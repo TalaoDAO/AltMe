@@ -1,1 +1,1 @@
-# ssi-cryto_wallet
+# ssi-cryto-wallet
