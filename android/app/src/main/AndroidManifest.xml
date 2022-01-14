@@ -2,7 +2,7 @@
     package="co.talao.crypto.ssi_crypto_wallet">
    <application
         android:label="${appName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
