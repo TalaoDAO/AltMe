@@ -71,7 +71,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: Column(
           children: [
             Container(
-              constraints: const BoxConstraints(maxHeight: 50),
+              constraints: const BoxConstraints(maxHeight: 300),
               child: Material(
                 color: Colors.indigo,
                 child: TabBar(
@@ -83,13 +83,13 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   controller: _tabController,
                   tabs: const <Widget>[
                     Tab(
-                      icon: Icon(Icons.money),
+                      icon: Icon(Icons.animation),
                     ),
                     Tab(
-                      icon: Icon(Icons.beach_access_sharp),
+                      icon: Icon(Icons.blur_on),
                     ),
                     Tab(
-                      icon: Icon(Icons.brightness_5_sharp),
+                      icon: Icon(Icons.portrait),
                     ),
                   ],
                 ),
