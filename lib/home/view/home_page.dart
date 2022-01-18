@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ssi_crypto_wallet/constants.dart';
+import 'package:ssi_crypto_wallet/home/view/tab_bar/clip_shadow.dart';
+import 'package:ssi_crypto_wallet/home/view/tab_bar/paralellogram.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,6 +28,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController _tabController;
+  bool isTabBarShrinked = false;
 
   @override
   void initState() {
@@ -73,7 +77,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Container(
               constraints: const BoxConstraints(maxHeight: 300),
               child: Material(
-                color: Colors.indigo,
+                color: Colors.transparent,
                 child: TabBar(
                   padding: const EdgeInsets.all(8),
                   indicatorPadding: const EdgeInsets.all(8),
@@ -81,9 +85,71 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   unselectedLabelColor: Colors.grey,
                   indicatorColor: Colors.purple,
                   controller: _tabController,
-                  tabs: const <Widget>[
+                  tabs: <Widget>[
                     Tab(
-                      icon: Icon(Icons.animation),
+                      height: isTabBarShrinked
+                          ? tabBarShrinkedSize
+                          : tabBarExpandedSize,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        clipBehavior: Clip.none
+                            
+                            ,
+                        children: [
+                          Positioned(
+                            left: 20,
+                            child: Parallelogram(
+                              clipShadows: [
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                              ],
+                              cutLength: 30,
+                              child: Container(
+                                height: isTabBarShrinked
+                                    ? tabBarShrinkedSize - 20
+                                    : tabBarExpandedSize - 20,
+                                width: tabBarShrinkedSize + 50,
+                                color: Colors.green,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: const Icon(Icons.animation),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 20,
+                            child: Parallelogram(
+                              clipShadows: [
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                                // ClipShadow(color: Colors.green, elevation: 20),
+                              ],
+                              cutLength: 30,
+                              child: Container(
+                                height: isTabBarShrinked
+                                    ? tabBarShrinkedSize - 20
+                                    : tabBarExpandedSize - 20,
+                                width: tabBarShrinkedSize + 50,
+                                color: Colors.yellowAccent,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: const Icon(Icons.animation),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     Tab(
                       icon: Icon(Icons.blur_on),
@@ -98,15 +164,25 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: const <Widget>[
+                children: <Widget>[
                   Center(
-                    child: Text("It's cloudy here"),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          isTabBarShrinked = !isTabBarShrinked;
+                        });
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(32),
+                        child: Text("Here is the tokens' list"),
+                      ),
+                    ),
                   ),
                   Center(
-                    child: Text("It's rainy here"),
+                    child: Text('Here is the grid showing NFTs'),
                   ),
                   Center(
-                    child: Text("It's sunny here"),
+                    child: Text('Here is the grid showing credentials'),
                   ),
                 ],
               ),
