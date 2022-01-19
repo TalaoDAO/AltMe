@@ -17,7 +17,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
+        appBarTheme: const AppBarTheme(color: Color(0xFFe15522)),
         tabBarTheme: const TabBarTheme(
           labelColor: Colors.green,
           indicator: UnderlineTabIndicator(
@@ -26,14 +26,14 @@ class App extends StatelessWidget {
           ),
         ),
         colorScheme: ColorScheme.fromSwatch(
-          accentColor: const Color(0xFF13B9FF),
+          accentColor: const Color(0xFFe15522),
         ),
         brightness: Brightness.light,
       ),
       darkTheme: ThemeData(
-        appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
+        appBarTheme: const AppBarTheme(color: Color(0xFFe15522)),
         colorScheme: ColorScheme.fromSwatch(
-          accentColor: const Color(0xFF13B9FF),
+          accentColor: const Color(0xFFe15522),
           brightness: Brightness.dark,
         ),
         brightness: Brightness.dark,

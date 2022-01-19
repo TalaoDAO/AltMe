@@ -1,6 +1,6 @@
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:ssi_crypto_wallet/constants.dart';
-import 'package:ssi_crypto_wallet/home/view/tab_bar/clip_shadow.dart';
 import 'package:ssi_crypto_wallet/home/view/tab_bar/paralellogram.dart';
 
 class HomePage extends StatefulWidget {
@@ -90,72 +90,28 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       height: isTabBarShrinked
                           ? tabBarShrinkedSize
                           : tabBarExpandedSize,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        clipBehavior: Clip.none
-                            
-                            ,
-                        children: [
-                          Positioned(
-                            left: 20,
-                            child: Parallelogram(
-                              clipShadows: [
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                              ],
-                              cutLength: 30,
-                              child: Container(
-                                height: isTabBarShrinked
-                                    ? tabBarShrinkedSize - 20
-                                    : tabBarExpandedSize - 20,
-                                width: tabBarShrinkedSize + 50,
-                                color: Colors.green,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: const Icon(Icons.animation),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 20,
-                            child: Parallelogram(
-                              clipShadows: [
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                                // ClipShadow(color: Colors.green, elevation: 20),
-                              ],
-                              cutLength: 30,
-                              child: Container(
-                                height: isTabBarShrinked
-                                    ? tabBarShrinkedSize - 20
-                                    : tabBarExpandedSize - 20,
-                                width: tabBarShrinkedSize + 50,
-                                color: Colors.yellowAccent,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: const Icon(Icons.animation),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                      child: TabBarElement(
+                        isTabBarShrinked: isTabBarShrinked,
+                        icon: const Icon(Icons.animation),
                       ),
                     ),
                     Tab(
-                      icon: Icon(Icons.blur_on),
+                      height: isTabBarShrinked
+                          ? tabBarShrinkedSize
+                          : tabBarExpandedSize,
+                      child: TabBarElement(
+                        isTabBarShrinked: isTabBarShrinked,
+                        icon: const Icon(Icons.blur_on),
+                      ),
                     ),
                     Tab(
-                      icon: Icon(Icons.portrait),
+                      height: isTabBarShrinked
+                          ? tabBarShrinkedSize
+                          : tabBarExpandedSize,
+                      child: TabBarElement(
+                        isTabBarShrinked: isTabBarShrinked,
+                        icon: const Icon(Icons.portrait),
+                      ),
                     ),
                   ],
                 ),
@@ -172,22 +128,95 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           isTabBarShrinked = !isTabBarShrinked;
                         });
                       },
-                      child: Padding(
+                      child: const Padding(
                         padding: EdgeInsets.all(32),
                         child: Text("Here is the tokens' list"),
                       ),
                     ),
                   ),
-                  Center(
+                  const Center(
                     child: Text('Here is the grid showing NFTs'),
                   ),
-                  Center(
+                  const Center(
                     child: Text('Here is the grid showing credentials'),
                   ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+      floatingActionButton: FabCircularMenu(
+          ringDiameter: 300,
+          ringWidth: 60,
+          ringColor: Colors.yellow[300],
+          fabColor: Colors.orange,
+          fabOpenIcon: Icon(Icons.open_in_browser),
+          children: <Widget>[
+            IconButton(
+                icon: Icon(Icons.download),
+                onPressed: () {
+                  print('Home');
+                }),
+            IconButton(
+                icon: Icon(Icons.credit_card),
+                onPressed: () {
+                  print('Favorite');
+                }),
+            IconButton(
+                icon: Icon(Icons.send),
+                onPressed: () {
+                  print('Favorite');
+                }),
+            IconButton(
+                icon: Icon(Icons.swap_calls),
+                onPressed: () {
+                  print('Favorite');
+                })
+          ]),
+    );
+  }
+}
+
+class TabBarElement extends StatelessWidget {
+  const TabBarElement({
+    Key? key,
+    required this.isTabBarShrinked,
+    required this.icon,
+  }) : super(key: key);
+
+  final bool isTabBarShrinked;
+  final Widget icon;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isTabBarShrinked) {
+      return Padding(
+        padding: const EdgeInsets.all(8),
+        child: icon,
+      );
+    }
+    return StrangeParallelogram(
+      topChild: SizedBox(
+        height: isTabBarShrinked
+            ? tabBarShrinkedSize - 30
+            : tabBarExpandedSize - 30,
+        width: tabBarShrinkedSize + 60,
+        child: Container(
+          color: Colors.orange,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: icon,
+          ),
+        ),
+      ),
+      layerChild: SizedBox(
+        height: isTabBarShrinked
+            ? tabBarShrinkedSize - 30
+            : tabBarExpandedSize - 30,
+        width: tabBarShrinkedSize + 60,
+        child: Container(
+          color: Colors.yellow[300],
         ),
       ),
     );

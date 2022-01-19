@@ -1,30 +1,52 @@
-import 'package:flutter/widgets.dart';
-import 'package:ssi_crypto_wallet/home/view/tab_bar/clip_shadow.dart';
-import 'package:ssi_crypto_wallet/home/view/tab_bar/clip_shadow.dart' show ClipShadow;
-import 'package:ssi_crypto_wallet/home/view/tab_bar/edge.dart';
+import 'package:flutter/material.dart';
+import 'package:ssi_crypto_wallet/constants.dart';
 import 'package:ssi_crypto_wallet/home/view/tab_bar/parallelogram_clipper.dart';
 
-class Parallelogram extends StatelessWidget {
-  const Parallelogram(
-      {Key? key,
-      required this.cutLength,
-      required this.child,
-      this.edge = Edge.right,
-      this.clipShadows = const [],})
-      : super(key: key);
+class StrangeParallelogram extends StatelessWidget {
+  const StrangeParallelogram({
+    Key? key,
+    required this.topChild,
+    required this.layerChild,
+  }) : super(key: key);
 
-  final Widget child;
-  final double cutLength;
-  final Edge edge;
-
-  ///List of shadows to be cast on the border
-  final List<ClipShadow> clipShadows;
+  final Widget topChild;
+  final Widget layerChild;
 
   @override
   Widget build(BuildContext context) {
-    var clipper = ParallelogramClipper(cutLength, edge);
+    final stack = List.generate(
+      tabBarLayersQuantity,
+      (index) => Positioned(
+        left: tabBarLayersOffset * (index + 1) - 20,
+        top: tabBarLayersOffset * (index + 1),
+        child: CustomTabBarPainter(
+          child: layerChild,
+        ),
+      ),
+    );
+    return Stack(
+      fit: StackFit.expand,
+      clipBehavior: Clip.none,
+      children: [
+        ...stack,
+        Positioned(left: -20, child: CustomTabBarPainter(child: topChild)),
+      ],
+    );
+  }
+}
+
+class CustomTabBarPainter extends StatelessWidget {
+  const CustomTabBarPainter({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final clipper = ParallelogramClipper();
     return CustomPaint(
-      painter: ClipShadowPainter(clipper, clipShadows),
       child: ClipPath(
         clipper: clipper,
         child: child,
