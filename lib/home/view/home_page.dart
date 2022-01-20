@@ -76,13 +76,12 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Container(
               constraints: const BoxConstraints(maxHeight: 300),
               child: Material(
-                color: Colors.transparent,
                 child: TabBar(
                   padding: const EdgeInsets.all(8),
                   indicatorPadding: const EdgeInsets.all(8),
-                  labelColor: Colors.pink,
-                  unselectedLabelColor: Colors.grey,
-                  indicatorColor: Colors.purple,
+                  // labelColor: Colors.pink,
+                  // unselectedLabelColor: Colors.grey,
+                  // indicatorColor: Colors.purple,
                   controller: _tabController,
                   tabs: <Widget>[
                     Tab(
@@ -173,7 +172,7 @@ class TabBarElement extends StatelessWidget {
           isTabBarShrinked ? tabBarShrinkedSize - 30 : tabBarExpandedSize - 30,
       width: tabBarShrinkedSize + 60,
       child: Container(
-        color: Colors.orange,
+        // color: Colors.orange,
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: icon,

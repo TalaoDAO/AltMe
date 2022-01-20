@@ -13,8 +13,8 @@ class FloatingActionMenu extends StatelessWidget {
     return FabCircularMenu(
       ringDiameter: 300,
       ringWidth: 60,
-      ringColor: Colors.yellow[300],
-      fabColor: Colors.orange,
+      ringColor: Theme.of(context).colorScheme.secondaryVariant,
+      fabColor: Theme.of(context).colorScheme.secondaryVariant,
       fabOpenIcon: const Icon(Icons.open_in_browser),
       children: <Widget>[
         const IconThemeSwitch(),
