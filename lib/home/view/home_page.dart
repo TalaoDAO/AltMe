@@ -76,43 +76,9 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Container(
               constraints: const BoxConstraints(maxHeight: 300),
               child: Material(
-                child: TabBar(
-                  padding: const EdgeInsets.all(8),
-                  indicatorPadding: const EdgeInsets.all(8),
-                  // labelColor: Colors.pink,
-                  // unselectedLabelColor: Colors.grey,
-                  // indicatorColor: Colors.purple,
-                  controller: _tabController,
-                  tabs: <Widget>[
-                    Tab(
-                      height: isTabBarShrinked
-                          ? tabBarShrinkedSize
-                          : tabBarExpandedSize,
-                      child: TabBarElement(
-                        isTabBarShrinked: isTabBarShrinked,
-                        icon: const Icon(Icons.animation),
-                      ),
-                    ),
-                    Tab(
-                      height: isTabBarShrinked
-                          ? tabBarShrinkedSize
-                          : tabBarExpandedSize,
-                      child: TabBarElement(
-                        isTabBarShrinked: isTabBarShrinked,
-                        icon: const Icon(Icons.blur_on),
-                      ),
-                    ),
-                    Tab(
-                      height: isTabBarShrinked
-                          ? tabBarShrinkedSize
-                          : tabBarExpandedSize,
-                      child: TabBarElement(
-                        isTabBarShrinked: isTabBarShrinked,
-                        icon: const Icon(Icons.portrait),
-                      ),
-                    ),
-                  ],
-                ),
+                child: HomePageTabBar(
+                    tabController: _tabController,
+                    isTabBarShrinked: isTabBarShrinked),
               ),
             ),
             Expanded(
@@ -145,39 +111,6 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
       ),
       floatingActionButton: const FloatingActionMenu(),
-    );
-  }
-}
-
-class TabBarElement extends StatelessWidget {
-  const TabBarElement({
-    Key? key,
-    required this.isTabBarShrinked,
-    required this.icon,
-  }) : super(key: key);
-
-  final bool isTabBarShrinked;
-  final Widget icon;
-
-  @override
-  Widget build(BuildContext context) {
-    if (isTabBarShrinked) {
-      return Padding(
-        padding: const EdgeInsets.all(8),
-        child: icon,
-      );
-    }
-    return SizedBox(
-      height:
-          isTabBarShrinked ? tabBarShrinkedSize - 30 : tabBarExpandedSize - 30,
-      width: tabBarShrinkedSize + 60,
-      child: Container(
-        // color: Colors.orange,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: icon,
-        ),
-      ),
     );
   }
 }
