@@ -31,28 +31,29 @@ class MaterialAppDefinition extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        // appBarTheme: const AppBarTheme(color: Color(0xFFe15522)),
-        // tabBarTheme: const TabBarTheme(
-        //   labelColor: Colors.green,
-        //   indicator: UnderlineTabIndicator(
-        //     // color for indicator (underline)
-        //     borderSide: BorderSide(color: Colors.brown),
-        //   ),
-        // ),
-        colorScheme: const ColorScheme(
-          primary: Color(0xFF232d55),
-          background: Color(0x33232d55),
+        appBarTheme: const AppBarTheme(color: Color(0xFFFF5722)),
+        tabBarTheme: const TabBarTheme(
+          labelColor: Color(0xFF00D30F),
+          unselectedLabelColor: Color(0xFFB1D400),
+          indicator: UnderlineTabIndicator(
+            // color for indicator (underline)
+            borderSide: BorderSide(color: Color(0xFF00D30F)),
+          ),
+        ),
+        colorScheme: ColorScheme(
+          primary: const Color(0xFF232d55),
+          primaryVariant: const Color(0xFF007d50),
+          secondary: const Color(0xFFffdc05),
+          secondaryVariant: const Color(0xFFFF5722),
+          background: Colors.grey[700]!,
           brightness: Brightness.light,
           error: Colors.red,
-          onBackground: Colors.black,
-          onError: Colors.white,
-          onPrimary: Colors.black,
-          onSecondary: Colors.black,
-          onSurface: Colors.black,
-          primaryVariant: Color(0xAA232d55),
-          secondary: Color(0xFF1eaadc),
-          secondaryVariant: Color(0xAA232d55),
-          surface: Colors.white,
+          onBackground: Colors.white,
+          onError: Colors.black,
+          onPrimary: Colors.white,
+          onSecondary: Colors.white,
+          onSurface: Colors.white,
+          surface: Colors.grey[800]!,
         ),
         brightness: Brightness.light,
       ),
