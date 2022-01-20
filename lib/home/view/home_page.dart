@@ -1,7 +1,6 @@
-import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:ssi_crypto_wallet/constants.dart';
-import 'package:ssi_crypto_wallet/home/view/tab_bar/paralellogram.dart';
+import 'package:ssi_crypto_wallet/home/view/floating_action_menu.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -146,34 +145,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ],
         ),
       ),
-      floatingActionButton: FabCircularMenu(
-          ringDiameter: 300,
-          ringWidth: 60,
-          ringColor: Colors.yellow[300],
-          fabColor: Colors.orange,
-          fabOpenIcon: Icon(Icons.open_in_browser),
-          children: <Widget>[
-            IconButton(
-                icon: Icon(Icons.download),
-                onPressed: () {
-                  print('Home');
-                }),
-            IconButton(
-                icon: Icon(Icons.credit_card),
-                onPressed: () {
-                  print('Favorite');
-                }),
-            IconButton(
-                icon: Icon(Icons.send),
-                onPressed: () {
-                  print('Favorite');
-                }),
-            IconButton(
-                icon: Icon(Icons.swap_calls),
-                onPressed: () {
-                  print('Favorite');
-                })
-          ]),
+      floatingActionButton: const FloatingActionMenu(),
     );
   }
 }
@@ -196,27 +168,15 @@ class TabBarElement extends StatelessWidget {
         child: icon,
       );
     }
-    return StrangeParallelogram(
-      topChild: SizedBox(
-        height: isTabBarShrinked
-            ? tabBarShrinkedSize - 30
-            : tabBarExpandedSize - 30,
-        width: tabBarShrinkedSize + 60,
-        child: Container(
-          color: Colors.orange,
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: icon,
-          ),
-        ),
-      ),
-      layerChild: SizedBox(
-        height: isTabBarShrinked
-            ? tabBarShrinkedSize - 30
-            : tabBarExpandedSize - 30,
-        width: tabBarShrinkedSize + 60,
-        child: Container(
-          color: Colors.yellow[300],
+    return SizedBox(
+      height:
+          isTabBarShrinked ? tabBarShrinkedSize - 30 : tabBarExpandedSize - 30,
+      width: tabBarShrinkedSize + 60,
+      child: Container(
+        color: Colors.orange,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: icon,
         ),
       ),
     );
