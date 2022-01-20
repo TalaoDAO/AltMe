@@ -6,28 +6,39 @@ class TabBarElement extends StatelessWidget {
     Key? key,
     required this.isTabBarShrinked,
     required this.icon,
+    required this.menuLabel,
   }) : super(key: key);
 
   final bool isTabBarShrinked;
-  final Widget icon;
+  final IconData icon;
+  final String menuLabel;
 
   @override
   Widget build(BuildContext context) {
     if (isTabBarShrinked) {
       return Padding(
         padding: const EdgeInsets.all(8),
-        child: icon,
+        child: Icon(
+          icon,
+        ),
       );
     }
     return SizedBox(
       height:
           isTabBarShrinked ? tabBarShrinkedSize - 30 : tabBarExpandedSize - 30,
       width: tabBarShrinkedSize + 60,
-      child: Container(
-        // color: Colors.orange,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: icon,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              size: 50,
+            ),
+            const Spacer(),
+            Text(menuLabel),
+            const Spacer(),
+          ],
         ),
       ),
     );

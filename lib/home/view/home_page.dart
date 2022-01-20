@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ssi_crypto_wallet/constants.dart';
 import 'package:ssi_crypto_wallet/home/view/floating_action_menu.dart';
+import 'package:ssi_crypto_wallet/home/view/home_page_tab_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -77,8 +77,9 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
               constraints: const BoxConstraints(maxHeight: 300),
               child: Material(
                 child: HomePageTabBar(
-                    tabController: _tabController,
-                    isTabBarShrinked: isTabBarShrinked),
+                  tabController: _tabController,
+                  isTabBarShrinked: isTabBarShrinked,
+                ),
               ),
             ),
             Expanded(
