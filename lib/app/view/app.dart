@@ -33,11 +33,11 @@ class MaterialAppDefinition extends StatelessWidget {
       theme: ThemeData(
         appBarTheme: const AppBarTheme(color: Color(0xFFFF5722)),
         tabBarTheme: const TabBarTheme(
-          labelColor: Color(0xFF00D30F),
-          unselectedLabelColor: Color(0xFFB1D400),
+          labelColor: Color(0xFFff225d),
+          unselectedLabelColor: Color(0xFFffc422),
           indicator: UnderlineTabIndicator(
             // color for indicator (underline)
-            borderSide: BorderSide(color: Color(0xFF00D30F)),
+            borderSide: BorderSide(color: Color(0xFFff225d)),
           ),
         ),
         colorScheme: ColorScheme(
@@ -58,20 +58,20 @@ class MaterialAppDefinition extends StatelessWidget {
         brightness: Brightness.light,
       ),
       darkTheme: ThemeData(
-        appBarTheme: const AppBarTheme(color: Color(0xFF1eaadc)),
+        appBarTheme: const AppBarTheme(color: Color(0xFF007cb7)),
         tabBarTheme: const TabBarTheme(
-          labelColor: Color(0xEEffdc05),
-          unselectedLabelColor: Colors.white,
+          labelColor: Color(0xFFdc1ea9),
+          unselectedLabelColor: Color(0xEE7b49e8),
           indicator: UnderlineTabIndicator(
             // color for indicator (underline)
-            borderSide: BorderSide(color: Color(0xEEffdc05)),
+            borderSide: BorderSide(color: Color(0xFFdc1ea9)),
           ),
         ),
         colorScheme: ColorScheme(
           primary: const Color(0xFF232d55),
           primaryVariant: const Color(0xFF007d50),
           secondary: const Color(0xFFffdc05),
-          secondaryVariant: const Color(0xFF1eaadc),
+          secondaryVariant: const Color(0xFF007cb7),
           background: Colors.grey[700]!,
           brightness: Brightness.dark,
           error: Colors.red,
