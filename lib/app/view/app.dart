@@ -46,7 +46,7 @@ class MaterialAppDefinition extends StatelessWidget {
           onPrimary: Colors.white,
           onSecondary: Colors.white,
           onSurface: Colors.white,
-          surface: Colors.grey[800]!,
+          surface: Colors.grey[300]!,
         ),
         brightness: Brightness.light,
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ssi_crypto_wallet/constants.dart';
 import 'package:ssi_crypto_wallet/home/view/floating_action_menu.dart';
 import 'package:ssi_crypto_wallet/home/view/home_page_tab_bar.dart';
 
@@ -74,7 +75,11 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: Column(
           children: [
             Container(
-              constraints: const BoxConstraints(maxHeight: 300),
+              constraints: BoxConstraints(
+                maxHeight: isTabBarShrinked
+                    ? tabBarShrinkedSize + 18
+                    : tabBarExpandedSize + 53,
+              ),
               child: Material(
                 child: HomePageTabBar(
                   tabController: _tabController,
@@ -82,22 +87,78 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(right: 8, left: 8),
+              child: Container(
+                height: 50,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondaryVariant,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 3,
+                    left: 3,
+                    right: 3,
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          topRight: Radius.circular(50),
+                        )),
+                    child: IconButton(
+                      icon: Icon(Icons.ac_unit_rounded),
+                      onPressed: () {},
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
                 children: <Widget>[
-                  Center(
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          isTabBarShrinked = !isTabBarShrinked;
-                        });
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.all(32),
-                        child: Text("Here is the tokens' list"),
+                  ListView(
+                    shrinkWrap: true,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 11, left: 11),
+                        child: Container(
+                          width: double.infinity,
+                          color: Theme.of(context).colorScheme.surface,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                isTabBarShrinked = !isTabBarShrinked;
+                              });
+                            },
+                            child: Column(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(32),
+                                  child: Text("Here is the tokens' list"),
+                                ),
+                                SizedBox(
+                                  height: 300,
+                                ),
+                                SizedBox(
+                                  height: 300,
+                                ),
+                                SizedBox(
+                                  height: 300,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                   const Center(
                     child: Text('Here is the grid showing NFTs'),
