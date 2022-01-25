@@ -81,35 +81,10 @@ class TabBarViewElement extends StatelessWidget {
   final Widget child;
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverPersistentHeader(
-          pinned: true,
-          delegate: AppMainContentHeader(),
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate([
-            Padding(
-              padding: const EdgeInsets.only(
-                right: 11,
-                left: 11,
-              ),
-              child: Container(
-                width: double.infinity,
-                color: Theme.of(context).colorScheme.surface,
-                child: InkWell(
-                  onTap: () {
-                    // setState(() {
-                    //   isTabBarShrinked = !isTabBarShrinked;
-                    // });
-                  },
-                  child: child,
-                ),
-              ),
-            )
-          ]),
-        )
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [AppMainContentHeader(), TokenList()],
+      ),
     );
   }
 }
@@ -141,12 +116,12 @@ class TokenList extends StatelessWidget {
   }
 }
 
-class AppMainContentHeader extends SliverPersistentHeaderDelegate {
+class AppMainContentHeader extends StatelessWidget {
+  const AppMainContentHeader({Key? key}) : super(key: key);
+
   @override
   Widget build(
     BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
   ) {
     return Padding(
       padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
