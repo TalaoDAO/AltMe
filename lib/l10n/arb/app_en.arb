@@ -4,10 +4,10 @@
     "@counterAppBarTitle": {
         "description": "Text shown in the AppBar of the Counter Page"
     },
-    "tokenMenu": "Token",
+    "tokenMenu": "Tokens",
     "tokenMenuExplanation": "Here is the explanation of the active tab",
-    "nftMenu": "NFT",
+    "nftMenu": "NFTs",
     "nftMenuExplanation": "NFT is bla bla bla",
-    "ssiMenu": "SSI",
+    "ssiMenu": "Credentials",
     "ssiMenuExplanation": "SSI is bla bla bla"
 }

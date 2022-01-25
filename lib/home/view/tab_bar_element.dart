@@ -15,30 +15,35 @@ class TabBarElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isTabBarShrinked) {
-      return Padding(
-        padding: const EdgeInsets.all(8),
-        child: Icon(
-          icon,
-        ),
-      );
-    }
-    return SizedBox(
-      height:
-          isTabBarShrinked ? tabBarShrinkedSize - 30 : tabBarExpandedSize - 30,
-      width: tabBarShrinkedSize + 60,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              size: 50,
-            ),
-            const Spacer(),
-            Text(menuLabel),
-            const Spacer(),
-          ],
+    return Tab(
+      // height: isTabBarShrinked ? tabBarShrinkedSize : tabBarExpandedSize,
+      height: tabBarExpandedSize,
+      child: AnimatedContainer(
+        height: isTabBarShrinked
+            ? tabBarShrinkedSize - 30
+            : tabBarExpandedSize - 30,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.bounceIn,
+        child: SizedBox(
+          width: tabBarShrinkedSize + 60,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: isTabBarShrinked
+                ? Icon(
+                    icon,
+                  )
+                : Column(
+                    children: [
+                      Icon(
+                        icon,
+                        size: 50,
+                      ),
+                      const Spacer(),
+                      Text(menuLabel),
+                      const Spacer(),
+                    ],
+                  ),
+          ),
         ),
       ),
     );

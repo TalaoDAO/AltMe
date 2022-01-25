@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ssi_crypto_wallet/constants.dart';
 import 'package:ssi_crypto_wallet/home/view/floating_action_menu.dart';
 import 'package:ssi_crypto_wallet/home/view/home_page_tab_bar.dart';
 
@@ -39,133 +38,30 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const Drawer(
-        child: Center(
-          child: Text(
-            'this is the drawer which contains the menu',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
+      drawer: const AppDrawer(),
       appBar: AppBar(
-        leading: Builder(
-          builder: (context) {
-            return IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
+        leading: const AppDrawerMenuButton(),
         centerTitle: true,
-        title: const Text('Account 1'),
-        actions: [
-          InkWell(
-            onTap: () {},
-            child: const Padding(
-              padding: EdgeInsets.all(8),
-              child: Icon(Icons.qr_code_scanner),
-            ),
-          )
+        title: const AccountTitle(),
+        actions: const [
+          QrCodeScannerMenuButton(),
         ],
       ),
       body: DefaultTabController(
         length: 3,
         child: Column(
           children: [
-            Container(
-              constraints: BoxConstraints(
-                maxHeight: isTabBarShrinked
-                    ? tabBarShrinkedSize + 18
-                    : tabBarExpandedSize + 53,
-              ),
-              child: Material(
-                child: HomePageTabBar(
-                  tabController: _tabController,
-                  isTabBarShrinked: isTabBarShrinked,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 8, left: 8),
-              child: Container(
-                height: 50,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondaryVariant,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 3,
-                    left: 3,
-                    right: 3,
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(50),
-                          topRight: Radius.circular(50),
-                        )),
-                    child: IconButton(
-                      icon: Icon(Icons.ac_unit_rounded),
-                      onPressed: () {},
-                    ),
-                  ),
-                ),
-              ),
+            HomePageTabBar(
+              tabController: _tabController,
+              isTabBarShrinked: isTabBarShrinked,
             ),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: <Widget>[
-                  ListView(
-                    shrinkWrap: true,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 11, left: 11),
-                        child: Container(
-                          width: double.infinity,
-                          color: Theme.of(context).colorScheme.surface,
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                isTabBarShrinked = !isTabBarShrinked;
-                              });
-                            },
-                            child: Column(
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(32),
-                                  child: Text("Here is the tokens' list"),
-                                ),
-                                SizedBox(
-                                  height: 300,
-                                ),
-                                SizedBox(
-                                  height: 300,
-                                ),
-                                SizedBox(
-                                  height: 300,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Center(
-                    child: Text('Here is the grid showing NFTs'),
-                  ),
-                  const Center(
-                    child: Text('Here is the grid showing credentials'),
-                  ),
+                children: const <Widget>[
+                  TabBarViewElement(TokenList()),
+                  TabBarViewElement(TokenList()),
+                  TabBarViewElement(TokenList()),
                 ],
               ),
             ),
@@ -173,6 +69,198 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
       ),
       floatingActionButton: const FloatingActionMenu(),
+    );
+  }
+}
+
+class TabBarViewElement extends StatelessWidget {
+  const TabBarViewElement(
+    this.child, {
+    Key? key,
+  }) : super(key: key);
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: AppMainContentHeader(),
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate([
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 11,
+                left: 11,
+              ),
+              child: Container(
+                width: double.infinity,
+                color: Theme.of(context).colorScheme.surface,
+                child: InkWell(
+                  onTap: () {
+                    // setState(() {
+                    //   isTabBarShrinked = !isTabBarShrinked;
+                    // });
+                  },
+                  child: child,
+                ),
+              ),
+            )
+          ]),
+        )
+      ],
+    );
+  }
+}
+
+class TokenList extends StatelessWidget {
+  const TokenList({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        Padding(
+          padding: EdgeInsets.all(32),
+          child: Text('Here is the list'),
+        ),
+        SizedBox(
+          height: 300,
+        ),
+        SizedBox(
+          height: 300,
+        ),
+        SizedBox(
+          height: 300,
+        )
+      ],
+    );
+  }
+}
+
+class AppMainContentHeader extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
+      child: Container(
+        color: Theme.of(context).backgroundColor,
+        child: Container(
+          height: 50,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.secondaryVariant,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(50),
+              topRight: Radius.circular(50),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: 3,
+              left: 3,
+              right: 3,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(50),
+                  topRight: Radius.circular(50),
+                ),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.ac_unit_rounded),
+                onPressed: () {},
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 50;
+
+  @override
+  double get minExtent => 50;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
+  }
+}
+
+class QrCodeScannerMenuButton extends StatelessWidget {
+  const QrCodeScannerMenuButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      child: const Padding(
+        padding: EdgeInsets.all(8),
+        child: Icon(Icons.qr_code_scanner),
+      ),
+    );
+  }
+}
+
+class AccountTitle extends StatelessWidget {
+  const AccountTitle({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text('Account 1');
+  }
+}
+
+class AppDrawerMenuButton extends StatelessWidget {
+  const AppDrawerMenuButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) {
+        return IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+        );
+      },
+    );
+  }
+}
+
+class AppDrawer extends StatelessWidget {
+  const AppDrawer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Drawer(
+      child: Center(
+        child: Text(
+          'this is the drawer which contains the menu',
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 }
