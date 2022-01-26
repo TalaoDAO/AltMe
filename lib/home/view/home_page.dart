@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:ssi_crypto_wallet/home/view/floating_action_menu.dart';
 import 'package:ssi_crypto_wallet/home/view/home_page_tab_bar.dart';
 
+/// StatefulWidget or StatelessWidget
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   static Route route() {
     return PageRouteBuilder<void>(
       pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
+
+      /// defining the route name
       settings: const RouteSettings(name: '/home'),
+
+      /// defining transition animation if not the basic one
       transitionDuration: const Duration(seconds: 1),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         // ignore: prefer_int_literals
@@ -59,9 +64,9 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
               child: TabBarView(
                 controller: _tabController,
                 children: const <Widget>[
-                  TabBarViewElement(TokenList()),
-                  TabBarViewElement(TokenList()),
-                  TabBarViewElement(TokenList()),
+                  TabBarViewElement(TokenList(), 'Tokens'),
+                  TabBarViewElement(TokenList(), 'NFTs'),
+                  TabBarViewElement(TokenList(), 'SSI'),
                 ],
               ),
             ),
@@ -75,15 +80,108 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
 class TabBarViewElement extends StatelessWidget {
   const TabBarViewElement(
-    this.child, {
+    this.child,
+    this.name, {
     Key? key,
   }) : super(key: key);
   final Widget child;
+  final String name;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [AppMainContentHeader(), TokenList()],
+    return NestedScrollView(
+      // Setting floatHeaderSlivers to true is required in order to float
+      // the outer slivers over the inner scrollable.
+      floatHeaderSlivers: true,
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget>[
+          SliverOverlapAbsorber(
+            // This widget takes the overlapping behavior of the SliverAppBar,
+            // and redirects it to the SliverOverlapInjector below. If it is
+            // missing, then it is possible for the nested "inner" scroll view
+            // below to end up under the SliverAppBar even when the inner
+            // scroll view thinks it has not been scrolled.
+            // This is not necessary if the "headerSliverBuilder" only builds
+            // widgets that do not overlap the next sliver
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            sliver: SliverAppBar(
+              title: const AppMainContentHeader(),
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.transparent,
+              leadingWidth: 0,
+              floating: false,
+              pinned: true,
+              forceElevated: innerBoxIsScrolled,
+            ),
+          ),
+        ];
+      },
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Builder(
+            // This Builder is needed to provide a BuildContext that is
+            // "inside" the NestedScrollView, so that
+            // sliverOverlapAbsorberHandleFor() can find the
+            // NestedScrollView.
+            builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.only(
+              right: 20,
+              top: 53,
+              left: 20,
+            ),
+            child: Container(
+              color: Theme.of(context).colorScheme.surface,
+              child: CustomScrollView(
+                // The "controller" and "primary" members should be left
+                // unset, so that the NestedScrollView can control this
+                // inner scroll view.
+                // If the "controller" property is set, then this scroll
+                // view will not be associated with the NestedScrollView.
+                // The PageStorageKey should be unique to this ScrollView;
+                // it allows the list to remember its scroll position when
+                // the tab view is not on the screen.
+                key: PageStorageKey<String>(name),
+                slivers: <Widget>[
+                  SliverOverlapInjector(
+                    // This is the flip side of the SliverOverlapAbsorber
+                    // above.
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      context,
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8),
+                    // In this example, the inner scroll view has
+                    // fixed-height list items, hence the use of
+                    // SliverFixedExtentList. However, one could use any
+                    // sliver widget here, e.g. SliverList or SliverGrid.
+                    sliver: SliverFixedExtentList(
+                      // The items in this example are fixed to 48 pixels
+                      // high. This matches the Material Design spec for
+                      // ListTile widgets.
+                      itemExtent: 48,
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          // This builder is called for each child.
+                          // In this example, we just number each list item.
+                          return ListTile(
+                            title: Center(child: Text('Item $index')),
+                          );
+                        },
+                        // The childCount of the SliverChildBuilderDelegate
+                        // specifies how many children this inner list
+                        // has. In this example, each tab has a list of
+                        // exactly 30 items, but this is arbitrary.
+                        childCount: 30,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
       ),
     );
   }
@@ -123,54 +221,37 @@ class AppMainContentHeader extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
-      child: Container(
-        color: Theme.of(context).backgroundColor,
+    return Container(
+      height: 50,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondaryVariant,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(50),
+          topRight: Radius.circular(50),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: 3,
+          left: 3,
+          right: 3,
+        ),
         child: Container(
-          height: 50,
-          width: double.infinity,
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondaryVariant,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(50),
               topRight: Radius.circular(50),
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 3,
-              left: 3,
-              right: 3,
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(50),
-                  topRight: Radius.circular(50),
-                ),
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.ac_unit_rounded),
-                onPressed: () {},
-              ),
-            ),
+          child: IconButton(
+            icon: const Icon(Icons.ac_unit_rounded),
+            onPressed: () {},
           ),
         ),
       ),
     );
-  }
-
-  @override
-  double get maxExtent => 50;
-
-  @override
-  double get minExtent => 50;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
   }
 }
 
