@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ssi_crypto_wallet/constants.dart';
 import 'package:ssi_crypto_wallet/home/view/floating_action_menu.dart';
+import 'package:ssi_crypto_wallet/home/view/drawer/home_page_drawer.dart';
 import 'package:ssi_crypto_wallet/home/view/home_page_tab_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,14 +40,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const Drawer(
-        child: Center(
-          child: Text(
-            'this is the drawer which contains the menu',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
+      drawer: const HomePageDrawer(),
       appBar: AppBar(
         leading: Builder(
           builder: (context) {
