@@ -91,7 +91,6 @@ class TabBarViewElement extends StatelessWidget {
     return NestedScrollView(
       // Setting floatHeaderSlivers to true is required in order to float
       // the outer slivers over the inner scrollable.
-      floatHeaderSlivers: false,
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
           SliverOverlapAbsorber(
@@ -191,10 +190,11 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     return Container(
-        decoration: BoxDecoration(
-          color: Colors.primaries[1],
-        ),
-        child: const AppMainContentHeader());
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+      ),
+      child: const AppMainContentHeader(),
+    );
   }
 
   @override
