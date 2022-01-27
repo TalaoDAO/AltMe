@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ssi_crypto_wallet/constants.dart';
-import 'package:ssi_crypto_wallet/home/view/tab_bar_element.dart';
+import 'package:ssi_crypto_wallet/home/view/tab_bar/tab_bar_element.dart';
 import 'package:ssi_crypto_wallet/l10n/l10n.dart';
 
 class HomePageTabBar extends StatelessWidget {
