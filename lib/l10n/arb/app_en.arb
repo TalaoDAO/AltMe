@@ -1,13 +1,19 @@
 {
-    "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
-    },
-    "tokenMenu": "Token",
-    "tokenMenuExplanation": "Here is the explanation of the active tab",
-    "nftMenu": "NFT",
-    "nftMenuExplanation": "NFT is bla bla bla",
-    "ssiMenu": "SSI",
-    "ssiMenuExplanation": "SSI is bla bla bla"
+  "@@locale": "en",
+  "counterAppBarTitle": "Counter",
+  "@counterAppBarTitle": {
+    "description": "Text shown in the AppBar of the Counter Page"
+  },
+  "tokenMenu": "Token",
+  "tokenMenuExplanation": "Here is the explanation of the active tab",
+  "nftMenu": "NFT",
+  "nftMenuExplanation": "NFT is bla bla bla",
+  "ssiMenu": "SSI",
+  "ssiMenuExplanation": "SSI is bla bla bla",
+  "personalTitle": "Personal",
+  "generalInformationLabel": "General information",
+  "privacyTitle": "Privacy & Security",
+  "termsAndConditionTitle": "Terms & Conditions",
+  "resetWalletButton": "Reset Wallet",
+  "onBoardingTosTitle": "Terms & Conditions"
 }
