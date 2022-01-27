@@ -289,6 +289,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = 4X584B7SPL;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "Ssi Crypto Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -296,7 +297,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.talao.crypto.ssi-crypto-wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = "co.talao.crypto.ssi-crypto-wallet";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -420,6 +421,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = 4X584B7SPL;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "Ssi Crypto Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -427,7 +429,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.talao.crypto.ssi-crypto-wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = "co.talao.crypto.ssi-crypto-wallet";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -443,6 +445,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = 4X584B7SPL;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "Ssi Crypto Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -450,7 +453,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.talao.crypto.ssi-crypto-wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = "co.talao.crypto.ssi-crypto-wallet";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -521,6 +524,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = 4X584B7SPL;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "[DEV] Ssi Crypto Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -528,7 +532,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.talao.crypto.ssi-crypto-wallet.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = "co.talao.crypto.ssi-crypto-wallet.dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -597,6 +601,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = 4X584B7SPL;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "[DEV] Ssi Crypto Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -604,7 +609,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.talao.crypto.ssi-crypto-wallet.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = "co.talao.crypto.ssi-crypto-wallet.dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -670,6 +675,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = 4X584B7SPL;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "[DEV] Ssi Crypto Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -677,7 +683,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.talao.crypto.ssi-crypto-wallet.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = "co.talao.crypto.ssi-crypto-wallet.dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -748,6 +754,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = 4X584B7SPL;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "[STG] Ssi Crypto Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -755,7 +762,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.talao.crypto.ssi-crypto-wallet.stg;
+				PRODUCT_BUNDLE_IDENTIFIER = "co.talao.crypto.ssi-crypto-wallet.stg";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -824,6 +831,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = 4X584B7SPL;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "[STG] Ssi Crypto Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -831,7 +839,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.talao.crypto.ssi-crypto-wallet.stg;
+				PRODUCT_BUNDLE_IDENTIFIER = "co.talao.crypto.ssi-crypto-wallet.stg";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -897,6 +905,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = 4X584B7SPL;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "[STG] Ssi Crypto Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -904,7 +913,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.talao.crypto.ssi-crypto-wallet.stg;
+				PRODUCT_BUNDLE_IDENTIFIER = "co.talao.crypto.ssi-crypto-wallet.stg";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
