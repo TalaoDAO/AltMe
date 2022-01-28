@@ -9,19 +9,22 @@ class CredentialList extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 160.0,
-        mainAxisSpacing: 10.0,
-        crossAxisSpacing: 10.0,
+        maxCrossAxisExtent: 160,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
         childAspectRatio: 1.8,
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           return Container(
             alignment: Alignment.center,
-            child: Image.asset('assets/images/$index.png'),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.asset('assets/images/$index.png'),
+            ),
           );
         },
-        childCount: 10,
+        childCount: 13,
       ),
     );
   }

@@ -12,7 +12,7 @@ class NftList extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: Icon(
               Icons.flutter_dash_rounded,
               size: 70,
@@ -20,7 +20,7 @@ class NftList extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: Text(
               'No NFTs yet',
               style: Theme.of(context).textTheme.headline5,
@@ -33,16 +33,17 @@ class NftList extends StatelessWidget {
               child: Text(
                 'Learn more',
                 style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                    color: Theme.of(context).colorScheme.secondaryVariant),
+                      color: Theme.of(context).colorScheme.secondaryVariant,
+                    ),
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('Don\'t see your NFT?'),
+          const Padding(
+            padding: EdgeInsets.all(8),
+            child: Text("Don't see your NFT?"),
           ),
           InkWell(
             onTap: () => _launchURL('www.talao.co'),
@@ -51,7 +52,8 @@ class NftList extends StatelessWidget {
               child: Text(
                 'Import NFTs',
                 style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                    color: Theme.of(context).colorScheme.secondaryVariant),
+                      color: Theme.of(context).colorScheme.secondaryVariant,
+                    ),
               ),
             ),
           ),
@@ -60,7 +62,7 @@ class NftList extends StatelessWidget {
     );
   }
 
-  void _launchURL(String _url) async => await canLaunch(_url)
+  Future<void> _launchURL(String _url) async => await canLaunch(_url)
       ? await launch(_url)
-      : throw 'Could not launch $_url';
+      : throw Exception('Could not launch $_url');
 }
