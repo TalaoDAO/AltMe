@@ -35,6 +35,7 @@ flutter:
     - assets/privacy/
     - assets/terms/
     - assets/icons/
+    - assets/images/
 flutter_icons:
   android: "launcher_icon"
   ios: true

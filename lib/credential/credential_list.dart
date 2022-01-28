@@ -18,10 +18,10 @@ class CredentialList extends StatelessWidget {
         (BuildContext context, int index) {
           return Container(
             alignment: Alignment.center,
-            child: FlutterLogo(),
+            child: Image.asset('assets/images/$index.png'),
           );
         },
-        childCount: 20,
+        childCount: 10,
       ),
     );
   }
