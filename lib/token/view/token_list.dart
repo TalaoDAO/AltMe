@@ -1,3 +1,7 @@
+// ignore_for_file: lines_longer_than_80_chars
+
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class TokenList extends StatelessWidget {
@@ -7,17 +11,28 @@ class TokenList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverFixedExtentList(
+    return SliverList(
       // The items in this example are fixed to 48 pixels
       // high. This matches the Material Design spec for
       // ListTile widgets.
-      itemExtent: 48,
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           // This builder is called for each child.
           // In this example, we just number each list item.
+          final randomNumber = Random();
           return ListTile(
-            title: Center(child: Text('Item $index')),
+            leading: const Padding(
+              padding: EdgeInsets.all(8),
+              child: Icon(Icons.surfing_rounded),
+            ),
+            title: Text(
+              '${((randomNumber.nextDouble() * index * 10000000 + 1).round() / 100000).toString()} TALAO',
+              textAlign: TextAlign.end,
+            ),
+            trailing: const Padding(
+              padding: EdgeInsets.all(8),
+              child: Icon(Icons.search),
+            ),
           );
         },
         // The childCount of the SliverChildBuilderDelegate

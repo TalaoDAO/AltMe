@@ -19,8 +19,10 @@ class HomePageTabBar extends StatelessWidget {
     final l10n = context.l10n;
 
     return Container(
-      constraints: const BoxConstraints(
-        maxHeight: tabBarExpandedSize + 53,
+      constraints: BoxConstraints(
+        maxHeight: isTabBarShrinked
+            ? tabBarShrinkedSize + 20
+            : tabBarExpandedSize + 53,
       ),
       child: Material(
         child: Column(

@@ -16,8 +16,7 @@ class TabBarElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tab(
-      // height: isTabBarShrinked ? tabBarShrinkedSize : tabBarExpandedSize,
-      height: tabBarExpandedSize,
+      height: isTabBarShrinked ? tabBarShrinkedSize : tabBarExpandedSize,
       child: AnimatedContainer(
         height: isTabBarShrinked
             ? tabBarShrinkedSize - 30

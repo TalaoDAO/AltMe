@@ -33,6 +33,9 @@ class MaterialAppDefinition extends StatelessWidget {
             borderSide: BorderSide(color: Color(0xFFff225d)),
           ),
         ),
+        // outlinedButtonTheme: const OutlinedButtonThemeData(
+        //   style: ButtonStyle(backgroundColor: Color(0xFF232d55)),
+        // ),
         colorScheme: ColorScheme(
           primary: const Color(0xFF232d55),
           primaryVariant: const Color(0xFF007d50),

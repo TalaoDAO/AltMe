@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ssi_crypto_wallet/credential/credential_list.dart';
+import 'package:ssi_crypto_wallet/home/home.dart';
 import 'package:ssi_crypto_wallet/home/view/drawer/home_page_drawer.dart';
 import 'package:ssi_crypto_wallet/home/view/floating_action_menu_button.dart';
 import 'package:ssi_crypto_wallet/home/view/tab_bar/home_page_tab_bar.dart';
 import 'package:ssi_crypto_wallet/home/view/tab_bar/tab_bar_view_element.dart';
+import 'package:ssi_crypto_wallet/nft/nft_list.dart';
 import 'package:ssi_crypto_wallet/token/view/token_list.dart';
 
 /// StatefulWidget or StatelessWidget
@@ -11,7 +15,10 @@ class HomePage extends StatefulWidget {
 
   static Route route() {
     return PageRouteBuilder<void>(
-      pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
+      pageBuilder: (context, animation, secondaryAnimation) => BlocProvider(
+        create: (_) => HomeCubit(),
+        child: const HomePage(),
+      ),
 
       /// defining the route name
       settings: const RouteSettings(name: '/home'),
@@ -35,7 +42,6 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController _tabController;
-  bool isTabBarShrinked = false;
 
   @override
   void initState() {
@@ -61,15 +67,16 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
           children: [
             HomePageTabBar(
               tabController: _tabController,
-              isTabBarShrinked: isTabBarShrinked,
+              isTabBarShrinked:
+                  context.select((HomeCubit cubit) => cubit.state),
             ),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
                 children: const <Widget>[
                   TabBarViewElement(TokenList(), 'Tokens'),
-                  TabBarViewElement(TokenList(), 'NFTs'),
-                  TabBarViewElement(TokenList(), 'SSI'),
+                  TabBarViewElement(NftList(), 'NFTs'),
+                  TabBarViewElement(CredentialList(), 'SSI'),
                 ],
               ),
             ),
