@@ -27,7 +27,8 @@ class _SplashViewState extends State<SplashView>
     _animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 5));
     _scaleAnimation = Tween<double>(begin: 0.2, end: 1).animate(
-        CurvedAnimation(parent: _animationController, curve: Curves.ease));
+      CurvedAnimation(parent: _animationController, curve: Curves.ease),
+    );
     _animationController.forward();
     super.initState();
   }
