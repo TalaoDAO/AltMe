@@ -10,8 +10,33 @@ class SplashPage extends StatelessWidget {
   }
 }
 
-class SplashView extends StatelessWidget {
+class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
+
+  @override
+  State<SplashView> createState() => _SplashViewState();
+}
+
+class _SplashViewState extends State<SplashView>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 5));
+    _scaleAnimation = Tween<double>(begin: 0.2, end: 1).animate(
+        CurvedAnimation(parent: _animationController, curve: Curves.ease));
+    _animationController.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +46,10 @@ class SplashView extends StatelessWidget {
       body: Center(
         child: SizedBox.square(
           dimension: MediaQuery.of(context).size.width * 0.4,
-          child: Image.asset(ImageStrings.splash),
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: Image.asset(ImageStrings.splash),
+          ),
         ),
       ),
     );
