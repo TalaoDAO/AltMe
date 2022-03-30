@@ -47,6 +47,7 @@ class _SplashViewState extends State<SplashView>
         child: SizedBox.square(
           dimension: MediaQuery.of(context).size.width * 0.4,
           child: ScaleTransition(
+            key: const Key('scaleTransition'),
             scale: _scaleAnimation,
             child: Image.asset(ImageStrings.splash),
           ),
