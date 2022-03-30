@@ -6,7 +6,7 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/splash/view/splash_page.dart';
+import 'package:altme/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
