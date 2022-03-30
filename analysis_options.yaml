@@ -2,3 +2,6 @@ include: package:very_good_analysis/analysis_options.2.4.0.yaml
 linter:
   rules:
     public_member_api_docs: false
+    library_private_types_in_public_api: false
+    omit_local_variable_types: false
+    avoid_redundant_argument_values: false
