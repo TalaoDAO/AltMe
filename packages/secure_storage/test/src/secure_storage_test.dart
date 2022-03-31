@@ -3,31 +3,42 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class MockSecureStorageProvider extends Mock implements SecureStorageProvider{}
+class MockSecureStorageProvider extends Mock implements SecureStorageProvider {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late SecureStorageProvider secureStorageProvider;
 
-  setUp(() async {
+  setUp(() {
     secureStorageProvider = MockSecureStorageProvider();
-    await secureStorageProvider.deleteAll();
   });
 
-  group('SecureStorage', () {
 
+  group('SecureStorage', () {
     test('can be instantiated', () {
       expect(secureStorageProvider, isNotNull);
     });
 
+    //call this
     test('set method', () async {
+      when(
+            () => secureStorageProvider.set('key1', 'value'),
+      ).thenAnswer((_) => Future.value);
+
       await secureStorageProvider.set('key1', 'value');
+
+      when(
+            () => secureStorageProvider.get('key1'),
+      ).thenAnswer((_) {
+        return () => Future<String>.value('value');
+      });
+
       final result = await secureStorageProvider.get('key1');
       expect(result, equals('value'));
     });
 
     test('delete method', () async {
-      await secureStorageProvider.set('key','value');
+      await secureStorageProvider.set('key', 'value');
       await secureStorageProvider.delete('key');
       final result = await secureStorageProvider.get('key');
       expect(result, isNull);
