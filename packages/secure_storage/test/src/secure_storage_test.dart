@@ -1,13 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:secure_storage/secure_storage.dart';
+
+class MockSecureStorageProvider extends Mock implements SecureStorageProvider{}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late SecureStorageProvider secureStorageProvider;
 
   setUp(() async {
-    secureStorageProvider = SecureStorageProvider.instance;
+    secureStorageProvider = MockSecureStorageProvider();
     await secureStorageProvider.deleteAll();
   });
 
