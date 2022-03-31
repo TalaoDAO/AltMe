@@ -5,7 +5,7 @@ import 'dart:html';
 
 import 'package:js/js.dart';
 
-import 'secure_storage.dart';
+import 'package:secure_storage/src/secure_storage.dart';
 
 SecureStorageProvider getProvider() => SecureStorageWeb();
 
