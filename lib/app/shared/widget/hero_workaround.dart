@@ -21,6 +21,7 @@ class HeroFix extends StatelessWidget {
           BuildContext toHeroContext,
         ) =>
             Material(
+          key: const Key('shuttleKey'),
           color: Colors.transparent,
           child: toHeroContext.widget,
         ),
