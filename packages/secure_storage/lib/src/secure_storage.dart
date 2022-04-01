@@ -1,4 +1,4 @@
-import 'secure_storage_stub.dart'
+import 'package:secure_storage/src/secure_storage_stub.dart'
     if (dart.library.io) 'secure_storage_io.dart'
     if (dart.library.js) 'secure_storage_js.dart';
 
@@ -34,6 +34,7 @@ abstract class SecureStorageKeys {
   static const companyName = 'companyName';
   static const companyWebsite = 'companyWebsite';
   static const jobTitle = 'jobTitle';
+
   //
   static const String firstNameKey = 'profile/firstName';
   static const String lastNameKey = 'profile/lastName';

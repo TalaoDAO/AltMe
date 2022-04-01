@@ -1,14 +1,14 @@
 library secure_storage;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'secure_storage.dart';
+import 'package:secure_storage/src/secure_storage.dart';
 
 SecureStorageProvider getProvider() => SecureStorageIO();
 
 class SecureStorageIO extends SecureStorageProvider {
-  FlutterSecureStorage get _storage => FlutterSecureStorage();
+  FlutterSecureStorage get _storage => const FlutterSecureStorage();
 
-  IOSOptions get _defaultIOSOptions => const IOSOptions(
+    IOSOptions get _defaultIOSOptions => const IOSOptions(
         accessibility: IOSAccessibility.unlocked_this_device,
       );
 
