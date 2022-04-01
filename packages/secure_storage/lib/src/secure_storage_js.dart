@@ -7,13 +7,17 @@ import 'package:js/js.dart';
 
 import 'package:secure_storage/src/secure_storage.dart';
 
+///getProvider
 SecureStorageProvider getProvider() => SecureStorageWeb();
 
+///SecureStorageJS
 @JS('SecureStorage')
 class SecureStorageJS {
+  ///example
   external static String example(String did, String inputMetadata);
 }
 
+///SecureStorageWeb
 class SecureStorageWeb extends SecureStorageProvider {
   @override
   Future<String?> get(String key) async {

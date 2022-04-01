@@ -3,8 +3,11 @@ library secure_storage;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:secure_storage/src/secure_storage.dart';
 
+
+///getProvider
 SecureStorageProvider getProvider() => SecureStorageIO();
 
+///SecureStorageIO
 class SecureStorageIO extends SecureStorageProvider {
   FlutterSecureStorage get _storage => const FlutterSecureStorage();
 
