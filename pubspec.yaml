@@ -14,6 +14,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
+  secure_storage:
+    path: packages/secure_storage
 
 dev_dependencies:
   bloc_test: ^9.0.3
