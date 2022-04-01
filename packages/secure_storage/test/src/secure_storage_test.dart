@@ -24,7 +24,7 @@ void main() {
       expect(secureStorageProvider, isNotNull);
     });
 
-    test('set method', () async {
+    test('set and get method', () async {
       when(
         () => secureStorageProvider.set(key, value),
       ).thenAnswer((invocation) async {});
