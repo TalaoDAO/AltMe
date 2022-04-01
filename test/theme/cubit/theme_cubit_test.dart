@@ -1,3 +1,4 @@
+import 'package:altme/app/shared/constants/altme_strings.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
@@ -54,12 +55,13 @@ void main() {
           act: (cubit) => cubit.setLightTheme(),
           setUp: () {
             when(
-              () => mockSecureStorage.set('theme', 'light'),
+              () => mockSecureStorage.set(AltMeStrings.theme, 'light'),
             ).thenAnswer((_) async {});
           },
           expect: () => <ThemeMode>[ThemeMode.light],
           verify: (_) {
-            verify(() => mockSecureStorage.set('theme', 'light')).called(1);
+            verify(() => mockSecureStorage.set(AltMeStrings.theme, 'light'))
+                .called(1);
           },
         );
 
@@ -69,12 +71,13 @@ void main() {
           act: (cubit) => cubit.setDarkTheme(),
           setUp: () {
             when(
-              () => mockSecureStorage.set('theme', 'dark'),
+              () => mockSecureStorage.set(AltMeStrings.theme, 'dark'),
             ).thenAnswer((_) async {});
           },
           expect: () => <ThemeMode>[ThemeMode.dark],
           verify: (_) {
-            verify(() => mockSecureStorage.set('theme', 'dark')).called(1);
+            verify(() => mockSecureStorage.set(AltMeStrings.theme, 'dark'))
+                .called(1);
           },
         );
 
@@ -84,12 +87,13 @@ void main() {
           act: (cubit) => cubit.setSystemTheme(),
           setUp: () {
             when(
-              () => mockSecureStorage.set('theme', 'system'),
+              () => mockSecureStorage.set(AltMeStrings.theme, 'system'),
             ).thenAnswer((_) async {});
           },
           expect: () => <ThemeMode>[ThemeMode.system],
           verify: (_) {
-            verify(() => mockSecureStorage.set('theme', 'system')).called(1);
+            verify(() => mockSecureStorage.set(AltMeStrings.theme, 'system'))
+                .called(1);
           },
         );
       },
@@ -102,11 +106,11 @@ void main() {
         act: (cubit) => cubit.getCurrentTheme(),
         setUp: () {
           when(
-            () => mockSecureStorage.get('theme'),
+            () => mockSecureStorage.get(AltMeStrings.theme),
           ).thenAnswer((_) async => '');
         },
         verify: (_) {
-          verify(() => mockSecureStorage.get('theme')).called(1);
+          verify(() => mockSecureStorage.get(AltMeStrings.theme)).called(1);
         },
       );
 
@@ -116,7 +120,7 @@ void main() {
         act: (cubit) => cubit.getCurrentTheme(),
         setUp: () {
           when(
-            () => mockSecureStorage.get('theme'),
+            () => mockSecureStorage.get(AltMeStrings.theme),
           ).thenAnswer((_) async => '');
         },
         expect: () => <ThemeMode>[],
@@ -128,7 +132,7 @@ void main() {
         act: (cubit) => cubit.getCurrentTheme(),
         setUp: () {
           when(
-            () => mockSecureStorage.get('theme'),
+            () => mockSecureStorage.get(AltMeStrings.theme),
           ).thenAnswer((_) async => 'light');
         },
         expect: () => <ThemeMode>[ThemeMode.light],
@@ -140,7 +144,7 @@ void main() {
         act: (cubit) => cubit.getCurrentTheme(),
         setUp: () {
           when(
-            () => mockSecureStorage.get('theme'),
+            () => mockSecureStorage.get(AltMeStrings.theme),
           ).thenAnswer((_) async => 'dark');
         },
         expect: () => <ThemeMode>[ThemeMode.dark],
@@ -152,19 +156,19 @@ void main() {
         act: (cubit) => cubit.getCurrentTheme(),
         setUp: () {
           when(
-            () => mockSecureStorage.get('theme'),
+            () => mockSecureStorage.get(AltMeStrings.theme),
           ).thenAnswer((_) async => 'system');
         },
         expect: () => <ThemeMode>[ThemeMode.system],
       );
 
       blocTest<ThemeCubit, ThemeMode>(
-        'emit [Theme.dark] if random data is returned',
+        'emit [Theme.dark] if random app_theme is returned',
         build: () => ThemeCubit(mockSecureStorage),
         act: (cubit) => cubit.getCurrentTheme(),
         setUp: () {
           when(
-            () => mockSecureStorage.get('theme'),
+            () => mockSecureStorage.get(AltMeStrings.theme),
           ).thenAnswer((_) async => 'sdf');
         },
         expect: () => <ThemeMode>[ThemeMode.dark],
