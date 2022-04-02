@@ -55,13 +55,16 @@ void main() {
           act: (cubit) => cubit.setLightTheme(),
           setUp: () {
             when(
-              () => mockSecureStorage.set(AltMeStrings.theme, 'light'),
+              () =>
+                  mockSecureStorage.set(AltMeStrings.theme, AltMeStrings.light),
             ).thenAnswer((_) async {});
           },
           expect: () => <ThemeMode>[ThemeMode.light],
           verify: (_) {
-            verify(() => mockSecureStorage.set(AltMeStrings.theme, 'light'))
-                .called(1);
+            verify(
+              () =>
+                  mockSecureStorage.set(AltMeStrings.theme, AltMeStrings.light),
+            ).called(1);
           },
         );
 
@@ -71,13 +74,20 @@ void main() {
           act: (cubit) => cubit.setDarkTheme(),
           setUp: () {
             when(
-              () => mockSecureStorage.set(AltMeStrings.theme, 'dark'),
+              () => mockSecureStorage.set(
+                AltMeStrings.theme,
+                AltMeStrings.dark,
+              ),
             ).thenAnswer((_) async {});
           },
           expect: () => <ThemeMode>[ThemeMode.dark],
           verify: (_) {
-            verify(() => mockSecureStorage.set(AltMeStrings.theme, 'dark'))
-                .called(1);
+            verify(
+              () => mockSecureStorage.set(
+                AltMeStrings.theme,
+                AltMeStrings.dark,
+              ),
+            ).called(1);
           },
         );
 
@@ -87,13 +97,20 @@ void main() {
           act: (cubit) => cubit.setSystemTheme(),
           setUp: () {
             when(
-              () => mockSecureStorage.set(AltMeStrings.theme, 'system'),
+              () => mockSecureStorage.set(
+                AltMeStrings.theme,
+                AltMeStrings.system,
+              ),
             ).thenAnswer((_) async {});
           },
           expect: () => <ThemeMode>[ThemeMode.system],
           verify: (_) {
-            verify(() => mockSecureStorage.set(AltMeStrings.theme, 'system'))
-                .called(1);
+            verify(
+              () => mockSecureStorage.set(
+                AltMeStrings.theme,
+                AltMeStrings.system,
+              ),
+            ).called(1);
           },
         );
       },
@@ -133,7 +150,9 @@ void main() {
         setUp: () {
           when(
             () => mockSecureStorage.get(AltMeStrings.theme),
-          ).thenAnswer((_) async => 'light');
+          ).thenAnswer(
+            (_) async => AltMeStrings.light,
+          );
         },
         expect: () => <ThemeMode>[ThemeMode.light],
       );
@@ -145,7 +164,9 @@ void main() {
         setUp: () {
           when(
             () => mockSecureStorage.get(AltMeStrings.theme),
-          ).thenAnswer((_) async => 'dark');
+          ).thenAnswer(
+            (_) async => AltMeStrings.dark,
+          );
         },
         expect: () => <ThemeMode>[ThemeMode.dark],
       );
@@ -157,7 +178,9 @@ void main() {
         setUp: () {
           when(
             () => mockSecureStorage.get(AltMeStrings.theme),
-          ).thenAnswer((_) async => 'system');
+          ).thenAnswer(
+            (_) async => AltMeStrings.system,
+          );
         },
         expect: () => <ThemeMode>[ThemeMode.system],
       );
@@ -171,7 +194,7 @@ void main() {
             () => mockSecureStorage.get(AltMeStrings.theme),
           ).thenAnswer((_) async => 'sdf');
         },
-        expect: () => <ThemeMode>[ThemeMode.dark],
+        expect: () => <ThemeMode>[ThemeMode.light],
       );
     });
   });

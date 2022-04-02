@@ -30,6 +30,14 @@ class _SplashViewState extends State<SplashView>
       CurvedAnimation(parent: _animationController, curve: Curves.ease),
     );
     _animationController.forward();
+
+    // Future.delayed(
+    //   const Duration(seconds: 5),
+    //   () async {
+    //     //await context.read<ThemeCubit>().getCurrentTheme();
+    //    // return Navigator.of(context).push<void>(ThemePage.route());
+    //   },
+    // );
     super.initState();
   }
 

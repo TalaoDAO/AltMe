@@ -1,14 +1,24 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/splash/splash.dart';
+import 'package:altme/theme/theme.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/helpers.dart';
 
+class MockThemeCubit extends MockCubit<ThemeMode> implements ThemeCubit {}
+
 void main() {
+  late ThemeCubit themeCubit;
+
+  setUpAll(() {
+    themeCubit = MockThemeCubit();
+  });
+
   group('SplashPage', () {
     testWidgets('renders SplashView', (tester) async {
-      await tester.pumpApp(const SplashPage());
+      await tester.pumpApp(const SplashView());
       expect(find.byType(SplashView), findsOneWidget);
     });
   });

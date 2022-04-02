@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/constants/altme_strings.dart';
+import 'package:altme/app/app.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -8,19 +8,18 @@ class ThemeCubit extends Cubit<ThemeMode> {
 
   final SecureStorageProvider secureStorageProvider;
 
-
-  Future<void> setLightTheme() async {
-    await secureStorageProvider.set(AltMeStrings.theme, 'light');
+  void setLightTheme() {
+    secureStorageProvider.set(AltMeStrings.theme, AltMeStrings.light);
     setTheme(ThemeMode.light);
   }
 
-  Future<void> setDarkTheme() async {
-    await secureStorageProvider.set(AltMeStrings.theme, 'dark');
+  void setDarkTheme() {
+    secureStorageProvider.set(AltMeStrings.theme, AltMeStrings.dark);
     setTheme(ThemeMode.dark);
   }
 
-  Future<void> setSystemTheme() async {
-    await secureStorageProvider.set(AltMeStrings.theme, 'system');
+  void setSystemTheme() {
+    secureStorageProvider.set(AltMeStrings.theme, AltMeStrings.system);
     setTheme(ThemeMode.system);
   }
 
@@ -31,14 +30,14 @@ class ThemeCubit extends Cubit<ThemeMode> {
   Future<void> getCurrentTheme() async {
     final theme = await secureStorageProvider.get(AltMeStrings.theme) ?? '';
     if (theme.isNotEmpty) {
-      if (theme == 'light') {
+      if (theme == AltMeStrings.light) {
         setTheme(ThemeMode.light);
-      } else if (theme == 'dark') {
+      } else if (theme == AltMeStrings.dark) {
         setTheme(ThemeMode.dark);
-      } else if (theme == 'system') {
+      } else if (theme == AltMeStrings.system) {
         setTheme(ThemeMode.system);
       } else {
-        setTheme(ThemeMode.dark);
+        setTheme(ThemeMode.light);
       }
     }
   }
