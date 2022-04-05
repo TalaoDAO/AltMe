@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  AppTheme();
+  AppTheme._();
 
   static const Color darkPrimary = Color(0xffbb86fc);
   static const Color darkPrimaryContainer = Color(0xff3700B3);
@@ -215,7 +215,7 @@ extension CustomColorScheme on ColorScheme {
       ? const Color(0xFF757575)
       : const Color(0xFF424242);
 
-  Color get documentShape => AppTheme.lightPrimaryContainer.withOpacity(05);
+  Color get documentShape => AppTheme.lightPrimaryContainer.withOpacity(0.5);
 
   Color get star => const Color(0xFFFFB83D);
 
