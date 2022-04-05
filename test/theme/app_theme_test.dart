@@ -1,6 +1,7 @@
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../helpers/helpers.dart';
 
@@ -384,6 +385,252 @@ void main() {
       final buttonDisabled =
           tester.widget<Container>(find.byKey(const Key('buttonDisabled')));
       expect(buttonDisabled.color, const Color(0xFF424242));
+    });
+  });
+
+  group('CustomTextTheme', () {
+    testWidgets('custom text theme rendered correctly', (tester) async {
+      await tester.pumpApp(
+        MaterialApp(
+          theme: ThemeData(brightness: Brightness.dark),
+          home: Builder(
+            builder: (context) => Column(
+              children: [
+                Text(
+                  'brand',
+                  key: const Key('brand'),
+                  style: Theme.of(context).textTheme.brand,
+                ),
+                Text(
+                  'credentialTitle',
+                  key: const Key('credentialTitle'),
+                  style: Theme.of(context).textTheme.credentialTitle,
+                ),
+                Text(
+                  'credentialDescription',
+                  key: const Key('credentialDescription'),
+                  style: Theme.of(context).textTheme.credentialDescription,
+                ),
+                Text(
+                  'credentialFieldTitle',
+                  key: const Key('credentialFieldTitle'),
+                  style: Theme.of(context).textTheme.credentialFieldTitle,
+                ),
+                Text(
+                  'credentialFieldDescription',
+                  key: const Key('credentialFieldDescription'),
+                  style: Theme.of(context).textTheme.credentialFieldDescription,
+                ),
+                Text(
+                  'learningAchievementTitle',
+                  key: const Key('learningAchievementTitle'),
+                  style: Theme.of(context).textTheme.learningAchievementTitle,
+                ),
+                Text(
+                  'learningAchievementDescription',
+                  key: const Key('learningAchievementDescription'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .learningAchievementDescription,
+                ),
+                Text(
+                  'credentialIssuer',
+                  key: const Key('credentialIssuer'),
+                  style: Theme.of(context).textTheme.credentialIssuer,
+                ),
+                Text(
+                  'imageCard',
+                  key: const Key('imageCard'),
+                  style: Theme.of(context).textTheme.imageCard,
+                ),
+                Text(
+                  'loyaltyCard',
+                  key: const Key('loyaltyCard'),
+                  style: Theme.of(context).textTheme.loyaltyCard,
+                ),
+                Text(
+                  'professionalExperienceAssessmentRating',
+                  key: const Key('professionalExperienceAssessmentRating'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .professionalExperienceAssessmentRating,
+                ),
+                Text(
+                  'voucherOverlay',
+                  key: const Key('voucherOverlay'),
+                  style: Theme.of(context).textTheme.voucherOverlay,
+                ),
+                Text(
+                  'ecole42LearningAchievementStudentIdentity',
+                  key: const Key('ecole42LearningAchievementStudentIdentity'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .ecole42LearningAchievementStudentIdentity,
+                ),
+                Text(
+                  'ecole42LearningAchievementLevel',
+                  key: const Key('ecole42LearningAchievementLevel'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .ecole42LearningAchievementLevel,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      final brand = tester.widget<Text>(find.byKey(const Key('brand')));
+      expect(
+        brand.style,
+        GoogleFonts.nunito(
+          color: const Color(0xFFFFFFFF),
+          fontSize: 28,
+          fontWeight: FontWeight.w400,
+        ),
+      );
+
+      final credentialTitle =
+          tester.widget<Text>(find.byKey(const Key('credentialTitle')));
+      expect(
+        credentialTitle.style,
+        GoogleFonts.nunito(
+          color: const Color(0xFF424242),
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+
+      final credentialDescription =
+          tester.widget<Text>(find.byKey(const Key('credentialDescription')));
+      expect(
+        credentialDescription.style,
+        GoogleFonts.nunito(
+          color: const Color(0xFF757575),
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+
+      final credentialFieldTitle =
+          tester.widget<Text>(find.byKey(const Key('credentialFieldTitle')));
+      expect(
+        credentialFieldTitle.style,
+        GoogleFonts.nunito(
+          color: const Color(0xff212121),
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+        ),
+      );
+
+      final credentialFieldDescription = tester
+          .widget<Text>(find.byKey(const Key('credentialFieldDescription')));
+      expect(
+        credentialFieldDescription.style,
+        GoogleFonts.nunito(
+          color: const Color(0xff212121),
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+
+      final learningAchievementTitle = tester
+          .widget<Text>(find.byKey(const Key('learningAchievementTitle')));
+      expect(
+        learningAchievementTitle.style,
+        GoogleFonts.nunito(
+          color: const Color(0xff212121),
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+
+      final learningAchievementDescription = tester.widget<Text>(
+          find.byKey(const Key('learningAchievementDescription')));
+      expect(
+        learningAchievementDescription.style,
+        GoogleFonts.nunito(
+          color: const Color(0xff212121),
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+        ),
+      );
+
+      final credentialIssuer =
+          tester.widget<Text>(find.byKey(const Key('credentialIssuer')));
+      expect(
+        credentialIssuer.style,
+        GoogleFonts.nunito(
+          color: const Color(0xff212121),
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+
+      final imageCard = tester.widget<Text>(find.byKey(const Key('imageCard')));
+      expect(
+        imageCard.style,
+        GoogleFonts.nunito(
+          color: const Color(0xff212121),
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+
+      final loyaltyCard =
+          tester.widget<Text>(find.byKey(const Key('loyaltyCard')));
+      expect(
+        loyaltyCard.style,
+        GoogleFonts.nunito(
+          color: const Color(0xffffffff),
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+
+      final professionalExperienceAssessmentRating = tester.widget<Text>(
+          find.byKey(const Key('professionalExperienceAssessmentRating')));
+      expect(
+        professionalExperienceAssessmentRating.style,
+        GoogleFonts.nunito(
+          color: const Color(0xff212121),
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+
+      final voucherOverlay =
+          tester.widget<Text>(find.byKey(const Key('voucherOverlay')));
+      expect(
+        voucherOverlay.style,
+        GoogleFonts.nunito(
+          color: const Color(0xffFFFFFF),
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+
+      final ecole42LearningAchievementStudentIdentity = tester.widget<Text>(
+          find.byKey(const Key('ecole42LearningAchievementStudentIdentity')));
+      expect(
+        ecole42LearningAchievementStudentIdentity.style,
+        GoogleFonts.nunito(
+          color: const Color(0xff212121),
+          fontSize: 6,
+          fontWeight: FontWeight.w700,
+        ),
+      );
+
+      final ecole42LearningAchievementLevel = tester.widget<Text>(
+          find.byKey(const Key('ecole42LearningAchievementLevel')));
+      expect(
+        ecole42LearningAchievementLevel.style,
+        GoogleFonts.nunito(
+          color: const Color(0xff212121),
+          fontSize: 5,
+          fontWeight: FontWeight.w700,
+        ),
+      );
     });
   });
 }
