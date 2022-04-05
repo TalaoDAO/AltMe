@@ -37,6 +37,7 @@ class CryptocurrencyKeys {
     return keyPair;
   }
 
+  ///encrypt
   Future<Encryption> encrypt(String message, String mnemonic) async {
     final keyPair = await generateKeyPair(mnemonic);
     final encryptor =

@@ -3,19 +3,28 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'encryption.g.dart';
 
+///Encryption
 @JsonSerializable()
 class Encryption extends Equatable {
-  Encryption({
+
+
+  ///Encryption
+  const Encryption({
     this.cipherText,
     this.authenticationTag,
   });
 
-  final String? cipherText;
-  final String? authenticationTag;
-
+  ///fromJson
   factory Encryption.fromJson(Map<String, dynamic> json) =>
       _$EncryptionFromJson(json);
 
+  ///cipherText
+  final String? cipherText;
+
+  ///authenticationTag
+  final String? authenticationTag;
+
+  ///toJson
   Map<String, dynamic> toJson() => _$EncryptionToJson(this);
 
   @override
