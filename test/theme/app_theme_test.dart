@@ -6,6 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 import '../helpers/helpers.dart';
 
 void main() {
+  test('can access AppTheme', () {
+    expect(AppTheme, isNotNull);
+  });
+
   group('Light CustomColorScheme', () {
     testWidgets('light color is rendered correctly', (tester) async {
       await tester.pumpApp(
@@ -546,7 +550,8 @@ void main() {
       );
 
       final learningAchievementDescription = tester.widget<Text>(
-          find.byKey(const Key('learningAchievementDescription')));
+        find.byKey(const Key('learningAchievementDescription')),
+      );
       expect(
         learningAchievementDescription.style,
         GoogleFonts.nunito(
@@ -589,7 +594,8 @@ void main() {
       );
 
       final professionalExperienceAssessmentRating = tester.widget<Text>(
-          find.byKey(const Key('professionalExperienceAssessmentRating')));
+        find.byKey(const Key('professionalExperienceAssessmentRating')),
+      );
       expect(
         professionalExperienceAssessmentRating.style,
         GoogleFonts.nunito(
@@ -611,7 +617,8 @@ void main() {
       );
 
       final ecole42LearningAchievementStudentIdentity = tester.widget<Text>(
-          find.byKey(const Key('ecole42LearningAchievementStudentIdentity')));
+        find.byKey(const Key('ecole42LearningAchievementStudentIdentity')),
+      );
       expect(
         ecole42LearningAchievementStudentIdentity.style,
         GoogleFonts.nunito(
@@ -622,7 +629,8 @@ void main() {
       );
 
       final ecole42LearningAchievementLevel = tester.widget<Text>(
-          find.byKey(const Key('ecole42LearningAchievementLevel')));
+        find.byKey(const Key('ecole42LearningAchievementLevel')),
+      );
       expect(
         ecole42LearningAchievementLevel.style,
         GoogleFonts.nunito(
