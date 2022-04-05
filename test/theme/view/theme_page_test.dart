@@ -1,10 +1,8 @@
 import 'package:altme/theme/theme.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -21,15 +19,12 @@ void main() {
   group('ThemePage', () {
     testWidgets('is routable', (tester) async {
       await tester.pumpApp(
-        BlocProvider(
-          create: (_) => ThemeCubit(SecureStorageProvider.instance),
-          child: Builder(
-            builder: (context) => Scaffold(
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.of(context).push<void>(ThemePage.route(themeCubit));
-                },
-              ),
+        Builder(
+          builder: (context) => Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).push<void>(ThemePage.route(themeCubit));
+              },
             ),
           ),
         ),

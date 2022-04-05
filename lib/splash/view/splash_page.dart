@@ -1,5 +1,7 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -25,19 +27,19 @@ class _SplashViewState extends State<SplashView>
   @override
   void initState() {
     _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 5));
+        AnimationController(vsync: this, duration: const Duration(seconds: 5))
+          ..addStatusListener((AnimationStatus status) async {
+            if (status == AnimationStatus.completed) {
+               await context.read<ThemeCubit>().getCurrentTheme();
+              // await Navigator.of(context)
+              //     .push<void>(ThemePage.route(context.read<ThemeCubit>()));
+            }
+          });
     _scaleAnimation = Tween<double>(begin: 0.2, end: 1).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.ease),
     );
     _animationController.forward();
 
-    // Future.delayed(
-    //   const Duration(seconds: 5),
-    //   () async {
-    //     //await context.read<ThemeCubit>().getCurrentTheme();
-    //    // return Navigator.of(context).push<void>(ThemePage.route());
-    //   },
-    // );
     super.initState();
   }
 
