@@ -5,7 +5,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 void main() {
   group('JwtDecode', () {
     test('can be instantiated', () {
-      expect(JwtDecode(), isNotNull);
+      expect(JWTDecode(), isNotNull);
     });
   });
 }
