@@ -1,87 +1,49 @@
-import 'package:secure_storage/src/secure_storage_stub.dart'
-    if (dart.library.io) 'secure_storage_io.dart'
-    if (dart.library.js) 'secure_storage_js.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-///SecureStorageProviderClass
-abstract class SecureStorageProvider {
-  static SecureStorageProvider? _instance;
+///SecureStorageProvider
+class SecureStorageProvider {
+  ///SecureStorageProvider
+  const SecureStorageProvider(this._storage);
 
-  ///SecureStorageProviderInstance
-  static SecureStorageProvider get instance {
-    _instance ??= getProvider();
-    return _instance!;
+  final FlutterSecureStorage _storage;
+
+  IOSOptions get _defaultIOSOptions => const IOSOptions(
+        accessibility: IOSAccessibility.unlocked_this_device,
+      );
+
+  ///get
+  Future<String?> get(String key) async {
+    try {
+      return await _storage.read(key: key);
+    } catch (e) {
+      return null;
+    }
   }
 
-  ///get string
-  Future<String?> get(String key);
+  ///set
+  Future<void> set(String key, String val) async {
+    return _storage.write(
+      key: key,
+      value: val,
+      iOptions: _defaultIOSOptions,
+    );
+  }
 
-  ///set string
-  Future<void> set(String key, String val);
+  ///delete
+  Future<void> delete(String key) async {
+    return _storage.delete(
+      key: key,
+      iOptions: _defaultIOSOptions,
+    );
+  }
 
-  ///delete string
-  Future<void> delete(String key);
+  ///getAllValues
+  Future<Map<String, String>> getAllValues() {
+    return _storage.readAll();
+  }
 
-  ///get all values
-  Future<Map<String, dynamic>> getAllValues();
-
-  ///delete all values
-  Future<void> deleteAll();
-}
-
-///SecureStorage keys class
-abstract class SecureStorageKeys {
-  ///data
-  static const data = 'data';
-
-  ///mnemonic
-  static const mnemonic = 'mnemonic';
-
-  ///isEnterpriseUser
-  static const isEnterpriseUser = 'isEnterpriseUser';
-
-  ///did
-  static const did = 'DID';
-
-  ///rsaKeyJson
-  static const rsaKeyJson = 'RSAKeyJson';
-
-  ///key
-  static const key = 'key';
-
-  ///didMethod
-  static const didMethod = 'DIDMethod';
-
-  ///didMethodName
-  static const didMethodName = 'DIDMethodName';
-
-  ///verificationMethod
-  static const verificationMethod = 'VerificationMethod';
-
-  ///companyName
-  static const companyName = 'companyName';
-
-  ///companyWebsite
-  static const companyWebsite = 'companyWebsite';
-
-  ///jobTitle
-  static const jobTitle = 'jobTitle';
-
-  ///firstNameKey
-  static const String firstNameKey = 'profile/firstName';
-
-  ///lastNameKey
-  static const String lastNameKey = 'profile/lastName';
-
-  ///phoneKey
-  static const String phoneKey = 'profile/phone';
-
-  ///locationKey
-  static const String locationKey = 'profile/location';
-
-  ///emailKey
-  static const String emailKey = 'profile/email';
-
-  ///issuerVerificationSettingKey
-  static const String issuerVerificationSettingKey =
-      'profile/issuerVerificationSetting';
+  ///deleteAll
+  Future<void> deleteAll() async {
+    return _storage.deleteAll();
+  }
 }

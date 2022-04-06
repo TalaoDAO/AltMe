@@ -1,22 +1,24 @@
 // ignore_for_file: prefer_const_constructors
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:test/test.dart';
 
-class MockSecureStorageProvider extends Mock implements SecureStorageProvider {}
+class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 
 void main() {
   const key = 'key';
   const value = 'value';
-  const key1 = 'key1';
-  const value1 = 'value1';
+  const allValue = <String, String>{};
 
-  final SecureStorageProvider secureStorageProvider =
-      MockSecureStorageProvider();
+  late MockFlutterSecureStorage mockFlutterSecureStorage;
 
-  setUp(() async {
-    when(secureStorageProvider.deleteAll).thenAnswer((invocation) async {});
-    await secureStorageProvider.deleteAll();
+  late SecureStorageProvider secureStorageProvider;
+
+  setUpAll(() async {
+    mockFlutterSecureStorage = MockFlutterSecureStorage();
+    secureStorageProvider = SecureStorageProvider(mockFlutterSecureStorage);
   });
 
   group('SecureStorage', () {
@@ -24,54 +26,78 @@ void main() {
       expect(secureStorageProvider, isNotNull);
     });
 
-    test('set and get method', () async {
+    test('get method', () async {
+      when(() => mockFlutterSecureStorage.read(key: key))
+          .thenAnswer((invocation) async {
+        return value;
+      });
+      final result = await secureStorageProvider.get(key);
+      expect(result, equals(value));
+      verify(() => mockFlutterSecureStorage.read(key: key)).called(1);
+    });
+
+    test('getAll method', () async {
       when(
-        () => secureStorageProvider.set(key, value),
+        () => mockFlutterSecureStorage.readAll(
+          iOptions: any(named: 'iOptions'),
+        ),
+      ).thenAnswer((invocation) async {
+        return allValue;
+      });
+      final result = await secureStorageProvider.getAllValues();
+      expect(result, equals(allValue));
+      verify(
+        () => mockFlutterSecureStorage.readAll(
+          iOptions: any(named: 'iOptions'),
+        ),
+      ).called(1);
+    });
+
+    test('set method', () async {
+      when(
+        () => mockFlutterSecureStorage.write(
+          key: key,
+          value: value,
+          iOptions: any(named: 'iOptions'),
+        ),
       ).thenAnswer((invocation) async {});
 
       await secureStorageProvider.set(key, value);
 
-      when(
-        () => secureStorageProvider.get(key),
-      ).thenAnswer((invocation) => Future.value(value));
-
-      final result = await secureStorageProvider.get(key);
-      expect(result, equals(value));
+      verify(
+        () => mockFlutterSecureStorage.write(
+          key: key,
+          value: value,
+          iOptions: any(named: 'iOptions'),
+        ),
+      ).called(1);
     });
 
     test('delete method', () async {
-      when(() => secureStorageProvider.set(key, value))
-          .thenAnswer((invocation) async {});
+      when(
+        () => mockFlutterSecureStorage.delete(
+          key: key,
+          iOptions: any(named: 'iOptions'),
+        ),
+      ).thenAnswer((_) async {});
 
-      when(() => secureStorageProvider.delete(key))
-          .thenAnswer((invocation) async {});
-
-      when(() => secureStorageProvider.get(key))
-          .thenAnswer((invocation) => Future.value(null));
-
-      await secureStorageProvider.set(key, value);
-      await secureStorageProvider.delete(key);
-      final result = await secureStorageProvider.get(key);
-      expect(result, isNull);
+      await secureStorageProvider.delete(
+        key,
+      );
+      verify(
+        () => mockFlutterSecureStorage.delete(
+          key: key,
+          iOptions: any(named: 'iOptions'),
+        ),
+      ).called(1);
     });
 
     test('deleteAll method', () async {
-      when(() => secureStorageProvider.set(key, value))
+      when(mockFlutterSecureStorage.deleteAll)
           .thenAnswer((invocation) async {});
-      when(() => secureStorageProvider.set(key1, value1))
-          .thenAnswer((invocation) async {});
-
-      await secureStorageProvider.set(key, value);
-      await secureStorageProvider.set(key1, value1);
-
-      when(secureStorageProvider.deleteAll).thenAnswer((invocation) async {});
-      when(secureStorageProvider.getAllValues)
-          .thenAnswer((invocation) => Future.value(<String, dynamic>{}));
 
       await secureStorageProvider.deleteAll();
-      final result = await secureStorageProvider.getAllValues();
-      expect(result, equals(<String,dynamic>{}));
+      verify(mockFlutterSecureStorage.deleteAll).called(1);
     });
-
   });
 }
