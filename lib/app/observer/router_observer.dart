@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+/// Ignoring this part which is already tested in Flutter framework.
+/// If we add some real functionality here in the future, the new function
+/// itself should be tested.
 
+// coverage:ignore-start
 class MyRouteObserver extends RouteObserver<PageRoute<dynamic>> {
   @override
   void didPush(Route<dynamic>? route, Route<dynamic>? previousRoute) {
@@ -32,3 +36,4 @@ class MyRouteObserver extends RouteObserver<PageRoute<dynamic>> {
     );
   }
 }
+// coverage:ignore-end
