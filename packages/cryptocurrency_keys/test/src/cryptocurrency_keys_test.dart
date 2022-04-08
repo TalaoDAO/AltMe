@@ -30,13 +30,13 @@ void main() {
       expect(generatedKey.publicKey.hashCode, equals(1100798733));
     });
 
-    test('encrypt', () async {
+    test('message is encrypted correctly', () async {
       final encryptedData = await cryptocurrencyKeys.encrypt(message, mnemonic);
       expect(encryptedData.cipherText, equals(cipherText));
       expect(encryptedData.authenticationTag, equals(authenticationTag));
     });
 
-    test('decrypt', () async {
+    test('encrypted data is decrypted correctly', () async {
       final encryption = Encryption(
         cipherText: cipherText,
         authenticationTag: authenticationTag,
@@ -48,7 +48,7 @@ void main() {
       expect(decryptedData, equals(message));
     });
 
-    test('invalid cipherText', () async {
+    test('invalid cipherText throws Auth error', () async {
       const inCipherText = '123';
       final encryption = Encryption(
         cipherText: inCipherText,
@@ -62,7 +62,7 @@ void main() {
       }
     });
 
-    test('invalid authenticationTag', () async {
+    test('invalid authenticationTag throws Auth error', () async {
       const inValidAuthenticationTag = '123';
       final encryption = Encryption(
         cipherText: cipherText,

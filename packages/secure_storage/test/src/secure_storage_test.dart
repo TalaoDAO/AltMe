@@ -24,7 +24,7 @@ void main() {
       expect(secureStorageProvider, isNotNull);
     });
 
-    test('get method', () async {
+    test('get method works correctly', () async {
       when(() => mockFlutterSecureStorage.read(key: key))
           .thenAnswer((invocation) async {
         return value;
@@ -34,7 +34,7 @@ void main() {
       verify(() => mockFlutterSecureStorage.read(key: key)).called(1);
     });
 
-    test('getAll method', () async {
+    test('getAll method works correctly', () async {
       when(
         () => mockFlutterSecureStorage.readAll(
           iOptions: any(named: 'iOptions'),
@@ -51,7 +51,7 @@ void main() {
       ).called(1);
     });
 
-    test('set method', () async {
+    test('set method works correctly', () async {
       when(
         () => mockFlutterSecureStorage.write(
           key: key,
@@ -71,7 +71,7 @@ void main() {
       ).called(1);
     });
 
-    test('delete method', () async {
+    test('delete method works correctly', () async {
       when(
         () => mockFlutterSecureStorage.delete(
           key: key,
@@ -90,7 +90,7 @@ void main() {
       ).called(1);
     });
 
-    test('deleteAll method', () async {
+    test('deleteAll method works correctly', () async {
       when(mockFlutterSecureStorage.deleteAll)
           .thenAnswer((invocation) async {});
 

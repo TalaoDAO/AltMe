@@ -76,26 +76,26 @@ void main() {
       expect(jwtDecode, isNotNull);
     });
 
-    test('valid jwt token', () {
+    test('valid jwt token results some data', () {
       final result = jwtDecode.parseJwt(validJwtToken);
       expect(result, isNotNull);
       expect(result, isA<Map<String, dynamic>>());
     });
 
-    test('another valid jwt token with result', () {
+    test('valid jwt token results string correctly', () {
       final result = jwtDecode.parseJwt(validJwtTokenOne);
       expect(result, isNotNull);
       expect(result.toString(), equals(jsonStringOfValidTokenOne));
     });
 
-    test('inValid jwt token with less than three part', () {
+    test('inValid jwt token with less than three part throws exception', () {
       expect(
         () => jwtDecode.parseJwt(inValidJwtTokenWithLessThanThreePart),
         throwsA(isA<Exception>()),
       );
     });
 
-    test('inValid jwt token with three part', () {
+    test('inValid jwt token with three part throws exception', () {
       expect(
         () => jwtDecode.parseJwt(inValidJwtTokenWithThreePart),
         throwsA(isA<Exception>()),
