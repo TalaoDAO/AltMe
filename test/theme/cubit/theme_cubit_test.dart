@@ -47,7 +47,7 @@ void main() {
     });
 
     group(
-      'set and save theme',
+      'theme is set correctly',
       () {
         blocTest<ThemeCubit, ThemeMode>(
           'ThemeMode.Light',
@@ -116,7 +116,7 @@ void main() {
       },
     );
 
-    group('Get saved Theme', () {
+    group('get saved theme', () {
       blocTest<ThemeCubit, ThemeMode>(
         'attempt to get saved theme',
         build: () => ThemeCubit(mockSecureStorage),
@@ -186,7 +186,7 @@ void main() {
       );
 
       blocTest<ThemeCubit, ThemeMode>(
-        'emit [Theme.dark] if random app_theme is returned',
+        'emit [Theme.light] if random app_theme is returned',
         build: () => ThemeCubit(mockSecureStorage),
         act: (cubit) => cubit.getCurrentTheme(),
         setUp: () {

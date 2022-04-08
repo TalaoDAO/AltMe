@@ -40,7 +40,7 @@ void main() {
     );
 
     testWidgets(
-      'renders correct Icon when true case ',
+      'renders correct Icon when isTrue is true',
       (tester) async {
         await tester.pumpWidget(
           MaterialApp(
@@ -58,7 +58,7 @@ void main() {
     );
 
     testWidgets(
-      'renders correct Icon when true case ',
+      'renders correct Icon when isTrue is true',
       (tester) async {
         await tester.pumpWidget(
           MaterialApp(

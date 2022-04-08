@@ -34,7 +34,7 @@ void main() {
       expect(find.byType(ThemePage), findsOneWidget);
     });
 
-    testWidgets('calls setLightTheme when setLightTheme is Tapped',
+    testWidgets('calls setLightTheme when setLightTheme is tapped',
         (tester) async {
       when(() => themeCubit.setLightTheme()).thenAnswer((_) async {});
       await tester.pumpApp(
@@ -54,7 +54,7 @@ void main() {
       verify(() => themeCubit.setLightTheme()).called(1);
     });
 
-    testWidgets('calls setDarkTheme when setDarkTheme is Tapped',
+    testWidgets('calls setDarkTheme when setDarkTheme is tapped',
         (tester) async {
       when(() => themeCubit.setDarkTheme()).thenAnswer((_) async {});
       await tester.pumpApp(
@@ -74,7 +74,7 @@ void main() {
       verify(() => themeCubit.setDarkTheme()).called(1);
     });
 
-    testWidgets('calls setSystemTheme when setSystemTheme is Tapped',
+    testWidgets('calls setSystemTheme when setSystemTheme is tapped',
         (tester) async {
       when(() => themeCubit.setSystemTheme()).thenAnswer((_) async {});
       await tester.pumpApp(
