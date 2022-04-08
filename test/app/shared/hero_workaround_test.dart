@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Hero Workaround', () {
-    testWidgets('test flightShuttleBuilder', (tester) async {
+    testWidgets('flightShuttleBuilder is rendered', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(

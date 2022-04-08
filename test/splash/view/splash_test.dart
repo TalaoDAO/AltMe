@@ -38,7 +38,7 @@ void main() {
   });
 
   group('SplashView', () {
-    testWidgets('there is only one BasePage widget', (tester) async {
+    testWidgets('only one BasePage widget is rendered', (tester) async {
       await tester.pumpApp(
         BlocProvider.value(
           value: themeCubit,
@@ -68,7 +68,7 @@ void main() {
     //   expect(find.byType(ScaleTransition), findsOneWidget);
     // });
 
-    testWidgets('scaleAnimation Tween is correct', (tester) async {
+    testWidgets('scaleAnimation Tween is animated correctly', (tester) async {
       await tester.pumpApp(
         BlocProvider.value(
           value: themeCubit,

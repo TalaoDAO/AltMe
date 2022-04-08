@@ -21,8 +21,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        // TODO(all): bug found
         BlocProvider<ThemeCubit>(
-          create: (context) => ThemeCubit(SecureStorageProvider.instance),
+          create: (context) => ThemeCubit(SecureStorageProvider()),
         ),
       ],
       child: const MaterialAppDefinition(),

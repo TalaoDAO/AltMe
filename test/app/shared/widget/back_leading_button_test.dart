@@ -7,7 +7,7 @@ import '../../../helpers/helpers.dart';
 
 void main() {
   group('BackLeadingButton', () {
-    testWidgets('pops when pressed IconButton is tapped', (tester) async {
+    testWidgets('pops when IconButton is tapped', (tester) async {
       final MockNavigator navigator = MockNavigator();
       await tester.pumpApp(
         MockNavigatorProvider(
