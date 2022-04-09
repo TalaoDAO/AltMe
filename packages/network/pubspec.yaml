@@ -16,5 +16,6 @@ dev_dependencies:
   build_runner: ^2.1.7
   flutter_test:
     sdk: flutter
+  http_mock_adapter: ^0.3.2
   mocktail: ^0.3.0
   very_good_analysis: ^2.4.0

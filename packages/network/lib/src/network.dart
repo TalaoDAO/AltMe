@@ -54,7 +54,7 @@ class Network {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      final response = await _dio.get<Response<dynamic>>(
+      final response = await _dio.get<dynamic>(
         uri,
         queryParameters: queryParameters,
         options: options,
@@ -86,7 +86,7 @@ class Network {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      final response = await _dio.post<Response<dynamic>>(
+      final response = await _dio.post<dynamic>(
         uri,
         data: data,
         queryParameters: queryParameters,
@@ -108,11 +108,8 @@ class Network {
   }
 
   ///changeHeaders
-  set headers(Map<String, dynamic> headers) =>
-    _dio.options.headers = headers;
-
+  set headers(Map<String, dynamic> headers) => _dio.options.headers = headers;
 
   ///headers
   Map<String, dynamic> get headers => _dio.options.headers;
-
 }
