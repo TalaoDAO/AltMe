@@ -8,9 +8,12 @@ jobs:
     with:
       flutter_channel: stable
       flutter_version: 2.10.0
-# TODO(bibash) : find correct format
-#    - uses: VGVentures/very-good-coverage@v1.1.1
-#      with:
-#        path: "./coverage/lcov.info"
-#        min_coverage: 95
-#        exclude: "**/*_observer.dart **/change.dart"
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: VGVentures/very-good-coverage@v1.1.1
+      with:
+        path: "./coverage/lcov.info"
+        min_coverage: 95
+        exclude: "**/*_observer.dart **/change.dart"
