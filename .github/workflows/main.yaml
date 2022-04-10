@@ -6,7 +6,7 @@ jobs:
   build:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
+      coverage_excludes: "**/*_observer.dart **/change.dart"
       flutter_channel: stable
       flutter_version: 2.10.0
       min_coverage: 95
-      coverage_excludes: "**/*_observer.dart **/change.dart"

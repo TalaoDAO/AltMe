@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 /// Ignoring this part which is already tested in Flutter framework.
 /// If we add some real functionality here in the future, the new function
 /// itself should be tested.

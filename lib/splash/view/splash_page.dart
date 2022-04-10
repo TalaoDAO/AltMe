@@ -30,7 +30,7 @@ class _SplashViewState extends State<SplashView>
         AnimationController(vsync: this, duration: const Duration(seconds: 5))
           ..addStatusListener((AnimationStatus status) async {
             if (status == AnimationStatus.completed) {
-               await context.read<ThemeCubit>().getCurrentTheme();
+              await context.read<ThemeCubit>().getCurrentTheme();
               // await Navigator.of(context)
               //     .push<void>(ThemePage.route(context.read<ThemeCubit>()));
             }
