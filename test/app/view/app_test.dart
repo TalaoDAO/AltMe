@@ -13,6 +13,7 @@ void main() {
   group('App', () {
     testWidgets('renders SplashPage', (tester) async {
       await tester.pumpWidget(const App());
+      await tester.pumpAndSettle();
       expect(find.byType(SplashPage), findsOneWidget);
     });
   });

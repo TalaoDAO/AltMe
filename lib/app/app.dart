@@ -5,5 +5,6 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+export 'observer/router_observer.dart';
 export 'shared/shared.dart';
 export 'view/app.dart';

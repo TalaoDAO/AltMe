@@ -5,3 +5,4 @@ linter:
     library_private_types_in_public_api: false
     omit_local_variable_types: false
     avoid_redundant_argument_values: false
+    cascade_invocations: false
