@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:cryptocurrency_keys/src/model/encryption.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,10 +10,10 @@ void main() {
   const cipherText = '¨`ýp<ÐW3AR1¯#.í©¥¿e,|VrtuXÅ';
   const authenticationTag = 'äU~ÇÍÞ¦BÌuDÅ';
 
-  late final CryptocurrencyKeys cryptocurrencyKeys;
+  late CryptocurrencyKeys cryptocurrencyKeys;
 
   setUpAll(() {
-    cryptocurrencyKeys = CryptocurrencyKeys();
+    cryptocurrencyKeys = const CryptocurrencyKeys();
   });
 
   group('CryptocurrencyKeys', () {
@@ -37,7 +36,7 @@ void main() {
     });
 
     test('encrypted data is decrypted correctly', () async {
-      final encryption = Encryption(
+      const encryption = Encryption(
         cipherText: cipherText,
         authenticationTag: authenticationTag,
       );
@@ -50,7 +49,7 @@ void main() {
 
     test('invalid cipherText throws Auth error', () async {
       const inCipherText = '123';
-      final encryption = Encryption(
+      const encryption = Encryption(
         cipherText: inCipherText,
         authenticationTag: authenticationTag,
       );
@@ -64,7 +63,7 @@ void main() {
 
     test('invalid authenticationTag throws Auth error', () async {
       const inValidAuthenticationTag = '123';
-      final encryption = Encryption(
+      const encryption = Encryption(
         cipherText: cipherText,
         authenticationTag: inValidAuthenticationTag,
       );
