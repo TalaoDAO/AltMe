@@ -4,14 +4,9 @@ on: [pull_request, push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-        with:
-          flutter_channel: stable
-          flutter_version: 2.10.0
-      - uses: VGVentures/very-good-coverage@v1.1.1
-        with:
-          path: "./coverage/lcov.info"
-          min_coverage: 95
-          exclude: "**/*_observer.dart **/change.dart"
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    with:
+      flutter_channel: stable
+      flutter_version: 2.10.0
+      min_coverage: 95
+      coverage_excludes: "**/*_observer.dart **/change.dart"
