@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
@@ -62,7 +61,7 @@ void main() {
       'Y-NVqJ6_YmUo3uDIr9BmSw';
 
   const jsonStringOfValidTokenOne =
-      '''{scope: openid, response_type: id_token, client_id: did:web:talao.co, redirect_uri: https://talao.co/gaiax/login_redirect/287f58e9-a50c-11ec-bea0-0a1628958560, response_mode: post, claims: {"id_token":{},"vp_token":{"presentation_definition":{"id":"pass_for_gaiax","input_descriptors":[{"id":"GaiaxPass issued by Talao","purpose":"Test for Gaia-X hackathon","format":{"ldp_vc":{"proof_type":["JsonWebSignature2020"]}},"constraints":{"limit_disclosure":"required","fields":[{"path":["\$.credentialSubject.type"],"purpose":"One can only accept GaiaxPass","filter":{"type":"string","pattern":"GaiaxPass"}},{"path":["\$.issuer"],"purpose":"One can accept only GaiaxPass signed by Talao","filter":{"type":"string","pattern":"did:web:talao.co"}}]}}]}}}, nonce: 6j0RATZeIj, registration: {"id_token_signing_alg_values_supported":["RS256","ES256","ES256K","EdDSA"],"subject_syntax_types_supported":["did:web","did:tz","did:key","did:ion","did:pkh","did:ethr"]}, request_uri: https://talao.co/gaiax/login_request_uri/287f58e9-a50c-11ec-bea0-0a1628958560}''';
+      r'''{scope: openid, response_type: id_token, client_id: did:web:talao.co, redirect_uri: https://talao.co/gaiax/login_redirect/287f58e9-a50c-11ec-bea0-0a1628958560, response_mode: post, claims: {"id_token":{},"vp_token":{"presentation_definition":{"id":"pass_for_gaiax","input_descriptors":[{"id":"GaiaxPass issued by Talao","purpose":"Test for Gaia-X hackathon","format":{"ldp_vc":{"proof_type":["JsonWebSignature2020"]}},"constraints":{"limit_disclosure":"required","fields":[{"path":["$.credentialSubject.type"],"purpose":"One can only accept GaiaxPass","filter":{"type":"string","pattern":"GaiaxPass"}},{"path":["$.issuer"],"purpose":"One can accept only GaiaxPass signed by Talao","filter":{"type":"string","pattern":"did:web:talao.co"}}]}}]}}}, nonce: 6j0RATZeIj, registration: {"id_token_signing_alg_values_supported":["RS256","ES256","ES256K","EdDSA"],"subject_syntax_types_supported":["did:web","did:tz","did:key","did:ion","did:pkh","did:ethr"]}, request_uri: https://talao.co/gaiax/login_request_uri/287f58e9-a50c-11ec-bea0-0a1628958560}''';
 
   const inValidJwtTokenWithLessThanThreePart = 'partOne.partTwo';
   const inValidJwtTokenWithThreePart = 'partOne.partTwo.partThree';
@@ -76,26 +75,26 @@ void main() {
       expect(jwtDecode, isNotNull);
     });
 
-    test('valid jwt token', () {
+    test('valid jwt token results some data', () {
       final result = jwtDecode.parseJwt(validJwtToken);
       expect(result, isNotNull);
       expect(result, isA<Map<String, dynamic>>());
     });
 
-    test('another valid jwt token with result', () {
+    test('valid jwt token results string correctly', () {
       final result = jwtDecode.parseJwt(validJwtTokenOne);
       expect(result, isNotNull);
       expect(result.toString(), equals(jsonStringOfValidTokenOne));
     });
 
-    test('inValid jwt token with less than three part', () {
+    test('inValid jwt token with less than three part throws exception', () {
       expect(
         () => jwtDecode.parseJwt(inValidJwtTokenWithLessThanThreePart),
         throwsA(isA<Exception>()),
       );
     });
 
-    test('inValid jwt token with three part', () {
+    test('inValid jwt token with three part throws exception', () {
       expect(
         () => jwtDecode.parseJwt(inValidJwtTokenWithThreePart),
         throwsA(isA<Exception>()),

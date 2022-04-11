@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:cryptocurrency_keys/src/model/encryption.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,10 +10,10 @@ void main() {
   const cipherText = '¨`ýp<ÐW3AR1¯#.í©¥¿e,|VrtuXÅ';
   const authenticationTag = 'äU~ÇÍÞ¦BÌuDÅ';
 
-  late final CryptocurrencyKeys cryptocurrencyKeys;
+  late CryptocurrencyKeys cryptocurrencyKeys;
 
   setUpAll(() {
-    cryptocurrencyKeys = CryptocurrencyKeys();
+    cryptocurrencyKeys = const CryptocurrencyKeys();
   });
 
   group('CryptocurrencyKeys', () {
@@ -30,14 +29,14 @@ void main() {
       expect(generatedKey.publicKey.hashCode, equals(1100798733));
     });
 
-    test('encrypt', () async {
+    test('message is encrypted correctly', () async {
       final encryptedData = await cryptocurrencyKeys.encrypt(message, mnemonic);
       expect(encryptedData.cipherText, equals(cipherText));
       expect(encryptedData.authenticationTag, equals(authenticationTag));
     });
 
-    test('decrypt', () async {
-      final encryption = Encryption(
+    test('encrypted data is decrypted correctly', () async {
+      const encryption = Encryption(
         cipherText: cipherText,
         authenticationTag: authenticationTag,
       );
@@ -48,9 +47,9 @@ void main() {
       expect(decryptedData, equals(message));
     });
 
-    test('invalid cipherText', () async {
+    test('invalid cipherText throws Auth error', () async {
       const inCipherText = '123';
-      final encryption = Encryption(
+      const encryption = Encryption(
         cipherText: inCipherText,
         authenticationTag: authenticationTag,
       );
@@ -62,9 +61,9 @@ void main() {
       }
     });
 
-    test('invalid authenticationTag', () async {
+    test('invalid authenticationTag throws Auth error', () async {
       const inValidAuthenticationTag = '123';
-      final encryption = Encryption(
+      const encryption = Encryption(
         cipherText: cipherText,
         authenticationTag: inValidAuthenticationTag,
       );
