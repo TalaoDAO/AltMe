@@ -9,5 +9,5 @@ import 'package:altme/app/app.dart';
 import 'package:altme/bootstrap.dart';
 
 void main() {
-  bootstrap(() => const App());
+  bootstrap(() => const App(flavorMode: FlavorMode.development));
 }

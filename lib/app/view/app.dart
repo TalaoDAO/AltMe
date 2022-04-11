@@ -6,6 +6,7 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:altme/app/app.dart';
+import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
@@ -15,12 +16,18 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({Key? key, this.flavorMode = FlavorMode.production})
+      : super(key: key);
+
+  final FlavorMode flavorMode;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<FlavorCubit>(
+          create: (context) => FlavorCubit(flavorMode),
+        ),
         // TODO(all): bug found
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(SecureStorageProvider()),
