@@ -6,6 +6,7 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:altme/app/app.dart';
+import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/splash/view/splash_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
