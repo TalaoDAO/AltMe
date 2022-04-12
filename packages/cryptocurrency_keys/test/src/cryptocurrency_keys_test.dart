@@ -30,14 +30,13 @@ void main() {
         cipherText: cipherText,
         authenticationTag: authenticationTag,
       );
-      expect(encryption.toJson(),encryptionModelJson);
+      expect(encryption.toJson(), encryptionModelJson);
 
       final encryptionFromJson = Encryption.fromJson(encryptionModelJson);
       expect(encryptionFromJson.cipherText, cipherText);
       expect(encryptionFromJson.authenticationTag, authenticationTag);
 
       expect(encryption.props, encryptionFromJson.props);
-
     });
 
     test(
