@@ -8,4 +8,4 @@ jobs:
     with:
       exclude: "**/*_observer.dart **/change.dart"
       min_coverage: 95
-      path: packages/secure_storage
+      path: packages/secure_storage/coverage/lcov.info
