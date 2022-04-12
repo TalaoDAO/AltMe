@@ -3,6 +3,6 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@android:color/white" />
 
-    <!-- You can insert your own image assets here -->
-    <item android:gravity="center" android:drawable="@drawable/ic_launch_image" />
+<!--    &lt;!&ndash; You can insert your own image assets here &ndash;&gt;-->
+<!--    <item android:gravity="center" android:drawable="@drawable/ic_launch_image" />-->
 </layer-list>
