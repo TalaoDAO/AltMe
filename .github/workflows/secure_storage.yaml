@@ -1,0 +1,11 @@
+name: altme
+
+on: [pull_request, push]
+
+jobs:
+  build:
+    uses: VGVentures/very-good-coverage@v1.1.1
+    with:
+      exclude: "**/*_observer.dart **/change.dart"
+      min_coverage: 95
+      path: packages/secure_storage
