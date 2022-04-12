@@ -4,8 +4,9 @@ on: [ pull_request, push ]
 
 jobs:
   build:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
-      dart_sdk: stable
+      flutter_channel: stable
+      flutter_version: 2.10.0
       min_coverage: 95
       working_directory: packages/secure_storage
