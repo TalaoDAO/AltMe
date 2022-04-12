@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,6 +52,7 @@ class _SplashViewState extends State<SplashView>
 
   @override
   Widget build(BuildContext context) {
+    final FlavorCubit flavorCubit = context.read<FlavorCubit>();
     return BasePage(
       backgroundColor: const Color(0xffffffff),
       scrollView: false,
@@ -60,7 +62,13 @@ class _SplashViewState extends State<SplashView>
           child: ScaleTransition(
             key: const Key('scaleTransition'),
             scale: _scaleAnimation,
-            child: Image.asset(ImageStrings.splash),
+            child: Image.asset(
+              flavorCubit.state == FlavorMode.development
+                  ? ImageStrings.splashDev
+                  : flavorCubit.state == FlavorMode.staging
+                      ? ImageStrings.splashStage
+                      : ImageStrings.splash,
+            ),
           ),
         ),
       ),
