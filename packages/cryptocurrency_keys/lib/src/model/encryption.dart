@@ -6,8 +6,6 @@ part 'encryption.g.dart';
 ///Encryption
 @JsonSerializable()
 class Encryption extends Equatable {
-
-
   ///Encryption
   const Encryption({
     this.cipherText,
