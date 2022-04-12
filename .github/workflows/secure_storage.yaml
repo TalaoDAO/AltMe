@@ -7,6 +7,5 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
     with:
       dart_sdk: stable
-      flutter_version: 2.10.0
       min_coverage: 95
       working_directory: packages/secure_storage
