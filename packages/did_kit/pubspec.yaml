@@ -11,6 +11,7 @@ dependencies:
     path: ../../../didkit/lib/flutter
   flutter:
     sdk: flutter
+  mocktail: ^0.3.0
 
 dev_dependencies:
   flutter_test:
