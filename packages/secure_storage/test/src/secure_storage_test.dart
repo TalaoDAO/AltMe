@@ -16,7 +16,7 @@ void main() {
 
   setUpAll(() async {
     mockFlutterSecureStorage = MockFlutterSecureStorage();
-    secureStorageProvider = SecureStorageProvider();
+    secureStorageProvider = SecureStorageProvider(mockFlutterSecureStorage);
   });
 
   group('SecureStorage', () {
