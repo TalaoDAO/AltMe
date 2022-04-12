@@ -21,7 +21,7 @@ void main() {
 
   group('SecureStorage', () {
     test('can be instantiated', () {
-      expect(secureStorageProvider, isNotNull);
+      expect(getSecureStorage, isNotNull);
     });
 
     test('get method works correctly', () async {
