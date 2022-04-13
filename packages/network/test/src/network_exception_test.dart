@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:network/network.dart';
@@ -58,10 +60,11 @@ void main() {
       requestOptions: RequestOptions(path: ''),
       type: DioErrorType.response,
       response: Response<dynamic>(
-          requestOptions: RequestOptions(
-            path: '',
-          ),
-          statusCode: 404,),
+        requestOptions: RequestOptions(
+          path: '',
+        ),
+        statusCode: 404,
+      ),
     );
     final exception = NetworkException.getDioException(error);
     expect(exception, const NetworkException.notFound('Not found'));
@@ -200,6 +203,32 @@ void main() {
     );
     final exception = NetworkException.getDioException(error);
     expect(exception, const NetworkException.gatewayTimeout());
+  });
+
+  test('Exception defaultError', () {
+    final exception = NetworkException.handleResponse(410);
+    expect(
+      exception,
+      const NetworkException.defaultError('Received invalid status code: 410'),
+    );
+  });
+
+  test('Exception SocketException', () {
+    const error = SocketException('message');
+    final exception = NetworkException.getDioException(error);
+    expect(
+      exception,
+      const NetworkException.noInternetConnection(),
+    );
+  });
+
+  test('Exception unexpectedError', () {
+    const error = DefaultError('');
+    final exception = NetworkException.getDioException(error);
+    expect(
+      exception,
+      const NetworkException.unexpectedError(),
+    );
   });
 
   test('Exception Send Timeout', () {

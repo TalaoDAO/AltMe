@@ -7,14 +7,19 @@ import 'package:network/src/network_exception.dart';
 const _defaultConnectTimeout = Duration.millisecondsPerMinute;
 const _defaultReceiveTimeout = Duration.millisecondsPerMinute;
 
+///
+Network getNetwork({required String baseUrl, List<Interceptor>? interceptors}) {
+  return Network(baseUrl, Dio(), interceptors: interceptors);
+}
+
 ///DioClient
 class Network {
   ///DioClient
   Network(
     this.baseUrl,
-    Dio? dio, {
+    this._dio, {
     this.interceptors,
-  }) : _dio = dio ?? Dio() {
+  }) {
     _dio
       ..options.baseUrl = baseUrl
       ..options.connectTimeout = _defaultConnectTimeout
@@ -62,8 +67,6 @@ class Network {
         onReceiveProgress: onReceiveProgress,
       );
       return response.data;
-    } on SocketException catch (e) {
-      throw SocketException(e.toString());
     } on FormatException catch (_) {
       throw const FormatException('Unable to process the data');
     } catch (e) {

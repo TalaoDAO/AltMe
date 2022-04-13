@@ -8,42 +8,89 @@ import 'package:network/network.dart';
 import 'test_constants.dart';
 
 void main() {
-  late Dio dio;
-  late DioAdapter dioAdapter;
-
-  setUp(() {
-    dio = Dio(BaseOptions(baseUrl: baseUrl));
-    dioAdapter = DioAdapter(dio: dio);
-    dio.httpClientAdapter = dioAdapter;
-  });
 
   group('Network class methods test', () {
+    test('can be instantiated', () {
+      expect(getNetwork(baseUrl: baseUrl), isNotNull);
+    });
+
+    group('headers', () {
+      final dio = Dio(BaseOptions(baseUrl: baseUrl));
+      final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
+      dio.httpClientAdapter = dioAdapter;
+      final service = Network(baseUrl, dio);
+
+      test('set and get headers', () {
+        final headers = <String, dynamic>{
+          'content-type': 'application/json; charset=utf-8'
+        };
+        service.headers = headers;
+        expect(service.headers, headers);
+      });
+    });
+
+    group('interceptors', () {
+      final dio = Dio(BaseOptions(baseUrl: baseUrl));
+      final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
+      dio.httpClientAdapter = dioAdapter;
+      final interceptor = DioInterceptor(dio: dio);
+      final service = Network(baseUrl, dio,interceptors: [interceptor]);
+
+      test('set interceptors', () {
+        expect(service.interceptors?.length,greaterThan(0));
+      });
+    });
+
+    group('exceptions', () {
+      final dio = Dio(BaseOptions(baseUrl: 'http://no.domain.com'));
+      final service = Network('http://no.domain.com', dio);
+      test('socket exception in get method', () async {
+        try {
+          await service.get('/path');
+        } catch (e) {
+          expect(e, const NetworkException.noInternetConnection());
+        }
+      });
+
+      test('socket exception in post method', () async {
+        try {
+          await service.post('/path');
+        } catch (e) {
+          expect(e, const NetworkException.noInternetConnection());
+        }
+      });
+    });
+
     group('Get Method', () {
+      final dio = Dio(BaseOptions(baseUrl: baseUrl));
+      final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
+      dio.httpClientAdapter = dioAdapter;
+      final service = Network(baseUrl, dio);
+
       test('Get Method Success test', () async {
         dioAdapter.onGet(
-          testPath,
+          baseUrl + testPath,
           (request) {
             return request.reply(200, successMessage);
           },
-          queryParameters: <String, dynamic>{},
-          headers: <String, dynamic>{},
         );
 
-        final service = Network(
-          baseUrl,
-          dio,
-        );
-
-        final dynamic response = await service.get(testPath);
+        final dynamic response = await service.get(baseUrl + testPath);
 
         expect(response, successMessage);
       });
     });
 
     group('Post Method', () {
+      final dio = Dio(BaseOptions(baseUrl: baseUrl));
+      final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
+      dio.httpClientAdapter = dioAdapter;
+      final service = Network(baseUrl, dio);
+
       test('Post Method Success test', () async {
+
         dioAdapter.onPost(
-          testPath,
+          baseUrl + testPath,
           (request) {
             return request.reply(201, successMessage);
           },
@@ -52,13 +99,8 @@ void main() {
           headers: header,
         );
 
-        final service = Network(
-          baseUrl,
-          dio,
-        );
-
         final dynamic response = await service.post(
-          testPath,
+          baseUrl + testPath,
           data: json.encode(testData),
           options: Options(headers: header),
         );
