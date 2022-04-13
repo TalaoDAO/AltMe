@@ -15,6 +15,8 @@ dependencies:
     sdk: flutter
   google_fonts: ^2.3.1
   intl: ^0.17.0
+  network:
+    path: ./packages/network
   secure_storage:
     path: packages/secure_storage
 
