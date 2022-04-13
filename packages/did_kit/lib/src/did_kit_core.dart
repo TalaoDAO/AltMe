@@ -1,41 +1,35 @@
-import 'package:did_kit/src/did_kit_core.dart';
-
-///get instance
-DIDKitProvider get getDidKit => DIDKitProvider(DIDKitCore());
+import 'package:didkit/didkit.dart';
 
 ///
-class DIDKitProvider {
+class DIDKitCore {
   ///
-  factory DIDKitProvider(DIDKitCore didKitCore) {
-    _instance ??= DIDKitProvider._(didKitCore);
+  factory DIDKitCore() {
+    _instance ??= DIDKitCore._();
     return _instance!;
   }
 
-  DIDKitProvider._(this.didKit);
+  DIDKitCore._();
 
-  static DIDKitProvider? _instance;
-
-  ///
-  final DIDKitCore didKit;
+  static DIDKitCore? _instance;
 
   ///getVersion
   String getVersion() {
-    return didKit.getVersion();
+    return DIDKit.getVersion();
   }
 
   ///generateEd25519Key
   String generateEd25519Key() {
-    return didKit.generateEd25519Key();
+    return DIDKit.generateEd25519Key();
   }
 
-  ///keyToDID
+  ///generateEd25519Key
   String keyToDID(String methodName, String key) {
-    return didKit.keyToDID(methodName, key);
+    return DIDKit.keyToDID(methodName, key);
   }
 
   ///keyToVerificationMethod
   Future<String> keyToVerificationMethod(String methodName, String key) async {
-    return didKit.keyToVerificationMethod(methodName, key);
+    return DIDKit.keyToVerificationMethod(methodName, key);
   }
 
   ///issueCredential
@@ -44,7 +38,7 @@ class DIDKitProvider {
     String options,
     String key,
   ) async {
-    return didKit.issueCredential(credential, options, key);
+    return DIDKit.issueCredential(credential, options, key);
   }
 
   ///verifyCredential
@@ -52,7 +46,7 @@ class DIDKitProvider {
     String credential,
     String options,
   ) async {
-    return didKit.verifyCredential(credential, options);
+    return DIDKit.verifyCredential(credential, options);
   }
 
   ///issuePresentation
@@ -61,7 +55,7 @@ class DIDKitProvider {
     String options,
     String key,
   ) async {
-    return didKit.issuePresentation(presentation, options, key);
+    return DIDKit.issuePresentation(presentation, options, key);
   }
 
   ///verifyPresentation
@@ -69,7 +63,7 @@ class DIDKitProvider {
     String presentation,
     String options,
   ) async {
-    return didKit.verifyPresentation(presentation, options);
+    return DIDKit.verifyPresentation(presentation, options);
   }
 
   ///resolveDID
@@ -77,7 +71,7 @@ class DIDKitProvider {
     String did,
     String inputMetadata,
   ) async {
-    return didKit.resolveDID(did, inputMetadata);
+    return DIDKit.resolveDID(did, inputMetadata);
   }
 
   ///dereferenceDIDURL
@@ -85,7 +79,7 @@ class DIDKitProvider {
     String didUrl,
     String inputMetadata,
   ) async {
-    return didKit.dereferenceDIDURL(didUrl, inputMetadata);
+    return DIDKit.dereferenceDIDURL(didUrl, inputMetadata);
   }
 
   ///DIDAuth
@@ -94,6 +88,6 @@ class DIDKitProvider {
     String options,
     String key,
   ) async {
-    return didKit.didAuth(did, options, key);
+    return DIDKit.DIDAuth(did, options, key);
   }
 }
