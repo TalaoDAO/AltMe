@@ -16,12 +16,12 @@ void main() {
 
   setUpAll(() async {
     mockFlutterSecureStorage = MockFlutterSecureStorage();
-    secureStorageProvider = SecureStorageProvider();
+    secureStorageProvider = SecureStorageProvider(mockFlutterSecureStorage);
   });
 
   group('SecureStorage', () {
     test('can be instantiated', () {
-      expect(secureStorageProvider, isNotNull);
+      expect(getSecureStorage, isNotNull);
     });
 
     test('get method works correctly', () async {

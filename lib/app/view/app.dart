@@ -13,7 +13,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:secure_storage/secure_storage.dart';
+import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class App extends StatelessWidget {
   const App({Key? key, this.flavorMode = FlavorMode.production})
@@ -30,7 +30,7 @@ class App extends StatelessWidget {
         ),
         // TODO(all): bug found
         BlocProvider<ThemeCubit>(
-          create: (context) => ThemeCubit(SecureStorageProvider()),
+          create: (context) => ThemeCubit(secure_storage.getSecureStorage),
         ),
       ],
       child: const MaterialAppDefinition(),

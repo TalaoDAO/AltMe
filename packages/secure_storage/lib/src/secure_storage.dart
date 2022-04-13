@@ -1,8 +1,15 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+///SecureStorageProvider getter
+SecureStorageProvider get getSecureStorage =>
+    const SecureStorageProvider(FlutterSecureStorage());
+
 ///SecureStorageProvider
 class SecureStorageProvider {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  ///SecureStorageProvider
+  const SecureStorageProvider(this._storage);
+
+  final FlutterSecureStorage _storage;
 
   IOSOptions get _defaultIOSOptions => const IOSOptions(
         accessibility: IOSAccessibility.unlocked_this_device,
