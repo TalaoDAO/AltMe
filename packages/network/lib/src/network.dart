@@ -34,10 +34,11 @@ class Network {
     if (kDebugMode) {
       _dio.interceptors.add(
         LogInterceptor(
-            responseBody: true,
-            requestHeader: false,
-            responseHeader: false,
-            request: false),
+          responseBody: true,
+          requestHeader: false,
+          responseHeader: false,
+          request: false,
+        ),
       );
     }
   }
