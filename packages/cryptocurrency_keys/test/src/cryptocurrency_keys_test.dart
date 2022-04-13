@@ -9,6 +9,10 @@ void main() {
   const message = '{"name": "My name is Bibash."}';
   const cipherText = '¨`ýp<ÐW3AR1¯#.í©¥¿e,|VrtuXÅ';
   const authenticationTag = 'äU~ÇÍÞ¦BÌuDÅ';
+  const encryptionModelJson = {
+    'cipherText': cipherText,
+    'authenticationTag': authenticationTag
+  };
 
   late CryptocurrencyKeys cryptocurrencyKeys;
 
@@ -19,6 +23,20 @@ void main() {
   group('CryptocurrencyKeys', () {
     test('can be instantiated', () {
       expect(cryptocurrencyKeys, isNotNull);
+    });
+
+    test('Encryption model', () {
+      const encryption = Encryption(
+        cipherText: cipherText,
+        authenticationTag: authenticationTag,
+      );
+      expect(encryption.toJson(), encryptionModelJson);
+
+      final encryptionFromJson = Encryption.fromJson(encryptionModelJson);
+      expect(encryptionFromJson.cipherText, cipherText);
+      expect(encryptionFromJson.authenticationTag, authenticationTag);
+
+      expect(encryption.props, encryptionFromJson.props);
     });
 
     test(
