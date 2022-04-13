@@ -5,78 +5,54 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'network_exception.freezed.dart';
 
-///NetworkException
 @freezed
 class NetworkException with Exception, _$NetworkException {
   const NetworkException._();
 
-  ///badRequest
   const factory NetworkException.badRequest() = BadRequest;
 
-  ///conflict
   const factory NetworkException.conflict() = Conflict;
 
-  ///created
   const factory NetworkException.created() = Created;
 
-  ///defaultError
   const factory NetworkException.defaultError(String error) = DefaultError;
 
-  ///formatException
   const factory NetworkException.formatException() = NetworkFormatException;
 
-  ///gatewayTimeout
   const factory NetworkException.gatewayTimeout() = GatewayTimeout;
 
-  ///internalServerError
   const factory NetworkException.internalServerError() = InternalServerError;
 
-  ///methodNotAllowed
   const factory NetworkException.methodNotAllowed() = MethodNotAllowed;
 
-  ///noInternetConnection
   const factory NetworkException.noInternetConnection() = NoInternetConnection;
 
-  ///notAcceptable
   const factory NetworkException.notAcceptable() = NotAcceptable;
 
-  ///notFound
   const factory NetworkException.notFound(String reason) = NotFound;
 
-  ///notImplemented
   const factory NetworkException.notImplemented() = NotImplemented;
 
-  ///ok
   const factory NetworkException.ok() = Ok;
 
-  ///requestCancelled
   const factory NetworkException.requestCancelled() = RequestCancelled;
 
-  ///requestTimeout
   const factory NetworkException.requestTimeout() = RequestTimeout;
 
-  ///sendTimeout
   const factory NetworkException.sendTimeout() = SendTimeout;
 
-  ///serviceUnavailable
   const factory NetworkException.serviceUnavailable() = ServiceUnavailable;
 
-  ///tooManyRequests
   const factory NetworkException.tooManyRequests() = TooManyRequests;
 
-  ///unableToProcess
   const factory NetworkException.unableToProcess() = UnableToProcess;
 
-  ///unauthenticated
   const factory NetworkException.unauthenticated() = Unauthenticated;
 
-  ///unauthorizedRequest
   const factory NetworkException.unauthorizedRequest() = UnauthorizedRequest;
 
-  ///unexpectedError
   const factory NetworkException.unexpectedError() = UnexpectedError;
 
-  ///handleResponse
   factory NetworkException.handleResponse(int? statusCode) {
     switch (statusCode) {
       case 200:
@@ -114,7 +90,6 @@ class NetworkException with Exception, _$NetworkException {
     }
   }
 
-  ///getDioException
   factory NetworkException.getDioException(dynamic error) {
     if (error is Exception) {
       late NetworkException networkException;
