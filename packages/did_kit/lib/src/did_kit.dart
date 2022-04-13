@@ -1,9 +1,9 @@
 import 'package:didkit/didkit.dart';
 
 
-///
+///DidKitProvider
 class DIDKitProvider {
-  ///
+  ///DidKitProvider constructor
   factory DIDKitProvider() {
     _instance ??= DIDKitProvider._();
     return _instance!;
