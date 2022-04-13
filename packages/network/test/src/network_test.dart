@@ -9,7 +9,7 @@ import 'test_constants.dart';
 
 void main() {
 
-  group('Network class methods test', () {
+  group('Network Class', () {
     test('can be instantiated', () {
       expect(getNetwork(baseUrl: baseUrl), isNotNull);
     });

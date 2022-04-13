@@ -107,6 +107,7 @@ class NetworkException with Exception, _$NetworkException {
         return const NetworkException.gatewayTimeout();
       default:
         final responseCode = statusCode;
+        // TODO(bibash): localise
         return NetworkException.defaultError(
           'Received invalid status code: $responseCode',
         );

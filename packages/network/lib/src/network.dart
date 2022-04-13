@@ -68,6 +68,7 @@ class Network {
       );
       return response.data;
     } on FormatException catch (_) {
+      // TODO(bibash): localise
       throw const FormatException('Unable to process the data');
     } catch (e) {
       if (e is DioError) {
@@ -100,6 +101,7 @@ class Network {
       );
       return response.data;
     } on FormatException catch (_) {
+      // TODO(bibash): localise
       throw const FormatException('Unable to process the data');
     } catch (e) {
       if (e is DioError) {
