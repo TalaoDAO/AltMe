@@ -1,13 +1,13 @@
-import 'package:did_kit/src/did_kit_core.dart';
+import 'package:did_kit/src/did_kit_wrapper.dart';
 
 ///get instance
-DIDKitProvider get getDidKit => DIDKitProvider(DIDKitCore());
+DIDKitProvider get getDidKit => DIDKitProvider(DIDKitWrapper());
 
 ///
 class DIDKitProvider {
   ///
-  factory DIDKitProvider(DIDKitCore didKitCore) {
-    _instance ??= DIDKitProvider._(didKitCore);
+  factory DIDKitProvider(DIDKitWrapper didKitWrapper) {
+    _instance ??= DIDKitProvider._(didKitWrapper);
     return _instance!;
   }
 
@@ -16,7 +16,7 @@ class DIDKitProvider {
   static DIDKitProvider? _instance;
 
   ///
-  final DIDKitCore didKit;
+  final DIDKitWrapper didKit;
 
   ///getVersion
   String getVersion() {

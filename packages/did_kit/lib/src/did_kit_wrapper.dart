@@ -1,16 +1,16 @@
 import 'package:didkit/didkit.dart';
 
-///
-class DIDKitCore {
-  ///
-  factory DIDKitCore() {
-    _instance ??= DIDKitCore._();
+///DIDKitWrapper
+class DIDKitWrapper {
+  ///DIDKitWrapper
+  factory DIDKitWrapper() {
+    _instance ??= DIDKitWrapper._();
     return _instance!;
   }
 
-  DIDKitCore._();
+  DIDKitWrapper._();
 
-  static DIDKitCore? _instance;
+  static DIDKitWrapper? _instance;
 
   ///getVersion
   String getVersion() {

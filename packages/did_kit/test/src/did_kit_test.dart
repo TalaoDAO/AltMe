@@ -2,16 +2,16 @@
 import 'dart:convert';
 
 import 'package:did_kit/did_kit.dart';
-import 'package:did_kit/src/did_kit_core.dart';
+import 'package:did_kit/src/did_kit_wrapper.dart';
 import 'package:didkit/didkit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockDidKitCore extends Mock implements DIDKitCore {}
+class MockDidKitCore extends Mock implements DIDKitWrapper {}
 
 void main() {
-  final mockDidKitCore = MockDidKitCore();
-  final didKitProvider = DIDKitProvider(mockDidKitCore);
+  final mockDidKitWrapper = MockDidKitCore();
+  final didKitProvider = DIDKitProvider(mockDidKitWrapper);
 
   //
   const didKitVersion = '0.3.0';
@@ -69,12 +69,12 @@ void main() {
     });
 
     test('verify did kit version is $didKitVersion', () {
-      when(mockDidKitCore.getVersion).thenReturn(didKitVersion);
+      when(mockDidKitWrapper.getVersion).thenReturn(didKitVersion);
       expect(didKitProvider.getVersion(), didKitVersion);
     });
 
-    test('exceptions', () async {
-      when(() => mockDidKitCore.issueCredential('', '', '')).thenThrow(
+    test('exceptions with empty inputs', () async {
+      when(() => mockDidKitWrapper.issueCredential('', '', '')).thenThrow(
         DIDKitException(0, ''),
       );
       expect(
@@ -82,7 +82,7 @@ void main() {
         throwsA(isInstanceOf<DIDKitException>()),
       );
 
-      when(() => mockDidKitCore.issuePresentation('', '', '')).thenThrow(
+      when(() => mockDidKitWrapper.issuePresentation('', '', '')).thenThrow(
         DIDKitException(0, ''),
       );
       expect(
@@ -90,7 +90,7 @@ void main() {
         throwsA(isInstanceOf<DIDKitException>()),
       );
 
-      when(() => mockDidKitCore.verifyCredential('', '')).thenThrow(
+      when(() => mockDidKitWrapper.verifyCredential('', '')).thenThrow(
         DIDKitException(0, ''),
       );
       expect(
@@ -98,7 +98,7 @@ void main() {
         throwsA(isInstanceOf<DIDKitException>()),
       );
 
-      when(() => mockDidKitCore.verifyPresentation('', '')).thenThrow(
+      when(() => mockDidKitWrapper.verifyPresentation('', '')).thenThrow(
         DIDKitException(0, ''),
       );
       expect(
@@ -107,21 +107,21 @@ void main() {
       );
     });
 
-    test('generateEd25519Key', () {
-      when(mockDidKitCore.generateEd25519Key).thenReturn(ed25519Key);
+    test('generateEd25519Key method mocked', () {
+      when(mockDidKitWrapper.generateEd25519Key).thenReturn(ed25519Key);
       expect(didKitProvider.generateEd25519Key(), equals(ed25519Key));
     });
 
-    test('keyToDID', () async {
-      when(() => mockDidKitCore.keyToDID(key, ed25519Key)).thenReturn(did);
+    test('keyToDID method mocked', () async {
+      when(() => mockDidKitWrapper.keyToDID(key, ed25519Key)).thenReturn(did);
       expect(
         didKitProvider.keyToDID(key, ed25519Key),
         equals(did),
       );
     });
 
-    test('keyToVerificationMethod', () async {
-      when(() => mockDidKitCore.keyToVerificationMethod(key, ed25519Key))
+    test('keyToVerificationMethod method mocked', () async {
+      when(() => mockDidKitWrapper.keyToVerificationMethod(key, ed25519Key))
           .thenAnswer((_) async => vm);
       expect(
         await didKitProvider.keyToVerificationMethod(key, ed25519Key),
@@ -129,9 +129,9 @@ void main() {
       );
     });
 
-    test('issueCredential', () async {
+    test('issueCredential method mocked', () async {
       when(
-        () => mockDidKitCore.issueCredential(
+        () => mockDidKitWrapper.issueCredential(
           jsonEncode(credential),
           jsonEncode(options),
           key,
@@ -147,19 +147,24 @@ void main() {
       );
     });
 
-    test('verifyCredential', () async {
-      when(() => mockDidKitCore.verifyCredential(vc, jsonEncode(verifyOptions)))
-          .thenAnswer((_) async => verifyResult);
+    test('verifyCredential method mocked', () async {
+      when(
+        () => mockDidKitWrapper.verifyCredential(
+          vc,
+          jsonEncode(verifyOptions),
+        ),
+      ).thenAnswer((_) async => verifyResult);
       expect(
         await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions)),
         equals(verifyResult),
       );
     });
 
-    test('issuePresentation', () async {
-      when(() => mockDidKitCore.issuePresentation(
-              jsonEncode(presentation), jsonEncode(options), key))
-          .thenAnswer((_) async => vc);
+    test('issuePresentation method mocked', () async {
+      when(
+        () => mockDidKitWrapper.issuePresentation(
+            jsonEncode(presentation), jsonEncode(options), key),
+      ).thenAnswer((_) async => vc);
       expect(
         await didKitProvider.issuePresentation(
             jsonEncode(presentation), jsonEncode(options), key),
@@ -167,9 +172,9 @@ void main() {
       );
     });
 
-    test('verifyPresentation', () async {
+    test('verifyPresentation method mocked', () async {
       when(
-        () => mockDidKitCore.verifyPresentation(
+        () => mockDidKitWrapper.verifyPresentation(
           vc,
           jsonEncode(verifyOptions),
         ),
@@ -183,16 +188,17 @@ void main() {
       );
     });
 
-    test('resolveDID', () async {
-      when(() => mockDidKitCore.resolveDID(did, '{}')).thenAnswer((_) async => '');
+    test('resolveDID method mocked', () async {
+      when(() => mockDidKitWrapper.resolveDID(did, '{}'))
+          .thenAnswer((_) async => '');
       expect(
         await didKitProvider.resolveDID(did, '{}'),
         isInstanceOf<String>(),
       );
     });
 
-    test('dereferenceDIDURL', () async {
-      when(() => mockDidKitCore.dereferenceDIDURL(vm, '{}'))
+    test('dereferenceDIDURL method mocked', () async {
+      when(() => mockDidKitWrapper.dereferenceDIDURL(vm, '{}'))
           .thenAnswer((_) async => '');
       expect(
         await didKitProvider.dereferenceDIDURL(vm, '{}'),
@@ -200,8 +206,8 @@ void main() {
       );
     });
 
-    test('didAuth', () async {
-      when(() => mockDidKitCore.didAuth(did, proofOptions, key))
+    test('didAuth method mocked', () async {
+      when(() => mockDidKitWrapper.didAuth(did, proofOptions, key))
           .thenAnswer((_) async => '');
       expect(
         await didKitProvider.didAuth(did, proofOptions, key),
