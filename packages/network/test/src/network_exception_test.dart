@@ -275,7 +275,7 @@ void main() {
 
       test('return formatException message if FormatException is thrown',
           () async {
-        final message = NetworkException.getDioException(Exception("!@312"));
+        final message = NetworkException.getDioException(FormatException(""));
         expect(message, const NetworkException.formatException());
       });
     });
