@@ -17,8 +17,8 @@ void main() {
       });
 
       test(
-          'return requestTimeout message when error is DioErrorType.connectTimeout',
-          () {
+          'return requestTimeout message when error is '
+          'DioErrorType.connectTimeout', () {
         final error = DioError(
           requestOptions: RequestOptions(path: ''),
           type: DioErrorType.connectTimeout,
@@ -28,8 +28,8 @@ void main() {
       });
 
       test(
-          'return noInternetConnection message when error is DioErrorType.other',
-          () {
+          'return noInternetConnection message when error is '
+          'DioErrorType.other', () {
         final error = DioError(
           requestOptions: RequestOptions(path: ''),
         );
@@ -38,8 +38,8 @@ void main() {
       });
 
       test(
-          'return receiveTimeout message when error is DioErrorType.receiveTimeout',
-          () {
+          'return receiveTimeout message when error is '
+          'DioErrorType.receiveTimeout', () {
         final error = DioError(
           requestOptions: RequestOptions(path: ''),
           type: DioErrorType.receiveTimeout,
@@ -49,8 +49,8 @@ void main() {
       });
 
       test(
-          'return receiveTimeout message when error is DioErrorType.sendTimeout',
-          () {
+          'return receiveTimeout message when error is '
+          'DioErrorType.sendTimeout', () {
         final error = DioError(
           requestOptions: RequestOptions(
             path: '',
@@ -237,7 +237,8 @@ void main() {
         expect(
           message,
           const NetworkException.defaultError(
-              'Received invalid status code: 410'),
+            'Received invalid status code: 410',
+          ),
         );
       });
     });
@@ -271,12 +272,6 @@ void main() {
           () async {
         final message = NetworkException.getDioException('I am random message');
         expect(message, const NetworkException.unexpectedError());
-      });
-
-      test('return formatException message if FormatException is thrown',
-          () async {
-        final message = NetworkException.getDioException(FormatException(""));
-        expect(message, const NetworkException.formatException());
       });
     });
   });
