@@ -107,6 +107,7 @@ class NetworkException with Exception, _$NetworkException {
         return const NetworkException.gatewayTimeout();
       default:
         final responseCode = statusCode;
+        // TODO(bibash): localise
         return NetworkException.defaultError(
           'Received invalid status code: $responseCode',
         );
@@ -116,41 +117,35 @@ class NetworkException with Exception, _$NetworkException {
   ///getDioException
   factory NetworkException.getDioException(dynamic error) {
     if (error is Exception) {
-      try {
-        NetworkException networkException;
-        if (error is DioError) {
-          switch (error.type) {
-            case DioErrorType.cancel:
-              networkException = const NetworkException.requestCancelled();
-              break;
-            case DioErrorType.connectTimeout:
-              networkException = const NetworkException.requestTimeout();
-              break;
-            case DioErrorType.other:
-              networkException = const NetworkException.noInternetConnection();
-              break;
-            case DioErrorType.receiveTimeout:
-              networkException = const NetworkException.sendTimeout();
-              break;
-            case DioErrorType.response:
-              networkException =
-                  NetworkException.handleResponse(error.response?.statusCode);
-              break;
-            case DioErrorType.sendTimeout:
-              networkException = const NetworkException.sendTimeout();
-              break;
-          }
-        } else if (error is SocketException) {
-          networkException = const NetworkException.noInternetConnection();
-        } else {
-          networkException = const NetworkException.unexpectedError();
+      late NetworkException networkException;
+      if (error is DioError) {
+        switch (error.type) {
+          case DioErrorType.cancel:
+            networkException = const NetworkException.requestCancelled();
+            break;
+          case DioErrorType.connectTimeout:
+            networkException = const NetworkException.requestTimeout();
+            break;
+          case DioErrorType.other:
+            networkException = const NetworkException.noInternetConnection();
+            break;
+          case DioErrorType.receiveTimeout:
+            networkException = const NetworkException.sendTimeout();
+            break;
+          case DioErrorType.response:
+            networkException =
+                NetworkException.handleResponse(error.response?.statusCode);
+            break;
+          case DioErrorType.sendTimeout:
+            networkException = const NetworkException.sendTimeout();
+            break;
         }
-        return networkException;
-      } on FormatException catch (_) {
-        return const NetworkException.formatException();
-      } catch (_) {
-        return const NetworkException.unexpectedError();
+      } else if (error is SocketException) {
+        networkException = const NetworkException.noInternetConnection();
+      } else {
+        networkException = const NetworkException.unexpectedError();
       }
+      return networkException;
     } else {
       if (error.toString().contains('is not a subtype of')) {
         return const NetworkException.unableToProcess();
