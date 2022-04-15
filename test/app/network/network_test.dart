@@ -1,24 +1,24 @@
 import 'dart:convert';
 
+import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/network/network.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
-import 'package:network/network.dart';
 
 import 'test_constants.dart';
 
 void main() {
-
-  group('Network Class', () {
-    test('can be instantiated', () {
-      expect(getNetwork(baseUrl: baseUrl), isNotNull);
-    });
+  group('DioClient Class', () {
+    // test('can be instantiated', () {
+    //   expect(getDioClient(baseUrl: baseUrl), isNotNull);
+    // });
 
     group('headers', () {
       final dio = Dio(BaseOptions(baseUrl: baseUrl));
       final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
       dio.httpClientAdapter = dioAdapter;
-      final service = Network(baseUrl, dio);
+      final service = DioClient(baseUrl, dio);
 
       test('set and get headers', () {
         final headers = <String, dynamic>{
@@ -34,21 +34,26 @@ void main() {
       final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
       dio.httpClientAdapter = dioAdapter;
       final interceptor = DioInterceptor(dio: dio);
-      final service = Network(baseUrl, dio,interceptors: [interceptor]);
+      final service = DioClient(baseUrl, dio, interceptors: [interceptor]);
 
       test('set interceptors', () {
-        expect(service.interceptors?.length,greaterThan(0));
+        expect(service.interceptors?.length, greaterThan(0));
       });
     });
 
     group('exceptions', () {
       final dio = Dio(BaseOptions(baseUrl: 'http://no.domain.com'));
-      final service = Network('http://no.domain.com', dio);
+      final service = DioClient('http://no.domain.com', dio);
       test('socket exception in get method', () async {
         try {
           await service.get('/path');
         } catch (e) {
-          expect(e, const NetworkException.noInternetConnection());
+          if (e is NetworkException) {
+            expect(
+              e.message,
+              NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+            );
+          }
         }
       });
 
@@ -56,7 +61,12 @@ void main() {
         try {
           await service.post('/path');
         } catch (e) {
-          expect(e, const NetworkException.noInternetConnection());
+          if (e is NetworkException) {
+            expect(
+              e.message,
+              NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+            );
+          }
         }
       });
     });
@@ -65,7 +75,7 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: baseUrl));
       final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
       dio.httpClientAdapter = dioAdapter;
-      final service = Network(baseUrl, dio);
+      final service = DioClient(baseUrl, dio);
 
       test('Get Method Success test', () async {
         dioAdapter.onGet(
@@ -85,10 +95,9 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: baseUrl));
       final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
       dio.httpClientAdapter = dioAdapter;
-      final service = Network(baseUrl, dio);
+      final service = DioClient(baseUrl, dio);
 
       test('Post Method Success test', () async {
-
         dioAdapter.onPost(
           baseUrl + testPath,
           (request) {

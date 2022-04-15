@@ -6,3 +6,6 @@ linter:
     omit_local_variable_types: false
     avoid_redundant_argument_values: false
     cascade_invocations: false
+    constant_identifier_names: false
+    non_constant_identifier_names: false
+    prefer_constructors_over_static_methods: false

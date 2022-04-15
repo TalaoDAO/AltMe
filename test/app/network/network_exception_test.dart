@@ -1,8 +1,9 @@
 import 'dart:io';
 
+import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/network/network.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:network/network.dart';
 
 void main() {
   group('NetworkException Test', () {
@@ -13,7 +14,7 @@ void main() {
           type: DioErrorType.cancel,
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.requestCancelled());
+        expect(message.message, NetworkError.NETWORK_ERROR_REQUEST_CANCELLED);
       });
 
       test(
@@ -24,7 +25,7 @@ void main() {
           type: DioErrorType.connectTimeout,
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.requestTimeout());
+        expect(message.message, NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT);
       });
 
       test(
@@ -34,7 +35,10 @@ void main() {
           requestOptions: RequestOptions(path: ''),
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.noInternetConnection());
+        expect(
+          message.message,
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
       });
 
       test(
@@ -45,7 +49,7 @@ void main() {
           type: DioErrorType.receiveTimeout,
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.sendTimeout());
+        expect(message.message, NetworkError.NETWORK_ERROR_SEND_TIMEOUT);
       });
 
       test(
@@ -58,7 +62,7 @@ void main() {
           type: DioErrorType.sendTimeout,
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.sendTimeout());
+        expect(message.message, NetworkError.NETWORK_ERROR_SEND_TIMEOUT);
       });
 
       test(
@@ -75,7 +79,7 @@ void main() {
           ),
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.badRequest());
+        expect(message.message, NetworkError.NETWORK_ERROR_BAD_REQUEST);
       });
     });
 
@@ -92,8 +96,7 @@ void main() {
           ),
         );
         final message = NetworkException.getDioException(error);
-        // TODO(bibash): localise
-        expect(message, const NetworkException.notFound('Not found'));
+        expect(message.message, NetworkError.NETWORK_ERROR_NOT_FOUND);
       });
 
       test('return internalServerError message when statusCode is 500', () {
@@ -108,7 +111,10 @@ void main() {
           ),
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.internalServerError());
+        expect(
+          message.message,
+          NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR,
+        );
       });
 
       test('return unauthenticated message when statusCode is 401', () {
@@ -123,7 +129,7 @@ void main() {
           ),
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.unauthenticated());
+        expect(message.message, NetworkError.NETWORK_ERROR_UNAUTHENTICATED);
       });
 
       test('return unauthorizedRequest message when statusCode is 403', () {
@@ -138,7 +144,10 @@ void main() {
           ),
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.unauthorizedRequest());
+        expect(
+          message.message,
+          NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST,
+        );
       });
 
       test('return requestTimeout message when statusCode is 408', () {
@@ -153,7 +162,7 @@ void main() {
           ),
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.requestTimeout());
+        expect(message.message, NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT);
       });
 
       test('return getDioException message when statusCode is 409', () {
@@ -168,7 +177,7 @@ void main() {
           ),
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.conflict());
+        expect(message.message, NetworkError.NETWORK_ERROR_CONFLICT);
       });
 
       test('return tooManyRequests message when statusCode is 429', () {
@@ -183,7 +192,7 @@ void main() {
           ),
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.tooManyRequests());
+        expect(message.message, NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS);
       });
 
       test('return notImplemented message when statusCode is 501', () {
@@ -198,7 +207,7 @@ void main() {
           ),
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.notImplemented());
+        expect(message.message, NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED);
       });
 
       test('return serviceUnavailable message when statusCode is 503', () {
@@ -213,7 +222,7 @@ void main() {
           ),
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.serviceUnavailable());
+        expect(message.message, NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE);
       });
 
       test('return gatewayTimeout message when statusCode is 504', () {
@@ -228,18 +237,13 @@ void main() {
           ),
         );
         final message = NetworkException.getDioException(error);
-        expect(message, const NetworkException.gatewayTimeout());
+        expect(message.message, NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT);
       });
 
       test('return defaultError message when status code is not from our list',
           () {
         final message = NetworkException.handleResponse(410);
-        expect(
-          message,
-          const NetworkException.defaultError(
-            'Received invalid status code: 410',
-          ),
-        );
+        expect(message.message, NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR);
       });
     });
 
@@ -248,30 +252,27 @@ void main() {
         const error = SocketException('message');
         final message = NetworkException.getDioException(error);
         expect(
-          message,
-          const NetworkException.noInternetConnection(),
+          message.message,
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
         );
       });
 
-      test('returns unexpectedError when DefaultError is thrown', () {
-        const error = DefaultError('');
+      test('returns unexpectedError when other errror occurs', () {
+        const error = FormatException('message');
         final message = NetworkException.getDioException(error);
-        expect(
-          message,
-          const NetworkException.unexpectedError(),
-        );
+        expect(message.message, NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR);
       });
 
       test('returns UnableToProcess message if error is "is not a subtype of"',
           () async {
         final message = NetworkException.getDioException('is not a subtype of');
-        expect(message, const NetworkException.unableToProcess());
+        expect(message.message, NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS);
       });
 
       test('return UnexpectedError message if error has untracked message',
           () async {
         final message = NetworkException.getDioException('I am random message');
-        expect(message, const NetworkException.unexpectedError());
+        expect(message.message, NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR);
       });
     });
   });

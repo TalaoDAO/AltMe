@@ -18,11 +18,10 @@
     "networkErrorSendTimeout",
     "networkErrorUnableToProcess",
     "networkErrorNotAcceptable",
-    "networkErrorCreated",
     "networkErrorGatewayTimeout",
-    "networkErrorOk",
     "networkErrorTooManyRequests",
-    "networkErrorUnauthenticated"
+    "networkErrorUnauthenticated",
+    "networkErrorNotFound"
   ],
 
   "es": [
@@ -44,11 +43,10 @@
     "networkErrorSendTimeout",
     "networkErrorUnableToProcess",
     "networkErrorNotAcceptable",
-    "networkErrorCreated",
     "networkErrorGatewayTimeout",
-    "networkErrorOk",
     "networkErrorTooManyRequests",
-    "networkErrorUnauthenticated"
+    "networkErrorUnauthenticated",
+    "networkErrorNotFound"
   ],
 
   "fr": [
@@ -70,11 +68,10 @@
     "networkErrorSendTimeout",
     "networkErrorUnableToProcess",
     "networkErrorNotAcceptable",
-    "networkErrorCreated",
     "networkErrorGatewayTimeout",
-    "networkErrorOk",
     "networkErrorTooManyRequests",
-    "networkErrorUnauthenticated"
+    "networkErrorUnauthenticated",
+    "networkErrorNotFound"
   ],
 
   "it": [
@@ -96,10 +93,9 @@
     "networkErrorSendTimeout",
     "networkErrorUnableToProcess",
     "networkErrorNotAcceptable",
-    "networkErrorCreated",
     "networkErrorGatewayTimeout",
-    "networkErrorOk",
     "networkErrorTooManyRequests",
-    "networkErrorUnauthenticated"
+    "networkErrorUnauthenticated",
+    "networkErrorNotFound"
   ]
 }
