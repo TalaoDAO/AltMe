@@ -1,19 +1,12 @@
+import 'package:altme/app/shared/network/network_exception.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:network/src/network_exception.dart';
 
 const _defaultConnectTimeout = Duration.millisecondsPerMinute;
 const _defaultReceiveTimeout = Duration.millisecondsPerMinute;
 
-///
-Network getNetwork({required String baseUrl, List<Interceptor>? interceptors}) {
-  return Network(baseUrl, Dio(), interceptors: interceptors);
-}
-
-///DioClient
-class Network {
-  ///DioClient
-  Network(
+class DioClient {
+  DioClient(
     this.baseUrl,
     this._dio, {
     this.interceptors,
@@ -41,15 +34,10 @@ class Network {
     }
   }
 
-  ///baseUrl
   final String baseUrl;
-
   final Dio _dio;
-
-  ///interceptors
   final List<Interceptor>? interceptors;
 
-  ///get
   Future<dynamic> get(
     String uri, {
     Map<String, dynamic>? queryParameters,
@@ -78,7 +66,6 @@ class Network {
     }
   }
 
-  ///post
   Future<dynamic> post(
     String uri, {
     dynamic data,
@@ -111,9 +98,7 @@ class Network {
     }
   }
 
-  ///changeHeaders
   set headers(Map<String, dynamic> headers) => _dio.options.headers = headers;
 
-  ///headers
   Map<String, dynamic> get headers => _dio.options.headers;
 }
