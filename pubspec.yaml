@@ -35,3 +35,4 @@ flutter:
   generate: true
   assets:
     - assets/splash/
+    - assets/icon/
