@@ -1,0 +1,38 @@
+import 'package:altme/app/shared/models/author/author.dart';
+import 'package:altme/app/shared/widget/image_from_network/image_from_network.dart';
+import 'package:altme/theme/theme.dart';
+import 'package:flutter/material.dart';
+
+class DisplayIssuer extends StatelessWidget {
+  const DisplayIssuer({
+    Key? key,
+    required this.issuer,
+  }) : super(key: key);
+
+  final Author issuer;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          // Text('${localizations.issuer} '),
+          Text(issuer.name,
+              style: Theme.of(context).textTheme.credentialIssuer),
+          Spacer(),
+          (issuer.logo != '')
+              ? Container(
+                  height: 30,
+                  child: ImageFromNetwork(
+                    issuer.logo,
+                    fit: BoxFit.cover,
+                  ))
+              : SizedBox(
+                  height: 30,
+                )
+        ],
+      ),
+    );
+  }
+}
