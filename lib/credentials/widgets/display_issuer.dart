@@ -23,7 +23,7 @@ class DisplayIssuer extends StatelessWidget {
             style: Theme.of(context).textTheme.credentialIssuer,
           ),
           const Spacer(),
-          if (issuer.logo != '')
+          if (issuer.logo.isNotEmpty)
             SizedBox(
               height: 30,
               child: ImageFromNetwork(
