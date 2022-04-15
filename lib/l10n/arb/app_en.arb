@@ -18,9 +18,8 @@
   "networkErrorSendTimeout": "Send timeout in connection with API server",
   "networkErrorUnableToProcess": "Unable to process the data",
   "networkErrorNotAcceptable": "Not acceptable",
-  "networkErrorCreated": "",
   "networkErrorGatewayTimeout": "The gateway encountered a timeout",
-  "networkErrorOk": "",
   "networkErrorTooManyRequests": "The user has sent too many requests in a given amount of time",
-  "networkErrorUnauthenticated": "The user must authenticate itself to get the requested response"
+  "networkErrorUnauthenticated": "The user must authenticate itself to get the requested response",
+  "networkErrorNotFound": "Not Found"
 }
