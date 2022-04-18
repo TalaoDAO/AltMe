@@ -227,11 +227,17 @@ extension CustomColorScheme on ColorScheme {
 
   Color get revokedCredential => Colors.red;
 
-  Color get snackBarError => Colors.red;
-
   Color get buttonDisabled => brightness == Brightness.light
       ? const Color(0xFFADACAC)
       : const Color(0xFF424242);
+
+  Color get alertErrorMessage => Colors.red;
+
+  Color get alertWarningMessage => Colors.yellow;
+
+  Color get alertInfoMessage => Colors.cyan;
+
+  Color get alertSuccessMessage => Colors.green;
 }
 
 extension CustomTextTheme on TextTheme {

@@ -33,6 +33,9 @@ class _SplashViewState extends State<SplashView>
     )..addStatusListener((AnimationStatus status) async {
         if (status == AnimationStatus.completed) {
           await context.read<ThemeCubit>().getCurrentTheme();
+          // ErrorHandler a =
+          // NetworkException(NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS);
+          // print(a.getErrorMessage(context, a));
           // await Navigator.of(context)
           //     .push<void>(ThemePage.route(context.read<ThemeCubit>()));
         }
