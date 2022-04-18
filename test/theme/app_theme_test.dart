@@ -100,7 +100,7 @@ void main() {
                 ),
                 Container(
                   key: const Key('snackBarError'),
-                  color: Theme.of(context).colorScheme.snackBarError,
+                  color: Theme.of(context).colorScheme.alertErrorMessage,
                 ),
                 Container(
                   key: const Key('buttonDisabled'),
@@ -291,7 +291,7 @@ void main() {
                 ),
                 Container(
                   key: const Key('snackBarError'),
-                  color: Theme.of(context).colorScheme.snackBarError,
+                  color: Theme.of(context).colorScheme.alertErrorMessage,
                 ),
                 Container(
                   key: const Key('buttonDisabled'),
