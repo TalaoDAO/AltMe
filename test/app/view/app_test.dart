@@ -11,6 +11,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('App', () {
+    test('default flavor is FlavorMode.production', () async {
+      expect(const App().flavorMode, FlavorMode.production);
+    });
+
     testWidgets('renders SplashPage', (tester) async {
       await tester.pumpWidget(const App());
       await tester.pumpAndSettle();

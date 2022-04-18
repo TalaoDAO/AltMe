@@ -99,8 +99,20 @@ void main() {
                   color: Theme.of(context).colorScheme.revokedCredential,
                 ),
                 Container(
-                  key: const Key('snackBarError'),
-                  color: Theme.of(context).colorScheme.snackBarError,
+                  key: const Key('alertErrorMessage'),
+                  color: Theme.of(context).colorScheme.alertErrorMessage,
+                ),
+                Container(
+                  key: const Key('alertWarningMessage'),
+                  color: Theme.of(context).colorScheme.alertWarningMessage,
+                ),
+                Container(
+                  key: const Key('alertInfoMessage'),
+                  color: Theme.of(context).colorScheme.alertInfoMessage,
+                ),
+                Container(
+                  key: const Key('alertSuccessMessage'),
+                  color: Theme.of(context).colorScheme.alertSuccessMessage,
                 ),
                 Container(
                   key: const Key('buttonDisabled'),
@@ -191,9 +203,21 @@ void main() {
           tester.widget<Container>(find.byKey(const Key('revokedCredential')));
       expect(revokedCredential.color, Colors.red);
 
-      final snackBarError =
-          tester.widget<Container>(find.byKey(const Key('snackBarError')));
-      expect(snackBarError.color, Colors.red);
+      final alertErrorMessage =
+          tester.widget<Container>(find.byKey(const Key('alertErrorMessage')));
+      expect(alertErrorMessage.color, Colors.red);
+
+      final alertWarningMessage = tester
+          .widget<Container>(find.byKey(const Key('alertWarningMessage')));
+      expect(alertWarningMessage.color, Colors.yellow);
+
+      final alertInfoMessage =
+          tester.widget<Container>(find.byKey(const Key('alertInfoMessage')));
+      expect(alertInfoMessage.color, Colors.cyan);
+
+      final alertSuccessMessage = tester
+          .widget<Container>(find.byKey(const Key('alertSuccessMessage')));
+      expect(alertSuccessMessage.color, Colors.green);
 
       final buttonDisabled =
           tester.widget<Container>(find.byKey(const Key('buttonDisabled')));
@@ -290,8 +314,20 @@ void main() {
                   color: Theme.of(context).colorScheme.revokedCredential,
                 ),
                 Container(
-                  key: const Key('snackBarError'),
-                  color: Theme.of(context).colorScheme.snackBarError,
+                  key: const Key('alertErrorMessage'),
+                  color: Theme.of(context).colorScheme.alertErrorMessage,
+                ),
+                Container(
+                  key: const Key('alertWarningMessage'),
+                  color: Theme.of(context).colorScheme.alertWarningMessage,
+                ),
+                Container(
+                  key: const Key('alertInfoMessage'),
+                  color: Theme.of(context).colorScheme.alertInfoMessage,
+                ),
+                Container(
+                  key: const Key('alertSuccessMessage'),
+                  color: Theme.of(context).colorScheme.alertSuccessMessage,
                 ),
                 Container(
                   key: const Key('buttonDisabled'),
@@ -382,9 +418,21 @@ void main() {
           tester.widget<Container>(find.byKey(const Key('revokedCredential')));
       expect(revokedCredential.color, Colors.red);
 
-      final snackBarError =
-          tester.widget<Container>(find.byKey(const Key('snackBarError')));
-      expect(snackBarError.color, Colors.red);
+      final alertErrorMessage =
+          tester.widget<Container>(find.byKey(const Key('alertErrorMessage')));
+      expect(alertErrorMessage.color, Colors.red);
+
+      final alertWarningMessage = tester
+          .widget<Container>(find.byKey(const Key('alertWarningMessage')));
+      expect(alertWarningMessage.color, Colors.yellow);
+
+      final alertInfoMessage =
+          tester.widget<Container>(find.byKey(const Key('alertInfoMessage')));
+      expect(alertInfoMessage.color, Colors.cyan);
+
+      final alertSuccessMessage = tester
+          .widget<Container>(find.byKey(const Key('alertSuccessMessage')));
+      expect(alertSuccessMessage.color, Colors.green);
 
       final buttonDisabled =
           tester.widget<Container>(find.byKey(const Key('buttonDisabled')));

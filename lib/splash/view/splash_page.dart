@@ -27,20 +27,23 @@ class _SplashViewState extends State<SplashView>
 
   @override
   void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 5))
-          ..addStatusListener((AnimationStatus status) async {
-            if (status == AnimationStatus.completed) {
-              await context.read<ThemeCubit>().getCurrentTheme();
-              // await Navigator.of(context)
-              //     .push<void>(ThemePage.route(context.read<ThemeCubit>()));
-            }
-          });
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    )..addStatusListener((AnimationStatus status) async {
+        if (status == AnimationStatus.completed) {
+          await context.read<ThemeCubit>().getCurrentTheme();
+          // ErrorHandler a =
+          // NetworkException(NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS);
+          // print(a.getErrorMessage(context, a));
+          // await Navigator.of(context)
+          //     .push<void>(ThemePage.route(context.read<ThemeCubit>()));
+        }
+      });
     _scaleAnimation = Tween<double>(begin: 0.2, end: 1).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.ease),
     );
     _animationController.forward();
-
     super.initState();
   }
 
