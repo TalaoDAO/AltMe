@@ -1,5 +1,4 @@
-import 'package:altme/app/shared/models/author/author.dart';
-import 'package:altme/app/shared/widget/image_from_network.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 

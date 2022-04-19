@@ -1,5 +1,5 @@
-import 'package:altme/app/shared/widget/tooltip_text.dart';
-import 'package:altme/credentials/widgets/labeled_item.dart';
+import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credential.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

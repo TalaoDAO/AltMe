@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/models/author/author.dart';
-import 'package:altme/credentials/widgets/display_issuer.dart';
+import 'package:altme/credentials/credential.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
