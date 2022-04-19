@@ -17,6 +17,7 @@ dependencies:
   intl: ^0.17.0
   network:
     path: ./packages/network
+  network_image_mock: ^2.1.0
   secure_storage:
     path: packages/secure_storage
 
