@@ -12,7 +12,10 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SplashView();
+    return BlocProvider(
+      create: (context) => SplashCubit(secure_storage.getSecureStorage),
+      child: const SplashView(),
+    );
   }
 }
 
@@ -74,24 +77,21 @@ class _SplashViewState extends State<SplashView>
           },
         ),
       ],
-      child: BlocProvider(
-        create: (context) => SplashCubit(secure_storage.getSecureStorage),
-        child: BasePage(
-          backgroundColor: const Color(0xffffffff),
-          scrollView: false,
-          body: Center(
-            child: SizedBox.square(
-              dimension: MediaQuery.of(context).size.width * 0.4,
-              child: ScaleTransition(
-                key: const Key('scaleTransition'),
-                scale: _scaleAnimation,
-                child: Image.asset(
-                  flavorCubit.state == FlavorMode.development
-                      ? ImageStrings.splashDev
-                      : flavorCubit.state == FlavorMode.staging
-                          ? ImageStrings.splashStage
-                          : ImageStrings.splash,
-                ),
+      child: BasePage(
+        backgroundColor: const Color(0xffffffff),
+        scrollView: false,
+        body: Center(
+          child: SizedBox.square(
+            dimension: MediaQuery.of(context).size.width * 0.4,
+            child: ScaleTransition(
+              key: const Key('scaleTransition'),
+              scale: _scaleAnimation,
+              child: Image.asset(
+                flavorCubit.state == FlavorMode.development
+                    ? ImageStrings.splashDev
+                    : flavorCubit.state == FlavorMode.staging
+                        ? ImageStrings.splashStage
+                        : ImageStrings.splash,
               ),
             ),
           ),
