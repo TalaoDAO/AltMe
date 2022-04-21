@@ -45,7 +45,7 @@ class _SplashViewState extends State<SplashView>
           // print(a.getErrorMessage(context, a));
 
           //ignore: use_build_context_synchronously
-          await context.read<SplashCubit>().initialiseApp();
+         // await context.read<SplashCubit>().initialiseApp();
         }
       });
     _scaleAnimation = Tween<double>(begin: 0.2, end: 1).animate(
