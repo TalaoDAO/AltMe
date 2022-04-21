@@ -17,17 +17,18 @@ dependencies:
   flutter_svg: ^1.0.0
   google_fonts: ^2.3.1
   intl: ^0.17.0
+  json_annotation: ^4.4.0
   network_image_mock: ^2.1.0
   secure_storage:
     path: packages/secure_storage
 
 dev_dependencies:
   bloc_test: ^9.0.3
-  build_runner: ^2.1.7
+  build_runner: ^2.1.10
   flutter_test:
     sdk: flutter
-  freezed_annotation: ^1.1.0
   http_mock_adapter: ^0.3.2
+  json_serializable: ^6.1.3
   mockingjay: ^0.3.0
   mockito: ^5.1.0
   mocktail: ^0.3.0

@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/models/author/author.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
