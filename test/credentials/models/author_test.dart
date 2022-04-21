@@ -1,4 +1,4 @@
-import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credential.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
