@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
+import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:bloc_test/bloc_test.dart';
@@ -13,6 +14,8 @@ import '../../helpers/helpers.dart';
 
 class MockSecureStorageProvider extends Mock implements SecureStorageProvider {}
 
+class MockSplashCubit extends MockCubit<SplashState> implements SplashCubit {}
+
 class MockThemeCubit extends MockCubit<ThemeMode> implements ThemeCubit {}
 
 class MockFlavorCubit extends MockCubit<FlavorMode> implements FlavorCubit {}
@@ -20,6 +23,7 @@ class MockFlavorCubit extends MockCubit<FlavorMode> implements FlavorCubit {}
 void main() {
   late ThemeCubit themeCubit;
   late FlavorCubit flavorCubit;
+  late SplashCubit splashCubit;
 
   setUpAll(() async {
     themeCubit = MockThemeCubit();
@@ -27,37 +31,40 @@ void main() {
     when(() => themeCubit.getCurrentTheme())
         .thenAnswer((_) async => ThemeMode.light);
     flavorCubit = MockFlavorCubit();
+    splashCubit = MockSplashCubit();
   });
+
+  Widget makeTestableWidget() {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: themeCubit),
+        BlocProvider.value(value: flavorCubit),
+        BlocProvider.value(value: splashCubit),
+      ],
+      child: const SplashView(),
+    );
+  }
 
   group('SplashPage', () {
     testWidgets('renders SplashView', (tester) async {
       when(() => flavorCubit.state).thenReturn(FlavorMode.development);
-      await tester.pumpApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: themeCubit),
-            BlocProvider.value(value: flavorCubit),
-          ],
-          child: const SplashView(),
-        ),
-      );
+      when(() => splashCubit.state).thenReturn(SplashState.init);
+      when(() => splashCubit.initialiseApp()).thenAnswer((_) async {});
+      await tester.pumpApp(makeTestableWidget());
       await tester.pumpAndSettle();
       expect(find.byType(SplashView), findsOneWidget);
     });
   });
 
   group('SplashView', () {
+    setUp(() {
+      when(() => splashCubit.state).thenReturn(SplashState.init);
+      when(() => splashCubit.initialiseApp()).thenAnswer((_) async {});
+    });
+
     testWidgets('only one BasePage widget is rendered', (tester) async {
       when(() => flavorCubit.state).thenReturn(FlavorMode.development);
-      await tester.pumpApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: themeCubit),
-            BlocProvider.value(value: flavorCubit),
-          ],
-          child: const SplashView(),
-        ),
-      );
+      await tester.pumpApp(makeTestableWidget());
       await tester.pumpAndSettle();
       expect(find.byType(BasePage), findsOneWidget);
     });
@@ -65,15 +72,7 @@ void main() {
     testWidgets('correct image is rendered for development flavor',
         (tester) async {
       when(() => flavorCubit.state).thenReturn(FlavorMode.development);
-      await tester.pumpApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: themeCubit),
-            BlocProvider.value(value: flavorCubit),
-          ],
-          child: const SplashView(),
-        ),
-      );
+      await tester.pumpApp(makeTestableWidget());
       await tester.pumpAndSettle();
       final Image image = find.byType(Image).evaluate().single.widget as Image;
       final AssetImage assetImage = image.image as AssetImage;
@@ -82,15 +81,7 @@ void main() {
 
     testWidgets('correct image is rendered for staging flavor', (tester) async {
       when(() => flavorCubit.state).thenReturn(FlavorMode.staging);
-      await tester.pumpApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: themeCubit),
-            BlocProvider.value(value: flavorCubit),
-          ],
-          child: const SplashView(),
-        ),
-      );
+      await tester.pumpApp(makeTestableWidget());
       await tester.pumpAndSettle();
       final Image image = find.byType(Image).evaluate().single.widget as Image;
       final AssetImage assetImage = image.image as AssetImage;
@@ -100,15 +91,7 @@ void main() {
     testWidgets('correct image is rendered for production flavor',
         (tester) async {
       when(() => flavorCubit.state).thenReturn(FlavorMode.production);
-      await tester.pumpApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: themeCubit),
-            BlocProvider.value(value: flavorCubit),
-          ],
-          child: const SplashView(),
-        ),
-      );
+      await tester.pumpApp(makeTestableWidget());
       await tester.pumpAndSettle();
       final Image image = find.byType(Image).evaluate().single.widget as Image;
       final AssetImage assetImage = image.image as AssetImage;
@@ -123,15 +106,7 @@ void main() {
 
     testWidgets('scaleAnimation Tween is animated correctly', (tester) async {
       when(() => flavorCubit.state).thenReturn(FlavorMode.development);
-      await tester.pumpApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: themeCubit),
-            BlocProvider.value(value: flavorCubit),
-          ],
-          child: const SplashView(),
-        ),
-      );
+      await tester.pumpApp(makeTestableWidget());
       await tester.pump();
 
       final initialScale = tester
