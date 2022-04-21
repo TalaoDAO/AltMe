@@ -1,4 +1,5 @@
 import 'package:altme/app/shared/widget/tooltip_text.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends PreferredSize {
@@ -25,9 +26,7 @@ class CustomAppBar extends PreferredSize {
           Container(
             alignment: Alignment.bottomCenter,
             decoration: BoxDecoration(
-              color: Colors.red,
-
-              // TODO(bibash): Theme.of(context).colorScheme.appBar,
+              color: Theme.of(context).colorScheme.appBar,
               boxShadow: <BoxShadow>[
                 BoxShadow(
                   color: Theme.of(context).colorScheme.shadow,
@@ -50,8 +49,7 @@ class CustomAppBar extends PreferredSize {
             ),
           ),
           Material(
-            color: Colors.red,
-            // TODO(bibash): Theme.of(context).colorScheme.transparent,
+            color: Theme.of(context).colorScheme.transparent,
             type: MaterialType.transparency,
             child: Container(
               alignment: Alignment.bottomCenter,
