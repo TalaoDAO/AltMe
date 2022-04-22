@@ -1,31 +1,29 @@
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 
 abstract class Recto extends StatelessWidget {
-  const Recto({Key? key});
+  const Recto({Key? key}) : super(key: key);
 }
+
 abstract class Verso extends StatelessWidget {
-  const Verso();
+  const Verso({Key? key}) : super(key: key);
 }
 
 class CardAnimation extends StatefulWidget {
-  final Verso verso;
-
-  final Recto recto;
-
   const CardAnimation({
     Key? key,
     required this.recto,
     required this.verso,
   }) : super(key: key);
 
-  @override
-  State<CardAnimation> createState() =>
-      _CardAnimationState();
-}
+  final Verso verso;
 
+  final Recto recto;
+
+  @override
+  State<CardAnimation> createState() => _CardAnimationState();
+}
 
 class _CardAnimationState extends State<CardAnimation>
     with SingleTickerProviderStateMixin {
@@ -71,13 +69,13 @@ class _CardAnimationState extends State<CardAnimation>
                   Matrix4.rotationX((1 - _animationController.value) * pi / 2),
               alignment: Alignment.center,
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black54,
                       offset: Offset(9, 9),
                       blurRadius: 10,
-                      spreadRadius: 5.0,
+                      spreadRadius: 5,
                     )
                   ],
                 ),
