@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AppTheme {
-  AppTheme._();
+abstract class AppTheme {
 
   static const Color darkPrimary = Color(0xffbb86fc);
   static const Color darkPrimaryContainer = Color(0xff3700B3);
