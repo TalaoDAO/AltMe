@@ -50,40 +50,41 @@ class _CardAnimationState extends State<CardAnimation>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () async {
-          await _animationController.reverse();
-          setState(() {
-            if (_card is Recto) {
-              _card = widget.verso;
-            } else {
-              _card = widget.recto;
-            }
-          });
-          await _animationController.forward();
-        },
-        child: AnimatedBuilder(
-          animation: _animationController,
-          builder: (context, child) {
-            return Transform(
-              transform:
-                  Matrix4.rotationX((1 - _animationController.value) * pi / 2),
-              alignment: Alignment.center,
-              child: Container(
-                decoration: const BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black54,
-                      offset: Offset(9, 9),
-                      blurRadius: 10,
-                      spreadRadius: 5,
-                    )
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: _card,
+      onTap: () async {
+        await _animationController.reverse();
+        setState(() {
+          if (_card is Recto) {
+            _card = widget.verso;
+          } else {
+            _card = widget.recto;
+          }
+        });
+        await _animationController.forward();
+      },
+      child: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return Transform(
+            transform:
+                Matrix4.rotationX((1 - _animationController.value) * pi / 2),
+            alignment: Alignment.center,
+            child: Container(
+              decoration: const BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black54,
+                    offset: Offset(9, 9),
+                    blurRadius: 10,
+                    spreadRadius: 5,
+                  )
+                ],
               ),
-            );
-          },
-        ));
+              alignment: Alignment.center,
+              child: _card,
+            ),
+          );
+        },
+      ),
+    );
   }
 }
