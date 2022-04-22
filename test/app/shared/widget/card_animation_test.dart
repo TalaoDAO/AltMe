@@ -71,6 +71,13 @@ void main() {
       expect(find.byType(VersoWidget), findsOneWidget);
       expect(find.byType(RectoWidget), findsNothing);
       expect(find.byType(CardAnimation), findsOneWidget);
+
+      await tester.tap(find.byType(GestureDetector));
+      await tester.pumpAndSettle(const Duration(milliseconds: 700));
+
+      expect(find.byType(RectoWidget), findsOneWidget);
+      expect(find.byType(VersoWidget), findsNothing);
+      expect(find.byType(CardAnimation), findsOneWidget);
     });
   });
 }
