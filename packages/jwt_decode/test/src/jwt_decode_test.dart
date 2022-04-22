@@ -93,14 +93,22 @@ void main() {
     test('inValid jwt token with less than three part throws exception', () {
       expect(
         () => jwtDecode.parseJwt(inValidJwtTokenWithLessThanThreePart),
-        throwsA(isA<Exception>()),
+        throwsA(
+          isA<Exception>().having(
+            (p0) => p0.toString(),
+            'toString()',
+            'Exception: Invalid Token',
+          ),
+        ),
       );
     });
 
     test('inValid jwt token with three part throws exception', () {
       expect(
         () => jwtDecode.parseJwt(inValidJwtTokenWithThreePart),
-        throwsA(isA<Exception>()),
+        throwsA(
+          isA<FormatException>(),
+        ),
       );
     });
 
