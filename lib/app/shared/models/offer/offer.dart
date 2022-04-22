@@ -4,14 +4,14 @@ part 'offer.g.dart';
 
 @JsonSerializable()
 class Offer {
+  const Offer(this.value, this.currency);
+
+  factory Offer.fromJson(Map<String, dynamic> json) => _$OfferFromJson(json);
+
   @JsonKey(defaultValue: '')
   final String value;
   @JsonKey(defaultValue: '')
   final String currency;
-
-  factory Offer.fromJson(Map<String, dynamic> json) => _$OfferFromJson(json);
-
-  Offer(this.value, this.currency);
 
   Map<String, dynamic> toJson() => _$OfferToJson(this);
 }
