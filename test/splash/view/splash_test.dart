@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
+import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
