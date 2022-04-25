@@ -22,6 +22,7 @@ dependencies:
   network_image_mock: ^2.1.0
   secure_storage:
     path: packages/secure_storage
+  url_launcher: ^6.0.17
 
 dev_dependencies:
   bloc_test: ^9.0.3
