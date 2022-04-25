@@ -14,16 +14,19 @@ class SplashCubit extends Cubit<SplashState> {
     }
 
     final String? did = await secureStorageProvider.get(SecureStorageKeys.did);
-    final String? didMethod =
-        await secureStorageProvider.get(SecureStorageKeys.didMethod);
-    final String? didMethodName =
-        await secureStorageProvider.get(SecureStorageKeys.didMethodName);
+
     if (did == null || did.isEmpty) {
       return emit(SplashState.onboarding);
     }
+
+    final String? didMethod =
+        await secureStorageProvider.get(SecureStorageKeys.didMethod);
     if (didMethod == null || didMethod.isEmpty) {
       return emit(SplashState.onboarding);
     }
+
+    final String? didMethodName =
+        await secureStorageProvider.get(SecureStorageKeys.didMethodName);
     if (didMethodName == null || didMethodName.isEmpty) {
       return emit(SplashState.onboarding);
     }
