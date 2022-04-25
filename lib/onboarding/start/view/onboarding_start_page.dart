@@ -34,10 +34,12 @@ class _OnBoardingStartPageState extends State<OnBoardingStartPage> {
     return WillPopScope(
       onWillPop: () async => false,
       child: GestureDetector(
+        key: const Key('start_page_gesture_detector'),
         onTap: () async {
           await Navigator.of(context).push<void>(OnBoardingSecondPage.route());
         },
         onHorizontalDragUpdate: (drag) async {
+          //print('I am dragged. ${drag.delta.dx}');
           if (animate && drag.delta.dx < -2) {
             disableAnimation();
             await Navigator.of(context).push<void>(
