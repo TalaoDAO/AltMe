@@ -64,4 +64,13 @@ void main() {
       expect(find.byType(OnBoardingStartPage), findsOneWidget);
     });
   });
+
+  // testWidgets('navigates to OnBoardingSecondPage on right swipe',
+  //     (tester) async {
+  //   await tester.pumpApp(const OnBoardingStartPage());
+  //   final finder = find.byKey(const Key('start_page_gesture_detector'));
+  //   await tester.drag(finder, const Offset(-2, 0));
+  //   await tester.pumpAndSettle();
+  //   expect(find.byType(OnBoardingSecondPage), findsOneWidget);
+  // });
 }

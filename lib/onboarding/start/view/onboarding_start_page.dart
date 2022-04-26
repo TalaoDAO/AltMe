@@ -39,7 +39,7 @@ class _OnBoardingStartPageState extends State<OnBoardingStartPage> {
           await Navigator.of(context).push<void>(OnBoardingSecondPage.route());
         },
         onHorizontalDragUpdate: (drag) async {
-          //print('I am dragged. ${drag.delta.dx}');
+          print('I am dragged. ${drag.delta.dx}');
           if (animate && drag.delta.dx < -2) {
             disableAnimation();
             await Navigator.of(context).push<void>(
