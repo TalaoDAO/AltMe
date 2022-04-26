@@ -30,14 +30,6 @@ void main() {
       expect(find.byType(OnBoardingStartPage), findsOneWidget);
     });
 
-    testWidgets('navigates to OnBoardingSecondPage on when screen is tapped',
-        (tester) async {
-      await tester.pumpApp(const OnBoardingStartPage());
-      await tester.tap(find.byKey(const Key('start_page_gesture_detector')));
-      await tester.pumpAndSettle();
-      expect(find.byType(OnBoardingSecondPage), findsOneWidget);
-    });
-
     testWidgets('navigates to OnBoardingTosPage when button is pressed',
         (tester) async {
       await tester.pumpApp(const OnBoardingStartPage());
