@@ -46,8 +46,10 @@ void main() {
       expect(find.byType(OnBoardingTosPage), findsOneWidget);
     });
 
-    test('logger is not null', () {
-      expect(OnBoardingTosPage.log, isNotNull);
+    testWidgets('renders DisplayTerms', (tester) async {
+      await tester.pumpApp(const OnBoardingTosPage());
+      await tester.pumpAndSettle();
+      expect(find.byType(DisplayTerms), findsOneWidget);
     });
   });
 }
