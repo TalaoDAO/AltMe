@@ -10,7 +10,6 @@ class BaseButton extends StatelessWidget {
     this.gradient,
     this.textColor,
     this.borderColor,
-    this.height,
     this.margin = EdgeInsets.zero,
   }) : super(key: key);
 
@@ -20,7 +19,6 @@ class BaseButton extends StatelessWidget {
     required BuildContext context,
     VoidCallback? onPressed,
     Color? borderColor,
-    double? height,
     EdgeInsets? margin,
   }) : this(
           key: key,
@@ -31,7 +29,6 @@ class BaseButton extends StatelessWidget {
             colors: [Colors.white, Colors.white],
           ),
           borderColor: borderColor,
-          height: height,
           margin: margin ?? EdgeInsets.zero,
         );
 
@@ -43,7 +40,6 @@ class BaseButton extends StatelessWidget {
     Gradient? gradient,
     Color? borderColor,
     Color? textColor,
-    double? height,
     EdgeInsets? margin,
   }) : this(
           key: key,
@@ -59,7 +55,6 @@ class BaseButton extends StatelessWidget {
               ),
           textColor: textColor ?? Theme.of(context).colorScheme.onPrimary,
           borderColor: borderColor,
-          height: height,
           margin: margin ?? EdgeInsets.zero,
         );
 
@@ -70,7 +65,6 @@ class BaseButton extends StatelessWidget {
     VoidCallback? onPressed,
     Color? borderColor,
     Color? textColor,
-    double? height,
     EdgeInsets? margin,
   }) : this(
           key: key,
@@ -87,7 +81,6 @@ class BaseButton extends StatelessWidget {
               textColor ?? Theme.of(context).colorScheme.secondaryContainer,
           borderColor:
               borderColor ?? Theme.of(context).colorScheme.secondaryContainer,
-          height: height,
           margin: margin ?? EdgeInsets.zero,
         );
 
@@ -97,7 +90,6 @@ class BaseButton extends StatelessWidget {
   final Color? textColor;
   final Color? borderColor;
   final BuildContext context;
-  final double? height;
   final EdgeInsets margin;
 
   static BorderRadius buttonRadius = BorderRadius.circular(24);
@@ -108,7 +100,6 @@ class BaseButton extends StatelessWidget {
     final textColor = this.textColor ?? Theme.of(context).colorScheme.button;
 
     return Container(
-      height: height,
       margin: margin,
       decoration: BoxDecoration(
         gradient: gradient,
