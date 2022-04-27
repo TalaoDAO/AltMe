@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -18,17 +19,27 @@ void main() {
     );
   }
 
+  bool isFirstCase = true;
+
+  setUpAll(() {
+    ///do mock the assets
+    TestWidgetsFlutterBinding.ensureInitialized();
+    services.ServicesBinding.instance?.defaultBinaryMessenger
+        .setMockMessageHandler('flutter/assets', (message) {
+      if (isFirstCase) {
+        final Uint8List encoded =
+            utf8.encoder.convert('[Link `with nested code` Text](href)');
+        return Future.value(encoded.buffer.asByteData());
+      } else {
+        return null;
+      }
+    });
+  });
+
   group('MarkdownPage widget', () {
     late Widget widget;
 
     setUp(() {
-      //do mock the assets
-      TestWidgetsFlutterBinding.ensureInitialized();
-      services.ServicesBinding.instance?.defaultBinaryMessenger
-          .setMockMessageHandler('flutter/assets', (message) {
-        final Uint8List encoded = utf8.encoder.convert('<a href="https://www.toto.app">link</a>');
-        return Future.value(encoded.buffer.asByteData());
-      });
       widget = makeTestableWidget();
     });
 
@@ -57,27 +68,40 @@ void main() {
       await tester.pumpWidget(widget);
       await tester.pumpAndSettle();
       expect(find.byType(Markdown), findsOneWidget);
-      await tester.tap(find.byType(Markdown));
+      final richText = tester.widget<RichText>(find.byType(RichText).first);
+      final span = richText.text as TextSpan;
+
+      final gestureRecognizerTypes = <Type>[];
+      span.visitChildren((InlineSpan inlineSpan) {
+        if (inlineSpan is TextSpan) {
+          final recognizer = inlineSpan.recognizer;
+          gestureRecognizerTypes.add(recognizer?.runtimeType ?? Null);
+          if (recognizer != null && recognizer is TapGestureRecognizer) {
+            recognizer.onTap!();
+          }
+        }
+        return true;
+      });
+
+      expect(span.children!.length, 3);
+      expect(gestureRecognizerTypes.length, 3);
+      expect(gestureRecognizerTypes, everyElement(TapGestureRecognizer));
       await tester.pumpAndSettle();
     });
   });
 
   group('MarkdownPage bad state work properly', () {
-    late Widget widget;
-
-    setUp(() {
-      //do mock the assets
-      widget = makeTestableWidget();
-      TestWidgetsFlutterBinding.ensureInitialized();
-      services.ServicesBinding.instance?.defaultBinaryMessenger
-          .setMockMessageHandler('flutter/assets', (message) {
-        throw FlutterError('Unable to load asset');
-      });
-    });
+    final widget = MaterialApp(
+      home: MarkdownPage(
+        title: 'title',
+        file: 'assets1/notices.md',
+      ),
+    );
 
     testWidgets('trigger error ', (WidgetTester tester) async {
+      isFirstCase = false;
       await tester.pumpWidget(widget);
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
     });
   });
 }
