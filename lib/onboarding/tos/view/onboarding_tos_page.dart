@@ -14,7 +14,7 @@ class OnBoardingTosPage extends StatelessWidget {
         settings: const RouteSettings(name: '/onBoardingTermsPage'),
       );
 
-  static final _log = Logger('onboarding_tos_page');
+  static final log = Logger('onboarding_tos_page');
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class OnBoardingTosPage extends StatelessWidget {
         }
 
         if (snapshot.error != null) {
-          _log.severe(
+          log.severe(
             'something went wrong when loading $path',
             snapshot.error,
           );

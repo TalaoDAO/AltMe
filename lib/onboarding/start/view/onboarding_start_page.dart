@@ -34,6 +34,7 @@ class _OnBoardingStartPageState extends State<OnBoardingStartPage> {
     return WillPopScope(
       onWillPop: () async => false,
       child: GestureDetector(
+        key: const Key('start_page_gesture_detector'),
         onHorizontalDragUpdate: (drag) async {
           if (animate && drag.delta.dx < -2) {
             disableAnimation();

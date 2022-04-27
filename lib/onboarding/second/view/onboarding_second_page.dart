@@ -30,6 +30,7 @@ class _OnBoardingSecondPageState extends State<OnBoardingSecondPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return GestureDetector(
+      key: const Key('second_page_gesture_detector'),
       onHorizontalDragUpdate: (drag) async {
         if (animate) {
           if (drag.delta.dx > 2) {
