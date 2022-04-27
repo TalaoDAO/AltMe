@@ -2,8 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
-import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:bloc_test/bloc_test.dart';
