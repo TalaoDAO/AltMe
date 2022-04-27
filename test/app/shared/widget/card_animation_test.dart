@@ -34,7 +34,7 @@ void main() {
   late Widget testableWidget;
   setUp(() {
     testableWidget = MaterialApp(
-      home: CardAnimation(
+      home: CardAnimationWidget(
         key: GlobalKey(),
         recto: RectoWidget(
           key: GlobalKey(),
@@ -46,13 +46,13 @@ void main() {
     );
   });
 
-  group('CardAnimation widget', () {
-    testWidgets('CardAnimation property set correctly',
+  group('CardAnimationWidget widget', () {
+    testWidgets('CardAnimationWidget property set correctly',
         (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
-      expect(find.byType(CardAnimation), findsOneWidget);
+      expect(find.byType(CardAnimationWidget), findsOneWidget);
       final carAnimationWidget =
-          tester.widget<CardAnimation>(find.byType(CardAnimation));
+          tester.widget<CardAnimationWidget>(find.byType(CardAnimationWidget));
       expect(carAnimationWidget.recto, isNotNull);
       expect(carAnimationWidget.verso, isNotNull);
       expect(carAnimationWidget.key, isA<GlobalKey>());
@@ -61,7 +61,7 @@ void main() {
     testWidgets('Recto and Verso widgets changed with tap',
         (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
-      expect(find.byType(CardAnimation), findsOneWidget);
+      expect(find.byType(CardAnimationWidget), findsOneWidget);
       expect(find.byType(RectoWidget), findsOneWidget);
       expect(find.byType(VersoWidget), findsNothing);
 
@@ -70,14 +70,14 @@ void main() {
 
       expect(find.byType(VersoWidget), findsOneWidget);
       expect(find.byType(RectoWidget), findsNothing);
-      expect(find.byType(CardAnimation), findsOneWidget);
+      expect(find.byType(CardAnimationWidget), findsOneWidget);
 
       await tester.tap(find.byType(GestureDetector));
       await tester.pumpAndSettle(const Duration(milliseconds: 700));
 
       expect(find.byType(RectoWidget), findsOneWidget);
       expect(find.byType(VersoWidget), findsNothing);
-      expect(find.byType(CardAnimation), findsOneWidget);
+      expect(find.byType(CardAnimationWidget), findsOneWidget);
     });
   });
 }

@@ -1,6 +1,7 @@
 import 'dart:math';
 
-import 'package:altme/app/shared/widget/car_animation/card_animation_cubit.dart';
+import 'package:altme/app/shared/widget/card_animation/card_animation_cubit.dart';
+import 'package:altme/app/shared/widget/card_animation/card_animation_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,8 +13,8 @@ abstract class Verso extends StatelessWidget {
   const Verso({Key? key}) : super(key: key);
 }
 
-class CardAnimation extends StatefulWidget {
-  const CardAnimation({
+class CardAnimationWidget extends StatefulWidget {
+  const CardAnimationWidget({
     Key? key,
     required this.recto,
     required this.verso,
@@ -24,10 +25,10 @@ class CardAnimation extends StatefulWidget {
   final Recto recto;
 
   @override
-  State<CardAnimation> createState() => _CardAnimationState();
+  State<CardAnimationWidget> createState() => _CardAnimationWidgetState();
 }
 
-class _CardAnimationState extends State<CardAnimation>
+class _CardAnimationWidgetState extends State<CardAnimationWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late final carAnimationCubit = CardAnimationCubit(widget.recto);
