@@ -29,9 +29,7 @@ class _OnBoardingThirdPageState extends State<OnBoardingThirdPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pop();
-      },
+      key: const Key('third_page_gesture_detector'),
       onHorizontalDragUpdate: (drag) async {
         if (animate && drag.delta.dx > 2) {
           Navigator.of(context).pop();

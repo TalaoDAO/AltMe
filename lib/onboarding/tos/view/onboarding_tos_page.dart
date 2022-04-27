@@ -1,10 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:logging/logging.dart';
 
 class OnBoardingTosPage extends StatelessWidget {
   const OnBoardingTosPage({Key? key}) : super(key: key);
@@ -13,8 +9,6 @@ class OnBoardingTosPage extends StatelessWidget {
         builder: (context) => const OnBoardingTosPage(),
         settings: const RouteSettings(name: '/onBoardingTermsPage'),
       );
-
-  static final _log = Logger('onboarding_tos_page');
 
   @override
   Widget build(BuildContext context) {
@@ -67,50 +61,8 @@ class OnBoardingTosPage extends StatelessWidget {
             ),
           ),
         ),
-        body: displayTerms(context),
+        body: const DisplayTerms(),
       ),
     );
-  }
-
-  FutureBuilder<String> displayTerms(BuildContext context) {
-    final localizations = context.l10n;
-    final String path;
-    final languagesList = ['fr', 'it', 'es', 'de'];
-    if (languagesList.contains(localizations.localeName)) {
-      path = 'assets/privacy/privacy_${localizations.localeName}.md';
-    } else {
-      path = 'assets/privacy/privacy_en.md';
-    }
-    return FutureBuilder<String>(
-      future: _loadFile(path),
-      builder: (context, snapshot) {
-        if (snapshot.data != null) {
-          return Markdown(
-            data: snapshot.data!,
-            styleSheet: MarkdownStyleSheet(
-              h1: TextStyle(color: Theme.of(context).colorScheme.markDownH1),
-              h2: TextStyle(color: Theme.of(context).colorScheme.markDownH2),
-              a: TextStyle(color: Theme.of(context).colorScheme.markDownA),
-              p: TextStyle(color: Theme.of(context).colorScheme.markDownP),
-              // onTapLink: (text, href, title) => _onTapLink(href),
-            ),
-          );
-        }
-
-        if (snapshot.error != null) {
-          _log.severe(
-            'something went wrong when loading $path',
-            snapshot.error,
-          );
-          return const SizedBox.shrink();
-        }
-
-        return const Spinner();
-      },
-    );
-  }
-
-  Future<String> _loadFile(String path) async {
-    return rootBundle.loadString(path);
   }
 }
