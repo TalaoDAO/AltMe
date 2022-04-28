@@ -1,5 +1,6 @@
 export 'back_leading_button.dart';
 export 'base/base.dart';
+export 'card_animation/card_animation.dart';
 export 'custom_app_bar.dart';
 export 'display_terms.dart';
 export 'hero_workaround.dart';
