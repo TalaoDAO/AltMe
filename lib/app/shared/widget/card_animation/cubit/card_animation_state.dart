@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'card_animation_cubit.dart';
 
 class CardAnimationState {
   CardAnimationState(this.cardWidget);

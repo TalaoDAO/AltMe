@@ -1,7 +1,6 @@
 import 'dart:math';
 
-import 'package:altme/app/shared/widget/card_animation/card_animation_cubit.dart';
-import 'package:altme/app/shared/widget/card_animation/card_animation_state.dart';
+import 'package:altme/app/shared/widget/card_animation/card_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
