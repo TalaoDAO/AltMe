@@ -1,10 +1,13 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'work_for.g.dart';
 
 @JsonSerializable()
-class WorkFor {
-  WorkFor(this.address, this.logo, this.name);
+@immutable
+class WorkFor extends Equatable {
+  const WorkFor(this.address, this.logo, this.name);
 
   factory WorkFor.fromJson(Map<String, dynamic> json) =>
       _$WorkForFromJson(json);
@@ -17,4 +20,7 @@ class WorkFor {
   final String name;
 
   Map<String, dynamic> toJson() => _$WorkForToJson(this);
+
+  @override
+  List<Object?> get props => [name, logo, address];
 }

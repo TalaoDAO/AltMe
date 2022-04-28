@@ -1,4 +1,10 @@
 export 'author/author.dart';
 export 'certificate_of_employment/certificate_of_employment.dart';
+export 'credential/credential.dart';
+export 'credential_model/credential_model.dart';
 export 'credential_status_field/credential_status_field.dart';
+export 'credential_subject/credential_subject.dart';
+export 'default_credential_subject/default_credential_subject.dart';
+export 'display/display.dart';
+export 'evidence/evidence.dart';
 export 'proof/proof.dart';

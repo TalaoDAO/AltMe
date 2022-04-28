@@ -55,5 +55,7 @@
   "endDate": "Until",
   "employmentType": "Employment type",
   "jobTitle": "Job title",
-  "baseSalary": "Salary"
+  "baseSalary": "Salary",
+  "issuanceDate": "Issuance date",
+  "evidenceLabel": "Evidence"
 }

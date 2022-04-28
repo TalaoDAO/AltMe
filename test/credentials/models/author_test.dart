@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Author model work properly', () {
     test('initialize Author with default constructor', () {
-      final author = Author('Taleb', 'logo');
+      const author = Author('Taleb', 'logo');
       expect(author.name, 'Taleb');
       expect(author.logo, 'logo');
     });

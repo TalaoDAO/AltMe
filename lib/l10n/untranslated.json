@@ -55,7 +55,9 @@
     "endDate",
     "employmentType",
     "jobTitle",
-    "baseSalary"
+    "baseSalary",
+    "issuanceDate",
+    "evidenceLabel"
   ],
 
   "es": [
@@ -114,7 +116,9 @@
     "endDate",
     "employmentType",
     "jobTitle",
-    "baseSalary"
+    "baseSalary",
+    "issuanceDate",
+    "evidenceLabel"
   ],
 
   "fr": [
@@ -173,7 +177,9 @@
     "endDate",
     "employmentType",
     "jobTitle",
-    "baseSalary"
+    "baseSalary",
+    "issuanceDate",
+    "evidenceLabel"
   ],
 
   "it": [
@@ -232,6 +238,8 @@
     "endDate",
     "employmentType",
     "jobTitle",
-    "baseSalary"
+    "baseSalary",
+    "issuanceDate",
+    "evidenceLabel"
   ]
 }

@@ -1,10 +1,13 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'author.g.dart';
 
 @JsonSerializable()
-class Author {
-  Author(this.name, this.logo);
+@immutable
+class Author extends Equatable {
+  const Author(this.name, this.logo);
 
   factory Author.fromJson(Map<String, dynamic> json) => _$AuthorFromJson(json);
 
@@ -14,4 +17,7 @@ class Author {
   final String logo;
 
   Map<String, dynamic> toJson() => _$AuthorToJson(this);
+
+  @override
+  List<Object?> get props => [name, logo];
 }
