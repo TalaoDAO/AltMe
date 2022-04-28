@@ -39,5 +39,21 @@
   "onBoardingGenTitle": "Private Key Generation",
   "onBoardingGenButton": "Generate",
   "onBoardingSuccessTitle": "Identifier Created",
-  "onBoardingSuccessButton": "Continue"
+  "onBoardingSuccessButton": "Continue",
+  "lastName": "Last name",
+  "firstName": "First name",
+  "gender": "gender",
+  "birthdate": "Birthdate",
+  "birthplace": "Birthplace",
+  "address": "Address",
+  "maritalStatus": "Marital Status",
+  "nationality": "Nationality",
+  "identifier": "identifier",
+  "issuer": "Issued by",
+  "workFor": "Work for",
+  "startDate": "Since",
+  "endDate": "Until",
+  "employmentType": "Employment type",
+  "jobTitle": "Job title",
+  "baseSalary": "Salary"
 }

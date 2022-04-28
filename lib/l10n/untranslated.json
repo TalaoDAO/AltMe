@@ -39,7 +39,23 @@
     "onBoardingGenTitle",
     "onBoardingGenButton",
     "onBoardingSuccessTitle",
-    "onBoardingSuccessButton"
+    "onBoardingSuccessButton",
+    "lastName",
+    "firstName",
+    "gender",
+    "birthdate",
+    "birthplace",
+    "address",
+    "maritalStatus",
+    "nationality",
+    "identifier",
+    "issuer",
+    "workFor",
+    "startDate",
+    "endDate",
+    "employmentType",
+    "jobTitle",
+    "baseSalary"
   ],
 
   "es": [
@@ -82,7 +98,23 @@
     "onBoardingGenTitle",
     "onBoardingGenButton",
     "onBoardingSuccessTitle",
-    "onBoardingSuccessButton"
+    "onBoardingSuccessButton",
+    "lastName",
+    "firstName",
+    "gender",
+    "birthdate",
+    "birthplace",
+    "address",
+    "maritalStatus",
+    "nationality",
+    "identifier",
+    "issuer",
+    "workFor",
+    "startDate",
+    "endDate",
+    "employmentType",
+    "jobTitle",
+    "baseSalary"
   ],
 
   "fr": [
@@ -125,7 +157,23 @@
     "onBoardingGenTitle",
     "onBoardingGenButton",
     "onBoardingSuccessTitle",
-    "onBoardingSuccessButton"
+    "onBoardingSuccessButton",
+    "lastName",
+    "firstName",
+    "gender",
+    "birthdate",
+    "birthplace",
+    "address",
+    "maritalStatus",
+    "nationality",
+    "identifier",
+    "issuer",
+    "workFor",
+    "startDate",
+    "endDate",
+    "employmentType",
+    "jobTitle",
+    "baseSalary"
   ],
 
   "it": [
@@ -168,6 +216,22 @@
     "onBoardingGenTitle",
     "onBoardingGenButton",
     "onBoardingSuccessTitle",
-    "onBoardingSuccessButton"
+    "onBoardingSuccessButton",
+    "lastName",
+    "firstName",
+    "gender",
+    "birthdate",
+    "birthplace",
+    "address",
+    "maritalStatus",
+    "nationality",
+    "identifier",
+    "issuer",
+    "workFor",
+    "startDate",
+    "endDate",
+    "employmentType",
+    "jobTitle",
+    "baseSalary"
   ]
 }
