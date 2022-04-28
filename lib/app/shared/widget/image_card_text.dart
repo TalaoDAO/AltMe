@@ -1,4 +1,5 @@
-/// This widget is used to adapt text size on image card when user change phone orientation
+/// This widget is used to adapt text size on image card when user change
+/// phone orientation
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
