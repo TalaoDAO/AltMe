@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/models/credential/credential.dart';
 import 'package:altme/credentials/models/display/display.dart';
+import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -156,24 +159,22 @@ class CredentialModel extends Equatable {
   }
 
   Future<RevocationStatus> getRevocationStatus() async {
-    // TODO(bibash): hello
-    // final vcStr = jsonEncode(data);
-    // final optStr = jsonEncode({
-    //   'checks': ['credentialStatus']
-    // });
-    // final result = await Future.any([
-    //   DIDKitProvider.instance.verifyCredential(vcStr, optStr),
-    //   Future.delayed(const Duration(seconds: 4))
-    // ]);
-    // final jsonResult = jsonDecode(result);
-    // if (jsonResult['errors']?[0] == 'Credential is revoked.') {
-    //   revocationStatus = RevocationStatus.revoked;
-    //   return RevocationStatus.revoked;
-    // } else {
-    //   revocationStatus = RevocationStatus.active;
-    //   return RevocationStatus.active;
-    //}
-    return RevocationStatus.active;
+    final String vcStr = jsonEncode(data);
+    final String optStr = jsonEncode({
+      'checks': ['credentialStatus']
+    });
+    final String result = await Future.any([
+      DIDKitProvider().verifyCredential(vcStr, optStr),
+      Future.delayed(const Duration(seconds: 4))
+    ]);
+    final jsonResult = jsonDecode(result) as Map<String, dynamic>;
+    if (jsonResult['errors']?[0] == 'Credential is revoked.') {
+      revocationStatus = RevocationStatus.revoked;
+      return RevocationStatus.revoked;
+    } else {
+      revocationStatus = RevocationStatus.active;
+      return RevocationStatus.active;
+    }
   }
 
   void setRevocationStatusToUnknown() {

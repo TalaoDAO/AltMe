@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   bloc: ^8.0.3
+  did_kit:
+    path: packages/did_kit
   dio: ^4.0.4
   equatable: ^2.0.3
   flutter:
