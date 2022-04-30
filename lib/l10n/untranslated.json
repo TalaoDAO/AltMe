@@ -57,7 +57,19 @@
     "jobTitle",
     "baseSalary",
     "issuanceDate",
-    "evidenceLabel"
+    "evidenceLabel",
+    "failedToLoadProfile",
+    "failedToSaveProfile",
+    "active",
+    "expired",
+    "revoked",
+    "ok",
+    "personalFirstName",
+    "personalLastName",
+    "personalPhone",
+    "personalLocation",
+    "personalMail",
+    "expires"
   ],
 
   "es": [
@@ -118,7 +130,19 @@
     "jobTitle",
     "baseSalary",
     "issuanceDate",
-    "evidenceLabel"
+    "evidenceLabel",
+    "failedToLoadProfile",
+    "failedToSaveProfile",
+    "active",
+    "expired",
+    "revoked",
+    "ok",
+    "personalFirstName",
+    "personalLastName",
+    "personalPhone",
+    "personalLocation",
+    "personalMail",
+    "expires"
   ],
 
   "fr": [
@@ -179,7 +203,19 @@
     "jobTitle",
     "baseSalary",
     "issuanceDate",
-    "evidenceLabel"
+    "evidenceLabel",
+    "failedToLoadProfile",
+    "failedToSaveProfile",
+    "active",
+    "expired",
+    "revoked",
+    "ok",
+    "personalFirstName",
+    "personalLastName",
+    "personalPhone",
+    "personalLocation",
+    "personalMail",
+    "expires"
   ],
 
   "it": [
@@ -240,6 +276,18 @@
     "jobTitle",
     "baseSalary",
     "issuanceDate",
-    "evidenceLabel"
+    "evidenceLabel",
+    "failedToLoadProfile",
+    "failedToSaveProfile",
+    "active",
+    "expired",
+    "revoked",
+    "ok",
+    "personalFirstName",
+    "personalLastName",
+    "personalPhone",
+    "personalLocation",
+    "personalMail",
+    "expires"
   ]
 }

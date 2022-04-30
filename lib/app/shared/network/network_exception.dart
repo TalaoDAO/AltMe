@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/error_handler/error_handler.dart';
 import 'package:altme/app/shared/network/extension.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';

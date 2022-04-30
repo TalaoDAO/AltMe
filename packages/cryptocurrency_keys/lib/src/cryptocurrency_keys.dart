@@ -13,7 +13,7 @@ class CryptocurrencyKeys {
   const CryptocurrencyKeys();
 
   ///ivVector
-  static const String ivVector = 'Talao';
+  static const String ivVector = 'altme';
 
   ///additionalAuthenticatedData
   static const String additionalAuthenticatedData = 'Credible';

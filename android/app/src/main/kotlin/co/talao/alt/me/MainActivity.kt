@@ -1,4 +1,4 @@
-package co.talao.alt.me.altme
+package co.altme.alt.me.altme
 
 import io.flutter.embedding.android.FlutterActivity
 

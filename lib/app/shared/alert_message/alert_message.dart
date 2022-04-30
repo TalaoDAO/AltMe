@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/alert_message/extension.dart';
-import 'package:altme/app/shared/error_handler/error_handler.dart';
 import 'package:flutter/material.dart';
 
 class AlertMessage {

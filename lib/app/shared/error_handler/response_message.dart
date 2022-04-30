@@ -48,4 +48,8 @@ class ResponseMessage {
   String get NETWORK_ERROR_UNAUTHENTICATED => l10n.networkErrorUnauthenticated;
 
   String get NETWORK_ERROR_NOT_FOUND => l10n.networkErrorNotFound;
+
+  String get MESSAGE_ERROR_FAILED_TO_LOAD_PROFILE => l10n.failedToLoadProfile;
+
+  String get MESSAGE_ERROR_FAILED_TO_SAVE_PROFILE => l10n.failedToSaveProfile;
 }

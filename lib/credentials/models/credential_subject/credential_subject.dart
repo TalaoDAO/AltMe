@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
 part 'credential_subject.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -162,6 +163,48 @@ class CredentialSubject {
     );
   }
 
+  Widget displayInSelectionList(BuildContext context, CredentialModel item) {
+    return CredentialContainer(
+      child: Container(
+        // margin: const EdgeInsets.symmetric(vertical: 4),
+        decoration: BaseBoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: item.backgroundColor,
+          shapeColor: Theme.of(context).colorScheme.documentShape,
+          value: 1,
+          anchors: const <Alignment>[
+            Alignment.bottomRight,
+          ],
+        ),
+        child: Material(
+          color: Theme.of(context).colorScheme.transparent,
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: displayName(context, item),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: SizedBox(
+                    height: 48,
+                    child: displayDescription(context, item),
+                  ),
+                ),
+                DisplayIssuer(
+                  issuer: item.credentialPreview.credentialSubject.issuedBy,
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget displayDetail(BuildContext context, CredentialModel item) {
     final l10n = context.l10n;
     final _issuanceDate = item.credentialPreview.issuanceDate;
@@ -236,7 +279,8 @@ class CredentialSubject {
   String getName(BuildContext context, CredentialModel item) {
     final l10n = context.l10n;
 
-    var _nameValue = getTranslation(item.credentialPreview.name, l10n);
+    var _nameValue =
+        GetTranslation.getTranslation(item.credentialPreview.name, l10n);
     if (_nameValue == '') {
       _nameValue = item.display.nameFallback;
     }
@@ -250,30 +294,13 @@ class CredentialSubject {
   String getDescription(BuildContext context, CredentialModel item) {
     final l10n = context.l10n;
 
-    var _nameValue = getTranslation(item.credentialPreview.description, l10n);
+    var _nameValue =
+        GetTranslation.getTranslation(item.credentialPreview.description, l10n);
     if (_nameValue == '') {
       _nameValue = item.display.descriptionFallback;
     }
 
     return _nameValue;
-  }
-
-  String getTranslation(List<Translation> translations, AppLocalizations l10n) {
-    String _translation;
-    final translated =
-        translations.where((element) => element.language == l10n.localeName);
-    if (translated.isEmpty) {
-      final List<Translation> translationList =
-          translations.where((element) => element.language == 'en').toList();
-      if (translationList.isEmpty) {
-        _translation = '';
-      } else {
-        _translation = translationList.single.value;
-      }
-    } else {
-      _translation = translated.single.value;
-    }
-    return _translation;
   }
 
   Widget displayName(BuildContext context, CredentialModel item) {

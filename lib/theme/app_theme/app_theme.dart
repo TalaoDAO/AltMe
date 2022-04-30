@@ -323,4 +323,23 @@ extension CustomTextTheme on TextTheme {
         fontSize: 5,
         fontWeight: FontWeight.w700,
       );
+
+  TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.roboto(
+    color: const Color(0xFF0650C6),
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  );
+
+  TextStyle get certificateOfEmploymentDescription => GoogleFonts.montserrat(
+    color: const Color(0xFF757575),
+    fontSize: 13,
+    fontWeight: FontWeight.normal,
+  );
+
+  TextStyle get certificateOfEmploymentData => GoogleFonts.roboto(
+    color: const Color(0xFF434e62),
+    fontSize: 12,
+    fontWeight: FontWeight.normal,
+  );
+
 }

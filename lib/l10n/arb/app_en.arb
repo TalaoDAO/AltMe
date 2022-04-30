@@ -57,5 +57,17 @@
   "jobTitle": "Job title",
   "baseSalary": "Salary",
   "issuanceDate": "Issuance date",
-  "evidenceLabel": "Evidence"
+  "evidenceLabel": "Evidence",
+  "failedToLoadProfile": "Failed to load profile.",
+  "failedToSaveProfile": "Failed to save profile.",
+  "active": "Active",
+  "expired": "Expired",
+  "revoked": "Revoked",
+  "ok": "OK",
+  "personalFirstName": "First Name",
+  "personalLastName": "Last Name",
+  "personalPhone": "Phone",
+  "personalLocation": "Location",
+  "personalMail": "E-mail",
+  "expires": "Expires"
 }

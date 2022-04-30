@@ -7,26 +7,26 @@ Last Updated: September 17, 2021
 ## Preamble
 
 
-Protecting your privacy is important to us. Talao is committed to protecting the privacy, security and accuracy of personal information they collect, use or disclose in accordance with applicable law. This privacy protection policy (the « Policy of privacy ») is a statement of principles and guidelines concerning the privacy of individuals using the services offered by Talao (except our personnel, whose personal information is collected, used and disclosed in accordance with our policy of protection of confidentiality for staff.
+Protecting your privacy is important to us. altme is committed to protecting the privacy, security and accuracy of personal information they collect, use or disclose in accordance with applicable law. This privacy protection policy (the « Policy of privacy ») is a statement of principles and guidelines concerning the privacy of individuals using the services offered by altme (except our personnel, whose personal information is collected, used and disclosed in accordance with our policy of protection of confidentiality for staff.
 
 
 CONSENT
-BY SUBMITTING PERSONAL INFORMATION TO TALAO OR ITS AGENTS, YOU AGREE THAT WE MAY COLLECT, USE AND DISCLOSE SUCH PERSONAL INFORMATION IN ACCORDANCE WITH THIS PRIVACY POLICY OF PRIVACY PREFERENCE REGARDING THE PROTECTION OF THAT CONFIDENTIALITY YOU WE HAVE INDICATED AND AS PERMITTED OR REQUIRED BY LAW. Subject to legal and contractual requirements, you may refuse or withdraw your consent to certain of the identified purposes at any time by contacting us. If you refuse or withdraw your consent, it may be that we are unable to provide or continue to provide certain services or information that may be helpful.
+BY SUBMITTING PERSONAL INFORMATION TO altme OR ITS AGENTS, YOU AGREE THAT WE MAY COLLECT, USE AND DISCLOSE SUCH PERSONAL INFORMATION IN ACCORDANCE WITH THIS PRIVACY POLICY OF PRIVACY PREFERENCE REGARDING THE PROTECTION OF THAT CONFIDENTIALITY YOU WE HAVE INDICATED AND AS PERMITTED OR REQUIRED BY LAW. Subject to legal and contractual requirements, you may refuse or withdraw your consent to certain of the identified purposes at any time by contacting us. If you refuse or withdraw your consent, it may be that we are unable to provide or continue to provide certain services or information that may be helpful.
 
 
-## 1. Talao
+## 1. altme
 
 
-Talao is a French company registered in Paris.
+altme is a French company registered in Paris.
 
 
-Talao provides a self sovereign identity based on decentralized ledgers as a Blockchain public and private network.
+altme provides a self sovereign identity based on decentralized ledgers as a Blockchain public and private network.
 
 
 Traditional architectures to validate, certify, and manage professional data are based on centralized, top-down approaches that rely on third-party private operators. Unfortunately these solutions often lead to inappropriate use of personal data and hacks.
 
 
-Talao approaches this issue starting from a user perspective through a Self Sovereign Identity (SSI) focused on professional data. Talao allows Professional Identities for Talents, Companies and certificates issuers such as Schools or Training Centers.
+altme approaches this issue starting from a user perspective through a Self Sovereign Identity (SSI) focused on professional data. altme allows Professional Identities for Talents, Companies and certificates issuers such as Schools or Training Centers.
 It is for everyone the opportunity to use a new technology to get tamper proof professional data while keeping the ownership of that data.
 
 
@@ -40,7 +40,7 @@ This policy of privacy applies to the collection, use and disclosure of any pers
 
 
 Legislation on privacy defines personal information very broadly as information about an « identifiable individual » or as information that identifies an individual. The types of personal information we may collect from you from time to time include: your name, your address, your email address, your phone number, your service preferences,
-information about your education, your professional experience, your previous and current employers, your skills and information about the content you post to Talao.
+information about your education, your professional experience, your previous and current employers, your skills and information about the content you post to altme.
 
 
 ## 3. The reasons for the collection of personal information
@@ -58,14 +58,14 @@ We use your email address to send you the credentials you requested.
 Law enforcement and communication under legislation
 
 
-Talao may disclose your personal information to a government agency that has asserted its lawful authority to obtain the information or where Talao has reasonable grounds to believe that the information could be useful in the investigation of unlawful activity, or to comply with a subpoena, warrant or court order, a person or body with jurisdiction requiring the submission of information, or to comply with a court decision concerning the presentation of information records.
-Talao may also disclose your personal information to legal counsel.
+altme may disclose your personal information to a government agency that has asserted its lawful authority to obtain the information or where altme has reasonable grounds to believe that the information could be useful in the investigation of unlawful activity, or to comply with a subpoena, warrant or court order, a person or body with jurisdiction requiring the submission of information, or to comply with a court decision concerning the presentation of information records.
+altme may also disclose your personal information to legal counsel.
 
 
 ## 5. Control of your personal information
 
 
-Talao wants you to be able to maintain control over how we use your personal information. In particular:
+altme wants you to be able to maintain control over how we use your personal information. In particular:
 
 
 You can have the right not to participate in some or all of those purposes, uses and disclosures listed in sections 3 and 4 above.
@@ -87,13 +87,13 @@ There are 3 different levels of data encryption. If you choose to let your data 
 
 
 If you chose to let your data 'private', your data will be encrypted with a special key you could communicate to "partners" you have chosen.
-If you chose to let your data 'secret', your data will be encrypted with a special key we cannot communicate through the platform. For your information, please contact our responsible for the protection of confidentiality as identified in the section « Contact us » below) orgo to our online documentation  https://talao.readthedocs.io/en/latest/privacy/
+If you chose to let your data 'secret', your data will be encrypted with a special key we cannot communicate through the platform. For your information, please contact our responsible for the protection of confidentiality as identified in the section « Contact us » below) orgo to our online documentation  https://altme.readthedocs.io/en/latest/privacy/
 
 
 ## 7. The consultation of your personal information
 
 
-Upon written request, subject to certain exceptions, Talao informs you of the existence, use and disclosure of your personal information and you will see them.
+Upon written request, subject to certain exceptions, altme informs you of the existence, use and disclosure of your personal information and you will see them.
 
 
 You must send your request for our responsibility for protecting the confidentiality, details of which are classified « Contact us » (below).
@@ -118,10 +118,10 @@ We operate secure servers protected by firewall systems and password protection 
 ## 9. The protection of confidentiality and websites
 
 
-Talao sometimes collects personal information through its various websites. This clause provides additional information regarding the collection of personal information.
+altme sometimes collects personal information through its various websites. This clause provides additional information regarding the collection of personal information.
 
 
-Cookies : When an individual visitor accesses the website Talao, we may use a browser feature called a « session cookie » (cookie) to collect information such as browser type and operating system operating the visitor is using, the Web site domain name from which a visitor came, date and duration of the visit. A cookie is a small text file containing a unique identification number that identifies the visitor's browser (without necessarily identifying it) for our computers each time our websites are visited. Unless a visitor specifically informs us (p. Ex., by subscribing to our services or sending us a message from web sites), we will not know the identity of visitors. Visitors can reset their browser to notify them when they receive a cookie or decline cookies.
+Cookies : When an individual visitor accesses the website altme, we may use a browser feature called a « session cookie » (cookie) to collect information such as browser type and operating system operating the visitor is using, the Web site domain name from which a visitor came, date and duration of the visit. A cookie is a small text file containing a unique identification number that identifies the visitor's browser (without necessarily identifying it) for our computers each time our websites are visited. Unless a visitor specifically informs us (p. Ex., by subscribing to our services or sending us a message from web sites), we will not know the identity of visitors. Visitors can reset their browser to notify them when they receive a cookie or decline cookies.
 
 
 However, when visitors refuse cookies, it may be unable to use some of the features available on our websites.
@@ -130,38 +130,38 @@ However, when visitors refuse cookies, it may be unable to use some of the featu
 ## 10. Changes to the privacy protection policy
 
 
-Talao reserves the right to modify or supplement this privacy protection policy at any time.
+altme reserves the right to modify or supplement this privacy protection policy at any time.
 
 
-If we make changes to this policy of privacy, we will post those changes on our websites and the amended policy available upon request to the responsible for the Talao privacy protection.
+If we make changes to this policy of privacy, we will post those changes on our websites and the amended policy available upon request to the responsible for the altme privacy protection.
 
 
-However, Talao will obtain the necessary consents required under the law on the protection of applicable personal information if it seeks to collect, use or disclose personal information about an individual for purposes other than those for which the consent was given, unless it is otherwise required or permitted by law.
+However, altme will obtain the necessary consents required under the law on the protection of applicable personal information if it seeks to collect, use or disclose personal information about an individual for purposes other than those for which the consent was given, unless it is otherwise required or permitted by law.
 
 
 ## 11. How to Contact us
 
 
-Talao has appointed an official of privacy which oversees compliance with this privacy protection policy and applicable laws for the protection of personal information.
+altme has appointed an official of privacy which oversees compliance with this privacy protection policy and applicable laws for the protection of personal information.
 
 
-The contact information for the Talao protection of privacy are :
+The contact information for the altme protection of privacy are :
 
 
-Responsible for protecting the confidentiality of Talao
-Email: contact@talao.io.
+Responsible for protecting the confidentiality of altme
+Email: contact@altme.io.
 
 
 ## Appendix 1
 
 
-Personal data protection - Your data on Talao
+Personal data protection - Your data on altme
 
 
 ### What personal data collected about me ?
 
 
-When you create a Talao identity, you provide us with personal information that includes your given name, family name, your decentralized identifier(DID), username and a password. You can also choose to add a phone number to your account for a better authentication process.Those data are stored on Talao servers.
+When you create a altme identity, you provide us with personal information that includes your given name, family name, your decentralized identifier(DID), username and a password. You can also choose to add a phone number to your account for a better authentication process.Those data are stored on altme servers.
 
 
 When you fill your resume, you also provide us with professional data such as educational degrees, professional experiences. skills.
@@ -170,7 +170,7 @@ When you fill your resume, you also provide us with professional data such as ed
 When you store data files, you also provide us with the file content. 
 
 
-Depending on the decentralized network, Talao might eventually own some of those servers for persistence.
+Depending on the decentralized network, altme might eventually own some of those servers for persistence.
 
 
 ### When ?
@@ -190,7 +190,7 @@ The processing of your personal data is justified by various foundations (legal 
 
 
 • With your consent. We ask for your agreement to process your information for specific purposes and you have the right to withdraw your consent at any time. The processing of personal data is necessary for the performance of the service to which you have agreed.
-• When we’re providing a service. We process your data to provide a service you’ve asked for under a contract. For example we can process your information to request a professional experience assessment to a former employer. Without exception, you can at any time object to processing based on the legitimate interest by notifying Talao.
+• When we’re providing a service. We process your data to provide a service you’ve asked for under a contract. For example we can process your information to request a professional experience assessment to a former employer. Without exception, you can at any time object to processing based on the legitimate interest by notifying altme.
 
 
 ### 1. The data you provide us : Legal Basis Contract
@@ -226,29 +226,29 @@ We store this data to improve our product, create services and generate reports.
 • Manage your information
 
 
-You can access and update your information through your Account Settings Talao or by sending us a contact request.
+You can access and update your information through your Account Settings altme or by sending us a contact request.
 
 
 • Correction of inaccurate or incomplete. You can correct inaccurate or incomplete personal information directly via your profile or sending us a contact request.
-• Objection and deletion of data.After closing the account, the data is permanently deleted except for those that can afford to Talao justifying the execution of its legal or contractual obligations.
-The data retained are for a limited period of one month and subject to no use during this time.You may terminate your account at any time by going directly to your Talao account to "delete your Identity".When you delete your identity, data collected by us (username, wallet address, password, email, phone) are deleted and all links to your data stored on Blockchain servers are deleted. Data on Blockchain Network cannot be deleted but are no longer accessible.
-• Data protection and security infrastructure. We attach great importance to the protection of customer information and privacy of their users. We have established high safety standards. Talao is committed to take all reasonable measures to avoid any unwanted event (illegitimate access, modification or unwanted and disappearance of personal data).We collect navigational data to allow us to ensure the safety of our services and to detect, prevent or track any attempt of malice or computer intrusion or violation of the conditions of use of our services. Data is stored using the security concepts as: Firewall, Load balancers, Data encryption,Data replication in different geographical areas.
-• Delegate for Data Protection. Thierry Thevenet, Role: Data protection Officer (DPO), Email: thierry.thevenet@talao.io
+• Objection and deletion of data.After closing the account, the data is permanently deleted except for those that can afford to altme justifying the execution of its legal or contractual obligations.
+The data retained are for a limited period of one month and subject to no use during this time.You may terminate your account at any time by going directly to your altme account to "delete your Identity".When you delete your identity, data collected by us (username, wallet address, password, email, phone) are deleted and all links to your data stored on Blockchain servers are deleted. Data on Blockchain Network cannot be deleted but are no longer accessible.
+• Data protection and security infrastructure. We attach great importance to the protection of customer information and privacy of their users. We have established high safety standards. altme is committed to take all reasonable measures to avoid any unwanted event (illegitimate access, modification or unwanted and disappearance of personal data).We collect navigational data to allow us to ensure the safety of our services and to detect, prevent or track any attempt of malice or computer intrusion or violation of the conditions of use of our services. Data is stored using the security concepts as: Firewall, Load balancers, Data encryption,Data replication in different geographical areas.
+• Delegate for Data Protection. Thierry Thevenet, Role: Data protection Officer (DPO), Email: thierry.thevenet@altme.io
 
 
 ## Appendix 2
 
 
-Talao collects, uses and discloses your personal information using fair practices regarding information that correspond to the 10 principles of protection of the following personal information :
+altme collects, uses and discloses your personal information using fair practices regarding information that correspond to the 10 principles of protection of the following personal information :
 
 
 ### Principle 1 : Responsibility
 
 
-Talao is responsible for personal information.
+altme is responsible for personal information.
 
 
-Under its control and has designated an official of privacy that must ensure compliance with Talao of this policy to protect confidentiality and laws Privacy.
+Under its control and has designated an official of privacy that must ensure compliance with altme of this policy to protect confidentiality and laws Privacy.
 
 
 The contact information of the privacy protection are classified in « Contact us » of this policy of privacy. Furthermore, our liability for the personal information we collect continues even if we communicate such information to other organizations. For example, when we disclose your information to another organization (eg. Ex., One of our service providers)
@@ -257,7 +257,7 @@ The contact information of the privacy protection are classified in « Contact u
 ### Principle 2 : Identifying Purposes for Collection of Personal Information
 
 
-Talao will determine the purposes for which personal information is collected prior to collection or during it. Some of the purposes for which Talao collects, uses and discloses usually personal information are described in Section 3 of this privacy policy. If we intend to collect, use or disclose your personal information for additional purposes, we will amend this privacy protection policy (and we will notify you) or we will seek to obtain your consent.
+altme will determine the purposes for which personal information is collected prior to collection or during it. Some of the purposes for which altme collects, uses and discloses usually personal information are described in Section 3 of this privacy policy. If we intend to collect, use or disclose your personal information for additional purposes, we will amend this privacy protection policy (and we will notify you) or we will seek to obtain your consent.
 
 
 ### Principle 3 : Obtaining consent to the collection, use or disclosure of personal information
@@ -269,40 +269,40 @@ We will obtain your consent to the collection, use or disclosure of your persona
 ### Principle 4 : Limiting Collection of Personal Information
 
 
-Talao will limit the collection of personal information, both in terms of quantity and type of information to what is necessary for the purposes identified by Talao. In addition, Talao will collect your personal information in a fair and lawful way, without deceiving you or misleading you about the purpose for which the information is collected.
+altme will limit the collection of personal information, both in terms of quantity and type of information to what is necessary for the purposes identified by altme. In addition, altme will collect your personal information in a fair and lawful way, without deceiving you or misleading you about the purpose for which the information is collected.
 
 
 ### Principle 5 : Limiting Use, Disclosure, and Retention of Personal Information
 
 
-Talao does not use or disclose personal information for purposes other than those for which it was collected unless you do there consent or that the law requires. Talao will keep your personal information as long as necessary for the fulfillment of those purposes.
+altme does not use or disclose personal information for purposes other than those for which it was collected unless you do there consent or that the law requires. altme will keep your personal information as long as necessary for the fulfillment of those purposes.
 
 
 ### Principle 6 : Accuracy of Personal Information
 
 
-Talao will endeavor to ensure that your personal information is as accurate, complete and current as necessary for the purposes for which they are intended. Talao will update personal information when necessary to achieve the purposes or upon notice of the individual concerned. Point Contact.ne does not routinely update personal information, unless such a process is necessary to fulfill the purposes identified. If your contact information and / or other personal information changes, please contact us so we can update our records.
+altme will endeavor to ensure that your personal information is as accurate, complete and current as necessary for the purposes for which they are intended. altme will update personal information when necessary to achieve the purposes or upon notice of the individual concerned. Point Contact.ne does not routinely update personal information, unless such a process is necessary to fulfill the purposes identified. If your contact information and / or other personal information changes, please contact us so we can update our records.
 
 
 ### Principle 7 : Safeguards
 
 
-Talao will protect your personal information by security safeguards appropriate to the degree of sensitivity of the information. For example, computer servers in which we store your personal information are protected by firewalls and other security devices corresponding to industry standards. In addition, your personal information is made available to our employees and our service providers as a function of selective access to offer our services or otherwise fulfill the purposes specified in clause 3 above.
+altme will protect your personal information by security safeguards appropriate to the degree of sensitivity of the information. For example, computer servers in which we store your personal information are protected by firewalls and other security devices corresponding to industry standards. In addition, your personal information is made available to our employees and our service providers as a function of selective access to offer our services or otherwise fulfill the purposes specified in clause 3 above.
 
 
 ### Principle 8 : Openness concerning policies and practices
 
 
-Talao will ensure that specific information about its policies and practices regarding the management of your personal information is readily accessible. For example, the latest version of this policy of privacy will always be available on the Talao website at  https://talao.co/privacy/ and request protection officer confidentiality as identified in clause « contact us ».
+altme will ensure that specific information about its policies and practices regarding the management of your personal information is readily accessible. For example, the latest version of this policy of privacy will always be available on the altme website at  https://altme.co/privacy/ and request protection officer confidentiality as identified in clause « contact us ».
 
 
 ### Principle 9 : Individual Access to Personal Information
 
 
-Upon written request, subject to certain exceptions, Talao informs you of the existence of personal information about you, the use made of it and the fact that they have been disclosed to third parties, and you will see them. If we do not allow you to consult, Talao will notify you in writing, give reasons for the refusal and inform you of possible remedies. If access is granted, Talao will give you a reasonable opportunity to review your personal information. You can challenge the accuracy and completeness of the information and have it amended as appropriate.
+Upon written request, subject to certain exceptions, altme informs you of the existence of personal information about you, the use made of it and the fact that they have been disclosed to third parties, and you will see them. If we do not allow you to consult, altme will notify you in writing, give reasons for the refusal and inform you of possible remedies. If access is granted, altme will give you a reasonable opportunity to review your personal information. You can challenge the accuracy and completeness of the information and have it amended as appropriate.
 
 
 ### Principle 10 : Challenging complaint regarding non-compliance of the principles
 
 
-you have the right to complain of non-compliance with this privacy protection policy by contacting the responsible for the Talao protection of privacy.
+you have the right to complain of non-compliance with this privacy protection policy by contacting the responsible for the altme protection of privacy.

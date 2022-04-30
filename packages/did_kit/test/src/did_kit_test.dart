@@ -4,7 +4,6 @@ import 'package:did_kit/did_kit.dart';
 import 'package:did_kit/src/did_kit_provider.dart';
 import 'package:didkit/didkit.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 void main() {
   const didKitVersion = '0.3.0';

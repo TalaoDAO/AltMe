@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/error_handler/response_message.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/cupertino.dart';
 
