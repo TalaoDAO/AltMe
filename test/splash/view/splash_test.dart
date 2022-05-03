@@ -15,7 +15,7 @@ import '../../helpers/helpers.dart';
 
 class MockSecureStorageProvider extends Mock implements SecureStorageProvider {}
 
-class MockSplashCubit extends MockCubit<SplashState> implements SplashCubit {}
+class MockSplashCubit extends MockCubit<SplashStatus> implements SplashCubit {}
 
 class MockThemeCubit extends MockCubit<ThemeMode> implements ThemeCubit {}
 
@@ -49,7 +49,7 @@ void main() {
   group('SplashPage', () {
     testWidgets('renders SplashView', (tester) async {
       when(() => flavorCubit.state).thenReturn(FlavorMode.development);
-      when(() => splashCubit.state).thenReturn(SplashState.init);
+      when(() => splashCubit.state).thenReturn(SplashStatus.init);
       when(() => splashCubit.initialiseApp()).thenAnswer((_) async {});
       await tester.pumpApp(makeTestableWidget());
       await tester.pumpAndSettle();
@@ -58,9 +58,9 @@ void main() {
   });
 
   group('SplashView', () {
-    group('SplashState.init', () {
+    group('SplashStatus.init', () {
       setUp(() {
-        when(() => splashCubit.state).thenReturn(SplashState.init);
+        when(() => splashCubit.state).thenReturn(SplashStatus.init);
         when(() => splashCubit.initialiseApp()).thenAnswer((_) async {});
       });
 
@@ -131,9 +131,9 @@ void main() {
       });
     });
 
-    group('SplashState.onboarding', () {
+    group('SplashStatus.onboarding', () {
       testWidgets(
-          '''navigates to OnboardingFirstPage when state is SplashState.onboarding''',
+          '''navigates to OnboardingFirstPage when state is SplashStatus.onboarding''',
           (tester) async {
         when(() => flavorCubit.state).thenReturn(FlavorMode.development);
         when(() => splashCubit.initialiseApp()).thenAnswer((_) async {});
@@ -141,9 +141,9 @@ void main() {
         whenListen(
           splashCubit,
           Stream.fromIterable(
-            [SplashState.init, SplashState.onboarding],
+            [SplashStatus.init, SplashStatus.onboarding],
           ),
-          initialState: SplashState.init,
+          initialState: SplashStatus.init,
         );
 
         await tester.pumpApp(makeTestableWidget());

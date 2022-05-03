@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/message/message.dart';
 import 'package:altme/drawer/profile/models/models.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -20,7 +19,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   final SecureStorageProvider secureStorageProvider;
 
   Future<void> load() async {
-    final log = Logger('talao-wallet/profile/load');
+    state.loading();
+    final log = Logger('altme-wallet/profile/load');
     try {
       final firstName =
           await secureStorageProvider.get(SecureStorageKeys.firstNameKey) ?? '';
@@ -59,16 +59,13 @@ class ProfileCubit extends Cubit<ProfileState> {
         isEnterprise: isEnterprise,
       );
 
-      emit(state.copyWith(model: profileModel));
+      emit(state.success(model: profileModel));
     } catch (e) {
       log.severe('something went wrong', e);
-      // TODO(bibash): show snackbar
       emit(
-        state.copyWith(
-          message: StateMessage.error(
-            errorHandler: MessageException(
-              MessageError.MESSAGE_ERROR_FAILED_TO_LOAD_PROFILE,
-            ),
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE,
           ),
         ),
       );
@@ -76,6 +73,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> resetProfile() async {
+    emit(state.loading());
     await secureStorageProvider.delete(SecureStorageKeys.firstNameKey);
     await secureStorageProvider.delete(SecureStorageKeys.lastNameKey);
     await secureStorageProvider.delete(SecureStorageKeys.phoneKey);
@@ -85,11 +83,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     await secureStorageProvider.delete(SecureStorageKeys.companyWebsite);
     await secureStorageProvider.delete(SecureStorageKeys.companyName);
     await secureStorageProvider.delete(SecureStorageKeys.isEnterpriseUser);
-    emit(ProfileState(model: ProfileModel.empty()));
+    emit(state.success(model: ProfileModel.empty()));
   }
 
   Future<void> update(ProfileModel profileModel) async {
-    final log = Logger('talao-wallet/profile/update');
+    emit(state.loading());
+    final log = Logger('altme-wallet/profile/update');
 
     try {
       await secureStorageProvider.set(
@@ -134,16 +133,14 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.isEnterprise.toString(),
       );
 
-      emit(ProfileState(model: profileModel));
+      emit(state.success(model: profileModel));
     } catch (e) {
       log.severe('something went wrong', e);
 
       emit(
-        state.copyWith(
-          message: StateMessage.error(
-            errorHandler: MessageException(
-              MessageError.MESSAGE_ERROR_FAILED_TO_SAVE_PROFILE,
-            ),
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_FAILED_TO_SAVE_PROFILE,
           ),
         ),
       );

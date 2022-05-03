@@ -7,24 +7,43 @@ environment:
   sdk: ">=2.16.0 <3.0.0"
 
 dependencies:
+  auto_size_text: ^3.0.0
+  bip39: ^1.0.6
   bloc: ^8.0.3
+  cryptocurrency_keys:
+    path: packages/cryptocurrency_keys
   did_kit:
     path: packages/did_kit
   dio: ^4.0.4
+  dotted_border: ^2.0.0+2
+  ed25519_hd_key: ^2.2.0
   equatable: ^2.0.3
+  file_picker: ^4.4.0
+  file_saver: ^0.1.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
   flutter_localizations:
     sdk: flutter
   flutter_markdown: ^0.6.10
+  flutter_native_timezone: ^2.0.0
   flutter_svg: ^1.0.0
   google_fonts: ^2.3.1
   intl: ^0.17.0
+  jose: ^0.3.2
   json_annotation: ^4.4.0
   network_image_mock: ^2.1.0
+  package_info_plus: ^1.3.0
+  path: ^1.8.0
+  path_provider: ^2.0.8
+  permission_handler: ^9.2.0
+  pointycastle: ^3.5.2
+  qr_code_scanner: ^0.6.1
+  qr_flutter: ^4.0.0
+  secp256k1: ^0.3.0
   secure_storage:
     path: packages/secure_storage
+  uni_links: ^0.5.1
   url_launcher: ^6.0.17
   uuid: ^3.0.5
 
@@ -45,7 +64,9 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
+    - assets/
     - assets/splash/
     - assets/icon/
     - assets/image/
     - assets/privacy/
+    - assets/terms/
