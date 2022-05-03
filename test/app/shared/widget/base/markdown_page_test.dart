@@ -98,7 +98,7 @@ void main() {
       ),
     );
 
-    testWidgets('trigger error ', (WidgetTester tester) async {
+    testWidgets('trigger message ', (WidgetTester tester) async {
       isFirstCase = false;
       await tester.pumpWidget(widget);
       await tester.pumpAndSettle();

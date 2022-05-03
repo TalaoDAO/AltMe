@@ -6,10 +6,13 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credential.dart';
+import 'package:altme/drawer/drawer.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -32,6 +35,47 @@ class App extends StatelessWidget {
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(secure_storage.getSecureStorage),
         ),
+        // BlocProvider<DeepLinkCubit>(create: (context) => DeepLinkCubit()),
+        // BlocProvider<QueryByExampleCubit>(
+        //     create: (context) => QueryByExampleCubit()),
+        BlocProvider<ProfileCubit>(
+          create: (context) => ProfileCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+          ),
+        ),
+        BlocProvider<WalletCubit>(
+          lazy: false,
+          create: (context) => WalletCubit(
+            repository: CredentialsRepository(secure_storage.getSecureStorage),
+            secureStorageProvider: secure_storage.getSecureStorage,
+            profileCubit: context.read<ProfileCubit>(),
+          ),
+        ),
+        //   BlocProvider<ScanCubit>(
+        //     create: (context) => ScanCubit(
+        //       client: DioClient(Constants.checkIssuerServerUrl, Dio()),
+        //       walletCubit: context.read<WalletCubit>(),
+        //       didKitProvider: DIDKitProvider.instance,
+        //       secureStorageProvider: SecureStorageProvider.instance,
+        //     ),
+        //   ),
+        //   BlocProvider<QRCodeScanCubit>(
+        //     create: (context) => QRCodeScanCubit(
+        //       client: DioClient(Constants.checkIssuerServerUrl, Dio()),
+        //       requestClient: DioClient('', Dio()),
+        //       scanCubit: context.read<ScanCubit>(),
+        //       queryByExampleCubit: context.read<QueryByExampleCubit>(),
+        //       deepLinkCubit: context.read<DeepLinkCubit>(),
+        //       jwtDecode: JWTDecode(),
+        //     ),
+        //   ),
+        //   BlocProvider<DIDCubit>(
+        //     create: (context) => DIDCubit(
+        //       secureStorageProvider: SecureStorageProvider.instance,
+        //       didKitProvider: DIDKitProvider.instance,
+        //     ),
+        //     child: GlobalInformationPage(),
+        //   )
       ],
       child: const MaterialAppDefinition(),
     );

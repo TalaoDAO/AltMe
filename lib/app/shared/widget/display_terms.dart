@@ -29,8 +29,8 @@ class _DisplayTermsState extends State<DisplayTerms> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = context.l10n;
-    setPath(localizations.localeName);
+    final l10n = context.l10n;
+    setPath(l10n.localeName);
     return FutureBuilder<String>(
       future: _loadFile(path),
       builder: (context, snapshot) {

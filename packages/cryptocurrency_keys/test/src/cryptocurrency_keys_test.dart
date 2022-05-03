@@ -1,5 +1,4 @@
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
-import 'package:cryptocurrency_keys/src/model/encryption.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -47,7 +46,7 @@ void main() {
       expect(generatedKey.publicKey.hashCode, equals(1100798733));
     });
 
-    test('message is encrypted correctly', () async {
+    test('response is encrypted correctly', () async {
       final encryptedData = await cryptocurrencyKeys.encrypt(message, mnemonic);
       expect(encryptedData.cipherText, equals(cipherText));
       expect(encryptedData.authenticationTag, equals(authenticationTag));
@@ -65,7 +64,7 @@ void main() {
       expect(decryptedData, equals(message));
     });
 
-    test('invalid cipherText throws Auth error', () async {
+    test('invalid cipherText throws Auth message', () async {
       const inCipherText = '123';
       const encryption = Encryption(
         cipherText: inCipherText,
@@ -74,12 +73,12 @@ void main() {
       try {
         await cryptocurrencyKeys.decrypt(mnemonic, encryption);
       } catch (e) {
-        final error = e.toString().startsWith('Auth error');
+        final error = e.toString().startsWith('Auth message');
         expect(error, true);
       }
     });
 
-    test('invalid authenticationTag throws Auth error', () async {
+    test('invalid authenticationTag throws Auth message', () async {
       const inValidAuthenticationTag = '123';
       const encryption = Encryption(
         cipherText: cipherText,
@@ -88,7 +87,7 @@ void main() {
       try {
         await cryptocurrencyKeys.decrypt(mnemonic, encryption);
       } catch (e) {
-        final error = e.toString().startsWith('Auth error');
+        final error = e.toString().startsWith('Auth message');
         expect(error, true);
       }
     });

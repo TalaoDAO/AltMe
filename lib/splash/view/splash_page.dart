@@ -2,7 +2,9 @@ import 'package:altme/app/app.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
+import 'package:altme/temp/temp.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
@@ -40,7 +42,7 @@ class _SplashViewState extends State<SplashView>
         await context.read<ThemeCubit>().getCurrentTheme();
         if (status == AnimationStatus.completed) {
           // TODO(all): remove_later
-          // ErrorHandler a =
+          // MessageHandler a =
           // NetworkException(NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS);
           // print(a.getErrorMessage(context, a));
 
@@ -66,13 +68,30 @@ class _SplashViewState extends State<SplashView>
     final FlavorCubit flavorCubit = context.read<FlavorCubit>();
     return MultiBlocListener(
       listeners: [
-        BlocListener<SplashCubit, SplashState>(
+        BlocListener<SplashCubit, SplashStatus>(
           listener: (context, state) {
-            if (state == SplashState.onboarding) {
+            if (state == SplashStatus.onboarding) {
               Navigator.of(context).push<void>(OnBoardingStartPage.route());
             }
-            if (state == SplashState.bypassOnboarding) {
-              //Navigator.of(context).push<void>(CredentialsListPage.route());
+            if (state == SplashStatus.bypassOnboarding) {
+              Navigator.of(context).push<void>(CredentialsListPage.route());
+            }
+          },
+        ),
+        BlocListener<WalletCubit, WalletState>(
+          listener: (context, state) {
+            if (state.message != null) {
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: state.message!,
+              );
+            }
+            if (state.status == WalletStatus.delete) {
+              Navigator.of(context).pop();
+            }
+            if (state.status == WalletStatus.reset) {
+              Navigator.of(context)
+                  .pushReplacement<void, void>(ChooseWalletTypePage.route());
             }
           },
         ),

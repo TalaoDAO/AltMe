@@ -1,9 +1,6 @@
-export 'credential_status.dart';
-export 'credential_type.dart';
 export 'flavor.dart';
-export 'message_error.dart';
-export 'message_type.dart';
-export 'network_error.dart';
-export 'revocation_status.dart';
-export 'splash_state.dart';
-export 'verification_status.dart';
+export 'message/message.dart';
+export 'status/credential_status.dart';
+export 'status/status.dart';
+export 'type/credential_type.dart';
+export 'type/message_type.dart';
