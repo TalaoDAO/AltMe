@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/models/author/author.dart';
 import 'package:altme/credentials/models/certificate_of_employment/work_for.dart';
@@ -82,7 +84,6 @@ class CertificateOfEmployment extends CredentialSubject {
 
 class CertificateOfEmploymentRecto extends Recto {
   const CertificateOfEmploymentRecto(this.item, {Key? key}) : super(key: key);
-
   final CredentialModel item;
 
   @override
@@ -134,7 +135,7 @@ class CertificateOfEmploymentRecto extends Recto {
 }
 
 class CertificateOfEmploymentVerso extends Verso {
-  const CertificateOfEmploymentVerso({Key? key, required this.item})
+  const CertificateOfEmploymentVerso({required this.item, Key? key})
       : super(key: key);
 
   final CredentialModel item;
@@ -230,7 +231,9 @@ class CertificateOfEmploymentVerso extends Verso {
                     if (credentialSubject.workFor.logo != '')
                       SizedBox(
                         height: 17,
-                        child: ImageFromNetwork(credentialSubject.workFor.logo),
+                        child: ImageFromNetwork(
+                          credentialSubject.workFor.logo,
+                        ),
                       )
                     else
                       const SizedBox.shrink()
@@ -249,8 +252,10 @@ class CertificateOfEmploymentVerso extends Verso {
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                     ImageCardText(
-                      text:
-                          UiDate.displayDate(l10n, credentialSubject.startDate),
+                      text: UiDate.displayDate(
+                        l10n,
+                        credentialSubject.startDate,
+                      ),
                       textStyle: Theme.of(context)
                           .textTheme
                           .certificateOfEmploymentData,

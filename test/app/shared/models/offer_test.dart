@@ -1,10 +1,10 @@
-import 'package:altme/app/app.dart';
+import 'package:altme/credentials/models/voucher/offer/offer.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Offer model test', () {
     test('default constructor work properly', () {
-      const offer = Offer('value', 'currency');
+      final offer = Offer('value', 'currency');
       expect(offer.value, 'value');
       expect(offer.currency, 'currency');
       expect(
