@@ -73,7 +73,7 @@ class _SplashViewState extends State<SplashView>
             if (state == SplashStatus.onboarding) {
               Navigator.of(context).push<void>(OnBoardingStartPage.route());
             }
-            if (state == SplashStatus.bypassOnboarding) {
+            if (state == SplashStatus.bypassOnBoarding) {
               Navigator.of(context).push<void>(CredentialsListPage.route());
             }
           },

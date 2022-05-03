@@ -23,15 +23,3 @@ class IssuerWebsitesPage extends StatelessWidget {
     return Container();
   }
 }
-
-class ChooseWalletTypePage extends StatelessWidget {
-  const ChooseWalletTypePage({Key? key}) : super(key: key);
-
-  static Route route() =>
-      MaterialPageRoute<void>(builder: (context) => Container());
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}

@@ -49,7 +49,7 @@ Professionelle digitale Identität oder digitale Identität: bezieht sich auf de
 Registrierung: bezieht sich auf das Verfahren, das es jeder berechtigten Person ermöglicht, ihre persönlichen Daten einzugeben, um auf die Dienste zuzugreifen und eine professionelle digitale Identität zu erhalten. 
 
 
-Desktop: bezeichnet einen Computer (PC, Laptop usw.), der eine Verbindung zur Website https://talao.co ermöglicht. Dieser Computer muss mit einem Betriebssystem wie Windows, Linux, Mac und Internetzugangssoftware wie Chrome, Internet Explorer, Firefox, Brave ausgestattet sein.
+Desktop: bezeichnet einen Computer (PC, Laptop usw.), der eine Verbindung zur Website https://altme.co ermöglicht. Dieser Computer muss mit einem Betriebssystem wie Windows, Linux, Mac und Internetzugangssoftware wie Chrome, Internet Explorer, Firefox, Brave ausgestattet sein.
  
 Passwort: bezeichnet den vom Benutzer gewählten exklusiven und vertraulichen Code, der in Verbindung mit dem Benutzernamen erforderlich ist, damit dieser auf seinen Arbeitsbereich zugreifen kann, falls er sein Smartphone nicht hat.
  
@@ -62,7 +62,7 @@ Partner (s): bezieht sich auf Unternehmen in Bezug auf die Verwendung von Profes
 Dienst: bezieht sich auf den Dienst, der es einem Benutzer ermöglicht, ein von Talao eingerichtetes Portfolio zu erstellen, zu ändern, zu erneuern und zu löschen.
 
 
-Site: bezieht sich auf die von Talao veröffentlichte sichere Website (https://talao.co), die es einem Benutzer ermöglicht, auf sein Portfolio und den gesamten oder einen Teil des professionellen digitalen Identität Dienstes von Talao zuzugreifen.
+Site: bezieht sich auf die von Talao veröffentlichte sichere Website (https://altme.co), die es einem Benutzer ermöglicht, auf sein Portfolio und den gesamten oder einen Teil des professionellen digitalen Identität Dienstes von Talao zuzugreifen.
 
 
 Self Sovereign Identity (SSI Self Sovereign Identity): ein digitales Identitätsmodell, das dem Benutzer die Kontrolle über seine Daten gibt.
@@ -74,10 +74,10 @@ Benutzer: bezieht sich auf eine Person, die über die Talao-Smartphone-Anwendung
 ## Zweck
 
 
-Der Zweck dieser Allgemeinen Geschäftsbedingungen besteht darin, das Vertragsverhältnis zwischen Talao und dem Benutzer über den Zugriff und die Nutzung des Dienstes Professional Digital Identity zu definieren, der aus einer Webanwendung namens Portfolio unter der Adresse https://talao.co und a . besteht Smartphone-Anwendung namens Wallet, die in den Stores von Apple und Google erhältlich ist.
+Der Zweck dieser Allgemeinen Geschäftsbedingungen besteht darin, das Vertragsverhältnis zwischen Talao und dem Benutzer über den Zugriff und die Nutzung des Dienstes Professional Digital Identity zu definieren, der aus einer Webanwendung namens Portfolio unter der Adresse https://altme.co und a . besteht Smartphone-Anwendung namens Wallet, die in den Stores von Apple und Google erhältlich ist.
 
 
-Talao behält sich das Recht vor, jederzeit Änderungen am Professional Digital Identity Service und damit an diesen Allgemeinen Geschäftsbedingungen vorzunehmen. Jede Änderung tritt mit ihrer Veröffentlichung in Kraft oder, falls erforderlich, zu einem anderen angegebenen Datum. Talao wird sicherstellen, dass die Benutzer über jede Änderung der Allgemeinen Geschäftsbedingungen informiert sind. Es liegt jedoch am Benutzer, vor jeder Nutzung des Dienstes Digitale Identität auf die neueste Version der Allgemeinen Geschäftsbedingungen zu verweisen, die jederzeit unter https . zugänglich ist Website: //talao.co.
+Talao behält sich das Recht vor, jederzeit Änderungen am Professional Digital Identity Service und damit an diesen Allgemeinen Geschäftsbedingungen vorzunehmen. Jede Änderung tritt mit ihrer Veröffentlichung in Kraft oder, falls erforderlich, zu einem anderen angegebenen Datum. Talao wird sicherstellen, dass die Benutzer über jede Änderung der Allgemeinen Geschäftsbedingungen informiert sind. Es liegt jedoch am Benutzer, vor jeder Nutzung des Dienstes Digitale Identität auf die neueste Version der Allgemeinen Geschäftsbedingungen zu verweisen, die jederzeit unter https . zugänglich ist Website: //altme.co.
 
 
 Im Falle der Nichteinhaltung der neuen Bestimmungen verpflichtet sich der Nutzer, die Nutzung des Dienstes einzustellen und seine digitale Identität zu löschen.
@@ -92,7 +92,7 @@ Professional Digital Identity ist ein Dienst von Talao, mit dem Sie eine elektro
 Der Service basiert auf 2 digitalen Anwendungen: dem Portfolio und der Brieftasche. Das Wallet ermöglicht es Ihnen, Ihren Identifier zu generieren, Zertifikate von Dritten zu sammeln, zu speichern und an andere Dritte zu übertragen. Das Portfolio ermöglicht es einem Benutzer, Drittunternehmen um die Ausstellung von Zertifikaten zu bitten, aber auch diese Zertifikate auf einem externen Server zu speichern, um sie im Falle eines Verlusts seines Smartphones möglicherweise wiederherstellen zu können oder sie einem ausgewählten Publikum zugänglich zu machen. . Das Portfolio ist eine Art digitaler Tresor, dessen Daten unter der ausschließlichen Kontrolle des Benutzers zugänglich sind.
 
 
-Der Service von Talao basiert auf innovativer Technologie (Blockchain) und den Konzepten der selbst souveränen Identität und überprüfbaren Bescheinigungen. Der talao-Dienst ermöglicht es einem Benutzer, eine digitale Identität und Zertifikate von Dritten zertifizieren zu lassen, ohne dass seine persönlichen Daten auf den Servern eines Identitäts Anbieters gespeichert werden müssen. Die Daten werden im Wallet des Nutzers (Smartphone-Anwendung) gespeichert oder ggf. in einem dezentralen Netzwerk verschlüsselt. Allein der Nutzer behält mit seinem Smartphone den Zugriff auf seine Identität oder es werden kryptografische Schlüssel aufbewahrt. Es kann einer Anwendung eines Partners (einem Dienstanbieter) den Zugriff autorisieren.
+Der Service von Talao basiert auf innovativer Technologie (Blockchain) und den Konzepten der selbst souveränen Identität und überprüfbaren Bescheinigungen. Der altme-Dienst ermöglicht es einem Benutzer, eine digitale Identität und Zertifikate von Dritten zertifizieren zu lassen, ohne dass seine persönlichen Daten auf den Servern eines Identitäts Anbieters gespeichert werden müssen. Die Daten werden im Wallet des Nutzers (Smartphone-Anwendung) gespeichert oder ggf. in einem dezentralen Netzwerk verschlüsselt. Allein der Nutzer behält mit seinem Smartphone den Zugriff auf seine Identität oder es werden kryptografische Schlüssel aufbewahrt. Es kann einer Anwendung eines Partners (einem Dienstanbieter) den Zugriff autorisieren.
 
 
 Im Rahmen des Talao Professional Digital Identity Service profitiert der Nutzer von verschiedenen Funktionalitäten rund um seinen beruflichen Werdegang. Einige dieser Funktionen sind nur über ihre Smartphone-Wallet zugänglich.
@@ -107,7 +107,7 @@ Der Nutzer garantiert, dass die von ihm übermittelten Informationen richtig, au
 Im Falle einer Änderung seiner persönlichen Daten verpflichtet sich der Benutzer, diese auf seiner Profil Verwaltungsseite Professional Digital Identity zu aktualisieren.
 
 
-In jedem Fall werden die ihn betreffenden Informationen unabhängig von den Registrierungsmethoden des Benutzers gemäß der Charta zur Verwaltung personenbezogener Daten (Datenschutz) behandelt, die direkt über die Website https://talao zugänglich ist. co.
+In jedem Fall werden die ihn betreffenden Informationen unabhängig von den Registrierungsmethoden des Benutzers gemäß der Charta zur Verwaltung personenbezogener Daten (Datenschutz) behandelt, die direkt über die Website https://altme zugänglich ist. co.
 
 
 Der Benutzer ermächtigt den Talao Professional Digital Identity Service, durch Computerverarbeitung die für die Erkennung und Verwendung seiner digitalen Identität auf den Websites und Diensten dieser Partner erforderlichen Informationen an Partnerseiten zu übermitteln.
@@ -119,16 +119,16 @@ Der Benutzer ermächtigt den Talao Professional Digital Identity Service, durch 
 Das Herstellungsverfahren umfasst 2 Schritte, um das Registrierungsverfahren abzuschließen. Der erste Schritt besteht darin, Ihre ID mit Ihrer Smartphone-Wallet zu erstellen, der zweite besteht darin, ein Portfolio auf der Talao-Site zu erstellen, das mit Ihrer ID verknüpft ist.
 
 
-* Der Benutzer verbindet sich mit seinem Desktop oder seinem Smartphone mit der Website https://talao.co und wird eingeladen, seine Wallet auf sein Smartphone herunterzuladen. Durch das Starten seiner Wallet muss der Benutzer die Allgemeinen Geschäftsbedingungen (dieses Dokument) akzeptieren und dann seine dezentrale Kennung (DID) generieren oder abrufen. Für den Fall, dass der Benutzer beschließt, eine neue Kennung zu generieren, wird er aufgefordert, den 12-Wort-Wiederherstellungssatz zur Wiederherstellung seiner Kennung bei Verlust seines Smartphones zu kopieren
+* Der Benutzer verbindet sich mit seinem Desktop oder seinem Smartphone mit der Website https://altme.co und wird eingeladen, seine Wallet auf sein Smartphone herunterzuladen. Durch das Starten seiner Wallet muss der Benutzer die Allgemeinen Geschäftsbedingungen (dieses Dokument) akzeptieren und dann seine dezentrale Kennung (DID) generieren oder abrufen. Für den Fall, dass der Benutzer beschließt, eine neue Kennung zu generieren, wird er aufgefordert, den 12-Wort-Wiederherstellungssatz zur Wiederherstellung seiner Kennung bei Verlust seines Smartphones zu kopieren
 
 
-* Überprüfung der E-Mail-Adresse: Vor dem Benutzer Bei der Registrierung für den Professional Digital Identity Service überprüft Talao die E-Mail-Adresse des Benutzers, indem eine E-Mail mit einem Geheimcode gesendet wird. Der Benutzer wird aufgefordert, ein erstes Zertifikat zum Nachweis seiner E-Mail („Email Pass“) zu erhalten, indem er sich mit der Adresse https://talao.co/emailpass verbindet und seine E-Mail-Adresse eingibt und dann einen QR-Code scannt. Wenn der Benutzer den Zufallscode nicht bestätigt hat, wird der Benutzer aufgefordert, den Prozess neu zu starten, um dieses erste Zertifikat zu erhalten. Andere Verfahren zum Validieren der E-Mail des Benutzers können vorgeschlagen werden.
+* Überprüfung der E-Mail-Adresse: Vor dem Benutzer Bei der Registrierung für den Professional Digital Identity Service überprüft Talao die E-Mail-Adresse des Benutzers, indem eine E-Mail mit einem Geheimcode gesendet wird. Der Benutzer wird aufgefordert, ein erstes Zertifikat zum Nachweis seiner E-Mail („Email Pass“) zu erhalten, indem er sich mit der Adresse https://altme.co/emailpass verbindet und seine E-Mail-Adresse eingibt und dann einen QR-Code scannt. Wenn der Benutzer den Zufallscode nicht bestätigt hat, wird der Benutzer aufgefordert, den Prozess neu zu starten, um dieses erste Zertifikat zu erhalten. Andere Verfahren zum Validieren der E-Mail des Benutzers können vorgeschlagen werden.
 
 
 * Nach Erhalt dieses Zertifikats kann der Benutzer sein Portfolio erstellen („Konto erstellen“), indem er den auf seinem Desktop angezeigten QR-Code scannt oder auf den Link in seinem Browser auf seinem Smartphone klickt. Die Site erkennt, ob die Kennung ihrer Brieftasche die eines bereits bestehenden Portfolios ist. Wenn dies nicht der Fall ist, schlägt die Site vor, ein neues Portfolio für diese Kennung zu erstellen, indem sie den Benutzer auffordert, seinen Namen und seinen Vornamen anzugeben.
 
 
-* Überprüfung der dezentralen Kennung (DID) des Wallets: Nach dem Scannen des QR-Codes wird der Benutzer aufgefordert, den Zugriff von talao auf sein Wallet zu akzeptieren und sein E-Mail-Zertifikat (Email Pass) vorzulegen. Wird die Unterschrift dieser Bescheinigung nicht erkannt, wird der Benutzer aufgefordert, den Vorgang erneut zu starten. 
+* Überprüfung der dezentralen Kennung (DID) des Wallets: Nach dem Scannen des QR-Codes wird der Benutzer aufgefordert, den Zugriff von altme auf sein Wallet zu akzeptieren und sein E-Mail-Zertifikat (Email Pass) vorzulegen. Wird die Unterschrift dieser Bescheinigung nicht erkannt, wird der Benutzer aufgefordert, den Vorgang erneut zu starten.
 
 
 * Erstellung und Bereitstellung des Portfolios: Die Site stellt den Arbeitsbereich bereit. Für eine mögliche Verbindung ohne Smartphone erhält der Nutzer per E-Mail einen Benutzernamen. Standardmäßig lautet das Passwort „identity“ und in diesem Fall wird als sekundärer Authentifizierung Faktor systematisch ein Zufallscode per E-Mail versendet. Wir empfehlen dem Nutzer jedoch die einfachere, schnellere und sicherere Verbindung per Smartphone (QR-Code oder Link).
@@ -146,7 +146,7 @@ Das Löschen des Wallet-Identifiers kann durch Zurücksetzen des Wallets oder du
 ### Registrierungsbedingungen Die
 
 
-Registrierung für den Professional Digital Identity Service ist kostenlos und erfordert die ausdrückliche Zustimmung zu den Allgemeinen Geschäftsbedingungen für Professional Digital Identity und den Allgemeinen Geschäftsbedingungen der Website https://talao.co, unabhängig vom verwendeten Endgerät (Computer, Tablet, Smartphone …).
+Registrierung für den Professional Digital Identity Service ist kostenlos und erfordert die ausdrückliche Zustimmung zu den Allgemeinen Geschäftsbedingungen für Professional Digital Identity und den Allgemeinen Geschäftsbedingungen der Website https://altme.co, unabhängig vom verwendeten Endgerät (Computer, Tablet, Smartphone …).
 
 
 Zugriff auf den Professional Digital Identity Service Der Zugriff auf den Professional Digital Identity
@@ -280,7 +280,7 @@ Der Benutzer garantiert Talao gegen jede schädliche Handlung, die er einem Part
 
 
 Die Website und die Dienste sind durch geistige Eigentumsrechte und / oder andere Rechte geschützt, die Talao besitzt oder zu deren Nutzung berechtigt ist.
-Das als Unterstützung für professionelle digitale Identität verwendete Blockchain-Protokoll wird in Open Source https://github.com/TalaoDAO/talao-contracts zur Verfügung gestellt. 
+Das als Unterstützung für professionelle digitale Identität verwendete Blockchain-Protokoll wird in Open Source https://github.com/TalaoDAO/altme-contracts zur Verfügung gestellt.
 
 
 Talao ist und bleibt Eigentümer seiner Unterscheidungsmerkmale, nämlich Marken, Firmen- und andere Namen, Handelsnamen, Marken und Domainnamen. Die vollständige oder teilweise Reproduktion, Nachahmung oder Anbringung der Marken und Designs von Talao ist ohne deren vorherige schriftliche Zustimmung strengstens untersagt.
@@ -372,7 +372,7 @@ Zwischen den Parteien wird ausdrücklich vereinbart, dass die völlig außergew�
 ## Schutz personenbezogener Daten
 
 
-Die Bedingungen für die Verarbeitung personenbezogener Daten sind in der Datenschutzerklärung von Talao festgelegt, die hier https://talao.co/privacy/ abrufbar ist.
+Die Bedingungen für die Verarbeitung personenbezogener Daten sind in der Datenschutzerklärung von Talao festgelegt, die hier https://altme.co/privacy/ abrufbar ist.
 
 
 Die Aufbewahrung von Benutzerdaten durch Professional Digital Identity

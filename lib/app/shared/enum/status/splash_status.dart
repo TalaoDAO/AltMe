@@ -1,1 +1,1 @@
-enum SplashStatus { init, onboarding, bypassOnboarding }
+enum SplashStatus { init, onboarding, bypassOnBoarding }

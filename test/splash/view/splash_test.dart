@@ -133,7 +133,7 @@ void main() {
 
     group('SplashStatus.onboarding', () {
       testWidgets(
-          '''navigates to OnboardingFirstPage when state is SplashStatus.onboarding''',
+          '''navigates to OnBoardingFirstPage when state is SplashStatus.onboarding''',
           (tester) async {
         when(() => flavorCubit.state).thenReturn(FlavorMode.development);
         when(() => splashCubit.initialiseApp()).thenAnswer((_) async {});

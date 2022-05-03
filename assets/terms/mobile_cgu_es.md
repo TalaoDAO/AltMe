@@ -49,7 +49,7 @@ Identidad Digital Profesional o Identidad Digital: se refiere al servicio que pe
 Registro: se refiere al procedimiento que permite a cualquier persona elegible ingresar sus datos personales para acceder a los servicios y obtener una Identidad Digital Profesional. 
 
 
-Escritorio: designa una computadora (PC, laptop, etc.) que permite la conexión al sitio https://talao.co. Esta computadora debe estar equipada con un sistema operativo como Windows, Linux, Mac y software de acceso a Internet como Chrome, Internet Explorer, Firefox, Brave.
+Escritorio: designa una computadora (PC, laptop, etc.) que permite la conexión al sitio https://altme.co. Esta computadora debe estar equipada con un sistema operativo como Windows, Linux, Mac y software de acceso a Internet como Chrome, Internet Explorer, Firefox, Brave.
  
 Contraseña: designa el código elegido por el usuario, exclusivo y confidencial, que, asociado al nombre de usuario, es necesario para que este último acceda a su espacio de trabajo en caso de que no disponga de su smartphone.
  
@@ -62,7 +62,7 @@ Socio (s): se refiere a empresas en relación con el uso de la Identidad Digital
 Servicio: se refiere al servicio que permite a un usuario crear, modificar, renovar y eliminar una cartera configurada por Talao.
 
 
-Sitio: se refiere al sitio web seguro publicado por Talao (https://talao.co) que permite a un usuario acceder a su portafolio y a todo o parte del servicio de Identidad Digital Profesional de Talao.
+Sitio: se refiere al sitio web seguro publicado por Talao (https://altme.co) que permite a un usuario acceder a su portafolio y a todo o parte del servicio de Identidad Digital Profesional de Talao.
 
 
 Self Sovereign Identity (SSI Self Sovereign Identity): un modelo de identidad digital que le da al usuario control sobre sus datos.
@@ -74,10 +74,10 @@ Usuario: se refiere a una persona que tiene la aplicación de teléfono intelige
 ## Propósito
 
 
-El propósito de estos Términos y Condiciones es definir la relación contractual entre Talao y el usuario en cuanto al acceso y uso del servicio de Identidad Digital Profesional que consiste en una aplicación web denominada portafolio en la dirección https://talao.co y un aplicación de teléfono inteligente llamada billetera disponible en las tiendas de Apple y Google.
+El propósito de estos Términos y Condiciones es definir la relación contractual entre Talao y el usuario en cuanto al acceso y uso del servicio de Identidad Digital Profesional que consiste en una aplicación web denominada portafolio en la dirección https://altme.co y un aplicación de teléfono inteligente llamada billetera disponible en las tiendas de Apple y Google.
 
 
-En cualquier momento, Talao se reserva el derecho de realizar cambios en el Servicio de identidad digital profesional y, por lo tanto, en estos Términos y condiciones. Cualquier modificación entra en vigor a partir de su publicación o, en su caso, en cualquier otra fecha que se indique. Talao se asegurará de que los usuarios estén al tanto de cualquier modificación de los Términos y condiciones, sin embargo, es responsabilidad del usuario, antes de cualquier uso del servicio de Identidad digital, consultar la última versión de los Términos y condiciones accesible en cualquier momento en https. sitio: https//talao.co.
+En cualquier momento, Talao se reserva el derecho de realizar cambios en el Servicio de identidad digital profesional y, por lo tanto, en estos Términos y condiciones. Cualquier modificación entra en vigor a partir de su publicación o, en su caso, en cualquier otra fecha que se indique. Talao se asegurará de que los usuarios estén al tanto de cualquier modificación de los Términos y condiciones, sin embargo, es responsabilidad del usuario, antes de cualquier uso del servicio de Identidad digital, consultar la última versión de los Términos y condiciones accesible en cualquier momento en https. sitio: https//altme.co.
 
 
 En caso de desacuerdo con las nuevas disposiciones, el usuario se compromete a dejar de utilizar el servicio y a eliminar su Identidad Digital.
@@ -92,7 +92,7 @@ de Identidad Digital Profesional La Identidad Digital Profesional es un servicio
 El servicio se basa en 2 aplicaciones digitales: la cartera y la cartera. La billetera le permite generar su identificador, recopilar certificados de terceros, almacenarlos y transferirlos a otros terceros. La cartera permite a un usuario pedir a empresas de terceros que le emitan certificados, pero también mantener estos certificados en un servidor externo para posiblemente poder recuperarlos en caso de pérdida de su teléfono inteligente o exponerlos a una audiencia elegida. . La cartera es una especie de caja fuerte digital cuyos datos son accesibles bajo el control exclusivo del usuario.
 
 
-El servicio de Talao se basa en tecnología innovadora (Blockchain) y los conceptos de identidad soberana y certificaciones verificables. El servicio talao permite que un usuario tenga una Identidad Digital y certificados certificados por terceros sin tener que guardar sus datos personales en los servidores de un Proveedor de Identidad. Los datos se almacenan en la billetera del usuario (aplicación de teléfono inteligente) o posiblemente se cifran en una red descentralizada. El usuario solo conserva el acceso a su identidad con su teléfono inteligente o se guardan las claves criptográficas. Puede autorizar una aplicación de un socio (un proveedor de servicios) para acceder a él.
+El servicio de Talao se basa en tecnología innovadora (Blockchain) y los conceptos de identidad soberana y certificaciones verificables. El servicio altme permite que un usuario tenga una Identidad Digital y certificados certificados por terceros sin tener que guardar sus datos personales en los servidores de un Proveedor de Identidad. Los datos se almacenan en la billetera del usuario (aplicación de teléfono inteligente) o posiblemente se cifran en una red descentralizada. El usuario solo conserva el acceso a su identidad con su teléfono inteligente o se guardan las claves criptográficas. Puede autorizar una aplicación de un socio (un proveedor de servicios) para acceder a él.
 
 
 Como parte del servicio Talao Professional Digital Identity, el usuario se beneficia de diversas funcionalidades relacionadas con su carrera profesional. Algunas de estas funciones solo son accesibles a través de la billetera de su teléfono inteligente.
@@ -107,7 +107,7 @@ El usuario garantiza que la información que transmite es veraz, sincera y actua
 En caso de modificación de sus datos personales, el usuario se compromete a actualizarlos en su página de gestión del perfil de Identidad Digital Profesional.
 
 
-En todo caso, cualesquiera que sean los métodos de Registro del usuario, la información que le concierne será tratada de acuerdo con la carta de gestión de datos personales (Protección de datos) accesible directamente desde el sitio https: // talao. co.
+En todo caso, cualesquiera que sean los métodos de Registro del usuario, la información que le concierne será tratada de acuerdo con la carta de gestión de datos personales (Protección de datos) accesible directamente desde el sitio https: // altme. co.
 
 
 El usuario autoriza al servicio Talao Professional Digital Identity a transmitir a los sitios asociados, mediante procesamiento informático, la información necesaria para el reconocimiento y uso de su Identidad Digital en los sitios y servicios de dichos partners.
@@ -119,16 +119,16 @@ El usuario autoriza al servicio Talao Professional Digital Identity a transmitir
 El procedimiento de creación consta de 2 pasos para finalizar el procedimiento de registro. El primer paso es crear su identificación usando la billetera de su teléfono inteligente, el segundo es crear una cartera en el sitio de Talao asociado con su identificación.
 
 
-* El usuario se conecta al sitio https://talao.co con su Escritorio o su teléfono inteligente y está invitado a descargar su billetera en su teléfono inteligente. Al iniciar su billetera, el usuario debe aceptar los Términos y condiciones (este documento) y luego generar o recuperar su identificador descentralizado (DID). En el caso de que el usuario decida generar un nuevo identificador, se le invita a copiar la sentencia de recuperación de 12 palabras de regeneración de su identificador en caso de pérdida de su teléfono inteligente
+* El usuario se conecta al sitio https://altme.co con su Escritorio o su teléfono inteligente y está invitado a descargar su billetera en su teléfono inteligente. Al iniciar su billetera, el usuario debe aceptar los Términos y condiciones (este documento) y luego generar o recuperar su identificador descentralizado (DID). En el caso de que el usuario decida generar un nuevo identificador, se le invita a copiar la sentencia de recuperación de 12 palabras de regeneración de su identificador en caso de pérdida de su teléfono inteligente
 
 
-* Verificación de la dirección de correo electrónico: Previo al Usuario Al registrarse en el Servicio Profesional de Identidad Digital, Talao verifica la dirección de correo electrónico del usuario enviando un correo electrónico que contiene un código secreto. Se invita al usuario a obtener un primer certificado que acredite su correo electrónico (“EmailPass”) conectándose a la dirección https://talao.co/emailpass y dando su correo electrónico y luego escaneando un código QR. Si el usuario no ha confirmado el código aleatorio, se invita al usuario a reiniciar el proceso para obtener este primer certificado. Se pueden proponer otros métodos para validar el correo electrónico del usuario.
+* Verificación de la dirección de correo electrónico: Previo al Usuario Al registrarse en el Servicio Profesional de Identidad Digital, Talao verifica la dirección de correo electrónico del usuario enviando un correo electrónico que contiene un código secreto. Se invita al usuario a obtener un primer certificado que acredite su correo electrónico (“EmailPass”) conectándose a la dirección https://altme.co/emailpass y dando su correo electrónico y luego escaneando un código QR. Si el usuario no ha confirmado el código aleatorio, se invita al usuario a reiniciar el proceso para obtener este primer certificado. Se pueden proponer otros métodos para validar el correo electrónico del usuario.
 
 
 * Una vez obtenido este certificado, el usuario puede crear su portafolio (“crear una cuenta”) escaneando el código QR que se muestra en su escritorio o haciendo clic en el enlace de su navegador en su teléfono inteligente. El sitio detecta si el identificador de su billetera es el de una carpeta ya existente, si este no es el caso, el sitio propone crear una nueva carpeta para este identificador pidiendo al usuario que indique su nombre y su nombre.
 
 
-* Verificación del identificador descentralizado (DID) de la billetera: luego de escanear el código QR se invita al usuario a aceptar el acceso de talao a su billetera y presentar su certificado de correo electrónico (Email Pass). Si no se reconoce la firma de esta atestación, se invita al usuario a iniciar el proceso nuevamente. 
+* Verificación del identificador descentralizado (DID) de la billetera: luego de escanear el código QR se invita al usuario a aceptar el acceso de altme a su billetera y presentar su certificado de correo electrónico (Email Pass). Si no se reconoce la firma de esta atestación, se invita al usuario a iniciar el proceso nuevamente.
 
 
 * Creación y despliegue del portafolio: el sitio despliega el espacio de trabajo. El usuario recibe un nombre de usuario por correo electrónico para una posible conexión sin un teléfono inteligente. Por defecto, la contraseña será "identidad" y en este caso se enviará sistemáticamente un código aleatorio por correo electrónico como factor de autenticación secundario. Sin embargo, recomendamos que el usuario utilice la conexión por teléfono inteligente (código QR o enlace) que es más simple, rápida y segura.
@@ -146,7 +146,7 @@ La eliminación del identificador de billetera se puede llevar a cabo reiniciand
 ### Condiciones de
 
 
-registro El registro para el Servicio de Identidad Digital Profesional es gratuito y requiere la aceptación expresa de los Términos y Condiciones de Identidad Digital Profesional y los Términos y Condiciones del sitio https://talao.co independientemente del terminal utilizado (computadora, tableta, teléfono inteligente ...).
+registro El registro para el Servicio de Identidad Digital Profesional es gratuito y requiere la aceptación expresa de los Términos y Condiciones de Identidad Digital Profesional y los Términos y Condiciones del sitio https://altme.co independientemente del terminal utilizado (computadora, tableta, teléfono inteligente ...).
 
 
 Acceso al Servicio de Identidad Digital Profesional El acceso a Identidad Digital Profesional
@@ -280,7 +280,7 @@ El usuario garantiza a Talao frente a cualquier acto lesivo que pudiera cometer 
 
 
 El sitio y los servicios están protegidos por derechos de propiedad intelectual y / u otros derechos que Talao posee o que está autorizado a usar.
-El protocolo blockchain utilizado como soporte para la identidad digital profesional está disponible en código abierto https://github.com/TalaoDAO/talao-contracts. 
+El protocolo blockchain utilizado como soporte para la identidad digital profesional está disponible en código abierto https://github.com/TalaoDAO/altme-contracts.
 
 
 Talao es y seguirá siendo el propietario de sus signos distintivos, a saber, marcas, nombres corporativos y de otro tipo, nombres comerciales, marcas y nombres de dominio. Queda terminantemente prohibida la reproducción, imitación o colocación, total o parcial, de las marcas y diseños pertenecientes a Talao sin su consentimiento previo por escrito.
@@ -374,7 +374,7 @@ Queda expresamente acordado entre las Partes que la aplicación completamente ex
 ## Protección de datos personales
 
 
-Las condiciones para el procesamiento de datos personales se establecen en la política de privacidad y protección de datos de Talao, accesible aquí https://talao.co/privacy /.
+Las condiciones para el procesamiento de datos personales se establecen en la política de privacidad y protección de datos de Talao, accesible aquí https://altme.co/privacy /.
 
 
 La retención de los datos del usuario por Identidad Digital Profesional

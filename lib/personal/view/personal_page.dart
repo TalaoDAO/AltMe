@@ -182,7 +182,8 @@ class _PersonalPageState extends State<PersonalPage> {
                           fillColor: MaterialStateProperty.all(
                             Theme.of(context).colorScheme.secondaryContainer,
                           ),
-                          onChanged: personalPageCubit.firstNameCheckBoxChange,
+                          onChanged: (value) => personalPageCubit
+                              .firstNameCheckBoxChange(value: value),
                         ),
                 ),
                 _textFieldSpace(),
@@ -198,7 +199,8 @@ class _PersonalPageState extends State<PersonalPage> {
                           fillColor: MaterialStateProperty.all(
                             Theme.of(context).colorScheme.secondaryContainer,
                           ),
-                          onChanged: personalPageCubit.lastNameCheckBoxChange,
+                          onChanged: (value) => personalPageCubit
+                              .lastNameCheckBoxChange(value: value),
                         ),
                 ),
                 _textFieldSpace(),
@@ -214,7 +216,8 @@ class _PersonalPageState extends State<PersonalPage> {
                           fillColor: MaterialStateProperty.all(
                             Theme.of(context).colorScheme.secondaryContainer,
                           ),
-                          onChanged: personalPageCubit.phoneCheckBoxChange,
+                          onChanged: (value) => personalPageCubit
+                              .phoneCheckBoxChange(value: value),
                         ),
                 ),
                 _textFieldSpace(),
@@ -230,7 +233,8 @@ class _PersonalPageState extends State<PersonalPage> {
                           fillColor: MaterialStateProperty.all(
                             Theme.of(context).colorScheme.secondaryContainer,
                           ),
-                          onChanged: personalPageCubit.locationCheckBoxChange,
+                          onChanged: (value) => personalPageCubit
+                              .locationCheckBoxChange(value: value),
                         ),
                 ),
                 _textFieldSpace(),
@@ -246,7 +250,8 @@ class _PersonalPageState extends State<PersonalPage> {
                           fillColor: MaterialStateProperty.all(
                             Theme.of(context).colorScheme.secondaryContainer,
                           ),
-                          onChanged: personalPageCubit.emailCheckBoxChange,
+                          onChanged: (value) => personalPageCubit
+                              .emailCheckBoxChange(value: value),
                         ),
                 ),
                 if (isEnterprise) _buildEnterpriseTextFields(state)
@@ -336,7 +341,8 @@ class _PersonalPageState extends State<PersonalPage> {
                   fillColor: MaterialStateProperty.all(
                     Theme.of(context).colorScheme.secondaryContainer,
                   ),
-                  onChanged: personalPageCubit.companyNameCheckBoxChange,
+                  onChanged: (value) =>
+                      personalPageCubit.companyNameCheckBoxChange(value: value),
                 ),
         ),
         _textFieldSpace(),
@@ -352,7 +358,8 @@ class _PersonalPageState extends State<PersonalPage> {
                   fillColor: MaterialStateProperty.all(
                     Theme.of(context).colorScheme.secondaryContainer,
                   ),
-                  onChanged: personalPageCubit.companyWebsiteCheckBoxChange,
+                  onChanged: (value) => personalPageCubit
+                      .companyWebsiteCheckBoxChange(value: value),
                 ),
         ),
         _textFieldSpace(),
@@ -368,7 +375,8 @@ class _PersonalPageState extends State<PersonalPage> {
                   fillColor: MaterialStateProperty.all(
                     Theme.of(context).colorScheme.secondaryContainer,
                   ),
-                  onChanged: personalPageCubit.jobTitleCheckBoxChange,
+                  onChanged: (value) =>
+                      personalPageCubit.jobTitleCheckBoxChange(value: value),
                 ),
         ),
         _textFieldSpace()

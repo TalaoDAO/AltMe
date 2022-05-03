@@ -33,7 +33,7 @@ L’Identité Numérique Professionnelle ou Identité Numérique : désigne le s
 
 Inscription : désigne la procédure qui permet à toute personne éligible de saisir ses données personnelles en vue d'accéder aux services et d'obtenir une Identité Numérique Professionnelle.
 
-Desktop : désigne un ordinateur (PC, portable, …) qui permet de se connecter au site https://talao.co. Cet ordinateur doit être équipé d’un système d'exploitation de type Windows, Linux, Mac et d’un logiciel d’accès à internet comme Chrome, Internet Explorer, Firefox, Brave.
+Desktop : désigne un ordinateur (PC, portable, …) qui permet de se connecter au site https://altme.co. Cet ordinateur doit être équipé d’un système d'exploitation de type Windows, Linux, Mac et d’un logiciel d’accès à internet comme Chrome, Internet Explorer, Firefox, Brave.
 
 Mot de passe : désigne le code choisi par l'utilisateur, exclusif et confidentiel qui, associé au nom utilisateur est nécessaire à ce dernier pour accéder à son espace de travail dans le cas où il ne disposerait pas de son smartphone.
 
@@ -43,7 +43,7 @@ Partenaire(s) : désigne les sociétés en relation avec l'utilisation d'Identit
 
 Service : désigne le service qui permet à un utilisateur de créer, modifier, renouveler et supprimer un portfolio mis en place par Talao.
 
-Site : désigne le site web sécurisé édité par Talao (https://talao.co) permettant à un utilisateur d’accéder à son portfolio et à tout ou partie du service de l’Identité Numérique Professionnelle de Talao.
+Site : désigne le site web sécurisé édité par Talao (https://altme.co) permettant à un utilisateur d’accéder à son portfolio et à tout ou partie du service de l’Identité Numérique Professionnelle de Talao.
 
 Identité auto souveraine (SSI Self Sovereign Identity) : un modèle de l'identité numérique qui donne à l'utilisateur le contrôle de ses données.
 
@@ -52,9 +52,9 @@ Utilisateur : désigne une personne qui dispose de l’application smartphone de
 
 ## Objet
 
-Les présentes Conditions Générales d’Utilisation (CGU) ont pour objet de définir les relations contractuelles entre Talao et l’utilisateur concernant l’accès et l’utilisation du service d’Identité Numérique Professionnelle constityué d’une application web nommée portfolio à l’addresse https://talao.co et d’une l’application sur smartphone nommée wallet dospoonib le sur les stores Google et Apple.
+Les présentes Conditions Générales d’Utilisation (CGU) ont pour objet de définir les relations contractuelles entre Talao et l’utilisateur concernant l’accès et l’utilisation du service d’Identité Numérique Professionnelle constityué d’une application web nommée portfolio à l’addresse https://altme.co et d’une l’application sur smartphone nommée wallet dospoonib le sur les stores Google et Apple.
 
-À tout moment, Talao se réserve le droit d’apporter des modifications au Service Identité Numérique Professionnelle et par conséquent aux présentes CGU. Toute modification entre en vigueur à compter de leur publication ou, le cas échéant, à toute autre date qui serait indiquée. Talao fera en sorte de porter à la connaissance des utilisateurs toute modification des CGU, il appartient toutefois à l’utilisateur avant toute utilisation du service d'Identité Numérique  de se référer à la dernière version des CGU accessible à tout moment sur le site https://talao.co.
+À tout moment, Talao se réserve le droit d’apporter des modifications au Service Identité Numérique Professionnelle et par conséquent aux présentes CGU. Toute modification entre en vigueur à compter de leur publication ou, le cas échéant, à toute autre date qui serait indiquée. Talao fera en sorte de porter à la connaissance des utilisateurs toute modification des CGU, il appartient toutefois à l’utilisateur avant toute utilisation du service d'Identité Numérique  de se référer à la dernière version des CGU accessible à tout moment sur le site https://altme.co.
 
 En cas de désaccord avec les nouvelles dispositions, l’utilisateur s’engage à cesser toute utilisation du service et à supprimer son Identité Numérique.
 
@@ -64,7 +64,7 @@ L’Identité Numérique Professionnelle est un service de Talao qui permet de c
 
 Le service est construit sur de 2 applications numériques: le portfolio et le wallet. Le wallet permet de générer son identifiant,  de collecter des attestations auprès de tiers, de les conserver et de les transférer vers d’autres  tiers. Le portfolio permet à un utilisateur de demander à des entreprises tiers de lui émettre des attestations mais également de conserver ces attestations sur un serveur extérieur pour éventuellement être en mesure de les récupérer en cas de perte de son smartphone ou de les exposer à un public choisi. Le portfolio est une sorte de coffre fort numérique dont les données sont accessible sous le controle exclusif de l'utilisateur.
 
-Le service de Talao est construit sur la base d’une technologie innovante (Blockchain) et des concepts de l’identité auto-souveraine (SSI) et des attestations vérifiables. Le service de talao permet à un utilisateur de disposer d’une Identité Numérique et d’attestations certifiées par des tiers  sans devoir sauvegarder ses données personnelles sur les serveurs d’un Fournisseur d’Identité. Les données sont conservées dans le wallet (application smartphone) de l’utilisateur ou éventuellement cryptées sur un réseau décentralisé. L’utilisateur conserve seul un accès à son identité avec son smartphone ou sont conservées des clés cryptographiques. Il peut autoriser une application d’un partenaire (un fournisseur de services) à y accéder.
+Le service de Talao est construit sur la base d’une technologie innovante (Blockchain) et des concepts de l’identité auto-souveraine (SSI) et des attestations vérifiables. Le service de altme permet à un utilisateur de disposer d’une Identité Numérique et d’attestations certifiées par des tiers  sans devoir sauvegarder ses données personnelles sur les serveurs d’un Fournisseur d’Identité. Les données sont conservées dans le wallet (application smartphone) de l’utilisateur ou éventuellement cryptées sur un réseau décentralisé. L’utilisateur conserve seul un accès à son identité avec son smartphone ou sont conservées des clés cryptographiques. Il peut autoriser une application d’un partenaire (un fournisseur de services) à y accéder.
 
 Dans le cadre du service Identité Numérique Professionnelle Talao, l’utilisateur bénéficie de diverses fonctionnalités concernant son parcours professionnel. Certaines de ces fonctionnalités ne sont accessibles qu’au travers de son wallet sur smartphone.
 
@@ -74,7 +74,7 @@ L'utilisateur garantit que les informations qu'il transmet sont exactes, sincèr
 
 En cas de modification de ses coordonnées personnelles, l'utilisateur s'engage à les mettre à jour sur sa page de gestion de profil de Identité Numérique Professionnelle.
 
-En tout état de cause, quelles que soient les modalités d'Inscription de l'utilisateur, les informations le concernant seront traitées conformément à la charte de gestion des données personnelles (Protection des données) accessible directement depuis le site https://talao.co.
+En tout état de cause, quelles que soient les modalités d'Inscription de l'utilisateur, les informations le concernant seront traitées conformément à la charte de gestion des données personnelles (Protection des données) accessible directement depuis le site https://altme.co.
 
 L'utilisateur autorise le service d’Identité Numérique Professionnelle Talao à transmettre aux sites partenaires, par traitement informatique, les informations nécessaires à la reconnaissance et l'utilisation de son Identité Numérique sur les sites et les services desdits partenaires.
 
@@ -82,13 +82,13 @@ L'utilisateur autorise le service d’Identité Numérique Professionnelle Talao
 
 La procédure de création comporte 2 étapes pour finaliser la procédure d'inscription. La première étape consiste à créer son identifiant à l’aide de son wallet sur smartphone, la seconde consiste à créer un un portfolio sur le site de Talao associé à son identifiant.
 
-* L’utilisateur se connecte au site https://talao.co avec son Desktop ou son smartphone et est invité à télécharger son wallet sur son smartphone. En démarrant son wallet, l’utilisateur est amené à accepter les CGU (ce document) puis générer ou récupérer  son identifiant décentralisé (DID). Dans le cas où l’utilisateur décide de générer un nouvel identifiant il est invité à recopier la phrase de récupération de 12 mots de régénération de son identifiant en cas de perte de son smartphone
+* L’utilisateur se connecte au site https://altme.co avec son Desktop ou son smartphone et est invité à télécharger son wallet sur son smartphone. En démarrant son wallet, l’utilisateur est amené à accepter les CGU (ce document) puis générer ou récupérer  son identifiant décentralisé (DID). Dans le cas où l’utilisateur décide de générer un nouvel identifiant il est invité à recopier la phrase de récupération de 12 mots de régénération de son identifiant en cas de perte de son smartphone
 
-* Vérification de l'adresse de courrier électronique : Préalablement à l'inscription de l'utilisateur au Service de Identité Numérique Professionnelle, Talao vérifie l'adresse de courrier électronique de l'utilisateur en envoyant un courrier électronique contenant un code secret. L'utilisateur sera invité pour cela à obtenir une première attestation prouvant son email ( “EmailPass”) en se connectant à l'adresse https://talao.co/emailpass et en donnant son email puis en scannant un QR code. Si l’utilisateur n'a pas confirmé le code aléatoire, l'utilisateur est invité à recommencer le processus pour obtenir cette première attestation. D’autres méthodes de validations de l’email de l'utilisateur seront éventuellement proposées.
+* Vérification de l'adresse de courrier électronique : Préalablement à l'inscription de l'utilisateur au Service de Identité Numérique Professionnelle, Talao vérifie l'adresse de courrier électronique de l'utilisateur en envoyant un courrier électronique contenant un code secret. L'utilisateur sera invité pour cela à obtenir une première attestation prouvant son email ( “EmailPass”) en se connectant à l'adresse https://altme.co/emailpass et en donnant son email puis en scannant un QR code. Si l’utilisateur n'a pas confirmé le code aléatoire, l'utilisateur est invité à recommencer le processus pour obtenir cette première attestation. D’autres méthodes de validations de l’email de l'utilisateur seront éventuellement proposées.
 
 * Une fois obtenue cette attestation,  l’utilisateur peut  créer son portfolio (“créer un compte”) en scannant le QR code affiché sur son desktop ou en cliquant sur le lien de son browser sur son smartphone. Le site détecte si l’identifiant de son wallet est celui d’un portfolio déjà existant si ce n’est pas le cas le site propose de créer une nouvel portfolio pour cet identifiant en demandant à l’utilisateur d’indiquer son nom et son prénom.
 
-* Vérification de l’identifiant décentralisé (DID) du wallet : après le scan du QR code l’utilisateur est invité à accepter l’accès de talao à son wallet et de  présenter son attestation d’email  (EmailPass). Si la signature de cette attestation n’est pas reconnue, l’utilisateur est invité à recommencer le processus.
+* Vérification de l’identifiant décentralisé (DID) du wallet : après le scan du QR code l’utilisateur est invité à accepter l’accès de altme à son wallet et de  présenter son attestation d’email  (EmailPass). Si la signature de cette attestation n’est pas reconnue, l’utilisateur est invité à recommencer le processus.
 
 
 * Création et déploiement du portfolio : le site déploie l’espace de travail. L’utilisateur reçoit par email un nom utilisateur pour une éventuelle connexion  sans smartphone. Par défaut le password sera “identity” et dans ce cas un code aléatoire sera systématiquement envoyé par email comme facteur secondaire d'authentification. Nous conseillons en revanche à l'utilisateur l’emploi de la  connexion par smartphone (QR code ou lien) qui est plus simple, plus rapide et plus sécurisée.
@@ -101,7 +101,7 @@ La suppression de l’identifiant du wallet peut être réalisée en réinitiali
 
 ### Conditions d’inscription
 
-L’inscription au Service Identité Numérique Professionnelle est gratuite et nécessite l’acceptation expresse des CGU de Identité Numérique Professionnelle et des CGU du site https://talao.co quel que soit le terminal utilisé (ordinateur, tablette, smartphone…).
+L’inscription au Service Identité Numérique Professionnelle est gratuite et nécessite l’acceptation expresse des CGU de Identité Numérique Professionnelle et des CGU du site https://altme.co quel que soit le terminal utilisé (ordinateur, tablette, smartphone…).
 
 ### Accès au Service Identité Numérique Professionnelle
 
@@ -193,7 +193,7 @@ L'utilisateur garantit Talao contre tout acte dommageable qu'il commettrait à l
 ## Droits de propriété intellectuelle
 
 Le site et les services sont protégés par des droits de propriété intellectuelle et/ou autres droits que Talao détient ou dont elle est autorisée à faire usage.
-Le protocole de la blockchain utilisé comme support à l’Identité Numérique professionnelle est mis à disposition en open source https://github.com/TalaoDAO/talao-contracts.
+Le protocole de la blockchain utilisé comme support à l’Identité Numérique professionnelle est mis à disposition en open source https://github.com/TalaoDAO/altme-contracts.
 
 Talao est et restera propriétaire de ses signes distinctifs, à savoir marques, dénominations sociales et autres, noms commerciaux, enseignes et noms de domaine. La reproduction, l’imitation ou l’apposition, partielle ou totale des marques et dessins et modèles appartenant à Talao est strictement interdite sans son accord écrit préalable.
 
@@ -256,7 +256,7 @@ Il est expressément convenu entre les Parties que la mise en œuvre tout à fai
 
 ## Protection des données à caractère personnel
 
-Les conditions de traitement de données à caractère personnel sont rappelées dans la politique de confidentialité et de protection des données de Talao accessible ici https://talao.co/privacy / .
+Les conditions de traitement de données à caractère personnel sont rappelées dans la politique de confidentialité et de protection des données de Talao accessible ici https://altme.co/privacy / .
 
 Conservation des données de l’utilisateur par Identité Numérique Professionnelle
 Les documents sont conservés pendant toute la durée de l’utilisation du Service Identité Numérique Professionnelle, l’utilisateur étant libre de supprimer son Identité Numérique quand il le souhaite.

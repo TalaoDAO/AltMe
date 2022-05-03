@@ -210,7 +210,7 @@ void main() {
           });
 
           test(
-              '''emits SplashStatus.bypassOnboarding when we have required values''',
+              '''emits SplashStatus.bypassOnBoarding when we have required values''',
               () async {
             when(() => mockSecureStorage.get(SecureStorageKeys.rsaKeyJson))
                 .thenAnswer((_) => Future.value('{"key" : "value"}'));
@@ -218,7 +218,7 @@ void main() {
             final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
             await splashCubit.initialiseApp();
 
-            expect(splashCubit.state, SplashStatus.bypassOnboarding);
+            expect(splashCubit.state, SplashStatus.bypassOnBoarding);
           });
         });
       });

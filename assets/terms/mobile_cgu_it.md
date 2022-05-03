@@ -49,7 +49,7 @@ Identità Digitale Professionale o Identità Digitale: si riferisce al servizio 
 Registrazione: si riferisce alla procedura che consente a qualsiasi soggetto idoneo di inserire i propri dati personali per accedere ai servizi e ottenere un'Identità Digitale Professionale. 
 
 
-Desktop: designa un computer (PC, laptop, ecc.) che consente la connessione al sito https://talao.co. Questo computer deve essere dotato di un sistema operativo come Windows, Linux, Mac e software di accesso a Internet come Chrome, Internet Explorer, Firefox, Brave.
+Desktop: designa un computer (PC, laptop, ecc.) che consente la connessione al sito https://altme.co. Questo computer deve essere dotato di un sistema operativo come Windows, Linux, Mac e software di accesso a Internet come Chrome, Internet Explorer, Firefox, Brave.
  
 Password: designa il codice scelto dall'utente, esclusivo e riservato, che, associato al nome utente, è necessario a quest'ultimo per accedere al suo spazio di lavoro nel caso in cui non disponga del suo smartphone.
  
@@ -62,7 +62,7 @@ Partner/i: indica le aziende in relazione all'utilizzo dell'Identità Digitale P
 Servizio: si riferisce al servizio che consente a un utente di creare, modificare, rinnovare ed eliminare un portafoglio creato da Talao.
 
 
-Sito: si riferisce al sito web sicuro pubblicato da Talao (https://talao.co) che consente a un utente di accedere al proprio portfolio ea tutto o parte del servizio di Identità Digitale Professionale di Talao.
+Sito: si riferisce al sito web sicuro pubblicato da Talao (https://altme.co) che consente a un utente di accedere al proprio portfolio ea tutto o parte del servizio di Identità Digitale Professionale di Talao.
 
 
 Self Sovereign Identity (SSI Self Sovereign Identity): un modello di identità digitale che dà all'utente il controllo sui propri dati.
@@ -74,10 +74,10 @@ Utente: si riferisce a una persona che possiede l'applicazione per smartphone Ta
 ## Scopo
 
 
-Lo scopo dei presenti Termini e Condizioni è definire il rapporto contrattuale tra Talao e l'utente relativo all'accesso e all'utilizzo del servizio di Identità Digitale Professionale costituito da un'applicazione web denominata portfolio all'indirizzo https://talao.co e da un applicazione per smartphone denominata wallet disponibile sugli store Apple e Google.
+Lo scopo dei presenti Termini e Condizioni è definire il rapporto contrattuale tra Talao e l'utente relativo all'accesso e all'utilizzo del servizio di Identità Digitale Professionale costituito da un'applicazione web denominata portfolio all'indirizzo https://altme.co e da un applicazione per smartphone denominata wallet disponibile sugli store Apple e Google.
 
 
-In qualsiasi momento, Talao si riserva il diritto di apportare modifiche al Servizio di Identità Digitale Professionale e quindi ai presenti Termini e Condizioni. Ogni modifica entra in vigore a partire dalla loro pubblicazione o, se necessario, in qualsiasi altra data che sarebbe indicata. Talao farà in modo che gli utenti siano a conoscenza di qualsiasi modifica dei Termini e condizioni, tuttavia, spetta all'utente prima di qualsiasi utilizzo del servizio di Identità digitale fare riferimento all'ultima versione dei Termini e condizioni accessibile in qualsiasi momento su https sito: //talao.co.
+In qualsiasi momento, Talao si riserva il diritto di apportare modifiche al Servizio di Identità Digitale Professionale e quindi ai presenti Termini e Condizioni. Ogni modifica entra in vigore a partire dalla loro pubblicazione o, se necessario, in qualsiasi altra data che sarebbe indicata. Talao farà in modo che gli utenti siano a conoscenza di qualsiasi modifica dei Termini e condizioni, tuttavia, spetta all'utente prima di qualsiasi utilizzo del servizio di Identità digitale fare riferimento all'ultima versione dei Termini e condizioni accessibile in qualsiasi momento su https sito: //altme.co.
 
 
 In caso di disaccordo con le nuove disposizioni, l'utente si impegna a cessare ogni utilizzo del servizio ea cancellare la propria Identità Digitale.
@@ -92,7 +92,7 @@ Professionale è un servizio di Talao che permette di creare un'identità elettr
 Il servizio si basa su 2 applicazioni digitali: il portfolio e il wallet. Il portafoglio ti consente di generare il tuo identificatore, raccogliere certificati da terze parti, archiviarli e trasferirli ad altre terze parti. Il portfolio permette ad un utente di chiedere ad aziende terze di mettergli dei certificati ma anche di conservare questi certificati su un server esterno per poterli eventualmente recuperare in caso di smarrimento del proprio smartphone o per esporre ad un pubblico prescelto. . Il portafoglio è una sorta di cassaforte digitale i cui dati sono accessibili sotto il controllo esclusivo dell'utente.
 
 
-Il servizio di Talao è costruito sulla base di una tecnologia innovativa (Blockchain) e dei concetti di identità sovrana e attestazioni verificabili. Il servizio talao permette ad un utente di avere un'Identità Digitale e certificati certificati da terze parti senza dover salvare i propri dati personali sui server di un Identity Provider. I dati vengono archiviati nel portafoglio dell'utente (applicazione per smartphone) o eventualmente crittografati su una rete decentralizzata. L'utente da solo mantiene l'accesso alla sua identità con il suo smartphone o le chiavi crittografiche vengono conservate. Può autorizzare l'applicazione di un partner (un fornitore di servizi) ad accedervi.
+Il servizio di Talao è costruito sulla base di una tecnologia innovativa (Blockchain) e dei concetti di identità sovrana e attestazioni verificabili. Il servizio altme permette ad un utente di avere un'Identità Digitale e certificati certificati da terze parti senza dover salvare i propri dati personali sui server di un Identity Provider. I dati vengono archiviati nel portafoglio dell'utente (applicazione per smartphone) o eventualmente crittografati su una rete decentralizzata. L'utente da solo mantiene l'accesso alla sua identità con il suo smartphone o le chiavi crittografiche vengono conservate. Può autorizzare l'applicazione di un partner (un fornitore di servizi) ad accedervi.
 
 
 Nell'ambito del servizio Talao Professional Digital Identity, l'utente beneficia di diverse funzionalità relative alla propria carriera professionale. Alcune di queste funzionalità sono accessibili solo tramite il portafoglio dello smartphone.
@@ -107,7 +107,7 @@ L'utente garantisce che le informazioni che trasmette sono esatte, sincere e agg
 In caso di modifica dei propri dati anagrafici, l'utente si impegna ad aggiornarsi nella propria pagina di gestione del profilo di Identità Digitale Professionale.
 
 
-In ogni caso, qualunque siano le modalità di Registrazione dell'utente, le informazioni che lo riguardano saranno trattate in conformità con la carta di gestione dei dati personali (Protezione dei dati) accessibile direttamente dal sito https://talao. co.
+In ogni caso, qualunque siano le modalità di Registrazione dell'utente, le informazioni che lo riguardano saranno trattate in conformità con la carta di gestione dei dati personali (Protezione dei dati) accessibile direttamente dal sito https://altme. co.
 
 
 L'utente autorizza il servizio Talao Professional Identità Digitale a trasmettere ai siti partner, mediante elaborazione informatica, le informazioni necessarie per il riconoscimento e l'utilizzo della propria Identità Digitale sui siti e servizi di detti partner.
@@ -119,16 +119,16 @@ L'utente autorizza il servizio Talao Professional Identità Digitale a trasmette
 La procedura di creazione comprende 2 passaggi per finalizzare la procedura di registrazione. Il primo passo è creare il tuo ID utilizzando il portafoglio del tuo smartphone, il secondo è creare un portfolio sul sito Talao associato al tuo ID.
 
 
-* L'utente si connette al sito https://talao.co con il suo Desktop o il suo smartphone ed è invitato a scaricare il suo wallet sul suo smartphone. Avviando il suo portafoglio, l'utente è tenuto ad accettare i Termini e condizioni (questo documento) quindi generare o recuperare il suo identificatore decentralizzato (DID). Nel caso in cui l'utente decida di generare un nuovo identificatore, è invitato a copiare la frase di recupero di 12 parole di rigenerazione del suo identificatore in caso di smarrimento del suo smartphone
+* L'utente si connette al sito https://altme.co con il suo Desktop o il suo smartphone ed è invitato a scaricare il suo wallet sul suo smartphone. Avviando il suo portafoglio, l'utente è tenuto ad accettare i Termini e condizioni (questo documento) quindi generare o recuperare il suo identificatore decentralizzato (DID). Nel caso in cui l'utente decida di generare un nuovo identificatore, è invitato a copiare la frase di recupero di 12 parole di rigenerazione del suo identificatore in caso di smarrimento del suo smartphone
 
 
-* Verifica dell'indirizzo e-mail: Prima dell'Utente registrazione al Servizio di Identità Digitale Professionale, Talao verifica l'indirizzo email dell'utente inviando una email contenente un codice segreto. L'utente sarà invitato ad ottenere un primo certificato comprovante la sua email (“EmailPass”) collegandosi all'indirizzo https://talao.co/emailpass e consegnando la sua email quindi scansionando un codice QR. Se l'utente non ha confermato il codice casuale, l'utente è invitato a riavviare il processo per ottenere questo primo certificato. Possono essere proposti altri metodi di convalida dell'e-mail dell'utente.
+* Verifica dell'indirizzo e-mail: Prima dell'Utente registrazione al Servizio di Identità Digitale Professionale, Talao verifica l'indirizzo email dell'utente inviando una email contenente un codice segreto. L'utente sarà invitato ad ottenere un primo certificato comprovante la sua email (“EmailPass”) collegandosi all'indirizzo https://altme.co/emailpass e consegnando la sua email quindi scansionando un codice QR. Se l'utente non ha confermato il codice casuale, l'utente è invitato a riavviare il processo per ottenere questo primo certificato. Possono essere proposti altri metodi di convalida dell'e-mail dell'utente.
 
 
 * Una volta ottenuto questo certificato, l'utente può creare il suo portfolio (“creare un account”) scansionando il codice QR visualizzato sul suo desktop o cliccando sul link nel suo browser sul suo smartphone. Il sito rileva se l'identificativo del proprio portafoglio è quello di un portafoglio già esistente, in caso contrario il sito propone di creare un nuovo portafoglio per tale identificatore chiedendo all'utente di indicare il proprio nome e cognome.
 
 
-* Verifica dell'identificatore decentralizzato (DID) del portafoglio: dopo aver scansionato il codice QR l'utente è invitato ad accettare l'accesso di talao al suo portafoglio e a presentare il suo certificato di posta elettronica (Email Pass). Se la firma di questa attestazione non viene riconosciuta, l'utente è invitato a riavviare il processo. 
+* Verifica dell'identificatore decentralizzato (DID) del portafoglio: dopo aver scansionato il codice QR l'utente è invitato ad accettare l'accesso di altme al suo portafoglio e a presentare il suo certificato di posta elettronica (Email Pass). Se la firma di questa attestazione non viene riconosciuta, l'utente è invitato a riavviare il processo.
 
 
 * Creazione e distribuzione del portfolio: il sito distribuisce l'area di lavoro. L'utente riceve un nome utente via e-mail per un'eventuale connessione senza smartphone. Per impostazione predefinita la password sarà “identity” e in questo caso verrà inviato sistematicamente un codice casuale via e-mail come fattore di autenticazione secondario. Si consiglia comunque all'utente di utilizzare la connessione tramite smartphone (codice QR o link) che risulta più semplice, veloce e sicura.
@@ -146,7 +146,7 @@ La cancellazione dell'identificatore del portafoglio può essere effettuata impo
 ### Condizioni di
 
 
-registrazione La registrazione al Servizio di Identità Digitale Professionale è gratuita e richiede l'accettazione espressa dei Termini e Condizioni dell'Identità Digitale Professionale e dei Termini e Condizioni del sito https://talao.co indipendentemente dal terminale utilizzato (computer, tablet, smartphone…).
+registrazione La registrazione al Servizio di Identità Digitale Professionale è gratuita e richiede l'accettazione espressa dei Termini e Condizioni dell'Identità Digitale Professionale e dei Termini e Condizioni del sito https://altme.co indipendentemente dal terminale utilizzato (computer, tablet, smartphone…).
 
 
 Accesso al Servizio di Identità Digitale Professionale L'accesso all'Identità Digitale Professionale
@@ -280,7 +280,7 @@ L'utente garantisce Talao contro qualsiasi atto lesivo che commetterebbe nei con
 
 
 Il sito ei servizi sono protetti da diritti di proprietà intellettuale e/o altri diritti che Talao possiede o di cui è autorizzata a utilizzare.
-Il protocollo blockchain utilizzato come supporto per l'Identità Digitale professionale è reso disponibile in open source https://github.com/TalaoDAO/talao-contracts. 
+Il protocollo blockchain utilizzato come supporto per l'Identità Digitale professionale è reso disponibile in open source https://github.com/TalaoDAO/altme-contracts.
 
 
 Talao è e rimarrà titolare dei suoi segni distintivi, ovvero marchi, nomi aziendali e non, nomi commerciali, marchi e nomi a dominio. È severamente vietata la riproduzione, l'imitazione o l'apposizione, in tutto o in parte, dei marchi e dei disegni appartenenti a Talao senza il suo preventivo consenso scritto.
@@ -372,7 +372,7 @@ Qualsiasi caso di forza maggiore che incida sull'adempimento degli obblighi deri
 ## Protezione dei dati personali
 
 
-Le condizioni per il trattamento dei dati personali sono stabilite nella politica sulla privacy e sulla protezione dei dati di Talao, accessibile qui https://talao.co/privacy/.
+Le condizioni per il trattamento dei dati personali sono stabilite nella politica sulla privacy e sulla protezione dei dati di Talao, accessibile qui https://altme.co/privacy/.
 
 
 Conservazione dei dati dell'utente da parte dei Identità Digitale Professionale

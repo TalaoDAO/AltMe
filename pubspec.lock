@@ -518,6 +518,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.4.0"
+  json_path:
+    dependency: "direct main"
+    description:
+      name: json_path
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1"
   json_serializable:
     dependency: "direct dev"
     description:
@@ -525,6 +532,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.6"
+  key_generator:
+    dependency: "direct main"
+    description:
+      path: "packages/key_generator"
+      relative: true
+    source: path
+    version: "1.0.0+1"
   logging:
     dependency: transitive
     description:
@@ -861,8 +875,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1+1"
+  rfc_6901:
+    dependency: transitive
+    description:
+      name: rfc_6901
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   secp256k1:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: secp256k1
       url: "https://pub.dartlang.org"

@@ -49,7 +49,7 @@ Professional Digital Identity or Digital Identity: refers to the service allowin
 Registration: refers to the procedure which allows any eligible person to enter their personal data in order to access the services and obtain a Professional Digital Identity. 
 
 
-Desktop: designates a computer (PC, laptop, etc.) which allows connection to the site https://talao.co. This computer must be equipped with an operating system such as Windows, Linux, Mac and internet access software such as Chrome, Internet Explorer, Firefox, Brave.
+Desktop: designates a computer (PC, laptop, etc.) which allows connection to the site https://altme.co. This computer must be equipped with an operating system such as Windows, Linux, Mac and internet access software such as Chrome, Internet Explorer, Firefox, Brave.
  
 Password: designates the code chosen by the user, exclusive and confidential, which, associated with the user name, is necessary for the latter to access his workspace in the event that he does not have his smartphone.
  
@@ -62,7 +62,7 @@ Partner (s): refers to companies in relation to the use of Professional Digital 
 Service: refers to the service which allows a user to create, modify, renew and delete a portfolio set up by Talao.
 
 
-Site: refers to the secure website published by Talao (https://talao.co) allowing a user to access their portfolio and all or part of Talao's Professional Digital Identity service.
+Site: refers to the secure website published by Talao (https://altme.co) allowing a user to access their portfolio and all or part of Talao's Professional Digital Identity service.
 
 
 Self Sovereign Identity (SSI Self Sovereign Identity): a digital identity model that gives the user control over their data.
@@ -74,10 +74,10 @@ User: refers to a person who has the Talao smartphone application and a portfoli
 ## Purpose
 
 
-The purpose of these Terms & Conditions  is to define the contractual relationship between Talao and the user concerning access and use of the Professional Digital Identity service consisting of a web application called portfolio at the address https://talao.co and a smartphone application called wallet available on the Apple and Google stores.
+The purpose of these Terms & Conditions  is to define the contractual relationship between Talao and the user concerning access and use of the Professional Digital Identity service consisting of a web application called portfolio at the address https://altme.co and a smartphone application called wallet available on the Apple and Google stores.
 
 
-At any time, Talao reserves the right to make changes to the Professional Digital Identity Service and therefore to these Terms & Conditions. Any modification comes into force as from their publication or, if necessary, on any other date which would be indicated. Talao will ensure that users are aware of any modification of the Terms & Conditions, however, it is up to the user before any use of the Digital Identity service to refer to the latest version of the Terms & Conditions accessible at any time on the https site: //talao.co.
+At any time, Talao reserves the right to make changes to the Professional Digital Identity Service and therefore to these Terms & Conditions. Any modification comes into force as from their publication or, if necessary, on any other date which would be indicated. Talao will ensure that users are aware of any modification of the Terms & Conditions, however, it is up to the user before any use of the Digital Identity service to refer to the latest version of the Terms & Conditions accessible at any time on the https site: //altme.co.
 
 
 In the event of disagreement with the new provisions, the user undertakes to cease all use of the service and to delete his Digital Identity.
@@ -92,7 +92,7 @@ The Profession Digital Identity is a service from Talao that allows you to creat
 The service is built on 2 digital applications: the portfolio and the wallet. The wallet allows you to generate your identifier, collect certificates from third parties, store them and transfer them to other third parties. The portfolio allows a user to ask third-party companies to issue him certificates but also to keep these certificates on an external server to possibly be able to recover them in the event of loss of his smartphone or to expose them to a chosen audience. . The portfolio is a kind of digital safe whose data is accessible under the exclusive control of the user.
 
 
-Talao's service is built on the basis of innovative technology (Blockchain) and the concepts of self-sovereign identity and verifiable attestations. The talao service allows a user to have a Digital Identity and certificates certified by third parties without having to save their personal data on the servers of an Identity Provider. The data is stored in the user's wallet (smartphone application) or possibly encrypted on a decentralized network. The user alone retains access to his identity with his smartphone or cryptographic keys are kept. It can authorize an application of a partner (a service provider) to access it.
+Talao's service is built on the basis of innovative technology (Blockchain) and the concepts of self-sovereign identity and verifiable attestations. The altme service allows a user to have a Digital Identity and certificates certified by third parties without having to save their personal data on the servers of an Identity Provider. The data is stored in the user's wallet (smartphone application) or possibly encrypted on a decentralized network. The user alone retains access to his identity with his smartphone or cryptographic keys are kept. It can authorize an application of a partner (a service provider) to access it.
 
 
 As part of the Talao Professional Digital Identity service, the user benefits from various functionalities relating to his professional career. Some of these features are only accessible through their smartphone wallet.
@@ -107,7 +107,7 @@ The user guarantees that the information he transmits is accurate, sincere and u
 In case of modification of his personal details, the user undertakes to update them on his Professional Digital Identity profile management page.
 
 
-In any case, whatever the methods of Registration of the user, the information concerning him will be treated in accordance with the charter of management of personal data (Data protection) accessible directly from the site https: // talao. co.
+In any case, whatever the methods of Registration of the user, the information concerning him will be treated in accordance with the charter of management of personal data (Data protection) accessible directly from the site https: // altme. co.
 
 
 The user authorizes the Talao Professional Digital Identity service to transmit to partner sites, by computer processing, the information necessary for the recognition and use of his Digital Identity on the sites and services of said partners.
@@ -119,16 +119,16 @@ The user authorizes the Talao Professional Digital Identity service to transmit 
 The creation procedure comprises 2 steps to finalize the registration procedure. The first step is to create your ID using your smartphone wallet, the second is to create a portfolio on the Talao site associated with your ID.
 
 
-* The user connects to the site https://talao.co with his Desktop or his smartphone and is invited to download his wallet on his smartphone. By starting his wallet, the user is required to accept the Terms & Conditions (this document) then generate or retrieve his decentralized identifier (DID). In the event that the user decides to generate a new identifier, he is invited to copy the 12-word recovery sentence of regeneration of his identifier in the event of loss of his smartphone
+* The user connects to the site https://altme.co with his Desktop or his smartphone and is invited to download his wallet on his smartphone. By starting his wallet, the user is required to accept the Terms & Conditions (this document) then generate or retrieve his decentralized identifier (DID). In the event that the user decides to generate a new identifier, he is invited to copy the 12-word recovery sentence of regeneration of his identifier in the event of loss of his smartphone
 
 
-* Verification of the e-mail address: Prior to the User registration for the Professional Digital Identity Service, Talao verifies the user's email address by sending an email containing a secret code. The user will be invited to obtain a first certificate proving his email (“EmailPass”) by connecting to the address https://talao.co/emailpass and giving his email then scanning a QR code. If the user has not confirmed the random code, the user is invited to restart the process to obtain this first certificate. Other methods of validating the user's email may be proposed.
+* Verification of the e-mail address: Prior to the User registration for the Professional Digital Identity Service, Talao verifies the user's email address by sending an email containing a secret code. The user will be invited to obtain a first certificate proving his email (“EmailPass”) by connecting to the address https://altme.co/emailpass and giving his email then scanning a QR code. If the user has not confirmed the random code, the user is invited to restart the process to obtain this first certificate. Other methods of validating the user's email may be proposed.
 
 
 * Once this certificate has been obtained, the user can create his portfolio (“create an account”) by scanning the QR code displayed on his desktop or by clicking on the link in his browser on his smartphone. The site detects if the identifier of its wallet is that of an already existing portfolio if this is not the case the site proposes to create a new portfolio for this identifier by asking the user to indicate his name and his first name.
 
 
-* Verification of the decentralized identifier (DID) of the wallet: after scanning the QR code the user is invited to accept talao's access to his wallet and to present his email certificate (EmailPass). If the signature of this attestation is not recognized, the user is invited to start the process again. 
+* Verification of the decentralized identifier (DID) of the wallet: after scanning the QR code the user is invited to accept altme's access to his wallet and to present his email certificate (EmailPass). If the signature of this attestation is not recognized, the user is invited to start the process again.
 
 
 * Creation and deployment of the portfolio: the site deploys the workspace. The user receives a user name by email for a possible connection without a smartphone. By default the password will be “identity” and in this case a random code will be systematically sent by email as a secondary authentication factor. However, we recommend that the user use the connection by smartphone (QR code or link) which is simpler, faster and more secure.
@@ -146,7 +146,7 @@ The deletion of the wallet identifier can be carried out by resetting the wallet
 ### Registration conditions
 
 
-Registration for the Professional Digital Identity Service is free and requires the express acceptance of the Professional Digital Identity Terms & Conditions and the Terms & Conditions of the https://talao.co site regardless of the terminal used (computer, tablet, smartphone …).
+Registration for the Professional Digital Identity Service is free and requires the express acceptance of the Professional Digital Identity Terms & Conditions and the Terms & Conditions of the https://altme.co site regardless of the terminal used (computer, tablet, smartphone …).
 
 
 Access to the Professional Digital Identity Service Access to the Professional Digital Identity
@@ -280,7 +280,7 @@ The user guarantees Talao against any harmful act that he would commit towards a
 
 
 The site and the services are protected by intellectual property rights and / or other rights that Talao owns or of which it is authorized to use.
-The blockchain protocol used as a support for professional Digital Identity is made available in open source https://github.com/TalaoDAO/talao-contracts. 
+The blockchain protocol used as a support for professional Digital Identity is made available in open source https://github.com/TalaoDAO/altme-contracts.
 
 
 Talao is and will remain the owner of its distinctive signs, namely brands, corporate and other names, trade names, brands and domain names. The reproduction, imitation or affixing, in whole or in part, of the trademarks and designs belonging to Talao is strictly prohibited without its prior written consent.
@@ -372,7 +372,7 @@ It is expressly agreed between the Parties that the completely exceptional imple
 ## Personal data protection
 
 
-The conditions for processing personal data are set out in Talao's privacy and data protection policy, accessible here https://talao.co/privacy /.
+The conditions for processing personal data are set out in Talao's privacy and data protection policy, accessible here https://altme.co/privacy /.
 
 
 Retention of user data by Professional Digital Identity

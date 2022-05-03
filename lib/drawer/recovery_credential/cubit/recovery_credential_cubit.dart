@@ -28,7 +28,7 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
     emit(
       state.success(
         isTextFieldEdited: value.isNotEmpty,
-        isMnemonicValid: bip39.validateMnemonic(value),
+        isMnemonicValid: bip39.validateMnemonic(value) && value.isNotEmpty,
       ),
     );
   }

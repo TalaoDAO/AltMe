@@ -49,6 +49,6 @@ class SplashCubit extends Cubit<SplashStatus> {
     // context
     //     .read<DIDCubit>()
     //     .load(did: did, didMethod: didMethod, didMethodName: didMethodName);
-    emit(SplashStatus.bypassOnboarding);
+    emit(SplashStatus.bypassOnBoarding);
   }
 }

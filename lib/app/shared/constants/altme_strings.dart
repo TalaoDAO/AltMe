@@ -8,9 +8,9 @@ class AltMeStrings {
   static const String enterpriseDIDMethod = 'web';
   static const String enterpriseDIDMethodName = 'Web';
   static const String databaseFilename = 'wallet.db';
-  static const String appContactWebsiteUrl = 'https://talao.io';
-  static const String appContactWebsiteName = 'talao.io';
-  static const String appContactMail = 'contact@talao.io';
+  static const String appContactWebsiteUrl = 'https://altme.io';
+  static const String appContactWebsiteName = 'altme.io';
+  static const String appContactMail = 'contact@altme.io';
   static const String ivVector = 'Talao';
   static const String additionalAuthenticatedData = 'Credible';
 }
