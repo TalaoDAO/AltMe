@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 import 'package:altme/credentials/models/author/author.dart';
 import 'package:altme/credentials/models/credential_subject/credential_subject.dart';
 import 'package:json_annotation/json_annotation.dart';

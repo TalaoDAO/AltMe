@@ -6,48 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 part 'credential_subject.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class CredentialSubject {
   CredentialSubject(this.id, this.type, this.issuedBy);
 
-  factory CredentialSubject.fromJson(Map<String, dynamic> json) {
-    switch (json['type']) {
-      // case 'ResidentCard':
-      //   return ResidentCard.fromJson(json);
-      // case 'SelfIssued':
-      //   return SelfIssued.fromJson(json);
-      // case 'IdentityPass':
-      //   return IdentityPass.fromJson(json);
-      // case 'Voucher':
-      //   return Voucher.fromJson(json);
-      // case 'Ecole42LearningAchievement':
-      //   return Ecole42LearningAchievement.fromJson(json);
-      // case 'LoyaltyCard':
-      //   return LoyaltyCard.fromJson(json);
-      // case 'Over18':
-      //   return Over18.fromJson(json);
-      // case 'ProfessionalStudentCard':
-      //   return ProfessionalStudentCard.fromJson(json);
-      // case 'StudentCard':
-      //   return StudentCard.fromJson(json);
-      case 'CertificateOfEmployment':
-        return CertificateOfEmployment.fromJson(json);
-      // case 'EmailPass':
-      //   return EmailPass.fromJson(json);
-      // case 'PhonePass':
-      //   return PhonePass.fromJson(json);
-      // case 'ProfessionalExperienceAssessment':
-      //   return ProfessionalExperienceAssessment.fromJson(json);
-      // case 'ProfessionalSkillAssessment':
-      //   return ProfessionalSkillAssessment.fromJson(json);
-      // case 'LearningAchievement':
-      //   return LearningAchievement.fromJson(json);
-    }
-    return DefaultCredentialSubject.fromJson(json);
-  }
+  factory CredentialSubject.fromJson(Map<String, dynamic> json) =>
+      _$CredentialSubjectFromJson(json);
 
   final String id;
   final String type;
