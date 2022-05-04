@@ -6,7 +6,6 @@ import 'package:altme/app/shared/widget/base/credential_field.dart';
 import 'package:altme/credentials/credential.dart';
 import 'package:altme/credentials/models/professional_experience_assessment/review.dart';
 import 'package:altme/credentials/models/professional_experience_assessment/skill.dart';
-import 'package:altme/credentials/models/signature/signature.dart';
 import 'package:altme/credentials/widgets/display_signature.dart';
 import 'package:altme/credentials/widgets/skills_list_display.dart';
 import 'package:altme/credentials/widgets/star_rating.dart';

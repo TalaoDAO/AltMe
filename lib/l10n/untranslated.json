@@ -116,7 +116,8 @@
     "emailPassCredential",
     "needEmailPass",
     "signature",
-    "proof"
+    "proof",
+    "verifyMe"
   ],
 
   "es": [
@@ -235,7 +236,12 @@
     "emailPassCredential",
     "needEmailPass",
     "signature",
-    "proof"
+    "proof",
+    "verifyMe"
+  ],
+
+  "fr": [
+    "verifyMe"
   ],
 
   "it": [
@@ -356,6 +362,7 @@
     "emailPassCredential",
     "needEmailPass",
     "signature",
-    "proof"
+    "proof",
+    "verifyMe"
   ]
 }

@@ -3,7 +3,6 @@
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/credentials/credential.dart';
 import 'package:altme/credentials/models/ecole_42_learning_achievement/has_credential_ecole_42.dart';
-import 'package:altme/credentials/models/signature/signature.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -218,34 +217,5 @@ class Ecole42LearningAchievementDelegate extends MultiChildLayoutDelegate {
     covariant Ecole42LearningAchievementDelegate oldDelegate,
   ) {
     return oldDelegate.position != position;
-  }
-}
-
-class TextWithVoucherStyle extends StatelessWidget {
-  const TextWithVoucherStyle({
-    Key? key,
-    required this.value,
-  }) : super(key: key);
-
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    if (value != '') {
-      return Padding(
-        padding: const EdgeInsets.all(8),
-        child: ImageCardText(
-          text: value,
-          textStyle: const TextStyle(
-            inherit: true,
-            fontSize: 17,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
-        ),
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
   }
 }

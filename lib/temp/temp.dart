@@ -11,15 +11,3 @@ class CredentialsListPage extends StatelessWidget {
     return Container();
   }
 }
-
-class IssuerWebsitesPage extends StatelessWidget {
-  const IssuerWebsitesPage({Key? key}) : super(key: key);
-
-  static Route route(String? a) =>
-      MaterialPageRoute<void>(builder: (context) => Container());
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}

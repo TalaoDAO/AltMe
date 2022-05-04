@@ -21,7 +21,7 @@ class DisplayAltmeContacts extends StatelessWidget {
     return Column(
       children: [
         InkWell(
-          onTap: () => _launchURL(AltMeStrings.appContactWebsiteUrl),
+          onTap: () => _launchURL(Urls.appContactWebsiteUrl),
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Row(

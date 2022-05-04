@@ -4,6 +4,7 @@ import 'package:altme/drawer/drawer.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:passbase_flutter/passbase_flutter.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'wallet_cubit.g.dart';
@@ -114,5 +115,34 @@ class WalletCubit extends Cubit<WalletState> {
       await repository.insert(credential);
     }
     emit(state.success(status: WalletStatus.init, credentials: credentials));
+  }
+
+  /// Give user metadata to KYC. Currently we are just sending user DID.
+  bool setKYCMetadata() {
+    final selectedCredentials = <CredentialModel>[];
+    for (final credentialModel in state.credentials) {
+      final credentialTypeList = credentialModel.credentialPreview.type;
+
+      ///credential and issuer provided in claims
+      if (credentialTypeList.contains('EmailPass')) {
+        final credentialSubject =
+            credentialModel.credentialPreview.credentialSubject as EmailPass;
+        if (credentialSubject.passbaseMetadata != '') {
+          selectedCredentials.add(credentialModel);
+        }
+      }
+    }
+    if (selectedCredentials.isNotEmpty) {
+      final firstEmailPassCredentialSubject =
+          selectedCredentials.first.credentialPreview.credentialSubject;
+      if (firstEmailPassCredentialSubject is EmailPass) {
+        /// Give user email from first EmailPass to KYC. When KYC is successful
+        /// this email is used to send the over18 credential link to user.
+        PassbaseSDK.prefillUserEmail = firstEmailPassCredentialSubject.email;
+        PassbaseSDK.metaData = firstEmailPassCredentialSubject.passbaseMetadata;
+        return true;
+      }
+    }
+    return false;
   }
 }
