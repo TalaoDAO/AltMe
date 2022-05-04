@@ -1,21 +1,33 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class MockSecureStorage extends Mock implements SecureStorageProvider {}
 
+class MockDidCubit extends MockCubit<DIDState> implements DIDCubit {}
+
 void main() {
   late SecureStorageProvider mockSecureStorage;
+  late DIDCubit didCubit;
 
   setUp(() {
     mockSecureStorage = MockSecureStorage();
+    didCubit = MockDidCubit();
   });
 
   group('Splash Cubit', () {
     test('initial state is correct', () {
-      expect(SplashCubit(mockSecureStorage).state, SplashStatus.init);
+      expect(
+        SplashCubit(
+          secureStorageProvider: mockSecureStorage,
+          didCubit: didCubit,
+        ).state,
+        SplashStatus.init,
+      );
     });
 
     group('initialiseApp', () {
@@ -25,7 +37,10 @@ void main() {
           when(() => mockSecureStorage.get(SecureStorageKeys.key))
               .thenAnswer((_) => Future.value(null));
 
-          final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+          final SplashCubit splashCubit = SplashCubit(
+            secureStorageProvider: mockSecureStorage,
+            didCubit: didCubit,
+          );
           await splashCubit.initialiseApp();
 
           expect(splashCubit.state, SplashStatus.onboarding);
@@ -37,7 +52,10 @@ void main() {
           when(() => mockSecureStorage.get(SecureStorageKeys.key))
               .thenAnswer((_) => Future.value(''));
 
-          final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+          final SplashCubit splashCubit = SplashCubit(
+            secureStorageProvider: mockSecureStorage,
+            didCubit: didCubit,
+          );
           await splashCubit.initialiseApp();
 
           expect(splashCubit.state, SplashStatus.onboarding);
@@ -55,7 +73,10 @@ void main() {
           when(() => mockSecureStorage.get(SecureStorageKeys.did))
               .thenAnswer((_) => Future.value(null));
 
-          final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+          final SplashCubit splashCubit = SplashCubit(
+            secureStorageProvider: mockSecureStorage,
+            didCubit: didCubit,
+          );
           await splashCubit.initialiseApp();
 
           expect(splashCubit.state, SplashStatus.onboarding);
@@ -67,7 +88,10 @@ void main() {
           when(() => mockSecureStorage.get(SecureStorageKeys.did))
               .thenAnswer((_) => Future.value(''));
 
-          final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+          final SplashCubit splashCubit = SplashCubit(
+            secureStorageProvider: mockSecureStorage,
+            didCubit: didCubit,
+          );
           await splashCubit.initialiseApp();
 
           expect(splashCubit.state, SplashStatus.onboarding);
@@ -88,7 +112,10 @@ void main() {
           when(() => mockSecureStorage.get(SecureStorageKeys.didMethod))
               .thenAnswer((_) => Future.value(null));
 
-          final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+          final SplashCubit splashCubit = SplashCubit(
+            secureStorageProvider: mockSecureStorage,
+            didCubit: didCubit,
+          );
           await splashCubit.initialiseApp();
 
           expect(splashCubit.state, SplashStatus.onboarding);
@@ -100,7 +127,10 @@ void main() {
           when(() => mockSecureStorage.get(SecureStorageKeys.didMethod))
               .thenAnswer((_) => Future.value(''));
 
-          final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+          final SplashCubit splashCubit = SplashCubit(
+            secureStorageProvider: mockSecureStorage,
+            didCubit: didCubit,
+          );
           await splashCubit.initialiseApp();
 
           expect(splashCubit.state, SplashStatus.onboarding);
@@ -123,7 +153,10 @@ void main() {
           when(() => mockSecureStorage.get(SecureStorageKeys.didMethodName))
               .thenAnswer((_) => Future.value(null));
 
-          final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+          final SplashCubit splashCubit = SplashCubit(
+            secureStorageProvider: mockSecureStorage,
+            didCubit: didCubit,
+          );
           await splashCubit.initialiseApp();
 
           expect(splashCubit.state, SplashStatus.onboarding);
@@ -135,7 +168,10 @@ void main() {
           when(() => mockSecureStorage.get(SecureStorageKeys.didMethodName))
               .thenAnswer((_) => Future.value(''));
 
-          final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+          final SplashCubit splashCubit = SplashCubit(
+            secureStorageProvider: mockSecureStorage,
+            didCubit: didCubit,
+          );
           await splashCubit.initialiseApp();
 
           expect(splashCubit.state, SplashStatus.onboarding);
@@ -160,7 +196,10 @@ void main() {
           when(() => mockSecureStorage.get(SecureStorageKeys.isEnterpriseUser))
               .thenAnswer((_) => Future.value(null));
 
-          final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+          final SplashCubit splashCubit = SplashCubit(
+            secureStorageProvider: mockSecureStorage,
+            didCubit: didCubit,
+          );
           await splashCubit.initialiseApp();
 
           expect(splashCubit.state, SplashStatus.onboarding);
@@ -172,7 +211,10 @@ void main() {
           when(() => mockSecureStorage.get(SecureStorageKeys.isEnterpriseUser))
               .thenAnswer((_) => Future.value(''));
 
-          final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+          final SplashCubit splashCubit = SplashCubit(
+            secureStorageProvider: mockSecureStorage,
+            didCubit: didCubit,
+          );
           await splashCubit.initialiseApp();
 
           expect(splashCubit.state, SplashStatus.onboarding);
@@ -191,7 +233,10 @@ void main() {
             when(() => mockSecureStorage.get(SecureStorageKeys.rsaKeyJson))
                 .thenAnswer((_) => Future.value(null));
 
-            final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+            final SplashCubit splashCubit = SplashCubit(
+              secureStorageProvider: mockSecureStorage,
+              didCubit: didCubit,
+            );
             await splashCubit.initialiseApp();
 
             expect(splashCubit.state, SplashStatus.onboarding);
@@ -203,7 +248,10 @@ void main() {
             when(() => mockSecureStorage.get(SecureStorageKeys.rsaKeyJson))
                 .thenAnswer((_) => Future.value(''));
 
-            final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+            final SplashCubit splashCubit = SplashCubit(
+              secureStorageProvider: mockSecureStorage,
+              didCubit: didCubit,
+            );
             await splashCubit.initialiseApp();
 
             expect(splashCubit.state, SplashStatus.onboarding);
@@ -215,7 +263,10 @@ void main() {
             when(() => mockSecureStorage.get(SecureStorageKeys.rsaKeyJson))
                 .thenAnswer((_) => Future.value('{"key" : "value"}'));
 
-            final SplashCubit splashCubit = SplashCubit(mockSecureStorage);
+            final SplashCubit splashCubit = SplashCubit(
+              secureStorageProvider: mockSecureStorage,
+              didCubit: didCubit,
+            );
             await splashCubit.initialiseApp();
 
             expect(splashCubit.state, SplashStatus.bypassOnBoarding);

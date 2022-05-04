@@ -63,10 +63,12 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
   }
 
   Future<void> saveMnemonicKey(String mnemonic) async {
+    emit(state.loading());
     try {
       log.info('will save mnemonic to secure storage');
       await secureStorageProvider.set('mnemonic', mnemonic);
       log.info('mnemonic saved');
+      emit(state.success());
     } catch (error) {
       log.severe('error ocurred setting mnemonic to secure storate', error);
 

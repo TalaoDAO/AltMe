@@ -34,6 +34,7 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
   }
 
   Future<void> recoverWallet(String mnemonic, FilePickerResult result) async {
+    emit(state.loading());
     try {
       final file = File(result.files.single.path!);
       final text = await file.readAsString();
@@ -42,7 +43,10 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
           !json.containsKey('authenticationTag') ||
           json['cipherText'] is! String ||
           json['authenticationTag'] is! String) {
-        throw const FormatException();
+        throw ResponseMessage(
+          ResponseString
+              .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
+        );
       }
       final encryption = Encryption(
         cipherText: json['cipherText'] as String,
@@ -53,7 +57,10 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
       if (!decryptedJson.containsKey('date') ||
           !decryptedJson.containsKey('credentials') ||
           decryptedJson['date'] is! String) {
-        throw const FormatException();
+        throw ResponseMessage(
+          ResponseString
+              .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
+        );
       }
       final List credentialJson = decryptedJson['credentials'] as List<dynamic>;
       final credentials = credentialJson.map(
@@ -62,21 +69,13 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
       );
 
       await walletCubit.recoverWallet(credentials.toList());
-
       emit(
         state.success(recoveredCredentialLength: credentials.length),
       );
-    } on FormatException {
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString
-                .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
-          ),
-        ),
-      );
     } catch (e) {
-      if (e.toString().startsWith('Auth message')) {
+      if (e is ResponseMessage) {
+        emit(state.error(messageHandler: e));
+      } else if (e.toString().startsWith('Auth message')) {
         emit(
           state.error(
             messageHandler: ResponseMessage(

@@ -19,7 +19,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   final SecureStorageProvider secureStorageProvider;
 
   Future<void> load() async {
-    state.loading();
+    emit(state.loading());
     final log = Logger('altme-wallet/profile/load');
     try {
       final firstName =

@@ -32,9 +32,9 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
   }
 
   Future<void> verify(String did) async {
+    emit(state.loading());
     final log = Logger('altme-wallet/onBoarding/VerifyRSAAndDIDCubit/verify');
     try {
-      emit(state.loading());
       if (did.isEmpty) {
         throw ResponseMessage(
           ResponseString.RESPONSE_STRING_PLEASE_ENTER_YOUR_DID_KEY,
@@ -98,6 +98,7 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
           ResponseString.RESPONSE_STRING_DID_KEY_NOT_RESOLVED,
         );
       }
+      emit(state.success());
     } catch (e, s) {
       log.info('error in verifying RSA key :${e.toString()}, s: $s', e, s);
       if (e is ResponseMessage) {

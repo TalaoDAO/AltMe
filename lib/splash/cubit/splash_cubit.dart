@@ -1,11 +1,16 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class SplashCubit extends Cubit<SplashStatus> {
-  SplashCubit(this.secureStorageProvider) : super(SplashStatus.init);
+  SplashCubit({
+    required this.secureStorageProvider,
+    required this.didCubit,
+  }) : super(SplashStatus.init);
 
   final SecureStorageProvider secureStorageProvider;
+  final DIDCubit didCubit;
 
   Future<void> initialiseApp() async {
     final String? key = await secureStorageProvider.get(SecureStorageKeys.key);
@@ -45,10 +50,11 @@ class SplashCubit extends Cubit<SplashStatus> {
         return emit(SplashStatus.onboarding);
       }
     }
-    // TODO(all): load_didkit
-    // context
-    //     .read<DIDCubit>()
-    //     .load(did: did, didMethod: didMethod, didMethodName: didMethodName);
+    await didCubit.load(
+      did: did,
+      didMethod: didMethod,
+      didMethodName: didMethodName,
+    );
     emit(SplashStatus.bypassOnBoarding);
   }
 }

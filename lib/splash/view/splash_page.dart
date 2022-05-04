@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
@@ -15,7 +16,10 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SplashCubit(secure_storage.getSecureStorage),
+      create: (context) => SplashCubit(
+        secureStorageProvider: secure_storage.getSecureStorage,
+        didCubit: context.read<DIDCubit>(),
+      ),
       child: const SplashView(),
     );
   }
@@ -41,11 +45,6 @@ class _SplashViewState extends State<SplashView>
     )..addStatusListener((AnimationStatus status) async {
         await context.read<ThemeCubit>().getCurrentTheme();
         if (status == AnimationStatus.completed) {
-          // TODO(all): remove_later
-          // MessageHandler a =
-          // NetworkException(NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS);
-          // print(a.getErrorMessage(context, a));
-
           //ignore: use_build_context_synchronously
           await context.read<SplashCubit>().initialiseApp();
         }

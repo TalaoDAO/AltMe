@@ -21,10 +21,6 @@ class RecoveryKeyCubit extends Cubit<RecoveryKeyState> {
     emit(state.loading());
     final phrase =
         (await secureStorageProvider.get(SecureStorageKeys.mnemonic))!;
-    emit(
-      state.success(
-        mnemonic: phrase.split(' '),
-      ),
-    );
+    emit(state.success(mnemonic: phrase.split(' ')));
   }
 }

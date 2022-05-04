@@ -7,12 +7,14 @@
 
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credential.dart';
+import 'package:altme/did/did.dart';
 import 'package:altme/drawer/drawer.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -69,13 +71,12 @@ class App extends StatelessWidget {
         //       jwtDecode: JWTDecode(),
         //     ),
         //   ),
-        //   BlocProvider<DIDCubit>(
-        //     create: (context) => DIDCubit(
-        //       secureStorageProvider: SecureStorageProvider.instance,
-        //       didKitProvider: DIDKitProvider.instance,
-        //     ),
-        //     child: GlobalInformationPage(),
-        //   )
+        BlocProvider<DIDCubit>(
+          create: (context) => DIDCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            didKitProvider: DIDKitProvider(),
+          ),
+        )
       ],
       child: const MaterialAppDefinition(),
     );

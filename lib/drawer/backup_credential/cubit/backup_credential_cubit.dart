@@ -46,43 +46,44 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
     emit(state.loading());
     final isPermissionStatusGranted = await _getStoragePermission();
 
-    if (isPermissionStatusGranted) {
-      try {
-        final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
-        final fileName = 'altme-credential-$date';
-        final message = {
-          'date': date,
-          'credentials': walletCubit.state.credentials,
-        };
-        final mnemonicFormatted = state.mnemonic.join(' ');
-        final encrypted =
-            await cryptoKeys.encrypt(jsonEncode(message), mnemonicFormatted);
-        final fileBytes =
-            Uint8List.fromList(utf8.encode(jsonEncode(encrypted)));
-        final filePath =
-            await fileSaver.saveAs(fileName, fileBytes, 'txt', MimeType.TEXT);
-        emit(
-          state.success(
-            filePath: filePath,
-            messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
-            ),
-          ),
+    try {
+      if (isPermissionStatusGranted) {
+        throw ResponseMessage(
+          ResponseString
+              .RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE,
         );
-      } catch (e) {
+      }
+      final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      final fileName = 'altme-credential-$date';
+      final message = {
+        'date': date,
+        'credentials': walletCubit.state.credentials,
+      };
+
+      final mnemonicFormatted = state.mnemonic.join(' ');
+      final encrypted =
+          await cryptoKeys.encrypt(jsonEncode(message), mnemonicFormatted);
+      final fileBytes = Uint8List.fromList(utf8.encode(jsonEncode(encrypted)));
+      final filePath =
+          await fileSaver.saveAs(fileName, fileBytes, 'txt', MimeType.TEXT);
+      emit(
+        state.success(
+          filePath: filePath,
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
+          ),
+        ),
+      );
+    } catch (e) {
+      if (e is ResponseMessage) {
+        state.error(messageHandler: e);
+      } else {
         state.error(
           messageHandler: ResponseMessage(
             ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR,
           ),
         );
       }
-    } else {
-      state.error(
-        messageHandler: ResponseMessage(
-          ResponseString
-              .RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE,
-        ),
-      );
     }
   }
 }

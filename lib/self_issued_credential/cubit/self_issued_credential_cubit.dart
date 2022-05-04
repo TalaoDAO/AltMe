@@ -41,7 +41,6 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialState> {
   }) async {
     final log = Logger('altme/sef_issued_credential/create');
     try {
-      //show loading
       emit(state.loading());
       await Future<void>.delayed(const Duration(milliseconds: 500));
 
@@ -102,13 +101,9 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialState> {
       if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
         log.severe('failed to verify credential', jsonVerification['errors']);
         if (jsonVerification['errors'][0] != 'No applicable proof') {
-          emit(
-            state.error(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
-              ),
-            ),
+          throw ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
           );
         } else {
           await _recordCredential(vc);
@@ -116,17 +111,22 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialState> {
       } else {
         await _recordCredential(vc);
       }
+      emit(state.success());
     } catch (e, s) {
       debugPrint('e: $e,s: $s');
       log.severe('something went wrong', e, s);
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString
-                .RESPONSE_STRING_FAILED_TO_CREATE_SELF_ISSUED_CREDENTIAL,
+      if (e is ResponseMessage) {
+        emit(state.error(messageHandler: e));
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_FAILED_TO_CREATE_SELF_ISSUED_CREDENTIAL,
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
