@@ -1,5 +1,6 @@
 // ignore_for_file: overridden_fields
 
+import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/date/date.dart';
 import 'package:altme/app/shared/widget/image_card_text.dart';
 import 'package:altme/app/shared/widget/image_from_network.dart';
@@ -95,9 +96,7 @@ class StudentCardRecto extends Recto {
       decoration: const BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.fitWidth,
-          image: AssetImage(
-            'assets/image/carte-etudiant-recto.png',
-          ),
+          image: AssetImage(ImageStrings.studentCardFront),
         ),
       ),
       child: AspectRatio(
@@ -164,9 +163,7 @@ class StudentCardVerso extends Verso {
       decoration: const BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.fitWidth,
-          image: AssetImage(
-            'assets/image/carte-etudiant-verso.png',
-          ),
+          image: AssetImage(ImageStrings.studentCardBack),
         ),
       ),
       child: AspectRatio(

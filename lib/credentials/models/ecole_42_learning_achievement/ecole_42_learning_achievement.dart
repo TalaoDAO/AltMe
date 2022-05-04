@@ -74,9 +74,7 @@ class Ecole42LearningAchievement extends CredentialSubject {
                 borderRadius: BorderRadius.circular(20),
                 image: const DecorationImage(
                   fit: BoxFit.fitWidth,
-                  image: AssetImage(
-                    'assets/image/certificate-42.png',
-                  ),
+                  image: AssetImage(ImageStrings.ecole42LearningAchievement),
                 ),
               ),
               child: AspectRatio(

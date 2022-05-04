@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import, overridden_fields
 
+import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/widget/image_card_text.dart';
 import 'package:altme/credentials/models/author/author.dart';
 import 'package:altme/credentials/models/credential_model/credential_model.dart';
@@ -126,9 +127,7 @@ class VoucherRecto extends Recto {
         borderRadius: BorderRadius.circular(20),
         image: const DecorationImage(
           fit: BoxFit.fitWidth,
-          image: AssetImage(
-            'assets/image/carte-coupon-recto.png',
-          ),
+          image: AssetImage(ImageStrings.voucherFront),
         ),
       ),
       child: AspectRatio(
@@ -177,6 +176,7 @@ class VoucherRecto extends Recto {
 class VoucherVerso extends Verso {
   const VoucherVerso(this.item, {Key? key}) : super(key: key);
   final CredentialModel item;
+
   @override
   Widget build(BuildContext context) {
     // final l10n = AppLocalizations.of(context)!;
@@ -186,9 +186,7 @@ class VoucherVerso extends Verso {
         borderRadius: BorderRadius.circular(20),
         image: const DecorationImage(
           fit: BoxFit.fitWidth,
-          image: AssetImage(
-            'assets/image/carte-coupon-verso.png',
-          ),
+          image: AssetImage(ImageStrings.voucherBack),
         ),
       ),
       child: AspectRatio(

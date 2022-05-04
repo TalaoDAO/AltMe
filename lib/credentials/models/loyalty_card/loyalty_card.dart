@@ -1,5 +1,6 @@
 // ignore_for_file: overridden_fields
 
+import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/date/date.dart';
 import 'package:altme/credentials/models/author/author.dart';
 import 'package:altme/credentials/models/credential_model/credential_model.dart';
@@ -85,9 +86,7 @@ class LoyaltyCardRecto extends Recto {
         borderRadius: BorderRadius.circular(20),
         image: const DecorationImage(
           fit: BoxFit.fitWidth,
-          image: AssetImage(
-            'assets/image/tezotopia_loyalty_card.jpeg',
-          ),
+          image: AssetImage(ImageStrings.loyaltyCard),
         ),
       ),
       child: const AspectRatio(

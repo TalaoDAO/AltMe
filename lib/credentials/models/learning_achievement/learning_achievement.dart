@@ -1,5 +1,6 @@
 // ignore_for_file: overridden_fields
 
+import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/date/date.dart';
 import 'package:altme/app/shared/widget/image_card_text.dart';
 import 'package:altme/credentials/credential.dart';
@@ -91,9 +92,7 @@ class LearningAchievementRecto extends Recto {
         decoration: const BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.fitWidth,
-            image: AssetImage(
-              'assets/image/carte-diplome-recto.png',
-            ),
+            image: AssetImage(ImageStrings.learningAchievementFront),
           ),
         ),
         child: AspectRatio(
@@ -158,9 +157,7 @@ class LearningAchievementVerso extends Verso {
         decoration: const BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.fitWidth,
-            image: AssetImage(
-              'assets/image/carte-diplome-verso.png',
-            ),
+            image: AssetImage(ImageStrings.learningAchievementBack),
           ),
         ),
         child: AspectRatio(

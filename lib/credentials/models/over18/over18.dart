@@ -1,5 +1,6 @@
 // ignore_for_file: overridden_fields
 
+import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/date/date.dart';
 import 'package:altme/app/shared/widget/image_from_network.dart';
 import 'package:altme/credentials/credential.dart';
@@ -59,6 +60,7 @@ class Over18 extends CredentialSubject {
 class Over18Verso extends Verso {
   const Over18Verso(this.item, {Key? key}) : super(key: key);
   final CredentialModel item;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -70,9 +72,7 @@ class Over18Verso extends Verso {
         borderRadius: BorderRadius.circular(20),
         image: const DecorationImage(
           fit: BoxFit.fitWidth,
-          image: AssetImage(
-            'assets/image/over18_verso.png',
-          ),
+          image: AssetImage(ImageStrings.over18Front),
         ),
       ),
       child: AspectRatio(
@@ -127,9 +127,7 @@ class Over18Recto extends Recto {
         borderRadius: BorderRadius.circular(20),
         image: const DecorationImage(
           fit: BoxFit.fitWidth,
-          image: AssetImage(
-            'assets/image/over18_recto.png',
-          ),
+          image: AssetImage(ImageStrings.over18Back),
         ),
       ),
       child: const AspectRatio(

@@ -1,8 +1,6 @@
 // ignore_for_file: overridden_fields
 
-import 'package:altme/app/shared/date/date.dart';
-import 'package:altme/app/shared/widget/image_card_text.dart';
-import 'package:altme/app/shared/widget/image_from_network.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/credentials/models/author/author.dart';
 import 'package:altme/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/credentials/models/credential_subject/credential_subject.dart';
@@ -63,32 +61,6 @@ class ProfessionalStudentCard extends CredentialSubject {
   }
 }
 
-class JobStudentCardVerso extends Verso {
-  const JobStudentCardVerso({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(
-            'assets/image/adecco_student_card_verso.png',
-          ),
-        ),
-      ),
-      child: const AspectRatio(
-        /// this size comes from law publication about job student card specs
-        aspectRatio: 508.67 / 319.67,
-        child: SizedBox(
-          height: 319.67,
-          width: 508.67,
-        ),
-      ),
-    );
-  }
-}
-
 class JobStudentCardRecto extends Recto {
   const JobStudentCardRecto({
     Key? key,
@@ -107,9 +79,7 @@ class JobStudentCardRecto extends Recto {
       decoration: const BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.fitWidth,
-          image: AssetImage(
-            'assets/image/adecco_student_card_recto.png',
-          ),
+          image: AssetImage(ImageStrings.professionalStudentCardFront),
         ),
       ),
       child: AspectRatio(
@@ -154,6 +124,30 @@ class JobStudentCardRecto extends Recto {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class JobStudentCardVerso extends Verso {
+  const JobStudentCardVerso({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.fitWidth,
+          image: AssetImage(ImageStrings.professionalStudentCardBack),
+        ),
+      ),
+      child: const AspectRatio(
+        /// this size comes from law publication about job student card specs
+        aspectRatio: 508.67 / 319.67,
+        child: SizedBox(
+          height: 319.67,
+          width: 508.67,
         ),
       ),
     );

@@ -1,5 +1,6 @@
 // ignore_for_file: overridden_fields
 
+import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/widget/image_from_network.dart';
 import 'package:altme/credentials/credential.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -11,9 +12,14 @@ part 'email_pass.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class EmailPass extends CredentialSubject {
-  EmailPass(this.expires, this.email, this.id, this.type, this.issuedBy,
-      this.passbaseMetadata,)
-      : super(id, type, issuedBy);
+  EmailPass(
+    this.expires,
+    this.email,
+    this.id,
+    this.type,
+    this.issuedBy,
+    this.passbaseMetadata,
+  ) : super(id, type, issuedBy);
 
   factory EmailPass.fromJson(Map<String, dynamic> json) =>
       _$EmailPassFromJson(json);
@@ -75,9 +81,7 @@ class EmailPassRecto extends Recto {
         borderRadius: BorderRadius.circular(20),
         image: const DecorationImage(
           fit: BoxFit.fitWidth,
-          image: AssetImage(
-            'assets/image/email_pass_verso.png',
-          ),
+          image: AssetImage(ImageStrings.emailPassFront),
         ),
       ),
       child: AspectRatio(
@@ -133,6 +137,7 @@ class EmailPassRecto extends Recto {
 class EmailPassVerso extends Verso {
   const EmailPassVerso(this.item, {Key? key}) : super(key: key);
   final CredentialModel item;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -142,9 +147,7 @@ class EmailPassVerso extends Verso {
         borderRadius: BorderRadius.circular(20),
         image: const DecorationImage(
           fit: BoxFit.fitWidth,
-          image: AssetImage(
-            'assets/image/email_pass_verso.png',
-          ),
+          image: AssetImage(ImageStrings.emailPassBack),
         ),
       ),
       child: AspectRatio(
