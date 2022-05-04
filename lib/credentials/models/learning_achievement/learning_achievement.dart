@@ -1,8 +1,6 @@
 // ignore_for_file: overridden_fields
 
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/date/date.dart';
-import 'package:altme/app/shared/widget/image_card_text.dart';
 import 'package:altme/credentials/credential.dart';
 import 'package:altme/credentials/models/learning_achievement/has_credential.dart';
 import 'package:altme/l10n/l10n.dart';

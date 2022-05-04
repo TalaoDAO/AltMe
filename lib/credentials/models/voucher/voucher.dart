@@ -1,7 +1,6 @@
 // ignore_for_file: unused_import, overridden_fields
 
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/widget/image_card_text.dart';
 import 'package:altme/credentials/models/author/author.dart';
 import 'package:altme/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/credentials/models/credential_subject/credential_subject.dart';
