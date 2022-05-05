@@ -115,7 +115,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialState> {
     } catch (e, s) {
       debugPrint('e: $e,s: $s');
       log.severe('something went wrong', e, s);
-      if (e is ResponseMessage) {
+      if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
         emit(

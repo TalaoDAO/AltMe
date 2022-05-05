@@ -124,7 +124,9 @@
     "pending",
     "verified",
     "verifiedWithWarning",
-    "failedVerification"
+    "failedVerification",
+    "unableToProcessTheData",
+    "unimplementedQueryType"
   ],
 
   "es": [
@@ -251,7 +253,9 @@
     "pending",
     "verified",
     "verifiedWithWarning",
-    "failedVerification"
+    "failedVerification",
+    "unableToProcessTheData",
+    "unimplementedQueryType"
   ],
 
   "fr": [
@@ -262,7 +266,9 @@
     "pending",
     "verified",
     "verifiedWithWarning",
-    "failedVerification"
+    "failedVerification",
+    "unableToProcessTheData",
+    "unimplementedQueryType"
   ],
 
   "it": [
@@ -391,6 +397,8 @@
     "pending",
     "verified",
     "verifiedWithWarning",
-    "failedVerification"
+    "failedVerification",
+    "unableToProcessTheData",
+    "unimplementedQueryType"
   ]
 }

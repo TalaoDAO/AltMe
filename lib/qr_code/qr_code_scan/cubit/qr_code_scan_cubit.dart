@@ -152,7 +152,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 ),
               );
             } else {
-              throw UnimplementedError('Unimplemented Query Type');
+              throw ResponseMessage(
+                ResponseString.RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE,
+              );
             }
           } else {
             emit(
@@ -165,28 +167,33 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           break;
 
         default:
-          emit(
-            QRCodeScanStateUnknown(
-              isDeepLink: state.isDeepLink,
-              uri: state.uri!,
-            ),
+          throw ResponseMessage(
+            ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
           );
-          break;
       }
     } catch (e) {
       log.severe('An error occurred while connecting to the server.', e);
 
-      emit(
-        QRCodeScanStateMessage(
-          isDeepLink: true,
-          message: StateMessage.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER, // ignore: lines_longer_than_80_chars
+      if (e is MessageHandler) {
+        emit(
+          QRCodeScanStateMessage(
+            isDeepLink: state.isDeepLink,
+            message: StateMessage.error(messageHandler: e),
+          ),
+        );
+      } else {
+        emit(
+          QRCodeScanStateMessage(
+            isDeepLink: state.isDeepLink,
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER, // ignore: lines_longer_than_80_chars
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -313,6 +320,16 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   void emitQRCodeScanStateUnknown() {
-    emit(QRCodeScanStateUnknown(isDeepLink: state.isDeepLink, uri: state.uri!));
+    emit(
+      QRCodeScanStateMessage(
+        isDeepLink: state.isDeepLink,
+        message: StateMessage.error(
+          messageHandler: ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE, // ignore: lines_longer_than_80_chars
+          ),
+        ),
+      ),
+    );
   }
 }

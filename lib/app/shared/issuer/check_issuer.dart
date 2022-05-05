@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/issuer/models/issuer.dart';
 
 class CheckIssuer {
   CheckIssuer(

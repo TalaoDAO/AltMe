@@ -138,4 +138,13 @@ class GlobalMessage {
 
   String get RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY =>
       l10n.didKeyAndRSAKeyVerifiedSuccessfully;
+
+  String get RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA =>
+      l10n.unableToProcessTheData;
+
+  String get RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE =>
+      l10n.scanUnsupportedMessage;
+
+  String get RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE =>
+      l10n.unimplementedQueryType;
 }

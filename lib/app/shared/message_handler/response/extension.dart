@@ -132,6 +132,15 @@ extension MessageErrorExtension on ResponseString {
           .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY:
         return globalMessage
             .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY;
+
+      case ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA:
+        return globalMessage.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA;
+
+      case ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE:
+        return globalMessage.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE;
+
+      case ResponseString.RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE:
+        return globalMessage.RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE;
     }
   }
 }

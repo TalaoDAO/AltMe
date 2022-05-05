@@ -295,5 +295,7 @@
   "pending": "Pending",
   "verified": "Verified",
   "verifiedWithWarning": "Verified (with warnings)",
-  "failedVerification": "Failed verification"
+  "failedVerification": "Failed verification",
+  "unableToProcessTheData": "Unable to process the data",
+  "unimplementedQueryType": "Unimplemented Query Type"
 }

@@ -6,7 +6,6 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/drawer/drawer.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
-import 'package:altme/issuer/issuer.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -243,6 +242,7 @@ class _SplashViewState extends State<SplashView>
                   AlertMessage.showStringMessage(
                     context: context,
                     message: l10n.personalOpenIdRestrictionMessage,
+                    messageType: MessageType.error,
                   );
                   return;
                 }
@@ -252,6 +252,7 @@ class _SplashViewState extends State<SplashView>
                   AlertMessage.showStringMessage(
                     context: context,
                     message: l10n.credentialEmptyError,
+                    messageType: MessageType.error,
                   );
                   await Navigator.of(context).pushReplacement<void, void>(
                     IssuerWebsitesPage.route(''),
@@ -409,13 +410,6 @@ class _SplashViewState extends State<SplashView>
                   stateMessage: state.message!,
                 );
               }
-            }
-            if (state is QRCodeScanStateUnknown) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.scanUnsupportedMessage),
-                ),
-              );
             }
           },
         )

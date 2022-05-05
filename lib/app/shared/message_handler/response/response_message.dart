@@ -170,6 +170,18 @@ class ResponseMessage with MessageHandler {
           return ResponseString
               .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY
               .localise(context);
+
+        case ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA:
+          return ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE:
+          return ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE:
+          return ResponseString.RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE
+              .localise(context);
       }
     }
     return '';

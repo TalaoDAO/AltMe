@@ -73,7 +73,7 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
         state.success(recoveredCredentialLength: credentials.length),
       );
     } catch (e) {
-      if (e is ResponseMessage) {
+      if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else if (e.toString().startsWith('Auth message')) {
         emit(

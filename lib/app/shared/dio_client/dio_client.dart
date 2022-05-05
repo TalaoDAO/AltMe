@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/message_handler/network/network_exception.dart';
+import 'package:altme/app/app.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -55,8 +55,9 @@ class DioClient {
       );
       return response.data;
     } on FormatException catch (_) {
-      // TODO(bibash): localise
-      throw const FormatException('Unable to process the data');
+      throw ResponseMessage(
+        ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA,
+      );
     } catch (e) {
       if (e is DioError) {
         throw NetworkException.getDioException(e);
@@ -87,8 +88,9 @@ class DioClient {
       );
       return response.data;
     } on FormatException catch (_) {
-      // TODO(bibash): localise
-      throw const FormatException('Unable to process the data');
+      throw ResponseMessage(
+        ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA,
+      );
     } catch (e) {
       if (e is DioError) {
         throw NetworkException.getDioException(e);

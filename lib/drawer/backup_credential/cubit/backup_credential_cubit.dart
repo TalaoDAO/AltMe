@@ -75,7 +75,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
         ),
       );
     } catch (e) {
-      if (e is ResponseMessage) {
+      if (e is MessageHandler) {
         state.error(messageHandler: e);
       } else {
         state.error(

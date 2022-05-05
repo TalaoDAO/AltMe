@@ -53,11 +53,6 @@ class QRCodeScanStateSuccess extends QRCodeScanState {
       : super(route: route, isDeepLink: isDeepLink);
 }
 
-class QRCodeScanStateUnknown extends QRCodeScanState {
-  const QRCodeScanStateUnknown({required Uri uri, required bool isDeepLink})
-      : super(uri: uri, isDeepLink: isDeepLink);
-}
-
 class QRCodeScanStateMessage extends QRCodeScanState {
   const QRCodeScanStateMessage({
     StateMessage? message,
