@@ -98,7 +98,6 @@ class DioClient {
     }
   }
 
-  set headers(Map<String, dynamic> headers) => _dio.options.headers = headers;
-
-  Map<String, dynamic> get headers => _dio.options.headers;
+  void changeHeaders(Map<String, dynamic> headers) =>
+      _dio.options.headers = headers;
 }

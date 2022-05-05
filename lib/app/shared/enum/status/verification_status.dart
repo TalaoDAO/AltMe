@@ -1,6 +1,6 @@
-enum VerificationStatus {
-  unverified,
-  verified,
-  verifiedWithWarning,
-  verifiedWithError,
+enum VerificationState {
+  Unverified,
+  Verified,
+  VerifiedWithWarning,
+  VerifiedWithError,
 }

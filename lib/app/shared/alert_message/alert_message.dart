@@ -20,7 +20,7 @@ class AlertMessage {
   static void showStringMessage({
     required BuildContext context,
     required String message,
-    required MessageType messageType,
+    MessageType messageType = MessageType.error,
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

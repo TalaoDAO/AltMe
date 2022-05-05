@@ -288,5 +288,12 @@
   "needEmailPass": "You need to get a Proof of Email first.",
   "signature": "Signature",
   "proof": "Proof",
-  "verifyMe": "Verify Me"
+  "verifyMe": "Verify Me",
+  "yes": "Yes",
+  "no": "No",
+  "credentialAlias": "Credential Alias",
+  "pending": "Pending",
+  "verified": "Verified",
+  "verifiedWithWarning": "Verified (with warnings)",
+  "failedVerification": "Failed verification"
 }

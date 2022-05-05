@@ -117,7 +117,14 @@
     "needEmailPass",
     "signature",
     "proof",
-    "verifyMe"
+    "verifyMe",
+    "yes",
+    "no",
+    "credentialAlias",
+    "pending",
+    "verified",
+    "verifiedWithWarning",
+    "failedVerification"
   ],
 
   "es": [
@@ -237,11 +244,25 @@
     "needEmailPass",
     "signature",
     "proof",
-    "verifyMe"
+    "verifyMe",
+    "yes",
+    "no",
+    "credentialAlias",
+    "pending",
+    "verified",
+    "verifiedWithWarning",
+    "failedVerification"
   ],
 
   "fr": [
-    "verifyMe"
+    "verifyMe",
+    "yes",
+    "no",
+    "credentialAlias",
+    "pending",
+    "verified",
+    "verifiedWithWarning",
+    "failedVerification"
   ],
 
   "it": [
@@ -363,6 +384,13 @@
     "needEmailPass",
     "signature",
     "proof",
-    "verifyMe"
+    "verifyMe",
+    "yes",
+    "no",
+    "credentialAlias",
+    "pending",
+    "verified",
+    "verifiedWithWarning",
+    "failedVerification"
   ]
 }

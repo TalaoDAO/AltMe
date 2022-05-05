@@ -532,6 +532,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.6"
+  jwt_decode:
+    dependency: "direct main"
+    description:
+      path: "packages/jwt_decode"
+      relative: true
+    source: path
+    version: "1.0.0+1"
   key_generator:
     dependency: "direct main"
     description:

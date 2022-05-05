@@ -13,4 +13,5 @@ export 'my_rich_text.dart';
 export 'my_text.dart';
 export 'phrase_word.dart';
 export 'spinner.dart';
+export 'text_field_dialog.dart';
 export 'tooltip_text.dart';

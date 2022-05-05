@@ -3,6 +3,7 @@ export 'constants/constants.dart';
 export 'date/date.dart';
 export 'dio_client/dio_client.dart';
 export 'enum/enum.dart';
+export 'extension/extension.dart';
 export 'message_handler/message_handler.dart';
 export 'models/model.dart';
 export 'router/router.dart';

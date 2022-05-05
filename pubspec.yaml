@@ -33,6 +33,8 @@ dependencies:
   jose: ^0.3.2
   json_annotation: ^4.4.0
   json_path: ^0.3.1
+  jwt_decode:
+    path: packages/jwt_decode
   key_generator:
     path: packages/key_generator
   network_image_mock: ^2.1.0
