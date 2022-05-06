@@ -1,8 +1,6 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:flutter/cupertino.dart';
+part of 'network_error.dart';
 
-extension NetworkErrorExtension on NetworkError {
+extension NetworkErrorX on NetworkError {
   String localise(BuildContext context) {
     final GlobalMessage globalMessage = GlobalMessage(context.l10n);
     switch (this) {

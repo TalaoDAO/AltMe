@@ -1,3 +1,9 @@
+import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
+import 'package:flutter/cupertino.dart';
+
+part 'response_string_extension.dart';
+
 enum ResponseString {
   RESPONSE_STRING_FAILED_TO_LOAD_PROFILE,
   RESPONSE_STRING_FAILED_TO_SAVE_PROFILE,
@@ -34,4 +40,6 @@ enum ResponseString {
   RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA,
   RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
   RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE,
+  RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE,
+  RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR
 }

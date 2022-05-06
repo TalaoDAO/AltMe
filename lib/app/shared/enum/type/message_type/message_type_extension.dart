@@ -1,9 +1,6 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+part of 'message_type.dart';
 
-import 'package:flutter/material.dart';
-
-extension MessageTypeExtension on MessageType {
+extension MessageTypeX on MessageType {
   Color getColor(BuildContext context) {
     switch (this) {
       case MessageType.error:

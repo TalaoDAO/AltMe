@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credential.dart';
 import 'package:altme/deep_link/deep_link.dart';
+import 'package:altme/drawer/drawer.dart';
+import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/qr_code/qr_code.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -23,14 +26,18 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.client,
     required this.requestClient,
     required this.scanCubit,
+    required this.profileCubit,
+    required this.walletCubit,
     required this.queryByExampleCubit,
     required this.deepLinkCubit,
     required this.jwtDecode,
-  }) : super(const QRCodeScanStateWorking());
+  }) : super(const QRCodeScanState());
 
   final DioClient client;
   final DioClient requestClient;
   final ScanCubit scanCubit;
+  final ProfileCubit profileCubit;
+  final WalletCubit walletCubit;
   final QueryByExampleCubit queryByExampleCubit;
   final DeepLinkCubit deepLinkCubit;
   final JWTDecode jwtDecode;
@@ -41,67 +48,174 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return super.close();
   }
 
-  void emitWorkingState() {
-    emit(QRCodeScanStateWorking(isDeepLink: state.isDeepLink));
-  }
-
-  Future<void> host({required String? url, required bool isDeepLink}) async {
+  Future<void> host({required String? url}) async {
+    state.loading(isDeepLink: false);
     try {
-      if (url == null) {
-        emit(
-          QRCodeScanStateMessage(
-            isDeepLink: isDeepLink,
-            message: StateMessage.error(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
-              ),
-            ),
-          ),
+      if (url == null || url.isEmpty) {
+        throw ResponseMessage(
+          ResponseString
+              .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
         );
       } else {
         final uri = Uri.parse(url);
-
-        /// current QRCodeScanStateMessage may already be the
-        /// QRCodeScanStateHost we want to emit and nothing will happen if
-        /// that's the case.
-        ///
-        /// In order to avoid this, we emit QRCodeScanStateWorking which
-        /// don't trigger any action.
-        emit(QRCodeScanStateWorking(isDeepLink: isDeepLink));
-        emit(QRCodeScanStateHost(isDeepLink: isDeepLink, uri: uri));
+        await verify(uri: uri);
       }
     } on FormatException {
       emit(
-        QRCodeScanStateMessage(
-          isDeepLink: isDeepLink,
-          message: StateMessage.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
-            ),
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
           ),
         ),
       );
+    } catch (e) {
+      if (e is MessageHandler) {
+        emit(state.error(messageHandler: e));
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+            ),
+          ),
+        );
+      }
     }
   }
 
   Future<void> deepLink() async {
+    state.loading(isDeepLink: true);
     final deepLinkUrl = deepLinkCubit.state;
     if (deepLinkUrl != '') {
       deepLinkCubit.resetDeepLink();
       try {
         final uri = Uri.parse(deepLinkUrl);
-        emit(QRCodeScanStateHost(uri: uri, isDeepLink: true));
+        await verify(uri: uri);
       } on FormatException {
         emit(
-          QRCodeScanStateMessage(
-            isDeepLink: true,
-            message: StateMessage.error(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
-              ),
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> verify({required Uri? uri}) async {
+    state.loading();
+    try {
+      ///Check if SIOPV2 request
+      if (uri?.queryParameters['scope'] == 'openid') {
+        ///restrict non-enterprise user
+        if (!profileCubit.state.model.isEnterprise) {
+          throw ResponseMessage(
+            ResponseString.RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE,
+          );
+        }
+
+        ///credential should not be empty since we have to present
+        if (walletCubit.state.credentials.isEmpty) {
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR,
+            ),
+          );
+          state.success(route: IssuerWebsitesPage.route(''));
+
+          return;
+        }
+
+        ///request attribute check
+        if (requestAttributeExists()) {
+          throw ResponseMessage(
+            ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
+          );
+        }
+
+        ///request_uri attribute check
+        if (!requestUriAttributeExists()) {
+          throw ResponseMessage(
+            ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
+          );
+        }
+
+        final sIOPV2Param = await getSIOPV2Parameters();
+
+        ///check if claims exists
+        if (sIOPV2Param.claims == null) {
+          throw ResponseMessage(
+            ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
+          );
+        }
+
+        final openIdCredential = getCredential(sIOPV2Param.claims!);
+        final openIdIssuer = getIssuer(sIOPV2Param.claims!);
+
+        ///check if credential and issuer both are not present
+        // TODO(all): Review this code... JSONPath should not cause
+        // issue in future
+        if (openIdCredential == '' && openIdIssuer == '') {
+          throw ResponseMessage(
+            ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
+          );
+        }
+
+        final selectedCredentials = <CredentialModel>[];
+        for (final credentialModel in walletCubit.state.credentials) {
+          final credentialTypeList = credentialModel.credentialPreview.type;
+          final issuer = credentialModel.credentialPreview.issuer;
+
+          ///credential and issuer provided in claims
+          if (openIdCredential != '' && openIdIssuer != '') {
+            if (credentialTypeList.contains(openIdCredential) &&
+                openIdIssuer == issuer) {}
+          }
+
+          ///credential provided in claims
+          if (openIdCredential != '' && openIdIssuer == '') {
+            if (credentialTypeList.contains(openIdCredential)) {
+              selectedCredentials.add(credentialModel);
+            }
+          }
+
+          ///issuer provided in claims
+          if (openIdCredential == '' && openIdIssuer != '') {
+            if (openIdIssuer == issuer) {
+              selectedCredentials.add(credentialModel);
+            }
+          }
+        }
+
+        if (selectedCredentials.isEmpty) {
+          state.success(route: IssuerWebsitesPage.route(openIdCredential));
+          return;
+        }
+
+        state.success(
+          route: SIOPV2CredentialPickPage.route(
+            credentials: selectedCredentials,
+            sIOPV2Param: sIOPV2Param,
+          ),
+        );
+      } else {
+        state.acceptHost(uri: uri!);
+      }
+    } catch (e) {
+      if (e is MessageHandler) {
+        emit(
+          state.error(messageHandler: e),
+        );
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
             ),
           ),
         );
@@ -110,6 +224,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> accept({required Uri uri}) async {
+    state.loading();
     final log = Logger('altme-wallet/qrcode/accept');
 
     late final dynamic data;
@@ -122,10 +237,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       switch (data['type']) {
         case 'CredentialOffer':
           emit(
-            QRCodeScanStateSuccess(
-              isDeepLink: state.isDeepLink,
-              route: CredentialsReceivePage.route(uri),
-            ),
+            state.success(route: CredentialsReceivePage.route(uri)),
           );
           break;
 
@@ -146,10 +258,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               );
             } else if (data['query'].first['type'] == 'QueryByExample') {
               emit(
-                QRCodeScanStateSuccess(
-                  isDeepLink: state.isDeepLink,
-                  route: CredentialsPresentPage.route(uri: uri),
-                ),
+                state.success(route: CredentialsPresentPage.route(uri: uri)),
               );
             } else {
               throw ResponseMessage(
@@ -158,10 +267,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             }
           } else {
             emit(
-              QRCodeScanStateSuccess(
-                isDeepLink: state.isDeepLink,
-                route: CredentialsPresentPage.route(uri: uri),
-              ),
+              state.success(route: CredentialsPresentPage.route(uri: uri)),
             );
           }
           break;
@@ -175,34 +281,18 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       log.severe('An error occurred while connecting to the server.', e);
 
       if (e is MessageHandler) {
-        emit(
-          QRCodeScanStateMessage(
-            isDeepLink: state.isDeepLink,
-            message: StateMessage.error(messageHandler: e),
-          ),
-        );
+        emit(state.error(messageHandler: e));
       } else {
         emit(
-          QRCodeScanStateMessage(
-            isDeepLink: state.isDeepLink,
-            message: StateMessage.error(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER, // ignore: lines_longer_than_80_chars
-              ),
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER, // ignore: lines_longer_than_80_chars
             ),
           ),
         );
       }
     }
-  }
-
-  bool isOpenIdUrl() {
-    var condition = false;
-    if (state.uri?.queryParameters['scope'] == 'openid') {
-      condition = true;
-    }
-    return condition;
   }
 
   bool requestAttributeExists() {
@@ -225,7 +315,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return condition;
   }
 
-  Future<SIOPV2Param> getSIOPV2Parameters({required bool isDeepLink}) async {
+  Future<SIOPV2Param> getSIOPV2Parameters() async {
     String? nonce;
     String? redirect_uri;
     String? request_uri;
@@ -317,19 +407,5 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         .toList()
         .first;
     return issuerField['filter']['pattern'] as String;
-  }
-
-  void emitQRCodeScanStateUnknown() {
-    emit(
-      QRCodeScanStateMessage(
-        isDeepLink: state.isDeepLink,
-        message: StateMessage.error(
-          messageHandler: ResponseMessage(
-            ResponseString
-                .RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE, // ignore: lines_longer_than_80_chars
-          ),
-        ),
-      ),
-    );
   }
 }

@@ -5,13 +5,12 @@ import 'package:altme/credentials/credential.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/drawer/drawer.dart';
-import 'package:altme/flavor/cubit/flavor_cubit.dart';
-import 'package:altme/issuer_websites_page/issuer_websites.dart';
+import 'package:altme/flavor/flavor.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/qr_code/qr_code.dart';
 import 'package:altme/scan/scan.dart';
-import 'package:altme/splash/cubit/splash_cubit.dart';
+import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:dio/dio.dart';
@@ -229,116 +228,9 @@ class _SplashViewState extends State<SplashView>
         BlocListener<QRCodeScanCubit, QRCodeScanState>(
           listener: (context, state) async {
             final l10n = context.l10n;
-            if (state is QRCodeScanStateHost) {
-              final profileCubit = context.read<ProfileCubit>();
-              final qrCodeCubit = context.read<QRCodeScanCubit>();
-              final walletCubit = context.read<WalletCubit>();
-
-              ///Check if SIOPV2 request
-              final isOpenIdUrl = qrCodeCubit.isOpenIdUrl();
-              if (isOpenIdUrl) {
-                ///restrict non-enterprise user
-                if (!profileCubit.state.model.isEnterprise) {
-                  AlertMessage.showStringMessage(
-                    context: context,
-                    message: l10n.personalOpenIdRestrictionMessage,
-                    messageType: MessageType.error,
-                  );
-                  return;
-                }
-
-                ///credential should not be empty since we have to present
-                if (walletCubit.state.credentials.isEmpty) {
-                  AlertMessage.showStringMessage(
-                    context: context,
-                    message: l10n.credentialEmptyError,
-                    messageType: MessageType.error,
-                  );
-                  await Navigator.of(context).pushReplacement<void, void>(
-                    IssuerWebsitesPage.route(''),
-                  );
-                  return;
-                }
-
-                ///request attribute check
-                if (qrCodeCubit.requestAttributeExists()) {
-                  return qrCodeCubit.emitQRCodeScanStateUnknown();
-                }
-
-                ///request_uri attribute check
-                if (!qrCodeCubit.requestUriAttributeExists()) {
-                  return qrCodeCubit.emitQRCodeScanStateUnknown();
-                }
-
-                final sIOPV2Param = await qrCodeCubit.getSIOPV2Parameters(
-                  isDeepLink: state.isDeepLink,
-                );
-
-                ///check if claims exists
-                if (sIOPV2Param.claims == null) {
-                  return qrCodeCubit.emitQRCodeScanStateUnknown();
-                }
-
-                final openIdCredential =
-                    qrCodeCubit.getCredential(sIOPV2Param.claims!);
-                final openIdIssuer = qrCodeCubit.getIssuer(sIOPV2Param.claims!);
-
-                ///check if credential and issuer both are not present
-                // TODO(all): Review this code... JSONPath should not cause
-                // issue in future
-                if (openIdCredential == '' && openIdIssuer == '') {
-                  return qrCodeCubit.emitQRCodeScanStateUnknown();
-                }
-
-                final selectedCredentials = <CredentialModel>[];
-                for (final credentialModel in walletCubit.state.credentials) {
-                  final credentialTypeList =
-                      credentialModel.credentialPreview.type;
-                  final issuer = credentialModel.credentialPreview.issuer;
-
-                  ///credential and issuer provided in claims
-                  if (openIdCredential != '' && openIdIssuer != '') {
-                    if (credentialTypeList.contains(openIdCredential) &&
-                        openIdIssuer == issuer) {}
-                  }
-
-                  ///credential provided in claims
-                  if (openIdCredential != '' && openIdIssuer == '') {
-                    if (credentialTypeList.contains(openIdCredential)) {
-                      selectedCredentials.add(credentialModel);
-                    }
-                  }
-
-                  ///issuer provided in claims
-                  if (openIdCredential == '' && openIdIssuer != '') {
-                    if (openIdIssuer == issuer) {
-                      selectedCredentials.add(credentialModel);
-                    }
-                  }
-                }
-
-                if (selectedCredentials.isEmpty) {
-                  await Navigator.of(context).pushReplacement<void, void>(
-                    IssuerWebsitesPage.route(openIdCredential),
-                  );
-                  return;
-                }
-                if (state.isDeepLink) {
-                  await Navigator.of(context).push<void>(
-                    SIOPV2CredentialPickPage.route(
-                      credentials: selectedCredentials,
-                      sIOPV2Param: sIOPV2Param,
-                    ),
-                  );
-                } else {
-                  await Navigator.of(context).pushReplacement<void, void>(
-                    SIOPV2CredentialPickPage.route(
-                      credentials: selectedCredentials,
-                      sIOPV2Param: sIOPV2Param,
-                    ),
-                  );
-                }
-              } else {
+            if (state.status == QrScanStatus.acceptHost) {
+              if (state.uri != null) {
+                final profileCubit = context.read<ProfileCubit>();
                 var approvedIssuer = Issuer.emptyIssuer();
                 final isIssuerVerificationSettingTrue =
                     profileCubit.state.model.issuerVerificationSetting;
@@ -353,11 +245,20 @@ class _SplashViewState extends State<SplashView>
                     if (e is MessageHandler) {
                       AlertMessage.showStateMessage(
                         context: context,
+                        stateMessage: StateMessage.error(messageHandler: e),
+                      );
+                    } else {
+                      AlertMessage.showStateMessage(
+                        context: context,
                         stateMessage: StateMessage.error(
-                          messageHandler: e,
+                          messageHandler: ResponseMessage(
+                            ResponseString
+                                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+                          ),
                         ),
                       );
                     }
+                    return;
                   }
                 }
 
@@ -380,9 +281,6 @@ class _SplashViewState extends State<SplashView>
                 if (acceptHost) {
                   await context.read<QRCodeScanCubit>().accept(uri: state.uri!);
                 } else {
-                  /// We emit the working state to reset the state because state
-                  /// may already be same QRCodeScanStateMessage
-                  context.read<QRCodeScanCubit>().emitWorkingState();
                   AlertMessage.showStateMessage(
                     context: context,
                     stateMessage: StateMessage(
@@ -392,24 +290,27 @@ class _SplashViewState extends State<SplashView>
                       type: MessageType.error,
                     ),
                   );
+                  return;
                 }
               }
             }
-            if (state is QRCodeScanStateSuccess) {
-              if (state.isDeepLink) {
-                await Navigator.of(context).push<void>(state.route!);
-              } else {
-                await Navigator.of(context)
-                    .pushReplacement<void, void>(state.route!);
+
+            if (state.status == QrScanStatus.success) {
+              if (state.route != null) {
+                if (state.isDeepLink) {
+                  await Navigator.of(context).push<void>(state.route!);
+                } else {
+                  await Navigator.of(context)
+                      .pushReplacement<void, void>(state.route!);
+                }
               }
             }
-            if (state is QRCodeScanStateMessage) {
-              if (state.message != null) {
-                AlertMessage.showStateMessage(
-                  context: context,
-                  stateMessage: state.message!,
-                );
-              }
+
+            if (state.message != null) {
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: state.message!,
+              );
             }
           },
         )

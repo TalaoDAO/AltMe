@@ -76,6 +76,8 @@ class App extends StatelessWidget {
             queryByExampleCubit: context.read<QueryByExampleCubit>(),
             deepLinkCubit: context.read<DeepLinkCubit>(),
             jwtDecode: JWTDecode(),
+            profileCubit: context.read<ProfileCubit>(),
+            walletCubit: context.read<WalletCubit>(),
           ),
         ),
         BlocProvider<DIDCubit>(

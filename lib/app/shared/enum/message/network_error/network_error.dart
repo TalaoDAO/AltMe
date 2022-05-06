@@ -1,3 +1,9 @@
+import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
+import 'package:flutter/material.dart';
+
+part 'network_error_extension.dart';
+
 enum NetworkError {
   NETWORK_ERROR_NOT_IMPLEMENTED,
   NETWORK_ERROR_REQUEST_CANCELLED,

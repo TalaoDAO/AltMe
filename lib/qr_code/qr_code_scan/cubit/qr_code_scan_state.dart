@@ -3,6 +3,7 @@ part of 'qr_code_scan_cubit.dart';
 @JsonSerializable()
 class QRCodeScanState extends Equatable {
   const QRCodeScanState({
+    this.status = QrScanStatus.init,
     this.uri,
     this.route,
     this.isDeepLink = false,
@@ -12,6 +13,7 @@ class QRCodeScanState extends Equatable {
   factory QRCodeScanState.fromJson(Map<String, dynamic> json) =>
       _$QRCodeScanStateFromJson(json);
 
+  final QrScanStatus status;
   final Uri? uri;
   @JsonKey(ignore: true)
   final Route? route;
@@ -20,42 +22,46 @@ class QRCodeScanState extends Equatable {
 
   Map<String, dynamic> toJson() => _$QRCodeScanStateToJson(this);
 
-  QRCodeScanState copyWith({
-    Uri? uri,
-    Route? route,
-    bool? isDeepLink,
-    StateMessage? message,
+  QRCodeScanState loading({bool? isDeepLink}) {
+    return QRCodeScanState(
+      status: QrScanStatus.loading,
+      isDeepLink: isDeepLink ?? this.isDeepLink,
+      uri: uri,
+    );
+  }
+
+  QRCodeScanState acceptHost({required Uri uri}) {
+    return QRCodeScanState(
+      status: QrScanStatus.acceptHost,
+      isDeepLink: isDeepLink,
+      uri: uri,
+    );
+  }
+
+  QRCodeScanState error({required MessageHandler messageHandler}) {
+    return QRCodeScanState(
+      status: QrScanStatus.error,
+      message: StateMessage.error(messageHandler: messageHandler),
+      isDeepLink: isDeepLink,
+      uri: uri,
+    );
+  }
+
+  QRCodeScanState success({
+    MessageHandler? messageHandler,
+    required Route route,
   }) {
     return QRCodeScanState(
-      uri: uri ?? this.uri,
-      route: route ?? this.route,
-      isDeepLink: isDeepLink ?? this.isDeepLink,
-      message: message ?? this.message,
+      status: QrScanStatus.success,
+      message: messageHandler == null
+          ? null
+          : StateMessage.success(messageHandler: messageHandler),
+      isDeepLink: isDeepLink,
+      uri: uri,
+      route: route,
     );
   }
 
   @override
-  List<Object?> get props => [uri, route, isDeepLink, message];
-}
-
-class QRCodeScanStateWorking extends QRCodeScanState {
-  const QRCodeScanStateWorking({bool isDeepLink = false})
-      : super(isDeepLink: isDeepLink);
-}
-
-class QRCodeScanStateHost extends QRCodeScanState {
-  const QRCodeScanStateHost({Uri? uri, required bool isDeepLink})
-      : super(uri: uri, isDeepLink: isDeepLink);
-}
-
-class QRCodeScanStateSuccess extends QRCodeScanState {
-  const QRCodeScanStateSuccess({Route? route, required bool isDeepLink})
-      : super(route: route, isDeepLink: isDeepLink);
-}
-
-class QRCodeScanStateMessage extends QRCodeScanState {
-  const QRCodeScanStateMessage({
-    StateMessage? message,
-    required bool isDeepLink,
-  }) : super(message: message, isDeepLink: isDeepLink);
+  List<Object?> get props => [status, uri, route, isDeepLink, message];
 }

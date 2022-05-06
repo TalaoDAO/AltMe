@@ -182,6 +182,16 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE:
           return ResponseString.RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE
               .localise(context);
+
+        case ResponseString
+            .RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE:
+          return ResponseString
+              .RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR:
+          return ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR
+              .localise(context);
       }
     }
     return '';

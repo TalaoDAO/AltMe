@@ -147,4 +147,10 @@ class GlobalMessage {
 
   String get RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE =>
       l10n.unimplementedQueryType;
+
+  String get RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE =>
+      l10n.personalOpenIdRestrictionMessage;
+
+  String get RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR =>
+      l10n.credentialEmptyError;
 }

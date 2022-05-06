@@ -1,8 +1,6 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:flutter/cupertino.dart';
+part of 'response_string.dart';
 
-extension MessageErrorExtension on ResponseString {
+extension ResponseStringX on ResponseString {
   String localise(BuildContext context) {
     final GlobalMessage globalMessage = GlobalMessage(context.l10n);
     switch (this) {
@@ -141,6 +139,13 @@ extension MessageErrorExtension on ResponseString {
 
       case ResponseString.RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE:
         return globalMessage.RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE;
+
+      case ResponseString.RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE:
+        return globalMessage
+            .RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE;
+
+      case ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR:
+        return globalMessage.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR;
     }
   }
 }

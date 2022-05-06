@@ -52,9 +52,7 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
       qrController.pauseCamera();
       if (scanData.code is String && !isQrCodeScanned) {
         isQrCodeScanned = true;
-        context
-            .read<QRCodeScanCubit>()
-            .host(url: scanData.code, isDeepLink: false);
+        context.read<QRCodeScanCubit>().host(url: scanData.code);
       }
     });
   }
@@ -65,12 +63,16 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
 
     return BlocListener<QRCodeScanCubit, QRCodeScanState>(
       listener: (context, state) async {
-        if (state is QRCodeScanStateSuccess) {
-          await qrController.stopCamera();
+        if (state.status == QrScanStatus.success) {
+          if (state.route != null) {
+            await qrController.stopCamera();
+          }
         }
-        if (state is QRCodeScanStateMessage) {
-          await qrController.resumeCamera();
-          isQrCodeScanned = false;
+        if (state.status == QrScanStatus.error) {
+          if (state.message != null) {
+            await qrController.resumeCamera();
+            isQrCodeScanned = false;
+          }
         }
       },
       child: BasePage(

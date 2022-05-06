@@ -1,6 +1,7 @@
-enum AppStatus {
+enum QrScanStatus {
   init,
   loading,
+  acceptHost,
   error,
   success,
 }
