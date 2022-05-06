@@ -3,7 +3,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:passbase_flutter/passbase_flutter.dart';
+// TODO(bibash): uncomment
+//import 'package:passbase_flutter/passbase_flutter.dart';
 
 class KYCButton extends StatelessWidget {
   const KYCButton({
@@ -27,25 +28,26 @@ class KYCButton extends StatelessWidget {
                   child: Text(''),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(5),
-                child: PassbaseButton(
-                  height: 100 * MediaQuery.of(context).size.aspectRatio,
-                  onFinish: (identityAccessKey) {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                  onSubmitted: (identityAccessKey) {
-                    // do stuff in case of success
-                  },
-                  onError: (errorCode) {
-                    // do stuff in case of cancel
-                  },
-                  onStart: () {
-                    // do stuff in case of start
-                  },
-                ),
-              ),
+              // TODO(bibash): uncomment
+              // Padding(
+              //   padding: const EdgeInsets.all(5),
+              //   child: PassbaseButton(
+              //     height: 100 * MediaQuery.of(context).size.aspectRatio,
+              //     onFinish: (identityAccessKey) {
+              //       Navigator.pop(context);
+              //       Navigator.pop(context);
+              //     },
+              //     onSubmitted: (identityAccessKey) {
+              //       // do stuff in case of success
+              //     },
+              //     onError: (errorCode) {
+              //       // do stuff in case of cancel
+              //     },
+              //     onStart: () {
+              //       // do stuff in case of start
+              //     },
+              //   ),
+              // ),
             ],
           )
         : BaseButton.primary(

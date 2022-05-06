@@ -4,7 +4,8 @@ import 'package:altme/drawer/drawer.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:passbase_flutter/passbase_flutter.dart';
+// TODO(bibash): uncomment
+//import 'package:passbase_flutter/passbase_flutter.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'wallet_cubit.g.dart';
@@ -138,8 +139,9 @@ class WalletCubit extends Cubit<WalletState> {
       if (firstEmailPassCredentialSubject is EmailPass) {
         /// Give user email from first EmailPass to KYC. When KYC is successful
         /// this email is used to send the over18 credential link to user.
-        PassbaseSDK.prefillUserEmail = firstEmailPassCredentialSubject.email;
-        PassbaseSDK.metaData = firstEmailPassCredentialSubject.passbaseMetadata;
+        // TODO(bibash): uncomment
+        //PassbaseSDK.prefillUserEmail = firstEmailPassCredentialSubject.email;
+        //PassbaseSDK.metaData = firstEmailPassCredentialSubject.passbaseMetadata;
         return true;
       }
     }

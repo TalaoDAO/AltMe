@@ -7,12 +7,13 @@
 
 import 'dart:async';
 import 'dart:developer';
-
-import 'package:altme/app/app.dart';
+// TODO(bibash): uncomment
+//import 'package:altme/app/app.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
-import 'package:passbase_flutter/passbase_flutter.dart';
+// TODO(bibash): uncomment
+//import 'package:passbase_flutter/passbase_flutter.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
@@ -38,9 +39,10 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   });
 
   WidgetsFlutterBinding.ensureInitialized();
-  await PassbaseSDK.initialize(
-    publishableApiKey: AltMeStrings.passBasePublishableApiKey,
-  );
+  // TODO(bibash): uncomment
+  // await PassbaseSDK.initialize(
+  //   publishableApiKey: AltMeStrings.passBasePublishableApiKey,
+  // );
 
   await runZonedGuarded(
     () async {
