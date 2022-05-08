@@ -16,7 +16,6 @@ import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 part 'scan_cubit.g.dart';
-
 part 'scan_state.dart';
 
 class ScanCubit extends Cubit<ScanState> {
@@ -25,15 +24,15 @@ class ScanCubit extends Cubit<ScanState> {
     required this.walletCubit,
     required this.didKitProvider,
     required this.secureStorageProvider,
-  }) : super(ScanStateIdle());
+  }) : super(const ScanState());
 
   final DioClient client;
   final WalletCubit walletCubit;
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
 
-  void emitScanStatePreview({Map<String, dynamic>? preview}) {
-    emit(ScanStatePreview(preview: preview));
+  void emitScanStatePreview({required Map<String, dynamic> preview}) {
+    emit(state.scanPreview(preview: preview));
   }
 
   Future<void> credentialOffer({
@@ -41,8 +40,8 @@ class ScanCubit extends Cubit<ScanState> {
     required CredentialModel credentialModel,
     required String keyId,
   }) async {
+    emit(state.loading());
     final log = Logger('altme-wallet/scan/credential-offer');
-    emit(ScanStateLoading());
     try {
       final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
 
@@ -71,12 +70,10 @@ class ScanCubit extends Cubit<ScanState> {
         );
 
         emit(
-          ScanStateMessage(
-            message: StateMessage.warning(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING,
-              ),
+          state.warning(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING,
             ),
           ),
         );
@@ -85,16 +82,9 @@ class ScanCubit extends Cubit<ScanState> {
       if ((jsonVerification['errors'] as List).isNotEmpty) {
         log.severe('failed to verify credential', jsonVerification['errors']);
         if (jsonVerification['errors'][0] != 'No applicable proof') {
-          emit(
-            ScanStateMessage(
-              message: StateMessage.error(
-                messageHandler: ResponseMessage(
-                  ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
-                ),
-              ),
-            ),
+          throw ResponseMessage(
+            ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
           );
-          return emit(ScanStateIdle());
         }
       }
 
@@ -105,20 +95,23 @@ class ScanCubit extends Cubit<ScanState> {
         ),
       );
 
-      emit(ScanStateSuccess());
+      emit(state.success());
     } catch (e) {
       log.severe('something went wrong', e);
-      emit(
-        ScanStateMessage(
-          message: StateMessage.error(
+      if (e is MessageHandler) {
+        emit(
+          state.error(messageHandler: e),
+        );
+      } else {
+        emit(
+          state.error(
             messageHandler: ResponseMessage(
               ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
             ),
           ),
-        ),
-      );
-      emit(ScanStateIdle());
+        );
+      }
     }
   }
 
@@ -131,7 +124,7 @@ class ScanCubit extends Cubit<ScanState> {
   }) async {
     final log = Logger('altme-wallet/scan/verifiable-presentation-request');
 
-    emit(ScanStateLoading());
+    emit(state.loading());
     try {
       final key = (await secureStorageProvider.get(keyId))!;
       final did = await secureStorageProvider.get(SecureStorageKeys.did);
@@ -164,128 +157,30 @@ class ScanCubit extends Cubit<ScanState> {
       );
 
       emit(
-        ScanStateMessage(
-          message: StateMessage.success(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
-            ),
+        state.success(
+          messageHandler: ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
           ),
         ),
       );
-
-      emit(ScanStateSuccess());
     } catch (e) {
       log.severe('something went wrong', e);
-      emit(
-        ScanStateMessage(
-          message: StateMessage.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            ),
-          ),
-        ),
-      );
-    }
-  }
-
-  //
-  Future<void> storeCHAPI({
-    required Map<String, dynamic> data,
-    required void Function(String) done,
-  }) async {
-    final log = Logger('altme-wallet/scan/chapi-store');
-
-    emit(ScanStateLoading());
-    try {
-      late final dynamic type;
-
-      if (data['type'] is List<dynamic>) {
-        type = data['type'].first;
+      if (e is MessageHandler) {
+        emit(
+          state.error(messageHandler: e),
+        );
       } else {
-        type = data['type'];
-      }
-
-      late final dynamic vc;
-
-      switch (type) {
-        case 'VerifiablePresentation':
-          vc = data['verifiableCredential'];
-          break;
-
-        case 'VerifiableCredential':
-          vc = data;
-          break;
-
-        default:
-          throw UnimplementedError('Unsupported dataType: $type');
-      }
-
-      final vcStr = jsonEncode(vc);
-      final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
-      final verification = await didKitProvider.verifyCredential(vcStr, optStr);
-
-      debugPrint('[wallet/chapi-store/verify/vc] $vcStr');
-      debugPrint('[wallet/chapi-store/verify/options] $optStr');
-      debugPrint('[wallet/chapi-store/verify/result] $verification');
-
-      final jsonVerification = jsonDecode(verification) as Map<String, dynamic>;
-
-      if ((jsonVerification['warnings'] as List).isNotEmpty) {
-        log.warning(
-          'credential verification return warnings',
-          jsonVerification['warnings'],
-        );
         emit(
-          ScanStateMessage(
-            message: StateMessage.warning(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING,
-              ),
-            ),
-          ),
-        );
-      }
-
-      if ((jsonVerification['errors'] as List).isNotEmpty) {
-        log.severe('failed to verify credential', jsonVerification['errors']);
-
-        // done(jsonEncode(jsonVerification['errors']));
-
-        emit(
-          ScanStateMessage(
-            message: StateMessage.warning(
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
-              ),
-            ),
-          ),
-        );
-      }
-      await walletCubit.insertCredential(vc as CredentialModel);
-
-      done(vcStr);
-
-      // emit(ScanStateMessage(StateMessage.success(
-      //     'A new credential has been successfully added!')));
-    } catch (e) {
-      log.severe('something went wrong', e);
-
-      emit(
-        ScanStateMessage(
-          message: StateMessage.warning(
+          state.error(
             messageHandler: ResponseMessage(
               ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
             ),
           ),
-        ),
-      );
+        );
+      }
     }
-
-    emit(ScanStateSuccess());
   }
 
   Future<void> getDIDAuthCHAPI({
@@ -297,7 +192,7 @@ class ScanCubit extends Cubit<ScanState> {
   }) async {
     final log = Logger('altme-wallet/scan/chapi-get-didauth');
 
-    emit(ScanStateLoading());
+    emit(state.loading());
     try {
       final key = (await secureStorageProvider.get(keyId))!;
       final did = await secureStorageProvider.get(SecureStorageKeys.did);
@@ -325,27 +220,16 @@ class ScanCubit extends Cubit<ScanState> {
           done(presentation);
 
           emit(
-            ScanStateMessage(
-              message: StateMessage.success(
-                messageHandler: ResponseMessage(
-                  ResponseString
-                      .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
-                ),
+            state.success(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
               ),
             ),
           );
-
-          emit(ScanStateSuccess());
         } else {
-          emit(
-            ScanStateMessage(
-              message: StateMessage.warning(
-                messageHandler: ResponseMessage(
-                  ResponseString
-                      .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                ),
-              ),
-            ),
+          throw ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           );
         }
       } else {
@@ -353,16 +237,20 @@ class ScanCubit extends Cubit<ScanState> {
       }
     } catch (e) {
       log.severe('something went wrong', e);
-      emit(
-        ScanStateMessage(
-          message: StateMessage.warning(
+      if (e is MessageHandler) {
+        emit(
+          state.error(messageHandler: e),
+        );
+      } else {
+        emit(
+          state.error(
             messageHandler: ResponseMessage(
               ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
             ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -372,7 +260,7 @@ class ScanCubit extends Cubit<ScanState> {
   }) async {
     final log =
         Logger('altme-wallet/scan/present-credential-to-siop-v2-request');
-    emit(ScanStateLoading());
+    emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
       final vpToken = await createVpToken(
@@ -408,117 +296,36 @@ class ScanCubit extends Cubit<ScanState> {
 
       if (result == 'Congrats ! Everything is ok') {
         emit(
-          ScanStateMessage(
-            message: StateMessage.success(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
-              ),
-            ),
-          ),
-        );
-      } else {
-        emit(
-          ScanStateMessage(
-            message: StateMessage.warning(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-              ),
-            ),
-          ),
-        );
-      }
-    } catch (e) {
-      log.severe('something went wrong', e);
-      emit(
-        ScanStateMessage(
-          message: StateMessage.warning(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            ),
-          ),
-        ),
-      );
-      return;
-    }
-  }
-
-  //
-  Future<void> getQueryByExampleCHAPI({
-    required String keyId,
-    required List<CredentialModel> credentials,
-    required String? challenge,
-    required String? domain,
-    required void Function(String) done,
-    required Uri uri,
-  }) async {
-    final log = Logger('altme-wallet/scan/chapi-get-querybyexample');
-    emit(ScanStateLoading());
-
-    try {
-      final key = (await secureStorageProvider.get(keyId))!;
-      final did = await secureStorageProvider.get(SecureStorageKeys.did);
-      final verificationMethod =
-          await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
-
-      final presentationId = 'urn:uuid:${const Uuid().v4()}';
-      final presentation = await didKitProvider.issuePresentation(
-        jsonEncode({
-          '@context': ['https://www.w3.org/2018/credentials/v1'],
-          'type': ['VerifiablePresentation'],
-          'id': presentationId,
-          'holder': did,
-          'verifiableCredential': credentials.length == 1
-              ? credentials.first.toJson()
-              : credentials.map((c) => c.toJson()).toList(),
-        }),
-        jsonEncode({
-          'verificationMethod': verificationMethod,
-          'proofPurpose': 'authentication',
-          'challenge': challenge,
-          'domain': domain,
-        }),
-        key,
-      );
-
-      done(presentation);
-
-      emit(
-        ScanStateMessage(
-          message: StateMessage.success(
+          state.success(
             messageHandler: ResponseMessage(
               ResponseString
                   .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
             ),
           ),
-        ),
-      );
+        );
+      } else {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
     } catch (e) {
       log.severe('something went wrong', e);
-
-      emit(
-        ScanStateMessage(
-          message: StateMessage.warning(
+      if (e is MessageHandler) {
+        emit(
+          state.error(messageHandler: e),
+        );
+      } else {
+        emit(
+          state.error(
             messageHandler: ResponseMessage(
               ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
             ),
           ),
-        ),
-      );
+        );
+      }
+      return;
     }
-
-    emit(ScanStateSuccess());
-  }
-
-  //
-  Future<void> storeQueryByExampleCHAPI({
-    required Map<String, dynamic> data,
-    required Uri uri,
-  }) async {
-    emit(ScanStateStoreQueryByExample(data: data, uri: uri));
   }
 
   Future<void> askPermissionDIDAuthCHAPI({
@@ -529,7 +336,7 @@ class ScanCubit extends Cubit<ScanState> {
     required void Function(String) done,
   }) async {
     emit(
-      ScanStateAskPermissionDIDAuth(
+      state.scanPermission(
         keyId: keyId,
         done: done,
         uri: uri,

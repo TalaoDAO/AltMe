@@ -3,9 +3,9 @@ part of 'scan_cubit.dart';
 @JsonSerializable()
 class ScanState extends Equatable {
   const ScanState({
+    this.status = ScanStatus.init,
     this.message,
     this.preview,
-    this.data,
     this.uri,
     this.keyId,
     this.challenge,
@@ -16,9 +16,9 @@ class ScanState extends Equatable {
   factory ScanState.fromJson(Map<String, dynamic> json) =>
       _$ScanStateFromJson(json);
 
+  final ScanStatus status;
   final StateMessage? message;
   final Map<String, dynamic>? preview;
-  final Map<String, dynamic>? data;
   final Uri? uri;
   final String? keyId;
   final String? challenge;
@@ -26,45 +26,65 @@ class ScanState extends Equatable {
   @JsonKey(ignore: true)
   final void Function(String)? done;
 
+  ScanState loading() {
+    return ScanState(
+      status: ScanStatus.loading,
+      preview: preview,
+      uri: uri,
+      keyId: keyId,
+      challenge: challenge,
+      domain: domain,
+      done: done,
+    );
+  }
+
+  ScanState scanPreview({required Map<String, dynamic> preview}) {
+    return ScanState(status: ScanStatus.preview, preview: preview);
+  }
+
+  ScanState scanPermission({
+    required Uri uri,
+    required String keyId,
+    String? challenge,
+    String? domain,
+    required void Function(String) done,
+  }) {
+    return ScanState(
+      status: ScanStatus.askPermissionDidAuth,
+      uri: uri,
+      keyId: keyId,
+      challenge: challenge,
+      domain: domain,
+      done: done,
+    );
+  }
+
+  ScanState warning({required MessageHandler messageHandler}) {
+    return ScanState(
+      status: ScanStatus.warning,
+      message: StateMessage.warning(messageHandler: messageHandler),
+    );
+  }
+
+  ScanState error({required MessageHandler messageHandler}) {
+    return ScanState(
+      status: ScanStatus.error,
+      message: StateMessage.error(messageHandler: messageHandler),
+    );
+  }
+
+  ScanState success({MessageHandler? messageHandler}) {
+    return ScanState(
+      status: ScanStatus.success,
+      message: messageHandler == null
+          ? null
+          : StateMessage.success(messageHandler: messageHandler),
+    );
+  }
+
   Map<String, dynamic> toJson() => _$ScanStateToJson(this);
 
   @override
   List<Object?> get props =>
-      [message, preview, data, uri, keyId, challenge, domain, done];
-}
-
-class ScanStateLoading extends ScanState {}
-
-class ScanStateIdle extends ScanState {}
-
-class ScanStateMessage extends ScanState {
-  const ScanStateMessage({StateMessage? message}) : super(message: message);
-}
-
-class ScanStatePreview extends ScanState {
-  const ScanStatePreview({Map<String, dynamic>? preview})
-      : super(preview: preview);
-}
-
-class ScanStateSuccess extends ScanState {}
-
-class ScanStateStoreQueryByExample extends ScanState {
-  const ScanStateStoreQueryByExample({Map<String, dynamic>? data, Uri? uri})
-      : super(data: data, uri: uri);
-}
-
-class ScanStateAskPermissionDIDAuth extends ScanState {
-  const ScanStateAskPermissionDIDAuth({
-    String? keyId,
-    String? challenge,
-    String? domain,
-    Uri? uri,
-    void Function(String)? done,
-  }) : super(
-          keyId: keyId,
-          challenge: challenge,
-          domain: domain,
-          uri: uri,
-          done: done,
-        );
+      [status, message, preview, uri, keyId, challenge, domain, done];
 }

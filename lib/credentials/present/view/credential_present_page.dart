@@ -39,7 +39,7 @@ class _CredentialsPresentPageState extends State<CredentialsPresentPage> {
       ),
       body: BlocBuilder<ScanCubit, ScanState>(
         builder: (context, state) {
-          if (state is ScanStatePreview) {
+          if (state.status == ScanStatus.preview) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[

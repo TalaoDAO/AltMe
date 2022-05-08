@@ -31,7 +31,7 @@ class CredentialsReceivePage extends StatelessWidget {
       ),
       body: BlocBuilder<ScanCubit, ScanState>(
         builder: (builderContext, state) {
-          if (state is ScanStatePreview) {
+          if (state.status == ScanStatus.preview) {
             final credential = CredentialModel.fromJson(state.preview!);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,

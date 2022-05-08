@@ -184,13 +184,14 @@ class _SplashViewState extends State<SplashView>
         ),
         BlocListener<ScanCubit, ScanState>(
           listener: (context, state) async {
-            if (state is ScanStateMessage) {
+            if (state.message != null) {
               AlertMessage.showStateMessage(
                 context: context,
                 stateMessage: state.message!,
               );
             }
-            if (state is ScanStateAskPermissionDIDAuth) {
+
+            if (state.status == ScanStatus.askPermissionDidAuth) {
               final l10n = context.l10n;
               final scanCubit = context.read<ScanCubit>();
               final state = scanCubit.state;
@@ -205,7 +206,7 @@ class _SplashViewState extends State<SplashView>
                   ) ??
                   false;
 
-              if (confirm && state is ScanStateAskPermissionDIDAuth) {
+              if (confirm) {
                 await scanCubit.getDIDAuthCHAPI(
                   keyId: state.keyId!,
                   done: state.done!,
@@ -217,10 +218,10 @@ class _SplashViewState extends State<SplashView>
                 Navigator.of(context).pop();
               }
             }
-            if (state is ScanStateSuccess) {
+            if (state.status == ScanStatus.success) {
               Navigator.of(context).pop();
             }
-            if (state is ScanStateIdle) {
+            if (state.status == ScanStatus.error) {
               Navigator.of(context).pop();
             }
           },
