@@ -8,8 +8,11 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:altme/app/app.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
+import 'package:logging/logging.dart';
+import 'package:passbase_flutter/passbase_flutter.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
@@ -29,6 +32,16 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    debugPrint(record.toString());
+  });
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await PassbaseSDK.initialize(
+    publishableApiKey: AltMeStrings.passBasePublishableApiKey,
+  );
 
   await runZonedGuarded(
     () async {

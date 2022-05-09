@@ -7,7 +7,7 @@ import 'package:mockingjay/mockingjay.dart';
 import '../../../helpers/helpers.dart';
 
 void main() {
-  group('Onboarding Second Page', () {
+  group('OnBoarding Second Page', () {
     testWidgets('is routable', (tester) async {
       await tester.pumpApp(
         Builder(

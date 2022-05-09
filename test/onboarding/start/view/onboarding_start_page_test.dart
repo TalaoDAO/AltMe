@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../helpers/helpers.dart';
 
 void main() {
-  group('Onboarding Start Page', () {
+  group('OnBoarding Start Page', () {
     testWidgets('is routable', (tester) async {
       await tester.pumpApp(
         Builder(
@@ -48,7 +48,7 @@ void main() {
       expect(appState.animate, true);
     });
 
-    testWidgets('blocks going back from Onboarding start page', (tester) async {
+    testWidgets('blocks going back from OnBoarding start page', (tester) async {
       await tester.pumpApp(const OnBoardingStartPage());
       final dynamic appState = tester.state(find.byType(WidgetsApp));
       expect(await appState.didPopRoute(), true);

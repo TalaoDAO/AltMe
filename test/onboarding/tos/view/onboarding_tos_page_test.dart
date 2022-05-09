@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../helpers/helpers.dart';
 
 void main() {
-  group('Onboarding Terms Page', () {
+  group('OnBoarding Terms Page', () {
     testWidgets('is routable', (tester) async {
       await tester.pumpApp(
         Builder(

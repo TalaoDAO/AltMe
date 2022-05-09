@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppTheme {
-
   static const Color darkPrimary = Color(0xffbb86fc);
   static const Color darkPrimaryContainer = Color(0xff3700B3);
   static const Color darkSecondary = Color(0xff03dac6);
@@ -300,13 +299,14 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get professionalExperienceAssessmentRating => GoogleFonts.nunito(
+  TextStyle get professionalExperienceAssessmentRating =>
+      GoogleFonts.montserrat(
         color: const Color(0xff212121),
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get voucherOverlay => GoogleFonts.nunito(
+  TextStyle get voucherOverlay => GoogleFonts.montserrat(
         color: const Color(0xffFFFFFF),
         fontSize: 13,
         fontWeight: FontWeight.w500,
@@ -322,5 +322,59 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff212121),
         fontSize: 5,
         fontWeight: FontWeight.w700,
+      );
+
+  TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.roboto(
+        color: const Color(0xFF0650C6),
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      );
+
+  TextStyle get certificateOfEmploymentDescription => GoogleFonts.montserrat(
+        color: const Color(0xFF757575),
+        fontSize: 13,
+        fontWeight: FontWeight.normal,
+      );
+
+  TextStyle get certificateOfEmploymentData => GoogleFonts.roboto(
+        color: const Color(0xFF434e62),
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+      );
+
+  TextStyle get credentialStudentCardTextCard => GoogleFonts.roboto(
+        color: const Color(0xffffffff),
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+      );
+
+  TextStyle get over18 => GoogleFonts.roboto(
+        color: const Color(0xffffffff),
+        fontSize: 20,
+        fontWeight: FontWeight.normal,
+      );
+
+  TextStyle get studentCardSchool => GoogleFonts.roboto(
+        color: const Color(0xff9dc5ff),
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      );
+
+  TextStyle get studentCardData => GoogleFonts.roboto(
+        color: const Color(0xffffffff),
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+      );
+
+  TextStyle get credentialTitleCard => GoogleFonts.roboto(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      );
+
+  TextStyle get credentialTextCard => GoogleFonts.roboto(
+        color: const Color(0xff212121),
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
       );
 }

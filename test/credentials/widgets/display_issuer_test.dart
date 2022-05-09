@@ -11,8 +11,8 @@ void main() {
     const authorLogo = 'https://www.toto.fr';
 
     setUp(() {
-      issuerWithLogo = Author(authorName, authorLogo);
-      issuerWithoutLogo = Author(authorName, '');
+      issuerWithLogo = const Author(authorName, authorLogo);
+      issuerWithoutLogo = const Author(authorName, '');
     });
 
     testWidgets('find issuer name', (WidgetTester tester) async {

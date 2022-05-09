@@ -1,0 +1,124 @@
+import 'package:altme/app/app.dart';
+import 'package:altme/did/did.dart';
+import 'package:altme/drawer/profile/models/profile.dart';
+import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/gen_phrase/cubit/onboarding_gen_phrase_cubit.dart';
+import 'package:altme/personal/view/personal_page.dart';
+import 'package:did_kit/did_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:key_generator/key_generator.dart';
+import 'package:secure_storage/secure_storage.dart';
+
+class OnBoardingGenPhrasePage extends StatefulWidget {
+  const OnBoardingGenPhrasePage({Key? key}) : super(key: key);
+
+  static Route route() => MaterialPageRoute<void>(
+        builder: (context) => BlocProvider(
+          create: (context) => OnBoardingGenPhraseCubit(
+            secureStorageProvider: getSecureStorage,
+            didCubit: context.read<DIDCubit>(),
+            didKitProvider: DIDKitProvider(),
+            keyGenerator: KeyGenerator(),
+          ),
+          child: const OnBoardingGenPhrasePage(),
+        ),
+        settings: const RouteSettings(name: '/onBoardingGenPhrasePage'),
+      );
+
+  @override
+  _OnBoardingGenPhrasePageState createState() =>
+      _OnBoardingGenPhrasePageState();
+}
+
+class _OnBoardingGenPhrasePageState extends State<OnBoardingGenPhrasePage> {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return BasePage(
+      title: l10n.onBoardingGenPhraseTitle,
+      titleLeading: const BackLeadingButton(),
+      scrollView: true,
+      body: BlocConsumer<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
+        listener: (context, state) async {
+          if (state.message != null) {
+            AlertMessage.showStateMessage(
+              context: context,
+              stateMessage: state.message!,
+            );
+          }
+          if (state.status == AppStatus.success) {
+            await Navigator.of(context).pushReplacement<void, void>(
+              PersonalPage.route(
+                isFromOnBoarding: true,
+                profileModel: ProfileModel.empty(),
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Column(
+                children: [
+                  Text(
+                    l10n.genPhraseInstruction,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.genPhraseExplanation,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 32),
+              MnemonicDisplay(mnemonic: state.mnemonic),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 24,
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.privacy_tip_outlined,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        l10n.genPhraseViewLatterText,
+                        style: Theme.of(context).textTheme.caption!.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 42,
+                child: BaseButton.primary(
+                  context: context,
+                  onPressed: state.status == AppStatus.loading
+                      ? null
+                      : () async {
+                          await context
+                              .read<OnBoardingGenPhraseCubit>()
+                              .generateKey(context, state.mnemonic);
+                        },
+                  child: Text(l10n.onBoardingGenPhraseButton),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}

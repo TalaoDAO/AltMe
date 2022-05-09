@@ -5,6 +5,8 @@ import 'package:bip39/bip39.dart' as bip39;
 import 'package:crypto_keys/crypto_keys.dart';
 import 'package:cryptocurrency_keys/src/model/encryption.dart';
 
+export 'model/encryption.dart';
+
 /// {@template cryptocurrency_keys}
 /// Cryptocurrency keys package
 /// {@endtemplate}
@@ -13,7 +15,7 @@ class CryptocurrencyKeys {
   const CryptocurrencyKeys();
 
   ///ivVector
-  static const String ivVector = 'Talao';
+  static const String ivVector = 'altme';
 
   ///additionalAuthenticatedData
   static const String additionalAuthenticatedData = 'Credible';

@@ -4,8 +4,11 @@
 <dict>
 	<key>CFBundleLocalizations</key>
 	<array>
+		<string>de</string>
 		<string>en</string>
 		<string>es</string>
+		<string>fr</string>
+		<string>it</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
@@ -48,5 +51,22 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
+    <key>UIFileSharingEnabled</key>
+    <true/>
+    <key>NSCameraUsageDescription</key>
+    <string>Please give us access to your camera, to complete the verification.</string>
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Please give us access to your photo library to verify you.</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>https</string>
+      <string>http</string>
+    </array>
 </dict>
 </plist>
