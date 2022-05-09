@@ -282,6 +282,12 @@ extension CustomTextTheme on TextTheme {
         fontSize: 5,
         fontWeight: FontWeight.w700,
       );
+
+  TextStyle get starterTitleStyle => GoogleFonts.nunito(
+    color: Colors.white,
+    fontSize: 38,
+    fontWeight: FontWeight.bold,
+  );
 }
 
 extension ThemDataExtension on ThemeData {
@@ -304,11 +310,5 @@ extension ThemDataExtension on ThemeData {
           Color(0xFF6600FF),
           Color(0xFF330080),
         ],
-      );
-
-  TextStyle get starterTitleStyle => GoogleFonts.nunito(
-        color: Colors.white,
-        fontSize: 38,
-        fontWeight: FontWeight.bold,
       );
 }
