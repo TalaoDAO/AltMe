@@ -1,10 +1,10 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credential.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/self_issued_credential/sef_issued_credential.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 part 'credential_subject.g.dart';
 
@@ -12,8 +12,41 @@ part 'credential_subject.g.dart';
 class CredentialSubject {
   CredentialSubject(this.id, this.type, this.issuedBy);
 
-  factory CredentialSubject.fromJson(Map<String, dynamic> json) =>
-      _$CredentialSubjectFromJson(json);
+  factory CredentialSubject.fromJson(Map<String, dynamic> json) {
+    switch (json['type']) {
+      case 'ResidentCard':
+        return ResidentCard.fromJson(json);
+      case 'SelfIssued':
+        return SelfIssued.fromJson(json);
+      case 'IdentityPass':
+        return IdentityPass.fromJson(json);
+      case 'Voucher':
+        return Voucher.fromJson(json);
+      case 'Ecole42LearningAchievement':
+        return Ecole42LearningAchievement.fromJson(json);
+      case 'LoyaltyCard':
+        return LoyaltyCard.fromJson(json);
+      case 'Over18':
+        return Over18.fromJson(json);
+      case 'ProfessionalStudentCard':
+        return ProfessionalStudentCard.fromJson(json);
+      case 'StudentCard':
+        return StudentCard.fromJson(json);
+      case 'CertificateOfEmployment':
+        return CertificateOfEmployment.fromJson(json);
+      case 'EmailPass':
+        return EmailPass.fromJson(json);
+      case 'PhonePass':
+        return PhonePass.fromJson(json);
+      case 'ProfessionalExperienceAssessment':
+        return ProfessionalExperienceAssessment.fromJson(json);
+      case 'ProfessionalSkillAssessment':
+        return ProfessionalSkillAssessment.fromJson(json);
+      case 'LearningAchievement':
+        return LearningAchievement.fromJson(json);
+    }
+    return DefaultCredentialSubject.fromJson(json);
+  }
 
   final String id;
   final String type;
@@ -114,18 +147,64 @@ class CredentialSubject {
   }
 
   Widget displayInList(BuildContext context, CredentialModel item) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: displayName(context, item),
+    final credential = Credential.fromJsonOrDummy(item.data);
+
+    return CredentialContainer(
+      child: Container(
+        // margin: const EdgeInsets.symmetric(vertical: 4),
+        decoration: BaseBoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: item.backgroundColor,
+          shapeColor: Theme.of(context).colorScheme.documentShape,
+          value: 1,
+          anchors: const <Alignment>[
+            Alignment.bottomRight,
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: SizedBox(height: 48, child: displayDescription(context, item)),
+        child: Material(
+          color: Theme.of(context).colorScheme.transparent,
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    HeroFix(
+                      tag: 'credential/${item.id}/icon',
+                      child: CredentialIcon(credential: credential),
+                    ),
+                    const SizedBox(height: 16),
+                    DisplayStatus(item: item, displayLabel: false),
+                  ],
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: displayName(context, item),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: SizedBox(
+                          height: 48,
+                          child: displayDescription(context, item),
+                        ),
+                      ),
+                      DisplayIssuer(
+                        issuer:
+                            item.credentialPreview.credentialSubject.issuedBy,
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        DisplayIssuer(issuer: item.credentialPreview.credentialSubject.issuedBy)
-      ],
+      ),
     );
   }
 
@@ -173,63 +252,58 @@ class CredentialSubject {
 
   Widget displayDetail(BuildContext context, CredentialModel item) {
     final l10n = context.l10n;
-    final _issuanceDate = item.credentialPreview.issuanceDate;
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: displayName(context, item),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: displayDescription(context, item),
-        ),
-        item.credentialPreview.credentialSubject.displayDetail(context, item),
-        if (item.credentialPreview.credentialSubject is CertificateOfEmployment)
-          CredentialField(
-            title: l10n.issuanceDate,
-            value: UiDate.displayDate(l10n, _issuanceDate),
-          )
-        else
-          const SizedBox.shrink(),
-        if (item.credentialPreview.evidence.first.id != '')
+    return CredentialBackground(
+      model: item,
+      child: Column(
+        children: [
           Padding(
             padding: const EdgeInsets.all(8),
-            child: Row(
-              children: [
-                Text(
-                  '${l10n.evidenceLabel}: ',
-                  style: Theme.of(context).textTheme.credentialFieldTitle,
-                ),
-                Flexible(
-                  child: InkWell(
-                    onTap: () =>
-                        _launchURL(item.credentialPreview.evidence.first.id),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        children: [
-                          Text(
-                            item.credentialPreview.evidence.first.id,
-                            style: Theme.of(context)
-                                .textTheme
-                                .credentialFieldDescription,
-                            maxLines: 5,
-                            overflow: TextOverflow.fade,
-                            softWrap: true,
-                          ),
-                        ],
+            child: displayName(context, item),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: displayDescription(context, item),
+          ),
+          if (item.credentialPreview.evidence.first.id != '')
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  Text(
+                    '${l10n.evidenceLabel}: ',
+                    style: Theme.of(context).textTheme.credentialFieldTitle,
+                  ),
+                  Flexible(
+                    child: InkWell(
+                      onTap: () => LaunchUrl.launch(
+                        item.credentialPreview.evidence.first.id,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Row(
+                          children: [
+                            Text(
+                              item.credentialPreview.evidence.first.id,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .credentialFieldDescription,
+                              maxLines: 5,
+                              overflow: TextOverflow.fade,
+                              softWrap: true,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        else
-          const SizedBox.shrink()
-      ],
+                ],
+              ),
+            )
+          else
+            const SizedBox.shrink()
+        ],
+      ),
     );
   }
 
@@ -287,9 +361,4 @@ class CredentialSubject {
       style: Theme.of(context).textTheme.credentialDescription,
     );
   }
-
-  Future<void> _launchURL(String _url) async =>
-      await canLaunchUrl(Uri.parse(_url))
-          ? await launchUrl(Uri.parse(_url))
-          : throw Exception('Could not launch $_url');
 }

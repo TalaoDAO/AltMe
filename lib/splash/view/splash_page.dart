@@ -156,7 +156,7 @@ class _SplashViewState extends State<SplashView>
     return MultiBlocListener(
       listeners: [
         BlocListener<SplashCubit, SplashStatus>(
-          listener: (context, state) {
+          listener: (BuildContext context, SplashStatus state) {
             if (state == SplashStatus.onboarding) {
               Navigator.of(context).push<void>(OnBoardingStartPage.route());
             }
@@ -166,7 +166,7 @@ class _SplashViewState extends State<SplashView>
           },
         ),
         BlocListener<WalletCubit, WalletState>(
-          listener: (context, state) {
+          listener: (BuildContext context, WalletState state) {
             if (state.message != null) {
               AlertMessage.showStateMessage(
                 context: context,
@@ -183,7 +183,7 @@ class _SplashViewState extends State<SplashView>
           },
         ),
         BlocListener<ScanCubit, ScanState>(
-          listener: (context, state) async {
+          listener: (BuildContext context, ScanState state) async {
             if (state.message != null) {
               AlertMessage.showStateMessage(
                 context: context,
@@ -227,7 +227,7 @@ class _SplashViewState extends State<SplashView>
           },
         ),
         BlocListener<QRCodeScanCubit, QRCodeScanState>(
-          listener: (context, state) async {
+          listener: (BuildContext context, QRCodeScanState state) async {
             final l10n = context.l10n;
             if (state.status == QrScanStatus.acceptHost) {
               if (state.uri != null) {
