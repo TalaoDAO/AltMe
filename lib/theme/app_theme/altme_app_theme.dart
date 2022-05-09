@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// TODO(all): upgrade app theme to this theme
+
 abstract class AltmeAppTheme {
   static const Color darkPrimary = Color(0xff6600FF);
   static const Color darkPrimaryContainer = Color(0xff5805D3);
@@ -16,42 +18,6 @@ abstract class AltmeAppTheme {
   static const Color darkOnError = Colors.black;
   static Color darkShadow = const Color(0xFF1D1D1D).withOpacity(0.1);
   static Color cardColor = Colors.white.withOpacity(0.15);
-
-  static LinearGradient get darkGradient => const LinearGradient(
-        colors: [Color(0xff0A0421), Color(0xff25095B)],
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-      );
-
-  static LinearGradient get darkGradientReversed => const LinearGradient(
-        colors: [Color(0xff0A0421), Color(0xff25095B)],
-        end: Alignment.bottomCenter,
-        begin: Alignment.topCenter,
-      );
-
-  static LinearGradient get primaryButtonGradient => const LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          Color(0xFF6600FF),
-          Color(0xFF330080),
-        ],
-      );
-
-  static TextStyle get starterTitleStyle => GoogleFonts.nunito(
-        color: Colors.white,
-        fontSize: 38,
-        fontWeight: FontWeight.bold,
-      );
-
-  static SnackBarThemeData get snackBarThemeData => SnackBarThemeData(
-        backgroundColor: Colors.green,
-        contentTextStyle: GoogleFonts.nunito(
-          color: const Color(0xffF1EFF8),
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-        ),
-      );
 
   static ThemeData get darkThemeData => ThemeData(
         brightness: Brightness.dark,
@@ -111,6 +77,15 @@ abstract class AltmeAppTheme {
         ),
         iconTheme: const IconThemeData(color: Color(0xffF1EFF8)),
         snackBarTheme: snackBarThemeData,
+      );
+
+  static SnackBarThemeData get snackBarThemeData => SnackBarThemeData(
+        backgroundColor: Colors.green,
+        contentTextStyle: GoogleFonts.nunito(
+          color: const Color(0xffF1EFF8),
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+        ),
       );
 }
 
@@ -190,7 +165,7 @@ extension CustomColorScheme on ColorScheme {
       : const Color(0xFF424242);
 }
 
-//TODO update this extension styles
+// TODO(all): update this extension styles
 extension CustomTextTheme on TextTheme {
   Color get star => const Color(0xFFFFB83D);
 
@@ -206,73 +181,73 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get brand => GoogleFonts.montserrat(
         color: const Color(0xFFFFFFFF),
-        fontSize: 28.0,
+        fontSize: 28,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get credentialTitle => GoogleFonts.montserrat(
         color: const Color(0xFF424242),
-        fontSize: 14.0,
+        fontSize: 14,
         fontWeight: FontWeight.bold,
       );
 
   TextStyle get credentialTitleCard => GoogleFonts.roboto(
         color: const Color(0xFFFFFFFF),
-        fontSize: 20.0,
+        fontSize: 20,
         fontWeight: FontWeight.bold,
       );
 
   TextStyle get credentialDescription => GoogleFonts.montserrat(
         color: const Color(0xFF757575),
-        fontSize: 13.0,
+        fontSize: 13,
         fontWeight: FontWeight.normal,
       );
 
   TextStyle get credentialTextCard => GoogleFonts.roboto(
         color: const Color(0xff212121),
-        fontSize: 14.0,
+        fontSize: 14,
         fontWeight: FontWeight.normal,
       );
 
   TextStyle get credentialFieldTitle => GoogleFonts.montserrat(
         color: const Color(0xff212121),
-        fontSize: 12.0,
+        fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get credentialFieldDescription => GoogleFonts.montserrat(
         color: const Color(0xff212121),
-        fontSize: 13.0,
+        fontSize: 13,
         fontWeight: FontWeight.w600,
       );
 
   TextStyle get learningAchievementTitle => GoogleFonts.montserrat(
         color: const Color(0xff212121),
-        fontSize: 12.0,
+        fontSize: 12,
         fontWeight: FontWeight.w600,
       );
 
   TextStyle get learningAchievementDescription => GoogleFonts.montserrat(
         color: const Color(0xff212121),
-        fontSize: 12.0,
+        fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get credentialIssuer => GoogleFonts.montserrat(
         color: const Color(0xff212121),
-        fontSize: 13.0,
+        fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
   TextStyle get imageCard => GoogleFonts.montserrat(
         color: const Color(0xff212121),
-        fontSize: 12.0,
+        fontSize: 12,
         fontWeight: FontWeight.w500,
       );
 
   TextStyle get loyaltyCard => GoogleFonts.montserrat(
         color: const Color(0xffffffff),
-        fontSize: 13.0,
+        fontSize: 13,
         fontWeight: FontWeight.w600,
       );
 
@@ -285,26 +260,55 @@ extension CustomTextTheme on TextTheme {
   TextStyle get professionalExperienceAssessmentRating =>
       GoogleFonts.montserrat(
         color: const Color(0xff212121),
-        fontSize: 13.0,
+        fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
   TextStyle get voucherOverlay => GoogleFonts.montserrat(
         color: const Color(0xffFFFFFF),
-        fontSize: 13.0,
+        fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
   TextStyle get ecole42LearningAchievementStudentIdentity =>
       GoogleFonts.montserrat(
         color: const Color(0xff212121),
-        fontSize: 6.0,
+        fontSize: 6,
         fontWeight: FontWeight.w700,
       );
 
   TextStyle get ecole42LearningAchievementLevel => GoogleFonts.montserrat(
         color: const Color(0xff212121),
-        fontSize: 5.0,
+        fontSize: 5,
         fontWeight: FontWeight.w700,
+      );
+}
+
+extension ThemDataExtension on ThemeData {
+  LinearGradient get darkGradient => const LinearGradient(
+        colors: [Color(0xff0A0421), Color(0xff25095B)],
+        begin: Alignment.bottomCenter,
+        end: Alignment.topCenter,
+      );
+
+  LinearGradient get darkGradientReversed => const LinearGradient(
+        colors: [Color(0xff0A0421), Color(0xff25095B)],
+        end: Alignment.bottomCenter,
+        begin: Alignment.topCenter,
+      );
+
+  LinearGradient get primaryButtonGradient => const LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Color(0xFF6600FF),
+          Color(0xFF330080),
+        ],
+      );
+
+  TextStyle get starterTitleStyle => GoogleFonts.nunito(
+        color: Colors.white,
+        fontSize: 38,
+        fontWeight: FontWeight.bold,
       );
 }

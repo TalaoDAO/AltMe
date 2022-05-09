@@ -158,169 +158,169 @@ abstract class AppTheme {
         snackBarTheme: snackBarThemeData,
       );
 }
-
-extension CustomColorScheme on ColorScheme {
-  Color get transparent => Colors.transparent;
-
-  Color get appBar => brightness == Brightness.light
-      ? const Color(0xFFFFFFFF)
-      : const Color(0xFF1D1D1D);
-
-  Color get backButton => brightness == Brightness.light
-      ? const Color(0xFF1D1D1D)
-      : const Color(0xFFADACAC);
-
-  Color get selectedBottomBar => brightness == Brightness.light
-      ? AppTheme.lightOnSurface
-      : AppTheme.darkOnSurface;
-
-  Color get borderColor => brightness == Brightness.light
-      ? const Color(0xFFEEEAEA)
-      : const Color(0xFF3B3A3A);
-
-  Color get markDownH1 => brightness == Brightness.light
-      ? AppTheme.lightOnSurface
-      : const Color(0xFFDBD8D8);
-
-  Color get markDownH2 => brightness == Brightness.light
-      ? AppTheme.lightOnSurface
-      : const Color(0xFFDBD8D8);
-
-  Color get markDownP => brightness == Brightness.light
-      ? AppTheme.lightOnSurface
-      : const Color(0xFFADACAC);
-
-  Color get markDownA => brightness == Brightness.light
-      ? const Color(0xff3700b3)
-      : const Color(0xff517bff);
-
-  Color get subtitle1 => brightness == Brightness.light
-      ? const Color(0xff212121)
-      : const Color(0xFFFFFFFF);
-
-  Color get subtitle2 => brightness == Brightness.light
-      ? const Color(0xff212121)
-      : const Color(0xFF8B8C92);
-
-  Color get button => brightness == Brightness.light
-      ? const Color(0xff212121)
-      : const Color(0xFFEEEAEA);
-
-  Color get profileDummy => brightness == Brightness.light
-      ? const Color(0xFFE0E0E0)
-      : const Color(0xFF212121);
-
-  Color get documentShadow => brightness == Brightness.light
-      ? const Color(0xFF757575)
-      : const Color(0xFF424242);
-
-  Color get documentShape => AppTheme.lightPrimaryContainer.withOpacity(0.5);
-
-  Color get star => const Color(0xFFFFB83D);
-
-  Color get genderIcon => const Color(0xFF212121);
-
-  Color get activeCredential => Colors.green;
-
-  Color get expiredCredential => Colors.orange;
-
-  Color get revokedCredential => Colors.red;
-
-  Color get buttonDisabled => brightness == Brightness.light
-      ? const Color(0xFFADACAC)
-      : const Color(0xFF424242);
-
-  Color get alertErrorMessage => Colors.red;
-
-  Color get alertWarningMessage => Colors.yellow;
-
-  Color get alertInfoMessage => Colors.cyan;
-
-  Color get alertSuccessMessage => Colors.green;
-}
-
-extension CustomTextTheme on TextTheme {
-  TextStyle get brand => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
-        fontSize: 28,
-        fontWeight: FontWeight.w400,
-      );
-
-  TextStyle get credentialTitle => GoogleFonts.nunito(
-        color: const Color(0xFF424242),
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-      );
-
-  TextStyle get credentialDescription => GoogleFonts.nunito(
-        color: const Color(0xFF757575),
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-      );
-
-  TextStyle get credentialFieldTitle => GoogleFonts.nunito(
-        color: const Color(0xff212121),
-        fontSize: 12,
-        fontWeight: FontWeight.w400,
-      );
-
-  TextStyle get credentialFieldDescription => GoogleFonts.nunito(
-        color: const Color(0xff212121),
-        fontSize: 13,
-        fontWeight: FontWeight.w600,
-      );
-
-  TextStyle get learningAchievementTitle => GoogleFonts.nunito(
-        color: const Color(0xff212121),
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-      );
-
-  TextStyle get learningAchievementDescription => GoogleFonts.nunito(
-        color: const Color(0xff212121),
-        fontSize: 12,
-        fontWeight: FontWeight.w400,
-      );
-
-  TextStyle get credentialIssuer => GoogleFonts.nunito(
-        color: const Color(0xff212121),
-        fontSize: 13,
-        fontWeight: FontWeight.w500,
-      );
-
-  TextStyle get imageCard => GoogleFonts.nunito(
-        color: const Color(0xff212121),
-        fontSize: 12,
-        fontWeight: FontWeight.w500,
-      );
-
-  TextStyle get loyaltyCard => GoogleFonts.nunito(
-        color: const Color(0xffffffff),
-        fontSize: 13,
-        fontWeight: FontWeight.w600,
-      );
-
-  TextStyle get professionalExperienceAssessmentRating => GoogleFonts.nunito(
-        color: const Color(0xff212121),
-        fontSize: 13,
-        fontWeight: FontWeight.w500,
-      );
-
-  TextStyle get voucherOverlay => GoogleFonts.nunito(
-        color: const Color(0xffFFFFFF),
-        fontSize: 13,
-        fontWeight: FontWeight.w500,
-      );
-
-  TextStyle get ecole42LearningAchievementStudentIdentity => GoogleFonts.nunito(
-        color: const Color(0xff212121),
-        fontSize: 6,
-        fontWeight: FontWeight.w700,
-      );
-
-  TextStyle get ecole42LearningAchievementLevel => GoogleFonts.nunito(
-        color: const Color(0xff212121),
-        fontSize: 5,
-        fontWeight: FontWeight.w700,
-      );
-}
+//
+// extension CustomColorScheme on ColorScheme {
+//   Color get transparent => Colors.transparent;
+//
+//   Color get appBar => brightness == Brightness.light
+//       ? const Color(0xFFFFFFFF)
+//       : const Color(0xFF1D1D1D);
+//
+//   Color get backButton => brightness == Brightness.light
+//       ? const Color(0xFF1D1D1D)
+//       : const Color(0xFFADACAC);
+//
+//   Color get selectedBottomBar => brightness == Brightness.light
+//       ? AppTheme.lightOnSurface
+//       : AppTheme.darkOnSurface;
+//
+//   Color get borderColor => brightness == Brightness.light
+//       ? const Color(0xFFEEEAEA)
+//       : const Color(0xFF3B3A3A);
+//
+//   Color get markDownH1 => brightness == Brightness.light
+//       ? AppTheme.lightOnSurface
+//       : const Color(0xFFDBD8D8);
+//
+//   Color get markDownH2 => brightness == Brightness.light
+//       ? AppTheme.lightOnSurface
+//       : const Color(0xFFDBD8D8);
+//
+//   Color get markDownP => brightness == Brightness.light
+//       ? AppTheme.lightOnSurface
+//       : const Color(0xFFADACAC);
+//
+//   Color get markDownA => brightness == Brightness.light
+//       ? const Color(0xff3700b3)
+//       : const Color(0xff517bff);
+//
+//   Color get subtitle1 => brightness == Brightness.light
+//       ? const Color(0xff212121)
+//       : const Color(0xFFFFFFFF);
+//
+//   Color get subtitle2 => brightness == Brightness.light
+//       ? const Color(0xff212121)
+//       : const Color(0xFF8B8C92);
+//
+//   Color get button => brightness == Brightness.light
+//       ? const Color(0xff212121)
+//       : const Color(0xFFEEEAEA);
+//
+//   Color get profileDummy => brightness == Brightness.light
+//       ? const Color(0xFFE0E0E0)
+//       : const Color(0xFF212121);
+//
+//   Color get documentShadow => brightness == Brightness.light
+//       ? const Color(0xFF757575)
+//       : const Color(0xFF424242);
+//
+//   Color get documentShape => AppTheme.lightPrimaryContainer.withOpacity(0.5);
+//
+//   Color get star => const Color(0xFFFFB83D);
+//
+//   Color get genderIcon => const Color(0xFF212121);
+//
+//   Color get activeCredential => Colors.green;
+//
+//   Color get expiredCredential => Colors.orange;
+//
+//   Color get revokedCredential => Colors.red;
+//
+//   Color get buttonDisabled => brightness == Brightness.light
+//       ? const Color(0xFFADACAC)
+//       : const Color(0xFF424242);
+//
+//   Color get alertErrorMessage => Colors.red;
+//
+//   Color get alertWarningMessage => Colors.yellow;
+//
+//   Color get alertInfoMessage => Colors.cyan;
+//
+//   Color get alertSuccessMessage => Colors.green;
+// }
+//
+// extension CustomTextTheme on TextTheme {
+//   TextStyle get brand => GoogleFonts.nunito(
+//         color: const Color(0xFFFFFFFF),
+//         fontSize: 28,
+//         fontWeight: FontWeight.w400,
+//       );
+//
+//   TextStyle get credentialTitle => GoogleFonts.nunito(
+//         color: const Color(0xFF424242),
+//         fontSize: 14,
+//         fontWeight: FontWeight.bold,
+//       );
+//
+//   TextStyle get credentialDescription => GoogleFonts.nunito(
+//         color: const Color(0xFF757575),
+//         fontSize: 14,
+//         fontWeight: FontWeight.bold,
+//       );
+//
+//   TextStyle get credentialFieldTitle => GoogleFonts.nunito(
+//         color: const Color(0xff212121),
+//         fontSize: 12,
+//         fontWeight: FontWeight.w400,
+//       );
+//
+//   TextStyle get credentialFieldDescription => GoogleFonts.nunito(
+//         color: const Color(0xff212121),
+//         fontSize: 13,
+//         fontWeight: FontWeight.w600,
+//       );
+//
+//   TextStyle get learningAchievementTitle => GoogleFonts.nunito(
+//         color: const Color(0xff212121),
+//         fontSize: 12,
+//         fontWeight: FontWeight.w600,
+//       );
+//
+//   TextStyle get learningAchievementDescription => GoogleFonts.nunito(
+//         color: const Color(0xff212121),
+//         fontSize: 12,
+//         fontWeight: FontWeight.w400,
+//       );
+//
+//   TextStyle get credentialIssuer => GoogleFonts.nunito(
+//         color: const Color(0xff212121),
+//         fontSize: 13,
+//         fontWeight: FontWeight.w500,
+//       );
+//
+//   TextStyle get imageCard => GoogleFonts.nunito(
+//         color: const Color(0xff212121),
+//         fontSize: 12,
+//         fontWeight: FontWeight.w500,
+//       );
+//
+//   TextStyle get loyaltyCard => GoogleFonts.nunito(
+//         color: const Color(0xffffffff),
+//         fontSize: 13,
+//         fontWeight: FontWeight.w600,
+//       );
+//
+//   TextStyle get professionalExperienceAssessmentRating => GoogleFonts.nunito(
+//         color: const Color(0xff212121),
+//         fontSize: 13,
+//         fontWeight: FontWeight.w500,
+//       );
+//
+//   TextStyle get voucherOverlay => GoogleFonts.nunito(
+//         color: const Color(0xffFFFFFF),
+//         fontSize: 13,
+//         fontWeight: FontWeight.w500,
+//       );
+//
+//   TextStyle get ecole42LearningAchievementStudentIdentity => GoogleFonts.nunito(
+//         color: const Color(0xff212121),
+//         fontSize: 6,
+//         fontWeight: FontWeight.w700,
+//       );
+//
+//   TextStyle get ecole42LearningAchievementLevel => GoogleFonts.nunito(
+//         color: const Color(0xff212121),
+//         fontSize: 5,
+//         fontWeight: FontWeight.w700,
+//       );
+// }
