@@ -11,7 +11,6 @@ import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'onboarding_gen_phrase_cubit.g.dart';
-
 part 'onboarding_gen_phrase_state.dart';
 
 class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
@@ -33,7 +32,10 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     try {
       emit(state.loading());
       final mnemonicFormatted = mnemonic.join(' ');
-      await secureStorageProvider.set('mnemonic', mnemonicFormatted);
+      await secureStorageProvider.set(
+        SecureStorageKeys.mnemonic,
+        mnemonicFormatted,
+      );
       final key = await keyGenerator.privateKey(mnemonicFormatted);
       await secureStorageProvider.set(SecureStorageKeys.key, key);
 

@@ -52,8 +52,8 @@ class SelfIssuedCredentialButton extends StatelessWidget {
             child: Builder(
               builder: (_) {
                 return state.status == AppStatus.loading
-                    ? const Icon(Icons.fact_check_outlined)
-                    : const Center(child: CircularProgressIndicator.adaptive());
+                    ? const Center(child: CircularProgressIndicator.adaptive())
+                    : const Icon(Icons.fact_check_outlined);
               },
             ),
           );
