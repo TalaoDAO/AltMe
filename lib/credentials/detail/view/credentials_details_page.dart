@@ -141,9 +141,7 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              DocumentWidget(
-                model: widget.item,
-              ),
+              DocumentWidget(model: widget.item),
               const SizedBox(height: 64),
               ...<Widget>[
                 Center(

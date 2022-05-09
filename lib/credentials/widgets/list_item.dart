@@ -72,9 +72,8 @@ class CredentialsListPageItem extends StatelessWidget {
       isCustom: true,
       onTap: onTap ??
           () {
-            // Navigator.of(context).push(
-            //   CredentialsDetailsPage.route(item),
-            // )
+            Navigator.of(context)
+                .push<void>(CredentialsDetailsPage.route(item));
           },
       color: item.backgroundColor,
       child: selected == null
@@ -93,10 +92,6 @@ class CredentialsListPageItem extends StatelessWidget {
     return CredentialSelectionPadding(
       child: Column(
         children: <Widget>[
-          CredentialContainer(
-            child: item.credentialPreview.credentialSubject
-                .displayInSelectionList(context, item),
-          ),
           Padding(
             padding: const EdgeInsets.all(8),
             child: Row(

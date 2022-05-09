@@ -22,6 +22,10 @@ class QRCodeScanState extends Equatable {
 
   Map<String, dynamic> toJson() => _$QRCodeScanStateToJson(this);
 
+  QRCodeScanState init() {
+    return const QRCodeScanState(status: QrScanStatus.init);
+  }
+
   QRCodeScanState loading({bool? isDeepLink}) {
     return QRCodeScanState(
       status: QrScanStatus.loading,

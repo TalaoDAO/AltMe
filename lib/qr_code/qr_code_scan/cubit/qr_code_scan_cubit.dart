@@ -18,7 +18,6 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:logging/logging.dart';
 
 part 'qr_code_scan_cubit.g.dart';
-
 part 'qr_code_scan_state.dart';
 
 class QRCodeScanCubit extends Cubit<QRCodeScanState> {
@@ -49,7 +48,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> host({required String? url}) async {
-    state.loading(isDeepLink: false);
+    emit(state.loading(isDeepLink: false));
     try {
       if (url == null || url.isEmpty) {
         throw ResponseMessage(
@@ -203,13 +202,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           ),
         );
       } else {
-        state.acceptHost(uri: uri!);
+        emit(state.acceptHost(uri: uri!));
       }
     } catch (e) {
       if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
+        emit(state.error(messageHandler: e));
       } else {
         emit(
           state.error(
@@ -236,17 +233,18 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       scanCubit.emitScanStatePreview(preview: data as Map<String, dynamic>);
       switch (data['type']) {
         case 'CredentialOffer':
-          emit(
-            state.success(route: CredentialsReceivePage.route(uri)),
-          );
+          log.info('Credential Offer');
+          emit(state.success(route: CredentialsReceivePage.route(uri)));
           break;
 
         case 'VerifiablePresentationRequest':
           if (data['query'] != null) {
+            log.info('QueryByExample');
             queryByExampleCubit.setQueryByExampleCubit(
               (data['query']).first as Map<String, dynamic>,
             );
             if (data['query'].first['type'] == 'DIDAuth') {
+              log.info('DIDAuth');
               await scanCubit.askPermissionDIDAuthCHAPI(
                 keyId: 'key',
                 done: (done) {
@@ -266,9 +264,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               );
             }
           } else {
-            emit(
-              state.success(route: CredentialsPresentPage.route(uri: uri)),
-            );
+            emit(state.success(route: CredentialsPresentPage.route(uri: uri)));
           }
           break;
 
