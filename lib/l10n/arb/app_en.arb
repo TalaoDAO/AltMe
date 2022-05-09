@@ -39,5 +39,11 @@
   "onBoardingGenTitle": "Private Key Generation",
   "onBoardingGenButton": "Generate",
   "onBoardingSuccessTitle": "Identifier Created",
-  "onBoardingSuccessButton": "Continue"
+  "onBoardingSuccessButton": "Continue",
+  "starterTitle" : "Your universal wallet for web3 applications",
+  "createWallet" : "CREATE WALLET",
+  "importWallet" : "IMPORT WALLET",
+  "credentials" : "Credentials",
+  "nftS" : "NFTs",
+  "tokens" : "Tokens"
 }

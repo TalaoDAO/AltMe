@@ -39,7 +39,13 @@
     "onBoardingGenTitle",
     "onBoardingGenButton",
     "onBoardingSuccessTitle",
-    "onBoardingSuccessButton"
+    "onBoardingSuccessButton",
+    "starterTitle",
+    "createWallet",
+    "importWallet",
+    "credentials",
+    "nftS",
+    "tokens"
   ],
 
   "es": [
@@ -82,7 +88,13 @@
     "onBoardingGenTitle",
     "onBoardingGenButton",
     "onBoardingSuccessTitle",
-    "onBoardingSuccessButton"
+    "onBoardingSuccessButton",
+    "starterTitle",
+    "createWallet",
+    "importWallet",
+    "credentials",
+    "nftS",
+    "tokens"
   ],
 
   "fr": [
@@ -125,7 +137,13 @@
     "onBoardingGenTitle",
     "onBoardingGenButton",
     "onBoardingSuccessTitle",
-    "onBoardingSuccessButton"
+    "onBoardingSuccessButton",
+    "starterTitle",
+    "createWallet",
+    "importWallet",
+    "credentials",
+    "nftS",
+    "tokens"
   ],
 
   "it": [
@@ -168,6 +186,12 @@
     "onBoardingGenTitle",
     "onBoardingGenButton",
     "onBoardingSuccessTitle",
-    "onBoardingSuccessButton"
+    "onBoardingSuccessButton",
+    "starterTitle",
+    "createWallet",
+    "importWallet",
+    "credentials",
+    "nftS",
+    "tokens"
   ]
 }
