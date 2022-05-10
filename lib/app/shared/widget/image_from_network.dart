@@ -16,7 +16,11 @@ class ImageFromNetwork extends StatelessWidget {
       url,
       fit: fit,
       loadingBuilder: (context, child, loadingProgress) =>
-          (loadingProgress == null) ? child : const CircularProgressIndicator(),
+          (loadingProgress == null)
+              ? child
+              : const Center(
+                  child: CircularProgressIndicator(),
+                ),
       errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
     );
   }
