@@ -163,10 +163,13 @@ class CredentialModel extends Equatable {
     final String optStr = jsonEncode({
       'checks': ['credentialStatus']
     });
-    final String result = await Future.any([
-      DIDKitProvider().verifyCredential(vcStr, optStr),
-      Future.delayed(const Duration(seconds: 4))
-    ]);
+    // TODO(all): add limitation on returning status
+    // final String result = await Future.any([
+    //   DIDKitProvider().verifyCredential(vcStr, optStr),
+    //   Future.delayed(const Duration(seconds: 4))
+    // ]);
+    final String result =
+        await DIDKitProvider().verifyCredential(vcStr, optStr);
     final jsonResult = jsonDecode(result) as Map<String, dynamic>;
     if (jsonResult['errors']?[0] == 'Credential is revoked.') {
       revocationStatus = RevocationStatus.revoked;
