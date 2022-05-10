@@ -1,0 +1,41 @@
+<svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1 16V17.875H2.875" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M1 1H8.5V8.5H1V1Z" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M21.625 1H29.125V8.5H21.625V1Z" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M1 21.625H8.5V29.125H1V21.625Z" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M15.0625 1H17.875" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M12.25 1V4.75H15.0625" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M17.875 4.75V8.5H12.25" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M1 12.25H8.5V14.125" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M6.625 17.875H8.5" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M29.125 29.125H25.375V25.375H29.125V21.625H25.375" stroke="black" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M17.875 29.125H12.25V21.625" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M21.625 21.625V29.125" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M16 21.625H17.875V25.375H16" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M12.25 16V17.875H14.125" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M20.75 14.125C20.75 13.5727 20.3023 13.125 19.75 13.125C19.1977 13.125 18.75 13.5727 18.75 14.125V16.875H17.875C17.3227 16.875 16.875 17.3227 16.875 17.875C16.875 18.4273 17.3227 18.875 17.875 18.875H19.75H21.625C22.1773 18.875 22.625 18.4273 22.625 17.875C22.625 17.3227 22.1773 16.875 21.625 16.875H20.75V14.125Z"
+        fill="black" />
+    <path d="M12.25 12.25H16V14.125" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M29.125 12.25V14.125" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M29.125 16.9375V17.875" stroke="black" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    <path d="M23.5 12.25V14.125H25.375V16.9375" stroke="black" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" />
+</svg>
