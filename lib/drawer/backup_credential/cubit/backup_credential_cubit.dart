@@ -14,7 +14,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'backup_credential_cubit.g.dart';
-
 part 'backup_credential_state.dart';
 
 class BackupCredentialCubit extends Cubit<BackupCredentialState> {
@@ -47,7 +46,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
     final isPermissionStatusGranted = await _getStoragePermission();
 
     try {
-      if (isPermissionStatusGranted) {
+      if (!isPermissionStatusGranted) {
         throw ResponseMessage(
           ResponseString
               .RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE,
@@ -76,11 +75,13 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       );
     } catch (e) {
       if (e is MessageHandler) {
-        state.error(messageHandler: e);
+        emit(state.error(messageHandler: e));
       } else {
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR,
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR,
+            ),
           ),
         );
       }
