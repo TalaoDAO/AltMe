@@ -52,7 +52,8 @@ class _RecoveryCredentialPageState extends State<RecoveryCredentialPage> {
       titleLeading: const BackLeadingButton(),
       body: BlocConsumer<RecoveryCredentialCubit, RecoveryCredentialState>(
         listener: (context, state) {
-          if (state.status == AppStatus.success) {
+          if (state.status == AppStatus.success &&
+              state.recoveredCredentialLength != null) {
             final credentialLength = state.recoveredCredentialLength;
             AlertMessage.showStringMessage(
               context: context,
