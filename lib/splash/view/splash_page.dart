@@ -7,6 +7,7 @@ import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/drawer/drawer.dart';
 import 'package:altme/flavor/flavor.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/key/onboarding_key.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/qr_code/qr_code.dart';
 import 'package:altme/scan/scan.dart';
@@ -178,7 +179,7 @@ class _SplashViewState extends State<SplashView>
             }
             if (state.status == WalletStatus.reset) {
               Navigator.of(context)
-                  .pushReplacement<void, void>(ChooseWalletTypePage.route());
+                  .pushReplacement<void, void>(OnBoardingKeyPage.route());
             }
           },
         ),

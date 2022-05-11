@@ -1,7 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/widget/back_leading_button.dart';
-import 'package:altme/app/shared/widget/base/page.dart';
-import 'package:altme/app/shared/widget/spinner.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

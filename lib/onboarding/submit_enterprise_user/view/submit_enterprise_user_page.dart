@@ -3,10 +3,10 @@ import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/drawer/profile/cubit/profile_cubit.dart';
 import 'package:altme/drawer/profile/models/profile.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/key/onboarding_key.dart';
 import 'package:altme/onboarding/submit_enterprise_user/cubit/submit_enterprise_user_cubit.dart';
 import 'package:altme/onboarding/submit_enterprise_user/view/widgets/pick_file_button.dart';
 import 'package:altme/onboarding/submit_enterprise_user/view/widgets/picked_file.dart';
-import 'package:altme/onboarding/wallet_type/choose_wallet_type.dart';
 import 'package:altme/personal/view/personal_page.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:file_picker/file_picker.dart';
@@ -70,7 +70,7 @@ class _SubmitEnterpriseUserPageState extends State<SubmitEnterpriseUserPage> {
           titleLeading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context)
-                .pushReplacement<void, void>(ChooseWalletTypePage.route()),
+                .pushReplacement<void, void>(OnBoardingKeyPage.route()),
           ),
           body: Column(
             mainAxisSize: MainAxisSize.min,
