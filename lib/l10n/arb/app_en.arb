@@ -297,5 +297,6 @@
   "verifiedWithWarning": "Verified (with warnings)",
   "failedVerification": "Failed verification",
   "unableToProcessTheData": "Unable to process the data",
-  "unimplementedQueryType": "Unimplemented Query Type"
+  "unimplementedQueryType": "Unimplemented Query Type",
+  "onSubmittedPassBasePopUp": "You will receive an email"
 }

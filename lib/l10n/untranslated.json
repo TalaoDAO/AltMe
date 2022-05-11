@@ -126,7 +126,8 @@
     "verifiedWithWarning",
     "failedVerification",
     "unableToProcessTheData",
-    "unimplementedQueryType"
+    "unimplementedQueryType",
+    "onSubmittedPassBasePopUp"
   ],
 
   "es": [
@@ -255,7 +256,8 @@
     "verifiedWithWarning",
     "failedVerification",
     "unableToProcessTheData",
-    "unimplementedQueryType"
+    "unimplementedQueryType",
+    "onSubmittedPassBasePopUp"
   ],
 
   "fr": [
@@ -268,7 +270,8 @@
     "verifiedWithWarning",
     "failedVerification",
     "unableToProcessTheData",
-    "unimplementedQueryType"
+    "unimplementedQueryType",
+    "onSubmittedPassBasePopUp"
   ],
 
   "it": [
@@ -399,6 +402,7 @@
     "verifiedWithWarning",
     "failedVerification",
     "unableToProcessTheData",
-    "unimplementedQueryType"
+    "unimplementedQueryType",
+    "onSubmittedPassBasePopUp"
   ]
 }
