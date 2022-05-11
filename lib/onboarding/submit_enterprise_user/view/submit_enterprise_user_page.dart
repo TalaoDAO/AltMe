@@ -111,20 +111,17 @@ class _SubmitEnterpriseUserPageState extends State<SubmitEnterpriseUserPage> {
                 ),
             ],
           ),
-          navigation: SizedBox(
-            height: 40,
-            child: BaseButton.primary(
-              context: context,
-              margin: const EdgeInsets.all(15),
-              onPressed: state.status == AppStatus.loading
-                  ? null
-                  : () {
-                      context
-                          .read<SubmitEnterpriseUserCubit>()
-                          .verify(_didController.text);
-                    },
-              child: Text(localization.confirm),
-            ),
+          navigation: BaseButton.primary(
+            context: context,
+            margin: const EdgeInsets.all(15),
+            onPressed: state.status == AppStatus.loading
+                ? null
+                : () {
+                    context
+                        .read<SubmitEnterpriseUserCubit>()
+                        .verify(_didController.text);
+                  },
+            child: Text(localization.confirm),
           ),
         );
       },
