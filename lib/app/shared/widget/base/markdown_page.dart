@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/widget/back_leading_button.dart';
 import 'package:altme/app/shared/widget/base/page.dart';
 import 'package:altme/app/shared/widget/spinner.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:logging/logging.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class MarkdownPage extends StatelessWidget {
   MarkdownPage({Key? key, required this.title, required this.file})
@@ -60,11 +60,6 @@ class MarkdownPage extends StatelessWidget {
 
   Future<void> _onTapLink(String? href) async {
     if (href == null) return;
-
-    if (await canLaunchUrl(Uri.parse(href))) {
-      await launchUrl(Uri.parse(href));
-    } else {
-      _log.severe('cannot launch url: $href');
-    }
+    await LaunchUrl.launch(href);
   }
 }

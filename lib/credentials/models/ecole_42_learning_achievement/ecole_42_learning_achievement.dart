@@ -7,7 +7,6 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 part 'ecole_42_learning_achievement.g.dart';
 
@@ -147,8 +146,11 @@ class Ecole42LearningAchievement extends CredentialSubject {
                 const SizedBox(width: 5),
                 Flexible(
                   child: InkWell(
-                    onTap: () =>
-                        _launchURL(item.credentialPreview.evidence.first.id),
+                    onTap: () async {
+                      await LaunchUrl.launch(
+                        item.credentialPreview.evidence.first.id,
+                      );
+                    },
                     child: Text(
                       evidenceText,
                       style: Theme.of(context).textTheme.bodyText2!.copyWith(
@@ -167,11 +169,6 @@ class Ecole42LearningAchievement extends CredentialSubject {
       ],
     );
   }
-
-  Future<void> _launchURL(String _url) async =>
-      await canLaunchUrl(Uri.parse(_url))
-          ? await launchUrl(Uri.parse(_url))
-          : throw Exception('Could not launch $_url');
 
   static Signature _signatureLinesFromJson(dynamic json) {
     if (json == null || json == '') {
