@@ -5,4 +5,3 @@ export 'start/onboarding_start.dart';
 export 'submit_enterprise_user/submit_enterprise_user.dart';
 export 'third/onboarding_third.dart';
 export 'tos/onboarding_terms.dart';
-export 'wallet_type/choose_wallet_type.dart';

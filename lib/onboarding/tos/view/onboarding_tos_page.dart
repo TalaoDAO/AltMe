@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/onboarding.dart';
+import 'package:altme/onboarding/key/onboarding_key.dart';
 import 'package:flutter/material.dart';
 
 class OnBoardingTosPage extends StatelessWidget {
@@ -53,7 +53,7 @@ class OnBoardingTosPage extends StatelessWidget {
                     context: context,
                     onPressed: () {
                       Navigator.of(context).pushReplacement<void, void>(
-                        ChooseWalletTypePage.route(),
+                        OnBoardingKeyPage.route(),
                       );
                     },
                     child: Text(l10n.onBoardingTosButton),

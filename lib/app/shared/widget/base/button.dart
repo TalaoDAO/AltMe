@@ -124,8 +124,10 @@ class BaseButton extends StatelessWidget {
                 alignment: Alignment.center,
                 padding: buttonPadding,
                 child: DefaultTextStyle(
-                  style:
-                      Theme.of(context).textTheme.button!.apply(color: textColor),
+                  style: Theme.of(context)
+                      .textTheme
+                      .button!
+                      .apply(color: textColor),
                   child: child,
                 ),
               ),
