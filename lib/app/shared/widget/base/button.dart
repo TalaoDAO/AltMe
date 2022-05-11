@@ -99,35 +99,40 @@ class BaseButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final textColor = this.textColor ?? Theme.of(context).colorScheme.button;
 
-    return Container(
-      margin: margin,
-      decoration: BoxDecoration(
-        gradient: gradient,
-        borderRadius: buttonRadius,
-        border: borderColor != null
-            ? Border.all(
-                width: 2,
-                color: borderColor!,
-              )
-            : null,
-      ),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: buttonRadius,
-        child: InkWell(
-          onTap: onPressed,
-          borderRadius: buttonRadius,
-          child: Container(
-            alignment: Alignment.center,
-            padding: buttonPadding,
-            child: DefaultTextStyle(
-              style:
-                  Theme.of(context).textTheme.button!.apply(color: textColor),
-              child: child,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          margin: margin,
+          decoration: BoxDecoration(
+            gradient: gradient,
+            borderRadius: buttonRadius,
+            border: borderColor != null
+                ? Border.all(
+                    width: 2,
+                    color: borderColor!,
+                  )
+                : null,
+          ),
+          child: Material(
+            color: Colors.transparent,
+            borderRadius: buttonRadius,
+            child: InkWell(
+              onTap: onPressed,
+              borderRadius: buttonRadius,
+              child: Container(
+                alignment: Alignment.center,
+                padding: buttonPadding,
+                child: DefaultTextStyle(
+                  style:
+                      Theme.of(context).textTheme.button!.apply(color: textColor),
+                  child: child,
+                ),
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

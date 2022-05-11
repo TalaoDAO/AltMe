@@ -18,6 +18,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:logging/logging.dart';
 
 part 'qr_code_scan_cubit.g.dart';
+
 part 'qr_code_scan_state.dart';
 
 class QRCodeScanCubit extends Cubit<QRCodeScanState> {

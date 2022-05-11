@@ -36,7 +36,22 @@ class KYCButton extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   onSubmitted: (identityAccessKey) {
-                    // do stuff in case of success
+                    showDialog<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(l10n.onSubmittedPassBasePopUp),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text(l10n.ok),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                   onError: (errorCode) {
                     // do stuff in case of cancel

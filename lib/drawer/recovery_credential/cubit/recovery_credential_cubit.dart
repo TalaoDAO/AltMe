@@ -12,7 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'recovery_credential_cubit.g.dart';
-
 part 'recovery_credential_state.dart';
 
 class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {

@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/issuer_websites_page/widget/kyc_button.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class IssuerWebsitesPage extends StatelessWidget {
   const IssuerWebsitesPage(
@@ -27,8 +26,8 @@ class IssuerWebsitesPage extends StatelessWidget {
         children: [
           BaseButton.primary(
             context: context,
-            onPressed: () {
-              _launchURL(Urls.emailPassUrl);
+            onPressed: () async {
+              await LaunchUrl.launch(Urls.emailPassUrl);
               Navigator.pop(context);
               Navigator.pop(context);
             },
@@ -50,8 +49,8 @@ class IssuerWebsitesPage extends StatelessWidget {
           const SizedBox(height: 20),
           BaseButton.primary(
             context: context,
-            onPressed: () {
-              _launchURL(Urls.phonePassUrl);
+            onPressed: () async {
+              await LaunchUrl.launch(Urls.phonePassUrl);
               Navigator.pop(context);
               Navigator.pop(context);
             },
@@ -76,9 +75,4 @@ class IssuerWebsitesPage extends StatelessWidget {
       ),
     );
   }
-
-  Future<void> _launchURL(String _url) async =>
-      await canLaunchUrl(Uri.parse(_url))
-          ? await launchUrl(Uri.parse(_url))
-          : throw Exception('Could not launch $_url');
 }

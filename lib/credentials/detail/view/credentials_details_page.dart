@@ -124,7 +124,7 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SvgPicture.asset(
-                              'assets/icon/qr-code.svg',
+                              ImageStrings.qrCode,
                               width: 24,
                               height: 24,
                               color: Theme.of(context).colorScheme.onPrimary,
