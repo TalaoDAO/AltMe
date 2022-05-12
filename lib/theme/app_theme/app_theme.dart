@@ -377,4 +377,10 @@ extension CustomTextTheme on TextTheme {
         fontSize: 14,
         fontWeight: FontWeight.normal,
       );
+
+  TextStyle get illustrationPageDescription => GoogleFonts.nunito(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      );
 }
