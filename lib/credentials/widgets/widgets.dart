@@ -7,6 +7,4 @@ export 'display_issuer.dart';
 export 'display_name_card.dart';
 export 'display_status.dart';
 export 'document.dart';
-export 'labeled_item.dart';
-export 'labeled_item.dart';
 export 'list_item.dart';

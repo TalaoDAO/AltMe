@@ -69,6 +69,7 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
+    - google_fonts/
     - assets/
     - assets/splash/
     - assets/icon/

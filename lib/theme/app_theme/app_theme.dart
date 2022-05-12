@@ -299,14 +299,13 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get professionalExperienceAssessmentRating =>
-      GoogleFonts.montserrat(
+  TextStyle get professionalExperienceAssessmentRating => GoogleFonts.nunito(
         color: const Color(0xff212121),
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get voucherOverlay => GoogleFonts.montserrat(
+  TextStyle get voucherOverlay => GoogleFonts.nunito(
         color: const Color(0xffFFFFFF),
         fontSize: 13,
         fontWeight: FontWeight.w500,
@@ -324,57 +323,63 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.roboto(
+  TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.nunito(
         color: const Color(0xFF0650C6),
         fontSize: 20,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get certificateOfEmploymentDescription => GoogleFonts.montserrat(
+  TextStyle get certificateOfEmploymentDescription => GoogleFonts.nunito(
         color: const Color(0xFF757575),
         fontSize: 13,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get certificateOfEmploymentData => GoogleFonts.roboto(
+  TextStyle get certificateOfEmploymentData => GoogleFonts.nunito(
         color: const Color(0xFF434e62),
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get credentialStudentCardTextCard => GoogleFonts.roboto(
+  TextStyle get credentialStudentCardTextCard => GoogleFonts.nunito(
         color: const Color(0xffffffff),
         fontSize: 14,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get over18 => GoogleFonts.roboto(
+  TextStyle get over18 => GoogleFonts.nunito(
         color: const Color(0xffffffff),
         fontSize: 20,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get studentCardSchool => GoogleFonts.roboto(
+  TextStyle get studentCardSchool => GoogleFonts.nunito(
         color: const Color(0xff9dc5ff),
         fontSize: 18,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get studentCardData => GoogleFonts.roboto(
+  TextStyle get studentCardData => GoogleFonts.nunito(
         color: const Color(0xffffffff),
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get credentialTitleCard => GoogleFonts.roboto(
+  TextStyle get credentialTitleCard => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
         fontSize: 20,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get credentialTextCard => GoogleFonts.roboto(
+  TextStyle get credentialTextCard => GoogleFonts.nunito(
         color: const Color(0xff212121),
         fontSize: 14,
         fontWeight: FontWeight.normal,
+      );
+
+  TextStyle get illustrationPageDescription => GoogleFonts.nunito(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
       );
 }

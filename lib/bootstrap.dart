@@ -11,6 +11,7 @@ import 'dart:developer';
 import 'package:altme/app/app.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:logging/logging.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
 
@@ -42,6 +43,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   await PassbaseSDK.initialize(
     publishableApiKey: AltMeStrings.passBasePublishableApiKey,
   );
+
+  /// Disable Http google font
+  GoogleFonts.config.allowRuntimeFetching = false;
 
   await runZonedGuarded(
     () async {

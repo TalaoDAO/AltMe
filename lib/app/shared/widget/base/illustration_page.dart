@@ -1,8 +1,7 @@
-import 'package:altme/app/shared/widget/base/button.dart';
-import 'package:altme/app/shared/widget/base/page.dart';
+import 'package:altme/app/app.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class BaseIllustrationPage extends StatelessWidget {
   const BaseIllustrationPage({
@@ -42,11 +41,8 @@ class BaseIllustrationPage extends StatelessWidget {
                 Text(
                   description!,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style:
+                      Theme.of(context).textTheme.illustrationPageDescription,
                 ),
               Expanded(child: Container()),
               BaseButton.white(
