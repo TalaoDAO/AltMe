@@ -34,8 +34,6 @@ class KYCButton extends StatelessWidget {
                   onFinish: (identityAccessKey) {
                     Navigator.pop(context);
                     Navigator.pop(context);
-                  },
-                  onSubmitted: (identityAccessKey) {
                     showDialog<void>(
                       context: context,
                       builder: (BuildContext context) {
@@ -53,6 +51,7 @@ class KYCButton extends StatelessWidget {
                       },
                     );
                   },
+                  onSubmitted: (identityAccessKey) {},
                   onError: (errorCode) {
                     // do stuff in case of cancel
                   },
