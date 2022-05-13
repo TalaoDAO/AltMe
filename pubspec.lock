@@ -57,6 +57,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.6"
+  blake2b:
+    dependency: transitive
+    description:
+      name: blake2b
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.2"
   bloc:
     dependency: "direct main"
     description:
@@ -190,6 +197,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
+  conduit_password_hash:
+    dependency: transitive
+    description:
+      name: conduit_password_hash
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.1"
   convert:
     dependency: transitive
     description:
@@ -403,6 +417,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.2"
+  flutter_sodium:
+    dependency: transitive
+    description:
+      name: flutter_sodium
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -1034,6 +1055,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.9"
+  tezster_dart:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: beta
+      resolved-ref: "01f9e97ae74c04cdbee0157c49942bd403b18bb5"
+      url: "https://github.com/SushantChandla/Tezster_dart.git"
+    source: git
+    version: "2.1.2-beta.2"
   timing:
     dependency: transitive
     description:
@@ -1069,6 +1099,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0"
+  unorm_dart:
+    dependency: transitive
+    description:
+      name: unorm_dart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   url_launcher:
     dependency: "direct main"
     description:

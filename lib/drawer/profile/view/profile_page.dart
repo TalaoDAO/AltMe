@@ -14,6 +14,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tezster_dart/tezster_dart.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -172,6 +173,25 @@ class ProfileView extends StatelessWidget {
                   title: l10n.selectThemeText,
                   onTap: () => Navigator.of(context)
                       .push<void>(ThemePage.route(context.read<ThemeCubit>())),
+                ),
+                // TODO(taleb): remove this temp button after testing
+                TextButton(
+                  onPressed: () async {
+                    /// main public RPC endpoints can be accessed at:
+                    /// https://rpc.tzstats.com
+                    /// https://rpc.edo.tzstats.com
+                    /// https://rpc.florence.tzstats.com
+
+                    const tezosWalletAddress =
+                        'tz1b9CCt6ukjXC47hys7pUTXPDMNVbdo8hZc';
+                    const rpc = 'https://rpc.tzstats.com';
+                    final balance = await TezsterDart.getBalance(
+                      tezosWalletAddress,
+                      rpc,
+                    );
+                    print('balance: $balance');
+                  },
+                  child: const Text('GetBalance'),
                 ),
               ],
             );
