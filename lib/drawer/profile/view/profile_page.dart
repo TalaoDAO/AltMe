@@ -14,7 +14,9 @@ import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:tezster_dart/tezster_dart.dart';
+import 'package:web3dart/web3dart.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -192,6 +194,23 @@ class ProfileView extends StatelessWidget {
                     print('balance: $balance');
                   },
                   child: const Text('GetBalance'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    final _client = Web3Client(
+                      'https://mainnet.infura.io/v3/e8b3da9156fd4b4f8f8cdac7e085e1e0',
+                      Client(),
+                    );
+                    const myEthPublicAddress =
+                        '0x885eD4d3edc2FF91e219407B4192dCb0c9A24972';
+                    final ethereumAddress =
+                        EthereumAddress.fromHex(myEthPublicAddress);
+                    final ethAmount = await _client.getBalance(ethereumAddress);
+                    final _balance =
+                        '${ethAmount.getValueInUnit(EtherUnit.ether)} Eth';
+                    print('balance of ethereum address: $_balance');
+                  },
+                  child: const Text('getBalance ETH address'),
                 ),
               ],
             );
