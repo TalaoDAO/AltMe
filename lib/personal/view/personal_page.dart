@@ -5,7 +5,7 @@ import 'package:altme/drawer/profile/cubit/profile_cubit.dart';
 import 'package:altme/drawer/profile/models/profile.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/personal/cubit/personal_page_cubit.dart';
-import 'package:altme/self_issued_credential_button/cubit/self_issued_credential_cubit.dart';
+import 'package:altme/self_issued_credential_button/cubit/self_issued_credential_button_cubit.dart';
 import 'package:altme/self_issued_credential_button/models/self_issued_credential_model.dart';
 import 'package:altme/self_issued_credential_button/view/sef_issued_credential_button.dart';
 import 'package:altme/theme/theme.dart';

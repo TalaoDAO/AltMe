@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credential.dart';
 import 'package:altme/did/did.dart';
+import 'package:altme/self_issued_credential_button/models/self_issued_credential.dart';
 import 'package:altme/self_issued_credential_button/models/self_issued_credential_model.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
@@ -15,16 +16,16 @@ import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
-part 'self_issued_credential_cubit.g.dart';
-part 'self_issued_credential_state.dart';
+part 'self_issued_credential_button_cubit.g.dart';
+part 'self_issued_credential_button_state.dart';
 
-class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialState> {
+class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
   SelfIssuedCredentialCubit({
     required this.walletCubit,
     required this.secureStorageProvider,
     required this.didCubit,
     required this.didKitProvider,
-  }) : super(const SelfIssuedCredentialState());
+  }) : super(const SelfIssuedCredentialButtonState());
 
   final WalletCubit walletCubit;
   final DIDCubit didCubit;

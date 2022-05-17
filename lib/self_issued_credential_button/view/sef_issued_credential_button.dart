@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/self_issued_credential_button/cubit/self_issued_credential_cubit.dart';
+import 'package:altme/self_issued_credential_button/cubit/self_issued_credential_button_cubit.dart';
 import 'package:altme/self_issued_credential_button/models/self_issued_credential_model.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
@@ -28,7 +28,8 @@ class SelfIssuedCredentialButton extends StatelessWidget {
         didCubit: context.read<DIDCubit>(),
         didKitProvider: DIDKitProvider(),
       ),
-      child: BlocConsumer<SelfIssuedCredentialCubit, SelfIssuedCredentialState>(
+      child: BlocConsumer<SelfIssuedCredentialCubit,
+          SelfIssuedCredentialButtonState>(
         listener: (context, state) {
           if (state.message != null) {
             AlertMessage.showStateMessage(
