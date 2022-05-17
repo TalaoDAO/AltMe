@@ -51,7 +51,7 @@ class SelfIssuedDisplayDetail extends StatelessWidget {
         .credentialPreview.credentialSubjectModel as SelfIssuedModel;
 
     return CredentialBackground(
-      model: credentialModel,
+      credentialModel: credentialModel,
       child: Column(
         children: [
           if (selfIssuedModel.givenName?.isNotEmpty ?? false)

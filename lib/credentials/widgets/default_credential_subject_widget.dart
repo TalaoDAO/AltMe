@@ -20,7 +20,9 @@ class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
         // margin: const EdgeInsets.symmetric(vertical: 4),
         decoration: BaseBoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: credentialModel.backgroundColor,
+          color: credentialModel
+              .credentialPreview.credentialSubjectModel.credentialSubjectType
+              .backgroundColor(credentialModel),
           shapeColor: Theme.of(context).colorScheme.documentShape,
           value: 1,
           anchors: const <Alignment>[
@@ -101,7 +103,9 @@ class DefaultCredentialSubjectDisplayInSelectionList extends StatelessWidget {
         // margin: const EdgeInsets.symmetric(vertical: 4),
         decoration: BaseBoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: credentialModel.backgroundColor,
+          color: credentialModel
+              .credentialPreview.credentialSubjectModel.credentialSubjectType
+              .backgroundColor(credentialModel),
           shapeColor: Theme.of(context).colorScheme.documentShape,
           value: 1,
           anchors: const <Alignment>[
@@ -157,7 +161,7 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return CredentialBackground(
-      model: credentialModel,
+      credentialModel: credentialModel,
       child: Column(
         children: [
           Padding(

@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credential.dart';
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'credential_subject_model.g.dart';
@@ -55,99 +54,6 @@ class CredentialSubjectModel {
   @JsonKey(fromJson: fromJsonAuthor)
   final Author? issuedBy;
   final CredentialSubjectType credentialSubjectType;
-
-  Color get backgroundColor {
-    Color _backgroundColor;
-    switch (type) {
-      case 'ResidentCard':
-        _backgroundColor = Colors.white;
-        break;
-      case 'SelfIssued':
-        _backgroundColor = const Color(0xffEFF0F6);
-        break;
-      case 'IdentityPass':
-        _backgroundColor = const Color(0xffCAFFBF);
-        break;
-      case 'Voucher':
-        _backgroundColor = const Color(0xffCAFFBF);
-        break;
-      case 'LoyaltyCard':
-        _backgroundColor = const Color(0xffCAFFBF);
-        break;
-      case 'Over18':
-        _backgroundColor = const Color(0xffCAFFBF);
-        break;
-      case 'ProfessionalStudentCard':
-        _backgroundColor = const Color(0xffCAFFBF);
-        break;
-      case 'CertificateOfEmployment':
-        _backgroundColor = const Color(0xFF9BF6FF);
-        break;
-      case 'EmailPass':
-        _backgroundColor = const Color(0xFFffD6A5);
-        break;
-      case 'PhonePass':
-        _backgroundColor = const Color(0xFFffD6A5);
-        break;
-      case 'ProfessionalExperienceAssessment':
-        _backgroundColor = const Color(0xFFFFADAD);
-        break;
-      case 'ProfessionalSkillAssessment':
-        _backgroundColor = const Color(0xffCAFFBF);
-        break;
-      case 'LearningAchievement':
-        _backgroundColor = const Color(0xFFFFADAD);
-        break;
-      default:
-        _backgroundColor = Colors.black;
-    }
-    return _backgroundColor;
-  }
-
-  Icon get icon {
-    Icon _icon;
-    switch (type) {
-      case 'ResidentCard':
-        _icon = const Icon(Icons.home);
-        break;
-      case 'IdentityPass':
-        _icon = const Icon(Icons.perm_identity);
-        break;
-      case 'Voucher':
-        _icon = const Icon(Icons.gamepad);
-        break;
-      case 'LoyaltyCard':
-        _icon = const Icon(Icons.loyalty);
-        break;
-      case 'Over18':
-        _icon = const Icon(Icons.accessible_rounded);
-        break;
-      case 'ProfessionalStudentCard':
-        _icon = const Icon(Icons.perm_identity);
-        break;
-      case 'CertificateOfEmployment':
-        _icon = const Icon(Icons.work);
-        break;
-      case 'EmailPass':
-        _icon = const Icon(Icons.mail);
-        break;
-      case 'PhonePass':
-        _icon = const Icon(Icons.phone);
-        break;
-      case 'ProfessionalExperienceAssessment':
-        _icon = const Icon(Icons.add_road_outlined);
-        break;
-      case 'ProfessionalSkillAssessment':
-        _icon = const Icon(Icons.assessment_outlined);
-        break;
-      case 'LearningAchievement':
-        _icon = const Icon(Icons.star_rate_outlined);
-        break;
-      default:
-        _icon = const Icon(Icons.fact_check_outlined);
-    }
-    return _icon;
-  }
 
   Map<String, dynamic> toJson() => _$CredentialSubjectModelToJson(this);
 

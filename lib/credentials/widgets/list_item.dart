@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/widget/hero_workaround.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credential.dart';
 import 'package:flutter/material.dart';
 
@@ -75,7 +75,9 @@ class CredentialsListPageItem extends StatelessWidget {
             Navigator.of(context)
                 .push<void>(CredentialsDetailsPage.route(credentialModel));
           },
-      color: credentialModel.backgroundColor,
+      color: credentialModel
+          .credentialPreview.credentialSubjectModel.credentialSubjectType
+          .backgroundColor(credentialModel),
       child: selected == null
           ? DisplayInList(credentialModel: credentialModel)
           : displaySelectionElement(context),
@@ -158,7 +160,7 @@ class CredentialIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Icon(
-      credential.credentialSubjectModel.icon.icon,
+      credential.credentialSubjectModel.credentialSubjectType.iconData(),
       size: 24,
       color: Theme.of(context).colorScheme.primaryContainer,
     );

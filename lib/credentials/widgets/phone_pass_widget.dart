@@ -48,7 +48,7 @@ class PhonePassDisplayDetail extends StatelessWidget {
         .credentialPreview.credentialSubjectModel as PhonePassModel;
 
     return CredentialBackground(
-      model: credentialModel,
+      credentialModel: credentialModel,
       child: Column(
         children: [
           CredentialField(

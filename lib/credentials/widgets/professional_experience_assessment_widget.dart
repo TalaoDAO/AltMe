@@ -61,7 +61,7 @@ class ProfessionalExperienceAssessmentDisplayDetail extends StatelessWidget {
       professionalExperienceAssessmentModel.endDate!,
     );
     return CredentialBackground(
-      model: credentialModel,
+      credentialModel: credentialModel,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

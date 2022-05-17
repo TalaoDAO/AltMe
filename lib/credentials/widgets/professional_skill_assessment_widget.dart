@@ -52,7 +52,7 @@ class ProfessionalSkillAssessmentDisplayDetail extends StatelessWidget {
         .credentialSubjectModel as ProfessionalSkillAssessmentModel;
 
     return CredentialBackground(
-      model: credentialModel,
+      credentialModel: credentialModel,
       child: Column(
         children: [
           CredentialField(

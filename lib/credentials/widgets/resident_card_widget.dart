@@ -52,7 +52,7 @@ class ResidentCardDisplayDetail extends StatelessWidget {
         .credentialPreview.credentialSubjectModel as ResidentCardModel;
 
     return CredentialBackground(
-      model: credentialModel,
+      credentialModel: credentialModel,
       child: Column(
         children: [
           DisplayIssuer(issuer: residentCardModel.issuedBy!),

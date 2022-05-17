@@ -1,8 +1,19 @@
-import 'package:altme/app/app.dart';
-import 'package:flutter/material.dart';
+part of 'credential_subject_type.dart';
 
 extension CredentialSubjectTypeExtension on CredentialSubjectType {
-  Color backgroundColor() {
+  Color backgroundColor(CredentialModel credentialModel) {
+    Color _backgroundColor;
+    if (credentialModel.display.backgroundColor != '') {
+      _backgroundColor = Color(
+        int.parse('FF${credentialModel.display.backgroundColor}', radix: 16),
+      );
+    } else {
+      _backgroundColor = defaultBackgroundColor();
+    }
+    return _backgroundColor;
+  }
+
+  Color defaultBackgroundColor() {
     switch (this) {
       case CredentialSubjectType.residentCard:
         return Colors.white;
@@ -39,40 +50,40 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
-  Icon icon() {
+  IconData iconData() {
     switch (this) {
       case CredentialSubjectType.residentCard:
-        return const Icon(Icons.home);
+        return Icons.home;
       case CredentialSubjectType.selfIssued:
-        return const Icon(Icons.perm_identity);
+        return Icons.perm_identity;
       case CredentialSubjectType.identityPass:
-        return const Icon(Icons.perm_identity);
+        return Icons.perm_identity;
       case CredentialSubjectType.voucher:
-        return const Icon(Icons.gamepad);
+        return Icons.gamepad;
       case CredentialSubjectType.loyaltyCard:
-        return const Icon(Icons.loyalty);
+        return Icons.loyalty;
       case CredentialSubjectType.over18:
-        return const Icon(Icons.accessible_rounded);
+        return Icons.accessible_rounded;
       case CredentialSubjectType.professionalStudentCard:
-        return const Icon(Icons.perm_identity);
+        return Icons.perm_identity;
       case CredentialSubjectType.certificateOfEmployment:
-        return const Icon(Icons.work);
+        return Icons.work;
       case CredentialSubjectType.emailPass:
-        return const Icon(Icons.mail);
+        return Icons.mail;
       case CredentialSubjectType.phonePass:
-        return const Icon(Icons.phone);
+        return Icons.phone;
       case CredentialSubjectType.professionalExperienceAssessment:
-        return const Icon(Icons.add_road_outlined);
+        return Icons.add_road_outlined;
       case CredentialSubjectType.professionalSkillAssessment:
-        return const Icon(Icons.assessment_outlined);
+        return Icons.assessment_outlined;
       case CredentialSubjectType.learningAchievement:
-        return const Icon(Icons.star_rate_outlined);
+        return Icons.star_rate_outlined;
       case CredentialSubjectType.ecole42LearningAchievement:
-        return const Icon(Icons.perm_identity);
+        return Icons.perm_identity;
       case CredentialSubjectType.studentCard:
-        return const Icon(Icons.perm_identity);
+        return Icons.perm_identity;
       case CredentialSubjectType.defaultCredential:
-        return const Icon(Icons.fact_check_outlined);
+        return Icons.fact_check_outlined;
     }
   }
 }

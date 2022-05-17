@@ -50,7 +50,7 @@ class IdentityPassDisplayDetail extends StatelessWidget {
     final identityPassModel = credentialModel
         .credentialPreview.credentialSubjectModel as IdentityPassModel;
     return CredentialBackground(
-      model: credentialModel,
+      credentialModel: credentialModel,
       child: Column(
         children: [
           if (identityPassModel.expires != '')

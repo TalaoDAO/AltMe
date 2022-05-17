@@ -5,7 +5,6 @@ import 'package:altme/credentials/models/credential/credential.dart';
 import 'package:altme/credentials/models/display/display.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -121,18 +120,6 @@ class CredentialModel extends Equatable {
       );
     }
     return Display.fromJson(json as Map<String, dynamic>);
-  }
-
-  Color get backgroundColor {
-    Color _backgroundColor;
-    if (display.backgroundColor != '') {
-      _backgroundColor =
-          Color(int.parse('FF${display.backgroundColor}', radix: 16));
-    } else {
-      _backgroundColor =
-          credentialPreview.credentialSubjectModel.backgroundColor;
-    }
-    return _backgroundColor;
   }
 
   Future<CredentialStatus> checkRevocationStatus() async {
