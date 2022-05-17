@@ -32,7 +32,7 @@ class CredentialsReceivePage extends StatelessWidget {
       body: BlocBuilder<ScanCubit, ScanState>(
         builder: (builderContext, state) {
           if (state.status == ScanStatus.preview) {
-            final credential = CredentialModel.fromJson(state.preview!);
+            final credentialModel = CredentialModel.fromJson(state.preview!);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -52,7 +52,7 @@ class CredentialsReceivePage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                DisplayDetail(credentialModel: credential),
+                DisplayDetail(credentialModel: credentialModel),
                 const SizedBox(height: 24),
                 BaseButton.primary(
                   context: context,
@@ -66,7 +66,7 @@ class CredentialsReceivePage extends StatelessWidget {
                     await context.read<ScanCubit>().credentialOffer(
                           url: url.toString(),
                           credentialModel: CredentialModel.copyWithAlias(
-                            oldCredentialModel: credential,
+                            oldCredentialModel: credentialModel,
                             newAlias: alias,
                           ),
                           keyId: 'key',

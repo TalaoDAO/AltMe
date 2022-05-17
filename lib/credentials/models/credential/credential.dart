@@ -58,6 +58,7 @@ class Credential {
   final String issuanceDate;
   @JsonKey(fromJson: _fromJsonProofs)
   final List<Proof> proof;
+  @JsonKey(name: 'credentialSubject')
   final CredentialSubjectModel credentialSubjectModel;
   @JsonKey(fromJson: _fromJsonEvidence)
   final List<Evidence> evidence;
