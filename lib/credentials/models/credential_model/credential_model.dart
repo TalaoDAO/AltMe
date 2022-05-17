@@ -129,7 +129,8 @@ class CredentialModel extends Equatable {
       _backgroundColor =
           Color(int.parse('FF${display.backgroundColor}', radix: 16));
     } else {
-      _backgroundColor = credentialPreview.credentialSubject.backgroundColor;
+      _backgroundColor =
+          credentialPreview.credentialSubjectModel.backgroundColor;
     }
     return _backgroundColor;
   }

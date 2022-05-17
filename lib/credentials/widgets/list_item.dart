@@ -56,12 +56,12 @@ class __BaseItemState extends State<_BaseItem>
 class CredentialsListPageItem extends StatelessWidget {
   const CredentialsListPageItem({
     Key? key,
-    required this.item,
+    required this.credentialModel,
     this.onTap,
     this.selected,
   }) : super(key: key);
 
-  final CredentialModel item;
+  final CredentialModel credentialModel;
   final VoidCallback? onTap;
   final bool? selected;
 
@@ -73,28 +73,22 @@ class CredentialsListPageItem extends StatelessWidget {
       onTap: onTap ??
           () {
             Navigator.of(context)
-                .push<void>(CredentialsDetailsPage.route(item));
+                .push<void>(CredentialsDetailsPage.route(credentialModel));
           },
-      color: item.backgroundColor,
+      color: credentialModel.backgroundColor,
       child: selected == null
-          ? displayListElement(context)
+          ? DisplayInList(credentialModel: credentialModel)
           : displaySelectionElement(context),
     );
   }
 
-  Widget displayListElement(BuildContext context) {
-    return item.credentialPreview.credentialSubject
-        .displayInList(context, item);
-  }
-
   Widget displaySelectionElement(BuildContext context) {
-    final credential = Credential.fromJsonOrDummy(item.data);
+    final credential = Credential.fromJsonOrDummy(credentialModel.data);
     return CredentialSelectionPadding(
       child: Column(
         children: <Widget>[
           CredentialContainer(
-            child: item.credentialPreview.credentialSubject
-                .displayInSelectionList(context, item),
+            child: DisplayInSelectionList(credentialModel: credentialModel),
           ),
           Padding(
             padding: const EdgeInsets.all(8),
@@ -102,7 +96,7 @@ class CredentialsListPageItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 HeroFix(
-                  tag: 'credential/${item.id}/icon',
+                  tag: 'credential/${credentialModel.id}/icon',
                   child: selected == null
                       ? CredentialIcon(credential: credential)
                       : selected!
@@ -110,7 +104,10 @@ class CredentialsListPageItem extends StatelessWidget {
                           : const CredentialUncheckedBox(),
                 ),
                 const SizedBox(width: 8),
-                DisplayStatus(item: item, displayLabel: true),
+                DisplayStatus(
+                  credentialModel: credentialModel,
+                  displayLabel: true,
+                ),
               ],
             ),
           ),
@@ -161,7 +158,7 @@ class CredentialIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Icon(
-      credential.credentialSubject.icon.icon,
+      credential.credentialSubjectModel.icon.icon,
       size: 24,
       color: Theme.of(context).colorScheme.primaryContainer,
     );

@@ -124,17 +124,17 @@ class WalletCubit extends Cubit<WalletState> {
 
       ///credential and issuer provided in claims
       if (credentialTypeList.contains('EmailPass')) {
-        final credentialSubject =
-            credentialModel.credentialPreview.credentialSubject as EmailPass;
-        if (credentialSubject.passbaseMetadata != '') {
+        final credentialSubjectModel = credentialModel
+            .credentialPreview.credentialSubjectModel as EmailPassModel;
+        if (credentialSubjectModel.passbaseMetadata != '') {
           selectedCredentials.add(credentialModel);
         }
       }
     }
     if (selectedCredentials.isNotEmpty) {
       final firstEmailPassCredentialSubject =
-          selectedCredentials.first.credentialPreview.credentialSubject;
-      if (firstEmailPassCredentialSubject is EmailPass) {
+          selectedCredentials.first.credentialPreview.credentialSubjectModel;
+      if (firstEmailPassCredentialSubject is EmailPassModel) {
         /// Give user email from first EmailPass to KYC. When KYC is successful
         /// this email is used to send the over18 credential link to user.
         PassbaseSDK.prefillUserEmail = firstEmailPassCredentialSubject.email;

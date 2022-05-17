@@ -9,25 +9,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class DisplayStatus extends StatelessWidget {
   const DisplayStatus({
     Key? key,
-    required this.item,
+    required this.credentialModel,
     required this.displayLabel,
   }) : super(key: key);
 
-  final CredentialModel item;
+  final CredentialModel credentialModel;
   final bool displayLabel;
 
   @override
   Widget build(BuildContext context) {
     final wallet = context.read<WalletCubit>();
-    final currentRevocationStatus = item.revocationStatus;
+    final currentRevocationStatus = credentialModel.revocationStatus;
 
     final l10n = context.l10n;
     return FutureBuilder(
-      future: item.status,
+      future: credentialModel.status,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (currentRevocationStatus == RevocationStatus.unknown) {
-            wallet.handleUnknownRevocationStatus(item);
+            wallet.handleUnknownRevocationStatus(credentialModel);
           }
           switch (snapshot.data) {
             case CredentialStatus.active:

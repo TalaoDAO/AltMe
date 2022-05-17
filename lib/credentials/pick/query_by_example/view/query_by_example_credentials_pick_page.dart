@@ -120,7 +120,7 @@ class _QueryByExampleCredentialPickPageState
                   ...List.generate(
                     walletState.credentials.length,
                     (index) => CredentialsListPageItem(
-                      item: walletState.credentials[index],
+                      credentialModel: walletState.credentials[index],
                       selected: state.selection.contains(index),
                       onTap: () => context
                           .read<QueryByExampleCredentialPickCubit>()

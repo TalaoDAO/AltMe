@@ -52,7 +52,7 @@ class CredentialsReceivePage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                DocumentWidget(model: credential),
+                DisplayDetail(credentialModel: credential),
                 const SizedBox(height: 24),
                 BaseButton.primary(
                   context: context,

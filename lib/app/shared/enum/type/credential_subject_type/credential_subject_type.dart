@@ -1,0 +1,18 @@
+enum CredentialSubjectType {
+  certificateOfEmployment,
+  defaultCredential,
+  ecole42LearningAchievement,
+  emailPass,
+  identityPass,
+  learningAchievement,
+  loyaltyCard,
+  over18,
+  phonePass,
+  professionalExperienceAssessment,
+  professionalSkillAssessment,
+  professionalStudentCard,
+  residentCard,
+  selfIssued,
+  studentCard,
+  voucher,
+}

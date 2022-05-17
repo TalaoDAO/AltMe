@@ -85,8 +85,9 @@ class _CredentialsListPageState extends State<CredentialsListPage> {
             return Column(
               children: List.generate(
                 _credentialList.length,
-                (index) =>
-                    CredentialsListPageItem(item: _credentialList[index]),
+                (index) => CredentialsListPageItem(
+                  credentialModel: _credentialList[index],
+                ),
               ),
             );
           },

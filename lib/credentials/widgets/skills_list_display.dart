@@ -12,11 +12,11 @@ class SkillsListDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> widgetList = skillWidgetList
         .map(
-          (Skill e) => Row(
+          (Skill skill) => Row(
             children: [
               const Icon(Icons.arrow_right_alt_sharp),
               Text(
-                e.description,
+                skill.description,
                 style: Theme.of(context).textTheme.credentialFieldDescription,
               ),
             ],

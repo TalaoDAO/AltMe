@@ -12,19 +12,19 @@ import 'package:logging/logging.dart';
 class CredentialsDetailsPage extends StatefulWidget {
   const CredentialsDetailsPage({
     Key? key,
-    required this.item,
+    required this.credentialModel,
   }) : super(key: key);
 
-  final CredentialModel item;
+  final CredentialModel credentialModel;
 
-  static Route route(CredentialModel routeItem) {
+  static Route route(CredentialModel credentialModel) {
     return MaterialPageRoute<void>(
       builder: (context) => BlocProvider<CredentialDetailsCubit>(
         create: (context) => CredentialDetailsCubit(
           walletCubit: context.read<WalletCubit>(),
           didKitProvider: DIDKitProvider(),
         ),
-        child: CredentialsDetailsPage(item: routeItem),
+        child: CredentialsDetailsPage(credentialModel: credentialModel),
       ),
       settings: const RouteSettings(name: '/CredentialsDetailsPages'),
     );
@@ -40,8 +40,10 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
   @override
   void initState() {
     super.initState();
-    context.read<CredentialDetailsCubit>().setTitle(widget.item.alias!);
-    context.read<CredentialDetailsCubit>().verify(widget.item);
+    context
+        .read<CredentialDetailsCubit>()
+        .setTitle(widget.credentialModel.alias!);
+    context.read<CredentialDetailsCubit>().verify(widget.credentialModel);
   }
 
   Future<void> delete() async {
@@ -59,7 +61,7 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
         false;
 
     if (confirm) {
-      await context.read<WalletCubit>().deleteById(widget.item.id);
+      await context.read<WalletCubit>().deleteById(widget.credentialModel.id);
     }
   }
 
@@ -81,7 +83,7 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
 
     if (newAlias != null && newAlias != credentialDetailsCubit.state.title) {
       logger.info('New alias is different, going to update credential');
-      await credentialDetailsCubit.update(widget.item, newAlias);
+      await credentialDetailsCubit.update(widget.credentialModel, newAlias);
     }
   }
 
@@ -92,13 +94,14 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
       builder: (context, state) {
         return BasePage(
           title: state.title != '' ? state.title : l10n.credential,
-          titleTag: 'credential/${state.title ?? widget.item.id}/issuer',
+          titleTag:
+              'credential/${state.title ?? widget.credentialModel.id}/issuer',
           titleLeading: const BackLeadingButton(),
           titleTrailing: IconButton(
             onPressed: _edit,
             icon: const Icon(Icons.edit),
           ),
-          navigation: widget.item.shareLink != ''
+          navigation: widget.credentialModel.shareLink != ''
               ? SafeArea(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -113,8 +116,8 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
                         onPressed: () {
                           Navigator.of(context).push<void>(
                             QrCodeDisplayPage.route(
-                              widget.item.id,
-                              widget.item,
+                              widget.credentialModel.id,
+                              widget.credentialModel,
                             ),
                           );
                         },
@@ -141,7 +144,7 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              DocumentWidget(model: widget.item),
+              DisplayDetail(credentialModel: widget.credentialModel),
               const SizedBox(height: 64),
               ...<Widget>[
                 Center(
@@ -177,7 +180,10 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
                 ),
               ],
               Center(
-                child: DisplayStatus(item: widget.item, displayLabel: true),
+                child: DisplayStatus(
+                  credentialModel: widget.credentialModel,
+                  displayLabel: true,
+                ),
               ),
               const SizedBox(height: 64),
               TextButton(
