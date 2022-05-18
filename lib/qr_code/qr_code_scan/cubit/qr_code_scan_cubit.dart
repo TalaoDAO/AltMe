@@ -18,7 +18,6 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:logging/logging.dart';
 
 part 'qr_code_scan_cubit.g.dart';
-
 part 'qr_code_scan_state.dart';
 
 class QRCodeScanCubit extends Cubit<QRCodeScanState> {
@@ -86,7 +85,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> deepLink() async {
-    state.loading(isDeepLink: true);
+    emit(state.loading(isDeepLink: true));
     final deepLinkUrl = deepLinkCubit.state;
     if (deepLinkUrl != '') {
       deepLinkCubit.resetDeepLink();
@@ -107,7 +106,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> verify({required Uri? uri}) async {
-    state.loading();
+    emit(state.loading());
     try {
       ///Check if SIOPV2 request
       if (uri?.queryParameters['scope'] == 'openid') {
@@ -120,12 +119,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         ///credential should not be empty since we have to present
         if (walletCubit.state.credentials.isEmpty) {
-          state.error(
+          emit(state.error(
             messageHandler: ResponseMessage(
               ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR,
             ),
-          );
-          state.success(route: IssuerWebsitesPage.route(''));
+          ));
+          emit(state.success(route: IssuerWebsitesPage.route('')));
 
           return;
         }
@@ -192,16 +191,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         }
 
         if (selectedCredentials.isEmpty) {
-          state.success(route: IssuerWebsitesPage.route(openIdCredential));
+          emit(
+              state.success(route: IssuerWebsitesPage.route(openIdCredential)));
           return;
         }
 
-        state.success(
+        emit(state.success(
           route: SIOPV2CredentialPickPage.route(
             credentials: selectedCredentials,
             sIOPV2Param: sIOPV2Param,
           ),
-        );
+        ));
       } else {
         emit(state.acceptHost(uri: uri!));
       }
@@ -222,7 +222,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> accept({required Uri uri}) async {
-    state.loading();
+    emit(state.loading());
     final log = Logger('altme-wallet/qrcode/accept');
 
     late final dynamic data;
