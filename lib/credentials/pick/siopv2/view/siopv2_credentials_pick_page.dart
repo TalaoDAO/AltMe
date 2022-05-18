@@ -122,7 +122,7 @@ class _SIOPV2CredentialPickPageState extends State<SIOPV2CredentialPickPage> {
                 ...List.generate(
                   widget.credentials.length,
                   (index) => CredentialsListPageItem(
-                    item: widget.credentials[index],
+                    credentialModel: widget.credentials[index],
                     selected: state.index == index,
                     onTap: () =>
                         context.read<SIOPV2CredentialPickCubit>().toggle(index),

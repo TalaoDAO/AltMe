@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/credentials/credential.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class CredentialsRepository {

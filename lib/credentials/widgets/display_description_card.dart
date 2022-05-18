@@ -1,12 +1,15 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/credentials/credential.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class DisplayDescriptionCard extends StatelessWidget {
-  const DisplayDescriptionCard(this.item, this.style, {Key? key})
-      : super(key: key);
-  final CredentialModel item;
+  const DisplayDescriptionCard({
+    Key? key,
+    required this.credentialModel,
+    required this.style,
+  }) : super(key: key);
+  final CredentialModel credentialModel;
   final TextStyle style;
 
   @override
@@ -21,11 +24,11 @@ class DisplayDescriptionCard extends StatelessWidget {
 
   String getDescription(BuildContext context) {
     var _nameValue = GetTranslation.getTranslation(
-      item.credentialPreview.description,
+      credentialModel.credentialPreview.description,
       context.l10n,
     );
     if (_nameValue == '') {
-      _nameValue = item.display.descriptionFallback;
+      _nameValue = credentialModel.display.descriptionFallback;
     }
 
     return _nameValue;

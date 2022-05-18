@@ -1,10 +1,10 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/models/author/author.dart';
+import 'package:altme/credentials/models/credential/evidence.dart';
+import 'package:altme/credentials/models/credential/proof.dart';
 import 'package:altme/credentials/models/credential_status_field/credential_status_field.dart';
-import 'package:altme/credentials/models/credential_subject/credential_subject.dart';
-import 'package:altme/credentials/models/default_credential_subject/default_credential_subject.dart';
-import 'package:altme/credentials/models/evidence/evidence.dart';
-import 'package:altme/credentials/models/proof/proof.dart';
+import 'package:altme/credentials/models/credential_subject/credential_subject_model.dart';
+import 'package:altme/credentials/models/default_credential_subject/default_credential_subject_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'credential.g.dart';
@@ -17,7 +17,7 @@ class Credential {
     this.issuer,
     this.issuanceDate,
     this.proof,
-    this.credentialSubject,
+    this.credentialSubjectModel,
     this.description,
     this.name,
     this.credentialStatus,
@@ -40,7 +40,7 @@ class Credential {
       [
         Proof.dummy(),
       ],
-      DefaultCredentialSubject('dummy', 'dummy', const Author('', '')),
+      DefaultCredentialSubjectModel('dummy', 'dummy', const Author('', '')),
       [Translation('en', '')],
       [Translation('en', '')],
       CredentialStatusField.emptyCredentialStatusField(),
@@ -58,7 +58,8 @@ class Credential {
   final String issuanceDate;
   @JsonKey(fromJson: _fromJsonProofs)
   final List<Proof> proof;
-  final CredentialSubject credentialSubject;
+  @JsonKey(name: 'credentialSubject')
+  final CredentialSubjectModel credentialSubjectModel;
   @JsonKey(fromJson: _fromJsonEvidence)
   final List<Evidence> evidence;
   @JsonKey(fromJson: _fromJsonCredentialStatus)

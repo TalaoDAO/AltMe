@@ -1,3 +1,3 @@
-export 'credential_type.dart';
+export 'credential_subject_type/credential_subject_type.dart';
 export 'message_type/message_type.dart';
 export 'wallet_type.dart';
