@@ -167,7 +167,7 @@ Update the `CFBundleLocalizations` array in the `Info.plist` at `ios/Runner/Info
 flutter packages pub run build_runner build --delete-conflicting-outputs
 
 ### Apk generate
-flutter build apk --release --split-per-abi -t lib/main_production.dart
+flutter build apk --release --split-per-abi --flavor production -t lib/main_production.dart
 
 
 
