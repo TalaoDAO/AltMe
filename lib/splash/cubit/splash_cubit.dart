@@ -39,17 +39,16 @@ class SplashCubit extends Cubit<SplashStatus> {
     final String? isEnterprise =
         await secureStorageProvider.get(SecureStorageKeys.isEnterpriseUser);
 
-    if (isEnterprise == null || isEnterprise.isEmpty) {
-      return emit(SplashStatus.onboarding);
-    }
-
-    if (isEnterprise == 'true') {
-      final rsaKeyJson =
-          await secureStorageProvider.get(SecureStorageKeys.rsaKeyJson);
-      if (rsaKeyJson == null || rsaKeyJson.isEmpty) {
-        return emit(SplashStatus.onboarding);
+    if (isEnterprise != null && isEnterprise.isNotEmpty) {
+      if (isEnterprise == 'true') {
+        final rsaKeyJson =
+            await secureStorageProvider.get(SecureStorageKeys.rsaKeyJson);
+        if (rsaKeyJson == null || rsaKeyJson.isEmpty) {
+          return emit(SplashStatus.onboarding);
+        }
       }
     }
+
     await didCubit.load(
       did: did,
       didMethod: didMethod,
