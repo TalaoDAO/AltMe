@@ -54,7 +54,6 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
       emit(state.success());
     } catch (error) {
       log.severe('something went wrong when generating a key', error);
-      print(error);
       emit(
         state.error(
           messageHandler: ResponseMessage(
