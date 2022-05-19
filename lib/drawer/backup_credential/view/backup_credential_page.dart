@@ -29,61 +29,84 @@ class BackupCredentialPage extends StatefulWidget {
 }
 
 class _BackupCredentialPageState extends State<BackupCredentialPage> {
+  OverlayEntry? _overlay;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BasePage(
-      title: l10n.backupCredential,
-      titleLeading: const BackLeadingButton(),
-      body: BlocConsumer<BackupCredentialCubit, BackupCredentialState>(
-        listener: (context, state) async {
-          if (state.message != null) {
-            AlertMessage.showStateMessage(
-              context: context,
-              stateMessage: state.message!,
-            );
-          }
-        },
-        builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                children: [
-                  Text(
-                    l10n.backupCredentialPhrase,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    l10n.backupCredentialPhraseExplanation,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
-              MnemonicDisplay(mnemonic: state.mnemonic),
-              const SizedBox(height: 32),
-              SizedBox(
-                height: 42,
-                child: BaseButton.primary(
-                  context: context,
-                  onPressed: state.status == AppStatus.loading
-                      ? null
-                      : () async {
-                          await context
-                              .read<BackupCredentialCubit>()
-                              .encryptAndDownloadFile();
-                        },
-                  child: Text(l10n.backupCredentialButtonTitle),
+    return WillPopScope(
+      onWillPop: () async {
+        if (context.read<BackupCredentialCubit>().state.status ==
+            AppStatus.loading) {
+          return false;
+        }
+        return true;
+      },
+      child: BasePage(
+        title: l10n.backupCredential,
+        titleLeading: const BackLeadingButton(),
+        body: BlocConsumer<BackupCredentialCubit, BackupCredentialState>(
+          listener: (context, state) async {
+            if (state.status == AppStatus.loading) {
+              _overlay = OverlayEntry(
+                builder: (_) => const LoadingDialog(),
+              );
+              Overlay.of(context)!.insert(_overlay!);
+            } else {
+              if (_overlay != null) {
+                _overlay!.remove();
+                _overlay = null;
+              }
+            }
+
+            if (state.message != null) {
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: state.message!,
+              );
+            }
+          },
+          builder: (context, state) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      l10n.backupCredentialPhrase,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.backupCredentialPhraseExplanation,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
                 ),
-              )
-            ],
-          );
-        },
+                const SizedBox(height: 32),
+                MnemonicDisplay(mnemonic: state.mnemonic),
+                const SizedBox(height: 32),
+                SizedBox(
+                  height: 42,
+                  child: BaseButton.primary(
+                    context: context,
+                    onPressed: state.status == AppStatus.loading
+                        ? null
+                        : () async {
+                            await context
+                                .read<BackupCredentialCubit>()
+                                .encryptAndDownloadFile();
+                          },
+                    child: Text(l10n.backupCredentialButtonTitle),
+                  ),
+                )
+              ],
+            );
+          },
+        ),
       ),
     );
   }

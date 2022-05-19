@@ -44,89 +44,112 @@ class _RecoveryCredentialPageState extends State<RecoveryCredentialPage> {
     });
   }
 
+  OverlayEntry? _overlay;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BasePage(
-      title: l10n.recoveryCredential,
-      titleLeading: const BackLeadingButton(),
-      body: BlocConsumer<RecoveryCredentialCubit, RecoveryCredentialState>(
-        listener: (context, state) {
-          if (state.status == AppStatus.success &&
-              state.recoveredCredentialLength != null) {
-            final credentialLength = state.recoveredCredentialLength;
-            AlertMessage.showStringMessage(
-              context: context,
-              message: l10n.recoveryCredentialSuccessMessage(
-                '''$credentialLength ${credentialLength! > 1 ? '${l10n.credential}s' : l10n.credential}''',
-              ),
-              messageType: MessageType.success,
-            );
-            Navigator.of(context).pop();
-            Navigator.of(context).pop();
-          }
+    return WillPopScope(
+      onWillPop: () async {
+        if (context.read<RecoveryCredentialCubit>().state.status ==
+            AppStatus.loading) {
+          return false;
+        }
+        return true;
+      },
+      child: BasePage(
+        title: l10n.recoveryCredential,
+        titleLeading: const BackLeadingButton(),
+        body: BlocConsumer<RecoveryCredentialCubit, RecoveryCredentialState>(
+          listener: (context, state) {
+            if (state.status == AppStatus.loading) {
+              _overlay = OverlayEntry(
+                builder: (_) => const LoadingDialog(),
+              );
+              Overlay.of(context)!.insert(_overlay!);
+            } else {
+              if (_overlay != null) {
+                _overlay!.remove();
+                _overlay = null;
+              }
+            }
 
-          if (state.message != null) {
-            AlertMessage.showStateMessage(
-              context: context,
-              stateMessage: state.message!,
-            );
-          }
-        },
-        builder: (context, state) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Column(
-                children: [
-                  Text(
-                    l10n.recoveryCredentialPhrase,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    l10n.recoveryCredentialPhraseExplanation,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
-              BaseTextField(
-                label: l10n.recoveryMnemonicHintText,
-                controller: mnemonicController,
-                error: state.isTextFieldEdited && !state.isMnemonicValid
-                    ? l10n.recoveryMnemonicError
-                    : null,
-              ),
-              const SizedBox(height: 24),
-              BaseButton.primary(
+            if (state.status == AppStatus.success &&
+                state.recoveredCredentialLength != null) {
+              final credentialLength = state.recoveredCredentialLength;
+              AlertMessage.showStringMessage(
                 context: context,
-                textColor: Theme.of(context).colorScheme.onPrimary,
-                gradient: state.isMnemonicValid
-                    ? null
-                    : LinearGradient(
-                        colors: [
-                          Theme.of(context).colorScheme.buttonDisabled,
-                          Theme.of(context).colorScheme.buttonDisabled
-                        ],
-                      ),
-                onPressed: !state.isMnemonicValid
-                    ? null
-                    : () async {
-                        if (Platform.isAndroid) {
-                          final appDir = (await getTemporaryDirectory()).path;
-                          await Directory(appDir).delete(recursive: true);
-                        }
-                        await _pickRecoveryFile();
-                      },
-                child: Text(l10n.recoveryCredentialButtonTitle),
-              )
-            ],
-          );
-        },
+                message: l10n.recoveryCredentialSuccessMessage(
+                  '''$credentialLength ${credentialLength! > 1 ? '${l10n.credential}s' : l10n.credential}''',
+                ),
+                messageType: MessageType.success,
+              );
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            }
+
+            if (state.message != null) {
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: state.message!,
+              );
+            }
+          },
+          builder: (context, state) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Column(
+                  children: [
+                    Text(
+                      l10n.recoveryCredentialPhrase,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.recoveryCredentialPhraseExplanation,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                BaseTextField(
+                  label: l10n.recoveryMnemonicHintText,
+                  controller: mnemonicController,
+                  error: state.isTextFieldEdited && !state.isMnemonicValid
+                      ? l10n.recoveryMnemonicError
+                      : null,
+                ),
+                const SizedBox(height: 24),
+                BaseButton.primary(
+                  context: context,
+                  textColor: Theme.of(context).colorScheme.onPrimary,
+                  gradient: state.isMnemonicValid
+                      ? null
+                      : LinearGradient(
+                          colors: [
+                            Theme.of(context).colorScheme.buttonDisabled,
+                            Theme.of(context).colorScheme.buttonDisabled
+                          ],
+                        ),
+                  onPressed: !state.isMnemonicValid
+                      ? null
+                      : () async {
+                          if (Platform.isAndroid) {
+                            final appDir = (await getTemporaryDirectory()).path;
+                            await Directory(appDir).delete(recursive: true);
+                          }
+                          await _pickRecoveryFile();
+                        },
+                  child: Text(l10n.recoveryCredentialButtonTitle),
+                )
+              ],
+            );
+          },
+        ),
       ),
     );
   }
