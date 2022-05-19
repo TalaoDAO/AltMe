@@ -106,7 +106,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> verify({required Uri? uri}) async {
-    emit(state.loading());
     try {
       ///Check if SIOPV2 request
       if (uri?.queryParameters['scope'] == 'openid') {
@@ -249,7 +248,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         case 'VerifiablePresentationRequest':
           if (data['query'] != null) {
-            log.info('QueryByExample');
             queryByExampleCubit.setQueryByExampleCubit(
               (data['query']).first as Map<String, dynamic>,
             );
@@ -265,6 +263,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 domain: data['domain'] as String,
               );
             } else if (data['query'].first['type'] == 'QueryByExample') {
+              log.info('QueryByExample');
               emit(
                 state.success(
                   route: CredentialsPresentPage.route(

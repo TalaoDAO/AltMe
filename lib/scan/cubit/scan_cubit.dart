@@ -51,6 +51,8 @@ class ScanCubit extends Cubit<ScanState> {
 
       final vcStr = jsonEncode(jsonCredential);
       final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
+
+      await Future<void>.delayed(const Duration(milliseconds: 500));
       final verification = await didKitProvider.verifyCredential(vcStr, optStr);
 
       debugPrint('[wallet/credential-offer/verify/vc] $vcStr');
@@ -189,6 +191,7 @@ class ScanCubit extends Cubit<ScanState> {
     final log = Logger('altme-wallet/scan/chapi-get-didauth');
 
     emit(state.loading());
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
       final key = (await secureStorageProvider.get(keyId))!;
       final did = await secureStorageProvider.get(SecureStorageKeys.did);

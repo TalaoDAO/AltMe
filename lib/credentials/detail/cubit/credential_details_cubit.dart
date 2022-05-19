@@ -26,9 +26,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   }
 
   Future<void> verify(CredentialModel item) async {
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     final vcStr = jsonEncode(item.data);
     final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
-    final result = await DIDKitProvider().verifyCredential(vcStr, optStr);
+    final result = await didKitProvider.verifyCredential(vcStr, optStr);
     final jsonResult = jsonDecode(result) as Map<String, dynamic>;
 
     if ((jsonResult['warnings'] as List).isNotEmpty) {
