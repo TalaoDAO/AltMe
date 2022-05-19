@@ -9,6 +9,7 @@ import 'package:altme/drawer/recovery_key/view/recovery_key_page.dart';
 import 'package:altme/drawer/terms/view/terms_page.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/nft/view/nft_page.dart';
 import 'package:altme/personal/personal.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -173,6 +174,12 @@ class ProfileView extends StatelessWidget {
                   onTap: () => Navigator.of(context)
                       .push<void>(ThemePage.route(context.read<ThemeCubit>())),
                 ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push<void>(NftPage.route());
+                  },
+                  child: const Text('Test Button'),
+                )
               ],
             );
           },
