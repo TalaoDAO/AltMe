@@ -119,11 +119,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         ///credential should not be empty since we have to present
         if (walletCubit.state.credentials.isEmpty) {
-          emit(state.error(
-            messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR,
+          emit(
+            state.error(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR,
+              ),
             ),
-          ));
+          );
           emit(state.success(route: IssuerWebsitesPage.route('')));
 
           return;
@@ -156,8 +158,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final openIdIssuer = getIssuer(sIOPV2Param.claims!);
 
         ///check if credential and issuer both are not present
-        // TODO(all): Review this code... JSONPath should not cause
-        // issue in future
         if (openIdCredential == '' && openIdIssuer == '') {
           throw ResponseMessage(
             ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
@@ -192,16 +192,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         if (selectedCredentials.isEmpty) {
           emit(
-              state.success(route: IssuerWebsitesPage.route(openIdCredential)));
+            state.success(route: IssuerWebsitesPage.route(openIdCredential)),
+          );
           return;
         }
 
-        emit(state.success(
-          route: SIOPV2CredentialPickPage.route(
-            credentials: selectedCredentials,
-            sIOPV2Param: sIOPV2Param,
+        emit(
+          state.success(
+            route: SIOPV2CredentialPickPage.route(
+              credentials: selectedCredentials,
+              sIOPV2Param: sIOPV2Param,
+            ),
           ),
-        ));
+        );
       } else {
         emit(state.acceptHost(uri: uri!));
       }
