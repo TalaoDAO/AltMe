@@ -234,11 +234,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final dynamic response = await client.get(uri.toString());
       data = response is String ? jsonDecode(response) : response;
 
-      scanCubit.emitScanStatePreview(preview: data as Map<String, dynamic>);
       switch (data['type']) {
         case 'CredentialOffer':
           log.info('Credential Offer');
-          emit(state.success(route: CredentialsReceivePage.route(uri)));
+          emit(
+            state.success(
+              route: CredentialsReceivePage.route(
+                uri: uri,
+                preview: data as Map<String, dynamic>,
+              ),
+            ),
+          );
           break;
 
         case 'VerifiablePresentationRequest':
@@ -260,7 +266,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               );
             } else if (data['query'].first['type'] == 'QueryByExample') {
               emit(
-                state.success(route: CredentialsPresentPage.route(uri: uri)),
+                state.success(
+                  route: CredentialsPresentPage.route(
+                    uri: uri,
+                    preview: data as Map<String, dynamic>,
+                  ),
+                ),
               );
             } else {
               throw ResponseMessage(
@@ -268,7 +279,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               );
             }
           } else {
-            emit(state.success(route: CredentialsPresentPage.route(uri: uri)));
+            emit(
+              state.success(
+                route: CredentialsPresentPage.route(
+                  uri: uri,
+                  preview: data as Map<String, dynamic>,
+                ),
+              ),
+            );
           }
           break;
 

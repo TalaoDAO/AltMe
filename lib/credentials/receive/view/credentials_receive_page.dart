@@ -8,13 +8,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CredentialsReceivePage extends StatelessWidget {
   const CredentialsReceivePage({
     Key? key,
-    required this.url,
+    required this.uri,
+    required this.preview,
   }) : super(key: key);
 
-  final Uri url;
+  final Uri uri;
+  final Map<String, dynamic> preview;
 
-  static Route route(Uri routeUrl) => MaterialPageRoute<void>(
-        builder: (context) => CredentialsReceivePage(url: routeUrl),
+  static Route route({
+    required Uri uri,
+    required Map<String, dynamic> preview,
+  }) =>
+      MaterialPageRoute<void>(
+        builder: (context) =>
+            CredentialsReceivePage(uri: uri, preview: preview),
         settings: const RouteSettings(name: '/credentialsReceive'),
       );
 
@@ -31,60 +38,56 @@ class CredentialsReceivePage extends StatelessWidget {
       ),
       body: BlocBuilder<ScanCubit, ScanState>(
         builder: (builderContext, state) {
-          if (state.status == ScanStatus.preview) {
-            final credentialModel = CredentialModel.fromJson(state.preview!);
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Text(
-                          '${url.host} ${l10n.credentialReceiveHost}',
-                          maxLines: 3,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(builderContext).textTheme.bodyText1,
-                        ),
+          final credentialModel = CredentialModel.fromJson(preview);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Text(
+                        '${uri.host} ${l10n.credentialReceiveHost}',
+                        maxLines: 3,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(builderContext).textTheme.bodyText1,
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                DisplayDetail(credentialModel: credentialModel),
-                const SizedBox(height: 24),
-                BaseButton.primary(
-                  context: context,
-                  onPressed: () async {
-                    final alias = await showDialog<String>(
-                      context: builderContext,
-                      builder: (context) => TextFieldDialog(
-                        title: l10n.credentialPickAlertMessage,
-                      ),
-                    );
-                    await context.read<ScanCubit>().credentialOffer(
-                          url: url.toString(),
-                          credentialModel: CredentialModel.copyWithAlias(
-                            oldCredentialModel: credentialModel,
-                            newAlias: alias,
-                          ),
-                          keyId: 'key',
-                        );
-                  },
-                  child: Text(l10n.credentialReceiveConfirm),
-                ),
-                const SizedBox(height: 8),
-                BaseButton.transparent(
-                  context: context,
-                  onPressed: () => Navigator.of(builderContext).pop(),
-                  child: Text(l10n.credentialReceiveCancel),
-                ),
-              ],
-            );
-          }
-
-          return const LinearProgressIndicator();
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              DisplayDetail(credentialModel: credentialModel),
+              const SizedBox(height: 24),
+              BaseButton.primary(
+                context: context,
+                onPressed: () async {
+                  final alias = await showDialog<String>(
+                    context: builderContext,
+                    builder: (context) => TextFieldDialog(
+                      title: l10n.credentialPickAlertMessage,
+                    ),
+                  );
+                  await context.read<ScanCubit>().credentialOffer(
+                        url: uri.toString(),
+                        credentialModel: CredentialModel.copyWithAlias(
+                          oldCredentialModel: credentialModel,
+                          newAlias: alias,
+                        ),
+                        keyId: 'key',
+                      );
+                },
+                child: Text(l10n.credentialReceiveConfirm),
+              ),
+              const SizedBox(height: 8),
+              BaseButton.transparent(
+                context: context,
+                onPressed: () => Navigator.of(builderContext).pop(),
+                child: Text(l10n.credentialReceiveCancel),
+              ),
+            ],
+          );
         },
       ),
     );

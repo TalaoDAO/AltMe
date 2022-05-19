@@ -31,10 +31,6 @@ class ScanCubit extends Cubit<ScanState> {
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
 
-  void emitScanStatePreview({required Map<String, dynamic> preview}) {
-    emit(state.scanPreview(preview: preview));
-  }
-
   Future<void> credentialOffer({
     required String url,
     required CredentialModel credentialModel,
