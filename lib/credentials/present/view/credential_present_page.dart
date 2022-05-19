@@ -10,13 +10,18 @@ class CredentialsPresentPage extends StatefulWidget {
   const CredentialsPresentPage({
     Key? key,
     required this.uri,
+    required this.preview,
   }) : super(key: key);
 
   final Uri uri;
+  final Map<String, dynamic> preview;
 
-  static Route route({required Uri uri}) {
+  static Route route({
+    required Uri uri,
+    required Map<String, dynamic> preview,
+  }) {
     return MaterialPageRoute<void>(
-      builder: (context) => CredentialsPresentPage(uri: uri),
+      builder: (context) => CredentialsPresentPage(uri: uri, preview: preview),
       settings: const RouteSettings(name: '/credentialsPresent'),
     );
   }
@@ -39,59 +44,55 @@ class _CredentialsPresentPageState extends State<CredentialsPresentPage> {
       ),
       body: BlocBuilder<ScanCubit, ScanState>(
         builder: (context, state) {
-          if (state.status == ScanStatus.preview) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Row(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.175,
-                      height: MediaQuery.of(context).size.width * 0.175,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.profileDummy,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Text(
-                        '''${l10n.credentialPresentRequiredCredential} credential(s).''',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    ),
-                  ],
-                ),
-                // const SizedBox(height: 16.0),
-                // DocumentWidget(
-                //     model: DocumentWidgetModel.fromCredentialModel(
-                //         CredentialModel(
-                //             id: '', image: '', data: {'issuer': ''}))),
-                const SizedBox(height: 24),
-                BaseButton.transparent(
-                  context: context,
-                  onPressed: () =>
-                      Navigator.of(context).pushReplacement<void, void>(
-                    QueryByExampleCredentialPickPage.route(
-                      widget.uri,
-                      state.preview!,
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Row(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.175,
+                    height: MediaQuery.of(context).size.width * 0.175,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.profileDummy,
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: Text(l10n.credentialPresentConfirm),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      '''${l10n.credentialPresentRequiredCredential} credential(s).''',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                ],
+              ),
+              // const SizedBox(height: 16.0),
+              // DocumentWidget(
+              //     model: DocumentWidgetModel.fromCredentialModel(
+              //         CredentialModel(
+              //             id: '', image: '', data: {'issuer': ''}))),
+              const SizedBox(height: 24),
+              BaseButton.transparent(
+                context: context,
+                onPressed: () =>
+                    Navigator.of(context).pushReplacement<void, void>(
+                  QueryByExampleCredentialPickPage.route(
+                    widget.uri,
+                    widget.preview,
+                  ),
                 ),
-                const SizedBox(height: 8),
-                BaseButton.primary(
-                  context: context,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(l10n.credentialPresentCancel),
-                ),
-              ],
-            );
-          }
-
-          return const LinearProgressIndicator();
+                child: Text(l10n.credentialPresentConfirm),
+              ),
+              const SizedBox(height: 8),
+              BaseButton.primary(
+                context: context,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(l10n.credentialPresentCancel),
+              ),
+            ],
+          );
         },
       ),
     );

@@ -34,6 +34,7 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
 
   Future<void> recoverWallet(String mnemonic, FilePickerResult result) async {
     emit(state.loading());
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
       final file = File(result.files.single.path!);
       final text = await file.readAsString();

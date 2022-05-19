@@ -7,6 +7,7 @@ import 'package:bip39/bip39.dart' as bip39;
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_saver/file_saver.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -43,6 +44,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
 
   Future<void> encryptAndDownloadFile() async {
     emit(state.loading());
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     final isPermissionStatusGranted = await _getStoragePermission();
 
     try {
@@ -60,11 +62,13 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       };
 
       final mnemonicFormatted = state.mnemonic.join(' ');
+      debugPrint(mnemonicFormatted);
       final encrypted =
           await cryptoKeys.encrypt(jsonEncode(message), mnemonicFormatted);
       final fileBytes = Uint8List.fromList(utf8.encode(jsonEncode(encrypted)));
       final filePath =
           await fileSaver.saveAs(fileName, fileBytes, 'txt', MimeType.TEXT);
+
       emit(
         state.success(
           filePath: filePath,
