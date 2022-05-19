@@ -26,6 +26,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   }
 
   Future<void> verify(CredentialModel item) async {
+    emit(state.copyWith(status: AppStatus.loading));
     await Future<void>.delayed(const Duration(milliseconds: 500));
     final vcStr = jsonEncode(item.data);
     final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
@@ -36,20 +37,30 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       emit(
         state.copyWith(
           verificationState: VerificationState.VerifiedWithWarning,
+          status: AppStatus.error,
         ),
       );
     } else if ((jsonResult['errors'] as List).isNotEmpty) {
       if (jsonResult['errors'][0] == 'No applicable proof') {
-        emit(state.copyWith(verificationState: VerificationState.Unverified));
+        emit(state.copyWith(
+          verificationState: VerificationState.Unverified,
+          status: AppStatus.error,
+        ));
       } else {
         emit(
           state.copyWith(
             verificationState: VerificationState.VerifiedWithError,
+            status: AppStatus.error,
           ),
         );
       }
     } else {
-      emit(state.copyWith(verificationState: VerificationState.Verified));
+      emit(
+        state.copyWith(
+          verificationState: VerificationState.Verified,
+          status: AppStatus.success,
+        ),
+      );
     }
   }
 
