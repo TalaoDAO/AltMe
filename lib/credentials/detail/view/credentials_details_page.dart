@@ -121,7 +121,14 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
             title: state.title != '' ? state.title : l10n.credential,
             titleTag:
                 'credential/${state.title ?? widget.credentialModel.id}/issuer',
-            titleLeading: const BackLeadingButton(),
+            titleLeading: BackLeadingButton(
+              onPressed: () {
+                if (context.read<CredentialDetailsCubit>().state.status !=
+                    AppStatus.loading) {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
             titleTrailing: IconButton(
               onPressed: _edit,
               icon: const Icon(Icons.edit),

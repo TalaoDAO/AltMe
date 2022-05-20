@@ -48,7 +48,14 @@ class _OnBoardingGenPhrasePageState extends State<OnBoardingGenPhrasePage> {
       },
       child: BasePage(
         title: l10n.onBoardingGenPhraseTitle,
-        titleLeading: const BackLeadingButton(),
+        titleLeading: BackLeadingButton(
+          onPressed: () {
+            if (context.read<OnBoardingGenPhraseCubit>().state.status !=
+                AppStatus.loading) {
+              Navigator.of(context).pop();
+            }
+          },
+        ),
         scrollView: true,
         body: BlocConsumer<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
           listener: (context, state) async {

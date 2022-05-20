@@ -59,7 +59,14 @@ class _RecoveryCredentialPageState extends State<RecoveryCredentialPage> {
       },
       child: BasePage(
         title: l10n.recoveryCredential,
-        titleLeading: const BackLeadingButton(),
+        titleLeading: BackLeadingButton(
+          onPressed: () {
+            if (context.read<RecoveryCredentialCubit>().state.status !=
+                AppStatus.loading) {
+              Navigator.of(context).pop();
+            }
+          },
+        ),
         body: BlocConsumer<RecoveryCredentialCubit, RecoveryCredentialState>(
           listener: (context, state) {
             if (state.status == AppStatus.loading) {
