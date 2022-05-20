@@ -141,12 +141,16 @@ class _PersonalPageState extends State<PersonalPage> {
               await Navigator.of(context)
                   .pushReplacement<void, void>(CredentialsListPage.route());
             } else {
+              AlertMessage.showStringMessage(
+                context: context,
+                message: l10n.succesfullyUpdated,
+                messageType: MessageType.success,
+              );
+
               Navigator.of(context).pop();
 
               /// Another pop to close the drawer
               Navigator.of(context).pop();
-
-              // TODO(bibash): add snack bar - succesfully updated
             }
           },
           child: Padding(
