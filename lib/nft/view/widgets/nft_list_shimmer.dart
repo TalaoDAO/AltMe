@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/nft/view/widgets/index.dart';
 import 'package:flutter/material.dart';
 
@@ -14,13 +15,16 @@ class NftListShimmer extends StatelessWidget {
           height: 15,
           width: 70,
         ),
+        const SizedBox(
+          height: 8,
+        ),
         Expanded(
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
-              childAspectRatio: 150 / 180,
+              childAspectRatio: Sizes.nftItemRatio,
             ),
             itemBuilder: (_, __) => const NftItemShimmer(),
             itemCount: 12,
