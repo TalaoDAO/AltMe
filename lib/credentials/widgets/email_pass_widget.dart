@@ -185,20 +185,9 @@ class EmailPassVerso extends Verso {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Row(
-                      children: [
-                        Text(
-                          '${l10n.personalMail}: ',
-                          style: Theme.of(context)
-                              .textTheme
-                              .credentialTextCard
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          emailPassModel.email!,
-                          style: Theme.of(context).textTheme.credentialTextCard,
-                        )
-                      ],
+                    Text(
+                      emailPassModel.email!,
+                      style: Theme.of(context).textTheme.credentialTextCard,
                     )
                   ],
                 ),
