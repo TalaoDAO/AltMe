@@ -187,6 +187,13 @@ class _SplashViewState extends State<SplashView>
           listener: (BuildContext context, ScanState state) async {
             final l10n = context.l10n;
 
+            if (state.message != null) {
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: state.message!,
+              );
+            }
+
             if (state.status == ScanStatus.askPermissionDidAuth) {
               final scanCubit = context.read<ScanCubit>();
               final state = scanCubit.state;

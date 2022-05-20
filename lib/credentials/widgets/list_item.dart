@@ -101,9 +101,14 @@ class CredentialsListPageItem extends StatelessWidget {
                   tag: 'credential/${credentialModel.id}/icon',
                   child: selected == null
                       ? CredentialIcon(credential: credential)
-                      : selected!
-                          ? const CredentialCheckedBox()
-                          : const CredentialUncheckedBox(),
+                      : Icon(
+                          selected!
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
+                          size: 32,
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                        ),
                 ),
                 const SizedBox(width: 8),
                 DisplayStatus(
@@ -115,36 +120,6 @@ class CredentialsListPageItem extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class CredentialUncheckedBox extends StatelessWidget {
-  const CredentialUncheckedBox({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Icon(
-      Icons.check_box_outline_blank,
-      size: 32,
-      color: Theme.of(context).colorScheme.secondaryContainer,
-    );
-  }
-}
-
-class CredentialCheckedBox extends StatelessWidget {
-  const CredentialCheckedBox({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Icon(
-      Icons.check_box,
-      size: 32,
-      color: Theme.of(context).colorScheme.secondaryContainer,
     );
   }
 }
