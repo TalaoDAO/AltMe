@@ -48,21 +48,12 @@ class _SIOPV2CredentialPickPageState extends State<SIOPV2CredentialPickPage> {
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           _overlay = OverlayEntry(
-            builder: (context) => WillPopScope(
-              onWillPop: () => Future.value(false),
-              child: AlertDialog(
-                backgroundColor: Theme.of(context).colorScheme.background,
-                title: Center(
-                  child: Text(l10n.loading),
-                ),
-              ),
-            ),
+            builder: (_) => const LoadingDialog(),
           );
           Overlay.of(context)!.insert(_overlay!);
         } else {
           _overlay!.remove();
           _overlay = null;
-          Navigator.of(context).pop();
         }
       },
       builder: (context, state) {
@@ -78,7 +69,10 @@ class _SIOPV2CredentialPickPageState extends State<SIOPV2CredentialPickPage> {
             title: l10n.credentialPickTitle,
             titleTrailing: IconButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                if (context.read<SIOPV2CredentialPickCubit>().state.status !=
+                    AppStatus.loading) {
+                  Navigator.of(context).pop();
+                }
               },
               icon: const Icon(Icons.close),
             ),

@@ -32,7 +32,7 @@ class PersonalPage extends StatefulWidget {
       MaterialPageRoute<void>(
         builder: (context) => MultiBlocProvider(
           providers: [
-            BlocProvider(create: (_) => PersonalPgeCubit()),
+            BlocProvider(create: (_) => PersonalPageCubit()),
             BlocProvider(
               create: (_) => SelfIssuedCredentialCubit(
                 walletCubit: context.read<WalletCubit>(),
@@ -65,7 +65,7 @@ class _PersonalPageState extends State<PersonalPage> {
   late TextEditingController jobTitleController;
 
   late final l10n = context.l10n;
-  late final personalPageCubit = context.read<PersonalPgeCubit>();
+  late final personalPageCubit = context.read<PersonalPageCubit>();
   late final isEnterprise = widget.profileModel.isEnterprise;
 
   @override
@@ -94,7 +94,10 @@ class _PersonalPageState extends State<PersonalPage> {
     return WillPopScope(
       onWillPop: () async {
         if (!widget.isFromOnBoarding) {
-          Navigator.pop(context);
+          if (context.read<SelfIssuedCredentialCubit>().state.status !=
+              AppStatus.loading) {
+            Navigator.of(context).pop();
+          }
         }
         return false;
       },
@@ -111,6 +114,8 @@ class _PersonalPageState extends State<PersonalPage> {
         titleTrailing: InkWell(
           borderRadius: BorderRadius.circular(8),
           onTap: () async {
+            if (context.read<SelfIssuedCredentialCubit>().state.status ==
+                AppStatus.loading) return;
             final model = widget.profileModel.copyWith(
               firstName: firstNameController.text,
               lastName: lastNameController.text,
@@ -136,6 +141,12 @@ class _PersonalPageState extends State<PersonalPage> {
               await Navigator.of(context)
                   .pushReplacement<void, void>(CredentialsListPage.route());
             } else {
+              AlertMessage.showStringMessage(
+                context: context,
+                message: l10n.succesfullyUpdated,
+                messageType: MessageType.success,
+              );
+
               Navigator.of(context).pop();
 
               /// Another pop to close the drawer
@@ -156,7 +167,7 @@ class _PersonalPageState extends State<PersonalPage> {
         padding: const EdgeInsets.symmetric(
           vertical: 32,
         ),
-        body: BlocBuilder<PersonalPgeCubit, PersonalPageState>(
+        body: BlocBuilder<PersonalPageCubit, PersonalPageState>(
           builder: (context, state) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
