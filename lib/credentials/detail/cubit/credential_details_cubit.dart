@@ -42,10 +42,12 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       );
     } else if ((jsonResult['errors'] as List).isNotEmpty) {
       if (jsonResult['errors'][0] == 'No applicable proof') {
-        emit(state.copyWith(
-          verificationState: VerificationState.Unverified,
-          status: AppStatus.error,
-        ));
+        emit(
+          state.copyWith(
+            verificationState: VerificationState.Unverified,
+            status: AppStatus.error,
+          ),
+        );
       } else {
         emit(
           state.copyWith(

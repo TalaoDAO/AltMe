@@ -30,6 +30,8 @@ class CredentialsReceivePage extends StatefulWidget {
 }
 
 class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
+  OverlayEntry? _overlay;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -45,10 +47,27 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
         padding: const EdgeInsets.all(24),
         title: l10n.credentialReceiveTitle,
         titleTrailing: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            if (context.read<ScanCubit>().state.status != ScanStatus.loading) {
+              Navigator.of(context).pop();
+            }
+          },
           icon: const Icon(Icons.close),
         ),
-        body: BlocBuilder<ScanCubit, ScanState>(
+        body: BlocConsumer<ScanCubit, ScanState>(
+          listener: (BuildContext context, ScanState state) async {
+            if (state.status == ScanStatus.loading) {
+              _overlay = OverlayEntry(
+                builder: (_) => const LoadingDialog(),
+              );
+              Overlay.of(context)!.insert(_overlay!);
+            } else {
+              if (_overlay != null) {
+                _overlay!.remove();
+                _overlay = null;
+              }
+            }
+          },
           builder: (builderContext, state) {
             final credentialModel = CredentialModel.fromJson(widget.preview);
             return Column(

@@ -123,6 +123,7 @@ class ScanCubit extends Cubit<ScanState> {
     final log = Logger('altme-wallet/scan/verifiable-presentation-request');
 
     emit(state.loading());
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
       final key = (await secureStorageProvider.get(keyId))!;
       final did = await secureStorageProvider.get(SecureStorageKeys.did);

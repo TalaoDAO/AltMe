@@ -45,7 +45,14 @@ class _BackupCredentialPageState extends State<BackupCredentialPage> {
       },
       child: BasePage(
         title: l10n.backupCredential,
-        titleLeading: const BackLeadingButton(),
+        titleLeading: BackLeadingButton(
+          onPressed: () {
+            if (context.read<BackupCredentialCubit>().state.status !=
+                AppStatus.loading) {
+              Navigator.of(context).pop();
+            }
+          },
+        ),
         body: BlocConsumer<BackupCredentialCubit, BackupCredentialState>(
           listener: (context, state) async {
             if (state.status == AppStatus.loading) {
