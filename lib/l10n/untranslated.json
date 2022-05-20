@@ -120,7 +120,8 @@
     "failedVerification",
     "unableToProcessTheData",
     "unimplementedQueryType",
-    "onSubmittedPassBasePopUp"
+    "onSubmittedPassBasePopUp",
+    "myCollection"
   ],
 
   "es": [
@@ -243,7 +244,8 @@
     "failedVerification",
     "unableToProcessTheData",
     "unimplementedQueryType",
-    "onSubmittedPassBasePopUp"
+    "onSubmittedPassBasePopUp",
+    "myCollection"
   ],
 
   "fr": [
@@ -257,7 +259,8 @@
     "failedVerification",
     "unableToProcessTheData",
     "unimplementedQueryType",
-    "onSubmittedPassBasePopUp"
+    "onSubmittedPassBasePopUp",
+    "myCollection"
   ],
 
   "it": [
@@ -382,6 +385,7 @@
     "failedVerification",
     "unableToProcessTheData",
     "unimplementedQueryType",
-    "onSubmittedPassBasePopUp"
+    "onSubmittedPassBasePopUp",
+    "myCollection"
   ]
 }

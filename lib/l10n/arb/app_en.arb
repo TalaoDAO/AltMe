@@ -291,5 +291,6 @@
   "failedVerification": "Failed verification",
   "unableToProcessTheData": "Unable to process the data",
   "unimplementedQueryType": "Unimplemented Query Type",
-  "onSubmittedPassBasePopUp": "You will receive an email"
+  "onSubmittedPassBasePopUp": "You will receive an email",
+  "myCollection" : "My collection"
 }

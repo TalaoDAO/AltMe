@@ -1,3 +1,4 @@
+import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class MyCollectionText extends StatelessWidget {
@@ -5,9 +6,10 @@ class MyCollectionText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'My collection',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    final l10n = context.l10n;
+    return Text(
+      l10n.myCollection,
+      style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
     );
   }
 }
