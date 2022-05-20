@@ -79,7 +79,10 @@ class _QueryByExampleCredentialPickPageState
                   title: l10n.credentialPickTitle,
                   titleTrailing: IconButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      if (context.read<ScanCubit>().state.status !=
+                          ScanStatus.loading) {
+                        Navigator.of(context).pop();
+                      }
                     },
                     icon: const Icon(Icons.close),
                   ),
