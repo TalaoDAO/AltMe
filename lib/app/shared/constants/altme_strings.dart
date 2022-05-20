@@ -3,7 +3,7 @@ class AltMeStrings {
   static const String light = 'light';
   static const String dark = 'dark';
   static const String system = 'system';
-  static const String defaultDIDMethod = 'tz';
+  static const String defaultDIDMethod = 'key';
   static const String defaultDIDMethodName = 'Tezos';
   static const String enterpriseDIDMethod = 'web';
   static const String enterpriseDIDMethodName = 'Web';
