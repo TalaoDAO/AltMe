@@ -1,3 +1,4 @@
+import 'package:altme/nft/models/index.dart';
 import 'package:altme/nft/view/widgets/index.dart';
 import 'package:flutter/material.dart';
 
@@ -31,15 +32,15 @@ class _NftPageState extends State<NftPage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            MyCollectionText(),
-            Padding(
+          children: [
+            const MyCollectionText(),
+            const Padding(
               padding: EdgeInsets.only(top: 8, bottom: 16),
               child: Divider(
                 height: 1,
               ),
             ),
-            Expanded(child: NftListShimmer()),
+            Expanded(child: NftList(nftList: NftModel.fakeList(),)),
           ],
         ),
       ),
