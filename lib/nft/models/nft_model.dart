@@ -1,14 +1,27 @@
-class NftModel {
-  NftModel({
-    this.assetUrl =
-        'https://ipfs.io/ipfs/QmaukD3nc8zhAgQvruZRrHyeXpXnWgu3nnEatWUFt94ovi',
-    this.description = 'Abstract Smoke Red something else ',
-    this.assetValue = '1.25 ETH',
-  });
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-  final String assetUrl;
-  final String description;
-  final String assetValue;
+part 'nft_model.g.dart';
 
-  static List<NftModel> fakeList() => List.generate(14, (index) => NftModel());
+@JsonSerializable()
+@immutable
+class NftModel extends Equatable {
+  const NftModel(this.id, this.name, this.thumbnailUri, this.balance);
+
+  factory NftModel.fromJson(Map<String, dynamic> json) =>
+      _$NftModelFromJson(json);
+
+  @JsonKey(defaultValue: '')
+  final String id;
+  @JsonKey(defaultValue: '')
+  final String name;
+  @JsonKey(defaultValue: '')
+  final String thumbnailUri;
+  final int balance;
+
+  Map<String, dynamic> toJson() => _$NftModelToJson(this);
+
+  @override
+  List<Object?> get props => [id, name, thumbnailUri, balance];
 }

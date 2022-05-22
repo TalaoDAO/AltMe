@@ -28,9 +28,11 @@ class NftList extends StatelessWidget {
               childAspectRatio: Sizes.nftItemRatio,
             ),
             itemBuilder: (_, index) => NftItem(
-              assetUrl: nftList[index].assetUrl,
-              assetValue: nftList[index].assetValue,
-              description: nftList[index].description,
+              assetUrl: nftList[index]
+                  .thumbnailUri
+                  .replaceAll('ipfs://', 'https://ipfs.io/ipfs/'),
+              assetValue: '${nftList[index].balance} XTZ',
+              description: nftList[index].name,
             ),
             itemCount: nftList.length,
           ),
