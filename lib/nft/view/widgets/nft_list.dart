@@ -20,6 +20,7 @@ class NftList extends StatelessWidget {
         ),
         Expanded(
           child: GridView.builder(
+            physics: const BouncingScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 8,
