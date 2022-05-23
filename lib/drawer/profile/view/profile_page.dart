@@ -174,12 +174,6 @@ class ProfileView extends StatelessWidget {
                   onTap: () => Navigator.of(context)
                       .push<void>(ThemePage.route(context.read<ThemeCubit>())),
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push<void>(NftPage.route());
-                  },
-                  child: const Text('Test Button'),
-                )
               ],
             );
           },

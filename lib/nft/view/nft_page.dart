@@ -34,6 +34,7 @@ class _NftPageState extends State<NftPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // TODO(Taleb): update this widget after homePage widget created
         title: const Text('NFT page'),
       ),
       body: Container(

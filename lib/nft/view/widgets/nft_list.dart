@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/nft/models/index.dart';
 import 'package:altme/nft/view/widgets/index.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +11,12 @@ class NftList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${nftList.length} items'),
+        Text('${nftList.length} ${l10n.items}'),
         const SizedBox(
           height: 8,
         ),
