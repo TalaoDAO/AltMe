@@ -121,7 +121,8 @@
     "unableToProcessTheData",
     "unimplementedQueryType",
     "onSubmittedPassBasePopUp",
-    "succesfullyUpdated"
+    "succesfullyUpdated",
+    "search"
   ],
 
   "es": [
@@ -245,7 +246,8 @@
     "unableToProcessTheData",
     "unimplementedQueryType",
     "onSubmittedPassBasePopUp",
-    "succesfullyUpdated"
+    "succesfullyUpdated",
+    "search"
   ],
 
   "fr": [
@@ -386,6 +388,7 @@
     "unableToProcessTheData",
     "unimplementedQueryType",
     "onSubmittedPassBasePopUp",
-    "succesfullyUpdated"
+    "succesfullyUpdated",
+    "search"
   ]
 }

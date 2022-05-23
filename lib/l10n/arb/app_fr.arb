@@ -286,5 +286,6 @@
   "emailPassCredential": "Preuve d'email",
   "needEmailPass": "Vous devez dabord aquérir une preuve d'email.",
   "signature": "Signature",
-  "proof": "Preuve"
+  "proof": "Preuve",
+  "search": "Rechercher"
 }

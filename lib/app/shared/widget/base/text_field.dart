@@ -13,6 +13,7 @@ class BaseTextField extends StatelessWidget {
     this.prefixIcon,
     this.prefixConstraint,
     this.validator,
+    this.focusNode,
   }) : super(key: key);
 
   final String? label;
@@ -24,6 +25,7 @@ class BaseTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final BoxConstraints? prefixConstraint;
   final String? Function(String?)? validator;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class BaseTextField extends StatelessWidget {
         border: Border.all(color: Theme.of(context).colorScheme.borderColor),
       ),
       child: TextFormField(
+        focusNode: focusNode,
         controller: controller,
         cursorColor: Theme.of(context).colorScheme.secondaryContainer,
         keyboardType: type,
@@ -55,8 +58,6 @@ class BaseTextField extends StatelessWidget {
           hoverColor: Theme.of(context).colorScheme.primary,
           focusColor: Theme.of(context).colorScheme.primary,
           errorText: error,
-          // hintText: label,
-          // hintStyle: Theme.of(context).textTheme.bodyText1!,
           labelText: label,
           labelStyle: Theme.of(context).textTheme.bodyText1,
           prefixIcon: prefixIcon,

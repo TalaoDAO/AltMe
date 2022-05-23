@@ -292,5 +292,6 @@
   "unableToProcessTheData": "Unable to process the data",
   "unimplementedQueryType": "Unimplemented Query Type",
   "onSubmittedPassBasePopUp": "You will receive an email",
-  "succesfullyUpdated":"Successfully Updated."
+  "succesfullyUpdated": "Successfully Updated.",
+  "search": "Search"
 }
