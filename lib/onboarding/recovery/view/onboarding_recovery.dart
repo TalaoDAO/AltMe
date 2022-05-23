@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/drawer/drawer.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/recovery/cubit/onboarding_recovery_cubit.dart';
 import 'package:altme/wallet/wallet.dart';

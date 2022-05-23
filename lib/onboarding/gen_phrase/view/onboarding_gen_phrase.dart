@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/drawer/drawer.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/gen_phrase/cubit/onboarding_gen_phrase_cubit.dart';
 import 'package:did_kit/did_kit.dart';
