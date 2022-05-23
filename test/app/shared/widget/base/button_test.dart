@@ -54,7 +54,7 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          theme: AppTheme.lightThemeData,
+          theme: AppTheme.darkThemeData,
           darkTheme: AppTheme.darkThemeData,
           onGenerateRoute: (context) {
             return MaterialPageRoute<dynamic>(
@@ -103,7 +103,7 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          theme: AppTheme.lightThemeData,
+          theme: AppTheme.darkThemeData,
           darkTheme: AppTheme.darkThemeData,
           onGenerateRoute: (context) {
             return MaterialPageRoute<dynamic>(
@@ -155,7 +155,7 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          theme: AppTheme.lightThemeData,
+          theme: AppTheme.darkThemeData,
           darkTheme: AppTheme.darkThemeData,
           onGenerateRoute: (context) {
             return MaterialPageRoute<dynamic>(

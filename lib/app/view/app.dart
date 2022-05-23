@@ -38,9 +38,6 @@ class App extends StatelessWidget {
         BlocProvider<FlavorCubit>(
           create: (context) => FlavorCubit(flavorMode),
         ),
-        BlocProvider<ThemeCubit>(
-          create: (context) => ThemeCubit(secure_storage.getSecureStorage),
-        ),
         BlocProvider<DeepLinkCubit>(create: (context) => DeepLinkCubit()),
         BlocProvider<QueryByExampleCubit>(
           create: (context) => QueryByExampleCubit(),
@@ -97,10 +94,9 @@ class MaterialAppDefinition extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'AltMe',
-      theme: AppTheme.lightThemeData,
       darkTheme: AppTheme.darkThemeData,
       navigatorObservers: [MyRouteObserver()],
-      themeMode: context.select((ThemeCubit cubit) => cubit.state),
+      themeMode: ThemeMode.dark,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

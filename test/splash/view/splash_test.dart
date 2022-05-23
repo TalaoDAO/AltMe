@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,20 +15,13 @@ class MockSecureStorageProvider extends Mock implements SecureStorageProvider {}
 
 class MockSplashCubit extends MockCubit<SplashStatus> implements SplashCubit {}
 
-class MockThemeCubit extends MockCubit<ThemeMode> implements ThemeCubit {}
-
 class MockFlavorCubit extends MockCubit<FlavorMode> implements FlavorCubit {}
 
 void main() {
-  late ThemeCubit themeCubit;
   late FlavorCubit flavorCubit;
   late SplashCubit splashCubit;
 
   setUpAll(() async {
-    themeCubit = MockThemeCubit();
-    when(() => themeCubit.state).thenReturn(ThemeMode.light);
-    when(() => themeCubit.getCurrentTheme())
-        .thenAnswer((_) async => ThemeMode.light);
     flavorCubit = MockFlavorCubit();
     splashCubit = MockSplashCubit();
   });
@@ -37,7 +29,6 @@ void main() {
   Widget makeTestableWidget() {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: themeCubit),
         BlocProvider.value(value: flavorCubit),
         BlocProvider.value(value: splashCubit),
       ],
