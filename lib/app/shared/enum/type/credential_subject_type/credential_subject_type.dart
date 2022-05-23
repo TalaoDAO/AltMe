@@ -1,4 +1,4 @@
-import 'package:altme/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/home/credentials/models/credential_model/credential_model.dart';
 import 'package:flutter/material.dart';
 
 part 'credential_subject_type_extension.dart';
