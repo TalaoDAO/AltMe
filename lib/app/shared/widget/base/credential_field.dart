@@ -6,16 +6,22 @@ class CredentialField extends StatelessWidget {
     Key? key,
     required this.value,
     this.title,
+    this.textColor,
   }) : super(key: key);
 
   final String value;
   final String? title;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
     return HasDisplay(
       value: value,
-      child: DisplayCredentialField(title: title, value: value),
+      child: DisplayCredentialField(
+        title: title,
+        value: value,
+        textColor: textColor,
+      ),
     );
   }
 }
@@ -25,10 +31,12 @@ class DisplayCredentialField extends StatelessWidget {
     Key? key,
     required this.title,
     required this.value,
+    this.textColor,
   }) : super(key: key);
 
   final String? title;
   final String value;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +47,22 @@ class DisplayCredentialField extends StatelessWidget {
           if (title != null)
             Text(
               '$title: ',
-              style: Theme.of(context).textTheme.credentialFieldTitle,
+              style: textColor == null
+                  ? Theme.of(context).textTheme.credentialFieldTitle
+                  : Theme.of(context)
+                      .textTheme
+                      .credentialFieldTitle
+                      .copyWith(color: textColor),
             ),
           Flexible(
             child: Text(
               value,
-              style: Theme.of(context).textTheme.credentialFieldDescription,
+              style: textColor == null
+                  ? Theme.of(context).textTheme.credentialFieldDescription
+                  : Theme.of(context)
+                      .textTheme
+                      .credentialFieldDescription
+                      .copyWith(color: textColor),
               maxLines: 5,
               overflow: TextOverflow.fade,
               softWrap: true,

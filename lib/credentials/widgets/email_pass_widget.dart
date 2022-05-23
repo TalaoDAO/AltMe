@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credential.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -133,7 +132,6 @@ class EmailPassVerso extends Verso {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     final emailPassModel = credentialModel
         .credentialPreview.credentialSubjectModel as EmailPassModel;
     return Container(

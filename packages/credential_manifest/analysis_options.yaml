@@ -1,0 +1,17 @@
+include: package:very_good_analysis/analysis_options.2.4.0.yaml
+analyzer:
+  exclude:
+    - '**/*.g.dart'
+linter:
+  rules:
+    public_member_api_docs: false
+    library_private_types_in_public_api: false
+    omit_local_variable_types: false
+    avoid_redundant_argument_values: false
+    cascade_invocations: false
+    constant_identifier_names: false
+    non_constant_identifier_names: false
+    prefer_constructors_over_static_methods: false
+    avoid_dynamic_calls: false
+    use_build_context_synchronously: false
+    use_string_buffers: false

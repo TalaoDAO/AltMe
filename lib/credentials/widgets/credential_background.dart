@@ -8,19 +8,22 @@ class CredentialBackground extends StatelessWidget {
     Key? key,
     required this.credentialModel,
     required this.child,
+    this.backgroundColor,
   }) : super(key: key);
 
   final CredentialModel credentialModel;
   final Widget child;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return CredentialContainer(
       child: Container(
         decoration: BaseBoxDecoration(
-          color: credentialModel
-              .credentialPreview.credentialSubjectModel.credentialSubjectType
-              .backgroundColor(credentialModel),
+          color: backgroundColor ??
+              credentialModel.credentialPreview.credentialSubjectModel
+                  .credentialSubjectType
+                  .backgroundColor(credentialModel),
           shapeColor: Theme.of(context).colorScheme.documentShape,
           value: 0,
           shapeSize: 256,
