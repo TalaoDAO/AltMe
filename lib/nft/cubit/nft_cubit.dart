@@ -1,16 +1,21 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/nft/cubit/nft_state.dart';
-import 'package:altme/nft/models/index.dart';
+import 'package:altme/nft/models/models.dart';
+import 'package:altme/nft/nft.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'nft_cubit.g.dart';
+part 'nft_state.dart';
 
 class NftCubit extends Cubit<NftState> {
-  NftCubit({required this.client}) : super(NftState.loading());
+  NftCubit({required this.client}) : super(const NftState());
 
   final DioClient client;
 
   Future<void> getTezosNftList() async {
     try {
-      emit(NftState.loading());
+      emit(state.loading());
       final List<dynamic> response = await client.get(
         '/v1/tokens/balances',
         queryParameters: <String, dynamic>{
@@ -18,16 +23,22 @@ class NftCubit extends Cubit<NftState> {
           'token.contract': 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
           'account': 'tz1VPZyh4ZHjDDpgvznqQQXUCLcV7g91WGMz',
           'select':
-              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance',
+              '''token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance''',
         },
       ) as List<dynamic>;
       final List<NftModel> data = response
           .map((dynamic e) => NftModel.fromJson(e as Map<String, dynamic>))
           .toList();
-      emit(NftState.loaded(data));
-    } catch (e, s) {
-      // TODO(all): handle error message localization
-      emit(NftState.error(e.toString()));
+      emit(state.success(data: data));
+    } catch (e) {
+      // TODO(all): handle error message localization and error message
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        ),
+      );
     }
   }
 }

@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/nft/cubit/nft_cubit.dart';
-import 'package:altme/nft/cubit/nft_state.dart';
-import 'package:altme/nft/view/widgets/index.dart';
+import 'package:altme/nft/view/widgets/widgets.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +22,6 @@ class NftPage extends StatefulWidget {
 }
 
 class _NftPageState extends State<NftPage> {
-
   @override
   void initState() {
     context.read<NftCubit>().getTezosNftList();
@@ -61,14 +59,18 @@ class _NftPageState extends State<NftPage> {
             Expanded(
               child: BlocBuilder<NftCubit, NftState>(
                 bloc: context.read<NftCubit>(),
-                builder: (_, nftState) {
-                  if (nftState.state == NftStateEnum.loading) {
+                builder: (_, state) {
+                  if (state.status == AppStatus.loading) {
                     return const NftListShimmer();
-                  } else if (nftState.state == NftStateEnum.loaded) {
-                    return NftList(nftList: nftState.data);
+                  } else if (state.status == AppStatus.success) {
+                    return NftList(nftList: state.data);
                   } else {
+                    final MessageHandler messageHandler =
+                        state.message!.messageHandler!;
+                    final String message =
+                        messageHandler.getMessage(context, messageHandler);
                     return Center(
-                      child: Text(nftState.error),
+                      child: Text(message),
                     );
                   }
                 },

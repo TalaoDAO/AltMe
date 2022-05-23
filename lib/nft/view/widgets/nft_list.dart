@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/nft/models/index.dart';
+import 'package:altme/nft/models/models.dart';
 import 'package:altme/nft/view/widgets/index.dart';
 import 'package:flutter/material.dart';
 
