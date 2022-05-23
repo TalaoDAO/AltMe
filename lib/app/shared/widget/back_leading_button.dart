@@ -10,8 +10,9 @@ class BackLeadingButton extends StatelessWidget {
     return IconButton(
       onPressed: onPressed ?? () => Navigator.of(context).pop(),
       icon: Icon(
-        Icons.arrow_back,
+        Icons.chevron_left,
         color: Theme.of(context).colorScheme.onSurface,
+        size: 28,
       ),
     );
   }

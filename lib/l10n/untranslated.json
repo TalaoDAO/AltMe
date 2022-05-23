@@ -123,7 +123,8 @@
     "onSubmittedPassBasePopUp",
     "myCollection",
     "items",
-    "succesfullyUpdated"
+    "succesfullyUpdated",
+    "generate"
   ],
 
   "es": [
@@ -249,7 +250,8 @@
     "onSubmittedPassBasePopUp",
     "myCollection",
     "items",
-    "succesfullyUpdated"
+    "succesfullyUpdated",
+    "generate"
   ],
 
   "fr": [
@@ -266,7 +268,8 @@
     "onSubmittedPassBasePopUp",
     "myCollection",
     "items",
-    "succesfullyUpdated"
+    "succesfullyUpdated",
+    "generate"
   ],
 
   "it": [
@@ -394,6 +397,7 @@
     "onSubmittedPassBasePopUp",
     "myCollection",
     "items",
-    "succesfullyUpdated"
+    "succesfullyUpdated",
+    "generate"
   ]
 }

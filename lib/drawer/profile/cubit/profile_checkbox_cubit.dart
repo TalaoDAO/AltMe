@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 
-part 'personal_page_state.dart';
+part 'profile_checkbox_state.dart';
 
-class PersonalPageCubit extends Cubit<PersonalPageState> {
-  PersonalPageCubit() : super(const PersonalPageState());
+class ProfileCheckboxCubit extends Cubit<ProfileCheckboxState> {
+  ProfileCheckboxCubit() : super(const ProfileCheckboxState());
 
   void firstNameCheckBoxChange({bool? value}) {
     emit(state.copyWith(isFirstName: value));

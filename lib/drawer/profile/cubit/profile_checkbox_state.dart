@@ -1,7 +1,7 @@
-part of 'personal_page_cubit.dart';
+part of 'profile_checkbox_cubit.dart';
 
-class PersonalPageState {
-  const PersonalPageState({
+class ProfileCheckboxState {
+  const ProfileCheckboxState({
     this.isFirstName = true,
     this.isLastName = true,
     this.isPhone = true,
@@ -21,7 +21,7 @@ class PersonalPageState {
   final bool isCompanyWebsite;
   final bool isJobTitle;
 
-  PersonalPageState copyWith({
+  ProfileCheckboxState copyWith({
     bool? isFirstName,
     bool? isLastName,
     bool? isPhone,
@@ -31,7 +31,7 @@ class PersonalPageState {
     bool? isCompanyWebsite,
     bool? isJobTitle,
   }) {
-    return PersonalPageState(
+    return ProfileCheckboxState(
       isFirstName: isFirstName ?? this.isFirstName,
       isLastName: isLastName ?? this.isLastName,
       isPhone: isPhone ?? this.isPhone,

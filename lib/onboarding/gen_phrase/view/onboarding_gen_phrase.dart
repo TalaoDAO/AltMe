@@ -1,9 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/drawer/profile/models/profile.dart';
+import 'package:altme/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/gen_phrase/cubit/onboarding_gen_phrase_cubit.dart';
-import 'package:altme/personal/view/personal_page.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,7 +78,7 @@ class _OnBoardingGenPhrasePageState extends State<OnBoardingGenPhrasePage> {
             }
             if (state.status == AppStatus.success) {
               await Navigator.of(context).pushReplacement<void, void>(
-                PersonalPage.route(
+                ProfilePage.route(
                   isFromOnBoarding: true,
                   profileModel: ProfileModel.empty(),
                 ),

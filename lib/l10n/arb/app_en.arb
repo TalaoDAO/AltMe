@@ -103,8 +103,7 @@
   "scanUnsupportedMessage": "The extracted url is not valid.",
   "qrCodeSharing": "You are now sharing",
   "qrCodeNoValidMessage": "This QRCode does not contain a valid message.",
-  "profileTitle": "Settings",
-  "personalTitle": "Personal",
+  "profileTitle": "Profile",
   "privacyTitle": "Privacy & Security",
   "termsTitle": "Terms & Conditions",
   "recoveryKeyTitle": "Recovery - key",
@@ -141,7 +140,7 @@
   "didDisplayCopy": "Copy DID to clipboard",
   "adressDisplayCopy": "Copy address to clipboard",
   "personalSave": "Save",
-  "personalSubtitle": "Your profile data can be used to fill credentials when applicable",
+  "personalSubtitle": "Your profile information can be used to complete a certificate when necessary",
   "personalFirstName": "First Name",
   "personalLastName": "Last Name",
   "personalPhone": "Phone",
@@ -294,5 +293,6 @@
   "onSubmittedPassBasePopUp": "You will receive an email",
   "myCollection" : "My collection",
   "items" : "items",
-  "succesfullyUpdated":"Successfully Updated."
+  "succesfullyUpdated": "Successfully Updated.",
+  "generate": "Generate"
 }

@@ -1,1 +1,10 @@
+export 'backup_credential/backup_credential.dart';
+export 'drawer/drawer.dart';
+export 'global_information/global_information.dart';
+export 'notices/notices.dart';
+export 'privacy/privacy.dart';
 export 'profile/profile.dart';
+export 'recovery_credential/recovery_credential.dart';
+export 'recovery_key/recovery_key.dart';
+export 'support/support.dart';
+export 'terms/terms.dart';

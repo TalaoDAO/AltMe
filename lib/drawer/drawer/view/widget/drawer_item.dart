@@ -1,8 +1,8 @@
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class MenuItem extends StatelessWidget {
-  const MenuItem({
+class DrawerItem extends StatelessWidget {
+  const DrawerItem({
     Key? key,
     required this.icon,
     required this.title,

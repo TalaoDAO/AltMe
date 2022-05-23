@@ -11,7 +11,6 @@ class BaseTextField extends StatelessWidget {
     this.textCapitalization = TextCapitalization.none,
     this.error,
     this.prefixIcon,
-    this.prefixConstraint,
     this.validator,
   }) : super(key: key);
 
@@ -22,50 +21,71 @@ class BaseTextField extends StatelessWidget {
   final TextCapitalization textCapitalization;
   final String? error;
   final Widget? prefixIcon;
-  final BoxConstraints? prefixConstraint;
   final String? Function(String?)? validator;
+
+  static const double borderRadius = 50;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(
-        right: 24,
-        left: prefixIcon != null ? 0 : 24,
-      ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        border: Border.all(color: Theme.of(context).colorScheme.borderColor),
-      ),
-      child: TextFormField(
-        controller: controller,
-        cursorColor: Theme.of(context).colorScheme.secondaryContainer,
-        keyboardType: type,
-        maxLines: 1,
-        textCapitalization: textCapitalization,
-        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 17),
-        validator: validator,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          focusedErrorBorder: InputBorder.none,
-          fillColor: Theme.of(context).colorScheme.primary,
-          hoverColor: Theme.of(context).colorScheme.primary,
-          focusColor: Theme.of(context).colorScheme.primary,
-          errorText: error,
-          // hintText: label,
-          // hintStyle: Theme.of(context).textTheme.bodyText1!,
-          labelText: label,
-          labelStyle: Theme.of(context).textTheme.bodyText1,
-          prefixIcon: prefixIcon,
-          prefixIconConstraints: prefixConstraint,
-          suffixIcon: Icon(
-            icon,
-            color: Theme.of(context).colorScheme.secondaryContainer,
+    return TextFormField(
+      controller: controller,
+      cursorColor: Theme.of(context).colorScheme.secondaryContainer,
+      keyboardType: type,
+      maxLines: 1,
+      textCapitalization: textCapitalization,
+      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 17),
+      validator: validator,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.textFieldBorder,
+            width: 1,
           ),
         ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.textFieldBorder,
+            width: 1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.textFieldBorder,
+            width: 1.5,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.textFieldErrorBorder,
+            width: 1,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.textFieldErrorBorder,
+            width: 1.5,
+          ),
+        ),
+        fillColor: Theme.of(context).colorScheme.primaryContainer,
+        hoverColor: Theme.of(context).colorScheme.primaryContainer,
+        focusColor: Theme.of(context).colorScheme.primaryContainer,
+        errorText: error,
+        labelText: label,
+        labelStyle: Theme.of(context).textTheme.bodyText1,
+        prefixIcon: prefixIcon,
+        prefixIconConstraints: const BoxConstraints(minWidth: 60),
+        suffixIcon: Icon(
+          icon,
+          color: Theme.of(context).colorScheme.secondaryContainer,
+        ),
+        suffixIconConstraints: const BoxConstraints(minWidth: 60),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       ),
     );
   }
