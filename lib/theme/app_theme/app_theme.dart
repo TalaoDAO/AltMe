@@ -2,18 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppTheme {
-  static const Color darkPrimary = Color(0xffbb86fc);
-  static const Color darkPrimaryContainer = Color(0xff3700B3);
-  static const Color darkSecondary = Color(0xff03dac6);
-  static const Color darkSecondaryContainer = Color(0xff03dac6);
-  static const Color darkSurface = Color(0xff212121);
-  static const Color darkBackground = Color(0xff121212);
-  static const Color darkError = Color(0xffcf6679);
+  /// A color frequently across your app’s screens and components.
+  static const Color darkPrimary = Color(0XFF6600FF);
+
+  /// A color that's clearly legible when drawn on primary
   static const Color darkOnPrimary = Colors.black;
+
+  /// A color used for elements needing less emphasis than primary
+  static const Color darkPrimaryContainer = Color(0xFFFFFFFF);
+
+  /// An accent color used for less prominent components in the UI, such as
+  /// filter chips, while expanding the opportunity for color expression.
+  static const Color darkSecondary = Color(0XFF00A1FF);
+
+  /// A color that's clearly legible when drawn on secondary
   static const Color darkOnSecondary = Colors.black;
+
+  /// A color used for elements needing less emphasis than secondary
+  static const Color darkSecondaryContainer = Color(0xFFFFFFFF);
+
+  /// The background color for widgets like Card.
+  static const Color darkSurface = Color(0xff212121);
+
+  /// A color that's clearly legible when drawn on surface.
   static const Color darkOnSurface = Colors.white;
+
+  /// A color that typically appears behind scrollable content.
+  static const Color darkBackground = Color(0XFF0D1019);
+
+  /// A color that's clearly legible when drawn on background.
   static const Color darkOnBackground = Colors.white;
+
+  /// The color to use for input validation errors, e.g. for
+  /// InputDecoration.errorText
+  static const Color darkError = Color(0xffcf6679);
+
+  /// A color that's clearly legible when drawn on error.
   static const Color darkOnError = Colors.black;
+
   static Color darkShadow = const Color(0xFF1D1D1D).withOpacity(0.1);
 
   static SnackBarThemeData get snackBarThemeData => SnackBarThemeData(
