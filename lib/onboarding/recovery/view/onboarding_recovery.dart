@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/recovery/cubit/onboarding_recovery_cubit.dart';
-import 'package:altme/personal/personal.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +92,7 @@ class _OnBoardingRecoveryPageState extends State<OnBoardingRecoveryPage> {
                           .read<OnBoardingRecoveryCubit>()
                           .saveMnemonic(mnemonicController.text);
                       await Navigator.of(context).pushReplacement<void, void>(
-                        PersonalPage.route(
+                        ProfilePage.route(
                           isFromOnBoarding: true,
                           profileModel: ProfileModel.empty(),
                         ),

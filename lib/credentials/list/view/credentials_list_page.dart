@@ -56,7 +56,7 @@ class _CredentialsListPageState extends State<CredentialsListPage> {
           vertical: 24,
           horizontal: 16,
         ),
-        drawer: const ProfilePage(),
+        drawer: const DrawerPage(),
         titleLeading: IconButton(
           icon: const Icon(Icons.menu),
           onPressed: () => scaffoldKey.currentState!.openDrawer(),
