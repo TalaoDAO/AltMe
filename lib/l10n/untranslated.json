@@ -121,6 +121,8 @@
     "unableToProcessTheData",
     "unimplementedQueryType",
     "onSubmittedPassBasePopUp",
+    "myCollection",
+    "items",
     "succesfullyUpdated"
   ],
 
@@ -245,6 +247,8 @@
     "unableToProcessTheData",
     "unimplementedQueryType",
     "onSubmittedPassBasePopUp",
+    "myCollection",
+    "items",
     "succesfullyUpdated"
   ],
 
@@ -260,6 +264,8 @@
     "unableToProcessTheData",
     "unimplementedQueryType",
     "onSubmittedPassBasePopUp",
+    "myCollection",
+    "items",
     "succesfullyUpdated"
   ],
 
@@ -386,6 +392,8 @@
     "unableToProcessTheData",
     "unimplementedQueryType",
     "onSubmittedPassBasePopUp",
+    "myCollection",
+    "items",
     "succesfullyUpdated"
   ]
 }
