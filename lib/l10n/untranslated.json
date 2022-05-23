@@ -121,9 +121,8 @@
     "unableToProcessTheData",
     "unimplementedQueryType",
     "onSubmittedPassBasePopUp",
-    "myCollection",
-    "items",
-    "succesfullyUpdated"
+    "succesfullyUpdated",
+    "generate"
   ],
 
   "es": [
@@ -247,9 +246,8 @@
     "unableToProcessTheData",
     "unimplementedQueryType",
     "onSubmittedPassBasePopUp",
-    "myCollection",
-    "items",
-    "succesfullyUpdated"
+    "succesfullyUpdated",
+    "generate"
   ],
 
   "fr": [
@@ -264,9 +262,8 @@
     "unableToProcessTheData",
     "unimplementedQueryType",
     "onSubmittedPassBasePopUp",
-    "myCollection",
-    "items",
-    "succesfullyUpdated"
+    "succesfullyUpdated",
+    "generate"
   ],
 
   "it": [
@@ -392,8 +389,7 @@
     "unableToProcessTheData",
     "unimplementedQueryType",
     "onSubmittedPassBasePopUp",
-    "myCollection",
-    "items",
-    "succesfullyUpdated"
+    "succesfullyUpdated",
+    "generate"
   ]
 }

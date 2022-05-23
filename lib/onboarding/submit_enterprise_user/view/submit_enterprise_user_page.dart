@@ -84,8 +84,6 @@ class _SubmitEnterpriseUserPageState extends State<SubmitEnterpriseUserPage> {
               ),
               BaseTextField(
                 controller: _didController,
-                prefixConstraint:
-                    const BoxConstraints(minHeight: 0, minWidth: 0),
               ),
               const SizedBox(
                 height: 20,

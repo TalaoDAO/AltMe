@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/widget/button/button.dart';
 import 'package:altme/credentials/credential.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/drawer/drawer/view/widget/drawer_item.dart';
@@ -105,203 +106,177 @@ class _PersonalPageState extends State<ProfilePage> {
         title: l10n.profileTitle,
         titleLeading:
             widget.isFromOnBoarding ? null : const BackLeadingButton(),
-        floatingActionButton: widget.isFromOnBoarding
-            ? null
-            : SelfIssuedCredentialButton(
-                selfIssuedCredentialButtonClick: _getSelfIssuedCredential,
-              ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        titleTrailing: InkWell(
-          borderRadius: BorderRadius.circular(8),
-          onTap: () async {
-            if (context.read<SelfIssuedCredentialCubit>().state.status ==
-                AppStatus.loading) return;
-            final model = widget.profileModel.copyWith(
-              firstName: firstNameController.text,
-              lastName: lastNameController.text,
-              phone: phoneController.text,
-              location: locationController.text,
-              email: emailController.text,
-              companyName: companyNameController.text,
-              companyWebsite: companyWebsiteController.text,
-              jobTitle: jobTitleController.text,
-              issuerVerificationSetting:
-                  widget.profileModel.issuerVerificationSetting,
-            );
-
-            await context.read<ProfileCubit>().update(model);
-            if (widget.isFromOnBoarding) {
-              ///save selfIssued credential when user press save button
-              /// during onBoarding
-              await context
-                  .read<SelfIssuedCredentialCubit>()
-                  .createSelfIssuedCredential(
-                    selfIssuedCredentialDataModel: _getSelfIssuedCredential(),
-                  );
-              await Navigator.of(context)
-                  .pushReplacement<void, void>(CredentialsListPage.route());
-            } else {
-              AlertMessage.showStringMessage(
-                context: context,
-                message: l10n.succesfullyUpdated,
-                messageType: MessageType.success,
-              );
-
-              Navigator.of(context).pop();
-
-              /// Another pop to close the drawer
-              Navigator.of(context).pop();
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 8,
-            ),
-            child: Text(
-              l10n.personalSave,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-          ),
-        ),
         padding: const EdgeInsets.symmetric(
           vertical: 32,
         ),
         body: BlocBuilder<ProfileCheckboxCubit, ProfileCheckboxState>(
           builder: (context, state) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Text(
-                    l10n.personalSubtitle,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                          color: Theme.of(context).colorScheme.subtitle1,
-                        ),
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Text(
+                      l10n.personalSubtitle,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            color: Theme.of(context).colorScheme.subtitle1,
+                          ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 32),
-                BaseTextField(
-                  label: l10n.personalFirstName,
-                  controller: firstNameController,
-                  icon: Icons.person,
-                  textCapitalization: TextCapitalization.words,
-                  prefixIcon: isEnterprise && widget.isFromOnBoarding
-                      ? null
-                      : Checkbox(
-                          value: state.isFirstName,
-                          fillColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondaryContainer,
+                  const SizedBox(height: 32),
+                  BaseTextField(
+                    label: l10n.personalFirstName,
+                    controller: firstNameController,
+                    icon: Icons.person,
+                    textCapitalization: TextCapitalization.words,
+                    prefixIcon: isEnterprise && widget.isFromOnBoarding
+                        ? null
+                        : Checkbox(
+                            value: state.isFirstName,
+                            fillColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.secondaryContainer,
+                            ),
+                            onChanged: (value) => profileCheckboxCubit
+                                .firstNameCheckBoxChange(value: value),
                           ),
-                          onChanged: (value) => profileCheckboxCubit
-                              .firstNameCheckBoxChange(value: value),
-                        ),
-                ),
-                _textFieldSpace(),
-                BaseTextField(
-                  label: l10n.personalLastName,
-                  controller: lastNameController,
-                  icon: Icons.person,
-                  textCapitalization: TextCapitalization.words,
-                  prefixIcon: isEnterprise && widget.isFromOnBoarding
-                      ? null
-                      : Checkbox(
-                          value: state.isLastName,
-                          fillColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondaryContainer,
+                  ),
+                  _textFieldSpace(),
+                  BaseTextField(
+                    label: l10n.personalLastName,
+                    controller: lastNameController,
+                    icon: Icons.person,
+                    textCapitalization: TextCapitalization.words,
+                    prefixIcon: isEnterprise && widget.isFromOnBoarding
+                        ? null
+                        : Checkbox(
+                            value: state.isLastName,
+                            fillColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.secondaryContainer,
+                            ),
+                            onChanged: (value) => profileCheckboxCubit
+                                .lastNameCheckBoxChange(value: value),
                           ),
-                          onChanged: (value) => profileCheckboxCubit
-                              .lastNameCheckBoxChange(value: value),
-                        ),
-                ),
-                _textFieldSpace(),
-                BaseTextField(
-                  label: l10n.personalPhone,
-                  controller: phoneController,
-                  icon: Icons.phone,
-                  type: TextInputType.phone,
-                  prefixIcon: isEnterprise && widget.isFromOnBoarding
-                      ? null
-                      : Checkbox(
-                          value: state.isPhone,
-                          fillColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondaryContainer,
+                  ),
+                  _textFieldSpace(),
+                  BaseTextField(
+                    label: l10n.personalPhone,
+                    controller: phoneController,
+                    icon: Icons.phone,
+                    type: TextInputType.phone,
+                    prefixIcon: isEnterprise && widget.isFromOnBoarding
+                        ? null
+                        : Checkbox(
+                            value: state.isPhone,
+                            fillColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.secondaryContainer,
+                            ),
+                            onChanged: (value) => profileCheckboxCubit
+                                .phoneCheckBoxChange(value: value),
                           ),
-                          onChanged: (value) => profileCheckboxCubit
-                              .phoneCheckBoxChange(value: value),
-                        ),
-                ),
-                _textFieldSpace(),
-                BaseTextField(
-                  label: l10n.personalLocation,
-                  controller: locationController,
-                  icon: Icons.location_pin,
-                  textCapitalization: TextCapitalization.words,
-                  prefixIcon: isEnterprise && widget.isFromOnBoarding
-                      ? null
-                      : Checkbox(
-                          value: state.isLocation,
-                          fillColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondaryContainer,
+                  ),
+                  _textFieldSpace(),
+                  BaseTextField(
+                    label: l10n.personalLocation,
+                    controller: locationController,
+                    icon: Icons.location_pin,
+                    textCapitalization: TextCapitalization.words,
+                    prefixIcon: isEnterprise && widget.isFromOnBoarding
+                        ? null
+                        : Checkbox(
+                            value: state.isLocation,
+                            fillColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.secondaryContainer,
+                            ),
+                            onChanged: (value) => profileCheckboxCubit
+                                .locationCheckBoxChange(value: value),
                           ),
-                          onChanged: (value) => profileCheckboxCubit
-                              .locationCheckBoxChange(value: value),
-                        ),
-                ),
-                _textFieldSpace(),
-                BaseTextField(
-                  label: l10n.personalMail,
-                  controller: emailController,
-                  icon: Icons.email,
-                  type: TextInputType.emailAddress,
-                  prefixIcon: isEnterprise && widget.isFromOnBoarding
-                      ? null
-                      : Checkbox(
-                          value: state.isEmail,
-                          fillColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondaryContainer,
+                  ),
+                  _textFieldSpace(),
+                  BaseTextField(
+                    label: l10n.personalMail,
+                    controller: emailController,
+                    icon: Icons.email,
+                    type: TextInputType.emailAddress,
+                    prefixIcon: isEnterprise && widget.isFromOnBoarding
+                        ? null
+                        : Checkbox(
+                            value: state.isEmail,
+                            fillColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.secondaryContainer,
+                            ),
+                            onChanged: (value) => profileCheckboxCubit
+                                .emailCheckBoxChange(value: value),
                           ),
-                          onChanged: (value) => profileCheckboxCubit
-                              .emailCheckBoxChange(value: value),
-                        ),
-                ),
-                DrawerItem(
-                  key: const Key('my_nft'),
-                  icon: Icons.videogame_asset,
-                  title: 'NFT assets',
-                  onTap: () =>
-                      Navigator.of(context).push<void>(NftPage.route()),
-                ),
-                if (isEnterprise) _buildEnterpriseTextFields(state)
-              ],
+                  ),
+                  DrawerItem(
+                    key: const Key('my_nft'),
+                    icon: Icons.videogame_asset,
+                    title: 'NFT assets',
+                    onTap: () =>
+                        Navigator.of(context).push<void>(NftPage.route()),
+                  ),
+                  _textFieldSpace(),
+                  if (isEnterprise) _buildEnterpriseTextFields(state),
+                  MyOutlinedButton(
+                    text: l10n.personalSave,
+                    onPressed: () async {
+                      if (context
+                              .read<SelfIssuedCredentialCubit>()
+                              .state
+                              .status ==
+                          AppStatus.loading) return;
+                      final model = widget.profileModel.copyWith(
+                        firstName: firstNameController.text,
+                        lastName: lastNameController.text,
+                        phone: phoneController.text,
+                        location: locationController.text,
+                        email: emailController.text,
+                        companyName: companyNameController.text,
+                        companyWebsite: companyWebsiteController.text,
+                        jobTitle: jobTitleController.text,
+                        issuerVerificationSetting:
+                            widget.profileModel.issuerVerificationSetting,
+                      );
+
+                      await context.read<ProfileCubit>().update(model);
+                      if (widget.isFromOnBoarding) {
+                        ///save selfIssued credential when user press save button
+                        /// during onBoarding
+                        await context
+                            .read<SelfIssuedCredentialCubit>()
+                            .createSelfIssuedCredential(
+                              selfIssuedCredentialDataModel:
+                                  _getSelfIssuedCredential(),
+                            );
+                        await Navigator.of(context).pushReplacement<void, void>(
+                            CredentialsListPage.route());
+                      } else {
+                        AlertMessage.showStringMessage(
+                          context: context,
+                          message: l10n.succesfullyUpdated,
+                          messageType: MessageType.success,
+                        );
+
+                        Navigator.of(context).pop();
+
+                        /// Another pop to close the drawer
+                        Navigator.of(context).pop();
+                      }
+                    },
+                  ),
+                  _textFieldSpace(),
+                  MyElevatedButton(
+                    text: l10n.generate,
+                    onPressed: () => _getSelfIssuedCredential,
+                  ),
+                ],
+              ),
             );
           },
         ),
-        navigation: !widget.isFromOnBoarding
-            ? null
-            : SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      BaseButton.primary(
-                        context: context,
-                        textColor: Theme.of(context).colorScheme.onPrimary,
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement<void, void>(
-                            CredentialsListPage.route(),
-                          );
-                        },
-                        child: Text(l10n.personalSkip),
-                      )
-                    ],
-                  ),
-                ),
-              ),
       ),
     );
   }

@@ -11,7 +11,6 @@ class BaseTextField extends StatelessWidget {
     this.textCapitalization = TextCapitalization.none,
     this.error,
     this.prefixIcon,
-    this.prefixConstraint,
     this.validator,
   }) : super(key: key);
 
@@ -22,7 +21,6 @@ class BaseTextField extends StatelessWidget {
   final TextCapitalization textCapitalization;
   final String? error;
   final Widget? prefixIcon;
-  final BoxConstraints? prefixConstraint;
   final String? Function(String?)? validator;
 
   static const double borderRadius = 50;
@@ -42,14 +40,14 @@ class BaseTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
             color: Theme.of(context).colorScheme.textFieldBorder,
-            width: 1.5,
+            width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
             color: Theme.of(context).colorScheme.textFieldBorder,
-            width: 1.5,
+            width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -63,7 +61,7 @@ class BaseTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
             color: Theme.of(context).colorScheme.textFieldErrorBorder,
-            width: 1.5,
+            width: 1,
           ),
         ),
         focusedErrorBorder: OutlineInputBorder(
@@ -80,11 +78,14 @@ class BaseTextField extends StatelessWidget {
         labelText: label,
         labelStyle: Theme.of(context).textTheme.bodyText1,
         prefixIcon: prefixIcon,
-        prefixIconConstraints: prefixConstraint,
+        prefixIconConstraints: const BoxConstraints(minWidth: 60),
         suffixIcon: Icon(
           icon,
           color: Theme.of(context).colorScheme.secondaryContainer,
         ),
+        suffixIconConstraints: const BoxConstraints(minWidth: 60),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       ),
     );
   }

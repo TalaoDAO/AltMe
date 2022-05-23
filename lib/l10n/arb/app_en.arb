@@ -293,5 +293,6 @@
   "onSubmittedPassBasePopUp": "You will receive an email",
   "myCollection" : "My collection",
   "items" : "items",
-  "succesfullyUpdated":"Successfully Updated."
+  "succesfullyUpdated": "Successfully Updated.",
+  "generate": "Generate"
 }
