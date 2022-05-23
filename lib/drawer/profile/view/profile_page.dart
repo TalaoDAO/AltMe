@@ -174,6 +174,12 @@ class ProfileView extends StatelessWidget {
                   onTap: () => Navigator.of(context)
                       .push<void>(ThemePage.route(context.read<ThemeCubit>())),
                 ),
+                MenuItem(
+                  key: const Key('my_nft'),
+                  icon: Icons.videogame_asset,
+                  title: 'NFT assets',
+                  onTap: () => Navigator.of(context).push<void>(NftPage.route()),
+                ),
               ],
             );
           },
