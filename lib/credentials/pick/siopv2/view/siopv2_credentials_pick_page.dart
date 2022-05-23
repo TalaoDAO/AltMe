@@ -46,31 +46,21 @@ class _SIOPV2CredentialPickPageState extends State<SIOPV2CredentialPickPage> {
 
     return BlocConsumer<SIOPV2CredentialPickCubit, SIOPV2CredentialPickState>(
       listener: (context, state) {
-        if (state is SIOPV2CredentialPresentState) {
-          if (state.loading) {
-            _overlay = OverlayEntry(
-              builder: (context) => WillPopScope(
-                onWillPop: () => Future.value(false),
-                child: AlertDialog(
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                  title: Center(
-                    child: Text(l10n.loading),
-                  ),
-                ),
-              ),
-            );
-            Overlay.of(context)!.insert(_overlay!);
-          } else {
-            _overlay!.remove();
-            _overlay = null;
-            Navigator.of(context).pop();
-          }
+        if (state.status == AppStatus.loading) {
+          _overlay = OverlayEntry(
+            builder: (_) => const LoadingDialog(),
+          );
+          Overlay.of(context)!.insert(_overlay!);
+        } else {
+          _overlay!.remove();
+          _overlay = null;
         }
       },
       builder: (context, state) {
         return WillPopScope(
           onWillPop: () async {
-            if (context.read<SIOPV2CredentialPickCubit>().state.loading) {
+            if (context.read<SIOPV2CredentialPickCubit>().state.status ==
+                AppStatus.loading) {
               return false;
             }
             return true;
@@ -79,7 +69,10 @@ class _SIOPV2CredentialPickPageState extends State<SIOPV2CredentialPickPage> {
             title: l10n.credentialPickTitle,
             titleTrailing: IconButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                if (context.read<SIOPV2CredentialPickCubit>().state.status !=
+                    AppStatus.loading) {
+                  Navigator.of(context).pop();
+                }
               },
               icon: const Icon(Icons.close),
             ),

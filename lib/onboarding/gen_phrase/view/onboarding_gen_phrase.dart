@@ -32,92 +32,122 @@ class OnBoardingGenPhrasePage extends StatefulWidget {
 }
 
 class _OnBoardingGenPhrasePageState extends State<OnBoardingGenPhrasePage> {
+  OverlayEntry? _overlay;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BasePage(
-      title: l10n.onBoardingGenPhraseTitle,
-      titleLeading: const BackLeadingButton(),
-      scrollView: true,
-      body: BlocConsumer<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
-        listener: (context, state) async {
-          if (state.message != null) {
-            AlertMessage.showStateMessage(
-              context: context,
-              stateMessage: state.message!,
-            );
-          }
-          if (state.status == AppStatus.success) {
-            await Navigator.of(context).pushReplacement<void, void>(
-              PersonalPage.route(
-                isFromOnBoarding: true,
-                profileModel: ProfileModel.empty(),
-              ),
-            );
-          }
-        },
-        builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Column(
-                children: [
-                  Text(
-                    l10n.genPhraseInstruction,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    l10n.genPhraseExplanation,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
-              MnemonicDisplay(mnemonic: state.mnemonic),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 24,
+    return WillPopScope(
+      onWillPop: () async {
+        if (context.read<OnBoardingGenPhraseCubit>().state.status ==
+            AppStatus.loading) {
+          return false;
+        }
+        return true;
+      },
+      child: BasePage(
+        title: l10n.onBoardingGenPhraseTitle,
+        titleLeading: BackLeadingButton(
+          onPressed: () {
+            if (context.read<OnBoardingGenPhraseCubit>().state.status !=
+                AppStatus.loading) {
+              Navigator.of(context).pop();
+            }
+          },
+        ),
+        scrollView: true,
+        body: BlocConsumer<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
+          listener: (context, state) async {
+            if (state.status == AppStatus.loading) {
+              _overlay = OverlayEntry(
+                builder: (_) => const LoadingDialog(),
+              );
+              Overlay.of(context)!.insert(_overlay!);
+            } else {
+              if (_overlay != null) {
+                _overlay!.remove();
+                _overlay = null;
+              }
+            }
+
+            if (state.message != null) {
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: state.message!,
+              );
+            }
+            if (state.status == AppStatus.success) {
+              await Navigator.of(context).pushReplacement<void, void>(
+                PersonalPage.route(
+                  isFromOnBoarding: true,
+                  profileModel: ProfileModel.empty(),
                 ),
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.privacy_tip_outlined,
-                      color: Theme.of(context).colorScheme.primary,
+              );
+            }
+          },
+          builder: (context, state) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Column(
+                  children: [
+                    Text(
+                      l10n.genPhraseInstruction,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.subtitle1,
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Text(
-                        l10n.genPhraseViewLatterText,
-                        style: Theme.of(context).textTheme.caption!.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                      ),
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.genPhraseExplanation,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 42,
-                child: BaseButton.primary(
-                  context: context,
-                  onPressed: state.status == AppStatus.loading
-                      ? null
-                      : () async {
-                          await context
-                              .read<OnBoardingGenPhraseCubit>()
-                              .generateKey(context, state.mnemonic);
-                        },
-                  child: Text(l10n.onBoardingGenPhraseButton),
+                const SizedBox(height: 32),
+                MnemonicDisplay(mnemonic: state.mnemonic),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 24,
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.privacy_tip_outlined,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Text(
+                          l10n.genPhraseViewLatterText,
+                          style: Theme.of(context).textTheme.caption!.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+                SizedBox(
+                  height: 42,
+                  child: BaseButton.primary(
+                    context: context,
+                    onPressed: state.status == AppStatus.loading
+                        ? null
+                        : () async {
+                            await context
+                                .read<OnBoardingGenPhraseCubit>()
+                                .generateKey(context, state.mnemonic);
+                          },
+                    child: Text(l10n.onBoardingGenPhraseButton),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

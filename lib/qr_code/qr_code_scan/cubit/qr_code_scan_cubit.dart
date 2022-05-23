@@ -18,7 +18,6 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:logging/logging.dart';
 
 part 'qr_code_scan_cubit.g.dart';
-
 part 'qr_code_scan_state.dart';
 
 class QRCodeScanCubit extends Cubit<QRCodeScanState> {
@@ -86,7 +85,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> deepLink() async {
-    state.loading(isDeepLink: true);
+    emit(state.loading(isDeepLink: true));
     final deepLinkUrl = deepLinkCubit.state;
     if (deepLinkUrl != '') {
       deepLinkCubit.resetDeepLink();
@@ -107,7 +106,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> verify({required Uri? uri}) async {
-    state.loading();
     try {
       ///Check if SIOPV2 request
       if (uri?.queryParameters['scope'] == 'openid') {
@@ -120,12 +118,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         ///credential should not be empty since we have to present
         if (walletCubit.state.credentials.isEmpty) {
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR,
+          emit(
+            state.error(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR,
+              ),
             ),
           );
-          state.success(route: IssuerWebsitesPage.route(''));
+          emit(state.success(route: IssuerWebsitesPage.route('')));
 
           return;
         }
@@ -157,8 +157,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final openIdIssuer = getIssuer(sIOPV2Param.claims!);
 
         ///check if credential and issuer both are not present
-        // TODO(all): Review this code... JSONPath should not cause
-        // issue in future
         if (openIdCredential == '' && openIdIssuer == '') {
           throw ResponseMessage(
             ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
@@ -192,14 +190,18 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         }
 
         if (selectedCredentials.isEmpty) {
-          state.success(route: IssuerWebsitesPage.route(openIdCredential));
+          emit(
+            state.success(route: IssuerWebsitesPage.route(openIdCredential)),
+          );
           return;
         }
 
-        state.success(
-          route: SIOPV2CredentialPickPage.route(
-            credentials: selectedCredentials,
-            sIOPV2Param: sIOPV2Param,
+        emit(
+          state.success(
+            route: SIOPV2CredentialPickPage.route(
+              credentials: selectedCredentials,
+              sIOPV2Param: sIOPV2Param,
+            ),
           ),
         );
       } else {
@@ -222,7 +224,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> accept({required Uri uri}) async {
-    state.loading();
+    emit(state.loading());
     final log = Logger('altme-wallet/qrcode/accept');
 
     late final dynamic data;
@@ -231,16 +233,21 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final dynamic response = await client.get(uri.toString());
       data = response is String ? jsonDecode(response) : response;
 
-      scanCubit.emitScanStatePreview(preview: data as Map<String, dynamic>);
       switch (data['type']) {
         case 'CredentialOffer':
           log.info('Credential Offer');
-          emit(state.success(route: CredentialsReceivePage.route(uri)));
+          emit(
+            state.success(
+              route: CredentialsReceivePage.route(
+                uri: uri,
+                preview: data as Map<String, dynamic>,
+              ),
+            ),
+          );
           break;
 
         case 'VerifiablePresentationRequest':
           if (data['query'] != null) {
-            log.info('QueryByExample');
             queryByExampleCubit.setQueryByExampleCubit(
               (data['query']).first as Map<String, dynamic>,
             );
@@ -256,8 +263,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 domain: data['domain'] as String,
               );
             } else if (data['query'].first['type'] == 'QueryByExample') {
+              log.info('QueryByExample');
               emit(
-                state.success(route: CredentialsPresentPage.route(uri: uri)),
+                state.success(
+                  route: CredentialsPresentPage.route(
+                    uri: uri,
+                    preview: data as Map<String, dynamic>,
+                  ),
+                ),
               );
             } else {
               throw ResponseMessage(
@@ -265,7 +278,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               );
             }
           } else {
-            emit(state.success(route: CredentialsPresentPage.route(uri: uri)));
+            emit(
+              state.success(
+                route: CredentialsPresentPage.route(
+                  uri: uri,
+                  preview: data as Map<String, dynamic>,
+                ),
+              ),
+            );
           }
           break;
 

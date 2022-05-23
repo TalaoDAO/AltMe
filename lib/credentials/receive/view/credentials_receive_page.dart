@@ -5,34 +5,71 @@ import 'package:altme/scan/scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CredentialsReceivePage extends StatelessWidget {
+class CredentialsReceivePage extends StatefulWidget {
   const CredentialsReceivePage({
     Key? key,
-    required this.url,
+    required this.uri,
+    required this.preview,
   }) : super(key: key);
 
-  final Uri url;
+  final Uri uri;
+  final Map<String, dynamic> preview;
 
-  static Route route(Uri routeUrl) => MaterialPageRoute<void>(
-        builder: (context) => CredentialsReceivePage(url: routeUrl),
+  static Route route({
+    required Uri uri,
+    required Map<String, dynamic> preview,
+  }) =>
+      MaterialPageRoute<void>(
+        builder: (context) =>
+            CredentialsReceivePage(uri: uri, preview: preview),
         settings: const RouteSettings(name: '/credentialsReceive'),
       );
+
+  @override
+  State<CredentialsReceivePage> createState() => _CredentialsReceivePageState();
+}
+
+class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
+  OverlayEntry? _overlay;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BasePage(
-      padding: const EdgeInsets.all(24),
-      title: l10n.credentialReceiveTitle,
-      titleTrailing: IconButton(
-        onPressed: () => Navigator.of(context).pop(),
-        icon: const Icon(Icons.close),
-      ),
-      body: BlocBuilder<ScanCubit, ScanState>(
-        builder: (builderContext, state) {
-          if (state.status == ScanStatus.preview) {
-            final credentialModel = CredentialModel.fromJson(state.preview!);
+    return WillPopScope(
+      onWillPop: () async {
+        if (context.read<ScanCubit>().state.status == ScanStatus.loading) {
+          return false;
+        }
+        return true;
+      },
+      child: BasePage(
+        padding: const EdgeInsets.all(24),
+        title: l10n.credentialReceiveTitle,
+        titleTrailing: IconButton(
+          onPressed: () {
+            if (context.read<ScanCubit>().state.status != ScanStatus.loading) {
+              Navigator.of(context).pop();
+            }
+          },
+          icon: const Icon(Icons.close),
+        ),
+        body: BlocConsumer<ScanCubit, ScanState>(
+          listener: (BuildContext context, ScanState state) async {
+            if (state.status == ScanStatus.loading) {
+              _overlay = OverlayEntry(
+                builder: (_) => const LoadingDialog(),
+              );
+              Overlay.of(context)!.insert(_overlay!);
+            } else {
+              if (_overlay != null) {
+                _overlay!.remove();
+                _overlay = null;
+              }
+            }
+          },
+          builder: (builderContext, state) {
+            final credentialModel = CredentialModel.fromJson(widget.preview);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -42,7 +79,7 @@ class CredentialsReceivePage extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(24),
                         child: Text(
-                          '${url.host} ${l10n.credentialReceiveHost}',
+                          '${widget.uri.host} ${l10n.credentialReceiveHost}',
                           maxLines: 3,
                           textAlign: TextAlign.center,
                           style: Theme.of(builderContext).textTheme.bodyText1,
@@ -64,7 +101,7 @@ class CredentialsReceivePage extends StatelessWidget {
                       ),
                     );
                     await context.read<ScanCubit>().credentialOffer(
-                          url: url.toString(),
+                          url: widget.uri.toString(),
                           credentialModel: CredentialModel.copyWithAlias(
                             oldCredentialModel: credentialModel,
                             newAlias: alias,
@@ -82,10 +119,8 @@ class CredentialsReceivePage extends StatelessWidget {
                 ),
               ],
             );
-          }
-
-          return const LinearProgressIndicator();
-        },
+          },
+        ),
       ),
     );
   }

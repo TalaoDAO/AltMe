@@ -2,8 +2,8 @@ import 'package:bloc/bloc.dart';
 
 part 'personal_page_state.dart';
 
-class PersonalPgeCubit extends Cubit<PersonalPageState> {
-  PersonalPgeCubit() : super(const PersonalPageState());
+class PersonalPageCubit extends Cubit<PersonalPageState> {
+  PersonalPageCubit() : super(const PersonalPageState());
 
   void firstNameCheckBoxChange({bool? value}) {
     emit(state.copyWith(isFirstName: value));

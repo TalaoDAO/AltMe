@@ -29,8 +29,9 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
   final log = Logger('altme-wallet/on-boarding/key-generation');
 
   Future<void> generateKey(BuildContext context, List<String> mnemonic) async {
+    emit(state.loading());
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
-      emit(state.loading());
       final mnemonicFormatted = mnemonic.join(' ');
       await secureStorageProvider.set(
         SecureStorageKeys.mnemonic,

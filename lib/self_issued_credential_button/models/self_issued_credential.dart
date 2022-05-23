@@ -24,6 +24,7 @@ class SelfIssuedCredential {
   final String id;
   @JsonKey(defaultValue: _type)
   final List type;
+  @JsonKey(name: 'credentialSubject')
   final CredentialSubjectModel credentialSubjectModel;
   final String issuer;
   final String issuanceDate;

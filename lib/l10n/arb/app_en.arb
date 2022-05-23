@@ -293,5 +293,6 @@
   "unimplementedQueryType": "Unimplemented Query Type",
   "onSubmittedPassBasePopUp": "You will receive an email",
   "myCollection" : "My collection",
-  "items" : "items"
+  "items" : "items",
+  "succesfullyUpdated":"Successfully Updated."
 }

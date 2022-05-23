@@ -1,17 +1,13 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/self_issued_credential_button/cubit/self_issued_credential_button_cubit.dart';
 import 'package:altme/self_issued_credential_button/models/self_issued_credential_model.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 typedef SelfIssuedCredentialButtonClick = SelfIssuedCredentialDataModel
     Function();
 
-class SelfIssuedCredentialButton extends StatelessWidget {
+class SelfIssuedCredentialButton extends StatefulWidget {
   const SelfIssuedCredentialButton({
     Key? key,
     required this.selfIssuedCredentialButtonClick,
@@ -20,46 +16,53 @@ class SelfIssuedCredentialButton extends StatelessWidget {
   final SelfIssuedCredentialButtonClick selfIssuedCredentialButtonClick;
 
   @override
+  State<SelfIssuedCredentialButton> createState() =>
+      _SelfIssuedCredentialButtonState();
+}
+
+class _SelfIssuedCredentialButtonState
+    extends State<SelfIssuedCredentialButton> {
+  OverlayEntry? _overlay;
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider<SelfIssuedCredentialCubit>(
-      create: (_) => SelfIssuedCredentialCubit(
-        walletCubit: context.read<WalletCubit>(),
-        secureStorageProvider: secure_storage.getSecureStorage,
-        didCubit: context.read<DIDCubit>(),
-        didKitProvider: DIDKitProvider(),
-      ),
-      child: BlocConsumer<SelfIssuedCredentialCubit,
-          SelfIssuedCredentialButtonState>(
-        listener: (context, state) {
-          if (state.message != null) {
-            AlertMessage.showStateMessage(
-              context: context,
-              stateMessage: state.message!,
-            );
-          }
-        },
-        builder: (context, state) {
-          return FloatingActionButton(
-            onPressed: () {
-              if (state.status != AppStatus.loading) {
-                context
-                    .read<SelfIssuedCredentialCubit>()
-                    .createSelfIssuedCredential(
-                      selfIssuedCredentialDataModel:
-                          selfIssuedCredentialButtonClick.call(),
-                    );
-              }
-            },
-            child: Builder(
-              builder: (_) {
-                return state.status == AppStatus.loading
-                    ? const Center(child: CircularProgressIndicator.adaptive())
-                    : const Icon(Icons.fact_check_outlined);
-              },
-            ),
+    return BlocConsumer<SelfIssuedCredentialCubit,
+        SelfIssuedCredentialButtonState>(
+      listener: (context, state) {
+        if (state.status == AppStatus.loading) {
+          _overlay = OverlayEntry(
+            builder: (_) => const LoadingDialog(),
           );
-        },
-      ),
+          Overlay.of(context)!.insert(_overlay!);
+        } else {
+          if (_overlay != null) {
+            _overlay!.remove();
+            _overlay = null;
+          }
+        }
+
+        if (state.message != null) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: state.message!,
+          );
+        }
+      },
+      builder: (context, state) {
+        return FloatingActionButton(
+          onPressed: () {
+            if (state.status != AppStatus.loading) {
+              context
+                  .read<SelfIssuedCredentialCubit>()
+                  .createSelfIssuedCredential(
+                    selfIssuedCredentialDataModel:
+                        widget.selfIssuedCredentialButtonClick.call(),
+                  );
+            }
+          },
+          child: const Icon(Icons.fact_check_outlined),
+        );
+      },
     );
   }
 }

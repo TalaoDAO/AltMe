@@ -5,7 +5,6 @@ class ScanState extends Equatable {
   const ScanState({
     this.status = ScanStatus.init,
     this.message,
-    this.preview,
     this.uri,
     this.keyId,
     this.challenge,
@@ -18,7 +17,6 @@ class ScanState extends Equatable {
 
   final ScanStatus status;
   final StateMessage? message;
-  final Map<String, dynamic>? preview;
   final Uri? uri;
   final String? keyId;
   final String? challenge;
@@ -29,17 +27,12 @@ class ScanState extends Equatable {
   ScanState loading() {
     return ScanState(
       status: ScanStatus.loading,
-      preview: preview,
       uri: uri,
       keyId: keyId,
       challenge: challenge,
       domain: domain,
       done: done,
     );
-  }
-
-  ScanState scanPreview({required Map<String, dynamic> preview}) {
-    return ScanState(status: ScanStatus.preview, preview: preview);
   }
 
   ScanState scanPermission({
@@ -86,5 +79,5 @@ class ScanState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [status, message, preview, uri, keyId, challenge, domain, done];
+      [status, message, uri, keyId, challenge, domain, done];
 }

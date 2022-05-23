@@ -77,7 +77,7 @@ class KeyGenerator {
       'd': d,
       'x': x,
       'y': y,
-      'alg': 'ES256K-R' // or 'alg': "ES256K" for did:key
+      'alg': 'ES256K' // or 'alg': "ES256K-R" for did:tz
     };
     // key = {
     //   "kty": "EC",
