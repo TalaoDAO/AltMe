@@ -3,35 +3,37 @@ import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppTheme {
   /// A color frequently across your app’s screens and components.
-  static const Color darkPrimary = Color(0XFF6600FF);
+  static Color darkPrimary = const Color(0xff6600FF);
 
   /// A color that's clearly legible when drawn on primary
-  static const Color darkOnPrimary = Colors.black;
-
-  /// A color used for elements needing less emphasis than primary
-  static const Color darkPrimaryContainer = Color(0xFFFFFFFF);
+  static Color darkOnPrimary = const Color(0xffFFFFFF);
 
   /// An accent color used for less prominent components in the UI, such as
   /// filter chips, while expanding the opportunity for color expression.
-  static const Color darkSecondary = Color(0XFF00A1FF);
+  static Color darkSecondary = const Color(0xff00A1FF);
 
   /// A color that's clearly legible when drawn on secondary
-  static const Color darkOnSecondary = Colors.black;
+  static Color darkOnSecondary = const Color(0xffFFFFFF);
 
-  /// A color used for elements needing less emphasis than secondary
-  static const Color darkSecondaryContainer = Color(0xFFFFFFFF);
+  /// A color used as a contrasting accent that can balance primary
+  /// and secondary colors or bring heightened attention to an element,
+  /// such as an input field.
+  static Color darkTertiary = const Color(0xffFFFFFF);
+
+  /// A color that's clearly legible when drawn on tertiary.
+  static Color darkOnTertiary = const Color(0xffD1CCE3);
 
   /// The background color for widgets like Card.
-  static const Color darkSurface = Color(0xff212121);
+  static Color darkSurface = const Color(0xff9D61F5).withOpacity(0.09);
 
   /// A color that's clearly legible when drawn on surface.
-  static const Color darkOnSurface = Colors.white;
+  static Color darkOnSurface = const Color(0xffEDEAF5);
 
   /// A color that typically appears behind scrollable content.
-  static const Color darkBackground = Color(0XFF0D1019);
+  static Color darkBackground = const Color(0xff0D1019);
 
   /// A color that's clearly legible when drawn on background.
-  static const Color darkOnBackground = Colors.white;
+  static Color darkOnBackground = const Color(0xffFFFFFF);
 
   /// The color to use for input validation errors, e.g. for
   /// InputDecoration.errorText
@@ -40,31 +42,23 @@ abstract class AppTheme {
   /// A color that's clearly legible when drawn on error.
   static const Color darkOnError = Colors.black;
 
-  static Color darkShadow = const Color(0xFF1D1D1D).withOpacity(0.1);
-
-  static SnackBarThemeData get snackBarThemeData => SnackBarThemeData(
-        backgroundColor: Colors.green,
-        contentTextStyle: GoogleFonts.nunito(
-          color: const Color(0xFFFFFFFF),
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-        ),
-      );
+  /// A color use to paint the drop shadows of elevated components.
+  static Color darkShadow = const Color(0xff1D1D1D).withOpacity(0.1);
 
   static ThemeData get darkThemeData => ThemeData(
         brightness: Brightness.dark,
         colorScheme: ColorScheme(
           primary: darkPrimary,
-          primaryContainer: darkPrimaryContainer,
-          secondary: darkSecondary,
-          secondaryContainer: darkSecondaryContainer,
-          surface: darkSurface,
-          background: darkBackground,
-          error: darkError,
           onPrimary: darkOnPrimary,
+          secondary: darkSecondary,
           onSecondary: darkOnSecondary,
+          tertiary: darkTertiary,
+          onTertiary: darkOnTertiary,
+          surface: darkSurface,
           onSurface: darkOnSurface,
+          background: darkBackground,
           onBackground: darkOnBackground,
+          error: darkError,
           onError: darkOnError,
           shadow: darkShadow,
           brightness: Brightness.dark,
@@ -107,7 +101,14 @@ abstract class AppTheme {
           ),
         ),
         iconTheme: const IconThemeData(color: Color(0xFFFFFFFF)),
-        snackBarTheme: snackBarThemeData,
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: Colors.green,
+          contentTextStyle: GoogleFonts.nunito(
+            color: const Color(0xFFFFFFFF),
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
       );
 }
 
