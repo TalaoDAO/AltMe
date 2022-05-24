@@ -124,7 +124,8 @@
     "myCollection",
     "items",
     "succesfullyUpdated",
-    "generate"
+    "generate",
+    "myAssets"
   ],
 
   "es": [
@@ -251,7 +252,8 @@
     "myCollection",
     "items",
     "succesfullyUpdated",
-    "generate"
+    "generate",
+    "myAssets"
   ],
 
   "fr": [
@@ -269,7 +271,8 @@
     "myCollection",
     "items",
     "succesfullyUpdated",
-    "generate"
+    "generate",
+    "myAssets"
   ],
 
   "it": [
@@ -398,6 +401,7 @@
     "myCollection",
     "items",
     "succesfullyUpdated",
-    "generate"
+    "generate",
+    "myAssets"
   ]
 }

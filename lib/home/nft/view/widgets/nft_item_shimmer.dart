@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/home/nft/view/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class NftItemShimmer extends StatelessWidget {

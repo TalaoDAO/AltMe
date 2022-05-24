@@ -8,6 +8,7 @@ import 'package:altme/home/drawer/profile/view/profile_page.dart';
 import 'package:altme/home/drawer/recovery_credential/view/recovery_credential_page.dart';
 import 'package:altme/home/drawer/recovery_key/view/recovery_key_page.dart';
 import 'package:altme/home/drawer/terms/view/terms_page.dart';
+import 'package:altme/home/tokens/tokens.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -163,6 +164,13 @@ class ProfileView extends StatelessWidget {
                       await Navigator.of(context)
                           .push<void>(RecoveryCredentialPage.route());
                     }
+                  },
+                ),
+                DrawerItem(
+                  icon: Icons.wallet_membership,
+                  title: 'My assets',
+                  onTap: () {
+                    Navigator.of(context).push<void>(TokenPage.route());
                   },
                 ),
               ],

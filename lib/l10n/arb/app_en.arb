@@ -294,5 +294,6 @@
   "myCollection" : "My collection",
   "items" : "items",
   "succesfullyUpdated": "Successfully Updated.",
-  "generate": "Generate"
+  "generate": "Generate",
+  "myAssets": "My assets"
 }
