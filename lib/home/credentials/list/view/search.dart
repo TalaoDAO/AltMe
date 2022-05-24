@@ -20,6 +20,7 @@ class _SearchState extends State<Search> {
     Future.delayed(Duration.zero, () {
       searchController.addListener(() {
         context.read<WalletCubit>().searchWallet(searchController.text);
+        setState(() {});
       });
     });
     super.initState();
@@ -44,12 +45,11 @@ class _SearchState extends State<Search> {
                 await context
                     .read<WalletCubit>()
                     .loadAllCredentialsFromRepository();
+                setState(() {});
               },
-              child: const Icon(
+              child: Icon(
                 Icons.cancel,
-                // TODO(all): should be the color:
-                // color: Theme.of(context).colorScheme.secondaryContainer,
-                color: Colors.deepOrange,
+                color: Theme.of(context).colorScheme.secondaryContainer,
               ),
             )
           : const SizedBox.shrink(),

@@ -10,7 +10,6 @@ import 'package:altme/onboarding/key/onboarding_key.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -56,7 +55,6 @@ class _SplashViewState extends State<SplashView>
       vsync: this,
       duration: const Duration(seconds: 5),
     )..addStatusListener((AnimationStatus status) async {
-        await context.read<ThemeCubit>().getCurrentTheme();
         if (status == AnimationStatus.completed) {
           //ignore: use_build_context_synchronously
           await context.read<SplashCubit>().initialiseApp();
