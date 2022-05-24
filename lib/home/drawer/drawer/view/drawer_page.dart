@@ -10,7 +10,6 @@ import 'package:altme/home/drawer/recovery_key/view/recovery_key_page.dart';
 import 'package:altme/home/drawer/terms/view/terms_page.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -165,13 +164,6 @@ class ProfileView extends StatelessWidget {
                           .push<void>(RecoveryCredentialPage.route());
                     }
                   },
-                ),
-                DrawerItem(
-                  key: const Key('theme_update'),
-                  icon: Icons.light_mode,
-                  title: l10n.selectThemeText,
-                  onTap: () => Navigator.of(context)
-                      .push<void>(ThemePage.route(context.read<ThemeCubit>())),
                 ),
               ],
             );
