@@ -107,15 +107,17 @@ class _PersonalPageState extends State<ProfilePage> {
                     child: Text(
                       l10n.personalSubtitle,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.infoTitle,
+                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            color: Theme.of(context).colorScheme.subtitle1,
+                          ),
                     ),
                   ),
                   const SizedBox(height: 32),
                   BaseTextField(
                     label: l10n.personalFirstName,
                     controller: firstNameController,
-                    suffixIcon: ImageIcon(
-                      const AssetImage(IconStrings.profileCircle),
+                    suffixIcon: Icon(
+                      Icons.person,
                       color: state.isFirstName
                           ? Theme.of(context).colorScheme.primary
                           : Theme.of(context).colorScheme.onTertiary,
@@ -166,9 +168,9 @@ class _PersonalPageState extends State<ProfilePage> {
                   BaseTextField(
                     label: l10n.personalPhone,
                     controller: phoneController,
-                    suffixIcon: ImageIcon(
-                      const AssetImage(IconStrings.call),
-                      color: state.isFirstName
+                    suffixIcon: Icon(
+                      Icons.phone,
+                      color: state.isPhone
                           ? Theme.of(context).colorScheme.primary
                           : Theme.of(context).colorScheme.onTertiary,
                     ),
@@ -190,36 +192,10 @@ class _PersonalPageState extends State<ProfilePage> {
                   ),
                   _textFieldSpace(),
                   BaseTextField(
-                    label: l10n.personalMail,
-                    controller: emailController,
-                    suffixIcon: ImageIcon(
-                      const AssetImage(IconStrings.sms),
-                      color: state.isEmail
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onTertiary,
-                    ),
-                    type: TextInputType.emailAddress,
-                    prefixIcon: isEnterprise
-                        ? null
-                        : Checkbox(
-                            value: state.isEmail,
-                            fillColor: MaterialStateProperty.all(
-                              state.isEmail
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onTertiary,
-                            ),
-                            checkColor:
-                                Theme.of(context).colorScheme.background,
-                            onChanged: (value) => profileCheckboxCubit
-                                .emailCheckBoxChange(value: value),
-                          ),
-                  ),
-                  _textFieldSpace(),
-                  BaseTextField(
                     label: l10n.personalLocation,
                     controller: locationController,
-                    suffixIcon: ImageIcon(
-                      const AssetImage(IconStrings.location),
+                    suffixIcon: Icon(
+                      Icons.location_pin,
                       color: state.isLocation
                           ? Theme.of(context).colorScheme.primary
                           : Theme.of(context).colorScheme.onTertiary,
@@ -241,13 +217,35 @@ class _PersonalPageState extends State<ProfilePage> {
                           ),
                   ),
                   _textFieldSpace(),
-                  if (isEnterprise) _buildEnterpriseTextFields(state),
-                  MyOutlinedButton.icon(
-                    text: l10n.personalSave,
-                    icon: ImageIcon(
-                      const AssetImage(IconStrings.folderOpen),
-                      color: Theme.of(context).colorScheme.onOutlineButton,
+                  BaseTextField(
+                    label: l10n.personalMail,
+                    controller: emailController,
+                    suffixIcon: Icon(
+                      Icons.email,
+                      color: state.isEmail
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onTertiary,
                     ),
+                    type: TextInputType.emailAddress,
+                    prefixIcon: isEnterprise
+                        ? null
+                        : Checkbox(
+                            value: state.isEmail,
+                            fillColor: MaterialStateProperty.all(
+                              state.isEmail
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onTertiary,
+                            ),
+                            checkColor:
+                                Theme.of(context).colorScheme.background,
+                            onChanged: (value) => profileCheckboxCubit
+                                .emailCheckBoxChange(value: value),
+                          ),
+                  ),
+                  _textFieldSpace(),
+                  if (isEnterprise) _buildEnterpriseTextFields(state),
+                  MyOutlinedButton(
+                    text: l10n.personalSave,
                     onPressed: () async {
                       if (context
                               .read<SelfIssuedCredentialCubit>()
