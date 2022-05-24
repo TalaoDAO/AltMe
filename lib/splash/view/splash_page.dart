@@ -1,15 +1,13 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/credentials/credential.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/drawer/drawer.dart';
 import 'package:altme/flavor/flavor.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/key/onboarding_key.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/qr_code/qr_code.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';

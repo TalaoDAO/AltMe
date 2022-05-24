@@ -1,13 +1,11 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/drawer/profile/cubit/profile_cubit.dart';
-import 'package:altme/drawer/profile/models/profile.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/key/onboarding_key.dart';
 import 'package:altme/onboarding/submit_enterprise_user/cubit/submit_enterprise_user_cubit.dart';
 import 'package:altme/onboarding/submit_enterprise_user/view/widgets/pick_file_button.dart';
 import 'package:altme/onboarding/submit_enterprise_user/view/widgets/picked_file.dart';
-import 'package:altme/personal/view/personal_page.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +57,7 @@ class _SubmitEnterpriseUserPageState extends State<SubmitEnterpriseUserPage> {
             final model = ProfileModel.empty().copyWith(isEnterprise: true);
             await context.read<ProfileCubit>().update(model);
             await Navigator.of(context).pushReplacement<void, void>(
-              PersonalPage.route(profileModel: model, isFromOnBoarding: true),
+              ProfilePage.route(profileModel: model, isFromOnBoarding: true),
             );
           }
         }
@@ -86,8 +84,6 @@ class _SubmitEnterpriseUserPageState extends State<SubmitEnterpriseUserPage> {
               ),
               BaseTextField(
                 controller: _didController,
-                prefixConstraint:
-                    const BoxConstraints(minHeight: 0, minWidth: 0),
               ),
               const SizedBox(
                 height: 20,

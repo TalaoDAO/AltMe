@@ -50,6 +50,7 @@ dependencies:
   qr_flutter: ^4.0.0
   secure_storage:
     path: packages/secure_storage
+  shimmer: ^2.0.0
   uni_links: ^0.5.1
   url_launcher: ^6.0.17
   uuid: ^3.0.5

@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/credentials/credential.dart';
-import 'package:altme/qr_code/qr_code.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
