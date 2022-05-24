@@ -234,11 +234,6 @@ void main() {
             builder: (context) => Column(
               children: [
                 Text(
-                  'brand',
-                  key: const Key('brand'),
-                  style: Theme.of(context).textTheme.brand,
-                ),
-                Text(
                   'credentialTitle',
                   key: const Key('credentialTitle'),
                   style: Theme.of(context).textTheme.credentialTitle,

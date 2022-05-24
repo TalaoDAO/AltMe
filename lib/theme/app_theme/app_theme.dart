@@ -63,43 +63,6 @@ abstract class AppTheme {
           shadow: darkShadow,
           brightness: Brightness.dark,
         ),
-        textTheme: TextTheme(
-          subtitle1: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-          subtitle2: GoogleFonts.nunito(
-            color: const Color(0xFF8B8C92),
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-          bodyText1: GoogleFonts.nunito(
-            color: const Color(0xFF8B8C92),
-            fontSize: 14,
-            fontWeight: FontWeight.normal,
-          ),
-          bodyText2: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
-            fontSize: 12,
-            fontWeight: FontWeight.normal,
-          ),
-          button: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-          overline: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
-            fontSize: 10,
-            letterSpacing: 0,
-          ),
-          caption: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
         iconTheme: const IconThemeData(color: Color(0xFFFFFFFF)),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: Colors.green,
@@ -165,9 +128,21 @@ extension CustomColorScheme on ColorScheme {
 }
 
 extension CustomTextTheme on TextTheme {
-  TextStyle get brand => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
-        fontSize: 28,
+  TextStyle get infoTitle => GoogleFonts.nunito(
+        color: const Color(0xFFEDEAF5),
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get infoSubtitle => GoogleFonts.nunito(
+        color: const Color(0xFFD1CCE3),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get normal => GoogleFonts.nunito(
+        color: const Color(0xFFD1CCE3),
+        fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 

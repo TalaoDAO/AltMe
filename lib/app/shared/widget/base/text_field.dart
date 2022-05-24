@@ -1,3 +1,4 @@
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class BaseTextField extends StatelessWidget {
@@ -34,7 +35,7 @@ focusNode: focusNode,
       keyboardType: type,
       maxLines: 1,
       textCapitalization: textCapitalization,
-      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 17),
+      style: Theme.of(context).textTheme.normal,
       validator: validator,
       decoration: InputDecoration(
         border: OutlineInputBorder(
@@ -75,7 +76,7 @@ focusNode: focusNode,
         fillColor: Theme.of(context).colorScheme.background,
         errorText: error,
         labelText: label,
-        labelStyle: Theme.of(context).textTheme.bodyText1,
+        labelStyle: Theme.of(context).textTheme.normal,
         prefixIcon: prefixIcon,
         prefixIconConstraints: const BoxConstraints(minWidth: 60),
         suffixIcon: suffixIcon,
