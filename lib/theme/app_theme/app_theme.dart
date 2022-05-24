@@ -63,7 +63,7 @@ abstract class AppTheme {
           shadow: darkShadow,
           brightness: Brightness.dark,
         ),
-        iconTheme: const IconThemeData(color: Color(0xFFFFFFFF)),
+        iconTheme: const IconThemeData(color: Color(0xff6600FF)),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: Colors.green,
           contentTextStyle: GoogleFonts.nunito(
@@ -82,11 +82,13 @@ extension CustomColorScheme on ColorScheme {
 
   Color get onElevatedButton => const Color(0xFFFFFFFF);
 
-  Color get appBar => const Color(0xFF1D1D1D);
+  Color get appBarUpperLayer => background.withOpacity(0.5);
+
+  Color get appBarLowerLayer => background;
 
   Color get backButton => const Color(0xFFADACAC);
 
-  Color get selectedBottomBar => AppTheme.darkOnSurface;
+  Color get selectedBottomBar => surface;
 
   Color get borderColor => const Color(0xFF3B3A3A);
 
@@ -146,6 +148,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
         fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get appBar => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 24,
+        fontWeight: FontWeight.w800,
       );
 
   TextStyle get credentialTitle => GoogleFonts.nunito(

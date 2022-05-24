@@ -52,7 +52,6 @@ class BasePage extends StatelessWidget {
       appBar: title != null && title!.isNotEmpty
           ? CustomAppBar(
               title: title!,
-              tag: titleTag,
               leading: titleLeading,
               trailing: titleTrailing,
             )
