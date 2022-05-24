@@ -162,10 +162,6 @@ extension CustomColorScheme on ColorScheme {
   Color get alertInfoMessage => Colors.cyan;
 
   Color get alertSuccessMessage => Colors.green;
-
-  Color get textFieldBorder => const Color(0xFFAFAFAF);
-
-  Color get textFieldErrorBorder => Colors.red;
 }
 
 extension CustomTextTheme on TextTheme {
