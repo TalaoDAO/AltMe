@@ -14,6 +14,7 @@
     "blockChainDisplayMethod",
     "blockChainAdress",
     "adressDisplayCopy",
+    "personalAddress",
     "issuerVerificationSetting",
     "confimrDIDAuth",
     "evidenceLabel",
@@ -142,6 +143,7 @@
     "blockChainDisplayMethod",
     "blockChainAdress",
     "adressDisplayCopy",
+    "personalAddress",
     "issuerVerificationSetting",
     "confimrDIDAuth",
     "evidenceLabel",
@@ -257,6 +259,7 @@
   ],
 
   "fr": [
+    "personalAddress",
     "verifyMe",
     "yes",
     "no",
@@ -288,6 +291,7 @@
     "blockChainDisplayMethod",
     "blockChainAdress",
     "adressDisplayCopy",
+    "personalAddress",
     "issuanceDate",
     "appContactWebsite",
     "issuerVerificationSetting",
