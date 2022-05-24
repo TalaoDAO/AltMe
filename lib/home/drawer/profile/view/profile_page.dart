@@ -242,8 +242,12 @@ class _PersonalPageState extends State<ProfilePage> {
                   ),
                   _textFieldSpace(),
                   if (isEnterprise) _buildEnterpriseTextFields(state),
-                  MyOutlinedButton(
+                  MyOutlinedButton.icon(
                     text: l10n.personalSave,
+                    icon: ImageIcon(
+                      const AssetImage(IconStrings.folderOpen),
+                      color: Theme.of(context).colorScheme.onOutlineButton,
+                    ),
                     onPressed: () async {
                       if (context
                               .read<SelfIssuedCredentialCubit>()

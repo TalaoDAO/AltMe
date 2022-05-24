@@ -63,10 +63,6 @@ void main() {
                   color: Theme.of(context).colorScheme.subtitle2,
                 ),
                 Container(
-                  key: const Key('button'),
-                  color: Theme.of(context).colorScheme.button,
-                ),
-                Container(
                   key: const Key('profileDummy'),
                   color: Theme.of(context).colorScheme.profileDummy,
                 ),

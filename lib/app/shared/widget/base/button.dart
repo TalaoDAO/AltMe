@@ -97,7 +97,7 @@ class BaseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = this.textColor ?? Theme.of(context).colorScheme.button;
+    final textColor = this.textColor ?? Colors.green;
 
     return Column(
       mainAxisSize: MainAxisSize.min,

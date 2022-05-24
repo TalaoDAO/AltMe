@@ -78,6 +78,10 @@ abstract class AppTheme {
 extension CustomColorScheme on ColorScheme {
   Color get transparent => Colors.transparent;
 
+  Color get onOutlineButton => const Color(0xFF6600FF);
+
+  Color get onElevatedButton => const Color(0xFFFFFFFF);
+
   Color get appBar => const Color(0xFF1D1D1D);
 
   Color get backButton => const Color(0xFFADACAC);
@@ -97,8 +101,6 @@ extension CustomColorScheme on ColorScheme {
   Color get subtitle1 => const Color(0xFFFFFFFF);
 
   Color get subtitle2 => const Color(0xFF8B8C92);
-
-  Color get button => const Color(0xFFEEEAEA);
 
   Color get profileDummy => const Color(0xFF212121);
 

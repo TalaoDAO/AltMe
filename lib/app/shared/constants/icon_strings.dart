@@ -4,4 +4,5 @@ class IconStrings {
   static const String location = '$base/location.png';
   static const String profileCircle = '$base/profile-circle.png';
   static const String sms = '$base/sms.png';
+  static const String folderOpen = '$base/folder-open.png';
 }
