@@ -23,10 +23,6 @@ void main() {
                   color: Theme.of(context).colorScheme.transparent,
                 ),
                 Container(
-                  key: const Key('appBar'),
-                  color: Theme.of(context).colorScheme.appBar,
-                ),
-                Container(
                   key: const Key('backButton'),
                   color: Theme.of(context).colorScheme.backButton,
                 ),
