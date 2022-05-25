@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/home/nft/models/nft_model.dart';
 import 'package:altme/home/nft/view/widgets/nft_item.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class NftList extends StatelessWidget {
@@ -16,7 +17,10 @@ class NftList extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${nftList.length} ${l10n.items}'),
+        Text(
+          '${nftList.length} ${l10n.items}',
+          style: Theme.of(context).textTheme.listSubtitle,
+        ),
         const SizedBox(
           height: 8,
         ),

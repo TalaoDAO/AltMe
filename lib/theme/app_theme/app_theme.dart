@@ -24,7 +24,7 @@ abstract class AppTheme {
   static Color darkOnTertiary = const Color(0xffD1CCE3);
 
   /// The background color for widgets like Card.
-  static Color darkSurface = const Color(0xff9D61F5).withOpacity(0.09);
+  static Color darkSurface = const Color(0xff1A182D);
 
   /// A color that's clearly legible when drawn on surface.
   static Color darkOnSurface = const Color(0xffEDEAF5);
@@ -63,6 +63,13 @@ abstract class AppTheme {
           shadow: darkShadow,
           brightness: Brightness.dark,
         ),
+        textTheme: TextTheme(
+          caption: GoogleFonts.nunito(
+            color: const Color(0xFFFFFFFF),
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         iconTheme: const IconThemeData(color: Color(0xff6600FF)),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: Colors.green,
@@ -89,6 +96,8 @@ extension CustomColorScheme on ColorScheme {
   Color get appBarUpperLayer => background.withOpacity(0.5);
 
   Color get appBarLowerLayer => background;
+
+  Color get surfaceContainer => const Color(0xff707070).withOpacity(0.07);
 
   Color get backButton => const Color(0xFFADACAC);
 
@@ -170,6 +179,36 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xFFFFFFFF),
         fontSize: 24,
         fontWeight: FontWeight.w800,
+      );
+
+  TextStyle get listTitle => GoogleFonts.nunito(
+        color: const Color(0xFFEDEAF5),
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get listSubtitle => GoogleFonts.nunito(
+        color: const Color(0xFFEDEAF5),
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+      );
+
+  TextStyle get caption2 => GoogleFonts.nunito(
+        color: const Color(0xFF8682A8),
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get listTileTitle => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get listTileSubtitle => GoogleFonts.nunito(
+        color: const Color(0xFF8682A8),
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
       );
 
   TextStyle get credentialTitle => GoogleFonts.nunito(

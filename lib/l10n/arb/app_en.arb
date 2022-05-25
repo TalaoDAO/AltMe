@@ -301,5 +301,9 @@
   "starterTitle": "Your universal wallet for web3 applications",
   "starterSubtitle": "Altme supports digital currencies and credentials.",
   "starterLoading": "Loading...",
-  "version": "Version"
+  "version": "Version",
+  "cards": "Cards",
+  "nfts": "NFTs",
+  "tokens": "Tokens",
+  "getCards": "Get Cards"
 }

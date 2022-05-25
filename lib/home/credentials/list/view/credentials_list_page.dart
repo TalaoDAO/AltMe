@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/credentials/list/view/search.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,8 +24,8 @@ class _CredentialsListPageState extends State<CredentialsListPage> {
   @override
   Widget build(BuildContext credentialListContext) {
     return BasePage(
-      padding: const EdgeInsets.symmetric(vertical: 15),
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      padding: EdgeInsets.zero,
+      backgroundColor: Theme.of(context).colorScheme.transparent,
       body: BlocBuilder<WalletCubit, WalletState>(
         builder: (context, state) {
           var _credentialList = <CredentialModel>[];

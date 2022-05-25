@@ -131,7 +131,11 @@
     "starterTitle",
     "starterSubtitle",
     "starterLoading",
-    "version"
+    "version",
+    "cards",
+    "nfts",
+    "tokens",
+    "getCards"
   ],
 
   "es": [
@@ -265,7 +269,11 @@
     "starterTitle",
     "starterSubtitle",
     "starterLoading",
-    "version"
+    "version",
+    "cards",
+    "nfts",
+    "tokens",
+    "getCards"
   ],
 
   "fr": [
@@ -289,7 +297,11 @@
     "starterTitle",
     "starterSubtitle",
     "starterLoading",
-    "version"
+    "version",
+    "cards",
+    "nfts",
+    "tokens",
+    "getCards"
   ],
 
   "it": [
@@ -425,6 +437,10 @@
     "starterTitle",
     "starterSubtitle",
     "starterLoading",
-    "version"
+    "version",
+    "cards",
+    "nfts",
+    "tokens",
+    "getCards"
   ]
 }

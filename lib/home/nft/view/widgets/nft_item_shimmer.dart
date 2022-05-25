@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class NftItemShimmer extends StatelessWidget {
@@ -7,6 +8,8 @@ class NftItemShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackgroundCard(
+      color: Theme.of(context).colorScheme.surfaceContainer,
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
