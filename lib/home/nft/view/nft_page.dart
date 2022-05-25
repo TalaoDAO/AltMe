@@ -22,10 +22,10 @@ class NftView extends StatefulWidget {
   const NftView({Key? key}) : super(key: key);
 
   @override
-  _NftPageState createState() => _NftPageState();
+  _NftViewState createState() => _NftViewState();
 }
 
-class _NftPageState extends State<NftView> {
+class _NftViewState extends State<NftView> {
   @override
   void initState() {
     context.read<NftCubit>().getTezosNftList();

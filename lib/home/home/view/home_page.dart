@@ -1,5 +1,6 @@
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/home/tokens/view/token_page.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -99,9 +100,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       CredentialsListPage(),
                       NftPage(),
-                      Center(
-                        child: Text('Tokens'),
-                      )
+                      TokenPage(),
                     ],
                   ),
                 ),

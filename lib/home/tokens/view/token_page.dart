@@ -5,23 +5,27 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TokenPage extends StatefulWidget {
+class TokenPage extends StatelessWidget {
   const TokenPage({Key? key}) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(
-        builder: (_) => BlocProvider<TokensCubit>(
-          create: (context) =>
-              TokensCubit(client: DioClient(Urls.tezosNftBaseUrl, Dio())),
-          child: const TokenPage(),
-        ),
-        settings: const RouteSettings(name: '/tokenPage'),
-      );
-
   @override
-  _TokenPageState createState() => _TokenPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider<TokensCubit>(
+      create: (context) =>
+          TokensCubit(client: DioClient(Urls.tezosNftBaseUrl, Dio())),
+      child: const TokenView(),
+    );
+  }
 }
 
-class _TokenPageState extends State<TokenPage> {
+class TokenView extends StatefulWidget {
+  const TokenView({Key? key}) : super(key: key);
+
+  @override
+  _TokenViewState createState() => _TokenViewState();
+}
+
+class _TokenViewState extends State<TokenView> {
   @override
   void initState() {
     context.read<TokensCubit>().getBalanceOfAssetList();
