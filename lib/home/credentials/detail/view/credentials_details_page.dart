@@ -39,7 +39,7 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 0), () {
+    Future.delayed(Duration.zero, () {
       context
           .read<CredentialDetailsCubit>()
           .setTitle(widget.credentialModel.alias!);

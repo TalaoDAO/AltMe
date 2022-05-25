@@ -204,6 +204,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  credential_manifest:
+    dependency: "direct main"
+    description:
+      path: "packages/credential_manifest"
+      relative: true
+    source: path
+    version: "1.0.0+1"
   crypto:
     dependency: transitive
     description:

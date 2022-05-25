@@ -1,3 +1,4 @@
+import 'package:altme/app/shared/widget/my_text.dart';
 import 'package:altme/app/shared/widget/tooltip_text.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends PreferredSize {
   CustomAppBar({
     Key? key,
-    this.tag,
     required this.title,
     this.leading,
     this.trailing,
@@ -15,7 +15,6 @@ class CustomAppBar extends PreferredSize {
           preferredSize: const Size.fromHeight(80),
         );
 
-  final String? tag;
   final String title;
   final Widget? leading;
   final Widget? trailing;
@@ -26,14 +25,14 @@ class CustomAppBar extends PreferredSize {
           Container(
             alignment: Alignment.bottomCenter,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.appBar,
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: Theme.of(context).colorScheme.shadow,
-                  offset: const Offset(1, 0),
-                  blurRadius: 1,
-                ),
-              ],
+              gradient: LinearGradient(
+                colors: [
+                  Theme.of(context).colorScheme.appBarUpperLayer,
+                  Theme.of(context).colorScheme.appBarLowerLayer,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
             padding: const EdgeInsets.only(
               top: 12,
@@ -41,31 +40,26 @@ class CustomAppBar extends PreferredSize {
               left: 64,
               right: 64,
             ),
-            child: TooltipText(
-              tag: tag,
-              text: title,
+            child: MyText(
+              title,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.appBar,
             ),
           ),
-          Material(
-            color: Theme.of(context).colorScheme.transparent,
-            type: MaterialType.transparency,
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              padding: const EdgeInsets.only(
-                top: 12,
-                bottom: 8,
-                left: 8,
-                right: 8,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  leading ?? const SizedBox(width: 16, height: 16),
-                  trailing ?? const SizedBox(width: 16, height: 16),
-                ],
-              ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            padding: const EdgeInsets.only(
+              top: 12,
+              bottom: 12,
+              left: 8,
+              right: 8,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                leading ?? const SizedBox(width: 16, height: 16),
+                trailing ?? const SizedBox(width: 16, height: 16),
+              ],
             ),
           ),
         ],

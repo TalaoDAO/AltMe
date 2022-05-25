@@ -46,7 +46,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.studentCard:
         return const Color(0xFFffD6A5);
       case CredentialSubjectType.defaultCredential:
-        return Colors.black;
+        return Colors.white;
     }
   }
 

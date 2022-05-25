@@ -23,10 +23,6 @@ void main() {
                   color: Theme.of(context).colorScheme.transparent,
                 ),
                 Container(
-                  key: const Key('appBar'),
-                  color: Theme.of(context).colorScheme.appBar,
-                ),
-                Container(
                   key: const Key('backButton'),
                   color: Theme.of(context).colorScheme.backButton,
                 ),
@@ -61,10 +57,6 @@ void main() {
                 Container(
                   key: const Key('subtitle2'),
                   color: Theme.of(context).colorScheme.subtitle2,
-                ),
-                Container(
-                  key: const Key('button'),
-                  color: Theme.of(context).colorScheme.button,
                 ),
                 Container(
                   key: const Key('profileDummy'),
@@ -233,11 +225,6 @@ void main() {
           home: Builder(
             builder: (context) => Column(
               children: [
-                Text(
-                  'brand',
-                  key: const Key('brand'),
-                  style: Theme.of(context).textTheme.brand,
-                ),
                 Text(
                   'credentialTitle',
                   key: const Key('credentialTitle'),

@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/credentials/credential.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -133,7 +132,6 @@ class EmailPassVerso extends Verso {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     final emailPassModel = credentialModel
         .credentialPreview.credentialSubjectModel as EmailPassModel;
     return Container(
@@ -185,20 +183,9 @@ class EmailPassVerso extends Verso {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Row(
-                      children: [
-                        Text(
-                          '${l10n.personalMail}: ',
-                          style: Theme.of(context)
-                              .textTheme
-                              .credentialTextCard
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          emailPassModel.email!,
-                          style: Theme.of(context).textTheme.credentialTextCard,
-                        )
-                      ],
+                    Text(
+                      emailPassModel.email!,
+                      style: Theme.of(context).textTheme.credentialTextCard,
                     )
                   ],
                 ),
