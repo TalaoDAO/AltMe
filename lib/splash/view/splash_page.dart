@@ -158,7 +158,7 @@ class _SplashViewState extends State<SplashView>
               Navigator.of(context).push<void>(OnBoardingStartPage.route());
             }
             if (state == SplashStatus.bypassOnBoarding) {
-              Navigator.of(context).push<void>(CredentialsListPage.route());
+              Navigator.of(context).push<void>(HomePage.route());
             }
           },
         ),
@@ -316,7 +316,6 @@ class _SplashViewState extends State<SplashView>
         )
       ],
       child: BasePage(
-        backgroundColor: const Color(0xffffffff),
         scrollView: false,
         body: Center(
           child: SizedBox.square(

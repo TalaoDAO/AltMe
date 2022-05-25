@@ -117,7 +117,7 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
             return true;
           },
           child: BasePage(
-            title: state.title != '' ? state.title : l10n.credential,
+            title: state.title ?? l10n.credential,
             titleTag:
                 'credential/${state.title ?? widget.credentialModel.id}/issuer',
             titleLeading: BackLeadingButton(
