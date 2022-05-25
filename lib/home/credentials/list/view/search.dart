@@ -53,7 +53,7 @@ class _SearchState extends State<Search> {
               ),
             )
           : const SizedBox.shrink(),
-      icon: Icons.search,
+      suffixIcon: const Icon(Icons.search),
       label: l10n.search,
       controller: searchController,
       focusNode: focusNode,
