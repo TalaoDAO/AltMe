@@ -6,13 +6,10 @@ class TokenListShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (_, __) => const TokenItemShimmer(),
-        itemCount: 10,
-      ),
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(),
+      itemBuilder: (_, __) => const TokenItemShimmer(),
+      itemCount: 3,
     );
   }
 }

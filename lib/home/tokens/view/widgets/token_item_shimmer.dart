@@ -10,7 +10,7 @@ class TokenItemShimmer extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(blurRadius: 5, spreadRadius: 0, color: Colors.grey[300]!),
         ],
@@ -19,18 +19,21 @@ class TokenItemShimmer extends StatelessWidget {
         ),
       ),
       child: const ListTile(
-        leading: ShimmerWidget.circular(height: Sizes.tokenLogoSize),
+        leading: ShimmerWidget.circular(
+          height: Sizes.tokenLogoSize,
+          width: Sizes.tokenLogoSize,
+        ),
         title: ShimmerWidget.rectangular(
           height: 20,
-          width: 70,
+          width: 60,
         ),
         subtitle: ShimmerWidget.rectangular(
           height: 16,
-          width: 50,
+          width: 40,
         ),
         trailing: ShimmerWidget.rectangular(
           height: 18,
-          width: 60,
+          width: 50,
         ),
       ),
     );

@@ -8,7 +8,7 @@ part 'token_model.g.dart';
 @immutable
 class TokenModel extends Equatable {
   const TokenModel(
-      this.contract, this.name, this.symbol, this.logoUri, this.balance);
+      this.contract, this.name, this.symbol, this.logoPath, this.balance);
 
   factory TokenModel.fromJson(Map<String, dynamic> json) =>
       _$TokenModelFromJson(json);
@@ -20,11 +20,11 @@ class TokenModel extends Equatable {
   @JsonKey(defaultValue: '')
   final String name;
   @JsonKey(defaultValue: '')
-  final String logoUri;
+  final String logoPath;
   final int balance;
 
   Map<String, dynamic> toJson() => _$TokenModelToJson(this);
 
   @override
-  List<Object?> get props => [contract, name, symbol, logoUri, balance];
+  List<Object?> get props => [contract, name, symbol, logoPath, balance];
 }

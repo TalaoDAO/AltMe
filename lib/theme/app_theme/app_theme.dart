@@ -45,8 +45,12 @@ abstract class AppTheme {
   /// A color use to paint the drop shadows of elevated components.
   static Color darkShadow = const Color(0xff1D1D1D).withOpacity(0.1);
 
+  /// A color used for background color of every card widget
+  static Color cardColor = const Color(0xff363346);
+
   static ThemeData get darkThemeData => ThemeData(
         brightness: Brightness.dark,
+        cardColor: cardColor,
         colorScheme: ColorScheme(
           primary: darkPrimary,
           onPrimary: darkOnPrimary,
