@@ -70,7 +70,7 @@ void main() {
           },
         ),
       );
-      final BuildContext context = tester.element(find.byType(Scaffold));
+      //final BuildContext context = tester.element(find.byType(Scaffold));
 
       expect(find.byType(BaseButton), findsOneWidget);
       final baseButton = tester.widget<BaseButton>(find.byType(BaseButton));
@@ -89,13 +89,6 @@ void main() {
       expect(
         baseButton.child,
         isA<Text>().having((p0) => p0.data, 'Text', 'Test Button'),
-      );
-      expect(
-        tester
-            .widget<DefaultTextStyle>(find.byType(DefaultTextStyle).last)
-            .style
-            .color,
-        Theme.of(context).colorScheme.button,
       );
     });
 

@@ -14,6 +14,7 @@
     "blockChainDisplayMethod",
     "blockChainAdress",
     "adressDisplayCopy",
+    "personalAddress",
     "issuerVerificationSetting",
     "confimrDIDAuth",
     "evidenceLabel",
@@ -125,7 +126,8 @@
     "items",
     "succesfullyUpdated",
     "generate",
-    "myAssets"
+    "myAssets",
+    "search",
   ],
 
   "es": [
@@ -142,6 +144,7 @@
     "blockChainDisplayMethod",
     "blockChainAdress",
     "adressDisplayCopy",
+    "personalAddress",
     "issuerVerificationSetting",
     "confimrDIDAuth",
     "evidenceLabel",
@@ -253,10 +256,12 @@
     "items",
     "succesfullyUpdated",
     "generate",
-    "myAssets"
+    "myAssets",
+    "search",
   ],
 
   "fr": [
+    "personalAddress",
     "verifyMe",
     "yes",
     "no",
@@ -289,6 +294,7 @@
     "blockChainDisplayMethod",
     "blockChainAdress",
     "adressDisplayCopy",
+    "personalAddress",
     "issuanceDate",
     "appContactWebsite",
     "issuerVerificationSetting",
@@ -402,6 +408,7 @@
     "items",
     "succesfullyUpdated",
     "generate",
-    "myAssets"
+    "myAssets",
+    "search",
   ]
 }

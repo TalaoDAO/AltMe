@@ -45,4 +45,14 @@ class WalletState extends Equatable {
 
   @override
   List<Object?> get props => [status, message, credentials];
+
+  WalletState copyWith({
+    WalletStatus? status,
+    List<CredentialModel>? credentials,
+  }) {
+    return WalletState(
+      status: status ?? this.status,
+      credentials: credentials ?? this.credentials,
+    );
+  }
 }

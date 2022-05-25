@@ -1,6 +1,7 @@
 export 'app_version.dart';
 export 'back_leading_button.dart';
 export 'base/base.dart';
+export 'button/button.dart';
 export 'confirm_dialog.dart';
 export 'custom_app_bar.dart';
 export 'display_terms.dart';

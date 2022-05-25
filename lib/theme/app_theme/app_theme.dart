@@ -67,44 +67,7 @@ abstract class AppTheme {
           shadow: darkShadow,
           brightness: Brightness.dark,
         ),
-        textTheme: TextTheme(
-          subtitle1: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-          subtitle2: GoogleFonts.nunito(
-            color: const Color(0xFF8B8C92),
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-          bodyText1: GoogleFonts.nunito(
-            color: const Color(0xFF8B8C92),
-            fontSize: 14,
-            fontWeight: FontWeight.normal,
-          ),
-          bodyText2: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
-            fontSize: 12,
-            fontWeight: FontWeight.normal,
-          ),
-          button: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-          overline: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
-            fontSize: 10,
-            letterSpacing: 0,
-          ),
-          caption: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        iconTheme: const IconThemeData(color: Color(0xFFFFFFFF)),
+        iconTheme: const IconThemeData(color: Color(0xff6600FF)),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: Colors.green,
           contentTextStyle: GoogleFonts.nunito(
@@ -119,11 +82,17 @@ abstract class AppTheme {
 extension CustomColorScheme on ColorScheme {
   Color get transparent => Colors.transparent;
 
-  Color get appBar => const Color(0xFF1D1D1D);
+  Color get onOutlineButton => const Color(0xFF6600FF);
+
+  Color get onElevatedButton => const Color(0xFFFFFFFF);
+
+  Color get appBarUpperLayer => background.withOpacity(0.5);
+
+  Color get appBarLowerLayer => background;
 
   Color get backButton => const Color(0xFFADACAC);
 
-  Color get selectedBottomBar => AppTheme.darkOnSurface;
+  Color get selectedBottomBar => surface;
 
   Color get borderColor => const Color(0xFF3B3A3A);
 
@@ -138,8 +107,6 @@ extension CustomColorScheme on ColorScheme {
   Color get subtitle1 => const Color(0xFFFFFFFF);
 
   Color get subtitle2 => const Color(0xFF8B8C92);
-
-  Color get button => const Color(0xFFEEEAEA);
 
   Color get profileDummy => const Color(0xFF212121);
 
@@ -166,17 +133,31 @@ extension CustomColorScheme on ColorScheme {
   Color get alertInfoMessage => Colors.cyan;
 
   Color get alertSuccessMessage => Colors.green;
-
-  Color get textFieldBorder => const Color(0xFFAFAFAF);
-
-  Color get textFieldErrorBorder => Colors.red;
 }
 
 extension CustomTextTheme on TextTheme {
-  TextStyle get brand => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
-        fontSize: 28,
+  TextStyle get infoTitle => GoogleFonts.nunito(
+        color: const Color(0xFFEDEAF5),
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get infoSubtitle => GoogleFonts.nunito(
+        color: const Color(0xFFD1CCE3),
+        fontSize: 16,
         fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get normal => GoogleFonts.nunito(
+        color: const Color(0xFFD1CCE3),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get appBar => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 24,
+        fontWeight: FontWeight.w800,
       );
 
   TextStyle get credentialTitle => GoogleFonts.nunito(

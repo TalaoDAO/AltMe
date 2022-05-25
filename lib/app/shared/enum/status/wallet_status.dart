@@ -7,4 +7,5 @@ enum WalletStatus {
   update,
   reset,
   error,
+  search,
 }

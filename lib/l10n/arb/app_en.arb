@@ -104,6 +104,7 @@
   "qrCodeSharing": "You are now sharing",
   "qrCodeNoValidMessage": "This QRCode does not contain a valid message.",
   "profileTitle": "Profile",
+  "personalTitle": "Personal",
   "privacyTitle": "Privacy & Security",
   "termsTitle": "Terms & Conditions",
   "recoveryKeyTitle": "Recovery - key",
@@ -144,7 +145,7 @@
   "personalFirstName": "First Name",
   "personalLastName": "Last Name",
   "personalPhone": "Phone",
-  "personalLocation": "Location",
+  "personalAddress": "Address",
   "personalMail": "E-mail",
   "lastName": "Last name",
   "firstName": "First name",
@@ -295,5 +296,6 @@
   "items" : "items",
   "succesfullyUpdated": "Successfully Updated.",
   "generate": "Generate",
-  "myAssets": "My assets"
+  "myAssets": "My assets",
+  "search": "Search",
 }

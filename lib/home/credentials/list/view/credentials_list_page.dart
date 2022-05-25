@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/home/credentials/list/view/search.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -81,12 +82,15 @@ class _CredentialsListPageState extends State<CredentialsListPage> {
             var _credentialList = <CredentialModel>[];
             _credentialList = state.credentials;
             return Column(
-              children: List.generate(
-                _credentialList.length,
-                (index) => CredentialsListPageItem(
-                  credentialModel: _credentialList[index],
-                ),
-              ),
+              children: [
+                const Search(),
+                ...List.generate(
+                  _credentialList.length,
+                  (index) => CredentialsListPageItem(
+                    credentialModel: _credentialList[index],
+                  ),
+                )
+              ],
             );
           },
         ),
