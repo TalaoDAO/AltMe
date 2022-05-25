@@ -78,6 +78,8 @@ class _PersonalPageState extends State<ProfilePage> {
         TextEditingController(text: widget.profileModel.jobTitle);
   }
 
+  OverlayEntry? _overlay;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -92,216 +94,244 @@ class _PersonalPageState extends State<ProfilePage> {
       child: BasePage(
         title: l10n.profileTitle,
         titleLeading: const BackLeadingButton(),
-        padding: const EdgeInsets.symmetric(
-          vertical: 32,
-        ),
-        body: BlocBuilder<ProfileCheckboxCubit, ProfileCheckboxState>(
-          builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Text(
-                      l10n.personalSubtitle,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                            color: Theme.of(context).colorScheme.subtitle1,
-                          ),
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  BaseTextField(
-                    label: l10n.personalFirstName,
-                    controller: firstNameController,
-                    suffixIcon: Icon(
-                      Icons.person,
-                      color: state.isFirstName
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onTertiary,
-                    ),
-                    textCapitalization: TextCapitalization.words,
-                    prefixIcon: isEnterprise
-                        ? null
-                        : Checkbox(
-                            value: state.isFirstName,
-                            fillColor: MaterialStateProperty.all(
-                              state.isFirstName
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onTertiary,
-                            ),
-                            checkColor:
-                                Theme.of(context).colorScheme.background,
-                            onChanged: (value) => profileCheckboxCubit
-                                .firstNameCheckBoxChange(value: value),
-                          ),
-                  ),
-                  _textFieldSpace(),
-                  BaseTextField(
-                    label: l10n.personalLastName,
-                    controller: lastNameController,
-                    suffixIcon: Icon(
-                      Icons.person,
-                      color: state.isLastName
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onTertiary,
-                    ),
-                    textCapitalization: TextCapitalization.words,
-                    prefixIcon: isEnterprise
-                        ? null
-                        : Checkbox(
-                            value: state.isLastName,
-                            fillColor: MaterialStateProperty.all(
-                              state.isLastName
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onTertiary,
-                            ),
-                            checkColor:
-                                Theme.of(context).colorScheme.background,
-                            onChanged: (value) => profileCheckboxCubit
-                                .lastNameCheckBoxChange(value: value),
-                          ),
-                  ),
-                  _textFieldSpace(),
-                  BaseTextField(
-                    label: l10n.personalPhone,
-                    controller: phoneController,
-                    suffixIcon: Icon(
-                      Icons.phone,
-                      color: state.isPhone
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onTertiary,
-                    ),
-                    type: TextInputType.phone,
-                    prefixIcon: isEnterprise
-                        ? null
-                        : Checkbox(
-                            value: state.isPhone,
-                            fillColor: MaterialStateProperty.all(
-                              state.isPhone
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onTertiary,
-                            ),
-                            checkColor:
-                                Theme.of(context).colorScheme.background,
-                            onChanged: (value) => profileCheckboxCubit
-                                .phoneCheckBoxChange(value: value),
-                          ),
-                  ),
-                  _textFieldSpace(),
-                  BaseTextField(
-                    label: l10n.personalLocation,
-                    controller: locationController,
-                    suffixIcon: Icon(
-                      Icons.location_pin,
-                      color: state.isLocation
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onTertiary,
-                    ),
-                    textCapitalization: TextCapitalization.words,
-                    prefixIcon: isEnterprise
-                        ? null
-                        : Checkbox(
-                            value: state.isLocation,
-                            fillColor: MaterialStateProperty.all(
-                              state.isLocation
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onTertiary,
-                            ),
-                            checkColor:
-                                Theme.of(context).colorScheme.background,
-                            onChanged: (value) => profileCheckboxCubit
-                                .locationCheckBoxChange(value: value),
-                          ),
-                  ),
-                  _textFieldSpace(),
-                  BaseTextField(
-                    label: l10n.personalMail,
-                    controller: emailController,
-                    suffixIcon: Icon(
-                      Icons.email,
-                      color: state.isEmail
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onTertiary,
-                    ),
-                    type: TextInputType.emailAddress,
-                    prefixIcon: isEnterprise
-                        ? null
-                        : Checkbox(
-                            value: state.isEmail,
-                            fillColor: MaterialStateProperty.all(
-                              state.isEmail
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onTertiary,
-                            ),
-                            checkColor:
-                                Theme.of(context).colorScheme.background,
-                            onChanged: (value) => profileCheckboxCubit
-                                .emailCheckBoxChange(value: value),
-                          ),
-                  ),
-                  _textFieldSpace(),
-                  if (isEnterprise) _buildEnterpriseTextFields(state),
-                  MyOutlinedButton(
-                    text: l10n.personalSave,
-                    onPressed: () async {
-                      if (context
-                              .read<SelfIssuedCredentialCubit>()
-                              .state
-                              .status ==
-                          AppStatus.loading) return;
-
-                      await _updateProfile();
-
-                      AlertMessage.showStringMessage(
-                        context: context,
-                        message: l10n.succesfullyUpdated,
-                        messageType: MessageType.success,
-                      );
-
-                      Navigator.of(context).pop();
-
-                      /// Another pop to close the drawer
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  _textFieldSpace(),
-                  MyElevatedButton(
-                    text: l10n.generate,
-                    onPressed: () async {
-                      if (context
-                              .read<SelfIssuedCredentialCubit>()
-                              .state
-                              .status ==
-                          AppStatus.loading) return;
-
-                      await _updateProfile();
-
-                      await context
-                          .read<SelfIssuedCredentialCubit>()
-                          .createSelfIssuedCredential(
-                            selfIssuedCredentialDataModel:
-                                _getSelfIssuedCredential(),
-                          );
-
-                      AlertMessage.showStringMessage(
-                        context: context,
-                        message: l10n.succesfullyUpdated,
-                        messageType: MessageType.success,
-                      );
-
-                      Navigator.of(context).pop();
-
-                      /// Another pop to close the drawer
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            );
+        body: BlocListener<SelfIssuedCredentialCubit,
+            SelfIssuedCredentialButtonState>(
+          listener: (context, selfIssuedCredentialState) {
+            if (selfIssuedCredentialState.status == AppStatus.loading) {
+              _overlay = OverlayEntry(
+                builder: (_) => const LoadingDialog(),
+              );
+              Overlay.of(context)!.insert(_overlay!);
+            } else {
+              if (_overlay != null) {
+                _overlay!.remove();
+                _overlay = null;
+              }
+            }
           },
+          child: BlocBuilder<ProfileCheckboxCubit, ProfileCheckboxState>(
+            builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    BackgroundCard(
+                        child: Column(
+                      children: [
+                        Text(
+                          l10n.personalSubtitle,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.infoTitle,
+                        ),
+                        const SizedBox(height: 32),
+                        BaseTextField(
+                          label: l10n.personalFirstName,
+                          controller: firstNameController,
+                          suffixIcon: ImageIcon(
+                            const AssetImage(IconStrings.profileCircle),
+                            color: state.isFirstName
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.onTertiary,
+                          ),
+                          textCapitalization: TextCapitalization.words,
+                          prefixIcon: isEnterprise
+                              ? null
+                              : Checkbox(
+                                  value: state.isFirstName,
+                                  fillColor: MaterialStateProperty.all(
+                                    state.isFirstName
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onTertiary,
+                                  ),
+                                  checkColor:
+                                      Theme.of(context).colorScheme.background,
+                                  onChanged: (value) => profileCheckboxCubit
+                                      .firstNameCheckBoxChange(value: value),
+                                ),
+                        ),
+                        _textFieldSpace(),
+                        BaseTextField(
+                          label: l10n.personalLastName,
+                          controller: lastNameController,
+                          suffixIcon: Icon(
+                            Icons.person,
+                            color: state.isLastName
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.onTertiary,
+                          ),
+                          textCapitalization: TextCapitalization.words,
+                          prefixIcon: isEnterprise
+                              ? null
+                              : Checkbox(
+                                  value: state.isLastName,
+                                  fillColor: MaterialStateProperty.all(
+                                    state.isLastName
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onTertiary,
+                                  ),
+                                  checkColor:
+                                      Theme.of(context).colorScheme.background,
+                                  onChanged: (value) => profileCheckboxCubit
+                                      .lastNameCheckBoxChange(value: value),
+                                ),
+                        ),
+                        _textFieldSpace(),
+                        BaseTextField(
+                          label: l10n.personalPhone,
+                          controller: phoneController,
+                          suffixIcon: ImageIcon(
+                            const AssetImage(IconStrings.call),
+                            color: state.isPhone
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.onTertiary,
+                          ),
+                          type: TextInputType.phone,
+                          prefixIcon: isEnterprise
+                              ? null
+                              : Checkbox(
+                                  value: state.isPhone,
+                                  fillColor: MaterialStateProperty.all(
+                                    state.isPhone
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onTertiary,
+                                  ),
+                                  checkColor:
+                                      Theme.of(context).colorScheme.background,
+                                  onChanged: (value) => profileCheckboxCubit
+                                      .phoneCheckBoxChange(value: value),
+                                ),
+                        ),
+                        _textFieldSpace(),
+                        BaseTextField(
+                          label: l10n.personalMail,
+                          controller: emailController,
+                          suffixIcon: ImageIcon(
+                            const AssetImage(IconStrings.sms),
+                            color: state.isEmail
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.onTertiary,
+                          ),
+                          type: TextInputType.emailAddress,
+                          prefixIcon: isEnterprise
+                              ? null
+                              : Checkbox(
+                                  value: state.isEmail,
+                                  fillColor: MaterialStateProperty.all(
+                                    state.isEmail
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onTertiary,
+                                  ),
+                                  checkColor:
+                                      Theme.of(context).colorScheme.background,
+                                  onChanged: (value) => profileCheckboxCubit
+                                      .emailCheckBoxChange(value: value),
+                                ),
+                        ),
+                        _textFieldSpace(),
+                        BaseTextField(
+                          label: l10n.personalAddress,
+                          controller: locationController,
+                          suffixIcon: ImageIcon(
+                            const AssetImage(IconStrings.location),
+                            color: state.isLocation
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.onTertiary,
+                          ),
+                          textCapitalization: TextCapitalization.words,
+                          prefixIcon: isEnterprise
+                              ? null
+                              : Checkbox(
+                                  value: state.isLocation,
+                                  fillColor: MaterialStateProperty.all(
+                                    state.isLocation
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onTertiary,
+                                  ),
+                                  checkColor:
+                                      Theme.of(context).colorScheme.background,
+                                  onChanged: (value) => profileCheckboxCubit
+                                      .locationCheckBoxChange(value: value),
+                                ),
+                        ),
+                        _textFieldSpace(),
+                        if (isEnterprise) _buildEnterpriseTextFields(state),
+                      ],
+                    )),
+                    _textFieldSpace(),
+                    MyOutlinedButton.icon(
+                      text: l10n.personalSave,
+                      icon: ImageIcon(
+                        const AssetImage(IconStrings.folderOpen),
+                        color: Theme.of(context).colorScheme.onOutlineButton,
+                      ),
+                      onPressed: () async {
+                        if (context
+                                .read<SelfIssuedCredentialCubit>()
+                                .state
+                                .status ==
+                            AppStatus.loading) return;
+
+                        await _updateProfile();
+
+                        AlertMessage.showStringMessage(
+                          context: context,
+                          message: l10n.succesfullyUpdated,
+                          messageType: MessageType.success,
+                        );
+
+                        Navigator.of(context).pop();
+
+                        /// Another pop to close the drawer
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    _textFieldSpace(),
+                    MyElevatedButton(
+                      text: l10n.generate,
+                      onPressed: () async {
+                        if (context
+                                .read<SelfIssuedCredentialCubit>()
+                                .state
+                                .status ==
+                            AppStatus.loading) return;
+
+                        await _updateProfile();
+
+                        await context
+                            .read<SelfIssuedCredentialCubit>()
+                            .createSelfIssuedCredential(
+                              selfIssuedCredentialDataModel:
+                                  _getSelfIssuedCredential(),
+                            );
+
+                        AlertMessage.showStringMessage(
+                          context: context,
+                          message: l10n.succesfullyUpdated,
+                          messageType: MessageType.success,
+                        );
+
+                        Navigator.of(context).pop();
+
+                        /// Another pop to close the drawer
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
