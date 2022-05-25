@@ -1,12 +1,11 @@
 import 'package:altme/app/shared/widget/my_text.dart';
-import 'package:altme/app/shared/widget/tooltip_text.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends PreferredSize {
   CustomAppBar({
     Key? key,
-    required this.title,
+    this.title = '',
     this.leading,
     this.trailing,
   }) : super(

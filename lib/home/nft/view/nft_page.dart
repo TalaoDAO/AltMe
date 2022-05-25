@@ -5,23 +5,27 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class NftPage extends StatefulWidget {
+class NftPage extends StatelessWidget {
   const NftPage({Key? key}) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(
-        builder: (_) => BlocProvider<NftCubit>(
-          create: (context) =>
-              NftCubit(client: DioClient(Urls.tezosNftBaseUrl, Dio())),
-          child: const NftPage(),
-        ),
-        settings: const RouteSettings(name: '/nftPage'),
-      );
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<NftCubit>(
+      create: (context) =>
+          NftCubit(client: DioClient(Urls.tezosNftBaseUrl, Dio())),
+      child: const NftView(),
+    );
+  }
+}
+
+class NftView extends StatefulWidget {
+  const NftView({Key? key}) : super(key: key);
 
   @override
   _NftPageState createState() => _NftPageState();
 }
 
-class _NftPageState extends State<NftPage> {
+class _NftPageState extends State<NftView> {
   @override
   void initState() {
     context.read<NftCubit>().getTezosNftList();

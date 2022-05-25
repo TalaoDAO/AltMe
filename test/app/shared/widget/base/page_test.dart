@@ -9,7 +9,7 @@ void main() {
     group('CustomAppBar', () {
       testWidgets('does not renders CustomAppBar when title is null',
           (tester) async {
-        await tester.pumpApp(BasePage(body: Container(), title: null));
+        await tester.pumpApp(BasePage(body: Container(), title: ''));
         expect(find.byType(CustomAppBar), findsNothing);
       });
 

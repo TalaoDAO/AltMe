@@ -6,7 +6,7 @@ class BasePage extends StatelessWidget {
     Key? key,
     this.scaffoldKey,
     this.backgroundColor,
-    this.title,
+    this.title = '',
     this.titleTag,
     this.titleLeading,
     this.titleTrailing,
@@ -25,7 +25,7 @@ class BasePage extends StatelessWidget {
   }) : super(key: key);
 
   final GlobalKey<ScaffoldState>? scaffoldKey;
-  final String? title;
+  final String title;
   final Widget body;
   final bool scrollView;
   final EdgeInsets padding;
@@ -49,13 +49,13 @@ class BasePage extends StatelessWidget {
       extendBody: extendBelow ?? false,
       backgroundColor:
           backgroundColor ?? Theme.of(context).colorScheme.background,
-      appBar: title != null && title!.isNotEmpty
-          ? CustomAppBar(
-              title: title!,
+      appBar: (titleLeading == null || titleTrailing == null)
+          ? null
+          : CustomAppBar(
+              title: title,
               leading: titleLeading,
               trailing: titleTrailing,
-            )
-          : null,
+            ),
       bottomNavigationBar: navigation,
       drawer: drawer,
       body: scrollView
