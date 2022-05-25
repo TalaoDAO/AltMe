@@ -25,8 +25,8 @@ class NftList extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
               childAspectRatio: Sizes.nftItemRatio,
             ),
             itemBuilder: (_, index) => NftItem(

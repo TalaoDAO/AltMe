@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/home/nft/view/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class NftItemShimmer extends StatelessWidget {
@@ -7,20 +6,7 @@ class NftItemShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: Sizes.nftItemWidth,
-      height: Sizes.nftItemHeight,
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(blurRadius: 5, spreadRadius: 0, color: Colors.grey[300]!),
-        ],
-        borderRadius: const BorderRadius.all(
-          Radius.circular(12),
-        ),
-      ),
+    return BackgroundCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
