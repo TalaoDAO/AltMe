@@ -297,5 +297,9 @@
   "succesfullyUpdated": "Successfully Updated.",
   "generate": "Generate",
   "myAssets": "My assets",
-  "search": "Search"
+  "search": "Search",
+  "starterTitle": "Your universal wallet for web3 applications",
+  "starterSubtitle": "Altme supports digital currencies and credentials",
+  "starterLoading": "Loading...",
+  "version": "Version"
 }

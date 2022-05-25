@@ -1,3 +1,4 @@
+export 'altme_logo.dart';
 export 'app_version.dart';
 export 'back_leading_button.dart';
 export 'base/base.dart';

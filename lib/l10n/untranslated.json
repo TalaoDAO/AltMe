@@ -127,7 +127,11 @@
     "succesfullyUpdated",
     "generate",
     "myAssets",
-    "search"
+    "search",
+    "starterTitle",
+    "starterSubtitle",
+    "starterLoading",
+    "version"
   ],
 
   "es": [
@@ -257,7 +261,11 @@
     "succesfullyUpdated",
     "generate",
     "myAssets",
-    "search"
+    "search",
+    "starterTitle",
+    "starterSubtitle",
+    "starterLoading",
+    "version"
   ],
 
   "fr": [
@@ -277,7 +285,11 @@
     "items",
     "succesfullyUpdated",
     "generate",
-    "myAssets"
+    "myAssets",
+    "starterTitle",
+    "starterSubtitle",
+    "starterLoading",
+    "version"
   ],
 
   "it": [
@@ -409,6 +421,10 @@
     "succesfullyUpdated",
     "generate",
     "myAssets",
-    "search"
+    "search",
+    "starterTitle",
+    "starterSubtitle",
+    "starterLoading",
+    "version"
   ]
 }
