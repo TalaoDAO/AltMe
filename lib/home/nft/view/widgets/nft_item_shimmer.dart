@@ -12,7 +12,7 @@ class NftItemShimmer extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(blurRadius: 5, spreadRadius: 0, color: Colors.grey[300]!),
         ],

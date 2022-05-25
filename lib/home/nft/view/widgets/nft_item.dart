@@ -21,7 +21,7 @@ class NftItem extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(blurRadius: 5, spreadRadius: 0, color: Colors.grey[300]!),
         ],
@@ -33,7 +33,7 @@ class NftItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AspectRatio(
-            aspectRatio: 1,
+            aspectRatio: 1.05,
             child: Expanded(
               child: Image.network(assetUrl, fit: BoxFit.fill),
             ),
@@ -45,6 +45,7 @@ class NftItem extends StatelessWidget {
             description,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.caption,
           ),
           const SizedBox(
             height: 6,
@@ -53,6 +54,7 @@ class NftItem extends StatelessWidget {
             assetValue,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodyText1,
           )
         ],
       ),
