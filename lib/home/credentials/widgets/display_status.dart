@@ -116,19 +116,25 @@ class DisplayStatus extends StatelessWidget {
               );
             default:
               return const SizedBox(
-                height: 20,
+                height: 32,
+                width: 32,
                 child: CircularProgressIndicator(),
               );
           }
         } else {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Padding(
+            children: [
+              const Padding(
                 padding: EdgeInsets.all(8),
                 child: SizedBox(height: 32, child: CircularProgressIndicator()),
               ),
-              SizedBox(width: 63)
+              if (displayLabel)
+                const SizedBox(
+                  width: 63,
+                )
+              else
+                const SizedBox.shrink(),
             ],
           );
         }

@@ -12,6 +12,7 @@ class BaseTextField extends StatelessWidget {
     this.error,
     this.prefixIcon,
     this.validator,
+    this.focusNode,
   }) : super(key: key);
 
   final String? label;
@@ -22,12 +23,13 @@ class BaseTextField extends StatelessWidget {
   final String? error;
   final Widget? prefixIcon;
   final String? Function(String?)? validator;
-
+  final FocusNode? focusNode;
   static const double borderRadius = 50;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+focusNode: focusNode,
       controller: controller,
       cursorColor: Theme.of(context).colorScheme.secondaryContainer,
       keyboardType: type,

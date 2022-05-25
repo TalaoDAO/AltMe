@@ -243,8 +243,8 @@ class _PersonalPageState extends State<ProfilePage> {
 
                       await context.read<ProfileCubit>().update(model);
                       if (widget.isFromOnBoarding) {
-                        ///save selfIssued credential when user press save button
-                        /// during onBoarding
+                        ///save selfIssued credential when user press
+                        /// save button during onBoarding
                         await context
                             .read<SelfIssuedCredentialCubit>()
                             .createSelfIssuedCredential(

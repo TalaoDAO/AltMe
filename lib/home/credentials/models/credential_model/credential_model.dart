@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/home/credentials/models/credential/credential.dart';
 import 'package:altme/home/credentials/models/display/display.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -23,6 +24,7 @@ class CredentialModel extends Equatable {
     required this.data,
     required this.revocationStatus,
     this.expirationDate,
+    this.credentialManifest,
   });
 
   factory CredentialModel.fromJson(Map<String, dynamic> json) {
@@ -50,6 +52,8 @@ class CredentialModel extends Equatable {
       display: oldCredentialModel.display,
       credentialPreview: oldCredentialModel.credentialPreview,
       revocationStatus: oldCredentialModel.revocationStatus,
+      expirationDate: oldCredentialModel.expirationDate,
+      credentialManifest: oldCredentialModel.credentialManifest,
     );
   }
 
@@ -66,6 +70,8 @@ class CredentialModel extends Equatable {
       display: oldCredentialModel.display,
       credentialPreview: Credential.fromJson(newData),
       revocationStatus: oldCredentialModel.revocationStatus,
+      expirationDate: oldCredentialModel.expirationDate,
+      credentialManifest: oldCredentialModel.credentialManifest,
     );
   }
 
@@ -82,6 +88,8 @@ class CredentialModel extends Equatable {
   final String? expirationDate;
   @JsonKey(defaultValue: RevocationStatus.unknown)
   RevocationStatus revocationStatus;
+  @JsonKey(name: 'credential_manifest')
+  final CredentialManifest? credentialManifest;
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
