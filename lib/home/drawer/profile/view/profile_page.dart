@@ -168,7 +168,7 @@ class _PersonalPageState extends State<ProfilePage> {
                     controller: phoneController,
                     suffixIcon: ImageIcon(
                       const AssetImage(IconStrings.call),
-                      color: state.isFirstName
+                      color: state.isPhone
                           ? Theme.of(context).colorScheme.primary
                           : Theme.of(context).colorScheme.onTertiary,
                     ),
