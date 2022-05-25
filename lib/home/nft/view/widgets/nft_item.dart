@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class NftItem extends StatelessWidget {
@@ -16,13 +17,21 @@ class NftItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackgroundCard(
+      color: Theme.of(context).colorScheme.surfaceContainer,
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AspectRatio(
             aspectRatio: 1.05,
             child: Expanded(
-              child: Image.network(assetUrl, fit: BoxFit.fill),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.network(
+                  assetUrl,
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
           ),
           const SizedBox(
@@ -41,7 +50,7 @@ class NftItem extends StatelessWidget {
             assetValue,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.caption2,
           )
         ],
       ),

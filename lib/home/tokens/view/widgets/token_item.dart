@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -20,6 +21,8 @@ class TokenItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final numberFormatter = NumberFormat('#,###,000');
     return BackgroundCard(
+      color: Theme.of(context).colorScheme.surfaceContainer,
+      padding: const EdgeInsets.all(10),
       child: ListTile(
         leading: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(100)),
@@ -30,18 +33,16 @@ class TokenItem extends StatelessWidget {
         ),
         title: Text(
           name.toUpperCase(),
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.listTileTitle,
         ),
         subtitle: Text(
           symbol,
-          style: Theme.of(context)
-              .textTheme
-              .subtitle2
-              ?.copyWith(fontWeight: FontWeight.normal),
+          style: Theme.of(context).textTheme.listTileSubtitle,
         ),
         trailing: Text(
           numberFormatter.format(balance),
-          style: Theme.of(context).textTheme.bodyText2,
+          style:
+              Theme.of(context).textTheme.listTileTitle.copyWith(fontSize: 13),
         ),
       ),
     );

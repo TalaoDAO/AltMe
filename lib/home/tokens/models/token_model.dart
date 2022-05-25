@@ -8,7 +8,12 @@ part 'token_model.g.dart';
 @immutable
 class TokenModel extends Equatable {
   const TokenModel(
-      this.contract, this.name, this.symbol, this.logoPath, this.balance);
+    this.contract,
+    this.name,
+    this.symbol,
+    this.logoPath,
+    this.balance,
+  );
 
   factory TokenModel.fromJson(Map<String, dynamic> json) =>
       _$TokenModelFromJson(json);

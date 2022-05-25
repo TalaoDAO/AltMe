@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class TokenItemShimmer extends StatelessWidget {
@@ -6,23 +7,28 @@ class TokenItemShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const BackgroundCard(
-      child: ListTile(
-        leading: ShimmerWidget.circular(
-          height: Sizes.tokenLogoSize,
-          width: Sizes.tokenLogoSize,
-        ),
-        title: ShimmerWidget.rectangular(
-          height: 20,
-          width: 60,
-        ),
-        subtitle: ShimmerWidget.rectangular(
-          height: 16,
-          width: 40,
-        ),
-        trailing: ShimmerWidget.rectangular(
-          height: 18,
-          width: 50,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: BackgroundCard(
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        padding: const EdgeInsets.all(10),
+        child: const ListTile(
+          leading: ShimmerWidget.circular(
+            height: Sizes.tokenLogoSize,
+            width: Sizes.tokenLogoSize,
+          ),
+          title: ShimmerWidget.rectangular(
+            height: 20,
+            width: 60,
+          ),
+          subtitle: ShimmerWidget.rectangular(
+            height: 16,
+            width: 40,
+          ),
+          trailing: ShimmerWidget.rectangular(
+            height: 18,
+            width: 50,
+          ),
         ),
       ),
     );

@@ -117,157 +117,173 @@ class _PersonalPageState extends State<ProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     BackgroundCard(
-                        child: Column(
-                      children: [
-                        Text(
-                          l10n.personalSubtitle,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.infoTitle,
-                        ),
-                        const SizedBox(height: 32),
-                        BaseTextField(
-                          label: l10n.personalFirstName,
-                          controller: firstNameController,
-                          suffixIcon: ImageIcon(
-                            const AssetImage(IconStrings.profileCircle),
-                            color: state.isFirstName
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.onTertiary,
+                      child: Column(
+                        children: [
+                          Text(
+                            l10n.personalSubtitle,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.infoTitle,
                           ),
-                          textCapitalization: TextCapitalization.words,
-                          prefixIcon: isEnterprise
-                              ? null
-                              : Checkbox(
-                                  value: state.isFirstName,
-                                  fillColor: MaterialStateProperty.all(
-                                    state.isFirstName
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onTertiary,
+                          const SizedBox(height: 32),
+                          BaseTextField(
+                            label: l10n.personalFirstName,
+                            controller: firstNameController,
+                            suffixIcon: ImageIcon(
+                              const AssetImage(IconStrings.profileCircle),
+                              color: state.isFirstName
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onTertiary,
+                            ),
+                            textCapitalization: TextCapitalization.words,
+                            prefixIcon: isEnterprise
+                                ? null
+                                : Checkbox(
+                                    value: state.isFirstName,
+                                    fillColor: MaterialStateProperty.all(
+                                      state.isFirstName
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onTertiary,
+                                    ),
+                                    checkColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    onChanged: (value) => profileCheckboxCubit
+                                        .firstNameCheckBoxChange(value: value),
                                   ),
-                                  checkColor:
-                                      Theme.of(context).colorScheme.background,
-                                  onChanged: (value) => profileCheckboxCubit
-                                      .firstNameCheckBoxChange(value: value),
-                                ),
-                        ),
-                        _textFieldSpace(),
-                        BaseTextField(
-                          label: l10n.personalLastName,
-                          controller: lastNameController,
-                          suffixIcon: Icon(
-                            Icons.person,
-                            color: state.isLastName
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.onTertiary,
                           ),
-                          textCapitalization: TextCapitalization.words,
-                          prefixIcon: isEnterprise
-                              ? null
-                              : Checkbox(
-                                  value: state.isLastName,
-                                  fillColor: MaterialStateProperty.all(
-                                    state.isLastName
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onTertiary,
+                          _textFieldSpace(),
+                          BaseTextField(
+                            label: l10n.personalLastName,
+                            controller: lastNameController,
+                            suffixIcon: Icon(
+                              Icons.person,
+                              color: state.isLastName
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onTertiary,
+                            ),
+                            textCapitalization: TextCapitalization.words,
+                            prefixIcon: isEnterprise
+                                ? null
+                                : Checkbox(
+                                    value: state.isLastName,
+                                    fillColor: MaterialStateProperty.all(
+                                      state.isLastName
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onTertiary,
+                                    ),
+                                    checkColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    onChanged: (value) => profileCheckboxCubit
+                                        .lastNameCheckBoxChange(value: value),
                                   ),
-                                  checkColor:
-                                      Theme.of(context).colorScheme.background,
-                                  onChanged: (value) => profileCheckboxCubit
-                                      .lastNameCheckBoxChange(value: value),
-                                ),
-                        ),
-                        _textFieldSpace(),
-                        BaseTextField(
-                          label: l10n.personalPhone,
-                          controller: phoneController,
-                          suffixIcon: ImageIcon(
-                            const AssetImage(IconStrings.call),
-                            color: state.isPhone
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.onTertiary,
                           ),
-                          type: TextInputType.phone,
-                          prefixIcon: isEnterprise
-                              ? null
-                              : Checkbox(
-                                  value: state.isPhone,
-                                  fillColor: MaterialStateProperty.all(
-                                    state.isPhone
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onTertiary,
+                          _textFieldSpace(),
+                          BaseTextField(
+                            label: l10n.personalPhone,
+                            controller: phoneController,
+                            suffixIcon: ImageIcon(
+                              const AssetImage(IconStrings.call),
+                              color: state.isPhone
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onTertiary,
+                            ),
+                            type: TextInputType.phone,
+                            prefixIcon: isEnterprise
+                                ? null
+                                : Checkbox(
+                                    value: state.isPhone,
+                                    fillColor: MaterialStateProperty.all(
+                                      state.isPhone
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onTertiary,
+                                    ),
+                                    checkColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    onChanged: (value) => profileCheckboxCubit
+                                        .phoneCheckBoxChange(value: value),
                                   ),
-                                  checkColor:
-                                      Theme.of(context).colorScheme.background,
-                                  onChanged: (value) => profileCheckboxCubit
-                                      .phoneCheckBoxChange(value: value),
-                                ),
-                        ),
-                        _textFieldSpace(),
-                        BaseTextField(
-                          label: l10n.personalMail,
-                          controller: emailController,
-                          suffixIcon: ImageIcon(
-                            const AssetImage(IconStrings.sms),
-                            color: state.isEmail
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.onTertiary,
                           ),
-                          type: TextInputType.emailAddress,
-                          prefixIcon: isEnterprise
-                              ? null
-                              : Checkbox(
-                                  value: state.isEmail,
-                                  fillColor: MaterialStateProperty.all(
-                                    state.isEmail
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onTertiary,
+                          _textFieldSpace(),
+                          BaseTextField(
+                            label: l10n.personalMail,
+                            controller: emailController,
+                            suffixIcon: ImageIcon(
+                              const AssetImage(IconStrings.sms),
+                              color: state.isEmail
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onTertiary,
+                            ),
+                            type: TextInputType.emailAddress,
+                            prefixIcon: isEnterprise
+                                ? null
+                                : Checkbox(
+                                    value: state.isEmail,
+                                    fillColor: MaterialStateProperty.all(
+                                      state.isEmail
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onTertiary,
+                                    ),
+                                    checkColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    onChanged: (value) => profileCheckboxCubit
+                                        .emailCheckBoxChange(value: value),
                                   ),
-                                  checkColor:
-                                      Theme.of(context).colorScheme.background,
-                                  onChanged: (value) => profileCheckboxCubit
-                                      .emailCheckBoxChange(value: value),
-                                ),
-                        ),
-                        _textFieldSpace(),
-                        BaseTextField(
-                          label: l10n.personalAddress,
-                          controller: locationController,
-                          suffixIcon: ImageIcon(
-                            const AssetImage(IconStrings.location),
-                            color: state.isLocation
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.onTertiary,
                           ),
-                          textCapitalization: TextCapitalization.words,
-                          prefixIcon: isEnterprise
-                              ? null
-                              : Checkbox(
-                                  value: state.isLocation,
-                                  fillColor: MaterialStateProperty.all(
-                                    state.isLocation
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onTertiary,
+                          _textFieldSpace(),
+                          BaseTextField(
+                            label: l10n.personalAddress,
+                            controller: locationController,
+                            suffixIcon: ImageIcon(
+                              const AssetImage(IconStrings.location),
+                              color: state.isLocation
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onTertiary,
+                            ),
+                            textCapitalization: TextCapitalization.words,
+                            prefixIcon: isEnterprise
+                                ? null
+                                : Checkbox(
+                                    value: state.isLocation,
+                                    fillColor: MaterialStateProperty.all(
+                                      state.isLocation
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onTertiary,
+                                    ),
+                                    checkColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    onChanged: (value) => profileCheckboxCubit
+                                        .locationCheckBoxChange(value: value),
                                   ),
-                                  checkColor:
-                                      Theme.of(context).colorScheme.background,
-                                  onChanged: (value) => profileCheckboxCubit
-                                      .locationCheckBoxChange(value: value),
-                                ),
-                        ),
-                        _textFieldSpace(),
-                        if (isEnterprise) _buildEnterpriseTextFields(state),
-                      ],
-                    )),
+                          ),
+                          _textFieldSpace(),
+                          if (isEnterprise) _buildEnterpriseTextFields(state),
+                        ],
+                      ),
+                    ),
                     _textFieldSpace(),
                     MyOutlinedButton.icon(
                       text: l10n.personalSave,

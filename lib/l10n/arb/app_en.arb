@@ -297,5 +297,9 @@
   "succesfullyUpdated": "Successfully Updated.",
   "generate": "Generate",
   "myAssets": "My assets",
-  "search": "Search"
+  "search": "Search",
+  "cards": "Cards",
+  "nfts": "NFTs",
+  "tokens": "Tokens",
+  "getCards": "Get Cards"
 }
