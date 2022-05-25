@@ -1,12 +1,6 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/widget/button/button.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/home/credentials/credential.dart';
-import 'package:altme/home/drawer/drawer/view/widget/drawer_item.dart';
-import 'package:altme/home/drawer/profile/cubit/profile_checkbox_cubit.dart';
-import 'package:altme/home/drawer/profile/cubit/profile_cubit.dart';
-import 'package:altme/home/drawer/profile/models/profile.dart';
-import 'package:altme/home/nft/view/nft_page.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/self_issued_credential_button/sef_issued_credential_button.dart';
 import 'package:altme/theme/theme.dart';
@@ -17,14 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({
-    Key? key,
-    required this.profileModel,
-    required this.isFromOnBoarding,
-  }) : super(key: key);
+  const ProfilePage({Key? key, required this.profileModel}) : super(key: key);
 
   final ProfileModel profileModel;
-  final bool isFromOnBoarding;
 
   static Route route({
     required ProfileModel profileModel,
@@ -45,7 +34,6 @@ class ProfilePage extends StatefulWidget {
           ],
           child: ProfilePage(
             profileModel: profileModel,
-            isFromOnBoarding: isFromOnBoarding,
           ),
         ),
         settings: const RouteSettings(name: '/personalPage'),
@@ -94,18 +82,16 @@ class _PersonalPageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (!widget.isFromOnBoarding) {
-          if (context.read<SelfIssuedCredentialCubit>().state.status !=
-              AppStatus.loading) {
-            Navigator.of(context).pop();
-          }
+        if (context.read<SelfIssuedCredentialCubit>().state.status !=
+            AppStatus.loading) {
+          Navigator.of(context).pop();
         }
+
         return false;
       },
       child: BasePage(
         title: l10n.profileTitle,
-        titleLeading:
-            widget.isFromOnBoarding ? null : const BackLeadingButton(),
+        titleLeading: const BackLeadingButton(),
         padding: const EdgeInsets.symmetric(
           vertical: 32,
         ),
@@ -130,15 +116,24 @@ class _PersonalPageState extends State<ProfilePage> {
                   BaseTextField(
                     label: l10n.personalFirstName,
                     controller: firstNameController,
-                    icon: Icons.person,
+                    suffixIcon: Icon(
+                      Icons.person,
+                      color: state.isFirstName
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onTertiary,
+                    ),
                     textCapitalization: TextCapitalization.words,
-                    prefixIcon: isEnterprise && widget.isFromOnBoarding
+                    prefixIcon: isEnterprise
                         ? null
                         : Checkbox(
                             value: state.isFirstName,
                             fillColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.secondaryContainer,
+                              state.isFirstName
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onTertiary,
                             ),
+                            checkColor:
+                                Theme.of(context).colorScheme.background,
                             onChanged: (value) => profileCheckboxCubit
                                 .firstNameCheckBoxChange(value: value),
                           ),
@@ -147,15 +142,24 @@ class _PersonalPageState extends State<ProfilePage> {
                   BaseTextField(
                     label: l10n.personalLastName,
                     controller: lastNameController,
-                    icon: Icons.person,
+                    suffixIcon: Icon(
+                      Icons.person,
+                      color: state.isLastName
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onTertiary,
+                    ),
                     textCapitalization: TextCapitalization.words,
-                    prefixIcon: isEnterprise && widget.isFromOnBoarding
+                    prefixIcon: isEnterprise
                         ? null
                         : Checkbox(
                             value: state.isLastName,
                             fillColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.secondaryContainer,
+                              state.isLastName
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onTertiary,
                             ),
+                            checkColor:
+                                Theme.of(context).colorScheme.background,
                             onChanged: (value) => profileCheckboxCubit
                                 .lastNameCheckBoxChange(value: value),
                           ),
@@ -164,15 +168,24 @@ class _PersonalPageState extends State<ProfilePage> {
                   BaseTextField(
                     label: l10n.personalPhone,
                     controller: phoneController,
-                    icon: Icons.phone,
+                    suffixIcon: Icon(
+                      Icons.phone,
+                      color: state.isPhone
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onTertiary,
+                    ),
                     type: TextInputType.phone,
-                    prefixIcon: isEnterprise && widget.isFromOnBoarding
+                    prefixIcon: isEnterprise
                         ? null
                         : Checkbox(
                             value: state.isPhone,
                             fillColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.secondaryContainer,
+                              state.isPhone
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onTertiary,
                             ),
+                            checkColor:
+                                Theme.of(context).colorScheme.background,
                             onChanged: (value) => profileCheckboxCubit
                                 .phoneCheckBoxChange(value: value),
                           ),
@@ -181,15 +194,24 @@ class _PersonalPageState extends State<ProfilePage> {
                   BaseTextField(
                     label: l10n.personalLocation,
                     controller: locationController,
-                    icon: Icons.location_pin,
+                    suffixIcon: Icon(
+                      Icons.location_pin,
+                      color: state.isLocation
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onTertiary,
+                    ),
                     textCapitalization: TextCapitalization.words,
-                    prefixIcon: isEnterprise && widget.isFromOnBoarding
+                    prefixIcon: isEnterprise
                         ? null
                         : Checkbox(
                             value: state.isLocation,
                             fillColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.secondaryContainer,
+                              state.isLocation
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onTertiary,
                             ),
+                            checkColor:
+                                Theme.of(context).colorScheme.background,
                             onChanged: (value) => profileCheckboxCubit
                                 .locationCheckBoxChange(value: value),
                           ),
@@ -198,25 +220,27 @@ class _PersonalPageState extends State<ProfilePage> {
                   BaseTextField(
                     label: l10n.personalMail,
                     controller: emailController,
-                    icon: Icons.email,
+                    suffixIcon: Icon(
+                      Icons.email,
+                      color: state.isEmail
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onTertiary,
+                    ),
                     type: TextInputType.emailAddress,
-                    prefixIcon: isEnterprise && widget.isFromOnBoarding
+                    prefixIcon: isEnterprise
                         ? null
                         : Checkbox(
                             value: state.isEmail,
                             fillColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.secondaryContainer,
+                              state.isEmail
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onTertiary,
                             ),
+                            checkColor:
+                                Theme.of(context).colorScheme.background,
                             onChanged: (value) => profileCheckboxCubit
                                 .emailCheckBoxChange(value: value),
                           ),
-                  ),
-                  DrawerItem(
-                    key: const Key('my_nft'),
-                    icon: Icons.videogame_asset,
-                    title: 'NFT assets',
-                    onTap: () =>
-                        Navigator.of(context).push<void>(NftPage.route()),
                   ),
                   _textFieldSpace(),
                   if (isEnterprise) _buildEnterpriseTextFields(state),
@@ -228,50 +252,51 @@ class _PersonalPageState extends State<ProfilePage> {
                               .state
                               .status ==
                           AppStatus.loading) return;
-                      final model = widget.profileModel.copyWith(
-                        firstName: firstNameController.text,
-                        lastName: lastNameController.text,
-                        phone: phoneController.text,
-                        location: locationController.text,
-                        email: emailController.text,
-                        companyName: companyNameController.text,
-                        companyWebsite: companyWebsiteController.text,
-                        jobTitle: jobTitleController.text,
-                        issuerVerificationSetting:
-                            widget.profileModel.issuerVerificationSetting,
+
+                      await _updateProfile();
+
+                      AlertMessage.showStringMessage(
+                        context: context,
+                        message: l10n.succesfullyUpdated,
+                        messageType: MessageType.success,
                       );
 
-                      await context.read<ProfileCubit>().update(model);
-                      if (widget.isFromOnBoarding) {
-                        ///save selfIssued credential when user press
-                        /// save button during onBoarding
-                        await context
-                            .read<SelfIssuedCredentialCubit>()
-                            .createSelfIssuedCredential(
-                              selfIssuedCredentialDataModel:
-                                  _getSelfIssuedCredential(),
-                            );
-                        await Navigator.of(context).pushReplacement<void, void>(
-                          CredentialsListPage.route(),
-                        );
-                      } else {
-                        AlertMessage.showStringMessage(
-                          context: context,
-                          message: l10n.succesfullyUpdated,
-                          messageType: MessageType.success,
-                        );
+                      Navigator.of(context).pop();
 
-                        Navigator.of(context).pop();
-
-                        /// Another pop to close the drawer
-                        Navigator.of(context).pop();
-                      }
+                      /// Another pop to close the drawer
+                      Navigator.of(context).pop();
                     },
                   ),
                   _textFieldSpace(),
                   MyElevatedButton(
                     text: l10n.generate,
-                    onPressed: () => _getSelfIssuedCredential,
+                    onPressed: () async {
+                      if (context
+                              .read<SelfIssuedCredentialCubit>()
+                              .state
+                              .status ==
+                          AppStatus.loading) return;
+
+                      await _updateProfile();
+
+                      await context
+                          .read<SelfIssuedCredentialCubit>()
+                          .createSelfIssuedCredential(
+                            selfIssuedCredentialDataModel:
+                                _getSelfIssuedCredential(),
+                          );
+
+                      AlertMessage.showStringMessage(
+                        context: context,
+                        message: l10n.succesfullyUpdated,
+                        messageType: MessageType.success,
+                      );
+
+                      Navigator.of(context).pop();
+
+                      /// Another pop to close the drawer
+                      Navigator.of(context).pop();
+                    },
                   ),
                 ],
               ),
@@ -280,6 +305,22 @@ class _PersonalPageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _updateProfile() async {
+    final model = widget.profileModel.copyWith(
+      firstName: firstNameController.text,
+      lastName: lastNameController.text,
+      phone: phoneController.text,
+      location: locationController.text,
+      email: emailController.text,
+      companyName: companyNameController.text,
+      companyWebsite: companyWebsiteController.text,
+      jobTitle: jobTitleController.text,
+      issuerVerificationSetting: widget.profileModel.issuerVerificationSetting,
+    );
+
+    await context.read<ProfileCubit>().update(model);
   }
 
   SelfIssuedCredentialDataModel _getSelfIssuedCredential() {
@@ -330,15 +371,23 @@ class _PersonalPageState extends State<ProfilePage> {
         BaseTextField(
           label: l10n.companyName,
           controller: companyNameController,
-          icon: Icons.apartment,
+          suffixIcon: Icon(
+            Icons.apartment,
+            color: state.isCompanyName
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.onTertiary,
+          ),
           type: TextInputType.text,
-          prefixIcon: isEnterprise && widget.isFromOnBoarding
+          prefixIcon: isEnterprise
               ? null
               : Checkbox(
                   value: state.isCompanyName,
                   fillColor: MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.secondaryContainer,
+                    state.isCompanyName
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onTertiary,
                   ),
+                  checkColor: Theme.of(context).colorScheme.background,
                   onChanged: (value) => profileCheckboxCubit
                       .companyNameCheckBoxChange(value: value),
                 ),
@@ -347,15 +396,23 @@ class _PersonalPageState extends State<ProfilePage> {
         BaseTextField(
           label: l10n.companyWebsite,
           controller: companyWebsiteController,
-          icon: Icons.web_outlined,
+          suffixIcon: Icon(
+            Icons.web_outlined,
+            color: state.isCompanyWebsite
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.onTertiary,
+          ),
           type: TextInputType.url,
-          prefixIcon: isEnterprise && widget.isFromOnBoarding
+          prefixIcon: isEnterprise
               ? null
               : Checkbox(
                   value: state.isCompanyWebsite,
                   fillColor: MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.secondaryContainer,
+                    state.isCompanyWebsite
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onTertiary,
                   ),
+                  checkColor: Theme.of(context).colorScheme.background,
                   onChanged: (value) => profileCheckboxCubit
                       .companyWebsiteCheckBoxChange(value: value),
                 ),
@@ -364,15 +421,23 @@ class _PersonalPageState extends State<ProfilePage> {
         BaseTextField(
           label: l10n.jobTitle,
           controller: jobTitleController,
-          icon: Icons.work_outlined,
           type: TextInputType.text,
-          prefixIcon: isEnterprise && widget.isFromOnBoarding
+          suffixIcon: Icon(
+            Icons.work_outlined,
+            color: state.isJobTitle
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.onTertiary,
+          ),
+          prefixIcon: isEnterprise
               ? null
               : Checkbox(
                   value: state.isJobTitle,
                   fillColor: MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.secondaryContainer,
+                    state.isJobTitle
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onTertiary,
                   ),
+                  checkColor: Theme.of(context).colorScheme.background,
                   onChanged: (value) =>
                       profileCheckboxCubit.jobTitleCheckBoxChange(value: value),
                 ),

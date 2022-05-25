@@ -11,8 +11,8 @@ class BasePage extends StatelessWidget {
     this.titleLeading,
     this.titleTrailing,
     this.padding = const EdgeInsets.symmetric(
-      horizontal: 24,
-      vertical: 32,
+      horizontal: 15,
+      vertical: 20,
     ),
     this.scrollView = true,
     this.navigation,
@@ -52,7 +52,6 @@ class BasePage extends StatelessWidget {
       appBar: title != null && title!.isNotEmpty
           ? CustomAppBar(
               title: title!,
-              tag: titleTag,
               leading: titleLeading,
               trailing: titleTrailing,
             )

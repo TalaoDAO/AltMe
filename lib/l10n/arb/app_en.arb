@@ -145,7 +145,7 @@
   "personalFirstName": "First Name",
   "personalLastName": "Last Name",
   "personalPhone": "Phone",
-  "personalLocation": "Location",
+  "personalAddress": "Address",
   "personalMail": "E-mail",
   "lastName": "Last name",
   "firstName": "First name",
