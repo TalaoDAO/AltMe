@@ -78,16 +78,15 @@ class _HomePageState extends State<HomePage> {
                   ),
                   labelColor: Colors.white,
                   unselectedLabelColor: Colors.grey,
-                  tabs: const [
-                    // TODO(bibash): localise
+                  tabs: [
                     Tab(
-                      text: 'Cards',
+                      text: l10n.cards,
                     ),
                     Tab(
-                      text: 'NFTs',
+                      text: l10n.nfts,
                     ),
                     Tab(
-                      text: 'Tokens',
+                      text: l10n.tokens,
                     ),
                   ],
                 ),
@@ -95,7 +94,6 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 10),
               const Expanded(
                 child: BackgroundCard(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
                   child: TabBarView(
                     children: [
                       CredentialsListPage(),

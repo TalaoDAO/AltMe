@@ -32,8 +32,10 @@ class TokensState extends Equatable {
     );
   }
 
-  TokensState success(
-      {MessageHandler? messageHandler, List<TokenModel>? data}) {
+  TokensState success({
+    MessageHandler? messageHandler,
+    List<TokenModel>? data,
+  }) {
     return TokensState(
       status: AppStatus.success,
       data: data ?? this.data,

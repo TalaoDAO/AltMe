@@ -1,4 +1,5 @@
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class MyAssetsText extends StatelessWidget {
@@ -9,7 +10,7 @@ class MyAssetsText extends StatelessWidget {
     final l10n = context.l10n;
     return Text(
       l10n.myAssets,
-      style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      style: Theme.of(context).textTheme.infoTitle,
     );
   }
 }

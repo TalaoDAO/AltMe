@@ -127,7 +127,11 @@
     "succesfullyUpdated",
     "generate",
     "myAssets",
-    "search"
+    "search",
+    "cards",
+    "nfts",
+    "tokens",
+    "getCards"
   ],
 
   "es": [
@@ -257,7 +261,11 @@
     "succesfullyUpdated",
     "generate",
     "myAssets",
-    "search"
+    "search",
+    "cards",
+    "nfts",
+    "tokens",
+    "getCards"
   ],
 
   "fr": [
@@ -277,7 +285,11 @@
     "items",
     "succesfullyUpdated",
     "generate",
-    "myAssets"
+    "myAssets",
+    "cards",
+    "nfts",
+    "tokens",
+    "getCards"
   ],
 
   "it": [
@@ -409,6 +421,10 @@
     "succesfullyUpdated",
     "generate",
     "myAssets",
-    "search"
+    "search",
+    "cards",
+    "nfts",
+    "tokens",
+    "getCards"
   ]
 }
