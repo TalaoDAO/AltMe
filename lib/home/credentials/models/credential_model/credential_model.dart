@@ -188,6 +188,8 @@ class CredentialModel extends Equatable {
         shareLink,
         credentialPreview,
         display,
-        revocationStatus
+        revocationStatus,
+        expirationDate,
+        credentialManifest,
       ];
 }
