@@ -8,8 +8,6 @@ import 'package:altme/home/drawer/profile/view/profile_page.dart';
 import 'package:altme/home/drawer/recovery_credential/view/recovery_credential_page.dart';
 import 'package:altme/home/drawer/recovery_key/view/recovery_key_page.dart';
 import 'package:altme/home/drawer/terms/view/terms_page.dart';
-import 'package:altme/home/nft/nft.dart';
-import 'package:altme/home/tokens/tokens.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/wallet.dart';

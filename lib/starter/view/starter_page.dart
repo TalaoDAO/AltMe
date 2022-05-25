@@ -32,13 +32,17 @@ class StarterPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: const [
                   Spacer(
-                    flex: 3,
+                    flex: 4,
                   ),
                   AltMeLogo(),
                   Spacer(
                     flex: 1,
                   ),
                   StarterTitle(),
+                  Spacer(
+                    flex: 1,
+                  ),
+                  StarterSubTitle(),
                   Spacer(
                     flex: 2,
                   ),
@@ -51,27 +55,31 @@ class StarterPage extends StatelessWidget {
             flex: 1,
             child: Container(
               // TODO(Taleb): replace loading widget and version widget here
-              // padding: const EdgeInsets.all(SizeHelper.spaceSmall),
-              // decoration: BoxDecoration(
-              //   gradient: AppTheme.darkGradient,
-              // ),
-              // child: Column(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   crossAxisAlignment: CrossAxisAlignment.center,
-              //   mainAxisSize: MainAxisSize.max,
-              //   children: [
-              //     CreateWalletButton(
-              //       onPressed: () {
-              //         Navigator.of(context).push(MaterialPageRoute(
-              //             builder: (_) => const HomeScreen()));
-              //       },
-              //     ),
-              //     const SizedBox(
-              //       height: SizeHelper.spaceSmall,
-              //     ),
-              //     const ImportWalletButton(),
-              //   ],
-              // ),
+              padding: const EdgeInsets.all(Sizes.spaceSmall),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Theme.of(context).colorScheme.darkGradientEndColor,
+                    Theme.of(context).colorScheme.darkGradientStartColor,
+                  ],
+              ),),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: const [
+                  Spacer(flex: 2,),
+                  StarterLoadingText(),
+                  SizedBox(
+                    height: Sizes.spaceSmall,
+                  ),
+                  LoadingProgress(),
+                  Spacer(flex: 4,),
+                  VersionText()
+                ],
+              ),
             ),
           ),
         ],
