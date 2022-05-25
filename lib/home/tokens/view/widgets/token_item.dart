@@ -18,20 +18,8 @@ class TokenItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(Taleb): update widget
     final numberFormatter = NumberFormat('#,###,000');
-    return Container(
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        boxShadow: [
-          BoxShadow(blurRadius: 5, spreadRadius: 0, color: Colors.grey[300]!),
-        ],
-        borderRadius: const BorderRadius.all(
-          Radius.circular(12),
-        ),
-      ),
+    return BackgroundCard(
       child: ListTile(
         leading: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(100)),

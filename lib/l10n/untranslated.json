@@ -127,7 +127,7 @@
     "succesfullyUpdated",
     "generate",
     "myAssets",
-    "search",
+    "search"
   ],
 
   "es": [
@@ -257,7 +257,7 @@
     "succesfullyUpdated",
     "generate",
     "myAssets",
-    "search",
+    "search"
   ],
 
   "fr": [
@@ -409,6 +409,6 @@
     "succesfullyUpdated",
     "generate",
     "myAssets",
-    "search",
+    "search"
   ]
 }

@@ -174,6 +174,13 @@ class ProfileView extends StatelessWidget {
                     Navigator.of(context).push<void>(TokenPage.route());
                   },
                 ),
+                DrawerItem(
+                  icon: Icons.wallet_membership,
+                  title: 'My NFT',
+                  onTap: () {
+                    Navigator.of(context).push<void>(NftPage.route());
+                  },
+                ),
               ],
             );
           },
