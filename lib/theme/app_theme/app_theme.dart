@@ -83,6 +83,10 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get darkGradientStartColor => const Color(0xff0A0421);
+
+  Color get darkGradientEndColor => const Color(0xff25095B);
+
   Color get transparent => Colors.transparent;
 
   Color get onOutlineButton => const Color(0xFF6600FF);
@@ -145,6 +149,18 @@ extension CustomColorScheme on ColorScheme {
 }
 
 extension CustomTextTheme on TextTheme {
+  TextStyle get starterTitleStyle => GoogleFonts.nunito(
+        color: const Color(0xFFEDEAF5),
+        fontSize: 28,
+        fontWeight: FontWeight.w800,
+      );
+
+  TextStyle get starterSubTitleStyle => GoogleFonts.nunito(
+        color: const Color(0xFFD1CCE3),
+        fontSize: 22,
+        fontWeight: FontWeight.w500,
+      );
+
   TextStyle get infoTitle => GoogleFonts.nunito(
         color: const Color(0xFFEDEAF5),
         fontSize: 20,
