@@ -48,6 +48,7 @@ class _HomePageState extends State<HomePage> {
         scrollView: false,
         scaffoldKey: scaffoldKey,
         drawer: const DrawerPage(),
+        padding: EdgeInsets.zero,
         titleLeading: IconButton(
           icon: const Icon(Icons.menu),
           onPressed: () => scaffoldKey.currentState!.openDrawer(),
@@ -111,13 +112,16 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 10),
               const Expanded(
-                child: BackgroundCard(
-                  child: TabBarView(
-                    children: [
-                      CredentialsListPage(),
-                      NftPage(),
-                      TokenPage(),
-                    ],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: BackgroundCard(
+                    child: TabBarView(
+                      children: [
+                        CredentialsListPage(),
+                        NftPage(),
+                        TokenPage(),
+                      ],
+                    ),
                   ),
                 ),
               )
