@@ -50,7 +50,10 @@ class _HomePageState extends State<HomePage> {
         drawer: const DrawerPage(),
         padding: EdgeInsets.zero,
         titleLeading: IconButton(
-          icon: const Icon(Icons.menu),
+          icon: ImageIcon(
+            const AssetImage(IconStrings.icMenu),
+            color: Theme.of(context).colorScheme.leadingButton,
+          ),
           onPressed: () => scaffoldKey.currentState!.openDrawer(),
         ),
         titleTrailing: IconButton(

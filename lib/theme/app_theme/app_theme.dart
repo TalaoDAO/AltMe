@@ -99,7 +99,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get unSelectedLabel => const Color(0xff86809D);
 
-  Color get backButton => const Color(0xFFADACAC);
+  Color get leadingButton => const Color(0xffF1EFF8);
 
   Color get selectedBottomBar => surface;
 
