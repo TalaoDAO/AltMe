@@ -301,5 +301,6 @@
   "cards": "Cards",
   "nfts": "NFTs",
   "tokens": "Tokens",
-  "getCards": "Get Cards"
+  "getCards": "Get Cards",
+  "close": "Close"
 }

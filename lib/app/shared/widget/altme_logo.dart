@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AltMeLogo extends StatelessWidget {
-  const AltMeLogo({Key? key}) : super(key: key);
+  const AltMeLogo({Key? key, this.size = Sizes.logoLarge}) : super(key: key);
+
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +17,8 @@ class AltMeLogo extends StatelessWidget {
           : flavorCubit.state == FlavorMode.staging
               ? ImageStrings.splashStage
               : ImageStrings.splash,
-      width: Sizes.logoLarge,
-      height: Sizes.logoLarge,
+      width: size,
+      height: size,
       fit: BoxFit.fitHeight,
     );
   }

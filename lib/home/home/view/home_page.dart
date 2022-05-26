@@ -45,7 +45,9 @@ class _HomePageState extends State<HomePage> {
       child: BasePage(
         scrollView: false,
         scaffoldKey: scaffoldKey,
-        drawer: const DrawerPage(),
+        drawer: DrawerPage(
+          scaffoldKey: scaffoldKey,
+        ),
         padding: EdgeInsets.zero,
         titleLeading: IconButton(
           icon: ImageIcon(

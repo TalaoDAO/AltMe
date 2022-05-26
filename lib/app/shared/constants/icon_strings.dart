@@ -10,4 +10,5 @@ class IconStrings {
   static const String icMenu = '$base/ic-menu.png';
   static const String userSquare = '$base/user-square.png';
   static const String walletAdd = '$base/wallet-add.png';
+  static const String closeCircle = '$base/close-circle.png';
 }
