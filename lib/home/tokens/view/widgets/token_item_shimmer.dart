@@ -11,8 +11,10 @@ class TokenItemShimmer extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: BackgroundCard(
         color: Theme.of(context).colorScheme.surfaceContainer,
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: const ListTile(
+          minVerticalPadding: 0,
+          contentPadding: EdgeInsets.zero,
           leading: ShimmerWidget.circular(
             height: Sizes.tokenLogoSize,
             width: Sizes.tokenLogoSize,
