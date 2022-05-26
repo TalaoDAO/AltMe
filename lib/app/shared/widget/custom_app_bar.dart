@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends PreferredSize {
   CustomAppBar({
     Key? key,
-    this.title = '',
+    this.title,
     this.leading,
     this.trailing,
   }) : super(
@@ -14,7 +14,7 @@ class CustomAppBar extends PreferredSize {
           preferredSize: const Size.fromHeight(70),
         );
 
-  final String title;
+  final String? title;
   final Widget? leading;
   final Widget? trailing;
 
@@ -40,7 +40,7 @@ class CustomAppBar extends PreferredSize {
               right: 64,
             ),
             child: MyText(
-              title,
+              title ?? '',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.appBar,
             ),
