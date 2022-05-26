@@ -16,7 +16,7 @@ class _LoadingProgressState extends State<LoadingProgress>
   void initState() {
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2 * 1000),
+      duration: const Duration(milliseconds: 5 * 1000),
     );
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
