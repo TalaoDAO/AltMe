@@ -44,34 +44,19 @@ class SplashView extends StatefulWidget {
   State<SplashView> createState() => _SplashViewState();
 }
 
-class _SplashViewState extends State<SplashView>
-    with SingleTickerProviderStateMixin {
+class _SplashViewState extends State<SplashView> {
   StreamSubscription? _sub;
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
-
   @override
   void initState() {
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    )..addStatusListener((AnimationStatus status) async {
-        if (status == AnimationStatus.completed) {
-          //ignore: use_build_context_synchronously
-          await context.read<SplashCubit>().initialiseApp();
-        }
-      });
-    _scaleAnimation = Tween<double>(begin: 0.2, end: 1).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.ease),
-    );
-    _animationController.forward();
+    Future<void>.delayed(const Duration(milliseconds: 5 * 1000), () async {
+      await context.read<SplashCubit>().initialiseApp();
+    });
     super.initState();
   }
 
   @override
   void dispose() {
     _sub?.cancel();
-    _animationController.dispose();
     super.dispose();
   }
 
