@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,7 @@ class DrawerItem extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: Text(
+                child: MyText(
                   title,
                   style: Theme.of(context).textTheme.drawerItem,
                 ),

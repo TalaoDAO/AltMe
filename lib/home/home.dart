@@ -3,3 +3,4 @@ export 'credentials/credential.dart';
 export 'drawer/drawer.dart';
 export 'home/home.dart';
 export 'nft/nft.dart';
+export 'tokens/tokens.dart';
