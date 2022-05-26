@@ -14,7 +14,6 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
-import 'package:altme/starter/starter.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
@@ -103,8 +102,7 @@ class MaterialAppDefinition extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      //home: const SplashPage(),
-      home: const StarterPage(),
+      home: const SplashPage(),
     );
   }
 }

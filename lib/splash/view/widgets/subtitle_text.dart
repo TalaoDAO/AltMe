@@ -3,8 +3,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class StarterSubTitle extends StatelessWidget {
-  const StarterSubTitle({Key? key}) : super(key: key);
+class SubTitle extends StatelessWidget {
+  const SubTitle({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class StarterSubTitle extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceLarge),
       child: SizedBox(
         child: Text(
-          l10n.starterSubtitle,
+          l10n.splashSubtitle,
           maxLines: 3,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.starterSubTitleStyle,

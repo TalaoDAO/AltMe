@@ -27,6 +27,12 @@ class _LoadingProgressState extends State<LoadingProgress>
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceLarge),
