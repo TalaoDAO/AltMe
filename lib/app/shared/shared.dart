@@ -8,6 +8,5 @@ export 'issuer/issuer.dart';
 export 'launch_url/launch_url.dart';
 export 'message_handler/message_handler.dart';
 export 'models/model.dart';
-export 'router/router.dart';
 export 'translation/translation.dart';
 export 'widget/widget.dart';

@@ -61,10 +61,7 @@ class ProfileView extends StatelessWidget {
                   icon: Icons.person,
                   title: l10n.profileTitle,
                   onTap: () => Navigator.of(context).push<void>(
-                    ProfilePage.route(
-                      profileModel: state.model,
-                      isFromOnBoarding: false,
-                    ),
+                    ProfilePage.route(profileModel: state.model),
                   ),
                 ),
                 DrawerItem(

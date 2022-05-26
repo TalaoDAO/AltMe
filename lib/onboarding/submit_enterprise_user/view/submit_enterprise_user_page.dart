@@ -57,7 +57,7 @@ class _SubmitEnterpriseUserPageState extends State<SubmitEnterpriseUserPage> {
             final model = ProfileModel.empty().copyWith(isEnterprise: true);
             await context.read<ProfileCubit>().update(model);
             await Navigator.of(context).pushReplacement<void, void>(
-              ProfilePage.route(profileModel: model, isFromOnBoarding: true),
+              HomePage.route(),
             );
           }
         }

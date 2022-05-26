@@ -78,10 +78,7 @@ class _OnBoardingGenPhrasePageState extends State<OnBoardingGenPhrasePage> {
             }
             if (state.status == AppStatus.success) {
               await Navigator.of(context).pushReplacement<void, void>(
-                ProfilePage.route(
-                  isFromOnBoarding: true,
-                  profileModel: ProfileModel.empty(),
-                ),
+                HomePage.route(),
               );
             }
           },

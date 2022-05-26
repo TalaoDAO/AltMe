@@ -15,10 +15,7 @@ class ProfilePage extends StatefulWidget {
 
   final ProfileModel profileModel;
 
-  static Route route({
-    required ProfileModel profileModel,
-    required bool isFromOnBoarding,
-  }) =>
+  static Route route({required ProfileModel profileModel}) =>
       MaterialPageRoute<void>(
         builder: (context) => MultiBlocProvider(
           providers: [
