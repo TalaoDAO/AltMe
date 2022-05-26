@@ -1,6 +1,4 @@
-import 'package:altme/app/shared/constants/altme_strings.dart';
-import 'package:altme/app/shared/constants/icon_strings.dart';
-import 'package:altme/app/shared/widget/widget.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/home/home/widgets/tab_bar.dart';
 import 'package:altme/home/tokens/view/token_page.dart';
