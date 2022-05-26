@@ -95,6 +95,10 @@ extension CustomColorScheme on ColorScheme {
 
   Color get surfaceContainer => const Color(0xff707070).withOpacity(0.07);
 
+  Color get label => Colors.white;
+
+  Color get unSelectedLabel => const Color(0xff86809D);
+
   Color get backButton => const Color(0xFFADACAC);
 
   Color get selectedBottomBar => surface;

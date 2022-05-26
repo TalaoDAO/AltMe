@@ -1,7 +1,11 @@
+import 'package:altme/app/shared/constants/altme_strings.dart';
+import 'package:altme/app/shared/constants/icon_strings.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/home/home/widgets/tab_bar.dart';
 import 'package:altme/home/tokens/view/token_page.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,20 +77,34 @@ class _HomePageState extends State<HomePage> {
                 height: 80,
                 child: TabBar(
                   indicator: BoxDecoration(
-                    color: Colors.blue,
                     borderRadius: BorderRadius.circular(25),
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.secondary,
+                      ],
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                      stops: const [0.3, 1.0],
+                    ),
                   ),
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.grey,
+                  automaticIndicatorColorAdjustment: false,
+                  labelColor: Theme.of(context).colorScheme.label,
+                  unselectedLabelColor:
+                      Theme.of(context).colorScheme.unSelectedLabel,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   tabs: [
-                    Tab(
+                    MyTab(
                       text: l10n.cards,
+                      icon: IconStrings.userSquare,
                     ),
-                    Tab(
+                    MyTab(
                       text: l10n.nfts,
+                      icon: IconStrings.ghost,
                     ),
-                    Tab(
+                    MyTab(
                       text: l10n.tokens,
+                      icon: IconStrings.health,
                     ),
                   ],
                 ),
