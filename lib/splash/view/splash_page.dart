@@ -155,7 +155,7 @@ class _SplashViewState extends State<SplashView>
         BlocListener<SplashCubit, SplashStatus>(
           listener: (BuildContext context, SplashStatus state) {
             if (state == SplashStatus.onboarding) {
-              Navigator.of(context).push<void>(OnBoardingStartPage.route());
+              Navigator.of(context).push<void>(OnBoardingTosPage.route());
             }
             if (state == SplashStatus.bypassOnBoarding) {
               Navigator.of(context).push<void>(HomePage.route());
