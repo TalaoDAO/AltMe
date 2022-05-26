@@ -11,7 +11,7 @@ class CustomAppBar extends PreferredSize {
   }) : super(
           key: key,
           child: Container(),
-          preferredSize: const Size.fromHeight(80),
+          preferredSize: const Size.fromHeight(70),
         );
 
   final String title;
@@ -35,7 +35,7 @@ class CustomAppBar extends PreferredSize {
             ),
             padding: const EdgeInsets.only(
               top: 12,
-              bottom: 16,
+              bottom: 18,
               left: 64,
               right: 64,
             ),

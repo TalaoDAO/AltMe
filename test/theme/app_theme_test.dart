@@ -23,8 +23,8 @@ void main() {
                   color: Theme.of(context).colorScheme.transparent,
                 ),
                 Container(
-                  key: const Key('backButton'),
-                  color: Theme.of(context).colorScheme.backButton,
+                  key: const Key('leadingButton'),
+                  color: Theme.of(context).colorScheme.leadingButton,
                 ),
                 Container(
                   key: const Key('selectedBottomBar'),
