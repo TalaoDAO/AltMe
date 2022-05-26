@@ -37,16 +37,17 @@ class NftItem extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          Text(
+          MyText(
             description,
             maxLines: 1,
+            minFontSize: 12,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.caption,
           ),
           const SizedBox(
             height: 6,
           ),
-          Text(
+          MyText(
             assetValue,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

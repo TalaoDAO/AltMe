@@ -20,29 +20,36 @@ class TokenItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final numberFormatter = NumberFormat('#,###,000');
-    return BackgroundCard(
-      color: Theme.of(context).colorScheme.surfaceContainer,
-      padding: const EdgeInsets.all(10),
-      child: ListTile(
-        leading: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(100)),
-          child: Image.asset(
-            logoPath,
-            width: Sizes.tokenLogoSize,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: BackgroundCard(
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          minVerticalPadding: 0,
+          leading: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(100)),
+            child: Image.asset(
+              logoPath,
+              width: Sizes.tokenLogoSize,
+            ),
           ),
-        ),
-        title: Text(
-          name.toUpperCase(),
-          style: Theme.of(context).textTheme.listTileTitle,
-        ),
-        subtitle: Text(
-          symbol,
-          style: Theme.of(context).textTheme.listTileSubtitle,
-        ),
-        trailing: Text(
-          numberFormatter.format(balance),
-          style:
-              Theme.of(context).textTheme.listTileTitle.copyWith(fontSize: 13),
+          title: MyText(
+            name.toUpperCase(),
+            style: Theme.of(context).textTheme.listTileTitle,
+          ),
+          subtitle: MyText(
+            symbol,
+            style: Theme.of(context).textTheme.listTileSubtitle,
+          ),
+          trailing: MyText(
+            numberFormatter.format(balance),
+            style: Theme.of(context)
+                .textTheme
+                .listTileTitle
+                .copyWith(fontSize: 13),
+          ),
         ),
       ),
     );
