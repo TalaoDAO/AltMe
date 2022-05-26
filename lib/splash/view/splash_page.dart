@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:altme/app/app.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/flavor/flavor.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/key/onboarding_key.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
+import 'package:altme/splash/view/widgets/widgets.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -149,7 +150,6 @@ class _SplashViewState extends State<SplashView>
   Widget build(BuildContext context) {
     _handleIncomingLinks(context);
     _handleInitialUri(context);
-    final FlavorCubit flavorCubit = context.read<FlavorCubit>();
     return MultiBlocListener(
       listeners: [
         BlocListener<SplashCubit, SplashStatus>(
@@ -317,21 +317,85 @@ class _SplashViewState extends State<SplashView>
       ],
       child: BasePage(
         scrollView: false,
-        body: Center(
-          child: SizedBox.square(
-            dimension: MediaQuery.of(context).size.width * 0.4,
-            child: ScaleTransition(
-              key: const Key('scaleTransition'),
-              scale: _scaleAnimation,
-              child: Image.asset(
-                flavorCubit.state == FlavorMode.development
-                    ? ImageStrings.splashDev
-                    : flavorCubit.state == FlavorMode.staging
-                        ? ImageStrings.splashStage
-                        : ImageStrings.splash,
+        padding: EdgeInsets.zero,
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+              flex: 3,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.darkGradientStartColor,
+                      Theme.of(context).colorScheme.darkGradientEndColor
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: const [
+                    Spacer(
+                      flex: 4,
+                    ),
+                    AltMeLogo(),
+                    Spacer(
+                      flex: 1,
+                    ),
+                    TitleText(),
+                    Spacer(
+                      flex: 1,
+                    ),
+                    SubTitle(),
+                    Spacer(
+                      flex: 2,
+                    ),
+                    CityImage(),
+                  ],
+                ),
               ),
             ),
-          ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: const EdgeInsets.all(Sizes.spaceSmall),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Theme.of(context).colorScheme.darkGradientEndColor,
+                      Theme.of(context).colorScheme.darkGradientStartColor,
+                    ],
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: const [
+                    Spacer(
+                      flex: 2,
+                    ),
+                    LoadingText(),
+                    SizedBox(
+                      height: Sizes.spaceSmall,
+                    ),
+                    LoadingProgress(),
+                    Spacer(
+                      flex: 4,
+                    ),
+                    VersionText()
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
