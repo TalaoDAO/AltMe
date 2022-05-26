@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class CityImage extends StatelessWidget {
@@ -6,7 +7,7 @@ class CityImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.asset(
-      'assets/image/city.png',
+      ImageStrings.splashCity,
       fit: BoxFit.fitWidth,
     );
   }
