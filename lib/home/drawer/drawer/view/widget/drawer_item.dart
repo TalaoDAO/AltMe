@@ -22,8 +22,9 @@ class DrawerItem extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(
             vertical: 16,
+            horizontal: 5,
           ),
-          margin: const EdgeInsets.symmetric(horizontal: 24),
+          margin: const EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
