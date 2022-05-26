@@ -136,7 +136,10 @@
     "nfts",
     "tokens",
     "getCards",
-    "close"
+    "close",
+    "profile",
+    "infos",
+    "save"
   ],
 
   "es": [
@@ -275,7 +278,10 @@
     "nfts",
     "tokens",
     "getCards",
-    "close"
+    "close",
+    "profile",
+    "infos",
+    "save"
   ],
 
   "fr": [
@@ -304,7 +310,10 @@
     "nfts",
     "tokens",
     "getCards",
-    "close"
+    "close",
+    "profile",
+    "infos",
+    "save"
   ],
 
   "it": [
@@ -445,6 +454,9 @@
     "nfts",
     "tokens",
     "getCards",
-    "close"
+    "close",
+    "profile",
+    "infos",
+    "save"
   ]
 }

@@ -72,6 +72,40 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         body: const TabControllerWidget(),
+        navigation: Padding(
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 2),
+          child: BackgroundCard(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                BottomBarItem(
+                  icon: IconStrings.story,
+                  text: l10n.infos,
+                  onPressed: () {},
+                ),
+                BottomBarItem(
+                  icon: IconStrings.profile,
+                  text: l10n.profile,
+                  onPressed: () {},
+                ),
+                const SizedBox.shrink(),
+                const SizedBox.shrink(),
+                BottomBarItem(
+                  icon: IconStrings.searchNormal,
+                  text: l10n.search,
+                  onPressed: () {},
+                ),
+                BottomBarItem(
+                  icon: IconStrings.save,
+                  text: l10n.save,
+                  onPressed: () {},
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

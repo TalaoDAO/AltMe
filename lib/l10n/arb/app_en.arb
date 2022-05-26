@@ -302,5 +302,8 @@
   "nfts": "NFTs",
   "tokens": "Tokens",
   "getCards": "Get Cards",
-  "close": "Close"
+  "close": "Close",
+  "profile": "Profile",
+  "infos": "Infos",
+  "save": "Save"
 }

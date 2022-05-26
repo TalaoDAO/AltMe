@@ -187,6 +187,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w800,
       );
 
+  TextStyle get bottomBar => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 10,
+        fontWeight: FontWeight.w600,
+      );
+
   TextStyle get listTitle => GoogleFonts.nunito(
         color: const Color(0xFFEDEAF5),
         fontSize: 20,
