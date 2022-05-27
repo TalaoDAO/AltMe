@@ -163,7 +163,7 @@
   "jobTitle": "Job title",
   "baseSalary": "Salary",
   "expires": "Expires",
-  "globalInformationLabel": "General information",
+  "generalInformationLabel": "General information",
   "learningAchievement": "Achievement",
   "signedBy": "Signed by",
   "from": "from",

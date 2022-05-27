@@ -50,6 +50,8 @@ class DrawerView extends StatelessWidget {
             final lastName = state.model.lastName;
             final isEnterprise = state.model.isEnterprise;
 
+            //print(context.read<ProfileCubit>().state.model);
+
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
