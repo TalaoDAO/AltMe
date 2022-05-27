@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/home/credentials/credential.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';

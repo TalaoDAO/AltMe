@@ -163,7 +163,7 @@
   "jobTitle": "Job title",
   "baseSalary": "Salary",
   "expires": "Expires",
-  "globalInformationLabel": "General information",
+  "generalInformationLabel": "General information",
   "learningAchievement": "Achievement",
   "signedBy": "Signed by",
   "from": "from",
@@ -301,5 +301,9 @@
   "cards": "Cards",
   "nfts": "NFTs",
   "tokens": "Tokens",
-  "getCards": "Get Cards"
+  "getCards": "Get Cards",
+  "close": "Close",
+  "profile": "Profile",
+  "infos": "Infos",
+  "save": "Save"
 }

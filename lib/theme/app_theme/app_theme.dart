@@ -107,7 +107,9 @@ extension CustomColorScheme on ColorScheme {
 
   Color get selectedBottomBar => surface;
 
-  Color get borderColor => const Color(0xFF3B3A3A);
+  Color get drawerBackground => const Color(0xff0B0E19);
+
+  Color get borderColor => const Color(0xFFDDCEF4);
 
   Color get markDownH1 => const Color(0xFFDBD8D8);
 
@@ -185,6 +187,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w800,
       );
 
+  TextStyle get bottomBar => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 10,
+        fontWeight: FontWeight.w600,
+      );
+
   TextStyle get listTitle => GoogleFonts.nunito(
         color: const Color(0xFFEDEAF5),
         fontSize: 20,
@@ -213,6 +221,18 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xFF8682A8),
         fontSize: 12,
         fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get drawerClose => GoogleFonts.nunito(
+        color: const Color(0xFFD6C3F2),
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get drawerItem => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
       );
 
   TextStyle get credentialTitle => GoogleFonts.nunito(
