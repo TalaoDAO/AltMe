@@ -15,7 +15,8 @@ class _VersionTextState extends State<VersionText> {
   @override
   void initState() {
     Future<void>.delayed(Duration.zero, () async {
-      //TODO(bibash): remove setstate , update splashstate when removing onboarding
+      //TODO(bibash): remove setstate ,
+      //update splashstate when removing onboarding
       final version = await _getAppVersion();
       setState(() {
         appVersion = version;
