@@ -69,8 +69,20 @@ class _HomePageState extends State<HomePage> {
             }
           },
         ),
-        body: const TabControllerPage(),
-        navigation: const BottomBarPage(),
+        body: Stack(
+          children: [
+            Column(
+              children: const [
+                Expanded(child: TabControllerPage()),
+                BottomBarPage()
+              ],
+            ),
+            const Align(
+              alignment: Alignment.bottomCenter,
+              child: QRIcon(),
+            ),
+          ],
+        ),
       ),
     );
   }

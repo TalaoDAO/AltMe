@@ -35,18 +35,9 @@ class TabControllerPage extends StatelessWidget {
                   Theme.of(context).colorScheme.unSelectedLabel,
               padding: const EdgeInsets.symmetric(horizontal: 10),
               tabs: [
-                MyTab(
-                  text: l10n.cards,
-                  icon: IconStrings.userSquare,
-                ),
-                MyTab(
-                  text: l10n.nfts,
-                  icon: IconStrings.ghost,
-                ),
-                MyTab(
-                  text: l10n.tokens,
-                  icon: IconStrings.health,
-                ),
+                MyTab(text: l10n.cards, icon: IconStrings.userSquare),
+                MyTab(text: l10n.nfts, icon: IconStrings.ghost),
+                MyTab(text: l10n.tokens, icon: IconStrings.health),
               ],
             ),
           ),

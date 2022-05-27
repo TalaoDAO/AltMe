@@ -15,4 +15,5 @@ class IconStrings {
   static const String profile = '$base/profile.png';
   static const String searchNormal = '$base/search-normal.png';
   static const String save = '$base/save.png';
+  static const String scan = '$base/scan.png';
 }
