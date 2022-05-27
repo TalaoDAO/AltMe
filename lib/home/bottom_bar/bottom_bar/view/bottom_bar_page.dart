@@ -28,7 +28,9 @@ class BottomBarPage extends StatelessWidget {
             BottomBarItem(
               icon: IconStrings.profile,
               text: l10n.profile,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push<void>(ProfilePage.route());
+              },
             ),
             const SizedBox.shrink(),
             const SizedBox.shrink(),

@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/home/drawer/profile/models/models.dart';
+import 'package:altme/home/home.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
