@@ -1,8 +1,8 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/home/drawer/global_information/widget/did_display.dart';
-import 'package:altme/home/drawer/global_information/widget/issuer_verification_setting.dart';
-import 'package:altme/home/drawer/profile/cubit/profile_cubit.dart';
+import 'package:altme/did/did.dart';
+import 'package:altme/home/bottom_bar/global_information/widget/did_display.dart';
+import 'package:altme/home/bottom_bar/global_information/widget/issuer_verification_setting.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

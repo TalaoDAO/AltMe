@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/home/drawer/backup_credential/view/backup_credential_page.dart';
 import 'package:altme/home/drawer/drawer/view/widget/drawer_close_button.dart';
 import 'package:altme/home/drawer/drawer/view/widget/drawer_item.dart';
-import 'package:altme/home/drawer/global_information/view/global_information_page.dart';
 import 'package:altme/home/drawer/privacy/view/privacy.dart';
 import 'package:altme/home/drawer/profile/cubit/profile_cubit.dart';
 import 'package:altme/home/drawer/profile/view/profile_page.dart';
@@ -82,12 +81,6 @@ class DrawerView extends StatelessWidget {
                     onTap: () => Navigator.of(context).push<void>(
                       IssuerWebsitesPage.route(null),
                     ),
-                  ),
-                  DrawerItem(
-                    icon: Icons.receipt_long,
-                    title: l10n.globalInformationLabel,
-                    onTap: () => Navigator.of(context)
-                        .push<void>(GlobalInformationPage.route()),
                   ),
                   DrawerItem(
                     icon: Icons.shield,

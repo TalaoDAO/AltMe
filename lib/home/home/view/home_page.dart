@@ -83,7 +83,10 @@ class _HomePageState extends State<HomePage> {
                 BottomBarItem(
                   icon: IconStrings.story,
                   text: l10n.infos,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push<void>(GlobalInformationPage.route());
+                  },
                 ),
                 BottomBarItem(
                   icon: IconStrings.profile,
