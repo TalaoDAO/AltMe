@@ -43,9 +43,7 @@ class _HomePageState extends State<HomePage> {
       child: BasePage(
         scrollView: false,
         scaffoldKey: scaffoldKey,
-        drawer: DrawerPage(
-          scaffoldKey: scaffoldKey,
-        ),
+        drawer: const DrawerPage(),
         padding: EdgeInsets.zero,
         titleLeading: IconButton(
           icon: ImageIcon(
@@ -71,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             }
           },
         ),
-        body: const TabControllerWidget(),
+        body: const TabControllerPage(),
         navigation: const BottomBarPage(),
       ),
     );

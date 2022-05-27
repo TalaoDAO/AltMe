@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/home/bottom_bar/bottom_bar/widgets/bottom_bar_item.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -42,22 +41,8 @@ class BottomBarPage extends StatelessWidget {
             BottomBarItem(
               icon: IconStrings.save,
               text: l10n.save,
-              onPressed: () async {
-                final confirm = await showDialog<bool>(
-                      context: context,
-                      builder: (context) => ConfirmDialog(
-                        title: l10n.recoveryWarningDialogTitle,
-                        subtitle: l10n.recoveryCredentialWarningDialogSubtitle,
-                        yes: l10n.showDialogYes,
-                        no: l10n.showDialogNo,
-                      ),
-                    ) ??
-                    false;
-
-                if (confirm) {
-                  await Navigator.of(context)
-                      .push<void>(RecoveryCredentialPage.route());
-                }
+              onPressed: () {
+                Navigator.of(context).push<void>(BackupCredentialPage.route());
               },
             ),
           ],

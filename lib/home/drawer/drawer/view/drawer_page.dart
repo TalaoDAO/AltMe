@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DrawerPage extends StatelessWidget {
-  const DrawerPage({Key? key, required this.scaffoldKey}) : super(key: key);
-
-  final GlobalKey<ScaffoldState> scaffoldKey;
+  const DrawerPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -115,11 +113,25 @@ class DrawerView extends StatelessWidget {
                 },
               ),
               DrawerItem(
-                icon: Icons.backup,
-                title: l10n.backupCredential,
-                onTap: () {
-                  Navigator.of(context)
-                      .push<void>(BackupCredentialPage.route());
+                icon: Icons.restore_page,
+                title: l10n.recoveryCredential,
+                onTap: () async {
+                  final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => ConfirmDialog(
+                          title: l10n.recoveryWarningDialogTitle,
+                          subtitle:
+                              l10n.recoveryCredentialWarningDialogSubtitle,
+                          yes: l10n.showDialogYes,
+                          no: l10n.showDialogNo,
+                        ),
+                      ) ??
+                      false;
+
+                  if (confirm) {
+                    await Navigator.of(context)
+                        .push<void>(RecoveryCredentialPage.route());
+                  }
                 },
               ),
             ],

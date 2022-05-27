@@ -1,4 +1,4 @@
-import 'package:altme/home/credentials/models/credential_subject/credential_subject_model.dart';
+import 'package:altme/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'self_issued_credential.g.dart';

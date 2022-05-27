@@ -1,4 +1,4 @@
-import 'package:altme/home/credentials/models/voucher/offer.dart';
+import 'package:altme/home/tab_bar/credentials/models/voucher/offer.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
