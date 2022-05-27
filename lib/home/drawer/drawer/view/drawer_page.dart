@@ -122,28 +122,6 @@ class DrawerView extends StatelessWidget {
                       .push<void>(BackupCredentialPage.route());
                 },
               ),
-              DrawerItem(
-                icon: Icons.restore_page,
-                title: l10n.recoveryCredential,
-                onTap: () async {
-                  final confirm = await showDialog<bool>(
-                        context: context,
-                        builder: (context) => ConfirmDialog(
-                          title: l10n.recoveryWarningDialogTitle,
-                          subtitle:
-                              l10n.recoveryCredentialWarningDialogSubtitle,
-                          yes: l10n.showDialogYes,
-                          no: l10n.showDialogNo,
-                        ),
-                      ) ??
-                      false;
-
-                  if (confirm) {
-                    await Navigator.of(context)
-                        .push<void>(RecoveryCredentialPage.route());
-                  }
-                },
-              ),
             ],
           ),
         ),

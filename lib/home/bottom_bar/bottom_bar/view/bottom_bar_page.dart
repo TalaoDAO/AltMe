@@ -42,7 +42,23 @@ class BottomBarPage extends StatelessWidget {
             BottomBarItem(
               icon: IconStrings.save,
               text: l10n.save,
-              onPressed: () {},
+              onPressed: () async {
+                final confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => ConfirmDialog(
+                        title: l10n.recoveryWarningDialogTitle,
+                        subtitle: l10n.recoveryCredentialWarningDialogSubtitle,
+                        yes: l10n.showDialogYes,
+                        no: l10n.showDialogNo,
+                      ),
+                    ) ??
+                    false;
+
+                if (confirm) {
+                  await Navigator.of(context)
+                      .push<void>(RecoveryCredentialPage.route());
+                }
+              },
             ),
           ],
         ),

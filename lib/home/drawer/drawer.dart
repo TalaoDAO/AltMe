@@ -1,4 +1,3 @@
-export 'backup_credential/backup_credential.dart';
 export 'drawer/drawer.dart';
 export 'notices/notices.dart';
 export 'privacy/privacy.dart';
