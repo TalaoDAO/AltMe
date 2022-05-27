@@ -8,9 +8,11 @@ class DrawerItem extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.onTap,
+    this.trailing,
   }) : super(key: key);
 
-  final IconData icon;
+  final String icon;
+  final Widget? trailing;
   final String title;
   final VoidCallback onTap;
 
@@ -36,11 +38,7 @@ class DrawerItem extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(
-                icon,
-                size: 24,
-                color: Theme.of(context).colorScheme.onBackground,
-              ),
+              Image.asset(icon, height: 30),
               const SizedBox(width: 16),
               Expanded(
                 child: MyText(
@@ -48,12 +46,16 @@ class DrawerItem extends StatelessWidget {
                   style: Theme.of(context).textTheme.drawerItem,
                 ),
               ),
-              const SizedBox(width: 16),
-              Icon(
-                Icons.chevron_right,
-                size: 24,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              if (trailing == null)
+                Container()
+              else ...[
+                const SizedBox(width: 16),
+                Icon(
+                  Icons.chevron_right,
+                  size: 24,
+                  color: Theme.of(context).colorScheme.primary,
+                )
+              ],
             ],
           ),
         ),

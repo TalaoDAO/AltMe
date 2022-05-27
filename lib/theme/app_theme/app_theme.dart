@@ -148,6 +148,12 @@ extension CustomColorScheme on ColorScheme {
   Color get alertInfoMessage => Colors.cyan;
 
   Color get alertSuccessMessage => Colors.green;
+
+  Color get qrScanBackground => const Color(0xff2B1C48);
+
+  Color get qrScanInnerShadow => const Color(0xff000000).withOpacity(0.16);
+
+  Color get qrScanOuterShadow => const Color(0xff430F91);
 }
 
 extension CustomTextTheme on TextTheme {
@@ -232,6 +238,12 @@ extension CustomTextTheme on TextTheme {
   TextStyle get drawerItem => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
         fontSize: 18,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get getCardsButton => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 12,
         fontWeight: FontWeight.w600,
       );
 

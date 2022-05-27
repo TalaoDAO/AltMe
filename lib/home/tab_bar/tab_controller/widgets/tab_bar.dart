@@ -15,7 +15,7 @@ class MyTab extends StatelessWidget {
       children: <Widget>[
         Container(
           margin: const EdgeInsets.only(bottom: 10),
-          child: ImageIcon(AssetImage(icon)),
+          child: Image.asset(icon, height: 25),
         ),
         Text(text, softWrap: false, overflow: TextOverflow.fade),
       ],

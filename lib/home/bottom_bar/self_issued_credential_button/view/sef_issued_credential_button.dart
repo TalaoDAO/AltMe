@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/self_issued_credential_button/cubit/self_issued_credential_button_cubit.dart';
-import 'package:altme/self_issued_credential_button/models/self_issued_credential_model.dart';
+import 'package:altme/home/bottom_bar/self_issued_credential_button/self_issued_credential_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,8 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,7 +30,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return WillPopScope(
       onWillPop: () async {
         if (scaffoldKey.currentState!.isDrawerOpen) {
@@ -52,25 +49,21 @@ class _HomePageState extends State<HomePage> {
           ),
           onPressed: () => scaffoldKey.currentState!.openDrawer(),
         ),
-        titleTrailing: IconButton(
-          icon: const Icon(Icons.qr_code_scanner),
-          onPressed: () {
-            if (kIsWeb) {
-              showDialog<void>(
-                context: context,
-                builder: (BuildContext context) => InfoDialog(
-                  title: l10n.unavailable_feature_title,
-                  subtitle: l10n.unavailable_feature_message,
-                  button: l10n.ok,
-                ),
-              );
-            } else {
-              Navigator.of(context).push<void>(QrCodeScanPage.route());
-            }
-          },
+        titleTrailing: const GetCardsWidget(),
+        body: Stack(
+          children: [
+            Column(
+              children: const [
+                Expanded(child: TabControllerPage()),
+                BottomBarPage()
+              ],
+            ),
+            const Align(
+              alignment: Alignment.bottomCenter,
+              child: QRIcon(),
+            ),
+          ],
         ),
-        body: const TabControllerPage(),
-        navigation: const BottomBarPage(),
       ),
     );
   }

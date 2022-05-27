@@ -201,7 +201,7 @@
   "unavailable_feature_title": "Unavailable Feature",
   "unavailable_feature_message": "This feature is not available on the browser",
   "personalSkip": "SKIP",
-  "recoveryCredential": "Recovery - credential",
+  "restoreCredential": "Restore credentials",
   "backupCredential": "Backup - credential",
   "backupCredentialPhrase": "Write down these words and download this backup file and save it somewhere safe",
   "backupCredentialPhraseExplanation": "You need both words in right order and encrypted backup file to recover your credentials later if you lose access to this wallet",

@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
-import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -51,50 +50,7 @@ class DrawerView extends StatelessWidget {
                   ),
                 ),
               DrawerItem(
-                icon: Icons.important_devices,
-                title: l10n.getCredentialTitle,
-                onTap: () => Navigator.of(context).push<void>(
-                  IssuerWebsitesPage.route(null),
-                ),
-              ),
-              DrawerItem(
-                icon: Icons.shield,
-                title: l10n.privacyTitle,
-                onTap: () =>
-                    Navigator.of(context).push<void>(PrivacyPage.route()),
-              ),
-              DrawerItem(
-                icon: Icons.article,
-                title: l10n.onBoardingTosTitle,
-                onTap: () =>
-                    Navigator.of(context).push<void>(TermsPage.route()),
-              ),
-              if (isEnterprise)
-                const SizedBox.shrink()
-              else
-                DrawerItem(
-                  icon: Icons.vpn_key,
-                  title: l10n.recoveryKeyTitle,
-                  onTap: () async {
-                    final confirm = await showDialog<bool>(
-                          context: context,
-                          builder: (context) => ConfirmDialog(
-                            title: l10n.recoveryWarningDialogTitle,
-                            subtitle: l10n.recoveryWarningDialogSubtitle,
-                            yes: l10n.showDialogYes,
-                            no: l10n.showDialogNo,
-                          ),
-                        ) ??
-                        false;
-
-                    if (confirm) {
-                      await Navigator.of(context)
-                          .push<void>(RecoveryKeyPage.route());
-                    }
-                  },
-                ),
-              DrawerItem(
-                icon: Icons.settings_backup_restore,
+                icon: IconStrings.reset,
                 title: l10n.resetWalletButton,
                 onTap: () async {
                   final confirm = await showDialog<bool>(
@@ -113,8 +69,13 @@ class DrawerView extends StatelessWidget {
                 },
               ),
               DrawerItem(
-                icon: Icons.restore_page,
-                title: l10n.recoveryCredential,
+                icon: IconStrings.restore,
+                title: l10n.restoreCredential,
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 24,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 onTap: () async {
                   final confirm = await showDialog<bool>(
                         context: context,
@@ -134,6 +95,57 @@ class DrawerView extends StatelessWidget {
                   }
                 },
               ),
+              DrawerItem(
+                icon: IconStrings.terms,
+                title: l10n.privacyTitle,
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 24,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                onTap: () =>
+                    Navigator.of(context).push<void>(PrivacyPage.route()),
+              ),
+              DrawerItem(
+                icon: IconStrings.terms,
+                title: l10n.onBoardingTosTitle,
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 24,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                onTap: () =>
+                    Navigator.of(context).push<void>(TermsPage.route()),
+              ),
+              if (isEnterprise)
+                const SizedBox.shrink()
+              else
+                DrawerItem(
+                  icon: IconStrings.key,
+                  title: l10n.recoveryKeyTitle,
+                  trailing: Icon(
+                    Icons.chevron_right,
+                    size: 24,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  onTap: () async {
+                    final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => ConfirmDialog(
+                            title: l10n.recoveryWarningDialogTitle,
+                            subtitle: l10n.recoveryWarningDialogSubtitle,
+                            yes: l10n.showDialogYes,
+                            no: l10n.showDialogNo,
+                          ),
+                        ) ??
+                        false;
+
+                    if (confirm) {
+                      await Navigator.of(context)
+                          .push<void>(RecoveryKeyPage.route());
+                    }
+                  },
+                ),
             ],
           ),
         ),
