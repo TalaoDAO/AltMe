@@ -51,13 +51,6 @@ class DrawerView extends StatelessWidget {
                   ),
                 ),
               DrawerItem(
-                icon: Icons.important_devices,
-                title: l10n.getCredentialTitle,
-                onTap: () => Navigator.of(context).push<void>(
-                  IssuerWebsitesPage.route(null),
-                ),
-              ),
-              DrawerItem(
                 icon: Icons.shield,
                 title: l10n.privacyTitle,
                 onTap: () =>

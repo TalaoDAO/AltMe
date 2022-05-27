@@ -241,6 +241,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
       );
 
+  TextStyle get getCardsButton => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+      );
+
   TextStyle get credentialTitle => GoogleFonts.nunito(
         color: const Color(0xFF424242),
         fontSize: 14,

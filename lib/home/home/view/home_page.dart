@@ -32,7 +32,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return WillPopScope(
       onWillPop: () async {
         if (scaffoldKey.currentState!.isDrawerOpen) {
@@ -52,23 +51,7 @@ class _HomePageState extends State<HomePage> {
           ),
           onPressed: () => scaffoldKey.currentState!.openDrawer(),
         ),
-        titleTrailing: IconButton(
-          icon: const Icon(Icons.qr_code_scanner),
-          onPressed: () {
-            if (kIsWeb) {
-              showDialog<void>(
-                context: context,
-                builder: (BuildContext context) => InfoDialog(
-                  title: l10n.unavailable_feature_title,
-                  subtitle: l10n.unavailable_feature_message,
-                  button: l10n.ok,
-                ),
-              );
-            } else {
-              Navigator.of(context).push<void>(QrCodeScanPage.route());
-            }
-          },
-        ),
+        titleTrailing: const GetCardsWidget(),
         body: Stack(
           children: [
             Column(
