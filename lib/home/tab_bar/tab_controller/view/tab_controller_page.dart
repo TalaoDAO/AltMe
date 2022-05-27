@@ -29,7 +29,6 @@ class TabControllerPage extends StatelessWidget {
                   stops: const [0.3, 1.0],
                 ),
               ),
-              automaticIndicatorColorAdjustment: false,
               labelColor: Theme.of(context).colorScheme.label,
               unselectedLabelColor:
                   Theme.of(context).colorScheme.unSelectedLabel,

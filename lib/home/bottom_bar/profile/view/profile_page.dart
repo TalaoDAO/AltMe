@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/self_issued_credential_button/sef_issued_credential_button.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
