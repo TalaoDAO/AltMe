@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/home/bottom_bar/qr_code/qr_code_scan/model/siopv2_param.dart';
-import 'package:altme/home/credentials/credential.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:flutter/material.dart';

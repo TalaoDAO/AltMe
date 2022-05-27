@@ -1,7 +1,6 @@
-import 'package:altme/app/shared/enum/status/status.dart';
-import 'package:altme/home/bottom_bar/qr_code/qr_code_scan/model/siopv2_param.dart';
-import 'package:altme/home/credentials/credential.dart';
-import 'package:altme/scan/cubit/scan_cubit.dart';
+import 'package:altme/app/app.dart';
+import 'package:altme/home/home.dart';
+import 'package:altme/scan/scan.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';

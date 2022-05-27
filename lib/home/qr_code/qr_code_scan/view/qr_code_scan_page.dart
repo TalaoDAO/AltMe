@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/home/bottom_bar/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
