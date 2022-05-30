@@ -137,12 +137,12 @@ class _SplashViewState extends State<SplashView> {
     _handleInitialUri(context);
     return MultiBlocListener(
       listeners: [
-        BlocListener<SplashCubit, SplashStatus>(
-          listener: (BuildContext context, SplashStatus state) {
-            if (state == SplashStatus.onboarding) {
+        BlocListener<SplashCubit, SplashState>(
+          listener: (BuildContext context, SplashState state) {
+            if (state.status == SplashStatus.onboarding) {
               Navigator.of(context).push<void>(OnBoardingTosPage.route());
             }
-            if (state == SplashStatus.bypassOnBoarding) {
+            if (state.status == SplashStatus.bypassOnBoarding) {
               Navigator.of(context).push<void>(HomePage.route());
             }
           },

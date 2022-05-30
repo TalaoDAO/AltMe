@@ -12,7 +12,7 @@ import '../../helpers/helpers.dart';
 
 class MockSecureStorageProvider extends Mock implements SecureStorageProvider {}
 
-class MockSplashCubit extends MockCubit<SplashStatus> implements SplashCubit {}
+class MockSplashCubit extends MockCubit<SplashState> implements SplashCubit {}
 
 class MockFlavorCubit extends MockCubit<FlavorMode> implements FlavorCubit {}
 
@@ -38,7 +38,8 @@ void main() {
   group('SplashPage', () {
     testWidgets('renders SplashView', (tester) async {
       when(() => flavorCubit.state).thenReturn(FlavorMode.development);
-      when(() => splashCubit.state).thenReturn(SplashStatus.init);
+      when(() => splashCubit.state)
+          .thenReturn(const SplashState(status: SplashStatus.init));
       when(() => splashCubit.initialiseApp()).thenAnswer((_) async {});
       await tester.pumpApp(makeTestableWidget());
       await tester.pumpAndSettle();
@@ -49,7 +50,8 @@ void main() {
   group('SplashView', () {
     group('SplashStatus.init', () {
       setUp(() {
-        when(() => splashCubit.state).thenReturn(SplashStatus.init);
+        when(() => splashCubit.state)
+            .thenReturn(const SplashState(status: SplashStatus.init));
         when(() => splashCubit.initialiseApp()).thenAnswer((_) async {});
       });
 
