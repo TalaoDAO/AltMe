@@ -140,7 +140,10 @@
     "close",
     "profile",
     "infos",
-    "save"
+    "save",
+    "delete",
+    "enterNewPinCode",
+    "confirmYourPinCode"
   ],
 
   "es": [
@@ -283,7 +286,10 @@
     "close",
     "profile",
     "infos",
-    "save"
+    "save",
+    "delete",
+    "enterNewPinCode",
+    "confirmYourPinCode"
   ],
 
   "fr": [
@@ -317,7 +323,10 @@
     "close",
     "profile",
     "infos",
-    "save"
+    "save",
+    "delete",
+    "enterNewPinCode",
+    "confirmYourPinCode"
   ],
 
   "it": [
@@ -462,6 +471,9 @@
     "close",
     "profile",
     "infos",
-    "save"
+    "save",
+    "delete",
+    "enterNewPinCode",
+    "confirmYourPinCode"
   ]
 }

@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
@@ -105,6 +106,17 @@ class DrawerView extends StatelessWidget {
                 ),
                 onTap: () =>
                     Navigator.of(context).push<void>(PrivacyPage.route()),
+              ),
+              DrawerItem(
+                icon: IconStrings.terms,
+                title: 'Test Pin Page',
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 24,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                onTap: () =>
+                    Navigator.of(context).push<void>(PinCodePage.Route()),
               ),
               DrawerItem(
                 icon: IconStrings.terms,

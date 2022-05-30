@@ -305,5 +305,8 @@
   "close": "Close",
   "profile": "Profile",
   "infos": "Infos",
-  "save": "Save"
+  "save": "Save",
+  "delete": "Delete",
+  "enterNewPinCode": "Enter a new pin code",
+  "confirmYourPinCode": "Confirm your pin code"
 }

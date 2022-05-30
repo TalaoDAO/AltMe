@@ -241,6 +241,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
       );
 
+  TextStyle get pinCodeTitle => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      );
+
   TextStyle get getCardsButton => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
         fontSize: 12,
