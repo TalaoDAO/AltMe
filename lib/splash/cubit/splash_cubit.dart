@@ -23,25 +23,25 @@ class SplashCubit extends Cubit<SplashState> {
   Future<void> initialiseApp() async {
     final String? key = await secureStorageProvider.get(SecureStorageKeys.key);
     if (key == null || key.isEmpty) {
-      return emit(state.copyWith(status: SplashStatus.onboarding));
+      return emit(state.copyWith(status: SplashStatus.hasNoWallet));
     }
 
     final String? did = await secureStorageProvider.get(SecureStorageKeys.did);
 
     if (did == null || did.isEmpty) {
-      return emit(state.copyWith(status: SplashStatus.onboarding));
+      return emit(state.copyWith(status: SplashStatus.hasNoWallet));
     }
 
     final String? didMethod =
         await secureStorageProvider.get(SecureStorageKeys.didMethod);
     if (didMethod == null || didMethod.isEmpty) {
-      return emit(state.copyWith(status: SplashStatus.onboarding));
+      return emit(state.copyWith(status: SplashStatus.hasNoWallet));
     }
 
     final String? didMethodName =
         await secureStorageProvider.get(SecureStorageKeys.didMethodName);
     if (didMethodName == null || didMethodName.isEmpty) {
-      return emit(state.copyWith(status: SplashStatus.onboarding));
+      return emit(state.copyWith(status: SplashStatus.hasNoWallet));
     }
 
     final String? isEnterprise =
@@ -52,7 +52,7 @@ class SplashCubit extends Cubit<SplashState> {
         final rsaKeyJson =
             await secureStorageProvider.get(SecureStorageKeys.rsaKeyJson);
         if (rsaKeyJson == null || rsaKeyJson.isEmpty) {
-          return emit(state.copyWith(status: SplashStatus.onboarding));
+          return emit(state.copyWith(status: SplashStatus.hasNoWallet));
         }
       }
     }
@@ -63,7 +63,7 @@ class SplashCubit extends Cubit<SplashState> {
       didMethodName: didMethodName,
     );
 
-    return emit(state.copyWith(status: SplashStatus.bypassOnBoarding));
+    return emit(state.copyWith(status: SplashStatus.hasWallet));
   }
 
   Future<void> _getAppVersion() async {

@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -7,8 +8,8 @@ class ConfirmDialog extends StatelessWidget {
     Key? key,
     required this.title,
     this.subtitle,
-    required this.yes,
-    required this.no,
+    this.yes,
+    this.no,
     this.icon = IconStrings.cardReceive,
     this.dialogColor,
     this.bgColor,
@@ -17,8 +18,8 @@ class ConfirmDialog extends StatelessWidget {
 
   final String title;
   final String? subtitle;
-  final String yes;
-  final String no;
+  final String? yes;
+  final String? no;
   final Color? dialogColor;
   final Color? bgColor;
   final Color? textColor;
@@ -29,6 +30,8 @@ class ConfirmDialog extends StatelessWidget {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
     final background = bgColor ?? Theme.of(context).colorScheme.background;
     final text = textColor ?? Theme.of(context).colorScheme.dialogText;
+
+    final l10n = context.l10n;
     return AlertDialog(
       backgroundColor: background,
       contentPadding: const EdgeInsets.only(
@@ -66,11 +69,12 @@ class ConfirmDialog extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: MyOutlinedButton(
-                  text: no,
+                  text: no ?? l10n.no,
                   verticalSpacing: 8,
                   fontSize: 13,
                   borderColor: color,
                   backgroundColor: background,
+                  textColor: color,
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
@@ -79,7 +83,7 @@ class ConfirmDialog extends StatelessWidget {
               const SizedBox(width: 16),
               Expanded(
                 child: MyElevatedButton(
-                  text: yes,
+                  text: yes ?? l10n.yes,
                   verticalSpacing: 8,
                   backgroundColor: color,
                   textColor: background,
