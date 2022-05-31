@@ -134,6 +134,8 @@ class _PinCodeViewState extends State<PinCodeView>
             ),
           ),
           Positioned(
+            bottom: 0,
+            right: 0,
             child: Align(
               alignment: Alignment.bottomRight,
               child: _buildDeleteButton(),
@@ -193,6 +195,8 @@ class _PinCodeViewState extends State<PinCodeView>
             ),
           ),
           Positioned(
+            bottom: 0,
+            right: 0,
             child: Align(
               alignment: Alignment.bottomRight,
               child: _buildDeleteButton(),

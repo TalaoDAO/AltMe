@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,18 @@ import 'package:flutter/material.dart';
 class ConfirmPinCodePage extends StatefulWidget {
   const ConfirmPinCodePage({
     Key? key,
+    required this.storedPassword,
   }) : super(key: key);
 
-  static String storedPassword = '1234';
+  final String storedPassword;
 
-  static MaterialPageRoute Route() {
-    return MaterialPageRoute<void>(builder: (_) => const ConfirmPinCodePage());
+  static MaterialPageRoute route(String storedPassword) {
+    return MaterialPageRoute<void>(
+      builder: (_) => ConfirmPinCodePage(
+        storedPassword: storedPassword,
+      ),
+      settings: const RouteSettings(name: '/confirmPinCodePage'),
+    );
   }
 
   @override
@@ -37,8 +44,9 @@ class _ConfirmPinCodePageState extends State<ConfirmPinCodePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Scaffold(
+    return BasePage(
       backgroundColor: Theme.of(context).colorScheme.background,
+      scrollView: false,
       body: SafeArea(
         child: PinCodeView(
           title: l10n.confirmYourPinCode,
@@ -59,11 +67,11 @@ class _ConfirmPinCodePageState extends State<ConfirmPinCodePage> {
   }
 
   void _onPasscodeEntered(String enteredPasscode) {
-    // TODO(Taleb): remove static variable storedPassword;
-    final bool isValid = ConfirmPinCodePage.storedPassword == enteredPasscode;
+    final bool isValid = widget.storedPassword == enteredPasscode;
     _verificationNotifier.add(isValid);
     if (isValid) {
       // TODO(Taleb): Navigate to HomePage
+      // TODO(Taleb): Save password in secure storage
     }
   }
 

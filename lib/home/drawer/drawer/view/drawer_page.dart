@@ -116,7 +116,7 @@ class DrawerView extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 onTap: () =>
-                    Navigator.of(context).push<void>(PinCodePage.Route()),
+                    Navigator.of(context).push<void>(PinCodePage.route()),
               ),
               DrawerItem(
                 icon: IconStrings.terms,

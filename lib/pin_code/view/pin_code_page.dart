@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/view/confirm_pin_code_page.dart';
 import 'package:altme/pin_code/widgets/widgets.dart';
@@ -8,8 +9,11 @@ class PinCodePage extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  static MaterialPageRoute Route() {
-    return MaterialPageRoute<void>(builder: (_) => const PinCodePage());
+  static MaterialPageRoute route() {
+    return MaterialPageRoute<void>(
+      builder: (_) => const PinCodePage(),
+      settings: const RouteSettings(name: '/pinCodePage'),
+    );
   }
 
   @override
@@ -30,7 +34,8 @@ class _PinCodePageState extends State<PinCodePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Scaffold(
+    return BasePage(
+      scrollView: false,
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: PinCodeView(
@@ -51,12 +56,10 @@ class _PinCodePageState extends State<PinCodePage> {
   }
 
   void _onPasscodeEntered(String enteredPasscode) {
-    ConfirmPinCodePage.storedPassword = enteredPasscode;
     Navigator.pushReplacement<dynamic, dynamic>(
       context,
-      ConfirmPinCodePage.Route(),
+      ConfirmPinCodePage.route(enteredPasscode),
     );
-    // TODO(Taleb): Navigate to confirm password
   }
 
   void _onPasscodeCancelled() {
