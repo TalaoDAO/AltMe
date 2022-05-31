@@ -2,13 +2,12 @@ import 'package:altme/app/app.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class ConfirmDialog extends StatelessWidget {
-  const ConfirmDialog({
+class InfoDialog extends StatelessWidget {
+  const InfoDialog({
     Key? key,
     required this.title,
     this.subtitle,
-    required this.yes,
-    required this.no,
+    required this.button,
     this.icon = IconStrings.cardReceive,
     this.dialogColor,
     this.bgColor,
@@ -17,13 +16,11 @@ class ConfirmDialog extends StatelessWidget {
 
   final String title;
   final String? subtitle;
-  final String yes;
-  final String no;
+  final String button;
   final Color? dialogColor;
   final Color? bgColor;
   final Color? textColor;
   final String icon;
-
   @override
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
@@ -62,34 +59,18 @@ class ConfirmDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           const SizedBox(height: 24),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: MyOutlinedButton(
-                  text: no,
-                  verticalSpacing: 8,
-                  fontSize: 13,
-                  borderColor: color,
-                  backgroundColor: background,
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: MyElevatedButton(
-                  text: yes,
-                  verticalSpacing: 8,
-                  backgroundColor: color,
-                  textColor: background,
-                  fontSize: 13,
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                ),
-              )
-            ],
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 3,
+            child: MyElevatedButton(
+              text: button,
+              verticalSpacing: 8,
+              backgroundColor: color,
+              textColor: background,
+              fontSize: 13,
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
           ),
         ],
       ),

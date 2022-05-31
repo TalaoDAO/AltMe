@@ -81,7 +81,9 @@ class DrawerView extends StatelessWidget {
                   final confirm = await showDialog<bool>(
                         context: context,
                         builder: (context) => ConfirmDialog(
-                          title: l10n.recoveryCredentialWarningDialogSubtitle,
+                          title: l10n.recoveryWarningDialogTitle,
+                          subtitle:
+                              l10n.recoveryCredentialWarningDialogSubtitle,
                           yes: l10n.showDialogYes,
                           no: l10n.showDialogNo,
                         ),
@@ -131,7 +133,8 @@ class DrawerView extends StatelessWidget {
                     final confirm = await showDialog<bool>(
                           context: context,
                           builder: (context) => ConfirmDialog(
-                            title: l10n.recoveryWarningDialogSubtitle,
+                            title: l10n.recoveryWarningDialogTitle,
+                            subtitle: l10n.recoveryWarningDialogSubtitle,
                             yes: l10n.showDialogYes,
                             no: l10n.showDialogNo,
                           ),

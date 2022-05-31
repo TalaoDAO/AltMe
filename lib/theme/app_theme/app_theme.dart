@@ -388,12 +388,12 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get dialogTitle => GoogleFonts.nunito(
-        fontSize: 16,
+        fontSize: 17,
         fontWeight: FontWeight.w600,
       );
 
   TextStyle get dialogSubtitle => GoogleFonts.nunito(
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: FontWeight.w400,
       );
 }
