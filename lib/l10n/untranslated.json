@@ -143,7 +143,10 @@
     "save",
     "delete",
     "enterNewPinCode",
-    "confirmYourPinCode"
+    "confirmYourPinCode",
+    "create_wallet",
+    "restore_wallet",
+    "create_wallet_message"
   ],
 
   "es": [
@@ -289,7 +292,10 @@
     "save",
     "delete",
     "enterNewPinCode",
-    "confirmYourPinCode"
+    "confirmYourPinCode",
+    "create_wallet",
+    "restore_wallet",
+    "create_wallet_message"
   ],
 
   "fr": [
@@ -326,7 +332,10 @@
     "save",
     "delete",
     "enterNewPinCode",
-    "confirmYourPinCode"
+    "confirmYourPinCode",
+    "create_wallet",
+    "restore_wallet",
+    "create_wallet_message"
   ],
 
   "it": [
@@ -474,6 +483,9 @@
     "save",
     "delete",
     "enterNewPinCode",
-    "confirmYourPinCode"
+    "confirmYourPinCode",
+    "create_wallet",
+    "restore_wallet",
+    "create_wallet_message"
   ]
 }
