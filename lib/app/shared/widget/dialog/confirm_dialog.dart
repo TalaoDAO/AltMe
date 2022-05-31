@@ -12,6 +12,7 @@ class ConfirmDialog extends StatelessWidget {
     this.icon = IconStrings.cardReceive,
     this.dialogColor,
     this.bgColor,
+    this.textColor,
   }) : super(key: key);
 
   final String title;
@@ -20,12 +21,14 @@ class ConfirmDialog extends StatelessWidget {
   final String no;
   final Color? dialogColor;
   final Color? bgColor;
+  final Color? textColor;
   final String icon;
 
   @override
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
     final background = bgColor ?? Theme.of(context).colorScheme.background;
+    final text = textColor ?? Theme.of(context).colorScheme.dialogText;
     return AlertDialog(
       backgroundColor: background,
       contentPadding: const EdgeInsets.only(
@@ -46,7 +49,7 @@ class ConfirmDialog extends StatelessWidget {
           Text(
             title,
             style:
-                Theme.of(context).textTheme.dialogTitle.copyWith(color: color),
+                Theme.of(context).textTheme.dialogTitle.copyWith(color: text),
             textAlign: TextAlign.center,
           ),
           if (subtitle != null)
@@ -55,7 +58,7 @@ class ConfirmDialog extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .dialogSubtitle
-                  .copyWith(color: color),
+                  .copyWith(color: text),
               textAlign: TextAlign.center,
             ),
           const SizedBox(height: 24),

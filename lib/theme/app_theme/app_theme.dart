@@ -154,6 +154,8 @@ extension CustomColorScheme on ColorScheme {
   Color get qrScanInnerShadow => const Color(0xff000000).withOpacity(0.16);
 
   Color get qrScanOuterShadow => const Color(0xff430F91);
+
+  Color get dialogText => const Color(0xFF8682A8);
 }
 
 extension CustomTextTheme on TextTheme {
@@ -386,13 +388,11 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get dialogTitle => GoogleFonts.nunito(
-        color: Colors.white,
         fontSize: 16,
         fontWeight: FontWeight.w600,
       );
 
   TextStyle get dialogSubtitle => GoogleFonts.nunito(
-        color: Colors.white,
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
