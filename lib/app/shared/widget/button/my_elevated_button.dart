@@ -1,4 +1,3 @@
-import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 

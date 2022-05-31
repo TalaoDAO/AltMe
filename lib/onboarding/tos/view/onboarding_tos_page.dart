@@ -1,13 +1,14 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/key/onboarding_key.dart';
 import 'package:flutter/material.dart';
 
 class OnBoardingTosPage extends StatelessWidget {
-  const OnBoardingTosPage({Key? key}) : super(key: key);
+  const OnBoardingTosPage({Key? key, required this.routeTo}) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(
-        builder: (context) => const OnBoardingTosPage(),
+  final Route routeTo;
+
+  static Route route({required Route routeTo}) => MaterialPageRoute<void>(
+        builder: (context) => OnBoardingTosPage(routeTo: routeTo),
         settings: const RouteSettings(name: '/onBoardingTermsPage'),
       );
 
@@ -52,9 +53,8 @@ class OnBoardingTosPage extends StatelessWidget {
                   BaseButton.primary(
                     context: context,
                     onPressed: () {
-                      Navigator.of(context).pushReplacement<void, void>(
-                        OnBoardingKeyPage.route(),
-                      );
+                      Navigator.of(context)
+                          .pushReplacement<void, void>(routeTo);
                     },
                     child: Text(l10n.onBoardingTosButton),
                   )

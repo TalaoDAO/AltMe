@@ -13,7 +13,7 @@ void main() {
           builder: (context) => Scaffold(
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                Navigator.of(context).push<void>(OnBoardingTosPage.route());
+                //Navigator.of(context).push<void>(OnBoardingTosPage.route());
               },
             ),
           ),
@@ -25,13 +25,15 @@ void main() {
     });
 
     testWidgets('renders OnBoardingTosPage', (tester) async {
-      await tester.pumpApp(const OnBoardingTosPage());
+      await tester
+          .pumpApp(OnBoardingTosPage(routeTo: OnBoardingGenPhrasePage.route()));
       await tester.pumpAndSettle();
       expect(find.byType(OnBoardingTosPage), findsOneWidget);
     });
 
     testWidgets('nothing happens when button is pressed', (tester) async {
-      await tester.pumpApp(const OnBoardingTosPage());
+      await tester
+          .pumpApp(OnBoardingTosPage(routeTo: OnBoardingGenPhrasePage.route()));
       await tester.tap(find.byType(BaseButton));
       await tester.pumpAndSettle();
       expect(find.byType(OnBoardingTosPage), findsOneWidget);
@@ -39,7 +41,8 @@ void main() {
 
     testWidgets('blocks going back from OnBoardingTosPage start page',
         (tester) async {
-      await tester.pumpApp(const OnBoardingTosPage());
+      await tester
+          .pumpApp(OnBoardingTosPage(routeTo: OnBoardingGenPhrasePage.route()));
       final dynamic appState = tester.state(find.byType(WidgetsApp));
       expect(await appState.didPopRoute(), true);
       await tester.pumpAndSettle();
@@ -47,7 +50,8 @@ void main() {
     });
 
     testWidgets('renders DisplayTerms', (tester) async {
-      await tester.pumpApp(const OnBoardingTosPage());
+      await tester
+          .pumpApp(OnBoardingTosPage(routeTo: OnBoardingGenPhrasePage.route()));
       await tester.pumpAndSettle();
       expect(find.byType(DisplayTerms), findsOneWidget);
     });

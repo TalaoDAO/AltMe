@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +39,11 @@ class WalletDialog extends StatelessWidget {
             verticalSpacing: 8,
             fontSize: 13,
             onPressed: () {
-              Navigator.of(context).pop(true);
+              Navigator.of(context).push<void>(
+                OnBoardingTosPage.route(
+                  routeTo: OnBoardingGenPhrasePage.route(),
+                ),
+              );
             },
           ),
           MyElevatedButton(
@@ -46,7 +51,11 @@ class WalletDialog extends StatelessWidget {
             verticalSpacing: 8,
             fontSize: 13,
             onPressed: () {
-              Navigator.of(context).pop(true);
+              Navigator.of(context).push<void>(
+                OnBoardingTosPage.route(
+                  routeTo: OnBoardingRecoveryPage.route(),
+                ),
+              );
             },
           ),
         ],

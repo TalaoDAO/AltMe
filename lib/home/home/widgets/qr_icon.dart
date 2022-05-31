@@ -4,6 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QRIcon extends StatelessWidget {
   const QRIcon({Key? key}) : super(key: key);
@@ -59,7 +60,16 @@ class QRIcon extends StatelessWidget {
                       button: l10n.ok,
                     ),
                   );
+                  return;
                 } else {
+                  if (context.read<HomeCubit>().state ==
+                      HomeStatus.hasNoWallet) {
+                    showDialog<void>(
+                      context: context,
+                      builder: (_) => const WalletDialog(),
+                    );
+                    return;
+                  }
                   Navigator.of(context).push<void>(QrCodeScanPage.route());
                 }
               },
