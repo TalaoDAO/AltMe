@@ -108,10 +108,7 @@ class BaseButton extends StatelessWidget {
             gradient: gradient,
             borderRadius: buttonRadius,
             border: borderColor != null
-                ? Border.all(
-                    width: 2,
-                    color: borderColor!,
-                  )
+                ? Border.all(width: 2, color: borderColor!)
                 : null,
           ),
           child: Material(

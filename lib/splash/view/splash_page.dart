@@ -257,7 +257,8 @@ class _SplashViewState extends State<SplashView> {
                               : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''',
                           yes: l10n.communicationHostAllow,
                           no: l10n.communicationHostDeny,
-                          lock: state.uri!.scheme == 'http',
+                          //TODO(bibash): look into this lock thing
+                          //lock: state.uri!.scheme == 'http',
                         );
                       },
                     ) ??

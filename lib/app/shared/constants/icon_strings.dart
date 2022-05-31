@@ -25,4 +25,8 @@ class IconStrings {
   static const String userSquareBlur = '$base/user-square-blur.png';
   static const String ghostBlur = '$base/ghost-blur.png';
   static const String healthBlur = '$base/health-blur.png';
+  static const String cardReceive = '$base/card-receive.png';
+  static const String cardSend = '$base/card-send.png';
+  static const String emptyWalletAdd = '$base/empty-wallet-add.png';
+  static const String trash = '$base/trash.png';
 }

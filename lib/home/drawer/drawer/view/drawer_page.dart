@@ -55,11 +55,12 @@ class DrawerView extends StatelessWidget {
                 onTap: () async {
                   final confirm = await showDialog<bool>(
                         context: context,
-                        builder: (context) => ConfirmDialog(
-                          title: l10n.resetWalletButton,
-                          subtitle: l10n.resetWalletConfirmationText,
+                        builder: (_) => ConfirmDialog(
+                          title: l10n.resetWalletConfirmationText,
                           yes: l10n.showDialogYes,
                           no: l10n.showDialogNo,
+                          dialogColor: Theme.of(context).colorScheme.error,
+                          icon: IconStrings.trash,
                         ),
                       ) ??
                       false;

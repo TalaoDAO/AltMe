@@ -110,12 +110,17 @@ class ElevatedButtonText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyText(
-      text.toUpperCase(),
-      style: TextStyle(
-        color: textColor ?? Theme.of(context).colorScheme.onElevatedButton,
-        fontSize: fontSize,
-        fontWeight: FontWeight.w700,
+    return SizedBox(
+      height: 20,
+      child: Center(
+        child: Text(
+          text.toUpperCase(),
+          style: TextStyle(
+            color: textColor ?? Theme.of(context).colorScheme.onElevatedButton,
+            fontSize: fontSize,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
       ),
     );
   }

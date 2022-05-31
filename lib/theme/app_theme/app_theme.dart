@@ -229,7 +229,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get drawerClose => GoogleFonts.nunito(
+  TextStyle get close => GoogleFonts.nunito(
         color: const Color(0xFFD6C3F2),
         fontSize: 13,
         fontWeight: FontWeight.w400,
@@ -383,5 +383,17 @@ extension CustomTextTheme on TextTheme {
         color: Colors.white,
         fontSize: 16,
         fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get dialogTitle => GoogleFonts.nunito(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get dialogSubtitle => GoogleFonts.nunito(
+        color: Colors.white,
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
       );
 }

@@ -21,7 +21,7 @@ class DrawerCloseButton extends StatelessWidget {
           children: [
             Text(
               l10n.close,
-              style: Theme.of(context).textTheme.drawerClose,
+              style: Theme.of(context).textTheme.close,
             ),
             const SizedBox(width: 5),
             Image.asset(
