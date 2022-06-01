@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
+import 'package:altme/home/home.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
@@ -19,12 +20,14 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     required this.keyGenerator,
     required this.didKitProvider,
     required this.didCubit,
+    required this.homeCubit,
   }) : super(OnBoardingGenPhraseState());
 
   final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;
   final DIDKitProvider didKitProvider;
   final DIDCubit didCubit;
+  final HomeCubit homeCubit;
 
   final log = Logger('altme-wallet/on-boarding/key-generation');
 
@@ -51,6 +54,8 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         didMethodName: AltMeStrings.defaultDIDMethodName,
         verificationMethod: verificationMethod,
       );
+
+      homeCubit.emitHasWallet();
 
       emit(state.success());
     } catch (error) {

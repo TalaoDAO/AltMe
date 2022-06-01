@@ -18,6 +18,7 @@ class WalletCubit extends Cubit<WalletState> {
     required this.repository,
     required this.secureStorageProvider,
     required this.profileCubit,
+    required this.homeCubit,
   }) : super(WalletState()) {
     initialize();
   }
@@ -25,6 +26,7 @@ class WalletCubit extends Cubit<WalletState> {
   final CredentialsRepository repository;
   final SecureStorageProvider secureStorageProvider;
   final ProfileCubit profileCubit;
+  final HomeCubit homeCubit;
 
   Future initialize() async {
     final key = await secureStorageProvider.get(SecureStorageKeys.key);
@@ -116,6 +118,7 @@ class WalletCubit extends Cubit<WalletState> {
     await secureStorageProvider.delete(SecureStorageKeys.data);
     await repository.deleteAll();
     await profileCubit.resetProfile();
+    homeCubit.emitHasNoWallet();
     emit(state.success(status: WalletStatus.reset, credentials: []));
     emit(state.success(status: WalletStatus.init));
   }
