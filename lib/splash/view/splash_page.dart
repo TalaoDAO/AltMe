@@ -159,8 +159,12 @@ class _SplashViewState extends State<SplashView> {
               Navigator.of(context).pop();
             }
             if (state.status == WalletStatus.reset) {
-              Navigator.of(context)
-                  .pushReplacement<void, void>(HomePage.route());
+              /// Removes every stack except first route (splashPage)
+              Navigator.pushAndRemoveUntil<void>(
+                context,
+                HomePage.route(),
+                (Route<dynamic> route) => route.isFirst,
+              );
             }
           },
         ),

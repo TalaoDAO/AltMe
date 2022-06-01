@@ -55,8 +55,12 @@ class _SubmitEnterpriseUserPageState extends State<SubmitEnterpriseUserPage> {
           if (state.status == AppStatus.success) {
             final model = ProfileModel.empty().copyWith(isEnterprise: true);
             await context.read<ProfileCubit>().update(model);
-            await Navigator.of(context).pushReplacement<void, void>(
+
+            /// Removes every stack except first route (splashPage)
+            await Navigator.pushAndRemoveUntil<void>(
+              context,
               HomePage.route(),
+              (Route<dynamic> route) => route.isFirst,
             );
           }
         }

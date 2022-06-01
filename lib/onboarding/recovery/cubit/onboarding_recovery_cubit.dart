@@ -32,6 +32,15 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
   }
 
   Future<void> saveMnemonic(String mnemonic) async {
+    emit(state.loading());
     await secureStorageProvider.set(SecureStorageKeys.mnemonic, mnemonic);
+    //TODO:
+    // await didCubit.set(
+    //   did:  ,
+    //   didMethod:  ,
+    //   didMethodName:  ,
+    //   verificationMethod: ,
+    // );
+    emit(state.success());
   }
 }

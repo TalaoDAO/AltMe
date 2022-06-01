@@ -57,7 +57,7 @@ class _OnBoardingGenPhrasePageState extends State<OnBoardingGenPhrasePage> {
         ),
         scrollView: true,
         body: BlocConsumer<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
-          listener: (context, state) async {
+          listener: (context, state) {
             if (state.status == AppStatus.loading) {
               _overlay = OverlayEntry(
                 builder: (_) => const LoadingDialog(),
@@ -77,8 +77,11 @@ class _OnBoardingGenPhrasePageState extends State<OnBoardingGenPhrasePage> {
               );
             }
             if (state.status == AppStatus.success) {
-              await Navigator.of(context).pushReplacement<void, void>(
+              /// Removes every stack except first route (splashPage)
+              Navigator.pushAndRemoveUntil<void>(
+                context,
                 HomePage.route(),
+                (Route<dynamic> route) => route.isFirst,
               );
             }
           },

@@ -65,42 +65,52 @@ class _OnBoardingRecoveryPageState extends State<OnBoardingRecoveryPage> {
       titleLeading: const BackLeadingButton(),
       scrollView: false,
       padding: EdgeInsets.zero,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          OnBoardingRecoveryPage._padHorizontal(
-            Text(
-              l10n.recoveryText,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.subtitle1,
+      body: BlocListener<OnBoardingRecoveryCubit, OnBoardingRecoveryState>(
+        listener: (context, state) {
+          if (state.status == AppStatus.success) {
+            /// Removes every stack except first route (splashPage)
+            Navigator.pushAndRemoveUntil<void>(
+              context,
+              HomePage.route(),
+              (Route<dynamic> route) => route.isFirst,
+            );
+          }
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            OnBoardingRecoveryPage._padHorizontal(
+              Text(
+                l10n.recoveryText,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
             ),
-          ),
-          const SizedBox(height: 24),
-          BaseTextField(
-            label: l10n.recoveryMnemonicHintText,
-            controller: mnemonicController,
-            error: edited && !buttonEnabled ? l10n.recoveryMnemonicError : null,
-          ),
-          const SizedBox(height: 24),
-          OnBoardingRecoveryPage._padHorizontal(
-            BaseButton.primary(
-              context: context,
-              onPressed: buttonEnabled
-                  ? () async {
-                      await context
-                          .read<OnBoardingRecoveryCubit>()
-                          .saveMnemonic(mnemonicController.text);
-                      await Navigator.of(context).pushReplacement<void, void>(
-                        HomePage.route(),
-                      );
-                    }
-                  : null,
-              child: Text(l10n.onBoardingRecoveryButton),
+            const SizedBox(height: 24),
+            BaseTextField(
+              label: l10n.recoveryMnemonicHintText,
+              controller: mnemonicController,
+              error:
+                  edited && !buttonEnabled ? l10n.recoveryMnemonicError : null,
             ),
-          ),
-          const SizedBox(height: 32),
-        ],
+            const SizedBox(height: 24),
+            OnBoardingRecoveryPage._padHorizontal(
+              BaseButton.primary(
+                context: context,
+                onPressed: buttonEnabled
+                    ? () async {
+                        await context
+                            .read<OnBoardingRecoveryCubit>()
+                            .saveMnemonic(mnemonicController.text);
+                      }
+                    : null,
+                child: Text(l10n.onBoardingRecoveryButton),
+              ),
+            ),
+            const SizedBox(height: 32),
+          ],
+        ),
       ),
     );
   }
