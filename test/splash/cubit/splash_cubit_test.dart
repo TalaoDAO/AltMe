@@ -39,7 +39,7 @@ void main() {
     group('initialiseApp', () {
       group('SecureStorageKeys.key', () {
         test(
-            'emits SplashStatus.routeToPassCode when SecureStorageKeys.key is null',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.key is null''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.key))
               .thenAnswer((_) => Future.value(null));

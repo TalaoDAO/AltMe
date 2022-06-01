@@ -4,7 +4,6 @@ import 'package:altme/home/home.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';

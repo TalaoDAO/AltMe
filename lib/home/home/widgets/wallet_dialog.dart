@@ -40,9 +40,7 @@ class WalletDialog extends StatelessWidget {
             fontSize: 13,
             onPressed: () {
               Navigator.of(context).push<void>(
-                OnBoardingTosPage.route(
-                  routeTo: OnBoardingGenPhrasePage.route(),
-                ),
+                OnBoardingTosPage.route(routeType: WalletRouteType.create),
               );
             },
           ),
@@ -52,9 +50,7 @@ class WalletDialog extends StatelessWidget {
             fontSize: 13,
             onPressed: () {
               Navigator.of(context).push<void>(
-                OnBoardingTosPage.route(
-                  routeTo: OnBoardingRecoveryPage.route(),
-                ),
+                OnBoardingTosPage.route(routeType: WalletRouteType.recover),
               );
             },
           ),

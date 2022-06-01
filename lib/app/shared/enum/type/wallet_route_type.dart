@@ -1,0 +1,1 @@
+enum WalletRouteType { create, recover }
