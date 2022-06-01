@@ -5,6 +5,7 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/splash/view/widgets/widgets.dart';
@@ -45,6 +46,7 @@ class SplashView extends StatefulWidget {
 
 class _SplashViewState extends State<SplashView> {
   StreamSubscription? _sub;
+
   @override
   void initState() {
     Future<void>.delayed(const Duration(milliseconds: 5 * 1000), () async {
@@ -139,11 +141,13 @@ class _SplashViewState extends State<SplashView> {
         BlocListener<SplashCubit, SplashState>(
           listener: (BuildContext context, SplashState state) {
             if (state.status == SplashStatus.routeToPassCode) {
-              //TODO(all): navigate to pin code page
-              Navigator.of(context).push<void>(HomePage.route());
+              Navigator.of(context).pushReplacement<void, void>(
+                PinCodePage.route(HomePage.route()),
+              );
             }
             if (state.status == SplashStatus.routeToHomePage) {
-              Navigator.of(context).push<void>(HomePage.route());
+              Navigator.of(context)
+                  .pushReplacement<void, void>(HomePage.route());
             }
           },
         ),

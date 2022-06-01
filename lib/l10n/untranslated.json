@@ -145,7 +145,8 @@
     "confirmYourPinCode",
     "create_wallet",
     "restore_wallet",
-    "create_wallet_message"
+    "create_wallet_message",
+    "enterYourPinCode"
   ],
 
   "es": [
@@ -294,7 +295,8 @@
     "confirmYourPinCode",
     "create_wallet",
     "restore_wallet",
-    "create_wallet_message"
+    "create_wallet_message",
+    "enterYourPinCode"
   ],
 
   "fr": [
@@ -334,7 +336,8 @@
     "confirmYourPinCode",
     "create_wallet",
     "restore_wallet",
-    "create_wallet_message"
+    "create_wallet_message",
+    "enterYourPinCode"
   ],
 
   "it": [
@@ -485,6 +488,7 @@
     "confirmYourPinCode",
     "create_wallet",
     "restore_wallet",
-    "create_wallet_message"
+    "create_wallet_message",
+    "enterYourPinCode"
   ]
 }

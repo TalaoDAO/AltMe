@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/view/confirm_pin_code_page.dart';
 import 'package:altme/pin_code/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:secure_storage/secure_storage.dart';
 
-class PinCodePage extends StatefulWidget {
-  const PinCodePage({
+class EnterNewPinCodePage extends StatefulWidget {
+  const EnterNewPinCodePage({
     Key? key,
     required this.routeTo,
   }) : super(key: key);
@@ -16,21 +14,18 @@ class PinCodePage extends StatefulWidget {
 
   static MaterialPageRoute route(Route routeTo) {
     return MaterialPageRoute<void>(
-      builder: (_) => PinCodePage(
+      builder: (_) => EnterNewPinCodePage(
         routeTo: routeTo,
       ),
-      settings: const RouteSettings(name: '/pinCodePage'),
+      settings: const RouteSettings(name: '/enterNewPinCodePage'),
     );
   }
 
   @override
-  State<StatefulWidget> createState() => _PinCodePageState();
+  State<StatefulWidget> createState() => _EnterNewPinCodePageState();
 }
 
-class _PinCodePageState extends State<PinCodePage> {
-  final StreamController<bool> _verificationNotifier =
-      StreamController<bool>.broadcast();
-
+class _EnterNewPinCodePageState extends State<EnterNewPinCodePage> {
   @override
   void initState() {
     super.initState();
@@ -38,7 +33,6 @@ class _PinCodePageState extends State<PinCodePage> {
 
   @override
   void dispose() {
-    _verificationNotifier.close();
     super.dispose();
   }
 
@@ -46,11 +40,11 @@ class _PinCodePageState extends State<PinCodePage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      backgroundColor: Theme.of(context).colorScheme.background,
       scrollView: false,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: PinCodeView(
-          title: l10n.enterYourPinCode,
+          title: l10n.enterNewPinCode,
           passwordEnteredCallback: _onPasscodeEntered,
           deleteButton: Text(
             l10n.delete,
@@ -61,20 +55,16 @@ class _PinCodePageState extends State<PinCodePage> {
             style: Theme.of(context).textTheme.button,
           ),
           cancelCallback: _onPasscodeCancelled,
-          isValidCallback: () {
-            Navigator.of(context).pushReplacement<void, void>(widget.routeTo);
-          },
-          shouldTriggerVerification: _verificationNotifier.stream,
         ),
       ),
     );
   }
 
-  Future<void> _onPasscodeEntered(String enteredPasscode) async {
-    final bool isValid =
-        (await getSecureStorage.get(SecureStorageKeys.pinCode)) ==
-            enteredPasscode;
-    _verificationNotifier.add(isValid);
+  void _onPasscodeEntered(String enteredPasscode) {
+    Navigator.pushReplacement<dynamic, dynamic>(
+      context,
+      ConfirmPinCodePage.route(enteredPasscode, widget.routeTo),
+    );
   }
 
   void _onPasscodeCancelled() {
