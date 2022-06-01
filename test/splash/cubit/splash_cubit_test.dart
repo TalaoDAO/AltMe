@@ -78,7 +78,7 @@ void main() {
         });
 
         test(
-            'emits SplashStatus.routeToPassCode when SecureStorageKeys.did is null',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.did is null''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.did))
               .thenAnswer((_) => Future.value(null));
