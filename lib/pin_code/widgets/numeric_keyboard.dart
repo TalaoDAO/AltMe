@@ -1,0 +1,174 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+typedef KeyboardTapCallback = void Function(String text);
+
+@immutable
+class KeyboardUIConfig {
+  const KeyboardUIConfig({
+    this.digitBorderWidth = 1,
+    this.keyboardRowMargin = const EdgeInsets.only(top: 15, left: 4, right: 4),
+    this.digitInnerMargin = const EdgeInsets.all(24),
+    this.primaryColor = Colors.white,
+    this.digitFillColor = Colors.transparent,
+    this.digitTextStyle = const TextStyle(fontSize: 30, color: Colors.white),
+    this.deleteButtonTextStyle =
+        const TextStyle(fontSize: 16, color: Colors.white),
+    this.keyboardSize,
+  });
+
+  //Digits have a round thin borders, [digitBorderWidth] define their thickness
+  final double digitBorderWidth;
+  final TextStyle digitTextStyle;
+  final TextStyle deleteButtonTextStyle;
+  final Color primaryColor;
+  final Color digitFillColor;
+  final EdgeInsetsGeometry keyboardRowMargin;
+  final EdgeInsetsGeometry digitInnerMargin;
+
+  //Size for the keyboard can be define and provided from the app.
+  //If it will not be provided the size will be adjusted to a screen size.
+  final Size? keyboardSize;
+}
+
+class NumericKeyboard extends StatelessWidget {
+  NumericKeyboard({
+    Key? key,
+    required this.keyboardUIConfig,
+    required this.onKeyboardTap,
+    this.digits,
+  }) : super(key: key);
+
+  final KeyboardUIConfig keyboardUIConfig;
+  final KeyboardTapCallback onKeyboardTap;
+  final _focusNode = FocusNode();
+  static String deleteButton = 'keyboard_delete_button';
+
+  //should have a proper order [1...9, 0]
+  final List<String>? digits;
+
+  @override
+  Widget build(BuildContext context) => _buildKeyboard(context);
+
+  Widget _buildKeyboard(BuildContext context) {
+    List<String> keyboardItems = List.filled(10, '0');
+    if (digits == null || digits!.isEmpty) {
+      keyboardItems = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+    } else {
+      keyboardItems = digits!;
+    }
+    final screenSize = MediaQuery.of(context).size;
+    final keyboardHeight = screenSize.height > screenSize.width
+        ? screenSize.height / 2
+        : screenSize.height - 80;
+    final keyboardWidth = keyboardHeight * 3 / 4;
+    final keyboardSize = keyboardUIConfig.keyboardSize != null
+        ? keyboardUIConfig.keyboardSize!
+        : Size(keyboardWidth, keyboardHeight);
+    return Container(
+      width: keyboardSize.width,
+      height: keyboardSize.height,
+      margin: const EdgeInsets.only(top: 16),
+      child: RawKeyboardListener(
+        focusNode: _focusNode,
+        autofocus: true,
+        onKey: (event) {
+          if (event is RawKeyUpEvent) {
+            if (keyboardItems.contains(event.data.keyLabel)) {
+              onKeyboardTap(event.logicalKey.keyLabel);
+              return;
+            }
+            if (event.logicalKey.keyLabel == 'Backspace' ||
+                event.logicalKey.keyLabel == 'Delete') {
+              onKeyboardTap(NumericKeyboard.deleteButton);
+              return;
+            }
+          }
+        },
+        child: AlignedGrid(
+          keyboardSize: keyboardSize,
+          children: List.generate(10, (index) {
+            return _buildKeyboardDigit(keyboardItems[index]);
+          }),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildKeyboardDigit(String text) {
+    return Container(
+      margin: const EdgeInsets.all(4),
+      child: ClipOval(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            splashColor: keyboardUIConfig.primaryColor.withOpacity(0.4),
+            onTap: () {
+              onKeyboardTap(text);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.transparent,
+                border: Border.all(
+                    color: keyboardUIConfig.primaryColor,
+                    width: keyboardUIConfig.digitBorderWidth),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: keyboardUIConfig.digitFillColor,
+                ),
+                child: Center(
+                  child: Text(
+                    text,
+                    style: keyboardUIConfig.digitTextStyle,
+                    semanticsLabel: text,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AlignedGrid extends StatelessWidget {
+  const AlignedGrid({
+    Key? key,
+    required this.children,
+    required this.keyboardSize,
+  })  : listSize = children.length,
+        super(key: key);
+
+  static const double runSpacing = 4;
+  static const double spacing = 4;
+  final int listSize;
+  static const columns = 3;
+  final List<Widget> children;
+  final Size keyboardSize;
+
+  @override
+  Widget build(BuildContext context) {
+    final primarySize = keyboardSize.width > keyboardSize.height
+        ? keyboardSize.height
+        : keyboardSize.width;
+    final itemSize = (primarySize - runSpacing * (columns - 1)) / columns;
+    return Wrap(
+      runSpacing: runSpacing,
+      spacing: spacing,
+      alignment: WrapAlignment.center,
+      children: children
+          .map(
+            (item) => SizedBox(
+              width: itemSize,
+              height: itemSize,
+              child: item,
+            ),
+          )
+          .toList(growable: false),
+    );
+  }
+}
