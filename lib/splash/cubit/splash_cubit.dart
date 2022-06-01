@@ -1,5 +1,7 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/helper_function/is_wallet_created.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
+import 'package:altme/home/home/home.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -13,57 +15,27 @@ class SplashCubit extends Cubit<SplashState> {
   SplashCubit({
     required this.secureStorageProvider,
     required this.didCubit,
+    required this.homeCubit,
   }) : super(const SplashState()) {
     _getAppVersion();
   }
 
   final SecureStorageProvider secureStorageProvider;
   final DIDCubit didCubit;
+  final HomeCubit homeCubit;
 
   Future<void> initialiseApp() async {
-    final String? key = await secureStorageProvider.get(SecureStorageKeys.key);
-    if (key == null || key.isEmpty) {
-      return emit(state.copyWith(status: SplashStatus.onboarding));
-    }
-
-    final String? did = await secureStorageProvider.get(SecureStorageKeys.did);
-
-    if (did == null || did.isEmpty) {
-      return emit(state.copyWith(status: SplashStatus.onboarding));
-    }
-
-    final String? didMethod =
-        await secureStorageProvider.get(SecureStorageKeys.didMethod);
-    if (didMethod == null || didMethod.isEmpty) {
-      return emit(state.copyWith(status: SplashStatus.onboarding));
-    }
-
-    final String? didMethodName =
-        await secureStorageProvider.get(SecureStorageKeys.didMethodName);
-    if (didMethodName == null || didMethodName.isEmpty) {
-      return emit(state.copyWith(status: SplashStatus.onboarding));
-    }
-
-    final String? isEnterprise =
-        await secureStorageProvider.get(SecureStorageKeys.isEnterpriseUser);
-
-    if (isEnterprise != null && isEnterprise.isNotEmpty) {
-      if (isEnterprise == 'true') {
-        final rsaKeyJson =
-            await secureStorageProvider.get(SecureStorageKeys.rsaKeyJson);
-        if (rsaKeyJson == null || rsaKeyJson.isEmpty) {
-          return emit(state.copyWith(status: SplashStatus.onboarding));
-        }
-      }
-    }
-
-    await didCubit.load(
-      did: did,
-      didMethod: didMethod,
-      didMethodName: didMethodName,
+    final bool hasWallet = await isWalletCreated(
+      secureStorageProvider: secureStorageProvider,
+      didCubit: didCubit,
     );
-
-    return emit(state.copyWith(status: SplashStatus.bypassOnBoarding));
+    if (hasWallet) {
+      homeCubit.emitHasWallet();
+      emit(state.copyWith(status: SplashStatus.routeToPassCode));
+    } else {
+      homeCubit.emitHasNoWallet();
+      emit(state.copyWith(status: SplashStatus.routeToHomePage));
+    }
   }
 
   Future<void> _getAppVersion() async {

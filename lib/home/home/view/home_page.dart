@@ -8,7 +8,10 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (context) => const HomePage(),
+        builder: (context) => BlocProvider(
+          create: (context) => HomeCubit(),
+          child: const HomePage(),
+        ),
         settings: const RouteSettings(name: '/homePage'),
       );
 
@@ -47,7 +50,16 @@ class _HomePageState extends State<HomePage> {
             const AssetImage(IconStrings.icMenu),
             color: Theme.of(context).colorScheme.leadingButton,
           ),
-          onPressed: () => scaffoldKey.currentState!.openDrawer(),
+          onPressed: () {
+            if (context.read<HomeCubit>().state == HomeStatus.hasNoWallet) {
+              showDialog<void>(
+                context: context,
+                builder: (_) => const WalletDialog(),
+              );
+              return;
+            }
+            scaffoldKey.currentState!.openDrawer();
+          },
         ),
         titleTrailing: const GetCardsWidget(),
         body: Stack(

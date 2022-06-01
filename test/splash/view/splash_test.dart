@@ -97,7 +97,7 @@ void main() {
 
       // TODO(bibash): this test fails which does not make sense
       // testWidgets('there is only one ScaleTransition widget', (tester) async
-      // {¬
+      // {
       //   await tester.pumpApp(const SplashView());
       //   expect(find.byType(ScaleTransition), findsOneWidget);
       // });
@@ -132,7 +132,7 @@ void main() {
         whenListen(
           splashCubit,
           Stream.fromIterable(
-            [SplashStatus.init, SplashStatus.onboarding],
+            [SplashStatus.init, SplashStatus.routeToPassCode],
           ),
           initialState: SplashStatus.init,
         );

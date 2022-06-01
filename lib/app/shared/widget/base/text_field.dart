@@ -13,6 +13,9 @@ class BaseTextField extends StatelessWidget {
     this.prefixIcon,
     this.validator,
     this.focusNode,
+    this.contentPadding =
+        const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+    this.borderColor,
   }) : super(key: key);
 
   final String? label;
@@ -24,12 +27,16 @@ class BaseTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final String? Function(String?)? validator;
   final FocusNode? focusNode;
+  final EdgeInsetsGeometry contentPadding;
+  final Color? borderColor;
+
   static const double borderRadius = 50;
 
   @override
   Widget build(BuildContext context) {
+    final border = borderColor ?? Theme.of(context).colorScheme.tertiary;
     return TextFormField(
-focusNode: focusNode,
+      focusNode: focusNode,
       controller: controller,
       cursorColor: Theme.of(context).colorScheme.primary,
       keyboardType: type,
@@ -41,21 +48,21 @@ focusNode: focusNode,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.tertiary,
+            color: border,
             width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.tertiary,
+            color: border,
             width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.tertiary,
+            color: border,
             width: 1.5,
           ),
         ),
@@ -81,8 +88,7 @@ focusNode: focusNode,
         prefixIconConstraints: const BoxConstraints(minWidth: 60),
         suffixIcon: suffixIcon,
         suffixIconConstraints: const BoxConstraints(minWidth: 60),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        contentPadding: contentPadding,
       ),
     );
   }

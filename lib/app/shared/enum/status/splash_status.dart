@@ -1,5 +1,1 @@
-enum SplashStatus {
-  init,
-  onboarding,
-  bypassOnBoarding,
-}
+enum SplashStatus { init, routeToPassCode, routeToHomePage }

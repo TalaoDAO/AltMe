@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/key/onboarding_key.dart';
 import 'package:altme/onboarding/submit_enterprise_user/cubit/submit_enterprise_user_cubit.dart';
 import 'package:altme/onboarding/submit_enterprise_user/view/widgets/pick_file_button.dart';
 import 'package:altme/onboarding/submit_enterprise_user/view/widgets/picked_file.dart';
@@ -67,8 +66,7 @@ class _SubmitEnterpriseUserPageState extends State<SubmitEnterpriseUserPage> {
           title: localization.submit,
           titleLeading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context)
-                .pushReplacement<void, void>(OnBoardingKeyPage.route()),
+            onPressed: () => Navigator.of(context).pop(),
           ),
           body: Column(
             mainAxisSize: MainAxisSize.min,

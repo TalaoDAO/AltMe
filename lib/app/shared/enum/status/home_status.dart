@@ -1,0 +1,4 @@
+enum HomeStatus {
+  hasWallet,
+  hasNoWallet,
+}

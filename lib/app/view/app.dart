@@ -75,6 +75,7 @@ class App extends StatelessWidget {
             walletCubit: context.read<WalletCubit>(),
           ),
         ),
+        BlocProvider<HomeCubit>(create: (context) => HomeCubit()),
         BlocProvider<DIDCubit>(
           create: (context) => DIDCubit(
             secureStorageProvider: secure_storage.getSecureStorage,

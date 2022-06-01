@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,13 +11,17 @@ class MockSecureStorage extends Mock implements SecureStorageProvider {}
 
 class MockDidCubit extends MockCubit<DIDState> implements DIDCubit {}
 
+class MockHomeCubit extends MockCubit<HomeStatus> implements HomeCubit {}
+
 void main() {
   late SecureStorageProvider mockSecureStorage;
   late DIDCubit didCubit;
+  late HomeCubit homeCubit;
 
   setUp(() {
     mockSecureStorage = MockSecureStorage();
     didCubit = MockDidCubit();
+    homeCubit = MockHomeCubit();
   });
 
   group('Splash Cubit', () {
@@ -25,6 +30,7 @@ void main() {
         SplashCubit(
           secureStorageProvider: mockSecureStorage,
           didCubit: didCubit,
+          homeCubit: homeCubit,
         ).state,
         SplashStatus.init,
       );
@@ -32,7 +38,8 @@ void main() {
 
     group('initialiseApp', () {
       group('SecureStorageKeys.key', () {
-        test('emits SplashStatus.onboarding when SecureStorageKeys.key is null',
+        test(
+            'emits SplashStatus.routeToPassCode when SecureStorageKeys.key is null',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.key))
               .thenAnswer((_) => Future.value(null));
@@ -40,14 +47,15 @@ void main() {
           final SplashCubit splashCubit = SplashCubit(
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
+            homeCubit: homeCubit,
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.onboarding);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
 
         test(
-            'emits SplashStatus.onboarding when SecureStorageKeys.key is empty',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.key is empty''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.key))
               .thenAnswer((_) => Future.value(''));
@@ -55,10 +63,11 @@ void main() {
           final SplashCubit splashCubit = SplashCubit(
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
+            homeCubit: homeCubit,
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.onboarding);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
       });
 
@@ -68,7 +77,8 @@ void main() {
               .thenAnswer((_) => Future.value('key'));
         });
 
-        test('emits SplashStatus.onboarding when SecureStorageKeys.did is null',
+        test(
+            'emits SplashStatus.routeToPassCode when SecureStorageKeys.did is null',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.did))
               .thenAnswer((_) => Future.value(null));
@@ -76,14 +86,15 @@ void main() {
           final SplashCubit splashCubit = SplashCubit(
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
+            homeCubit: homeCubit,
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.onboarding);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
 
         test(
-            'emits SplashStatus.onboarding when SecureStorageKeys.did is empty',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.did is empty''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.did))
               .thenAnswer((_) => Future.value(''));
@@ -91,10 +102,11 @@ void main() {
           final SplashCubit splashCubit = SplashCubit(
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
+            homeCubit: homeCubit,
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.onboarding);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
       });
 
@@ -107,7 +119,7 @@ void main() {
         });
 
         test(
-            '''emits SplashStatus.onboarding when SecureStorageKeys.didMethod is null''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.didMethod is null''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.didMethod))
               .thenAnswer((_) => Future.value(null));
@@ -115,14 +127,15 @@ void main() {
           final SplashCubit splashCubit = SplashCubit(
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
+            homeCubit: homeCubit,
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.onboarding);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
 
         test(
-            '''emits SplashStatus.onboarding when SecureStorageKeys.didMethod is empty''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.didMethod is empty''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.didMethod))
               .thenAnswer((_) => Future.value(''));
@@ -130,10 +143,11 @@ void main() {
           final SplashCubit splashCubit = SplashCubit(
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
+            homeCubit: homeCubit,
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.onboarding);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
       });
 
@@ -148,7 +162,7 @@ void main() {
         });
 
         test(
-            '''emits SplashStatus.onboarding when SecureStorageKeys.didMethodName is null''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.didMethodName is null''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.didMethodName))
               .thenAnswer((_) => Future.value(null));
@@ -156,14 +170,15 @@ void main() {
           final SplashCubit splashCubit = SplashCubit(
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
+            homeCubit: homeCubit,
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.onboarding);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
 
         test(
-            '''emits SplashStatus.onboarding when SecureStorageKeys.didMethodName is empty''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.didMethodName is empty''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.didMethodName))
               .thenAnswer((_) => Future.value(''));
@@ -171,10 +186,11 @@ void main() {
           final SplashCubit splashCubit = SplashCubit(
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
+            homeCubit: homeCubit,
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.onboarding);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
       });
 
@@ -191,7 +207,7 @@ void main() {
         });
 
         test(
-            '''emits SplashStatus.onboarding when SecureStorageKeys.isEnterpriseUser is null''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.isEnterpriseUser is null''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.isEnterpriseUser))
               .thenAnswer((_) => Future.value(null));
@@ -199,14 +215,15 @@ void main() {
           final SplashCubit splashCubit = SplashCubit(
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
+            homeCubit: homeCubit,
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.onboarding);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
 
         test(
-            '''emits SplashStatus.onboarding when SecureStorageKeys.isEnterpriseUser is empty''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.isEnterpriseUser is empty''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.isEnterpriseUser))
               .thenAnswer((_) => Future.value(''));
@@ -214,10 +231,11 @@ void main() {
           final SplashCubit splashCubit = SplashCubit(
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
+            homeCubit: homeCubit,
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.onboarding);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
 
         group('when user is enterprise user', () {
@@ -228,7 +246,7 @@ void main() {
           });
 
           test(
-              '''emits SplashStatus.onboarding when SecureStorageKeys.rsaKeyJson is null''',
+              '''emits SplashStatus.routeToPassCode when SecureStorageKeys.rsaKeyJson is null''',
               () async {
             when(() => mockSecureStorage.get(SecureStorageKeys.rsaKeyJson))
                 .thenAnswer((_) => Future.value(null));
@@ -236,14 +254,15 @@ void main() {
             final SplashCubit splashCubit = SplashCubit(
               secureStorageProvider: mockSecureStorage,
               didCubit: didCubit,
+              homeCubit: homeCubit,
             );
             await splashCubit.initialiseApp();
 
-            expect(splashCubit.state, SplashStatus.onboarding);
+            expect(splashCubit.state, SplashStatus.routeToPassCode);
           });
 
           test(
-              '''emits SplashStatus.onboarding when SecureStorageKeys.rsaKeyJson is empty''',
+              '''emits SplashStatus.routeToPassCode when SecureStorageKeys.rsaKeyJson is empty''',
               () async {
             when(() => mockSecureStorage.get(SecureStorageKeys.rsaKeyJson))
                 .thenAnswer((_) => Future.value(''));
@@ -251,10 +270,11 @@ void main() {
             final SplashCubit splashCubit = SplashCubit(
               secureStorageProvider: mockSecureStorage,
               didCubit: didCubit,
+              homeCubit: homeCubit,
             );
             await splashCubit.initialiseApp();
 
-            expect(splashCubit.state, SplashStatus.onboarding);
+            expect(splashCubit.state, SplashStatus.routeToPassCode);
           });
 
           test(
@@ -266,10 +286,11 @@ void main() {
             final SplashCubit splashCubit = SplashCubit(
               secureStorageProvider: mockSecureStorage,
               didCubit: didCubit,
+              homeCubit: homeCubit,
             );
             await splashCubit.initialiseApp();
 
-            expect(splashCubit.state, SplashStatus.bypassOnBoarding);
+            expect(splashCubit.state, SplashStatus.routeToPassCode);
           });
         });
       });
