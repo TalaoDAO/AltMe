@@ -7,11 +7,14 @@ import 'package:flutter/material.dart';
 class PinCodePage extends StatefulWidget {
   const PinCodePage({
     Key? key,
+    required this.routeTo,
   }) : super(key: key);
 
-  static MaterialPageRoute route() {
+  final Route routeTo;
+
+  static MaterialPageRoute route(Route routeTo) {
     return MaterialPageRoute<void>(
-      builder: (_) => const PinCodePage(),
+      builder: (_) => PinCodePage(routeTo: routeTo,),
       settings: const RouteSettings(name: '/pinCodePage'),
     );
   }
@@ -58,7 +61,7 @@ class _PinCodePageState extends State<PinCodePage> {
   void _onPasscodeEntered(String enteredPasscode) {
     Navigator.pushReplacement<dynamic, dynamic>(
       context,
-      ConfirmPinCodePage.route(enteredPasscode),
+      ConfirmPinCodePage.route(enteredPasscode,widget.routeTo),
     );
   }
 

@@ -2,21 +2,30 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/pin_code/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class ConfirmPinCodePage extends StatefulWidget {
   const ConfirmPinCodePage({
     Key? key,
     required this.storedPassword,
+    required this.routeTo,
   }) : super(key: key);
 
   final String storedPassword;
+  final Route routeTo;
 
-  static MaterialPageRoute route(String storedPassword) {
+  static MaterialPageRoute route(String storedPassword, Route routeTo) {
     return MaterialPageRoute<void>(
-      builder: (_) => ConfirmPinCodePage(
-        storedPassword: storedPassword,
+      builder: (_) => BlocProvider(
+        create: (_) => PinCodeCubit(secureStorageProvider: getSecureStorage),
+        child: ConfirmPinCodePage(
+          storedPassword: storedPassword,
+          routeTo: routeTo,
+        ),
       ),
       settings: const RouteSettings(name: '/confirmPinCodePage'),
     );
@@ -60,19 +69,21 @@ class _ConfirmPinCodePageState extends State<ConfirmPinCodePage> {
             style: Theme.of(context).textTheme.button,
           ),
           cancelCallback: _onPasscodeCancelled,
+          isValidCallback: () {
+            Navigator.of(context).pushReplacement<void, void>(widget.routeTo);
+          },
           shouldTriggerVerification: _verificationNotifier.stream,
         ),
       ),
     );
   }
 
-  void _onPasscodeEntered(String enteredPasscode) {
+  Future<void> _onPasscodeEntered(String enteredPasscode) async {
     final bool isValid = widget.storedPassword == enteredPasscode;
-    _verificationNotifier.add(isValid);
     if (isValid) {
-      // TODO(Taleb): Navigate to HomePage
-      // TODO(Taleb): Save password in secure storage
+      await context.read<PinCodeCubit>().savePinCode(enteredPasscode);
     }
+    _verificationNotifier.add(isValid);
   }
 
   void _onPasscodeCancelled() {
