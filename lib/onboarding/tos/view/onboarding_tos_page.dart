@@ -59,7 +59,7 @@ class OnBoardingTosPage extends StatelessWidget {
                           await getSecureStorage.get(SecureStorageKeys.pinCode);
                       if (pinCode?.isEmpty ?? true) {
                         await Navigator.of(context)
-                            .pushReplacement<void, void>(PinCodePage.route(routeTo));
+                            .pushReplacement<void, void>(EnterNewPinCodePage.route(routeTo));
                       } else {
                         await Navigator.of(context)
                             .pushReplacement<void, void>(routeTo);

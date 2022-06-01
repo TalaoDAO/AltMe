@@ -304,5 +304,6 @@
   "confirmYourPinCode": "Confirm your pin code",
   "create_wallet": "Create Wallet",
   "restore_wallet": "Restore Wallet",
-  "create_wallet_message": "You need to create your wallet first"
+  "create_wallet_message": "You need to create your wallet first",
+  "enterYourPinCode": "Enter your pin code"
 }

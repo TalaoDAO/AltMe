@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/pin_code/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ConfirmPinCodePage extends StatefulWidget {
@@ -20,12 +18,9 @@ class ConfirmPinCodePage extends StatefulWidget {
 
   static MaterialPageRoute route(String storedPassword, Route routeTo) {
     return MaterialPageRoute<void>(
-      builder: (_) => BlocProvider(
-        create: (_) => PinCodeCubit(secureStorageProvider: getSecureStorage),
-        child: ConfirmPinCodePage(
-          storedPassword: storedPassword,
-          routeTo: routeTo,
-        ),
+      builder: (_) => ConfirmPinCodePage(
+        storedPassword: storedPassword,
+        routeTo: routeTo,
       ),
       settings: const RouteSettings(name: '/confirmPinCodePage'),
     );
@@ -81,7 +76,7 @@ class _ConfirmPinCodePageState extends State<ConfirmPinCodePage> {
   Future<void> _onPasscodeEntered(String enteredPasscode) async {
     final bool isValid = widget.storedPassword == enteredPasscode;
     if (isValid) {
-      await context.read<PinCodeCubit>().savePinCode(enteredPasscode);
+      await getSecureStorage.set(SecureStorageKeys.pinCode, enteredPasscode);
     }
     _verificationNotifier.add(isValid);
   }
