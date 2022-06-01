@@ -111,8 +111,9 @@ class NumericKeyboard extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: Colors.transparent,
                 border: Border.all(
-                    color: keyboardUIConfig.primaryColor,
-                    width: keyboardUIConfig.digitBorderWidth),
+                  color: keyboardUIConfig.primaryColor,
+                  width: keyboardUIConfig.digitBorderWidth,
+                ),
               ),
               child: Container(
                 decoration: BoxDecoration(

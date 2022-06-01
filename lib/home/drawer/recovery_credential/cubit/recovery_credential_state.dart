@@ -38,10 +38,20 @@ class RecoveryCredentialState extends Equatable {
     );
   }
 
-  RecoveryCredentialState success({
-    MessageHandler? messageHandler,
+  RecoveryCredentialState populating({
     bool? isTextFieldEdited,
     bool? isMnemonicValid,
+    int? recoveredCredentialLength,
+  }) {
+    return RecoveryCredentialState(
+      status: AppStatus.idle,
+      isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
+      isMnemonicValid: isMnemonicValid ?? this.isMnemonicValid,
+    );
+  }
+
+  RecoveryCredentialState success({
+    MessageHandler? messageHandler,
     int? recoveredCredentialLength,
   }) {
     return RecoveryCredentialState(
@@ -49,8 +59,8 @@ class RecoveryCredentialState extends Equatable {
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
-      isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
-      isMnemonicValid: isMnemonicValid ?? this.isMnemonicValid,
+      isTextFieldEdited: isTextFieldEdited,
+      isMnemonicValid: isMnemonicValid,
       recoveredCredentialLength:
           recoveredCredentialLength ?? this.recoveredCredentialLength,
     );

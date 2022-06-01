@@ -69,7 +69,9 @@ class _PinCodeViewState extends State<PinCodeView>
     streamSubscription =
         widget.shouldTriggerVerification?.listen(_showValidation);
     controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
     final Animation curve =
         CurvedAnimation(parent: controller, curve: ShakeCurve());
     animation =
@@ -289,7 +291,8 @@ class _PinCodeViewState extends State<PinCodeView>
       widget.isValidCallback!();
     } else {
       log.warning(
-          "You didn't implement validation callback. Please handle a state by yourself then.");
+        '''You didn't implement validation callback. Please handle a state by yourself then.''',
+      );
     }
   }
 

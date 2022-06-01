@@ -26,14 +26,14 @@ void main() {
 
     testWidgets('renders OnBoardingTosPage', (tester) async {
       await tester
-          .pumpApp(OnBoardingTosPage(routeTo: OnBoardingGenPhrasePage.route()));
+          .pumpApp(const OnBoardingTosPage(routeType: WalletRouteType.create));
       await tester.pumpAndSettle();
       expect(find.byType(OnBoardingTosPage), findsOneWidget);
     });
 
     testWidgets('nothing happens when button is pressed', (tester) async {
       await tester
-          .pumpApp(OnBoardingTosPage(routeTo: OnBoardingGenPhrasePage.route()));
+          .pumpApp(const OnBoardingTosPage(routeType: WalletRouteType.create));
       await tester.tap(find.byType(BaseButton));
       await tester.pumpAndSettle();
       expect(find.byType(OnBoardingTosPage), findsOneWidget);
@@ -42,7 +42,7 @@ void main() {
     testWidgets('blocks going back from OnBoardingTosPage start page',
         (tester) async {
       await tester
-          .pumpApp(OnBoardingTosPage(routeTo: OnBoardingGenPhrasePage.route()));
+          .pumpApp(const OnBoardingTosPage(routeType: WalletRouteType.create));
       final dynamic appState = tester.state(find.byType(WidgetsApp));
       expect(await appState.didPopRoute(), true);
       await tester.pumpAndSettle();
@@ -51,7 +51,7 @@ void main() {
 
     testWidgets('renders DisplayTerms', (tester) async {
       await tester
-          .pumpApp(OnBoardingTosPage(routeTo: OnBoardingGenPhrasePage.route()));
+          .pumpApp(const OnBoardingTosPage(routeType: WalletRouteType.create));
       await tester.pumpAndSettle();
       expect(find.byType(DisplayTerms), findsOneWidget);
     });
