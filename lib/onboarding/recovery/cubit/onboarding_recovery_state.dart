@@ -25,6 +25,18 @@ class OnBoardingRecoveryState extends Equatable {
     );
   }
 
+  OnBoardingRecoveryState populating({
+    bool? isTextFieldEdited,
+    bool? isMnemonicValid,
+    int? recoveredCredentialLength,
+  }) {
+    return OnBoardingRecoveryState(
+      status: AppStatus.idle,
+      isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
+      isMnemonicValid: isMnemonicValid ?? this.isMnemonicValid,
+    );
+  }
+
   OnBoardingRecoveryState error({required MessageHandler messageHandler}) {
     return OnBoardingRecoveryState(
       status: AppStatus.error,
@@ -36,17 +48,14 @@ class OnBoardingRecoveryState extends Equatable {
 
   OnBoardingRecoveryState success({
     MessageHandler? messageHandler,
-    bool? isTextFieldEdited,
-    bool? isMnemonicValid,
-    int? recoveredCredentialLength,
   }) {
     return OnBoardingRecoveryState(
       status: AppStatus.success,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
-      isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
-      isMnemonicValid: isMnemonicValid ?? this.isMnemonicValid,
+      isTextFieldEdited: isTextFieldEdited,
+      isMnemonicValid: isMnemonicValid,
     );
   }
 

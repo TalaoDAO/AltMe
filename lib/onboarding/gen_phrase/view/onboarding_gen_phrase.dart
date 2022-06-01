@@ -15,11 +15,12 @@ class OnBoardingGenPhrasePage extends StatefulWidget {
   static Route route() => MaterialPageRoute<void>(
         builder: (context) => BlocProvider(
           create: (context) => OnBoardingGenPhraseCubit(
-              secureStorageProvider: getSecureStorage,
-              didCubit: context.read<DIDCubit>(),
-              didKitProvider: DIDKitProvider(),
-              keyGenerator: KeyGenerator(),
-              homeCubit: context.read<HomeCubit>()),
+            secureStorageProvider: getSecureStorage,
+            didCubit: context.read<DIDCubit>(),
+            didKitProvider: DIDKitProvider(),
+            keyGenerator: KeyGenerator(),
+            homeCubit: context.read<HomeCubit>(),
+          ),
           child: const OnBoardingGenPhrasePage(),
         ),
         settings: const RouteSettings(name: '/onBoardingGenPhrasePage'),
@@ -138,7 +139,7 @@ class _OnBoardingGenPhrasePageState extends State<OnBoardingGenPhrasePage> {
                         : () async {
                             await context
                                 .read<OnBoardingGenPhraseCubit>()
-                                .generateKey(context, state.mnemonic);
+                                .generateKey(state.mnemonic);
                           },
                     child: Text(l10n.onBoardingGenPhraseButton),
                   ),
