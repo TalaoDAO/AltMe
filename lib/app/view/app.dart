@@ -47,12 +47,14 @@ class App extends StatelessWidget {
             secureStorageProvider: secure_storage.getSecureStorage,
           ),
         ),
+        BlocProvider<HomeCubit>(create: (context) => HomeCubit()),
         BlocProvider<WalletCubit>(
           lazy: false,
           create: (context) => WalletCubit(
             repository: CredentialsRepository(secure_storage.getSecureStorage),
             secureStorageProvider: secure_storage.getSecureStorage,
             profileCubit: context.read<ProfileCubit>(),
+            homeCubit: context.read<HomeCubit>(),
           ),
         ),
         BlocProvider<ScanCubit>(
@@ -75,7 +77,6 @@ class App extends StatelessWidget {
             walletCubit: context.read<WalletCubit>(),
           ),
         ),
-        BlocProvider<HomeCubit>(create: (context) => HomeCubit()),
         BlocProvider<DIDCubit>(
           create: (context) => DIDCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
