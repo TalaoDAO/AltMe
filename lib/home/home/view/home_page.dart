@@ -8,10 +8,7 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (context) => BlocProvider(
-          create: (context) => HomeCubit(),
-          child: const HomePage(),
-        ),
+        builder: (context) => const HomePage(),
         settings: const RouteSettings(name: '/homePage'),
       );
 
