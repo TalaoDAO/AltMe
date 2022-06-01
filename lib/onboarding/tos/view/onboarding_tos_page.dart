@@ -1,6 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingTosPage extends StatelessWidget {
   const OnBoardingTosPage({Key? key, required this.routeTo}) : super(key: key);
@@ -52,9 +54,16 @@ class OnBoardingTosPage extends StatelessWidget {
                   const SizedBox(height: 20),
                   BaseButton.primary(
                     context: context,
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pushReplacement<void, void>(routeTo);
+                    onPressed: () async {
+                      final pinCode =
+                          await getSecureStorage.get(SecureStorageKeys.pinCode);
+                      if (pinCode?.isEmpty ?? true) {
+                        await Navigator.of(context)
+                            .pushReplacement<void, void>(PinCodePage.route(routeTo));
+                      } else {
+                        await Navigator.of(context)
+                            .pushReplacement<void, void>(routeTo);
+                      }
                     },
                     child: Text(l10n.onBoardingTosButton),
                   )

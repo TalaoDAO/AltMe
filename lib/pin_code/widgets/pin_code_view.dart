@@ -278,7 +278,7 @@ class _PinCodeViewState extends State<PinCodeView>
 
   void _showValidation(bool isValid) {
     if (isValid) {
-      Navigator.maybePop(context).then<dynamic>((pop) => _validationCallback());
+      _validationCallback();
     } else {
       controller.forward();
     }
@@ -288,6 +288,7 @@ class _PinCodeViewState extends State<PinCodeView>
     if (widget.isValidCallback != null) {
       widget.isValidCallback!();
     } else {
+      Navigator.maybePop(context);
       log.warning(
           "You didn't implement validation callback. Please handle a state by yourself then.");
     }
