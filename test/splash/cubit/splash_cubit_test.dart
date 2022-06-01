@@ -39,7 +39,7 @@ void main() {
     group('initialiseApp', () {
       group('SecureStorageKeys.key', () {
         test(
-            'emits SplashStatus.hasNoWallet when SecureStorageKeys.key is null',
+            'emits SplashStatus.routeToPassCode when SecureStorageKeys.key is null',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.key))
               .thenAnswer((_) => Future.value(null));
@@ -51,11 +51,11 @@ void main() {
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.hasNoWallet);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
 
         test(
-            '''emits SplashStatus.hasNoWallet when SecureStorageKeys.key is empty''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.key is empty''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.key))
               .thenAnswer((_) => Future.value(''));
@@ -67,7 +67,7 @@ void main() {
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.hasNoWallet);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
       });
 
@@ -78,7 +78,7 @@ void main() {
         });
 
         test(
-            'emits SplashStatus.hasNoWallet when SecureStorageKeys.did is null',
+            'emits SplashStatus.routeToPassCode when SecureStorageKeys.did is null',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.did))
               .thenAnswer((_) => Future.value(null));
@@ -90,11 +90,11 @@ void main() {
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.hasNoWallet);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
 
         test(
-            '''emits SplashStatus.hasNoWallet when SecureStorageKeys.did is empty''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.did is empty''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.did))
               .thenAnswer((_) => Future.value(''));
@@ -106,7 +106,7 @@ void main() {
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.hasNoWallet);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
       });
 
@@ -119,7 +119,7 @@ void main() {
         });
 
         test(
-            '''emits SplashStatus.hasNoWallet when SecureStorageKeys.didMethod is null''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.didMethod is null''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.didMethod))
               .thenAnswer((_) => Future.value(null));
@@ -131,11 +131,11 @@ void main() {
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.hasNoWallet);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
 
         test(
-            '''emits SplashStatus.hasNoWallet when SecureStorageKeys.didMethod is empty''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.didMethod is empty''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.didMethod))
               .thenAnswer((_) => Future.value(''));
@@ -147,7 +147,7 @@ void main() {
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.hasNoWallet);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
       });
 
@@ -162,7 +162,7 @@ void main() {
         });
 
         test(
-            '''emits SplashStatus.hasNoWallet when SecureStorageKeys.didMethodName is null''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.didMethodName is null''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.didMethodName))
               .thenAnswer((_) => Future.value(null));
@@ -174,11 +174,11 @@ void main() {
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.hasNoWallet);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
 
         test(
-            '''emits SplashStatus.hasNoWallet when SecureStorageKeys.didMethodName is empty''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.didMethodName is empty''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.didMethodName))
               .thenAnswer((_) => Future.value(''));
@@ -190,7 +190,7 @@ void main() {
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.hasNoWallet);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
       });
 
@@ -207,7 +207,7 @@ void main() {
         });
 
         test(
-            '''emits SplashStatus.hasNoWallet when SecureStorageKeys.isEnterpriseUser is null''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.isEnterpriseUser is null''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.isEnterpriseUser))
               .thenAnswer((_) => Future.value(null));
@@ -219,11 +219,11 @@ void main() {
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.hasNoWallet);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
 
         test(
-            '''emits SplashStatus.hasNoWallet when SecureStorageKeys.isEnterpriseUser is empty''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.isEnterpriseUser is empty''',
             () async {
           when(() => mockSecureStorage.get(SecureStorageKeys.isEnterpriseUser))
               .thenAnswer((_) => Future.value(''));
@@ -235,7 +235,7 @@ void main() {
           );
           await splashCubit.initialiseApp();
 
-          expect(splashCubit.state, SplashStatus.hasNoWallet);
+          expect(splashCubit.state, SplashStatus.routeToPassCode);
         });
 
         group('when user is enterprise user', () {
@@ -246,7 +246,7 @@ void main() {
           });
 
           test(
-              '''emits SplashStatus.hasNoWallet when SecureStorageKeys.rsaKeyJson is null''',
+              '''emits SplashStatus.routeToPassCode when SecureStorageKeys.rsaKeyJson is null''',
               () async {
             when(() => mockSecureStorage.get(SecureStorageKeys.rsaKeyJson))
                 .thenAnswer((_) => Future.value(null));
@@ -258,11 +258,11 @@ void main() {
             );
             await splashCubit.initialiseApp();
 
-            expect(splashCubit.state, SplashStatus.hasNoWallet);
+            expect(splashCubit.state, SplashStatus.routeToPassCode);
           });
 
           test(
-              '''emits SplashStatus.hasNoWallet when SecureStorageKeys.rsaKeyJson is empty''',
+              '''emits SplashStatus.routeToPassCode when SecureStorageKeys.rsaKeyJson is empty''',
               () async {
             when(() => mockSecureStorage.get(SecureStorageKeys.rsaKeyJson))
                 .thenAnswer((_) => Future.value(''));
@@ -274,7 +274,7 @@ void main() {
             );
             await splashCubit.initialiseApp();
 
-            expect(splashCubit.state, SplashStatus.hasNoWallet);
+            expect(splashCubit.state, SplashStatus.routeToPassCode);
           });
 
           test(
@@ -290,7 +290,7 @@ void main() {
             );
             await splashCubit.initialiseApp();
 
-            expect(splashCubit.state, SplashStatus.hasNoWallet);
+            expect(splashCubit.state, SplashStatus.routeToPassCode);
           });
         });
       });

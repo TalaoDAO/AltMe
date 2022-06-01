@@ -138,11 +138,11 @@ class _SplashViewState extends State<SplashView> {
       listeners: [
         BlocListener<SplashCubit, SplashState>(
           listener: (BuildContext context, SplashState state) {
-            if (state.status == SplashStatus.hasWallet) {
+            if (state.status == SplashStatus.routeToPassCode) {
               //TODO(all): navigate to pin code page
               Navigator.of(context).push<void>(HomePage.route());
             }
-            if (state.status == SplashStatus.hasNoWallet) {
+            if (state.status == SplashStatus.routeToHomePage) {
               Navigator.of(context).push<void>(HomePage.route());
             }
           },

@@ -1,1 +1,1 @@
-enum SplashStatus { init, hasWallet, hasNoWallet }
+enum SplashStatus { init, routeToPassCode, routeToHomePage }

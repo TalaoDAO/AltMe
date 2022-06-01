@@ -132,7 +132,7 @@ void main() {
         whenListen(
           splashCubit,
           Stream.fromIterable(
-            [SplashStatus.init, SplashStatus.hasNoWallet],
+            [SplashStatus.init, SplashStatus.routeToPassCode],
           ),
           initialState: SplashStatus.init,
         );

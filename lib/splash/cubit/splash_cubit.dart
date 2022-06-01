@@ -31,10 +31,10 @@ class SplashCubit extends Cubit<SplashState> {
     );
     if (hasWallet) {
       homeCubit.emitHasWallet();
-      emit(state.copyWith(status: SplashStatus.hasWallet));
+      emit(state.copyWith(status: SplashStatus.routeToPassCode));
     } else {
       homeCubit.emitHasNoWallet();
-      emit(state.copyWith(status: SplashStatus.hasNoWallet));
+      emit(state.copyWith(status: SplashStatus.routeToHomePage));
     }
   }
 
