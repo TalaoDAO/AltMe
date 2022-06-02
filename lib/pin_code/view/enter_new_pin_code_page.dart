@@ -7,15 +7,15 @@ import 'package:flutter/material.dart';
 class EnterNewPinCodePage extends StatefulWidget {
   const EnterNewPinCodePage({
     Key? key,
-    required this.routeTo,
+    required this.routeType,
   }) : super(key: key);
 
-  final Route routeTo;
+  final WalletRouteType routeType;
 
-  static MaterialPageRoute route(Route routeTo) {
+  static MaterialPageRoute route(WalletRouteType routeType) {
     return MaterialPageRoute<void>(
       builder: (_) => EnterNewPinCodePage(
-        routeTo: routeTo,
+        routeType: routeType,
       ),
       settings: const RouteSettings(name: '/enterNewPinCodePage'),
     );
@@ -63,7 +63,7 @@ class _EnterNewPinCodePageState extends State<EnterNewPinCodePage> {
   void _onPasscodeEntered(String enteredPasscode) {
     Navigator.pushReplacement<dynamic, dynamic>(
       context,
-      ConfirmPinCodePage.route(enteredPasscode, widget.routeTo),
+      ConfirmPinCodePage.route(enteredPasscode, widget.routeType),
     );
   }
 
