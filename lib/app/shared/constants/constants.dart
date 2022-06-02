@@ -1,3 +1,4 @@
+export 'accentuations.dart';
 export 'altme_strings.dart';
 export 'enterprise.dart';
 export 'icon_strings.dart';

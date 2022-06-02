@@ -14,7 +14,7 @@ class BaseTextField extends StatelessWidget {
     this.validator,
     this.focusNode,
     this.contentPadding =
-        const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
     this.borderColor,
   }) : super(key: key);
 

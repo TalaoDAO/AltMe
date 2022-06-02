@@ -23,7 +23,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
-import 'package:secure_storage/secure_storage.dart';
 
 class App extends StatelessWidget {
   const App({Key? key, this.flavorMode = FlavorMode.production})
@@ -62,7 +61,7 @@ class App extends StatelessWidget {
             client: DioClient(Urls.checkIssuerServerUrl, Dio()),
             walletCubit: context.read<WalletCubit>(),
             didKitProvider: DIDKitProvider(),
-            secureStorageProvider: getSecureStorage,
+            secureStorageProvider: secure_storage.getSecureStorage,
           ),
         ),
         BlocProvider<QRCodeScanCubit>(
