@@ -1,10 +1,7 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/gen_phrase/view/onboarding_gen_phrase.dart';
-import 'package:altme/onboarding/recovery/view/onboarding_recovery.dart';
 import 'package:altme/pin_code/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -13,18 +10,20 @@ class ConfirmPinCodePage extends StatefulWidget {
   const ConfirmPinCodePage({
     Key? key,
     required this.storedPassword,
-    required this.routeType,
+    required this.isValidCallback,
   }) : super(key: key);
 
   final String storedPassword;
-  final WalletRouteType routeType;
+  final VoidCallback isValidCallback;
 
   static MaterialPageRoute route(
-      String storedPassword, WalletRouteType routeType) {
+    String storedPassword,
+    VoidCallback isValidCallback,
+  ) {
     return MaterialPageRoute<void>(
       builder: (_) => ConfirmPinCodePage(
         storedPassword: storedPassword,
-        routeType: routeType,
+        isValidCallback: isValidCallback,
       ),
       settings: const RouteSettings(name: '/confirmPinCodePage'),
     );
@@ -68,19 +67,7 @@ class _ConfirmPinCodePageState extends State<ConfirmPinCodePage> {
             style: Theme.of(context).textTheme.button,
           ),
           cancelCallback: _onPasscodeCancelled,
-          isValidCallback: () {
-            Route? routeTo;
-            if (widget.routeType == WalletRouteType.create) {
-              routeTo = OnBoardingGenPhrasePage.route();
-            } else if (widget.routeType == WalletRouteType.recover) {
-              routeTo = OnBoardingRecoveryPage.route();
-            } else if (widget.routeType == WalletRouteType.home) {
-              routeTo = HomePage.route();
-            }
-            if (routeTo != null) {
-              Navigator.of(context).pushReplacement<void, void>(routeTo);
-            }
-          },
+          isValidCallback: widget.isValidCallback,
           shouldTriggerVerification: _verificationNotifier.stream,
         ),
       ),

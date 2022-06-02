@@ -7,15 +7,15 @@ import 'package:flutter/material.dart';
 class EnterNewPinCodePage extends StatefulWidget {
   const EnterNewPinCodePage({
     Key? key,
-    required this.routeType,
+    required this.isValidCallback,
   }) : super(key: key);
 
-  final WalletRouteType routeType;
+  final VoidCallback isValidCallback;
 
-  static MaterialPageRoute route(WalletRouteType routeType) {
+  static MaterialPageRoute route(VoidCallback isValidCallback) {
     return MaterialPageRoute<void>(
       builder: (_) => EnterNewPinCodePage(
-        routeType: routeType,
+        isValidCallback: isValidCallback,
       ),
       settings: const RouteSettings(name: '/enterNewPinCodePage'),
     );
@@ -63,7 +63,7 @@ class _EnterNewPinCodePageState extends State<EnterNewPinCodePage> {
   void _onPasscodeEntered(String enteredPasscode) {
     Navigator.pushReplacement<dynamic, dynamic>(
       context,
-      ConfirmPinCodePage.route(enteredPasscode, widget.routeType),
+      ConfirmPinCodePage.route(enteredPasscode, widget.isValidCallback),
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/gen_phrase/view/onboarding_gen_phrase.dart';
 import 'package:altme/onboarding/recovery/view/onboarding_recovery.dart';
@@ -58,18 +59,29 @@ class OnBoardingTosPage extends StatelessWidget {
                 BaseButton.primary(
                   context: context,
                   onPressed: () async {
-                    final routeTo = routeType == WalletRouteType.create
-                        ? OnBoardingGenPhrasePage.route()
-                        : OnBoardingRecoveryPage.route();
+                    Route routeTo;
+                    if (routeType == WalletRouteType.create) {
+                      routeTo = OnBoardingGenPhrasePage.route();
+                    } else if (routeType == WalletRouteType.recover) {
+                      routeTo = OnBoardingRecoveryPage.route();
+                    } else {
+                      routeTo = HomePage.route();
+                    }
 
                     final pinCode =
                         await getSecureStorage.get(SecureStorageKeys.pinCode);
                     if (pinCode?.isEmpty ?? true) {
                       await Navigator.of(context).push<void>(
-                        EnterNewPinCodePage.route(routeType),
+                        EnterNewPinCodePage.route(() {
+                          Navigator.of(context).push<void>(routeTo);
+                        }),
                       );
                     } else {
-                      await Navigator.of(context).push<void>(routeTo);
+                      await Navigator.of(context).push<void>(
+                        PinCodePage.route(() {
+                          Navigator.of(context).push<void>(routeTo);
+                        }),
+                      );
                     }
                   },
                   child: Text(l10n.onBoardingTosButton),
