@@ -43,24 +43,27 @@ class _PinCodePageState extends State<PinCodePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BasePage(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      scrollView: false,
-      body: SafeArea(
-        child: PinCodeView(
-          title: l10n.enterYourPinCode,
-          passwordEnteredCallback: _onPasscodeEntered,
-          deleteButton: Text(
-            l10n.delete,
-            style: Theme.of(context).textTheme.button,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: BasePage(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        scrollView: false,
+        body: SafeArea(
+          child: PinCodeView(
+            title: l10n.enterYourPinCode,
+            passwordEnteredCallback: _onPasscodeEntered,
+            deleteButton: Text(
+              l10n.delete,
+              style: Theme.of(context).textTheme.button,
+            ),
+            cancelButton: Text(
+              l10n.cancel,
+              style: Theme.of(context).textTheme.button,
+            ),
+            cancelCallback: _onPasscodeCancelled,
+            isValidCallback: widget.isValidCallback,
+            shouldTriggerVerification: _verificationNotifier.stream,
           ),
-          cancelButton: Text(
-            l10n.cancel,
-            style: Theme.of(context).textTheme.button,
-          ),
-          cancelCallback: _onPasscodeCancelled,
-          isValidCallback: widget.isValidCallback,
-          shouldTriggerVerification: _verificationNotifier.stream,
         ),
       ),
     );
