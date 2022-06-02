@@ -59,6 +59,7 @@ class BottomBarPage extends StatelessWidget {
                   );
                   return;
                 }
+                Navigator.of(context).push<void>(SearchPage.route());
               },
             ),
             BottomBarItem(

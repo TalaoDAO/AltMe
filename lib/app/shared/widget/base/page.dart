@@ -49,9 +49,7 @@ class BasePage extends StatelessWidget {
       extendBody: extendBelow ?? false,
       backgroundColor:
           backgroundColor ?? Theme.of(context).colorScheme.background,
-      appBar: (titleLeading == null &&
-              titleTrailing == null &&
-              titleTrailing == null)
+      appBar: (title == null && titleLeading == null && titleTrailing == null)
           ? null
           : CustomAppBar(
               title: title,
