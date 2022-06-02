@@ -121,17 +121,12 @@ class OutlinedButtonText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 20,
-      child: Center(
-        child: MyText(
-          text.toUpperCase(),
-          style: TextStyle(
-            color: textColor ?? Theme.of(context).colorScheme.onOutlineButton,
-            fontSize: fontSize,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+    return Text(
+      text.toUpperCase(),
+      style: TextStyle(
+        color: textColor ?? Theme.of(context).colorScheme.onOutlineButton,
+        fontSize: fontSize,
+        fontWeight: FontWeight.w700,
       ),
     );
   }
