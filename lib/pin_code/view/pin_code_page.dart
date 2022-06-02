@@ -14,11 +14,9 @@ class PinCodePage extends StatefulWidget {
 
   final VoidCallback isValidCallback;
 
-  static MaterialPageRoute route(VoidCallback isValidCallback) {
+  static MaterialPageRoute route({required VoidCallback isValidCallback}) {
     return MaterialPageRoute<void>(
-      builder: (_) => PinCodePage(
-        isValidCallback: isValidCallback,
-      ),
+      builder: (_) => PinCodePage(isValidCallback: isValidCallback),
       settings: const RouteSettings(name: '/pinCodePage'),
     );
   }

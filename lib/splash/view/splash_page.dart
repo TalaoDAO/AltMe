@@ -142,12 +142,13 @@ class _SplashViewState extends State<SplashView> {
           listener: (BuildContext context, SplashState state) {
             if (state.status == SplashStatus.routeToPassCode) {
               Navigator.of(context).push<void>(
-                PinCodePage.route(() {
+                PinCodePage.route(isValidCallback: () {
                   Navigator.of(context).push<void>(HomePage.route());
                 }),
               );
             }
             if (state.status == SplashStatus.routeToHomePage) {
+              // TODO(Taleb): Naviate to homepage in different style
               Navigator.of(context).push<void>(HomePage.route());
             }
           },

@@ -65,6 +65,7 @@ class OnBoardingTosPage extends StatelessWidget {
                     } else if (routeType == WalletRouteType.recover) {
                       routeTo = OnBoardingRecoveryPage.route();
                     } else {
+                      // TODO(Taleb): Naviate to homepage in different style
                       routeTo = HomePage.route();
                     }
 
@@ -72,15 +73,19 @@ class OnBoardingTosPage extends StatelessWidget {
                         await getSecureStorage.get(SecureStorageKeys.pinCode);
                     if (pinCode?.isEmpty ?? true) {
                       await Navigator.of(context).push<void>(
-                        EnterNewPinCodePage.route(() {
-                          Navigator.of(context).push<void>(routeTo);
-                        }),
+                        EnterNewPinCodePage.route(
+                          isValidCallback: () {
+                            Navigator.of(context).push<void>(routeTo);
+                          },
+                        ),
                       );
                     } else {
                       await Navigator.of(context).push<void>(
-                        PinCodePage.route(() {
-                          Navigator.of(context).push<void>(routeTo);
-                        }),
+                        PinCodePage.route(
+                          isValidCallback: () {
+                            Navigator.of(context).push<void>(routeTo);
+                          },
+                        ),
                       );
                     }
                   },

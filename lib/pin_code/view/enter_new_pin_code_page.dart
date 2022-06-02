@@ -12,7 +12,7 @@ class EnterNewPinCodePage extends StatefulWidget {
 
   final VoidCallback isValidCallback;
 
-  static MaterialPageRoute route(VoidCallback isValidCallback) {
+  static MaterialPageRoute route({required VoidCallback isValidCallback}) {
     return MaterialPageRoute<void>(
       builder: (_) => EnterNewPinCodePage(
         isValidCallback: isValidCallback,
