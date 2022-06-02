@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/gen_phrase/view/onboarding_gen_phrase.dart';
+import 'package:altme/onboarding/recovery/view/onboarding_recovery.dart';
 import 'package:altme/pin_code/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -9,15 +12,15 @@ import 'package:secure_storage/secure_storage.dart';
 class PinCodePage extends StatefulWidget {
   const PinCodePage({
     Key? key,
-    required this.isValidCallback,
+    required this.routeType,
   }) : super(key: key);
 
-  final VoidCallback isValidCallback;
+  final WalletRouteType routeType;
 
-  static MaterialPageRoute route({required VoidCallback isValidCallback}) {
+  static MaterialPageRoute route(WalletRouteType routeType) {
     return MaterialPageRoute<void>(
       builder: (_) => PinCodePage(
-        isValidCallback: isValidCallback,
+        routeType: routeType,
       ),
       settings: const RouteSettings(name: '/pinCodePage'),
     );
@@ -61,7 +64,19 @@ class _PinCodePageState extends State<PinCodePage> {
             style: Theme.of(context).textTheme.button,
           ),
           cancelCallback: _onPasscodeCancelled,
-          isValidCallback: widget.isValidCallback,
+          isValidCallback: () {
+            Route? routeTo;
+            if (widget.routeType == WalletRouteType.create) {
+              routeTo = OnBoardingGenPhrasePage.route();
+            } else if (widget.routeType == WalletRouteType.recover) {
+              routeTo = OnBoardingRecoveryPage.route();
+            } else if (widget.routeType == WalletRouteType.home) {
+              routeTo = HomePage.route();
+            }
+            if (routeTo != null) {
+              Navigator.of(context).pushReplacement<void, void>(routeTo);
+            }
+          },
           shouldTriggerVerification: _verificationNotifier.stream,
         ),
       ),

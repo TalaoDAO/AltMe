@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/gen_phrase/view/onboarding_gen_phrase.dart';
 import 'package:altme/onboarding/recovery/view/onboarding_recovery.dart';
@@ -68,11 +69,17 @@ class _ConfirmPinCodePageState extends State<ConfirmPinCodePage> {
           ),
           cancelCallback: _onPasscodeCancelled,
           isValidCallback: () {
-            final Route routeTo = widget.routeType == WalletRouteType.create
-                ? OnBoardingGenPhrasePage.route()
-                : OnBoardingRecoveryPage.route();
-
-            Navigator.of(context).pushReplacement<void, void>(routeTo);
+            Route? routeTo;
+            if (widget.routeType == WalletRouteType.create) {
+              routeTo = OnBoardingGenPhrasePage.route();
+            } else if (widget.routeType == WalletRouteType.recover) {
+              routeTo = OnBoardingRecoveryPage.route();
+            } else if (widget.routeType == WalletRouteType.home) {
+              routeTo = HomePage.route();
+            }
+            if (routeTo != null) {
+              Navigator.of(context).pushReplacement<void, void>(routeTo);
+            }
           },
           shouldTriggerVerification: _verificationNotifier.stream,
         ),
