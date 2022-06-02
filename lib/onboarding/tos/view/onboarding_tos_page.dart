@@ -59,14 +59,11 @@ class OnBoardingTosPage extends StatelessWidget {
                 BaseButton.primary(
                   context: context,
                   onPressed: () async {
-                    Route routeTo;
+                    late Route routeTo;
                     if (routeType == WalletRouteType.create) {
                       routeTo = OnBoardingGenPhrasePage.route();
                     } else if (routeType == WalletRouteType.recover) {
                       routeTo = OnBoardingRecoveryPage.route();
-                    } else {
-                      // TODO(Taleb): Naviate to homepage in different style
-                      routeTo = HomePage.route();
                     }
 
                     final pinCode =
