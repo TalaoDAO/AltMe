@@ -9,15 +9,15 @@ import 'package:secure_storage/secure_storage.dart';
 class PinCodePage extends StatefulWidget {
   const PinCodePage({
     Key? key,
-    required this.routeTo,
+    required this.isValidCallback,
   }) : super(key: key);
 
-  final Route routeTo;
+  final VoidCallback isValidCallback;
 
-  static MaterialPageRoute route(Route routeTo) {
+  static MaterialPageRoute route({required VoidCallback isValidCallback}) {
     return MaterialPageRoute<void>(
       builder: (_) => PinCodePage(
-        routeTo: routeTo,
+        isValidCallback: isValidCallback,
       ),
       settings: const RouteSettings(name: '/pinCodePage'),
     );
@@ -61,9 +61,7 @@ class _PinCodePageState extends State<PinCodePage> {
             style: Theme.of(context).textTheme.button,
           ),
           cancelCallback: _onPasscodeCancelled,
-          isValidCallback: () {
-            Navigator.of(context).pushReplacement<void, void>(widget.routeTo);
-          },
+          isValidCallback: widget.isValidCallback,
           shouldTriggerVerification: _verificationNotifier.stream,
         ),
       ),

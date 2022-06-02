@@ -141,13 +141,17 @@ class _SplashViewState extends State<SplashView> {
         BlocListener<SplashCubit, SplashState>(
           listener: (BuildContext context, SplashState state) {
             if (state.status == SplashStatus.routeToPassCode) {
-              Navigator.of(context).pushReplacement<void, void>(
-                PinCodePage.route(HomePage.route()),
+              Navigator.of(context).push<void>(
+                PinCodePage.route(
+                  isValidCallback: () {
+                    Navigator.of(context)
+                        .pushReplacement<void, void>(HomePage.route());
+                  },
+                ),
               );
             }
             if (state.status == SplashStatus.routeToHomePage) {
-              Navigator.of(context)
-                  .pushReplacement<void, void>(HomePage.route());
+              Navigator.of(context).push<void>(HomePage.route());
             }
           },
         ),

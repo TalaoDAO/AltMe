@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/gen_phrase/view/onboarding_gen_phrase.dart';
+import 'package:altme/onboarding/recovery/view/onboarding_recovery.dart';
 import 'package:altme/pin_code/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -10,17 +12,18 @@ class ConfirmPinCodePage extends StatefulWidget {
   const ConfirmPinCodePage({
     Key? key,
     required this.storedPassword,
-    required this.routeTo,
+    required this.routeType,
   }) : super(key: key);
 
   final String storedPassword;
-  final Route routeTo;
+  final WalletRouteType routeType;
 
-  static MaterialPageRoute route(String storedPassword, Route routeTo) {
+  static MaterialPageRoute route(
+      String storedPassword, WalletRouteType routeType) {
     return MaterialPageRoute<void>(
       builder: (_) => ConfirmPinCodePage(
         storedPassword: storedPassword,
-        routeTo: routeTo,
+        routeType: routeType,
       ),
       settings: const RouteSettings(name: '/confirmPinCodePage'),
     );
@@ -65,7 +68,11 @@ class _ConfirmPinCodePageState extends State<ConfirmPinCodePage> {
           ),
           cancelCallback: _onPasscodeCancelled,
           isValidCallback: () {
-            Navigator.of(context).pushReplacement<void, void>(widget.routeTo);
+            final Route routeTo = widget.routeType == WalletRouteType.create
+                ? OnBoardingGenPhrasePage.route()
+                : OnBoardingRecoveryPage.route();
+
+            Navigator.of(context).pushReplacement<void, void>(routeTo);
           },
           shouldTriggerVerification: _verificationNotifier.stream,
         ),

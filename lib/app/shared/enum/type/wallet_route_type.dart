@@ -1,1 +1,1 @@
-enum WalletRouteType { create, recover }
+enum WalletRouteType { create, recover,home }

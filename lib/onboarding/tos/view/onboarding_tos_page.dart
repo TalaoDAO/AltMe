@@ -22,67 +22,64 @@ class OnBoardingTosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: BasePage(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        title: l10n.onBoardingTosTitle,
-        titleLeading: const BackLeadingButton(),
-        scrollView: false,
-        padding: EdgeInsets.zero,
-        useSafeArea: false,
-        navigation: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: Theme.of(context).colorScheme.shadow,
-                offset: const Offset(-1, -1),
-                blurRadius: 4,
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 12,
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    l10n.onBoardingTosText,
-                    style: Theme.of(context).textTheme.bodyText2,
-                  ),
-                  const SizedBox(height: 20),
-                  BaseButton.primary(
-                    context: context,
-                    onPressed: () async {
-                      final routeTo = routeType == WalletRouteType.create
-                          ? OnBoardingGenPhrasePage.route()
-                          : OnBoardingRecoveryPage.route();
+    return BasePage(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      title: l10n.onBoardingTosTitle,
+      titleLeading: const BackLeadingButton(),
+      scrollView: false,
+      padding: EdgeInsets.zero,
+      useSafeArea: false,
+      navigation: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Theme.of(context).colorScheme.shadow,
+              offset: const Offset(-1, -1),
+              blurRadius: 4,
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 12,
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  l10n.onBoardingTosText,
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+                const SizedBox(height: 20),
+                BaseButton.primary(
+                  context: context,
+                  onPressed: () async {
+                    final routeTo = routeType == WalletRouteType.create
+                        ? OnBoardingGenPhrasePage.route()
+                        : OnBoardingRecoveryPage.route();
 
-                      final pinCode =
-                          await getSecureStorage.get(SecureStorageKeys.pinCode);
-                      if (pinCode?.isEmpty ?? true) {
-                        await Navigator.of(context)
-                            .pushReplacement<void, void>(PinCodePage.route(routeTo));
-                      } else {
-                        await Navigator.of(context)
-                            .pushReplacement<void, void>(routeTo);
-                      }
-                    },
-                    child: Text(l10n.onBoardingTosButton),
-                  )
-                ],
-              ),
+                    final pinCode =
+                        await getSecureStorage.get(SecureStorageKeys.pinCode);
+                    if (pinCode?.isEmpty ?? true) {
+                      await Navigator.of(context).push<void>(
+                        PinCodePage.route(routeTo),
+                      );
+                    } else {
+                      await Navigator.of(context).push<void>(routeTo);
+                    }
+                  },
+                  child: Text(l10n.onBoardingTosButton),
+                )
+              ],
             ),
           ),
         ),
-        body: const DisplayTerms(),
       ),
+      body: const DisplayTerms(),
     );
   }
 }
