@@ -49,11 +49,13 @@ class BasePage extends StatelessWidget {
       extendBody: extendBelow ?? false,
       backgroundColor:
           backgroundColor ?? Theme.of(context).colorScheme.background,
-      appBar: CustomAppBar(
-        title: title,
-        leading: titleLeading,
-        trailing: titleTrailing,
-      ),
+      appBar: (title == null && titleLeading == null && titleTrailing == null)
+          ? null
+          : CustomAppBar(
+              title: title,
+              leading: titleLeading,
+              trailing: titleTrailing,
+            ),
       bottomNavigationBar: navigation,
       drawer: drawer,
       body: scrollView
