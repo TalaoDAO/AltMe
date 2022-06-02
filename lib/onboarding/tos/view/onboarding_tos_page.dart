@@ -73,13 +73,15 @@ class OnBoardingTosPage extends StatelessWidget {
                     if (pinCode?.isEmpty ?? true) {
                       await Navigator.of(context).push<void>(
                         EnterNewPinCodePage.route(() {
-                          Navigator.of(context).push<void>(routeTo);
+                          Navigator.of(context)
+                              .pushReplacement<void, void>(routeTo);
                         }),
                       );
                     } else {
                       await Navigator.of(context).push<void>(
                         PinCodePage.route(() {
-                          Navigator.of(context).push<void>(routeTo);
+                          Navigator.of(context)
+                              .pushReplacement<void, void>(routeTo);
                         }),
                       );
                     }
