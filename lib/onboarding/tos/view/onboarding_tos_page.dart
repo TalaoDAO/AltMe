@@ -75,7 +75,8 @@ class OnBoardingTosPage extends StatelessWidget {
                       await Navigator.of(context).push<void>(
                         EnterNewPinCodePage.route(
                           isValidCallback: () {
-                            Navigator.of(context).push<void>(routeTo);
+                            Navigator.of(context)
+                                .pushReplacement<void, void>(routeTo);
                           },
                         ),
                       );
@@ -83,7 +84,8 @@ class OnBoardingTosPage extends StatelessWidget {
                       await Navigator.of(context).push<void>(
                         PinCodePage.route(
                           isValidCallback: () {
-                            Navigator.of(context).push<void>(routeTo);
+                            Navigator.of(context)
+                                .pushReplacement<void, void>(routeTo);
                           },
                         ),
                       );
