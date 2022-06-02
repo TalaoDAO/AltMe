@@ -110,17 +110,6 @@ class DrawerView extends StatelessWidget {
               ),
               DrawerItem(
                 icon: IconStrings.terms,
-                title: 'Test Pin Page',
-                trailing: Icon(
-                  Icons.chevron_right,
-                  size: 24,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                onTap: () =>
-                    Navigator.of(context).push<void>(PinCodePage.route()),
-              ),
-              DrawerItem(
-                icon: IconStrings.terms,
                 title: l10n.onBoardingTosTitle,
                 trailing: Icon(
                   Icons.chevron_right,
