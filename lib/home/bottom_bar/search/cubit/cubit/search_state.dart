@@ -5,6 +5,7 @@ class SearchState extends Equatable {
   SearchState({
     this.status = AppStatus.init,
     this.message,
+    this.searchText = '',
     List<CredentialModel>? credentials,
   }) : credentials = credentials ?? [];
 
@@ -13,10 +14,15 @@ class SearchState extends Equatable {
 
   final AppStatus status;
   final List<CredentialModel> credentials;
+  final String searchText;
   final StateMessage? message;
 
-  SearchState loading() {
-    return SearchState(status: AppStatus.loading, credentials: credentials);
+  SearchState loading({String? searchText}) {
+    return SearchState(
+      status: AppStatus.loading,
+      credentials: credentials,
+      searchText: searchText ?? this.searchText,
+    );
   }
 
   SearchState error({required MessageHandler messageHandler}) {
@@ -24,6 +30,7 @@ class SearchState extends Equatable {
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       credentials: credentials,
+      searchText: searchText,
     );
   }
 
@@ -33,6 +40,7 @@ class SearchState extends Equatable {
     return SearchState(
       status: AppStatus.idle,
       credentials: credentials ?? this.credentials,
+      searchText: searchText,
     );
   }
 
@@ -47,11 +55,12 @@ class SearchState extends Equatable {
           ? null
           : StateMessage.success(messageHandler: messageHandler),
       credentials: credentials ?? this.credentials,
+      searchText: searchText,
     );
   }
 
   Map<String, dynamic> toJson() => _$SearchStateToJson(this);
 
   @override
-  List<Object?> get props => [status, message, credentials];
+  List<Object?> get props => [status, message, credentials, searchText];
 }

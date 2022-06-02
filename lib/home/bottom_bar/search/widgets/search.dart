@@ -20,7 +20,6 @@ class _SearchState extends State<Search> {
     Future.delayed(Duration.zero, () {
       searchController.addListener(() {
         context.read<SearchCubit>().searchWallet(searchController.text);
-        setState(() {});
       });
     });
     super.initState();
@@ -36,27 +35,30 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BaseTextField(
-      prefixIcon: searchController.text.isNotEmpty
-          ? InkWell(
-              onTap: () async {
-                searchController.text = '';
-                focusNode.unfocus();
-                await context
-                    .read<SearchCubit>()
-                    .loadAllCredentialsFromRepository();
-                setState(() {});
-              },
-              child: Icon(
-                Icons.cancel,
-                color: Theme.of(context).colorScheme.secondaryContainer,
-              ),
-            )
-          : const SizedBox.shrink(),
-      suffixIcon: const Icon(Icons.search),
-      label: l10n.search,
-      controller: searchController,
-      focusNode: focusNode,
+    return BlocBuilder<SearchCubit, SearchState>(
+      builder: (context, state) {
+        return BaseTextField(
+          prefixIcon: state.searchText.isNotEmpty
+              ? InkWell(
+                  onTap: () async {
+                    searchController.text = '';
+                    focusNode.unfocus();
+                    await context
+                        .read<SearchCubit>()
+                        .loadAllCredentialsFromRepository();
+                  },
+                  child: Icon(
+                    Icons.cancel,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                )
+              : const SizedBox.shrink(),
+          suffixIcon: const Icon(Icons.search),
+          label: l10n.search,
+          controller: searchController,
+          focusNode: focusNode,
+        );
+      },
     );
   }
 }

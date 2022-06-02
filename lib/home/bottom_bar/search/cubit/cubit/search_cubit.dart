@@ -35,14 +35,13 @@ class SearchCubit extends Cubit<SearchState> {
 
   Future loadAllCredentialsFromRepository() async {
     await repository.findAll(/* filters */).then((values) {
-      emit(
-        state.populate(credentials: values),
-      );
+      emit(state.populate(credentials: values));
     });
   }
 
-  Future searchWallet(String search) async {
-    final searchKeywords = search.split(' ');
+  Future searchWallet(String searchText) async {
+    emit(state.loading(searchText: searchText));
+    final searchKeywords = searchText.split(' ');
 
     /// We remove empty strings from the list of keyWords
     searchKeywords.removeWhere((element) => element == '');
@@ -59,9 +58,7 @@ class SearchCubit extends Cubit<SearchState> {
         }
         return isMatch;
       }).toList();
-      emit(
-        state.populate(credentials: searchList),
-      );
+      emit(state.populate(credentials: searchList));
     }
   }
 
