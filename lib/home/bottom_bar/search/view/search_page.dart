@@ -1,10 +1,10 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/home/bottom_bar/search/cubit/cubit/search_cubit.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class SearchPage extends StatelessWidget {
   const SearchPage({
@@ -12,7 +12,13 @@ class SearchPage extends StatelessWidget {
   }) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (context) => const SearchPage(),
+        builder: (context) => BlocProvider(
+          create: (context) => SearchCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            repository: CredentialsRepository(secure_storage.getSecureStorage),
+          ),
+          child: const SearchPage(),
+        ),
         settings: const RouteSettings(name: '/searchPage'),
       );
 
@@ -23,7 +29,7 @@ class SearchPage extends StatelessWidget {
       title: l10n.search,
       titleLeading: const BackLeadingButton(),
       padding: EdgeInsets.zero,
-      body: BlocBuilder<WalletCubit, WalletState>(
+      body: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
           var _credentialList = <CredentialModel>[];
           _credentialList = state.credentials;

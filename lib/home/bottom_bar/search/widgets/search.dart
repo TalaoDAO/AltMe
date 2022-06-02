@@ -1,6 +1,6 @@
 import 'package:altme/app/shared/widget/base/text_field.dart';
+import 'package:altme/home/bottom_bar/search/cubit/cubit/search_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +19,7 @@ class _SearchState extends State<Search> {
   void initState() {
     Future.delayed(Duration.zero, () {
       searchController.addListener(() {
-        context.read<WalletCubit>().searchWallet(searchController.text);
+        context.read<SearchCubit>().searchWallet(searchController.text);
         setState(() {});
       });
     });
@@ -43,7 +43,7 @@ class _SearchState extends State<Search> {
                 searchController.text = '';
                 focusNode.unfocus();
                 await context
-                    .read<WalletCubit>()
+                    .read<SearchCubit>()
                     .loadAllCredentialsFromRepository();
                 setState(() {});
               },
