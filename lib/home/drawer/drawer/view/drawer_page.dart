@@ -166,6 +166,41 @@ class DrawerView extends StatelessWidget {
                     }
                   },
                 ),
+              DrawerItem(
+                icon: IconStrings.key,
+                title: l10n.changePinCode,
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 24,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                onTap: () async {
+                  //method for set new pin code
+                  Future<void> setNewPinCode() async {
+                    Navigator.of(context).pop();
+                    await Navigator.of(context).push<void>(
+                      EnterNewPinCodePage.route(
+                        isValidCallback: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    );
+                  }
+
+                  final pinCode =
+                      await getSecureStorage.get(SecureStorageKeys.pinCode);
+                  if (pinCode?.isEmpty ?? true) {
+                    await setNewPinCode();
+                  } else {
+                    await Navigator.of(context).push<void>(
+                      PinCodePage.route(
+                        isValidCallback: setNewPinCode,
+                        restrictToBack: false,
+                      ),
+                    );
+                  }
+                },
+              ),
             ],
           ),
         ),
