@@ -6,6 +6,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class DrawerPage extends StatelessWidget {
   const DrawerPage({Key? key}) : super(key: key);
@@ -54,19 +55,36 @@ class DrawerView extends StatelessWidget {
                 icon: IconStrings.reset,
                 title: l10n.resetWalletButton,
                 onTap: () async {
-                  final confirm = await showDialog<bool>(
-                        context: context,
-                        builder: (_) => ConfirmDialog(
-                          title: l10n.resetWalletConfirmationText,
-                          yes: l10n.showDialogYes,
-                          no: l10n.showDialogNo,
-                          dialogColor: Theme.of(context).colorScheme.error,
-                          icon: IconStrings.trash,
-                        ),
-                      ) ??
-                      false;
-                  if (confirm) {
-                    await context.read<WalletCubit>().resetWallet();
+                  // method for reset wallet
+                  Future<void> resetButtonPressed() async {
+                    Navigator.of(context).pop();
+                    final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (_) => ConfirmDialog(
+                            title: l10n.resetWalletConfirmationText,
+                            yes: l10n.showDialogYes,
+                            no: l10n.showDialogNo,
+                            dialogColor: Theme.of(context).colorScheme.error,
+                            icon: IconStrings.trash,
+                          ),
+                        ) ??
+                        false;
+                    if (confirm) {
+                      await context.read<WalletCubit>().resetWallet();
+                    }
+                  }
+
+                  final pinCode =
+                      await getSecureStorage.get(SecureStorageKeys.pinCode);
+                  if (pinCode?.isEmpty ?? true) {
+                    await resetButtonPressed.call();
+                  } else {
+                    await Navigator.of(context).push<void>(
+                      PinCodePage.route(
+                        isValidCallback: resetButtonPressed,
+                        restrictToBack: false,
+                      ),
+                    );
                   }
                 },
               ),
