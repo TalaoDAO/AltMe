@@ -10,13 +10,21 @@ class PinCodePage extends StatefulWidget {
   const PinCodePage({
     Key? key,
     required this.isValidCallback,
+    this.restrictToBack = true,
   }) : super(key: key);
 
   final VoidCallback isValidCallback;
+  final bool restrictToBack;
 
-  static MaterialPageRoute route({required VoidCallback isValidCallback}) {
+  static MaterialPageRoute route({
+    required VoidCallback isValidCallback,
+    bool restrictToBack = true,
+  }) {
     return MaterialPageRoute<void>(
-      builder: (_) => PinCodePage(isValidCallback: isValidCallback),
+      builder: (_) => PinCodePage(
+        isValidCallback: isValidCallback,
+        restrictToBack: restrictToBack,
+      ),
       settings: const RouteSettings(name: '/pinCodePage'),
     );
   }
@@ -44,7 +52,7 @@ class _PinCodePageState extends State<PinCodePage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => !widget.restrictToBack,
       child: BasePage(
         backgroundColor: Theme.of(context).colorScheme.background,
         scrollView: false,
@@ -77,6 +85,6 @@ class _PinCodePageState extends State<PinCodePage> {
   }
 
   void _onPasscodeCancelled() {
-    Navigator.maybePop(context);
+    Navigator.of(context).maybePop();
   }
 }
