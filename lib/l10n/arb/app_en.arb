@@ -305,5 +305,9 @@
   "create_wallet": "Create Wallet",
   "restore_wallet": "Restore Wallet",
   "create_wallet_message": "You need to create your wallet first",
-  "enterYourPinCode": "Enter your pin code"
+  "enterYourPinCode": "Enter your pin code",
+  "gamingCards": "Gaming Cards",
+  "identityCards": "Identity Cards",
+  "communityCards": "Community Cards",
+  "otherCards": "Other Cards"
 }

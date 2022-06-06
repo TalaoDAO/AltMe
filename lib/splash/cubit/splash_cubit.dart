@@ -29,6 +29,7 @@ class SplashCubit extends Cubit<SplashState> {
       secureStorageProvider: secureStorageProvider,
       didCubit: didCubit,
     );
+
     if (hasWallet) {
       homeCubit.emitHasWallet();
       emit(state.copyWith(status: SplashStatus.routeToPassCode));

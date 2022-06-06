@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/enum/type/credential_subject_type/credential_subject_type.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -15,6 +15,7 @@ class Over18Model extends CredentialSubjectModel {
           type: type,
           issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.over18,
+          credentialCategory: CredentialCategory.identityCards,
         );
 
   factory Over18Model.fromJson(Map<String, dynamic> json) =>
