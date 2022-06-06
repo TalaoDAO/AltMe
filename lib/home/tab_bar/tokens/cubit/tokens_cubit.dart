@@ -30,6 +30,7 @@ class TokensCubit extends Cubit<TokensState> {
       final data = List<TokenModel>.from(<TokenModel>[xtzToken]).toList();
       emit(state.success(data: data));
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.error(
           messageHandler: ResponseMessage(
