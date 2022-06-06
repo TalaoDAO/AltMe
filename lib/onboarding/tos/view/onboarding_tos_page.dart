@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/gen_phrase/view/onboarding_gen_phrase.dart';
 import 'package:altme/onboarding/recovery/view/onboarding_recovery.dart';

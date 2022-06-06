@@ -308,5 +308,9 @@
   "enterYourPinCode": "Enter your pin code",
   "changePinCode": "Change pin code",
   "tryAgain": "Try again",
-  "yourPinCodeChangedSuccessfully": "Your pin code changed successfully"
+  "yourPinCodeChangedSuccessfully": "Your pin code changed successfully",
+  "gamingCards": "Gaming Cards",
+  "identityCards": "Identity Cards",
+  "communityCards": "Community Cards",
+  "otherCards": "Other Cards"
 }

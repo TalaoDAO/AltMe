@@ -11,6 +11,7 @@ class CredentialSubjectModel {
     this.type,
     this.issuedBy,
     required this.credentialSubjectType,
+    required this.credentialCategory,
   });
 
   factory CredentialSubjectModel.fromJson(Map<String, dynamic> json) {
@@ -54,6 +55,7 @@ class CredentialSubjectModel {
   @JsonKey(fromJson: fromJsonAuthor)
   final Author? issuedBy;
   final CredentialSubjectType credentialSubjectType;
+  final CredentialCategory credentialCategory;
 
   Map<String, dynamic> toJson() => _$CredentialSubjectModelToJson(this);
 

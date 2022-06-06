@@ -414,4 +414,10 @@ extension CustomTextTheme on TextTheme {
         fontSize: 14,
         fontWeight: FontWeight.w400,
       );
+
+  TextStyle get credentialCategoryTitle => GoogleFonts.nunito(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xffEDEAF5),
+      );
 }

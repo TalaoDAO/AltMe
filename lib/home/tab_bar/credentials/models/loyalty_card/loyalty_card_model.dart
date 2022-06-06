@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/enum/type/credential_subject_type/credential_subject_type.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/home/tab_bar/credentials/models/author/author.dart';
 import 'package:altme/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -23,6 +23,7 @@ class LoyaltyCardModel extends CredentialSubjectModel {
           type: type,
           issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.loyaltyCard,
+          credentialCategory: CredentialCategory.communityCards,
         );
 
   factory LoyaltyCardModel.fromJson(Map<String, dynamic> json) =>
