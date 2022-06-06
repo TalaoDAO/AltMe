@@ -14,7 +14,7 @@ class TokenList extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         itemBuilder: (_, index) => TokenItem(
           logoPath: tokenList[index].logoPath,
           name: tokenList[index].name,

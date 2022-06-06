@@ -20,7 +20,7 @@ class NftListShimmer extends StatelessWidget {
         const SizedBox(
           height: 8,
         ),
-        Flexible(
+        Expanded(
           child: RefreshIndicator(
             onRefresh: onRefresh,
             child: GridView.builder(

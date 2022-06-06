@@ -11,7 +11,8 @@ class TokenListShimmer extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
+        //physics: const BouncingScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         itemBuilder: (_, __) => const TokenItemShimmer(),
         itemCount: 3,
       ),
