@@ -306,5 +306,6 @@
   "restore_wallet": "Restore Wallet",
   "create_wallet_message": "You need to create your wallet first",
   "enterYourPinCode": "Enter your pin code",
-  "changePinCode": "Change pin code"
+  "changePinCode": "Change pin code",
+  "tryAgain": "Try again"
 }
