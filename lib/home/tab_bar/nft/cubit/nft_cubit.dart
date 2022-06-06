@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'nft_cubit.g.dart';
+
 part 'nft_state.dart';
 
 class NftCubit extends Cubit<NftState> {
@@ -33,6 +34,7 @@ class NftCubit extends Cubit<NftState> {
       emit(state.success(data: data));
     } catch (e) {
       // TODO(all): handle error message localization and error message
+      if (isClosed) return;
       emit(
         state.error(
           messageHandler: ResponseMessage(
