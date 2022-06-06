@@ -33,6 +33,7 @@ class NftCubit extends Cubit<NftState> {
           .toList();
       emit(state.success(data: data));
     } catch (e) {
+      // TODO(all): handle error message localization and error message
       if (isClosed) return;
       emit(
         state.error(
