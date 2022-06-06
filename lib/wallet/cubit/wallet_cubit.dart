@@ -112,9 +112,6 @@ class WalletCubit extends Cubit<WalletState> {
     await secureStorageProvider.delete(SecureStorageKeys.key);
     await secureStorageProvider.delete(SecureStorageKeys.mnemonic);
     await secureStorageProvider.delete(SecureStorageKeys.data);
-
-    // TODO(bibash): remove this
-    await secureStorageProvider.delete(SecureStorageKeys.pinCode);
     await repository.deleteAll();
     await profileCubit.resetProfile();
     homeCubit.emitHasNoWallet();
