@@ -267,7 +267,7 @@ class _PinCodeViewState extends State<PinCodeView>
       final passCode = enteredPasscode + text;
       pinCodeViewCubit.setEnteredPasscode(passCode);
       if (passCode.length == widget.passwordDigits) {
-        widget.passwordEnteredCallback(enteredPasscode);
+        widget.passwordEnteredCallback(passCode);
       }
     }
   }
