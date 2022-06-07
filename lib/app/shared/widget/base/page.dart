@@ -61,6 +61,7 @@ class BasePage extends StatelessWidget {
       body: scrollView
           ? SingleChildScrollView(
               padding: padding,
+              physics: const BouncingScrollPhysics(),
               child: useSafeArea ? SafeArea(child: body) : body,
             )
           : Padding(
