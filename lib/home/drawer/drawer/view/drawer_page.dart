@@ -21,12 +21,20 @@ class DrawerView extends StatelessWidget {
   const DrawerView({Key? key}) : super(key: key);
 
   //method for set new pin code
-  Future<void> setNewPinCode(BuildContext context) async {
+  Future<void> setNewPinCode(
+      BuildContext context, AppLocalizations l10n) async {
+    Navigator.of(context).pop();
     Navigator.of(context).pop();
     await Navigator.of(context).push<void>(
       EnterNewPinCodePage.route(
         isValidCallback: () {
           Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.yourPinCodeChangedSuccessfully),
+              duration: const Duration(seconds: 3),
+            ),
+          );
         },
       ),
     );
@@ -192,11 +200,12 @@ class DrawerView extends StatelessWidget {
                   final pinCode =
                       await getSecureStorage.get(SecureStorageKeys.pinCode);
                   if (pinCode?.isEmpty ?? true) {
-                    await setNewPinCode(context);
+                    await setNewPinCode(context, l10n);
                   } else {
                     await Navigator.of(context).push<void>(
                       PinCodePage.route(
-                        isValidCallback: () => setNewPinCode.call(context),
+                        isValidCallback: () =>
+                            setNewPinCode.call(context, l10n),
                         restrictToBack: false,
                       ),
                     );

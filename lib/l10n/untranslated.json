@@ -148,7 +148,8 @@
     "create_wallet_message",
     "enterYourPinCode",
     "changePinCode",
-    "tryAgain"
+    "tryAgain",
+    "yourPinCodeChangedSuccessfully"
   ],
 
   "es": [
@@ -300,7 +301,8 @@
     "create_wallet_message",
     "enterYourPinCode",
     "changePinCode",
-    "tryAgain"
+    "tryAgain",
+    "yourPinCodeChangedSuccessfully"
   ],
 
   "fr": [
@@ -343,7 +345,8 @@
     "create_wallet_message",
     "enterYourPinCode",
     "changePinCode",
-    "tryAgain"
+    "tryAgain",
+    "yourPinCodeChangedSuccessfully"
   ],
 
   "it": [
@@ -497,6 +500,7 @@
     "create_wallet_message",
     "enterYourPinCode",
     "changePinCode",
-    "tryAgain"
+    "tryAgain",
+    "yourPinCodeChangedSuccessfully"
   ]
 }
