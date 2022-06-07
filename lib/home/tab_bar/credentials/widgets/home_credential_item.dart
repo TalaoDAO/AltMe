@@ -30,13 +30,14 @@ class RealCredentialItem extends StatelessWidget {
     final l10n = context.l10n;
     return BackgroundCard(
       color: Theme.of(context).colorScheme.credentialBackground,
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: Column(
         children: [
           Expanded(
             flex: 8,
             child: CredentialsListPageItem(
               credentialModel: credentialModel,
+              onTap: () {},
             ),
           ),
           Expanded(
@@ -64,25 +65,33 @@ class RealCredentialItem extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 2,
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        IconStrings.frame,
-                        height: 15,
-                      ),
-                      const SizedBox(width: 2),
-                      Expanded(
-                        child: MyText(
-                          l10n.details,
-                          style: Theme.of(context)
-                              .textTheme
-                              .credentialSurfaceText
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push<void>(
+                        CredentialsDetailsPage.route(credentialModel),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          IconStrings.frame,
+                          height: 15,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 2),
+                        Expanded(
+                          child: MyText(
+                            l10n.details,
+                            style: Theme.of(context)
+                                .textTheme
+                                .credentialSurfaceText
+                                .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
