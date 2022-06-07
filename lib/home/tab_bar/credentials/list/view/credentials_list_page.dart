@@ -84,10 +84,10 @@ class GamingCredentials extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 4,
             mainAxisSpacing: 4,
-            childAspectRatio: 1.2,
+            childAspectRatio: Sizes.homeCredentialRatio,
           ),
           itemCount: credentials.length,
-          itemBuilder: (_, index) => CredentialsListPageItem(
+          itemBuilder: (_, index) => HomeCredentialItem(
             credentialModel: credentials[index],
           ),
         ),
@@ -123,10 +123,10 @@ class CommunityCredentials extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 4,
             mainAxisSpacing: 4,
-            childAspectRatio: 1.2,
+            childAspectRatio: Sizes.homeCredentialRatio,
           ),
           itemCount: credentials.length,
-          itemBuilder: (_, index) => CredentialsListPageItem(
+          itemBuilder: (_, index) => HomeCredentialItem(
             credentialModel: credentials[index],
           ),
         ),
@@ -162,10 +162,10 @@ class IdentityCredentials extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 4,
             mainAxisSpacing: 4,
-            childAspectRatio: 1.2,
+            childAspectRatio: Sizes.homeCredentialRatio,
           ),
           itemCount: credentials.length,
-          itemBuilder: (_, index) => CredentialsListPageItem(
+          itemBuilder: (_, index) => HomeCredentialItem(
             credentialModel: credentials[index],
           ),
         ),
@@ -201,10 +201,10 @@ class OtherCredentials extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 4,
             mainAxisSpacing: 4,
-            childAspectRatio: 1.2,
+            childAspectRatio: Sizes.homeCredentialRatio,
           ),
           itemCount: credentials.length,
-          itemBuilder: (_, index) => CredentialsListPageItem(
+          itemBuilder: (_, index) => HomeCredentialItem(
             credentialModel: credentials[index],
           ),
         ),

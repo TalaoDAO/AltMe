@@ -161,6 +161,8 @@ extension CustomColorScheme on ColorScheme {
   Color get dialogText => const Color(0xFF8682A8);
 
   Color get tabBarNotSelected => const Color(0xFF280164);
+
+  Color get credentialBackground => const Color(0xFF211F33);
 }
 
 extension CustomTextTheme on TextTheme {
@@ -419,5 +421,11 @@ extension CustomTextTheme on TextTheme {
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: const Color(0xffEDEAF5),
+      );
+
+  TextStyle get credentialSurfaceText => GoogleFonts.nunito(
+        fontSize: 10,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xff00B267),
       );
 }
