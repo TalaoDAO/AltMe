@@ -116,16 +116,15 @@ class NumericKeyboard extends StatelessWidget {
                 ),
               ),
               child: Container(
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: keyboardUIConfig.digitFillColor,
                 ),
-                child: Center(
-                  child: Text(
-                    text,
-                    style: keyboardUIConfig.digitTextStyle,
-                    semanticsLabel: text,
-                  ),
+                child: Text(
+                  text,
+                  style: keyboardUIConfig.digitTextStyle,
+                  semanticsLabel: text,
                 ),
               ),
             ),

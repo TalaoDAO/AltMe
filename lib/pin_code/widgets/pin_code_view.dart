@@ -71,7 +71,7 @@ class _PinCodeViewState extends State<PinCodeView>
     streamSubscription =
         widget.shouldTriggerVerification?.listen(_showValidation);
     controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 400),
       vsync: this,
     );
     final Animation curve =
@@ -95,8 +95,8 @@ class _PinCodeViewState extends State<PinCodeView>
           return OrientationBuilder(
             builder: (context, orientation) {
               return orientation == Orientation.portrait
-                  ? _buildPortraitPasscodeScreen(state.enteredPasscode)
-                  : _buildLandscapePasscodeScreen(state.enteredPasscode);
+                  ? _buildPortraitPasscodeScreen()
+                  : _buildLandscapePasscodeScreen();
             },
           );
         },
@@ -111,7 +111,7 @@ class _PinCodeViewState extends State<PinCodeView>
     );
   }
 
-  Widget _buildPortraitPasscodeScreen(String enteredPasscode) => Stack(
+  Widget _buildPortraitPasscodeScreen() => Stack(
         children: [
           Positioned(
             child: Center(
@@ -131,12 +131,12 @@ class _PinCodeViewState extends State<PinCodeView>
                       builder: (_, __) {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: _buildCircles(enteredPasscode),
+                          children: _buildCircles(),
                         );
                       },
                     ),
                   ),
-                  _buildKeyboard(enteredPasscode),
+                  _buildKeyboard(),
                   widget.bottomWidget ?? Container()
                 ],
               ),
@@ -147,13 +147,13 @@ class _PinCodeViewState extends State<PinCodeView>
             right: 0,
             child: Align(
               alignment: Alignment.bottomRight,
-              child: _buildDeleteButton(enteredPasscode),
+              child: _buildDeleteButton(),
             ),
           ),
         ],
       );
 
-  Widget _buildLandscapePasscodeScreen(String enteredPasscode) => Stack(
+  Widget _buildLandscapePasscodeScreen() => Stack(
         children: [
           Positioned(
             child: Center(
@@ -184,7 +184,7 @@ class _PinCodeViewState extends State<PinCodeView>
                                     return Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children: _buildCircles(enteredPasscode),
+                                      children: _buildCircles(),
                                     );
                                   },
                                 ),
@@ -204,7 +204,7 @@ class _PinCodeViewState extends State<PinCodeView>
                         Container()
                     ],
                   ),
-                  _buildKeyboard(enteredPasscode),
+                  _buildKeyboard(),
                 ],
               ),
             ),
@@ -214,20 +214,20 @@ class _PinCodeViewState extends State<PinCodeView>
             right: 0,
             child: Align(
               alignment: Alignment.bottomRight,
-              child: _buildDeleteButton(enteredPasscode),
+              child: _buildDeleteButton(),
             ),
           )
         ],
       );
 
-  Widget _buildKeyboard(String enteredPass) => NumericKeyboard(
-        onKeyboardTap: (text) =>
-            _onKeyboardButtonPressed.call(text, enteredPass),
+  Widget _buildKeyboard() => NumericKeyboard(
+        onKeyboardTap: _onKeyboardButtonPressed,
         keyboardUIConfig: widget.keyboardUIConfig,
         digits: widget.digits,
       );
 
-  List<Widget> _buildCircles(String enteredPasscode) {
+  List<Widget> _buildCircles() {
+    final enteredPasscode = pinCodeViewCubit.state.enteredPasscode;
     final list = <Widget>[];
     final config = widget.circleUIConfig;
     final extraSize = animation.value;
@@ -246,7 +246,8 @@ class _PinCodeViewState extends State<PinCodeView>
     return list;
   }
 
-  void _onDeleteCancelButtonPressed(String enteredPasscode) {
+  void _onDeleteCancelButtonPressed() {
+    final enteredPasscode = pinCodeViewCubit.state.enteredPasscode;
     if (enteredPasscode.isNotEmpty) {
       pinCodeViewCubit.setEnteredPasscode(
         enteredPasscode.substring(0, enteredPasscode.length - 1),
@@ -258,9 +259,10 @@ class _PinCodeViewState extends State<PinCodeView>
     }
   }
 
-  void _onKeyboardButtonPressed(String text, String enteredPasscode) {
+  void _onKeyboardButtonPressed(String text) {
+    final enteredPasscode = pinCodeViewCubit.state.enteredPasscode;
     if (text == NumericKeyboard.deleteButton) {
-      _onDeleteCancelButtonPressed(enteredPasscode);
+      _onDeleteCancelButtonPressed();
       return;
     }
     if (enteredPasscode.length < widget.passwordDigits) {
@@ -301,7 +303,7 @@ class _PinCodeViewState extends State<PinCodeView>
 
   void _validationCallback() {
     if (widget.isValidCallback != null) {
-      widget.isValidCallback!();
+      widget.isValidCallback!.call();
     } else {
       Navigator.maybePop(context);
       log.warning(
@@ -310,9 +312,10 @@ class _PinCodeViewState extends State<PinCodeView>
     }
   }
 
-  Widget _buildDeleteButton(String passCode) {
+  Widget _buildDeleteButton() {
+    final passCode = pinCodeViewCubit.state.enteredPasscode;
     return CupertinoButton(
-      onPressed: () => _onDeleteCancelButtonPressed.call(passCode),
+      onPressed: _onDeleteCancelButtonPressed,
       child: Container(
         margin: widget.keyboardUIConfig.digitInnerMargin,
         child: passCode.isEmpty ? widget.cancelButton : widget.deleteButton,
