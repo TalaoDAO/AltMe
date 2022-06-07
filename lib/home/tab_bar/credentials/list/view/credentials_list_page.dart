@@ -14,16 +14,16 @@ class CredentialsListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      scrollView: false,
+      scrollView: true,
       padding: EdgeInsets.zero,
       backgroundColor: Theme.of(context).colorScheme.transparent,
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: const [
-          Expanded(child: GamingCredentials()),
-          Expanded(child: CommunityCredentials()),
-          Expanded(child: IdentityCredentials()),
-          Expanded(child: OtherCredentials()),
+          GamingCredentials(),
+          CommunityCredentials(),
+          IdentityCredentials(),
+          OtherCredentials(),
         ],
       ),
     );
@@ -49,6 +49,7 @@ class GamingCredentials extends StatelessWidget {
             .toList();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               '${l10n.gamingCards} (${_credentialList.length})',
@@ -57,19 +58,18 @@ class GamingCredentials extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            Flexible(
-              child: GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 4,
-                  mainAxisSpacing: 4,
-                  childAspectRatio: 1.2,
-                ),
-                itemCount: _credentialList.length,
-                itemBuilder: (_, index) => CredentialsListPageItem(
-                  credentialModel: _credentialList[index],
-                ),
+            GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 4,
+                childAspectRatio: 1.2,
+              ),
+              itemCount: _credentialList.length,
+              itemBuilder: (_, index) => CredentialsListPageItem(
+                credentialModel: _credentialList[index],
               ),
             ),
           ],
@@ -98,6 +98,7 @@ class CommunityCredentials extends StatelessWidget {
             .toList();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               '${l10n.communityCards} (${_credentialList.length})',
@@ -106,19 +107,18 @@ class CommunityCredentials extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            Flexible(
-              child: GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 4,
-                  mainAxisSpacing: 4,
-                  childAspectRatio: 1.2,
-                ),
-                itemCount: _credentialList.length,
-                itemBuilder: (_, index) => CredentialsListPageItem(
-                  credentialModel: _credentialList[index],
-                ),
+            GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 4,
+                childAspectRatio: 1.2,
+              ),
+              itemCount: _credentialList.length,
+              itemBuilder: (_, index) => CredentialsListPageItem(
+                credentialModel: _credentialList[index],
               ),
             ),
           ],
@@ -147,6 +147,7 @@ class IdentityCredentials extends StatelessWidget {
             .toList();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               '${l10n.identityCards} (${_credentialList.length})',
@@ -155,19 +156,18 @@ class IdentityCredentials extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            Flexible(
-              child: GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 4,
-                  mainAxisSpacing: 4,
-                  childAspectRatio: 1.2,
-                ),
-                itemCount: _credentialList.length,
-                itemBuilder: (_, index) => CredentialsListPageItem(
-                  credentialModel: _credentialList[index],
-                ),
+            GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 4,
+                childAspectRatio: 1.2,
+              ),
+              itemCount: _credentialList.length,
+              itemBuilder: (_, index) => CredentialsListPageItem(
+                credentialModel: _credentialList[index],
               ),
             ),
           ],
@@ -196,6 +196,7 @@ class OtherCredentials extends StatelessWidget {
             .toList();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               '${l10n.otherCards} (${_credentialList.length})',
@@ -204,19 +205,18 @@ class OtherCredentials extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            Flexible(
-              child: GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 4,
-                  mainAxisSpacing: 4,
-                  childAspectRatio: 1.2,
-                ),
-                itemCount: _credentialList.length,
-                itemBuilder: (_, index) => CredentialsListPageItem(
-                  credentialModel: _credentialList[index],
-                ),
+            GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 4,
+                childAspectRatio: 1.2,
+              ),
+              itemCount: _credentialList.length,
+              itemBuilder: (_, index) => CredentialsListPageItem(
+                credentialModel: _credentialList[index],
               ),
             ),
           ],
