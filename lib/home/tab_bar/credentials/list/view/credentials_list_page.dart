@@ -51,7 +51,7 @@ class GamingCredentials extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              l10n.gamingCards,
+              '${l10n.gamingCards} (${_credentialList.length})',
               style: Theme.of(context).textTheme.credentialCategoryTitle,
             ),
             const SizedBox(
@@ -100,7 +100,7 @@ class CommunityCredentials extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              l10n.communityCards,
+              '${l10n.communityCards} (${_credentialList.length})',
               style: Theme.of(context).textTheme.credentialCategoryTitle,
             ),
             const SizedBox(
@@ -149,7 +149,7 @@ class IdentityCredentials extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              l10n.identityCards,
+              '${l10n.identityCards} (${_credentialList.length})',
               style: Theme.of(context).textTheme.credentialCategoryTitle,
             ),
             const SizedBox(
@@ -198,7 +198,7 @@ class OtherCredentials extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              l10n.otherCards,
+              '${l10n.otherCards} (${_credentialList.length})',
               style: Theme.of(context).textTheme.credentialCategoryTitle,
             ),
             const SizedBox(
