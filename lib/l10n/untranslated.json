@@ -147,7 +147,8 @@
     "restore_wallet",
     "create_wallet_message",
     "enterYourPinCode",
-    "changePinCode"
+    "changePinCode",
+    "tryAgain"
   ],
 
   "es": [
@@ -298,7 +299,8 @@
     "restore_wallet",
     "create_wallet_message",
     "enterYourPinCode",
-    "changePinCode"
+    "changePinCode",
+    "tryAgain"
   ],
 
   "fr": [
@@ -340,7 +342,8 @@
     "restore_wallet",
     "create_wallet_message",
     "enterYourPinCode",
-    "changePinCode"
+    "changePinCode",
+    "tryAgain"
   ],
 
   "it": [
@@ -493,6 +496,7 @@
     "restore_wallet",
     "create_wallet_message",
     "enterYourPinCode",
-    "changePinCode"
+    "changePinCode",
+    "tryAgain"
   ]
 }

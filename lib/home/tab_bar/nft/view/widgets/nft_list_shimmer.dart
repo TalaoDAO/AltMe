@@ -3,7 +3,9 @@ import 'package:altme/home/tab_bar/nft/view/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class NftListShimmer extends StatelessWidget {
-  const NftListShimmer({Key? key}) : super(key: key);
+  const NftListShimmer({Key? key, required this.onRefresh}) : super(key: key);
+
+  final RefreshCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +21,19 @@ class NftListShimmer extends StatelessWidget {
           height: 8,
         ),
         Expanded(
-          child: GridView.builder(
-            physics: const BouncingScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              childAspectRatio: Sizes.nftItemRatio,
+          child: RefreshIndicator(
+            onRefresh: onRefresh,
+            child: GridView.builder(
+              physics: const BouncingScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+                childAspectRatio: Sizes.nftItemRatio,
+              ),
+              itemBuilder: (_, __) => const NftItemShimmer(),
+              itemCount: 12,
             ),
-            itemBuilder: (_, __) => const NftItemShimmer(),
-            itemCount: 12,
           ),
         ),
       ],

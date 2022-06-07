@@ -6,9 +6,11 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class NftList extends StatelessWidget {
-  const NftList({Key? key, required this.nftList}) : super(key: key);
+  const NftList({Key? key, required this.nftList, required this.onRefresh})
+      : super(key: key);
 
   final List<NftModel> nftList;
+  final RefreshCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -25,22 +27,25 @@ class NftList extends StatelessWidget {
           height: 8,
         ),
         Expanded(
-          child: GridView.builder(
-            physics: const BouncingScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 4,
-              mainAxisSpacing: 4,
-              childAspectRatio: Sizes.nftItemRatio,
+          child: RefreshIndicator(
+            onRefresh: onRefresh,
+            child: GridView.builder(
+              physics: const BouncingScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 4,
+                childAspectRatio: Sizes.nftItemRatio,
+              ),
+              itemBuilder: (_, index) => NftItem(
+                assetUrl: nftList[index]
+                    .displayUri
+                    .replaceAll('ipfs://', 'https://ipfs.io/ipfs/'),
+                assetValue: '${nftList[index].balance} XTZ',
+                description: nftList[index].name,
+              ),
+              itemCount: nftList.length,
             ),
-            itemBuilder: (_, index) => NftItem(
-              assetUrl: nftList[index]
-                  .displayUri
-                  .replaceAll('ipfs://', 'https://ipfs.io/ipfs/'),
-              assetValue: '${nftList[index].balance} XTZ',
-              description: nftList[index].name,
-            ),
-            itemCount: nftList.length,
           ),
         ),
       ],

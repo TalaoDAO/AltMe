@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/home/tab_bar/tokens/view/widgets/widgets.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -29,18 +30,24 @@ class TokenView extends StatefulWidget {
 class _TokenViewState extends State<TokenView> {
   @override
   void initState() {
-    context.read<TokensCubit>().getBalanceOfAssetList();
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      context.read<TokensCubit>().getBalanceOfAssetList();
+    });
     super.initState();
+  }
+
+  Future<void> onRefresh() async {
+    await context.read<TokensCubit>().getBalanceOfAssetList();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BasePage(
       scrollView: false,
       padding: EdgeInsets.zero,
       backgroundColor: Theme.of(context).colorScheme.transparent,
       body: Column(
-        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -50,17 +57,34 @@ class _TokenViewState extends State<TokenView> {
             child: BlocBuilder<TokensCubit, TokensState>(
               bloc: context.read<TokensCubit>(),
               builder: (_, state) {
-                if (state.status == AppStatus.loading) {
-                  return const TokenListShimmer();
+                if (state.status == AppStatus.loading ||
+                    state.status == AppStatus.init) {
+                  return TokenListShimmer(onRefresh: onRefresh);
                 } else if (state.status == AppStatus.success) {
-                  return TokenList(tokenList: state.data);
+                  return TokenList(tokenList: state.data, onRefresh: onRefresh);
                 } else {
-                  final MessageHandler messageHandler =
-                      state.message!.messageHandler!;
-                  final String message =
-                      messageHandler.getMessage(context, messageHandler);
-                  return Center(
-                    child: Text(message),
+                  String message = '';
+                  if (state.message != null) {
+                    final MessageHandler messageHandler =
+                        state.message!.messageHandler!;
+                    message =
+                        messageHandler.getMessage(context, messageHandler);
+                  }
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(message),
+                      BaseButton.transparent(
+                        context: context,
+                        onPressed: onRefresh,
+                        margin: const EdgeInsets.all(Sizes.spaceLarge),
+                        child: Center(
+                          child: Text(l10n.tryAgain),
+                        ),
+                      ),
+                    ],
                   );
                 }
               },

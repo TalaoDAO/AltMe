@@ -15,9 +15,7 @@ class NftItemShimmer extends StatelessWidget {
         children: const [
           AspectRatio(
             aspectRatio: 1,
-            child: Expanded(
-              child: ShimmerWidget.rectangular(height: 0),
-            ),
+            child: ShimmerWidget.rectangular(height: 0),
           ),
           SizedBox(
             height: 8,

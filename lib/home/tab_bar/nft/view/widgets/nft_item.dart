@@ -24,13 +24,11 @@ class NftItem extends StatelessWidget {
         children: [
           AspectRatio(
             aspectRatio: 1.05,
-            child: Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image.network(
-                  assetUrl,
-                  fit: BoxFit.fill,
-                ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                assetUrl,
+                fit: BoxFit.fill,
               ),
             ),
           ),
