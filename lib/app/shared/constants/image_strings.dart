@@ -27,5 +27,11 @@ class ImageStrings {
   static const String voucherBack = 'assets/image/carte-coupon-verso.png';
   static const String ecole42LearningAchievement =
       'assets/image/certificate-42.png';
-  static const String qrCode = 'assets/icon/qr-code.svg';
+  static const String dummyEmailPassCard =
+      'assets/image/dummy_email_pass_card.png';
+  static const String dummyOver18Card = 'assets/image/dummy_over18_card.png';
+  static const String dummyResidentCard =
+      'assets/image/dummy_resident_card.png';
+  static const String dummyStudentCard = 'assets/image/dummy_student_card.png';
+  static const String dummyVoucherCard = 'assets/image/dummy_voucher_card.png';
 }
