@@ -156,7 +156,8 @@
     "otherCards",
     "inMyWallet",
     "details",
-    "getThisCard"
+    "getThisCard",
+    "loginWithBiometrics"
   ],
 
   "es": [
@@ -316,7 +317,8 @@
     "otherCards",
     "inMyWallet",
     "details",
-    "getThisCard"
+    "getThisCard",
+    "loginWithBiometrics"
   ],
 
   "fr": [
@@ -367,7 +369,8 @@
     "otherCards",
     "inMyWallet",
     "details",
-    "getThisCard"
+    "getThisCard",
+    "loginWithBiometrics"
   ],
 
   "it": [
@@ -529,6 +532,7 @@
     "otherCards",
     "inMyWallet",
     "details",
-    "getThisCard"
+    "getThisCard",
+    "loginWithBiometrics"
   ]
 }

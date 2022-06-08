@@ -315,5 +315,6 @@
   "otherCards": "Other Cards",
   "inMyWallet": "In my wallet",
   "details": "Details",
-  "getThisCard": "Get this card"
+  "getThisCard": "Get this card",
+  "loginWithBiometrics": "Login with biometrics"
 }
