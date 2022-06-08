@@ -1,7 +1,9 @@
 import 'package:json_path/json_path.dart';
 
 List<String> getTextsFromCredential(
-    String jsonPath, Map<String, dynamic> data) {
+  String jsonPath,
+  Map<String, dynamic> data,
+) {
   final textList = <String>[];
   try {
     final fieldsPath = JsonPath(jsonPath);

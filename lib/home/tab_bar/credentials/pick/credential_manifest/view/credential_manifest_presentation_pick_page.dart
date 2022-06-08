@@ -62,32 +62,34 @@ class _CredentialManifestPickPageState
               height: kBottomNavigationBarHeight + 16,
               child: Tooltip(
                 message: l10n.credentialPickPresent,
-                child: Builder(builder: (context) {
-                  return BaseButton.primary(
-                    context: context,
-                    onPressed: () {
-                      if (state.selection.isEmpty) {
-                        AlertMessage.showStringMessage(
-                          context: context,
-                          message: l10n.credentialPickSelect,
-                          messageType: MessageType.error,
-                        );
-                      } else {
-                        final scanCubit = context.read<ScanCubit>();
-                        scanCubit.verifiablePresentationRequest(
-                          url: widget.uri.toString(),
-                          keyId: SecureStorageKeys.key,
-                          credentials: state.selection
-                              .map((i) => state.filteredCredentialList[i])
-                              .toList(),
-                          challenge: widget.preview['challenge'] as String,
-                          domain: widget.preview['domain'] as String,
-                        );
-                      }
-                    },
-                    child: Text(l10n.credentialPickPresent),
-                  );
-                }),
+                child: Builder(
+                  builder: (context) {
+                    return BaseButton.primary(
+                      context: context,
+                      onPressed: () {
+                        if (state.selection.isEmpty) {
+                          AlertMessage.showStringMessage(
+                            context: context,
+                            message: l10n.credentialPickSelect,
+                            messageType: MessageType.error,
+                          );
+                        } else {
+                          final scanCubit = context.read<ScanCubit>();
+                          scanCubit.verifiablePresentationRequest(
+                            url: widget.uri.toString(),
+                            keyId: SecureStorageKeys.key,
+                            credentials: state.selection
+                                .map((i) => state.filteredCredentialList[i])
+                                .toList(),
+                            challenge: widget.preview['challenge'] as String,
+                            domain: widget.preview['domain'] as String,
+                          );
+                        }
+                      },
+                      child: Text(l10n.credentialPickPresent),
+                    );
+                  },
+                ),
               ),
             ),
           ),

@@ -41,7 +41,8 @@ class ScanCubit extends Cubit<ScanState> {
     try {
       final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
 
-      /// If credential manifest exist we follow instructions to present credential
+      /// If credential manifest exist we follow instructions to present
+      /// credential
       /// If credential manifest doesn't exist we add DIDAuth to the post
       /// If id was in preview we send it in the post
       ///  https://github.com/TalaoDAO/wallet-interaction/blob/main/README.md#credential-offer-protocol
@@ -55,8 +56,8 @@ class ScanCubit extends Cubit<ScanState> {
         final options = <String, dynamic>{
           'verificationMethod': verificationMethod,
           'proofPurpose': 'authentication',
-          'challenge': credentialModel.challenge as String,
-          'domain': credentialModel.domain as String,
+          'challenge': credentialModel.challenge ?? '',
+          'domain': credentialModel.domain ?? '',
         };
 
         presentation = await didKitProvider.didAuth(
@@ -65,7 +66,7 @@ class ScanCubit extends Cubit<ScanState> {
           key,
         );
       } else {
-        final presentationId = 'urn:uuid:' + Uuid().v4();
+        final presentationId = 'urn:uuid:${const Uuid().v4()}';
 
         presentation = await didKitProvider.issuePresentation(
           jsonEncode({

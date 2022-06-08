@@ -95,14 +95,17 @@ class _CredentialManifestOfferPickPageState
                                 onPressed: () {
                                   if (state.selection.isEmpty) {
                                     AlertMessage.showStringMessage(
-                                        context: context,
-                                        message: l10n.credentialPickSelect,
-                                        messageType: MessageType.error);
+                                      context: context,
+                                      message: l10n.credentialPickSelect,
+                                      messageType: MessageType.error,
+                                    );
                                   } else {
                                     final selectedCredentialsList = state
                                         .selection
-                                        .map((i) =>
-                                            state.filteredCredentialList[i])
+                                        .map(
+                                          (i) =>
+                                              state.filteredCredentialList[i],
+                                        )
                                         .toList();
                                     context.read<ScanCubit>().credentialOffer(
                                           url: widget.uri.toString(),
@@ -149,7 +152,7 @@ class _CredentialManifestOfferPickPageState
                       l10n.credentialPickSelect,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
-                  const SizedBox(height: 12.0),
+                  const SizedBox(height: 12),
                   ...credentialCandidateList,
                 ],
               ),

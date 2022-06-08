@@ -16,10 +16,14 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
   }) : super(CredentialManifestPickState(filteredCredentialList: const [])) {
     /// Get instruction to filter credentials of the wallet
     final filteredCredentialList = getFilteredCredentialList(
-        presentationDefinition, List.from(credentialList));
-    emit(CredentialManifestPickState(
-      filteredCredentialList: filteredCredentialList,
-    ));
+      presentationDefinition,
+      List.from(credentialList),
+    );
+    emit(
+      CredentialManifestPickState(
+        filteredCredentialList: filteredCredentialList,
+      ),
+    );
   }
 
   void toggle(int index) {

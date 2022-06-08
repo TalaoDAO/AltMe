@@ -2,8 +2,9 @@ import 'package:altme/home/tab_bar/credentials/credential.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 
 List<CredentialModel> getFilteredCredentialList(
-    Map<String, dynamic> presentationDefinition,
-    List<CredentialModel> credentialList) {
+  Map<String, dynamic> presentationDefinition,
+  List<CredentialModel> credentialList,
+) {
   /// Get instruction to filter credentials of the wallet
   final claims = PresentationDefinition.fromJson(presentationDefinition);
   final filterList =
