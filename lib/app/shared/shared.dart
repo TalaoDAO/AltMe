@@ -7,6 +7,7 @@ export 'extension/extension.dart';
 export 'helper_function/helper_function.dart';
 export 'issuer/issuer.dart';
 export 'launch_url/launch_url.dart';
+export 'local_auth/local_auth_api.dart';
 export 'message_handler/message_handler.dart';
 export 'models/model.dart';
 export 'translation/translation.dart';
