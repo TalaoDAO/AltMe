@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/enum/type/credential_subject_type/credential_subject_type.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/home/tab_bar/credentials/models/author/author.dart';
 import 'package:altme/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:altme/home/tab_bar/credentials/models/professional_experience_assessment/skill.dart';
@@ -23,6 +23,7 @@ class ProfessionalSkillAssessmentModel extends CredentialSubjectModel {
           issuedBy: issuedBy,
           credentialSubjectType:
               CredentialSubjectType.professionalSkillAssessment,
+          credentialCategory: CredentialCategory.identityCards,
         );
 
   factory ProfessionalSkillAssessmentModel.fromJson(

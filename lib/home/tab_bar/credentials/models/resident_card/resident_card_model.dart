@@ -26,6 +26,7 @@ class ResidentCardModel extends CredentialSubjectModel {
           type: type,
           issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.residentCard,
+          credentialCategory: CredentialCategory.communityCards,
         );
 
   factory ResidentCardModel.fromJson(Map<String, dynamic> json) =>

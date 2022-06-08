@@ -7,19 +7,21 @@ class CredentialContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.documentShadow,
-            blurRadius: 15,
-            spreadRadius: 1,
-            offset: const Offset(0, 4),
-          )
-        ],
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).colorScheme.documentShadow,
+              blurRadius: 15,
+              spreadRadius: 1,
+              offset: const Offset(0, 4),
+            )
+          ],
+        ),
+        child: child,
       ),
-      child: child,
     );
   }
 }

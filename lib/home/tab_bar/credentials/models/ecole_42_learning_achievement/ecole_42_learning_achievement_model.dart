@@ -22,6 +22,7 @@ class Ecole42LearningAchievementModel extends CredentialSubjectModel {
           issuedBy: issuedBy,
           credentialSubjectType:
               CredentialSubjectType.ecole42LearningAchievement,
+          credentialCategory: CredentialCategory.identityCards,
         );
 
   factory Ecole42LearningAchievementModel.fromJson(Map<String, dynamic> json) =>

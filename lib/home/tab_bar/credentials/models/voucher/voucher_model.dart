@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/enum/type/credential_subject_type/credential_subject_type.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/home/tab_bar/credentials/models/author/author.dart';
 import 'package:altme/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:altme/home/tab_bar/credentials/models/voucher/offer.dart';
@@ -19,6 +19,7 @@ class VoucherModel extends CredentialSubjectModel {
           type: type,
           issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.voucher,
+          credentialCategory: CredentialCategory.gamingCards,
         );
 
   factory VoucherModel.fromJson(Map<String, dynamic> json) =>

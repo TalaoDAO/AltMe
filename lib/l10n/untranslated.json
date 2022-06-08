@@ -149,7 +149,14 @@
     "enterYourPinCode",
     "changePinCode",
     "tryAgain",
-    "yourPinCodeChangedSuccessfully"
+    "yourPinCodeChangedSuccessfully",
+    "gamingCards",
+    "identityCards",
+    "communityCards",
+    "otherCards",
+    "inMyWallet",
+    "details",
+    "getThisCard"
   ],
 
   "es": [
@@ -302,7 +309,14 @@
     "enterYourPinCode",
     "changePinCode",
     "tryAgain",
-    "yourPinCodeChangedSuccessfully"
+    "yourPinCodeChangedSuccessfully",
+    "gamingCards",
+    "identityCards",
+    "communityCards",
+    "otherCards",
+    "inMyWallet",
+    "details",
+    "getThisCard"
   ],
 
   "fr": [
@@ -346,7 +360,14 @@
     "enterYourPinCode",
     "changePinCode",
     "tryAgain",
-    "yourPinCodeChangedSuccessfully"
+    "yourPinCodeChangedSuccessfully",
+    "gamingCards",
+    "identityCards",
+    "communityCards",
+    "otherCards",
+    "inMyWallet",
+    "details",
+    "getThisCard"
   ],
 
   "it": [
@@ -501,6 +522,13 @@
     "enterYourPinCode",
     "changePinCode",
     "tryAgain",
-    "yourPinCodeChangedSuccessfully"
+    "yourPinCodeChangedSuccessfully",
+    "gamingCards",
+    "identityCards",
+    "communityCards",
+    "otherCards",
+    "inMyWallet",
+    "details",
+    "getThisCard"
   ]
 }

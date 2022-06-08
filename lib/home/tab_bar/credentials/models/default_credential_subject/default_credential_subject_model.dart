@@ -13,6 +13,7 @@ class DefaultCredentialSubjectModel extends CredentialSubjectModel {
           type: type,
           issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.defaultCredential,
+          credentialCategory: CredentialCategory.othersCards,
         );
 
   factory DefaultCredentialSubjectModel.fromJson(Map<String, dynamic> json) =>

@@ -43,12 +43,9 @@ class __BaseItemState extends State<_BaseItem>
   @override
   Widget build(BuildContext context) => Opacity(
         opacity: !widget.enabled ? 0.33 : 1,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: InkWell(
-            onTap: widget.onTap,
-            child: IntrinsicHeight(child: widget.child),
-          ),
+        child: InkWell(
+          onTap: widget.onTap,
+          child: IntrinsicHeight(child: widget.child),
         ),
       );
 }

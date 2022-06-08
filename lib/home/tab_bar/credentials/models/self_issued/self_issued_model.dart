@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/enum/type/credential_subject_type/credential_subject_type.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -22,6 +22,7 @@ class SelfIssuedModel extends CredentialSubjectModel {
           type: type,
           issuedBy: const Author('', ''),
           credentialSubjectType: CredentialSubjectType.selfIssued,
+          credentialCategory: CredentialCategory.othersCards,
         );
 
   factory SelfIssuedModel.fromJson(Map<String, dynamic> json) =>
