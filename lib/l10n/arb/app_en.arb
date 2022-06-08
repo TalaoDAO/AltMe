@@ -307,5 +307,6 @@
   "create_wallet_message": "You need to create your wallet first",
   "enterYourPinCode": "Enter your pin code",
   "changePinCode": "Change pin code",
-  "tryAgain": "Try again"
+  "tryAgain": "Try again",
+  "yourPinCodeChangedSuccessfully": "Your pin code changed successfully"
 }

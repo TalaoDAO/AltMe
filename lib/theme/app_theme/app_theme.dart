@@ -83,6 +83,9 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get digitPrimaryColor => Colors.white;
+  Color get digitFillColor => Colors.transparent;
+
   Color get darkGradientStartColor => const Color(0xff0A0421);
 
   Color get darkGradientEndColor => const Color(0xff25095B);
@@ -161,6 +164,13 @@ extension CustomColorScheme on ColorScheme {
 }
 
 extension CustomTextTheme on TextTheme {
+
+  TextStyle get keyboardDigitTextStyle =>
+      GoogleFonts.nunito(fontSize: 30, color: Colors.white);
+
+  TextStyle get keyboardDeleteButtonTextStyle =>
+      GoogleFonts.nunito(fontSize: 16, color: Colors.white);
+
   TextStyle get starterTitleStyle => GoogleFonts.nunito(
         color: const Color(0xFFEDEAF5),
         fontSize: 28,
