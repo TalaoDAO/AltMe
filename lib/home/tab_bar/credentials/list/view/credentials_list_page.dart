@@ -13,29 +13,66 @@ class CredentialsListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<CredentialSubjectType> gamingCategories = [
+      CredentialSubjectType.voucher
+    ];
+    final List<CredentialSubjectType> communityCategories = [
+      CredentialSubjectType.residentCard,
+      CredentialSubjectType.studentCard,
+    ];
+    final List<CredentialSubjectType> identityCategories = [
+      CredentialSubjectType.emailPass,
+      CredentialSubjectType.over18,
+    ];
     return BlocBuilder<WalletCubit, WalletState>(
       builder: (context, state) {
-        final gamingCredentials = <CredentialModel>[];
-        final communityCredentials = <CredentialModel>[];
-        final identityCredentials = <CredentialModel>[];
-        final othersCredentials = <CredentialModel>[];
+        final gamingCredentials = <HomeCredential>[];
+        final communityCredentials = <HomeCredential>[];
+        final identityCredentials = <HomeCredential>[];
+        final othersCredentials = <HomeCredential>[];
 
         for (final credential in state.credentials) {
+          final CredentialSubjectType credentialSubjectType = credential
+              .credentialPreview.credentialSubjectModel.credentialSubjectType;
+
           switch (credential
               .credentialPreview.credentialSubjectModel.credentialCategory) {
             case CredentialCategory.gamingCards:
-              gamingCredentials.add(credential);
+              gamingCredentials.add(HomeCredential.isNotDummy(credential));
+              if (gamingCategories.contains(credentialSubjectType)) {
+                gamingCategories.remove(credentialSubjectType);
+              }
               break;
             case CredentialCategory.communityCards:
-              communityCredentials.add(credential);
+              communityCredentials.add(HomeCredential.isNotDummy(credential));
+              if (communityCategories.contains(credentialSubjectType)) {
+                communityCategories.remove(credentialSubjectType);
+              }
               break;
             case CredentialCategory.identityCards:
-              identityCredentials.add(credential);
+              identityCredentials.add(HomeCredential.isNotDummy(credential));
+              if (identityCategories.contains(credentialSubjectType)) {
+                identityCategories.remove(credentialSubjectType);
+              }
               break;
             case CredentialCategory.othersCards:
-              othersCredentials.add(credential);
+              othersCredentials.add(HomeCredential.isNotDummy(credential));
               break;
           }
+        }
+
+        for (final credentialSubjectType in gamingCategories) {
+          gamingCredentials.add(HomeCredential.isDummy(credentialSubjectType));
+        }
+
+        for (final credentialSubjectType in communityCategories) {
+          communityCredentials
+              .add(HomeCredential.isDummy(credentialSubjectType));
+        }
+
+        for (final credentialSubjectType in identityCategories) {
+          identityCredentials
+              .add(HomeCredential.isDummy(credentialSubjectType));
         }
 
         return BasePage(
@@ -61,7 +98,7 @@ class GamingCredentials extends StatelessWidget {
   const GamingCredentials({Key? key, required this.credentials})
       : super(key: key);
 
-  final List<CredentialModel> credentials;
+  final List<HomeCredential> credentials;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +108,7 @@ class GamingCredentials extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          '${l10n.gamingCards} (${credentials.length})',
+          '''${l10n.gamingCards} (${credentials.where((element) => !element.isDummy).toList().length})''',
           style: Theme.of(context).textTheme.credentialCategoryTitle,
         ),
         const SizedBox(
@@ -88,7 +125,7 @@ class GamingCredentials extends StatelessWidget {
           ),
           itemCount: credentials.length,
           itemBuilder: (_, index) => HomeCredentialItem(
-            credentialModel: credentials[index],
+            homeCredential: credentials[index],
           ),
         ),
       ],
@@ -100,7 +137,7 @@ class CommunityCredentials extends StatelessWidget {
   const CommunityCredentials({Key? key, required this.credentials})
       : super(key: key);
 
-  final List<CredentialModel> credentials;
+  final List<HomeCredential> credentials;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +147,7 @@ class CommunityCredentials extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          '${l10n.communityCards} (${credentials.length})',
+          '''${l10n.communityCards} (${credentials.where((element) => !element.isDummy).toList().length})''',
           style: Theme.of(context).textTheme.credentialCategoryTitle,
         ),
         const SizedBox(
@@ -127,7 +164,7 @@ class CommunityCredentials extends StatelessWidget {
           ),
           itemCount: credentials.length,
           itemBuilder: (_, index) => HomeCredentialItem(
-            credentialModel: credentials[index],
+            homeCredential: credentials[index],
           ),
         ),
       ],
@@ -139,7 +176,7 @@ class IdentityCredentials extends StatelessWidget {
   const IdentityCredentials({Key? key, required this.credentials})
       : super(key: key);
 
-  final List<CredentialModel> credentials;
+  final List<HomeCredential> credentials;
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +186,7 @@ class IdentityCredentials extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          '${l10n.identityCards} (${credentials.length})',
+          '''${l10n.identityCards} (${credentials.where((element) => !element.isDummy).toList().length})''',
           style: Theme.of(context).textTheme.credentialCategoryTitle,
         ),
         const SizedBox(
@@ -166,7 +203,7 @@ class IdentityCredentials extends StatelessWidget {
           ),
           itemCount: credentials.length,
           itemBuilder: (_, index) => HomeCredentialItem(
-            credentialModel: credentials[index],
+            homeCredential: credentials[index],
           ),
         ),
       ],
@@ -178,7 +215,7 @@ class OtherCredentials extends StatelessWidget {
   const OtherCredentials({Key? key, required this.credentials})
       : super(key: key);
 
-  final List<CredentialModel> credentials;
+  final List<HomeCredential> credentials;
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +225,7 @@ class OtherCredentials extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          '${l10n.otherCards} (${credentials.length})',
+          '''${l10n.otherCards} (${credentials.where((element) => !element.isDummy).toList().length})''',
           style: Theme.of(context).textTheme.credentialCategoryTitle,
         ),
         const SizedBox(
@@ -205,7 +242,7 @@ class OtherCredentials extends StatelessWidget {
           ),
           itemCount: credentials.length,
           itemBuilder: (_, index) => HomeCredentialItem(
-            credentialModel: credentials[index],
+            homeCredential: credentials[index],
           ),
         ),
       ],

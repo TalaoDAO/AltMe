@@ -155,7 +155,8 @@
     "communityCards",
     "otherCards",
     "inMyWallet",
-    "details"
+    "details",
+    "getThisCard"
   ],
 
   "es": [
@@ -314,7 +315,8 @@
     "communityCards",
     "otherCards",
     "inMyWallet",
-    "details"
+    "details",
+    "getThisCard"
   ],
 
   "fr": [
@@ -364,7 +366,8 @@
     "communityCards",
     "otherCards",
     "inMyWallet",
-    "details"
+    "details",
+    "getThisCard"
   ],
 
   "it": [
@@ -525,6 +528,7 @@
     "communityCards",
     "otherCards",
     "inMyWallet",
-    "details"
+    "details",
+    "getThisCard"
   ]
 }

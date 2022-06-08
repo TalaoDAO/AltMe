@@ -31,4 +31,6 @@ class IconStrings {
   static const String trash = '$base/trash.png';
   static const String frame = '$base/frame.png';
   static const String tickCircle = '$base/tick-circle.png';
+  static const String qrCode = '$base/qr-code.svg';
+  static const String addCircle = '$base/add-circle.png';
 }
