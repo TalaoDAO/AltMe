@@ -39,11 +39,14 @@ class SearchPage extends StatelessWidget {
               child: Column(
                 children: [
                   const Search(),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   ...List.generate(
                     _credentialList.length,
-                    (index) => CredentialsListPageItem(
-                      credentialModel: _credentialList[index],
+                    (index) => Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      child: CredentialsListPageItem(
+                        credentialModel: _credentialList[index],
+                      ),
                     ),
                   )
                 ],

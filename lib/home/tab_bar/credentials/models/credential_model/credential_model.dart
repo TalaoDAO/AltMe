@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 part 'credential_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-//ignore: must_be_immutable
+// ignore: must_be_immutable
 class CredentialModel extends Equatable {
   CredentialModel({
     required this.id,

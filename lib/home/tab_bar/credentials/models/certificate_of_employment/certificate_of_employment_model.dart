@@ -24,6 +24,7 @@ class CertificateOfEmploymentModel extends CredentialSubjectModel {
           type: type,
           issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.certificateOfEmployment,
+          credentialCategory: CredentialCategory.identityCards,
         );
 
   factory CertificateOfEmploymentModel.fromJson(Map<String, dynamic> json) =>

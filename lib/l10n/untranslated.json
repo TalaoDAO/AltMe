@@ -150,7 +150,15 @@
     "changePinCode",
     "tryAgain",
     "credentialSelectionListEmptyError",
-    "trustedIssuer"
+    "trustedIssuer",
+    "yourPinCodeChangedSuccessfully",
+    "gamingCards",
+    "identityCards",
+    "communityCards",
+    "otherCards",
+    "inMyWallet",
+    "details",
+    "getThisCard"
   ],
 
   "es": [
@@ -304,7 +312,15 @@
     "changePinCode",
     "tryAgain",
     "credentialSelectionListEmptyError",
-    "trustedIssuer"
+    "trustedIssuer",
+    "yourPinCodeChangedSuccessfully",
+    "gamingCards",
+    "identityCards",
+    "communityCards",
+    "otherCards",
+    "inMyWallet",
+    "details",
+    "getThisCard"
   ],
 
   "fr": [
@@ -503,6 +519,14 @@
     "changePinCode",
     "tryAgain",
     "credentialSelectionListEmptyError",
-    "trustedIssuer"
+    "trustedIssuer",
+    "yourPinCodeChangedSuccessfully",
+    "gamingCards",
+    "identityCards",
+    "communityCards",
+    "otherCards",
+    "inMyWallet",
+    "details",
+    "getThisCard"
   ]
 }

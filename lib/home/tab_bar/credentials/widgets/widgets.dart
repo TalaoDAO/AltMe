@@ -19,6 +19,7 @@ export 'display_status.dart';
 export 'display_title_widget.dart';
 export 'ecole_42_learning_achievement_widget.dart';
 export 'email_pass_widget.dart';
+export 'home_credential_item.dart';
 export 'identity_pass_widget.dart';
 export 'labeled_display_mapping_widget.dart';
 export 'learning_achievement_widget.dart';

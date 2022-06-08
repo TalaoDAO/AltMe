@@ -150,7 +150,6 @@ class _SplashViewState extends State<SplashView> {
               );
             }
             if (state.status == SplashStatus.routeToHomePage) {
-              // TODO(Taleb): Naviate to homepage in different style
               Navigator.of(context).push<void>(HomePage.route());
             }
           },

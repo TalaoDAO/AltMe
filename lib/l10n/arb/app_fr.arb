@@ -289,5 +289,13 @@
   "proof": "Preuve",
   "search": "Rechercher",
   "credentialSelectionListEmptyError": "Vous n'avez pas l'attestation nécessaire pour poursuivre.",
-  "trustedIssuer": "Ce fournisseur est appouvé par EBSI."
+  "trustedIssuer": "Ce fournisseur est appouvé par EBSI.",
+  "yourPinCodeChangedSuccessfully": "Votre pin est changé",
+  "gamingCards": "Cartes de jeu",
+  "identityCards": "Cartes d'identité",
+  "communityCards": "Cartes de communauté",
+  "otherCards": "Autres cartes",
+  "inMyWallet": "Dans mon portefeuille",
+  "details": "Détails",
+  "getThisCard": "Obtenir cette carte"
 }

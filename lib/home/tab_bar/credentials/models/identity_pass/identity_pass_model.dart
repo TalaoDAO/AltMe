@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/enum/type/credential_subject_type/credential_subject_type.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/home/tab_bar/credentials/models/identity_pass/identity_pass_recipient.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -18,6 +18,7 @@ class IdentityPassModel extends CredentialSubjectModel {
           type: type,
           issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.identityPass,
+          credentialCategory: CredentialCategory.identityCards,
         );
 
   factory IdentityPassModel.fromJson(Map<String, dynamic> json) =>

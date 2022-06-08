@@ -14,4 +14,6 @@ abstract class Sizes {
   static const double logoSmall = 38;
   static const double logoNormal = 50;
   static const double logoLarge = 100;
+
+  static const double homeCredentialRatio = 1.2;
 }

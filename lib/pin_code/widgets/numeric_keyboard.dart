@@ -1,3 +1,4 @@
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,20 +10,11 @@ class KeyboardUIConfig {
     this.digitBorderWidth = 1,
     this.keyboardRowMargin = const EdgeInsets.only(top: 15, left: 4, right: 4),
     this.digitInnerMargin = const EdgeInsets.all(24),
-    this.primaryColor = Colors.white,
-    this.digitFillColor = Colors.transparent,
-    this.digitTextStyle = const TextStyle(fontSize: 30, color: Colors.white),
-    this.deleteButtonTextStyle =
-        const TextStyle(fontSize: 16, color: Colors.white),
     this.keyboardSize,
   });
 
   //Digits have a round thin borders, [digitBorderWidth] define their thickness
   final double digitBorderWidth;
-  final TextStyle digitTextStyle;
-  final TextStyle deleteButtonTextStyle;
-  final Color primaryColor;
-  final Color digitFillColor;
   final EdgeInsetsGeometry keyboardRowMargin;
   final EdgeInsetsGeometry digitInnerMargin;
 
@@ -88,21 +80,24 @@ class NumericKeyboard extends StatelessWidget {
         child: AlignedGrid(
           keyboardSize: keyboardSize,
           children: List.generate(10, (index) {
-            return _buildKeyboardDigit(keyboardItems[index]);
+            return _buildKeyboardDigit(keyboardItems[index], context);
           }),
         ),
       ),
     );
   }
 
-  Widget _buildKeyboardDigit(String text) {
+  Widget _buildKeyboardDigit(String text, BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(4),
       child: ClipOval(
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            splashColor: keyboardUIConfig.primaryColor.withOpacity(0.4),
+            splashColor: Theme.of(context)
+                .colorScheme
+                .digitPrimaryColor
+                .withOpacity(0.4),
             onTap: () {
               onKeyboardTap(text);
             },
@@ -111,21 +106,20 @@ class NumericKeyboard extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: Colors.transparent,
                 border: Border.all(
-                  color: keyboardUIConfig.primaryColor,
+                  color: Theme.of(context).colorScheme.digitPrimaryColor,
                   width: keyboardUIConfig.digitBorderWidth,
                 ),
               ),
               child: Container(
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: keyboardUIConfig.digitFillColor,
+                  color: Theme.of(context).colorScheme.digitFillColor,
                 ),
-                child: Center(
-                  child: Text(
-                    text,
-                    style: keyboardUIConfig.digitTextStyle,
-                    semanticsLabel: text,
-                  ),
+                child: Text(
+                  text,
+                  style: Theme.of(context).textTheme.keyboardDigitTextStyle,
+                  semanticsLabel: text,
                 ),
               ),
             ),
