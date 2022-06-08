@@ -29,11 +29,10 @@ class DrawerView extends StatelessWidget {
       EnterNewPinCodePage.route(
         isValidCallback: () {
           Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(l10n.yourPinCodeChangedSuccessfully),
-              duration: const Duration(seconds: 3),
-            ),
+          AlertMessage.showStringMessage(
+            context: context,
+            message: l10n.yourPinCodeChangedSuccessfully,
+            messageType: MessageType.success,
           );
         },
       ),

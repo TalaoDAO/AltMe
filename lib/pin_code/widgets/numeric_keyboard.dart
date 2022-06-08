@@ -1,3 +1,4 @@
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,16 +12,11 @@ class KeyboardUIConfig {
     this.digitInnerMargin = const EdgeInsets.all(24),
     this.primaryColor = Colors.white,
     this.digitFillColor = Colors.transparent,
-    this.digitTextStyle = const TextStyle(fontSize: 30, color: Colors.white),
-    this.deleteButtonTextStyle =
-        const TextStyle(fontSize: 16, color: Colors.white),
     this.keyboardSize,
   });
 
   //Digits have a round thin borders, [digitBorderWidth] define their thickness
   final double digitBorderWidth;
-  final TextStyle digitTextStyle;
-  final TextStyle deleteButtonTextStyle;
   final Color primaryColor;
   final Color digitFillColor;
   final EdgeInsetsGeometry keyboardRowMargin;
@@ -88,14 +84,14 @@ class NumericKeyboard extends StatelessWidget {
         child: AlignedGrid(
           keyboardSize: keyboardSize,
           children: List.generate(10, (index) {
-            return _buildKeyboardDigit(keyboardItems[index]);
+            return _buildKeyboardDigit(keyboardItems[index], context);
           }),
         ),
       ),
     );
   }
 
-  Widget _buildKeyboardDigit(String text) {
+  Widget _buildKeyboardDigit(String text, BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(4),
       child: ClipOval(
@@ -123,7 +119,7 @@ class NumericKeyboard extends StatelessWidget {
                 ),
                 child: Text(
                   text,
-                  style: keyboardUIConfig.digitTextStyle,
+                  style: Theme.of(context).textTheme.keyboardDigitTextStyle,
                   semanticsLabel: text,
                 ),
               ),
