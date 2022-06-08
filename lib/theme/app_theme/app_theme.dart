@@ -83,6 +83,9 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get digitPrimaryColor => Colors.white;
+  Color get digitFillColor => Colors.transparent;
+
   Color get darkGradientStartColor => const Color(0xff0A0421);
 
   Color get darkGradientEndColor => const Color(0xff25095B);

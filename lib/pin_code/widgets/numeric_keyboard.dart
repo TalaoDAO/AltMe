@@ -10,15 +10,11 @@ class KeyboardUIConfig {
     this.digitBorderWidth = 1,
     this.keyboardRowMargin = const EdgeInsets.only(top: 15, left: 4, right: 4),
     this.digitInnerMargin = const EdgeInsets.all(24),
-    this.primaryColor = Colors.white,
-    this.digitFillColor = Colors.transparent,
     this.keyboardSize,
   });
 
   //Digits have a round thin borders, [digitBorderWidth] define their thickness
   final double digitBorderWidth;
-  final Color primaryColor;
-  final Color digitFillColor;
   final EdgeInsetsGeometry keyboardRowMargin;
   final EdgeInsetsGeometry digitInnerMargin;
 
@@ -98,7 +94,10 @@ class NumericKeyboard extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            splashColor: keyboardUIConfig.primaryColor.withOpacity(0.4),
+            splashColor: Theme.of(context)
+                .colorScheme
+                .digitPrimaryColor
+                .withOpacity(0.4),
             onTap: () {
               onKeyboardTap(text);
             },
@@ -107,7 +106,7 @@ class NumericKeyboard extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: Colors.transparent,
                 border: Border.all(
-                  color: keyboardUIConfig.primaryColor,
+                  color: Theme.of(context).colorScheme.digitPrimaryColor,
                   width: keyboardUIConfig.digitBorderWidth,
                 ),
               ),
@@ -115,7 +114,7 @@ class NumericKeyboard extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: keyboardUIConfig.digitFillColor,
+                  color: Theme.of(context).colorScheme.digitFillColor,
                 ),
                 child: Text(
                   text,
