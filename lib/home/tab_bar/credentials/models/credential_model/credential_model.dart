@@ -223,6 +223,6 @@ class CredentialModel extends Equatable {
     if (map['receivedId'] != null) {
       return map['receivedId'] as String;
     }
-    return map['id'] as String;
+    return map['id'] as String?;
   }
 }

@@ -17,7 +17,7 @@ class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
   Widget build(BuildContext context) {
     final credential = Credential.fromJsonOrDummy(credentialModel.data);
     final outputDescriptor =
-        credentialModel.credentialManifest?.outputDescriptors.first;
+        credentialModel.credentialManifest?.outputDescriptors?.first;
     // If outputDescriptor exist, the credential has a credential manifest
     // telling us what to display
     if (outputDescriptor == null) {
@@ -190,7 +190,7 @@ class DefaultCredentialSubjectDisplayInSelectionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final outputDescriptor =
-        credentialModel.credentialManifest?.outputDescriptors.first;
+        credentialModel.credentialManifest?.outputDescriptors?.first;
     // If outputDescriptor exist, the credential has a credential manifest
     // telling us what to display
     if (outputDescriptor == null) {

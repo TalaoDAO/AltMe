@@ -31,12 +31,12 @@ class CredentialManifest {
       _$CredentialManifestFromJson(json);
 
   ///
-  final String id;
+  final String? id;
 
   /// An array of OutputDescriptor which are objects used to describe the Claims
   /// an Issuer is offering to a Holder.
   @JsonKey(name: 'output_descriptors')
-  final List<OutputDescriptor> outputDescriptors;
+  final List<OutputDescriptor>? outputDescriptors;
 
   /// A PresentationDefinition which is a list of presentations
   @JsonKey(
