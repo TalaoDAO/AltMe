@@ -95,7 +95,8 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                 BaseButton.primary(
                   context: context,
                   onPressed: () async {
-                    /// We removed dialog box which is asking for the user to provide alias to the credential.
+                    /// We removed dialog box which is asking for the user
+                    /// to provide alias to the credential.
                     const alias = '';
 
                     if (credentialModel

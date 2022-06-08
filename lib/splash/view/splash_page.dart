@@ -194,7 +194,7 @@ class _SplashViewState extends State<SplashView> {
                     context: context,
                     builder: (context) => ConfirmDialog(
                       title:
-                          '''${l10n.credentialPresentTitleDIDAuth}\n${l10n.confimrDIDAuth}''',
+                          '''${l10n.credentialPresentTitleDIDAuth}\n\n${l10n.confimrDIDAuth}''',
                       yes: l10n.showDialogYes,
                       no: l10n.showDialogNo,
                     ),
@@ -230,12 +230,12 @@ class _SplashViewState extends State<SplashView> {
                 final profileCubit = context.read<ProfileCubit>();
                 var approvedIssuer = Issuer.emptyIssuer();
                 final isIssuerVerificationSettingTrue =
-                    profileCubit.state.model.issuerVerificationSetting;
+                    profileCubit.state.model.issuerVerificationUrl != '';
                 if (isIssuerVerificationSettingTrue) {
                   try {
                     approvedIssuer = await CheckIssuer(
-                      DioClient(Urls.checkIssuerServerUrl, Dio()),
-                      Urls.checkIssuerServerUrl,
+                      DioClient(Urls.checkIssuerTalaoUrl, Dio()),
+                      profileCubit.state.model.issuerVerificationUrl,
                       state.uri!,
                     ).isIssuerInApprovedList();
                   } catch (e) {

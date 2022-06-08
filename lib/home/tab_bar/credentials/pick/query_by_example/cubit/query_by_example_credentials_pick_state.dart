@@ -4,6 +4,7 @@ part of 'query_by_example_credentials_pick_cubit.dart';
 class QueryByExampleCredentialPickState extends Equatable {
   QueryByExampleCredentialPickState({
     List<int>? selection,
+    required this.filteredCredentialList,
   }) : selection = selection ?? <int>[];
 
   factory QueryByExampleCredentialPickState.fromJson(
@@ -12,10 +13,15 @@ class QueryByExampleCredentialPickState extends Equatable {
       _$QueryByExampleCredentialPickStateFromJson(json);
 
   final List<int> selection;
+  final List<CredentialModel> filteredCredentialList;
 
-  QueryByExampleCredentialPickState copyWith({List<int>? selection}) {
+  QueryByExampleCredentialPickState copyWith({
+    List<int>? selection,
+    required List<CredentialModel> filteredCredentialList,
+  }) {
     return QueryByExampleCredentialPickState(
       selection: selection ?? this.selection,
+      filteredCredentialList: filteredCredentialList,
     );
   }
 
@@ -23,5 +29,8 @@ class QueryByExampleCredentialPickState extends Equatable {
       _$QueryByExampleCredentialPickStateToJson(this);
 
   @override
-  List<Object?> get props => [selection];
+  List<Object?> get props => [
+        selection,
+        filteredCredentialList,
+      ];
 }

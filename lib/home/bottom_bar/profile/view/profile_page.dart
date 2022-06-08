@@ -362,8 +362,7 @@ class _PersonalPageState extends State<ProfilePage> {
       companyName: companyNameController.text,
       companyWebsite: companyWebsiteController.text,
       jobTitle: jobTitleController.text,
-      issuerVerificationSetting:
-          profileCubit.state.model.issuerVerificationSetting,
+      issuerVerificationUrl: profileCubit.state.model.issuerVerificationUrl,
     );
 
     await context.read<ProfileCubit>().update(model);

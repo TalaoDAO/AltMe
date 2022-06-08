@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/enum/issuer_verification_registry.dart';
 import 'package:altme/home/home.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -39,9 +40,9 @@ class ProfileCubit extends Cubit<ProfileState> {
               '';
       final jobTitle =
           await secureStorageProvider.get(SecureStorageKeys.jobTitle) ?? '';
-      final issuerVerificationSetting = !(await secureStorageProvider
-              .get(SecureStorageKeys.issuerVerificationSettingKey) ==
-          'false');
+      final issuerVerificationUrl = await secureStorageProvider
+              .get(SecureStorageKeys.issuerVerificationUrlKey) ??
+          Urls.checkIssuerTalaoUrl;
       final isEnterprise = (await secureStorageProvider
               .get(SecureStorageKeys.isEnterpriseUser)) ==
           'true';
@@ -52,7 +53,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         phone: phone,
         location: location,
         email: email,
-        issuerVerificationSetting: issuerVerificationSetting,
+        issuerVerificationUrl: issuerVerificationUrl,
         companyName: companyName,
         companyWebsite: companyWebsite,
         jobTitle: jobTitle,
@@ -82,6 +83,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     await secureStorageProvider.delete(SecureStorageKeys.jobTitle);
     await secureStorageProvider.delete(SecureStorageKeys.companyWebsite);
     await secureStorageProvider.delete(SecureStorageKeys.companyName);
+    await secureStorageProvider
+        .delete(SecureStorageKeys.issuerVerificationUrlKey);
     await secureStorageProvider.delete(SecureStorageKeys.isEnterpriseUser);
     emit(state.success(model: ProfileModel.empty()));
   }
@@ -124,8 +127,8 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.jobTitle,
       );
       await secureStorageProvider.set(
-        SecureStorageKeys.issuerVerificationSettingKey,
-        profileModel.issuerVerificationSetting.toString(),
+        SecureStorageKeys.issuerVerificationUrlKey,
+        profileModel.issuerVerificationUrl,
       );
 
       await secureStorageProvider.set(
@@ -145,5 +148,26 @@ class ProfileCubit extends Cubit<ProfileState> {
         ),
       );
     }
+  }
+
+  Future<void> updateIssuerVerificationUrl(
+    IssuerVerificationRegistry registry,
+  ) async {
+    Logger('talao-wallet/profile/updateIssuerVerificationUrl');
+    var _issuerVerificationUrl = Urls.checkIssuerTalaoUrl;
+    switch (registry) {
+      case IssuerVerificationRegistry.EBSI:
+        _issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
+        break;
+      case IssuerVerificationRegistry.None:
+        _issuerVerificationUrl = '';
+        break;
+      case IssuerVerificationRegistry.Talao:
+        _issuerVerificationUrl = Urls.checkIssuerTalaoUrl;
+        break;
+    }
+    final _newModel =
+        state.model.copyWith(issuerVerificationUrl: _issuerVerificationUrl);
+    await update(_newModel);
   }
 }
