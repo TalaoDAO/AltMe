@@ -43,6 +43,7 @@ class RealCredentialItem extends StatelessWidget {
               onTap: () {},
             ),
           ),
+          const SizedBox(height: 5),
           Expanded(
             flex: 2,
             child: Row(
@@ -115,6 +116,7 @@ class DummyCredentialItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
     return BackgroundCard(
       color: Theme.of(context).colorScheme.credentialBackground,
       padding: const EdgeInsets.all(4),
@@ -130,7 +132,9 @@ class DummyCredentialItem extends StatelessWidget {
           Expanded(
             flex: 2,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () async {
+                await LaunchUrl.launch(homeCredential.link!);
+              },
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   vertical: 5,

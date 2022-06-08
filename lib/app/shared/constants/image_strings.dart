@@ -1,37 +1,43 @@
 class ImageStrings {
-  static const String splashCity = 'assets/image/city.png';
-  static const String splash = 'assets/splash/altme.png';
-  static const String splashDev = 'assets/splash/altme-dev.png';
-  static const String splashStage = 'assets/splash/altme-stage.png';
+  static const String splashPath = 'assets/splash';
+  static const String splashCity = '$splashPath/city.png';
+  static const String splash = '$splashPath/altme.png';
+  static const String splashDev = '$splashPath/altme-dev.png';
+  static const String splashStage = '$splashPath/altme-stage.png';
+
+  static const String imagePath = 'assets/image';
   static const String employmentCertificateFront =
-      'assets/image/carte-attestation-employeur-recto.png';
+      '$imagePath/carte-attestation-employeur-recto.png';
   static const String employmentCertificateBack =
-      'assets/image/carte-attestation-employeur-verso.png';
-  static const String emailPassFront = 'assets/image/email_pass_verso.png';
-  static const String emailPassBack = 'assets/image/email_pass_verso.png';
+      '$imagePath/carte-attestation-employeur-verso.png';
+  static const String emailPassFront = '$imagePath/email_pass_verso.png';
+  static const String emailPassBack = '$imagePath/email_pass_verso.png';
   static const String learningAchievementFront =
-      'assets/image/carte-diplome-recto.png';
+      '$imagePath/carte-diplome-recto.png';
   static const String learningAchievementBack =
-      'assets/image/carte-diplome-verso.png';
-  static const String loyaltyCard = 'assets/image/tezotopia_loyalty_card.jpeg';
-  static const String over18Front = 'assets/image/over18_verso.png';
-  static const String over18Back = 'assets/image/over18_recto.png';
+      '$imagePath/carte-diplome-verso.png';
+  static const String loyaltyCard = '$imagePath/tezotopia_loyalty_card.jpeg';
+  static const String over18Front = '$imagePath/over18_verso.png';
+  static const String over18Back = '$imagePath/over18_recto.png';
   static const String professionalStudentCardFront =
-      'assets/image/adecco_student_card_recto.png';
+      '$imagePath/adecco_student_card_recto.png';
   static const String professionalStudentCardBack =
-      'assets/image/adecco_student_card_verso.png';
-  static const String studentCardFront =
-      'assets/image/carte-etudiant-recto.png';
-  static const String studentCardBack = 'assets/image/carte-etudiant-verso.png';
-  static const String voucherFront = 'assets/image/carte-coupon-recto.png';
-  static const String voucherBack = 'assets/image/carte-coupon-verso.png';
+      '$imagePath/adecco_student_card_verso.png';
+  static const String studentCardFront = '$imagePath/carte-etudiant-recto.png';
+  static const String studentCardBack = '$imagePath/carte-etudiant-verso.png';
+  static const String voucherFront = '$imagePath/carte-coupon-recto.png';
+  static const String voucherBack = '$imagePath/carte-coupon-verso.png';
   static const String ecole42LearningAchievement =
-      'assets/image/certificate-42.png';
+      '$imagePath/certificate-42.png';
   static const String dummyEmailPassCard =
-      'assets/image/dummy_email_pass_card.png';
-  static const String dummyOver18Card = 'assets/image/dummy_over18_card.png';
-  static const String dummyResidentCard =
-      'assets/image/dummy_resident_card.png';
-  static const String dummyStudentCard = 'assets/image/dummy_student_card.png';
-  static const String dummyVoucherCard = 'assets/image/dummy_voucher_card.png';
+      '$imagePath/dummy_email_pass_card.png';
+  static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
+  static const String dummyStudentCard = '$imagePath/dummy_student_card.png';
+  static const String dummyVoucherCard = '$imagePath/dummy_voucher_card.png';
+  static const String dummyPhonePassCard =
+      '$imagePath/dummy_phone_pass_card.png';
+  static const String dummyCertificateOfEmploymentCard =
+      '$imagePath/dummy_certificate_of_employment_card.png';
+  static const String dummyLearningAchievementCard =
+      '$imagePath/dumm_learning_achievement_card.png';
 }

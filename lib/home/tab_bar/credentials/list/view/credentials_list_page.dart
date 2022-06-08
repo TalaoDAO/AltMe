@@ -17,12 +17,14 @@ class CredentialsListPage extends StatelessWidget {
       CredentialSubjectType.voucher
     ];
     final List<CredentialSubjectType> communityCategories = [
-      CredentialSubjectType.residentCard,
       CredentialSubjectType.studentCard,
     ];
     final List<CredentialSubjectType> identityCategories = [
       CredentialSubjectType.emailPass,
       CredentialSubjectType.over18,
+      CredentialSubjectType.certificateOfEmployment,
+      CredentialSubjectType.learningAchievement,
+      CredentialSubjectType.phonePass,
     ];
     return BlocBuilder<WalletCubit, WalletState>(
       builder: (context, state) {
@@ -83,8 +85,11 @@ class CredentialsListPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               GamingCredentials(credentials: gamingCredentials),
+              const SizedBox(height: 10),
               CommunityCredentials(credentials: communityCredentials),
+              const SizedBox(height: 10),
               IdentityCredentials(credentials: identityCredentials),
+              const SizedBox(height: 10),
               OtherCredentials(credentials: othersCredentials),
             ],
           ),

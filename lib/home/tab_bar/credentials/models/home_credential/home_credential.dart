@@ -1,5 +1,4 @@
-import 'package:altme/app/shared/constants/image_strings.dart';
-import 'package:altme/app/shared/enum/type/type.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -30,68 +29,42 @@ class HomeCredential extends Equatable {
     String link = '';
     switch (credentialSubjectType) {
       case CredentialSubjectType.certificateOfEmployment:
-        image = '';
-        link = 'https://www.altme.io/';
-        break;
-      case CredentialSubjectType.defaultCredential:
-        image = '';
-        link = 'https://www.altme.io/';
-        break;
-      case CredentialSubjectType.ecole42LearningAchievement:
-        image = '';
-        link = 'https://www.altme.io/';
+        image = ImageStrings.dummyCertificateOfEmploymentCard;
+        link = Urls.certificateOfEmploymentUrl;
         break;
       case CredentialSubjectType.emailPass:
         image = ImageStrings.dummyEmailPassCard;
-        link = 'https://www.altme.io/';
-        break;
-      case CredentialSubjectType.identityPass:
-        image = '';
-        link = 'https://www.altme.io/';
+        link = Urls.emailPassUrl;
         break;
       case CredentialSubjectType.learningAchievement:
-        image = '';
-        link = 'https://www.altme.io/';
-        break;
-      case CredentialSubjectType.loyaltyCard:
-        image = '';
-        link = 'https://www.altme.io/';
+        image = ImageStrings.dummyLearningAchievementCard;
+        link = Urls.learningAchievementUrl;
         break;
       case CredentialSubjectType.over18:
         image = ImageStrings.dummyOver18Card;
-        link = 'https://www.altme.io/';
+        link = Urls.over18Url;
         break;
       case CredentialSubjectType.phonePass:
-        image = '';
-        link = 'https://www.altme.io/';
-        break;
-      case CredentialSubjectType.professionalExperienceAssessment:
-        image = '';
-        link = 'https://www.altme.io/';
-        break;
-      case CredentialSubjectType.professionalSkillAssessment:
-        image = '';
-        link = 'https://www.altme.io/';
-        break;
-      case CredentialSubjectType.professionalStudentCard:
-        image = '';
-        link = 'https://www.altme.io/';
-        break;
-      case CredentialSubjectType.residentCard:
-        image = ImageStrings.dummyResidentCard;
-        link = 'https://www.altme.io/';
-        break;
-      case CredentialSubjectType.selfIssued:
-        image = '';
-        link = 'https://www.altme.io/';
+        image = ImageStrings.dummyPhonePassCard;
+        link = Urls.phonePassUrl;
         break;
       case CredentialSubjectType.studentCard:
         image = ImageStrings.dummyStudentCard;
-        link = 'https://www.altme.io/';
+        link = Urls.studentCardUrl;
         break;
       case CredentialSubjectType.voucher:
         image = ImageStrings.dummyVoucherCard;
-        link = 'https://www.altme.io/';
+        link = Urls.voucherUrl;
+        break;
+      case CredentialSubjectType.selfIssued:
+      case CredentialSubjectType.defaultCredential:
+      case CredentialSubjectType.residentCard:
+      case CredentialSubjectType.professionalExperienceAssessment:
+      case CredentialSubjectType.professionalSkillAssessment:
+      case CredentialSubjectType.professionalStudentCard:
+      case CredentialSubjectType.loyaltyCard:
+      case CredentialSubjectType.identityPass:
+      case CredentialSubjectType.ecole42LearningAchievement:
         break;
     }
     return HomeCredential(
