@@ -40,9 +40,6 @@ class DisplayObject {
   static List<DisplayMapping>? _labeledDisplayMappingFromJson(
     dynamic json,
   ) {
-    if (json == null) {
-      return null;
-    }
     if (json is List<dynamic>) {
       return json.map((dynamic e) {
         if (e['text'] == null) {
@@ -51,6 +48,7 @@ class DisplayObject {
         return LabeledDisplayMappingText.fromJson(e as Map<String, dynamic>);
       }).toList();
     }
+    return null;
   }
 
   static DisplayMapping? _displayMappingFromJson(Map<String, dynamic>? json) {

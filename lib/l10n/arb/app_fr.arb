@@ -287,5 +287,7 @@
   "needEmailPass": "Vous devez dabord aquérir une preuve d'email.",
   "signature": "Signature",
   "proof": "Preuve",
-  "search": "Rechercher"
+  "search": "Rechercher",
+  "credentialSelectionListEmptyError": "Vous n'avez pas l'attestation nécessaire pour poursuivre.",
+  "trustedIssuer": "Ce fournisseur est appouvé par EBSI."
 }

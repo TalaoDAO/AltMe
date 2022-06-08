@@ -148,7 +148,9 @@
     "create_wallet_message",
     "enterYourPinCode",
     "changePinCode",
-    "tryAgain"
+    "tryAgain",
+    "credentialSelectionListEmptyError",
+    "trustedIssuer"
   ],
 
   "es": [
@@ -300,7 +302,9 @@
     "create_wallet_message",
     "enterYourPinCode",
     "changePinCode",
-    "tryAgain"
+    "tryAgain",
+    "credentialSelectionListEmptyError",
+    "trustedIssuer"
   ],
 
   "fr": [
@@ -497,6 +501,8 @@
     "create_wallet_message",
     "enterYourPinCode",
     "changePinCode",
-    "tryAgain"
+    "tryAgain",
+    "credentialSelectionListEmptyError",
+    "trustedIssuer"
   ]
 }

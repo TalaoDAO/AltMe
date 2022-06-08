@@ -34,7 +34,9 @@ class DrawerView extends StatelessWidget {
 
   // method for reset wallet
   Future<void> resetButtonPressed(
-      BuildContext context, AppLocalizations l10n) async {
+    BuildContext context,
+    AppLocalizations l10n,
+  ) async {
     Navigator.of(context).pop();
     final confirm = await showDialog<bool>(
           context: context,

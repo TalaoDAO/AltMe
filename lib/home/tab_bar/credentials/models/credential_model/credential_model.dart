@@ -24,6 +24,9 @@ class CredentialModel extends Equatable {
     required this.revocationStatus,
     this.expirationDate,
     this.credentialManifest,
+    this.receivedId,
+    this.challenge,
+    this.domain,
   });
 
   factory CredentialModel.fromJson(Map<String, dynamic> json) {
@@ -53,6 +56,9 @@ class CredentialModel extends Equatable {
       revocationStatus: oldCredentialModel.revocationStatus,
       expirationDate: oldCredentialModel.expirationDate,
       credentialManifest: oldCredentialModel.credentialManifest,
+      receivedId: oldCredentialModel.receivedId,
+      challenge: oldCredentialModel.challenge,
+      domain: oldCredentialModel.domain,
     );
   }
 
@@ -71,11 +77,16 @@ class CredentialModel extends Equatable {
       revocationStatus: oldCredentialModel.revocationStatus,
       expirationDate: oldCredentialModel.expirationDate,
       credentialManifest: oldCredentialModel.credentialManifest,
+      receivedId: oldCredentialModel.receivedId,
+      challenge: oldCredentialModel.challenge,
+      domain: oldCredentialModel.domain,
     );
   }
 
   @JsonKey(fromJson: fromJsonId)
   final String id;
+  @JsonKey(readValue: readValueReceivedId)
+  late String? receivedId;
   final String? alias;
   final String? image;
   final Map<String, dynamic> data;
@@ -87,8 +98,10 @@ class CredentialModel extends Equatable {
   final String? expirationDate;
   @JsonKey(defaultValue: RevocationStatus.unknown)
   RevocationStatus revocationStatus;
-  @JsonKey(name: 'credential_manifest')
+  @JsonKey(name: 'credential_manifest', fromJson: credentialManifestFromJson)
   final CredentialManifest? credentialManifest;
+  final String? challenge;
+  final String? domain;
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
@@ -191,4 +204,25 @@ class CredentialModel extends Equatable {
         expirationDate,
         credentialManifest,
       ];
+
+  static CredentialManifest? credentialManifestFromJson(
+    Map<String, dynamic>? json,
+  ) {
+    if (json == null) {
+      return null;
+    }
+    if (json['credential_manifest'] != null) {
+      return CredentialManifest.fromJson(
+        json['credential_manifest'] as Map<String, dynamic>,
+      );
+    }
+    return CredentialManifest.fromJson(json);
+  }
+
+  static String? readValueReceivedId(Map map, String value) {
+    if (map['receivedId'] != null) {
+      return map['receivedId'] as String;
+    }
+    return map['id'] as String;
+  }
 }
