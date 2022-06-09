@@ -38,11 +38,12 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future deleteById(String id) async {
+  Future deleteById(CredentialModel credential) async {
     emit(state.loading());
-    await repository.deleteById(id);
+    await repository.deleteById(credential.id);
     final credentials = List.of(state.credentials)
-      ..removeWhere((element) => element.id == id);
+      ..removeWhere((element) => element.id == credential.id);
+    await credentialListCubit.deleteById(credential);
     emit(
       state.success(
         status: WalletStatus.delete,

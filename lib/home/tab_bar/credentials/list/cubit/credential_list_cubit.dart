@@ -104,6 +104,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
   }
 
   Future insertCredential(CredentialModel credential) async {
+    emit(state.loading());
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
@@ -180,6 +181,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
   }
 
   Future updateCredential(CredentialModel credential) async {
+    emit(state.loading());
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
@@ -247,6 +249,43 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           )
           ..insert(index, HomeCredential.isNotDummy(credential));
 
+        emit(state.populate(othersCredentials: _credentials));
+        break;
+    }
+  }
+
+  Future deleteById(CredentialModel credential) async {
+    emit(state.loading());
+    final CredentialSubjectModel credentialSubject =
+        credential.credentialPreview.credentialSubjectModel;
+    switch (credentialSubject.credentialCategory) {
+      case CredentialCategory.gamingCards:
+        final _credentials = List.of(state.gamingCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          );
+        emit(state.populate(gamingCredentials: _credentials));
+        break;
+
+      case CredentialCategory.communityCards:
+        final _credentials = List.of(state.communityCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          );
+        emit(state.populate(communityCredentials: _credentials));
+        break;
+
+      case CredentialCategory.identityCards:
+        final _credentials = List.of(state.identityCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          );
+        emit(state.populate(identityCredentials: _credentials));
+        break;
+      case CredentialCategory.othersCards:
+        final _credentials = List.of(state.othersCredentials)
+          ..removeWhere(
+              (element) => element.credentialModel?.id == credential.id);
         emit(state.populate(othersCredentials: _credentials));
         break;
     }
