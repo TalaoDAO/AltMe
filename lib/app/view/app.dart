@@ -58,7 +58,7 @@ class App extends StatelessWidget {
         ),
         BlocProvider<ScanCubit>(
           create: (context) => ScanCubit(
-            client: DioClient(Urls.checkIssuerServerUrl, Dio()),
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             walletCubit: context.read<WalletCubit>(),
             didKitProvider: DIDKitProvider(),
             secureStorageProvider: secure_storage.getSecureStorage,
@@ -66,7 +66,7 @@ class App extends StatelessWidget {
         ),
         BlocProvider<QRCodeScanCubit>(
           create: (context) => QRCodeScanCubit(
-            client: DioClient(Urls.checkIssuerServerUrl, Dio()),
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             requestClient: DioClient('', Dio()),
             scanCubit: context.read<ScanCubit>(),
             queryByExampleCubit: context.read<QueryByExampleCubit>(),

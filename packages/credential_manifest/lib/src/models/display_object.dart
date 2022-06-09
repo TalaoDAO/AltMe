@@ -38,17 +38,17 @@ class DisplayObject {
   Map<String, dynamic> toJson() => _$DisplayObjectToJson(this);
 
   static List<DisplayMapping>? _labeledDisplayMappingFromJson(
-    List<Map<String, dynamic>>? json,
+    dynamic json,
   ) {
-    if (json == null) {
-      return null;
+    if (json is List<dynamic>) {
+      return json.map((dynamic e) {
+        if (e['text'] == null) {
+          return LabeledDisplayMappingPath.fromJson(e as Map<String, dynamic>);
+        }
+        return LabeledDisplayMappingText.fromJson(e as Map<String, dynamic>);
+      }).toList();
     }
-    return json.map((e) {
-      if (e['text'] == null) {
-        return LabeledDisplayMappingPath.fromJson(e);
-      }
-      return LabeledDisplayMappingText.fromJson(e);
-    }).toList();
+    return null;
   }
 
   static DisplayMapping? _displayMappingFromJson(Map<String, dynamic>? json) {

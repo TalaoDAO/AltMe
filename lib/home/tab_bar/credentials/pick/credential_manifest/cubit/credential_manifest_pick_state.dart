@@ -1,32 +1,29 @@
-part of 'query_by_example_credentials_pick_cubit.dart';
+part of 'credential_manifest_pick_cubit.dart';
 
 @JsonSerializable()
-class QueryByExampleCredentialPickState extends Equatable {
-  QueryByExampleCredentialPickState({
+class CredentialManifestPickState extends Equatable {
+  CredentialManifestPickState({
     List<int>? selection,
     required this.filteredCredentialList,
   }) : selection = selection ?? <int>[];
 
-  factory QueryByExampleCredentialPickState.fromJson(
-    Map<String, dynamic> json,
-  ) =>
-      _$QueryByExampleCredentialPickStateFromJson(json);
+  factory CredentialManifestPickState.fromJson(Map<String, dynamic> json) =>
+      _$CredentialManifestPickStateFromJson(json);
 
   final List<int> selection;
   final List<CredentialModel> filteredCredentialList;
 
-  QueryByExampleCredentialPickState copyWith({
+  CredentialManifestPickState copyWith({
     List<int>? selection,
     required List<CredentialModel> filteredCredentialList,
   }) {
-    return QueryByExampleCredentialPickState(
+    return CredentialManifestPickState(
       selection: selection ?? this.selection,
       filteredCredentialList: filteredCredentialList,
     );
   }
 
-  Map<String, dynamic> toJson() =>
-      _$QueryByExampleCredentialPickStateToJson(this);
+  Map<String, dynamic> toJson() => _$CredentialManifestPickStateToJson(this);
 
   @override
   List<Object?> get props => [

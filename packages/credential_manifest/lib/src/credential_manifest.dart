@@ -1,4 +1,5 @@
 import 'package:credential_manifest/src/models/output_descriptor.dart';
+import 'package:credential_manifest/src/models/presentation_definition.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'credential_manifest.g.dart';
@@ -19,20 +20,38 @@ part 'credential_manifest.g.dart';
 @JsonSerializable(explicitToJson: true)
 class CredentialManifest {
   /// Initialyze [id] and [outputDescriptors]
-  CredentialManifest(this.id, this.outputDescriptors);
+  CredentialManifest(
+    this.id,
+    this.outputDescriptors,
+    this.presentationDefinition,
+  );
 
   /// Create object from json definition
   factory CredentialManifest.fromJson(Map<String, dynamic> json) =>
       _$CredentialManifestFromJson(json);
 
   ///
-  final String id;
+  final String? id;
 
   /// An array of OutputDescriptor which are objects used to describe the Claims
   /// an Issuer is offering to a Holder.
   @JsonKey(name: 'output_descriptors')
-  final List<OutputDescriptor> outputDescriptors;
+  final List<OutputDescriptor>? outputDescriptors;
+
+  /// A PresentationDefinition which is a list of presentations
+  @JsonKey(
+    name: 'presentation_definition',
+    fromJson: presentationDefinitionFromJson,
+  )
+  final PresentationDefinition? presentationDefinition;
 
   /// Create json object from instance
   Map<String, dynamic> toJson() => _$CredentialManifestToJson(this);
+
+  static PresentationDefinition? presentationDefinitionFromJson(dynamic json) {
+    if (json == null || json['input_descriptors'] == null) {
+      return null;
+    }
+    return PresentationDefinition.fromJson(json as Map<String, dynamic>);
+  }
 }
