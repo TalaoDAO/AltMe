@@ -56,6 +56,11 @@ class App extends StatelessWidget {
             homeCubit: context.read<HomeCubit>(),
           ),
         ),
+        BlocProvider<CredentialListCubit>(
+          create: (context) => CredentialListCubit(
+            walletCubit: context.read<WalletCubit>(),
+          ),
+        ),
         BlocProvider<ScanCubit>(
           create: (context) => ScanCubit(
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),

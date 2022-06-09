@@ -1,5 +1,6 @@
 export 'accentuations.dart';
 export 'altme_strings.dart';
+export 'credential_categories.dart';
 export 'enterprise.dart';
 export 'icon_strings.dart';
 export 'image_strings.dart';
