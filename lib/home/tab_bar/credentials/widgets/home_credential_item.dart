@@ -3,6 +3,7 @@ import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeCredentialItem extends StatelessWidget {
   const HomeCredentialItem({Key? key, required this.homeCredential})
@@ -34,47 +35,47 @@ class RealCredentialItem extends StatelessWidget {
     return BackgroundCard(
       color: Theme.of(context).colorScheme.credentialBackground,
       padding: const EdgeInsets.all(4),
-      child: Column(
-        children: [
-          Expanded(
-            flex: 8,
-            child: CredentialsListPageItem(
-              credentialModel: credentialModel,
-              onTap: () {},
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push<void>(
+            CredentialsDetailsPage.route(credentialModel),
+          );
+        },
+        child: Column(
+          children: [
+            Expanded(
+              flex: 8,
+              child: CredentialsListPageItem(
+                credentialModel: credentialModel,
+              ),
             ),
-          ),
-          const SizedBox(height: 5),
-          Expanded(
-            flex: 2,
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        IconStrings.tickCircle,
-                        height: 15,
-                      ),
-                      const SizedBox(width: 2),
-                      Expanded(
-                        child: MyText(
-                          l10n.inMyWallet,
-                          style:
-                              Theme.of(context).textTheme.credentialSurfaceText,
+            const SizedBox(height: 5),
+            Expanded(
+              flex: 2,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          IconStrings.tickCircle,
+                          height: 15,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 2),
+                        Expanded(
+                          child: MyText(
+                            l10n.inMyWallet,
+                            style: Theme.of(context)
+                                .textTheme
+                                .credentialSurfaceText,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push<void>(
-                        CredentialsDetailsPage.route(credentialModel),
-                      );
-                    },
+                  Expanded(
+                    flex: 2,
                     child: Row(
                       children: [
                         Image.asset(
@@ -97,11 +98,11 @@ class RealCredentialItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -120,21 +121,28 @@ class DummyCredentialItem extends StatelessWidget {
     return BackgroundCard(
       color: Theme.of(context).colorScheme.credentialBackground,
       padding: const EdgeInsets.all(4),
-      child: Column(
-        children: [
-          Expanded(
-            flex: 8,
-            child: CredentialContainer(
-              child: Image.asset(homeCredential.image!, fit: BoxFit.fill),
+      child: InkWell(
+        onTap: () async {
+          if (context.read<HomeCubit>().state == HomeStatus.hasNoWallet) {
+            await showDialog<void>(
+              context: context,
+              builder: (_) => const WalletDialog(),
+            );
+            return;
+          }
+          await LaunchUrl.launch(homeCredential.link!);
+        },
+        child: Column(
+          children: [
+            Expanded(
+              flex: 8,
+              child: CredentialContainer(
+                child: Image.asset(homeCredential.image!, fit: BoxFit.fill),
+              ),
             ),
-          ),
-          const SizedBox(height: 5),
-          Expanded(
-            flex: 2,
-            child: GestureDetector(
-              onTap: () async {
-                await LaunchUrl.launch(homeCredential.link!);
-              },
+            const SizedBox(height: 5),
+            Expanded(
+              flex: 2,
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   vertical: 5,
@@ -159,9 +167,9 @@ class DummyCredentialItem extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

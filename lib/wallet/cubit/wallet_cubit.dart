@@ -15,6 +15,7 @@ class WalletCubit extends Cubit<WalletState> {
     required this.secureStorageProvider,
     required this.profileCubit,
     required this.homeCubit,
+    required this.credentialListCubit,
   }) : super(WalletState()) {
     initialize();
   }
@@ -23,6 +24,7 @@ class WalletCubit extends Cubit<WalletState> {
   final SecureStorageProvider secureStorageProvider;
   final ProfileCubit profileCubit;
   final HomeCubit homeCubit;
+  final CredentialListCubit credentialListCubit;
 
   Future initialize() async {
     final key = await secureStorageProvider.get(SecureStorageKeys.key);
@@ -36,11 +38,12 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future deleteById(String id) async {
+  Future deleteById(CredentialModel credential) async {
     emit(state.loading());
-    await repository.deleteById(id);
+    await repository.deleteById(credential.id);
     final credentials = List.of(state.credentials)
-      ..removeWhere((element) => element.id == id);
+      ..removeWhere((element) => element.id == credential.id);
+    await credentialListCubit.deleteById(credential);
     emit(
       state.success(
         status: WalletStatus.delete,
@@ -71,6 +74,7 @@ class WalletCubit extends Cubit<WalletState> {
     final credentials = List.of(state.credentials)
       ..removeWhere((element) => element.id == credential.id)
       ..insert(index, credential);
+    await credentialListCubit.updateCredential(credential);
     emit(
       state.success(
         status: WalletStatus.update,
@@ -97,6 +101,7 @@ class WalletCubit extends Cubit<WalletState> {
   Future insertCredential(CredentialModel credential) async {
     await repository.insert(credential);
     final credentials = List.of(state.credentials)..add(credential);
+    await credentialListCubit.insertCredential(credential);
     emit(
       state.success(
         status: WalletStatus.insert,
@@ -115,6 +120,7 @@ class WalletCubit extends Cubit<WalletState> {
     await repository.deleteAll();
     await profileCubit.resetProfile();
     homeCubit.emitHasNoWallet();
+    await credentialListCubit.clearCredentials();
     emit(state.success(status: WalletStatus.reset, credentials: []));
     emit(state.success(status: WalletStatus.init));
   }

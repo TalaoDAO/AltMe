@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/home/bottom_bar/search/cubit/cubit/search_cubit.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';

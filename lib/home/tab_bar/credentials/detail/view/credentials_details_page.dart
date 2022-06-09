@@ -62,7 +62,7 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
         false;
 
     if (confirm) {
-      await context.read<WalletCubit>().deleteById(widget.credentialModel.id);
+      await context.read<WalletCubit>().deleteById(widget.credentialModel);
     }
   }
 
