@@ -111,7 +111,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         /// adding real credentials
         final _credentials = List.of(state.gamingCredentials)
-          ..add(HomeCredential.isNotDummy(credential));
+          ..insert(0, HomeCredential.isNotDummy(credential));
 
         /// remove dummy credentials list if exists
         final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
@@ -132,7 +132,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         /// adding real credentials
         final _credentials = List.of(state.communityCredentials)
-          ..add(HomeCredential.isNotDummy(credential));
+          ..insert(0, HomeCredential.isNotDummy(credential));
 
         /// remove dummy credentials list if exists
         final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
@@ -152,7 +152,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         /// adding real credentials
         final _credentials = List.of(state.identityCredentials)
-          ..add(HomeCredential.isNotDummy(credential));
+          ..insert(0, HomeCredential.isNotDummy(credential));
 
         /// remove dummy credentials list if exists
         final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
@@ -172,7 +172,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         /// adding real credentials
         final _credentials = List.of(state.othersCredentials)
-          ..add(HomeCredential.isNotDummy(credential));
+          ..insert(0, HomeCredential.isNotDummy(credential));
 
         emit(state.populate(othersCredentials: _credentials));
         break;
