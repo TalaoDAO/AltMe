@@ -39,6 +39,16 @@ class _PinCodePageState extends State<PinCodePage> {
 
   @override
   void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      final fingerprintEnabled =
+          await getSecureStorage.get(SecureStorageKeys.fingerprintEnabled);
+      if (fingerprintEnabled == true.toString()) {
+        final authenticated = await LocalAuthApi().authenticate();
+        if (authenticated) {
+          widget.isValidCallback.call();
+        }
+      }
+    });
     super.initState();
   }
 

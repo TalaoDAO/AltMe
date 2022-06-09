@@ -164,11 +164,19 @@ class DrawerView extends StatelessWidget {
                             final hasBiometrics =
                                 await LocalAuthApi().hasBiometrics();
                             if (hasBiometrics) {
-                              drawerCubit.setFingerprintEnabled(enabled: value);
-                              await LocalAuthApi().authenticate(
-                                  localizedReason:
-                                      l10n.scanFingerprintToAuthenticate);
-                              // TODO(Taleb): check if save isEnabled inside storage
+                              final result = await LocalAuthApi().authenticate(
+                                localizedReason:
+                                    l10n.scanFingerprintToAuthenticate,
+                              );
+                              if (result) {
+                                await getSecureStorage.set(
+                                  SecureStorageKeys.fingerprintEnabled,
+                                  value.toString(),
+                                );
+                                drawerCubit.setFingerprintEnabled(
+                                  enabled: value,
+                                );
+                              }
                             } else {
                               // TODO(Taleb): show pop up and tell user that his device don't supports biometrics authentication
                             }

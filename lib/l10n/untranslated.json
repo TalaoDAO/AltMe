@@ -157,7 +157,8 @@
     "inMyWallet",
     "details",
     "getThisCard",
-    "loginWithBiometrics"
+    "loginWithBiometrics",
+    "scanFingerprintToAuthenticate"
   ],
 
   "es": [
@@ -318,7 +319,8 @@
     "inMyWallet",
     "details",
     "getThisCard",
-    "loginWithBiometrics"
+    "loginWithBiometrics",
+    "scanFingerprintToAuthenticate"
   ],
 
   "fr": [
@@ -370,7 +372,8 @@
     "inMyWallet",
     "details",
     "getThisCard",
-    "loginWithBiometrics"
+    "loginWithBiometrics",
+    "scanFingerprintToAuthenticate"
   ],
 
   "it": [
@@ -533,6 +536,7 @@
     "inMyWallet",
     "details",
     "getThisCard",
-    "loginWithBiometrics"
+    "loginWithBiometrics",
+    "scanFingerprintToAuthenticate"
   ]
 }
