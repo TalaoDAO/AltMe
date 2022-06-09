@@ -158,7 +158,9 @@
     "details",
     "getThisCard",
     "loginWithBiometrics",
-    "scanFingerprintToAuthenticate"
+    "scanFingerprintToAuthenticate",
+    "biometricsNotSupported",
+    "yourDeviceDoseNotSupportBiometricsAuthentication"
   ],
 
   "es": [
@@ -320,7 +322,9 @@
     "details",
     "getThisCard",
     "loginWithBiometrics",
-    "scanFingerprintToAuthenticate"
+    "scanFingerprintToAuthenticate",
+    "biometricsNotSupported",
+    "yourDeviceDoseNotSupportBiometricsAuthentication"
   ],
 
   "fr": [
@@ -373,7 +377,9 @@
     "details",
     "getThisCard",
     "loginWithBiometrics",
-    "scanFingerprintToAuthenticate"
+    "scanFingerprintToAuthenticate",
+    "biometricsNotSupported",
+    "yourDeviceDoseNotSupportBiometricsAuthentication"
   ],
 
   "it": [
@@ -537,6 +543,8 @@
     "details",
     "getThisCard",
     "loginWithBiometrics",
-    "scanFingerprintToAuthenticate"
+    "scanFingerprintToAuthenticate",
+    "biometricsNotSupported",
+    "yourDeviceDoseNotSupportBiometricsAuthentication"
   ]
 }

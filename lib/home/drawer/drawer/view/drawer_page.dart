@@ -178,7 +178,15 @@ class DrawerView extends StatelessWidget {
                                 );
                               }
                             } else {
-                              // TODO(Taleb): show pop up and tell user that his device don't supports biometrics authentication
+                              await showDialog<bool>(
+                                context: context,
+                                builder: (context) => ConfirmDialog(
+                                  title: l10n.biometricsNotSupported,
+                                  subtitle: l10n
+                                      .yourDeviceDoseNotSupportBiometricsAuthentication,
+                                  yes: l10n.ok,
+                                ),
+                              );
                             }
                           },
                           value: state.isBiometricsEnable,

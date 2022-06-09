@@ -317,5 +317,7 @@
   "details": "Details",
   "getThisCard": "Get this card",
   "loginWithBiometrics": "Login with biometrics",
-  "scanFingerprintToAuthenticate": "Scan Fingerprint to Authenticate"
+  "scanFingerprintToAuthenticate": "Scan Fingerprint to Authenticate",
+  "biometricsNotSupported": "Biometrics not supported",
+  "yourDeviceDoseNotSupportBiometricsAuthentication": "Your device dose not supports biometrics authentication"
 }
