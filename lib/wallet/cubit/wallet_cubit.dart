@@ -73,6 +73,7 @@ class WalletCubit extends Cubit<WalletState> {
     final credentials = List.of(state.credentials)
       ..removeWhere((element) => element.id == credential.id)
       ..insert(index, credential);
+    await credentialListCubit.updateCredential(credential);
     emit(
       state.success(
         status: WalletStatus.update,

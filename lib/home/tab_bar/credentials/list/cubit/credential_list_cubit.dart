@@ -110,74 +110,144 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       case CredentialCategory.gamingCards:
 
         /// adding real credentials
-        final gamingCredentials = List.of(state.gamingCredentials)
+        final _credentials = List.of(state.gamingCredentials)
           ..add(HomeCredential.isNotDummy(credential));
 
         /// remove dummy credentials list if exists
-        final HomeCredential? dummyCredential =
-            gamingCredentials.firstWhereOrNull(
+        final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
           (element) =>
               element.isDummy &&
               element.credentialSubjectType ==
                   credentialSubject.credentialSubjectType,
         );
         if (dummyCredential != null) {
-          gamingCredentials.remove(dummyCredential);
+          _credentials.remove(dummyCredential);
         }
 
-        emit(state.populate(gamingCredentials: gamingCredentials));
+        emit(state.populate(gamingCredentials: _credentials));
 
         break;
 
       case CredentialCategory.communityCards:
 
         /// adding real credentials
-        final communityCredentials = List.of(state.communityCredentials)
+        final _credentials = List.of(state.communityCredentials)
           ..add(HomeCredential.isNotDummy(credential));
 
         /// remove dummy credentials list if exists
-        final HomeCredential? dummyCredential =
-            communityCredentials.firstWhereOrNull(
+        final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
           (element) =>
               element.isDummy &&
               element.credentialSubjectType ==
                   credentialSubject.credentialSubjectType,
         );
         if (dummyCredential != null) {
-          communityCredentials.remove(dummyCredential);
+          _credentials.remove(dummyCredential);
         }
 
-        emit(state.populate(communityCredentials: communityCredentials));
+        emit(state.populate(communityCredentials: _credentials));
         break;
 
       case CredentialCategory.identityCards:
 
         /// adding real credentials
-        final identityCredentials = List.of(state.identityCredentials)
+        final _credentials = List.of(state.identityCredentials)
           ..add(HomeCredential.isNotDummy(credential));
 
         /// remove dummy credentials list if exists
-        final HomeCredential? dummyCredential =
-            identityCredentials.firstWhereOrNull(
+        final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
           (element) =>
               element.isDummy &&
               element.credentialSubjectType ==
                   credentialSubject.credentialSubjectType,
         );
         if (dummyCredential != null) {
-          identityCredentials.remove(dummyCredential);
+          _credentials.remove(dummyCredential);
         }
 
-        emit(state.populate(identityCredentials: identityCredentials));
+        emit(state.populate(identityCredentials: _credentials));
         break;
 
       case CredentialCategory.othersCards:
 
         /// adding real credentials
-        final othersCredentials = List.of(state.othersCredentials)
+        final _credentials = List.of(state.othersCredentials)
           ..add(HomeCredential.isNotDummy(credential));
 
-        emit(state.populate(othersCredentials: othersCredentials));
+        emit(state.populate(othersCredentials: _credentials));
+        break;
+    }
+  }
+
+  Future updateCredential(CredentialModel credential) async {
+    final CredentialSubjectModel credentialSubject =
+        credential.credentialPreview.credentialSubjectModel;
+    switch (credentialSubject.credentialCategory) {
+      case CredentialCategory.gamingCards:
+
+        ///finding index of updated credential
+        final index = state.gamingCredentials.indexWhere(
+          (element) => element.credentialModel?.id == credential.id,
+        );
+
+        ///create updated credential list
+        final _credentials = List.of(state.gamingCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          )
+          ..insert(index, HomeCredential.isNotDummy(credential));
+
+        emit(state.populate(gamingCredentials: _credentials));
+        break;
+
+      case CredentialCategory.communityCards:
+
+        ///finding index of updated credential
+        final index = state.communityCredentials.indexWhere(
+          (element) => element.credentialModel?.id == credential.id,
+        );
+
+        ///create updated credential list
+        final _credentials = List.of(state.communityCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          )
+          ..insert(index, HomeCredential.isNotDummy(credential));
+
+        emit(state.populate(communityCredentials: _credentials));
+        break;
+
+      case CredentialCategory.identityCards:
+
+        ///finding index of updated credential
+        final index = state.identityCredentials.indexWhere(
+          (element) => element.credentialModel?.id == credential.id,
+        );
+
+        ///create updated credential list
+        final _credentials = List.of(state.identityCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          )
+          ..insert(index, HomeCredential.isNotDummy(credential));
+
+        emit(state.populate(identityCredentials: _credentials));
+        break;
+      case CredentialCategory.othersCards:
+
+        ///finding index of updated credential
+        final index = state.othersCredentials.indexWhere(
+          (element) => element.credentialModel?.id == credential.id,
+        );
+
+        ///create updated credential list
+        final _credentials = List.of(state.othersCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          )
+          ..insert(index, HomeCredential.isNotDummy(credential));
+
+        emit(state.populate(othersCredentials: _credentials));
         break;
     }
   }
