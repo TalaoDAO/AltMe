@@ -149,6 +149,8 @@
     "enterYourPinCode",
     "changePinCode",
     "tryAgain",
+    "credentialSelectionListEmptyError",
+    "trustedIssuer",
     "yourPinCodeChangedSuccessfully",
     "gamingCards",
     "identityCards",
@@ -309,6 +311,8 @@
     "enterYourPinCode",
     "changePinCode",
     "tryAgain",
+    "credentialSelectionListEmptyError",
+    "trustedIssuer",
     "yourPinCodeChangedSuccessfully",
     "gamingCards",
     "identityCards",
@@ -359,15 +363,7 @@
     "create_wallet_message",
     "enterYourPinCode",
     "changePinCode",
-    "tryAgain",
-    "yourPinCodeChangedSuccessfully",
-    "gamingCards",
-    "identityCards",
-    "communityCards",
-    "otherCards",
-    "inMyWallet",
-    "details",
-    "getThisCard"
+    "tryAgain"
   ],
 
   "it": [
@@ -522,6 +518,8 @@
     "enterYourPinCode",
     "changePinCode",
     "tryAgain",
+    "credentialSelectionListEmptyError",
+    "trustedIssuer",
     "yourPinCodeChangedSuccessfully",
     "gamingCards",
     "identityCards",

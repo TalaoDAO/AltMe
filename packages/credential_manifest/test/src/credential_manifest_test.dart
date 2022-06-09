@@ -5,7 +5,14 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('CredentialManifest', () {
     test('can be instantiated', () {
-      expect(CredentialManifest('idOfCredentialManifest', []), isNotNull);
+      expect(
+        CredentialManifest(
+          'idOfCredentialManifest',
+          [],
+          null,
+        ),
+        isNotNull,
+      );
     });
   });
 }

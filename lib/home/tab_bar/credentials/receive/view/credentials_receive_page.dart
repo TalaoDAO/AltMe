@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/home/tab_bar/credentials/pick/credential_manifest/credential_manifest_pick.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:flutter/material.dart';
@@ -94,20 +95,32 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                 BaseButton.primary(
                   context: context,
                   onPressed: () async {
-                    final alias = await showDialog<String>(
-                      context: builderContext,
-                      builder: (context) => TextFieldDialog(
-                        title: l10n.credentialPickAlertMessage,
-                      ),
-                    );
-                    await context.read<ScanCubit>().credentialOffer(
-                          url: widget.uri.toString(),
-                          credentialModel: CredentialModel.copyWithAlias(
+                    /// We removed dialog box which is asking for the user
+                    /// to provide alias to the credential.
+                    const alias = '';
+
+                    if (credentialModel
+                            .credentialManifest?.presentationDefinition !=
+                        null) {
+                      await Navigator.of(context).pushReplacement<void, void>(
+                        CredentialManifestOfferPickPage.route(
+                          widget.uri,
+                          CredentialModel.copyWithAlias(
                             oldCredentialModel: credentialModel,
                             newAlias: alias,
                           ),
-                          keyId: 'key',
-                        );
+                        ),
+                      );
+                    } else {
+                      await context.read<ScanCubit>().credentialOffer(
+                            url: widget.uri.toString(),
+                            credentialModel: CredentialModel.copyWithAlias(
+                              oldCredentialModel: credentialModel,
+                              newAlias: alias,
+                            ),
+                            keyId: 'key',
+                          );
+                    }
                   },
                   child: Text(l10n.credentialReceiveConfirm),
                 ),

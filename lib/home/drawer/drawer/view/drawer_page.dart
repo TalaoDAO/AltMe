@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,9 @@ class DrawerView extends StatelessWidget {
 
   //method for set new pin code
   Future<void> setNewPinCode(
-      BuildContext context, AppLocalizations l10n) async {
+    BuildContext context,
+    AppLocalizations l10n,
+  ) async {
     Navigator.of(context).pop();
     Navigator.of(context).pop();
     await Navigator.of(context).push<void>(
@@ -40,7 +43,9 @@ class DrawerView extends StatelessWidget {
 
   // method for reset wallet
   Future<void> resetButtonPressed(
-      BuildContext context, AppLocalizations l10n) async {
+    BuildContext context,
+    AppLocalizations l10n,
+  ) async {
     Navigator.of(context).pop();
     final confirm = await showDialog<bool>(
           context: context,
