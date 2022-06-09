@@ -15,13 +15,17 @@ class DrawerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => DrawerCubit(),
-      child: const DrawerView(),
+      child: DrawerView(
+        localAuthApi: LocalAuthApi(),
+      ),
     );
   }
 }
 
 class DrawerView extends StatelessWidget {
-  const DrawerView({Key? key}) : super(key: key);
+  const DrawerView({Key? key, required this.localAuthApi}) : super(key: key);
+
+  final LocalAuthApi localAuthApi;
 
   //method for set new pin code
   Future<void> setNewPinCode(
@@ -166,9 +170,9 @@ class DrawerView extends StatelessWidget {
                         trailing: Switch(
                           onChanged: (value) async {
                             final hasBiometrics =
-                                await LocalAuthApi().hasBiometrics();
+                                await localAuthApi.hasBiometrics();
                             if (hasBiometrics) {
-                              final result = await LocalAuthApi().authenticate(
+                              final result = await localAuthApi.authenticate(
                                 localizedReason:
                                     l10n.scanFingerprintToAuthenticate,
                               );

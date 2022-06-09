@@ -31,7 +31,7 @@ class LocalAuthApi {
   }
 
   Future<bool> authenticate({
-    String localizedReason = 'Scan Fingerprint to Authenticate',
+    required String localizedReason,
   }) async {
     final isAvailable = await hasBiometrics();
     if (!isAvailable) return false;
@@ -44,7 +44,7 @@ class LocalAuthApi {
           stickyAuth: true,
         ),
       );
-    } on PlatformException catch (e,s) {
+    } on PlatformException catch (e, s) {
       logger.info('${e.message} stack: $s');
       return false;
     }

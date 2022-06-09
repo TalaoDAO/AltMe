@@ -11,10 +11,12 @@ class PinCodePage extends StatefulWidget {
     Key? key,
     required this.isValidCallback,
     this.restrictToBack = true,
+    required this.localAuthApi,
   }) : super(key: key);
 
   final VoidCallback isValidCallback;
   final bool restrictToBack;
+  final LocalAuthApi localAuthApi;
 
   static MaterialPageRoute route({
     required VoidCallback isValidCallback,
@@ -24,6 +26,7 @@ class PinCodePage extends StatefulWidget {
       builder: (_) => PinCodePage(
         isValidCallback: isValidCallback,
         restrictToBack: restrictToBack,
+        localAuthApi: LocalAuthApi(),
       ),
       settings: const RouteSettings(name: '/pinCodePage'),
     );
@@ -43,7 +46,9 @@ class _PinCodePageState extends State<PinCodePage> {
       final fingerprintEnabled =
           await getSecureStorage.get(SecureStorageKeys.fingerprintEnabled);
       if (fingerprintEnabled == true.toString()) {
-        final authenticated = await LocalAuthApi().authenticate();
+        final l10n = context.l10n;
+        final authenticated = await widget.localAuthApi
+            .authenticate(localizedReason: l10n.scanFingerprintToAuthenticate);
         if (authenticated) {
           widget.isValidCallback.call();
         }
