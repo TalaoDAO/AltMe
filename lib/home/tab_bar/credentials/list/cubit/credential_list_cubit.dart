@@ -290,4 +290,15 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         break;
     }
   }
+
+  Future clearCredentials() async {
+    emit(
+      state.populate(
+        gamingCredentials: [],
+        communityCredentials: [],
+        identityCredentials: [],
+        othersCredentials: [],
+      ),
+    );
+  }
 }

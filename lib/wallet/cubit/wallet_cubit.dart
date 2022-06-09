@@ -120,6 +120,7 @@ class WalletCubit extends Cubit<WalletState> {
     await repository.deleteAll();
     await profileCubit.resetProfile();
     homeCubit.emitHasNoWallet();
+    await credentialListCubit.resetWallet();
     emit(state.success(status: WalletStatus.reset, credentials: []));
     emit(state.success(status: WalletStatus.init));
   }
