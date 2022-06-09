@@ -3,6 +3,7 @@ import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeCredentialItem extends StatelessWidget {
   const HomeCredentialItem({Key? key, required this.homeCredential})
@@ -133,6 +134,13 @@ class DummyCredentialItem extends StatelessWidget {
             flex: 2,
             child: GestureDetector(
               onTap: () async {
+                if (context.read<HomeCubit>().state == HomeStatus.hasNoWallet) {
+                  await showDialog<void>(
+                    context: context,
+                    builder: (_) => const WalletDialog(),
+                  );
+                  return;
+                }
                 await LaunchUrl.launch(homeCredential.link!);
               },
               child: Container(

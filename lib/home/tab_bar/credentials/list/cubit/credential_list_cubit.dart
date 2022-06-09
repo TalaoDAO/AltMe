@@ -64,11 +64,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       identityCredentials.add(HomeCredential.isDummy(credentialSubjectType));
     }
 
-    emit(state.populate(
-      gamingCredentials: gamingCredentials,
-      communityCredentials: communityCredentials,
-      identityCredentials: identityCredentials,
-      othersCredentials: othersCredentials,
-    ));
+    emit(
+      state.populate(
+        gamingCredentials: gamingCredentials,
+        communityCredentials: communityCredentials,
+        identityCredentials: identityCredentials,
+        othersCredentials: othersCredentials,
+      ),
+    );
   }
 }
