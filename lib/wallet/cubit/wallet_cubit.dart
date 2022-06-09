@@ -15,6 +15,7 @@ class WalletCubit extends Cubit<WalletState> {
     required this.secureStorageProvider,
     required this.profileCubit,
     required this.homeCubit,
+    required this.credentialListCubit,
   }) : super(WalletState()) {
     initialize();
   }
@@ -23,6 +24,7 @@ class WalletCubit extends Cubit<WalletState> {
   final SecureStorageProvider secureStorageProvider;
   final ProfileCubit profileCubit;
   final HomeCubit homeCubit;
+  final CredentialListCubit credentialListCubit;
 
   Future initialize() async {
     final key = await secureStorageProvider.get(SecureStorageKeys.key);
@@ -97,6 +99,7 @@ class WalletCubit extends Cubit<WalletState> {
   Future insertCredential(CredentialModel credential) async {
     await repository.insert(credential);
     final credentials = List.of(state.credentials)..add(credential);
+    await credentialListCubit.insertCredential(credential);
     emit(
       state.success(
         status: WalletStatus.insert,

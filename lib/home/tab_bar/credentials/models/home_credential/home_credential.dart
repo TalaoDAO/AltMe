@@ -12,6 +12,7 @@ class HomeCredential extends Equatable {
     this.link,
     this.image,
     required this.isDummy,
+    required this.credentialSubjectType,
   });
 
   factory HomeCredential.fromJson(Map<String, dynamic> json) =>
@@ -21,6 +22,8 @@ class HomeCredential extends Equatable {
     return HomeCredential(
       credentialModel: credentialModel,
       isDummy: false,
+      credentialSubjectType: credentialModel
+          .credentialPreview.credentialSubjectModel.credentialSubjectType,
     );
   }
 
@@ -71,6 +74,7 @@ class HomeCredential extends Equatable {
       isDummy: true,
       image: image,
       link: link,
+      credentialSubjectType: credentialSubjectType,
     );
   }
 
@@ -78,9 +82,11 @@ class HomeCredential extends Equatable {
   final String? link;
   final String? image;
   final bool isDummy;
+  final CredentialSubjectType credentialSubjectType;
 
   Map<String, dynamic> toJson() => _$HomeCredentialToJson(this);
 
   @override
-  List<Object?> get props => [credentialModel, link, image, isDummy];
+  List<Object?> get props =>
+      [credentialModel, link, image, isDummy, credentialSubjectType];
 }

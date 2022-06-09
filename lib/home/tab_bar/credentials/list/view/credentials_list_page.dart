@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +18,7 @@ class CredentialsListPage extends StatefulWidget {
 class _CredentialsListPageState extends State<CredentialsListPage> {
   @override
   void initState() {
-    context.read<CredentialListCubit>().initialise();
+    context.read<CredentialListCubit>().initialise(context.read<WalletCubit>());
     super.initState();
   }
 
