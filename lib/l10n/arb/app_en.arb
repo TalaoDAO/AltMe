@@ -317,5 +317,9 @@
   "otherCards": "Other Cards",
   "inMyWallet": "In my wallet",
   "details": "Details",
-  "getThisCard": "Get this card"
+  "getThisCard": "Get this card",
+  "loginWithBiometrics": "Login with biometrics",
+  "scanFingerprintToAuthenticate": "Scan Fingerprint to Authenticate",
+  "biometricsNotSupported": "Biometrics not supported",
+  "yourDeviceDoseNotSupportBiometricsAuthentication": "Your device dose not supports biometrics authentication"
 }

@@ -1,4 +1,5 @@
 class SecureStorageKeys {
+  static const String fingerprintEnabled = 'fingerprintEnabled';
   static const String pinCode = 'pinCode';
   static const String data = 'data';
   static const String mnemonic = 'mnemonic';

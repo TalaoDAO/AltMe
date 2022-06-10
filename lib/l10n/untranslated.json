@@ -158,7 +158,11 @@
     "otherCards",
     "inMyWallet",
     "details",
-    "getThisCard"
+    "getThisCard",
+    "loginWithBiometrics",
+    "scanFingerprintToAuthenticate",
+    "biometricsNotSupported",
+    "yourDeviceDoseNotSupportBiometricsAuthentication"
   ],
 
   "es": [
@@ -320,7 +324,11 @@
     "otherCards",
     "inMyWallet",
     "details",
-    "getThisCard"
+    "getThisCard",
+    "loginWithBiometrics",
+    "scanFingerprintToAuthenticate",
+    "biometricsNotSupported",
+    "yourDeviceDoseNotSupportBiometricsAuthentication"
   ],
 
   "fr": [
@@ -363,7 +371,11 @@
     "create_wallet_message",
     "enterYourPinCode",
     "changePinCode",
-    "tryAgain"
+    "tryAgain",
+    "loginWithBiometrics",
+    "scanFingerprintToAuthenticate",
+    "biometricsNotSupported",
+    "yourDeviceDoseNotSupportBiometricsAuthentication"
   ],
 
   "it": [
@@ -527,6 +539,10 @@
     "otherCards",
     "inMyWallet",
     "details",
-    "getThisCard"
+    "getThisCard",
+    "loginWithBiometrics",
+    "scanFingerprintToAuthenticate",
+    "biometricsNotSupported",
+    "yourDeviceDoseNotSupportBiometricsAuthentication"
   ]
 }

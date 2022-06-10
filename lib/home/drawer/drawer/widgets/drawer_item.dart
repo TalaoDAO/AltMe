@@ -7,14 +7,14 @@ class DrawerItem extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.title,
-    required this.onTap,
+    this.onTap,
     this.trailing,
   }) : super(key: key);
 
   final String icon;
   final Widget? trailing;
   final String title;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +46,8 @@ class DrawerItem extends StatelessWidget {
                   style: Theme.of(context).textTheme.drawerItem,
                 ),
               ),
-              if (trailing == null)
-                Container()
+              if (trailing != null)
+                trailing!
               else ...[
                 const SizedBox(width: 16),
                 Icon(
