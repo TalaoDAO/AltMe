@@ -71,7 +71,7 @@ class _TokenViewState extends State<TokenView> {
                   //some action
                 }
               },
-              builder: (_, state) {
+              builder: (context, state) {
                 String message = '';
                 if (state.message != null) {
                   final MessageHandler messageHandler =

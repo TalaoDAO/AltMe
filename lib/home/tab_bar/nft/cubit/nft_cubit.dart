@@ -38,7 +38,7 @@ class NftCubit extends Cubit<NftState> {
       // TODO(all): handle error message localization and error message
       if (isClosed) return;
       emit(
-        state.errorWhileFetcing(
+        state.errorWhileFetching(
           messageHandler: ResponseMessage(
             ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           ),

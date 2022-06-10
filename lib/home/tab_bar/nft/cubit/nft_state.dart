@@ -19,7 +19,7 @@ class NftState extends Equatable {
     return NftState(status: AppStatus.fetching, data: data);
   }
 
-  NftState errorWhileFetcing({
+  NftState errorWhileFetching({
     required MessageHandler messageHandler,
   }) {
     return NftState(

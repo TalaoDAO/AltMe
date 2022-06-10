@@ -19,7 +19,7 @@ class TokensState extends Equatable {
     return TokensState(status: AppStatus.fetching, data: data);
   }
 
-  TokensState errorWhileFetcing({
+  TokensState errorWhileFetching({
     required MessageHandler messageHandler,
   }) {
     return TokensState(
