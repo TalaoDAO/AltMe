@@ -14,6 +14,10 @@ class DisplayInList extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
+      case CredentialSubjectType.associatedWallet:
+        return AssociatedWalletDisplayInList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.certificateOfEmployment:
         return CertificateOfEmploymentDisplayInList(
           credentialModel: credentialModel,

@@ -8,6 +8,8 @@ class Urls {
 
   static const String certificateOfEmploymentUrl =
       'https://talao.co/wallet/test/direct_offer?VC=CertificateOfEmployment.jsonld';
+  static const String associatedWalletUrl =
+      'https://talao.co/wallet/test/direct_offer?address=&VC=TezosAssociatedWallet.jsonld';
   static const String emailPassUrl = 'https://issuer.talao.co/emailpass';
   static const String learningAchievementUrl =
       'https://talao.co/wallet/test/direct_offer?VC=LearningAchievement.jsonld';

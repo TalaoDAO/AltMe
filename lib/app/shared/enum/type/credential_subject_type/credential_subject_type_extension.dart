@@ -15,6 +15,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   Color defaultBackgroundColor() {
     switch (this) {
+      case CredentialSubjectType.associatedWallet:
+        return const Color(0xffFE7400);
       case CredentialSubjectType.residentCard:
         return Colors.white;
       case CredentialSubjectType.selfIssued:
@@ -52,6 +54,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   IconData iconData() {
     switch (this) {
+      case CredentialSubjectType.associatedWallet:
+        return Icons.account_balance_wallet;
       case CredentialSubjectType.residentCard:
         return Icons.home;
       case CredentialSubjectType.selfIssued:

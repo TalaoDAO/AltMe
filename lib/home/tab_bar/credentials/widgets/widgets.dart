@@ -1,3 +1,4 @@
+export 'associated_wallet_widget.dart';
 export 'card_animation.dart';
 export 'certificate_of_employment_widget.dart';
 export 'credential_background.dart';
