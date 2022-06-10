@@ -15,9 +15,7 @@ class DrawerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => DrawerCubit(),
-      child: DrawerView(
-        localAuthApi: LocalAuthApi(),
-      ),
+      child: DrawerView(localAuthApi: LocalAuthApi()),
     );
   }
 }
@@ -181,8 +179,15 @@ class DrawerView extends StatelessWidget {
                                 SecureStorageKeys.fingerprintEnabled,
                                 value.toString(),
                               );
-                              drawerCubit.setFingerprintEnabled(
-                                enabled: value,
+                              drawerCubit.setFingerprintEnabled(enabled: value);
+                              await showDialog<bool>(
+                                context: context,
+                                builder: (context) => InfoDialog(
+                                  title: value
+                                      ? l10n.biometricsEnabledMessage
+                                      : l10n.biometricsDisabledMessage,
+                                  button: l10n.ok,
+                                ),
                               );
                             }
                           } else {
