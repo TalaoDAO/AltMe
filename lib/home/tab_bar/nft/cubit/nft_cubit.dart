@@ -9,7 +9,9 @@ part 'nft_cubit.g.dart';
 part 'nft_state.dart';
 
 class NftCubit extends Cubit<NftState> {
-  NftCubit({required this.client}) : super(const NftState());
+  NftCubit({required this.client}) : super(const NftState()) {
+    getTezosNftList();
+  }
 
   final DioClient client;
 

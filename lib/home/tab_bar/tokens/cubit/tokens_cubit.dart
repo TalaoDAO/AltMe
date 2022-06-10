@@ -9,7 +9,9 @@ part 'tokens_cubit.g.dart';
 part 'tokens_state.dart';
 
 class TokensCubit extends Cubit<TokensState> {
-  TokensCubit({required this.client}) : super(const TokensState());
+  TokensCubit({required this.client}) : super(const TokensState()) {
+    getBalanceOfAssetList();
+  }
 
   final DioClient client;
 

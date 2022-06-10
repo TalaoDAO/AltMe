@@ -30,13 +30,6 @@ class NftView extends StatefulWidget {
 
 class _NftViewState extends State<NftView> {
   OverlayEntry? _overlay;
-  @override
-  void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      context.read<NftCubit>().getTezosNftList();
-    });
-    super.initState();
-  }
 
   Future<void> onRefresh() async {
     await context.read<NftCubit>().getTezosNftList();

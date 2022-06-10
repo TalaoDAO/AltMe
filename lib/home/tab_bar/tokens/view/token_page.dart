@@ -29,14 +29,6 @@ class TokenView extends StatefulWidget {
 class _TokenViewState extends State<TokenView> {
   OverlayEntry? _overlay;
 
-  @override
-  void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      context.read<TokensCubit>().getBalanceOfAssetList();
-    });
-    super.initState();
-  }
-
   Future<void> onRefresh() async {
     await context.read<TokensCubit>().getBalanceOfAssetList();
   }
