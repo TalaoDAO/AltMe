@@ -321,5 +321,8 @@
   "loginWithBiometrics": "Login with biometrics",
   "scanFingerprintToAuthenticate": "Scan Fingerprint to Authenticate",
   "biometricsNotSupported": "Biometrics not supported",
-  "yourDeviceDoseNotSupportBiometricsAuthentication": "Your device dose not supports biometrics authentication"
+  "yourDeviceDoseNotSupportBiometricsAuthentication": "Your device dose not supports biometrics authentication",
+  "biometricsEnabledMessage": "Your can now unlock app with your biometrics.",
+  "biometricsDisabledMessage": "Your biometrics has been disbled." 
+
 }
