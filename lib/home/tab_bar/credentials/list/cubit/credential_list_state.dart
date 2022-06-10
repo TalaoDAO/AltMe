@@ -52,7 +52,7 @@ class CredentialListState extends Equatable {
     List<HomeCredential>? othersCredentials,
   }) {
     return CredentialListState(
-      status: AppStatus.idle,
+      status: AppStatus.populate,
       gamingCredentials: gamingCredentials ?? this.gamingCredentials,
       communityCredentials: communityCredentials ?? this.communityCredentials,
       identityCredentials: identityCredentials ?? this.identityCredentials,

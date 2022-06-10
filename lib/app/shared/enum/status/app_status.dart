@@ -3,7 +3,6 @@ enum AppStatus {
   fetching,
   loading,
   populate,
-  idle, //TODO(bibash): remove this later
   error,
   errorWhileFetching,
   success,

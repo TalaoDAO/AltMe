@@ -31,7 +31,7 @@ class OnBoardingRecoveryState extends Equatable {
     int? recoveredCredentialLength,
   }) {
     return OnBoardingRecoveryState(
-      status: AppStatus.idle,
+      status: AppStatus.populate,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
       isMnemonicValid: isMnemonicValid ?? this.isMnemonicValid,
     );
