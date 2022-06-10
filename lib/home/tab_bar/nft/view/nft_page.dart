@@ -3,7 +3,6 @@ import 'package:altme/home/tab_bar/nft/cubit/nft_cubit.dart';
 import 'package:altme/home/tab_bar/nft/view/widgets/my_collection_text.dart';
 import 'package:altme/home/tab_bar/nft/view/widgets/nft_list.dart';
 import 'package:altme/home/tab_bar/nft/view/widgets/nft_list_shimmer.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +44,6 @@ class _NftViewState extends State<NftView> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BasePage(
       scrollView: false,
       padding: EdgeInsets.zero,
