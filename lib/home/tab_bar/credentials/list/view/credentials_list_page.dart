@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
-import 'package:altme/l10n/l10n.dart';
+import 'package:altme/home/tab_bar/credentials/list/widgets/credential_list_data.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
@@ -16,190 +16,69 @@ class CredentialsListPage extends StatefulWidget {
 }
 
 class _CredentialsListPageState extends State<CredentialsListPage> {
+  OverlayEntry? _overlay;
+
   @override
   void initState() {
     context.read<CredentialListCubit>().initialise(context.read<WalletCubit>());
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CredentialListCubit, CredentialListState>(
-      builder: (context, state) {
-        return BasePage(
-          scrollView: true,
-          padding: EdgeInsets.zero,
-          backgroundColor: Theme.of(context).colorScheme.transparent,
-          body: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              GamingCredentials(credentials: state.gamingCredentials),
-              const SizedBox(height: 10),
-              CommunityCredentials(credentials: state.communityCredentials),
-              const SizedBox(height: 10),
-              IdentityCredentials(credentials: state.identityCredentials),
-              const SizedBox(height: 10),
-              OtherCredentials(credentials: state.othersCredentials),
-            ],
-          ),
-        );
-      },
-    );
+  Future<void> onRefresh() async {
+    await context
+        .read<CredentialListCubit>()
+        .initialise(context.read<WalletCubit>());
   }
-}
-
-class GamingCredentials extends StatelessWidget {
-  const GamingCredentials({Key? key, required this.credentials})
-      : super(key: key);
-
-  final List<HomeCredential> credentials;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          '''${l10n.gamingCards} (${credentials.where((element) => !element.isDummy).toList().length})''',
-          style: Theme.of(context).textTheme.credentialCategoryTitle,
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 4,
-            mainAxisSpacing: 4,
-            childAspectRatio: Sizes.homeCredentialRatio,
-          ),
-          itemCount: credentials.length,
-          itemBuilder: (_, index) => HomeCredentialItem(
-            homeCredential: credentials[index],
-          ),
-        ),
-      ],
-    );
-  }
-}
+    return BasePage(
+      scrollView: false,
+      padding: EdgeInsets.zero,
+      backgroundColor: Theme.of(context).colorScheme.transparent,
+      body: BlocConsumer<CredentialListCubit, CredentialListState>(
+        listener: (context, state) {
+          if (state.status == AppStatus.loading) {
+            _overlay = OverlayEntry(builder: (_) => const LoadingDialog());
+            Overlay.of(context)!.insert(_overlay!);
+          } else {
+            if (_overlay != null) {
+              _overlay!.remove();
+              _overlay = null;
+            }
+          }
 
-class CommunityCredentials extends StatelessWidget {
-  const CommunityCredentials({Key? key, required this.credentials})
-      : super(key: key);
+          if (state.message != null &&
+              state.status != AppStatus.errorWhileFetching) {
+            AlertMessage.showStateMessage(
+              context: context,
+              stateMessage: state.message!,
+            );
+          }
 
-  final List<HomeCredential> credentials;
+          if (state.status == AppStatus.success) {
+            //some action
+          }
+        },
+        builder: (context, state) {
+          String message = '';
+          if (state.message != null) {
+            final MessageHandler messageHandler =
+                state.message!.messageHandler!;
+            message = messageHandler.getMessage(context, messageHandler);
+          }
 
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          '''${l10n.communityCards} (${credentials.where((element) => !element.isDummy).toList().length})''',
-          style: Theme.of(context).textTheme.credentialCategoryTitle,
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 4,
-            mainAxisSpacing: 4,
-            childAspectRatio: Sizes.homeCredentialRatio,
-          ),
-          itemCount: credentials.length,
-          itemBuilder: (_, index) => HomeCredentialItem(
-            homeCredential: credentials[index],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class IdentityCredentials extends StatelessWidget {
-  const IdentityCredentials({Key? key, required this.credentials})
-      : super(key: key);
-
-  final List<HomeCredential> credentials;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          '''${l10n.identityCards} (${credentials.where((element) => !element.isDummy).toList().length})''',
-          style: Theme.of(context).textTheme.credentialCategoryTitle,
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 4,
-            mainAxisSpacing: 4,
-            childAspectRatio: Sizes.homeCredentialRatio,
-          ),
-          itemCount: credentials.length,
-          itemBuilder: (_, index) => HomeCredentialItem(
-            homeCredential: credentials[index],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class OtherCredentials extends StatelessWidget {
-  const OtherCredentials({Key? key, required this.credentials})
-      : super(key: key);
-
-  final List<HomeCredential> credentials;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          '''${l10n.otherCards} (${credentials.where((element) => !element.isDummy).toList().length})''',
-          style: Theme.of(context).textTheme.credentialCategoryTitle,
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 4,
-            mainAxisSpacing: 4,
-            childAspectRatio: Sizes.homeCredentialRatio,
-          ),
-          itemCount: credentials.length,
-          itemBuilder: (_, index) => HomeCredentialItem(
-            homeCredential: credentials[index],
-          ),
-        ),
-      ],
+          if (state.status == AppStatus.fetching) {
+            return const CredentialListShimmer();
+          } else if (state.status == AppStatus.populate) {
+            return CredentialListData(state: state, onRefresh: onRefresh);
+          } else if (state.status == AppStatus.errorWhileFetching) {
+            return ErrorView(message: message, onTap: onRefresh);
+          } else {
+            return Container();
+          }
+        },
+      ),
     );
   }
 }

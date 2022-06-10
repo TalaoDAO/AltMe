@@ -88,47 +88,136 @@ class DrawerView extends StatelessWidget {
         child: SafeArea(
           child: SingleChildScrollView(
             child: BlocBuilder<DrawerCubit, DrawerState>(
-                bloc: drawerCubit,
-                builder: (context, state) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const DrawerCloseButton(),
-                      const SizedBox(height: 20),
-                      const AltMeLogo(size: Sizes.logoLarge),
-                      if (firstName.isNotEmpty || lastName.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 10,
-                          ),
-                          child: MyText(
-                            '$firstName $lastName',
-                            style: Theme.of(context).textTheme.infoTitle,
-                          ),
+              bloc: drawerCubit,
+              builder: (context, state) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const DrawerCloseButton(),
+                    const SizedBox(height: 20),
+                    const AltMeLogo(size: Sizes.logoLarge),
+                    if (firstName.isNotEmpty || lastName.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
                         ),
-                      DrawerItem(
-                        icon: IconStrings.reset,
-                        title: l10n.resetWalletButton,
-                        onTap: () async {
-                          final pinCode = await getSecureStorage
-                              .get(SecureStorageKeys.pinCode);
-                          if (pinCode?.isEmpty ?? true) {
-                            await resetButtonPressed.call(context, l10n);
+                        child: MyText(
+                          '$firstName $lastName',
+                          style: Theme.of(context).textTheme.infoTitle,
+                        ),
+                      ),
+                    DrawerItem(
+                      icon: IconStrings.reset,
+                      title: l10n.resetWalletButton,
+                      onTap: () async {
+                        final pinCode = await getSecureStorage
+                            .get(SecureStorageKeys.pinCode);
+                        if (pinCode?.isEmpty ?? true) {
+                          await resetButtonPressed.call(context, l10n);
+                        } else {
+                          await Navigator.of(context).push<void>(
+                            PinCodePage.route(
+                              isValidCallback: () =>
+                                  resetButtonPressed.call(context, l10n),
+                              restrictToBack: false,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    DrawerItem(
+                      icon: IconStrings.restore,
+                      title: l10n.restoreCredential,
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onTap: () async {
+                        final confirm = await showDialog<bool>(
+                              context: context,
+                              builder: (context) => ConfirmDialog(
+                                title: l10n.recoveryWarningDialogTitle,
+                                subtitle: l10n
+                                    .recoveryCredentialWarningDialogSubtitle,
+                                yes: l10n.showDialogYes,
+                                no: l10n.showDialogNo,
+                              ),
+                            ) ??
+                            false;
+
+                        if (confirm) {
+                          await Navigator.of(context)
+                              .push<void>(RecoveryCredentialPage.route());
+                        }
+                      },
+                    ),
+                    DrawerItem(
+                      icon: IconStrings.terms,
+                      title: l10n.privacyTitle,
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onTap: () =>
+                          Navigator.of(context).push<void>(PrivacyPage.route()),
+                    ),
+                    DrawerItem(
+                      icon: IconStrings.fingerprint,
+                      title: l10n.loginWithBiometrics,
+                      trailing: Switch(
+                        onChanged: (value) async {
+                          final hasBiometrics =
+                              await localAuthApi.hasBiometrics();
+                          if (hasBiometrics) {
+                            final result = await localAuthApi.authenticate(
+                              localizedReason:
+                                  l10n.scanFingerprintToAuthenticate,
+                            );
+                            if (result) {
+                              await getSecureStorage.set(
+                                SecureStorageKeys.fingerprintEnabled,
+                                value.toString(),
+                              );
+                              drawerCubit.setFingerprintEnabled(
+                                enabled: value,
+                              );
+                            }
                           } else {
-                            await Navigator.of(context).push<void>(
-                              PinCodePage.route(
-                                isValidCallback: () =>
-                                    resetButtonPressed.call(context, l10n),
-                                restrictToBack: false,
+                            await showDialog<bool>(
+                              context: context,
+                              builder: (context) => ConfirmDialog(
+                                title: l10n.biometricsNotSupported,
+                                subtitle: l10n
+                                    .yourDeviceDoseNotSupportBiometricsAuthentication, // ignore: lines_longer_than_80_chars
+                                yes: l10n.ok,
                               ),
                             );
                           }
                         },
+                        value: state.isBiometricsEnable,
+                        activeColor: Theme.of(context).colorScheme.primary,
                       ),
+                    ),
+                    DrawerItem(
+                      icon: IconStrings.terms,
+                      title: l10n.onBoardingTosTitle,
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onTap: () =>
+                          Navigator.of(context).push<void>(TermsPage.route()),
+                    ),
+                    if (isEnterprise)
+                      const SizedBox.shrink()
+                    else
                       DrawerItem(
-                        icon: IconStrings.restore,
-                        title: l10n.restoreCredential,
+                        icon: IconStrings.key,
+                        title: l10n.recoveryKeyTitle,
                         trailing: Icon(
                           Icons.chevron_right,
                           size: 24,
@@ -139,8 +228,7 @@ class DrawerView extends StatelessWidget {
                                 context: context,
                                 builder: (context) => ConfirmDialog(
                                   title: l10n.recoveryWarningDialogTitle,
-                                  subtitle: l10n
-                                      .recoveryCredentialWarningDialogSubtitle,
+                                  subtitle: l10n.recoveryWarningDialogSubtitle,
                                   yes: l10n.showDialogYes,
                                   no: l10n.showDialogNo,
                                 ),
@@ -149,126 +237,38 @@ class DrawerView extends StatelessWidget {
 
                           if (confirm) {
                             await Navigator.of(context)
-                                .push<void>(RecoveryCredentialPage.route());
+                                .push<void>(RecoveryKeyPage.route());
                           }
                         },
                       ),
-                      DrawerItem(
-                        icon: IconStrings.terms,
-                        title: l10n.privacyTitle,
-                        trailing: Icon(
-                          Icons.chevron_right,
-                          size: 24,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        onTap: () => Navigator.of(context)
-                            .push<void>(PrivacyPage.route()),
+                    DrawerItem(
+                      icon: IconStrings.key,
+                      title: l10n.changePinCode,
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
-                      DrawerItem(
-                        icon: IconStrings.fingerprint,
-                        title: l10n.loginWithBiometrics,
-                        trailing: Switch(
-                          onChanged: (value) async {
-                            final hasBiometrics =
-                                await localAuthApi.hasBiometrics();
-                            if (hasBiometrics) {
-                              final result = await localAuthApi.authenticate(
-                                localizedReason:
-                                    l10n.scanFingerprintToAuthenticate,
-                              );
-                              if (result) {
-                                await getSecureStorage.set(
-                                  SecureStorageKeys.fingerprintEnabled,
-                                  value.toString(),
-                                );
-                                drawerCubit.setFingerprintEnabled(
-                                  enabled: value,
-                                );
-                              }
-                            } else {
-                              await showDialog<bool>(
-                                context: context,
-                                builder: (context) => ConfirmDialog(
-                                  title: l10n.biometricsNotSupported,
-                                  subtitle: l10n
-                                      .yourDeviceDoseNotSupportBiometricsAuthentication,
-                                  yes: l10n.ok,
-                                ),
-                              );
-                            }
-                          },
-                          value: state.isBiometricsEnable,
-                          activeColor: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      DrawerItem(
-                        icon: IconStrings.terms,
-                        title: l10n.onBoardingTosTitle,
-                        trailing: Icon(
-                          Icons.chevron_right,
-                          size: 24,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        onTap: () =>
-                            Navigator.of(context).push<void>(TermsPage.route()),
-                      ),
-                      if (isEnterprise)
-                        const SizedBox.shrink()
-                      else
-                        DrawerItem(
-                          icon: IconStrings.key,
-                          title: l10n.recoveryKeyTitle,
-                          trailing: Icon(
-                            Icons.chevron_right,
-                            size: 24,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          onTap: () async {
-                            final confirm = await showDialog<bool>(
-                                  context: context,
-                                  builder: (context) => ConfirmDialog(
-                                    title: l10n.recoveryWarningDialogTitle,
-                                    subtitle:
-                                        l10n.recoveryWarningDialogSubtitle,
-                                    yes: l10n.showDialogYes,
-                                    no: l10n.showDialogNo,
-                                  ),
-                                ) ??
-                                false;
-
-                            if (confirm) {
-                              await Navigator.of(context)
-                                  .push<void>(RecoveryKeyPage.route());
-                            }
-                          },
-                        ),
-                      DrawerItem(
-                        icon: IconStrings.key,
-                        title: l10n.changePinCode,
-                        trailing: Icon(
-                          Icons.chevron_right,
-                          size: 24,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        onTap: () async {
-                          final pinCode = await getSecureStorage
-                              .get(SecureStorageKeys.pinCode);
-                          if (pinCode?.isEmpty ?? true) {
-                            await setNewPinCode(context, l10n);
-                          } else {
-                            await Navigator.of(context).push<void>(
-                              PinCodePage.route(
-                                isValidCallback: () =>
-                                    setNewPinCode.call(context, l10n),
-                                restrictToBack: false,
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                }),
+                      onTap: () async {
+                        final pinCode = await getSecureStorage
+                            .get(SecureStorageKeys.pinCode);
+                        if (pinCode?.isEmpty ?? true) {
+                          await setNewPinCode(context, l10n);
+                        } else {
+                          await Navigator.of(context).push<void>(
+                            PinCodePage.route(
+                              isValidCallback: () =>
+                                  setNewPinCode.call(context, l10n),
+                              restrictToBack: false,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

@@ -3,7 +3,6 @@ import 'package:altme/home/tab_bar/nft/cubit/nft_cubit.dart';
 import 'package:altme/home/tab_bar/nft/view/widgets/my_collection_text.dart';
 import 'package:altme/home/tab_bar/nft/view/widgets/nft_list.dart';
 import 'package:altme/home/tab_bar/nft/view/widgets/nft_list_shimmer.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +29,7 @@ class NftView extends StatefulWidget {
 }
 
 class _NftViewState extends State<NftView> {
-  @override
-  void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      context.read<NftCubit>().getTezosNftList();
-    });
-    super.initState();
-  }
+  OverlayEntry? _overlay;
 
   Future<void> onRefresh() async {
     await context.read<NftCubit>().getTezosNftList();
@@ -44,7 +37,6 @@ class _NftViewState extends State<NftView> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BasePage(
       scrollView: false,
       padding: EdgeInsets.zero,
@@ -55,41 +47,47 @@ class _NftViewState extends State<NftView> {
         children: [
           const MyCollectionText(),
           Expanded(
-            child: BlocBuilder<NftCubit, NftState>(
-              bloc: context.read<NftCubit>(),
-              builder: (_, state) {
-                if (state.status == AppStatus.loading ||
-                    state.status == AppStatus.init) {
-                  return NftListShimmer(onRefresh: onRefresh);
-                } else if (state.status == AppStatus.success) {
-                  return NftList(
-                    nftList: state.data,
-                    onRefresh: onRefresh,
-                  );
+            child: BlocConsumer<NftCubit, NftState>(
+              listener: (context, state) {
+                if (state.status == AppStatus.loading) {
+                  _overlay =
+                      OverlayEntry(builder: (_) => const LoadingDialog());
+                  Overlay.of(context)!.insert(_overlay!);
                 } else {
-                  String message = '';
-                  if (state.message != null) {
-                    final MessageHandler messageHandler =
-                        state.message!.messageHandler!;
-                    message =
-                        messageHandler.getMessage(context, messageHandler);
+                  if (_overlay != null) {
+                    _overlay!.remove();
+                    _overlay = null;
                   }
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(message),
-                      BaseButton.transparent(
-                        context: context,
-                        onPressed: onRefresh,
-                        margin: const EdgeInsets.all(Sizes.spaceLarge),
-                        child: Center(
-                          child: Text(l10n.tryAgain),
-                        ),
-                      ),
-                    ],
+                }
+
+                if (state.message != null &&
+                    state.status != AppStatus.errorWhileFetching) {
+                  AlertMessage.showStateMessage(
+                    context: context,
+                    stateMessage: state.message!,
                   );
+                }
+
+                if (state.status == AppStatus.success) {
+                  //some action
+                }
+              },
+              builder: (_, state) {
+                String message = '';
+                if (state.message != null) {
+                  final MessageHandler messageHandler =
+                      state.message!.messageHandler!;
+                  message = messageHandler.getMessage(context, messageHandler);
+                }
+
+                if (state.status == AppStatus.fetching) {
+                  return const NftListShimmer();
+                } else if (state.status == AppStatus.populate) {
+                  return NftList(nftList: state.data, onRefresh: onRefresh);
+                } else if (state.status == AppStatus.errorWhileFetching) {
+                  return ErrorView(message: message, onTap: onRefresh);
+                } else {
+                  return NftList(nftList: const [], onRefresh: onRefresh);
                 }
               },
             ),

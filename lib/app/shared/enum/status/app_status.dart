@@ -1,7 +1,9 @@
 enum AppStatus {
   init,
+  fetching,
   loading,
-  idle,
+  populate,
   error,
+  errorWhileFetching,
   success,
 }

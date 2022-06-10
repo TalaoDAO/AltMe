@@ -44,7 +44,7 @@ class RecoveryCredentialState extends Equatable {
     int? recoveredCredentialLength,
   }) {
     return RecoveryCredentialState(
-      status: AppStatus.idle,
+      status: AppStatus.populate,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
       isMnemonicValid: isMnemonicValid ?? this.isMnemonicValid,
     );
