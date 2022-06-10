@@ -15,7 +15,7 @@ class NftCubit extends Cubit<NftState> {
 
   Future<void> getTezosNftList() async {
     try {
-      emit(state.loading());
+      emit(state.fetching());
       final List<dynamic> response = await client.get(
         '/v1/tokens/balances',
         queryParameters: <String, dynamic>{
@@ -31,12 +31,12 @@ class NftCubit extends Cubit<NftState> {
       final List<NftModel> data = response
           .map((dynamic e) => NftModel.fromJson(e as Map<String, dynamic>))
           .toList();
-      emit(state.success(data: data));
+      emit(state.populate(data: data));
     } catch (e) {
       // TODO(all): handle error message localization and error message
       if (isClosed) return;
       emit(
-        state.error(
+        state.errorWhileFetcing(
           messageHandler: ResponseMessage(
             ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           ),

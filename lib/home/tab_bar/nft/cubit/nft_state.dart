@@ -15,11 +15,22 @@ class NftState extends Equatable {
   final StateMessage? message;
   final List<NftModel> data;
 
-  NftState loading() {
+  NftState fetching() {
+    return NftState(status: AppStatus.fetching, data: data);
+  }
+
+  NftState errorWhileFetcing({
+    required MessageHandler messageHandler,
+  }) {
     return NftState(
-      status: AppStatus.loading,
+      status: AppStatus.errorWhileFetching,
+      message: StateMessage.error(messageHandler: messageHandler),
       data: data,
     );
+  }
+
+  NftState loading() {
+    return NftState(status: AppStatus.loading, data: data);
   }
 
   NftState error({
@@ -29,6 +40,15 @@ class NftState extends Equatable {
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       data: data,
+    );
+  }
+
+  NftState populate({
+    List<NftModel>? data,
+  }) {
+    return NftState(
+      status: AppStatus.populate,
+      data: data ?? this.data,
     );
   }
 
