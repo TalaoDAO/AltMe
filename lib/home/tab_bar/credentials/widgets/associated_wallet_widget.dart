@@ -113,35 +113,47 @@ class AssociatedWalletVerso extends Verso {
         child: SizedBox(
           height: 317,
           width: 584,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 24, left: 24),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: SizedBox(
-                    height: 50,
-                    child: ImageFromNetwork(
-                      associatedWallet.issuedBy!.logo,
-                      fit: BoxFit.cover,
+          child: Padding(
+            padding: const EdgeInsets.all(Sizes.spaceNormal),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (associatedWallet.issuedBy?.logo.isNotEmpty ?? false)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: SizedBox(
+                      height: 50,
+                      child: ImageFromNetwork(
+                        associatedWallet.issuedBy!.logo,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
+                DisplayNameCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context)
+                      .textTheme
+                      .associatedWalletTitleCard,
                 ),
-              ),
-              if (expirationDate != null)
+                const SizedBox(height: Sizes.spaceSmall,),
+                DisplayDescriptionCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context).textTheme.credentialDescription,
+                ),
+                if (expirationDate != null)
+                  TextWithAssociatedWalletCardStyle(
+                    value: '${l10n.expires}: ${UiDate.displayDate(
+                      l10n,
+                      expirationDate,
+                    )}',
+                  )
+                else
+                  const SizedBox.shrink(),
                 TextWithAssociatedWalletCardStyle(
-                  value: '${l10n.expires}: ${UiDate.displayDate(
-                    l10n,
-                    expirationDate,
-                  )}',
-                )
-              else
-                const SizedBox.shrink(),
-              TextWithAssociatedWalletCardStyle(
-                value: '${l10n.issuer}: $issuerName',
-              ),
-            ],
+                  value: '${l10n.issuer}: $issuerName',
+                ),
+              ],
+            ),
           ),
         ),
       ),
