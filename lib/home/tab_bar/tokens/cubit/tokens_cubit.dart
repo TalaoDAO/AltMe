@@ -15,7 +15,7 @@ class TokensCubit extends Cubit<TokensState> {
 
   Future<void> getBalanceOfAssetList() async {
     try {
-      emit(state.loading());
+      emit(state.fetching());
       final int balance = await client.get(
         // TODO(all): remove hardcoded Tezos address in the path of api
         '/v1/accounts/tz1dKRZVcmJBVNvaAueUmqX42vVEaLb2MbA6/balance',
@@ -28,11 +28,11 @@ class TokensCubit extends Cubit<TokensState> {
         balance,
       );
       final data = List<TokenModel>.from(<TokenModel>[xtzToken]).toList();
-      emit(state.success(data: data));
+      emit(state.populate(data: data));
     } catch (e) {
       if (isClosed) return;
       emit(
-        state.error(
+        state.errorWhileFetcing(
           messageHandler: ResponseMessage(
             ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
           ),

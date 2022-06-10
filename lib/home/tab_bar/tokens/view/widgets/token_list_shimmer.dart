@@ -2,20 +2,15 @@ import 'package:altme/home/tab_bar/tokens/view/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class TokenListShimmer extends StatelessWidget {
-  const TokenListShimmer({Key? key, required this.onRefresh}) : super(key: key);
-
-  final RefreshCallback onRefresh;
+  const TokenListShimmer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: onRefresh,
-      child: ListView.builder(
-        //physics: const BouncingScrollPhysics(),
-        physics: const AlwaysScrollableScrollPhysics(),
-        itemBuilder: (_, __) => const TokenItemShimmer(),
-        itemCount: 3,
-      ),
+    return ListView.builder(
+      //physics: const BouncingScrollPhysics(),
+      physics: const AlwaysScrollableScrollPhysics(),
+      itemBuilder: (_, __) => const TokenItemShimmer(),
+      itemCount: 3,
     );
   }
 }

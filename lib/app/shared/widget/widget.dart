@@ -6,6 +6,7 @@ export 'button/button.dart';
 export 'custom_app_bar.dart';
 export 'dialog/dialog.dart';
 export 'display_terms.dart';
+export 'error_view.dart';
 export 'hero_workaround.dart';
 export 'image_card_text.dart';
 export 'image_from_network.dart';

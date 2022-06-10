@@ -166,7 +166,6 @@ extension CustomColorScheme on ColorScheme {
 }
 
 extension CustomTextTheme on TextTheme {
-
   TextStyle get keyboardDigitTextStyle =>
       GoogleFonts.nunito(fontSize: 30, color: Colors.white);
 
@@ -427,5 +426,11 @@ extension CustomTextTheme on TextTheme {
         fontSize: 10,
         fontWeight: FontWeight.w400,
         color: const Color(0xff00B267),
+      );
+
+  TextStyle get errorMessage => GoogleFonts.nunito(
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xffFFFFFF),
       );
 }

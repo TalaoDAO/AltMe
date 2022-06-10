@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/home/tab_bar/tokens/view/widgets/widgets.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +27,8 @@ class TokenView extends StatefulWidget {
 }
 
 class _TokenViewState extends State<TokenView> {
+  OverlayEntry? _overlay;
+
   @override
   void initState() {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
@@ -42,7 +43,6 @@ class _TokenViewState extends State<TokenView> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BasePage(
       scrollView: false,
       padding: EdgeInsets.zero,
@@ -54,38 +54,47 @@ class _TokenViewState extends State<TokenView> {
           const MyAssetsText(),
           const SizedBox(height: 10),
           Expanded(
-            child: BlocBuilder<TokensCubit, TokensState>(
-              bloc: context.read<TokensCubit>(),
-              builder: (_, state) {
-                if (state.status == AppStatus.loading ||
-                    state.status == AppStatus.init) {
-                  return TokenListShimmer(onRefresh: onRefresh);
-                } else if (state.status == AppStatus.success) {
-                  return TokenList(tokenList: state.data, onRefresh: onRefresh);
+            child: BlocConsumer<TokensCubit, TokensState>(
+              listener: (context, state) {
+                if (state.status == AppStatus.loading) {
+                  _overlay =
+                      OverlayEntry(builder: (_) => const LoadingDialog());
+                  Overlay.of(context)!.insert(_overlay!);
                 } else {
-                  String message = '';
-                  if (state.message != null) {
-                    final MessageHandler messageHandler =
-                        state.message!.messageHandler!;
-                    message =
-                        messageHandler.getMessage(context, messageHandler);
+                  if (_overlay != null) {
+                    _overlay!.remove();
+                    _overlay = null;
                   }
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(message),
-                      BaseButton.transparent(
-                        context: context,
-                        onPressed: onRefresh,
-                        margin: const EdgeInsets.all(Sizes.spaceLarge),
-                        child: Center(
-                          child: Text(l10n.tryAgain),
-                        ),
-                      ),
-                    ],
+                }
+
+                if (state.message != null &&
+                    state.status != AppStatus.errorWhileFetching) {
+                  AlertMessage.showStateMessage(
+                    context: context,
+                    stateMessage: state.message!,
                   );
+                }
+
+                if (state.status == AppStatus.success) {
+                  //some action
+                }
+              },
+              builder: (_, state) {
+                String message = '';
+                if (state.message != null) {
+                  final MessageHandler messageHandler =
+                      state.message!.messageHandler!;
+                  message = messageHandler.getMessage(context, messageHandler);
+                }
+
+                if (state.status == AppStatus.fetching) {
+                  return const TokenListShimmer();
+                } else if (state.status == AppStatus.populate) {
+                  return TokenList(tokenList: state.data, onRefresh: onRefresh);
+                } else if (state.status == AppStatus.errorWhileFetching) {
+                  return ErrorView(message: message, onTap: onRefresh);
+                } else {
+                  return TokenList(tokenList: const [], onRefresh: onRefresh);
                 }
               },
             ),
