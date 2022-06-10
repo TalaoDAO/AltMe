@@ -17,7 +17,7 @@ class LocalAuthApi {
   Future<bool> hasBiometrics() async {
     try {
       return await _auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
+    } on PlatformException {
       return false;
     }
   }
@@ -25,7 +25,7 @@ class LocalAuthApi {
   Future<List<BiometricType>> getBiometrics() async {
     try {
       return await _auth.getAvailableBiometrics();
-    } on PlatformException catch (e) {
+    } on PlatformException {
       return <BiometricType>[];
     }
   }
