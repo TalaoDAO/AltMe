@@ -47,28 +47,6 @@ class DrawerView extends StatelessWidget {
     );
   }
 
-  // method for reset wallet
-  Future<void> resetButtonPressed(
-    BuildContext context,
-    AppLocalizations l10n,
-  ) async {
-    Navigator.of(context).pop();
-    final confirm = await showDialog<bool>(
-          context: context,
-          builder: (_) => ConfirmDialog(
-            title: l10n.resetWalletConfirmationText,
-            yes: l10n.showDialogYes,
-            no: l10n.showDialogNo,
-            dialogColor: Theme.of(context).colorScheme.error,
-            icon: IconStrings.trash,
-          ),
-        ) ??
-        false;
-    if (confirm) {
-      await context.read<WalletCubit>().resetWallet();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -110,18 +88,32 @@ class DrawerView extends StatelessWidget {
                       icon: IconStrings.reset,
                       title: l10n.resetWalletButton,
                       onTap: () async {
-                        final pinCode = await getSecureStorage
-                            .get(SecureStorageKeys.pinCode);
-                        if (pinCode?.isEmpty ?? true) {
-                          await resetButtonPressed.call(context, l10n);
-                        } else {
-                          await Navigator.of(context).push<void>(
-                            PinCodePage.route(
-                              isValidCallback: () =>
-                                  resetButtonPressed.call(context, l10n),
-                              restrictToBack: false,
-                            ),
-                          );
+                        final confirm = await showDialog<bool>(
+                              context: context,
+                              builder: (_) => ConfirmDialog(
+                                title: l10n.resetWalletConfirmationText,
+                                yes: l10n.showDialogYes,
+                                no: l10n.showDialogNo,
+                                dialogColor:
+                                    Theme.of(context).colorScheme.error,
+                                icon: IconStrings.trash,
+                              ),
+                            ) ??
+                            false;
+                        if (confirm) {
+                          final pinCode = await getSecureStorage
+                              .get(SecureStorageKeys.pinCode);
+                          if (pinCode?.isEmpty ?? true) {
+                            await context.read<WalletCubit>().resetWallet();
+                          } else {
+                            await Navigator.of(context).push<void>(
+                              PinCodePage.route(
+                                isValidCallback: () =>
+                                    context.read<WalletCubit>().resetWallet(),
+                                restrictToBack: false,
+                              ),
+                            );
+                          }
                         }
                       },
                     ),
