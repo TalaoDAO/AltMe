@@ -20,6 +20,8 @@ class DIDDisplay extends StatelessWidget {
         final did = state.status == AppStatus.success ? state.did! : '';
         var blockChainAddress = '';
         if (did.length > 7) {
+          // TODO(all): notice that if you want to get address
+          // TODO(all): it's better to split did by ":" and get last string
           blockChainAddress = did.substring(7);
         }
 
