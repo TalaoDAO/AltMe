@@ -23,35 +23,35 @@ class DIDDisplay extends StatelessWidget {
           blockChainAddress = did.substring(7);
         }
 
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (!isEnterpriseUser)
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    Text(
-                      '${l10n.blockChainDisplayMethod} : ',
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                    Text(
-                      // TODO(all): Can we change did method
-                      //  name according to the user type?
-                      AltMeStrings.defaultDIDMethodName,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ],
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              if (!isEnterpriseUser) ...[
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    children: [
+                      Text(
+                        '${l10n.blockChainDisplayMethod} : ',
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                      Text(
+                        // TODO(all): Can we change did method
+                        //  name according to the user type?
+                        AltMeStrings.defaultDIDMethodName,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            if (!isEnterpriseUser)
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Row(
+                const SizedBox(height: 8),
+                Row(
                   children: [
                     Text(
                       '${l10n.blockChainAdress} : ',
@@ -72,11 +72,8 @@ class DIDDisplay extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            if (!isEnterpriseUser)
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: TextButton(
+                const SizedBox(height: 8),
+                TextButton(
                   style: TextButton.styleFrom(
                     backgroundColor:
                         Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -86,10 +83,9 @@ class DIDDisplay extends StatelessWidget {
                   },
                   child: Text(l10n.adressDisplayCopy),
                 ),
-              ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(
+              ],
+              const SizedBox(height: 8),
+              Row(
                 children: [
                   Text(
                     '${l10n.didDisplayId} : ',
@@ -109,10 +105,8 @@ class DIDDisplay extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: TextButton(
+              const SizedBox(height: 8),
+              TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor:
                       Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -122,8 +116,8 @@ class DIDDisplay extends StatelessWidget {
                 },
                 child: Text(l10n.didDisplayCopy),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );

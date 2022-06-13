@@ -36,7 +36,7 @@ class HomeCredential extends Equatable {
         link = Urls.certificateOfEmploymentUrl;
         break;
       case CredentialSubjectType.associatedWallet:
-        image = ImageStrings.associatedWalletCard;
+        image = ImageStrings.associatedWalletFront;
         link = Urls.associatedWalletUrl;
         break;
       case CredentialSubjectType.emailPass:

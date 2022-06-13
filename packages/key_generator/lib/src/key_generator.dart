@@ -90,4 +90,32 @@ class KeyGenerator {
 
     return jsonEncode(key);
   }
+
+  Future<String> secretKey(String mnemonic) async {
+    //notice photo opera keen climb agent soft parrot best joke field devote
+    final seed = bip39.mnemonicToSeed(mnemonic);
+
+    //[105, 104, 114, 235, 191, 74, 81, 25, 186, 14, 224, 98, 187, 127, 45, 150,
+    // 115, 57, 174, 200, 238, 175, 36, 200, 142, 171, 91, 50, 40, 188, 126, 59,
+    // 73, 165, 227, 3, 92, 110, 15, 220, 157, 233, 140, 87, 195, 12, 91, 90,
+    // 165, 113, 52, 220, 139, 101, 206, 246, 2, 182, 24, 189, 73, 225, 195, 72]
+
+    final rootKey = bip32.BIP32.fromSeed(seed); //Instance of 'BIP32'
+
+    // derive path for ethereum '60' see bip 44, first address
+    final child = rootKey.derivePath("m/44'/60'/0'/0/0"); //Instance of 'BIP32'
+
+    final Iterable<int> iterable = child.privateKey!;
+    //[44, 254, 73, 198, 41, 37, 89, 193, 190, 104, 116, 244, 188, 50, 31, 128,
+    // 25, 101, 57, 132, 49, 132, 105, 153, 166, 32, 39, 237, 145, 88, 63, 154]
+
+    final epk = HEX.encode(List.from(iterable));
+    //2cfe49c6292559c1be6874f4bc321f801965398431846999a62027ed91583f9a
+
+    final pk = PrivateKey.fromHex(epk); //Instance of 'PrivateKey'
+
+    final secretKey = pk.publicKey.toString();
+
+    return secretKey;
+  }
 }

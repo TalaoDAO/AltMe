@@ -20,7 +20,7 @@ class GeneralInformationPage extends StatelessWidget {
     return BasePage(
       title: l10n.generalInformationLabel,
       titleLeading: const BackLeadingButton(),
-      scrollView: false,
+      scrollView: true,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -29,7 +29,7 @@ class GeneralInformationPage extends StatelessWidget {
             isEnterpriseUser:
                 context.read<ProfileCubit>().state.model.isEnterprise,
           ),
-          const Spacer(),
+          const SizedBox(height: 30),
           Center(
             child: Text(
               'DIDKit v${context.read<DIDCubit>().didKitProvider.getVersion()}',
