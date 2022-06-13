@@ -10,8 +10,6 @@ class ImageStrings {
       '$imagePath/carte-attestation-employeur-recto.png';
   static const String employmentCertificateBack =
       '$imagePath/carte-attestation-employeur-verso.png';
-  static const String associatedWalletBack =
-      '$imagePath/associated-wallet-verso.png';
   static const String emailPassFront = '$imagePath/email_pass_verso.png';
   static const String emailPassBack = '$imagePath/email_pass_verso.png';
   static const String learningAchievementFront =
@@ -40,8 +38,10 @@ class ImageStrings {
       '$imagePath/dummy_phone_pass_card.png';
   static const String dummyCertificateOfEmploymentCard =
       '$imagePath/dummy_certificate_of_employment_card.png';
-  static const String associatedWalletCard =
-      '$imagePath/associated_wallet_card.png';
   static const String dummyLearningAchievementCard =
       '$imagePath/dumm_learning_achievement_card.png';
+  static const String associatedWalletFront =
+      '$imagePath/associated_wallet_recto.png';
+  static const String associatedWalletBack =
+      '$imagePath/associated-wallet-verso.png';
 }

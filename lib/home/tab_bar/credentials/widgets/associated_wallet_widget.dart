@@ -70,7 +70,7 @@ class AssociatedWalletRecto extends Recto {
         borderRadius: BorderRadius.circular(20),
         image: const DecorationImage(
           fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.associatedWalletCard),
+          image: AssetImage(ImageStrings.associatedWalletFront),
         ),
       ),
       child: const AspectRatio(
@@ -131,11 +131,11 @@ class AssociatedWalletVerso extends Verso {
                   ),
                 DisplayNameCard(
                   credentialModel: credentialModel,
-                  style: Theme.of(context)
-                      .textTheme
-                      .associatedWalletTitleCard,
+                  style: Theme.of(context).textTheme.associatedWalletTitleCard,
                 ),
-                const SizedBox(height: Sizes.spaceSmall,),
+                const SizedBox(
+                  height: Sizes.spaceSmall,
+                ),
                 DisplayDescriptionCard(
                   credentialModel: credentialModel,
                   style: Theme.of(context).textTheme.credentialDescription,
