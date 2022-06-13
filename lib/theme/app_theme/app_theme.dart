@@ -364,6 +364,18 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.normal,
       );
 
+  TextStyle get associatedWalletData => GoogleFonts.nunito(
+        color: const Color(0xffeee7e7),
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+      );
+
+  TextStyle get associatedWalletTitleCard => GoogleFonts.nunito(
+        color: const Color(0xffeee7e7),
+        fontSize: 20,
+        fontWeight: FontWeight.normal,
+      );
+
   TextStyle get credentialStudentCardTextCard => GoogleFonts.nunito(
         color: const Color(0xffffffff),
         fontSize: 14,

@@ -40,4 +40,8 @@ class ImageStrings {
       '$imagePath/dummy_certificate_of_employment_card.png';
   static const String dummyLearningAchievementCard =
       '$imagePath/dumm_learning_achievement_card.png';
+  static const String associatedWalletFront =
+      '$imagePath/associated_wallet_recto.png';
+  static const String associatedWalletBack =
+      '$imagePath/associated-wallet-verso.png';
 }

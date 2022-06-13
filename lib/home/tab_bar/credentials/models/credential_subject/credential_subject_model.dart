@@ -18,6 +18,8 @@ class CredentialSubjectModel {
     switch (json['type']) {
       case 'ResidentCard':
         return ResidentCardModel.fromJson(json);
+      case 'TezosAssociatedWallet':
+        return AssociatedWalletModel.fromJson(json);
       case 'SelfIssued':
         return SelfIssuedModel.fromJson(json);
       case 'IdentityPass':

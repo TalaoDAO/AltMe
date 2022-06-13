@@ -14,7 +14,11 @@ class DisplayDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
-      case CredentialSubjectType.certificateOfEmployment:
+      case CredentialSubjectType.associatedWallet:
+        return AssociatedWalletDisplayDetail(
+          credentialModel: credentialModel,
+        );
+        case CredentialSubjectType.certificateOfEmployment:
         return CertificateOfEmploymentDisplayDetail(
           credentialModel: credentialModel,
         );
