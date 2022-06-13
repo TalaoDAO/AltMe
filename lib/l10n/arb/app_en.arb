@@ -104,8 +104,8 @@
   "privacyTitle": "Privacy & Security",
   "termsTitle": "Terms & Conditions",
   "recoveryKeyTitle": "Recovery - key",
-  "recoveryWarningDialogTitle": "Be careful",
-  "recoveryWarningDialogSubtitle": "The recovery page contains sensitive information that will compromise your identifier in the wrong hands. You should not open this page in public or share it with anyone.",
+  "warningDialogTitle": "Be careful",
+  "warningDialogSubtitle": "The recovery page contains sensitive information that will compromise your identifier in the wrong hands. You should not open this page in public or share it with anyone.",
   "recoveryText": "Please enter your recovery phrase",
   "recoveryMnemonicHintText": "Mnemonic Phrase",
   "recoveryMnemonicError": "Please enter a valid mnemonic phrase",
@@ -323,6 +323,8 @@
   "biometricsNotSupported": "Biometrics not supported",
   "yourDeviceDoseNotSupportBiometricsAuthentication": "Your device dose not supports biometrics authentication",
   "biometricsEnabledMessage": "Your can now unlock app with your biometrics.",
-  "biometricsDisabledMessage": "Your biometrics has been disbled." 
-
+  "biometricsDisabledMessage": "Your biometrics has been disbled.",
+  "exportSecretKey": "Export secret key",
+  "secretKey" : "Secret Key",
+  "copySecretKeyToClipboard": "Copy secret key to clipboard"
 }
