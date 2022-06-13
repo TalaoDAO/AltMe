@@ -20,4 +20,5 @@ class Urls {
       'https://talao.co/wallet/test/direct_offer?VC=StudentCard.jsonld';
   static const String voucherUrl =
       'https://talao.co/wallet/test/direct_offer?VC=Voucher.jsonld';
+  static const String talaoUrl = 'https://www.altme.io/';
 }

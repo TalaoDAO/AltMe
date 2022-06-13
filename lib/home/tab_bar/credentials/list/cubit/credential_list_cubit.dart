@@ -16,15 +16,12 @@ class CredentialListCubit extends Cubit<CredentialListState> {
   ];
 
   final List<CredentialSubjectType> communityCategories = [
-    CredentialSubjectType.studentCard,
+    CredentialSubjectType.talao
   ];
 
   final List<CredentialSubjectType> identityCategories = [
     CredentialSubjectType.emailPass,
     CredentialSubjectType.over18,
-    CredentialSubjectType.certificateOfEmployment,
-    CredentialSubjectType.learningAchievement,
-    CredentialSubjectType.phonePass,
   ];
 
   Future<void> initialise(WalletCubit walletCubit) async {

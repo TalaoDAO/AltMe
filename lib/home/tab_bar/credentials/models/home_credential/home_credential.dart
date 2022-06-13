@@ -31,37 +31,21 @@ class HomeCredential extends Equatable {
     String image = '';
     String link = '';
     switch (credentialSubjectType) {
-      case CredentialSubjectType.certificateOfEmployment:
-        image = ImageStrings.dummyCertificateOfEmploymentCard;
-        link = Urls.certificateOfEmploymentUrl;
-        break;
-      case CredentialSubjectType.associatedWallet:
-        image = ImageStrings.associatedWalletFront;
-        link = Urls.associatedWalletUrl;
-        break;
       case CredentialSubjectType.emailPass:
         image = ImageStrings.dummyEmailPassCard;
         link = Urls.emailPassUrl;
-        break;
-      case CredentialSubjectType.learningAchievement:
-        image = ImageStrings.dummyLearningAchievementCard;
-        link = Urls.learningAchievementUrl;
         break;
       case CredentialSubjectType.over18:
         image = ImageStrings.dummyOver18Card;
         link = Urls.over18Url;
         break;
-      case CredentialSubjectType.phonePass:
-        image = ImageStrings.dummyPhonePassCard;
-        link = Urls.phonePassUrl;
-        break;
-      case CredentialSubjectType.studentCard:
-        image = ImageStrings.dummyStudentCard;
-        link = Urls.studentCardUrl;
-        break;
       case CredentialSubjectType.voucher:
         image = ImageStrings.dummyVoucherCard;
         link = Urls.voucherUrl;
+        break;
+      case CredentialSubjectType.talao:
+        image = ImageStrings.dummyTalaoCard;
+        link = Urls.talaoUrl;
         break;
       case CredentialSubjectType.selfIssued:
       case CredentialSubjectType.defaultCredential:
@@ -72,6 +56,11 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.loyaltyCard:
       case CredentialSubjectType.identityPass:
       case CredentialSubjectType.ecole42LearningAchievement:
+      case CredentialSubjectType.phonePass:
+      case CredentialSubjectType.studentCard:
+      case CredentialSubjectType.associatedWallet:
+      case CredentialSubjectType.learningAchievement:
+      case CredentialSubjectType.certificateOfEmployment:
         break;
     }
     return HomeCredential(
