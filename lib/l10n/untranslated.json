@@ -10,6 +10,8 @@
     "siopV2credentialPickSelect",
     "credentialPickAlertMessage",
     "scanUnsupportedMessage",
+    "warningDialogTitle",
+    "warningDialogSubtitle",
     "blockChainDisplayMethod",
     "blockChainAdress",
     "adressDisplayCopy",
@@ -164,7 +166,10 @@
     "biometricsNotSupported",
     "yourDeviceDoseNotSupportBiometricsAuthentication",
     "biometricsEnabledMessage",
-    "biometricsDisabledMessage"
+    "biometricsDisabledMessage",
+    "exportSecretKey",
+    "secretKey",
+    "copySecretKeyToClipboard"
   ],
 
   "es": [
@@ -178,6 +183,8 @@
     "siopV2credentialPickSelect",
     "credentialPickAlertMessage",
     "scanUnsupportedMessage",
+    "warningDialogTitle",
+    "warningDialogSubtitle",
     "blockChainDisplayMethod",
     "blockChainAdress",
     "adressDisplayCopy",
@@ -332,10 +339,15 @@
     "biometricsNotSupported",
     "yourDeviceDoseNotSupportBiometricsAuthentication",
     "biometricsEnabledMessage",
-    "biometricsDisabledMessage"
+    "biometricsDisabledMessage",
+    "exportSecretKey",
+    "secretKey",
+    "copySecretKeyToClipboard"
   ],
 
   "fr": [
+    "warningDialogTitle",
+    "warningDialogSubtitle",
     "personalAddress",
     "generalInformationLabel",
     "restoreCredential",
@@ -381,7 +393,10 @@
     "biometricsNotSupported",
     "yourDeviceDoseNotSupportBiometricsAuthentication",
     "biometricsEnabledMessage",
-    "biometricsDisabledMessage"
+    "biometricsDisabledMessage",
+    "exportSecretKey",
+    "secretKey",
+    "copySecretKeyToClipboard"
   ],
 
   "it": [
@@ -395,6 +410,8 @@
     "siopV2credentialPickSelect",
     "credentialPickAlertMessage",
     "scanUnsupportedMessage",
+    "warningDialogTitle",
+    "warningDialogSubtitle",
     "blockChainDisplayMethod",
     "blockChainAdress",
     "adressDisplayCopy",
@@ -551,6 +568,9 @@
     "biometricsNotSupported",
     "yourDeviceDoseNotSupportBiometricsAuthentication",
     "biometricsEnabledMessage",
-    "biometricsDisabledMessage"
+    "biometricsDisabledMessage",
+    "exportSecretKey",
+    "secretKey",
+    "copySecretKeyToClipboard"
   ]
 }
