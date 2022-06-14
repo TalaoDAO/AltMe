@@ -18,7 +18,7 @@ class DisplayDetail extends StatelessWidget {
         return AssociatedWalletDisplayDetail(
           credentialModel: credentialModel,
         );
-        case CredentialSubjectType.certificateOfEmployment:
+      case CredentialSubjectType.certificateOfEmployment:
         return CertificateOfEmploymentDisplayDetail(
           credentialModel: credentialModel,
         );
@@ -82,6 +82,8 @@ class DisplayDetail extends StatelessWidget {
         return VoucherDisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.talao:
+        return Container();
     }
   }
 }
