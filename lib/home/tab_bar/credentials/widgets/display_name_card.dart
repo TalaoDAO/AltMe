@@ -15,11 +15,13 @@ class DisplayNameCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final nameValue = getName(context);
-    return Text(
-      nameValue,
-      maxLines: 1,
-      overflow: TextOverflow.clip,
-      style: style,
+    return FractionallySizedBox(
+      heightFactor: 0.15,
+      child: MyText(
+        nameValue,
+        maxLines: 1,
+        style: style,
+      ),
     );
   }
 

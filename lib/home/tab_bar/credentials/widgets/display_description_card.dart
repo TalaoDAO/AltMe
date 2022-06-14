@@ -4,21 +4,27 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class DisplayDescriptionCard extends StatelessWidget {
-  const DisplayDescriptionCard({
-    Key? key,
-    required this.credentialModel,
-    required this.style,
-  }) : super(key: key);
+  const DisplayDescriptionCard(
+      {Key? key,
+      required this.credentialModel,
+      required this.style,
+      this.heightFactor = 0.4})
+      : super(key: key);
   final CredentialModel credentialModel;
   final TextStyle style;
+  final double heightFactor;
 
   @override
   Widget build(BuildContext context) {
     final nameValue = getDescription(context);
-    return Text(
-      nameValue,
-      overflow: TextOverflow.fade,
-      style: style,
+    return FractionallySizedBox(
+      heightFactor: heightFactor,
+      child: MyText(
+        nameValue,
+        maxLines: 5,
+        overflow: TextOverflow.fade,
+        style: style,
+      ),
     );
   }
 
