@@ -82,6 +82,8 @@ class DisplayInSelectionList extends StatelessWidget {
         return VoucherDisplayInSelectionList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.talao:
+        return Container();
     }
   }
 }

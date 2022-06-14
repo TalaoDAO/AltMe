@@ -47,6 +47,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xFFffD6A5);
       case CredentialSubjectType.studentCard:
         return const Color(0xFFffD6A5);
+      case CredentialSubjectType.talao:
+        return const Color(0xffd72b8e);
       case CredentialSubjectType.defaultCredential:
         return Colors.white;
     }
@@ -86,6 +88,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return Icons.perm_identity;
       case CredentialSubjectType.studentCard:
         return Icons.perm_identity;
+      case CredentialSubjectType.talao:
+        return Icons.fact_check_outlined;
       case CredentialSubjectType.defaultCredential:
         return Icons.fact_check_outlined;
     }

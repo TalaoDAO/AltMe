@@ -29,19 +29,14 @@ class ImageStrings {
   static const String voucherBack = '$imagePath/carte-coupon-verso.png';
   static const String ecole42LearningAchievement =
       '$imagePath/certificate-42.png';
-  static const String dummyEmailPassCard =
-      '$imagePath/dummy_email_pass_card.png';
-  static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
-  static const String dummyStudentCard = '$imagePath/dummy_student_card.png';
-  static const String dummyVoucherCard = '$imagePath/dummy_voucher_card.png';
-  static const String dummyPhonePassCard =
-      '$imagePath/dummy_phone_pass_card.png';
-  static const String dummyCertificateOfEmploymentCard =
-      '$imagePath/dummy_certificate_of_employment_card.png';
-  static const String dummyLearningAchievementCard =
-      '$imagePath/dumm_learning_achievement_card.png';
   static const String associatedWalletFront =
       '$imagePath/associated_wallet_recto.png';
   static const String associatedWalletBack =
       '$imagePath/associated-wallet-verso.png';
+
+  static const String dummyEmailPassCard =
+      '$imagePath/dummy_email_pass_card.png';
+  static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
+  static const String dummyVoucherCard = '$imagePath/dummy_voucher_card.png';
+  static const String dummyTalaoCard = '$imagePath/dummy_talao_card.png';
 }

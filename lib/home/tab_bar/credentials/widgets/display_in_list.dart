@@ -82,6 +82,8 @@ class DisplayInList extends StatelessWidget {
         return VoucherDisplayInList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.talao:
+        return Container();
     }
   }
 }
