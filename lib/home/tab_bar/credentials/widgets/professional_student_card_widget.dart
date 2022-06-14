@@ -49,19 +49,11 @@ class ProfessionalStudentCardDisplayDetail extends StatelessWidget {
         .credentialSubjectModel as ProfessionalStudentCardModel;
     return Column(
       children: [
-        AspectRatio(
-          /// this size comes from law publication about job student card specs
-          aspectRatio: 508.67 / 319.67,
-          child: SizedBox(
-            height: 319.67,
-            width: 508.67,
-            child: CardAnimation(
-              recto: JobStudentCardRecto(
-                professionalStudentCardModel: professionalStudentCardModel,
-              ),
-              verso: const JobStudentCardVerso(),
-            ),
+        CardAnimation(
+          recto: JobStudentCardRecto(
+            professionalStudentCardModel: professionalStudentCardModel,
           ),
+          verso: const JobStudentCardVerso(),
         ),
       ],
     );
@@ -80,64 +72,56 @@ class JobStudentCardRecto extends Recto {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.professionalStudentCardFront),
-        ),
-      ),
+    return CredentialImage(
+      /// this size comes from law publication about job student card specs
+      image: ImageStrings.professionalStudentCardFront,
       child: AspectRatio(
-        /// this size comes from law publication about job student card specs
         aspectRatio: 508.67 / 319.67,
-        child: SizedBox(
-          height: 319.67,
-          width: 508.67,
-          child: CustomMultiChildLayout(
-            delegate: ProfessionalStudentCardDelegate(position: Offset.zero),
-            children: [
-              LayoutId(
-                id: 'familyName',
-                child: ImageCardText(
-                  text: professionalStudentCardModel.recipient!.familyName,
+        child: CustomMultiChildLayout(
+          delegate: ProfessionalStudentCardDelegate(position: Offset.zero),
+          children: [
+            LayoutId(
+              id: 'familyName',
+              child: ImageCardText(
+                text: professionalStudentCardModel.recipient!.familyName,
+              ),
+            ),
+            LayoutId(
+              id: 'givenName',
+              child: ImageCardText(
+                text: professionalStudentCardModel.recipient!.givenName,
+              ),
+            ),
+            LayoutId(
+              id: 'birthDate',
+              child: ImageCardText(
+                text: UiDate.displayDate(
+                  l10n,
+                  professionalStudentCardModel.recipient!.birthDate,
                 ),
               ),
-              LayoutId(
-                id: 'givenName',
-                child: ImageCardText(
-                  text: professionalStudentCardModel.recipient!.givenName,
+            ),
+            LayoutId(
+              id: 'expires',
+              child: ImageCardText(
+                text: UiDate.displayDate(
+                  l10n,
+                  professionalStudentCardModel.expires!,
                 ),
               ),
-              LayoutId(
-                id: 'birthDate',
-                child: ImageCardText(
-                  text: UiDate.displayDate(
-                    l10n,
-                    professionalStudentCardModel.recipient!.birthDate,
-                  ),
-                ),
+            ),
+            LayoutId(
+              id: 'signature',
+              //TODO(all) Missing field
+              child: const ImageCardText(text: 'missing field'),
+            ),
+            LayoutId(
+              id: 'image',
+              child: ImageFromNetwork(
+                professionalStudentCardModel.recipient!.image,
               ),
-              LayoutId(
-                id: 'expires',
-                child: ImageCardText(
-                  text: UiDate.displayDate(
-                    l10n,
-                    professionalStudentCardModel.expires!,
-                  ),
-                ),
-              ),
-              LayoutId(
-                id: 'signature',
-                child: const ImageCardText(text: 'missing field'),
-              ),
-              LayoutId(
-                id: 'image',
-                child: ImageFromNetwork(
-                  professionalStudentCardModel.recipient!.image,
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
@@ -149,21 +133,12 @@ class JobStudentCardVerso extends Verso {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.professionalStudentCardBack),
-        ),
-      ),
-      child: const AspectRatio(
-        /// this size comes from law publication about job student card specs
-        aspectRatio: 508.67 / 319.67,
-        child: SizedBox(
-          height: 319.67,
-          width: 508.67,
-        ),
-      ),
+    return const CredentialImage(
+      /// this size comes from law publication about job student card specs
+
+      image: ImageStrings.professionalStudentCardBack,
+      child:
+          AspectRatio(aspectRatio: 508.67 / 319.67, child: SizedBox.shrink()),
     );
   }
 }

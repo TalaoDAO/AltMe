@@ -59,42 +59,51 @@ class EmailPassRecto extends Recto {
 
   @override
   Widget build(BuildContext context) {
-    return CredentialFill(
-      aspectRatio: 584 / 317,
+    return CredentialImage(
       image: ImageStrings.emailPassFront,
-      child: CustomMultiChildLayout(
-        delegate: EmailPassVersoDelegate(position: Offset.zero),
-        children: [
-          LayoutId(
-            id: 'name',
-            child: DisplayNameCard(
-              credentialModel: credentialModel,
-              style: Theme.of(context).textTheme.credentialTitleCard,
-            ),
-          ),
-          LayoutId(
-            id: 'description',
-            child: DisplayDescriptionCard(
-              credentialModel: credentialModel,
-              style: Theme.of(context).textTheme.credentialTextCard,
-            ),
-          ),
-          LayoutId(
-            id: 'issuer',
-            child: Row(
-              children: [
-                FractionallySizedBox(
-                  heightFactor: 0.15,
-                  child: ImageFromNetwork(
-                    credentialModel.credentialPreview.credentialSubjectModel
-                        .issuedBy!.logo,
-                    fit: BoxFit.fill,
-                  ),
+      child: AspectRatio(
+        aspectRatio: 584 / 317,
+        child: CustomMultiChildLayout(
+          delegate: EmailPassVersoDelegate(position: Offset.zero),
+          children: [
+            LayoutId(
+              id: 'name',
+              child: FractionallySizedBox(
+                widthFactor: 0.5,
+                child: DisplayNameCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context).textTheme.credentialTitleCard,
                 ),
-              ],
+              ),
             ),
-          )
-        ],
+            LayoutId(
+              id: 'description',
+              child: FractionallySizedBox(
+                widthFactor: 0.65,
+                heightFactor: 0.45,
+                child: DisplayDescriptionCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context).textTheme.credentialTextCard,
+                ),
+              ),
+            ),
+            LayoutId(
+              id: 'issuer',
+              child: Row(
+                children: [
+                  FractionallySizedBox(
+                    heightFactor: 0.15,
+                    child: ImageFromNetwork(
+                      credentialModel.credentialPreview.credentialSubjectModel
+                          .issuedBy!.logo,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -109,52 +118,55 @@ class EmailPassVerso extends Verso {
   Widget build(BuildContext context) {
     final emailPassModel = credentialModel
         .credentialPreview.credentialSubjectModel as EmailPassModel;
-    return CredentialFill(
-      aspectRatio: 584 / 317,
+    return CredentialImage(
       image: ImageStrings.emailPassBack,
-      child: CustomMultiChildLayout(
-        delegate: EmailPassVersoDelegate(position: Offset.zero),
-        children: [
-          LayoutId(
-            id: 'name',
-            child: DisplayNameCard(
-              credentialModel: credentialModel,
-              style: Theme.of(context).textTheme.credentialTitleCard,
-            ),
-          ),
-          LayoutId(
-            id: 'description',
-            child: Padding(
-              padding: EdgeInsets.only(
-                right: 250 * MediaQuery.of(context).size.aspectRatio,
-              ),
-              child: DisplayDescriptionCard(
-                credentialModel: credentialModel,
-                style: Theme.of(context).textTheme.credentialTextCard,
-              ),
-            ),
-          ),
-          LayoutId(
-            id: 'issuer',
-            child: Row(
-              children: [
-                FractionallySizedBox(
-                  heightFactor: 0.15,
-                  child: ImageFromNetwork(
-                    credentialModel.credentialPreview.credentialSubjectModel
-                        .issuedBy!.logo,
-                    fit: BoxFit.cover,
-                  ),
+      child: AspectRatio(
+        aspectRatio: 584 / 317,
+        child: CustomMultiChildLayout(
+          delegate: EmailPassVersoDelegate(position: Offset.zero),
+          children: [
+            LayoutId(
+              id: 'name',
+              child: FractionallySizedBox(
+                widthFactor: 0.5,
+                child: DisplayNameCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context).textTheme.credentialTitleCard,
                 ),
-                const SizedBox(width: 10),
-                Text(
-                  emailPassModel.email!,
-                  style: Theme.of(context).textTheme.credentialTextCard,
-                )
-              ],
+              ),
             ),
-          )
-        ],
+            LayoutId(
+              id: 'description',
+              child: FractionallySizedBox(
+                widthFactor: 0.65,
+                child: DisplayDescriptionCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context).textTheme.credentialTextCard,
+                ),
+              ),
+            ),
+            LayoutId(
+              id: 'issuer',
+              child: Row(
+                children: [
+                  FractionallySizedBox(
+                    heightFactor: 0.15,
+                    child: ImageFromNetwork(
+                      credentialModel.credentialPreview.credentialSubjectModel
+                          .issuedBy!.logo,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    emailPassModel.email!,
+                    style: Theme.of(context).textTheme.credentialTextCard,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
