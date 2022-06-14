@@ -18,6 +18,7 @@ class KeyGenerator {
     final rootKey = bip32.BIP32.fromSeed(seed); //Instance of 'BIP32'
 
     // derive path for ethereum '60' see bip 44, first address
+    // m/44’/60’/x’/0/0 where x = 0 for first account 1, x=1 for second account, etc...
     final child = rootKey.derivePath("m/44'/60'/0'/0/0"); //Instance of 'BIP32'
 
     final Iterable<int> iterable = child.privateKey!;
@@ -28,7 +29,6 @@ class KeyGenerator {
     //2cfe49c6292559c1be6874f4bc321f801965398431846999a62027ed91583f9a
 
     final pk = PrivateKey.fromHex(epk); //Instance of 'PrivateKey'
-
     final pub = pk.publicKey.toHex().substring(2);
     //41a72ac211e17bfa49bde064d4617ed88f08d394dfdbf20f51c367035d0dc9e8901f5ac8c
     //57c64f9306b0ed200e08a1b36a08969dc1755f149eac0e3b652a06c

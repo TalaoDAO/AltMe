@@ -7,9 +7,20 @@ environment:
   sdk: ">=2.16.0 <3.0.0"
 
 dependencies:
+  blake2b: ^0.2.2
+  bs58check: ^1.0.2
+  bip32: ^2.0.0
+  bip39: ^1.0.6
   flutter:
     sdk: flutter
+  convert: ^3.0.2
   tezart: ^2.0.3
+  web3dart: ^2.4.0
+
+dependency_overrides:
+  collection: ^1.15.0
+  async: ^2.9.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
