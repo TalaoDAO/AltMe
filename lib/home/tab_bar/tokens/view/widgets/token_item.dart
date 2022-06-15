@@ -44,7 +44,7 @@ class TokenItem extends StatelessWidget {
             style: Theme.of(context).textTheme.listTileSubtitle,
           ),
           trailing: MyText(
-            numberFormatter.format(balance),
+            balance == 0 ? 0.toString() : numberFormatter.format(balance),
             style: Theme.of(context)
                 .textTheme
                 .listTileTitle

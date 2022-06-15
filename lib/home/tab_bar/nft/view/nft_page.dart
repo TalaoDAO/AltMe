@@ -8,6 +8,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class NftPage extends StatelessWidget {
   const NftPage({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class NftPage extends StatelessWidget {
           context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
           Dio(),
         ),
+        secureStorageProvider: getSecureStorage,
       ),
       child: const NftView(),
     );
