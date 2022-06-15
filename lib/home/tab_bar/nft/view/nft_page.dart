@@ -7,6 +7,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class NftPage extends StatelessWidget {
   const NftPage({Key? key}) : super(key: key);
@@ -14,8 +15,10 @@ class NftPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<NftCubit>(
-      create: (context) =>
-          NftCubit(client: DioClient(Urls.tezosNftBaseUrl, Dio())),
+      create: (context) => NftCubit(
+        client: DioClient(Urls.tezosNftBaseUrl, Dio()),
+        secureStorageProvider: getSecureStorage,
+      ),
       child: const NftView(),
     );
   }

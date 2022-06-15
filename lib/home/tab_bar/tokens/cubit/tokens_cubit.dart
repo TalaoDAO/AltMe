@@ -4,27 +4,30 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:tezart/tezart.dart';
 
 part 'tokens_cubit.g.dart';
 
 part 'tokens_state.dart';
 
 class TokensCubit extends Cubit<TokensState> {
-  TokensCubit({required this.client}) : super(const TokensState()) {
+  TokensCubit({required this.client, required this.secureStorageProvider})
+      : super(const TokensState()) {
     getBalanceOfAssetList();
   }
 
   final DioClient client;
+  final SecureStorageProvider secureStorageProvider;
 
   Future<void> getBalanceOfAssetList() async {
     try {
       emit(state.fetching());
+      final address = await getTezosWalletAddress();
       final int balance = await client.get(
-        // TODO(all): remove hardcoded Tezos address in the path of api
-        '/v1/accounts/tz1dKRZVcmJBVNvaAueUmqX42vVEaLb2MbA6/balance',
+        '/v1/accounts/$address/balance',
       ) as int;
       final xtzToken = TokenModel(
-        'tz1dKRZVcmJBVNvaAueUmqX42vVEaLb2MbA6',
+        address,
         'Tezos',
         'XTZ',
         'assets/image/tezos.png',
@@ -44,9 +47,10 @@ class TokensCubit extends Cubit<TokensState> {
     }
   }
 
-  Future<void> getTezosWalletAddress() async {
-    final mnemonic = await getSecureStorage.get(SecureStorageKeys.mnemonic);
-    final keystore = Keystore.fromMnemonic(mnemonic);
+  Future<String> getTezosWalletAddress() async {
+    final mnemonic =
+        await secureStorageProvider.get(SecureStorageKeys.mnemonic);
+    final keystore = Keystore.fromMnemonic(mnemonic!);
     return keystore.address;
   }
 }

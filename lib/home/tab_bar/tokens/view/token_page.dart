@@ -5,6 +5,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class TokenPage extends StatelessWidget {
   const TokenPage({Key? key}) : super(key: key);
@@ -12,8 +13,10 @@ class TokenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TokensCubit>(
-      create: (context) =>
-          TokensCubit(client: DioClient(Urls.tezosNftBaseUrl, Dio())),
+      create: (context) => TokensCubit(
+        client: DioClient(Urls.tezosNftBaseUrl, Dio()),
+        secureStorageProvider: getSecureStorage,
+      ),
       child: const TokenView(),
     );
   }
