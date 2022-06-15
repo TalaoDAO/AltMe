@@ -46,10 +46,13 @@ class ProfileCubit extends Cubit<ProfileState> {
       final issuerVerificationUrl = await secureStorageProvider
               .get(SecureStorageKeys.issuerVerificationUrlKey) ??
           Urls.checkIssuerTalaoUrl;
-      final tezosNetwork = TezosNetwork.fromJson(
-        await secureStorageProvider.get(SecureStorageKeys.tezosNetworkKey)
-            as Map<String, dynamic>,
-      );
+      final _tezosNetworkJson =
+          await secureStorageProvider.get(SecureStorageKeys.tezosNetworkKey);
+      final tezosNetwork = _tezosNetworkJson != null
+          ? TezosNetwork.fromJson(
+              json.decode(_tezosNetworkJson) as Map<String, dynamic>,
+            )
+          : TezosNetwork.mainNet();
       final isEnterprise = (await secureStorageProvider
               .get(SecureStorageKeys.isEnterpriseUser)) ==
           'true';
