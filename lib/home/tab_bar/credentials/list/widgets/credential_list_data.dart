@@ -19,20 +19,18 @@ class CredentialListData extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: onRefresh,
-      child: Expanded(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              GamingCredentials(credentials: state.gamingCredentials),
-              const SizedBox(height: 10),
-              CommunityCredentials(credentials: state.communityCredentials),
-              const SizedBox(height: 10),
-              IdentityCredentials(credentials: state.identityCredentials),
-              const SizedBox(height: 10),
-              OtherCredentials(credentials: state.othersCredentials),
-            ],
-          ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            GamingCredentials(credentials: state.gamingCredentials),
+            const SizedBox(height: 10),
+            CommunityCredentials(credentials: state.communityCredentials),
+            const SizedBox(height: 10),
+            IdentityCredentials(credentials: state.identityCredentials),
+            const SizedBox(height: 10),
+            OtherCredentials(credentials: state.othersCredentials),
+          ],
         ),
       ),
     );
