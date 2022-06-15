@@ -3,6 +3,7 @@ export 'card_animation.dart';
 export 'certificate_of_employment_widget.dart';
 export 'credential_background.dart';
 export 'credential_container.dart';
+export 'credential_image.dart';
 export 'credential_selection_padding.dart';
 export 'default_credential_subject_widget.dart';
 export 'display_description_card.dart';

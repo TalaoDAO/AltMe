@@ -34,13 +34,9 @@ class DisplayStatus extends StatelessWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Icon(
-                      Icons.check_circle,
-                      color: Theme.of(context).colorScheme.activeCredential,
-                      size: 32,
-                    ),
+                  Icon(
+                    Icons.check_circle,
+                    color: Theme.of(context).colorScheme.activeCredential,
                   ),
                   if (displayLabel)
                     Padding(

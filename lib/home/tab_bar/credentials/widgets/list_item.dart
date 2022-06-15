@@ -86,9 +86,7 @@ class CredentialsListPageItem extends StatelessWidget {
     return CredentialSelectionPadding(
       child: Column(
         children: <Widget>[
-          CredentialContainer(
-            child: DisplayInSelectionList(credentialModel: credentialModel),
-          ),
+          DisplayInSelectionList(credentialModel: credentialModel),
           Padding(
             padding: const EdgeInsets.all(8),
             child: Row(

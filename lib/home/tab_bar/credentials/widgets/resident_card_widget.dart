@@ -16,6 +16,7 @@ class ResidentCardDisplayInList extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultCredentialSubjectDisplayInList(
       credentialModel: credentialModel,
+      descriptionMaxLine: 3,
     );
   }
 }

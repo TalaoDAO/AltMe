@@ -43,16 +43,9 @@ class EmailPassDisplayDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AspectRatio(
-          aspectRatio: 584 / 317,
-          child: SizedBox(
-            height: 317,
-            width: 584,
-            child: CardAnimation(
-              recto: EmailPassRecto(credentialModel: credentialModel),
-              verso: EmailPassVerso(credentialModel: credentialModel),
-            ),
-          ),
+        CardAnimation(
+          recto: EmailPassRecto(credentialModel: credentialModel),
+          verso: EmailPassVerso(credentialModel: credentialModel),
         ),
       ],
     );
@@ -66,59 +59,50 @@ class EmailPassRecto extends Recto {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.emailPassFront),
-        ),
-      ),
+    return CredentialImage(
+      image: ImageStrings.emailPassFront,
       child: AspectRatio(
-        /// size from over18 recto picture
         aspectRatio: 584 / 317,
-        child: SizedBox(
-          height: 317,
-          width: 584,
-          child: CustomMultiChildLayout(
-            delegate: EmailPassVersoDelegate(position: Offset.zero),
-            children: [
-              LayoutId(
-                id: 'name',
+        child: CustomMultiChildLayout(
+          delegate: EmailPassVersoDelegate(position: Offset.zero),
+          children: [
+            LayoutId(
+              id: 'name',
+              child: FractionallySizedBox(
+                widthFactor: 0.5,
                 child: DisplayNameCard(
                   credentialModel: credentialModel,
                   style: Theme.of(context).textTheme.credentialTitleCard,
                 ),
               ),
-              LayoutId(
-                id: 'description',
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: 250 * MediaQuery.of(context).size.aspectRatio,
-                  ),
-                  child: DisplayDescriptionCard(
-                    credentialModel: credentialModel,
-                    style: Theme.of(context).textTheme.credentialTextCard,
-                  ),
+            ),
+            LayoutId(
+              id: 'description',
+              child: FractionallySizedBox(
+                widthFactor: 0.65,
+                heightFactor: 0.45,
+                child: DisplayDescriptionCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context).textTheme.credentialTextCard,
                 ),
               ),
-              LayoutId(
-                id: 'issuer',
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 30,
-                      child: ImageFromNetwork(
-                        credentialModel.credentialPreview.credentialSubjectModel
-                            .issuedBy!.logo,
-                        fit: BoxFit.cover,
-                      ),
+            ),
+            LayoutId(
+              id: 'issuer',
+              child: Row(
+                children: [
+                  FractionallySizedBox(
+                    heightFactor: 0.15,
+                    child: ImageFromNetwork(
+                      credentialModel.credentialPreview.credentialSubjectModel
+                          .issuedBy!.logo,
+                      fit: BoxFit.fill,
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -134,64 +118,54 @@ class EmailPassVerso extends Verso {
   Widget build(BuildContext context) {
     final emailPassModel = credentialModel
         .credentialPreview.credentialSubjectModel as EmailPassModel;
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.emailPassBack),
-        ),
-      ),
+    return CredentialImage(
+      image: ImageStrings.emailPassBack,
       child: AspectRatio(
-        /// size from over18 recto picture
         aspectRatio: 584 / 317,
-        child: SizedBox(
-          height: 317,
-          width: 584,
-          child: CustomMultiChildLayout(
-            delegate: EmailPassVersoDelegate(position: Offset.zero),
-            children: [
-              LayoutId(
-                id: 'name',
+        child: CustomMultiChildLayout(
+          delegate: EmailPassVersoDelegate(position: Offset.zero),
+          children: [
+            LayoutId(
+              id: 'name',
+              child: FractionallySizedBox(
+                widthFactor: 0.5,
                 child: DisplayNameCard(
                   credentialModel: credentialModel,
                   style: Theme.of(context).textTheme.credentialTitleCard,
                 ),
               ),
-              LayoutId(
-                id: 'description',
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: 250 * MediaQuery.of(context).size.aspectRatio,
-                  ),
-                  child: DisplayDescriptionCard(
-                    credentialModel: credentialModel,
-                    style: Theme.of(context).textTheme.credentialTextCard,
-                  ),
+            ),
+            LayoutId(
+              id: 'description',
+              child: FractionallySizedBox(
+                widthFactor: 0.65,
+                child: DisplayDescriptionCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context).textTheme.credentialTextCard,
                 ),
               ),
-              LayoutId(
-                id: 'issuer',
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 30,
-                      child: ImageFromNetwork(
-                        credentialModel.credentialPreview.credentialSubjectModel
-                            .issuedBy!.logo,
-                        fit: BoxFit.cover,
-                      ),
+            ),
+            LayoutId(
+              id: 'issuer',
+              child: Row(
+                children: [
+                  FractionallySizedBox(
+                    heightFactor: 0.15,
+                    child: ImageFromNetwork(
+                      credentialModel.credentialPreview.credentialSubjectModel
+                          .issuedBy!.logo,
+                      fit: BoxFit.cover,
                     ),
-                    const SizedBox(width: 10),
-                    Text(
-                      emailPassModel.email!,
-                      style: Theme.of(context).textTheme.credentialTextCard,
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    emailPassModel.email!,
+                    style: Theme.of(context).textTheme.credentialTextCard,
+                  )
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

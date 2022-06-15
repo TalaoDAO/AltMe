@@ -48,16 +48,9 @@ class LoyaltyCardDisplayDetail extends StatelessWidget {
         .credentialPreview.credentialSubjectModel as LoyaltyCardModel;
     return Column(
       children: [
-        AspectRatio(
-          aspectRatio: 508.67 / 319.67,
-          child: SizedBox(
-            height: 319.67,
-            width: 508.67,
-            child: CardAnimation(
-              recto: const LoyaltyCardRecto(),
-              verso: LoyaltyCardVerso(loyaltyCardModel: loyaltyCardModel),
-            ),
-          ),
+        CardAnimation(
+          recto: const LoyaltyCardRecto(),
+          verso: LoyaltyCardVerso(loyaltyCardModel: loyaltyCardModel),
         ),
       ],
     );
@@ -69,21 +62,12 @@ class LoyaltyCardRecto extends Recto {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.loyaltyCard),
-        ),
-      ),
-      child: const AspectRatio(
+    return const CredentialImage(
+      image: ImageStrings.loyaltyCard,
+      child: AspectRatio(
         /// random size, copy from professional student card
         aspectRatio: 508.67 / 319.67,
-        child: SizedBox(
-          height: 319.67,
-          width: 508.67,
-        ),
+        child: SizedBox.shrink(),
       ),
     );
   }
@@ -98,30 +82,38 @@ class LoyaltyCardVerso extends Verso {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Theme.of(context).colorScheme.error,
-      ),
-      child: Column(
-        children: [
-          TextWithLoyaltyCardStyle(value: loyaltyCardModel.programName!),
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextWithLoyaltyCardStyle(value: loyaltyCardModel.givenName!),
-                TextWithLoyaltyCardStyle(value: loyaltyCardModel.familyName!),
-              ],
-            ),
+    return CredentialContainer(
+      child: AspectRatio(
+        /// random size, copy from professional student card
+        aspectRatio: 508.67 / 319.67,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Theme.of(context).colorScheme.error,
           ),
-          TextWithLoyaltyCardStyle(
-            value: UiDate.displayDate(l10n, loyaltyCardModel.birthDate!),
+          child: Column(
+            children: [
+              TextWithLoyaltyCardStyle(value: loyaltyCardModel.programName!),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextWithLoyaltyCardStyle(
+                        value: loyaltyCardModel.givenName!),
+                    TextWithLoyaltyCardStyle(
+                        value: loyaltyCardModel.familyName!),
+                  ],
+                ),
+              ),
+              TextWithLoyaltyCardStyle(
+                value: UiDate.displayDate(l10n, loyaltyCardModel.birthDate!),
+              ),
+              TextWithLoyaltyCardStyle(value: loyaltyCardModel.email!),
+              TextWithLoyaltyCardStyle(value: loyaltyCardModel.telephone!),
+              TextWithLoyaltyCardStyle(value: loyaltyCardModel.address!),
+            ],
           ),
-          TextWithLoyaltyCardStyle(value: loyaltyCardModel.email!),
-          TextWithLoyaltyCardStyle(value: loyaltyCardModel.telephone!),
-          TextWithLoyaltyCardStyle(value: loyaltyCardModel.address!),
-        ],
+        ),
       ),
     );
   }

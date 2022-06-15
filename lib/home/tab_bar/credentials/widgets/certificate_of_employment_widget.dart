@@ -62,21 +62,13 @@ class CertificateOfEmploymentRecto extends Recto {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(
-            ImageStrings.employmentCertificateFront,
-          ),
-        ),
-      ),
+    return CredentialImage(
+      image: ImageStrings.employmentCertificateFront,
       child: AspectRatio(
-        /// size from over18 recto picture
         aspectRatio: 575 / 316,
-        child: SizedBox(
-          height: 316,
-          width: 575,
+        child: FractionallySizedBox(
+          widthFactor: 0.7,
+          alignment: Alignment.centerLeft,
           child: CustomMultiChildLayout(
             delegate: CertificateOfEmploymentModelRectoDelegate(
               position: Offset.zero,
@@ -93,14 +85,9 @@ class CertificateOfEmploymentRecto extends Recto {
               ),
               LayoutId(
                 id: 'description',
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: 250 * MediaQuery.of(context).size.aspectRatio,
-                  ),
-                  child: DisplayDescriptionCard(
-                    credentialModel: credentialModel,
-                    style: Theme.of(context).textTheme.credentialDescription,
-                  ),
+                child: DisplayDescriptionCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context).textTheme.credentialDescription,
                 ),
               ),
             ],
@@ -125,26 +112,19 @@ class CertificateOfEmploymentVerso extends Verso {
     final certificateOfEmploymentModel = credentialModel.credentialPreview
         .credentialSubjectModel as CertificateOfEmploymentModel;
 
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.employmentCertificateBack),
-        ),
-      ),
+    return CredentialImage(
+      image: ImageStrings.employmentCertificateBack,
       child: AspectRatio(
-        /// this size comes from law publication about job student card specs
-        aspectRatio: 572 / 402,
-        child: SizedBox(
-          height: 402,
-          width: 572,
-          child: CustomMultiChildLayout(
-            delegate: CertificateOfEmploymentModelVersoDelegate(
-              position: Offset.zero,
-            ),
-            children: [
-              LayoutId(
-                id: 'name',
+        aspectRatio: 575 / 316,
+        child: CustomMultiChildLayout(
+          delegate: CertificateOfEmploymentModelVersoDelegate(
+            position: Offset.zero,
+          ),
+          children: [
+            LayoutId(
+              id: 'name',
+              child: FractionallySizedBox(
+                widthFactor: 0.7,
                 child: DisplayNameCard(
                   credentialModel: credentialModel,
                   style: Theme.of(context)
@@ -152,184 +132,176 @@ class CertificateOfEmploymentVerso extends Verso {
                       .certificateOfEmploymentTitleCard,
                 ),
               ),
-              LayoutId(
-                id: 'familyName',
-                child: Row(
-                  children: [
-                    ImageCardText(
-                      text: '${l10n.personalLastName}: ',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    ImageCardText(
-                      text: certificateOfEmploymentModel.familyName!,
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData,
-                    ),
-                  ],
-                ),
+            ),
+            LayoutId(
+              id: 'familyName',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.personalLastName}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .certificateOfEmploymentData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: certificateOfEmploymentModel.familyName!,
+                    textStyle:
+                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                  ),
+                ],
               ),
-              LayoutId(
-                id: 'givenName',
-                child: Row(
-                  children: [
-                    ImageCardText(
-                      text: '${l10n.personalFirstName}: ',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    ImageCardText(
-                      text: certificateOfEmploymentModel.givenName!,
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData,
-                    ),
-                  ],
-                ),
+            ),
+            LayoutId(
+              id: 'givenName',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.personalFirstName}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .certificateOfEmploymentData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: certificateOfEmploymentModel.givenName!,
+                    textStyle:
+                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                  ),
+                ],
               ),
-              LayoutId(
-                id: 'workFor',
-                child: Row(
-                  children: [
-                    ImageCardText(
-                      text: '${l10n.workFor}: ',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    ImageCardText(
-                      text: certificateOfEmploymentModel.workFor!.name,
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData,
-                    ),
-                    const SizedBox(width: 20),
-                    if (certificateOfEmploymentModel.workFor!.logo != '')
-                      SizedBox(
-                        height: 17,
-                        child: ImageFromNetwork(
-                          certificateOfEmploymentModel.workFor!.logo,
-                        ),
-                      )
-                    else
-                      const SizedBox.shrink()
-                  ],
-                ),
-              ),
-              LayoutId(
-                id: 'startDate',
-                child: Row(
-                  children: [
-                    ImageCardText(
-                      text: '${l10n.startDate}: ',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    ImageCardText(
-                      text: UiDate.displayDate(
-                        l10n,
-                        certificateOfEmploymentModel.startDate!,
+            ),
+            LayoutId(
+              id: 'workFor',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.workFor}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .certificateOfEmploymentData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: certificateOfEmploymentModel.workFor!.name,
+                    textStyle:
+                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                  ),
+                  const SizedBox(width: 20),
+                  if (certificateOfEmploymentModel.workFor!.logo != '')
+                    SizedBox(
+                      height: 17,
+                      child: ImageFromNetwork(
+                        certificateOfEmploymentModel.workFor!.logo,
                       ),
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData,
-                    ),
-                  ],
-                ),
+                    )
+                  else
+                    const SizedBox.shrink()
+                ],
               ),
-              LayoutId(
-                id: 'jobTitle',
-                child: Row(
-                  children: [
-                    ImageCardText(
-                      text: '${l10n.jobTitle}: ',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData
-                          .copyWith(fontWeight: FontWeight.bold),
+            ),
+            LayoutId(
+              id: 'startDate',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.startDate}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .certificateOfEmploymentData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: UiDate.displayDate(
+                      l10n,
+                      certificateOfEmploymentModel.startDate!,
                     ),
-                    ImageCardText(
-                      text: certificateOfEmploymentModel.jobTitle!,
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData,
-                    ),
-                  ],
-                ),
+                    textStyle:
+                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                  ),
+                ],
               ),
-              LayoutId(
-                id: 'employmentType',
-                child: Row(
-                  children: [
-                    ImageCardText(
-                      text: '${l10n.employmentType}: ',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    ImageCardText(
-                      text: certificateOfEmploymentModel.employmentType!,
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData,
-                    ),
-                  ],
-                ),
+            ),
+            LayoutId(
+              id: 'jobTitle',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.jobTitle}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .certificateOfEmploymentData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: certificateOfEmploymentModel.jobTitle!,
+                    textStyle:
+                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                  ),
+                ],
               ),
-              LayoutId(
-                id: 'baseSalary',
-                child: Row(
-                  children: [
-                    ImageCardText(
-                      text: '${l10n.baseSalary}: ',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    ImageCardText(
-                      text: certificateOfEmploymentModel.baseSalary!,
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData,
-                    ),
-                  ],
-                ),
+            ),
+            LayoutId(
+              id: 'employmentType',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.employmentType}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .certificateOfEmploymentData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: certificateOfEmploymentModel.employmentType!,
+                    textStyle:
+                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                  ),
+                ],
               ),
-              LayoutId(
-                id: 'issuanceDate',
-                child: Row(
-                  children: [
-                    ImageCardText(
-                      text: '${l10n.issuanceDate}: ',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    ImageCardText(
-                      text: UiDate.displayDate(
-                        l10n,
-                        credentialModel.credentialPreview.issuanceDate,
-                      ),
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .certificateOfEmploymentData,
-                    ),
-                  ],
-                ),
+            ),
+            LayoutId(
+              id: 'baseSalary',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.baseSalary}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .certificateOfEmploymentData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: certificateOfEmploymentModel.baseSalary!,
+                    textStyle:
+                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            LayoutId(
+              id: 'issuanceDate',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.issuanceDate}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .certificateOfEmploymentData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: UiDate.displayDate(
+                      l10n,
+                      credentialModel.credentialPreview.issuanceDate,
+                    ),
+                    textStyle:
+                        Theme.of(context).textTheme.certificateOfEmploymentData,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

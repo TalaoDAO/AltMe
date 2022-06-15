@@ -15,6 +15,7 @@ class ProfessionalSkillAssessmentDisplayInList extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultCredentialSubjectDisplayInList(
       credentialModel: credentialModel,
+      descriptionMaxLine: 5,
     );
   }
 }
@@ -78,8 +79,11 @@ class ProfessionalSkillAssessmentDisplayDetail extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8),
-            child: DisplayIssuer(
-              issuer: professionalSkillAssessmentModel.issuedBy!,
+            child: SizedBox(
+              height: 40,
+              child: DisplayIssuer(
+                issuer: professionalSkillAssessmentModel.issuedBy!,
+              ),
             ),
           ),
         ],
