@@ -44,16 +44,9 @@ class Over18DisplayDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AspectRatio(
-          aspectRatio: 584 / 317,
-          child: SizedBox(
-            height: 317,
-            width: 584,
-            child: CardAnimation(
-              recto: const Over18Recto(),
-              verso: Over18Verso(credentialModel: credentialModel),
-            ),
-          ),
+        CardAnimation(
+          recto: const Over18Recto(),
+          verso: Over18Verso(credentialModel: credentialModel),
         ),
       ],
     );
@@ -65,21 +58,11 @@ class Over18Recto extends Recto {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.over18Back),
-        ),
-      ),
-      child: const AspectRatio(
-        /// size from over18 recto picture
+    return const CredentialImage(
+      image: ImageStrings.over18Back,
+      child: AspectRatio(
         aspectRatio: 584 / 317,
-        child: SizedBox(
-          height: 317,
-          width: 584,
-        ),
+        child: SizedBox.shrink(),
       ),
     );
   }
@@ -99,50 +82,40 @@ class Over18Verso extends Verso {
     final expirationDate = credentialModel.expirationDate;
     final issuerName = over18Model.issuedBy!.name;
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.over18Front),
-        ),
-      ),
+    return CredentialImage(
+      image: ImageStrings.over18Front,
       child: AspectRatio(
         /// size from over18 recto picture
         aspectRatio: 584 / 317,
-        child: SizedBox(
-          height: 317,
-          width: 584,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 24, left: 24),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: SizedBox(
-                    height: 50,
-                    child: ImageFromNetwork(
-                      over18Model.issuedBy!.logo,
-                      fit: BoxFit.cover,
-                    ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 24, left: 24),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: SizedBox(
+                  height: 40,
+                  child: ImageFromNetwork(
+                    over18Model.issuedBy!.logo,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              if (expirationDate != null)
-                TextWithOver18CardStyle(
-                  value: '${l10n.expires}: ${UiDate.displayDate(
-                    l10n,
-                    expirationDate,
-                  )}',
-                )
-              else
-                const SizedBox.shrink(),
+            ),
+            if (expirationDate != null)
               TextWithOver18CardStyle(
-                value: '${l10n.issuer}: $issuerName',
-              ),
-            ],
-          ),
+                value: '${l10n.expires}: ${UiDate.displayDate(
+                  l10n,
+                  expirationDate,
+                )}',
+              )
+            else
+              const SizedBox.shrink(),
+            TextWithOver18CardStyle(
+              value: '${l10n.issuer}: $issuerName',
+            ),
+          ],
         ),
       ),
     );

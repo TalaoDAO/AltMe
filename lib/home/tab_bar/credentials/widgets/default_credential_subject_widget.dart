@@ -357,7 +357,8 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
     if (outputDescriptor == null) {
       final l10n = context.l10n;
 
-      return CredentialContainer(
+      return AspectRatio(
+        aspectRatio: 584 / 317,
         child: CredentialBackground(
           credentialModel: credentialModel,
           child: Column(
