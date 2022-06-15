@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:tezart/tezart.dart';
 
 part 'tokens_cubit.g.dart';
 
@@ -22,7 +21,8 @@ class TokensCubit extends Cubit<TokensState> {
   Future<void> getBalanceOfAssetList() async {
     try {
       emit(state.fetching());
-      final address = await getTezosWalletAddress();
+      final address =
+          (await secureStorageProvider.get(SecureStorageKeys.walletAddress))!;
       final int balance = await client.get(
         '/v1/accounts/$address/balance',
       ) as int;
@@ -45,12 +45,5 @@ class TokensCubit extends Cubit<TokensState> {
         ),
       );
     }
-  }
-
-  Future<String> getTezosWalletAddress() async {
-    final mnemonic =
-        await secureStorageProvider.get(SecureStorageKeys.mnemonic);
-    final keystore = Keystore.fromMnemonic(mnemonic!);
-    return keystore.address;
   }
 }
