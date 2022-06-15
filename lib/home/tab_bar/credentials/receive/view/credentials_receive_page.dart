@@ -90,9 +90,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                CredentialContainer(
-                  child: DisplayDetail(credentialModel: credentialModel),
-                ),
+                DisplayDetail(credentialModel: credentialModel),
                 const SizedBox(height: 24),
                 BaseButton.primary(
                   context: context,

@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class VoucherDisplayInList extends StatelessWidget {
@@ -13,7 +12,7 @@ class VoucherDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CredentialContainer(child: VoucherRecto());
+    return const VoucherRecto();
   }
 }
 
@@ -27,7 +26,7 @@ class VoucherDisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CredentialContainer(child: VoucherRecto());
+    return const VoucherRecto();
   }
 }
 
@@ -43,16 +42,9 @@ class VoucherDisplayDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: const [
-        AspectRatio(
-          aspectRatio: 584 / 317,
-          child: SizedBox(
-            height: 317,
-            width: 584,
-            child: CardAnimation(
-              recto: VoucherRecto(),
-              verso: VoucherVerso(),
-            ),
-          ),
+        CardAnimation(
+          recto: VoucherRecto(),
+          verso: VoucherVerso(),
         ),
       ],
     );
@@ -64,23 +56,13 @@ class VoucherRecto extends Recto {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.voucherFront),
-        ),
-      ),
+    return CredentialImage(
+      image: ImageStrings.voucherFront,
       child: AspectRatio(
         /// size from over18 recto picture
         aspectRatio: 584 / 317,
-        child: SizedBox(
-          height: 317,
-          width: 584,
-          child: CustomMultiChildLayout(
-            delegate: VoucherVersoDelegate(position: Offset.zero),
-          ),
+        child: CustomMultiChildLayout(
+          delegate: VoucherVersoDelegate(position: Offset.zero),
         ),
       ),
     );
@@ -92,23 +74,13 @@ class VoucherVerso extends Verso {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.voucherBack),
-        ),
-      ),
+    return CredentialImage(
+      image: ImageStrings.voucherBack,
       child: AspectRatio(
         /// size from over18 recto picture
         aspectRatio: 584 / 317,
-        child: SizedBox(
-          height: 317,
-          width: 584,
-          child: CustomMultiChildLayout(
-            delegate: VoucherVersoDelegate(position: Offset.zero),
-          ),
+        child: CustomMultiChildLayout(
+          delegate: VoucherVersoDelegate(position: Offset.zero),
         ),
       ),
     );
@@ -134,30 +106,6 @@ class VoucherDelegate extends MultiChildLayoutDelegate {
   @override
   bool shouldRelayout(covariant VoucherDelegate oldDelegate) {
     return oldDelegate.position != position;
-  }
-}
-
-class TextWithVoucherStyle extends StatelessWidget {
-  const TextWithVoucherStyle({
-    Key? key,
-    required this.value,
-  }) : super(key: key);
-
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    if (value != '') {
-      return Padding(
-        padding: const EdgeInsets.all(8),
-        child: ImageCardText(
-          text: value,
-          textStyle: Theme.of(context).textTheme.voucherOverlay,
-        ),
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
   }
 }
 
