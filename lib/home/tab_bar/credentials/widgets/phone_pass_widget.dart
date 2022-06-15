@@ -15,6 +15,7 @@ class PhonePassDisplayInList extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultCredentialSubjectDisplayInList(
       credentialModel: credentialModel,
+      descriptionMaxLine: 3,
     );
   }
 }
@@ -57,8 +58,11 @@ class PhonePassDisplayDetail extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8),
-            child: DisplayIssuer(
-              issuer: phonePassModel.issuedBy!,
+            child: SizedBox(
+              height: 40,
+              child: DisplayIssuer(
+                issuer: phonePassModel.issuedBy!,
+              ),
             ),
           ),
         ],

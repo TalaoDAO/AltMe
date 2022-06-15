@@ -49,9 +49,6 @@ class Ecole42LearningAchievementDisplayDetail extends StatelessWidget {
     final ecole42LearningAchievementModel = credentialModel.credentialPreview
         .credentialSubjectModel as Ecole42LearningAchievementModel;
 
-    const _height = 1753.0;
-    const _width = 1240.0;
-    const _aspectRatio = _width / _height;
     final l10n = context.l10n;
     final studentIdentity = '${ecole42LearningAchievementModel.givenName}'
         ' ${ecole42LearningAchievementModel.familyName},'
@@ -65,76 +62,58 @@ class Ecole42LearningAchievementDisplayDetail extends StatelessWidget {
       children: [
         AspectRatio(
           /// this size comes from law publication about job student card specs
-          aspectRatio: _aspectRatio,
-          child: SizedBox(
-            height: _height,
-            width: _width,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                image: const DecorationImage(
-                  fit: BoxFit.fitWidth,
-                  image: AssetImage(ImageStrings.ecole42LearningAchievement),
-                ),
+          aspectRatio: 1240.0 / 1753.0,
+          child: CredentialImage(
+            image: ImageStrings.ecole42LearningAchievement,
+            child: CustomMultiChildLayout(
+              delegate: Ecole42LearningAchievementDelegate(
+                position: Offset.zero,
               ),
-              child: AspectRatio(
-                /// random size, copy from professional student card
-                aspectRatio: _aspectRatio,
-                child: SizedBox(
-                  height: _height,
-                  width: _width,
-                  child: CustomMultiChildLayout(
-                    delegate: Ecole42LearningAchievementDelegate(
-                      position: Offset.zero,
-                    ),
+              children: [
+                LayoutId(
+                  id: 'studentIdentity',
+                  child: Row(
                     children: [
-                      LayoutId(
-                        id: 'studentIdentity',
-                        child: Row(
-                          children: [
-                            ImageCardText(
-                              text: studentIdentity,
-                              textStyle: Theme.of(context)
-                                  .textTheme
-                                  .ecole42LearningAchievementStudentIdentity,
-                            ),
-                          ],
-                        ),
-                      ),
-                      LayoutId(
-                        id: 'level',
-                        child: Row(
-                          children: [
-                            ImageCardText(
-                              text:
-                                  '''Level ${ecole42LearningAchievementModel.hasCredential!.level}''',
-                              textStyle: Theme.of(context)
-                                  .textTheme
-                                  .ecole42LearningAchievementLevel,
-                            ),
-                          ],
-                        ),
-                      ),
-                      LayoutId(
-                        id: 'signature',
-                        child: credentialModel.image != ''
-                            ? Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: SizedBox(
-                                  height: 80 *
-                                      MediaQuery.of(context).size.aspectRatio,
-                                  child: ImageFromNetwork(
-                                    ecole42LearningAchievementModel
-                                        .signatureLines!.image,
-                                  ),
-                                ),
-                              )
-                            : const SizedBox.shrink(),
+                      ImageCardText(
+                        text: studentIdentity,
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .ecole42LearningAchievementStudentIdentity,
                       ),
                     ],
                   ),
                 ),
-              ),
+                LayoutId(
+                  id: 'level',
+                  child: Row(
+                    children: [
+                      ImageCardText(
+                        text:
+                            '''Level ${ecole42LearningAchievementModel.hasCredential!.level}''',
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .ecole42LearningAchievementLevel,
+                      ),
+                    ],
+                  ),
+                ),
+                LayoutId(
+                  id: 'signature',
+                  child: credentialModel.image != ''
+                      ? Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: SizedBox(
+                            height:
+                                80 * MediaQuery.of(context).size.aspectRatio,
+                            child: ImageFromNetwork(
+                              ecole42LearningAchievementModel
+                                  .signatureLines!.image,
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ),
+              ],
             ),
           ),
         ),

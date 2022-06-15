@@ -6,12 +6,12 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
 class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
-  const DefaultCredentialSubjectDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
+  const DefaultCredentialSubjectDisplayInList(
+      {Key? key, required this.credentialModel, this.descriptionMaxLine = 2})
+      : super(key: key);
 
   final CredentialModel credentialModel;
+  final int descriptionMaxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -100,16 +100,19 @@ class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
                                 style: Theme.of(context)
                                     .textTheme
                                     .credentialDescription,
-                                maxLines: 2,
+                                maxLines: descriptionMaxLine,
                               )
                             ],
                           ),
                         ),
                         Expanded(
                           flex: 1,
-                          child: DisplayIssuer(
-                            issuer: credentialModel.credentialPreview
-                                .credentialSubjectModel.issuedBy!,
+                          child: FractionallySizedBox(
+                            heightFactor: 0.4,
+                            child: DisplayIssuer(
+                              issuer: credentialModel.credentialPreview
+                                  .credentialSubjectModel.issuedBy!,
+                            ),
                           ),
                         )
                       ],

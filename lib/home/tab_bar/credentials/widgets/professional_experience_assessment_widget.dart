@@ -16,6 +16,7 @@ class ProfessionalExperienceAssessmentDisplayInList extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultCredentialSubjectDisplayInList(
       credentialModel: credentialModel,
+      descriptionMaxLine: 3,
     );
   }
 }
@@ -147,8 +148,11 @@ class ProfessionalExperienceAssessmentDisplayDetail extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8),
-            child: DisplayIssuer(
-              issuer: professionalExperienceAssessmentModel.issuedBy!,
+            child: SizedBox(
+              height: 40,
+              child: DisplayIssuer(
+                issuer: professionalExperienceAssessmentModel.issuedBy!,
+              ),
             ),
           ),
         ],
