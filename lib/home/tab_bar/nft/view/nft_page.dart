@@ -18,9 +18,8 @@ class NftPage extends StatelessWidget {
     return BlocProvider<NftCubit>(
       create: (context) => NftCubit(
         client: DioClient(
-          context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
-          Dio(),
-        ),
+            context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+            Dio()),
         secureStorageProvider: getSecureStorage,
       ),
       child: const NftView(),
