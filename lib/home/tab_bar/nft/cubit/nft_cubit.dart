@@ -3,27 +3,32 @@ import 'package:altme/home/tab_bar/nft/models/nft_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'nft_cubit.g.dart';
 
 part 'nft_state.dart';
 
 class NftCubit extends Cubit<NftState> {
-  NftCubit({required this.client}) : super(const NftState()) {
+  NftCubit({required this.client, required this.secureStorageProvider})
+      : super(const NftState()) {
     getTezosNftList();
   }
 
   final DioClient client;
+  final SecureStorageProvider secureStorageProvider;
 
   Future<void> getTezosNftList() async {
     try {
       emit(state.fetching());
+      final address =
+          (await secureStorageProvider.get(SecureStorageKeys.walletAddress))!;
       final List<dynamic> response = await client.get(
         '/v1/tokens/balances',
         queryParameters: <String, dynamic>{
-          // TODO(all): remove hardcoded tezos nft contract and account address
+          // TODO(all): remove hardcoded tezos nft contract
           'token.contract': 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
-          'account': 'tz1VPZyh4ZHjDDpgvznqQQXUCLcV7g91WGMz',
+          'account': address,
           'select':
               '''token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance''',
         },
