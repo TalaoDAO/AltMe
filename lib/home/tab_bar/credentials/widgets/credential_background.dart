@@ -32,7 +32,7 @@ class CredentialBackground extends StatelessWidget {
             Alignment.bottomCenter,
           ],
           // value: animation.value,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(Sizes.credentialBorderRadius),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8),

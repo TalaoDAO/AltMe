@@ -6,12 +6,12 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
 class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
-  const DefaultCredentialSubjectDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
+  const DefaultCredentialSubjectDisplayInList(
+      {Key? key, required this.credentialModel, this.descriptionMaxLine = 2})
+      : super(key: key);
 
   final CredentialModel credentialModel;
+  final int descriptionMaxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +20,13 @@ class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
         credentialModel.credentialManifest?.outputDescriptors?.first;
     // If outputDescriptor exist, the credential has a credential manifest
     // telling us what to display
+
     if (outputDescriptor == null) {
       return CredentialContainer(
         child: AspectRatio(
           aspectRatio: 584 / 317,
           child: Container(
-            // margin: const EdgeInsets.symmetric(vertical: 4.0),
             decoration: BaseBoxDecoration(
-              borderRadius: BorderRadius.circular(20),
               color: credentialModel.credentialPreview.credentialSubjectModel
                   .credentialSubjectType
                   .backgroundColor(credentialModel),
@@ -37,60 +36,90 @@ class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
                 Alignment.bottomRight,
               ],
             ),
-            child: Material(
-              color: Theme.of(context).colorScheme.transparent,
-              borderRadius: BorderRadius.circular(20),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        HeroFix(
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: HeroFix(
                           tag: 'credential/${credentialModel.id}/icon',
-                          child: CredentialIcon(credential: credential),
-                        ),
-                        const SizedBox(height: 16),
-                        DisplayStatus(
-                          credentialModel: credentialModel,
-                          displayLabel: false,
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: DisplayNameCard(
-                              credentialModel: credentialModel,
-                              style:
-                                  Theme.of(context).textTheme.credentialTitle,
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: FractionallySizedBox(
+                              heightFactor: 0.4,
+                              child: FittedBox(
+                                child: Center(
+                                  child: CredentialIcon(credential: credential),
+                                ),
+                              ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: SizedBox(
-                              height: 48,
-                              child: DisplayDescriptionCard(
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: FractionallySizedBox(
+                            heightFactor: 0.4,
+                            child: FittedBox(
+                              child: DisplayStatus(
+                                credentialModel: credentialModel,
+                                displayLabel: false,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 10, right: 10, bottom: 2),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            children: [
+                              DisplayNameCard(
+                                credentialModel: credentialModel,
+                                style:
+                                    Theme.of(context).textTheme.credentialTitle,
+                              ),
+                              const SizedBox(height: 5),
+                              DisplayDescriptionCard(
                                 credentialModel: credentialModel,
                                 style: Theme.of(context)
                                     .textTheme
                                     .credentialDescription,
-                              ),
+                                maxLines: descriptionMaxLine,
+                              )
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: FractionallySizedBox(
+                            heightFactor: 0.4,
+                            child: DisplayIssuer(
+                              issuer: credentialModel.credentialPreview
+                                  .credentialSubjectModel.issuedBy!,
                             ),
                           ),
-                          DisplayIssuer(
-                            issuer: credentialModel.credentialPreview
-                                .credentialSubjectModel.issuedBy!,
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -328,63 +357,66 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
     if (outputDescriptor == null) {
       final l10n = context.l10n;
 
-      return CredentialBackground(
-        credentialModel: credentialModel,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: DisplayNameCard(
-                credentialModel: credentialModel,
-                style: Theme.of(context).textTheme.credentialTitle,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: DisplayDescriptionCard(
-                credentialModel: credentialModel,
-                style: Theme.of(context).textTheme.credentialDescription,
-              ),
-            ),
-            if (credentialModel.credentialPreview.evidence.first.id != '')
+      return AspectRatio(
+        aspectRatio: 584 / 317,
+        child: CredentialBackground(
+          credentialModel: credentialModel,
+          child: Column(
+            children: [
               Padding(
                 padding: const EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    Text(
-                      '${l10n.evidenceLabel}: ',
-                      style: Theme.of(context).textTheme.credentialFieldTitle,
-                    ),
-                    Flexible(
-                      child: InkWell(
-                        onTap: () => LaunchUrl.launch(
-                          credentialModel.credentialPreview.evidence.first.id,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Row(
-                            children: [
-                              Text(
-                                credentialModel
-                                    .credentialPreview.evidence.first.id,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .credentialFieldDescription,
-                                maxLines: 5,
-                                overflow: TextOverflow.fade,
-                                softWrap: true,
-                              ),
-                            ],
+                child: DisplayNameCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context).textTheme.credentialTitle,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: DisplayDescriptionCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context).textTheme.credentialDescription,
+                ),
+              ),
+              if (credentialModel.credentialPreview.evidence.first.id != '')
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    children: [
+                      Text(
+                        '${l10n.evidenceLabel}: ',
+                        style: Theme.of(context).textTheme.credentialFieldTitle,
+                      ),
+                      Flexible(
+                        child: InkWell(
+                          onTap: () => LaunchUrl.launch(
+                            credentialModel.credentialPreview.evidence.first.id,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              children: [
+                                Text(
+                                  credentialModel
+                                      .credentialPreview.evidence.first.id,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .credentialFieldDescription,
+                                  maxLines: 5,
+                                  overflow: TextOverflow.fade,
+                                  softWrap: true,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              )
-            else
-              const SizedBox.shrink()
-          ],
+                    ],
+                  ),
+                )
+              else
+                const SizedBox.shrink()
+            ],
+          ),
         ),
       );
     } else {

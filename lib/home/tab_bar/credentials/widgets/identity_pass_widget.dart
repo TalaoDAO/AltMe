@@ -15,6 +15,7 @@ class IdentityPassDisplayInList extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultCredentialSubjectDisplayInList(
       credentialModel: credentialModel,
+      descriptionMaxLine: 4,
     );
   }
 }
@@ -128,8 +129,11 @@ class IdentityPassDisplayDetail extends StatelessWidget {
             const SizedBox.shrink(),
           Padding(
             padding: const EdgeInsets.all(8),
-            child: DisplayIssuer(
-              issuer: identityPassModel.issuedBy!,
+            child: SizedBox(
+              height: 40,
+              child: DisplayIssuer(
+                issuer: identityPassModel.issuedBy!,
+              ),
             ),
           )
         ],

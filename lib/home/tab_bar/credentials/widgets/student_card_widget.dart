@@ -14,9 +14,7 @@ class StudentCardDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CredentialContainer(
-      child: StudentCardRecto(credentialModel: credentialModel),
-    );
+    return StudentCardRecto(credentialModel: credentialModel);
   }
 }
 
@@ -30,9 +28,7 @@ class StudentCardDisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CredentialContainer(
-      child: StudentCardRecto(credentialModel: credentialModel),
-    );
+    return StudentCardRecto(credentialModel: credentialModel);
   }
 }
 
@@ -48,16 +44,9 @@ class StudentCardDisplayDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AspectRatio(
-          aspectRatio: 572 / 315,
-          child: SizedBox(
-            height: 315,
-            width: 572,
-            child: CardAnimation(
-              recto: StudentCardRecto(credentialModel: credentialModel),
-              verso: StudentCardVerso(credentialModel: credentialModel),
-            ),
-          ),
+        CardAnimation(
+          recto: StudentCardRecto(credentialModel: credentialModel),
+          verso: StudentCardVerso(credentialModel: credentialModel),
         ),
       ],
     );
@@ -74,53 +63,49 @@ class StudentCardRecto extends Recto {
     final studentCardModel = credentialModel
         .credentialPreview.credentialSubjectModel as StudentCardModel;
 
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.studentCardFront),
-        ),
-      ),
+    return CredentialImage(
+      image: ImageStrings.studentCardFront,
       child: AspectRatio(
-        /// size from over18 recto picture
         aspectRatio: 572 / 315,
-        child: SizedBox(
-          height: 315,
-          width: 572,
-          child: CustomMultiChildLayout(
-            delegate: StudentCardVersoDelegate(position: Offset.zero),
-            children: [
-              LayoutId(
-                id: 'school',
-                child: Text(
-                  studentCardModel.issuedBy!.name,
-                  overflow: TextOverflow.fade,
-                  style: Theme.of(context).textTheme.studentCardSchool,
-                ),
-              ),
-              LayoutId(
-                id: 'name',
+        child: CustomMultiChildLayout(
+          delegate: StudentCardVersoDelegate(position: Offset.zero),
+          children: [
+            LayoutId(
+              id: 'name',
+              child: FractionallySizedBox(
+                widthFactor: 0.6,
+                alignment: Alignment.centerLeft,
                 child: DisplayNameCard(
                   credentialModel: credentialModel,
                   style: Theme.of(context).textTheme.credentialTitleCard,
                 ),
               ),
-              LayoutId(
-                id: 'description',
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: 250 * MediaQuery.of(context).size.aspectRatio,
-                  ),
-                  child: DisplayDescriptionCard(
-                    credentialModel: credentialModel,
-                    style: Theme.of(context)
-                        .textTheme
-                        .credentialStudentCardTextCard,
-                  ),
+            ),
+            LayoutId(
+              id: 'school',
+              child: FractionallySizedBox(
+                widthFactor: 0.4,
+                alignment: Alignment.centerLeft,
+                child: MyText(
+                  studentCardModel.issuedBy!.name,
+                  style: Theme.of(context).textTheme.studentCardSchool,
                 ),
               ),
-            ],
-          ),
+            ),
+            LayoutId(
+              id: 'description',
+              child: FractionallySizedBox(
+                widthFactor: 0.63,
+                heightFactor: 0.33,
+                alignment: Alignment.centerLeft,
+                child: DisplayDescriptionCard(
+                  credentialModel: credentialModel,
+                  style:
+                      Theme.of(context).textTheme.credentialStudentCardTextCard,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -141,134 +126,126 @@ class StudentCardVerso extends Verso {
 
     final studentCardModel = credentialModel
         .credentialPreview.credentialSubjectModel as StudentCardModel;
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.studentCardBack),
-        ),
-      ),
+    return CredentialImage(
+      /// this size comes from law publication about job student card specs
+
+      image: ImageStrings.studentCardBack,
       child: AspectRatio(
-        /// this size comes from law publication about job student card specs
         aspectRatio: 572 / 315,
-        child: SizedBox(
-          height: 315,
-          width: 572,
-          child: CustomMultiChildLayout(
-            delegate: StudentCardDelegate(position: Offset.zero),
-            children: [
-              LayoutId(
-                id: 'name',
-                child: DisplayNameCard(
-                  credentialModel: credentialModel,
-                  style: Theme.of(context).textTheme.credentialTitleCard,
-                ),
+        child: CustomMultiChildLayout(
+          delegate: StudentCardDelegate(position: Offset.zero),
+          children: [
+            LayoutId(
+              id: 'name',
+              child: DisplayNameCard(
+                credentialModel: credentialModel,
+                style: Theme.of(context).textTheme.credentialTitleCard,
               ),
-              LayoutId(
-                id: 'school',
-                child: Text(
-                  studentCardModel.issuedBy!.name,
-                  overflow: TextOverflow.fade,
-                  style: Theme.of(context).textTheme.studentCardSchool,
-                ),
+            ),
+            LayoutId(
+              id: 'school',
+              child: Text(
+                studentCardModel.issuedBy!.name,
+                overflow: TextOverflow.fade,
+                style: Theme.of(context).textTheme.studentCardSchool,
               ),
-              LayoutId(
-                id: 'familyName',
-                child: Row(
-                  children: [
-                    ImageCardText(
-                      text: '${l10n.personalLastName}: ',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .studentCardData
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    ImageCardText(
-                      text: studentCardModel.recipient!.familyName,
-                      textStyle: Theme.of(context).textTheme.studentCardData,
-                    ),
-                  ],
-                ),
-              ),
-              LayoutId(
-                id: 'givenName',
-                child: Row(
-                  children: [
-                    ImageCardText(
-                      text: '${l10n.personalFirstName}: ',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .studentCardData
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    ImageCardText(
-                      text: studentCardModel.recipient!.givenName,
-                      textStyle: Theme.of(context).textTheme.studentCardData,
-                    ),
-                  ],
-                ),
-              ),
-              LayoutId(
-                id: 'birthDate',
-                child: Row(
-                  children: [
-                    ImageCardText(
-                      text: '${l10n.birthdate}: ',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .studentCardData
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    ImageCardText(
-                      text: UiDate.displayDate(
-                        l10n,
-                        studentCardModel.recipient!.birthDate,
-                      ),
-                      textStyle: Theme.of(context).textTheme.studentCardData,
-                    ),
-                  ],
-                ),
-              ),
-              LayoutId(
-                id: 'expires',
-                child: Row(
-                  children: [
-                    ImageCardText(
-                      text: '${l10n.expires}: ',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .studentCardData
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    ImageCardText(
-                      text: UiDate.displayDate(l10n, studentCardModel.expires!),
-                      textStyle: Theme.of(context).textTheme.studentCardData,
-                    ),
-                  ],
-                ),
-              ),
-              LayoutId(
-                id: 'signature',
-                child: ImageCardText(
-                  text: '${l10n.signature}: ',
-                  textStyle: Theme.of(context)
-                      .textTheme
-                      .studentCardData
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-              LayoutId(
-                id: 'image',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: ImageFromNetwork(
-                    studentCardModel.recipient!.image,
-                    fit: BoxFit.fill,
+            ),
+            LayoutId(
+              id: 'familyName',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.personalLastName}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .studentCardData
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
+                  ImageCardText(
+                    text: studentCardModel.recipient!.familyName,
+                    textStyle: Theme.of(context).textTheme.studentCardData,
+                  ),
+                ],
+              ),
+            ),
+            LayoutId(
+              id: 'givenName',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.personalFirstName}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .studentCardData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: studentCardModel.recipient!.givenName,
+                    textStyle: Theme.of(context).textTheme.studentCardData,
+                  ),
+                ],
+              ),
+            ),
+            LayoutId(
+              id: 'birthDate',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.birthdate}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .studentCardData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: UiDate.displayDate(
+                      l10n,
+                      studentCardModel.recipient!.birthDate,
+                    ),
+                    textStyle: Theme.of(context).textTheme.studentCardData,
+                  ),
+                ],
+              ),
+            ),
+            LayoutId(
+              id: 'expires',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.expires}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .studentCardData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: UiDate.displayDate(l10n, studentCardModel.expires!),
+                    textStyle: Theme.of(context).textTheme.studentCardData,
+                  ),
+                ],
+              ),
+            ),
+            LayoutId(
+              id: 'signature',
+              child: ImageCardText(
+                text: '${l10n.signature}: ',
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .studentCardData
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+            LayoutId(
+              id: 'image',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: ImageFromNetwork(
+                  studentCardModel.recipient!.image,
+                  fit: BoxFit.fill,
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

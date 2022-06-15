@@ -44,16 +44,9 @@ class AssociatedWalletDisplayDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AspectRatio(
-          aspectRatio: 584 / 317,
-          child: SizedBox(
-            height: 317,
-            width: 584,
-            child: CardAnimation(
-              recto: const AssociatedWalletRecto(),
-              verso: AssociatedWalletVerso(credentialModel: credentialModel),
-            ),
-          ),
+        CardAnimation(
+          recto: const AssociatedWalletRecto(),
+          verso: AssociatedWalletVerso(credentialModel: credentialModel),
         ),
       ],
     );
@@ -65,21 +58,12 @@ class AssociatedWalletRecto extends Recto {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.associatedWalletFront),
-        ),
-      ),
-      child: const AspectRatio(
-        /// size from recto picture
-        aspectRatio: 584 / 317,
-        child: SizedBox(
-          height: 317,
-          width: 584,
-        ),
+    return const AspectRatio(
+      /// size from recto picture
+      aspectRatio: 584 / 317,
+      child: CredentialImage(
+        image: ImageStrings.associatedWalletFront,
+        child: SizedBox.shrink(),
       ),
     );
   }
@@ -99,88 +83,53 @@ class AssociatedWalletVerso extends Verso {
     final expirationDate = credentialModel.expirationDate;
     final issuerName = associatedWallet.issuedBy!.name;
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: AssetImage(ImageStrings.associatedWalletBack),
-        ),
-      ),
+    return CredentialImage(
+      image: ImageStrings.associatedWalletBack,
       child: AspectRatio(
         /// size from recto picture
         aspectRatio: 584 / 317,
-        child: SizedBox(
-          height: 317,
-          width: 584,
-          child: Padding(
-            padding: const EdgeInsets.all(Sizes.spaceNormal),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (associatedWallet.issuedBy?.logo.isNotEmpty ?? false)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: SizedBox(
-                      height: 50,
-                      child: ImageFromNetwork(
-                        associatedWallet.issuedBy!.logo,
-                        fit: BoxFit.cover,
-                      ),
+        child: Padding(
+          padding: const EdgeInsets.all(Sizes.spaceNormal),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (associatedWallet.issuedBy?.logo.isNotEmpty ?? false)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: SizedBox(
+                    height: 50,
+                    child: ImageFromNetwork(
+                      associatedWallet.issuedBy!.logo,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                DisplayNameCard(
-                  credentialModel: credentialModel,
-                  style: Theme.of(context).textTheme.associatedWalletTitleCard,
                 ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
+              DisplayNameCard(
+                credentialModel: credentialModel,
+                style: Theme.of(context).textTheme.associatedWalletTitleCard,
+              ),
+              const SizedBox(height: Sizes.spaceSmall),
+              DisplayDescriptionCard(
+                credentialModel: credentialModel,
+                style: Theme.of(context).textTheme.credentialDescription,
+              ),
+              const SizedBox(height: Sizes.spaceSmall),
+              if (expirationDate != null)
+                Text(
+                  '${l10n.expires}: ${UiDate.displayDate(
+                    l10n,
+                    expirationDate,
+                  )}',
+                  style: Theme.of(context).textTheme.associatedWalletData,
                 ),
-                DisplayDescriptionCard(
-                  credentialModel: credentialModel,
-                  style: Theme.of(context).textTheme.credentialDescription,
-                ),
-                if (expirationDate != null)
-                  TextWithAssociatedWalletCardStyle(
-                    value: '${l10n.expires}: ${UiDate.displayDate(
-                      l10n,
-                      expirationDate,
-                    )}',
-                  )
-                else
-                  const SizedBox.shrink(),
-                TextWithAssociatedWalletCardStyle(
-                  value: '${l10n.issuer}: $issuerName',
-                ),
-              ],
-            ),
+              Text(
+                '${l10n.issuer}: $issuerName',
+                style: Theme.of(context).textTheme.associatedWalletData,
+              )
+            ],
           ),
         ),
       ),
     );
-  }
-}
-
-class TextWithAssociatedWalletCardStyle extends StatelessWidget {
-  const TextWithAssociatedWalletCardStyle({
-    Key? key,
-    required this.value,
-  }) : super(key: key);
-
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    if (value != '') {
-      return Padding(
-        padding: const EdgeInsets.all(24),
-        child: Text(
-          value,
-          style: Theme.of(context).textTheme.associatedWalletData,
-        ),
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
   }
 }
