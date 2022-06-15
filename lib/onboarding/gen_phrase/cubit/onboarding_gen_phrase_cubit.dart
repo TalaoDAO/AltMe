@@ -9,8 +9,10 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:tezart/tezart.dart';
 
 part 'onboarding_gen_phrase_cubit.g.dart';
+
 part 'onboarding_gen_phrase_state.dart';
 
 class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
@@ -41,6 +43,9 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
       );
       final key = await keyGenerator.privateKey(mnemonicFormatted);
       await secureStorageProvider.set(SecureStorageKeys.key, key);
+
+      final address = Keystore.fromMnemonic(mnemonicFormatted).address;
+      await secureStorageProvider.set(SecureStorageKeys.walletAddress, address);
 
       const didMethod = AltMeStrings.defaultDIDMethod;
       final did = didKitProvider.keyToDID(didMethod, key);
@@ -73,7 +78,9 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     emit(state.loading());
     try {
       log.info('will save mnemonic to secure storage');
-      await secureStorageProvider.set('mnemonic', mnemonic);
+      await secureStorageProvider.set(SecureStorageKeys.mnemonic, mnemonic);
+      final address = Keystore.fromMnemonic(mnemonic).address;
+      await secureStorageProvider.set(SecureStorageKeys.walletAddress, address);
       log.info('mnemonic saved');
       emit(state.success());
     } catch (error) {
