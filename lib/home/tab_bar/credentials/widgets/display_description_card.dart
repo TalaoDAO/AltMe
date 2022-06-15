@@ -8,16 +8,19 @@ class DisplayDescriptionCard extends StatelessWidget {
     Key? key,
     required this.credentialModel,
     required this.style,
+    this.maxLines = 5,
   }) : super(key: key);
+
   final CredentialModel credentialModel;
   final TextStyle style;
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {
     final nameValue = getDescription(context);
     return MyText(
       nameValue,
-      maxLines: 5,
+      maxLines: maxLines,
       overflow: TextOverflow.fade,
       style: style,
     );

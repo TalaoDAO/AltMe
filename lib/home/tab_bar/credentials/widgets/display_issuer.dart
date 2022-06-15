@@ -13,28 +13,23 @@ class DisplayIssuer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
+    return FractionallySizedBox(
+      heightFactor: 0.4,
       child: Row(
         children: [
           // Text('${localizations.issuer} '),
-          Text(
+          MyText(
             issuer.name,
             style: Theme.of(context).textTheme.credentialIssuer,
           ),
           const Spacer(),
           if (issuer.logo.isNotEmpty)
-            SizedBox(
-              height: 30,
-              child: ImageFromNetwork(
-                issuer.logo,
-                fit: BoxFit.cover,
-              ),
+            ImageFromNetwork(
+              issuer.logo,
+              fit: BoxFit.cover,
             )
           else
-            const SizedBox(
-              height: 30,
-            )
+            const SizedBox.shrink()
         ],
       ),
     );
