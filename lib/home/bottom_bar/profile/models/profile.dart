@@ -1,4 +1,5 @@
 import 'package:altme/app/shared/constants/urls.dart';
+import 'package:altme/app/shared/tezos_network/models/tezos_network.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -13,6 +14,7 @@ class ProfileModel extends Equatable {
     required this.location,
     required this.email,
     required this.issuerVerificationUrl,
+    required this.tezosNetwork,
     required this.isEnterprise,
     this.companyName = '',
     this.companyWebsite = '',
@@ -22,7 +24,7 @@ class ProfileModel extends Equatable {
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
       _$ProfileModelFromJson(json);
 
-  factory ProfileModel.empty() => const ProfileModel(
+  factory ProfileModel.empty() => ProfileModel(
         firstName: '',
         lastName: '',
         phone: '',
@@ -33,6 +35,7 @@ class ProfileModel extends Equatable {
         jobTitle: '',
         issuerVerificationUrl: Urls.checkIssuerTalaoUrl,
         isEnterprise: false,
+        tezosNetwork: TezosNetwork.mainNet(),
       );
 
   final String firstName;
@@ -44,6 +47,7 @@ class ProfileModel extends Equatable {
   final String companyWebsite;
   final String jobTitle;
   final String issuerVerificationUrl;
+  final TezosNetwork tezosNetwork;
   final bool isEnterprise;
 
   @override
@@ -54,6 +58,7 @@ class ProfileModel extends Equatable {
         location,
         email,
         issuerVerificationUrl,
+        tezosNetwork,
         companyName,
         companyWebsite,
         jobTitle,
@@ -72,6 +77,7 @@ class ProfileModel extends Equatable {
     String? companyWebsite,
     String? jobTitle,
     String? issuerVerificationUrl,
+    TezosNetwork? tezosNetwork,
     bool? isEnterprise,
   }) {
     return ProfileModel(
@@ -85,6 +91,7 @@ class ProfileModel extends Equatable {
       jobTitle: jobTitle ?? this.jobTitle,
       issuerVerificationUrl:
           issuerVerificationUrl ?? this.issuerVerificationUrl,
+      tezosNetwork: tezosNetwork ?? this.tezosNetwork,
       isEnterprise: isEnterprise ?? this.isEnterprise,
     );
   }

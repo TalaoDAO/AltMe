@@ -325,6 +325,7 @@
   "biometricsEnabledMessage": "Your can now unlock app with your biometrics.",
   "biometricsDisabledMessage": "Your biometrics has been disbled.",
   "exportSecretKey": "Export secret key",
-  "secretKey" : "Secret Key",
-  "copySecretKeyToClipboard": "Copy secret key to clipboard"
+  "secretKey": "Secret Key",
+  "copySecretKeyToClipboard": "Copy secret key to clipboard",
+  "tezosNetwork": "Tezos Network"
 }

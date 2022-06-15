@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/enum/issuer_verification_registry.dart';
+import 'package:altme/app/shared/tezos_network/models/tezos_network.dart';
 import 'package:altme/home/home.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -43,6 +46,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       final issuerVerificationUrl = await secureStorageProvider
               .get(SecureStorageKeys.issuerVerificationUrlKey) ??
           Urls.checkIssuerTalaoUrl;
+      final tezosNetwork = TezosNetwork.fromJson(
+        await secureStorageProvider.get(SecureStorageKeys.tezosNetworkKey)
+            as Map<String, dynamic>,
+      );
       final isEnterprise = (await secureStorageProvider
               .get(SecureStorageKeys.isEnterpriseUser)) ==
           'true';
@@ -54,6 +61,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         location: location,
         email: email,
         issuerVerificationUrl: issuerVerificationUrl,
+        tezosNetwork: tezosNetwork,
         companyName: companyName,
         companyWebsite: companyWebsite,
         jobTitle: jobTitle,
@@ -85,6 +93,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     await secureStorageProvider.delete(SecureStorageKeys.companyName);
     await secureStorageProvider
         .delete(SecureStorageKeys.issuerVerificationUrlKey);
+    await secureStorageProvider.delete(SecureStorageKeys.tezosNetworkKey);
     await secureStorageProvider.delete(SecureStorageKeys.isEnterpriseUser);
     emit(state.success(model: ProfileModel.empty()));
   }
@@ -132,6 +141,11 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
+        SecureStorageKeys.tezosNetworkKey,
+        jsonEncode(profileModel.tezosNetwork.toJson()),
+      );
+
+      await secureStorageProvider.set(
         SecureStorageKeys.isEnterpriseUser,
         profileModel.isEnterprise.toString(),
       );
@@ -168,6 +182,14 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
     final _newModel =
         state.model.copyWith(issuerVerificationUrl: _issuerVerificationUrl);
+    await update(_newModel);
+  }
+
+  Future<void> updateTezosNetwork(
+    TezosNetwork newTezosNetwork,
+  ) async {
+    Logger('talao-wallet/profile/updateTezosNetwork');
+    final _newModel = state.model.copyWith(tezosNetwork: newTezosNetwork);
     await update(_newModel);
   }
 }
