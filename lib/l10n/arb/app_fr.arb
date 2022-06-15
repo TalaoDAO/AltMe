@@ -297,5 +297,6 @@
   "otherCards": "Autres cartes",
   "inMyWallet": "Dans mon portefeuille",
   "details": "Détails",
-  "getThisCard": "Obtenir cette carte"
+  "getThisCard": "Obtenir cette carte",
+  "tezosNetwork": "Réseau Tezos"
 }

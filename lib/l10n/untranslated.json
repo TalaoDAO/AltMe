@@ -169,7 +169,8 @@
     "biometricsDisabledMessage",
     "exportSecretKey",
     "secretKey",
-    "copySecretKeyToClipboard"
+    "copySecretKeyToClipboard",
+    "tezosNetwork"
   ],
 
   "es": [
@@ -342,7 +343,8 @@
     "biometricsDisabledMessage",
     "exportSecretKey",
     "secretKey",
-    "copySecretKeyToClipboard"
+    "copySecretKeyToClipboard",
+    "tezosNetwork"
   ],
 
   "fr": [
@@ -571,6 +573,7 @@
     "biometricsDisabledMessage",
     "exportSecretKey",
     "secretKey",
-    "copySecretKeyToClipboard"
+    "copySecretKeyToClipboard",
+    "tezosNetwork"
   ]
 }

@@ -4,7 +4,6 @@ class Urls {
       'https://talao.co/trusted-issuers-registry/v1/issuers';
   static const String checkIssuerEbsiUrl =
       'https://api.conformance.intebsi.xyz/trusted-issuers-registry/v2/issuers';
-  static const String tezosNftBaseUrl = 'https://api.tzkt.io';
 
   static const String certificateOfEmploymentUrl =
       'https://talao.co/wallet/test/direct_offer?VC=CertificateOfEmployment.jsonld';

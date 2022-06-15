@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
+import 'package:altme/home/bottom_bar/general_information/widget/tezos_network_setting.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class GeneralInformationPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const IssuerVerificationSetting(),
+          const TezosNetworksetting(),
           DIDDisplay(
             isEnterpriseUser:
                 context.read<ProfileCubit>().state.model.isEnterprise,

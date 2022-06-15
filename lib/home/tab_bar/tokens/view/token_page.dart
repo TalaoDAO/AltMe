@@ -12,8 +12,12 @@ class TokenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TokensCubit>(
-      create: (context) =>
-          TokensCubit(client: DioClient(Urls.tezosNftBaseUrl, Dio())),
+      create: (context) => TokensCubit(
+        client: DioClient(
+          context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+          Dio(),
+        ),
+      ),
       child: const TokenView(),
     );
   }

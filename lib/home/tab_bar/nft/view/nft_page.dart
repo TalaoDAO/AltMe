@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/home/bottom_bar/profile/cubit/profile_cubit.dart';
 import 'package:altme/home/tab_bar/nft/cubit/nft_cubit.dart';
 import 'package:altme/home/tab_bar/nft/view/widgets/my_collection_text.dart';
 import 'package:altme/home/tab_bar/nft/view/widgets/nft_list.dart';
@@ -14,8 +15,12 @@ class NftPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<NftCubit>(
-      create: (context) =>
-          NftCubit(client: DioClient(Urls.tezosNftBaseUrl, Dio())),
+      create: (context) => NftCubit(
+        client: DioClient(
+          context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+          Dio(),
+        ),
+      ),
       child: const NftView(),
     );
   }
