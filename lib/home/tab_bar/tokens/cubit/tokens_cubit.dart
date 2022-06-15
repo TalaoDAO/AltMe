@@ -3,6 +3,7 @@ import 'package:altme/home/home.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'tokens_cubit.g.dart';
 
@@ -41,5 +42,11 @@ class TokensCubit extends Cubit<TokensState> {
         ),
       );
     }
+  }
+
+  Future<void> getTezosWalletAddress() async {
+    final mnemonic = await getSecureStorage.get(SecureStorageKeys.mnemonic);
+    final keystore = Keystore.fromMnemonic(mnemonic);
+    return keystore.address;
   }
 }
