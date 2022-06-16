@@ -4,8 +4,11 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class DisplayIssuanceDateWidget extends StatelessWidget {
-  const DisplayIssuanceDateWidget(this.issuanceDate, this.textColor, {Key? key})
-      : super(key: key);
+  const DisplayIssuanceDateWidget({
+    this.issuanceDate,
+    this.textColor,
+    Key? key,
+  }) : super(key: key);
   final String? issuanceDate;
   final Color? textColor;
 

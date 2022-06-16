@@ -73,7 +73,7 @@ class ProfessionalSkillAssessmentDisplayDetail extends StatelessWidget {
                 .map(
                   (e) => DisplaySignatures(
                     localizations: l10n,
-                    item: e,
+                    signature: e,
                   ),
                 )
                 .toList(),

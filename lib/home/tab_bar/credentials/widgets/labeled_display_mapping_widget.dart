@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 class LabeledDisplayMappingWidget extends StatelessWidget {
   const LabeledDisplayMappingWidget({
     required this.displayMapping,
-    required this.item,
+    required this.credentialModel,
     this.textColor,
     Key? key,
   }) : super(key: key);
   final DisplayMapping displayMapping;
-  final CredentialModel item;
+  final CredentialModel credentialModel;
   final Color? textColor;
 
   @override
@@ -27,7 +27,7 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
     if (object is LabeledDisplayMappingPath) {
       final widgets = <Widget>[];
       for (final e in object.path) {
-        final textList = getTextsFromCredential(e, item.data);
+        final textList = getTextsFromCredential(e, credentialModel.data);
         for (final element in textList) {
           widgets.add(
             CredentialField(

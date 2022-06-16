@@ -8,23 +8,23 @@ class DisplaySignatures extends StatelessWidget {
   const DisplaySignatures({
     Key? key,
     required this.localizations,
-    required this.item,
+    required this.signature,
   }) : super(key: key);
 
   final AppLocalizations localizations;
-  final Signature item;
+  final Signature signature;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CredentialField(title: localizations.signedBy, value: item.name),
-        if (item.image != '')
+        CredentialField(title: localizations.signedBy, value: signature.name),
+        if (signature.image != '')
           Padding(
             padding: const EdgeInsets.all(8),
             child: SizedBox(
               height: 100,
-              child: ImageFromNetwork(item.image),
+              child: ImageFromNetwork(signature.image),
             ),
           )
         else

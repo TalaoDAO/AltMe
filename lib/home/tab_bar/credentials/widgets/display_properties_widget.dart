@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 class DisplayPropertiesWidget extends StatelessWidget {
   const DisplayPropertiesWidget({
     this.properties,
-    required this.item,
+    required this.credentialModel,
     this.textColor,
     Key? key,
   }) : super(key: key);
 
   final List<DisplayMapping>? properties;
-  final CredentialModel item;
+  final CredentialModel credentialModel;
   final Color? textColor;
 
   @override
@@ -21,7 +21,7 @@ class DisplayPropertiesWidget extends StatelessWidget {
       widgets.add(
         LabeledDisplayMappingWidget(
           displayMapping: element,
-          item: item,
+          credentialModel: credentialModel,
           textColor: textColor,
         ),
       );

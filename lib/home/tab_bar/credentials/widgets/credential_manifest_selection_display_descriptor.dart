@@ -1,21 +1,23 @@
-import 'package:altme/app/shared/widget/image_from_network.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
-class OutputDescriptorWidget extends StatelessWidget {
-  const OutputDescriptorWidget(
-    this.outputDescriptor,
-    this.item, {
+class CredentialSelectionManifestDisplayDescriptor extends StatelessWidget {
+  const CredentialSelectionManifestDisplayDescriptor({
     Key? key,
+    required this.credentialModel,
+    required this.outputDescriptors,
   }) : super(key: key);
-  final List<OutputDescriptor> outputDescriptor;
-  final CredentialModel item;
+
+  final CredentialModel credentialModel;
+  final List<OutputDescriptor> outputDescriptors;
+
   @override
   Widget build(BuildContext context) {
     final widgets = <Widget>[];
 
-    for (final element in outputDescriptor) {
+    for (final element in outputDescriptors) {
       final textcolor =
           getColorFromCredential(element.styles?.text, Colors.black);
       widgets.add(
@@ -26,7 +28,7 @@ class OutputDescriptorWidget extends StatelessWidget {
               element.styles?.background,
               Colors.white,
             ),
-            credentialModel: item,
+            credentialModel: credentialModel,
             child: Column(
               children: [
                 if (element.styles?.hero != null)
@@ -41,7 +43,7 @@ class OutputDescriptorWidget extends StatelessWidget {
                     Expanded(
                       child: DisplayMappingWidget(
                         displayMapping: element.display?.title,
-                        item: item,
+                        credentialModel: credentialModel,
                         textColor: textcolor,
                       ),
                     ),
@@ -64,17 +66,17 @@ class OutputDescriptorWidget extends StatelessWidget {
                 ),
                 DisplayMappingWidget(
                   displayMapping: element.display?.subtitle,
-                  item: item,
+                  credentialModel: credentialModel,
                   textColor: textcolor,
                 ),
                 DisplayMappingWidget(
                   displayMapping: element.display?.description,
-                  item: item,
+                  credentialModel: credentialModel,
                   textColor: textcolor,
                 ),
                 DisplayPropertiesWidget(
                   properties: element.display?.properties,
-                  item: item,
+                  credentialModel: credentialModel,
                   textColor: textcolor,
                 ),
               ],

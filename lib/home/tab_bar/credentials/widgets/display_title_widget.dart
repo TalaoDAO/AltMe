@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 class DisplayTitleWidget extends StatelessWidget {
   const DisplayTitleWidget({
     this.displayMapping,
-    required this.item,
+    required this.credentialModel,
     this.textColor,
     Key? key,
   }) : super(key: key);
   final DisplayMapping? displayMapping;
-  final CredentialModel item;
+  final CredentialModel credentialModel;
   final Color? textColor;
 
   @override
@@ -32,7 +32,7 @@ class DisplayTitleWidget extends StatelessWidget {
     if (object is DisplayMappingPath) {
       final textList = <String>[];
       for (final e in object.path) {
-        textList.addAll(getTextsFromCredential(e, item.data));
+        textList.addAll(getTextsFromCredential(e, credentialModel.data));
       }
       if (textList.isNotEmpty) {
         return MyText(

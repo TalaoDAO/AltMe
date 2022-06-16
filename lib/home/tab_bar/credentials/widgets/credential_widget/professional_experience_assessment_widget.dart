@@ -143,7 +143,7 @@ class ProfessionalExperienceAssessmentDisplayDetail extends StatelessWidget {
           Column(
             children: professionalExperienceAssessmentModel.signatureLines!
                 .map(
-                  (e) => DisplaySignatures(localizations: l10n, item: e),
+                  (e) => DisplaySignatures(localizations: l10n, signature: e),
                 )
                 .toList(),
           ),

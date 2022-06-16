@@ -5,14 +5,14 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
 class DisplayDescriptionWidget extends StatelessWidget {
-  const DisplayDescriptionWidget(
+  const DisplayDescriptionWidget({
     this.displayMapping,
-    this.item,
-    this.textColor, {
+    required this.credentialModel,
+    this.textColor,
     Key? key,
   }) : super(key: key);
   final DisplayMapping? displayMapping;
-  final CredentialModel item;
+  final CredentialModel credentialModel;
   final Color? textColor;
 
   @override
@@ -33,7 +33,7 @@ class DisplayDescriptionWidget extends StatelessWidget {
     if (object is DisplayMappingPath) {
       final textList = <String>[];
       for (final e in object.path) {
-        textList.addAll(getTextsFromCredential(e, item.data));
+        textList.addAll(getTextsFromCredential(e, credentialModel.data));
       }
       if (textList.isNotEmpty) {
         return MyText(textList.first, style: color, maxLines: 2);
