@@ -32,6 +32,7 @@ class IdentityPassDisplayInSelectionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultCredentialSubjectDisplayInSelectionList(
       credentialModel: credentialModel,
+      descriptionMaxLine: 4,
     );
   }
 }

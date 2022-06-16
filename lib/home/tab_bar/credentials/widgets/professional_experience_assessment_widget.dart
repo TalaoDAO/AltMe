@@ -34,6 +34,7 @@ class ProfessionalExperienceAssessmentDisplayInSelectionList
   Widget build(BuildContext context) {
     return DefaultCredentialSubjectDisplayInSelectionList(
       credentialModel: credentialModel,
+      descriptionMaxLine: 3,
     );
   }
 }

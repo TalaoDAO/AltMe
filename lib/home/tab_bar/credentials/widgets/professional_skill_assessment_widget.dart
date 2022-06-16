@@ -33,6 +33,7 @@ class ProfessionalSkillAssessmentDisplayInSelectionList
   Widget build(BuildContext context) {
     return DefaultCredentialSubjectDisplayInSelectionList(
       credentialModel: credentialModel,
+      descriptionMaxLine: 5,
     );
   }
 }
