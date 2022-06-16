@@ -99,9 +99,11 @@ class LoyaltyCardVerso extends Verso {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextWithLoyaltyCardStyle(
-                        value: loyaltyCardModel.givenName!),
+                      value: loyaltyCardModel.givenName!,
+                    ),
                     TextWithLoyaltyCardStyle(
-                        value: loyaltyCardModel.familyName!),
+                      value: loyaltyCardModel.familyName!,
+                    )
                   ],
                 ),
               ),

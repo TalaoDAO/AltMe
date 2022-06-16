@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/enum/issuer_verification_registry.dart';
-import 'package:altme/app/shared/tezos_network/models/tezos_network.dart';
 import 'package:altme/home/home.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';

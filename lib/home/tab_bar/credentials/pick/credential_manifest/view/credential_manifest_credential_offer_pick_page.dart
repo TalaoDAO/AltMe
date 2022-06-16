@@ -23,14 +23,10 @@ class CredentialManifestOfferPickPage extends StatefulWidget {
         create: (context) {
           final presentationDefinition =
               credential.credentialManifest?.presentationDefinition;
-          if (presentationDefinition != null) {
-            return CredentialManifestPickCubit(
-              presentationDefinition: presentationDefinition.toJson(),
-              credentialList: context.read<WalletCubit>().state.credentials,
-            );
-          }
           return CredentialManifestPickCubit(
-            presentationDefinition: <String, dynamic>{},
+            presentationDefinition: presentationDefinition == null
+                ? <String, dynamic>{}
+                : presentationDefinition.toJson(),
             credentialList: context.read<WalletCubit>().state.credentials,
           );
         },
@@ -77,10 +73,7 @@ class _CredentialManifestOfferPickPageState
                 },
                 icon: const Icon(Icons.close),
               ),
-              padding: const EdgeInsets.symmetric(
-                vertical: 24,
-                horizontal: 16,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
               navigation: credentialCandidateList.isNotEmpty
                   ? SafeArea(
                       child: Container(

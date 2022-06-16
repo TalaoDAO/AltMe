@@ -270,7 +270,7 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get credentialTitle => GoogleFonts.nunito(
         color: const Color(0xFF424242),
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: FontWeight.bold,
       );
 

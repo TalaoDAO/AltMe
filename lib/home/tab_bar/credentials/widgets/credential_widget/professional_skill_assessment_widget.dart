@@ -33,6 +33,7 @@ class ProfessionalSkillAssessmentDisplayInSelectionList
   Widget build(BuildContext context) {
     return DefaultCredentialSubjectDisplayInSelectionList(
       credentialModel: credentialModel,
+      descriptionMaxLine: 5,
     );
   }
 }
@@ -72,7 +73,7 @@ class ProfessionalSkillAssessmentDisplayDetail extends StatelessWidget {
                 .map(
                   (e) => DisplaySignatures(
                     localizations: l10n,
-                    item: e,
+                    signature: e,
                   ),
                 )
                 .toList(),

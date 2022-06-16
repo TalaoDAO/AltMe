@@ -21,7 +21,6 @@ class DisplayDescriptionCard extends StatelessWidget {
     return MyText(
       nameValue,
       maxLines: maxLines,
-      overflow: TextOverflow.fade,
       style: style,
     );
   }

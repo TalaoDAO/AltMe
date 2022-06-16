@@ -3,15 +3,15 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
 class DisplayPropertiesWidget extends StatelessWidget {
-  const DisplayPropertiesWidget(
+  const DisplayPropertiesWidget({
     this.properties,
-    this.item,
-    this.textColor, {
+    required this.credentialModel,
+    this.textColor,
     Key? key,
   }) : super(key: key);
 
   final List<DisplayMapping>? properties;
-  final CredentialModel item;
+  final CredentialModel credentialModel;
   final Color? textColor;
 
   @override
@@ -20,9 +20,9 @@ class DisplayPropertiesWidget extends StatelessWidget {
     properties?.forEach((element) {
       widgets.add(
         LabeledDisplayMappingWidget(
-          element,
-          item,
-          textColor,
+          displayMapping: element,
+          credentialModel: credentialModel,
+          textColor: textColor,
         ),
       );
     });
