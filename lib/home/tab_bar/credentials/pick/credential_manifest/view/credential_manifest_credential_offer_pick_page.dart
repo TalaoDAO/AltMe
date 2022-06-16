@@ -73,10 +73,7 @@ class _CredentialManifestOfferPickPageState
                 },
                 icon: const Icon(Icons.close),
               ),
-              padding: const EdgeInsets.symmetric(
-                vertical: 24,
-                horizontal: 16,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
               navigation: credentialCandidateList.isNotEmpty
                   ? SafeArea(
                       child: Container(

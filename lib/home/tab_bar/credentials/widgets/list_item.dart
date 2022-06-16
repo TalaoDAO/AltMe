@@ -43,7 +43,7 @@ class __BaseItemState extends State<_BaseItem>
   @override
   Widget build(BuildContext context) => Opacity(
         opacity: !widget.enabled ? 0.33 : 1,
-        child: InkWell(
+        child: GestureDetector(
           onTap: widget.onTap,
           child: IntrinsicHeight(child: widget.child),
         ),
