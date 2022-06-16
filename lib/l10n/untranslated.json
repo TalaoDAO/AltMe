@@ -170,7 +170,8 @@
     "exportSecretKey",
     "secretKey",
     "copySecretKeyToClipboard",
-    "tezosNetwork"
+    "tezosNetwork",
+    "noNftProvidedWithYourAccount"
   ],
 
   "es": [
@@ -344,7 +345,8 @@
     "exportSecretKey",
     "secretKey",
     "copySecretKeyToClipboard",
-    "tezosNetwork"
+    "tezosNetwork",
+    "noNftProvidedWithYourAccount"
   ],
 
   "fr": [
@@ -398,7 +400,8 @@
     "biometricsDisabledMessage",
     "exportSecretKey",
     "secretKey",
-    "copySecretKeyToClipboard"
+    "copySecretKeyToClipboard",
+    "noNftProvidedWithYourAccount"
   ],
 
   "it": [
@@ -574,6 +577,7 @@
     "exportSecretKey",
     "secretKey",
     "copySecretKeyToClipboard",
-    "tezosNetwork"
+    "tezosNetwork",
+    "noNftProvidedWithYourAccount"
   ]
 }

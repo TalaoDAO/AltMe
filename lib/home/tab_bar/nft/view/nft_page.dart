@@ -4,6 +4,7 @@ import 'package:altme/home/tab_bar/nft/cubit/nft_cubit.dart';
 import 'package:altme/home/tab_bar/nft/view/widgets/my_collection_text.dart';
 import 'package:altme/home/tab_bar/nft/view/widgets/nft_list.dart';
 import 'package:altme/home/tab_bar/nft/view/widgets/nft_list_shimmer.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,9 @@ class NftPage extends StatelessWidget {
     return BlocProvider<NftCubit>(
       create: (context) => NftCubit(
         client: DioClient(
-            context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
-            Dio()),
+          context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+          Dio(),
+        ),
         secureStorageProvider: getSecureStorage,
       ),
       child: const NftView(),
@@ -43,6 +45,7 @@ class _NftViewState extends State<NftView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BasePage(
       scrollView: false,
       padding: EdgeInsets.zero,
@@ -89,7 +92,15 @@ class _NftViewState extends State<NftView> {
                 if (state.status == AppStatus.fetching) {
                   return const NftListShimmer();
                 } else if (state.status == AppStatus.populate) {
-                  return NftList(nftList: state.data, onRefresh: onRefresh);
+                  if (state.data.isEmpty) {
+                    return EmptyPageView(
+                      imagePath: 'assets/image/nft.png',
+                      message: l10n.noNftProvidedWithYourAccount,
+                      onTap: onRefresh,
+                    );
+                  } else {
+                    return NftList(nftList: state.data, onRefresh: onRefresh);
+                  }
                 } else if (state.status == AppStatus.errorWhileFetching) {
                   return ErrorView(message: message, onTap: onRefresh);
                 } else {

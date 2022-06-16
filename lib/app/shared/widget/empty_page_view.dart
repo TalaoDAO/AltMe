@@ -3,11 +3,16 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class ErrorView extends StatelessWidget {
-  const ErrorView({Key? key, required this.message, required this.onTap})
-      : super(key: key);
+class EmptyPageView extends StatelessWidget {
+  const EmptyPageView({
+    Key? key,
+    required this.message,
+    required this.imagePath,
+    required this.onTap,
+  }) : super(key: key);
 
   final String message;
+  final String imagePath;
   final VoidCallback onTap;
 
   @override
@@ -18,6 +23,12 @@ class ErrorView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        Image.asset(
+          imagePath,
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: MediaQuery.of(context).size.width * 0.5,
+        ),
+        const SizedBox(height: Sizes.spaceSmall),
         Center(
           child: Text(
             message,

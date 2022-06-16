@@ -327,5 +327,6 @@
   "exportSecretKey": "Export secret key",
   "secretKey": "Secret Key",
   "copySecretKeyToClipboard": "Copy secret key to clipboard",
-  "tezosNetwork": "Tezos Network"
+  "tezosNetwork": "Tezos Network",
+  "noNftProvidedWithYourAccount": "No NFT provided with your account!"
 }
