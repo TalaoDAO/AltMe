@@ -1,6 +1,6 @@
-import 'package:altme/app/shared/date/date.dart';
-import 'package:altme/app/shared/widget/base/credential_field.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class DisplayIssuanceDateWidget extends StatelessWidget {
@@ -13,11 +13,33 @@ class DisplayIssuanceDateWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final date = issuanceDate;
+
     if (date != null) {
-      return CredentialField(
-        value: UiDate.displayDate(l10n, date),
-        title: l10n.issuanceDate,
-        textColor: textColor,
+      return Row(
+        children: [
+          Expanded(
+            child: MyText(
+              '${l10n.issuanceDate}: ',
+              style: textColor == null
+                  ? Theme.of(context).textTheme.credentialFieldTitle
+                  : Theme.of(context)
+                      .textTheme
+                      .credentialFieldTitle
+                      .copyWith(color: textColor),
+            ),
+          ),
+          Expanded(
+            child: MyText(
+              UiDate.displayDate(l10n, date),
+              style: textColor == null
+                  ? Theme.of(context).textTheme.credentialDescription
+                  : Theme.of(context)
+                      .textTheme
+                      .credentialDescription
+                      .copyWith(color: textColor),
+            ),
+          ),
+        ],
       );
     } else {
       return const SizedBox.shrink();

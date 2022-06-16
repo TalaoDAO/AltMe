@@ -1,14 +1,14 @@
-import 'package:altme/app/shared/widget/base/credential_field.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
 class DisplayTitleWidget extends StatelessWidget {
-  const DisplayTitleWidget(
+  const DisplayTitleWidget({
     this.displayMapping,
-    this.item,
-    this.textColor, {
+    required this.item,
+    this.textColor,
     Key? key,
   }) : super(key: key);
   final DisplayMapping? displayMapping;
@@ -19,9 +19,14 @@ class DisplayTitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final object = displayMapping;
     if (object is DisplayMappingText) {
-      return CredentialField(
-        value: object.text,
-        textColor: textColor,
+      MyText(
+        object.text,
+        style: textColor == null
+            ? Theme.of(context).textTheme.credentialFieldDescription
+            : Theme.of(context)
+                .textTheme
+                .credentialFieldDescription
+                .copyWith(color: textColor),
       );
     }
     if (object is DisplayMappingPath) {
@@ -30,10 +35,9 @@ class DisplayTitleWidget extends StatelessWidget {
         textList.addAll(getTextsFromCredential(e, item.data));
       }
       if (textList.isNotEmpty) {
-        return Text(
+        return MyText(
           textList.first,
           maxLines: 1,
-          overflow: TextOverflow.clip,
           style: textColor == null
               ? Theme.of(context).textTheme.credentialTitle
               : Theme.of(context)
@@ -43,10 +47,9 @@ class DisplayTitleWidget extends StatelessWidget {
         );
       }
       if (object.fallback != null) {
-        return Text(
+        return MyText(
           object.fallback ?? '',
           maxLines: 1,
-          overflow: TextOverflow.clip,
           style: textColor == null
               ? Theme.of(context).textTheme.credentialTitle
               : Theme.of(context)

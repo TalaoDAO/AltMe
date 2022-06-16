@@ -4,10 +4,10 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
 class LabeledDisplayMappingWidget extends StatelessWidget {
-  const LabeledDisplayMappingWidget(
-    this.displayMapping,
-    this.item,
-    this.textColor, {
+  const LabeledDisplayMappingWidget({
+    required this.displayMapping,
+    required this.item,
+    this.textColor,
     Key? key,
   }) : super(key: key);
   final DisplayMapping displayMapping;

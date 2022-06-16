@@ -3,10 +3,10 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
 class DisplayPropertiesWidget extends StatelessWidget {
-  const DisplayPropertiesWidget(
+  const DisplayPropertiesWidget({
     this.properties,
-    this.item,
-    this.textColor, {
+    required this.item,
+    this.textColor,
     Key? key,
   }) : super(key: key);
 
@@ -20,9 +20,9 @@ class DisplayPropertiesWidget extends StatelessWidget {
     properties?.forEach((element) {
       widgets.add(
         LabeledDisplayMappingWidget(
-          element,
-          item,
-          textColor,
+          displayMapping: element,
+          item: item,
+          textColor: textColor,
         ),
       );
     });

@@ -21,65 +21,63 @@ class OutputDescriptorWidget extends StatelessWidget {
       widgets.add(
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: CredentialContainer(
-            child: CredentialBackground(
-              backgroundColor: getColorFromCredential(
-                element.styles?.background,
-                Colors.white,
-              ),
-              credentialModel: item,
-              child: Column(
-                children: [
-                  if (element.styles?.hero != null)
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: ImageFromNetwork(element.styles!.hero!.uri),
-                    )
-                  else
-                    const SizedBox.shrink(),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DisplayMappingWidget(
-                          element.display?.title,
-                          item,
-                          textcolor,
-                        ),
+          child: CredentialBackground(
+            backgroundColor: getColorFromCredential(
+              element.styles?.background,
+              Colors.white,
+            ),
+            credentialModel: item,
+            child: Column(
+              children: [
+                if (element.styles?.hero != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: ImageFromNetwork(element.styles!.hero!.uri),
+                  )
+                else
+                  const SizedBox.shrink(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DisplayMappingWidget(
+                        displayMapping: element.display?.title,
+                        item: item,
+                        textColor: textcolor,
                       ),
-                      if (element.styles?.thumbnail != null)
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Container(
-                            constraints: const BoxConstraints(
-                              maxHeight: 100,
-                              maxWidth: 100,
-                            ),
-                            child: ImageFromNetwork(
-                              element.styles!.thumbnail!.uri,
-                            ),
+                    ),
+                    if (element.styles?.thumbnail != null)
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Container(
+                          constraints: const BoxConstraints(
+                            maxHeight: 100,
+                            maxWidth: 100,
                           ),
-                        )
-                      else
-                        const SizedBox.shrink(),
-                    ],
-                  ),
-                  DisplayMappingWidget(
-                    element.display?.subtitle,
-                    item,
-                    textcolor,
-                  ),
-                  DisplayMappingWidget(
-                    element.display?.description,
-                    item,
-                    textcolor,
-                  ),
-                  DisplayPropertiesWidget(
-                    element.display?.properties,
-                    item,
-                    textcolor,
-                  ),
-                ],
-              ),
+                          child: ImageFromNetwork(
+                            element.styles!.thumbnail!.uri,
+                          ),
+                        ),
+                      )
+                    else
+                      const SizedBox.shrink(),
+                  ],
+                ),
+                DisplayMappingWidget(
+                  displayMapping: element.display?.subtitle,
+                  item: item,
+                  textColor: textcolor,
+                ),
+                DisplayMappingWidget(
+                  displayMapping: element.display?.description,
+                  item: item,
+                  textColor: textcolor,
+                ),
+                DisplayPropertiesWidget(
+                  properties: element.display?.properties,
+                  item: item,
+                  textColor: textcolor,
+                ),
+              ],
             ),
           ),
         ),
