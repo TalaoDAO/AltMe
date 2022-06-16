@@ -6,9 +6,9 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-part 'did_state.dart';
-
 part 'did_cubit.g.dart';
+
+part 'did_state.dart';
 
 class DIDCubit extends Cubit<DIDState> {
   DIDCubit({required this.didKitProvider, required this.secureStorageProvider})
@@ -52,6 +52,7 @@ class DIDCubit extends Cubit<DIDState> {
     required String did,
     required String didMethod,
     required String didMethodName,
+    required String walletAddress,
   }) async {
     final log = Logger('altme-wallet/DID/load');
     emit(state.loading());
@@ -60,6 +61,7 @@ class DIDCubit extends Cubit<DIDState> {
         did: did,
         didMethod: didMethod,
         didMethodName: didMethodName,
+        walletAddress: walletAddress,
       ),
     );
     log.info('successfully Loaded');

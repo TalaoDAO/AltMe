@@ -6,6 +6,7 @@ class DIDState extends Equatable {
     this.did = '',
     this.didMethod = '',
     this.didMethodName = '',
+    this.walletAddress = '',
     this.status = AppStatus.init,
     this.message,
   });
@@ -16,6 +17,7 @@ class DIDState extends Equatable {
   final String? did;
   final String? didMethod;
   final String? didMethodName;
+  final String walletAddress;
   final AppStatus? status;
   final StateMessage? message;
 
@@ -30,11 +32,17 @@ class DIDState extends Equatable {
     );
   }
 
-  DIDState success({String? did, String? didMethod, String? didMethodName}) {
+  DIDState success({
+    String? did,
+    String? didMethod,
+    String? didMethodName,
+    String? walletAddress,
+  }) {
     return DIDState(
       did: did ?? this.did,
       didMethod: didMethod ?? this.didMethod,
       didMethodName: didMethodName ?? this.didMethodName,
+      walletAddress: walletAddress ?? this.walletAddress,
       status: AppStatus.success,
     );
   }
