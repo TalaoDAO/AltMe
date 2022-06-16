@@ -29,6 +29,12 @@ Future<bool> isWalletCreated({
     return false;
   }
 
+  final String? walletAddress =
+      await secureStorageProvider.get(SecureStorageKeys.walletAddress);
+  if (walletAddress == null || walletAddress.isEmpty) {
+    return false;
+  }
+
   final String? isEnterprise =
       await secureStorageProvider.get(SecureStorageKeys.isEnterpriseUser);
 
@@ -46,6 +52,7 @@ Future<bool> isWalletCreated({
     did: did,
     didMethod: didMethod,
     didMethodName: didMethodName,
+    walletAddress: walletAddress,
   );
 
   return true;

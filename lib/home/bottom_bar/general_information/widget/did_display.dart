@@ -18,10 +18,7 @@ class DIDDisplay extends StatelessWidget {
     return BlocBuilder<DIDCubit, DIDState>(
       builder: (context, state) {
         final did = state.status == AppStatus.success ? state.did! : '';
-        var blockChainAddress = '';
-        if (did.length > 7) {
-          blockChainAddress = did.substring(7);
-        }
+        final blockChainAddress = state.walletAddress;
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
