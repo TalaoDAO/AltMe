@@ -6,9 +6,11 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
 class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
-  const DefaultCredentialSubjectDisplayInList(
-      {Key? key, required this.credentialModel, this.descriptionMaxLine = 2})
-      : super(key: key);
+  const DefaultCredentialSubjectDisplayInList({
+    Key? key,
+    required this.credentialModel,
+    this.descriptionMaxLine = 2,
+  }) : super(key: key);
 
   final CredentialModel credentialModel;
   final int descriptionMaxLine;

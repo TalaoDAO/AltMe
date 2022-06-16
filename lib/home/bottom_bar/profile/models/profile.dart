@@ -1,5 +1,4 @@
-import 'package:altme/app/shared/constants/urls.dart';
-import 'package:altme/app/shared/tezos_network/models/tezos_network.dart';
+import 'package:altme/app/app.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 

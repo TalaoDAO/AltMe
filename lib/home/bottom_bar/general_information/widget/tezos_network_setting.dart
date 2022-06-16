@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/tezos_network/models/tezos_network.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
