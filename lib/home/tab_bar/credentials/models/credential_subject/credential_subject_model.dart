@@ -26,6 +26,8 @@ class CredentialSubjectModel {
         return IdentityPassModel.fromJson(json);
       case 'Voucher':
         return VoucherModel.fromJson(json);
+      case 'TezVoucher_1':
+        return TezotopiaVoucherModel.fromJson(json);
       case 'Ecole42LearningAchievement':
         return Ecole42LearningAchievementModel.fromJson(json);
       case 'LoyaltyCard':
