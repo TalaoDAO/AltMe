@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -6,16 +7,10 @@ import 'package:intl/intl.dart';
 class TokenItem extends StatelessWidget {
   const TokenItem({
     Key? key,
-    required this.logoPath,
-    required this.symbol,
-    required this.name,
-    required this.balance,
+    required this.token,
   }) : super(key: key);
 
-  final String logoPath;
-  final String symbol;
-  final String name;
-  final int balance;
+  final TokenModel token;
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +25,30 @@ class TokenItem extends StatelessWidget {
           minVerticalPadding: 0,
           leading: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(100)),
-            child: Image.asset(
-              logoPath,
-              width: Sizes.tokenLogoSize,
-            ),
+            child: iconUrl() == null
+                ? Container(
+                    color: Theme.of(context).primaryColorDark,
+                    width: Sizes.tokenLogoSize,
+                    height: Sizes.tokenLogoSize,
+                  )
+                : Image.network(
+                    iconUrl()!,
+                    width: Sizes.tokenLogoSize,
+                    height: Sizes.tokenLogoSize,
+                  ),
           ),
           title: MyText(
-            name.toUpperCase(),
+            token.name.toUpperCase(),
             style: Theme.of(context).textTheme.listTileTitle,
           ),
           subtitle: MyText(
-            symbol,
+            token.symbol,
             style: Theme.of(context).textTheme.listTileSubtitle,
           ),
           trailing: MyText(
-            balance == 0 ? 0.toString() : numberFormatter.format(balance),
+            token.balance == '0'
+                ? token.balance
+                : numberFormatter.format(double.parse(token.balance)),
             style: Theme.of(context)
                 .textTheme
                 .listTileTitle
@@ -53,5 +57,14 @@ class TokenItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String? iconUrl() {
+    String? iconUrl = token.icon ?? token.thumbnailUri;
+    if (iconUrl == null) {
+      return null;
+    } else {
+      return iconUrl.replaceFirst('ipfs://', 'https://ipfs.io/ipfs/');
+    }
   }
 }
