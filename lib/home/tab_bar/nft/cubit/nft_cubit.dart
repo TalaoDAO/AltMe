@@ -27,7 +27,8 @@ class NftCubit extends Cubit<NftState> {
         '/v1/tokens/balances',
         queryParameters: <String, dynamic>{
           // TODO(all): remove hardcoded tezos nft contract
-          'token.contract': 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
+          // 'token.contract': 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
+          //'token.contract': 'KT1ViVwoVfGSCsDaxjwoovejm1aYSGz7s2TZ',
           'account': address,
           'select':
               '''token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance''',
