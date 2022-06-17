@@ -23,18 +23,29 @@ class TokensCubit extends Cubit<TokensState> {
       emit(state.fetching());
       final address =
           (await secureStorageProvider.get(SecureStorageKeys.walletAddress))!;
-      final int balance = await client.get(
-        '/v1/accounts/$address/balance',
-      ) as int;
-      final xtzToken = TokenModel(
-        address,
-        'Tezos',
-        'XTZ',
-        'assets/image/tezos.png',
-        balance,
-      );
-      final data = List<TokenModel>.from(<TokenModel>[xtzToken]).toList();
-      emit(state.populate(data: data));
+      final List<dynamic> tokensBalancesJsonArray = await client.get(
+        '/v1/tokens/balances',
+        queryParameters: <String, dynamic>{
+          'account': address,
+          'token.contract.in':
+              'KT1GRSvLoikDsXujKgZPsGLX8k8VvR2Tq95b,KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb,KT1M81KrJr6TxYLkZkVqcpSTNKGoya8XytWT,KT1Xobej4mc6XgEjDoJoHtTKgbD1ELMvcQuL,KT1K9gCRgaLRFKTErYt1wVxA3Frb9FjasjTV,KT1LN4LPSqTMS7Sd2CJw4bbDGRkMv2t68Fy9,KT1SjXiUX63QvdNMcM2m492f7kuf8JxXRLp4,KT1Ha4yFVeyzw6KRAdkzq6TxDHB97KG4pZe8',
+          'select':
+              'token.contract.address as contractAddress,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri',
+        },
+      ) as List<dynamic>;
+
+      if (tokensBalancesJsonArray.isNotEmpty) {
+        final data = tokensBalancesJsonArray
+            .map(
+              (dynamic json) =>
+                  TokenModel.fromJson(json as Map<String, dynamic>),
+            )
+            .toList();
+
+        emit(state.populate(data: data));
+      } else {
+        emit(state.populate(data: []));
+      }
     } catch (e) {
       if (isClosed) return;
       emit(
