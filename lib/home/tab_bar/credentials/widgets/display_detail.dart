@@ -82,6 +82,10 @@ class DisplayDetail extends StatelessWidget {
         return VoucherDisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.tezVoucher:
+        return TezotopiaVoucherDisplayDetail(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.talao:
         return Container();
     }

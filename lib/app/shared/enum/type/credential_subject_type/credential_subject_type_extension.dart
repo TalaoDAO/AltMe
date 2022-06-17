@@ -49,6 +49,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xFFffD6A5);
       case CredentialSubjectType.talao:
         return const Color(0xffd72b8e);
+      case CredentialSubjectType.tezVoucher:
+        return const Color(0xff7a29de);
       case CredentialSubjectType.defaultCredential:
         return Colors.white;
     }
@@ -64,8 +66,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return Icons.perm_identity;
       case CredentialSubjectType.identityPass:
         return Icons.perm_identity;
-      case CredentialSubjectType.voucher:
-        return Icons.gamepad;
       case CredentialSubjectType.loyaltyCard:
         return Icons.loyalty;
       case CredentialSubjectType.over18:
@@ -90,6 +90,10 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return Icons.perm_identity;
       case CredentialSubjectType.talao:
         return Icons.fact_check_outlined;
+      case CredentialSubjectType.voucher:
+        return Icons.gamepad;
+      case CredentialSubjectType.tezVoucher:
+        return Icons.gamepad;
       case CredentialSubjectType.defaultCredential:
         return Icons.fact_check_outlined;
     }

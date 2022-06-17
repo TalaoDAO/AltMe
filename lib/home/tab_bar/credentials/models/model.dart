@@ -24,4 +24,5 @@ export 'resident_card/resident_card_model.dart';
 export 'self_issued/self_issued_model.dart';
 export 'signature/signature.dart';
 export 'student_card/student_card_model.dart';
+export 'tezotopia_voucher/tezotopia_voucher_model.dart';
 export 'voucher/voucher_model.dart';

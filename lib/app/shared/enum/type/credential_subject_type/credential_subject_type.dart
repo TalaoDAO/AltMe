@@ -22,4 +22,5 @@ enum CredentialSubjectType {
   studentCard,
   talao,
   voucher,
+  tezVoucher
 }

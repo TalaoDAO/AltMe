@@ -27,6 +27,7 @@ class ImageStrings {
   static const String studentCardBack = '$imagePath/carte-etudiant-verso.png';
   static const String voucherFront = '$imagePath/carte-coupon-recto.png';
   static const String voucherBack = '$imagePath/carte-coupon-verso.png';
+  static const String tezotopiaVoucher = '$imagePath/tezotopia_voucher.png';
   static const String ecole42LearningAchievement =
       '$imagePath/certificate-42.png';
   static const String associatedWalletFront =
@@ -37,6 +38,7 @@ class ImageStrings {
   static const String dummyEmailPassCard =
       '$imagePath/dummy_email_pass_card.png';
   static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
-  static const String dummyVoucherCard = '$imagePath/dummy_voucher_card.png';
+  static const String dummyTezotopiaVoucherCard =
+      '$imagePath/dummy_tezotopia_voucher_card.png';
   static const String dummyTalaoCard = '$imagePath/dummy_talao_card.png';
 }
