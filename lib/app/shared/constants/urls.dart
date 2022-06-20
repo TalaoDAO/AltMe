@@ -10,7 +10,7 @@ class Urls {
   static const String over18Url =
       'https://talao.co/wallet/test/direct_offer?VC=Over18.jsonld';
   static const String tezotopiaVoucherUrl =
-      'https://talao.co/wallet/test/credentialOffer?path=test%2FCredentialOffer2';
+      'https://issuer.tezotopia.altme.io/issuer/62b01953d556ef67c65272db';
   static const String talaoUrl =
       'https://talao.co/wallet/test/credentialOffer?path=test%2FCredentialOffer2';
 }
