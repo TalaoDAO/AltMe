@@ -307,17 +307,17 @@ class LearningAchievementVersoDelegate extends MultiChildLayoutDelegate {
   void performLayout(Size size) {
     if (hasChild('name')) {
       layoutChild('name', BoxConstraints.loose(size));
-      positionChild('name', Offset(size.width * 0.06, size.height * 0.16));
+      positionChild('name', Offset(size.width * 0.06, size.height * 0.10));
     }
     if (hasChild('school')) {
       layoutChild('school', BoxConstraints.loose(size));
-      positionChild('school', Offset(size.width * 0.06, size.height * 0.33));
+      positionChild('school', Offset(size.width * 0.06, size.height * 0.32));
     }
     if (hasChild('description')) {
       layoutChild('description', BoxConstraints.loose(size));
       positionChild(
         'description',
-        Offset(size.width * 0.06, size.height * 0.49),
+        Offset(size.width * 0.06, size.height * 0.53),
       );
     }
   }

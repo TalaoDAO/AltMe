@@ -120,6 +120,7 @@ class JobStudentCardRecto extends Recto {
               id: 'image',
               child: ImageFromNetwork(
                 professionalStudentCardModel.recipient!.image,
+                fit: BoxFit.cover,
               ),
             )
           ],
@@ -158,17 +159,17 @@ class ProfessionalStudentCardDelegate extends MultiChildLayoutDelegate {
       layoutChild('familyName', BoxConstraints.loose(size));
       positionChild(
         'familyName',
-        Offset(size.width * 0.15, size.height * 0.29),
+        Offset(size.width * 0.15, size.height * 0.285),
       );
     }
     if (hasChild('givenName')) {
       layoutChild('givenName', BoxConstraints.loose(size));
-      positionChild('givenName', Offset(size.width * 0.19, size.height * 0.38));
+      positionChild('givenName', Offset(size.width * 0.2, size.height * 0.375));
     }
 
     if (hasChild('birthDate')) {
       layoutChild('birthDate', BoxConstraints.loose(size));
-      positionChild('birthDate', Offset(size.width * 0.19, size.height * 0.47));
+      positionChild('birthDate', Offset(size.width * 0.2, size.height * 0.47));
     }
 
     if (hasChild('expires')) {
@@ -185,11 +186,11 @@ class ProfessionalStudentCardDelegate extends MultiChildLayoutDelegate {
       layoutChild(
         'image',
         BoxConstraints.tightFor(
-          width: size.width * 0.28,
-          height: size.height * 0.59,
+          width: size.width * 0.27,
+          height: size.height * 0.577,
         ),
       );
-      positionChild('image', Offset(size.width * 0.68, size.height * 0.06));
+      positionChild('image', Offset(size.width * 0.684, size.height * 0.065));
     }
   }
 

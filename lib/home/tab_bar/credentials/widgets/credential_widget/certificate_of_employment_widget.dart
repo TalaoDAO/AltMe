@@ -89,6 +89,7 @@ class CertificateOfEmploymentRecto extends Recto {
                 child: DisplayDescriptionCard(
                   credentialModel: credentialModel,
                   style: Theme.of(context).textTheme.credentialDescription,
+                  maxLines: 4,
                 ),
               ),
             ],
