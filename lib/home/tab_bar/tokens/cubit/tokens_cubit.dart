@@ -28,9 +28,9 @@ class TokensCubit extends Cubit<TokensState> {
         queryParameters: <String, dynamic>{
           'account': address,
           'token.contract.in':
-              'KT1GRSvLoikDsXujKgZPsGLX8k8VvR2Tq95b,KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb,KT1M81KrJr6TxYLkZkVqcpSTNKGoya8XytWT,KT1Xobej4mc6XgEjDoJoHtTKgbD1ELMvcQuL,KT1K9gCRgaLRFKTErYt1wVxA3Frb9FjasjTV,KT1LN4LPSqTMS7Sd2CJw4bbDGRkMv2t68Fy9,KT1SjXiUX63QvdNMcM2m492f7kuf8JxXRLp4,KT1Ha4yFVeyzw6KRAdkzq6TxDHB97KG4pZe8',
+              '''KT1GRSvLoikDsXujKgZPsGLX8k8VvR2Tq95b,KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb,KT1M81KrJr6TxYLkZkVqcpSTNKGoya8XytWT,KT1Xobej4mc6XgEjDoJoHtTKgbD1ELMvcQuL,KT1K9gCRgaLRFKTErYt1wVxA3Frb9FjasjTV,KT1LN4LPSqTMS7Sd2CJw4bbDGRkMv2t68Fy9,KT1SjXiUX63QvdNMcM2m492f7kuf8JxXRLp4,KT1Ha4yFVeyzw6KRAdkzq6TxDHB97KG4pZe8''',
           'select':
-              'token.contract.address as contractAddress,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri',
+              '''token.contract.address as contractAddress,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri''',
         },
       ) as List<dynamic>;
 

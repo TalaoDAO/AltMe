@@ -111,7 +111,7 @@ class JobStudentCardRecto extends Recto {
             ),
             LayoutId(
               id: 'signature',
-              //TODO(all) Missing field
+              // TODO(all): Missing field
               child: const ImageCardText(text: ''),
             ),
             LayoutId(

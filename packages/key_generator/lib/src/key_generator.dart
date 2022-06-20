@@ -4,8 +4,6 @@ import 'dart:typed_data';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:ed25519_hd_key/ed25519_hd_key.dart';
 import 'package:pinenacl/ed25519.dart';
-import 'package:tezart/src/crypto/crypto.dart' as crypto hide Prefixes;
-import 'package:tezart/src/crypto/crypto.dart' show Prefixes;
 import 'package:tezart/tezart.dart';
 
 /// old key generation system
@@ -30,11 +28,13 @@ class KeyGenerator {
     /// Here we use same derivation as temple
     final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/0'/0'/0'", seed);
 
-    /// TODO(hawkbee): create ticket: change derivation
+    // TODO(hawkbee): create ticket: change derivation
+
     /// depending on user selection.
     /// Will be used for kukai key import by example
-    ///
-    /// TODO(@all): Multiple account preparation:
+
+    // TODO(all): Multiple account preparation:
+
     /// derivation example with 3 accounts
     //    final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/0'/0'", seed);
     //    final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/1'/0'", seed);
@@ -48,7 +48,7 @@ class KeyGenerator {
   }
 
   Map<String, String> jwkFromSeed(Uint8List seedBytes) {
-    final mypk = crypto.publicKeyBytesFromSeedBytes(seedBytes);
+    final mypk = publicKeyBytesFromSeedBytes(seedBytes);
 
     final sk = base64Url.encode(seedBytes);
     final pk = base64Url.encode(mypk);
@@ -69,10 +69,9 @@ class KeyGenerator {
 
     final dBytes = base64Url.decode(d);
 
-    final tezosSeed =
-        crypto.encodeWithPrefix(prefix: _seedPrefix, bytes: dBytes);
+    final tezosSeed = encodeWithPrefix(prefix: _seedPrefix, bytes: dBytes);
 
-    final tezosSecretKey = crypto.seedToSecretKey(tezosSeed);
+    final tezosSecretKey = seedToSecretKey(tezosSeed);
 
     return tezosSecretKey;
   }
@@ -85,17 +84,16 @@ class KeyGenerator {
 
     final dBytes = base64Url.decode(d);
 
-    final tezosSeed =
-        crypto.encodeWithPrefix(prefix: _seedPrefix, bytes: dBytes);
+    final tezosSeed = encodeWithPrefix(prefix: _seedPrefix, bytes: dBytes);
 
-    final tezosSecretKey = crypto.seedToSecretKey(tezosSeed);
+    final tezosSecretKey = seedToSecretKey(tezosSeed);
 
     return tz1AddressFromSecretKey(tezosSecretKey);
   }
 
   Future<String> jwkFromSecretKey(String secretKey) async {
     final newSeedBytes = Uint8List.fromList(
-      crypto.decodeWithoutPrefix(secretKey).take(32).toList(),
+      decodeWithoutPrefix(secretKey).take(32).toList(),
     );
 
     final jwk = jwkFromSeed(newSeedBytes);
