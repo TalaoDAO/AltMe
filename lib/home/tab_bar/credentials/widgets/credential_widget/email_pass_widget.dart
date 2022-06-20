@@ -62,7 +62,7 @@ class EmailPassRecto extends Recto {
     return CredentialImage(
       image: ImageStrings.emailPassFront,
       child: AspectRatio(
-        aspectRatio: 584 / 317,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate: EmailPassVersoDelegate(position: Offset.zero),
           children: [
@@ -121,7 +121,7 @@ class EmailPassVerso extends Verso {
     return CredentialImage(
       image: ImageStrings.emailPassBack,
       child: AspectRatio(
-        aspectRatio: 584 / 317,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate: EmailPassVersoDelegate(position: Offset.zero),
           children: [

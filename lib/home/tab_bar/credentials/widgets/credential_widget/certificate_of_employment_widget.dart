@@ -65,7 +65,7 @@ class CertificateOfEmploymentRecto extends Recto {
     return CredentialImage(
       image: ImageStrings.employmentCertificateFront,
       child: AspectRatio(
-        aspectRatio: 575 / 316,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: FractionallySizedBox(
           widthFactor: 0.7,
           alignment: Alignment.centerLeft,
@@ -88,6 +88,7 @@ class CertificateOfEmploymentRecto extends Recto {
                 child: DisplayDescriptionCard(
                   credentialModel: credentialModel,
                   style: Theme.of(context).textTheme.credentialDescription,
+                  maxLines: 4,
                 ),
               ),
             ],
@@ -115,7 +116,7 @@ class CertificateOfEmploymentVerso extends Verso {
     return CredentialImage(
       image: ImageStrings.employmentCertificateBack,
       child: AspectRatio(
-        aspectRatio: 575 / 316,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate: CertificateOfEmploymentModelVersoDelegate(
             position: Offset.zero,

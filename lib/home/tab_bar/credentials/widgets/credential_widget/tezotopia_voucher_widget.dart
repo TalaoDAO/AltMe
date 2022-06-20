@@ -52,8 +52,7 @@ class TezotopiaVoucherRecto extends Recto {
     return CredentialImage(
       image: ImageStrings.tezotopiaVoucher,
       child: AspectRatio(
-        /// size from over18 recto picture
-        aspectRatio: 584 / 317,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate: TezotopiaVoucherVersoDelegate(position: Offset.zero),
         ),
