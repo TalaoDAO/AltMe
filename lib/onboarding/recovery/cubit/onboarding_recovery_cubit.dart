@@ -60,6 +60,7 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
         didMethod: didMethod,
         didMethodName: AltMeStrings.defaultDIDMethodName,
         verificationMethod: verificationMethod,
+        walletAddress: address,
       );
 
       homeCubit.emitHasWallet();
