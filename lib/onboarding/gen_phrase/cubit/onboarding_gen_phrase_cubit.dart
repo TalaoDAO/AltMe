@@ -41,10 +41,11 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         SecureStorageKeys.mnemonic,
         mnemonicFormatted,
       );
-      final key = await keyGenerator.privateKey(mnemonicFormatted);
+      final key = await keyGenerator.jwkFromMnemonic(mnemonicFormatted);
       await secureStorageProvider.set(SecureStorageKeys.key, key);
 
-      final address = Keystore.fromMnemonic(mnemonicFormatted).address;
+      final address =
+          await keyGenerator.tz1AddressFromMnemonic(mnemonicFormatted);
       await secureStorageProvider.set(SecureStorageKeys.walletAddress, address);
 
       const didMethod = AltMeStrings.defaultDIDMethod;

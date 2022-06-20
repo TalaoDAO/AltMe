@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:tezart/tezart.dart';
 
 part 'onboarding_recovery_cubit.g.dart';
 
@@ -46,9 +45,9 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
       await secureStorageProvider.set(SecureStorageKeys.mnemonic, mnemonic);
-      final address = Keystore.fromMnemonic(mnemonic).address;
+      final address = await keyGenerator.tz1AddressFromMnemonic(mnemonic);
       await secureStorageProvider.set(SecureStorageKeys.walletAddress, address);
-      final key = await keyGenerator.privateKey(mnemonic);
+      final key = await keyGenerator.jwkFromMnemonic(mnemonic);
       await secureStorageProvider.set(SecureStorageKeys.key, key);
 
       const didMethod = AltMeStrings.defaultDIDMethod;
