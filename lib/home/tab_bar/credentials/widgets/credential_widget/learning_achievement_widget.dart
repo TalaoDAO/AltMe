@@ -63,7 +63,8 @@ class LearningAchievementRecto extends Recto {
     return CredentialImage(
       image: ImageStrings.learningAchievementFront,
       child: AspectRatio(
-        aspectRatio: 572 / 315,
+        //aspectRatio: 572 / 315,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: FractionallySizedBox(
           widthFactor: 0.7,
           alignment: Alignment.centerLeft,
@@ -116,7 +117,8 @@ class LearningAchievementVerso extends Verso {
     return CredentialImage(
       image: ImageStrings.learningAchievementBack,
       child: AspectRatio(
-        aspectRatio: 572 / 315,
+        //aspectRatio: 572 / 315,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate: LearningAchievementDelegate(position: Offset.zero),
           children: [

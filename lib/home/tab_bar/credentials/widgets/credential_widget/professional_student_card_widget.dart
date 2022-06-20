@@ -76,7 +76,8 @@ class JobStudentCardRecto extends Recto {
       /// this size comes from law publication about job student card specs
       image: ImageStrings.professionalStudentCardFront,
       child: AspectRatio(
-        aspectRatio: 508.67 / 319.67,
+        //aspectRatio: 508.67 / 319.67,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate: ProfessionalStudentCardDelegate(position: Offset.zero),
           children: [
@@ -137,8 +138,11 @@ class JobStudentCardVerso extends Verso {
       /// this size comes from law publication about job student card specs
 
       image: ImageStrings.professionalStudentCardBack,
-      child:
-          AspectRatio(aspectRatio: 508.67 / 319.67, child: SizedBox.shrink()),
+      child: AspectRatio(
+        //aspectRatio: 508.67 / 319.67,
+        aspectRatio: Sizes.credentialAspectRatio,
+        child: SizedBox.shrink(),
+      ),
     );
   }
 }

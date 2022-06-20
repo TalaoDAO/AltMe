@@ -66,7 +66,8 @@ class StudentCardRecto extends Recto {
     return CredentialImage(
       image: ImageStrings.studentCardFront,
       child: AspectRatio(
-        aspectRatio: 572 / 315,
+        // aspectRatio: 572 / 315,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate: StudentCardVersoDelegate(position: Offset.zero),
           children: [
@@ -131,7 +132,8 @@ class StudentCardVerso extends Verso {
 
       image: ImageStrings.studentCardBack,
       child: AspectRatio(
-        aspectRatio: 572 / 315,
+        //aspectRatio: 572 / 315,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate: StudentCardDelegate(position: Offset.zero),
           children: [
