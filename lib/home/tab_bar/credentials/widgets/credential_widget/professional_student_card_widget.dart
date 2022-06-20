@@ -73,10 +73,8 @@ class JobStudentCardRecto extends Recto {
     final l10n = context.l10n;
 
     return CredentialImage(
-      /// this size comes from law publication about job student card specs
       image: ImageStrings.professionalStudentCardFront,
       child: AspectRatio(
-        //aspectRatio: 508.67 / 319.67,
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate: ProfessionalStudentCardDelegate(position: Offset.zero),
@@ -113,8 +111,8 @@ class JobStudentCardRecto extends Recto {
             ),
             LayoutId(
               id: 'signature',
-              // TODO(all): Missing field
-              child: const ImageCardText(text: 'missing field'),
+              //TODO(all) Missing field
+              child: const ImageCardText(text: ''),
             ),
             LayoutId(
               id: 'image',
@@ -136,11 +134,8 @@ class JobStudentCardVerso extends Verso {
   @override
   Widget build(BuildContext context) {
     return const CredentialImage(
-      /// this size comes from law publication about job student card specs
-
       image: ImageStrings.professionalStudentCardBack,
       child: AspectRatio(
-        //aspectRatio: 508.67 / 319.67,
         aspectRatio: Sizes.credentialAspectRatio,
         child: SizedBox.shrink(),
       ),

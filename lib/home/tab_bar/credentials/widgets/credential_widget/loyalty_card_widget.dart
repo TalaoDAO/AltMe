@@ -65,8 +65,6 @@ class LoyaltyCardRecto extends Recto {
     return const CredentialImage(
       image: ImageStrings.loyaltyCard,
       child: AspectRatio(
-        /// random size, copy from professional student card
-        //aspectRatio: 508.67 / 319.67,
         aspectRatio: Sizes.credentialAspectRatio,
         child: SizedBox.shrink(),
       ),
@@ -85,8 +83,6 @@ class LoyaltyCardVerso extends Verso {
     final l10n = context.l10n;
     return CredentialContainer(
       child: AspectRatio(
-        /// random size, copy from professional student card
-        //aspectRatio: 508.67 / 319.67,
         aspectRatio: Sizes.credentialAspectRatio,
         child: Container(
           decoration: BoxDecoration(

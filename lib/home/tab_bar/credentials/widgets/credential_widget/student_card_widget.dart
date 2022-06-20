@@ -128,11 +128,8 @@ class StudentCardVerso extends Verso {
     final studentCardModel = credentialModel
         .credentialPreview.credentialSubjectModel as StudentCardModel;
     return CredentialImage(
-      /// this size comes from law publication about job student card specs
-
       image: ImageStrings.studentCardBack,
       child: AspectRatio(
-        //aspectRatio: 572 / 315,
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate: StudentCardDelegate(position: Offset.zero),

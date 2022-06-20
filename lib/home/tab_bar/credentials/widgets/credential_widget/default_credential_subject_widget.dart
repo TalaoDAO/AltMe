@@ -47,7 +47,6 @@ class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
 
     return CredentialContainer(
       child: AspectRatio(
-        //aspectRatio: 584 / 317,
         aspectRatio: Sizes.credentialAspectRatio,
         child: Container(
           decoration: BaseBoxDecoration(
@@ -154,9 +153,8 @@ class DefaultCredentialSubjectDisplayInSelectionList extends StatelessWidget {
     }
     return CredentialContainer(
       child: AspectRatio(
-        aspectRatio: 584 / 317,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: Container(
-          // margin: const EdgeInsets.symmetric(vertical: 4.0),
           decoration: BaseBoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: backgroundColor,
@@ -192,7 +190,6 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
     // telling us what to display
     if (outputDescriptor == null) {
       return AspectRatio(
-        //aspectRatio: 584 / 317,
         aspectRatio: Sizes.credentialAspectRatio,
         child:
             DefaultSelectionDisplayDescriptor(credentialModel: credentialModel),
