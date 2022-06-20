@@ -60,7 +60,7 @@ class TokenItem extends StatelessWidget {
   }
 
   String? iconUrl() {
-    String? iconUrl = token.icon ?? token.thumbnailUri;
+    final iconUrl = token.icon ?? token.thumbnailUri;
     if (iconUrl == null) {
       return null;
     } else {

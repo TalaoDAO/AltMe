@@ -17,7 +17,8 @@ class SecretKeyCubit extends Cubit<String> {
   Future<void> initialise() async {
     final mnemonic =
         await secureStorageProvider.get(SecureStorageKeys.mnemonic);
-    final String secretKey = await keyGenerator.secretKey(mnemonic!);
+    final String secretKey =
+        await keyGenerator.secretKeyFromMnemonic(mnemonic!);
     emit(secretKey);
   }
 }
