@@ -15,7 +15,7 @@ class DisplayDetail extends StatelessWidget {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
       case CredentialSubjectType.associatedWallet:
-        return AssociatedWalletDisplayDetail(
+        return TezosAssociatedAddressDisplayDetail(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.certificateOfEmployment:
