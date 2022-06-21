@@ -26,12 +26,9 @@ class NftCubit extends Cubit<NftState> {
       final List<dynamic> response = await client.get(
         '/v1/tokens/balances',
         queryParameters: <String, dynamic>{
-          // TODO(all): remove hardcoded tezos nft contract
-          // 'token.contract': 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
-          //'token.contract': 'KT1ViVwoVfGSCsDaxjwoovejm1aYSGz7s2TZ',
           'account': address,
           'select':
-              '''token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance''',
+              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance',
         },
       ) as List<dynamic>;
       // TODO(all): check the balance variable of NFTModel
