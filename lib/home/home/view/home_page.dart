@@ -58,7 +58,6 @@ class _HomePageState extends State<HomePage> {
             scaffoldKey.currentState!.openDrawer();
           },
         ),
-        titleTrailing: const GetCardsWidget(),
         body: Stack(
           children: [
             Column(
