@@ -19,4 +19,6 @@ abstract class Sizes {
 
   ///borderRadius
   static const credentialBorderRadius = 15.0;
+
+  static const double credentialAspectRatio = 584 / 317;
 }

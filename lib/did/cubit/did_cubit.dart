@@ -22,10 +22,15 @@ class DIDCubit extends Cubit<DIDState> {
     required String didMethod,
     required String didMethodName,
     required String verificationMethod,
+    required String walletAddress,
   }) async {
     final log = Logger('altme-wallet/DID/set');
 
     emit(state.loading());
+    await secureStorageProvider.set(
+      SecureStorageKeys.walletAddress,
+      walletAddress,
+    );
     await secureStorageProvider.set(SecureStorageKeys.did, did);
     await secureStorageProvider.set(SecureStorageKeys.didMethod, didMethod);
     await secureStorageProvider.set(
@@ -42,6 +47,7 @@ class DIDCubit extends Cubit<DIDState> {
         did: did,
         didMethod: didMethod,
         didMethodName: didMethodName,
+        walletAddress: walletAddress,
       ),
     );
 

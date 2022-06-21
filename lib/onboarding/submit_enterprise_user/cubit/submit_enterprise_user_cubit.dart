@@ -78,6 +78,8 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
             didMethod: AltMeStrings.enterpriseDIDMethod,
             didMethodName: AltMeStrings.enterpriseDIDMethodName,
             verificationMethod: verificationMethod,
+            // TODO(all): create correct wallet address for enterpirse user
+            walletAddress: '',
           );
 
           emit(

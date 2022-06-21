@@ -9,7 +9,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:tezart/tezart.dart';
 
 part 'onboarding_gen_phrase_cubit.g.dart';
 
@@ -58,6 +57,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         didMethod: didMethod,
         didMethodName: AltMeStrings.defaultDIDMethodName,
         verificationMethod: verificationMethod,
+        walletAddress: address,
       );
 
       homeCubit.emitHasWallet();
@@ -80,7 +80,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     try {
       log.info('will save mnemonic to secure storage');
       await secureStorageProvider.set(SecureStorageKeys.mnemonic, mnemonic);
-      final address = Keystore.fromMnemonic(mnemonic).address;
+      final address = await keyGenerator.tz1AddressFromMnemonic(mnemonic);
       await secureStorageProvider.set(SecureStorageKeys.walletAddress, address);
       log.info('mnemonic saved');
       emit(state.success());

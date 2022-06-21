@@ -59,8 +59,7 @@ class AssociatedWalletRecto extends Recto {
   @override
   Widget build(BuildContext context) {
     return const AspectRatio(
-      /// size from recto picture
-      aspectRatio: 584 / 317,
+      aspectRatio: Sizes.credentialAspectRatio,
       child: CredentialImage(
         image: ImageStrings.associatedWalletFront,
         child: SizedBox.shrink(),
@@ -86,8 +85,7 @@ class AssociatedWalletVerso extends Verso {
     return CredentialImage(
       image: ImageStrings.associatedWalletBack,
       child: AspectRatio(
-        /// size from recto picture
-        aspectRatio: 584 / 317,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: Padding(
           padding: const EdgeInsets.all(Sizes.spaceNormal),
           child: Column(

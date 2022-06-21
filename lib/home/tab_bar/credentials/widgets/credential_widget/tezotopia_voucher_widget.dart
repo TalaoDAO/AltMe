@@ -40,14 +40,7 @@ class TezotopiaVoucherDisplayDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
-        CardAnimation(
-          recto: TezotopiaVoucherRecto(),
-          verso: TezotopiaVoucherVerso(),
-        ),
-      ],
-    );
+    return const TezotopiaVoucherRecto();
   }
 }
 
@@ -59,26 +52,7 @@ class TezotopiaVoucherRecto extends Recto {
     return CredentialImage(
       image: ImageStrings.tezotopiaVoucher,
       child: AspectRatio(
-        /// size from over18 recto picture
-        aspectRatio: 584 / 317,
-        child: CustomMultiChildLayout(
-          delegate: TezotopiaVoucherVersoDelegate(position: Offset.zero),
-        ),
-      ),
-    );
-  }
-}
-
-class TezotopiaVoucherVerso extends Verso {
-  const TezotopiaVoucherVerso({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return CredentialImage(
-      image: ImageStrings.tezotopiaVoucher,
-      child: AspectRatio(
-        /// size from over18 recto picture
-        aspectRatio: 584 / 317,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate: TezotopiaVoucherVersoDelegate(position: Offset.zero),
         ),

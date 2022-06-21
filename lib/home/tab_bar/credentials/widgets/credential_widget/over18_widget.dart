@@ -61,7 +61,7 @@ class Over18Recto extends Recto {
     return const CredentialImage(
       image: ImageStrings.over18Back,
       child: AspectRatio(
-        aspectRatio: 584 / 317,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: SizedBox.shrink(),
       ),
     );
@@ -85,8 +85,7 @@ class Over18Verso extends Verso {
     return CredentialImage(
       image: ImageStrings.over18Front,
       child: AspectRatio(
-        /// size from over18 recto picture
-        aspectRatio: 584 / 317,
+        aspectRatio: Sizes.credentialAspectRatio,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
