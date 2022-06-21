@@ -77,10 +77,10 @@ class TezosAssociatedAddressVerso extends Verso {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final TezosAssociatedAddress = credentialModel.credentialPreview
+    final tezosAssociatedAddress = credentialModel.credentialPreview
         .credentialSubjectModel as TezosAssociatedAddressModel;
     final expirationDate = credentialModel.expirationDate;
-    final issuerName = TezosAssociatedAddress.issuedBy!.name;
+    final issuerName = tezosAssociatedAddress.issuedBy!.name;
 
     return CredentialImage(
       image: ImageStrings.associatedWalletBack,
@@ -91,20 +91,26 @@ class TezosAssociatedAddressVerso extends Verso {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (TezosAssociatedAddress.issuedBy?.logo.isNotEmpty ?? false)
+              if (tezosAssociatedAddress.issuedBy?.logo.isNotEmpty ?? false)
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: SizedBox(
                     height: 50,
                     child: ImageFromNetwork(
-                      TezosAssociatedAddress.issuedBy!.logo,
+                      tezosAssociatedAddress.issuedBy!.logo,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
               DisplayNameCard(
                 credentialModel: credentialModel,
-                style: Theme.of(context).textTheme.associatedWalletTitleCard,
+                style:
+                    Theme.of(context).textTheme.tezosAssociatedAddressTitleCard,
+              ),
+              const SizedBox(height: Sizes.spaceSmall),
+              Text(
+                tezosAssociatedAddress.associatedAddress!,
+                style: Theme.of(context).textTheme.tezosAssociatedAddressData,
               ),
               const SizedBox(height: Sizes.spaceSmall),
               DisplayDescriptionCard(
@@ -118,11 +124,11 @@ class TezosAssociatedAddressVerso extends Verso {
                     l10n,
                     expirationDate,
                   )}',
-                  style: Theme.of(context).textTheme.associatedWalletData,
+                  style: Theme.of(context).textTheme.tezosAssociatedAddressData,
                 ),
               Text(
                 '${l10n.issuer}: $issuerName',
-                style: Theme.of(context).textTheme.associatedWalletData,
+                style: Theme.of(context).textTheme.tezosAssociatedAddressData,
               )
             ],
           ),
