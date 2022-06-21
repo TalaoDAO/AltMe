@@ -33,7 +33,11 @@ class NftCubit extends Cubit<NftState> {
       ) as List<dynamic>;
       // TODO(all): check the balance variable of NFTModel
       // and get right value from api
+
       final List<NftModel> data = response
+          .where(
+            (dynamic json) => json['displayUri'] != null,
+          )
           .map((dynamic e) => NftModel.fromJson(e as Map<String, dynamic>))
           .toList();
       emit(state.populate(data: data));

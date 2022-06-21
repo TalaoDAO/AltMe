@@ -168,7 +168,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateIssuerVerificationUrl(
     IssuerVerificationRegistry registry,
   ) async {
-    Logger('talao-wallet/profile/updateIssuerVerificationUrl');
+    Logger('altme-wallet/profile/updateIssuerVerificationUrl');
     var _issuerVerificationUrl = Urls.checkIssuerTalaoUrl;
     switch (registry) {
       case IssuerVerificationRegistry.EBSI:
@@ -189,7 +189,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateTezosNetwork(
     TezosNetwork newTezosNetwork,
   ) async {
-    Logger('talao-wallet/profile/updateTezosNetwork');
+    Logger('altme-wallet/profile/updateTezosNetwork');
     final _newModel = state.model.copyWith(tezosNetwork: newTezosNetwork);
     await update(_newModel);
   }
