@@ -50,6 +50,7 @@ class _PinCodePageState extends State<PinCodePage> {
         final authenticated = await widget.localAuthApi
             .authenticate(localizedReason: l10n.scanFingerprintToAuthenticate);
         if (authenticated) {
+          Navigator.pop(context);
           widget.isValidCallback.call();
         }
       }
