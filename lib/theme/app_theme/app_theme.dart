@@ -130,7 +130,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get documentShadow => const Color(0xFF424242);
 
-  Color get documentShape => const Color(0xff3700b3).withOpacity(0.5);
+  Color get documentShape => const Color(0xff3700b3).withOpacity(0.05);
 
   Color get star => const Color(0xFFFFB83D);
 
