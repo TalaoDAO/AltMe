@@ -15,7 +15,7 @@ class DisplayInList extends StatelessWidget {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
       case CredentialSubjectType.associatedWallet:
-        return AssociatedWalletDisplayInList(
+        return TezosAssociatedAddressDisplayInList(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.certificateOfEmployment:

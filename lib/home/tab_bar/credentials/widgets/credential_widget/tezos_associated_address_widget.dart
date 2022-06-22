@@ -4,8 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class AssociatedWalletDisplayInList extends StatelessWidget {
-  const AssociatedWalletDisplayInList({
+class TezosAssociatedAddressDisplayInList extends StatelessWidget {
+  const TezosAssociatedAddressDisplayInList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -14,12 +14,12 @@ class AssociatedWalletDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AssociatedWalletRecto();
+    return const TezosAssociatedAddressRecto();
   }
 }
 
-class AssociatedWalletDisplayInSelectionList extends StatelessWidget {
-  const AssociatedWalletDisplayInSelectionList({
+class TezosAssociatedAddressDisplayInSelectionList extends StatelessWidget {
+  const TezosAssociatedAddressDisplayInSelectionList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -28,12 +28,12 @@ class AssociatedWalletDisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AssociatedWalletRecto();
+    return const TezosAssociatedAddressRecto();
   }
 }
 
-class AssociatedWalletDisplayDetail extends StatelessWidget {
-  const AssociatedWalletDisplayDetail({
+class TezosAssociatedAddressDisplayDetail extends StatelessWidget {
+  const TezosAssociatedAddressDisplayDetail({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -45,16 +45,16 @@ class AssociatedWalletDisplayDetail extends StatelessWidget {
     return Column(
       children: [
         CardAnimation(
-          recto: const AssociatedWalletRecto(),
-          verso: AssociatedWalletVerso(credentialModel: credentialModel),
+          recto: const TezosAssociatedAddressRecto(),
+          verso: TezosAssociatedAddressVerso(credentialModel: credentialModel),
         ),
       ],
     );
   }
 }
 
-class AssociatedWalletRecto extends Recto {
-  const AssociatedWalletRecto({Key? key}) : super(key: key);
+class TezosAssociatedAddressRecto extends Recto {
+  const TezosAssociatedAddressRecto({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +68,8 @@ class AssociatedWalletRecto extends Recto {
   }
 }
 
-class AssociatedWalletVerso extends Verso {
-  const AssociatedWalletVerso({Key? key, required this.credentialModel})
+class TezosAssociatedAddressVerso extends Verso {
+  const TezosAssociatedAddressVerso({Key? key, required this.credentialModel})
       : super(key: key);
   final CredentialModel credentialModel;
 
@@ -77,10 +77,10 @@ class AssociatedWalletVerso extends Verso {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final associatedWallet = credentialModel
-        .credentialPreview.credentialSubjectModel as AssociatedWalletModel;
+    final tezosAssociatedAddress = credentialModel.credentialPreview
+        .credentialSubjectModel as TezosAssociatedAddressModel;
     final expirationDate = credentialModel.expirationDate;
-    final issuerName = associatedWallet.issuedBy!.name;
+    final issuerName = tezosAssociatedAddress.issuedBy!.name;
 
     return CredentialImage(
       image: ImageStrings.associatedWalletBack,
@@ -91,20 +91,26 @@ class AssociatedWalletVerso extends Verso {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (associatedWallet.issuedBy?.logo.isNotEmpty ?? false)
+              if (tezosAssociatedAddress.issuedBy?.logo.isNotEmpty ?? false)
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: SizedBox(
                     height: 50,
                     child: ImageFromNetwork(
-                      associatedWallet.issuedBy!.logo,
+                      tezosAssociatedAddress.issuedBy!.logo,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
               DisplayNameCard(
                 credentialModel: credentialModel,
-                style: Theme.of(context).textTheme.associatedWalletTitleCard,
+                style:
+                    Theme.of(context).textTheme.tezosAssociatedAddressTitleCard,
+              ),
+              const SizedBox(height: Sizes.spaceSmall),
+              Text(
+                tezosAssociatedAddress.associatedAddress!,
+                style: Theme.of(context).textTheme.tezosAssociatedAddressData,
               ),
               const SizedBox(height: Sizes.spaceSmall),
               DisplayDescriptionCard(
@@ -118,11 +124,11 @@ class AssociatedWalletVerso extends Verso {
                     l10n,
                     expirationDate,
                   )}',
-                  style: Theme.of(context).textTheme.associatedWalletData,
+                  style: Theme.of(context).textTheme.tezosAssociatedAddressData,
                 ),
               Text(
                 '${l10n.issuer}: $issuerName',
-                style: Theme.of(context).textTheme.associatedWalletData,
+                style: Theme.of(context).textTheme.tezosAssociatedAddressData,
               )
             ],
           ),
