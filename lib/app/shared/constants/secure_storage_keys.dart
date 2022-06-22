@@ -22,4 +22,5 @@ class SecureStorageKeys {
   static const String issuerVerificationUrlKey =
       'profile/issuerVerificationUrl';
   static const String tezosNetworkKey = 'profile/tezosNetwork';
+  static const String credentialKey = 'credential';
 }
