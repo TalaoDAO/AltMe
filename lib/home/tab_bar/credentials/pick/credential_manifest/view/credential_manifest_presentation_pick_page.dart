@@ -77,7 +77,7 @@ class _CredentialManifestPickPageState
                           final scanCubit = context.read<ScanCubit>();
                           scanCubit.verifiablePresentationRequest(
                             url: widget.uri.toString(),
-                            keyId: SecureStorageKeys.key,
+                            keyId: SecureStorageKeys.secretKey,
                             credentials: state.selection
                                 .map((i) => state.filteredCredentialList[i])
                                 .toList(),

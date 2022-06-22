@@ -47,8 +47,8 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
       await secureStorageProvider.set(SecureStorageKeys.mnemonic, mnemonic);
       final address = await keyGenerator.tz1AddressFromMnemonic(mnemonic);
       await secureStorageProvider.set(SecureStorageKeys.walletAddress, address);
-      final key = await keyGenerator.jwkFromMnemonic(mnemonic);
-      await secureStorageProvider.set(SecureStorageKeys.key, key);
+      final key = await keyGenerator.jwkFromMnemonic(mnemonic: mnemonic);
+      await secureStorageProvider.set(SecureStorageKeys.secretKey, key);
 
       const didMethod = AltMeStrings.defaultDIDMethod;
       final did = didKitProvider.keyToDID(didMethod, key);

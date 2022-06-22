@@ -1,13 +1,10 @@
 class SecureStorageKeys {
-  static const String walletAddress = 'walletAddress';
   static const String fingerprintEnabled = 'fingerprintEnabled';
   static const String pinCode = 'pinCode';
   static const String data = 'data';
-  static const String mnemonic = 'mnemonic';
   static const String isEnterpriseUser = 'isEnterpriseUser';
   static const String did = 'DID';
   static const String rsaKeyJson = 'RSAKeyJson';
-  static const String key = 'key';
   static const String didMethod = 'DIDMethod';
   static const String didMethodName = 'DIDMethodName';
   static const String verificationMethod = 'VerificationMethod';
@@ -23,4 +20,12 @@ class SecureStorageKeys {
       'profile/issuerVerificationUrl';
   static const String tezosNetworkKey = 'profile/tezosNetwork';
   static const String credentialKey = 'credential';
+  static const String mnemonic_ = 'mnemonic';
+  static const String key_ = 'key';
+  static const String walletAddress_ = 'walletAddress';
+  static const String ssi = 'ssi';
+  static const String crypto = 'crypto';
+  static const String mnemonic = 'mnemonic';
+  static const String secretKey = 'key';
+  static const String walletAddress = 'walletAddress';
 }

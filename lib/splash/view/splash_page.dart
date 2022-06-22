@@ -75,10 +75,10 @@ class _SplashViewState extends State<SplashView> {
             if (key == 'uri') {
               final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
               context.read<DeepLinkCubit>().addDeepLink(url);
-              final key = await secure_storage.getSecureStorage.get(
-                SecureStorageKeys.key,
+              final secretKey = await secure_storage.getSecureStorage.get(
+                SecureStorageKeys.secretKey,
               );
-              if (key != null) {
+              if (secretKey != null) {
                 await context.read<QRCodeScanCubit>().deepLink();
               }
             }

@@ -39,7 +39,8 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       emit(state.loading());
       await Future<void>.delayed(const Duration(milliseconds: 500));
 
-      final key = (await secureStorageProvider.get(SecureStorageKeys.key))!;
+      final key =
+          (await secureStorageProvider.get(SecureStorageKeys.secretKey))!;
       final verificationMethod =
           await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
 

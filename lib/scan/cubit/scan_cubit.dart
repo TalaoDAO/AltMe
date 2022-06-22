@@ -409,7 +409,7 @@ class ScanCubit extends Cubit<ScanState> {
     required String challenge,
     required CredentialModel credential,
   }) async {
-    final key = await secureStorageProvider.get(SecureStorageKeys.key);
+    final key = await secureStorageProvider.get(SecureStorageKeys.secretKey);
     final did = await secureStorageProvider.get(SecureStorageKeys.did);
     final options = jsonEncode({
       'verificationMethod':
@@ -433,7 +433,7 @@ class ScanCubit extends Cubit<ScanState> {
   }
 
   Future<String> createIdToken({required String nonce}) async {
-    final key = await secureStorageProvider.get(SecureStorageKeys.key);
+    final key = await secureStorageProvider.get(SecureStorageKeys.secretKey);
     final did = await secureStorageProvider.get(SecureStorageKeys.did);
 
     final timeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
