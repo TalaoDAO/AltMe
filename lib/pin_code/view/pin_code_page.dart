@@ -85,7 +85,10 @@ class _PinCodePageState extends State<PinCodePage> {
               style: Theme.of(context).textTheme.button,
             ),
             cancelCallback: _onPasscodeCancelled,
-            isValidCallback: widget.isValidCallback,
+            isValidCallback: () {
+              Navigator.pop(context);
+              widget.isValidCallback.call();
+            },
             shouldTriggerVerification: _verificationNotifier.stream,
           ),
         ),
