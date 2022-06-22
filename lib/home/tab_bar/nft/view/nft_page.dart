@@ -38,9 +38,24 @@ class NftView extends StatefulWidget {
 
 class _NftViewState extends State<NftView> {
   OverlayEntry? _overlay;
+  int _offset = 0;
+  final _limit = 15;
 
   Future<void> onRefresh() async {
-    await context.read<NftCubit>().getTezosNftList();
+    _offset = 0;
+    await context.read<NftCubit>().getTezosNftList(offset: _offset);
+  }
+
+  Future<void> onScrollEnded() async {
+    _offset += _limit;
+    _overlay =
+        OverlayEntry(builder: (_) => const LoadingDialog());
+    Overlay.of(context)!.insert(_overlay!);
+
+    await context.read<NftCubit>().getTezosNftList(offset: _offset);
+
+    _overlay?.remove();
+    _overlay = null;
   }
 
   @override
@@ -63,10 +78,8 @@ class _NftViewState extends State<NftView> {
                       OverlayEntry(builder: (_) => const LoadingDialog());
                   Overlay.of(context)!.insert(_overlay!);
                 } else {
-                  if (_overlay != null) {
-                    _overlay!.remove();
-                    _overlay = null;
-                  }
+                  _overlay?.remove();
+                  _overlay = null;
                 }
 
                 if (state.message != null &&
@@ -99,7 +112,11 @@ class _NftViewState extends State<NftView> {
                       onTap: onRefresh,
                     );
                   } else {
-                    return NftList(nftList: state.data, onRefresh: onRefresh);
+                    return NftList(
+                      nftList: state.data,
+                      onRefresh: onRefresh,
+                      onScrollEnded: onScrollEnded,
+                    );
                   }
                 } else if (state.status == AppStatus.errorWhileFetching) {
                   return ErrorView(message: message, onTap: onRefresh);
