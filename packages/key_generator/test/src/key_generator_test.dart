@@ -12,7 +12,8 @@ void main() {
 
     test('can be instantiated', () {
       keyGenerator.jwkFromMnemonic(
-        '''notice photo opera keen climb agent soft parrot best joke field devote''',
+        mnemonic:
+            '''notice photo opera keen climb agent soft parrot best joke field devote''',
       );
       expect(keyGenerator, isNotNull);
     });

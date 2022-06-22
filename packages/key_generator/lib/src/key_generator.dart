@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:ed25519_hd_key/ed25519_hd_key.dart';
+import 'package:key_generator/key_generator.dart';
 import 'package:pinenacl/ed25519.dart';
 import 'package:tezart/src/crypto/crypto.dart' as crypto hide Prefixes;
 import 'package:tezart/src/crypto/crypto.dart' show Prefixes;
@@ -23,22 +24,22 @@ import 'package:tezart/tezart.dart';
 class KeyGenerator {
   static const Prefixes _seedPrefix = Prefixes.edsk2;
 
-  Future<String> jwkFromMnemonic(String mnemonic) async {
+  Future<String> jwkFromMnemonic({
+    required String mnemonic,
+    AccountType accountType = AccountType.ssi,
+    int cryptoAccountLength = 0,
+  }) async {
     //notice photo opera keen climb agent soft parrot best joke field devote
     final seed = bip39.mnemonicToSeed(mnemonic);
 
-    /// Here we use same derivation as temple
-    final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/1'/0'", seed);
+    late KeyData child;
 
-    // TODO(hawkbee): create ticket: change derivation
-    // depending on user selection.
-    // Will be used for kukai key import by example
-
-    // TODO(@all): Multiple account preparation:
-    // derivation example with 3 accounts
-    //    final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/0'/0'", seed);
-    //    final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/1'/0'", seed);
-    //  final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/2'/0'", seed);
+    if (accountType == AccountType.ssi) {
+      child = await ED25519_HD_KEY.derivePath("m/44'/60'/0'/0/0'", seed);
+    } else {
+      final index = cryptoAccountLength - 1;
+      child = await ED25519_HD_KEY.derivePath("m/44'/1729'/$index'/0'", seed);
+    }
 
     final seedBytes = Uint8List.fromList(child.key);
 
@@ -64,7 +65,7 @@ class KeyGenerator {
   }
 
   Future<String> secretKeyFromMnemonic(String mnemonic) async {
-    final key = await jwkFromMnemonic(mnemonic);
+    final key = await jwkFromMnemonic(mnemonic: mnemonic);
 
     // ignore: avoid_dynamic_calls
     final d = jsonDecode(key)['d'] as String;
@@ -80,7 +81,7 @@ class KeyGenerator {
   }
 
   Future<String> tz1AddressFromMnemonic(String mnemonic) async {
-    final key = await jwkFromMnemonic(mnemonic);
+    final key = await jwkFromMnemonic(mnemonic: mnemonic);
 
     // ignore: avoid_dynamic_calls
     final d = jsonDecode(key)['d'] as String;

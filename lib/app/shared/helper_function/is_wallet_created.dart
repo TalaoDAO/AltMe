@@ -6,8 +6,9 @@ Future<bool> isWalletCreated({
   required SecureStorageProvider secureStorageProvider,
   required DIDCubit didCubit,
 }) async {
-  final String? key = await secureStorageProvider.get(SecureStorageKeys.key);
-  if (key == null || key.isEmpty) {
+  final String? secretKey =
+      await secureStorageProvider.get(SecureStorageKeys.secretKey);
+  if (secretKey == null || secretKey.isEmpty) {
     return false;
   }
 
