@@ -117,12 +117,15 @@ class _OnBoardingRecoveryPageState extends State<OnBoardingRecoveryPage> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                BaseTextField(
-                  label: l10n.recoveryMnemonicHintText,
-                  controller: mnemonicController,
-                  error: state.isTextFieldEdited && !state.isMnemonicValid
-                      ? l10n.recoveryMnemonicError
-                      : null,
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: BaseTextField(
+                    label: l10n.recoveryMnemonicHintText,
+                    controller: mnemonicController,
+                    error: state.isTextFieldEdited && !state.isMnemonicValid
+                        ? l10n.recoveryMnemonicError
+                        : null,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 OnBoardingRecoveryPage._padHorizontal(

@@ -28,14 +28,14 @@ class KeyGenerator {
     final seed = bip39.mnemonicToSeed(mnemonic);
 
     /// Here we use same derivation as temple
-    final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/0'/0'/0'", seed);
+    final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/0'/0'", seed);
 
-    /// TODO(hawkbee): create ticket: change derivation
-    /// depending on user selection.
-    /// Will be used for kukai key import by example
-    ///
-    /// TODO(@all): Multiple account preparation:
-    /// derivation example with 3 accounts
+    // TODO(hawkbee): create ticket: change derivation
+    // depending on user selection.
+    // Will be used for kukai key import by example
+
+    // TODO(@all): Multiple account preparation:
+    // derivation example with 3 accounts
     //    final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/0'/0'", seed);
     //    final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/1'/0'", seed);
     //  final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/2'/0'", seed);

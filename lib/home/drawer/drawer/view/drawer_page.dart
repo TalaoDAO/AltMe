@@ -145,17 +145,6 @@ class DrawerView extends StatelessWidget {
                       },
                     ),
                     DrawerItem(
-                      icon: IconStrings.terms,
-                      title: l10n.privacyTitle,
-                      trailing: Icon(
-                        Icons.chevron_right,
-                        size: 24,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: () =>
-                          Navigator.of(context).push<void>(PrivacyPage.route()),
-                    ),
-                    DrawerItem(
                       icon: IconStrings.fingerprint,
                       title: l10n.loginWithBiometrics,
                       trailing: Switch(
@@ -198,17 +187,6 @@ class DrawerView extends StatelessWidget {
                         value: state.isBiometricsEnable,
                         activeColor: Theme.of(context).colorScheme.primary,
                       ),
-                    ),
-                    DrawerItem(
-                      icon: IconStrings.terms,
-                      title: l10n.onBoardingTosTitle,
-                      trailing: Icon(
-                        Icons.chevron_right,
-                        size: 24,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: () =>
-                          Navigator.of(context).push<void>(TermsPage.route()),
                     ),
                     DrawerItem(
                       icon: IconStrings.key,
@@ -315,6 +293,28 @@ class DrawerView extends StatelessWidget {
                           }
                         }
                       },
+                    ),
+                    DrawerItem(
+                      icon: IconStrings.terms,
+                      title: l10n.privacyTitle,
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onTap: () =>
+                          Navigator.of(context).push<void>(PrivacyPage.route()),
+                    ),
+                    DrawerItem(
+                      icon: IconStrings.terms,
+                      title: l10n.onBoardingTosTitle,
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onTap: () =>
+                          Navigator.of(context).push<void>(TermsPage.route()),
                     ),
                   ],
                 );

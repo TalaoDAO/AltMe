@@ -1,3 +1,4 @@
+import 'package:altme/home/home/widgets/get_cards_widget.dart';
 import 'package:altme/home/tab_bar/credentials/list/cubit/credential_list_cubit.dart';
 import 'package:altme/home/tab_bar/credentials/list/widgets/community_credentials.dart';
 import 'package:altme/home/tab_bar/credentials/list/widgets/game_credentials.dart';
@@ -23,6 +24,13 @@ class CredentialListData extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
+            Row(
+              children: const [
+                Spacer(),
+                GetCardsWidget(),
+                Spacer(),
+              ],
+            ),
             GamingCredentials(credentials: state.gamingCredentials),
             const SizedBox(height: 10),
             CommunityCredentials(credentials: state.communityCredentials),

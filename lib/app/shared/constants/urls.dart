@@ -7,8 +7,7 @@ class Urls {
 
   static const String phonePassUrl = 'https://issuer.talao.co/phonepass';
   static const String emailPassUrl = 'https://issuer.talao.co/emailpass';
-  static const String over18Url =
-      'https://talao.co/wallet/test/direct_offer?VC=Over18.jsonld';
+  static const String over18Url = 'https://issuer.talao.co/over18';
   static const String tezotopiaVoucherUrl =
       'https://issuer.tezotopia.altme.io/issuer/62b01953d556ef67c65272db';
   static const String talaoUrl =
