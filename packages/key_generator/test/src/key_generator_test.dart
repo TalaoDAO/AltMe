@@ -4,11 +4,17 @@ import 'package:test/test.dart';
 
 void main() {
   group('KeyGenerator', () {
+    late KeyGenerator keyGenerator;
+
+    setUpAll(() {
+      keyGenerator = KeyGenerator();
+    });
+
     test('can be instantiated', () {
-      KeyGenerator().jwkFromMnemonic(
+      keyGenerator.jwkFromMnemonic(
         '''notice photo opera keen climb agent soft parrot best joke field devote''',
       );
-      expect(KeyGenerator(), isNotNull);
+      expect(keyGenerator, isNotNull);
     });
   });
 }

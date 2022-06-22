@@ -28,7 +28,7 @@ class KeyGenerator {
     final seed = bip39.mnemonicToSeed(mnemonic);
 
     /// Here we use same derivation as temple
-    final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/0'/0'", seed);
+    final child = await ED25519_HD_KEY.derivePath("m/44'/1729'/1'/0'", seed);
 
     // TODO(hawkbee): create ticket: change derivation
     // depending on user selection.
@@ -44,6 +44,8 @@ class KeyGenerator {
 
     final key = jwkFromSeed(seedBytes);
 
+    //{"kty":"OKP","crv":"Ed25519","d":"xmYPuZdc1LwVYshIUdto7I8psjb9zgPrUblAp5
+    //w7qws=","x":"uCURp8D_ilizA32RCZi1UFoYdq0HmI_KE8RBbG19ZrU="}
     return jsonEncode(key);
   }
 
