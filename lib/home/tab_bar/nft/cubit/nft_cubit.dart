@@ -50,6 +50,9 @@ class NftCubit extends Cubit<NftState> {
           .where(
             (dynamic json) => json['displayUri'] != null,
           )
+          .where(
+            (dynamic json) => json['balance'] != '0',
+          )
           .map((dynamic e) => NftModel.fromJson(e as Map<String, dynamic>))
           .toList();
 
