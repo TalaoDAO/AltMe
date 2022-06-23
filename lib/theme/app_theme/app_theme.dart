@@ -366,7 +366,7 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get tezosAssociatedAddressData => GoogleFonts.roboto(
         color: const Color(0xffeee7e7),
-        fontSize: 12,
+        fontSize: 20,
         fontWeight: FontWeight.normal,
       );
 

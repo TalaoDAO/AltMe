@@ -11,4 +11,5 @@ class Urls {
   static const String tezotopiaVoucherUrl =
       'https://issuer.tezotopia.altme.io/issuer/62b01953d556ef67c65272db';
   static const String talaoUrl = 'https://issuer.talao.co/talao_community';
+  static const String identityCardUrl = 'http://issuer.talao.co/kyc';
 }
