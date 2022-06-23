@@ -5,12 +5,41 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class NftList extends StatelessWidget {
-  const NftList({Key? key, required this.nftList, required this.onRefresh})
-      : super(key: key);
+typedef OnScrollEnded = Future<void> Function();
+
+class NftList extends StatefulWidget {
+  const NftList({
+    Key? key,
+    required this.nftList,
+    required this.onRefresh,
+    this.onScrollEnded,
+  }) : super(key: key);
 
   final List<NftModel> nftList;
   final RefreshCallback onRefresh;
+  final OnScrollEnded? onScrollEnded;
+
+  @override
+  State<NftList> createState() => _NftListState();
+}
+
+class _NftListState extends State<NftList> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollControllerListener);
+    super.initState();
+  }
+
+  void _scrollControllerListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      widget.onScrollEnded?.call();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +49,7 @@ class NftList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${nftList.length} ${l10n.items}',
+          '${widget.nftList.length} ${l10n.items}',
           style: Theme.of(context).textTheme.listSubtitle,
         ),
         const SizedBox(
@@ -28,8 +57,9 @@ class NftList extends StatelessWidget {
         ),
         Expanded(
           child: RefreshIndicator(
-            onRefresh: onRefresh,
+            onRefresh: widget.onRefresh,
             child: GridView.builder(
+              controller: _scrollController,
               physics: const BouncingScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -38,13 +68,12 @@ class NftList extends StatelessWidget {
                 childAspectRatio: Sizes.nftItemRatio,
               ),
               itemBuilder: (_, index) => NftItem(
-                assetUrl: nftList[index]
-                    .displayUri
+                assetUrl: widget.nftList[index].displayUri
                     .replaceAll('ipfs://', 'https://ipfs.io/ipfs/'),
-                assetValue: '${nftList[index].balance} XTZ',
-                description: nftList[index].name,
+                assetValue: '${widget.nftList[index].balance} XTZ',
+                description: widget.nftList[index].name,
               ),
-              itemCount: nftList.length,
+              itemCount: widget.nftList.length,
             ),
           ),
         ),
