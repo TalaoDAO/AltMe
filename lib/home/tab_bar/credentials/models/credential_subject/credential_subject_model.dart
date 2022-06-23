@@ -18,7 +18,8 @@ class CredentialSubjectModel {
     switch (json['type']) {
       case 'ResidentCard':
         return ResidentCardModel.fromJson(json);
-      case 'TezosAssociatedAddress':
+        // TODO(all): edit type to TezosAssociatedAddress after updating Sandbox
+      case 'TezosAssociatedWallet':
         return TezosAssociatedAddressModel.fromJson(json);
       case 'SelfIssued':
         return SelfIssuedModel.fromJson(json);

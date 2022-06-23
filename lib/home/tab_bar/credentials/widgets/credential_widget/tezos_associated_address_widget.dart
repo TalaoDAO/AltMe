@@ -14,7 +14,9 @@ class TezosAssociatedAddressDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const TezosAssociatedAddressRecto();
+    return TezosAssociatedAddressRecto(
+      credentialModel: credentialModel,
+    );
   }
 }
 
@@ -28,7 +30,9 @@ class TezosAssociatedAddressDisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const TezosAssociatedAddressRecto();
+    return TezosAssociatedAddressRecto(
+      credentialModel: credentialModel,
+    );
   }
 }
 
@@ -45,7 +49,9 @@ class TezosAssociatedAddressDisplayDetail extends StatelessWidget {
     return Column(
       children: [
         CardAnimation(
-          recto: const TezosAssociatedAddressRecto(),
+          recto: TezosAssociatedAddressRecto(
+            credentialModel: credentialModel,
+          ),
           verso: TezosAssociatedAddressVerso(credentialModel: credentialModel),
         ),
       ],
@@ -54,15 +60,30 @@ class TezosAssociatedAddressDisplayDetail extends StatelessWidget {
 }
 
 class TezosAssociatedAddressRecto extends Recto {
-  const TezosAssociatedAddressRecto({Key? key}) : super(key: key);
+  const TezosAssociatedAddressRecto({Key? key, required this.credentialModel})
+      : super(key: key);
+
+  final CredentialModel credentialModel;
 
   @override
   Widget build(BuildContext context) {
-    return const AspectRatio(
+    final tezosAssociatedAddress = credentialModel.credentialPreview
+        .credentialSubjectModel as TezosAssociatedAddressModel;
+    final l10n = context.l10n;
+    return AspectRatio(
       aspectRatio: Sizes.credentialAspectRatio,
       child: CredentialImage(
         image: ImageStrings.associatedWalletFront,
-        child: SizedBox.shrink(),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(Sizes.spaceXSmall),
+            child: Text(
+              '${l10n.address}: ${tezosAssociatedAddress.associatedAddress?.isEmpty == true ? '?' : tezosAssociatedAddress.associatedAddress}',
+              style: Theme.of(context).textTheme.tezosAssociatedAddressData,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -129,7 +150,7 @@ class TezosAssociatedAddressVerso extends Verso {
               Text(
                 '${l10n.issuer}: $issuerName',
                 style: Theme.of(context).textTheme.tezosAssociatedAddressData,
-              )
+              ),
             ],
           ),
         ),
