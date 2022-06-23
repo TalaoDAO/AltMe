@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class TezotopiaVoucherDisplayInList extends StatelessWidget {
@@ -54,7 +55,19 @@ class TezotopiaVoucherRecto extends Recto {
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
-          delegate: TezotopiaVoucherVersoDelegate(position: Offset.zero),
+          delegate: TezotopiaVoucherDelegate(position: Offset.zero),
+          children: [
+            LayoutId(
+              id: 'voucherValue',
+              child: FractionallySizedBox(
+                widthFactor: 0.5,
+                child: Text(
+                  '15%',
+                  style: Theme.of(context).textTheme.voucherValueCard,
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -72,44 +85,13 @@ class TezotopiaVoucherDelegate extends MultiChildLayoutDelegate {
       layoutChild('voucherValue', BoxConstraints.loose(size));
       positionChild(
         'voucherValue',
-        Offset(size.width * 0.27, size.height * 0.95),
+        Offset(size.width * 0.38, size.height * 0.63),
       );
     }
   }
 
   @override
   bool shouldRelayout(covariant TezotopiaVoucherDelegate oldDelegate) {
-    return oldDelegate.position != position;
-  }
-}
-
-class TezotopiaVoucherVersoDelegate extends MultiChildLayoutDelegate {
-  TezotopiaVoucherVersoDelegate({this.position = Offset.zero});
-
-  final Offset position;
-
-  @override
-  void performLayout(Size size) {
-    if (hasChild('name')) {
-      layoutChild('name', BoxConstraints.loose(size));
-      positionChild('name', Offset(size.width * 0.06, size.height * 0.14));
-    }
-    if (hasChild('description')) {
-      layoutChild('description', BoxConstraints.loose(size));
-      positionChild(
-        'description',
-        Offset(size.width * 0.06, size.height * 0.33),
-      );
-    }
-
-    if (hasChild('issuer')) {
-      layoutChild('issuer', BoxConstraints.loose(size));
-      positionChild('issuer', Offset(size.width * 0.06, size.height * 0.783));
-    }
-  }
-
-  @override
-  bool shouldRelayout(TezotopiaVoucherVersoDelegate oldDelegate) {
     return oldDelegate.position != position;
   }
 }

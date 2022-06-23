@@ -5,11 +5,12 @@ class WalletState extends Equatable {
   WalletState({
     this.status = WalletStatus.init,
     this.message,
-    this.currentCryptoIndex,
+    int? currentCryptoIndex,
     List<CredentialModel>? credentials,
     List<CryptoAccount>? cryptoAccounts,
   })  : credentials = credentials ?? [],
-        cryptoAccounts = cryptoAccounts ?? [];
+        cryptoAccounts = cryptoAccounts ?? [],
+        currentCryptoIndex = currentCryptoIndex ?? 0;
 
   factory WalletState.fromJson(Map<String, dynamic> json) =>
       _$WalletStateFromJson(json);
@@ -17,7 +18,7 @@ class WalletState extends Equatable {
   final WalletStatus status;
   final List<CredentialModel> credentials;
   final StateMessage? message;
-  final int? currentCryptoIndex;
+  final int currentCryptoIndex;
   final List<CryptoAccount> cryptoAccounts;
 
   WalletState loading() {

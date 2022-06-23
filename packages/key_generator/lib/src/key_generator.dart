@@ -38,7 +38,9 @@ class KeyGenerator {
       child = await ED25519_HD_KEY.derivePath("m/44'/60'/0'/0'/0'", seed);
     } else {
       child = await ED25519_HD_KEY.derivePath(
-          "m/44'/1729'/$derivePathIndex'/0'", seed);
+        "m/44'/1729'/$derivePathIndex'/0'",
+        seed,
+      );
     }
     final seedBytes = Uint8List.fromList(child.key);
 
