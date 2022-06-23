@@ -9,7 +9,7 @@ Future<bool> isWalletCreated({
   required WalletCubit walletCubit,
 }) async {
   final String? key =
-      await secureStorageProvider.get('${SecureStorageKeys.secretKeyy}/0');
+      await secureStorageProvider.get('${SecureStorageKeys.key}/0');
   if (key == null || key.isEmpty) {
     return false;
   }

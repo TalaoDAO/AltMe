@@ -79,7 +79,7 @@ class _SplashViewState extends State<SplashView> {
               final activeIndex =
                   context.read<WalletCubit>().state.currentIndex;
               final secretKey = await secure_storage.getSecureStorage.get(
-                '${SecureStorageKeys.secretKeyy}/$activeIndex',
+                '${SecureStorageKeys.key}/$activeIndex',
               );
               if (secretKey != null) {
                 await context.read<QRCodeScanCubit>().deepLink();

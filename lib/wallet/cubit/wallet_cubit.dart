@@ -28,8 +28,7 @@ class WalletCubit extends Cubit<WalletState> {
   final CredentialListCubit credentialListCubit;
 
   Future initialize() async {
-    final key =
-        await secureStorageProvider.get('${SecureStorageKeys.secretKeyy}/0');
+    final key = await secureStorageProvider.get('${SecureStorageKeys.key}/0');
     if (key != null) {
       if (key.isNotEmpty) {
         /// When app is initialized, set all credentials with active status to
@@ -155,7 +154,7 @@ class WalletCubit extends Cubit<WalletState> {
 
   Future deleteWalletAccountData() async {
     for (int i = 0; i <= state.walletAccounts.length; i++) {
-      await secureStorageProvider.delete('${SecureStorageKeys.secretKeyy}/i');
+      await secureStorageProvider.delete('${SecureStorageKeys.key}/i');
       await secureStorageProvider.delete('${SecureStorageKeys.menomicss}/i');
       await secureStorageProvider
           .delete('${SecureStorageKeys.walletAddresss}/i');

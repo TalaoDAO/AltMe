@@ -72,8 +72,7 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
             rsaJsonString,
           );
           // TODO(all):use index to set
-          await secureStorageProvider.set(
-              SecureStorageKeys.secretKeyy, rsaJsonString);
+          await secureStorageProvider.set(SecureStorageKeys.key, rsaJsonString);
           final verificationMethod = rsaKey['kid'] as String;
           await didCubit.set(
             did: did,

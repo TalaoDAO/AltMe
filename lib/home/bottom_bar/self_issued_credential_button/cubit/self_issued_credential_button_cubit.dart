@@ -41,7 +41,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
 
       final activeIndex = walletCubit.state.currentIndex;
       final secretKey = await secureStorageProvider.get(
-        '${SecureStorageKeys.secretKeyy}/$activeIndex',
+        '${SecureStorageKeys.key}/$activeIndex',
       );
 
       final did = didCubit.state.did!;

@@ -27,7 +27,8 @@ class SecureStorageKeys {
 
   // TODO(bibash): rename to proper name later
   static const String menomicss = 'mnemonics';
-  static const String secretKeyy = 'secretKey';
+  static const String key = 'key';
+  static const String secretKey = 'secretKey';
   static const String walletAddresss = 'walletAddress';
 
   static const String currentAccountIndex = 'currentAccountIndex';

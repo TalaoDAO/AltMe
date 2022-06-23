@@ -130,7 +130,7 @@ class _QueryByExampleCredentialPickPageState
                                         scanCubit.verifiablePresentationRequest(
                                           url: widget.uri.toString(),
                                           keyId:
-                                              '${SecureStorageKeys.secretKeyy}/$activeIndex',
+                                              '${SecureStorageKeys.key}/$activeIndex',
                                           credentials: state.selection
                                               .map(
                                                 (i) =>
