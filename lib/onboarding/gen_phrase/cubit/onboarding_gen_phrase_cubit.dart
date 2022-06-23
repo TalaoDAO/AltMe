@@ -72,9 +72,8 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
       await secureStorageProvider.set(
           '${SecureStorageKeys.secretKey}/0', ssiSecretKey);
 
-      final ssiWalletAddress = await keyGenerator.tz1AddressFromMnemonic(
-        mnemonic: mnemonicFormatted,
-        accountType: AccountType.ssi,
+      final ssiWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
+        secretKey: ssiSecretKey,
       );
       await secureStorageProvider.set(
         '${SecureStorageKeys.walletAddresss}/0',
@@ -114,10 +113,8 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         cryptoSecretKey,
       );
 
-      final cryptoWalletAddress = await keyGenerator.tz1AddressFromMnemonic(
-        mnemonic: mnemonicFormatted,
-        accountType: AccountType.crypto,
-        cryptoAccountLength: 1,
+      final cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
+        secretKey: cryptoSecretKey,
       );
       await secureStorageProvider.set(
         '${SecureStorageKeys.walletAddresss}/1',
