@@ -23,6 +23,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xffEFF0F6);
       case CredentialSubjectType.identityPass:
         return const Color(0xffCAFFBF);
+      case CredentialSubjectType.identityCard:
+        return const Color(0xff2596be);
       case CredentialSubjectType.voucher:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.loyaltyCard:
@@ -65,6 +67,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.selfIssued:
         return Icons.perm_identity;
       case CredentialSubjectType.identityPass:
+        return Icons.perm_identity;
+      case CredentialSubjectType.identityCard:
         return Icons.perm_identity;
       case CredentialSubjectType.loyaltyCard:
         return Icons.loyalty;

@@ -47,6 +47,10 @@ class HomeCredential extends Equatable {
         image = ImageStrings.dummyTalaoCard;
         link = Urls.talaoUrl;
         break;
+      case CredentialSubjectType.identityCard:
+        image = ImageStrings.dummyIdentityCard;
+        link = Urls.identityCardUrl;
+        break;
       case CredentialSubjectType.voucher:
       case CredentialSubjectType.selfIssued:
       case CredentialSubjectType.defaultCredential:

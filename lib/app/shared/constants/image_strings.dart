@@ -41,4 +41,5 @@ class ImageStrings {
   static const String dummyTezotopiaVoucherCard =
       '$imagePath/dummy_tezotopia_voucher_card.png';
   static const String dummyTalaoCard = '$imagePath/dummy_talao_card.png';
+  static const String dummyIdentityCard = '$imagePath/dummy_identity_card.png';
 }

@@ -38,6 +38,10 @@ class DisplayDetail extends StatelessWidget {
         return IdentityPassDisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.identityCard:
+        return IdentityCardDisplayDetail(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.learningAchievement:
         return LearningAchievementDisplayDetail(
           credentialModel: credentialModel,

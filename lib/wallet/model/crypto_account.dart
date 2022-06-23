@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:key_generator/key_generator.dart';
 
 part 'crypto_account.g.dart';
 

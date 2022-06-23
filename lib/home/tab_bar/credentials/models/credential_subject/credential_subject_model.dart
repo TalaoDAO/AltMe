@@ -24,6 +24,8 @@ class CredentialSubjectModel {
         return SelfIssuedModel.fromJson(json);
       case 'IdentityPass':
         return IdentityPassModel.fromJson(json);
+      case 'Kyc':
+        return IdentityCardModel.fromJson(json);
       case 'Voucher':
         return VoucherModel.fromJson(json);
       case 'TezVoucher_1':
