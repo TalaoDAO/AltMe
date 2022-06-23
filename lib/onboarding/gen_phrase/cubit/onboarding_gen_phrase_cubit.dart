@@ -95,7 +95,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         secretKey: cryptoSecretKey,
       );
       await secureStorageProvider.set(
-        '${SecureStorageKeys.cryptoWalletAddresss}/0',
+        '${SecureStorageKeys.cryptoWalletAddress}/0',
         cryptoWalletAddress,
       );
 
