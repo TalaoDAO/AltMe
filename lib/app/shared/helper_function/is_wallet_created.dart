@@ -1,14 +1,16 @@
 import 'package:altme/app/shared/constants/constants.dart';
 import 'package:altme/did/did.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 Future<bool> isWalletCreated({
   required SecureStorageProvider secureStorageProvider,
   required DIDCubit didCubit,
+  required WalletCubit walletCubit,
 }) async {
-  final String? secretKey =
-      await secureStorageProvider.get(SecureStorageKeys.secretKey);
-  if (secretKey == null || secretKey.isEmpty) {
+  final String? key =
+      await secureStorageProvider.get('${SecureStorageKeys.secretKeyy}/0');
+  if (key == null || key.isEmpty) {
     return false;
   }
 
@@ -30,8 +32,14 @@ Future<bool> isWalletCreated({
     return false;
   }
 
+  final String? verificationMethod =
+      await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
+  if (verificationMethod == null || verificationMethod.isEmpty) {
+    return false;
+  }
+
   final String? walletAddress =
-      await secureStorageProvider.get(SecureStorageKeys.walletAddress);
+      await secureStorageProvider.get('${SecureStorageKeys.walletAddresss}/0');
   if (walletAddress == null || walletAddress.isEmpty) {
     return false;
   }
@@ -53,8 +61,16 @@ Future<bool> isWalletCreated({
     did: did,
     didMethod: didMethod,
     didMethodName: didMethodName,
-    walletAddress: walletAddress,
+    verificationMethod: verificationMethod,
   );
+
+  final String? currentAccountIndex =
+      await secureStorageProvider.get(SecureStorageKeys.currentAccountIndex);
+  if (currentAccountIndex == null || currentAccountIndex.isEmpty) {
+    return false;
+  }
+
+  await walletCubit.setCurrentWalletAccount(int.parse(currentAccountIndex));
 
   return true;
 }

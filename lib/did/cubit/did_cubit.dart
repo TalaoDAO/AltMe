@@ -11,8 +11,10 @@ part 'did_cubit.g.dart';
 part 'did_state.dart';
 
 class DIDCubit extends Cubit<DIDState> {
-  DIDCubit({required this.didKitProvider, required this.secureStorageProvider})
-      : super(const DIDState());
+  DIDCubit({
+    required this.didKitProvider,
+    required this.secureStorageProvider,
+  }) : super(const DIDState());
 
   final SecureStorageProvider secureStorageProvider;
   final DIDKitProvider didKitProvider;
@@ -22,35 +24,29 @@ class DIDCubit extends Cubit<DIDState> {
     required String didMethod,
     required String didMethodName,
     required String verificationMethod,
-    required String walletAddress,
   }) async {
     final log = Logger('altme-wallet/DID/set');
 
     emit(state.loading());
-    await secureStorageProvider.set(
-      SecureStorageKeys.walletAddress,
-      walletAddress,
-    );
     await secureStorageProvider.set(SecureStorageKeys.did, did);
     await secureStorageProvider.set(SecureStorageKeys.didMethod, didMethod);
-    await secureStorageProvider.set(
-      SecureStorageKeys.verificationMethod,
-      verificationMethod,
-    );
+    const didMethodName = AltMeStrings.defaultDIDMethodName;
     await secureStorageProvider.set(
       SecureStorageKeys.didMethodName,
       didMethodName,
     );
-
+    await secureStorageProvider.set(
+      SecureStorageKeys.verificationMethod,
+      verificationMethod,
+    );
     emit(
       state.success(
         did: did,
         didMethod: didMethod,
         didMethodName: didMethodName,
-        walletAddress: walletAddress,
+        verificationMethod: verificationMethod,
       ),
     );
-
     log.info('successfully Set');
   }
 
@@ -58,7 +54,7 @@ class DIDCubit extends Cubit<DIDState> {
     required String did,
     required String didMethod,
     required String didMethodName,
-    required String walletAddress,
+    required String verificationMethod,
   }) async {
     final log = Logger('altme-wallet/DID/load');
     emit(state.loading());
@@ -67,7 +63,7 @@ class DIDCubit extends Cubit<DIDState> {
         did: did,
         didMethod: didMethod,
         didMethodName: didMethodName,
-        walletAddress: walletAddress,
+        verificationMethod: verificationMethod,
       ),
     );
     log.info('successfully Loaded');

@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:did_kit/did_kit.dart';
@@ -22,6 +23,7 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
     required this.keyGenerator,
     required this.homeCubit,
     required this.didCubit,
+    required this.walletCubit,
   }) : super(const OnBoardingRecoveryState());
 
   final DIDKitProvider didKitProvider;
@@ -30,6 +32,7 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
   final KeyGenerator keyGenerator;
   final HomeCubit homeCubit;
   final DIDCubit didCubit;
+  final WalletCubit walletCubit;
 
   void isMnemonicsValid(String value) {
     emit(
@@ -44,24 +47,39 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
-      await secureStorageProvider.set(SecureStorageKeys.mnemonic, mnemonic);
-      final address = await keyGenerator.tz1AddressFromMnemonic(mnemonic);
-      await secureStorageProvider.set(SecureStorageKeys.walletAddress, address);
-      final key = await keyGenerator.jwkFromMnemonic(mnemonic: mnemonic);
-      await secureStorageProvider.set(SecureStorageKeys.secretKey, key);
+      // TODO(bibash): change recovery indexes based on ssi or cypto
+      //for now I am considering crypto
+      await secureStorageProvider.set(
+          '${SecureStorageKeys.menomicss}/0', mnemonic);
+      final walletAddress = await keyGenerator.tz1AddressFromMnemonic(mnemonic);
+      await secureStorageProvider.set(
+          '${SecureStorageKeys.walletAddresss}/0', walletAddress);
+      final secretKey = await keyGenerator.jwkFromMnemonic(mnemonic: mnemonic);
+      await secureStorageProvider.set(
+          '${SecureStorageKeys.secretKeyy}/0', secretKey);
 
       const didMethod = AltMeStrings.defaultDIDMethod;
-      final did = didKitProvider.keyToDID(didMethod, key);
+      final did = didKitProvider.keyToDID(didMethod, secretKey);
       final verificationMethod =
-          await didKitProvider.keyToVerificationMethod(didMethod, key);
+          await didKitProvider.keyToVerificationMethod(didMethod, secretKey);
 
-      await didCubit.set(
+      await didCubit.load(
         did: did,
         didMethod: didMethod,
         didMethodName: AltMeStrings.defaultDIDMethodName,
         verificationMethod: verificationMethod,
-        walletAddress: address,
       );
+
+      await walletCubit.insertWalletAccount(
+        WalletAccount(
+          mnemonics: mnemonic,
+          secretKey: secretKey,
+          walletAddress: walletAddress,
+        ),
+      );
+
+      //setting ssi index
+      await walletCubit.setCurrentWalletAccount(0);
 
       homeCubit.emitHasWallet();
 

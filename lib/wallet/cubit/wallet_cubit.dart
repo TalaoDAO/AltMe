@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -27,7 +28,8 @@ class WalletCubit extends Cubit<WalletState> {
   final CredentialListCubit credentialListCubit;
 
   Future initialize() async {
-    final key = await secureStorageProvider.get(SecureStorageKeys.secretKey);
+    final key =
+        await secureStorageProvider.get('${SecureStorageKeys.secretKeyy}/0');
     if (key != null) {
       if (key.isNotEmpty) {
         /// When app is initialized, set all credentials with active status to
@@ -38,6 +40,31 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
+  Future insertWalletAccount(WalletAccount walletAccount) async {
+    emit(state.loading());
+    final walletAccounts = List.of(state.walletAccounts)..add(walletAccount);
+    emit(
+      state.copyWith(
+        status: WalletStatus.populate,
+        walletAccounts: walletAccounts,
+      ),
+    );
+  }
+
+  Future setCurrentWalletAccount(int index) async {
+    emit(state.loading());
+    await secureStorageProvider.set(
+      SecureStorageKeys.currentAccountIndex,
+      index.toString(),
+    );
+    emit(
+      state.copyWith(
+        status: WalletStatus.populate,
+        currentIndex: index,
+      ),
+    );
+  }
+
   Future deleteById(CredentialModel credential) async {
     emit(state.loading());
     await repository.deleteById(credential.id);
@@ -45,7 +72,7 @@ class WalletCubit extends Cubit<WalletState> {
       ..removeWhere((element) => element.id == credential.id);
     await credentialListCubit.deleteById(credential);
     emit(
-      state.success(
+      state.copyWith(
         status: WalletStatus.delete,
         credentials: credentials,
         messageHandler: ResponseMessage(
@@ -60,7 +87,7 @@ class WalletCubit extends Cubit<WalletState> {
     await repository.findAll(/* filters */).then((values) {
       emit(
         state.copyWith(
-          status: WalletStatus.idle,
+          status: WalletStatus.populate,
           credentials: values,
         ),
       );
@@ -76,7 +103,7 @@ class WalletCubit extends Cubit<WalletState> {
       ..insert(index, credential);
     await credentialListCubit.updateCredential(credential);
     emit(
-      state.success(
+      state.copyWith(
         status: WalletStatus.update,
         credentials: credentials,
         messageHandler: ResponseMessage(
@@ -94,7 +121,8 @@ class WalletCubit extends Cubit<WalletState> {
       final credentials = List.of(state.credentials)
         ..removeWhere((element) => element.id == credential.id)
         ..insert(index, credential);
-      emit(state.success(status: WalletStatus.idle, credentials: credentials));
+      emit(state.copyWith(
+          status: WalletStatus.populate, credentials: credentials));
     }
   }
 
@@ -103,7 +131,7 @@ class WalletCubit extends Cubit<WalletState> {
     final credentials = List.of(state.credentials)..add(credential);
     await credentialListCubit.insertCredential(credential);
     emit(
-      state.success(
+      state.copyWith(
         status: WalletStatus.insert,
         credentials: credentials,
         messageHandler: ResponseMessage(
@@ -114,15 +142,24 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future resetWallet() async {
-    await secureStorageProvider.delete(SecureStorageKeys.secretKey);
-    await secureStorageProvider.delete(SecureStorageKeys.mnemonic);
+    await deleteWalletAccountData();
+    await secureStorageProvider.delete(SecureStorageKeys.currentAccountIndex);
     await secureStorageProvider.delete(SecureStorageKeys.data);
     await repository.deleteAll();
     await profileCubit.resetProfile();
     homeCubit.emitHasNoWallet();
     await credentialListCubit.clearCredentials();
-    emit(state.success(status: WalletStatus.reset, credentials: []));
-    emit(state.success(status: WalletStatus.init));
+    emit(state.copyWith(status: WalletStatus.reset, credentials: []));
+    emit(state.copyWith(status: WalletStatus.init));
+  }
+
+  Future deleteWalletAccountData() async {
+    for (int i = 0; i <= state.walletAccounts.length; i++) {
+      await secureStorageProvider.delete('${SecureStorageKeys.secretKeyy}/i');
+      await secureStorageProvider.delete('${SecureStorageKeys.menomicss}/i');
+      await secureStorageProvider
+          .delete('${SecureStorageKeys.walletAddresss}/i');
+    }
   }
 
   Future<void> recoverWallet(List<CredentialModel> credentials) async {
@@ -131,7 +168,7 @@ class WalletCubit extends Cubit<WalletState> {
       await repository.insert(credential);
     }
     homeCubit.emitHasNoWallet();
-    emit(state.success(status: WalletStatus.init, credentials: credentials));
+    emit(state.copyWith(status: WalletStatus.init, credentials: credentials));
   }
 
   /// Give user metadata to KYC. Currently we are just sending user DID.

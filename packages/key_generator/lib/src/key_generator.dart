@@ -81,6 +81,7 @@ class KeyGenerator {
   }
 
   Future<String> tz1AddressFromMnemonic(String mnemonic) async {
+    // TODO(bibash): differentiate crypto or ssi
     final key = await jwkFromMnemonic(mnemonic: mnemonic);
 
     // ignore: avoid_dynamic_calls

@@ -3,6 +3,7 @@ import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/recovery/cubit/onboarding_recovery_cubit.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class OnBoardingRecoveryPage extends StatefulWidget {
             didKitProvider: DIDKitProvider(),
             keyGenerator: KeyGenerator(),
             homeCubit: context.read<HomeCubit>(),
+            walletCubit: context.read<WalletCubit>(),
           ),
           child: const OnBoardingRecoveryPage(),
         ),
@@ -134,6 +136,7 @@ class _OnBoardingRecoveryPageState extends State<OnBoardingRecoveryPage> {
                     onPressed: !state.isMnemonicValid
                         ? null
                         : () async {
+                            // TODO(bibash) : show options to  crypto or ssi
                             await context
                                 .read<OnBoardingRecoveryCubit>()
                                 .saveMnemonic(mnemonicController.text);

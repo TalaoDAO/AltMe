@@ -22,9 +22,10 @@ class SearchCubit extends Cubit<SearchState> {
   final SecureStorageProvider secureStorageProvider;
 
   Future initialize() async {
-    final key = await secureStorageProvider.get(SecureStorageKeys.secretKey);
-    if (key != null) {
-      if (key.isNotEmpty) {
+    final secretKey =
+        await secureStorageProvider.get('${SecureStorageKeys.secretKeyy}/0');
+    if (secretKey != null) {
+      if (secretKey.isNotEmpty) {
         /// When app is initialized, set all credentials with active status to
         /// unknown status
         await repository.initializeRevocationStatus();

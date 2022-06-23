@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +19,13 @@ class DIDDisplay extends StatelessWidget {
     return BlocBuilder<DIDCubit, DIDState>(
       builder: (context, state) {
         final did = state.status == AppStatus.success ? state.did! : '';
-        final blockChainAddress = state.walletAddress;
+
+        final WalletCubit walletCubit = context.read<WalletCubit>();
+
+        final activeIndex = walletCubit.state.currentIndex!;
+
+        final blockChainAddress =
+            walletCubit.state.walletAccounts[activeIndex].walletAddress;
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),

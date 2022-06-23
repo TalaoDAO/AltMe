@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/tab_bar/nft/models/nft_model.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -10,23 +11,28 @@ part 'nft_cubit.g.dart';
 part 'nft_state.dart';
 
 class NftCubit extends Cubit<NftState> {
-  NftCubit({required this.client, required this.secureStorageProvider})
-      : super(const NftState()) {
+  NftCubit({
+    required this.client,
+    required this.secureStorageProvider,
+    required this.walletCubit,
+  }) : super(const NftState()) {
     getTezosNftList();
   }
 
   final DioClient client;
   final SecureStorageProvider secureStorageProvider;
+  final WalletCubit walletCubit;
 
   Future<void> getTezosNftList() async {
     try {
       emit(state.fetching());
-      final address =
-          (await secureStorageProvider.get(SecureStorageKeys.walletAddress))!;
+      final activeIndex = walletCubit.state.currentIndex;
+      final walletAddress = await secureStorageProvider
+          .get('${SecureStorageKeys.walletAddresss}/$activeIndex');
       final List<dynamic> response = await client.get(
         '/v1/tokens/balances',
         queryParameters: <String, dynamic>{
-          'account': address,
+          'account': walletAddress!,
           'select':
               'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance',
         },

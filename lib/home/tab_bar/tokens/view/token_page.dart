@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/home/tab_bar/tokens/view/widgets/widgets.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,7 @@ class TokenPage extends StatelessWidget {
           Dio(),
         ),
         secureStorageProvider: getSecureStorage,
+        walletCubit: context.read<WalletCubit>(),
       ),
       child: const TokenView(),
     );

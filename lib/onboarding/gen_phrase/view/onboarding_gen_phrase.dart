@@ -3,6 +3,7 @@ import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/gen_phrase/cubit/onboarding_gen_phrase_cubit.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ class OnBoardingGenPhrasePage extends StatefulWidget {
             didKitProvider: DIDKitProvider(),
             keyGenerator: KeyGenerator(),
             homeCubit: context.read<HomeCubit>(),
+            walletCubit: context.read<WalletCubit>(),
           ),
           child: const OnBoardingGenPhrasePage(),
         ),
