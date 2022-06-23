@@ -22,7 +22,11 @@ class CredentialsRepository {
 
   Future<List<CredentialModel>> findAll(/* dynamic filters */) async {
     final data = await _secureStorageProvider.getAllValues();
-    data.removeWhere((key, value) => !key.startsWith('credential/'));
+    data.removeWhere(
+      (key, value) => !key.startsWith(
+        '${SecureStorageKeys.credentialKey}/',
+      ),
+    );
 
     final _credentialList = <CredentialModel>[];
     data.forEach((key, value) {
@@ -35,7 +39,8 @@ class CredentialsRepository {
   }
 
   Future<CredentialModel?> findById(String id) async {
-    final String? data = await _secureStorageProvider.get('credential/$id');
+    final String? data = await _secureStorageProvider
+        .get('${SecureStorageKeys.credentialKey}/$id');
     if (data == null) {
       return null;
     }
@@ -46,7 +51,9 @@ class CredentialsRepository {
 
   Future<int> deleteAll() async {
     final data = await _secureStorageProvider.getAllValues();
-    data.removeWhere((key, value) => !key.startsWith('credential/'));
+    data.removeWhere(
+      (key, value) => !key.startsWith('${SecureStorageKeys.credentialKey}/'),
+    );
     var numberOfDeletedCredentials = 0;
     data.forEach((key, value) {
       _secureStorageProvider.delete(key);
@@ -56,13 +63,14 @@ class CredentialsRepository {
   }
 
   Future<bool> deleteById(String id) async {
-    await _secureStorageProvider.delete('credential/$id');
+    await _secureStorageProvider
+        .delete('${SecureStorageKeys.credentialKey}/$id');
     return true;
   }
 
   Future<int> insert(CredentialModel credential) async {
     await _secureStorageProvider.set(
-      'credential/${credential.id}',
+      '${SecureStorageKeys.credentialKey}/${credential.id}',
       json.encode(credential.toJson()),
     );
     return 1;
@@ -70,7 +78,7 @@ class CredentialsRepository {
 
   Future<int> update(CredentialModel credential) async {
     await _secureStorageProvider.set(
-      'credential/${credential.id}',
+      '${SecureStorageKeys.credentialKey}/${credential.id}',
       json.encode(credential.toJson()),
     );
     return 1;

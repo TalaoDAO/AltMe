@@ -71,15 +71,16 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
             SecureStorageKeys.rsaKeyJson,
             rsaJsonString,
           );
-          await secureStorageProvider.set(SecureStorageKeys.key, rsaJsonString);
+          await secureStorageProvider.set(
+            SecureStorageKeys.ssiKey,
+            rsaJsonString,
+          );
           final verificationMethod = rsaKey['kid'] as String;
           await didCubit.set(
             did: did,
             didMethod: AltMeStrings.enterpriseDIDMethod,
             didMethodName: AltMeStrings.enterpriseDIDMethodName,
             verificationMethod: verificationMethod,
-            // TODO(all): create correct wallet address for enterpirse user
-            walletAddress: '',
           );
 
           emit(

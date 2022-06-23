@@ -125,7 +125,7 @@ class _QueryByExampleCredentialPickPageState
                                             context.read<ScanCubit>();
                                         scanCubit.verifiablePresentationRequest(
                                           url: widget.uri.toString(),
-                                          keyId: SecureStorageKeys.key,
+                                          keyId: SecureStorageKeys.ssiKey,
                                           credentials: state.selection
                                               .map(
                                                 (i) =>

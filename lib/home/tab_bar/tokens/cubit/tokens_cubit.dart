@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -10,23 +11,30 @@ part 'tokens_cubit.g.dart';
 part 'tokens_state.dart';
 
 class TokensCubit extends Cubit<TokensState> {
-  TokensCubit({required this.client, required this.secureStorageProvider})
-      : super(const TokensState()) {
+  TokensCubit({
+    required this.client,
+    required this.secureStorageProvider,
+    required this.walletCubit,
+  }) : super(const TokensState()) {
     getBalanceOfAssetList();
   }
 
   final DioClient client;
   final SecureStorageProvider secureStorageProvider;
+  final WalletCubit walletCubit;
 
   Future<void> getBalanceOfAssetList() async {
     try {
       emit(state.fetching());
-      final address =
-          (await secureStorageProvider.get(SecureStorageKeys.walletAddress))!;
+
+      final activeIndex = walletCubit.state.currentCryptoIndex;
+      final walletAddress = await secureStorageProvider
+          .get('${SecureStorageKeys.cryptoWalletAddress}/$activeIndex');
+
       final List<dynamic> tokensBalancesJsonArray = await client.get(
         '/v1/tokens/balances',
         queryParameters: <String, dynamic>{
-          'account': address,
+          'account': walletAddress,
           'token.contract.in':
               '''KT1GRSvLoikDsXujKgZPsGLX8k8VvR2Tq95b,KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb,KT1M81KrJr6TxYLkZkVqcpSTNKGoya8XytWT,KT1Xobej4mc6XgEjDoJoHtTKgbD1ELMvcQuL,KT1K9gCRgaLRFKTErYt1wVxA3Frb9FjasjTV,KT1LN4LPSqTMS7Sd2CJw4bbDGRkMv2t68Fy9,KT1SjXiUX63QvdNMcM2m492f7kuf8JxXRLp4,KT1Ha4yFVeyzw6KRAdkzq6TxDHB97KG4pZe8''',
           'select':

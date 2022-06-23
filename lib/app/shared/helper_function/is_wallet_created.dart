@@ -6,8 +6,9 @@ Future<bool> isWalletCreated({
   required SecureStorageProvider secureStorageProvider,
   required DIDCubit didCubit,
 }) async {
-  final String? key = await secureStorageProvider.get(SecureStorageKeys.key);
-  if (key == null || key.isEmpty) {
+  final String? ssiKey =
+      await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+  if (ssiKey == null || ssiKey.isEmpty) {
     return false;
   }
 
@@ -29,9 +30,9 @@ Future<bool> isWalletCreated({
     return false;
   }
 
-  final String? walletAddress =
-      await secureStorageProvider.get(SecureStorageKeys.walletAddress);
-  if (walletAddress == null || walletAddress.isEmpty) {
+  final String? verificationMethod =
+      await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
+  if (verificationMethod == null || verificationMethod.isEmpty) {
     return false;
   }
 
@@ -52,7 +53,7 @@ Future<bool> isWalletCreated({
     did: did,
     didMethod: didMethod,
     didMethodName: didMethodName,
-    walletAddress: walletAddress,
+    verificationMethod: verificationMethod,
   );
 
   return true;

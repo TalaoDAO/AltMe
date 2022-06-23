@@ -39,15 +39,15 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       emit(state.loading());
       await Future<void>.delayed(const Duration(milliseconds: 500));
 
-      final key = (await secureStorageProvider.get(SecureStorageKeys.key))!;
-      final verificationMethod =
-          await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
+      final secretKey = await secureStorageProvider.get(
+        SecureStorageKeys.ssiKey,
+      );
 
       final did = didCubit.state.did!;
 
       final options = {
         'proofPurpose': 'assertionMethod',
-        'verificationMethod': verificationMethod
+        'verificationMethod': didCubit.state.verificationMethod
       };
       final verifyOptions = {'proofPurpose': 'assertionMethod'};
       final id = 'urn:uuid:${const Uuid().v4()}';
@@ -77,7 +77,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       final vc = await didKitProvider.issueCredential(
         jsonEncode(selfIssuedCredential.toJson()),
         jsonEncode(options),
-        key,
+        secretKey!,
       );
       final result =
           await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions));

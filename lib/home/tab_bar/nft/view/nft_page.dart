@@ -6,6 +6,7 @@ import 'package:altme/home/tab_bar/nft/view/widgets/nft_list.dart';
 import 'package:altme/home/tab_bar/nft/view/widgets/nft_list_shimmer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,7 @@ class NftPage extends StatelessWidget {
           Dio(),
         ),
         secureStorageProvider: getSecureStorage,
+        walletCubit: context.read<WalletCubit>(),
       ),
       child: const NftView(),
     );
