@@ -23,9 +23,8 @@ class RecoveryKeyCubit extends Cubit<RecoveryKeyState> {
   Future<void> loadMnemonic() async {
     emit(state.loading());
 
-    final activeIndex = walletCubit.state.currentIndex;
     final phrase = await secureStorageProvider.get(
-      '${SecureStorageKeys.menomicss}/$activeIndex',
+      SecureStorageKeys.ssiMnemonic,
     );
     emit(state.success(mnemonic: phrase!.split(' ')));
   }

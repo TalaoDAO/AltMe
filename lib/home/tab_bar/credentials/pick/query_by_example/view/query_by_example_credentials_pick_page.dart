@@ -121,16 +121,11 @@ class _QueryByExampleCredentialPickPageState
                                           messageType: MessageType.error,
                                         );
                                       } else {
-                                        final activeIndex = context
-                                            .read<WalletCubit>()
-                                            .state
-                                            .currentIndex;
                                         final scanCubit =
                                             context.read<ScanCubit>();
                                         scanCubit.verifiablePresentationRequest(
                                           url: widget.uri.toString(),
-                                          keyId:
-                                              '${SecureStorageKeys.key}/$activeIndex',
+                                          keyId: SecureStorageKeys.ssiKey,
                                           credentials: state.selection
                                               .map(
                                                 (i) =>

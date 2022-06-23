@@ -34,7 +34,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
 
   final log = Logger('altme-wallet/on-boarding/key-generation');
 
-  Future<void> generateSSIAndCryptoKey(List<String> mnemonic) async {
+  Future<void> generateSSIAndCryptoAccount(List<String> mnemonic) async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
@@ -42,7 +42,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
 
       /// ssi wallet
       await secureStorageProvider.set(
-        '${SecureStorageKeys.menomicss}/0',
+        SecureStorageKeys.ssiMnemonic,
         mnemonicFormatted,
       );
 
@@ -50,7 +50,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         mnemonic: mnemonicFormatted,
         accountType: AccountType.ssi,
       );
-      await secureStorageProvider.set('${SecureStorageKeys.key}/0', ssiKey);
+      await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
 
       const didMethod = AltMeStrings.defaultDIDMethod;
       final did = didKitProvider.keyToDID(didMethod, ssiKey);
@@ -65,51 +65,29 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         verificationMethod: verificationMethod,
       );
 
-      final ssiSecretKey = await keyGenerator.secretKeyFromMnemonic(
-        mnemonic: mnemonicFormatted,
-        accountType: AccountType.ssi,
-      );
-      await secureStorageProvider.set(
-          '${SecureStorageKeys.secretKey}/0', ssiSecretKey);
-
-      final ssiWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
-        secretKey: ssiSecretKey,
-      );
-      await secureStorageProvider.set(
-        '${SecureStorageKeys.walletAddresss}/0',
-        ssiWalletAddress,
-      );
-
-      await walletCubit.insertWalletAccount(
-        WalletAccount(
-          mnemonics: mnemonicFormatted,
-          key: ssiKey,
-          walletAddress: ssiWalletAddress,
-          secretKey: ssiSecretKey,
-          accountType: AccountType.ssi,
-        ),
-      );
-
       /// crypto wallet
       await secureStorageProvider.set(
-        '${SecureStorageKeys.menomicss}/1',
+        '${SecureStorageKeys.cryptoMnemonic}/0',
         mnemonicFormatted,
       );
 
       final cryptoKey = await keyGenerator.jwkFromMnemonic(
         mnemonic: mnemonicFormatted,
         accountType: AccountType.crypto,
-        cryptoAccountLength: 1,
+        derivePathIndex: 0,
       );
-      await secureStorageProvider.set('${SecureStorageKeys.key}/1', cryptoKey);
+      await secureStorageProvider.set(
+        '${SecureStorageKeys.cryptoKey}/0',
+        cryptoKey,
+      );
 
       final cryptoSecretKey = await keyGenerator.secretKeyFromMnemonic(
         mnemonic: mnemonicFormatted,
         accountType: AccountType.crypto,
-        cryptoAccountLength: 1,
+        derivePathIndex: 0,
       );
       await secureStorageProvider.set(
-        '${SecureStorageKeys.secretKey}/1',
+        '${SecureStorageKeys.cryptoSecretKey}/0',
         cryptoSecretKey,
       );
 
@@ -117,21 +95,19 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         secretKey: cryptoSecretKey,
       );
       await secureStorageProvider.set(
-        '${SecureStorageKeys.walletAddresss}/1',
+        '${SecureStorageKeys.cryptoWalletAddresss}/0',
         cryptoWalletAddress,
       );
 
       await walletCubit.insertWalletAccount(
-        WalletAccount(
+        CryptoAccount(
           mnemonics: mnemonicFormatted,
           key: cryptoKey,
           walletAddress: cryptoWalletAddress,
           secretKey: cryptoSecretKey,
-          accountType: AccountType.crypto,
         ),
       );
 
-      //setting ssi index
       await walletCubit.setCurrentWalletAccount(0);
 
       homeCubit.emitHasWallet();

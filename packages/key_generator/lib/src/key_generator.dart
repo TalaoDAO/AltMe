@@ -27,7 +27,7 @@ class KeyGenerator {
   Future<String> jwkFromMnemonic({
     required String mnemonic,
     required AccountType accountType,
-    int cryptoAccountLength = 0,
+    int derivePathIndex = 0,
   }) async {
     //notice photo opera keen climb agent soft parrot best joke field devote
     final seed = bip39.mnemonicToSeed(mnemonic);
@@ -37,8 +37,8 @@ class KeyGenerator {
     if (accountType == AccountType.ssi) {
       child = await ED25519_HD_KEY.derivePath("m/44'/60'/0'/0'/0'", seed);
     } else {
-      final index = cryptoAccountLength - 1;
-      child = await ED25519_HD_KEY.derivePath("m/44'/1729'/$index'/0'", seed);
+      child = await ED25519_HD_KEY.derivePath(
+          "m/44'/1729'/$derivePathIndex'/0'", seed);
     }
     final seedBytes = Uint8List.fromList(child.key);
 
@@ -66,12 +66,12 @@ class KeyGenerator {
   Future<String> secretKeyFromMnemonic({
     required String mnemonic,
     required AccountType accountType,
-    int cryptoAccountLength = 0,
+    int derivePathIndex = 0,
   }) async {
     final key = await jwkFromMnemonic(
       mnemonic: mnemonic,
       accountType: accountType,
-      cryptoAccountLength: cryptoAccountLength,
+      derivePathIndex: derivePathIndex,
     );
 
     // ignore: avoid_dynamic_calls
@@ -90,12 +90,12 @@ class KeyGenerator {
   Future<String> tz1AddressFromMnemonic({
     required String mnemonic,
     required AccountType accountType,
-    int cryptoAccountLength = 0,
+    int derivePathIndex = 0,
   }) async {
     final key = await jwkFromMnemonic(
       mnemonic: mnemonic,
       accountType: accountType,
-      cryptoAccountLength: cryptoAccountLength,
+      derivePathIndex: derivePathIndex,
     );
 
     // ignore: avoid_dynamic_calls

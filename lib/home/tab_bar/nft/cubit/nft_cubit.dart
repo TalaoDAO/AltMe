@@ -31,9 +31,9 @@ class NftCubit extends Cubit<NftState> {
       if (offset == 0) {
         emit(state.fetching());
       }
-      final activeIndex = walletCubit.state.currentIndex;
+      final activeIndex = walletCubit.state.currentCryptoIndex;
       final walletAddress = await secureStorageProvider
-          .get('${SecureStorageKeys.walletAddresss}/$activeIndex');
+          .get('${SecureStorageKeys.cryptoWalletAddresss}/$activeIndex');
       final List<dynamic> response = await client.get(
         '/v1/tokens/balances',
         queryParameters: <String, dynamic>{

@@ -26,9 +26,11 @@ class TokensCubit extends Cubit<TokensState> {
   Future<void> getBalanceOfAssetList() async {
     try {
       emit(state.fetching());
-      final activeIndex = walletCubit.state.currentIndex;
+
+      final activeIndex = walletCubit.state.currentCryptoIndex;
       final walletAddress = await secureStorageProvider
-          .get('${SecureStorageKeys.walletAddresss}/$activeIndex');
+          .get('${SecureStorageKeys.cryptoWalletAddresss}/$activeIndex');
+
       final List<dynamic> tokensBalancesJsonArray = await client.get(
         '/v1/tokens/balances',
         queryParameters: <String, dynamic>{
