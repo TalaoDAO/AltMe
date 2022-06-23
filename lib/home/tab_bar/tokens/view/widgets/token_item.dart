@@ -31,10 +31,12 @@ class TokenItem extends StatelessWidget {
                     width: Sizes.tokenLogoSize,
                     height: Sizes.tokenLogoSize,
                   )
-                : Image.network(
-                    iconUrl()!,
+                : SizedBox(
                     width: Sizes.tokenLogoSize,
                     height: Sizes.tokenLogoSize,
+                    child: ImageFromNetwork(
+                      iconUrl()!,
+                    ),
                   ),
           ),
           title: MyText(

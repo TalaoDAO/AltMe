@@ -118,7 +118,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                               oldCredentialModel: credentialModel,
                               newAlias: alias,
                             ),
-                            keyId: 'key',
+                            keyId: SecureStorageKeys.ssiKey,
                           );
                     }
                   },

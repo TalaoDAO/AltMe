@@ -4,7 +4,6 @@ import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/recovery/cubit/onboarding_recovery_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +16,6 @@ class OnBoardingRecoveryPage extends StatefulWidget {
   static Route route() => MaterialPageRoute<void>(
         builder: (context) => BlocProvider(
           create: (context) => OnBoardingRecoveryCubit(
-            cryptoKeys: const CryptocurrencyKeys(),
             secureStorageProvider: getSecureStorage,
             didCubit: context.read<DIDCubit>(),
             didKitProvider: DIDKitProvider(),

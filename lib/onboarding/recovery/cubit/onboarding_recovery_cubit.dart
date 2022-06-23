@@ -9,16 +9,15 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'onboarding_recovery_cubit.g.dart';
-
 part 'onboarding_recovery_state.dart';
 
 class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
   OnBoardingRecoveryCubit({
     required this.didKitProvider,
-    required this.cryptoKeys,
     required this.secureStorageProvider,
     required this.keyGenerator,
     required this.homeCubit,
@@ -27,12 +26,13 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
   }) : super(const OnBoardingRecoveryState());
 
   final DIDKitProvider didKitProvider;
-  final CryptocurrencyKeys cryptoKeys;
   final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;
   final HomeCubit homeCubit;
   final DIDCubit didCubit;
   final WalletCubit walletCubit;
+
+  final log = Logger('altme-wallet/on-boarding/key-recovery');
 
   void isMnemonicsValid(String value) {
     emit(
@@ -63,20 +63,62 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
       final verificationMethod =
           await didKitProvider.keyToVerificationMethod(didMethod, ssiKey);
 
-      await didCubit.load(
+      await didCubit.set(
         did: did,
         didMethod: didMethod,
         didMethodName: AltMeStrings.defaultDIDMethodName,
         verificationMethod: verificationMethod,
       );
 
-      //setting ssi index
+      /// crypto wallet
+      await secureStorageProvider.set(
+        '${SecureStorageKeys.cryptoMnemonic}/0',
+        mnemonic,
+      );
+
+      final cryptoKey = await keyGenerator.jwkFromMnemonic(
+        mnemonic: mnemonic,
+        accountType: AccountType.crypto,
+        derivePathIndex: 0,
+      );
+      await secureStorageProvider.set(
+        '${SecureStorageKeys.cryptoKey}/0',
+        cryptoKey,
+      );
+
+      final cryptoSecretKey = await keyGenerator.secretKeyFromMnemonic(
+        mnemonic: mnemonic,
+        accountType: AccountType.crypto,
+        derivePathIndex: 0,
+      );
+      await secureStorageProvider.set(
+        '${SecureStorageKeys.cryptoSecretKey}/0',
+        cryptoSecretKey,
+      );
+
+      final cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
+        secretKey: cryptoSecretKey,
+      );
+      await secureStorageProvider.set(
+        '${SecureStorageKeys.cryptoWalletAddress}/0',
+        cryptoWalletAddress,
+      );
+
+      await walletCubit.insertWalletAccount(
+        CryptoAccount(
+          mnemonics: mnemonic,
+          key: cryptoKey,
+          walletAddress: cryptoWalletAddress,
+          secretKey: cryptoSecretKey,
+        ),
+      );
+
       await walletCubit.setCurrentWalletAccount(0);
 
       homeCubit.emitHasWallet();
-
       emit(state.success());
     } catch (error) {
+      log.severe('something went wrong when generating a key', error);
       emit(
         state.error(
           messageHandler: ResponseMessage(

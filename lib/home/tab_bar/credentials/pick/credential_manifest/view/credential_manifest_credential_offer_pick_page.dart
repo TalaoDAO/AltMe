@@ -103,7 +103,7 @@ class _CredentialManifestOfferPickPageState
                                     context.read<ScanCubit>().credentialOffer(
                                           url: widget.uri.toString(),
                                           credentialModel: widget.credential,
-                                          keyId: 'key',
+                                          keyId: SecureStorageKeys.ssiKey,
                                           signatureOwnershipProof:
                                               selectedCredentialsList.first,
                                         );
