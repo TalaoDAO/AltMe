@@ -25,11 +25,14 @@ class SecureStorageKeys {
   static const String tezosNetworkKey = 'profile/tezosNetwork';
   static const String credentialKey = 'credential';
 
-  // TODO(bibash): rename to proper name later
-  static const String menomicss = 'mnemonics';
-  static const String key = 'key';
-  static const String secretKey = 'secretKey';
-  static const String walletAddresss = 'walletAddress';
+  static const String ssiMnemonic = 'ssi/mnemonic';
+  static const String ssiKey = 'ssi/key';
 
-  static const String currentAccountIndex = 'currentAccountIndex';
+  static const String cryptoName = 'crypto/name';
+  static const String cryptoMnemonic = 'crypto/mnemonics';
+  static const String cryptoKey = 'crypto/key';
+  static const String cryptoSecretKey = 'crypto/secretKey';
+  static const String cryptoWalletAddresss = 'crypto/walletAddress';
+
+  static const String currentCryptoIndex = 'currentCryptoIndex';
 }

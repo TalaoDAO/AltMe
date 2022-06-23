@@ -136,7 +136,6 @@ class _OnBoardingRecoveryPageState extends State<OnBoardingRecoveryPage> {
                     onPressed: !state.isMnemonicValid
                         ? null
                         : () async {
-                            // TODO(bibash) : show options to  crypto or ssi
                             await context
                                 .read<OnBoardingRecoveryCubit>()
                                 .saveMnemonic(mnemonicController.text);

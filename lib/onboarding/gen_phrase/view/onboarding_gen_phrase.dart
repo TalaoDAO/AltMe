@@ -141,7 +141,7 @@ class _OnBoardingGenPhrasePageState extends State<OnBoardingGenPhrasePage> {
                         : () async {
                             await context
                                 .read<OnBoardingGenPhraseCubit>()
-                                .generateSSIAndCryptoKey(state.mnemonic);
+                                .generateSSIAndCryptoAccount(state.mnemonic);
                           },
                     child: Text(l10n.onBoardingGenPhraseButton),
                   ),

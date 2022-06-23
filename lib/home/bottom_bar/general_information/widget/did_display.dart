@@ -22,10 +22,10 @@ class DIDDisplay extends StatelessWidget {
 
         final WalletCubit walletCubit = context.read<WalletCubit>();
 
-        final activeIndex = walletCubit.state.currentIndex!;
+        final activeIndex = walletCubit.state.currentCryptoIndex!;
 
         final blockChainAddress =
-            walletCubit.state.walletAccounts[activeIndex].walletAddress;
+            walletCubit.state.cryptoAccounts[activeIndex].walletAddress;
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),

@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:key_generator/key_generator.dart';
 import 'package:test/test.dart';
 
@@ -8,11 +7,8 @@ void main() {
 
   const ssiKey =
       '''{"kty":"OKP","crv":"Ed25519","d":"hqt8zD2FI57cBBAzzeYx4fLszgS1s33zu4kZ_AHjATI=","x":"W3ydcmeAyZurKf7FRmN8sAj5-fiuOkDNX-LaYFd5urQ="}''';
-  const ssiSecretKey =
-      '''edskRudfATJv3uyShVpc5NJrBhkXQwinQA5MYhThXkaD8pRRtCCbexknVkz3hDQYTRk82E433oSQK4ts1tGsqtEYdPAMW3B6cB''';
-  const ssiWalletAddress = 'tz1Szsu5oe5rqjDh1XcY6XpGWM5MHQKR9gnJ';
 
-  const cryptoLength = 1;
+  const derivePathIndex = 1;
   const cryptoKey =
       '''{"kty":"OKP","crv":"Ed25519","d":"xmYPuZdc1LwVYshIUdto7I8psjb9zgPrUblAp5w7qws=","x":"uCURp8D_ilizA32RCZi1UFoYdq0HmI_KE8RBbG19ZrU="}''';
   const cryptoSecretKey =
@@ -42,29 +38,6 @@ void main() {
         );
         expect(key, ssiKey);
       });
-
-      test('secretKey from mnemonics for ssi', () async {
-        final secretKey = await keyGenerator.secretKeyFromMnemonic(
-          mnemonic: mnemonics,
-          accountType: AccountType.ssi,
-        );
-        expect(secretKey, ssiSecretKey);
-      });
-
-      test('tz1 wallet address from mnemonics for ssi', () async {
-        final walletAddress = await keyGenerator.tz1AddressFromMnemonic(
-          mnemonic: mnemonics,
-          accountType: AccountType.ssi,
-        );
-        expect(walletAddress, ssiWalletAddress);
-      });
-
-      test('tz1 wallet address from mnemonics for ssi', () async {
-        final walletAddress = await keyGenerator.tz1AddressFromSecretKey(
-          secretKey: ssiSecretKey,
-        );
-        expect(walletAddress, ssiWalletAddress);
-      });
     });
 
     group('crypto', () {
@@ -72,7 +45,7 @@ void main() {
         final key = await keyGenerator.jwkFromMnemonic(
           mnemonic: mnemonics,
           accountType: AccountType.crypto,
-          cryptoAccountLength: cryptoLength,
+          derivePathIndex: derivePathIndex,
         );
         expect(key, cryptoKey);
       });
@@ -81,7 +54,7 @@ void main() {
         final secretKey = await keyGenerator.secretKeyFromMnemonic(
           mnemonic: mnemonics,
           accountType: AccountType.crypto,
-          cryptoAccountLength: cryptoLength,
+          derivePathIndex: derivePathIndex,
         );
         expect(secretKey, cryptoSecretKey);
       });
@@ -90,7 +63,7 @@ void main() {
         final walletAddress = await keyGenerator.tz1AddressFromMnemonic(
           mnemonic: mnemonics,
           accountType: AccountType.crypto,
-          cryptoAccountLength: cryptoLength,
+          derivePathIndex: derivePathIndex,
         );
         expect(walletAddress, cryptoWalletAddress);
       });

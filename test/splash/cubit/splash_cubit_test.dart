@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -14,19 +13,15 @@ class MockDidCubit extends MockCubit<DIDState> implements DIDCubit {}
 
 class MockHomeCubit extends MockCubit<HomeStatus> implements HomeCubit {}
 
-class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {}
-
 void main() {
   late SecureStorageProvider mockSecureStorage;
   late DIDCubit didCubit;
   late HomeCubit homeCubit;
-  late WalletCubit walletCubit;
 
   setUp(() {
     mockSecureStorage = MockSecureStorage();
     didCubit = MockDidCubit();
     homeCubit = MockHomeCubit();
-    walletCubit = MockWalletCubit();
   });
 
   group('Splash Cubit', () {
@@ -36,18 +31,17 @@ void main() {
           secureStorageProvider: mockSecureStorage,
           didCubit: didCubit,
           homeCubit: homeCubit,
-          walletCubit: walletCubit,
         ).state,
         SplashStatus.init,
       );
     });
 
     group('initialiseApp', () {
-      group('SecureStorageKeys.key', () {
+      group('SecureStorageKeys.ssiKey', () {
         test(
-            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.key is null''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.ssiKey is null''',
             () async {
-          when(() => mockSecureStorage.get(SecureStorageKeys.key))
+          when(() => mockSecureStorage.get(SecureStorageKeys.ssiKey))
               .thenAnswer((_) => Future.value(null));
 
           final SplashCubit splashCubit = SplashCubit(
@@ -61,9 +55,9 @@ void main() {
         });
 
         test(
-            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.key is empty''',
+            '''emits SplashStatus.routeToPassCode when SecureStorageKeys.ssiKey is empty''',
             () async {
-          when(() => mockSecureStorage.get(SecureStorageKeys.key))
+          when(() => mockSecureStorage.get(SecureStorageKeys.ssiKey))
               .thenAnswer((_) => Future.value(''));
 
           final SplashCubit splashCubit = SplashCubit(
@@ -79,7 +73,7 @@ void main() {
 
       group('SecureStorageKeys.did', () {
         setUp(() {
-          when(() => mockSecureStorage.get(SecureStorageKeys.key))
+          when(() => mockSecureStorage.get(SecureStorageKeys.ssiKey))
               .thenAnswer((_) => Future.value('key'));
         });
 
@@ -118,7 +112,7 @@ void main() {
 
       group('SecureStorageKeys.didMethod', () {
         setUp(() {
-          when(() => mockSecureStorage.get(SecureStorageKeys.key))
+          when(() => mockSecureStorage.get(SecureStorageKeys.ssiKey))
               .thenAnswer((_) => Future.value('key'));
           when(() => mockSecureStorage.get(SecureStorageKeys.did))
               .thenAnswer((_) => Future.value('did'));
@@ -159,7 +153,7 @@ void main() {
 
       group('SecureStorageKeys.didMethodName', () {
         setUp(() {
-          when(() => mockSecureStorage.get(SecureStorageKeys.key))
+          when(() => mockSecureStorage.get(SecureStorageKeys.ssiKey))
               .thenAnswer((_) => Future.value('key'));
           when(() => mockSecureStorage.get(SecureStorageKeys.did))
               .thenAnswer((_) => Future.value('did'));
@@ -202,7 +196,7 @@ void main() {
 
       group('SecureStorageKeys.isEnterpriseUser', () {
         setUp(() {
-          when(() => mockSecureStorage.get(SecureStorageKeys.key))
+          when(() => mockSecureStorage.get(SecureStorageKeys.ssiKey))
               .thenAnswer((_) => Future.value('key'));
           when(() => mockSecureStorage.get(SecureStorageKeys.did))
               .thenAnswer((_) => Future.value('did'));

@@ -13,7 +13,6 @@ class SecretKeyPage extends StatelessWidget {
   static Route route() => MaterialPageRoute<void>(
         builder: (_) => BlocProvider(
           create: (context) => SecretKeyCubit(
-            keyGenerator: KeyGenerator(),
             walletCubit: context.read<WalletCubit>(),
           ),
           child: const SecretKeyPage(),

@@ -23,7 +23,10 @@ class CredentialsRepository {
   Future<List<CredentialModel>> findAll(/* dynamic filters */) async {
     final data = await _secureStorageProvider.getAllValues();
     data.removeWhere(
-        (key, value) => !key.startsWith('${SecureStorageKeys.credentialKey}/'));
+      (key, value) => !key.startsWith(
+        '${SecureStorageKeys.credentialKey}/',
+      ),
+    );
 
     final _credentialList = <CredentialModel>[];
     data.forEach((key, value) {
@@ -49,7 +52,8 @@ class CredentialsRepository {
   Future<int> deleteAll() async {
     final data = await _secureStorageProvider.getAllValues();
     data.removeWhere(
-        (key, value) => !key.startsWith('${SecureStorageKeys.credentialKey}/'));
+      (key, value) => !key.startsWith('${SecureStorageKeys.credentialKey}/'),
+    );
     var numberOfDeletedCredentials = 0;
     data.forEach((key, value) {
       _secureStorageProvider.delete(key);

@@ -47,53 +47,27 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
-      // TODO(bibash): change recovery indexes based on ssi or cypto
-      //for now I am considering crypto
       await secureStorageProvider.set(
-        '${SecureStorageKeys.menomicss}/0',
+        SecureStorageKeys.ssiMnemonic,
         mnemonic,
       );
 
-      final walletAddress = await keyGenerator.tz1AddressFromMnemonic(
+      final ssiKey = await keyGenerator.jwkFromMnemonic(
         mnemonic: mnemonic,
         accountType: AccountType.ssi,
       );
-      await secureStorageProvider.set(
-          '${SecureStorageKeys.walletAddresss}/0', walletAddress);
-
-      final key = await keyGenerator.jwkFromMnemonic(
-        mnemonic: mnemonic,
-        accountType: AccountType.ssi,
-      );
-      await secureStorageProvider.set('${SecureStorageKeys.key}/0', key);
-
-      final secretKey = await keyGenerator.secretKeyFromMnemonic(
-        mnemonic: mnemonic,
-        accountType: AccountType.ssi,
-      );
-      await secureStorageProvider.set(
-          '${SecureStorageKeys.secretKey}/0', secretKey);
+      await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
 
       const didMethod = AltMeStrings.defaultDIDMethod;
-      final did = didKitProvider.keyToDID(didMethod, key);
+      final did = didKitProvider.keyToDID(didMethod, ssiKey);
       final verificationMethod =
-          await didKitProvider.keyToVerificationMethod(didMethod, key);
+          await didKitProvider.keyToVerificationMethod(didMethod, ssiKey);
 
       await didCubit.load(
         did: did,
         didMethod: didMethod,
         didMethodName: AltMeStrings.defaultDIDMethodName,
         verificationMethod: verificationMethod,
-      );
-
-      await walletCubit.insertWalletAccount(
-        WalletAccount(
-          mnemonics: mnemonic,
-          key: key,
-          secretKey: secretKey,
-          walletAddress: walletAddress,
-          accountType: AccountType.ssi,
-        ),
       );
 
       //setting ssi index

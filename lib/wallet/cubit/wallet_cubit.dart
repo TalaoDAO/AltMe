@@ -28,9 +28,9 @@ class WalletCubit extends Cubit<WalletState> {
   final CredentialListCubit credentialListCubit;
 
   Future initialize() async {
-    final key = await secureStorageProvider.get('${SecureStorageKeys.key}/0');
-    if (key != null) {
-      if (key.isNotEmpty) {
+    final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+    if (ssiKey != null) {
+      if (ssiKey.isNotEmpty) {
         /// When app is initialized, set all credentials with active status to
         /// unknown status
         await repository.initializeRevocationStatus();
@@ -39,13 +39,13 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future insertWalletAccount(WalletAccount walletAccount) async {
+  Future insertWalletAccount(CryptoAccount cryptoAccount) async {
     emit(state.loading());
-    final walletAccounts = List.of(state.walletAccounts)..add(walletAccount);
+    final cryptoAccounts = List.of(state.cryptoAccounts)..add(cryptoAccount);
     emit(
       state.copyWith(
         status: WalletStatus.populate,
-        walletAccounts: walletAccounts,
+        cryptoAccounts: cryptoAccounts,
       ),
     );
   }
@@ -53,13 +53,13 @@ class WalletCubit extends Cubit<WalletState> {
   Future setCurrentWalletAccount(int index) async {
     emit(state.loading());
     await secureStorageProvider.set(
-      SecureStorageKeys.currentAccountIndex,
+      SecureStorageKeys.currentCryptoIndex,
       index.toString(),
     );
     emit(
       state.copyWith(
         status: WalletStatus.populate,
-        currentIndex: index,
+        currentCryptoIndex: index,
       ),
     );
   }
@@ -120,8 +120,12 @@ class WalletCubit extends Cubit<WalletState> {
       final credentials = List.of(state.credentials)
         ..removeWhere((element) => element.id == credential.id)
         ..insert(index, credential);
-      emit(state.copyWith(
-          status: WalletStatus.populate, credentials: credentials));
+      emit(
+        state.copyWith(
+          status: WalletStatus.populate,
+          credentials: credentials,
+        ),
+      );
     }
   }
 
@@ -141,8 +145,9 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future resetWallet() async {
+    await secureStorageProvider.delete(SecureStorageKeys.ssiMnemonic);
+    await secureStorageProvider.delete(SecureStorageKeys.ssiKey);
     await deleteWalletAccountData();
-    await secureStorageProvider.delete(SecureStorageKeys.currentAccountIndex);
     await secureStorageProvider.delete(SecureStorageKeys.data);
     await repository.deleteAll();
     await profileCubit.resetProfile();
@@ -153,11 +158,17 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future deleteWalletAccountData() async {
-    for (int i = 0; i <= state.walletAccounts.length; i++) {
-      await secureStorageProvider.delete('${SecureStorageKeys.key}/i');
-      await secureStorageProvider.delete('${SecureStorageKeys.menomicss}/i');
+    await secureStorageProvider.delete(SecureStorageKeys.currentCryptoIndex);
+
+    for (int i = 0; i <= state.cryptoAccounts.length; i++) {
+      await secureStorageProvider.delete('${SecureStorageKeys.cryptoName}/i');
       await secureStorageProvider
-          .delete('${SecureStorageKeys.walletAddresss}/i');
+          .delete('${SecureStorageKeys.cryptoMnemonic}/i');
+      await secureStorageProvider.delete('${SecureStorageKeys.cryptoKey}/i');
+      await secureStorageProvider
+          .delete('${SecureStorageKeys.cryptoSecretKey}/i');
+      await secureStorageProvider
+          .delete('${SecureStorageKeys.cryptoWalletAddresss}/i');
     }
   }
 

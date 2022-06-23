@@ -39,9 +39,8 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       emit(state.loading());
       await Future<void>.delayed(const Duration(milliseconds: 500));
 
-      final activeIndex = walletCubit.state.currentIndex;
       final secretKey = await secureStorageProvider.get(
-        '${SecureStorageKeys.key}/$activeIndex',
+        SecureStorageKeys.ssiKey,
       );
 
       final did = didCubit.state.did!;
