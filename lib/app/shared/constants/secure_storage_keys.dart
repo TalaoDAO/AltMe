@@ -32,7 +32,7 @@ class SecureStorageKeys {
   static const String cryptoMnemonic = 'crypto/mnemonics';
   static const String cryptoKey = 'crypto/key';
   static const String cryptoSecretKey = 'crypto/secretKey';
-  static const String cryptoWalletAddresss = 'crypto/walletAddress';
+  static const String cryptoWalletAddress = 'crypto/walletAddress';
 
   static const String currentCryptoIndex = 'currentCryptoIndex';
 }

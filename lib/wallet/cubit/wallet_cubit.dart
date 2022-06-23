@@ -168,7 +168,7 @@ class WalletCubit extends Cubit<WalletState> {
       await secureStorageProvider
           .delete('${SecureStorageKeys.cryptoSecretKey}/i');
       await secureStorageProvider
-          .delete('${SecureStorageKeys.cryptoWalletAddresss}/i');
+          .delete('${SecureStorageKeys.cryptoWalletAddress}/i');
     }
   }
 

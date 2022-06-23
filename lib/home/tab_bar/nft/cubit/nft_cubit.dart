@@ -33,7 +33,7 @@ class NftCubit extends Cubit<NftState> {
       }
       final activeIndex = walletCubit.state.currentCryptoIndex;
       final walletAddress = await secureStorageProvider
-          .get('${SecureStorageKeys.cryptoWalletAddresss}/$activeIndex');
+          .get('${SecureStorageKeys.cryptoWalletAddress}/$activeIndex');
       final List<dynamic> response = await client.get(
         '/v1/tokens/balances',
         queryParameters: <String, dynamic>{
