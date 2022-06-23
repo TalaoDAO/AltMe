@@ -5,7 +5,6 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
 
 class SecretKeyPage extends StatelessWidget {
   const SecretKeyPage({Key? key}) : super(key: key);

@@ -11,6 +11,7 @@ export 'display/display.dart';
 export 'ecole_42_learning_achievement/ecole_42_learning_achievement_model.dart';
 export 'email_pass/email_pass_model.dart';
 export 'home_credential/home_credential.dart';
+export 'identity_card/identity_card_model.dart';
 export 'identity_pass/identity_pass_model.dart';
 export 'learning_achievement/learning_achievement_model.dart';
 export 'loyalty_card/loyalty_card_model.dart';
