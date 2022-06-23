@@ -1,6 +1,6 @@
 enum WalletStatus {
   init,
-  idle,
+  populate,
   loading,
   insert,
   delete,

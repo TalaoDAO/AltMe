@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -13,15 +14,19 @@ class MockDidCubit extends MockCubit<DIDState> implements DIDCubit {}
 
 class MockHomeCubit extends MockCubit<HomeStatus> implements HomeCubit {}
 
+class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {}
+
 void main() {
   late SecureStorageProvider mockSecureStorage;
   late DIDCubit didCubit;
   late HomeCubit homeCubit;
+  late WalletCubit walletCubit;
 
   setUp(() {
     mockSecureStorage = MockSecureStorage();
     didCubit = MockDidCubit();
     homeCubit = MockHomeCubit();
+    walletCubit = MockWalletCubit();
   });
 
   group('Splash Cubit', () {
@@ -31,6 +36,7 @@ void main() {
           secureStorageProvider: mockSecureStorage,
           didCubit: didCubit,
           homeCubit: homeCubit,
+          walletCubit: walletCubit,
         ).state,
         SplashStatus.init,
       );

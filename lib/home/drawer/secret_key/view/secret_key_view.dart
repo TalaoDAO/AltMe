@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/drawer/secret_key/cubit/secret_key_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +16,7 @@ class SecretKeyPage extends StatelessWidget {
           create: (context) => SecretKeyCubit(
             secureStorageProvider: getSecureStorage,
             keyGenerator: KeyGenerator(),
+            walletCubit: context.read<WalletCubit>(),
           ),
           child: const SecretKeyPage(),
         ),

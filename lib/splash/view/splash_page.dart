@@ -31,6 +31,7 @@ class SplashPage extends StatelessWidget {
         secureStorageProvider: secure_storage.getSecureStorage,
         didCubit: context.read<DIDCubit>(),
         homeCubit: context.read<HomeCubit>(),
+        walletCubit: context.read<WalletCubit>(),
       ),
       child: const SplashView(),
     );
@@ -75,8 +76,10 @@ class _SplashViewState extends State<SplashView> {
             if (key == 'uri') {
               final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
               context.read<DeepLinkCubit>().addDeepLink(url);
+              final activeIndex =
+                  context.read<WalletCubit>().state.currentIndex;
               final secretKey = await secure_storage.getSecureStorage.get(
-                SecureStorageKeys.secretKey,
+                '${SecureStorageKeys.secretKeyy}/$activeIndex',
               );
               if (secretKey != null) {
                 await context.read<QRCodeScanCubit>().deepLink();

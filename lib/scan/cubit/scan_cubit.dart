@@ -409,7 +409,10 @@ class ScanCubit extends Cubit<ScanState> {
     required String challenge,
     required CredentialModel credential,
   }) async {
-    final key = await secureStorageProvider.get(SecureStorageKeys.secretKey);
+    final activeIndex = walletCubit.state.currentIndex;
+    final secretKey = await secureStorageProvider.get(
+      '${SecureStorageKeys.secretKeyy}/$activeIndex',
+    );
     final did = await secureStorageProvider.get(SecureStorageKeys.did);
     final options = jsonEncode({
       'verificationMethod':
@@ -427,13 +430,16 @@ class ScanCubit extends Cubit<ScanState> {
         'verifiableCredential': credential.data,
       }),
       options,
-      key!,
+      secretKey!,
     );
     return vpToken;
   }
 
   Future<String> createIdToken({required String nonce}) async {
-    final key = await secureStorageProvider.get(SecureStorageKeys.secretKey);
+    final activeIndex = walletCubit.state.currentIndex;
+    final secretKey = await secureStorageProvider.get(
+      '${SecureStorageKeys.secretKeyy}/$activeIndex',
+    );
     final did = await secureStorageProvider.get(SecureStorageKeys.did);
 
     final timeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
@@ -454,7 +460,7 @@ class ScanCubit extends Cubit<ScanState> {
 
     // add a key to sign, can only add one for JWT
     builder.addRecipient(
-      JsonWebKey.fromJson(jsonDecode(key!) as Map<String, dynamic>),
+      JsonWebKey.fromJson(jsonDecode(secretKey!) as Map<String, dynamic>),
       algorithm: 'RS256',
     );
 

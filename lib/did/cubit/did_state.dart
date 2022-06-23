@@ -6,7 +6,7 @@ class DIDState extends Equatable {
     this.did = '',
     this.didMethod = '',
     this.didMethodName = '',
-    this.walletAddress = '',
+    this.verificationMethod = '',
     this.status = AppStatus.init,
     this.message,
   });
@@ -17,7 +17,7 @@ class DIDState extends Equatable {
   final String? did;
   final String? didMethod;
   final String? didMethodName;
-  final String walletAddress;
+  final String verificationMethod;
   final AppStatus? status;
   final StateMessage? message;
 
@@ -29,6 +29,7 @@ class DIDState extends Equatable {
       did: did,
       didMethod: didMethod,
       didMethodName: didMethodName,
+      verificationMethod: verificationMethod,
     );
   }
 
@@ -36,17 +37,18 @@ class DIDState extends Equatable {
     String? did,
     String? didMethod,
     String? didMethodName,
-    String? walletAddress,
+    String? verificationMethod,
   }) {
     return DIDState(
       did: did ?? this.did,
       didMethod: didMethod ?? this.didMethod,
       didMethodName: didMethodName ?? this.didMethodName,
-      walletAddress: walletAddress ?? this.walletAddress,
+      verificationMethod: verificationMethod ?? this.verificationMethod,
       status: AppStatus.success,
     );
   }
 
   @override
-  List<Object?> get props => [did, didMethod, didMethodName, status, message];
+  List<Object?> get props =>
+      [did, didMethod, didMethodName, status, message, verificationMethod];
 }
