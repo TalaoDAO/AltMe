@@ -50,18 +50,34 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
       // TODO(bibash): change recovery indexes based on ssi or cypto
       //for now I am considering crypto
       await secureStorageProvider.set(
-          '${SecureStorageKeys.menomicss}/0', mnemonic);
-      final walletAddress = await keyGenerator.tz1AddressFromMnemonic(mnemonic);
+        '${SecureStorageKeys.menomicss}/0',
+        mnemonic,
+      );
+
+      final walletAddress = await keyGenerator.tz1AddressFromMnemonic(
+        mnemonic: mnemonic,
+        accountType: AccountType.ssi,
+      );
       await secureStorageProvider.set(
           '${SecureStorageKeys.walletAddresss}/0', walletAddress);
-      final secretKey = await keyGenerator.jwkFromMnemonic(mnemonic: mnemonic);
+
+      final key = await keyGenerator.jwkFromMnemonic(
+        mnemonic: mnemonic,
+        accountType: AccountType.ssi,
+      );
+      await secureStorageProvider.set('${SecureStorageKeys.key}/0', key);
+
+      final secretKey = await keyGenerator.secretKeyFromMnemonic(
+        mnemonic: mnemonic,
+        accountType: AccountType.ssi,
+      );
       await secureStorageProvider.set(
-          '${SecureStorageKeys.secretKeyy}/0', secretKey);
+          '${SecureStorageKeys.secretKey}/0', secretKey);
 
       const didMethod = AltMeStrings.defaultDIDMethod;
-      final did = didKitProvider.keyToDID(didMethod, secretKey);
+      final did = didKitProvider.keyToDID(didMethod, key);
       final verificationMethod =
-          await didKitProvider.keyToVerificationMethod(didMethod, secretKey);
+          await didKitProvider.keyToVerificationMethod(didMethod, key);
 
       await didCubit.load(
         did: did,
@@ -73,8 +89,10 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
       await walletCubit.insertWalletAccount(
         WalletAccount(
           mnemonics: mnemonic,
+          key: key,
           secretKey: secretKey,
           walletAddress: walletAddress,
+          accountType: AccountType.ssi,
         ),
       );
 

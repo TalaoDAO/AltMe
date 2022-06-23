@@ -26,7 +26,7 @@ class KeyGenerator {
 
   Future<String> jwkFromMnemonic({
     required String mnemonic,
-    AccountType accountType = AccountType.ssi,
+    required AccountType accountType,
     int cryptoAccountLength = 0,
   }) async {
     //notice photo opera keen climb agent soft parrot best joke field devote
@@ -35,12 +35,11 @@ class KeyGenerator {
     late KeyData child;
 
     if (accountType == AccountType.ssi) {
-      child = await ED25519_HD_KEY.derivePath("m/44'/60'/0'/0/0'", seed);
+      child = await ED25519_HD_KEY.derivePath("m/44'/60'/0'/0'/0'", seed);
     } else {
       final index = cryptoAccountLength - 1;
       child = await ED25519_HD_KEY.derivePath("m/44'/1729'/$index'/0'", seed);
     }
-
     final seedBytes = Uint8List.fromList(child.key);
 
     final key = jwkFromSeed(seedBytes);
@@ -64,8 +63,16 @@ class KeyGenerator {
     return jwk;
   }
 
-  Future<String> secretKeyFromMnemonic(String mnemonic) async {
-    final key = await jwkFromMnemonic(mnemonic: mnemonic);
+  Future<String> secretKeyFromMnemonic({
+    required String mnemonic,
+    required AccountType accountType,
+    int cryptoAccountLength = 0,
+  }) async {
+    final key = await jwkFromMnemonic(
+      mnemonic: mnemonic,
+      accountType: accountType,
+      cryptoAccountLength: cryptoAccountLength,
+    );
 
     // ignore: avoid_dynamic_calls
     final d = jsonDecode(key)['d'] as String;
@@ -80,9 +87,16 @@ class KeyGenerator {
     return tezosSecretKey;
   }
 
-  Future<String> tz1AddressFromMnemonic(String mnemonic) async {
-    // TODO(bibash): differentiate crypto or ssi
-    final key = await jwkFromMnemonic(mnemonic: mnemonic);
+  Future<String> tz1AddressFromMnemonic({
+    required String mnemonic,
+    required AccountType accountType,
+    int cryptoAccountLength = 0,
+  }) async {
+    final key = await jwkFromMnemonic(
+      mnemonic: mnemonic,
+      accountType: accountType,
+      cryptoAccountLength: cryptoAccountLength,
+    );
 
     // ignore: avoid_dynamic_calls
     final d = jsonDecode(key)['d'] as String;
@@ -94,10 +108,10 @@ class KeyGenerator {
 
     final tezosSecretKey = crypto.seedToSecretKey(tezosSeed);
 
-    return tz1AddressFromSecretKey(tezosSecretKey);
+    return tz1AddressFromSecretKey(secretKey: tezosSecretKey);
   }
 
-  Future<String> jwkFromSecretKey(String secretKey) async {
+  Future<String> jwkFromSecretKey({required String secretKey}) async {
     final newSeedBytes = Uint8List.fromList(
       crypto.decodeWithoutPrefix(secretKey).take(32).toList(),
     );
@@ -107,7 +121,7 @@ class KeyGenerator {
     return jsonEncode(jwk);
   }
 
-  Future<String> tz1AddressFromSecretKey(String secretKey) async {
+  Future<String> tz1AddressFromSecretKey({required String secretKey}) async {
     final keystore = Keystore.fromSecretKey(secretKey);
 
     return keystore.address;

@@ -411,7 +411,7 @@ class ScanCubit extends Cubit<ScanState> {
   }) async {
     final activeIndex = walletCubit.state.currentIndex;
     final secretKey = await secureStorageProvider.get(
-      '${SecureStorageKeys.secretKeyy}/$activeIndex',
+      '${SecureStorageKeys.key}/$activeIndex',
     );
     final did = await secureStorageProvider.get(SecureStorageKeys.did);
     final options = jsonEncode({
@@ -437,8 +437,8 @@ class ScanCubit extends Cubit<ScanState> {
 
   Future<String> createIdToken({required String nonce}) async {
     final activeIndex = walletCubit.state.currentIndex;
-    final secretKey = await secureStorageProvider.get(
-      '${SecureStorageKeys.secretKeyy}/$activeIndex',
+    final key = await secureStorageProvider.get(
+      '${SecureStorageKeys.key}/$activeIndex',
     );
     final did = await secureStorageProvider.get(SecureStorageKeys.did);
 
@@ -460,7 +460,7 @@ class ScanCubit extends Cubit<ScanState> {
 
     // add a key to sign, can only add one for JWT
     builder.addRecipient(
-      JsonWebKey.fromJson(jsonDecode(secretKey!) as Map<String, dynamic>),
+      JsonWebKey.fromJson(jsonDecode(key!) as Map<String, dynamic>),
       algorithm: 'RS256',
     );
 

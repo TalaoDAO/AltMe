@@ -46,18 +46,17 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         mnemonicFormatted,
       );
 
-      final ssiSecretKey =
-          await keyGenerator.jwkFromMnemonic(mnemonic: mnemonicFormatted);
-      await secureStorageProvider.set(
-        '${SecureStorageKeys.secretKeyy}/0',
-        ssiSecretKey,
+      final ssiKey = await keyGenerator.jwkFromMnemonic(
+        mnemonic: mnemonicFormatted,
+        accountType: AccountType.ssi,
       );
+      await secureStorageProvider.set('${SecureStorageKeys.key}/0', ssiKey);
 
       const didMethod = AltMeStrings.defaultDIDMethod;
-      final did = didKitProvider.keyToDID(didMethod, ssiSecretKey);
+      final did = didKitProvider.keyToDID(didMethod, ssiKey);
       const didMethodName = AltMeStrings.defaultDIDMethodName;
       final verificationMethod =
-          await didKitProvider.keyToVerificationMethod(didMethod, ssiSecretKey);
+          await didKitProvider.keyToVerificationMethod(didMethod, ssiKey);
 
       await didCubit.set(
         did: did,
@@ -66,8 +65,17 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         verificationMethod: verificationMethod,
       );
 
-      final ssiWalletAddress =
-          await keyGenerator.tz1AddressFromMnemonic(mnemonicFormatted);
+      final ssiSecretKey = await keyGenerator.secretKeyFromMnemonic(
+        mnemonic: mnemonicFormatted,
+        accountType: AccountType.ssi,
+      );
+      await secureStorageProvider.set(
+          '${SecureStorageKeys.secretKey}/0', ssiSecretKey);
+
+      final ssiWalletAddress = await keyGenerator.tz1AddressFromMnemonic(
+        mnemonic: mnemonicFormatted,
+        accountType: AccountType.ssi,
+      );
       await secureStorageProvider.set(
         '${SecureStorageKeys.walletAddresss}/0',
         ssiWalletAddress,
@@ -76,8 +84,10 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
       await walletCubit.insertWalletAccount(
         WalletAccount(
           mnemonics: mnemonicFormatted,
-          secretKey: ssiSecretKey,
+          key: ssiKey,
           walletAddress: ssiWalletAddress,
+          secretKey: ssiSecretKey,
+          accountType: AccountType.ssi,
         ),
       );
 
@@ -87,18 +97,28 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         mnemonicFormatted,
       );
 
-      final cryptoSecretKey = await keyGenerator.jwkFromMnemonic(
+      final cryptoKey = await keyGenerator.jwkFromMnemonic(
+        mnemonic: mnemonicFormatted,
+        accountType: AccountType.crypto,
+        cryptoAccountLength: 1,
+      );
+      await secureStorageProvider.set('${SecureStorageKeys.key}/1', cryptoKey);
+
+      final cryptoSecretKey = await keyGenerator.secretKeyFromMnemonic(
         mnemonic: mnemonicFormatted,
         accountType: AccountType.crypto,
         cryptoAccountLength: 1,
       );
       await secureStorageProvider.set(
-        '${SecureStorageKeys.secretKeyy}/1',
+        '${SecureStorageKeys.secretKey}/1',
         cryptoSecretKey,
       );
 
-      final cryptoWalletAddress =
-          await keyGenerator.tz1AddressFromMnemonic(mnemonicFormatted);
+      final cryptoWalletAddress = await keyGenerator.tz1AddressFromMnemonic(
+        mnemonic: mnemonicFormatted,
+        accountType: AccountType.crypto,
+        cryptoAccountLength: 1,
+      );
       await secureStorageProvider.set(
         '${SecureStorageKeys.walletAddresss}/1',
         cryptoWalletAddress,
@@ -107,8 +127,10 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
       await walletCubit.insertWalletAccount(
         WalletAccount(
           mnemonics: mnemonicFormatted,
-          secretKey: cryptoSecretKey,
+          key: cryptoKey,
           walletAddress: cryptoWalletAddress,
+          secretKey: cryptoSecretKey,
+          accountType: AccountType.crypto,
         ),
       );
 
@@ -123,38 +145,6 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         state.error(
           messageHandler: ResponseMessage(
             ResponseString.RESPONSE_STRING_ERROR_GENERATING_KEY,
-          ),
-        ),
-      );
-    }
-  }
-
-  Future<void> saveMnemonicKey({
-    required String mnemonic,
-    required int index,
-  }) async {
-    emit(state.loading());
-    try {
-      log.info('will save mnemonic to secure storage');
-      await secureStorageProvider.set(
-        '${SecureStorageKeys.menomicss}/$index',
-        mnemonic,
-      );
-      final walletAddress = await keyGenerator.tz1AddressFromMnemonic(mnemonic);
-      await secureStorageProvider.set(
-        '${SecureStorageKeys.walletAddresss}/$index',
-        walletAddress,
-      );
-      log.info('mnemonic saved');
-      emit(state.success());
-    } catch (error) {
-      log.severe('error ocurred setting mnemonic to secure storate', error);
-
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString
-                .RESPONSE_STRING_FAILED_TO_SAVE_MNEMONIC_PLEASE_TRY_AGAIN,
           ),
         ),
       );

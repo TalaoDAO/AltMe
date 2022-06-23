@@ -1,29 +1,26 @@
-import 'package:altme/app/app.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class SecretKeyCubit extends Cubit<String> {
   SecretKeyCubit({
     required this.keyGenerator,
-    required this.secureStorageProvider,
     required this.walletCubit,
   }) : super('') {
     initialise();
   }
 
   final KeyGenerator keyGenerator;
-  final SecureStorageProvider secureStorageProvider;
   final WalletCubit walletCubit;
 
   Future<void> initialise() async {
-    final activeIndex = walletCubit.state.currentIndex;
-    final mnemonic = await secureStorageProvider.get(
-      '${SecureStorageKeys.menomicss}/$activeIndex',
+    //TODO(all): may be we need list later we have active right now
+    final activeIndex = walletCubit.state.currentIndex!;
+    final String secretKey = await keyGenerator.secretKeyFromMnemonic(
+      mnemonic: walletCubit.state.walletAccounts[activeIndex].mnemonics!,
+      accountType: walletCubit.state.walletAccounts[activeIndex].accountType,
+      cryptoAccountLength: walletCubit.state.walletAccounts.length,
     );
-    final String secretKey =
-        await keyGenerator.secretKeyFromMnemonic(mnemonic!);
     emit(secretKey);
   }
 }

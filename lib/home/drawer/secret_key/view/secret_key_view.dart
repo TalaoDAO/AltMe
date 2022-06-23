@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class SecretKeyPage extends StatelessWidget {
   const SecretKeyPage({Key? key}) : super(key: key);
@@ -14,7 +13,6 @@ class SecretKeyPage extends StatelessWidget {
   static Route route() => MaterialPageRoute<void>(
         builder: (_) => BlocProvider(
           create: (context) => SecretKeyCubit(
-            secureStorageProvider: getSecureStorage,
             keyGenerator: KeyGenerator(),
             walletCubit: context.read<WalletCubit>(),
           ),
@@ -22,6 +20,8 @@ class SecretKeyPage extends StatelessWidget {
         ),
         settings: const RouteSettings(name: '/secretKeyPage'),
       );
+
+  // TODO(all): need loading  in this screen
 
   @override
   Widget build(BuildContext context) {
