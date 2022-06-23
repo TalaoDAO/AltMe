@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -73,7 +74,16 @@ class BottomBarPage extends StatelessWidget {
                   );
                   return;
                 }
-                Navigator.of(context).push<void>(BackupCredentialPage.route());
+
+                Navigator.of(context).push<void>(
+                  PinCodePage.route(
+                    restrictToBack: false,
+                    isValidCallback: () {
+                      Navigator.of(context)
+                          .push<void>(BackupCredentialPage.route());
+                    },
+                  ),
+                );
               },
             ),
           ],

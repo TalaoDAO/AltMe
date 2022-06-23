@@ -29,7 +29,6 @@ class IssuerWebsitesPage extends StatelessWidget {
             onPressed: () async {
               await LaunchUrl.launch(Urls.emailPassUrl);
               Navigator.pop(context);
-              Navigator.pop(context);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +50,6 @@ class IssuerWebsitesPage extends StatelessWidget {
             context: context,
             onPressed: () async {
               await LaunchUrl.launch(Urls.phonePassUrl);
-              Navigator.pop(context);
               Navigator.pop(context);
             },
             child: Row(
