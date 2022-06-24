@@ -10,7 +10,6 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class NftPage extends StatelessWidget {
   const NftPage({Key? key}) : super(key: key);
@@ -23,7 +22,6 @@ class NftPage extends StatelessWidget {
           context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
           Dio(),
         ),
-        secureStorageProvider: getSecureStorage,
         walletCubit: context.read<WalletCubit>(),
       ),
       child: const NftView(),
@@ -50,8 +48,7 @@ class _NftViewState extends State<NftView> {
 
   Future<void> onScrollEnded() async {
     _offset += _limit;
-    _overlay =
-        OverlayEntry(builder: (_) => const LoadingDialog());
+    _overlay = OverlayEntry(builder: (_) => const LoadingDialog());
     Overlay.of(context)!.insert(_overlay!);
 
     await context.read<NftCubit>().getTezosNftList(offset: _offset);

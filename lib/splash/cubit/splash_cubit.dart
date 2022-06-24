@@ -1,7 +1,8 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/helper_function/is_wallet_created.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/home/home/home.dart';
+import 'package:altme/splash/helper_function/is_wallet_created.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -16,6 +17,7 @@ class SplashCubit extends Cubit<SplashState> {
     required this.secureStorageProvider,
     required this.didCubit,
     required this.homeCubit,
+    required this.walletCubit,
   }) : super(const SplashState()) {
     _getAppVersion();
   }
@@ -23,11 +25,13 @@ class SplashCubit extends Cubit<SplashState> {
   final SecureStorageProvider secureStorageProvider;
   final DIDCubit didCubit;
   final HomeCubit homeCubit;
+  final WalletCubit walletCubit;
 
   Future<void> initialiseApp() async {
     final bool hasWallet = await isWalletCreated(
       secureStorageProvider: secureStorageProvider,
       didCubit: didCubit,
+      walletCubit: walletCubit,
     );
 
     if (hasWallet) {

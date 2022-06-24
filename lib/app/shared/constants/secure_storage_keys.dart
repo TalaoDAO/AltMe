@@ -28,11 +28,6 @@ class SecureStorageKeys {
   static const String ssiMnemonic = 'ssi/mnemonic';
   static const String ssiKey = 'ssi/key';
 
-  static const String cryptoName = 'crypto/name';
-  static const String cryptoMnemonic = 'crypto/mnemonics';
-  static const String cryptoKey = 'crypto/key';
-  static const String cryptoSecretKey = 'crypto/secretKey';
-  static const String cryptoWalletAddress = 'crypto/walletAddress';
-
+  static const String cryptoAccount = 'cryptoAccount';
   static const String currentCryptoIndex = 'currentCryptoIndex';
 }

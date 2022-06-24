@@ -31,6 +31,7 @@ class CredentialListData extends StatelessWidget {
                 Spacer(),
               ],
             ),
+            const SizedBox(height: 10),
             GamingCredentials(credentials: state.gamingCredentials),
             const SizedBox(height: 10),
             CommunityCredentials(credentials: state.communityCredentials),

@@ -276,15 +276,14 @@ class DrawerView extends StatelessWidget {
                           final pinCode = await getSecureStorage
                               .get(SecureStorageKeys.pinCode);
                           if (pinCode?.isEmpty ?? true) {
-                            await Navigator.of(context)
-                                .pushReplacement<void, void>(
+                            await Navigator.of(context).push<void>(
                               SecretKeyPage.route(),
                             );
                           } else {
                             await Navigator.of(context).push<void>(
                               PinCodePage.route(
-                                isValidCallback: () => Navigator.of(context)
-                                    .pushReplacement<void, void>(
+                                isValidCallback: () =>
+                                    Navigator.of(context).push<void>(
                                   SecretKeyPage.route(),
                                 ),
                                 restrictToBack: false,

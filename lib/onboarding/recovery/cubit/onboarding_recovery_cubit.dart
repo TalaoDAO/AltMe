@@ -3,7 +3,6 @@ import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,48 +70,7 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
       );
 
       /// crypto wallet
-      await secureStorageProvider.set(
-        '${SecureStorageKeys.cryptoMnemonic}/0',
-        mnemonic,
-      );
-
-      final cryptoKey = await keyGenerator.jwkFromMnemonic(
-        mnemonic: mnemonic,
-        accountType: AccountType.crypto,
-        derivePathIndex: 0,
-      );
-      await secureStorageProvider.set(
-        '${SecureStorageKeys.cryptoKey}/0',
-        cryptoKey,
-      );
-
-      final cryptoSecretKey = await keyGenerator.secretKeyFromMnemonic(
-        mnemonic: mnemonic,
-        accountType: AccountType.crypto,
-        derivePathIndex: 0,
-      );
-      await secureStorageProvider.set(
-        '${SecureStorageKeys.cryptoSecretKey}/0',
-        cryptoSecretKey,
-      );
-
-      final cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
-        secretKey: cryptoSecretKey,
-      );
-      await secureStorageProvider.set(
-        '${SecureStorageKeys.cryptoWalletAddress}/0',
-        cryptoWalletAddress,
-      );
-
-      await walletCubit.insertWalletAccount(
-        CryptoAccount(
-          mnemonics: mnemonic,
-          key: cryptoKey,
-          walletAddress: cryptoWalletAddress,
-          secretKey: cryptoSecretKey,
-        ),
-      );
-
+      await walletCubit.createCryptoWallet(mnemonic: mnemonic, index: 0);
       await walletCubit.setCurrentWalletAccount(0);
 
       homeCubit.emitHasWallet();
