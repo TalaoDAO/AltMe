@@ -24,8 +24,8 @@ class DIDDisplay extends StatelessWidget {
 
         final activeIndex = walletCubit.state.currentCryptoIndex;
 
-        final blockChainAddress =
-            walletCubit.state.cryptoAccounts[activeIndex].walletAddress;
+        final walletAddress =
+            walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -43,8 +43,6 @@ class DIDDisplay extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
                       Text(
-                        // TODO(all): Can we change did method
-                        //  name according to the user type?
                         AltMeStrings.defaultDIDMethodName,
                         style: Theme.of(context)
                             .textTheme
@@ -63,8 +61,8 @@ class DIDDisplay extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        blockChainAddress != ''
-                            ? '''${blockChainAddress.substring(0, 10)} ... ${blockChainAddress.substring(blockChainAddress.length - 10)}'''
+                        walletAddress != ''
+                            ? '''${walletAddress.substring(0, 10)} ... ${walletAddress.substring(walletAddress.length - 10)}'''
                             : '',
                         maxLines: 2,
                         style: Theme.of(context)
@@ -83,7 +81,7 @@ class DIDDisplay extends StatelessWidget {
                         Theme.of(context).colorScheme.primary.withOpacity(0.1),
                   ),
                   onPressed: () {
-                    Clipboard.setData(ClipboardData(text: blockChainAddress));
+                    Clipboard.setData(ClipboardData(text: walletAddress));
                   },
                   child: Text(l10n.adressDisplayCopy),
                 ),

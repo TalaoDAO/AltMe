@@ -290,7 +290,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     }
   }
 
-  Future clearCredentials() async {
+  Future clearHomeCredentials() async {
     emit(
       state.populate(
         gamingCredentials: [],

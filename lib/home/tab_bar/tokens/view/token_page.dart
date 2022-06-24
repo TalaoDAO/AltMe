@@ -6,7 +6,6 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class TokenPage extends StatelessWidget {
   const TokenPage({Key? key}) : super(key: key);
@@ -19,7 +18,6 @@ class TokenPage extends StatelessWidget {
           context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
           Dio(),
         ),
-        secureStorageProvider: getSecureStorage,
         walletCubit: context.read<WalletCubit>(),
       ),
       child: const TokenView(),
