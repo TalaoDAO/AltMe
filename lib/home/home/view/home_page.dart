@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -56,6 +57,35 @@ class _HomePageState extends State<HomePage> {
               return;
             }
             scaffoldKey.currentState!.openDrawer();
+          },
+        ),
+        titleTrailing: BlocBuilder<WalletCubit, WalletState>(
+          builder: (context, state) {
+            final currentIndex = state.currentCryptoIndex;
+            final walletAddress =
+                state.cryptoAccount.data[currentIndex].walletAddress;
+
+            final walletAddressExtracted = walletAddress != ''
+                ? '''${walletAddress.substring(0, 5)} ... ${walletAddress.substring(walletAddress.length - 5)}'''
+                : '';
+            return InkWell(
+              onTap: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (context) => const CryptoBottomSheet(),
+                );
+              },
+              child: Row(
+                children: [
+                  Text(walletAddressExtracted),
+                  const SizedBox(width: 5),
+                  const Icon(
+                    Icons.arrow_downward,
+                    color: Colors.white,
+                  )
+                ],
+              ),
+            );
           },
         ),
         body: Stack(
