@@ -8,6 +8,7 @@ part 'tezos_associated_address_model.g.dart';
 class TezosAssociatedAddressModel extends CredentialSubjectModel {
   TezosAssociatedAddressModel({
     this.associatedAddress,
+    this.accountName,
     String? id,
     String? type,
     Author? issuedBy,
@@ -24,6 +25,9 @@ class TezosAssociatedAddressModel extends CredentialSubjectModel {
 
   @JsonKey(defaultValue: '')
   final String? associatedAddress;
+
+  @JsonKey(defaultValue: '')
+  final String? accountName;
 
   @override
   Map<String, dynamic> toJson() => _$TezosAssociatedAddressModelToJson(this);
