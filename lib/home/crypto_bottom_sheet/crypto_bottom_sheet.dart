@@ -13,8 +13,10 @@ class CryptoBottomSheet extends StatelessWidget {
     return BlocBuilder<WalletCubit, WalletState>(
       builder: (context, state) {
         final l10n = context.l10n;
-
         final List<CryptoAccountData> cryptoAccount = state.cryptoAccount.data;
+
+        final activeIndex = state.currentCryptoIndex;
+
         return Padding(
           padding: const EdgeInsets.all(16),
           child: Wrap(
@@ -36,29 +38,37 @@ class CryptoBottomSheet extends StatelessWidget {
                   final walletAddressExtracted = walletAddress != ''
                       ? '''${walletAddress.substring(0, 5)} ... ${walletAddress.substring(walletAddress.length - 5)}'''
                       : '';
-                  return Container(
-                    color: Colors.grey.withOpacity(0.2),
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '${l10n.cryptoAccount} ${i + 1}',
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              walletAddressExtracted,
-                              style: const TextStyle(
-                                fontSize: 18,
+                  return InkWell(
+                    onTap: () {
+                      context.read<WalletCubit>().setCurrentWalletAccount(i);
+                    },
+                    child: Container(
+                      color: activeIndex == i
+                          ? Colors.purple
+                          : Colors.grey.withOpacity(0.2),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      margin: const EdgeInsets.symmetric(vertical: 2),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${l10n.cryptoAccount} ${i + 1}',
+                                style: const TextStyle(fontSize: 18),
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                walletAddressExtracted,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
