@@ -98,7 +98,9 @@ class _TokenViewState extends State<TokenView> {
                     return const TokenListShimmer();
                   } else if (state.status == AppStatus.populate) {
                     return TokenList(
-                        tokenList: state.data, onRefresh: onRefresh);
+                      tokenList: state.data,
+                      onRefresh: onRefresh,
+                    );
                   } else if (state.status == AppStatus.errorWhileFetching) {
                     return ErrorView(message: message, onTap: onRefresh);
                   } else {
