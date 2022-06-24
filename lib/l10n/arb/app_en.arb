@@ -328,5 +328,10 @@
   "secretKey": "Secret Key",
   "copySecretKeyToClipboard": "Copy secret key to clipboard",
   "tezosNetwork": "Tezos Network",
-  "noNftProvidedWithYourAccount": "No NFT provided with your account!"
+  "noNftProvidedWithYourAccount": "No NFT provided with your account!",
+  "cryptoAccounts": "Accounts",
+  "cryptoAccount": "Account",
+  "cryptoAddAccount": "Add Account",
+  "cryptoAddedMessage": "Your crypto account has been succesfully added."
+
 }

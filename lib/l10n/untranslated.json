@@ -171,7 +171,11 @@
     "secretKey",
     "copySecretKeyToClipboard",
     "tezosNetwork",
-    "noNftProvidedWithYourAccount"
+    "noNftProvidedWithYourAccount",
+    "cryptoAccounts",
+    "cryptoAccount",
+    "cryptoAddAccount",
+    "cryptoAddedMessage"
   ],
 
   "es": [
@@ -346,7 +350,18 @@
     "secretKey",
     "copySecretKeyToClipboard",
     "tezosNetwork",
-    "noNftProvidedWithYourAccount"
+    "noNftProvidedWithYourAccount",
+    "cryptoAccounts",
+    "cryptoAccount",
+    "cryptoAddAccount",
+    "cryptoAddedMessage"
+  ],
+
+  "fr": [
+    "cryptoAccounts",
+    "cryptoAccount",
+    "cryptoAddAccount",
+    "cryptoAddedMessage"
   ],
 
   "it": [
@@ -523,6 +538,10 @@
     "secretKey",
     "copySecretKeyToClipboard",
     "tezosNetwork",
-    "noNftProvidedWithYourAccount"
+    "noNftProvidedWithYourAccount",
+    "cryptoAccounts",
+    "cryptoAccount",
+    "cryptoAddAccount",
+    "cryptoAddedMessage"
   ]
 }
