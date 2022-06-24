@@ -63,6 +63,11 @@ class App extends StatelessWidget {
             homeCubit: context.read<HomeCubit>(),
             credentialListCubit: context.read<CredentialListCubit>(),
             keyGenerator: KeyGenerator(),
+            associatedWalletCredentialHelper: AssociatedWalletCredentialHelper(
+              didKitProvider: DIDKitProvider(),
+              secureStorageProvider: secure_storage.getSecureStorage,
+              didCubit: context.read<DIDCubit>(),
+            ),
           ),
         ),
         BlocProvider(

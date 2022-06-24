@@ -11,6 +11,7 @@ import 'package:passbase_flutter/passbase_flutter.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'wallet_cubit.g.dart';
+
 part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {
@@ -21,6 +22,7 @@ class WalletCubit extends Cubit<WalletState> {
     required this.homeCubit,
     required this.credentialListCubit,
     required this.keyGenerator,
+    required this.associatedWalletCredentialHelper,
   }) : super(WalletState()) {
     initialize();
   }
@@ -31,6 +33,7 @@ class WalletCubit extends Cubit<WalletState> {
   final HomeCubit homeCubit;
   final CredentialListCubit credentialListCubit;
   final KeyGenerator keyGenerator;
+  final AssociatedWalletCredentialHelper associatedWalletCredentialHelper;
 
   Future initialize() async {
     final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
@@ -141,6 +144,15 @@ class WalletCubit extends Cubit<WalletState> {
     }
 
     emitCryptoAccount(cryptoAccount);
+
+    final credential = await associatedWalletCredentialHelper
+        .generateAssociatedWalletCredential(
+      accountName: 'account ${cryptoAccounts.length}',
+      walletAddress: cryptoWalletAddress,
+    );
+    if (credential != null) {
+      await insertCredential(credential);
+    }
   }
 
   void emitCryptoAccount(CryptoAccount cryptoAccount) {
