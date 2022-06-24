@@ -38,6 +38,7 @@ class CryptoBottomSheet extends StatelessWidget {
                   final walletAddressExtracted = walletAddress != ''
                       ? '''${walletAddress.substring(0, 5)} ... ${walletAddress.substring(walletAddress.length - 5)}'''
                       : '';
+
                   return InkWell(
                     onTap: () {
                       context.read<WalletCubit>().setCurrentWalletAccount(i);

@@ -40,6 +40,7 @@ class _NftViewState extends State<NftView> {
   OverlayEntry? _overlay;
   int _offset = 0;
   final _limit = 15;
+  int activeIndex = -1;
 
   Future<void> onRefresh() async {
     _offset = 0;
@@ -60,72 +61,81 @@ class _NftViewState extends State<NftView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BasePage(
-      scrollView: false,
-      padding: EdgeInsets.zero,
-      backgroundColor: Theme.of(context).colorScheme.transparent,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const MyCollectionText(),
-          Expanded(
-            child: BlocConsumer<NftCubit, NftState>(
-              listener: (context, state) {
-                if (state.status == AppStatus.loading) {
-                  _overlay =
-                      OverlayEntry(builder: (_) => const LoadingDialog());
-                  Overlay.of(context)!.insert(_overlay!);
-                } else {
-                  _overlay?.remove();
-                  _overlay = null;
-                }
-
-                if (state.message != null &&
-                    state.status != AppStatus.errorWhileFetching) {
-                  AlertMessage.showStateMessage(
-                    context: context,
-                    stateMessage: state.message!,
-                  );
-                }
-
-                if (state.status == AppStatus.success) {
-                  //some action
-                }
-              },
-              builder: (_, state) {
-                String message = '';
-                if (state.message != null) {
-                  final MessageHandler messageHandler =
-                      state.message!.messageHandler!;
-                  message = messageHandler.getMessage(context, messageHandler);
-                }
-
-                if (state.status == AppStatus.fetching) {
-                  return const NftListShimmer();
-                } else if (state.status == AppStatus.populate) {
-                  if (state.data.isEmpty) {
-                    return EmptyPageView(
-                      imagePath: 'assets/image/nft.png',
-                      message: l10n.noNftProvidedWithYourAccount,
-                      onTap: onRefresh,
-                    );
+    return BlocListener<WalletCubit, WalletState>(
+      listener: (context, state) {
+        if (activeIndex != state.currentCryptoIndex) {
+          onRefresh();
+        }
+        activeIndex = state.currentCryptoIndex;
+      },
+      child: BasePage(
+        scrollView: false,
+        padding: EdgeInsets.zero,
+        backgroundColor: Theme.of(context).colorScheme.transparent,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const MyCollectionText(),
+            Expanded(
+              child: BlocConsumer<NftCubit, NftState>(
+                listener: (context, state) {
+                  if (state.status == AppStatus.loading) {
+                    _overlay =
+                        OverlayEntry(builder: (_) => const LoadingDialog());
+                    Overlay.of(context)!.insert(_overlay!);
                   } else {
-                    return NftList(
-                      nftList: state.data,
-                      onRefresh: onRefresh,
-                      onScrollEnded: onScrollEnded,
+                    _overlay?.remove();
+                    _overlay = null;
+                  }
+
+                  if (state.message != null &&
+                      state.status != AppStatus.errorWhileFetching) {
+                    AlertMessage.showStateMessage(
+                      context: context,
+                      stateMessage: state.message!,
                     );
                   }
-                } else if (state.status == AppStatus.errorWhileFetching) {
-                  return ErrorView(message: message, onTap: onRefresh);
-                } else {
-                  return NftList(nftList: const [], onRefresh: onRefresh);
-                }
-              },
+
+                  if (state.status == AppStatus.success) {
+                    //some action
+                  }
+                },
+                builder: (_, state) {
+                  String message = '';
+                  if (state.message != null) {
+                    final MessageHandler messageHandler =
+                        state.message!.messageHandler!;
+                    message =
+                        messageHandler.getMessage(context, messageHandler);
+                  }
+
+                  if (state.status == AppStatus.fetching) {
+                    return const NftListShimmer();
+                  } else if (state.status == AppStatus.populate) {
+                    if (state.data.isEmpty) {
+                      return EmptyPageView(
+                        imagePath: 'assets/image/nft.png',
+                        message: l10n.noNftProvidedWithYourAccount,
+                        onTap: onRefresh,
+                      );
+                    } else {
+                      return NftList(
+                        nftList: state.data,
+                        onRefresh: onRefresh,
+                        onScrollEnded: onScrollEnded,
+                      );
+                    }
+                  } else if (state.status == AppStatus.errorWhileFetching) {
+                    return ErrorView(message: message, onTap: onRefresh);
+                  } else {
+                    return NftList(nftList: const [], onRefresh: onRefresh);
+                  }
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
