@@ -62,30 +62,38 @@ class _HomePageState extends State<HomePage> {
         titleTrailing: BlocBuilder<WalletCubit, WalletState>(
           builder: (context, state) {
             final currentIndex = state.currentCryptoIndex;
-            final walletAddress =
-                state.cryptoAccount.data[currentIndex].walletAddress;
 
-            final walletAddressExtracted = walletAddress != ''
-                ? '''${walletAddress.substring(0, 5)} ... ${walletAddress.substring(walletAddress.length - 5)}'''
-                : '';
-            return InkWell(
-              onTap: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (context) => const CryptoBottomSheet(),
-                );
-              },
-              child: Row(
-                children: [
-                  Text(walletAddressExtracted),
-                  const SizedBox(width: 5),
-                  const Icon(
-                    Icons.arrow_downward,
-                    color: Colors.white,
-                  )
-                ],
-              ),
-            );
+            String walletAddressExtracted = '';
+
+            if (state.cryptoAccount.data.isNotEmpty) {
+              final walletAddress =
+                  state.cryptoAccount.data[currentIndex].walletAddress;
+
+              walletAddressExtracted = walletAddress != ''
+                  ? '''${walletAddress.substring(0, 5)} ... ${walletAddress.substring(walletAddress.length - 5)}'''
+                  : '';
+            }
+
+            return walletAddressExtracted == ''
+                ? const SizedBox.shrink()
+                : InkWell(
+                    onTap: () {
+                      showModalBottomSheet<void>(
+                        context: context,
+                        builder: (context) => const CryptoBottomSheet(),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Text(walletAddressExtracted),
+                        const SizedBox(width: 5),
+                        const Icon(
+                          Icons.arrow_downward,
+                          color: Colors.white,
+                        )
+                      ],
+                    ),
+                  );
           },
         ),
         body: Stack(

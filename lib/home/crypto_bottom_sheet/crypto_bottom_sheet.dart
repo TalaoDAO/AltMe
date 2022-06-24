@@ -1,9 +1,9 @@
-import 'package:altme/app/shared/widget/button/button.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class CryptoBottomSheet extends StatelessWidget {
   const CryptoBottomSheet({Key? key}) : super(key: key);
@@ -69,7 +69,13 @@ class CryptoBottomSheet extends StatelessWidget {
                 text: l10n.cryptoAddAccount,
                 verticalSpacing: 8,
                 fontSize: 15,
-                onPressed: () {},
+                onPressed: () async {
+                  final String? ssiMnemonic =
+                      await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+                  await context
+                      .read<WalletCubit>()
+                      .createCryptoWallet(mnemonic: ssiMnemonic!);
+                },
               ),
             ],
           ),

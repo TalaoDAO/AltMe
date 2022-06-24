@@ -70,7 +70,7 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
       );
 
       /// crypto wallet
-      await walletCubit.createCryptoWallet(mnemonic: mnemonic, index: 0);
+      await walletCubit.createCryptoWallet(mnemonic: mnemonic);
       await walletCubit.setCurrentWalletAccount(0);
 
       homeCubit.emitHasWallet();

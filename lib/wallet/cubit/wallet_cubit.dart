@@ -58,20 +58,31 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future<void> createCryptoWallet({
-    required String mnemonic,
-    required int index,
-  }) async {
+  Future<void> createCryptoWallet({required String mnemonic}) async {
+    int index = 0;
+
+    final String? derivePathIndex =
+        await secureStorageProvider.get(SecureStorageKeys.derivePathIndex);
+
+    if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
+      index = int.parse(derivePathIndex) + 1;
+    }
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.derivePathIndex,
+      index.toString(),
+    );
+
     final cryptoKey = await keyGenerator.jwkFromMnemonic(
       mnemonic: mnemonic,
       accountType: AccountType.crypto,
-      derivePathIndex: 0,
+      derivePathIndex: index,
     );
 
     final cryptoSecretKey = await keyGenerator.secretKeyFromMnemonic(
       mnemonic: mnemonic,
       accountType: AccountType.crypto,
-      derivePathIndex: 0,
+      derivePathIndex: index,
     );
 
     final cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
@@ -200,6 +211,7 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// crypto
     await secureStorageProvider.delete(SecureStorageKeys.cryptoAccount);
+    await secureStorageProvider.delete(SecureStorageKeys.derivePathIndex);
     await secureStorageProvider.delete(SecureStorageKeys.currentCryptoIndex);
     await secureStorageProvider.delete(SecureStorageKeys.data);
 
