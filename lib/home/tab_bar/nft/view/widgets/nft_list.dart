@@ -70,7 +70,7 @@ class _NftListState extends State<NftList> {
               itemBuilder: (_, index) => NftItem(
                 assetUrl: widget.nftList[index].displayUri
                     .replaceAll('ipfs://', 'https://ipfs.io/ipfs/'),
-                assetValue: '${widget.nftList[index].balance} XTZ',
+                assetValue: widget.nftList[index].balance,
                 description: widget.nftList[index].name,
               ),
               itemCount: widget.nftList.length,
