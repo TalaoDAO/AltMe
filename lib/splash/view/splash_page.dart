@@ -31,6 +31,7 @@ class SplashPage extends StatelessWidget {
         secureStorageProvider: secure_storage.getSecureStorage,
         didCubit: context.read<DIDCubit>(),
         homeCubit: context.read<HomeCubit>(),
+        walletCubit: context.read<WalletCubit>(),
       ),
       child: const SplashView(),
     );

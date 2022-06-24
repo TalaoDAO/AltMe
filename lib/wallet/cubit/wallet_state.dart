@@ -5,12 +5,11 @@ class WalletState extends Equatable {
   WalletState({
     this.status = WalletStatus.init,
     this.message,
-    int? currentCryptoIndex,
+    this.currentCryptoIndex = 0,
+    CryptoAccount? cryptoAccount,
     List<CredentialModel>? credentials,
-    List<CryptoAccount>? cryptoAccounts,
   })  : credentials = credentials ?? [],
-        cryptoAccounts = cryptoAccounts ?? [],
-        currentCryptoIndex = currentCryptoIndex ?? 0;
+        cryptoAccount = cryptoAccount ?? CryptoAccount(data: const []);
 
   factory WalletState.fromJson(Map<String, dynamic> json) =>
       _$WalletStateFromJson(json);
@@ -19,14 +18,14 @@ class WalletState extends Equatable {
   final List<CredentialModel> credentials;
   final StateMessage? message;
   final int currentCryptoIndex;
-  final List<CryptoAccount> cryptoAccounts;
+  final CryptoAccount cryptoAccount;
 
   WalletState loading() {
     return WalletState(
       status: WalletStatus.loading,
       credentials: credentials,
       currentCryptoIndex: currentCryptoIndex,
-      cryptoAccounts: cryptoAccounts,
+      cryptoAccount: cryptoAccount,
     );
   }
 
@@ -36,7 +35,7 @@ class WalletState extends Equatable {
       message: StateMessage.error(messageHandler: messageHandler),
       credentials: credentials,
       currentCryptoIndex: currentCryptoIndex,
-      cryptoAccounts: cryptoAccounts,
+      cryptoAccount: cryptoAccount,
     );
   }
 
@@ -44,7 +43,7 @@ class WalletState extends Equatable {
     required WalletStatus status,
     MessageHandler? messageHandler,
     List<CredentialModel>? credentials,
-    List<CryptoAccount>? cryptoAccounts,
+    CryptoAccount? cryptoAccount,
     int? currentCryptoIndex,
   }) {
     return WalletState(
@@ -54,7 +53,7 @@ class WalletState extends Equatable {
           : StateMessage.success(messageHandler: messageHandler),
       credentials: credentials ?? this.credentials,
       currentCryptoIndex: currentCryptoIndex ?? this.currentCryptoIndex,
-      cryptoAccounts: cryptoAccounts ?? this.cryptoAccounts,
+      cryptoAccount: cryptoAccount ?? this.cryptoAccount,
     );
   }
 
@@ -66,6 +65,6 @@ class WalletState extends Equatable {
         message,
         credentials,
         currentCryptoIndex,
-        cryptoAccounts,
+        cryptoAccount,
       ];
 }
