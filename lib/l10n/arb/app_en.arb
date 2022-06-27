@@ -332,5 +332,9 @@
   "cryptoAccounts": "Accounts",
   "cryptoAccount": "Account",
   "cryptoAddAccount": "Add Account",
-  "cryptoAddedMessage": "Your crypto account has been succesfully added."
+  "cryptoAddedMessage": "Your crypto account has been succesfully added.",
+  "cryptoEditConfirmationDialog": "Do you really want to edit this crypto account name?",
+  "cryptoEditConfirmationDialogYes": "Save",
+  "cryptoEditConfirmationDialogNo": "Cancel",
+  "cryptoEditLabel": "Account Name"
 }

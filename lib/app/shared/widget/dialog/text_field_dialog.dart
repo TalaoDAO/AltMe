@@ -7,6 +7,7 @@ class TextFieldDialog extends StatefulWidget {
   const TextFieldDialog({
     Key? key,
     required this.title,
+    required this.label,
     this.subtitle,
     this.initialValue,
     this.yes,
@@ -17,6 +18,7 @@ class TextFieldDialog extends StatefulWidget {
   }) : super(key: key);
 
   final String title;
+  final String label;
   final String? subtitle;
   final String? initialValue;
   final String? yes;
@@ -83,7 +85,7 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
             ),
           const SizedBox(height: 24),
           BaseTextField(
-            label: l10n.credentialAlias,
+            label: widget.label,
             controller: controller,
             textCapitalization: TextCapitalization.sentences,
             contentPadding:

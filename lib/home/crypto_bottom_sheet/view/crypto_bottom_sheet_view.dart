@@ -5,19 +5,74 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CryptoBottomSheetView extends StatelessWidget {
+class CryptoBottomSheetView extends StatefulWidget {
   const CryptoBottomSheetView({Key? key}) : super(key: key);
 
   @override
+  State<CryptoBottomSheetView> createState() => _CryptoBottomSheetViewState();
+}
+
+class _CryptoBottomSheetViewState extends State<CryptoBottomSheetView> {
+  OverlayEntry? _overlay;
+
+  Future<void> _edit(int index) async {
+    final l10n = context.l10n;
+    final List<CryptoAccountData> cryptoAccount =
+        context.read<CryptoBottomSheetCubit>().state.cryptoAccount.data;
+
+    final cryptoAccountData = cryptoAccount[index];
+
+    final newCryptoAccountName = await showDialog<String>(
+      context: context,
+      builder: (_) => TextFieldDialog(
+        label: l10n.cryptoEditLabel,
+        title: l10n.cryptoEditConfirmationDialog,
+        initialValue: cryptoAccountData.name,
+        yes: l10n.cryptoEditConfirmationDialogYes,
+        no: l10n.cryptoEditConfirmationDialogNo,
+      ),
+    );
+
+    if (newCryptoAccountName != null &&
+        newCryptoAccountName != cryptoAccountData.name) {
+      await context.read<CryptoBottomSheetCubit>().editCryptoAccount(
+            newAccountName: newCryptoAccountName,
+            index: index,
+          );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WalletCubit, WalletState>(
-      builder: (context, walletState) {
-        final l10n = context.l10n;
-        final List<CryptoAccountData> cryptoAccount =
-            walletState.cryptoAccount.data;
+    final l10n = context.l10n;
+    return BlocConsumer<CryptoBottomSheetCubit, CryptoBottomSheetState>(
+      listener: (context, state) {
+        if (state.status == AppStatus.loading) {
+          _overlay = OverlayEntry(
+            builder: (_) => const LoadingDialog(),
+          );
+          Overlay.of(context)!.insert(_overlay!);
+        } else {
+          if (_overlay != null) {
+            _overlay!.remove();
+            _overlay = null;
+          }
+        }
 
-        final activeIndex = walletState.currentCryptoIndex;
-
+        if (state.message != null) {
+          final MessageHandler messageHandler = state.message!.messageHandler!;
+          final String message =
+              messageHandler.getMessage(context, messageHandler);
+          showDialog<bool>(
+            context: context,
+            builder: (context) => InfoDialog(
+              title: message,
+              button: l10n.ok,
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.all(16),
           child: SingleChildScrollView(
@@ -32,11 +87,11 @@ class CryptoBottomSheetView extends StatelessWidget {
                 ),
                 Container(height: 10),
                 ListView.builder(
-                  itemCount: cryptoAccount.length,
+                  itemCount: state.cryptoAccount.data.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, i) {
-                    final cryptoAccountData = cryptoAccount[i];
+                    final cryptoAccountData = state.cryptoAccount.data[i];
                     final walletAddress = cryptoAccountData.walletAddress;
 
                     final walletAddressExtracted = walletAddress != ''
@@ -45,10 +100,12 @@ class CryptoBottomSheetView extends StatelessWidget {
 
                     return InkWell(
                       onTap: () {
-                        context.read<WalletCubit>().setCurrentWalletAccount(i);
+                        context
+                            .read<CryptoBottomSheetCubit>()
+                            .setCurrentWalletAccount(i);
                       },
                       child: Container(
-                        color: activeIndex == i
+                        color: state.currentCryptoIndex == i
                             ? Colors.purple
                             : Colors.grey.withOpacity(0.2),
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -57,9 +114,20 @@ class CryptoBottomSheetView extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 20),
                           child: Row(
                             children: [
+                              InkWell(
+                                onTap: () => _edit(i),
+                                child: Icon(
+                                  Icons.edit,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  '${l10n.cryptoAccount} ${i + 1}',
+                                  cryptoAccountData.name == ''
+                                      ? '${l10n.cryptoAccount} ${i + 1}'
+                                      : cryptoAccountData.name,
                                   style: const TextStyle(fontSize: 18),
                                 ),
                               ),

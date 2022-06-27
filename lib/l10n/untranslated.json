@@ -175,7 +175,11 @@
     "cryptoAccounts",
     "cryptoAccount",
     "cryptoAddAccount",
-    "cryptoAddedMessage"
+    "cryptoAddedMessage",
+    "cryptoEditConfirmationDialog",
+    "cryptoEditConfirmationDialogYes",
+    "cryptoEditConfirmationDialogNo",
+    "cryptoEditLabel"
   ],
 
   "es": [
@@ -354,14 +358,22 @@
     "cryptoAccounts",
     "cryptoAccount",
     "cryptoAddAccount",
-    "cryptoAddedMessage"
+    "cryptoAddedMessage",
+    "cryptoEditConfirmationDialog",
+    "cryptoEditConfirmationDialogYes",
+    "cryptoEditConfirmationDialogNo",
+    "cryptoEditLabel"
   ],
 
   "fr": [
     "cryptoAccounts",
     "cryptoAccount",
     "cryptoAddAccount",
-    "cryptoAddedMessage"
+    "cryptoAddedMessage",
+    "cryptoEditConfirmationDialog",
+    "cryptoEditConfirmationDialogYes",
+    "cryptoEditConfirmationDialogNo",
+    "cryptoEditLabel"
   ],
 
   "it": [
@@ -542,6 +554,10 @@
     "cryptoAccounts",
     "cryptoAccount",
     "cryptoAddAccount",
-    "cryptoAddedMessage"
+    "cryptoAddedMessage",
+    "cryptoEditConfirmationDialog",
+    "cryptoEditConfirmationDialogYes",
+    "cryptoEditConfirmationDialogNo",
+    "cryptoEditLabel"
   ]
 }

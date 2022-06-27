@@ -5,7 +5,7 @@ part 'crypto_account_data.g.dart';
 
 @JsonSerializable()
 class CryptoAccountData extends Equatable {
-  const CryptoAccountData({
+  CryptoAccountData({
     this.name = '',
     this.mnemonics,
     required this.key,
@@ -16,7 +16,7 @@ class CryptoAccountData extends Equatable {
   factory CryptoAccountData.fromJson(Map<String, dynamic> json) =>
       _$CryptoAccountDataFromJson(json);
 
-  final String? name;
+  String name;
   final String? mnemonics;
   final String key;
   final String secretKey;
