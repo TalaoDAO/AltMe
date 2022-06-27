@@ -58,7 +58,10 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future<void> createCryptoWallet({required String mnemonic}) async {
+  Future<void> createCryptoWallet({
+    required String mnemonic,
+    Function(CryptoAccount cryptoAccount)? onComplete,
+  }) async {
     int index = 0;
 
     final String? derivePathIndex =
@@ -105,6 +108,37 @@ class WalletCubit extends Cubit<WalletState> {
       SecureStorageKeys.cryptoAccount,
       cryptoAccountString,
     );
+
+    if (onComplete != null) {
+      onComplete.call(cryptoAccount);
+    }
+
+    emitCryptoAccount(cryptoAccount);
+  }
+
+  Future<void> editCryptoAccountName({
+    required String newAccountName,
+    required int index,
+    Function(CryptoAccount cryptoAccount)? onComplete,
+  }) async {
+    final CryptoAccountData cryptoAccountData = state.cryptoAccount.data[index];
+    cryptoAccountData.name = newAccountName;
+
+    final cryptoAccounts = List.of(state.cryptoAccount.data)
+      ..removeWhere(
+          (element) => element.walletAddress == cryptoAccountData.walletAddress)
+      ..insert(index, cryptoAccountData);
+
+    final CryptoAccount cryptoAccount = CryptoAccount(data: cryptoAccounts);
+    final String cryptoAccountString = jsonEncode(cryptoAccount);
+    await secureStorageProvider.set(
+      SecureStorageKeys.cryptoAccount,
+      cryptoAccountString,
+    );
+
+    if (onComplete != null) {
+      onComplete.call(cryptoAccount);
+    }
 
     emitCryptoAccount(cryptoAccount);
   }
@@ -224,7 +258,14 @@ class WalletCubit extends Cubit<WalletState> {
     /// clear app states
     homeCubit.emitHasNoWallet();
     await credentialListCubit.clearHomeCredentials();
-    emit(state.copyWith(status: WalletStatus.reset, credentials: []));
+    emit(
+      state.copyWith(
+        status: WalletStatus.reset,
+        credentials: [],
+        cryptoAccount: CryptoAccount(data: const []),
+        currentCryptoIndex: null,
+      ),
+    );
     emit(state.copyWith(status: WalletStatus.init));
   }
 

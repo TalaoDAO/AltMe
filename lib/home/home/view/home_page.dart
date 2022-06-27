@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       showModalBottomSheet<void>(
                         context: context,
-                        builder: (context) => const CryptoBottomSheet(),
+                        builder: (context) => const CryptoBottomSheetView(),
                       );
                     },
                     child: Row(

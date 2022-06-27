@@ -73,6 +73,7 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
     final newAlias = await showDialog<String>(
       context: context,
       builder: (_) => TextFieldDialog(
+        label: l10n.credentialAlias,
         title: l10n.credentialDetailEditConfirmationDialog,
         initialValue: credentialDetailsCubit.state.title,
         yes: l10n.credentialDetailEditConfirmationDialogYes,

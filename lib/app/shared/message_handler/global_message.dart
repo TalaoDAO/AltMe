@@ -153,4 +153,6 @@ class GlobalMessage {
 
   String get RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR =>
       l10n.credentialEmptyError;
+
+  String get RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED => l10n.cryptoAddedMessage;
 }
