@@ -5,6 +5,7 @@ import 'package:altme/app/shared/associated_wallet/associated_wallet_credential.
 import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -38,6 +39,8 @@ class AssociatedWalletCredentialHelper {
       };
       final verifyOptions = {'proofPurpose': 'assertionMethod'};
       final id = 'urn:uuid:${const Uuid().v4()}';
+      final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
+      final issuanceDate = '${formatter.format(DateTime.now())}Z';
 
       final selfIssued = TezosAssociatedAddressModel(
         id: did,
@@ -48,6 +51,7 @@ class AssociatedWalletCredentialHelper {
       final selfIssuedCredential = AssociatedWalletCredential(
         id: id,
         issuer: did,
+        issuanceDate: issuanceDate,
         credentialSubjectModel: selfIssued,
       );
 
@@ -59,9 +63,6 @@ class AssociatedWalletCredentialHelper {
       final result =
           await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions));
       final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
-
-      log.info('vc: $vc');
-      log.info('verifyResult: ${jsonVerification.toString()}');
 
       if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
         log.warning(
@@ -84,7 +85,7 @@ class AssociatedWalletCredentialHelper {
         return _createCredential(vc);
       }
     } catch (e, s) {
-      log.severe('something went wrong', e, s);
+      log.severe('something went wrong e: $e, stackTrace: $s', e, s);
       return null;
     }
   }

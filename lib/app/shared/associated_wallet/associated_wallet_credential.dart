@@ -8,6 +8,7 @@ class AssociatedWalletCredential {
   AssociatedWalletCredential({
     required this.id,
     required this.issuer,
+    required this.issuanceDate,
     required this.credentialSubjectModel,
     this.context = _context,
     this.type = _type,
@@ -24,6 +25,7 @@ class AssociatedWalletCredential {
   @JsonKey(name: 'credentialSubject')
   final CredentialSubjectModel credentialSubjectModel;
   final String issuer;
+  final String issuanceDate;
 
   Map<String, dynamic> toJson() => _$AssociatedWalletCredentialToJson(this);
 
