@@ -224,7 +224,14 @@ class WalletCubit extends Cubit<WalletState> {
     /// clear app states
     homeCubit.emitHasNoWallet();
     await credentialListCubit.clearHomeCredentials();
-    emit(state.copyWith(status: WalletStatus.reset, credentials: []));
+    emit(
+      state.copyWith(
+        status: WalletStatus.reset,
+        credentials: [],
+        cryptoAccount: CryptoAccount(data: const []),
+        currentCryptoIndex: null,
+      ),
+    );
     emit(state.copyWith(status: WalletStatus.init));
   }
 
