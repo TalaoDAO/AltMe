@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/crypto_bottom_sheet/crypto_bottom_sheet.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocListener<CryptoBottomSheetCubit, CryptoBottomSheetState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -48,9 +50,15 @@ class _HomePageState extends State<HomePage> {
         }
 
         if (state.message != null) {
-          AlertMessage.showStateMessage(
+          final MessageHandler messageHandler = state.message!.messageHandler!;
+          final String message =
+              messageHandler.getMessage(context, messageHandler);
+          showDialog<bool>(
             context: context,
-            stateMessage: state.message!,
+            builder: (context) => InfoDialog(
+              title: message,
+              button: l10n.ok,
+            ),
           );
         }
       },

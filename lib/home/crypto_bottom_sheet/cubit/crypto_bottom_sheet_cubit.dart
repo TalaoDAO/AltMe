@@ -22,7 +22,12 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
     final String? ssiMnemonic =
         await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
     await walletCubit.createCryptoWallet(mnemonic: ssiMnemonic!);
-    emit(state.success());
-    //show message
+    emit(
+      state.success(
+        messageHandler: ResponseMessage(
+          ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+        ),
+      ),
+    );
   }
 }
