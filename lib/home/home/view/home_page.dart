@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/home/crypto_bottom_sheet/crypto_bottom_sheet.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -18,6 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  OverlayEntry? _overlay;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -31,84 +33,106 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (scaffoldKey.currentState!.isDrawerOpen) {
-          Navigator.of(context).pop();
+    return BlocListener<CryptoBottomSheetCubit, CryptoBottomSheetState>(
+      listener: (context, state) {
+        if (state.status == AppStatus.loading) {
+          _overlay = OverlayEntry(
+            builder: (_) => const LoadingDialog(),
+          );
+          Overlay.of(context)!.insert(_overlay!);
+        } else {
+          if (_overlay != null) {
+            _overlay!.remove();
+            _overlay = null;
+          }
         }
-        return false;
+
+        if (state.message != null) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: state.message!,
+          );
+        }
       },
-      child: BasePage(
-        scrollView: false,
-        scaffoldKey: scaffoldKey,
-        drawer: const DrawerPage(),
-        padding: EdgeInsets.zero,
-        titleLeading: IconButton(
-          icon: ImageIcon(
-            const AssetImage(IconStrings.icMenu),
-            color: Theme.of(context).colorScheme.leadingButton,
+      child: WillPopScope(
+        onWillPop: () async {
+          if (scaffoldKey.currentState!.isDrawerOpen) {
+            Navigator.of(context).pop();
+          }
+          return false;
+        },
+        child: BasePage(
+          scrollView: false,
+          scaffoldKey: scaffoldKey,
+          drawer: const DrawerPage(),
+          padding: EdgeInsets.zero,
+          titleLeading: IconButton(
+            icon: ImageIcon(
+              const AssetImage(IconStrings.icMenu),
+              color: Theme.of(context).colorScheme.leadingButton,
+            ),
+            onPressed: () {
+              if (context.read<HomeCubit>().state == HomeStatus.hasNoWallet) {
+                showDialog<void>(
+                  context: context,
+                  builder: (_) => const WalletDialog(),
+                );
+                return;
+              }
+              scaffoldKey.currentState!.openDrawer();
+            },
           ),
-          onPressed: () {
-            if (context.read<HomeCubit>().state == HomeStatus.hasNoWallet) {
-              showDialog<void>(
-                context: context,
-                builder: (_) => const WalletDialog(),
-              );
-              return;
-            }
-            scaffoldKey.currentState!.openDrawer();
-          },
-        ),
-        titleTrailing: BlocBuilder<WalletCubit, WalletState>(
-          builder: (context, state) {
-            final currentIndex = state.currentCryptoIndex;
+          titleTrailing: BlocBuilder<WalletCubit, WalletState>(
+            builder: (context, state) {
+              final currentIndex = state.currentCryptoIndex;
 
-            String walletAddressExtracted = '';
+              String walletAddressExtracted = '';
 
-            if (state.cryptoAccount.data.isNotEmpty) {
-              final walletAddress =
-                  state.cryptoAccount.data[currentIndex].walletAddress;
+              if (state.cryptoAccount.data.isNotEmpty) {
+                final walletAddress =
+                    state.cryptoAccount.data[currentIndex].walletAddress;
 
-              walletAddressExtracted = walletAddress != ''
-                  ? '''${walletAddress.substring(0, 5)} ... ${walletAddress.substring(walletAddress.length - 5)}'''
-                  : '';
-            }
+                walletAddressExtracted = walletAddress != ''
+                    ? '''${walletAddress.substring(0, 5)} ... ${walletAddress.substring(walletAddress.length - 5)}'''
+                    : '';
+              }
 
-            return walletAddressExtracted == ''
-                ? const SizedBox.shrink()
-                : InkWell(
-                    onTap: () {
-                      showModalBottomSheet<void>(
-                        context: context,
-                        builder: (context) => const CryptoBottomSheet(),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Text(walletAddressExtracted),
-                        const SizedBox(width: 5),
-                        const Icon(
-                          Icons.arrow_downward,
-                          color: Colors.white,
-                        )
-                      ],
-                    ),
-                  );
-          },
-        ),
-        body: Stack(
-          children: [
-            Column(
-              children: const [
-                Expanded(child: TabControllerPage()),
-                BottomBarPage()
-              ],
-            ),
-            const Align(
-              alignment: Alignment.bottomCenter,
-              child: QRIcon(),
-            ),
-          ],
+              return walletAddressExtracted == ''
+                  ? const SizedBox.shrink()
+                  : InkWell(
+                      onTap: () {
+                        showModalBottomSheet<void>(
+                          context: context,
+                          builder: (context) => const CryptoBottomSheetView(),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Text(walletAddressExtracted),
+                          const SizedBox(width: 5),
+                          const Icon(
+                            Icons.arrow_downward,
+                            color: Colors.white,
+                          )
+                        ],
+                      ),
+                    );
+            },
+          ),
+          body: Stack(
+            children: [
+              Column(
+                children: const [
+                  Expanded(child: TabControllerPage()),
+                  BottomBarPage()
+                ],
+              ),
+              const Align(
+                alignment: Alignment.bottomCenter,
+                child: QRIcon(),
+              ),
+            ],
+          ),
         ),
       ),
     );

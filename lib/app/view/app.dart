@@ -65,6 +65,12 @@ class App extends StatelessWidget {
             keyGenerator: KeyGenerator(),
           ),
         ),
+        BlocProvider(
+          create: (context) => CryptoBottomSheetCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            walletCubit: context.read<WalletCubit>(),
+          ),
+        ),
         BlocProvider<ScanCubit>(
           create: (context) => ScanCubit(
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
