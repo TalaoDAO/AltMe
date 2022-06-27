@@ -33,12 +33,28 @@ class TokenView extends StatefulWidget {
 }
 
 class _TokenViewState extends State<TokenView> {
+
   OverlayEntry? _overlay;
+  int _offset = 0;
+  final _limit = 15;
   int activeIndex = -1;
 
   Future<void> onRefresh() async {
-    await context.read<TokensCubit>().getBalanceOfAssetList();
+    _offset = 0;
+    await context.read<TokensCubit>().getBalanceOfAssetList(offset: _offset);
   }
+
+  Future<void> onScrollEnded() async {
+    _offset += _limit;
+    _overlay = OverlayEntry(builder: (_) => const LoadingDialog());
+    Overlay.of(context)!.insert(_overlay!);
+
+    await context.read<TokensCubit>().getBalanceOfAssetList(offset: _offset);
+
+    _overlay?.remove();
+    _overlay = null;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +83,8 @@ class _TokenViewState extends State<TokenView> {
                         OverlayEntry(builder: (_) => const LoadingDialog());
                     Overlay.of(context)!.insert(_overlay!);
                   } else {
-                    if (_overlay != null) {
-                      _overlay!.remove();
-                      _overlay = null;
-                    }
+                    _overlay?.remove();
+                    _overlay = null;
                   }
 
                   if (state.message != null &&
@@ -100,6 +114,7 @@ class _TokenViewState extends State<TokenView> {
                     return TokenList(
                       tokenList: state.data,
                       onRefresh: onRefresh,
+                      onScrollEnded: onScrollEnded,
                     );
                   } else if (state.status == AppStatus.errorWhileFetching) {
                     return ErrorView(message: message, onTap: onRefresh);

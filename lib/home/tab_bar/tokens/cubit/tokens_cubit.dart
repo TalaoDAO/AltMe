@@ -14,15 +14,21 @@ class TokensCubit extends Cubit<TokensState> {
     required this.client,
     required this.walletCubit,
   }) : super(const TokensState()) {
-    getBalanceOfAssetList();
+    getBalanceOfAssetList(offset: 0);
   }
 
   final DioClient client;
   final WalletCubit walletCubit;
 
-  Future<void> getBalanceOfAssetList() async {
+  List<TokenModel> data = [];
+
+  Future<void> getBalanceOfAssetList(
+      {required int offset, int limit = 15}) async {
+    if (data.length < offset) return;
     try {
-      emit(state.fetching());
+      if (offset == 0) {
+        emit(state.fetching());
+      }
 
       final activeIndex = walletCubit.state.currentCryptoIndex;
       final walletAddress =
@@ -36,21 +42,26 @@ class TokensCubit extends Cubit<TokensState> {
               '''KT1GRSvLoikDsXujKgZPsGLX8k8VvR2Tq95b,KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb,KT1M81KrJr6TxYLkZkVqcpSTNKGoya8XytWT,KT1Xobej4mc6XgEjDoJoHtTKgbD1ELMvcQuL,KT1K9gCRgaLRFKTErYt1wVxA3Frb9FjasjTV,KT1LN4LPSqTMS7Sd2CJw4bbDGRkMv2t68Fy9,KT1SjXiUX63QvdNMcM2m492f7kuf8JxXRLp4,KT1Ha4yFVeyzw6KRAdkzq6TxDHB97KG4pZe8,KT1JBNFcB5tiycHNdYGYCtR3kk6JaJysUCi8''',
           'select':
               '''token.contract.address as contractAddress,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri''',
+          'offset': offset,
+          'limit': limit,
         },
       ) as List<dynamic>;
-
+      List<TokenModel> newData = [];
       if (tokensBalancesJsonArray.isNotEmpty) {
-        final data = tokensBalancesJsonArray
+        newData = tokensBalancesJsonArray
             .map(
               (dynamic json) =>
                   TokenModel.fromJson(json as Map<String, dynamic>),
             )
             .toList();
-
-        emit(state.populate(data: data));
-      } else {
-        emit(state.populate(data: []));
       }
+
+      if (offset == 0) {
+        data = newData;
+      } else {
+        data.addAll(newData);
+      }
+      emit(state.populate(data: data));
     } catch (e) {
       if (isClosed) return;
       emit(
