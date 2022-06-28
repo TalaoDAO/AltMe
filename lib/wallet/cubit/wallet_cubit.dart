@@ -347,21 +347,21 @@ class WalletCubit extends Cubit<WalletState> {
       final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
       final issuanceDate = '${formatter.format(DateTime.now())}Z';
 
-      final selfIssued = TezosAssociatedAddressModel(
+      final tezosAssociatedAddressModel = TezosAssociatedAddressModel(
         id: did,
         accountName: accountName,
         associatedAddress: walletAddress,
       );
 
-      final selfIssuedCredential = TezosAssociatedAddressCredential(
+      final tezosAssociatedAddressCredential = TezosAssociatedAddressCredential(
         id: id,
         issuer: did,
         issuanceDate: issuanceDate,
-        credentialSubjectModel: selfIssued,
+        credentialSubjectModel: tezosAssociatedAddressModel,
       );
 
       final vc = await didKitProvider.issueCredential(
-        jsonEncode(selfIssuedCredential.toJson()),
+        jsonEncode(tezosAssociatedAddressCredential.toJson()),
         jsonEncode(options),
         secretKey!,
       );
