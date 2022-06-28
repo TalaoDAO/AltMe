@@ -54,6 +54,12 @@ class App extends StatelessWidget {
         BlocProvider<CredentialListCubit>(
           create: (context) => CredentialListCubit(),
         ),
+        BlocProvider<DIDCubit>(
+          create: (context) => DIDCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            didKitProvider: DIDKitProvider(),
+          ),
+        ),
         BlocProvider<WalletCubit>(
           lazy: false,
           create: (context) => WalletCubit(
@@ -63,6 +69,8 @@ class App extends StatelessWidget {
             homeCubit: context.read<HomeCubit>(),
             credentialListCubit: context.read<CredentialListCubit>(),
             keyGenerator: KeyGenerator(),
+            didKitProvider: DIDKitProvider(),
+            didCubit: context.read<DIDCubit>(),
           ),
         ),
         BlocProvider(
@@ -91,12 +99,6 @@ class App extends StatelessWidget {
             walletCubit: context.read<WalletCubit>(),
           ),
         ),
-        BlocProvider<DIDCubit>(
-          create: (context) => DIDCubit(
-            secureStorageProvider: secure_storage.getSecureStorage,
-            didKitProvider: DIDKitProvider(),
-          ),
-        )
       ],
       child: const MaterialAppDefinition(),
     );
