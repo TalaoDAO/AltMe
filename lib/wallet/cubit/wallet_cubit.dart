@@ -98,7 +98,7 @@ class WalletCubit extends Cubit<WalletState> {
       derivePathIndex: index,
     );
 
-    final cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
+    final String cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
       secretKey: cryptoSecretKey,
     );
 
