@@ -163,6 +163,8 @@ extension CustomColorScheme on ColorScheme {
   Color get tabBarNotSelected => const Color(0xFF280164);
 
   Color get credentialBackground => const Color(0xFF211F33);
+
+  Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
 }
 
 extension CustomTextTheme on TextTheme {
@@ -448,6 +450,24 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get errorMessage => GoogleFonts.roboto(
         fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xffFFFFFF),
+      );
+
+  TextStyle get accountsText => GoogleFonts.roboto(
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xffFFFFFF),
+      );
+
+  TextStyle get accountsName => GoogleFonts.roboto(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xffFFFFFF),
+      );
+
+  TextStyle get walletAddress => GoogleFonts.roboto(
+        fontSize: 16,
         fontWeight: FontWeight.w400,
         color: const Color(0xffFFFFFF),
       );
