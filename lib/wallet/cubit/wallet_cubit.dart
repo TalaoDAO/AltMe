@@ -16,7 +16,7 @@ import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 part 'wallet_cubit.g.dart';
-
+part 'wallet_helper_method.dart';
 part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {
