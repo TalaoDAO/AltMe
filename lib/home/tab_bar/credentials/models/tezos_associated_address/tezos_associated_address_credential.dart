@@ -14,7 +14,8 @@ class TezosAssociatedAddressCredential {
     this.type = _type,
   });
 
-  factory TezosAssociatedAddressCredential.fromJson(Map<String, dynamic> json) =>
+  factory TezosAssociatedAddressCredential.fromJson(
+          Map<String, dynamic> json) =>
       _$TezosAssociatedAddressCredentialFromJson(json);
 
   @JsonKey(name: '@context', defaultValue: _context)
@@ -27,7 +28,8 @@ class TezosAssociatedAddressCredential {
   final String issuer;
   final String issuanceDate;
 
-  Map<String, dynamic> toJson() => _$TezosAssociatedAddressCredentialToJson(this);
+  Map<String, dynamic> toJson() =>
+      _$TezosAssociatedAddressCredentialToJson(this);
 
   static const List<String> _type = [
     'VerifiableCredential',
