@@ -25,6 +25,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     CredentialSubjectType.identityCard,
   ];
 
+  CredentialSubjectType over18 = CredentialSubjectType.over18;
+
   Future<void> initialise(WalletCubit walletCubit) async {
     emit(state.fetching());
     await Future<void>.delayed(const Duration(seconds: 1));
@@ -42,31 +44,23 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
           /// adding real credentials
           gamingCredentials.add(HomeCredential.isNotDummy(credential));
-
-          // /// updating dummy credentials list if exists
-          // if (gamingCategories.contains(credentialSubjectType)) {
-          //   gamingCategories.remove(credentialSubjectType);
-          // }
           break;
+
         case CredentialCategory.communityCards:
 
           /// adding real credentials
           communityCredentials.add(HomeCredential.isNotDummy(credential));
-
-          // /// updating dummy credentials list if exists
-          // if (communityCategories.contains(credentialSubjectType)) {
-          //   communityCategories.remove(credentialSubjectType);
-          // }
           break;
+
         case CredentialCategory.identityCards:
 
           /// adding real credentials
           identityCredentials.add(HomeCredential.isNotDummy(credential));
 
-          // /// updating dummy credentials list if exists
-          // if (identityCategories.contains(credentialSubjectType)) {
-          //   identityCategories.remove(credentialSubjectType);
-          // }
+          /// remove over18 if exists
+          if (identityCategories.contains(over18)) {
+            identityCategories.remove(over18);
+          }
           break;
         case CredentialCategory.othersCards:
 
@@ -111,20 +105,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         /// adding real credentials
         final _credentials = List.of(state.gamingCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
-
-        // /// remove dummy credentials list if exists
-        //final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
-        //   (element) =>
-        //       element.isDummy &&
-        //       element.credentialSubjectType ==
-        //           credentialSubject.credentialSubjectType,
-        // );
-        // if (dummyCredential != null) {
-        //   _credentials.remove(dummyCredential);
-        // }
-
         emit(state.populate(gamingCredentials: _credentials));
-
         break;
 
       case CredentialCategory.communityCards:
@@ -132,18 +113,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         /// adding real credentials
         final _credentials = List.of(state.communityCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
-
-        // /// remove dummy credentials list if exists
-        //final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
-        //   (element) =>
-        //       element.isDummy &&
-        //       element.credentialSubjectType ==
-        //           credentialSubject.credentialSubjectType,
-        // );
-        // if (dummyCredential != null) {
-        //   _credentials.remove(dummyCredential);
-        // }
-
         emit(state.populate(communityCredentials: _credentials));
         break;
 
@@ -153,16 +122,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         final _credentials = List.of(state.identityCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
 
-        // /// remove dummy credentials list if exists
-        //final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
-        //   (element) =>
-        //       element.isDummy &&
-        //       element.credentialSubjectType ==
-        //           credentialSubject.credentialSubjectType,
-        // );
-        // if (dummyCredential != null) {
-        //   _credentials.remove(dummyCredential);
-        // }
+        /// remove dummy over18 credentials if exists
+        final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
+          (element) =>
+              element.isDummy && element.credentialSubjectType == over18,
+        );
+        if (dummyCredential != null) {
+          _credentials.remove(dummyCredential);
+        }
 
         emit(state.populate(identityCredentials: _credentials));
         break;
@@ -172,7 +139,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         /// adding real credentials
         final _credentials = List.of(state.othersCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
-
         emit(state.populate(othersCredentials: _credentials));
         break;
     }
@@ -274,12 +240,28 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         break;
 
       case CredentialCategory.identityCards:
-        final _credentials = List.of(state.identityCredentials)
-          ..removeWhere(
-            (element) => element.credentialModel?.id == credential.id,
-          );
+        late List<HomeCredential> _credentials;
+
+        final credentialSubjectType = credential
+            .credentialPreview.credentialSubjectModel.credentialSubjectType;
+
+        //add dummmy over18 credentials
+        if (credentialSubjectType == over18) {
+          _credentials = List.of(state.identityCredentials)
+            ..removeWhere(
+              (element) => element.credentialModel?.id == credential.id,
+            )
+            ..add(HomeCredential.isDummy(over18));
+        } else {
+          _credentials = List.of(state.identityCredentials)
+            ..removeWhere(
+              (element) => element.credentialModel?.id == credential.id,
+            );
+        }
+
         emit(state.populate(identityCredentials: _credentials));
         break;
+
       case CredentialCategory.othersCards:
         final _credentials = List.of(state.othersCredentials)
           ..removeWhere(
