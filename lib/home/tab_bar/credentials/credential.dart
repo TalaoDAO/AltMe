@@ -5,4 +5,5 @@ export 'pick/credentials_pick.dart';
 export 'present/credential_present.dart';
 export 'receive/credentials_receive.dart';
 export 'repository/credential_repository.dart';
+export 'tezos_associated_address/tezos_associated_address.dart';
 export 'widgets/widgets.dart';

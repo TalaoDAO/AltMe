@@ -1,11 +1,11 @@
 import 'package:altme/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'associated_wallet_credential.g.dart';
+part 'tezos_associated_address_credential.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class AssociatedWalletCredential {
-  AssociatedWalletCredential({
+class TezosAssociatedAddressCredential {
+  TezosAssociatedAddressCredential({
     required this.id,
     required this.issuer,
     required this.issuanceDate,
@@ -14,8 +14,8 @@ class AssociatedWalletCredential {
     this.type = _type,
   });
 
-  factory AssociatedWalletCredential.fromJson(Map<String, dynamic> json) =>
-      _$AssociatedWalletCredentialFromJson(json);
+  factory TezosAssociatedAddressCredential.fromJson(Map<String, dynamic> json) =>
+      _$TezosAssociatedAddressCredentialFromJson(json);
 
   @JsonKey(name: '@context', defaultValue: _context)
   final List<dynamic> context;
@@ -27,7 +27,7 @@ class AssociatedWalletCredential {
   final String issuer;
   final String issuanceDate;
 
-  Map<String, dynamic> toJson() => _$AssociatedWalletCredentialToJson(this);
+  Map<String, dynamic> toJson() => _$TezosAssociatedAddressCredentialToJson(this);
 
   static const List<String> _type = [
     'VerifiableCredential',

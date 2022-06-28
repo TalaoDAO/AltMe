@@ -33,7 +33,7 @@ class WalletCubit extends Cubit<WalletState> {
   final HomeCubit homeCubit;
   final CredentialListCubit credentialListCubit;
   final KeyGenerator keyGenerator;
-  final AssociatedWalletCredentialHelper associatedWalletCredentialHelper;
+  final TezosAssociatedAddressCredentialCubit associatedWalletCredentialHelper;
 
   Future initialize() async {
     final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);

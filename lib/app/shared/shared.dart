@@ -1,5 +1,4 @@
 export 'alert_message/alert_message.dart';
-export 'associated_wallet/associated_wallet.dart';
 export 'constants/constants.dart';
 export 'date/date.dart';
 export 'dio_client/dio_client.dart';

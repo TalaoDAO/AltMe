@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/associated_wallet/associated_wallet_credential.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
 import 'package:did_kit/did_kit.dart';
@@ -10,8 +9,8 @@ import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
-class AssociatedWalletCredentialHelper {
-  AssociatedWalletCredentialHelper({
+class TezosAssociatedAddressCredentialCubit {
+  TezosAssociatedAddressCredentialCubit({
     required this.secureStorageProvider,
     required this.didCubit,
     required this.didKitProvider,
@@ -48,7 +47,7 @@ class AssociatedWalletCredentialHelper {
         associatedAddress: walletAddress,
       );
 
-      final selfIssuedCredential = AssociatedWalletCredential(
+      final selfIssuedCredential = TezosAssociatedAddressCredential(
         id: id,
         issuer: did,
         issuanceDate: issuanceDate,
