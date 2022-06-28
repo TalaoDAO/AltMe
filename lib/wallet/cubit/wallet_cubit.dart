@@ -16,7 +16,6 @@ import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 part 'wallet_cubit.g.dart';
-part 'wallet_helper_method.dart';
 part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {
@@ -98,7 +97,8 @@ class WalletCubit extends Cubit<WalletState> {
       derivePathIndex: index,
     );
 
-    final cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
+    final String cryptoWalletAddress =
+        await keyGenerator.tz1AddressFromSecretKey(
       secretKey: cryptoSecretKey,
     );
 
