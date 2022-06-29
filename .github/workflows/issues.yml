@@ -13,7 +13,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/add-to-project@v0.1.0
+      - uses: actions/add-to-project@vRELEASE_VERSION
         with:
           project-url: https://github.com/orgs/TalaoDAO/projects/1
-          github-token: ${{ secrets.GITHUB_TOKEN || github.token }}
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
