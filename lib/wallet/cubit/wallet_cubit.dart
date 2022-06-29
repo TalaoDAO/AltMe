@@ -351,6 +351,7 @@ class WalletCubit extends Cubit<WalletState> {
         id: did,
         accountName: accountName,
         associatedAddress: walletAddress,
+        type: 'TezosAssociatedAddress',
       );
 
       final tezosAssociatedAddressCredential = TezosAssociatedAddressCredential(
@@ -359,7 +360,6 @@ class WalletCubit extends Cubit<WalletState> {
         issuanceDate: issuanceDate,
         credentialSubjectModel: tezosAssociatedAddressModel,
       );
-
       final vc = await didKitProvider.issueCredential(
         jsonEncode(tezosAssociatedAddressCredential.toJson()),
         jsonEncode(options),

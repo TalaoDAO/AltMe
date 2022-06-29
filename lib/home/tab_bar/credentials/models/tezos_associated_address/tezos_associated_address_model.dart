@@ -11,11 +11,9 @@ class TezosAssociatedAddressModel extends CredentialSubjectModel {
     this.accountName,
     String? id,
     String? type,
-    Author? issuedBy,
   }) : super(
           id: id,
           type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.associatedWallet,
           credentialCategory: CredentialCategory.othersCards,
         );
