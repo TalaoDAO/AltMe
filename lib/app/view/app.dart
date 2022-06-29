@@ -118,6 +118,8 @@ class MaterialAppDefinition extends StatelessWidget {
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       home: const SplashPage(),
