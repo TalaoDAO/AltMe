@@ -8,7 +8,6 @@ class _BaseItem extends StatefulWidget {
     required this.child,
     this.onTap,
     this.enabled = true,
-    this.selected,
     this.color = Colors.white,
     this.isCustom = false,
   }) : super(key: key);
@@ -16,7 +15,6 @@ class _BaseItem extends StatefulWidget {
   final Widget child;
   final VoidCallback? onTap;
   final bool enabled;
-  final bool? selected;
   final Color color;
   final bool isCustom;
 

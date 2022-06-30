@@ -1,13 +1,22 @@
 part of 'drawer_cubit.dart';
 
-class DrawerState {
-  const DrawerState({this.isBiometricsEnable = false});
+@JsonSerializable()
+class DrawerState extends Equatable {
+  const DrawerState({this.isBiometricsEnabled = false});
 
-  final bool isBiometricsEnable;
+  factory DrawerState.fromJson(Map<String, dynamic> json) =>
+      _$DrawerStateFromJson(json);
 
-  DrawerState copyWith({bool? isBiometricsEnable}) {
+  final bool isBiometricsEnabled;
+
+  DrawerState copyWith({bool? isBiometricsEnabled}) {
     return DrawerState(
-      isBiometricsEnable: isBiometricsEnable ?? this.isBiometricsEnable,
+      isBiometricsEnabled: isBiometricsEnabled ?? this.isBiometricsEnabled,
     );
   }
+
+  Map<String, dynamic> toJson() => _$DrawerStateToJson(this);
+
+  @override
+  List<Object?> get props => [isBiometricsEnabled];
 }

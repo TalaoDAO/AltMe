@@ -22,8 +22,10 @@ class TokensCubit extends Cubit<TokensState> {
 
   List<TokenModel> data = [];
 
-  Future<void> getBalanceOfAssetList(
-      {required int offset, int limit = 15}) async {
+  Future<void> getBalanceOfAssetList({
+    required int offset,
+    int limit = 15,
+  }) async {
     if (data.length < offset) return;
     try {
       if (offset == 0) {

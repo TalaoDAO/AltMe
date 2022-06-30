@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/deep_link/deep_link.dart';
-import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
@@ -26,15 +25,7 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SplashCubit(
-        secureStorageProvider: secure_storage.getSecureStorage,
-        didCubit: context.read<DIDCubit>(),
-        homeCubit: context.read<HomeCubit>(),
-        walletCubit: context.read<WalletCubit>(),
-      ),
-      child: const SplashView(),
-    );
+    return const SplashView();
   }
 }
 

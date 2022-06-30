@@ -15,7 +15,8 @@ class TezosAssociatedAddressCredential {
   });
 
   factory TezosAssociatedAddressCredential.fromJson(
-          Map<String, dynamic> json) =>
+    Map<String, dynamic> json,
+  ) =>
       _$TezosAssociatedAddressCredentialFromJson(json);
 
   @JsonKey(name: '@context', defaultValue: _context)
