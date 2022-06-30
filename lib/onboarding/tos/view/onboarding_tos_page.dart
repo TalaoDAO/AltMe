@@ -32,15 +32,15 @@ class _OnBoardingTosPageState extends State<OnBoardingTosPage> {
   @override
   void initState() {
     _scrollController = ScrollController();
-    _scrollController.addListener(() {
+    _scrollController.addListener(() async {
       bool scrollIsOver = false;
-      if (_scrollController.offset + 20 >=
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange) {
         scrollIsOver = true;
       } else {
         scrollIsOver = false;
       }
-
       if (context.read<TOSCubit>().state.scrollIsOver != scrollIsOver) {
         context.read<TOSCubit>().setScrolledIsOver(scrollIsOver: scrollIsOver);
       }
@@ -59,7 +59,12 @@ class _OnBoardingTosPageState extends State<OnBoardingTosPage> {
           title: l10n.onBoardingTosTitle,
           titleLeading: const BackLeadingButton(),
           scrollView: false,
-          padding: EdgeInsets.zero,
+          padding: EdgeInsets.only(
+            top: Sizes.spaceSmall,
+            right: Sizes.spaceSmall,
+            left: Sizes.spaceSmall,
+            bottom: state.scrollIsOver ? 0 : Sizes.spaceSmall,
+          ),
           useSafeArea: false,
           navigation: state.scrollIsOver
               ? AcceptanceButtonsWidget(
@@ -68,8 +73,21 @@ class _OnBoardingTosPageState extends State<OnBoardingTosPage> {
                   onAcceptancePressed: () => onAcceptancePressed(context),
                 )
               : null,
-          body: DisplayTerms(
-            scrollController: _scrollController,
+          body: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(Sizes.smallRadius),
+                topRight: const Radius.circular(Sizes.smallRadius),
+                bottomRight:
+                    Radius.circular(state.scrollIsOver ? 0 : Sizes.smallRadius),
+                bottomLeft:
+                    Radius.circular(state.scrollIsOver ? 0 : Sizes.smallRadius),
+              ),
+            ),
+            child: DisplayTerms(
+              scrollController: _scrollController,
+            ),
           ),
           floatingActionButton: state.scrollIsOver
               ? null
