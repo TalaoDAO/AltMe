@@ -126,6 +126,7 @@ class WalletCubit extends Cubit<WalletState> {
     final credential = await generateAssociatedWalletCredential(
       accountName: 'account ${cryptoAccounts.length}',
       walletAddress: cryptoWalletAddress,
+      cryptoKey: cryptoKey,
     );
     if (credential != null) {
       await insertCredential(credential);
@@ -330,18 +331,20 @@ class WalletCubit extends Cubit<WalletState> {
   Future<CredentialModel?> generateAssociatedWalletCredential({
     required String accountName,
     required String walletAddress,
+    required String cryptoKey,
   }) async {
     final log = Logger('altme/associated_wallet_credential/create');
     try {
-      final secretKey = await secureStorageProvider.get(
-        SecureStorageKeys.ssiKey,
-      );
+      const didMethod = AltMeStrings.defaultDIDMethod;
+      final didSsi = didCubit.state.did!;
+      final did = didKitProvider.keyToDID(didMethod, cryptoKey);
 
-      final did = didCubit.state.did!;
+      final verificationMethod =
+          await didKitProvider.keyToVerificationMethod(didMethod, cryptoKey);
 
       final options = {
         'proofPurpose': 'assertionMethod',
-        'verificationMethod': didCubit.state.verificationMethod
+        'verificationMethod': verificationMethod
       };
       final verifyOptions = {'proofPurpose': 'assertionMethod'};
       final id = 'urn:uuid:${const Uuid().v4()}';
@@ -349,7 +352,7 @@ class WalletCubit extends Cubit<WalletState> {
       final issuanceDate = '${formatter.format(DateTime.now())}Z';
 
       final tezosAssociatedAddressModel = TezosAssociatedAddressModel(
-        id: did,
+        id: didSsi,
         accountName: accountName,
         associatedAddress: walletAddress,
         type: 'TezosAssociatedAddress',
@@ -364,7 +367,7 @@ class WalletCubit extends Cubit<WalletState> {
       final vc = await didKitProvider.issueCredential(
         jsonEncode(tezosAssociatedAddressCredential.toJson()),
         jsonEncode(options),
-        secretKey!,
+        cryptoKey,
       );
       final result =
           await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions));
