@@ -156,6 +156,25 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
+  TextStyle get onBoardingTitleStyle => GoogleFonts.roboto(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get onBoardingSubTitleStyle => GoogleFonts.roboto(
+        color: const Color(0xFFD1CCE3),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get learnMoreTextStyle => GoogleFonts.roboto(
+        color: const Color(0xFFD1CCE3),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        decoration: TextDecoration.underline,
+      );
+
   TextStyle get infoTitle => GoogleFonts.roboto(
         color: const Color(0xFFEDEAF5),
         fontSize: 20,
