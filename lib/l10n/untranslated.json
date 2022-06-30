@@ -191,7 +191,15 @@
     "cryptoEditConfirmationDialog",
     "cryptoEditConfirmationDialogYes",
     "cryptoEditConfirmationDialogNo",
-    "cryptoEditLabel"
+    "cryptoEditLabel",
+    "onBoardingFirstTitle",
+    "onBoardingFirstSubtitle",
+    "onBoardingSecondTitle",
+    "onBoardingSecondSubtitle",
+    "onBoardingThirdTitle",
+    "onBoardingThirdSubtitle",
+    "onBoardingStart",
+    "learnMoreAboutAltme"
   ],
 
   "es": [
@@ -386,7 +394,15 @@
     "cryptoEditConfirmationDialog",
     "cryptoEditConfirmationDialogYes",
     "cryptoEditConfirmationDialogNo",
-    "cryptoEditLabel"
+    "cryptoEditLabel",
+    "onBoardingFirstTitle",
+    "onBoardingFirstSubtitle",
+    "onBoardingSecondTitle",
+    "onBoardingSecondSubtitle",
+    "onBoardingThirdTitle",
+    "onBoardingThirdSubtitle",
+    "onBoardingStart",
+    "learnMoreAboutAltme"
   ],
 
   "fr": [
@@ -409,7 +425,15 @@
     "cryptoEditConfirmationDialog",
     "cryptoEditConfirmationDialogYes",
     "cryptoEditConfirmationDialogNo",
-    "cryptoEditLabel"
+    "cryptoEditLabel",
+    "onBoardingFirstTitle",
+    "onBoardingFirstSubtitle",
+    "onBoardingSecondTitle",
+    "onBoardingSecondSubtitle",
+    "onBoardingThirdTitle",
+    "onBoardingThirdSubtitle",
+    "onBoardingStart",
+    "learnMoreAboutAltme"
   ],
 
   "it": [
@@ -606,6 +630,14 @@
     "cryptoEditConfirmationDialog",
     "cryptoEditConfirmationDialogYes",
     "cryptoEditConfirmationDialogNo",
-    "cryptoEditLabel"
+    "cryptoEditLabel",
+    "onBoardingFirstTitle",
+    "onBoardingFirstSubtitle",
+    "onBoardingSecondTitle",
+    "onBoardingSecondSubtitle",
+    "onBoardingThirdTitle",
+    "onBoardingThirdSubtitle",
+    "onBoardingStart",
+    "learnMoreAboutAltme"
   ]
 }

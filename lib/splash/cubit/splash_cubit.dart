@@ -39,7 +39,7 @@ class SplashCubit extends Cubit<SplashState> {
       emit(state.copyWith(status: SplashStatus.routeToPassCode));
     } else {
       homeCubit.emitHasNoWallet();
-      emit(state.copyWith(status: SplashStatus.routeToHomePage));
+      emit(state.copyWith(status: SplashStatus.routeToOnboarding));
     }
   }
 
