@@ -7,7 +7,9 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:logging/logging.dart';
 
 class DisplayTerms extends StatefulWidget {
-  const DisplayTerms({Key? key}) : super(key: key);
+  const DisplayTerms({Key? key, this.scrollController}) : super(key: key);
+
+  final ScrollController? scrollController;
 
   @override
   State<DisplayTerms> createState() => _DisplayTermsState();
@@ -37,6 +39,7 @@ class _DisplayTermsState extends State<DisplayTerms> {
         if (snapshot.data != null) {
           return Markdown(
             data: snapshot.data!,
+            controller: widget.scrollController,
             styleSheet: MarkdownStyleSheet(
               h1: TextStyle(color: Theme.of(context).colorScheme.markDownH1),
               h2: TextStyle(color: Theme.of(context).colorScheme.markDownH2),
