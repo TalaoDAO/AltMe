@@ -66,13 +66,14 @@ class _OnBoardingTosPageState extends State<OnBoardingTosPage> {
             bottom: state.scrollIsOver ? 0 : Sizes.spaceSmall,
           ),
           useSafeArea: false,
-          navigation: state.scrollIsOver
-              ? AcceptanceButtonsWidget(
-                  agreeTermsAndCondition: state.agreeTerms,
-                  readTermsOfUse: state.readTerms,
-                  onAcceptancePressed: () => onAcceptancePressed(context),
-                )
-              : null,
+          navigation: Visibility(
+            visible: state.scrollIsOver,
+            child: AcceptanceButtonsWidget(
+              agreeTermsAndCondition: state.agreeTerms,
+              readTermsOfUse: state.readTerms,
+              onAcceptancePressed: () => onAcceptancePressed(context),
+            ),
+          ),
           body: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
