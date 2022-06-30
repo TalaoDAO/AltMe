@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class App extends StatelessWidget {
@@ -53,6 +54,12 @@ class App extends StatelessWidget {
         BlocProvider<CredentialListCubit>(
           create: (context) => CredentialListCubit(),
         ),
+        BlocProvider<DIDCubit>(
+          create: (context) => DIDCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            didKitProvider: DIDKitProvider(),
+          ),
+        ),
         BlocProvider<WalletCubit>(
           lazy: false,
           create: (context) => WalletCubit(
@@ -61,6 +68,15 @@ class App extends StatelessWidget {
             profileCubit: context.read<ProfileCubit>(),
             homeCubit: context.read<HomeCubit>(),
             credentialListCubit: context.read<CredentialListCubit>(),
+            keyGenerator: KeyGenerator(),
+            didKitProvider: DIDKitProvider(),
+            didCubit: context.read<DIDCubit>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => CryptoBottomSheetCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            walletCubit: context.read<WalletCubit>(),
           ),
         ),
         BlocProvider<ScanCubit>(
@@ -83,10 +99,12 @@ class App extends StatelessWidget {
             walletCubit: context.read<WalletCubit>(),
           ),
         ),
-        BlocProvider<DIDCubit>(
-          create: (context) => DIDCubit(
+        BlocProvider(
+          create: (context) => SplashCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
-            didKitProvider: DIDKitProvider(),
+            didCubit: context.read<DIDCubit>(),
+            homeCubit: context.read<HomeCubit>(),
+            walletCubit: context.read<WalletCubit>(),
           ),
         )
       ],
@@ -108,6 +126,8 @@ class MaterialAppDefinition extends StatelessWidget {
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       home: const SplashPage(),

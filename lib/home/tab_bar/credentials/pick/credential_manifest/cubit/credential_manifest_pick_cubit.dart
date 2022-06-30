@@ -1,5 +1,5 @@
 import 'package:altme/home/home.dart';
-import 'package:altme/home/tab_bar/credentials/pick/credential_manifest/helpers/get_filtered_credential_list.dart';
+import 'package:altme/home/tab_bar/credentials/pick/credential_manifest/helpers/get_credentials_from_presentation_definition.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -15,7 +15,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
     Map<String, dynamic> presentationDefinition = const <String, dynamic>{},
   }) : super(CredentialManifestPickState(filteredCredentialList: const [])) {
     /// Get instruction to filter credentials of the wallet
-    final filteredCredentialList = getFilteredCredentialList(
+    final filteredCredentialList = getCredentialsFromPresentationDefinition(
       presentationDefinition,
       List.from(credentialList),
     );

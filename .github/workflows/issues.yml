@@ -1,0 +1,19 @@
+name: Adds all new issues to project board
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add-to-project:
+    name: Add issue to project
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/add-to-project@v0.1.0
+        with:
+          project-url: https://github.com/orgs/TalaoDAO/projects/1
+          github-token: ${{ secrets.GITHUB_TOKEN }}

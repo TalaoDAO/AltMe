@@ -66,48 +66,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
       );
 
       /// crypto wallet
-      await secureStorageProvider.set(
-        '${SecureStorageKeys.cryptoMnemonic}/0',
-        mnemonicFormatted,
-      );
-
-      final cryptoKey = await keyGenerator.jwkFromMnemonic(
-        mnemonic: mnemonicFormatted,
-        accountType: AccountType.crypto,
-        derivePathIndex: 0,
-      );
-      await secureStorageProvider.set(
-        '${SecureStorageKeys.cryptoKey}/0',
-        cryptoKey,
-      );
-
-      final cryptoSecretKey = await keyGenerator.secretKeyFromMnemonic(
-        mnemonic: mnemonicFormatted,
-        accountType: AccountType.crypto,
-        derivePathIndex: 0,
-      );
-      await secureStorageProvider.set(
-        '${SecureStorageKeys.cryptoSecretKey}/0',
-        cryptoSecretKey,
-      );
-
-      final cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
-        secretKey: cryptoSecretKey,
-      );
-      await secureStorageProvider.set(
-        '${SecureStorageKeys.cryptoWalletAddress}/0',
-        cryptoWalletAddress,
-      );
-
-      await walletCubit.insertWalletAccount(
-        CryptoAccount(
-          mnemonics: mnemonicFormatted,
-          key: cryptoKey,
-          walletAddress: cryptoWalletAddress,
-          secretKey: cryptoSecretKey,
-        ),
-      );
-
+      await walletCubit.createCryptoWallet(mnemonic: mnemonicFormatted);
       await walletCubit.setCurrentWalletAccount(0);
 
       homeCubit.emitHasWallet();

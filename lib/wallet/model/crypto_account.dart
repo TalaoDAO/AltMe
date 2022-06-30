@@ -1,3 +1,4 @@
+import 'package:altme/wallet/model/crypto_account_data.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -5,25 +6,17 @@ part 'crypto_account.g.dart';
 
 @JsonSerializable()
 class CryptoAccount extends Equatable {
-  const CryptoAccount({
-    this.name = '',
-    this.mnemonics,
-    required this.key,
-    required this.secretKey,
-    required this.walletAddress,
-  });
+  CryptoAccount({
+    List<CryptoAccountData>? data,
+  }) : data = data ?? [];
 
   factory CryptoAccount.fromJson(Map<String, dynamic> json) =>
       _$CryptoAccountFromJson(json);
 
-  final String? name;
-  final String? mnemonics;
-  final String key;
-  final String secretKey;
-  final String walletAddress;
+  final List<CryptoAccountData> data;
 
   Map<String, dynamic> toJson() => _$CryptoAccountToJson(this);
 
   @override
-  List<Object?> get props => [name, mnemonics, key, secretKey, walletAddress];
+  List<Object?> get props => [data];
 }

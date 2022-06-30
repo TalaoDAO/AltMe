@@ -146,6 +146,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR:
         return globalMessage.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR;
+
+      case ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED:
+        return globalMessage.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED;
     }
   }
 }

@@ -60,8 +60,8 @@ class TezotopiaVoucherRecto extends Recto {
             LayoutId(
               id: 'voucherValue',
               child: FractionallySizedBox(
-                widthFactor: 0.5,
-                child: Text(
+                widthFactor: 0.3,
+                child: MyText(
                   '15%',
                   style: Theme.of(context).textTheme.voucherValueCard,
                 ),

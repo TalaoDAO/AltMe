@@ -1,6 +1,6 @@
 class ImageStrings {
   static const String splashPath = 'assets/splash';
-  static const String splashCity = '$splashPath/city.png';
+  static const String splashImage = '$splashPath/splash_image.png';
   static const String splash = '$splashPath/altme.png';
   static const String splashDev = '$splashPath/altme-dev.png';
   static const String splashStage = '$splashPath/altme-stage.png';
@@ -42,4 +42,11 @@ class ImageStrings {
       '$imagePath/dummy_tezotopia_voucher_card.png';
   static const String dummyTalaoCard = '$imagePath/dummy_talao_card.png';
   static const String dummyIdentityCard = '$imagePath/dummy_identity_card.png';
+
+  static const String onBoardingFirstImage =
+      '$imagePath/onBoardingFirstImage.png';
+  static const String onBoardingSecondImage =
+      '$imagePath/onBoardingSecondImage.png';
+  static const String onBoardingThirdImage =
+      '$imagePath/onBoardingThirdImage.png';
 }

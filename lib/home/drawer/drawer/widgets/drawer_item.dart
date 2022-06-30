@@ -22,42 +22,32 @@ class DrawerItem extends StatelessWidget {
       color: Theme.of(context).colorScheme.transparent,
       child: InkWell(
         onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            vertical: 16,
-            horizontal: 5,
-          ),
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: Theme.of(context).colorScheme.borderColor,
-                width: 0.2,
+        child: Row(
+          children: [
+            Image.asset(
+              icon,
+              height: 30,
+              width: 30,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: MyText(
+                title,
+                style: Theme.of(context).textTheme.drawerItem,
               ),
             ),
-          ),
-          child: Row(
-            children: [
-              Image.asset(icon, height: 30),
+            if (trailing != null)
+              trailing!
+            else ...[
               const SizedBox(width: 16),
-              Expanded(
-                child: MyText(
-                  title,
-                  style: Theme.of(context).textTheme.drawerItem,
-                ),
-              ),
-              if (trailing != null)
-                trailing!
-              else ...[
-                const SizedBox(width: 16),
-                Icon(
-                  Icons.chevron_right,
-                  size: 24,
-                  color: Theme.of(context).colorScheme.primary,
-                )
-              ],
+              Icon(
+                Icons.chevron_right,
+                size: 24,
+                color: Theme.of(context).colorScheme.primary,
+              )
             ],
-          ),
+          ],
         ),
       ),
     );
