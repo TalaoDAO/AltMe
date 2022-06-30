@@ -34,7 +34,7 @@ class _OnBoardingTosPageState extends State<OnBoardingTosPage> {
     _scrollController = ScrollController();
     _scrollController.addListener(() async {
       bool scrollIsOver = false;
-      if (_scrollController.offset >=
+      if (_scrollController.offset + 500 >=
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
         scrollIsOver = true;
