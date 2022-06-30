@@ -99,6 +99,14 @@ class App extends StatelessWidget {
             walletCubit: context.read<WalletCubit>(),
           ),
         ),
+        BlocProvider(
+          create: (context) => SplashCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            didCubit: context.read<DIDCubit>(),
+            homeCubit: context.read<HomeCubit>(),
+            walletCubit: context.read<WalletCubit>(),
+          ),
+        )
       ],
       child: const MaterialAppDefinition(),
     );

@@ -144,7 +144,8 @@ class WalletCubit extends Cubit<WalletState> {
 
     final cryptoAccounts = List.of(state.cryptoAccount.data)
       ..removeWhere(
-          (element) => element.walletAddress == cryptoAccountData.walletAddress)
+        (element) => element.walletAddress == cryptoAccountData.walletAddress,
+      )
       ..insert(index, cryptoAccountData);
 
     final CryptoAccount cryptoAccount = CryptoAccount(data: cryptoAccounts);

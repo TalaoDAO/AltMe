@@ -1,2 +1,11 @@
+export 'about_items.dart';
+export 'did_key.dart';
+export 'drawer_app_version.dart';
 export 'drawer_close_button.dart';
 export 'drawer_item.dart';
+export 'drawer_item_divider.dart';
+export 'issuer_items.dart';
+export 'manage_items.dart';
+export 'network_items.dart';
+export 'security_items.dart';
+export 'wallet_items.dart';

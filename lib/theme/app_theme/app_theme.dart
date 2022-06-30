@@ -87,83 +87,53 @@ extension CustomColorScheme on ColorScheme {
   Color get digitFillColor => Colors.transparent;
 
   Color get darkGradientStartColor => const Color(0xff0A0421);
-
   Color get darkGradientEndColor => const Color(0xff25095B);
-
   Color get transparent => Colors.transparent;
-
   Color get onOutlineButton => const Color(0xFF6600FF);
-
   Color get onElevatedButton => const Color(0xFFFFFFFF);
 
   Color get appBarUpperLayer => background.withOpacity(0.5);
-
   Color get appBarLowerLayer => background;
 
   Color get surfaceContainer => const Color(0xff707070).withOpacity(0.07);
+  Color get drawerSurface => const Color(0xff232630);
 
   Color get label => Colors.white;
-
   Color get unSelectedLabel => const Color(0xff86809D);
-
   Color get leadingButton => const Color(0xffF1EFF8);
-
   Color get selectedBottomBar => surface;
-
   Color get drawerBackground => const Color(0xff0B0E19);
-
   Color get borderColor => const Color(0xFFDDCEF4);
 
   Color get markDownH1 => const Color(0xFFDBD8D8);
-
   Color get markDownH2 => const Color(0xFFDBD8D8);
-
   Color get markDownP => const Color(0xFFADACAC);
-
   Color get markDownA => const Color(0xff517bff);
-
   Color get subtitle1 => const Color(0xFFFFFFFF);
-
   Color get subtitle2 => const Color(0xFF8B8C92);
 
   Color get profileDummy => const Color(0xFF212121);
-
   Color get documentShadow => const Color(0xFF424242);
-
   Color get documentShape => const Color(0xff3700b3).withOpacity(0.05);
-
   Color get star => const Color(0xFFFFB83D);
-
   Color get genderIcon => const Color(0xFF212121);
-
   Color get activeCredential => Colors.green;
-
   Color get expiredCredential => Colors.orange;
-
   Color get revokedCredential => Colors.red;
 
   Color get buttonDisabled => const Color(0xFF424242);
-
   Color get alertErrorMessage => Colors.red;
-
   Color get alertWarningMessage => Colors.yellow;
-
   Color get alertInfoMessage => Colors.cyan;
-
   Color get alertSuccessMessage => Colors.green;
 
   Color get qrScanBackground => const Color(0xff2B1C48);
-
   Color get qrScanInnerShadow => const Color(0xff000000).withOpacity(0.16);
-
   Color get qrScanOuterShadow => const Color(0xff430F91);
 
   Color get dialogText => const Color(0xFF8682A8);
-
   Color get tabBarNotSelected => const Color(0xFF280164);
-
   Color get credentialBackground => const Color(0xFF211F33);
-
   Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
 }
 
@@ -252,10 +222,22 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
+  TextStyle get drawerMenu => GoogleFonts.roboto(
+        color: const Color(0xFFD1CCE3),
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get drawerItem => GoogleFonts.roboto(
         color: const Color(0xFFFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get biometricMessage => GoogleFonts.roboto(
+        color: const Color(0xFFB1ADC3),
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
       );
 
   TextStyle get pinCodeTitle => GoogleFonts.roboto(
