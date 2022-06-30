@@ -34,9 +34,9 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   void initState() {
-    // Future<void>.delayed(const Duration(milliseconds: 5 * 1000), () async {
-    //   await context.read<SplashCubit>().initialiseApp();
-    // });
+    Future<void>.delayed(const Duration(milliseconds: 5 * 1000), () async {
+      await context.read<SplashCubit>().initialiseApp();
+    });
     super.initState();
   }
 
