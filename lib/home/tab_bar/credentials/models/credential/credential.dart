@@ -55,6 +55,7 @@ class Credential {
   final List<Translation> description;
   @JsonKey(defaultValue: <Translation>[])
   final List<Translation> name;
+  @JsonKey(defaultValue: '')
   final String issuanceDate;
   @JsonKey(fromJson: _fromJsonProofs)
   final List<Proof> proof;
