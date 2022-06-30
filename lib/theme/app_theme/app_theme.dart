@@ -135,6 +135,9 @@ extension CustomColorScheme on ColorScheme {
   Color get tabBarNotSelected => const Color(0xFF280164);
   Color get credentialBackground => const Color(0xFF211F33);
   Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
+
+  Color get startButtonColorA => const Color(0xff8436F8);
+  Color get startButtonColorB => const Color(0xff6600FF);
 }
 
 extension CustomTextTheme on TextTheme {
@@ -154,6 +157,25 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
         fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get onBoardingTitleStyle => GoogleFonts.roboto(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get onBoardingSubTitleStyle => GoogleFonts.roboto(
+        color: const Color(0xFFD1CCE3),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get learnMoreTextStyle => GoogleFonts.roboto(
+        color: const Color(0xFFD1CCE3),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        decoration: TextDecoration.underline,
       );
 
   TextStyle get infoTitle => GoogleFonts.roboto(

@@ -348,5 +348,13 @@
   "cryptoEditConfirmationDialog": "Do you really want to edit this crypto account name?",
   "cryptoEditConfirmationDialogYes": "Save",
   "cryptoEditConfirmationDialogNo": "Cancel",
-  "cryptoEditLabel": "Account Name"
+  "cryptoEditLabel": "Account Name",
+  "onBoardingFirstTitle": "Discover exclusive offers from your favorite App and Games.",
+  "onBoardingFirstSubtitle": "Why pay the full price when you can use BIG discounts? Sync your wallet. Add your offers in 1 click. And start to PLAY / SAVE !",
+  "onBoardingSecondTitle": "Add credentials and get rewarded for it.",
+  "onBoardingSecondSubtitle": "Web 3 is about redistributing the power to the average consumer. The more credentials you add, the best deals you will get.",
+  "onBoardingThirdTitle": "Manage your data with full autonomy, security and privacy.",
+  "onBoardingThirdSubtitle": "Altme use SSI cryptography to give you full control over your data. Nothing goes out of your phone.",
+  "onBoardingStart" : "Start",
+  "learnMoreAboutAltme": "Learn more about Altme"
 }
