@@ -135,6 +135,9 @@ extension CustomColorScheme on ColorScheme {
   Color get tabBarNotSelected => const Color(0xFF280164);
   Color get credentialBackground => const Color(0xFF211F33);
   Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
+
+  Color get startButtonColorA => const Color(0xff8436F8);
+  Color get startButtonColorB => const Color(0xff6600FF);
 }
 
 extension CustomTextTheme on TextTheme {

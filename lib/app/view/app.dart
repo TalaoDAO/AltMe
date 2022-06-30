@@ -11,7 +11,6 @@ import 'package:altme/did/did.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
@@ -131,7 +130,7 @@ class MaterialAppDefinition extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const OnBoardingFirstPage(),
+      home: const SplashPage(),
     );
   }
 }

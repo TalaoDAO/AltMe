@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/first/onboarding_first.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
@@ -20,8 +21,9 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
         ),
       );
     }
-    if (state.status == SplashStatus.routeToHomePage) {
-      Navigator.of(context).push<void>(HomePage.route());
+
+    if (state.status == SplashStatus.routeToOnboarding) {
+      Navigator.of(context).push<void>(OnBoardingFirstPage.route());
     }
   },
 );

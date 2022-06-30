@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 class OnBoardingSecondPage extends StatefulWidget {
   const OnBoardingSecondPage({Key? key}) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route route() => RightToLeftRoute<void>(
         builder: (context) => const OnBoardingSecondPage(),
-        settings: const RouteSettings(name: '/onBoardingSecond'),
+        settings: const RouteSettings(name: '/onBoardingSecondPage'),
       );
 
   @override

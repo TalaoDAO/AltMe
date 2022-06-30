@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 class OnBoardingThirdPage extends StatefulWidget {
   const OnBoardingThirdPage({Key? key}) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route route() => RightToLeftRoute<void>(
         builder: (context) => const OnBoardingThirdPage(),
-        settings: const RouteSettings(name: '/onBoardingThird'),
+        settings: const RouteSettings(name: '/onBoardingThirdPage'),
       );
 
   @override

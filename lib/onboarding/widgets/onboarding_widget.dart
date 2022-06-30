@@ -43,12 +43,7 @@ class OnBoardingWidget extends StatelessWidget {
         const Spacer(),
         PageTracker(index: index),
         const SizedBox(height: 20),
-        MyElevatedButton(
-          verticalSpacing: 20,
-          borderRadius: 20,
-          text: l10n.onBoardingStart,
-          onPressed: () {},
-        ),
+        const StartButton(),
         const SizedBox(height: 20),
         GestureDetector(
           child: Text(
