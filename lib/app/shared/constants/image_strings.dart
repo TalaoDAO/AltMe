@@ -1,6 +1,6 @@
 class ImageStrings {
   static const String splashPath = 'assets/splash';
-  static const String splashCity = '$splashPath/city.png';
+  static const String splashImage = '$splashPath/splash_image.png';
   static const String splash = '$splashPath/altme.png';
   static const String splashDev = '$splashPath/altme-dev.png';
   static const String splashStage = '$splashPath/altme-stage.png';

@@ -1,14 +1,15 @@
 import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
-class CityImage extends StatelessWidget {
-  const CityImage({Key? key}) : super(key: key);
+class SplashImage extends StatelessWidget {
+  const SplashImage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Image.asset(
-      ImageStrings.splashCity,
+      ImageStrings.splashImage,
       fit: BoxFit.fitWidth,
+      height: MediaQuery.of(context).size.longestSide / 3,
     );
   }
 }
