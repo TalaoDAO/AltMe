@@ -145,15 +145,15 @@ extension CustomTextTheme on TextTheme {
       GoogleFonts.roboto(fontSize: 16, color: Colors.white);
 
   TextStyle get starterTitleStyle => GoogleFonts.roboto(
-        color: const Color(0xFFEDEAF5),
-        fontSize: 28,
-        fontWeight: FontWeight.w800,
+        color: const Color(0xFFFFFFFF),
+        fontSize: 32,
+        fontWeight: FontWeight.w600,
       );
 
   TextStyle get starterSubTitleStyle => GoogleFonts.roboto(
         color: const Color(0xFFD1CCE3),
-        fontSize: 22,
-        fontWeight: FontWeight.w500,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
       );
 
   TextStyle get infoTitle => GoogleFonts.roboto(
