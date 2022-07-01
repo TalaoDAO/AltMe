@@ -73,6 +73,12 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 showModalBottomSheet<void>(
                   context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(Sizes.largeRadius),
+                      topLeft: Radius.circular(Sizes.largeRadius),
+                    ),
+                  ),
                   builder: (context) => const CryptoBottomSheetView(),
                 );
               },

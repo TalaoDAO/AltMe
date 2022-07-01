@@ -76,7 +76,13 @@ class _CryptoBottomSheetViewState extends State<CryptoBottomSheetView> {
       },
       builder: (context, state) {
         return Container(
-          color: Theme.of(context).colorScheme.surface,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(Sizes.largeRadius),
+              topLeft: Radius.circular(Sizes.largeRadius),
+            ),
+          ),
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16),
