@@ -37,4 +37,5 @@ class IconStrings {
   static const String issuer = '$base/issuer.png';
   static const String wallet = '$base/wallet.png';
   static const String userRound = '$base/user-round.png';
+  static const String arrowSquareDown = '$base/arrow-square-down.png';
 }

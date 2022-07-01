@@ -80,10 +80,10 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text(accountName),
                   const SizedBox(width: 5),
-                  const Icon(
-                    Icons.arrow_downward,
-                    color: Colors.white,
-                  )
+                  Image.asset(
+                    IconStrings.arrowSquareDown,
+                    width: Sizes.icon,
+                  ),
                 ],
               ),
             );
