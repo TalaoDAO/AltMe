@@ -199,7 +199,10 @@
     "onBoardingThirdTitle",
     "onBoardingThirdSubtitle",
     "onBoardingStart",
-    "learnMoreAboutAltme"
+    "learnMoreAboutAltme",
+    "scroll",
+    "agreeTermsAndConditionCheckBox",
+    "readTermsOfUseCheckBox"
   ],
 
   "es": [
@@ -402,7 +405,10 @@
     "onBoardingThirdTitle",
     "onBoardingThirdSubtitle",
     "onBoardingStart",
-    "learnMoreAboutAltme"
+    "learnMoreAboutAltme",
+    "scroll",
+    "agreeTermsAndConditionCheckBox",
+    "readTermsOfUseCheckBox"
   ],
 
   "fr": [
@@ -433,7 +439,10 @@
     "onBoardingThirdTitle",
     "onBoardingThirdSubtitle",
     "onBoardingStart",
-    "learnMoreAboutAltme"
+    "learnMoreAboutAltme",
+    "scroll",
+    "agreeTermsAndConditionCheckBox",
+    "readTermsOfUseCheckBox"
   ],
 
   "it": [
@@ -638,6 +647,9 @@
     "onBoardingThirdTitle",
     "onBoardingThirdSubtitle",
     "onBoardingStart",
-    "learnMoreAboutAltme"
+    "learnMoreAboutAltme",
+    "scroll",
+    "agreeTermsAndConditionCheckBox",
+    "readTermsOfUseCheckBox"
   ]
 }

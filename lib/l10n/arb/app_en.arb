@@ -356,5 +356,8 @@
   "onBoardingThirdTitle": "Manage your data with full autonomy, security and privacy.",
   "onBoardingThirdSubtitle": "Altme use SSI cryptography to give you full control over your data. Nothing goes out of your phone.",
   "onBoardingStart" : "Start",
-  "learnMoreAboutAltme": "Learn more about Altme"
+  "learnMoreAboutAltme": "Learn more about Altme",
+  "scroll": "Scroll",
+  "agreeTermsAndConditionCheckBox": "I agree to the terms and conditions.",
+  "readTermsOfUseCheckBox": "I have read the terms of use."
 }
