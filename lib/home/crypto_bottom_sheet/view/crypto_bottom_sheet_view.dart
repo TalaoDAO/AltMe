@@ -89,7 +89,7 @@ class _CryptoBottomSheetViewState extends State<CryptoBottomSheetView> {
                       style: Theme.of(context).textTheme.accountsText,
                     ),
                     Container(height: 10),
-                    ListView.builder(
+                    ListView.separated(
                       itemCount: state.cryptoAccount.data.length,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -106,6 +106,7 @@ class _CryptoBottomSheetViewState extends State<CryptoBottomSheetView> {
                           onEditButtonPressed: () => _edit(i),
                         );
                       },
+                      separatorBuilder: (_,__) => const Divider(height: 1.2,),
                     ),
                     Container(height: 20),
                     Align(

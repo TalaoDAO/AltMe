@@ -23,55 +23,45 @@ class CryptoAccountItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final walletAddressExtracted = cryptoAccountData.walletAddress != ''
-        ? '''${cryptoAccountData.walletAddress.substring(0, 8)} ... ${cryptoAccountData.walletAddress.substring(cryptoAccountData.walletAddress.length - 5)}'''
+    final walletAddressLength = cryptoAccountData.walletAddress.length;
+    final walletAddressExtracted = walletAddressLength > 0
+        ? '''${cryptoAccountData.walletAddress.substring(0, walletAddressLength - 16)} ... ${cryptoAccountData.walletAddress.substring(cryptoAccountData.walletAddress.length - 5)}'''
         : '';
 
-    return InkWell(
+    return ListTile(
       onTap: onPressed,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: isSelected
-              ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.cryptoAccountNotSelected,
+      contentPadding: EdgeInsets.zero,
+      leading: Checkbox(
+        value: isSelected,
+        fillColor: MaterialStateProperty.all(
+          Theme.of(context).colorScheme.inversePrimary,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        margin: const EdgeInsets.symmetric(vertical: 2),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Row(
-            children: [
-              InkWell(
-                onTap: onEditButtonPressed,
-                child: Icon(
-                  Icons.edit,
-                  size: 20,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: MyText(
-                  cryptoAccountData.name.isEmpty
-                      ? '${l10n.cryptoAccount} ${listIndex + 1}'
-                      : cryptoAccountData.name,
-                  style: Theme.of(context).textTheme.accountsName,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  child: MyText(
-                    walletAddressExtracted,
-                    style: Theme.of(context).textTheme.walletAddress,
-                  ),
-                ),
-              ),
-            ],
+        checkColor: Theme.of(context).colorScheme.primary,
+        onChanged: (_) => onPressed.call(),
+        shape: const CircleBorder(),
+      ),
+      title: Row(
+        children: [
+          MyText(
+            cryptoAccountData.name.isEmpty
+                ? '${l10n.cryptoAccount} ${listIndex + 1}'
+                : cryptoAccountData.name,
+            style: Theme.of(context).textTheme.accountsName,
           ),
-        ),
+          const SizedBox(width: 10),
+          InkWell(
+            onTap: onEditButtonPressed,
+            child: Icon(
+              Icons.edit,
+              size: 20,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),
+        ],
+      ),
+      subtitle: MyText(
+        walletAddressExtracted,
+        style: Theme.of(context).textTheme.walletAddress,
       ),
     );
   }
