@@ -94,70 +94,16 @@ class _CryptoBottomSheetViewState extends State<CryptoBottomSheetView> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, i) {
-                        final cryptoAccountData = state.cryptoAccount.data[i];
-                        final walletAddress = cryptoAccountData.walletAddress;
-
-                        final walletAddressExtracted = walletAddress != ''
-                            ? '''${walletAddress.substring(0, 5)} ... ${walletAddress.substring(walletAddress.length - 5)}'''
-                            : '';
-
-                        return InkWell(
-                          onTap: () {
+                        return CryptoAccountItem(
+                          cryptoAccountData: state.cryptoAccount.data[i],
+                          isSelected: state.currentCryptoIndex == i,
+                          listIndex: i,
+                          onPressed: () {
                             context
                                 .read<CryptoBottomSheetCubit>()
                                 .setCurrentWalletAccount(i);
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: state.currentCryptoIndex == i
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .cryptoAccountNotSelected,
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            margin: const EdgeInsets.symmetric(vertical: 2),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              child: Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () => _edit(i),
-                                    child: Icon(
-                                      Icons.edit,
-                                      size: 20,
-                                      color:
-                                          Theme.of(context).colorScheme.onPrimary,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: MyText(
-                                      cryptoAccountData.name == ''
-                                          ? '${l10n.cryptoAccount} ${i + 1}'
-                                          : cryptoAccountData.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .accountsName,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Container(
-                                      alignment: Alignment.centerRight,
-                                      child: MyText(
-                                        walletAddressExtracted,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .walletAddress,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          onEditButtonPressed: () => _edit(i),
                         );
                       },
                     ),
