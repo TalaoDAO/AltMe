@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/home/tab_bar/credentials/pick/credential_manifest/helpers/get_credentials_from_filter_list.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
@@ -126,6 +128,7 @@ class WalletCubit extends Cubit<WalletState> {
     final credential = await generateAssociatedWalletCredential(
       accountName: 'account ${cryptoAccounts.length}',
       walletAddress: cryptoWalletAddress,
+      cryptoKey: cryptoKey,
     );
     if (credential != null) {
       await insertCredential(credential);
@@ -157,6 +160,40 @@ class WalletCubit extends Cubit<WalletState> {
 
     if (onComplete != null) {
       onComplete.call(cryptoAccount);
+    }
+
+    /// get id of current AssociatedAddres credential of this account
+    final oldCredentialList = getCredentialsFromFilterList(
+      [
+        Field([r'$..type'], Filter('String', 'TezosAssociatedAddress')),
+        Field(
+          [r'$..associatedAddress'],
+          Filter('String', cryptoAccountData.walletAddress),
+        ),
+      ],
+      state.credentials,
+    );
+
+    /// update or create AssociatedAddres credential with new name
+    if (oldCredentialList.isNotEmpty) {
+      final credential = await generateAssociatedWalletCredential(
+        accountName: cryptoAccountData.name,
+        walletAddress: cryptoAccountData.walletAddress,
+        cryptoKey: cryptoAccountData.key,
+        oldId: oldCredentialList.first.id,
+      );
+      if (credential != null) {
+        await updateCredential(credential);
+      }
+    } else {
+      final credential = await generateAssociatedWalletCredential(
+        accountName: cryptoAccountData.name,
+        walletAddress: cryptoAccountData.walletAddress,
+        cryptoKey: cryptoAccountData.key,
+      );
+      if (credential != null) {
+        await insertCredential(credential);
+      }
     }
 
     emitCryptoAccount(cryptoAccount);
@@ -330,18 +367,21 @@ class WalletCubit extends Cubit<WalletState> {
   Future<CredentialModel?> generateAssociatedWalletCredential({
     required String accountName,
     required String walletAddress,
+    required String cryptoKey,
+    String? oldId,
   }) async {
     final log = Logger('altme/associated_wallet_credential/create');
     try {
-      final secretKey = await secureStorageProvider.get(
-        SecureStorageKeys.ssiKey,
-      );
+      const didMethod = AltMeStrings.defaultDIDMethod;
+      final didSsi = didCubit.state.did!;
+      final did = didKitProvider.keyToDID(didMethod, cryptoKey);
 
-      final did = didCubit.state.did!;
+      final verificationMethod =
+          await didKitProvider.keyToVerificationMethod(didMethod, cryptoKey);
 
       final options = {
         'proofPurpose': 'assertionMethod',
-        'verificationMethod': didCubit.state.verificationMethod
+        'verificationMethod': verificationMethod
       };
       final verifyOptions = {'proofPurpose': 'assertionMethod'};
       final id = 'urn:uuid:${const Uuid().v4()}';
@@ -349,7 +389,7 @@ class WalletCubit extends Cubit<WalletState> {
       final issuanceDate = '${formatter.format(DateTime.now())}Z';
 
       final tezosAssociatedAddressModel = TezosAssociatedAddressModel(
-        id: did,
+        id: didSsi,
         accountName: accountName,
         associatedAddress: walletAddress,
         type: 'TezosAssociatedAddress',
@@ -364,7 +404,7 @@ class WalletCubit extends Cubit<WalletState> {
       final vc = await didKitProvider.issueCredential(
         jsonEncode(tezosAssociatedAddressCredential.toJson()),
         jsonEncode(options),
-        secretKey!,
+        cryptoKey,
       );
       final result =
           await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions));
@@ -385,10 +425,10 @@ class WalletCubit extends Cubit<WalletState> {
                 .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
           );
         } else {
-          return _createCredential(vc);
+          return _createCredential(vc, oldId);
         }
       } else {
-        return _createCredential(vc);
+        return _createCredential(vc, oldId);
       }
     } catch (e, s) {
       log.severe('something went wrong e: $e, stackTrace: $s', e, s);
@@ -396,9 +436,9 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future<CredentialModel> _createCredential(String vc) async {
+  Future<CredentialModel> _createCredential(String vc, String? oldId) async {
     final jsonCredential = jsonDecode(vc) as Map<String, dynamic>;
-    final id = 'urn:uuid:${const Uuid().v4()}';
+    final id = oldId ?? 'urn:uuid:${const Uuid().v4()}';
     return CredentialModel(
       id: id,
       alias: '',
