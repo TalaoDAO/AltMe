@@ -83,6 +83,7 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get accountBottomSheetBorder => Colors.grey[200]!;
   Color get digitPrimaryColor => Colors.white;
   Color get digitFillColor => Colors.transparent;
 

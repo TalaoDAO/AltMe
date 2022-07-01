@@ -43,7 +43,7 @@ class CryptoAccountItem extends StatelessWidget {
       title: Row(
         children: [
           MyText(
-            cryptoAccountData.name.isEmpty
+            cryptoAccountData.name.trim().isEmpty
                 ? '${l10n.cryptoAccount} ${listIndex + 1}'
                 : cryptoAccountData.name,
             style: Theme.of(context).textTheme.accountsName,

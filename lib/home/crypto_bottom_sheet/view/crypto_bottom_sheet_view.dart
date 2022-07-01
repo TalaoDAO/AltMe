@@ -88,25 +88,40 @@ class _CryptoBottomSheetViewState extends State<CryptoBottomSheetView> {
                       l10n.cryptoAccounts,
                       style: Theme.of(context).textTheme.accountsText,
                     ),
-                    Container(height: 10),
-                    ListView.separated(
-                      itemCount: state.cryptoAccount.data.length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, i) {
-                        return CryptoAccountItem(
-                          cryptoAccountData: state.cryptoAccount.data[i],
-                          isSelected: state.currentCryptoIndex == i,
-                          listIndex: i,
-                          onPressed: () {
-                            context
-                                .read<CryptoBottomSheetCubit>()
-                                .setCurrentWalletAccount(i);
-                          },
-                          onEditButtonPressed: () => _edit(i),
-                        );
-                      },
-                      separatorBuilder: (_,__) => const Divider(height: 1.2,),
+                    const SizedBox(height: 10),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .accountBottomSheetBorder,
+                          width: 0.2,
+                        ),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(Sizes.normalRadius),
+                        ),
+                      ),
+                      child: ListView.separated(
+                        itemCount: state.cryptoAccount.data.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, i) {
+                          return CryptoAccountItem(
+                            cryptoAccountData: state.cryptoAccount.data[i],
+                            isSelected: state.currentCryptoIndex == i,
+                            listIndex: i,
+                            onPressed: () {
+                              context
+                                  .read<CryptoBottomSheetCubit>()
+                                  .setCurrentWalletAccount(i);
+                            },
+                            onEditButtonPressed: () => _edit(i),
+                          );
+                        },
+                        separatorBuilder: (_, __) => const Divider(
+                          height: 1.2,
+                        ),
+                      ),
                     ),
                     Container(height: 20),
                     Align(
