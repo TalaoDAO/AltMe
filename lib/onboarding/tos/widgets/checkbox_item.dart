@@ -20,9 +20,8 @@ class CheckboxItem extends StatelessWidget {
         onChange.call(!value);
       },
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Checkbox(
             value: value,

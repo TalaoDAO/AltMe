@@ -499,4 +499,10 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w700,
         color: const Color(0xff6600FF),
       );
+
+  TextStyle get scrollText => GoogleFonts.roboto(
+        fontSize: 9,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xffFFFFFF),
+      );
 }
