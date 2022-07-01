@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/crypto_bottom_sheet/cubit/crypto_bottom_sheet_cubit.dart';
+import 'package:altme/home/crypto_bottom_sheet/widgets/widgets.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -91,100 +92,89 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
       },
       builder: (context, state) {
         return Container(
-          color: Theme.of(context).colorScheme.surface,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: SingleChildScrollView(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(Sizes.largeRadius),
+              topLeft: Radius.circular(Sizes.largeRadius),
+            ),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    l10n.cryptoAccounts,
-                    style: Theme.of(context).textTheme.accountsText,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.account_balance_wallet_rounded,
+                        size: Sizes.icon2x,
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                      const SizedBox(width: Sizes.spaceXSmall),
+                      Text(
+                        l10n.selectAccount,
+                        style: Theme.of(context).textTheme.accountsText,
+                      ),
+                    ],
                   ),
-                  Container(height: 10),
-                  ListView.builder(
-                    itemCount: state.cryptoAccount.data.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, i) {
-                      final cryptoAccountData = state.cryptoAccount.data[i];
-                      final walletAddress = cryptoAccountData.walletAddress;
-
-                      final walletAddressExtracted = walletAddress != ''
-                          ? '''${walletAddress.substring(0, 5)} ... ${walletAddress.substring(walletAddress.length - 5)}'''
-                          : '';
-
-                      return InkWell(
-                        onTap: () {
-                          context
-                              .read<CryptoBottomSheetCubit>()
-                              .setCurrentWalletAccount(i);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: state.currentCryptoIndex == i
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context)
+                  const SizedBox(height: Sizes.spaceNormal),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context)
                                     .colorScheme
-                                    .cryptoAccountNotSelected,
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          margin: const EdgeInsets.symmetric(vertical: 2),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: Row(
-                              children: [
-                                InkWell(
-                                  onTap: () => _edit(i),
-                                  child: Icon(
-                                    Icons.edit,
-                                    size: 20,
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: MyText(
-                                    cryptoAccountData.name == ''
-                                        ? '${l10n.cryptoAccount} ${i + 1}'
-                                        : cryptoAccountData.name,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .accountsName,
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Container(
-                                    alignment: Alignment.centerRight,
-                                    child: MyText(
-                                      walletAddressExtracted,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .walletAddress,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                    .accountBottomSheetBorder,
+                                width: 0.2,
+                              ),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(Sizes.normalRadius),
+                              ),
+                            ),
+                            child: ListView.separated(
+                              itemCount: state.cryptoAccount.data.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, i) {
+                                return CryptoAccountItem(
+                                  cryptoAccountData:
+                                      state.cryptoAccount.data[i],
+                                  isSelected: state.currentCryptoIndex == i,
+                                  listIndex: i,
+                                  onPressed: () {
+                                    context
+                                        .read<CryptoBottomSheetCubit>()
+                                        .setCurrentWalletAccount(i);
+                                  },
+                                  onEditButtonPressed: () => _edit(i),
+                                );
+                              },
+                              separatorBuilder: (_, __) => const Divider(
+                                height: 1.2,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                  Container(height: 20),
-                  MyElevatedButton(
-                    text: l10n.cryptoAddAccount,
-                    verticalSpacing: 11,
-                    fontSize: 17,
-                    onPressed: () async {
-                      await context
-                          .read<CryptoBottomSheetCubit>()
-                          .addCryptoAccount();
-                    },
+                          Container(height: 20),
+                          Align(
+                            alignment: Alignment.center,
+                            child: AddAccountButton(
+                              onPressed: () async {
+                                await context
+                                    .read<CryptoBottomSheetCubit>()
+                                    .addCryptoAccount();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),

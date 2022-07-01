@@ -83,6 +83,7 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get accountBottomSheetBorder => Colors.grey[200]!;
   Color get digitPrimaryColor => Colors.white;
   Color get digitFillColor => Colors.transparent;
 
@@ -489,9 +490,9 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get walletAddress => GoogleFonts.roboto(
-        fontSize: 16,
+        fontSize: 12,
         fontWeight: FontWeight.w400,
-        color: const Color(0xffFFFFFF),
+        color: const Color(0xFF757575),
       );
 
   TextStyle get textButton => GoogleFonts.roboto(

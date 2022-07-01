@@ -204,7 +204,9 @@
     "learnMoreAboutAltme",
     "scroll",
     "agreeTermsAndConditionCheckBox",
-    "readTermsOfUseCheckBox"
+    "readTermsOfUseCheckBox",
+    "createOrImportNewAccount",
+    "selectAccount"
   ],
 
   "es": [
@@ -412,7 +414,9 @@
     "learnMoreAboutAltme",
     "scroll",
     "agreeTermsAndConditionCheckBox",
-    "readTermsOfUseCheckBox"
+    "readTermsOfUseCheckBox",
+    "createOrImportNewAccount",
+    "selectAccount"
   ],
 
   "fr": [
@@ -450,7 +454,9 @@
     "learnMoreAboutAltme",
     "scroll",
     "agreeTermsAndConditionCheckBox",
-    "readTermsOfUseCheckBox"
+    "readTermsOfUseCheckBox",
+    "createOrImportNewAccount",
+    "selectAccount"
   ],
 
   "it": [
@@ -660,6 +666,8 @@
     "learnMoreAboutAltme",
     "scroll",
     "agreeTermsAndConditionCheckBox",
-    "readTermsOfUseCheckBox"
+    "readTermsOfUseCheckBox",
+    "createOrImportNewAccount",
+    "selectAccount"
   ]
 }
