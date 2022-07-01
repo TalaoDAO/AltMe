@@ -80,62 +80,81 @@ class _CryptoBottomSheetViewState extends State<CryptoBottomSheetView> {
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.cryptoAccounts,
-                      style: Theme.of(context).textTheme.accountsText,
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .accountBottomSheetBorder,
-                          width: 0.2,
-                        ),
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(Sizes.normalRadius),
-                        ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.account_balance_wallet_rounded,
+                        size: Sizes.icon2x,
+                        color: Theme.of(context).colorScheme.inversePrimary,
                       ),
-                      child: ListView.separated(
-                        itemCount: state.cryptoAccount.data.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, i) {
-                          return CryptoAccountItem(
-                            cryptoAccountData: state.cryptoAccount.data[i],
-                            isSelected: state.currentCryptoIndex == i,
-                            listIndex: i,
-                            onPressed: () {
-                              context
-                                  .read<CryptoBottomSheetCubit>()
-                                  .setCurrentWalletAccount(i);
-                            },
-                            onEditButtonPressed: () => _edit(i),
-                          );
-                        },
-                        separatorBuilder: (_, __) => const Divider(
-                          height: 1.2,
-                        ),
+                      const SizedBox(width: Sizes.spaceXSmall),
+                      Text(
+                        l10n.selectAccount,
+                        style: Theme.of(context).textTheme.accountsText,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .accountBottomSheetBorder,
+                                width: 0.2,
+                              ),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(Sizes.normalRadius),
+                              ),
+                            ),
+                            child: ListView.separated(
+                              itemCount: state.cryptoAccount.data.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, i) {
+                                return CryptoAccountItem(
+                                  cryptoAccountData:
+                                      state.cryptoAccount.data[i],
+                                  isSelected: state.currentCryptoIndex == i,
+                                  listIndex: i,
+                                  onPressed: () {
+                                    context
+                                        .read<CryptoBottomSheetCubit>()
+                                        .setCurrentWalletAccount(i);
+                                  },
+                                  onEditButtonPressed: () => _edit(i),
+                                );
+                              },
+                              separatorBuilder: (_, __) => const Divider(
+                                height: 1.2,
+                              ),
+                            ),
+                          ),
+                          Container(height: 20),
+                          Align(
+                            alignment: Alignment.center,
+                            child: AddAccountButton(
+                              onPressed: () async {
+                                await context
+                                    .read<CryptoBottomSheetCubit>()
+                                    .addCryptoAccount();
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Container(height: 20),
-                    Align(
-                      alignment: Alignment.center,
-                      child: AddAccountButton(
-                        onPressed: () async {
-                          await context
-                              .read<CryptoBottomSheetCubit>()
-                              .addCryptoAccount();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

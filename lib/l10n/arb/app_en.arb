@@ -362,5 +362,6 @@
   "scroll": "Scroll",
   "agreeTermsAndConditionCheckBox": "I agree to the terms and conditions.",
   "readTermsOfUseCheckBox": "I have read the terms of use.",
-  "createOrImportNewAccount": "Create or import a new account."
+  "createOrImportNewAccount": "Create or import a new account.",
+  "selectAccount": "Select account"
 }

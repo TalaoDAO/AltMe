@@ -26,6 +26,6 @@ abstract class Sizes {
 
   //Icon
   static const double icon = 18;
-  static const double icon2x = 28;
+  static const double icon2x = 24;
   static const double icon3x = 34;
 }

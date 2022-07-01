@@ -205,7 +205,8 @@
     "scroll",
     "agreeTermsAndConditionCheckBox",
     "readTermsOfUseCheckBox",
-    "createOrImportNewAccount"
+    "createOrImportNewAccount",
+    "selectAccount"
   ],
 
   "es": [
@@ -414,7 +415,8 @@
     "scroll",
     "agreeTermsAndConditionCheckBox",
     "readTermsOfUseCheckBox",
-    "createOrImportNewAccount"
+    "createOrImportNewAccount",
+    "selectAccount"
   ],
 
   "fr": [
@@ -453,7 +455,8 @@
     "scroll",
     "agreeTermsAndConditionCheckBox",
     "readTermsOfUseCheckBox",
-    "createOrImportNewAccount"
+    "createOrImportNewAccount",
+    "selectAccount"
   ],
 
   "it": [
@@ -664,6 +667,7 @@
     "scroll",
     "agreeTermsAndConditionCheckBox",
     "readTermsOfUseCheckBox",
-    "createOrImportNewAccount"
+    "createOrImportNewAccount",
+    "selectAccount"
   ]
 }
