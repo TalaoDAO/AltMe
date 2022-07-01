@@ -244,6 +244,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
+  TextStyle get walletDialogClose => GoogleFonts.roboto(
+        color: const Color(0xFF030408),
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get drawerMenu => GoogleFonts.roboto(
         color: const Color(0xFFD1CCE3),
         fontSize: 15,
@@ -486,5 +492,11 @@ extension CustomTextTheme on TextTheme {
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: const Color(0xffFFFFFF),
+      );
+
+  TextStyle get textButton => GoogleFonts.roboto(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        color: const Color(0xff6600FF),
       );
 }
