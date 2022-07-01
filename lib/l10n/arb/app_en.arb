@@ -302,9 +302,11 @@
   "delete": "Delete",
   "enterNewPinCode": "Enter a new pin code",
   "confirmYourPinCode": "Confirm your pin code",
+  "walletAltme": "Wallet Altme",
+  "createTitle": "Create or import your wallet address",
+  "createSubtitle": "Altme never has access to your funds or recovery phase. Nothing goes out of your phone.",
   "create_wallet": "Create Wallet",
-  "restore_wallet": "Restore Wallet",
-  "create_wallet_message": "You need to create your wallet first",
+  "import_wallet": "Import Wallet",
   "enterYourPinCode": "Enter your pin code",
   "changePinCode": "Change PIN Code",
   "tryAgain": "Try again",
@@ -356,5 +358,10 @@
   "onBoardingThirdTitle": "Manage your data with full autonomy, security and privacy.",
   "onBoardingThirdSubtitle": "Altme use SSI cryptography to give you full control over your data. Nothing goes out of your phone.",
   "onBoardingStart" : "Start",
-  "learnMoreAboutAltme": "Learn more about Altme"
+  "learnMoreAboutAltme": "Learn more about Altme",
+  "scroll": "Scroll",
+  "agreeTermsAndConditionCheckBox": "I agree to the terms and conditions.",
+  "readTermsOfUseCheckBox": "I have read the terms of use.",
+  "createOrImportNewAccount": "Create or import a new account.",
+  "selectAccount": "Select account"
 }

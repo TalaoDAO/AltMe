@@ -18,7 +18,15 @@ abstract class Sizes {
   static const double homeCredentialRatio = 1.2;
 
   ///borderRadius
-  static const credentialBorderRadius = 15.0;
+  static const double credentialBorderRadius = 15;
+  static const double smallRadius = 8;
+  static const double normalRadius = 12;
+  static const double largeRadius = 18;
 
   static const double credentialAspectRatio = 584 / 317;
+
+  //Icon
+  static const double icon = 18;
+  static const double icon2x = 24;
+  static const double icon3x = 34;
 }

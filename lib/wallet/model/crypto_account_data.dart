@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -6,7 +8,7 @@ part 'crypto_account_data.g.dart';
 @JsonSerializable()
 class CryptoAccountData extends Equatable {
   CryptoAccountData({
-    this.name = '',
+    required this.name,
     this.mnemonics,
     required this.key,
     required this.secretKey,

@@ -18,6 +18,7 @@ import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 part 'wallet_cubit.g.dart';
+
 part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {
@@ -105,6 +106,9 @@ class WalletCubit extends Cubit<WalletState> {
     );
 
     final CryptoAccountData cryptoAccountData = CryptoAccountData(
+      name:
+          'My Account ${state.cryptoAccount.data.isEmpty ? '' : '${state.cryptoAccount.data.length}'}',
+      //The default name is Account + index
       mnemonics: mnemonic,
       key: cryptoKey,
       walletAddress: cryptoWalletAddress,
@@ -121,12 +125,10 @@ class WalletCubit extends Cubit<WalletState> {
       cryptoAccountString,
     );
 
-    if (onComplete != null) {
-      onComplete.call(cryptoAccount);
-    }
+    onComplete?.call(cryptoAccount);
 
     final credential = await generateAssociatedWalletCredential(
-      accountName: 'account ${cryptoAccounts.length}',
+      accountName: cryptoAccountData.name,
       walletAddress: cryptoWalletAddress,
       cryptoKey: cryptoKey,
     );

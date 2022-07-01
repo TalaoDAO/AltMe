@@ -49,4 +49,6 @@ class ImageStrings {
       '$imagePath/onBoardingSecondImage.png';
   static const String onBoardingThirdImage =
       '$imagePath/onBoardingThirdImage.png';
+
+  static const String createWalletImage = '$imagePath/create_wallet_icon.png';
 }

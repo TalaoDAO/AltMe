@@ -28,17 +28,15 @@ class ConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background = bgColor ?? Theme.of(context).colorScheme.background;
+    final background = bgColor ?? Theme.of(context).colorScheme.onBackground;
     final text = textColor ?? Theme.of(context).colorScheme.dialogText;
 
     final l10n = context.l10n;
     return AlertDialog(
       backgroundColor: background,
-      contentPadding: const EdgeInsets.only(
-        top: 24,
-        bottom: 16,
-        left: 24,
-        right: 24,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -75,6 +73,7 @@ class ConfirmDialog extends StatelessWidget {
                   borderColor: color,
                   backgroundColor: background,
                   textColor: color,
+                  elevation: 0,
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
@@ -88,6 +87,7 @@ class ConfirmDialog extends StatelessWidget {
                   backgroundColor: color,
                   textColor: background,
                   fontSize: 13,
+                  elevation: 0,
                   onPressed: () {
                     Navigator.of(context).pop(true);
                   },

@@ -63,37 +63,39 @@ class _HomePageState extends State<HomePage> {
           builder: (context, state) {
             final currentIndex = state.currentCryptoIndex;
 
-            String walletAddressExtracted = '';
+            String accountName = '';
 
             if (state.cryptoAccount.data.isNotEmpty) {
-              final walletAddress =
-                  state.cryptoAccount.data[currentIndex].walletAddress;
-
-              walletAddressExtracted = walletAddress != ''
-                  ? '''${walletAddress.substring(0, 5)} ... ${walletAddress.substring(walletAddress.length - 5)}'''
-                  : '';
+              accountName = state.cryptoAccount.data[currentIndex].name;
             }
 
-            return walletAddressExtracted == ''
-                ? const SizedBox.shrink()
-                : InkWell(
-                    onTap: () {
-                      showModalBottomSheet<void>(
-                        context: context,
-                        builder: (context) => const CryptoBottomSheetView(),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Text(walletAddressExtracted),
-                        const SizedBox(width: 5),
-                        const Icon(
-                          Icons.arrow_downward,
-                          color: Colors.white,
-                        )
-                      ],
+            return InkWell(
+              onTap: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(Sizes.largeRadius),
+                      topLeft: Radius.circular(Sizes.largeRadius),
                     ),
-                  );
+                  ),
+                  builder: (context) => const CryptoBottomSheetView(),
+                );
+              },
+              child: Row(
+                children: [
+                  Text(
+                    accountName,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(width: 5),
+                  Image.asset(
+                    IconStrings.arrowSquareDown,
+                    width: Sizes.icon,
+                  ),
+                ],
+              ),
+            );
           },
         ),
         body: Stack(

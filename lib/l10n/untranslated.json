@@ -145,9 +145,11 @@
     "delete",
     "enterNewPinCode",
     "confirmYourPinCode",
+    "walletAltme",
+    "createTitle",
+    "createSubtitle",
     "create_wallet",
-    "restore_wallet",
-    "create_wallet_message",
+    "import_wallet",
     "enterYourPinCode",
     "changePinCode",
     "tryAgain",
@@ -199,7 +201,12 @@
     "onBoardingThirdTitle",
     "onBoardingThirdSubtitle",
     "onBoardingStart",
-    "learnMoreAboutAltme"
+    "learnMoreAboutAltme",
+    "scroll",
+    "agreeTermsAndConditionCheckBox",
+    "readTermsOfUseCheckBox",
+    "createOrImportNewAccount",
+    "selectAccount"
   ],
 
   "es": [
@@ -348,9 +355,11 @@
     "delete",
     "enterNewPinCode",
     "confirmYourPinCode",
+    "walletAltme",
+    "createTitle",
+    "createSubtitle",
     "create_wallet",
-    "restore_wallet",
-    "create_wallet_message",
+    "import_wallet",
     "enterYourPinCode",
     "changePinCode",
     "tryAgain",
@@ -402,10 +411,19 @@
     "onBoardingThirdTitle",
     "onBoardingThirdSubtitle",
     "onBoardingStart",
-    "learnMoreAboutAltme"
+    "learnMoreAboutAltme",
+    "scroll",
+    "agreeTermsAndConditionCheckBox",
+    "readTermsOfUseCheckBox",
+    "createOrImportNewAccount",
+    "selectAccount"
   ],
 
   "fr": [
+    "walletAltme",
+    "createTitle",
+    "createSubtitle",
+    "import_wallet",
     "loginWithBiometricsMessage",
     "manage",
     "wallets",
@@ -433,7 +451,12 @@
     "onBoardingThirdTitle",
     "onBoardingThirdSubtitle",
     "onBoardingStart",
-    "learnMoreAboutAltme"
+    "learnMoreAboutAltme",
+    "scroll",
+    "agreeTermsAndConditionCheckBox",
+    "readTermsOfUseCheckBox",
+    "createOrImportNewAccount",
+    "selectAccount"
   ],
 
   "it": [
@@ -584,9 +607,11 @@
     "delete",
     "enterNewPinCode",
     "confirmYourPinCode",
+    "walletAltme",
+    "createTitle",
+    "createSubtitle",
     "create_wallet",
-    "restore_wallet",
-    "create_wallet_message",
+    "import_wallet",
     "enterYourPinCode",
     "changePinCode",
     "tryAgain",
@@ -638,6 +663,11 @@
     "onBoardingThirdTitle",
     "onBoardingThirdSubtitle",
     "onBoardingStart",
-    "learnMoreAboutAltme"
+    "learnMoreAboutAltme",
+    "scroll",
+    "agreeTermsAndConditionCheckBox",
+    "readTermsOfUseCheckBox",
+    "createOrImportNewAccount",
+    "selectAccount"
   ]
 }
