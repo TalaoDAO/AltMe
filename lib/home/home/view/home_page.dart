@@ -78,7 +78,10 @@ class _HomePageState extends State<HomePage> {
               },
               child: Row(
                 children: [
-                  Text(accountName),
+                  Text(
+                    accountName,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   const SizedBox(width: 5),
                   Image.asset(
                     IconStrings.arrowSquareDown,
