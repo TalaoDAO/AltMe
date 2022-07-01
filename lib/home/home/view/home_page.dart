@@ -69,26 +69,24 @@ class _HomePageState extends State<HomePage> {
               accountName = state.cryptoAccount.data[currentIndex].name;
             }
 
-            return accountName == ''
-                ? const SizedBox.shrink()
-                : InkWell(
-                    onTap: () {
-                      showModalBottomSheet<void>(
-                        context: context,
-                        builder: (context) => const CryptoBottomSheetView(),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Text(accountName),
-                        const SizedBox(width: 5),
-                        const Icon(
-                          Icons.arrow_downward,
-                          color: Colors.white,
-                        )
-                      ],
-                    ),
-                  );
+            return InkWell(
+              onTap: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (context) => const CryptoBottomSheetView(),
+                );
+              },
+              child: Row(
+                children: [
+                  Text(accountName),
+                  const SizedBox(width: 5),
+                  const Icon(
+                    Icons.arrow_downward,
+                    color: Colors.white,
+                  )
+                ],
+              ),
+            );
           },
         ),
         body: Stack(
