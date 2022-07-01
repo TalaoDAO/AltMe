@@ -131,7 +131,7 @@ extension CustomColorScheme on ColorScheme {
   Color get qrScanInnerShadow => const Color(0xff000000).withOpacity(0.16);
   Color get qrScanOuterShadow => const Color(0xff430F91);
 
-  Color get dialogText => const Color(0xFF8682A8);
+  Color get dialogText => const Color(0xFF180B2B);
   Color get tabBarNotSelected => const Color(0xFF280164);
   Color get credentialBackground => const Color(0xFF211F33);
   Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
@@ -241,6 +241,12 @@ extension CustomTextTheme on TextTheme {
   TextStyle get close => GoogleFonts.roboto(
         color: const Color(0xFFD6C3F2),
         fontSize: 13,
+        fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get walletDialogClose => GoogleFonts.roboto(
+        color: const Color(0xFF030408),
+        fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
@@ -440,6 +446,18 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
+  TextStyle get walletAltme => GoogleFonts.roboto(
+        fontSize: 25,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xff180B2B),
+      );
+
+  TextStyle get walletAltmeMessage => GoogleFonts.roboto(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xff9A8BB1),
+      );
+
   TextStyle get credentialCategoryTitle => GoogleFonts.roboto(
         fontSize: 18,
         fontWeight: FontWeight.w600,
@@ -474,5 +492,11 @@ extension CustomTextTheme on TextTheme {
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: const Color(0xffFFFFFF),
+      );
+
+  TextStyle get textButton => GoogleFonts.roboto(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        color: const Color(0xff6600FF),
       );
 }

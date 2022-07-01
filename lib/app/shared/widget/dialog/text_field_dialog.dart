@@ -54,16 +54,14 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
 
     final color = widget.dialogColor ?? Theme.of(context).colorScheme.primary;
     final background =
-        widget.bgColor ?? Theme.of(context).colorScheme.background;
+        widget.bgColor ?? Theme.of(context).colorScheme.onBackground;
     final text = widget.textColor ?? Theme.of(context).colorScheme.dialogText;
 
     return AlertDialog(
       backgroundColor: background,
-      contentPadding: const EdgeInsets.only(
-        top: 24,
-        bottom: 16,
-        left: 24,
-        right: 24,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -90,7 +88,7 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
             textCapitalization: TextCapitalization.sentences,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            borderColor: Theme.of(context).colorScheme.dialogText,
+            borderColor: Theme.of(context).colorScheme.background,
           ),
           const SizedBox(height: 24),
           Row(
@@ -100,6 +98,7 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
                   text: no,
                   verticalSpacing: 8,
                   fontSize: 13,
+                  elevation: 0,
                   borderColor: color,
                   backgroundColor: background,
                   textColor: color,
@@ -113,6 +112,7 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
                 child: MyElevatedButton(
                   text: yes,
                   verticalSpacing: 8,
+                  elevation: 0,
                   backgroundColor: color,
                   textColor: background,
                   fontSize: 13,

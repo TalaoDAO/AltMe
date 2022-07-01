@@ -1,13 +1,35 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class WalletItems extends StatelessWidget {
   const WalletItems({
     Key? key,
   }) : super(key: key);
+
+  //method for set new pin code
+  Future<void> setNewPinCode(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) async {
+    Navigator.of(context).pop();
+    await Navigator.of(context).push<void>(
+      EnterNewPinCodePage.route(
+        isValidCallback: () {
+          Navigator.of(context).pop();
+          AlertMessage.showStringMessage(
+            context: context,
+            message: l10n.yourPinCodeChangedSuccessfully,
+            messageType: MessageType.success,
+          );
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +65,21 @@ class WalletItems extends StatelessWidget {
                   size: 24,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                onTap: () async {},
+                onTap: () async {
+                  final pinCode =
+                      await getSecureStorage.get(SecureStorageKeys.pinCode);
+                  if (pinCode?.isEmpty ?? true) {
+                    await setNewPinCode(context, l10n);
+                  } else {
+                    await Navigator.of(context).push<void>(
+                      PinCodePage.route(
+                        isValidCallback: () =>
+                            setNewPinCode.call(context, l10n),
+                        restrictToBack: false,
+                      ),
+                    );
+                  }
+                },
               ),
             ],
           ),

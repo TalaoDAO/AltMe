@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/widgets/widgets.dart';
 import 'package:altme/theme/theme.dart';
@@ -43,7 +44,17 @@ class OnBoardingWidget extends StatelessWidget {
         const Spacer(),
         PageTracker(index: index),
         const SizedBox(height: 20),
-        const StartButton(),
+        MyGradientButton(
+          text: l10n.onBoardingStart,
+          onPressed: () {
+            /// Removes every stack except first route (splashPage)
+            Navigator.pushAndRemoveUntil<void>(
+              context,
+              HomePage.route(),
+              (Route<dynamic> route) => route.isFirst,
+            );
+          },
+        ),
         const SizedBox(height: 20),
         GestureDetector(
           child: Text(
