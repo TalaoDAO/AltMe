@@ -1,10 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-part 'tos_state.dart';
+part 'onboarding_tos_cubit.g.dart';
+part 'onboarding_tos_state.dart';
 
-class TOSCubit extends Cubit<TOSState> {
-  TOSCubit() : super(const TOSState());
+class OnBoardingTosCubit extends Cubit<OnBoardingTosState> {
+  OnBoardingTosCubit() : super(const OnBoardingTosState());
 
   void setScrolledIsOver({required bool scrollIsOver}) {
     emit(state.copyWith(scrollIsOver: scrollIsOver));

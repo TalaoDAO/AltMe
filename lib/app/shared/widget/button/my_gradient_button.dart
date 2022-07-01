@@ -10,7 +10,7 @@ class MyGradientButton extends StatelessWidget {
     this.elevation = 2,
     this.fontSize = 18,
     this.gradient,
-    required this.onPressed,
+    this.onPressed,
   }) : super(key: key);
 
   final String text;
@@ -19,7 +19,7 @@ class MyGradientButton extends StatelessWidget {
   final double verticalSpacing;
   final double fontSize;
   final Gradient? gradient;
-  final GestureTapCallback onPressed;
+  final GestureTapCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class MyGradientButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
-          gradient: gradientValue,
+          gradient: onPressed == null ? null : gradientValue,
         ),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(

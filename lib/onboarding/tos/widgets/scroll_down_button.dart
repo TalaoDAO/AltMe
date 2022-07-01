@@ -1,4 +1,5 @@
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class ScrollDownButton extends StatelessWidget {
@@ -15,14 +16,16 @@ class ScrollDownButton extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.primary,
       child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
               l10n.scroll,
-              style: Theme.of(context).textTheme.labelSmall,
+              style: Theme.of(context).textTheme.scrollText,
             ),
-            const Icon(Icons.keyboard_arrow_down_rounded)
+            const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              size: 30,
+            )
           ],
         ),
       ),

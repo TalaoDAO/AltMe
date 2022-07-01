@@ -15,8 +15,8 @@ class OnBoardingTosPage extends StatefulWidget {
 
   static Route route({required WalletRouteType routeType}) =>
       MaterialPageRoute<void>(
-        builder: (context) => BlocProvider<TOSCubit>(
-          create: (_) => TOSCubit(),
+        builder: (context) => BlocProvider<OnBoardingTosCubit>(
+          create: (_) => OnBoardingTosCubit(),
           child: OnBoardingTosPage(routeType: routeType),
         ),
         settings: const RouteSettings(name: '/onBoardingTermsPage'),
@@ -33,16 +33,17 @@ class _OnBoardingTosPageState extends State<OnBoardingTosPage> {
   void initState() {
     _scrollController = ScrollController();
     _scrollController.addListener(() async {
-      bool scrollIsOver = false;
-      if (_scrollController.offset + 500 >=
-              _scrollController.position.maxScrollExtent &&
-          !_scrollController.position.outOfRange) {
-        scrollIsOver = true;
+      final double maxScroll = _scrollController.position.maxScrollExtent;
+      final double currentScroll = _scrollController.position.pixels;
+
+      if (maxScroll - currentScroll <= 200) {
+        context
+            .read<OnBoardingTosCubit>()
+            .setScrolledIsOver(scrollIsOver: true);
       } else {
-        scrollIsOver = false;
-      }
-      if (context.read<TOSCubit>().state.scrollIsOver != scrollIsOver) {
-        context.read<TOSCubit>().setScrolledIsOver(scrollIsOver: scrollIsOver);
+        context
+            .read<OnBoardingTosCubit>()
+            .setScrolledIsOver(scrollIsOver: false);
       }
     });
     super.initState();
@@ -52,42 +53,57 @@ class _OnBoardingTosPageState extends State<OnBoardingTosPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BlocBuilder<TOSCubit, TOSState>(
+    return BlocBuilder<OnBoardingTosCubit, OnBoardingTosState>(
       builder: (context, state) {
         return BasePage(
           backgroundColor: Theme.of(context).colorScheme.background,
-          title: l10n.onBoardingTosTitle,
+          title: l10n.termsOfUse,
           titleLeading: const BackLeadingButton(),
           scrollView: false,
-          padding: EdgeInsets.only(
-            top: Sizes.spaceSmall,
-            right: Sizes.spaceSmall,
-            left: Sizes.spaceSmall,
-            bottom: state.scrollIsOver ? 0 : Sizes.spaceSmall,
-          ),
-          useSafeArea: false,
-          navigation: Visibility(
-            visible: state.scrollIsOver,
-            child: AcceptanceButtonsWidget(
-              agreeTermsAndCondition: state.agreeTerms,
-              readTermsOfUse: state.readTerms,
-              onAcceptancePressed: () => onAcceptancePressed(context),
-            ),
-          ),
-          body: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.only(
-                topLeft: const Radius.circular(Sizes.smallRadius),
-                topRight: const Radius.circular(Sizes.smallRadius),
-                bottomRight:
-                    Radius.circular(state.scrollIsOver ? 0 : Sizes.smallRadius),
-                bottomLeft:
-                    Radius.circular(state.scrollIsOver ? 0 : Sizes.smallRadius),
-              ),
-            ),
-            child: DisplayTerms(
-              scrollController: _scrollController,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          body: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              children: [
+                BackgroundCard(
+                  padding: EdgeInsets.zero,
+                  child: Column(
+                    children: [
+                      const DisplayTerms(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                      ),
+                      CheckboxItem(
+                        value: state.agreeTerms,
+                        text: l10n.agreeTermsAndConditionCheckBox,
+                        onChange: (value) {
+                          context
+                              .read<OnBoardingTosCubit>()
+                              .setAgreeTerms(agreeTerms: value);
+                        },
+                      ),
+                      CheckboxItem(
+                        value: state.readTerms,
+                        text: l10n.readTermsOfUseCheckBox,
+                        onChange: (value) {
+                          context
+                              .read<OnBoardingTosCubit>()
+                              .setReadTerms(readTerms: value);
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 15),
+                MyGradientButton(
+                  text: l10n.onBoardingTosButton,
+                  onPressed: (state.agreeTerms && state.readTerms)
+                      ? () async => onAcceptancePressed(context)
+                      : null,
+                ),
+                const SizedBox(height: 10),
+              ],
             ),
           ),
           floatingActionButton: state.scrollIsOver
