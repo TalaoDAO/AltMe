@@ -164,9 +164,9 @@ class _QueryByExampleCredentialPickPageState
                       ),
                       const SizedBox(height: 12),
                       ...List.generate(
-                        walletState.credentials.length,
+                        state.filteredCredentialList.length,
                         (index) => CredentialsListPageItem(
-                          credentialModel: walletState.credentials[index],
+                          credentialModel: state.filteredCredentialList[index],
                           selected: state.selection.contains(index),
                           onTap: () => context
                               .read<QueryByExampleCredentialPickCubit>()

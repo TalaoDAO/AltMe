@@ -7,9 +7,16 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:logging/logging.dart';
 
 class DisplayTerms extends StatefulWidget {
-  const DisplayTerms({Key? key, this.scrollController}) : super(key: key);
+  const DisplayTerms({
+    Key? key,
+    this.scrollController,
+    this.physics,
+    this.shrinkWrap = true,
+  }) : super(key: key);
 
   final ScrollController? scrollController;
+  final ScrollPhysics? physics;
+  final bool shrinkWrap;
 
   @override
   State<DisplayTerms> createState() => _DisplayTermsState();
@@ -38,6 +45,8 @@ class _DisplayTermsState extends State<DisplayTerms> {
       builder: (context, snapshot) {
         if (snapshot.data != null) {
           return Markdown(
+            physics: widget.physics,
+            shrinkWrap: widget.shrinkWrap,
             data: snapshot.data!,
             controller: widget.scrollController,
             styleSheet: MarkdownStyleSheet(

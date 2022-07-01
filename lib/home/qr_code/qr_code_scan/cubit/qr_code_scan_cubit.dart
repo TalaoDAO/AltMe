@@ -252,7 +252,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             if (data['query'].first['type'] == 'DIDAuth') {
               log.info('DIDAuth');
               await scanCubit.askPermissionDIDAuthCHAPI(
-                keyId: 'key',
+                keyId: SecureStorageKeys.ssiKey,
                 done: (done) {
                   debugPrint('done');
                 },
