@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/crypto_bottom_sheet/cubit/crypto_bottom_sheet_cubit.dart';
+import 'package:altme/home/crypto_bottom_sheet/widgets/widgets.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -160,15 +161,15 @@ class _CryptoBottomSheetViewState extends State<CryptoBottomSheetView> {
                     },
                   ),
                   Container(height: 20),
-                  MyElevatedButton(
-                    text: l10n.cryptoAddAccount,
-                    verticalSpacing: 11,
-                    fontSize: 17,
-                    onPressed: () async {
-                      await context
-                          .read<CryptoBottomSheetCubit>()
-                          .addCryptoAccount();
-                    },
+                  Align(
+                    alignment: Alignment.center,
+                    child: AddAccountButton(
+                      onPressed: () async {
+                        await context
+                            .read<CryptoBottomSheetCubit>()
+                            .addCryptoAccount();
+                      },
+                    ),
                   ),
                 ],
               ),
