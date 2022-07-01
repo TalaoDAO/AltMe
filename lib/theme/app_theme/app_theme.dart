@@ -131,7 +131,7 @@ extension CustomColorScheme on ColorScheme {
   Color get qrScanInnerShadow => const Color(0xff000000).withOpacity(0.16);
   Color get qrScanOuterShadow => const Color(0xff430F91);
 
-  Color get dialogText => const Color(0xFF8682A8);
+  Color get dialogText => const Color(0xFF180B2B);
   Color get tabBarNotSelected => const Color(0xFF280164);
   Color get credentialBackground => const Color(0xFF211F33);
   Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);

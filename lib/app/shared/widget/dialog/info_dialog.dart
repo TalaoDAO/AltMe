@@ -24,15 +24,13 @@ class InfoDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background = bgColor ?? Theme.of(context).colorScheme.background;
+    final background = bgColor ?? Theme.of(context).colorScheme.onBackground;
     final text = textColor ?? Theme.of(context).colorScheme.dialogText;
     return AlertDialog(
       backgroundColor: background,
-      contentPadding: const EdgeInsets.only(
-        top: 24,
-        bottom: 16,
-        left: 24,
-        right: 24,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
