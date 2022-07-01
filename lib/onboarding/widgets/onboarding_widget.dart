@@ -36,7 +36,7 @@ class OnBoardingWidget extends StatelessWidget {
           style: Theme.of(context).textTheme.onBoardingSubTitleStyle,
         ),
         Image.asset(
-          ImageStrings.onBoardingFirstImage,
+          image,
           fit: BoxFit.fitHeight,
           height: MediaQuery.of(context).size.longestSide * 0.4,
         ),

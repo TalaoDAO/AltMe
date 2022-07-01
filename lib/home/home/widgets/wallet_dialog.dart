@@ -13,7 +13,7 @@ class WalletDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.onBackground,
       contentPadding: const EdgeInsets.only(
         top: 24,
         bottom: 16,
@@ -23,14 +23,22 @@ class WalletDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const ImageIcon(
-            AssetImage(IconStrings.emptyWalletAdd),
-            size: 80,
-          ),
+          //
           const SizedBox(height: 15),
           Text(
-            l10n.create_wallet_message,
-            style: Theme.of(context).textTheme.dialogTitle,
+            l10n.walletAltme,
+            style: Theme.of(context).textTheme.walletAltme,
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            l10n.createTitle,
+            style: Theme.of(context).textTheme.walletAltmeMessage,
+            textAlign: TextAlign.center,
+          ),
+          //Place for image
+          Text(
+            l10n.createSubtitle,
+            style: Theme.of(context).textTheme.walletAltmeMessage,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 15),
@@ -45,7 +53,7 @@ class WalletDialog extends StatelessWidget {
             },
           ),
           MyElevatedButton(
-            text: l10n.restore_wallet.toUpperCase(),
+            text: l10n.import_wallet.toUpperCase(),
             verticalSpacing: 8,
             fontSize: 13,
             onPressed: () {

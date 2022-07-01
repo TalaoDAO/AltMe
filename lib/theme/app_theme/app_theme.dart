@@ -440,6 +440,18 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
+  TextStyle get walletAltme => GoogleFonts.roboto(
+        fontSize: 25,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xff180B2B),
+      );
+
+  TextStyle get walletAltmeMessage => GoogleFonts.roboto(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xff9A8BB1),
+      );
+
   TextStyle get credentialCategoryTitle => GoogleFonts.roboto(
         fontSize: 18,
         fontWeight: FontWeight.w600,
