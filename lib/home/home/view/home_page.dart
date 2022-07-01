@@ -63,18 +63,13 @@ class _HomePageState extends State<HomePage> {
           builder: (context, state) {
             final currentIndex = state.currentCryptoIndex;
 
-            String walletAddressExtracted = '';
+            String accountName = '';
 
             if (state.cryptoAccount.data.isNotEmpty) {
-              final walletAddress =
-                  state.cryptoAccount.data[currentIndex].walletAddress;
-
-              walletAddressExtracted = walletAddress != ''
-                  ? '''${walletAddress.substring(0, 5)} ... ${walletAddress.substring(walletAddress.length - 5)}'''
-                  : '';
+              accountName = state.cryptoAccount.data[currentIndex].name;
             }
 
-            return walletAddressExtracted == ''
+            return accountName == ''
                 ? const SizedBox.shrink()
                 : InkWell(
                     onTap: () {
@@ -85,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Row(
                       children: [
-                        Text(walletAddressExtracted),
+                        Text(accountName),
                         const SizedBox(width: 5),
                         const Icon(
                           Icons.arrow_downward,

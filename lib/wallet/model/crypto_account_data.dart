@@ -8,7 +8,7 @@ part 'crypto_account_data.g.dart';
 @JsonSerializable()
 class CryptoAccountData extends Equatable {
   CryptoAccountData({
-    this.name = '',
+    required this.name,
     this.mnemonics,
     required this.key,
     required this.secretKey,
