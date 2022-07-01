@@ -5,15 +5,31 @@ import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
-class CryptoBottomSheetView extends StatefulWidget {
+class CryptoBottomSheetView extends StatelessWidget {
   const CryptoBottomSheetView({Key? key}) : super(key: key);
 
   @override
-  State<CryptoBottomSheetView> createState() => _CryptoBottomSheetViewState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => CryptoBottomSheetCubit(
+        secureStorageProvider: getSecureStorage,
+        walletCubit: context.read<WalletCubit>(),
+      ),
+      child: const CryptoBottomSheetPage(),
+    );
+  }
 }
 
-class _CryptoBottomSheetViewState extends State<CryptoBottomSheetView> {
+class CryptoBottomSheetPage extends StatefulWidget {
+  const CryptoBottomSheetPage({Key? key}) : super(key: key);
+
+  @override
+  State<CryptoBottomSheetPage> createState() => _CryptoBottomSheetPageState();
+}
+
+class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
   OverlayEntry? _overlay;
 
   Future<void> _edit(int index) async {
