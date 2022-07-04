@@ -86,6 +86,13 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
         return Container(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                blurRadius: 8,
+                spreadRadius: -3,
+              )
+            ],
             borderRadius: const BorderRadius.only(
               topRight: Radius.circular(Sizes.largeRadius),
               topLeft: Radius.circular(Sizes.largeRadius),
