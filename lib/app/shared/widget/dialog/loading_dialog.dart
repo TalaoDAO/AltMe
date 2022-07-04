@@ -1,8 +1,8 @@
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
-class LoadingDialog extends StatelessWidget {
-  const LoadingDialog({
+class LoadingDialogs extends StatelessWidget {
+  const LoadingDialogs({
     Key? key,
     this.text,
   }) : super(key: key);

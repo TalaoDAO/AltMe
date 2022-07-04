@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logging/logging.dart';
 
+// TODO(bibash): PageView
 class CredentialsDetailsPage extends StatefulWidget {
   const CredentialsDetailsPage({
     Key? key,
@@ -89,23 +90,15 @@ class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
     }
   }
 
-  OverlayEntry? _overlay;
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
-          _overlay = OverlayEntry(
-            builder: (_) => const LoadingDialog(),
-          );
-          Overlay.of(context)!.insert(_overlay!);
+          LoadingView().show(context: context);
         } else {
-          if (_overlay != null) {
-            _overlay!.remove();
-            _overlay = null;
-          }
+          LoadingView().hide();
         }
       },
       builder: (context, state) {

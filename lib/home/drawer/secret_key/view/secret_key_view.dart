@@ -10,14 +10,23 @@ class SecretKeyPage extends StatelessWidget {
   const SecretKeyPage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (_) => BlocProvider(
-          create: (context) => SecretKeyCubit(
-            walletCubit: context.read<WalletCubit>(),
-          ),
-          child: const SecretKeyPage(),
-        ),
+        builder: (_) => const SecretKeyPage(),
         settings: const RouteSettings(name: '/secretKeyPage'),
       );
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => SecretKeyCubit(
+        walletCubit: context.read<WalletCubit>(),
+      ),
+      child: const SecretKeyView(),
+    );
+  }
+}
+
+class SecretKeyView extends StatelessWidget {
+  const SecretKeyView({Key? key}) : super(key: key);
 
   // TODO(all): need loading  in this screen
 

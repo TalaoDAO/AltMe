@@ -6,25 +6,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class RecoveryKeyPage extends StatefulWidget {
+class RecoveryKeyPage extends StatelessWidget {
   const RecoveryKeyPage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (_) => BlocProvider(
-          create: (context) => RecoveryKeyCubit(
-            secureStorageProvider: getSecureStorage,
-            walletCubit: context.read<WalletCubit>(),
-          ),
-          child: const RecoveryKeyPage(),
-        ),
+        builder: (_) => const RecoveryKeyPage(),
         settings: const RouteSettings(name: '/recoveryKeyPage'),
       );
 
   @override
-  State<RecoveryKeyPage> createState() => _RecoveryKeyPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => RecoveryKeyCubit(
+        secureStorageProvider: getSecureStorage,
+        walletCubit: context.read<WalletCubit>(),
+      ),
+      child: const RecoveryKeyView(),
+    );
+  }
 }
 
-class _RecoveryKeyPageState extends State<RecoveryKeyPage> {
+class RecoveryKeyView extends StatelessWidget {
+  const RecoveryKeyView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;

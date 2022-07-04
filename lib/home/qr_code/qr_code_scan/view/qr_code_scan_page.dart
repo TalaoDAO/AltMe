@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+// TODO(bibash): PageView
 class QrCodeScanPage extends StatefulWidget {
   const QrCodeScanPage({Key? key}) : super(key: key);
 

@@ -6,6 +6,7 @@ export 'enum/enum.dart';
 export 'extension/extension.dart';
 export 'issuer/issuer.dart';
 export 'launch_url/launch_url.dart';
+export 'loading/loading.dart';
 export 'local_auth/local_auth_api.dart';
 export 'message_handler/message_handler.dart';
 export 'models/model.dart';

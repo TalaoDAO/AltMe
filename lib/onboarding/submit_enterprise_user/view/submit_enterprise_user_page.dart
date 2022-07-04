@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 
+// TODO(bibash): PageView
 class SubmitEnterpriseUserPage extends StatefulWidget {
   const SubmitEnterpriseUserPage({Key? key}) : super(key: key);
 
@@ -112,13 +113,11 @@ class _SubmitEnterpriseUserPageState extends State<SubmitEnterpriseUserPage> {
           navigation: BaseButton.primary(
             context: context,
             margin: const EdgeInsets.all(15),
-            onPressed: state.status == AppStatus.loading
-                ? null
-                : () {
-                    context
-                        .read<SubmitEnterpriseUserCubit>()
-                        .verify(_didController.text);
-                  },
+            onPressed: () {
+              context
+                  .read<SubmitEnterpriseUserCubit>()
+                  .verify(_didController.text);
+            },
             child: Text(localization.confirm),
           ),
         );

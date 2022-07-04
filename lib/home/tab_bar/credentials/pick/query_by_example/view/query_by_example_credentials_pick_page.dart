@@ -7,6 +7,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// TODO(bibash): PageView
 class QueryByExampleCredentialPickPage extends StatefulWidget {
   const QueryByExampleCredentialPickPage({
     Key? key,
@@ -44,8 +45,6 @@ class QueryByExampleCredentialPickPage extends StatefulWidget {
 
 class _QueryByExampleCredentialPickPageState
     extends State<QueryByExampleCredentialPickPage> {
-  OverlayEntry? _overlay;
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -75,16 +74,10 @@ class _QueryByExampleCredentialPickPageState
               },
               child: BlocListener<ScanCubit, ScanState>(
                 listener: (BuildContext context, ScanState state) async {
-                  if (state.status == ScanStatus.loading) {
-                    _overlay = OverlayEntry(
-                      builder: (_) => const LoadingDialog(),
-                    );
-                    Overlay.of(context)!.insert(_overlay!);
+                  if (state.status == AppStatus.loading) {
+                    LoadingView().show(context: context);
                   } else {
-                    if (_overlay != null) {
-                      _overlay!.remove();
-                      _overlay = null;
-                    }
+                    LoadingView().hide();
                   }
                 },
                 child: BasePage(

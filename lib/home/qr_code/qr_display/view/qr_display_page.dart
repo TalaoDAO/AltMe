@@ -3,6 +3,7 @@ import 'package:altme/home/tab_bar/credentials/models/credential_model/credentia
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+// TODO(bibash): PageView
 class QrCodeDisplayPage extends StatelessWidget {
   const QrCodeDisplayPage({
     Key? key,

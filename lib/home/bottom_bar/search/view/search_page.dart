@@ -6,20 +6,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class SearchPage extends StatelessWidget {
-  const SearchPage({
-    Key? key,
-  }) : super(key: key);
+  const SearchPage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (context) => BlocProvider(
-          create: (context) => SearchCubit(
-            secureStorageProvider: secure_storage.getSecureStorage,
-            repository: CredentialsRepository(secure_storage.getSecureStorage),
-          ),
-          child: const SearchPage(),
-        ),
+        builder: (context) => const SearchPage(),
         settings: const RouteSettings(name: '/searchPage'),
       );
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => SearchCubit(
+        secureStorageProvider: secure_storage.getSecureStorage,
+        repository: CredentialsRepository(secure_storage.getSecureStorage),
+      ),
+      child: const SearchView(),
+    );
+  }
+}
+
+class SearchView extends StatelessWidget {
+  const SearchView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

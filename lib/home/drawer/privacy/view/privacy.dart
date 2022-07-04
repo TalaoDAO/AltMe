@@ -2,6 +2,7 @@ import 'package:altme/app/shared/widget/base/markdown_page.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
+// TODO(bibash): PageView
 class PrivacyPage extends StatelessWidget {
   const PrivacyPage({Key? key}) : super(key: key);
 

@@ -148,6 +148,12 @@ extension CustomTextTheme on TextTheme {
   TextStyle get keyboardDeleteButtonTextStyle =>
       GoogleFonts.roboto(fontSize: 16, color: Colors.white);
 
+  TextStyle get loadingText => GoogleFonts.roboto(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+      );
+
   TextStyle get starterTitleStyle => GoogleFonts.roboto(
         color: const Color(0xFFFFFFFF),
         fontSize: 32,

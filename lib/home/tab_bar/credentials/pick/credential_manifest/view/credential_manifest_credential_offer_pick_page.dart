@@ -7,6 +7,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// TODO(bibash): PageView
 class CredentialManifestOfferPickPage extends StatefulWidget {
   const CredentialManifestOfferPickPage({
     Key? key,

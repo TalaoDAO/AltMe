@@ -6,6 +6,7 @@ import 'package:altme/pin_code/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:secure_storage/secure_storage.dart';
 
+// TODO(bibash): PageView
 class PinCodePage extends StatefulWidget {
   const PinCodePage({
     Key? key,
