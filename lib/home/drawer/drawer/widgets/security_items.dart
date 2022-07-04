@@ -56,7 +56,7 @@ class SecurityItems extends StatelessWidget {
                         context: context,
                         builder: (_) => ConfirmDialog(
                           title: l10n.resetWalletConfirmationText,
-                          yes: "Delete",
+                          yes: l10n.delete,
                           no: l10n.showDialogNo,
                           dialogColor: Theme.of(context).colorScheme.error,
                           icon: IconStrings.trash,

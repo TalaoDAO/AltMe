@@ -52,7 +52,6 @@ class _OnBoardingTosPageState extends State<OnBoardingTosPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
     return BlocBuilder<OnBoardingTosCubit, OnBoardingTosState>(
       builder: (context, state) {
         return BasePage(
@@ -69,7 +68,7 @@ class _OnBoardingTosPageState extends State<OnBoardingTosPage> {
                   padding: EdgeInsets.zero,
                   child: Column(
                     children: [
-                      const DisplayTerms(
+                      const DisplayTermsofUse(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                       ),
