@@ -31,8 +31,6 @@ class CryptoBottomSheetPage extends StatefulWidget {
 }
 
 class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
-  OverlayEntry? _overlay;
-
   Future<void> _edit(int index) async {
     final l10n = context.l10n;
     final List<CryptoAccountData> cryptoAccount =
@@ -66,15 +64,9 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
     return BlocConsumer<CryptoBottomSheetCubit, CryptoBottomSheetState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
-          _overlay = OverlayEntry(
-            builder: (_) => const LoadingDialog(),
-          );
-          Overlay.of(context)!.insert(_overlay!);
+          LoadingView().show(context: context);
         } else {
-          if (_overlay != null) {
-            _overlay!.remove();
-            _overlay = null;
-          }
+          LoadingView().hide();
         }
 
         if (state.message != null) {

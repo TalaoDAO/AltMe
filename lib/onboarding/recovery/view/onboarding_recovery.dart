@@ -10,41 +10,39 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class OnBoardingRecoveryPage extends StatefulWidget {
+class OnBoardingRecoveryPage extends StatelessWidget {
   const OnBoardingRecoveryPage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (context) => BlocProvider(
-          create: (context) => OnBoardingRecoveryCubit(
-            secureStorageProvider: getSecureStorage,
-            didCubit: context.read<DIDCubit>(),
-            didKitProvider: DIDKitProvider(),
-            keyGenerator: KeyGenerator(),
-            homeCubit: context.read<HomeCubit>(),
-            walletCubit: context.read<WalletCubit>(),
-          ),
-          child: const OnBoardingRecoveryPage(),
-        ),
-        settings: const RouteSettings(name: '/onBoardingKeyPage'),
-      );
-
-  static const _padding = EdgeInsets.symmetric(
-    horizontal: 16,
-  );
-
-  static Widget _padHorizontal(Widget child) => Padding(
-        padding: _padding,
-        child: child,
+        builder: (context) => const OnBoardingRecoveryPage(),
+        settings: const RouteSettings(name: '/onBoardingRecoveryPage'),
       );
 
   @override
-  _OnBoardingRecoveryPageState createState() => _OnBoardingRecoveryPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => OnBoardingRecoveryCubit(
+        secureStorageProvider: getSecureStorage,
+        didCubit: context.read<DIDCubit>(),
+        didKitProvider: DIDKitProvider(),
+        keyGenerator: KeyGenerator(),
+        homeCubit: context.read<HomeCubit>(),
+        walletCubit: context.read<WalletCubit>(),
+      ),
+      child: const OnBoardingRecoveryView(),
+    );
+  }
 }
 
-class _OnBoardingRecoveryPageState extends State<OnBoardingRecoveryPage> {
-  late TextEditingController mnemonicController;
+class OnBoardingRecoveryView extends StatefulWidget {
+  const OnBoardingRecoveryView({Key? key}) : super(key: key);
 
-  OverlayEntry? _overlay;
+  @override
+  _OnBoardingRecoveryViewState createState() => _OnBoardingRecoveryViewState();
+}
+
+class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
+  late TextEditingController mnemonicController;
 
   @override
   void initState() {
@@ -78,15 +76,9 @@ class _OnBoardingRecoveryPageState extends State<OnBoardingRecoveryPage> {
         body: BlocConsumer<OnBoardingRecoveryCubit, OnBoardingRecoveryState>(
           listener: (context, state) {
             if (state.status == AppStatus.loading) {
-              _overlay = OverlayEntry(
-                builder: (_) => const LoadingDialog(),
-              );
-              Overlay.of(context)!.insert(_overlay!);
+              LoadingView().show(context: context);
             } else {
-              if (_overlay != null) {
-                _overlay!.remove();
-                _overlay = null;
-              }
+              LoadingView().hide();
             }
 
             if (state.message != null) {
@@ -109,8 +101,9 @@ class _OnBoardingRecoveryPageState extends State<OnBoardingRecoveryPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                OnBoardingRecoveryPage._padHorizontal(
-                  Text(
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
                     l10n.recoveryText,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.subtitle1,
@@ -118,7 +111,7 @@ class _OnBoardingRecoveryPageState extends State<OnBoardingRecoveryPage> {
                 ),
                 const SizedBox(height: 24),
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: BaseTextField(
                     label: l10n.recoveryMnemonicHintText,
                     controller: mnemonicController,
@@ -128,8 +121,11 @@ class _OnBoardingRecoveryPageState extends State<OnBoardingRecoveryPage> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                OnBoardingRecoveryPage._padHorizontal(
-                  BaseButton.primary(
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  child: BaseButton.primary(
                     context: context,
                     onPressed: !state.isMnemonicValid
                         ? null

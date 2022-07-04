@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class OnBoardingTosPage extends StatefulWidget {
+class OnBoardingTosPage extends StatelessWidget {
   const OnBoardingTosPage({Key? key, required this.routeType})
       : super(key: key);
 
@@ -15,18 +15,30 @@ class OnBoardingTosPage extends StatefulWidget {
 
   static Route route({required WalletRouteType routeType}) =>
       MaterialPageRoute<void>(
-        builder: (context) => BlocProvider<OnBoardingTosCubit>(
-          create: (_) => OnBoardingTosCubit(),
-          child: OnBoardingTosPage(routeType: routeType),
-        ),
+        builder: (context) => OnBoardingTosPage(routeType: routeType),
         settings: const RouteSettings(name: '/onBoardingTermsPage'),
       );
 
   @override
-  State<OnBoardingTosPage> createState() => _OnBoardingTosPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider<OnBoardingTosCubit>(
+      create: (_) => OnBoardingTosCubit(),
+      child: OnBoardingTosView(routeType: routeType),
+    );
+  }
 }
 
-class _OnBoardingTosPageState extends State<OnBoardingTosPage> {
+class OnBoardingTosView extends StatefulWidget {
+  const OnBoardingTosView({Key? key, required this.routeType})
+      : super(key: key);
+
+  final WalletRouteType routeType;
+
+  @override
+  State<OnBoardingTosView> createState() => _OnBoardingTosViewState();
+}
+
+class _OnBoardingTosViewState extends State<OnBoardingTosView> {
   late final ScrollController _scrollController;
 
   @override

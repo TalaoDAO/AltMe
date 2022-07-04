@@ -9,32 +9,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (context) => MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (_) => ProfileCheckboxCubit()),
-            BlocProvider(
-              create: (_) => SelfIssuedCredentialCubit(
-                walletCubit: context.read<WalletCubit>(),
-                secureStorageProvider: getSecureStorage,
-                didKitProvider: DIDKitProvider(),
-                didCubit: context.read<DIDCubit>(),
-              ),
-            ),
-          ],
-          child: const ProfilePage(),
-        ),
+        builder: (context) => const ProfilePage(),
         settings: const RouteSettings(name: '/personalPage'),
       );
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => ProfileCheckboxCubit()),
+        BlocProvider(
+          create: (_) => SelfIssuedCredentialCubit(
+            walletCubit: context.read<WalletCubit>(),
+            secureStorageProvider: getSecureStorage,
+            didKitProvider: DIDKitProvider(),
+            didCubit: context.read<DIDCubit>(),
+          ),
+        ),
+      ],
+      child: const ProfileView(),
+    );
+  }
+}
+
+class ProfileView extends StatefulWidget {
+  const ProfileView({Key? key}) : super(key: key);
 
   @override
   _PersonalPageState createState() => _PersonalPageState();
 }
 
-class _PersonalPageState extends State<ProfilePage> {
+class _PersonalPageState extends State<ProfileView> {
   late TextEditingController firstNameController;
   late TextEditingController lastNameController;
   late TextEditingController phoneController;
@@ -74,8 +83,6 @@ class _PersonalPageState extends State<ProfilePage> {
         TextEditingController(text: profileCubit.state.model.jobTitle);
   }
 
-  OverlayEntry? _overlay;
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -103,15 +110,9 @@ class _PersonalPageState extends State<ProfilePage> {
               SelfIssuedCredentialButtonState>(
             listener: (context, selfIssuedCredentialState) {
               if (selfIssuedCredentialState.status == AppStatus.loading) {
-                _overlay = OverlayEntry(
-                  builder: (_) => const LoadingDialog(),
-                );
-                Overlay.of(context)!.insert(_overlay!);
+                LoadingView().show(context: context);
               } else {
-                if (_overlay != null) {
-                  _overlay!.remove();
-                  _overlay = null;
-                }
+                LoadingView().hide();
               }
             },
             child: BlocBuilder<ProfileCheckboxCubit, ProfileCheckboxState>(

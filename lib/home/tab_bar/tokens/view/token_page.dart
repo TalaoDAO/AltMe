@@ -33,8 +33,6 @@ class TokenView extends StatefulWidget {
 }
 
 class _TokenViewState extends State<TokenView> {
-
-  OverlayEntry? _overlay;
   int _offset = 0;
   final _limit = 15;
   int activeIndex = -1;
@@ -46,15 +44,10 @@ class _TokenViewState extends State<TokenView> {
 
   Future<void> onScrollEnded() async {
     _offset += _limit;
-    _overlay = OverlayEntry(builder: (_) => const LoadingDialog());
-    Overlay.of(context)!.insert(_overlay!);
-
+    LoadingView().show(context: context);
     await context.read<TokensCubit>().getBalanceOfAssetList(offset: _offset);
-
-    _overlay?.remove();
-    _overlay = null;
+    LoadingView().hide();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +72,9 @@ class _TokenViewState extends State<TokenView> {
               child: BlocConsumer<TokensCubit, TokensState>(
                 listener: (context, state) {
                   if (state.status == AppStatus.loading) {
-                    _overlay =
-                        OverlayEntry(builder: (_) => const LoadingDialog());
-                    Overlay.of(context)!.insert(_overlay!);
+                    LoadingView().show(context: context);
                   } else {
-                    _overlay?.remove();
-                    _overlay = null;
+                    LoadingView().hide();
                   }
 
                   if (state.message != null &&

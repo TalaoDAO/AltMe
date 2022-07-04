@@ -7,7 +7,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class QueryByExampleCredentialPickPage extends StatefulWidget {
+class QueryByExampleCredentialPickPage extends StatelessWidget {
   const QueryByExampleCredentialPickPage({
     Key? key,
     required this.uri,
@@ -19,33 +19,38 @@ class QueryByExampleCredentialPickPage extends StatefulWidget {
 
   static Route route(Uri routeUri, Map<String, dynamic> preview) =>
       MaterialPageRoute<void>(
-        builder: (context) => BlocProvider(
-          create: (context) {
-            final credentialQueryList =
-                context.read<QueryByExampleCubit>().state.credentialQuery;
-            return QueryByExampleCredentialPickCubit(
-              credentialQuery: credentialQueryList.isNotEmpty
-                  ? credentialQueryList.first
-                  : null,
-              credentialList: context.read<WalletCubit>().state.credentials,
-            );
-          },
-          child:
-              QueryByExampleCredentialPickPage(uri: routeUri, preview: preview),
-        ),
+        builder: (context) =>
+            QueryByExampleCredentialPickPage(uri: routeUri, preview: preview),
         settings:
             const RouteSettings(name: '/QueryByExampleCredentialPickPage'),
       );
 
   @override
-  _QueryByExampleCredentialPickPageState createState() =>
-      _QueryByExampleCredentialPickPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) {
+        final credentialQueryList =
+            context.read<QueryByExampleCubit>().state.credentialQuery;
+        return QueryByExampleCredentialPickCubit(
+          credentialQuery:
+              credentialQueryList.isNotEmpty ? credentialQueryList.first : null,
+          credentialList: context.read<WalletCubit>().state.credentials,
+        );
+      },
+      child: QueryByExampleCredentialPickView(uri: uri, preview: preview),
+    );
+  }
 }
 
-class _QueryByExampleCredentialPickPageState
-    extends State<QueryByExampleCredentialPickPage> {
-  OverlayEntry? _overlay;
+class QueryByExampleCredentialPickView extends StatelessWidget {
+  const QueryByExampleCredentialPickView({
+    Key? key,
+    required this.uri,
+    required this.preview,
+  }) : super(key: key);
 
+  final Uri uri;
+  final Map<String, dynamic> preview;
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -75,16 +80,10 @@ class _QueryByExampleCredentialPickPageState
               },
               child: BlocListener<ScanCubit, ScanState>(
                 listener: (BuildContext context, ScanState state) async {
-                  if (state.status == ScanStatus.loading) {
-                    _overlay = OverlayEntry(
-                      builder: (_) => const LoadingDialog(),
-                    );
-                    Overlay.of(context)!.insert(_overlay!);
+                  if (state.status == AppStatus.loading) {
+                    LoadingView().show(context: context);
                   } else {
-                    if (_overlay != null) {
-                      _overlay!.remove();
-                      _overlay = null;
-                    }
+                    LoadingView().hide();
                   }
                 },
                 child: BasePage(
@@ -124,7 +123,7 @@ class _QueryByExampleCredentialPickPageState
                                         final scanCubit =
                                             context.read<ScanCubit>();
                                         scanCubit.verifiablePresentationRequest(
-                                          url: widget.uri.toString(),
+                                          url: uri.toString(),
                                           keyId: SecureStorageKeys.ssiKey,
                                           credentials: state.selection
                                               .map(
@@ -132,10 +131,9 @@ class _QueryByExampleCredentialPickPageState
                                                     walletState.credentials[i],
                                               )
                                               .toList(),
-                                          challenge: widget.preview['challenge']
-                                              as String,
-                                          domain: widget.preview['domain']
-                                              as String,
+                                          challenge:
+                                              preview['challenge'] as String,
+                                          domain: preview['domain'] as String,
                                         );
                                       }
                                     },

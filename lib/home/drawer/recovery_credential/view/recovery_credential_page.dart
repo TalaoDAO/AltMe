@@ -12,25 +12,34 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class RecoveryCredentialPage extends StatefulWidget {
+class RecoveryCredentialPage extends StatelessWidget {
   const RecoveryCredentialPage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (context) => BlocProvider(
-          create: (context) => RecoveryCredentialCubit(
-            walletCubit: context.read<WalletCubit>(),
-            cryptoKeys: const CryptocurrencyKeys(),
-          ),
-          child: const RecoveryCredentialPage(),
-        ),
+        builder: (context) => const RecoveryCredentialPage(),
         settings: const RouteSettings(name: '/recoveryCredentialPage'),
       );
 
   @override
-  _RecoveryCredentialPageState createState() => _RecoveryCredentialPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => RecoveryCredentialCubit(
+        walletCubit: context.read<WalletCubit>(),
+        cryptoKeys: const CryptocurrencyKeys(),
+      ),
+      child: const RecoveryCredentialView(),
+    );
+  }
 }
 
-class _RecoveryCredentialPageState extends State<RecoveryCredentialPage> {
+class RecoveryCredentialView extends StatefulWidget {
+  const RecoveryCredentialView({Key? key}) : super(key: key);
+
+  @override
+  _RecoveryCredentialViewState createState() => _RecoveryCredentialViewState();
+}
+
+class _RecoveryCredentialViewState extends State<RecoveryCredentialView> {
   late TextEditingController mnemonicController;
 
   @override
@@ -43,8 +52,6 @@ class _RecoveryCredentialPageState extends State<RecoveryCredentialPage> {
           .isMnemonicsValid(mnemonicController.text);
     });
   }
-
-  OverlayEntry? _overlay;
 
   @override
   Widget build(BuildContext context) {
@@ -70,15 +77,9 @@ class _RecoveryCredentialPageState extends State<RecoveryCredentialPage> {
         body: BlocConsumer<RecoveryCredentialCubit, RecoveryCredentialState>(
           listener: (context, state) {
             if (state.status == AppStatus.loading) {
-              _overlay = OverlayEntry(
-                builder: (_) => const LoadingDialog(),
-              );
-              Overlay.of(context)!.insert(_overlay!);
+              LoadingView().show(context: context);
             } else {
-              if (_overlay != null) {
-                _overlay!.remove();
-                _overlay = null;
-              }
+              LoadingView().hide();
             }
 
             if (state.status == AppStatus.success &&
