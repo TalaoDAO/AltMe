@@ -17,6 +17,7 @@ class DefaultSelectionDisplayDescriptor extends StatelessWidget {
     final l10n = context.l10n;
     return CredentialBackground(
       credentialModel: credentialModel,
+      withShapes: false,
       child: Column(
         children: [
           Padding(

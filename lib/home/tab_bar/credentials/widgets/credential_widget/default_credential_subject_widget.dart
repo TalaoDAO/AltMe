@@ -155,14 +155,9 @@ class DefaultCredentialSubjectDisplayInSelectionList extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: Container(
-          decoration: BaseBoxDecoration(
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: backgroundColor,
-            shapeColor: Theme.of(context).colorScheme.documentShape,
-            value: 1,
-            anchors: const <Alignment>[
-              Alignment.bottomRight,
-            ],
           ),
           child: Padding(
             padding: const EdgeInsets.all(20),
