@@ -86,10 +86,24 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                     child: Row(
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
-                          accountName.trim().isEmpty ? '...' : accountName,
-                          style: Theme.of(context).textTheme.titleMedium,
+                        SizedBox(
+                          width: 200,
+                          child: Expanded(
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: MyText(
+                                accountName.trim().isEmpty
+                                    ? '...'
+                                    : accountName,
+                                maxLines: 1,
+                                minFontSize: 12,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 5),
                         Image.asset(

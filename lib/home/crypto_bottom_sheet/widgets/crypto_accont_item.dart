@@ -42,11 +42,16 @@ class CryptoAccountItem extends StatelessWidget {
       ),
       title: Row(
         children: [
-          MyText(
-            cryptoAccountData.name.trim().isEmpty
-                ? '${l10n.cryptoAccount} ${listIndex + 1}'
-                : cryptoAccountData.name,
-            style: Theme.of(context).textTheme.accountsName,
+          Flexible(
+            child: MyText(
+              cryptoAccountData.name.trim().isEmpty
+                  ? '${l10n.cryptoAccount} ${listIndex + 1}'
+                  : cryptoAccountData.name,
+              maxLines: 1,
+              minFontSize: 12,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.accountsName,
+            ),
           ),
           const SizedBox(width: 10),
           InkWell(
