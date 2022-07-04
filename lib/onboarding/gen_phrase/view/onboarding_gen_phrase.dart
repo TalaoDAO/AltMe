@@ -10,31 +10,32 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class OnBoardingGenPhrasePage extends StatefulWidget {
+class OnBoardingGenPhrasePage extends StatelessWidget {
   const OnBoardingGenPhrasePage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (context) => BlocProvider(
-          create: (context) => OnBoardingGenPhraseCubit(
-            secureStorageProvider: getSecureStorage,
-            didCubit: context.read<DIDCubit>(),
-            didKitProvider: DIDKitProvider(),
-            keyGenerator: KeyGenerator(),
-            homeCubit: context.read<HomeCubit>(),
-            walletCubit: context.read<WalletCubit>(),
-          ),
-          child: const OnBoardingGenPhrasePage(),
-        ),
+        builder: (context) => const OnBoardingGenPhrasePage(),
         settings: const RouteSettings(name: '/onBoardingGenPhrasePage'),
       );
 
   @override
-  _OnBoardingGenPhrasePageState createState() =>
-      _OnBoardingGenPhrasePageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => OnBoardingGenPhraseCubit(
+        secureStorageProvider: getSecureStorage,
+        didCubit: context.read<DIDCubit>(),
+        didKitProvider: DIDKitProvider(),
+        keyGenerator: KeyGenerator(),
+        homeCubit: context.read<HomeCubit>(),
+        walletCubit: context.read<WalletCubit>(),
+      ),
+      child: const OnBoardingGenPhraseView(),
+    );
+  }
 }
 
-class _OnBoardingGenPhrasePageState extends State<OnBoardingGenPhrasePage> {
-  OverlayEntry? _overlay;
+class OnBoardingGenPhraseView extends StatelessWidget {
+  const OnBoardingGenPhraseView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,15 +63,9 @@ class _OnBoardingGenPhrasePageState extends State<OnBoardingGenPhrasePage> {
         body: BlocConsumer<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
           listener: (context, state) {
             if (state.status == AppStatus.loading) {
-              _overlay = OverlayEntry(
-                builder: (_) => const LoadingDialog(),
-              );
-              Overlay.of(context)!.insert(_overlay!);
+              LoadingView().show(context: context);
             } else {
-              if (_overlay != null) {
-                _overlay!.remove();
-                _overlay = null;
-              }
+              LoadingView().hide();
             }
 
             if (state.message != null) {
@@ -136,13 +131,11 @@ class _OnBoardingGenPhrasePageState extends State<OnBoardingGenPhrasePage> {
                   height: 42,
                   child: BaseButton.primary(
                     context: context,
-                    onPressed: state.status == AppStatus.loading
-                        ? null
-                        : () async {
-                            await context
-                                .read<OnBoardingGenPhraseCubit>()
-                                .generateSSIAndCryptoAccount(state.mnemonic);
-                          },
+                    onPressed: () async {
+                      await context
+                          .read<OnBoardingGenPhraseCubit>()
+                          .generateSSIAndCryptoAccount(state.mnemonic);
+                    },
                     child: Text(l10n.onBoardingGenPhraseButton),
                   ),
                 ),

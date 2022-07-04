@@ -21,23 +21,15 @@ class SelfIssuedCredentialButton extends StatefulWidget {
 
 class _SelfIssuedCredentialButtonState
     extends State<SelfIssuedCredentialButton> {
-  OverlayEntry? _overlay;
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SelfIssuedCredentialCubit,
         SelfIssuedCredentialButtonState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
-          _overlay = OverlayEntry(
-            builder: (_) => const LoadingDialog(),
-          );
-          Overlay.of(context)!.insert(_overlay!);
+          LoadingView().show(context: context);
         } else {
-          if (_overlay != null) {
-            _overlay!.remove();
-            _overlay = null;
-          }
+          LoadingView().hide();
         }
 
         if (state.message != null) {

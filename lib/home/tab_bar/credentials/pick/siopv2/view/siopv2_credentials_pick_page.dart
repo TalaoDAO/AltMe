@@ -5,7 +5,7 @@ import 'package:altme/scan/scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SIOPV2CredentialPickPage extends StatefulWidget {
+class SIOPV2CredentialPickPage extends StatelessWidget {
   const SIOPV2CredentialPickPage({
     Key? key,
     required this.credentials,
@@ -20,39 +20,46 @@ class SIOPV2CredentialPickPage extends StatefulWidget {
     required SIOPV2Param sIOPV2Param,
   }) =>
       MaterialPageRoute<void>(
-        builder: (context) => BlocProvider(
-          create: (context) =>
-              SIOPV2CredentialPickCubit(scanCubit: context.read<ScanCubit>()),
-          child: SIOPV2CredentialPickPage(
-            credentials: credentials,
-            sIOPV2Param: sIOPV2Param,
-          ),
+        builder: (context) => SIOPV2CredentialPickPage(
+          credentials: credentials,
+          sIOPV2Param: sIOPV2Param,
         ),
         settings: const RouteSettings(name: '/SIOPV2CredentialPickPage'),
       );
 
   @override
-  _SIOPV2CredentialPickPageState createState() =>
-      _SIOPV2CredentialPickPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) =>
+          SIOPV2CredentialPickCubit(scanCubit: context.read<ScanCubit>()),
+      child: SIOPV2CredentialPickView(
+        credentials: credentials,
+        sIOPV2Param: sIOPV2Param,
+      ),
+    );
+  }
 }
 
-class _SIOPV2CredentialPickPageState extends State<SIOPV2CredentialPickPage> {
+class SIOPV2CredentialPickView extends StatelessWidget {
+  const SIOPV2CredentialPickView({
+    Key? key,
+    required this.credentials,
+    required this.sIOPV2Param,
+  }) : super(key: key);
+
+  final List<CredentialModel> credentials;
+  final SIOPV2Param sIOPV2Param;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    OverlayEntry? _overlay;
-
     return BlocConsumer<SIOPV2CredentialPickCubit, SIOPV2CredentialPickState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
-          _overlay = OverlayEntry(
-            builder: (_) => const LoadingDialog(),
-          );
-          Overlay.of(context)!.insert(_overlay!);
+          LoadingView().show(context: context);
         } else {
-          _overlay!.remove();
-          _overlay = null;
+          LoadingView().hide();
         }
       },
       builder: (context, state) {
@@ -93,8 +100,8 @@ class _SIOPV2CredentialPickPageState extends State<SIOPV2CredentialPickPage> {
                           context
                               .read<SIOPV2CredentialPickCubit>()
                               .presentCredentialToSIOPV2Request(
-                                credential: widget.credentials[state.index],
-                                sIOPV2Param: widget.sIOPV2Param,
+                                credential: credentials[state.index],
+                                sIOPV2Param: sIOPV2Param,
                               );
                         },
                         child: Text(l10n.credentialPickPresent),
@@ -112,9 +119,9 @@ class _SIOPV2CredentialPickPageState extends State<SIOPV2CredentialPickPage> {
                 ),
                 const SizedBox(height: 12),
                 ...List.generate(
-                  widget.credentials.length,
+                  credentials.length,
                   (index) => CredentialsListPageItem(
-                    credentialModel: widget.credentials[index],
+                    credentialModel: credentials[index],
                     selected: state.index == index,
                     onTap: () =>
                         context.read<SIOPV2CredentialPickCubit>().toggle(index),

@@ -8,28 +8,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class BackupCredentialPage extends StatefulWidget {
+class BackupCredentialPage extends StatelessWidget {
   const BackupCredentialPage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (_) => BlocProvider(
-          create: (context) => BackupCredentialCubit(
-            secureStorageProvider: getSecureStorage,
-            cryptoKeys: const CryptocurrencyKeys(),
-            walletCubit: context.read<WalletCubit>(),
-            fileSaver: FileSaver.instance,
-          ),
-          child: const BackupCredentialPage(),
-        ),
+        builder: (_) => const BackupCredentialPage(),
         settings: const RouteSettings(name: '/backupCredentialPage'),
       );
 
   @override
-  State<BackupCredentialPage> createState() => _BackupCredentialPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => BackupCredentialCubit(
+        secureStorageProvider: getSecureStorage,
+        cryptoKeys: const CryptocurrencyKeys(),
+        walletCubit: context.read<WalletCubit>(),
+        fileSaver: FileSaver.instance,
+      ),
+      child: const BackupCredentialView(),
+    );
+  }
 }
 
-class _BackupCredentialPageState extends State<BackupCredentialPage> {
-  OverlayEntry? _overlay;
+class BackupCredentialView extends StatelessWidget {
+  const BackupCredentialView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,15 +58,9 @@ class _BackupCredentialPageState extends State<BackupCredentialPage> {
         body: BlocConsumer<BackupCredentialCubit, BackupCredentialState>(
           listener: (context, state) async {
             if (state.status == AppStatus.loading) {
-              _overlay = OverlayEntry(
-                builder: (_) => const LoadingDialog(),
-              );
-              Overlay.of(context)!.insert(_overlay!);
+              LoadingView().show(context: context);
             } else {
-              if (_overlay != null) {
-                _overlay!.remove();
-                _overlay = null;
-              }
+              LoadingView().hide();
             }
 
             if (state.message != null) {
@@ -100,13 +96,11 @@ class _BackupCredentialPageState extends State<BackupCredentialPage> {
                   height: 42,
                   child: BaseButton.primary(
                     context: context,
-                    onPressed: state.status == AppStatus.loading
-                        ? null
-                        : () async {
-                            await context
-                                .read<BackupCredentialCubit>()
-                                .encryptAndDownloadFile();
-                          },
+                    onPressed: () async {
+                      await context
+                          .read<BackupCredentialCubit>()
+                          .encryptAndDownloadFile();
+                    },
                     child: Text(l10n.backupCredentialButtonTitle),
                   ),
                 )

@@ -53,7 +53,7 @@ void main() {
       await tester
           .pumpApp(const OnBoardingTosPage(routeType: WalletRouteType.create));
       await tester.pumpAndSettle();
-      expect(find.byType(DisplayTerms), findsOneWidget);
+      expect(find.byType(DisplayTermsofUse), findsOneWidget);
     });
   });
 }

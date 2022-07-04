@@ -37,7 +37,6 @@ class NftView extends StatefulWidget {
 }
 
 class _NftViewState extends State<NftView> {
-  OverlayEntry? _overlay;
   int _offset = 0;
   final _limit = 15;
   int activeIndex = -1;
@@ -49,13 +48,9 @@ class _NftViewState extends State<NftView> {
 
   Future<void> onScrollEnded() async {
     _offset += _limit;
-    _overlay = OverlayEntry(builder: (_) => const LoadingDialog());
-    Overlay.of(context)!.insert(_overlay!);
-
+    LoadingView().show(context: context);
     await context.read<NftCubit>().getTezosNftList(offset: _offset);
-
-    _overlay?.remove();
-    _overlay = null;
+    LoadingView().hide();
   }
 
   @override
@@ -81,12 +76,9 @@ class _NftViewState extends State<NftView> {
               child: BlocConsumer<NftCubit, NftState>(
                 listener: (context, state) {
                   if (state.status == AppStatus.loading) {
-                    _overlay =
-                        OverlayEntry(builder: (_) => const LoadingDialog());
-                    Overlay.of(context)!.insert(_overlay!);
+                    LoadingView().show(context: context);
                   } else {
-                    _overlay?.remove();
-                    _overlay = null;
+                    LoadingView().hide();
                   }
 
                   if (state.message != null &&

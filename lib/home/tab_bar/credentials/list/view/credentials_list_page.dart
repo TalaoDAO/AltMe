@@ -16,8 +16,6 @@ class CredentialsListPage extends StatefulWidget {
 }
 
 class _CredentialsListPageState extends State<CredentialsListPage> {
-  OverlayEntry? _overlay;
-
   @override
   void initState() {
     context.read<CredentialListCubit>().initialise(context.read<WalletCubit>());
@@ -39,13 +37,9 @@ class _CredentialsListPageState extends State<CredentialsListPage> {
       body: BlocConsumer<CredentialListCubit, CredentialListState>(
         listener: (context, state) {
           if (state.status == AppStatus.loading) {
-            _overlay = OverlayEntry(builder: (_) => const LoadingDialog());
-            Overlay.of(context)!.insert(_overlay!);
+            LoadingView().show(context: context);
           } else {
-            if (_overlay != null) {
-              _overlay!.remove();
-              _overlay = null;
-            }
+            LoadingView().hide();
           }
 
           if (state.message != null &&

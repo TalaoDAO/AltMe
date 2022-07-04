@@ -3,7 +3,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 
-class OnBoardingThirdPage extends StatefulWidget {
+class OnBoardingThirdPage extends StatelessWidget {
   const OnBoardingThirdPage({Key? key}) : super(key: key);
 
   static Route route() => RightToLeftRoute<void>(
@@ -12,10 +12,24 @@ class OnBoardingThirdPage extends StatefulWidget {
       );
 
   @override
-  State<OnBoardingThirdPage> createState() => _OnBoardingThirdPageState();
+  Widget build(BuildContext context) {
+    return const OnBoardingThirdView();
+  }
 }
 
-class _OnBoardingThirdPageState extends State<OnBoardingThirdPage> {
+class OnBoardingThirdView extends StatefulWidget {
+  const OnBoardingThirdView({Key? key}) : super(key: key);
+
+  static Route route() => RightToLeftRoute<void>(
+        builder: (context) => const OnBoardingThirdView(),
+        settings: const RouteSettings(name: '/onBoardingThirdPage'),
+      );
+
+  @override
+  State<OnBoardingThirdView> createState() => _OnBoardingThirdViewState();
+}
+
+class _OnBoardingThirdViewState extends State<OnBoardingThirdView> {
   bool animate = true;
 
   void disableAnimation() {

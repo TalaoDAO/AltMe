@@ -7,7 +7,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CredentialManifestPickPage extends StatefulWidget {
+class CredentialManifestPickPage extends StatelessWidget {
   const CredentialManifestPickPage({
     Key? key,
     required this.uri,
@@ -19,25 +19,34 @@ class CredentialManifestPickPage extends StatefulWidget {
 
   static Route route(Uri routeUri, Map<String, dynamic> preview) {
     return MaterialPageRoute<void>(
-      builder: (context) => BlocProvider(
-        create: (context) => CredentialManifestPickCubit(
-          presentationDefinition: preview['credential_manifest']
-              ['presentation_definition'] as Map<String, dynamic>,
-          credentialList: context.read<WalletCubit>().state.credentials,
-        ),
-        child: CredentialManifestPickPage(uri: routeUri, preview: preview),
-      ),
+      builder: (context) =>
+          CredentialManifestPickPage(uri: routeUri, preview: preview),
       settings: const RouteSettings(name: '/CredentialManifestPickPage'),
     );
   }
 
   @override
-  _CredentialManifestPickPageState createState() =>
-      _CredentialManifestPickPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => CredentialManifestPickCubit(
+        presentationDefinition: preview['credential_manifest']
+            ['presentation_definition'] as Map<String, dynamic>,
+        credentialList: context.read<WalletCubit>().state.credentials,
+      ),
+      child: CredentialManifestPickView(uri: uri, preview: preview),
+    );
+  }
 }
 
-class _CredentialManifestPickPageState
-    extends State<CredentialManifestPickPage> {
+class CredentialManifestPickView extends StatelessWidget {
+  const CredentialManifestPickView({
+    Key? key,
+    required this.uri,
+    required this.preview,
+  }) : super(key: key);
+
+  final Uri uri;
+  final Map<String, dynamic> preview;
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -76,13 +85,13 @@ class _CredentialManifestPickPageState
                         } else {
                           final scanCubit = context.read<ScanCubit>();
                           scanCubit.verifiablePresentationRequest(
-                            url: widget.uri.toString(),
+                            url: uri.toString(),
                             keyId: SecureStorageKeys.ssiKey,
                             credentials: state.selection
                                 .map((i) => state.filteredCredentialList[i])
                                 .toList(),
-                            challenge: widget.preview['challenge'] as String,
-                            domain: widget.preview['domain'] as String,
+                            challenge: preview['challenge'] as String,
+                            domain: preview['domain'] as String,
                           );
                         }
                       },
