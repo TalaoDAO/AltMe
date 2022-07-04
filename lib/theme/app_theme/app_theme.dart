@@ -150,7 +150,7 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get loadingText => GoogleFonts.roboto(
         color: const Color(0xFFFFFFFF),
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: FontWeight.w600,
       );
 
