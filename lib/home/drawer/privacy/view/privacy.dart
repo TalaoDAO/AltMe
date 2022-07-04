@@ -16,13 +16,13 @@ class PrivacyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final languagesList = ['fr', 'it', 'es', 'de'];
-    var filePath = 'en';
+    var language = 'en';
     if (languagesList.contains(l10n.localeName)) {
-      filePath = l10n.localeName;
+      language = l10n.localeName;
     }
     return MarkdownPage(
       title: l10n.privacyTitle,
-      file: 'assets/privacy/privacy_$filePath.md',
+      file: 'assets/privacy/privacy_$language.md',
     );
   }
 }
