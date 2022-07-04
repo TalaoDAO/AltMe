@@ -3,20 +3,28 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 
-// TODO(bibash): PageView
-class OnBoardingFirstPage extends StatefulWidget {
+class OnBoardingFirstPage extends StatelessWidget {
   const OnBoardingFirstPage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
         builder: (context) => const OnBoardingFirstPage(),
-        settings: const RouteSettings(name: '/onBoardingFirst'),
+        settings: const RouteSettings(name: '/onBoardingFirstPage'),
       );
 
   @override
-  State<OnBoardingFirstPage> createState() => _OnBoardingFirstPageState();
+  Widget build(BuildContext context) {
+    return const OnBoardingFirstView();
+  }
 }
 
-class _OnBoardingFirstPageState extends State<OnBoardingFirstPage> {
+class OnBoardingFirstView extends StatefulWidget {
+  const OnBoardingFirstView({Key? key}) : super(key: key);
+
+  @override
+  State<OnBoardingFirstView> createState() => _OnBoardingFirstViewState();
+}
+
+class _OnBoardingFirstViewState extends State<OnBoardingFirstView> {
   bool animate = true;
 
   void disableAnimation() {

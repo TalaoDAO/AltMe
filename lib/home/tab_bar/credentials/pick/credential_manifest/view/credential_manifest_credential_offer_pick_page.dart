@@ -7,8 +7,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// TODO(bibash): PageView
-class CredentialManifestOfferPickPage extends StatefulWidget {
+class CredentialManifestOfferPickPage extends StatelessWidget {
   const CredentialManifestOfferPickPage({
     Key? key,
     required this.uri,
@@ -20,33 +19,44 @@ class CredentialManifestOfferPickPage extends StatefulWidget {
 
   static Route route(Uri routeUri, CredentialModel credential) {
     return MaterialPageRoute<void>(
-      builder: (context) => BlocProvider(
-        create: (context) {
-          final presentationDefinition =
-              credential.credentialManifest?.presentationDefinition;
-          return CredentialManifestPickCubit(
-            presentationDefinition: presentationDefinition == null
-                ? <String, dynamic>{}
-                : presentationDefinition.toJson(),
-            credentialList: context.read<WalletCubit>().state.credentials,
-          );
-        },
-        child: CredentialManifestOfferPickPage(
-          uri: routeUri,
-          credential: credential,
-        ),
+      builder: (context) => CredentialManifestOfferPickPage(
+        uri: routeUri,
+        credential: credential,
       ),
       settings: const RouteSettings(name: '/CredentialManifestPickPage'),
     );
   }
 
   @override
-  _CredentialManifestOfferPickPageState createState() =>
-      _CredentialManifestOfferPickPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) {
+        final presentationDefinition =
+            credential.credentialManifest?.presentationDefinition;
+        return CredentialManifestPickCubit(
+          presentationDefinition: presentationDefinition == null
+              ? <String, dynamic>{}
+              : presentationDefinition.toJson(),
+          credentialList: context.read<WalletCubit>().state.credentials,
+        );
+      },
+      child: CredentialManifestOfferPickView(
+        uri: uri,
+        credential: credential,
+      ),
+    );
+  }
 }
 
-class _CredentialManifestOfferPickPageState
-    extends State<CredentialManifestOfferPickPage> {
+class CredentialManifestOfferPickView extends StatelessWidget {
+  const CredentialManifestOfferPickView({
+    Key? key,
+    required this.uri,
+    required this.credential,
+  }) : super(key: key);
+
+  final Uri uri;
+  final CredentialModel credential;
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -64,7 +74,7 @@ class _CredentialManifestOfferPickPageState
                     context.read<CredentialManifestPickCubit>().toggle(index),
               ),
             );
-            final _purpose = widget.credential.credentialManifest
+            final _purpose = credential.credentialManifest
                 ?.presentationDefinition?.inputDescriptors.first.purpose;
             return BasePage(
               title: l10n.credentialPickTitle,
@@ -102,8 +112,8 @@ class _CredentialManifestOfferPickPageState
                                         )
                                         .toList();
                                     context.read<ScanCubit>().credentialOffer(
-                                          url: widget.uri.toString(),
-                                          credentialModel: widget.credential,
+                                          url: uri.toString(),
+                                          credentialModel: credential,
                                           keyId: SecureStorageKeys.ssiKey,
                                           signatureOwnershipProof:
                                               selectedCredentialsList.first,

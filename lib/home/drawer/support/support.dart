@@ -2,7 +2,6 @@ import 'package:altme/app/shared/widget/base/markdown_page.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
-// TODO(bibash): PageView
 class SupportPage extends StatelessWidget {
   const SupportPage({Key? key}) : super(key: key);
 

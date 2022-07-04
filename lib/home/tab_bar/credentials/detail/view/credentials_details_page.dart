@@ -8,8 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logging/logging.dart';
 
-// TODO(bibash): PageView
-class CredentialsDetailsPage extends StatefulWidget {
+class CredentialsDetailsPage extends StatelessWidget {
   const CredentialsDetailsPage({
     Key? key,
     required this.credentialModel,
@@ -19,22 +18,37 @@ class CredentialsDetailsPage extends StatefulWidget {
 
   static Route route(CredentialModel credentialModel) {
     return MaterialPageRoute<void>(
-      builder: (context) => BlocProvider<CredentialDetailsCubit>(
-        create: (context) => CredentialDetailsCubit(
-          walletCubit: context.read<WalletCubit>(),
-          didKitProvider: DIDKitProvider(),
-        ),
-        child: CredentialsDetailsPage(credentialModel: credentialModel),
-      ),
+      builder: (context) =>
+          CredentialsDetailsPage(credentialModel: credentialModel),
       settings: const RouteSettings(name: '/credentialsDetailsPages'),
     );
   }
 
   @override
-  _CredentialsDetailsPageState createState() => _CredentialsDetailsPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider<CredentialDetailsCubit>(
+      create: (context) => CredentialDetailsCubit(
+        walletCubit: context.read<WalletCubit>(),
+        didKitProvider: DIDKitProvider(),
+      ),
+      child: CredentialsDetailsView(credentialModel: credentialModel),
+    );
+  }
 }
 
-class _CredentialsDetailsPageState extends State<CredentialsDetailsPage> {
+class CredentialsDetailsView extends StatefulWidget {
+  const CredentialsDetailsView({
+    Key? key,
+    required this.credentialModel,
+  }) : super(key: key);
+
+  final CredentialModel credentialModel;
+
+  @override
+  _CredentialsDetailsViewState createState() => _CredentialsDetailsViewState();
+}
+
+class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
   final logger = Logger('altme-wallet/credentials/detail');
 
   @override

@@ -6,7 +6,6 @@ import 'package:altme/scan/scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// TODO(bibash): PageView
 class CredentialsReceivePage extends StatefulWidget {
   const CredentialsReceivePage({
     Key? key,

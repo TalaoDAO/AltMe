@@ -12,28 +12,36 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-// TODO(bibash): PageView
-class SubmitEnterpriseUserPage extends StatefulWidget {
+class SubmitEnterpriseUserPage extends StatelessWidget {
   const SubmitEnterpriseUserPage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (context) => BlocProvider(
-          create: (_) => SubmitEnterpriseUserCubit(
-            secureStorageProvider: getSecureStorage,
-            didCubit: context.read<DIDCubit>(),
-            didKitProvider: DIDKitProvider(),
-          ),
-          child: const SubmitEnterpriseUserPage(),
-        ),
+        builder: (context) => const SubmitEnterpriseUserPage(),
         settings: const RouteSettings(name: '/submitEnterpriseUserPage'),
       );
 
   @override
-  _SubmitEnterpriseUserPageState createState() =>
-      _SubmitEnterpriseUserPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => SubmitEnterpriseUserCubit(
+        secureStorageProvider: getSecureStorage,
+        didCubit: context.read<DIDCubit>(),
+        didKitProvider: DIDKitProvider(),
+      ),
+      child: const SubmitEnterpriseUserView(),
+    );
+  }
 }
 
-class _SubmitEnterpriseUserPageState extends State<SubmitEnterpriseUserPage> {
+class SubmitEnterpriseUserView extends StatefulWidget {
+  const SubmitEnterpriseUserView({Key? key}) : super(key: key);
+
+  @override
+  _SubmitEnterpriseUserViewState createState() =>
+      _SubmitEnterpriseUserViewState();
+}
+
+class _SubmitEnterpriseUserViewState extends State<SubmitEnterpriseUserView> {
   late final TextEditingController _didController = TextEditingController();
 
   @override

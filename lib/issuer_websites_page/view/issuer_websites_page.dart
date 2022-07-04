@@ -3,7 +3,6 @@ import 'package:altme/issuer_websites_page/widget/kyc_button.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
-// TODO(bibash): PageView
 class IssuerWebsitesPage extends StatelessWidget {
   const IssuerWebsitesPage(
     this.issuerFilter, {

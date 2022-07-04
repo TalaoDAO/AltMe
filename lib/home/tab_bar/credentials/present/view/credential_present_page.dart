@@ -6,7 +6,6 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// TODO(bibash): PageView
 class CredentialsPresentPage extends StatefulWidget {
   const CredentialsPresentPage({
     Key? key,

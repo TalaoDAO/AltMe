@@ -4,7 +4,6 @@ import 'package:altme/pin_code/view/confirm_pin_code_page.dart';
 import 'package:altme/pin_code/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
-// TODO(bibash): PageView
 class EnterNewPinCodePage extends StatefulWidget {
   const EnterNewPinCodePage({
     Key? key,
