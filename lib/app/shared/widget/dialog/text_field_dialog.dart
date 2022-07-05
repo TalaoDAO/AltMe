@@ -53,15 +53,18 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
     final no = widget.no ?? l10n.no;
 
     final color = widget.dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background =
-        widget.bgColor ?? Theme.of(context).colorScheme.onBackground;
-    final text = widget.textColor ?? Theme.of(context).colorScheme.dialogText;
+    final background = widget.bgColor ?? Theme.of(context).colorScheme.surface;
+    final text = widget.textColor ?? Theme.of(context).colorScheme.label;
 
     return AlertDialog(
       backgroundColor: background,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(25)),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.inversePrimary,
+          width: 0.3,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(25)),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -85,43 +88,40 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
           BaseTextField(
             label: widget.label,
             controller: controller,
+            borderRadius: Sizes.smallRadius,
             textCapitalization: TextCapitalization.sentences,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            borderColor: Theme.of(context).colorScheme.background,
+            fillColor: Theme.of(context).highlightColor,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: Sizes.spaceSmall,
+              horizontal: Sizes.spaceSmall,
+            ),
+            borderColor: Theme.of(context).colorScheme.onInverseSurface,
           ),
           const SizedBox(height: 24),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: MyOutlinedButton(
-                  text: no,
-                  verticalSpacing: 8,
-                  fontSize: 13,
-                  elevation: 0,
-                  borderColor: color,
-                  backgroundColor: background,
-                  textColor: color,
-                  onPressed: () {
-                    Navigator.of(context).pop('');
-                  },
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: MyElevatedButton(
-                  text: yes,
-                  verticalSpacing: 8,
-                  elevation: 0,
-                  backgroundColor: color,
-                  textColor: background,
-                  fontSize: 13,
-                  onPressed: () {
-                    Navigator.of(context).pop(controller.text);
-                  },
-                ),
-              )
-            ],
+          MyElevatedButton(
+            text: yes,
+            verticalSpacing: Sizes.normalRadius,
+            elevation: 10,
+            borderRadius: Sizes.smallRadius,
+            backgroundColor: color,
+            textColor: Theme.of(context).colorScheme.label,
+            fontSize: 15,
+            onPressed: () {
+              Navigator.of(context).pop(controller.text);
+            },
+          ),
+          const SizedBox(width: Sizes.spaceNormal),
+          MyOutlinedButton(
+            text: no,
+            verticalSpacing: Sizes.smallRadius,
+            fontSize: 12,
+            elevation: 0,
+            borderColor: Colors.transparent,
+            backgroundColor: Colors.transparent,
+            textColor: Theme.of(context).colorScheme.label,
+            onPressed: () {
+              Navigator.of(context).pop('');
+            },
           ),
         ],
       ),
