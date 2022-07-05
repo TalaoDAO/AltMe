@@ -101,6 +101,7 @@ class SIOPV2CredentialPickView extends StatelessWidget {
                           bool authenticated = false;
                           await Navigator.of(context).push<void>(
                             PinCodePage.route(
+                              restrictToBack: false,
                               isValidCallback: () {
                                 authenticated = true;
                               },
