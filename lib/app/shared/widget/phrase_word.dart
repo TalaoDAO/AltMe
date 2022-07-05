@@ -22,14 +22,14 @@ class PhraseWord extends StatelessWidget {
           color: Theme.of(context).colorScheme.transparent,
           border: Border.all(
             width: 1.5,
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.primary,
           ),
           borderRadius: BorderRadius.circular(128),
         ),
         child: MyText(
           '$order $word',
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.passPhraseText,
         ),
       );
 }

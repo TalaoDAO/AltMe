@@ -3,9 +3,11 @@ import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/gen_phrase/cubit/onboarding_gen_phrase_cubit.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -50,7 +52,7 @@ class OnBoardingGenPhraseView extends StatelessWidget {
         return true;
       },
       child: BasePage(
-        title: l10n.onBoardingGenPhraseTitle,
+        title: l10n.onbordingSeedPhrase,
         titleLeading: BackLeadingButton(
           onPressed: () {
             if (context.read<OnBoardingGenPhraseCubit>().state.status !=
@@ -90,54 +92,73 @@ class OnBoardingGenPhraseView extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      l10n.genPhraseInstruction,
+                      l10n.onboardingPleaseStoreMessage,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.passPhraseMessage,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 20),
                     Text(
-                      l10n.genPhraseExplanation,
+                      l10n.onboardingAltmeMessage,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.passPhraseSubMessage,
                     ),
                   ],
                 ),
                 const SizedBox(height: 32),
                 MnemonicDisplay(mnemonic: state.mnemonic),
+                TextButton(
+                  onPressed: () {
+                    Clipboard.setData(
+                      ClipboardData(
+                        text: state.mnemonic.join(' '),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    l10n.copyToClipboard,
+                    style: Theme.of(context).textTheme.copyToClipBoard,
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 24,
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.privacy_tip_outlined,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Text(
-                          l10n.genPhraseViewLatterText,
-                          style: Theme.of(context).textTheme.caption!.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
+                  child: GestureDetector(
+                    onTap: () {
+                      context.read<OnBoardingGenPhraseCubit>().switchTick();
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          state.isTicked
+                              ? Icons.check_box_outlined
+                              : Icons.check_box_outline_blank_outlined,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            l10n.onboardingWroteDownMessage,
+                            style: Theme.of(context)
+                                .textTheme
+                                .onBoardingCheckMessage,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                SizedBox(
-                  height: 42,
-                  child: BaseButton.primary(
-                    context: context,
-                    onPressed: () async {
-                      await context
-                          .read<OnBoardingGenPhraseCubit>()
-                          .generateSSIAndCryptoAccount(state.mnemonic);
-                    },
-                    child: Text(l10n.onBoardingGenPhraseButton),
-                  ),
+                MyGradientButton(
+                  text: l10n.onBoardingGenPhraseButton,
+                  verticalSpacing: 14,
+                  onPressed: state.isTicked
+                      ? () async {
+                          await context
+                              .read<OnBoardingGenPhraseCubit>()
+                              .generateSSIAndCryptoAccount(state.mnemonic);
+                        }
+                      : null,
                 ),
               ],
             );
