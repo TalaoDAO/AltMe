@@ -34,6 +34,10 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
 
   final log = Logger('altme-wallet/on-boarding/key-generation');
 
+  Future<void> switchTick() async {
+    emit(state.copyWith(isTicked: !state.isTicked));
+  }
+
   Future<void> generateSSIAndCryptoAccount(List<String> mnemonic) async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));

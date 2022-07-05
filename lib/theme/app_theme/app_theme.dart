@@ -87,6 +87,9 @@ extension CustomColorScheme on ColorScheme {
   Color get digitPrimaryColor => Colors.white;
   Color get digitFillColor => Colors.transparent;
 
+  Color get disabledBgColor => const Color(0xFF6A5F7B);
+  Color get disabledTextColor => const Color(0xFF000000);
+
   Color get darkGradientStartColor => const Color(0xff0A0421);
   Color get darkGradientEndColor => const Color(0xff25095B);
   Color get transparent => Colors.transparent;
@@ -512,4 +515,34 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w500,
         color: const Color(0xffFFFFFF),
       );
+
+  TextStyle get passPhraseText => GoogleFonts.roboto(
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xffD1CCE3),
+      );
+
+  TextStyle get passPhraseMessage => GoogleFonts.roboto(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xffEDEAF5),
+      );
+
+  TextStyle get passPhraseSubMessage => GoogleFonts.roboto(
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xff71CBFF),
+      );
+
+  TextStyle get copyToClipBoard => GoogleFonts.roboto(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xffDED6EA),
+        decoration: TextDecoration.underline,
+      );
+
+  TextStyle get onBoardingCheckMessage => GoogleFonts.roboto(
+      fontSize: 15,
+      fontWeight: FontWeight.w600,
+      color: const Color(0xffFFFFFF));
 }
