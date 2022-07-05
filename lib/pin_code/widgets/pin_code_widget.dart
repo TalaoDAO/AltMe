@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/cubit/pin_code_view_cubit.dart';
 import 'package:altme/pin_code/widgets/widgets.dart';
 import 'package:altme/theme/theme.dart';
@@ -13,8 +14,8 @@ typedef PasswordEnteredCallback = void Function(String text);
 typedef IsValidCallback = void Function();
 typedef CancelCallback = void Function();
 
-class PinCodeView extends StatefulWidget {
-  const PinCodeView({
+class PinCodeWidget extends StatefulWidget {
+  const PinCodeWidget({
     Key? key,
     required this.title,
     this.passwordDigits = 4,
@@ -53,15 +54,14 @@ class PinCodeView extends StatefulWidget {
   final List<String>? digits;
 
   @override
-  State<StatefulWidget> createState() => _PinCodeViewState();
+  State<StatefulWidget> createState() => _PinCodeWidgetState();
 }
 
-class _PinCodeViewState extends State<PinCodeView>
+class _PinCodeWidgetState extends State<PinCodeWidget>
     with SingleTickerProviderStateMixin {
   late StreamSubscription<bool>? streamSubscription;
   late AnimationController controller;
   late Animation<double> animation;
-  late final PinCodeViewCubit pinCodeViewCubit = PinCodeViewCubit();
 
   final log = Logger('altme-wallet/pin_code/enter_pin_code');
 
@@ -80,7 +80,7 @@ class _PinCodeViewState extends State<PinCodeView>
         Tween<double>(begin: 0, end: 10).animate(curve as Animation<double>)
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
-              pinCodeViewCubit.setEnteredPasscode('');
+              context.read<PinCodeViewCubit>().setEnteredPasscode('');
               controller.value = 0;
             }
           });
@@ -88,26 +88,34 @@ class _PinCodeViewState extends State<PinCodeView>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: pinCodeViewCubit,
-      child: BlocBuilder<PinCodeViewCubit, PinCodeViewState>(
-        builder: (_, state) {
-          return OrientationBuilder(
-            builder: (context, orientation) {
-              return orientation == Orientation.portrait
-                  ? _buildPortraitPasscodeScreen()
-                  : _buildLandscapePasscodeScreen();
-            },
-          );
-        },
-      ),
+    return BlocBuilder<PinCodeViewCubit, PinCodeViewState>(
+      builder: (context, state) {
+        return OrientationBuilder(
+          builder: (context, orientation) {
+            return orientation == Orientation.portrait
+                ? _buildPortraitPasscodeScreen()
+                : _buildLandscapePasscodeScreen();
+          },
+        );
+      },
     );
   }
 
   Widget _buildTitle() {
-    return Text(
-      widget.title,
-      style: Theme.of(context).textTheme.pinCodeTitle,
+    final l10n = context.l10n;
+    return Column(
+      children: [
+        Text(
+          widget.title,
+          style: Theme.of(context).textTheme.pinCodeTitle,
+        ),
+        const SizedBox(height: 10),
+        Text(
+          l10n.pinCodeMessage,
+          style: Theme.of(context).textTheme.pinCodeMessage,
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 
@@ -119,9 +127,7 @@ class _PinCodeViewState extends State<PinCodeView>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const AltMeLogo(size: Sizes.logoLarge),
-                  const SizedBox(
-                    height: Sizes.spaceLarge,
-                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
                   _buildTitle(),
                   Container(
                     margin: const EdgeInsets.only(top: 20),
@@ -171,9 +177,7 @@ class _PinCodeViewState extends State<PinCodeView>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const AltMeLogo(size: Sizes.logoLarge),
-                              const SizedBox(
-                                height: Sizes.spaceLarge,
-                              ),
+                              const SizedBox(height: Sizes.spaceNormal),
                               _buildTitle(),
                               Container(
                                 margin: const EdgeInsets.only(top: 20),
@@ -227,6 +231,7 @@ class _PinCodeViewState extends State<PinCodeView>
       );
 
   List<Widget> _buildCircles() {
+    final PinCodeViewCubit pinCodeViewCubit = context.read<PinCodeViewCubit>();
     final enteredPasscode = pinCodeViewCubit.state.enteredPasscode;
     final list = <Widget>[];
     final config = widget.circleUIConfig;
@@ -247,6 +252,7 @@ class _PinCodeViewState extends State<PinCodeView>
   }
 
   void _onDeleteCancelButtonPressed() {
+    final PinCodeViewCubit pinCodeViewCubit = context.read<PinCodeViewCubit>();
     final enteredPasscode = pinCodeViewCubit.state.enteredPasscode;
     if (enteredPasscode.isNotEmpty) {
       pinCodeViewCubit.setEnteredPasscode(
@@ -260,6 +266,7 @@ class _PinCodeViewState extends State<PinCodeView>
   }
 
   void _onKeyboardButtonPressed(String text) {
+    final PinCodeViewCubit pinCodeViewCubit = context.read<PinCodeViewCubit>();
     final enteredPasscode = pinCodeViewCubit.state.enteredPasscode;
     if (text == NumericKeyboard.deleteButton) {
       _onDeleteCancelButtonPressed();
@@ -275,7 +282,7 @@ class _PinCodeViewState extends State<PinCodeView>
   }
 
   @override
-  void didUpdateWidget(PinCodeView old) {
+  void didUpdateWidget(PinCodeWidget old) {
     super.didUpdateWidget(old);
     // in case the stream instance changed, subscribe to the new one
     if (widget.shouldTriggerVerification != old.shouldTriggerVerification) {
@@ -289,7 +296,6 @@ class _PinCodeViewState extends State<PinCodeView>
   void dispose() {
     controller.dispose();
     streamSubscription?.cancel();
-    pinCodeViewCubit.close();
     super.dispose();
   }
 
@@ -313,6 +319,7 @@ class _PinCodeViewState extends State<PinCodeView>
   }
 
   Widget _buildDeleteButton() {
+    final PinCodeViewCubit pinCodeViewCubit = context.read<PinCodeViewCubit>();
     final passCode = pinCodeViewCubit.state.enteredPasscode;
     return CupertinoButton(
       onPressed: _onDeleteCancelButtonPressed,
