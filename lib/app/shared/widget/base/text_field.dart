@@ -16,6 +16,8 @@ class BaseTextField extends StatelessWidget {
     this.contentPadding =
         const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
     this.borderColor,
+    this.fillColor,
+    this.borderRadius = 50,
   }) : super(key: key);
 
   final String? label;
@@ -29,8 +31,8 @@ class BaseTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final EdgeInsetsGeometry contentPadding;
   final Color? borderColor;
-
-  static const double borderRadius = 50;
+  final Color? fillColor;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +82,8 @@ class BaseTextField extends StatelessWidget {
             width: 1.5,
           ),
         ),
-        fillColor: Theme.of(context).colorScheme.background,
+        fillColor: fillColor ?? Theme.of(context).colorScheme.background,
+        filled: true,
         errorText: error,
         labelText: label,
         labelStyle: Theme.of(context).textTheme.normal,
