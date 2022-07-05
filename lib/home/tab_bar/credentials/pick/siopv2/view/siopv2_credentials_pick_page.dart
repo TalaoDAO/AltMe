@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -96,8 +97,21 @@ class SIOPV2CredentialPickView extends StatelessWidget {
                     builder: (context) {
                       return BaseButton.primary(
                         context: context,
-                        onPressed: () {
-                          context
+                        onPressed: () async {
+                          bool authenticated = false;
+                          await Navigator.of(context).push<void>(
+                            PinCodePage.route(
+                              isValidCallback: () {
+                                authenticated = true;
+                              },
+                            ),
+                          );
+
+                          if (!authenticated) {
+                            return;
+                          }
+
+                          await context
                               .read<SIOPV2CredentialPickCubit>()
                               .presentCredentialToSIOPV2Request(
                                 credential: credentials[state.index],

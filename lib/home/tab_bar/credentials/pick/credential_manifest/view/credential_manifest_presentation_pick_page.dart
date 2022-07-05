@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/home/tab_bar/credentials/pick/credential_manifest/credential_manifest_pick.dart';
 import 'package:altme/home/tab_bar/credentials/widgets/list_item.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +76,20 @@ class CredentialManifestPickView extends StatelessWidget {
                   builder: (context) {
                     return BaseButton.primary(
                       context: context,
-                      onPressed: () {
+                      onPressed: () async {
+                        bool authenticated = false;
+                        await Navigator.of(context).push<void>(
+                          PinCodePage.route(
+                            isValidCallback: () {
+                              authenticated = true;
+                            },
+                          ),
+                        );
+
+                        if (!authenticated) {
+                          return;
+                        }
+
                         if (state.selection.isEmpty) {
                           AlertMessage.showStringMessage(
                             context: context,
@@ -84,7 +98,7 @@ class CredentialManifestPickView extends StatelessWidget {
                           );
                         } else {
                           final scanCubit = context.read<ScanCubit>();
-                          scanCubit.verifiablePresentationRequest(
+                          await scanCubit.verifiablePresentationRequest(
                             url: uri.toString(),
                             keyId: SecureStorageKeys.ssiKey,
                             credentials: state.selection

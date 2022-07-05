@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/home/tab_bar/credentials/credential.dart';
 import 'package:altme/home/tab_bar/credentials/pick/credential_manifest/credential_manifest_pick.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
 
   final Uri uri;
   final CredentialModel credential;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -96,7 +98,20 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                             builder: (context) {
                               return BaseButton.primary(
                                 context: context,
-                                onPressed: () {
+                                onPressed: () async {
+                                  bool authenticated = false;
+                                  await Navigator.of(context).push<void>(
+                                    PinCodePage.route(
+                                      isValidCallback: () {
+                                        authenticated = true;
+                                      },
+                                    ),
+                                  );
+
+                                  if (!authenticated) {
+                                    return;
+                                  }
+
                                   if (state.selection.isEmpty) {
                                     AlertMessage.showStringMessage(
                                       context: context,
