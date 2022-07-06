@@ -115,20 +115,6 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                   return BaseButton.primary(
                                     context: context,
                                     onPressed: () async {
-                                      bool authenticated = false;
-                                      await Navigator.of(context).push<void>(
-                                        PinCodePage.route(
-                                          restrictToBack: false,
-                                          isValidCallback: () {
-                                            authenticated = true;
-                                          },
-                                        ),
-                                      );
-
-                                      if (!authenticated) {
-                                        return;
-                                      }
-
                                       if (state.selection.isEmpty) {
                                         AlertMessage.showStringMessage(
                                           context: context,
@@ -136,9 +122,25 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                           messageType: MessageType.error,
                                         );
                                       } else {
+                                        /// Authenticate
+                                        bool authenticated = false;
+                                        await Navigator.of(context).push<void>(
+                                          PinCodePage.route(
+                                            restrictToBack: false,
+                                            isValidCallback: () {
+                                              authenticated = true;
+                                            },
+                                          ),
+                                        );
+
+                                        if (!authenticated) {
+                                          return;
+                                        }
+
                                         final scanCubit =
                                             context.read<ScanCubit>();
-                                        scanCubit.verifiablePresentationRequest(
+                                        await scanCubit
+                                            .verifiablePresentationRequest(
                                           url: uri.toString(),
                                           keyId: SecureStorageKeys.ssiKey,
                                           credentials: state.selection

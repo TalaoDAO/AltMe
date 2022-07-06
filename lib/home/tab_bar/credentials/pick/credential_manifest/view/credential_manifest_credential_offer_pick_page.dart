@@ -99,20 +99,6 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                               return BaseButton.primary(
                                 context: context,
                                 onPressed: () async {
-                                  bool authenticated = false;
-                                  await Navigator.of(context).push<void>(
-                                    PinCodePage.route(
-                                      restrictToBack: false,
-                                      isValidCallback: () {
-                                        authenticated = true;
-                                      },
-                                    ),
-                                  );
-
-                                  if (!authenticated) {
-                                    return;
-                                  }
-
                                   if (state.selection.isEmpty) {
                                     AlertMessage.showStringMessage(
                                       context: context,
@@ -120,6 +106,21 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                       messageType: MessageType.error,
                                     );
                                   } else {
+                                    /// Authenticate
+                                    bool authenticated = false;
+                                    await Navigator.of(context).push<void>(
+                                      PinCodePage.route(
+                                        restrictToBack: false,
+                                        isValidCallback: () {
+                                          authenticated = true;
+                                        },
+                                      ),
+                                    );
+
+                                    if (!authenticated) {
+                                      return;
+                                    }
+
                                     final selectedCredentialsList = state
                                         .selection
                                         .map(
@@ -127,7 +128,9 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                               state.filteredCredentialList[i],
                                         )
                                         .toList();
-                                    context.read<ScanCubit>().credentialOffer(
+                                    await context
+                                        .read<ScanCubit>()
+                                        .credentialOffer(
                                           url: uri.toString(),
                                           credentialModel: credential,
                                           keyId: SecureStorageKeys.ssiKey,
