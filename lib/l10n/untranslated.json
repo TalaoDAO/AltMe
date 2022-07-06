@@ -219,7 +219,12 @@
     "accountName",
     "importWalletText",
     "recoveryPhraseDescriptions",
-    "importEasilyFrom"
+    "importEasilyFrom",
+    "templeWallet",
+    "metaMaskWallet",
+    "kukaiWallet",
+    "otherWalletApp",
+    "importWalletHintText"
   ],
 
   "es": [
@@ -442,7 +447,12 @@
     "accountName",
     "importWalletText",
     "recoveryPhraseDescriptions",
-    "importEasilyFrom"
+    "importEasilyFrom",
+    "templeWallet",
+    "metaMaskWallet",
+    "kukaiWallet",
+    "otherWalletApp",
+    "importWalletHintText"
   ],
 
   "fr": [
@@ -495,7 +505,12 @@
     "accountName",
     "importWalletText",
     "recoveryPhraseDescriptions",
-    "importEasilyFrom"
+    "importEasilyFrom",
+    "templeWallet",
+    "metaMaskWallet",
+    "kukaiWallet",
+    "otherWalletApp",
+    "importWalletHintText"
   ],
 
   "it": [
@@ -720,6 +735,11 @@
     "accountName",
     "importWalletText",
     "recoveryPhraseDescriptions",
-    "importEasilyFrom"
+    "importEasilyFrom",
+    "templeWallet",
+    "metaMaskWallet",
+    "kukaiWallet",
+    "otherWalletApp",
+    "importWalletHintText"
   ]
 }

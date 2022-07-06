@@ -15,8 +15,8 @@ class WalletTypeItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(Sizes.spaceSmall),
-        margin: const EdgeInsets.all(Sizes.spaceSmall),
+        padding: const EdgeInsets.all(Sizes.spaceXSmall),
+        margin: const EdgeInsets.all(Sizes.space2XSmall),
         decoration: BoxDecoration(
           color: Theme.of(context).highlightColor,
           borderRadius:

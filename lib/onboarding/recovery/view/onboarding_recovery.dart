@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/onboarding/recovery/cubit/onboarding_recovery_cubit.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -122,7 +123,7 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                   const SizedBox(height: Sizes.spaceLarge),
                   BaseTextField(
                     height: Sizes.recoveryPhraseTextFieldHeight,
-                    hint: l10n.recoveryMnemonicHintText,
+                    hint: l10n.importWalletHintText,
                     hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
                     maxLines: 10,
                     borderRadius: Sizes.normalRadius,
@@ -143,6 +144,13 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                     l10n.importEasilyFrom,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
+                  const SizedBox(height: Sizes.spaceSmall),
+                  WalletTypeList(
+                    onItemTap: (wallet) {
+                      // TODO(all): switch on wallet type on navigate to true screen
+                    },
+                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
                 ],
               ),
             ),

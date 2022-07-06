@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -111,7 +112,8 @@ class _AddAccountPopUpState extends State<AddAccountPopUp> {
             backgroundColor: Colors.transparent,
             textColor: Theme.of(context).colorScheme.label,
             onPressed: () {
-              // TODO(Taleb): Navigate to import account page with account name¬
+              Navigator.of(context).pop();
+              Navigator.of(context).push<void>(OnBoardingRecoveryPage.route());
             },
           ),
         ],
