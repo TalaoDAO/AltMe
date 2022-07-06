@@ -1,18 +1,11 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/cubit/pin_code_view_cubit.dart';
-import 'package:altme/pin_code/widgets/widgets.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-
-typedef PasswordEnteredCallback = void Function(String text);
-typedef IsValidCallback = void Function();
-typedef CancelCallback = void Function();
 
 class PinCodeWidget extends StatefulWidget {
   const PinCodeWidget({
@@ -101,24 +94,6 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
     );
   }
 
-  Widget _buildTitle() {
-    final l10n = context.l10n;
-    return Column(
-      children: [
-        Text(
-          widget.title,
-          style: Theme.of(context).textTheme.pinCodeTitle,
-        ),
-        const SizedBox(height: 10),
-        Text(
-          l10n.pinCodeMessage,
-          style: Theme.of(context).textTheme.pinCodeMessage,
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-
   Widget _buildPortraitPasscodeScreen() => Stack(
         children: [
           Positioned(
@@ -128,7 +103,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                 children: [
                   const AltMeLogo(size: Sizes.logoLarge),
                   const SizedBox(height: Sizes.spaceNormal),
-                  _buildTitle(),
+                  PinCodeTitle(title: widget.title),
                   Container(
                     margin: const EdgeInsets.only(top: 20),
                     height: 40,
@@ -142,7 +117,13 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                       },
                     ),
                   ),
-                  _buildKeyboard(),
+                  NumKeyboard(
+                    passwordEnteredCallback: widget.passwordEnteredCallback,
+                    keyboardUIConfig: widget.keyboardUIConfig,
+                    passwordDigits: widget.passwordDigits,
+                    digits: widget.digits,
+                    cancelCallback: widget.cancelCallback,
+                  ),
                   widget.bottomWidget ?? Container()
                 ],
               ),
@@ -153,7 +134,12 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
             right: 0,
             child: Align(
               alignment: Alignment.bottomRight,
-              child: _buildDeleteButton(),
+              child: DeleteButton(
+                cancelButton: widget.cancelButton,
+                deleteButton: widget.deleteButton,
+                cancelCallback: widget.cancelCallback,
+                keyboardUIConfig: widget.keyboardUIConfig,
+              ),
             ),
           ),
         ],
@@ -178,7 +164,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                             children: [
                               const AltMeLogo(size: Sizes.logoLarge),
                               const SizedBox(height: Sizes.spaceNormal),
-                              _buildTitle(),
+                              PinCodeTitle(title: widget.title),
                               Container(
                                 margin: const EdgeInsets.only(top: 20),
                                 height: 40,
@@ -208,7 +194,13 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                         Container()
                     ],
                   ),
-                  _buildKeyboard(),
+                  NumKeyboard(
+                    passwordEnteredCallback: widget.passwordEnteredCallback,
+                    keyboardUIConfig: widget.keyboardUIConfig,
+                    passwordDigits: widget.passwordDigits,
+                    digits: widget.digits,
+                    cancelCallback: widget.cancelCallback,
+                  ),
                 ],
               ),
             ),
@@ -218,16 +210,15 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
             right: 0,
             child: Align(
               alignment: Alignment.bottomRight,
-              child: _buildDeleteButton(),
+              child: DeleteButton(
+                cancelButton: widget.cancelButton,
+                deleteButton: widget.deleteButton,
+                cancelCallback: widget.cancelCallback,
+                keyboardUIConfig: widget.keyboardUIConfig,
+              ),
             ),
           )
         ],
-      );
-
-  Widget _buildKeyboard() => NumericKeyboard(
-        onKeyboardTap: _onKeyboardButtonPressed,
-        keyboardUIConfig: widget.keyboardUIConfig,
-        digits: widget.digits,
       );
 
   List<Widget> _buildCircles() {
@@ -249,36 +240,6 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
       );
     }
     return list;
-  }
-
-  void _onDeleteCancelButtonPressed() {
-    final PinCodeViewCubit pinCodeViewCubit = context.read<PinCodeViewCubit>();
-    final enteredPasscode = pinCodeViewCubit.state.enteredPasscode;
-    if (enteredPasscode.isNotEmpty) {
-      pinCodeViewCubit.setEnteredPasscode(
-        enteredPasscode.substring(0, enteredPasscode.length - 1),
-      );
-    } else {
-      if (widget.cancelCallback != null) {
-        widget.cancelCallback!.call();
-      }
-    }
-  }
-
-  void _onKeyboardButtonPressed(String text) {
-    final PinCodeViewCubit pinCodeViewCubit = context.read<PinCodeViewCubit>();
-    final enteredPasscode = pinCodeViewCubit.state.enteredPasscode;
-    if (text == NumericKeyboard.deleteButton) {
-      _onDeleteCancelButtonPressed();
-      return;
-    }
-    if (enteredPasscode.length < widget.passwordDigits) {
-      final passCode = enteredPasscode + text;
-      pinCodeViewCubit.setEnteredPasscode(passCode);
-      if (passCode.length == widget.passwordDigits) {
-        widget.passwordEnteredCallback(passCode);
-      }
-    }
   }
 
   @override
@@ -316,17 +277,5 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
         '''You didn't implement validation callback. Please handle a state by yourself then.''',
       );
     }
-  }
-
-  Widget _buildDeleteButton() {
-    final PinCodeViewCubit pinCodeViewCubit = context.read<PinCodeViewCubit>();
-    final passCode = pinCodeViewCubit.state.enteredPasscode;
-    return CupertinoButton(
-      onPressed: _onDeleteCancelButtonPressed,
-      child: Container(
-        margin: widget.keyboardUIConfig.digitInnerMargin,
-        child: passCode.isEmpty ? widget.cancelButton : widget.deleteButton,
-      ),
-    );
   }
 }

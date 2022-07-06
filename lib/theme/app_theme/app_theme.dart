@@ -548,7 +548,8 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get onBoardingCheckMessage => GoogleFonts.roboto(
-      fontSize: 15,
-      fontWeight: FontWeight.w600,
-      color: const Color(0xffFFFFFF));
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xffFFFFFF),
+      );
 }

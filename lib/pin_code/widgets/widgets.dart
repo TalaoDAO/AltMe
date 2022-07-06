@@ -1,4 +1,7 @@
-export 'circle.dart';
-export 'numeric_keyboard.dart';
+export 'circle_ui_config.dart';
+export 'delete_button.dart';
+export 'keyboard_ui_config.dart';
+export 'num_keyboard.dart';
+export 'pin_code_title.dart';
 export 'pin_code_widget.dart';
 export 'shake_curve.dart';
