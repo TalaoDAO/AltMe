@@ -4,9 +4,9 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class AddAccountPopUp extends StatefulWidget {
-  const AddAccountPopUp({Key? key, this.initialValue}) : super(key: key);
+  const AddAccountPopUp({Key? key, this.defaultAccountName}) : super(key: key);
 
-  final String? initialValue;
+  final String? defaultAccountName;
 
   @override
   State<AddAccountPopUp> createState() => _AddAccountPopUpState();
@@ -14,7 +14,7 @@ class AddAccountPopUp extends StatefulWidget {
 
 class _AddAccountPopUpState extends State<AddAccountPopUp> {
   late TextEditingController controller =
-      TextEditingController(text: widget.initialValue);
+      TextEditingController(text: widget.defaultAccountName);
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class _AddAccountPopUpState extends State<AddAccountPopUp> {
             textColor: Theme.of(context).colorScheme.label,
             fontSize: 15,
             onPressed: () {
-              Navigator.of(context).pop(controller.text);
+              // TODO(Taleb): Navigate to create account page with account name
             },
           ),
           const SizedBox(width: Sizes.spaceNormal),
@@ -111,7 +111,7 @@ class _AddAccountPopUpState extends State<AddAccountPopUp> {
             backgroundColor: Colors.transparent,
             textColor: Theme.of(context).colorScheme.label,
             onPressed: () {
-              Navigator.of(context).pop('');
+              // TODO(Taleb): Navigate to import account page with account name¬
             },
           ),
         ],
