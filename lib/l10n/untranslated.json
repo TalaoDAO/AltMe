@@ -212,7 +212,11 @@
     "onboardingAltmeMessage",
     "onboardingWroteDownMessage",
     "copyToClipboard",
-    "pinCodeMessage"
+    "pinCodeMessage",
+    "enterNameForYourNewAccount",
+    "create",
+    "import",
+    "accountName"
   ],
 
   "es": [
@@ -428,7 +432,11 @@
     "onboardingAltmeMessage",
     "onboardingWroteDownMessage",
     "copyToClipboard",
-    "pinCodeMessage"
+    "pinCodeMessage",
+    "enterNameForYourNewAccount",
+    "create",
+    "import",
+    "accountName"
   ],
 
   "fr": [
@@ -474,7 +482,11 @@
     "onboardingAltmeMessage",
     "onboardingWroteDownMessage",
     "copyToClipboard",
-    "pinCodeMessage"
+    "pinCodeMessage",
+    "enterNameForYourNewAccount",
+    "create",
+    "import",
+    "accountName"
   ],
 
   "it": [
@@ -692,6 +704,10 @@
     "onboardingAltmeMessage",
     "onboardingWroteDownMessage",
     "copyToClipboard",
-    "pinCodeMessage"
+    "pinCodeMessage",
+    "enterNameForYourNewAccount",
+    "create",
+    "import",
+    "accountName"
   ]
 }
