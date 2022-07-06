@@ -1,10 +1,10 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/view/confirm_pin_code_page.dart';
-import 'package:altme/pin_code/widgets/widgets.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EnterNewPinCodePage extends StatefulWidget {
+class EnterNewPinCodePage extends StatelessWidget {
   const EnterNewPinCodePage({
     Key? key,
     required this.isValidCallback,
@@ -12,20 +12,41 @@ class EnterNewPinCodePage extends StatefulWidget {
 
   final VoidCallback isValidCallback;
 
-  static MaterialPageRoute route({required VoidCallback isValidCallback}) {
-    return MaterialPageRoute<void>(
-      builder: (_) => EnterNewPinCodePage(
-        isValidCallback: isValidCallback,
-      ),
-      settings: const RouteSettings(name: '/enterNewPinCodePage'),
-    );
-  }
+  static Route route({
+    required VoidCallback isValidCallback,
+    bool restrictToBack = true,
+  }) =>
+      MaterialPageRoute<void>(
+        builder: (_) => EnterNewPinCodePage(
+          isValidCallback: isValidCallback,
+        ),
+        settings: const RouteSettings(name: '/enterPinCodePage'),
+      );
 
   @override
-  State<StatefulWidget> createState() => _EnterNewPinCodePageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => PinCodeViewCubit(),
+      child: EnterNewPinCodeView(
+        isValidCallback: isValidCallback,
+      ),
+    );
+  }
 }
 
-class _EnterNewPinCodePageState extends State<EnterNewPinCodePage> {
+class EnterNewPinCodeView extends StatefulWidget {
+  const EnterNewPinCodeView({
+    Key? key,
+    required this.isValidCallback,
+  }) : super(key: key);
+
+  final VoidCallback isValidCallback;
+
+  @override
+  State<StatefulWidget> createState() => _EnterNewPinCodeViewState();
+}
+
+class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
   @override
   void initState() {
     super.initState();
@@ -43,7 +64,7 @@ class _EnterNewPinCodePageState extends State<EnterNewPinCodePage> {
       scrollView: false,
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
-        child: PinCodeView(
+        child: PinCodeWidget(
           title: l10n.enterNewPinCode,
           passwordEnteredCallback: _onPasscodeEntered,
           deleteButton: Text(

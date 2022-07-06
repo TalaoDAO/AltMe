@@ -284,6 +284,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
       );
 
+  TextStyle get pinCodeMessage => GoogleFonts.roboto(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get getCardsButton => GoogleFonts.roboto(
         color: const Color(0xFFFFFFFF),
         fontSize: 12,
@@ -542,7 +548,8 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get onBoardingCheckMessage => GoogleFonts.roboto(
-      fontSize: 15,
-      fontWeight: FontWeight.w600,
-      color: const Color(0xffFFFFFF));
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xffFFFFFF),
+      );
 }

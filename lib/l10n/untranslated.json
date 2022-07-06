@@ -211,7 +211,8 @@
     "onboardingPleaseStoreMessage",
     "onboardingAltmeMessage",
     "onboardingWroteDownMessage",
-    "copyToClipboard"
+    "copyToClipboard",
+    "pinCodeMessage"
   ],
 
   "es": [
@@ -426,7 +427,8 @@
     "onboardingPleaseStoreMessage",
     "onboardingAltmeMessage",
     "onboardingWroteDownMessage",
-    "copyToClipboard"
+    "copyToClipboard",
+    "pinCodeMessage"
   ],
 
   "fr": [
@@ -471,7 +473,8 @@
     "onboardingPleaseStoreMessage",
     "onboardingAltmeMessage",
     "onboardingWroteDownMessage",
-    "copyToClipboard"
+    "copyToClipboard",
+    "pinCodeMessage"
   ],
 
   "it": [
@@ -688,6 +691,7 @@
     "onboardingPleaseStoreMessage",
     "onboardingAltmeMessage",
     "onboardingWroteDownMessage",
-    "copyToClipboard"
+    "copyToClipboard",
+    "pinCodeMessage"
   ]
 }
