@@ -217,7 +217,9 @@
     "create",
     "import",
     "accountName",
-    "importWalletText"
+    "importWalletText",
+    "recoveryPhraseDescriptions",
+    "importEasilyFrom"
   ],
 
   "es": [
@@ -438,7 +440,9 @@
     "create",
     "import",
     "accountName",
-    "importWalletText"
+    "importWalletText",
+    "recoveryPhraseDescriptions",
+    "importEasilyFrom"
   ],
 
   "fr": [
@@ -489,7 +493,9 @@
     "create",
     "import",
     "accountName",
-    "importWalletText"
+    "importWalletText",
+    "recoveryPhraseDescriptions",
+    "importEasilyFrom"
   ],
 
   "it": [
@@ -712,6 +718,8 @@
     "create",
     "import",
     "accountName",
-    "importWalletText"
+    "importWalletText",
+    "recoveryPhraseDescriptions",
+    "importEasilyFrom"
   ]
 }

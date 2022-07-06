@@ -9,6 +9,8 @@ abstract class Sizes {
   static const double spaceSmall = 12;
   static const double spaceNormal = 24;
   static const double spaceLarge = 28;
+  static const double spaceXLarge = 38;
+  static const double space2XLarge = 48;
 
   ///Logo
   static const double logoSmall = 38;

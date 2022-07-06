@@ -69,41 +69,42 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
         }
         return true;
       },
-      child: BasePage(
-        title: l10n.import_wallet,
-        titleLeading: const BackLeadingButton(),
-        scrollView: false,
-        padding: EdgeInsets.zero,
-        body: BlocConsumer<OnBoardingRecoveryCubit, OnBoardingRecoveryState>(
-          listener: (context, state) {
-            if (state.status == AppStatus.loading) {
-              LoadingView().show(context: context);
-            } else {
-              LoadingView().hide();
-            }
+      child: BlocConsumer<OnBoardingRecoveryCubit, OnBoardingRecoveryState>(
+        listener: (context, state) {
+          if (state.status == AppStatus.loading) {
+            LoadingView().show(context: context);
+          } else {
+            LoadingView().hide();
+          }
 
-            if (state.message != null) {
-              AlertMessage.showStateMessage(
-                context: context,
-                stateMessage: state.message!,
-              );
-            }
-            if (state.status == AppStatus.success) {
-              /// Removes every stack except first route (splashPage)
-              Navigator.pushAndRemoveUntil<void>(
-                context,
-                HomePage.route(),
-                (Route<dynamic> route) => route.isFirst,
-              );
-            }
-          },
-          builder: (context, state) {
-            return BackgroundCard(
-              margin: const EdgeInsets.all(Sizes.spaceSmall),
+          if (state.message != null) {
+            AlertMessage.showStateMessage(
+              context: context,
+              stateMessage: state.message!,
+            );
+          }
+          if (state.status == AppStatus.success) {
+            /// Removes every stack except first route (splashPage)
+            Navigator.pushAndRemoveUntil<void>(
+              context,
+              HomePage.route(),
+              (Route<dynamic> route) => route.isFirst,
+            );
+          }
+        },
+        builder: (context, state) {
+          return BasePage(
+            title: l10n.import_wallet,
+            titleLeading: const BackLeadingButton(),
+            scrollView: true,
+            useSafeArea: true,
+            padding: const EdgeInsets.all(Sizes.spaceSmall),
+            body: BackgroundCard(
               padding: const EdgeInsets.all(Sizes.spaceSmall),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   const SizedBox(height: Sizes.spaceLarge),
                   Padding(
@@ -130,24 +131,36 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                         ? l10n.recoveryMnemonicError
                         : null,
                   ),
-                  const SizedBox(height: 24),
-                  BaseButton.primary(
-                    context: context,
-                    onPressed: !state.isMnemonicValid
-                        ? null
-                        : () async {
-                            await context
-                                .read<OnBoardingRecoveryCubit>()
-                                .saveMnemonic(mnemonicController.text);
-                          },
-                    child: Text(l10n.onBoardingRecoveryButton),
+                  const SizedBox(height: Sizes.spaceSmall),
+                  Text(
+                    l10n.recoveryPhraseDescriptions,
+                    style: Theme.of(context).textTheme.infoSubtitle.copyWith(
+                          fontSize: 12,
+                        ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: Sizes.space2XLarge),
+                  Text(
+                    l10n.importEasilyFrom,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ],
               ),
-            );
-          },
-        ),
+            ),
+            navigation: Padding(
+              padding: const EdgeInsets.all(Sizes.spaceSmall),
+              child: MyGradientButton(
+                text: l10n.import,
+                onPressed: !state.isMnemonicValid
+                    ? null
+                    : () async {
+                        await context
+                            .read<OnBoardingRecoveryCubit>()
+                            .saveMnemonic(mnemonicController.text);
+                      },
+              ),
+            ),
+          );
+        },
       ),
     );
   }
