@@ -39,6 +39,9 @@ class MyGradientButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
           gradient: onPressed == null ? null : gradientValue,
+          color: onPressed == null
+              ? Theme.of(context).colorScheme.disabledBgColor
+              : null,
         ),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
@@ -54,7 +57,9 @@ class MyGradientButton extends StatelessWidget {
           child: Text(
             text.toUpperCase(),
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onElevatedButton,
+              color: onPressed != null
+                  ? Theme.of(context).colorScheme.onElevatedButton
+                  : Theme.of(context).colorScheme.disabledTextColor,
               fontSize: fontSize,
               fontWeight: FontWeight.w700,
             ),

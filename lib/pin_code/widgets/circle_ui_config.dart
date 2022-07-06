@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 class CircleUIConfig {
   const CircleUIConfig({
     this.borderColor = Colors.white,
-    this.borderWidth = 1,
+    this.borderWidth = 1.5,
     this.fillColor = const Color(0xFF6600FF),
     this.defaultColor = Colors.white,
-    this.circleSize = 20,
+    this.circleSize = 18,
   });
 
   final Color borderColor;
@@ -36,10 +36,10 @@ class Circle extends StatelessWidget {
       width: circleUIConfig.circleSize,
       height: circleUIConfig.circleSize,
       decoration: BoxDecoration(
-        color: filled ? circleUIConfig.fillColor : circleUIConfig.defaultColor,
+        color: filled ? circleUIConfig.fillColor : null,
         shape: BoxShape.circle,
         border: Border.all(
-          color: circleUIConfig.borderColor,
+          color: filled ? circleUIConfig.fillColor : circleUIConfig.borderColor,
           width: circleUIConfig.borderWidth,
         ),
       ),

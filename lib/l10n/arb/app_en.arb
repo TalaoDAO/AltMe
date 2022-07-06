@@ -363,5 +363,16 @@
   "agreeTermsAndConditionCheckBox": "I agree to the terms and conditions.",
   "readTermsOfUseCheckBox": "I have read the terms of use.",
   "createOrImportNewAccount": "Create or import a new account.",
-  "selectAccount": "Select account"
+  "selectAccount": "Select account",
+  "onbordingSeedPhrase": "Seed Phrase",
+  "onboardingPleaseStoreMessage": "Please store your seed phrase carefully. It is the only way to recover your account.",
+  "onboardingAltmeMessage": "Altme never has access to it.",
+  "onboardingWroteDownMessage": "I wrote down my recovery phrase and I am aware of the risk  of losing it.",
+  "copyToClipboard": "Copy to clipboard",
+  "pinCodeMessage": "PIN Code prevent unauthorized access to your Altme Wallet. You can change it at any time.",
+  "enterNameForYourNewAccount": "Enter a name for your new account",
+  "create": "Create",
+  "import": "Import",
+  "accountName": "Account name"
+
 }
