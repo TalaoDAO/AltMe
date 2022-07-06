@@ -86,80 +86,11 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
         return OrientationBuilder(
           builder: (context, orientation) {
             return orientation == Orientation.portrait
-                ? _buildPortraitPasscodeScreen()
-                : _buildLandscapePasscodeScreen();
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildPortraitPasscodeScreen() => Stack(
-        children: [
-          Positioned(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const AltMeLogo(size: Sizes.logoLarge),
-                  const SizedBox(height: Sizes.spaceNormal),
-                  PinCodeTitle(title: widget.title),
-                  Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    height: 40,
-                    child: AnimatedBuilder(
-                      animation: animation,
-                      builder: (_, __) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: _buildCircles(),
-                        );
-                      },
-                    ),
-                  ),
-                  NumKeyboard(
-                    passwordEnteredCallback: widget.passwordEnteredCallback,
-                    keyboardUIConfig: widget.keyboardUIConfig,
-                    passwordDigits: widget.passwordDigits,
-                    digits: widget.digits,
-                    cancelCallback: widget.cancelCallback,
-                  ),
-                  widget.bottomWidget ?? Container()
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: DeleteButton(
-                cancelButton: widget.cancelButton,
-                deleteButton: widget.deleteButton,
-                cancelCallback: widget.cancelCallback,
-                keyboardUIConfig: widget.keyboardUIConfig,
-              ),
-            ),
-          ),
-        ],
-      );
-
-  Widget _buildLandscapePasscodeScreen() => Stack(
-        children: [
-          Positioned(
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Stack(
-                    children: <Widget>[
+                ? Stack(
+                    children: [
                       Positioned(
-                        child: Align(
-                          alignment: Alignment.center,
+                        child: Center(
                           child: Column(
-                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const AltMeLogo(size: Sizes.logoLarge),
@@ -179,47 +110,121 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                   },
                                 ),
                               ),
+                              NumKeyboard(
+                                passwordEnteredCallback:
+                                    widget.passwordEnteredCallback,
+                                keyboardUIConfig: widget.keyboardUIConfig,
+                                passwordDigits: widget.passwordDigits,
+                                digits: widget.digits,
+                                cancelCallback: widget.cancelCallback,
+                              ),
+                              widget.bottomWidget ?? Container()
                             ],
                           ),
                         ),
                       ),
-                      if (widget.bottomWidget != null)
-                        Positioned(
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: widget.bottomWidget,
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: DeleteButton(
+                            cancelButton: widget.cancelButton,
+                            deleteButton: widget.deleteButton,
+                            cancelCallback: widget.cancelCallback,
+                            keyboardUIConfig: widget.keyboardUIConfig,
                           ),
-                        )
-                      else
-                        Container()
+                        ),
+                      ),
                     ],
-                  ),
-                  NumKeyboard(
-                    passwordEnteredCallback: widget.passwordEnteredCallback,
-                    keyboardUIConfig: widget.keyboardUIConfig,
-                    passwordDigits: widget.passwordDigits,
-                    digits: widget.digits,
-                    cancelCallback: widget.cancelCallback,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: DeleteButton(
-                cancelButton: widget.cancelButton,
-                deleteButton: widget.deleteButton,
-                cancelCallback: widget.cancelCallback,
-                keyboardUIConfig: widget.keyboardUIConfig,
-              ),
-            ),
-          )
-        ],
-      );
+                  )
+                : Stack(
+                    children: [
+                      Positioned(
+                        child: Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Stack(
+                                children: <Widget>[
+                                  Positioned(
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const AltMeLogo(
+                                            size: Sizes.logoLarge,
+                                          ),
+                                          const SizedBox(
+                                            height: Sizes.spaceNormal,
+                                          ),
+                                          PinCodeTitle(title: widget.title),
+                                          Container(
+                                            margin:
+                                                const EdgeInsets.only(top: 20),
+                                            height: 40,
+                                            child: AnimatedBuilder(
+                                              animation: animation,
+                                              builder: (_, __) {
+                                                return Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: _buildCircles(),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  if (widget.bottomWidget != null)
+                                    Positioned(
+                                      child: Align(
+                                        alignment: Alignment.topCenter,
+                                        child: widget.bottomWidget,
+                                      ),
+                                    )
+                                  else
+                                    Container()
+                                ],
+                              ),
+                              NumKeyboard(
+                                passwordEnteredCallback:
+                                    widget.passwordEnteredCallback,
+                                keyboardUIConfig: widget.keyboardUIConfig,
+                                passwordDigits: widget.passwordDigits,
+                                digits: widget.digits,
+                                cancelCallback: widget.cancelCallback,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: DeleteButton(
+                            cancelButton: widget.cancelButton,
+                            deleteButton: widget.deleteButton,
+                            cancelCallback: widget.cancelCallback,
+                            keyboardUIConfig: widget.keyboardUIConfig,
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+          },
+        );
+      },
+    );
+  }
 
   List<Widget> _buildCircles() {
     final PinCodeViewCubit pinCodeViewCubit = context.read<PinCodeViewCubit>();
