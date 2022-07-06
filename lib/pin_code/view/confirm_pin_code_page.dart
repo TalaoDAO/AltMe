@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/widgets/widgets.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class ConfirmPinCodePage extends StatefulWidget {
+class ConfirmPinCodePage extends StatelessWidget {
   const ConfirmPinCodePage({
     Key? key,
     required this.storedPassword,
@@ -16,7 +17,7 @@ class ConfirmPinCodePage extends StatefulWidget {
   final String storedPassword;
   final VoidCallback isValidCallback;
 
-  static MaterialPageRoute route(
+  static Route route(
     String storedPassword,
     VoidCallback isValidCallback,
   ) {
@@ -30,10 +31,32 @@ class ConfirmPinCodePage extends StatefulWidget {
   }
 
   @override
-  State<StatefulWidget> createState() => _ConfirmPinCodePageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => PinCodeViewCubit(),
+      child: ConfirmPinCodeView(
+        storedPassword: storedPassword,
+        isValidCallback: isValidCallback,
+      ),
+    );
+  }
 }
 
-class _ConfirmPinCodePageState extends State<ConfirmPinCodePage> {
+class ConfirmPinCodeView extends StatefulWidget {
+  const ConfirmPinCodeView({
+    Key? key,
+    required this.storedPassword,
+    required this.isValidCallback,
+  }) : super(key: key);
+
+  final String storedPassword;
+  final VoidCallback isValidCallback;
+
+  @override
+  State<StatefulWidget> createState() => _ConfirmPinCodeViewState();
+}
+
+class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
   final StreamController<bool> _verificationNotifier =
       StreamController<bool>.broadcast();
 
@@ -54,22 +77,20 @@ class _ConfirmPinCodePageState extends State<ConfirmPinCodePage> {
     return BasePage(
       backgroundColor: Theme.of(context).colorScheme.background,
       scrollView: false,
-      body: SafeArea(
-        child: PinCodeView(
-          title: l10n.confirmYourPinCode,
-          passwordEnteredCallback: _onPasscodeEntered,
-          deleteButton: Text(
-            l10n.delete,
-            style: Theme.of(context).textTheme.button,
-          ),
-          cancelButton: Text(
-            l10n.cancel,
-            style: Theme.of(context).textTheme.button,
-          ),
-          cancelCallback: _onPasscodeCancelled,
-          isValidCallback: widget.isValidCallback,
-          shouldTriggerVerification: _verificationNotifier.stream,
+      body: PinCodeWidget(
+        title: l10n.confirmYourPinCode,
+        passwordEnteredCallback: _onPasscodeEntered,
+        deleteButton: Text(
+          l10n.delete,
+          style: Theme.of(context).textTheme.button,
         ),
+        cancelButton: Text(
+          l10n.cancel,
+          style: Theme.of(context).textTheme.button,
+        ),
+        cancelCallback: _onPasscodeCancelled,
+        isValidCallback: widget.isValidCallback,
+        shouldTriggerVerification: _verificationNotifier.stream,
       ),
     );
   }

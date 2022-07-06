@@ -206,7 +206,17 @@
     "agreeTermsAndConditionCheckBox",
     "readTermsOfUseCheckBox",
     "createOrImportNewAccount",
-    "selectAccount"
+    "selectAccount",
+    "onbordingSeedPhrase",
+    "onboardingPleaseStoreMessage",
+    "onboardingAltmeMessage",
+    "onboardingWroteDownMessage",
+    "copyToClipboard",
+    "pinCodeMessage",
+    "enterNameForYourNewAccount",
+    "create",
+    "import",
+    "accountName"
   ],
 
   "es": [
@@ -416,7 +426,17 @@
     "agreeTermsAndConditionCheckBox",
     "readTermsOfUseCheckBox",
     "createOrImportNewAccount",
-    "selectAccount"
+    "selectAccount",
+    "onbordingSeedPhrase",
+    "onboardingPleaseStoreMessage",
+    "onboardingAltmeMessage",
+    "onboardingWroteDownMessage",
+    "copyToClipboard",
+    "pinCodeMessage",
+    "enterNameForYourNewAccount",
+    "create",
+    "import",
+    "accountName"
   ],
 
   "fr": [
@@ -456,7 +476,17 @@
     "agreeTermsAndConditionCheckBox",
     "readTermsOfUseCheckBox",
     "createOrImportNewAccount",
-    "selectAccount"
+    "selectAccount",
+    "onbordingSeedPhrase",
+    "onboardingPleaseStoreMessage",
+    "onboardingAltmeMessage",
+    "onboardingWroteDownMessage",
+    "copyToClipboard",
+    "pinCodeMessage",
+    "enterNameForYourNewAccount",
+    "create",
+    "import",
+    "accountName"
   ],
 
   "it": [
@@ -668,6 +698,16 @@
     "agreeTermsAndConditionCheckBox",
     "readTermsOfUseCheckBox",
     "createOrImportNewAccount",
-    "selectAccount"
+    "selectAccount",
+    "onbordingSeedPhrase",
+    "onboardingPleaseStoreMessage",
+    "onboardingAltmeMessage",
+    "onboardingWroteDownMessage",
+    "copyToClipboard",
+    "pinCodeMessage",
+    "enterNameForYourNewAccount",
+    "create",
+    "import",
+    "accountName"
   ]
 }
