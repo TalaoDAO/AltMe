@@ -37,6 +37,7 @@ class ScanCubit extends Cubit<ScanState> {
     CredentialModel? signatureOwnershipProof,
   }) async {
     emit(state.loading());
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     final log = Logger('altme-wallet/scan/credential-offer');
     try {
       final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;

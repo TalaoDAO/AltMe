@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -51,6 +52,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
 
   final Uri uri;
   final Map<String, dynamic> preview;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -69,7 +71,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
       builder: (context, walletState) {
         return BlocBuilder<QueryByExampleCredentialPickCubit,
             QueryByExampleCredentialPickState>(
-          builder: (context, state) {
+          builder: (context, queryState) {
             return WillPopScope(
               onWillPop: () async {
                 if (context.read<ScanCubit>().state.status ==
@@ -79,8 +81,8 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                 return true;
               },
               child: BlocListener<ScanCubit, ScanState>(
-                listener: (BuildContext context, ScanState state) async {
-                  if (state.status == AppStatus.loading) {
+                listener: (BuildContext context, ScanState scanState) async {
+                  if (scanState.status == ScanStatus.loading) {
                     LoadingView().show(context: context);
                   } else {
                     LoadingView().hide();
@@ -102,7 +104,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                     horizontal: 16,
                   ),
                   navigation: SafeArea(
-                    child: state.filteredCredentialList.isNotEmpty
+                    child: queryState.filteredCredentialList.isNotEmpty
                         ? Container(
                             padding: const EdgeInsets.all(16),
                             height: kBottomNavigationBarHeight + 16,
@@ -112,20 +114,36 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                 builder: (context) {
                                   return BaseButton.primary(
                                     context: context,
-                                    onPressed: () {
-                                      if (state.selection.isEmpty) {
+                                    onPressed: () async {
+                                      if (queryState.selection.isEmpty) {
                                         AlertMessage.showStringMessage(
                                           context: context,
                                           message: l10n.credentialPickSelect,
                                           messageType: MessageType.error,
                                         );
                                       } else {
+                                        /// Authenticate
+                                        bool authenticated = false;
+                                        await Navigator.of(context).push<void>(
+                                          PinCodePage.route(
+                                            restrictToBack: false,
+                                            isValidCallback: () {
+                                              authenticated = true;
+                                            },
+                                          ),
+                                        );
+
+                                        if (!authenticated) {
+                                          return;
+                                        }
+
                                         final scanCubit =
                                             context.read<ScanCubit>();
-                                        scanCubit.verifiablePresentationRequest(
+                                        await scanCubit
+                                            .verifiablePresentationRequest(
                                           url: uri.toString(),
                                           keyId: SecureStorageKeys.ssiKey,
-                                          credentials: state.selection
+                                          credentials: queryState.selection
                                               .map(
                                                 (i) =>
                                                     walletState.credentials[i],
@@ -162,16 +180,17 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       ...List.generate(
-                        state.filteredCredentialList.length,
+                        queryState.filteredCredentialList.length,
                         (index) => CredentialsListPageItem(
-                          credentialModel: state.filteredCredentialList[index],
-                          selected: state.selection.contains(index),
+                          credentialModel:
+                              queryState.filteredCredentialList[index],
+                          selected: queryState.selection.contains(index),
                           onTap: () => context
                               .read<QueryByExampleCredentialPickCubit>()
                               .toggle(index),
                         ),
                       ),
-                      if (state.filteredCredentialList.isEmpty)
+                      if (queryState.filteredCredentialList.isEmpty)
                         Padding(
                           padding: const EdgeInsets.all(8),
                           child: Text(
