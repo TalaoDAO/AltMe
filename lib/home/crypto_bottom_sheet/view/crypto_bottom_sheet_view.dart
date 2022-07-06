@@ -164,10 +164,15 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                           Align(
                             alignment: Alignment.center,
                             child: AddAccountButton(
-                              onPressed: () async {
-                                await context
-                                    .read<CryptoBottomSheetCubit>()
-                                    .addCryptoAccount();
+                              onPressed: () {
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (_) => const AddAccountPopUp(),
+                                );
+                                // TODO(Taleb): Move this line to another place
+                                // await context
+                                //     .read<CryptoBottomSheetCubit>()
+                                //     .addCryptoAccount();
                               },
                             ),
                           ),
