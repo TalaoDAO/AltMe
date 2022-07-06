@@ -3,6 +3,7 @@ import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/recovery/cubit/onboarding_recovery_cubit.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
         return true;
       },
       child: BasePage(
-        title: l10n.onBoardingRecoveryTitle,
+        title: l10n.import_wallet,
         titleLeading: const BackLeadingButton(),
         scrollView: false,
         padding: EdgeInsets.zero,
@@ -97,35 +98,40 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
             }
           },
           builder: (context, state) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    l10n.recoveryText,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle1,
+            return BackgroundCard(
+              margin: const EdgeInsets.all(Sizes.spaceSmall),
+              padding: const EdgeInsets.all(Sizes.spaceSmall),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  const SizedBox(height: Sizes.spaceLarge),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.spaceLarge,
+                    ),
+                    child: Text(
+                      l10n.importWalletText,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            letterSpacing: 1.2,
+                          ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 24),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: BaseTextField(
-                    label: l10n.recoveryMnemonicHintText,
+                  const SizedBox(height: Sizes.spaceLarge),
+                  BaseTextField(
+                    height: Sizes.recoveryPhraseTextFieldHeight,
+                    hint: l10n.recoveryMnemonicHintText,
+                    hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
+                    maxLines: 10,
+                    borderRadius: Sizes.normalRadius,
                     controller: mnemonicController,
                     error: state.isTextFieldEdited && !state.isMnemonicValid
                         ? l10n.recoveryMnemonicError
                         : null,
                   ),
-                ),
-                const SizedBox(height: 24),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                  ),
-                  child: BaseButton.primary(
+                  const SizedBox(height: 24),
+                  BaseButton.primary(
                     context: context,
                     onPressed: !state.isMnemonicValid
                         ? null
@@ -136,9 +142,9 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                           },
                     child: Text(l10n.onBoardingRecoveryButton),
                   ),
-                ),
-                const SizedBox(height: 32),
-              ],
+                  const SizedBox(height: 32),
+                ],
+              ),
             );
           },
         ),

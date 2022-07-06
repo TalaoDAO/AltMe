@@ -216,7 +216,8 @@
     "enterNameForYourNewAccount",
     "create",
     "import",
-    "accountName"
+    "accountName",
+    "importWalletText"
   ],
 
   "es": [
@@ -436,7 +437,8 @@
     "enterNameForYourNewAccount",
     "create",
     "import",
-    "accountName"
+    "accountName",
+    "importWalletText"
   ],
 
   "fr": [
@@ -486,7 +488,8 @@
     "enterNameForYourNewAccount",
     "create",
     "import",
-    "accountName"
+    "accountName",
+    "importWalletText"
   ],
 
   "it": [
@@ -708,6 +711,7 @@
     "enterNameForYourNewAccount",
     "create",
     "import",
-    "accountName"
+    "accountName",
+    "importWalletText"
   ]
 }

@@ -107,7 +107,7 @@
   "warningDialogTitle": "Be careful",
   "warningDialogSubtitle": "The recovery page contains sensitive information that will compromise your identifier in the wrong hands. You should not open this page in public or share it with anyone.",
   "recoveryText": "Please enter your recovery phrase",
-  "recoveryMnemonicHintText": "Mnemonic Phrase",
+  "recoveryMnemonicHintText": "Enter your recovery phrase here.\nOnce you have entered your 12 words,\ntap Import.",
   "recoveryMnemonicError": "Please enter a valid mnemonic phrase",
   "showDialogYes": "Continue",
   "showDialogNo": "Cancel",
@@ -373,6 +373,7 @@
   "enterNameForYourNewAccount": "Enter a name for your new account",
   "create": "Create",
   "import": "Import",
-  "accountName": "Account name"
+  "accountName": "Account name",
+  "importWalletText": "Import a wallet with its own recovery phrases"
 
 }
