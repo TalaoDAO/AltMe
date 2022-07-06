@@ -71,7 +71,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
       builder: (context, walletState) {
         return BlocBuilder<QueryByExampleCredentialPickCubit,
             QueryByExampleCredentialPickState>(
-          builder: (context, state) {
+          builder: (context, queryState) {
             return WillPopScope(
               onWillPop: () async {
                 if (context.read<ScanCubit>().state.status ==
@@ -81,8 +81,8 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                 return true;
               },
               child: BlocListener<ScanCubit, ScanState>(
-                listener: (BuildContext context, ScanState state) async {
-                  if (state.status == AppStatus.loading) {
+                listener: (BuildContext context, ScanState scanState) async {
+                  if (scanState.status == ScanStatus.loading) {
                     LoadingView().show(context: context);
                   } else {
                     LoadingView().hide();
@@ -104,7 +104,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                     horizontal: 16,
                   ),
                   navigation: SafeArea(
-                    child: state.filteredCredentialList.isNotEmpty
+                    child: queryState.filteredCredentialList.isNotEmpty
                         ? Container(
                             padding: const EdgeInsets.all(16),
                             height: kBottomNavigationBarHeight + 16,
@@ -115,7 +115,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                   return BaseButton.primary(
                                     context: context,
                                     onPressed: () async {
-                                      if (state.selection.isEmpty) {
+                                      if (queryState.selection.isEmpty) {
                                         AlertMessage.showStringMessage(
                                           context: context,
                                           message: l10n.credentialPickSelect,
@@ -143,7 +143,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                             .verifiablePresentationRequest(
                                           url: uri.toString(),
                                           keyId: SecureStorageKeys.ssiKey,
-                                          credentials: state.selection
+                                          credentials: queryState.selection
                                               .map(
                                                 (i) =>
                                                     walletState.credentials[i],
@@ -180,16 +180,17 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       ...List.generate(
-                        state.filteredCredentialList.length,
+                        queryState.filteredCredentialList.length,
                         (index) => CredentialsListPageItem(
-                          credentialModel: state.filteredCredentialList[index],
-                          selected: state.selection.contains(index),
+                          credentialModel:
+                              queryState.filteredCredentialList[index],
+                          selected: queryState.selection.contains(index),
                           onTap: () => context
                               .read<QueryByExampleCredentialPickCubit>()
                               .toggle(index),
                         ),
                       ),
-                      if (state.filteredCredentialList.isEmpty)
+                      if (queryState.filteredCredentialList.isEmpty)
                         Padding(
                           padding: const EdgeInsets.all(8),
                           child: Text(
