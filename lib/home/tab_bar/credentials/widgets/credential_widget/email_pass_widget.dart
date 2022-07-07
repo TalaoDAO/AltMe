@@ -59,12 +59,15 @@ class EmailPassRecto extends Recto {
 
   @override
   Widget build(BuildContext context) {
+    final emailPassModel = credentialModel
+        .credentialPreview.credentialSubjectModel as EmailPassModel;
+
     return CredentialImage(
       image: ImageStrings.emailPassFront,
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
-          delegate: EmailPassVersoDelegate(position: Offset.zero),
+          delegate: EmailPassRectoDelegate(position: Offset.zero),
           children: [
             LayoutId(
               id: 'name',
@@ -83,6 +86,17 @@ class EmailPassRecto extends Recto {
                 heightFactor: 0.45,
                 child: DisplayDescriptionCard(
                   credentialModel: credentialModel,
+                  style: Theme.of(context).textTheme.credentialTextCard,
+                ),
+              ),
+            ),
+            LayoutId(
+              id: 'email',
+              child: FractionallySizedBox(
+                widthFactor: 0.65,
+                heightFactor: 0.65,
+                child: MyText(
+                  emailPassModel.email!,
                   style: Theme.of(context).textTheme.credentialTextCard,
                 ),
               ),
@@ -123,7 +137,7 @@ class EmailPassVerso extends Verso {
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
-          delegate: EmailPassVersoDelegate(position: Offset.zero),
+          delegate: EmailPassRectoDelegate(position: Offset.zero),
           children: [
             LayoutId(
               id: 'name',
@@ -172,8 +186,8 @@ class EmailPassVerso extends Verso {
   }
 }
 
-class EmailPassVersoDelegate extends MultiChildLayoutDelegate {
-  EmailPassVersoDelegate({this.position = Offset.zero});
+class EmailPassRectoDelegate extends MultiChildLayoutDelegate {
+  EmailPassRectoDelegate({this.position = Offset.zero});
 
   final Offset position;
 
@@ -191,6 +205,14 @@ class EmailPassVersoDelegate extends MultiChildLayoutDelegate {
       );
     }
 
+    if (hasChild('email')) {
+      layoutChild('email', BoxConstraints.loose(size));
+      positionChild(
+        'email',
+        Offset(size.width * 0.06, size.height * 0.65),
+      );
+    }
+
     if (hasChild('issuer')) {
       layoutChild('issuer', BoxConstraints.loose(size));
       positionChild('issuer', Offset(size.width * 0.06, size.height * 0.783));
@@ -198,7 +220,7 @@ class EmailPassVersoDelegate extends MultiChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(EmailPassVersoDelegate oldDelegate) {
+  bool shouldRelayout(EmailPassRectoDelegate oldDelegate) {
     return oldDelegate.position != position;
   }
 }

@@ -46,8 +46,7 @@ class CheckIssuer {
       return Issuer.emptyIssuer();
     } catch (e) {
       if (e is NetworkException) {
-        if (checkIssuerServerUrl == Urls.checkIssuerEbsiUrl &&
-            e.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
+        if (e.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
           return Issuer.emptyIssuer();
         }
       }
