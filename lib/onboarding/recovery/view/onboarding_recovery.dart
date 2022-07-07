@@ -97,74 +97,80 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
           return BasePage(
             title: l10n.import_wallet,
             titleLeading: const BackLeadingButton(),
-            scrollView: true,
+            scrollView: false,
             useSafeArea: true,
             padding: const EdgeInsets.all(Sizes.spaceSmall),
             body: BackgroundCard(
               padding: const EdgeInsets.all(Sizes.spaceSmall),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  const SizedBox(height: Sizes.spaceLarge),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.spaceLarge,
+              height: double.infinity,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const SizedBox(height: Sizes.spaceLarge),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Sizes.spaceLarge,
+                      ),
+                      child: Text(
+                        l10n.importWalletText,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              letterSpacing: 1.2,
+                            ),
+                      ),
                     ),
-                    child: Text(
-                      l10n.importWalletText,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            letterSpacing: 1.2,
+                    const SizedBox(height: Sizes.spaceLarge),
+                    BaseTextField(
+                      height: Sizes.recoveryPhraseTextFieldHeight,
+                      hint: l10n.importWalletHintText,
+                      fillColor: Colors.transparent,
+                      hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
+                      maxLines: 10,
+                      borderRadius: Sizes.normalRadius,
+                      controller: mnemonicController,
+                      error: state.isTextFieldEdited && !state.isMnemonicValid
+                          ? l10n.recoveryMnemonicError
+                          : null,
+                    ),
+                    const SizedBox(height: Sizes.spaceSmall),
+                    Text(
+                      l10n.recoveryPhraseDescriptions,
+                      style: Theme.of(context).textTheme.infoSubtitle.copyWith(
+                            fontSize: 12,
                           ),
                     ),
-                  ),
-                  const SizedBox(height: Sizes.spaceLarge),
-                  BaseTextField(
-                    height: Sizes.recoveryPhraseTextFieldHeight,
-                    hint: l10n.importWalletHintText,
-                    hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
-                    maxLines: 10,
-                    borderRadius: Sizes.normalRadius,
-                    controller: mnemonicController,
-                    error: state.isTextFieldEdited && !state.isMnemonicValid
-                        ? l10n.recoveryMnemonicError
-                        : null,
-                  ),
-                  const SizedBox(height: Sizes.spaceSmall),
-                  Text(
-                    l10n.recoveryPhraseDescriptions,
-                    style: Theme.of(context).textTheme.infoSubtitle.copyWith(
-                          fontSize: 12,
-                        ),
-                  ),
-                  const SizedBox(height: Sizes.space2XLarge),
-                  Text(
-                    l10n.importEasilyFrom,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: Sizes.spaceSmall),
-                  WalletTypeList(
-                    onItemTap: (wallet) {
-                      // TODO(all): switch on wallet type on navigate to true screen
-                    },
-                  ),
-                  const SizedBox(height: Sizes.spaceNormal),
-                ],
+                    const SizedBox(height: Sizes.space2XLarge),
+                    Text(
+                      l10n.importEasilyFrom,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: Sizes.spaceSmall),
+                    WalletTypeList(
+                      onItemTap: (wallet) {
+                        // TODO(all): switch on wallet type on navigate to true screen
+                      },
+                    ),
+                    const SizedBox(height: Sizes.spaceNormal),
+                  ],
+                ),
               ),
             ),
-            navigation: Padding(
-              padding: const EdgeInsets.all(Sizes.spaceNormal),
-              child: MyGradientButton(
-                text: l10n.import,
-                onPressed: !state.isMnemonicValid
-                    ? null
-                    : () async {
-                        await context
-                            .read<OnBoardingRecoveryCubit>()
-                            .saveMnemonic(mnemonicController.text);
-                      },
+            navigation: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(Sizes.spaceSmall),
+                child: MyGradientButton(
+                  text: l10n.import,
+                  onPressed: !state.isMnemonicValid
+                      ? null
+                      : () async {
+                          await context
+                              .read<OnBoardingRecoveryCubit>()
+                              .saveMnemonic(mnemonicController.text);
+                        },
+                ),
               ),
             ),
           );
