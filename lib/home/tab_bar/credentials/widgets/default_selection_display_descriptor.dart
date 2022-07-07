@@ -8,16 +8,18 @@ class DefaultSelectionDisplayDescriptor extends StatelessWidget {
   const DefaultSelectionDisplayDescriptor({
     Key? key,
     required this.credentialModel,
+    required this.showBgDecoration,
   }) : super(key: key);
 
   final CredentialModel credentialModel;
+  final bool showBgDecoration;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return CredentialBackground(
       credentialModel: credentialModel,
-      showBackgroundDecoration: false,
+      showBgDecoration: showBgDecoration,
       child: Column(
         children: [
           Padding(

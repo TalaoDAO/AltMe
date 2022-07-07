@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 class CredentialBackground extends StatelessWidget {
   const CredentialBackground({
     Key? key,
-    this.showBackgroundDecoration = true,
+    this.showBgDecoration = true,
     required this.credentialModel,
     required this.child,
     this.backgroundColor,
   }) : super(key: key);
 
-  final bool showBackgroundDecoration;
+  final bool showBgDecoration;
   final CredentialModel credentialModel;
   final Widget child;
   final Color? backgroundColor;
@@ -29,7 +29,7 @@ class CredentialBackground extends StatelessWidget {
           shapeColor: Theme.of(context).colorScheme.documentShape,
           value: 0,
           shapeSize: 256,
-          anchors: showBackgroundDecoration
+          anchors: showBgDecoration
               ? const <Alignment>[
                   Alignment.topRight,
                   Alignment.bottomCenter,
