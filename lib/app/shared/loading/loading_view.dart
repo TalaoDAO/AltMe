@@ -41,7 +41,7 @@ class LoadingView {
     final overlay = OverlayEntry(
       builder: (context) {
         return Material(
-          color: Colors.black.withAlpha(150),
+          color: Colors.grey[800]!.withAlpha(150),
           child: Center(
             child: Container(
               constraints: BoxConstraints(
