@@ -7,18 +7,21 @@ class BackgroundCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(15),
     this.margin = EdgeInsets.zero,
     this.color,
+    this.height,
   }) : super(key: key);
 
   final Widget child;
   final EdgeInsets padding;
   final EdgeInsets margin;
   final Color? color;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: padding,
       margin: margin,
+      height: height,
       decoration: BoxDecoration(
         color: color ?? Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.all(Radius.circular(15)),

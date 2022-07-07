@@ -382,6 +382,6 @@
   "metaMaskWallet": "Metamask wallet",
   "kukaiWallet": "Kukai wallet",
   "otherWalletApp": "Other wallet App",
-  "importWalletHintText": "Enter your recovery phrase\n(seed phrase) here.Once you have\nentered your 12 words\ncorrectly.tap ≪ Import ≫"
+  "importWalletHintText": "Enter your recovery phrase\n(seed phrase) here.Once you have\nentered your 12 words\ncorrectly, tap ≪ Import ≫"
 
 }
