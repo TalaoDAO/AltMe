@@ -90,7 +90,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
             boxShadow: [
               BoxShadow(
                 color: Theme.of(context).colorScheme.inversePrimary,
-                blurRadius: 8,
+                blurRadius: 5,
                 spreadRadius: -3,
               )
             ],
@@ -156,8 +156,13 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                   onEditButtonPressed: () => _edit(i),
                                 );
                               },
-                              separatorBuilder: (_, __) => const Divider(
-                                height: 1.2,
+                              separatorBuilder: (_, __) => const Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: Sizes.spaceXSmall,
+                                ),
+                                child: Divider(
+                                  height: 1.2,
+                                ),
                               ),
                             ),
                           ),
