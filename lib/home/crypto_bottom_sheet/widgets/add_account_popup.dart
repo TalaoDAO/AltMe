@@ -1,10 +1,7 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/home/crypto_bottom_sheet/cubit/crypto_bottom_sheet_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddAccountPopUp extends StatefulWidget {
   const AddAccountPopUp({

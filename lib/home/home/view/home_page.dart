@@ -93,12 +93,9 @@ class _HomePageState extends State<HomePage> {
                           child: Expanded(
                             child: Align(
                               alignment: Alignment.centerRight,
-                              child: MyText(
-                                accountName.trim().isEmpty
-                                    ? '...'
-                                    : accountName,
+                              child: Text(
+                                accountName,
                                 maxLines: 1,
-                                minFontSize: 12,
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),

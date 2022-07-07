@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/home/crypto_bottom_sheet/cubit/crypto_bottom_sheet_cubit.dart';
 import 'package:altme/home/crypto_bottom_sheet/widgets/widgets.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
@@ -189,7 +190,12 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                             accountName: accountName,
                                           );
                                     },
-                                    onImportAccount: () {},
+                                    onImportAccount: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).push<void>(
+                                        OnBoardingRecoveryPage.route(),
+                                      );
+                                    },
                                   ),
                                 );
                               },
