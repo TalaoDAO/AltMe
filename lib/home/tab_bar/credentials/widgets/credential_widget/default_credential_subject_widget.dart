@@ -9,10 +9,12 @@ class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
     Key? key,
     required this.credentialModel,
     this.descriptionMaxLine = 2,
+    this.showBgDecoration = true,
   }) : super(key: key);
 
   final CredentialModel credentialModel;
   final int descriptionMaxLine;
+  final bool showBgDecoration;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +55,9 @@ class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
             color: backgroundColor,
             shapeColor: Theme.of(context).colorScheme.documentShape,
             value: 1,
-            anchors: const <Alignment>[Alignment.bottomRight],
+            anchors: showBgDecoration
+                ? const <Alignment>[Alignment.bottomRight]
+                : const <Alignment>[],
           ),
           child: Row(
             children: [
@@ -116,11 +120,13 @@ class DefaultCredentialSubjectDisplayInSelectionList extends StatelessWidget {
   const DefaultCredentialSubjectDisplayInSelectionList({
     Key? key,
     required this.credentialModel,
+    this.showBgDecoration = true,
     this.descriptionMaxLine = 2,
   }) : super(key: key);
 
   final CredentialModel credentialModel;
   final int descriptionMaxLine;
+  final bool showBgDecoration;
 
   @override
   Widget build(BuildContext context) {
@@ -160,9 +166,9 @@ class DefaultCredentialSubjectDisplayInSelectionList extends StatelessWidget {
             color: backgroundColor,
             shapeColor: Theme.of(context).colorScheme.documentShape,
             value: 1,
-            anchors: const <Alignment>[
-              Alignment.bottomRight,
-            ],
+            anchors: showBgDecoration
+                ? const <Alignment>[Alignment.bottomRight]
+                : const <Alignment>[],
           ),
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -178,9 +184,11 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
   const DefaultCredentialSubjectDisplayDetail({
     Key? key,
     required this.credentialModel,
+    required this.showBgDecoration,
   }) : super(key: key);
 
   final CredentialModel credentialModel;
+  final bool showBgDecoration;
 
   @override
   Widget build(BuildContext context) {
@@ -191,13 +199,16 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
     if (outputDescriptor == null) {
       return AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
-        child:
-            DefaultSelectionDisplayDescriptor(credentialModel: credentialModel),
+        child: DefaultSelectionDisplayDescriptor(
+          credentialModel: credentialModel,
+          showBgDecoration: showBgDecoration,
+        ),
       );
     } else {
       return CredentialSelectionManifestDisplayDescriptor(
         outputDescriptors: outputDescriptor,
         credentialModel: credentialModel,
+        showBgDecoration: showBgDecoration,
       );
     }
   }

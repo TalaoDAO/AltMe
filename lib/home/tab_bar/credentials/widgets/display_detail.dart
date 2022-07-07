@@ -25,6 +25,7 @@ class DisplayDetail extends StatelessWidget {
       case CredentialSubjectType.defaultCredential:
         return DefaultCredentialSubjectDisplayDetail(
           credentialModel: credentialModel,
+          showBgDecoration: false,
         );
       case CredentialSubjectType.ecole42LearningAchievement:
         return Ecole42LearningAchievementDisplayDetail(

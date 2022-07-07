@@ -25,6 +25,7 @@ class DisplayInSelectionList extends StatelessWidget {
       case CredentialSubjectType.defaultCredential:
         return DefaultCredentialSubjectDisplayInSelectionList(
           credentialModel: credentialModel,
+          showBgDecoration: false,
         );
       case CredentialSubjectType.ecole42LearningAchievement:
         return Ecole42LearningAchievementDisplayInSelectionList(

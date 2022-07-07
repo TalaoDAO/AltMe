@@ -8,10 +8,12 @@ class CredentialSelectionManifestDisplayDescriptor extends StatelessWidget {
     Key? key,
     required this.credentialModel,
     required this.outputDescriptors,
+    required this.showBgDecoration,
   }) : super(key: key);
 
   final CredentialModel credentialModel;
   final List<OutputDescriptor> outputDescriptors;
+  final bool showBgDecoration;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class CredentialSelectionManifestDisplayDescriptor extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
           child: CredentialBackground(
+            showBgDecoration: false,
             backgroundColor: getColorFromCredential(
               element.styles?.background,
               Colors.white,

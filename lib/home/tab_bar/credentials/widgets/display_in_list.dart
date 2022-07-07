@@ -25,6 +25,7 @@ class DisplayInList extends StatelessWidget {
       case CredentialSubjectType.defaultCredential:
         return DefaultCredentialSubjectDisplayInList(
           credentialModel: credentialModel,
+          showBgDecoration: false,
         );
       case CredentialSubjectType.ecole42LearningAchievement:
         return Ecole42LearningAchievementDisplayInList(
