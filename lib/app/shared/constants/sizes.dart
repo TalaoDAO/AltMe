@@ -9,6 +9,8 @@ abstract class Sizes {
   static const double spaceSmall = 12;
   static const double spaceNormal = 24;
   static const double spaceLarge = 28;
+  static const double spaceXLarge = 38;
+  static const double space2XLarge = 48;
 
   ///Logo
   static const double logoSmall = 38;
@@ -29,4 +31,7 @@ abstract class Sizes {
   static const double icon = 18;
   static const double icon2x = 24;
   static const double icon3x = 34;
+
+  //TextField height
+  static const double recoveryPhraseTextFieldHeight = 160;
 }

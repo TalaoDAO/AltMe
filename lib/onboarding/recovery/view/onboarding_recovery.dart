@@ -2,7 +2,9 @@ import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/onboarding/recovery/cubit/onboarding_recovery_cubit.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
@@ -68,80 +70,105 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
         }
         return true;
       },
-      child: BasePage(
-        title: l10n.onBoardingRecoveryTitle,
-        titleLeading: const BackLeadingButton(),
-        scrollView: false,
-        padding: EdgeInsets.zero,
-        body: BlocConsumer<OnBoardingRecoveryCubit, OnBoardingRecoveryState>(
-          listener: (context, state) {
-            if (state.status == AppStatus.loading) {
-              LoadingView().show(context: context);
-            } else {
-              LoadingView().hide();
-            }
+      child: BlocConsumer<OnBoardingRecoveryCubit, OnBoardingRecoveryState>(
+        listener: (context, state) {
+          if (state.status == AppStatus.loading) {
+            LoadingView().show(context: context);
+          } else {
+            LoadingView().hide();
+          }
 
-            if (state.message != null) {
-              AlertMessage.showStateMessage(
-                context: context,
-                stateMessage: state.message!,
-              );
-            }
-            if (state.status == AppStatus.success) {
-              /// Removes every stack except first route (splashPage)
-              Navigator.pushAndRemoveUntil<void>(
-                context,
-                HomePage.route(),
-                (Route<dynamic> route) => route.isFirst,
-              );
-            }
-          },
-          builder: (context, state) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    l10n.recoveryText,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle1,
+          if (state.message != null) {
+            AlertMessage.showStateMessage(
+              context: context,
+              stateMessage: state.message!,
+            );
+          }
+          if (state.status == AppStatus.success) {
+            /// Removes every stack except first route (splashPage)
+            Navigator.pushAndRemoveUntil<void>(
+              context,
+              HomePage.route(),
+              (Route<dynamic> route) => route.isFirst,
+            );
+          }
+        },
+        builder: (context, state) {
+          return BasePage(
+            title: l10n.import_wallet,
+            titleLeading: const BackLeadingButton(),
+            scrollView: true,
+            useSafeArea: true,
+            padding: const EdgeInsets.all(Sizes.spaceSmall),
+            body: BackgroundCard(
+              padding: const EdgeInsets.all(Sizes.spaceSmall),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  const SizedBox(height: Sizes.spaceLarge),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.spaceLarge,
+                    ),
+                    child: Text(
+                      l10n.importWalletText,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            letterSpacing: 1.2,
+                          ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 24),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: BaseTextField(
-                    label: l10n.recoveryMnemonicHintText,
+                  const SizedBox(height: Sizes.spaceLarge),
+                  BaseTextField(
+                    height: Sizes.recoveryPhraseTextFieldHeight,
+                    hint: l10n.importWalletHintText,
+                    hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
+                    maxLines: 10,
+                    borderRadius: Sizes.normalRadius,
                     controller: mnemonicController,
                     error: state.isTextFieldEdited && !state.isMnemonicValid
                         ? l10n.recoveryMnemonicError
                         : null,
                   ),
-                ),
-                const SizedBox(height: 24),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
+                  const SizedBox(height: Sizes.spaceSmall),
+                  Text(
+                    l10n.recoveryPhraseDescriptions,
+                    style: Theme.of(context).textTheme.infoSubtitle.copyWith(
+                          fontSize: 12,
+                        ),
                   ),
-                  child: BaseButton.primary(
-                    context: context,
-                    onPressed: !state.isMnemonicValid
-                        ? null
-                        : () async {
-                            await context
-                                .read<OnBoardingRecoveryCubit>()
-                                .saveMnemonic(mnemonicController.text);
-                          },
-                    child: Text(l10n.onBoardingRecoveryButton),
+                  const SizedBox(height: Sizes.space2XLarge),
+                  Text(
+                    l10n.importEasilyFrom,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
-                ),
-                const SizedBox(height: 32),
-              ],
-            );
-          },
-        ),
+                  const SizedBox(height: Sizes.spaceSmall),
+                  WalletTypeList(
+                    onItemTap: (wallet) {
+                      // TODO(all): switch on wallet type on navigate to true screen
+                    },
+                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
+                ],
+              ),
+            ),
+            navigation: Padding(
+              padding: const EdgeInsets.all(Sizes.spaceSmall),
+              child: MyGradientButton(
+                text: l10n.import,
+                onPressed: !state.isMnemonicValid
+                    ? null
+                    : () async {
+                        await context
+                            .read<OnBoardingRecoveryCubit>()
+                            .saveMnemonic(mnemonicController.text);
+                      },
+              ),
+            ),
+          );
+        },
       ),
     );
   }

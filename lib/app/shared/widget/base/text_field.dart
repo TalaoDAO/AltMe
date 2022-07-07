@@ -18,6 +18,10 @@ class BaseTextField extends StatelessWidget {
     this.borderColor,
     this.fillColor,
     this.borderRadius = 50,
+    this.height,
+    this.maxLines = 1,
+    this.hint,
+    this.hintStyle,
   }) : super(key: key);
 
   final String? label;
@@ -33,65 +37,74 @@ class BaseTextField extends StatelessWidget {
   final Color? borderColor;
   final Color? fillColor;
   final double borderRadius;
+  final double? height;
+  final int maxLines;
+  final String? hint;
+  final TextStyle? hintStyle;
 
   @override
   Widget build(BuildContext context) {
     final border = borderColor ?? Theme.of(context).colorScheme.tertiary;
-    return TextFormField(
-      focusNode: focusNode,
-      controller: controller,
-      cursorColor: Theme.of(context).colorScheme.primary,
-      keyboardType: type,
-      maxLines: 1,
-      textCapitalization: textCapitalization,
-      style: Theme.of(context).textTheme.normal,
-      validator: validator,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(
-            color: border,
-            width: 1,
+    return SizedBox(
+      height: height,
+      child: TextFormField(
+        focusNode: focusNode,
+        controller: controller,
+        cursorColor: Theme.of(context).colorScheme.primary,
+        keyboardType: type,
+        maxLines: maxLines,
+        textCapitalization: textCapitalization,
+        style: Theme.of(context).textTheme.normal,
+        validator: validator,
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: hintStyle,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+            borderSide: BorderSide(
+              color: border,
+              width: 1,
+            ),
           ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(
-            color: border,
-            width: 1,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+            borderSide: BorderSide(
+              color: border,
+              width: 1,
+            ),
           ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(
-            color: border,
-            width: 1.5,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+            borderSide: BorderSide(
+              color: border,
+              width: 1.5,
+            ),
           ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.error,
-            width: 1,
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.error,
+              width: 1,
+            ),
           ),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.error,
-            width: 1.5,
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.error,
+              width: 1.5,
+            ),
           ),
+          fillColor: fillColor ?? Theme.of(context).colorScheme.background,
+          filled: true,
+          errorText: error,
+          labelText: label,
+          labelStyle: Theme.of(context).textTheme.normal,
+          prefixIcon: prefixIcon,
+          prefixIconConstraints: const BoxConstraints(minWidth: 60),
+          suffixIcon: suffixIcon,
+          suffixIconConstraints: const BoxConstraints(minWidth: 60),
+          contentPadding: contentPadding,
         ),
-        fillColor: fillColor ?? Theme.of(context).colorScheme.background,
-        filled: true,
-        errorText: error,
-        labelText: label,
-        labelStyle: Theme.of(context).textTheme.normal,
-        prefixIcon: prefixIcon,
-        prefixIconConstraints: const BoxConstraints(minWidth: 60),
-        suffixIcon: suffixIcon,
-        suffixIconConstraints: const BoxConstraints(minWidth: 60),
-        contentPadding: contentPadding,
       ),
     );
   }

@@ -4,9 +4,16 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class AddAccountPopUp extends StatefulWidget {
-  const AddAccountPopUp({Key? key, this.defaultAccountName}) : super(key: key);
+  const AddAccountPopUp({
+    Key? key,
+    this.defaultAccountName,
+    required this.onCreateAccount,
+    required this.onImportAccount,
+  }) : super(key: key);
 
   final String? defaultAccountName;
+  final GestureTapCallback onImportAccount;
+  final Function(String) onCreateAccount;
 
   @override
   State<AddAccountPopUp> createState() => _AddAccountPopUpState();
@@ -37,6 +44,7 @@ class _AddAccountPopUpState extends State<AddAccountPopUp> {
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
                 mainAxisSize: MainAxisSize.min,
@@ -77,7 +85,6 @@ class _AddAccountPopUpState extends State<AddAccountPopUp> {
           ),
           const SizedBox(height: Sizes.spaceNormal),
           BaseTextField(
-            label: l10n.accountName,
             controller: controller,
             borderRadius: Sizes.smallRadius,
             textCapitalization: TextCapitalization.sentences,
@@ -89,17 +96,12 @@ class _AddAccountPopUpState extends State<AddAccountPopUp> {
             borderColor: Theme.of(context).colorScheme.onInverseSurface,
           ),
           const SizedBox(height: 24),
-          MyElevatedButton(
+          MyGradientButton(
             text: l10n.create,
-            verticalSpacing: Sizes.normalRadius,
+            verticalSpacing: 10,
+            borderRadius: 10,
             elevation: 10,
-            borderRadius: Sizes.smallRadius,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            textColor: Theme.of(context).colorScheme.label,
-            fontSize: 15,
-            onPressed: () {
-              // TODO(Taleb): Navigate to create account page with account name
-            },
+            onPressed: () => widget.onCreateAccount.call(controller.text),
           ),
           const SizedBox(width: Sizes.spaceNormal),
           MyOutlinedButton(
@@ -110,9 +112,7 @@ class _AddAccountPopUpState extends State<AddAccountPopUp> {
             borderColor: Colors.transparent,
             backgroundColor: Colors.transparent,
             textColor: Theme.of(context).colorScheme.label,
-            onPressed: () {
-              // TODO(Taleb): Navigate to import account page with account name¬
-            },
+            onPressed: () => widget.onImportAccount.call(),
           ),
         ],
       ),

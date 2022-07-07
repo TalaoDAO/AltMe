@@ -18,56 +18,58 @@ class WalletDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const WalletDialogCloseButton(),
-          const SizedBox(height: 15),
-          Text(
-            l10n.walletAltme,
-            style: Theme.of(context).textTheme.walletAltme,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 5),
-          Text(
-            l10n.createTitle,
-            style: Theme.of(context).textTheme.walletAltmeMessage,
-            textAlign: TextAlign.center,
-          ),
-          Image.asset(
-            ImageStrings.createWalletImage,
-            fit: BoxFit.fitWidth,
-            width: MediaQuery.of(context).size.shortestSide * 0.5,
-          ),
-          Text(
-            l10n.createSubtitle,
-            style: Theme.of(context).textTheme.walletAltmeMessage,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 15),
-          MyElevatedButton(
-            text: l10n.create_wallet.toUpperCase(),
-            verticalSpacing: 20,
-            fontSize: 18,
-            borderRadius: 20,
-            onPressed: () {
-              Navigator.of(context).push<void>(
-                OnBoardingTosPage.route(routeType: WalletRouteType.create),
-              );
-            },
-          ),
-          TextButton(
-            child: Text(
-              l10n.import_wallet.toUpperCase(),
-              style: Theme.of(context).textTheme.textButton,
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const WalletDialogCloseButton(),
+            const SizedBox(height: 15),
+            Text(
+              l10n.walletAltme,
+              style: Theme.of(context).textTheme.walletAltme,
+              textAlign: TextAlign.center,
             ),
-            onPressed: () {
-              Navigator.of(context).push<void>(
-                OnBoardingTosPage.route(routeType: WalletRouteType.recover),
-              );
-            },
-          ),
-        ],
+            const SizedBox(height: 5),
+            Text(
+              l10n.createTitle,
+              style: Theme.of(context).textTheme.walletAltmeMessage,
+              textAlign: TextAlign.center,
+            ),
+            Image.asset(
+              ImageStrings.createWalletImage,
+              fit: BoxFit.fitWidth,
+              width: MediaQuery.of(context).size.shortestSide * 0.5,
+            ),
+            Text(
+              l10n.createSubtitle,
+              style: Theme.of(context).textTheme.walletAltmeMessage,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 15),
+            MyElevatedButton(
+              text: l10n.create_wallet.toUpperCase(),
+              verticalSpacing: 20,
+              fontSize: 18,
+              borderRadius: 20,
+              onPressed: () {
+                Navigator.of(context).push<void>(
+                  OnBoardingTosPage.route(routeType: WalletRouteType.create),
+                );
+              },
+            ),
+            TextButton(
+              child: Text(
+                l10n.import_wallet.toUpperCase(),
+                style: Theme.of(context).textTheme.textButton,
+              ),
+              onPressed: () {
+                Navigator.of(context).push<void>(
+                  OnBoardingTosPage.route(routeType: WalletRouteType.recover),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

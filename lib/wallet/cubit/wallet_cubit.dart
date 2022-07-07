@@ -71,6 +71,7 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future<void> createCryptoWallet({
+    String? accountName,
     required String mnemonic,
     Function(CryptoAccount cryptoAccount)? onComplete,
   }) async {
@@ -105,10 +106,13 @@ class WalletCubit extends Cubit<WalletState> {
       secretKey: cryptoSecretKey,
     );
 
+    String name = 'My Account ${index + 1}';
+
+    if (accountName != null && accountName.isNotEmpty) {
+      name = accountName;
+    }
     final CryptoAccountData cryptoAccountData = CryptoAccountData(
-      name:
-          '''My Account ${state.cryptoAccount.data.isEmpty ? '' : '${state.cryptoAccount.data.length}'}''',
-      //The default name is Account + index
+      name: name,
       mnemonics: mnemonic,
       key: cryptoKey,
       walletAddress: cryptoWalletAddress,

@@ -293,6 +293,7 @@
     "copySecretKeyToClipboard",
     "tezosNetwork",
     "noNftProvidedWithYourAccount",
+    "myAccount",
     "cryptoAccounts",
     "cryptoAccount",
     "cryptoAddAccount",
@@ -323,7 +324,15 @@
     "enterNameForYourNewAccount",
     "create",
     "import",
-    "accountName"
+    "accountName",
+    "importWalletText",
+    "recoveryPhraseDescriptions",
+    "importEasilyFrom",
+    "templeWallet",
+    "metaMaskWallet",
+    "kukaiWallet",
+    "otherWalletApp",
+    "importWalletHintText"
   ],
 
   "es": [
@@ -620,6 +629,7 @@
     "copySecretKeyToClipboard",
     "tezosNetwork",
     "noNftProvidedWithYourAccount",
+    "myAccount",
     "cryptoAccounts",
     "cryptoAccount",
     "cryptoAddAccount",
@@ -650,7 +660,15 @@
     "enterNameForYourNewAccount",
     "create",
     "import",
-    "accountName"
+    "accountName",
+    "importWalletText",
+    "recoveryPhraseDescriptions",
+    "importEasilyFrom",
+    "templeWallet",
+    "metaMaskWallet",
+    "kukaiWallet",
+    "otherWalletApp",
+    "importWalletHintText"
   ],
 
   "fr": [
@@ -947,6 +965,7 @@
     "copySecretKeyToClipboard",
     "tezosNetwork",
     "noNftProvidedWithYourAccount",
+    "myAccount",
     "cryptoAccounts",
     "cryptoAccount",
     "cryptoAddAccount",
@@ -977,7 +996,15 @@
     "enterNameForYourNewAccount",
     "create",
     "import",
-    "accountName"
+    "accountName",
+    "importWalletText",
+    "recoveryPhraseDescriptions",
+    "importEasilyFrom",
+    "templeWallet",
+    "metaMaskWallet",
+    "kukaiWallet",
+    "otherWalletApp",
+    "importWalletHintText"
   ],
 
   "it": [
@@ -1274,6 +1301,7 @@
     "copySecretKeyToClipboard",
     "tezosNetwork",
     "noNftProvidedWithYourAccount",
+    "myAccount",
     "cryptoAccounts",
     "cryptoAccount",
     "cryptoAddAccount",
@@ -1304,6 +1332,14 @@
     "enterNameForYourNewAccount",
     "create",
     "import",
-    "accountName"
+    "accountName",
+    "importWalletText",
+    "recoveryPhraseDescriptions",
+    "importEasilyFrom",
+    "templeWallet",
+    "metaMaskWallet",
+    "kukaiWallet",
+    "otherWalletApp",
+    "importWalletHintText"
   ]
 }
