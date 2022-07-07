@@ -90,16 +90,11 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         SizedBox(
                           width: 200,
-                          child: Expanded(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                accountName,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ),
+                          child: Text(
+                            accountName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),
                         const SizedBox(width: 5),
