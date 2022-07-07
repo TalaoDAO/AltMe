@@ -53,7 +53,7 @@ class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
             color: backgroundColor,
             shapeColor: Theme.of(context).colorScheme.documentShape,
             value: 1,
-            anchors: const <Alignment>[Alignment.bottomRight],
+            anchors: const <Alignment>[],
           ),
           child: Row(
             children: [
@@ -160,9 +160,7 @@ class DefaultCredentialSubjectDisplayInSelectionList extends StatelessWidget {
             color: backgroundColor,
             shapeColor: Theme.of(context).colorScheme.documentShape,
             value: 1,
-            anchors: const <Alignment>[
-              Alignment.bottomRight,
-            ],
+            anchors: const <Alignment>[],
           ),
           child: Padding(
             padding: const EdgeInsets.all(20),

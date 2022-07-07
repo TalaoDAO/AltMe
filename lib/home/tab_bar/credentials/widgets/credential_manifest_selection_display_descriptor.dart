@@ -24,6 +24,7 @@ class CredentialSelectionManifestDisplayDescriptor extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
           child: CredentialBackground(
+            showBackgroundDecoration: false,
             backgroundColor: getColorFromCredential(
               element.styles?.background,
               Colors.white,
