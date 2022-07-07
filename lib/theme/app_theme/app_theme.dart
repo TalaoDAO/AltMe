@@ -30,7 +30,7 @@ abstract class AppTheme {
   static Color darkOnSurface = const Color(0xffEDEAF5);
 
   /// A color that typically appears behind scrollable content.
-  static Color darkBackground = const Color(0xff0D1019);
+  static Color darkBackground = const Color(0xff0A0421);
 
   /// A color that's clearly legible when drawn on background.
   static Color darkOnBackground = const Color(0xffFFFFFF);
@@ -103,7 +103,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get onElevatedButton => const Color(0xFFFFFFFF);
 
-  Color get appBarUpperLayer => background.withOpacity(0.5);
+  Color get appBarUpperLayer => const Color(0xff25095B);
 
   Color get appBarLowerLayer => background;
 
