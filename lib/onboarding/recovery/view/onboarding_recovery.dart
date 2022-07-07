@@ -155,7 +155,7 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
               ),
             ),
             navigation: Padding(
-              padding: const EdgeInsets.all(Sizes.spaceSmall),
+              padding: const EdgeInsets.all(Sizes.spaceNormal),
               child: MyGradientButton(
                 text: l10n.import,
                 onPressed: !state.isMnemonicValid
