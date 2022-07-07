@@ -11,13 +11,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class OnBoardingRecoveryPage extends StatelessWidget {
-  const OnBoardingRecoveryPage({Key? key}) : super(key: key);
+class OnBoardingImportFromWalletPage extends StatelessWidget {
+  const OnBoardingImportFromWalletPage({
+    Key? key,
+    required this.walletTypeModel,
+  }) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(
-        builder: (context) => const OnBoardingRecoveryPage(),
-        settings: const RouteSettings(name: '/onBoardingRecoveryPage'),
+  static Route route({required WalletTypeModel walletTypeModel}) =>
+      MaterialPageRoute<void>(
+        builder: (context) => OnBoardingImportFromWalletPage(
+          walletTypeModel: walletTypeModel,
+        ),
+        settings: const RouteSettings(name: '/onBoardingImportFromWalletPage'),
       );
+
+  final WalletTypeModel walletTypeModel;
 
   @override
   Widget build(BuildContext context) {
@@ -30,19 +38,28 @@ class OnBoardingRecoveryPage extends StatelessWidget {
         homeCubit: context.read<HomeCubit>(),
         walletCubit: context.read<WalletCubit>(),
       ),
-      child: const OnBoardingRecoveryView(),
+      child: OnBoardingImportFromWalletView(
+        walletTypeModel: walletTypeModel,
+      ),
     );
   }
 }
 
-class OnBoardingRecoveryView extends StatefulWidget {
-  const OnBoardingRecoveryView({Key? key}) : super(key: key);
+class OnBoardingImportFromWalletView extends StatefulWidget {
+  const OnBoardingImportFromWalletView({
+    Key? key,
+    required this.walletTypeModel,
+  }) : super(key: key);
+
+  final WalletTypeModel walletTypeModel;
 
   @override
-  _OnBoardingRecoveryViewState createState() => _OnBoardingRecoveryViewState();
+  _OnBoardingImportFromWalletViewState createState() =>
+      _OnBoardingImportFromWalletViewState();
 }
 
-class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
+class _OnBoardingImportFromWalletViewState
+    extends State<OnBoardingImportFromWalletView> {
   late TextEditingController mnemonicController;
 
   @override
@@ -66,8 +83,11 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
         if (context.read<OnBoardingRecoveryCubit>().state.status ==
             AppStatus.loading) {
           return false;
+        } else {
+          await Navigator.of(context)
+              .pushReplacement<void, void>(OnBoardingRecoveryPage.route());
+          return false;
         }
-        return true;
       },
       child: BlocConsumer<OnBoardingRecoveryCubit, OnBoardingRecoveryState>(
         listener: (context, state) {
@@ -94,8 +114,13 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
         },
         builder: (context, state) {
           return BasePage(
-            title: l10n.import_wallet,
-            titleLeading: const BackLeadingButton(),
+            title: '${l10n.import} ${widget.walletTypeModel.walletName}',
+            titleLeading: BackLeadingButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement<void, void>(
+                    OnBoardingRecoveryPage.route());
+              },
+            ),
             scrollView: false,
             useSafeArea: true,
             padding: const EdgeInsets.all(Sizes.spaceSmall),
@@ -105,9 +130,27 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+                    const SizedBox(height: Sizes.spaceNormal),
+                    Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(Sizes.spaceXSmall),
+                      width: Sizes.icon4x,
+                      height: Sizes.icon4x,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(Sizes.smallRadius),
+                        ),
+                      ),
+                      child: Image.asset(
+                        widget.walletTypeModel.imagePath,
+                        width: Sizes.icon3x,
+                        height: Sizes.icon3x,
+                      ),
+                    ),
                     const SizedBox(height: Sizes.spaceLarge),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -141,22 +184,6 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                             fontSize: 12,
                           ),
                     ),
-                    const SizedBox(height: Sizes.space2XLarge),
-                    Text(
-                      l10n.importEasilyFrom,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: Sizes.spaceSmall),
-                    WalletTypeList(
-                      onItemTap: (wallet) {
-                        Navigator.of(context).pushReplacement<void, void>(
-                          OnBoardingImportFromWalletPage.route(
-                            walletTypeModel: wallet,
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: Sizes.spaceNormal),
                   ],
                 ),
               ),
