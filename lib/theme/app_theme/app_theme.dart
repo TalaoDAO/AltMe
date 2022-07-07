@@ -181,6 +181,14 @@ extension CustomColorScheme on ColorScheme {
 }
 
 extension CustomTextTheme on TextTheme {
+  TextStyle get hintTextFieldStyle => GoogleFonts.nunito(
+        fontSize: 14,
+        height: 1.5,
+        letterSpacing: 1.02,
+        fontWeight: FontWeight.normal,
+        color: const Color(0xffD1CCE3),
+      );
+
   TextStyle get keyboardDigitTextStyle =>
       GoogleFonts.roboto(fontSize: 30, color: Colors.white);
 
