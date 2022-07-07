@@ -158,17 +158,19 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                 ),
               ),
             ),
-            navigation: Padding(
-              padding: const EdgeInsets.all(Sizes.spaceNormal),
-              child: MyGradientButton(
-                text: l10n.import,
-                onPressed: !state.isMnemonicValid
-                    ? null
-                    : () async {
-                        await context
-                            .read<OnBoardingRecoveryCubit>()
-                            .saveMnemonic(mnemonicController.text);
-                      },
+            navigation: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(Sizes.spaceSmall),
+                child: MyGradientButton(
+                  text: l10n.import,
+                  onPressed: !state.isMnemonicValid
+                      ? null
+                      : () async {
+                          await context
+                              .read<OnBoardingRecoveryCubit>()
+                              .saveMnemonic(mnemonicController.text);
+                        },
+                ),
               ),
             ),
           );
