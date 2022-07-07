@@ -35,9 +35,7 @@ class AddAccountButton extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(
-              width: Sizes.spaceXSmall,
-            ),
+            const SizedBox(height: 3),
             Text(
               l10n.createOrImportNewAccount,
               style: Theme.of(context).textTheme.listSubtitle,

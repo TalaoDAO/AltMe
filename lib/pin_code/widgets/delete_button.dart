@@ -1,5 +1,4 @@
 import 'package:altme/pin_code/pin_code.dart';
-import 'package:altme/pin_code/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

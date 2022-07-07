@@ -41,7 +41,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
     final newCryptoAccountName = await showDialog<String>(
       context: context,
       builder: (_) => TextFieldDialog(
-        label: l10n.cryptoEditLabel,
+        label: '',
         title: l10n.cryptoEditConfirmationDialog,
         initialValue: cryptoAccountData.name,
         yes: l10n.cryptoEditConfirmationDialogYes,
@@ -164,18 +164,34 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                           Align(
                             alignment: Alignment.center,
                             child: AddAccountButton(
-                              onPressed: () {
-                                showDialog<void>(
+                              onPressed: () async {
+                                int index = 0;
+
+                                final String? derivePathIndex =
+                                    await getSecureStorage
+                                        .get(SecureStorageKeys.derivePathIndex);
+
+                                if (derivePathIndex != null &&
+                                    derivePathIndex.isNotEmpty) {
+                                  index = int.parse(derivePathIndex) + 1;
+                                }
+
+                                await showDialog<void>(
                                   context: context,
                                   builder: (_) => AddAccountPopUp(
                                     defaultAccountName:
-                                        '${l10n.cryptoAccount} ${state.cryptoAccount.data.length + 1}',
+                                        'My Account ${index + 1}',
+                                    onCreateAccount: (String accountName) {
+                                      Navigator.pop(context);
+                                      context
+                                          .read<CryptoBottomSheetCubit>()
+                                          .addCryptoAccount(
+                                            accountName: accountName,
+                                          );
+                                    },
+                                    onImportAccount: () {},
                                   ),
                                 );
-                                // TODO(Taleb): Move this line to another place
-                                // await context
-                                //     .read<CryptoBottomSheetCubit>()
-                                //     .addCryptoAccount();
                               },
                             ),
                           ),

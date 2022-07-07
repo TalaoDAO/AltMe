@@ -343,6 +343,7 @@
   "copySecretKeyToClipboard": "Copy secret key to clipboard",
   "tezosNetwork": "Tezos Network",
   "noNftProvidedWithYourAccount": "No NFT provided with your account!",
+  "myAccount": "My Account",
   "cryptoAccounts": "Accounts",
   "cryptoAccount": "Account",
   "cryptoAddAccount": "Add Account",
