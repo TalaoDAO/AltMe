@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
@@ -35,6 +36,13 @@ class SearchCubit extends Cubit<SearchState> {
 
   Future loadAllCredentialsFromRepository() async {
     await repository.findAll(/* filters */).then((values) {
+      /// remove tezosAssociatedWallet
+      values.removeWhere(
+        (credential) =>
+            credential.credentialPreview.credentialSubjectModel
+                .credentialSubjectType ==
+            CredentialSubjectType.tezosAssociatedWallet,
+      );
       emit(state.populate(credentials: values));
     });
   }
