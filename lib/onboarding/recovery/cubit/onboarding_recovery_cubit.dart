@@ -34,13 +34,24 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
 
   final log = Logger('altme-wallet/on-boarding/key-recovery');
 
-  void isMnemonicsValid(String value) {
-    emit(
-      state.populating(
-        isTextFieldEdited: value.isNotEmpty,
-        isMnemonicValid: bip39.validateMnemonic(value) && value.isNotEmpty,
-      ),
-    );
+  void isMnemonicsOrKeyValid(String value) {
+    if (value.isNotEmpty && value.startsWith('edsk')) {
+      // TODO(all): Need more validation for Tezos private key that started with edsk or edsek
+      emit(
+        state.populating(
+          isTextFieldEdited: value.isNotEmpty,
+          isMnemonicOrKeyValid: true,
+        ),
+      );
+    } else {
+      emit(
+        state.populating(
+          isTextFieldEdited: value.isNotEmpty,
+          isMnemonicOrKeyValid:
+              bip39.validateMnemonic(value) && value.isNotEmpty,
+        ),
+      );
+    }
   }
 
   Future<void> saveMnemonic({
@@ -77,13 +88,14 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
       /// crypto wallet
       await walletCubit.createCryptoWallet(
         accountName: accountName,
-        mnemonic: mnemonic,
+        mnemonicOrKey: mnemonic,
       );
       await walletCubit.setCurrentWalletAccount(0);
 
       homeCubit.emitHasWallet();
       emit(state.success());
-    } catch (error) {
+    } catch (error,stack) {
+      log.info('error: $error,stack: $stack');
       log.severe('something went wrong when generating a key', error);
       emit(
         state.error(

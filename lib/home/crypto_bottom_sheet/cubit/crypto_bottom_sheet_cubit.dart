@@ -43,7 +43,7 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
 
     await walletCubit.createCryptoWallet(
       accountName: accountName,
-      mnemonic: ssiMnemonic!,
+      mnemonicOrKey: ssiMnemonic!,
       onComplete: (cryptoAccount) {
         emit(
           state.success(

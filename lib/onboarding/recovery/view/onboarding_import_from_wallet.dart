@@ -79,7 +79,7 @@ class _OnBoardingImportFromWalletViewState
     mnemonicController.addListener(() {
       context
           .read<OnBoardingRecoveryCubit>()
-          .isMnemonicsValid(mnemonicController.text);
+          .isMnemonicsOrKeyValid(mnemonicController.text);
     });
   }
 
@@ -184,7 +184,7 @@ class _OnBoardingImportFromWalletViewState
                       maxLines: 10,
                       borderRadius: Sizes.normalRadius,
                       controller: mnemonicController,
-                      error: state.isTextFieldEdited && !state.isMnemonicValid
+                      error: state.isTextFieldEdited && !state.isMnemonicOrKeyValid
                           ? l10n.recoveryMnemonicError
                           : null,
                     ),
@@ -204,7 +204,7 @@ class _OnBoardingImportFromWalletViewState
                 padding: const EdgeInsets.all(Sizes.spaceSmall),
                 child: MyGradientButton(
                   text: l10n.import,
-                  onPressed: !state.isMnemonicValid
+                  onPressed: !state.isMnemonicOrKeyValid
                       ? null
                       : () async {
                           await context

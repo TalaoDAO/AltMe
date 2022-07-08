@@ -6,7 +6,7 @@ class OnBoardingRecoveryState extends Equatable {
     this.status = AppStatus.init,
     this.message,
     this.isTextFieldEdited = false,
-    this.isMnemonicValid = false,
+    this.isMnemonicOrKeyValid = false,
   });
 
   factory OnBoardingRecoveryState.fromJson(Map<String, dynamic> json) =>
@@ -15,25 +15,25 @@ class OnBoardingRecoveryState extends Equatable {
   final AppStatus status;
   final StateMessage? message;
   final bool isTextFieldEdited;
-  final bool isMnemonicValid;
+  final bool isMnemonicOrKeyValid;
 
   OnBoardingRecoveryState loading() {
     return OnBoardingRecoveryState(
       status: AppStatus.loading,
       isTextFieldEdited: isTextFieldEdited,
-      isMnemonicValid: isMnemonicValid,
+      isMnemonicOrKeyValid: isMnemonicOrKeyValid,
     );
   }
 
   OnBoardingRecoveryState populating({
     bool? isTextFieldEdited,
-    bool? isMnemonicValid,
+    bool? isMnemonicOrKeyValid,
     int? recoveredCredentialLength,
   }) {
     return OnBoardingRecoveryState(
       status: AppStatus.populate,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
-      isMnemonicValid: isMnemonicValid ?? this.isMnemonicValid,
+      isMnemonicOrKeyValid: isMnemonicOrKeyValid ?? this.isMnemonicOrKeyValid,
     );
   }
 
@@ -42,7 +42,7 @@ class OnBoardingRecoveryState extends Equatable {
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       isTextFieldEdited: isTextFieldEdited,
-      isMnemonicValid: isMnemonicValid,
+      isMnemonicOrKeyValid: isMnemonicOrKeyValid,
     );
   }
 
@@ -55,7 +55,7 @@ class OnBoardingRecoveryState extends Equatable {
           ? null
           : StateMessage.success(messageHandler: messageHandler),
       isTextFieldEdited: isTextFieldEdited,
-      isMnemonicValid: isMnemonicValid,
+      isMnemonicOrKeyValid: isMnemonicOrKeyValid,
     );
   }
 
@@ -64,7 +64,7 @@ class OnBoardingRecoveryState extends Equatable {
   @override
   List<Object?> get props => [
         status,
-        isMnemonicValid,
+        isMnemonicOrKeyValid,
         isTextFieldEdited,
         message,
       ];
