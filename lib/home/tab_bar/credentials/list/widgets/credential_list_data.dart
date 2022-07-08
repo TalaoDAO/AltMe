@@ -1,9 +1,4 @@
-import 'package:altme/home/home/widgets/get_cards_widget.dart';
-import 'package:altme/home/tab_bar/credentials/list/cubit/credential_list_cubit.dart';
-import 'package:altme/home/tab_bar/credentials/list/widgets/community_credentials.dart';
-import 'package:altme/home/tab_bar/credentials/list/widgets/game_credentials.dart';
-import 'package:altme/home/tab_bar/credentials/list/widgets/identity_credentials.dart';
-import 'package:altme/home/tab_bar/credentials/list/widgets/other_credentials.dart';
+import 'package:altme/home/home.dart';
 import 'package:flutter/material.dart';
 
 class CredentialListData extends StatelessWidget {

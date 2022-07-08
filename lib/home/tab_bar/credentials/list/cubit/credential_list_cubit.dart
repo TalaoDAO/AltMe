@@ -65,8 +65,12 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           break;
         case CredentialCategory.othersCards:
 
-          /// adding real credentials
-          othersCredentials.add(HomeCredential.isNotDummy(credential));
+          /// adding real credentials except tezosAssociatedWallet
+          if (credential.credentialPreview.credentialSubjectModel
+                  .credentialSubjectType !=
+              CredentialSubjectType.tezosAssociatedWallet) {
+            othersCredentials.add(HomeCredential.isNotDummy(credential));
+          }
           break;
       }
     }

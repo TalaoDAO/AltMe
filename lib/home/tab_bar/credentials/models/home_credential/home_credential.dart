@@ -63,7 +63,7 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.ecole42LearningAchievement:
       case CredentialSubjectType.phonePass:
       case CredentialSubjectType.studentCard:
-      case CredentialSubjectType.associatedWallet:
+      case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.certificateOfEmployment:
         break;

@@ -15,7 +15,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   Color defaultBackgroundColor() {
     switch (this) {
-      case CredentialSubjectType.associatedWallet:
+      case CredentialSubjectType.tezosAssociatedWallet:
         return const Color(0xffFE7400);
       case CredentialSubjectType.residentCard:
         return Colors.white;
@@ -60,7 +60,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   IconData iconData() {
     switch (this) {
-      case CredentialSubjectType.associatedWallet:
+      case CredentialSubjectType.tezosAssociatedWallet:
         return Icons.account_balance_wallet;
       case CredentialSubjectType.residentCard:
         return Icons.home;
