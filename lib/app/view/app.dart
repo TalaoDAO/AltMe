@@ -51,9 +51,6 @@ class App extends StatelessWidget {
         BlocProvider<CredentialListCubit>(
           create: (context) => CredentialListCubit(),
         ),
-        BlocProvider<CredentialListCubit>(
-          create: (context) => CredentialListCubit(),
-        ),
         BlocProvider<DIDCubit>(
           create: (context) => DIDCubit(
             secureStorageProvider: secure_storage.getSecureStorage,

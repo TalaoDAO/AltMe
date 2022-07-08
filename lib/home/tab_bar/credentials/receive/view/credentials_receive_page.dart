@@ -55,7 +55,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
         ),
         body: BlocConsumer<ScanCubit, ScanState>(
           listener: (BuildContext context, ScanState state) async {
-            if (state.status == AppStatus.loading) {
+            if (state.status == ScanStatus.loading) {
               LoadingView().show(context: context);
             } else {
               LoadingView().hide();
@@ -84,8 +84,8 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                 const SizedBox(height: 16),
                 DisplayDetail(credentialModel: credentialModel),
                 const SizedBox(height: 24),
-                BaseButton.primary(
-                  context: context,
+                MyGradientButton(
+                  text: l10n.credentialAddThisCard,
                   onPressed: () async {
                     /// We removed dialog box which is asking for the user
                     /// to provide alias to the credential.
@@ -114,13 +114,12 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                           );
                     }
                   },
-                  child: Text(l10n.credentialReceiveConfirm),
                 ),
                 const SizedBox(height: 8),
-                BaseButton.transparent(
-                  context: context,
+                MyOutlinedButton(
+                  verticalSpacing: 20,
+                  text: l10n.credentialReceiveCancel,
                   onPressed: () => Navigator.of(builderContext).pop(),
-                  child: Text(l10n.credentialReceiveCancel),
                 ),
               ],
             );
