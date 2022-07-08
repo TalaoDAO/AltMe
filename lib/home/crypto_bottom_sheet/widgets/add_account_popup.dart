@@ -12,7 +12,7 @@ class AddAccountPopUp extends StatefulWidget {
   }) : super(key: key);
 
   final String? defaultAccountName;
-  final GestureTapCallback onImportAccount;
+  final Function(String) onImportAccount;
   final Function(String) onCreateAccount;
 
   @override
@@ -112,7 +112,7 @@ class _AddAccountPopUpState extends State<AddAccountPopUp> {
             borderColor: Colors.transparent,
             backgroundColor: Colors.transparent,
             textColor: Theme.of(context).colorScheme.label,
-            onPressed: () => widget.onImportAccount.call(),
+            onPressed: () => widget.onImportAccount.call(controller.text),
           ),
         ],
       ),

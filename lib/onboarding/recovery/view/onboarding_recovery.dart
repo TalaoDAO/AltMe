@@ -12,12 +12,16 @@ import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingRecoveryPage extends StatelessWidget {
-  const OnBoardingRecoveryPage({Key? key}) : super(key: key);
+  const OnBoardingRecoveryPage({Key? key, this.accountName}) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(
-        builder: (context) => const OnBoardingRecoveryPage(),
+  static Route route({String? accountName}) => MaterialPageRoute<void>(
+        builder: (context) => OnBoardingRecoveryPage(
+          accountName: accountName,
+        ),
         settings: const RouteSettings(name: '/onBoardingRecoveryPage'),
       );
+
+  final String? accountName;
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +34,15 @@ class OnBoardingRecoveryPage extends StatelessWidget {
         homeCubit: context.read<HomeCubit>(),
         walletCubit: context.read<WalletCubit>(),
       ),
-      child: const OnBoardingRecoveryView(),
+      child: OnBoardingRecoveryView(accountName: accountName,),
     );
   }
 }
 
 class OnBoardingRecoveryView extends StatefulWidget {
-  const OnBoardingRecoveryView({Key? key}) : super(key: key);
+  const OnBoardingRecoveryView({Key? key, this.accountName}) : super(key: key);
+
+  final String? accountName;
 
   @override
   _OnBoardingRecoveryViewState createState() => _OnBoardingRecoveryViewState();
@@ -171,7 +177,10 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                       : () async {
                           await context
                               .read<OnBoardingRecoveryCubit>()
-                              .saveMnemonic(mnemonicController.text);
+                              .saveMnemonic(
+                                mnemonic: mnemonicController.text,
+                                accountName: widget.accountName,
+                              );
                         },
                 ),
               ),

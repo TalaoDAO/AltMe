@@ -195,10 +195,12 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                             accountName: accountName,
                                           );
                                     },
-                                    onImportAccount: () {
+                                    onImportAccount: (String accountName) {
                                       Navigator.of(context).pop();
                                       Navigator.of(context).push<void>(
-                                        OnBoardingRecoveryPage.route(),
+                                        OnBoardingRecoveryPage.route(
+                                          accountName: accountName,
+                                        ),
                                       );
                                     },
                                   ),

@@ -12,6 +12,7 @@ import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'onboarding_recovery_cubit.g.dart';
+
 part 'onboarding_recovery_state.dart';
 
 class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
@@ -42,8 +43,12 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
     );
   }
 
-  Future<void> saveMnemonic(String mnemonic) async {
+  Future<void> saveMnemonic({
+    required String mnemonic,
+    String? accountName,
+  }) async {
     emit(state.loading());
+
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
       await secureStorageProvider.set(
@@ -70,7 +75,10 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
       );
 
       /// crypto wallet
-      await walletCubit.createCryptoWallet(mnemonic: mnemonic);
+      await walletCubit.createCryptoWallet(
+        accountName: accountName,
+        mnemonic: mnemonic,
+      );
       await walletCubit.setCurrentWalletAccount(0);
 
       homeCubit.emitHasWallet();

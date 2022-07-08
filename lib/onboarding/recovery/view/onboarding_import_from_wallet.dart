@@ -15,17 +15,23 @@ class OnBoardingImportFromWalletPage extends StatelessWidget {
   const OnBoardingImportFromWalletPage({
     Key? key,
     required this.walletTypeModel,
+    this.accountName,
   }) : super(key: key);
 
-  static Route route({required WalletTypeModel walletTypeModel}) =>
+  static Route route({
+    required WalletTypeModel walletTypeModel,
+    String? accountName,
+  }) =>
       MaterialPageRoute<void>(
         builder: (context) => OnBoardingImportFromWalletPage(
           walletTypeModel: walletTypeModel,
+          accountName: accountName,
         ),
         settings: const RouteSettings(name: '/onBoardingImportFromWalletPage'),
       );
 
   final WalletTypeModel walletTypeModel;
+  final String? accountName;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +46,7 @@ class OnBoardingImportFromWalletPage extends StatelessWidget {
       ),
       child: OnBoardingImportFromWalletView(
         walletTypeModel: walletTypeModel,
+        accountName: accountName,
       ),
     );
   }
@@ -49,9 +56,11 @@ class OnBoardingImportFromWalletView extends StatefulWidget {
   const OnBoardingImportFromWalletView({
     Key? key,
     required this.walletTypeModel,
+    this.accountName,
   }) : super(key: key);
 
   final WalletTypeModel walletTypeModel;
+  final String? accountName;
 
   @override
   _OnBoardingImportFromWalletViewState createState() =>
@@ -84,8 +93,9 @@ class _OnBoardingImportFromWalletViewState
             AppStatus.loading) {
           return false;
         } else {
-          await Navigator.of(context)
-              .pushReplacement<void, void>(OnBoardingRecoveryPage.route());
+          await Navigator.of(context).pushReplacement<void, void>(
+            OnBoardingRecoveryPage.route(accountName: widget.accountName),
+          );
           return false;
         }
       },
@@ -118,7 +128,7 @@ class _OnBoardingImportFromWalletViewState
             titleLeading: BackLeadingButton(
               onPressed: () {
                 Navigator.of(context).pushReplacement<void, void>(
-                  OnBoardingRecoveryPage.route(),
+                  OnBoardingRecoveryPage.route(accountName: widget.accountName),
                 );
               },
             ),
@@ -199,7 +209,10 @@ class _OnBoardingImportFromWalletViewState
                       : () async {
                           await context
                               .read<OnBoardingRecoveryCubit>()
-                              .saveMnemonic(mnemonicController.text);
+                              .saveMnemonic(
+                                accountName: widget.accountName,
+                                mnemonic: mnemonicController.text,
+                              );
                         },
                 ),
               ),
