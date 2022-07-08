@@ -90,15 +90,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                 },
                 child: BasePage(
                   title: l10n.credentialPickTitle,
-                  titleTrailing: IconButton(
-                    onPressed: () {
-                      if (context.read<ScanCubit>().state.status !=
-                          ScanStatus.loading) {
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    icon: const Icon(Icons.close),
-                  ),
+                  titleTrailing: const WhiteCloseButton(),
                   padding: const EdgeInsets.symmetric(
                     vertical: 24,
                     horizontal: 16,
@@ -107,7 +99,6 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                     child: queryState.filteredCredentialList.isNotEmpty
                         ? Container(
                             padding: const EdgeInsets.all(16),
-                            height: kBottomNavigationBarHeight + 16,
                             child: Tooltip(
                               message: l10n.credentialPickPresent,
                               child: Builder(

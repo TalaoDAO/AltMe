@@ -1,5 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class _BaseItem extends StatefulWidget {
@@ -80,7 +82,8 @@ class CredentialsListPageItem extends StatelessWidget {
   }
 
   Widget displaySelectionElement(BuildContext context) {
-    final credential = Credential.fromJsonOrDummy(credentialModel.data);
+    //final credential = Credential.fromJsonOrDummy(credentialModel.data);
+    final l10n = context.l10n;
     return CredentialSelectionPadding(
       child: Column(
         children: <Widget>[
@@ -90,23 +93,31 @@ class CredentialsListPageItem extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                HeroFix(
-                  tag: 'credential/${credentialModel.id}/icon',
-                  child: selected == null
-                      ? CredentialIcon(credential: credential)
-                      : Icon(
-                          selected!
-                              ? Icons.check_box
-                              : Icons.check_box_outline_blank,
-                          size: 32,
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        IconStrings.tickCircle,
+                        height: 20,
+                      ),
+                      const SizedBox(width: 2),
+                      Expanded(
+                        child: Text(
+                          l10n.inMyWallet,
+                          style: Theme.of(context)
+                              .textTheme
+                              .credentialSurfaceText
+                              .copyWith(fontSize: 14),
                         ),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(width: 8),
-                DisplayStatus(
-                  credentialModel: credentialModel,
-                  displayLabel: true,
+                Icon(
+                  selected! ? Icons.check_box : Icons.check_box_outline_blank,
+                  size: 25,
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
               ],
             ),

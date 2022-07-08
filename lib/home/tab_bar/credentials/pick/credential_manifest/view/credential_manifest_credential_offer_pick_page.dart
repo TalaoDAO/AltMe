@@ -24,7 +24,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
         uri: routeUri,
         credential: credential,
       ),
-      settings: const RouteSettings(name: '/CredentialManifestPickPage'),
+      settings: const RouteSettings(name: '/CredentialManifestOfferPickPage'),
     );
   }
 
@@ -89,25 +89,18 @@ class CredentialManifestOfferPickView extends StatelessWidget {
               },
               child: BasePage(
                 title: l10n.credentialPickTitle,
-                titleTrailing: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.close),
-                ),
+                titleTrailing: const WhiteCloseButton(),
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                 navigation: credentialCandidateList.isNotEmpty
                     ? SafeArea(
                         child: Container(
                           padding: const EdgeInsets.all(16),
-                          height: kBottomNavigationBarHeight + 16,
                           child: Tooltip(
                             message: l10n.credentialPickPresent,
                             child: Builder(
                               builder: (context) {
-                                return BaseButton.primary(
-                                  context: context,
+                                return MyGradientButton(
                                   onPressed: () async {
                                     if (credentialManifestState
                                         .selection.isEmpty) {
@@ -150,7 +143,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                           );
                                     }
                                   },
-                                  child: Text(l10n.credentialPickPresent),
+                                  text: l10n.credentialPickPresent,
                                 );
                               },
                             ),
