@@ -7,7 +7,7 @@ typedef KeyboardTapCallback = void Function(String text);
 @immutable
 class KeyboardUIConfig {
   const KeyboardUIConfig({
-    this.digitBorderWidth = 1,
+    this.digitBorderWidth = 3.5,
     this.keyboardRowMargin = const EdgeInsets.only(top: 15, left: 4, right: 4),
     this.digitInnerMargin = const EdgeInsets.all(24),
     this.keyboardSize,
