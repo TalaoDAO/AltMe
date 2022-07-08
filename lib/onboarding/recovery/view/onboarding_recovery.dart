@@ -34,7 +34,9 @@ class OnBoardingRecoveryPage extends StatelessWidget {
         homeCubit: context.read<HomeCubit>(),
         walletCubit: context.read<WalletCubit>(),
       ),
-      child: OnBoardingRecoveryView(accountName: accountName,),
+      child: OnBoardingRecoveryView(
+        accountName: accountName,
+      ),
     );
   }
 }
@@ -158,6 +160,7 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                         Navigator.of(context).pushReplacement<void, void>(
                           OnBoardingImportFromWalletPage.route(
                             walletTypeModel: wallet,
+                            accountName: widget.accountName,
                           ),
                         );
                       },
