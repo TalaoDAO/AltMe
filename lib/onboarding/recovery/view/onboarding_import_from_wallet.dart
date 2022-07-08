@@ -118,7 +118,8 @@ class _OnBoardingImportFromWalletViewState
             titleLeading: BackLeadingButton(
               onPressed: () {
                 Navigator.of(context).pushReplacement<void, void>(
-                    OnBoardingRecoveryPage.route());
+                  OnBoardingRecoveryPage.route(),
+                );
               },
             ),
             scrollView: false,

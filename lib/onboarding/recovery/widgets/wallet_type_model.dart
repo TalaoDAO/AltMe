@@ -1,4 +1,4 @@
-import 'package:altme/onboarding/recovery/widgets/import_wallet_types.dart';
+import 'package:altme/app/shared/enum/type/import_wallet_types.dart';
 
 class WalletTypeModel {
   WalletTypeModel({
