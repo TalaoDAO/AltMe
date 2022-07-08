@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/tab_bar/credentials/pick/credential_manifest/credential_manifest_pick.dart';
-import 'package:altme/home/tab_bar/credentials/widgets/list_item.dart';
+import 'package:altme/home/tab_bar/tab_bar.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
@@ -22,7 +22,7 @@ class CredentialManifestPickPage extends StatelessWidget {
     return MaterialPageRoute<void>(
       builder: (context) =>
           CredentialManifestPickPage(uri: routeUri, preview: preview),
-      settings: const RouteSettings(name: '/CredentialManifestPickPage'),
+      settings: const RouteSettings(name: '/credentialManifestPickPage'),
     );
   }
 
@@ -56,12 +56,7 @@ class CredentialManifestPickView extends StatelessWidget {
       builder: (context, state) {
         return BasePage(
           title: l10n.credentialPickTitle,
-          titleTrailing: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.close),
-          ),
+          titleTrailing: const WhiteCloseButton(),
           padding: const EdgeInsets.symmetric(
             vertical: 24,
             horizontal: 16,
@@ -69,13 +64,11 @@ class CredentialManifestPickView extends StatelessWidget {
           navigation: SafeArea(
             child: Container(
               padding: const EdgeInsets.all(16),
-              height: kBottomNavigationBarHeight + 16,
               child: Tooltip(
                 message: l10n.credentialPickPresent,
                 child: Builder(
                   builder: (context) {
-                    return BaseButton.primary(
-                      context: context,
+                    return MyGradientButton(
                       onPressed: () async {
                         bool authenticated = false;
                         await Navigator.of(context).push<void>(
@@ -110,7 +103,7 @@ class CredentialManifestPickView extends StatelessWidget {
                           );
                         }
                       },
-                      child: Text(l10n.credentialPickPresent),
+                      text: l10n.credentialPickPresent,
                     );
                   },
                 ),

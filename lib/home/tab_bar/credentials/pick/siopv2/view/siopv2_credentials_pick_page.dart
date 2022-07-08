@@ -74,15 +74,7 @@ class SIOPV2CredentialPickView extends StatelessWidget {
           },
           child: BasePage(
             title: l10n.credentialPickTitle,
-            titleTrailing: IconButton(
-              onPressed: () {
-                if (context.read<SIOPV2CredentialPickCubit>().state.status !=
-                    AppStatus.loading) {
-                  Navigator.of(context).pop();
-                }
-              },
-              icon: const Icon(Icons.close),
-            ),
+            titleTrailing: const WhiteCloseButton(),
             padding: const EdgeInsets.symmetric(
               vertical: 24,
               horizontal: 16,
@@ -90,13 +82,11 @@ class SIOPV2CredentialPickView extends StatelessWidget {
             navigation: SafeArea(
               child: Container(
                 padding: const EdgeInsets.all(16),
-                height: kBottomNavigationBarHeight + 16,
                 child: Tooltip(
                   message: l10n.credentialPickPresent,
                   child: Builder(
                     builder: (context) {
-                      return BaseButton.primary(
-                        context: context,
+                      return MyGradientButton(
                         onPressed: () async {
                           bool authenticated = false;
                           await Navigator.of(context).push<void>(
@@ -119,7 +109,7 @@ class SIOPV2CredentialPickView extends StatelessWidget {
                                 sIOPV2Param: sIOPV2Param,
                               );
                         },
-                        child: Text(l10n.credentialPickPresent),
+                        text: l10n.credentialPickPresent,
                       );
                     },
                   ),

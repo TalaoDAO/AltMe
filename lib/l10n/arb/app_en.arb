@@ -82,7 +82,7 @@
   "credentialPresentConfirm": "Select credential(s)",
   "credentialPresentCancel": "Reject",
   "credentialPickPresent": "Present",
-  "credentialPickTitle": "Present Credentials",
+  "credentialPickTitle": "Presentation request",
   "credentialPickSelect": "Choose one or more credentials from your wallet to present",
   "siopV2credentialPickSelect": "Choose only one credentials from your wallet to present",
   "credentialPickAlertMessage": "Do you want to give an alias to this credential?",
