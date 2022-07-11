@@ -211,7 +211,7 @@ class _OnBoardingImportFromWalletViewState
                               .read<OnBoardingRecoveryCubit>()
                               .saveMnemonic(
                                 accountName: widget.accountName,
-                                mnemonic: mnemonicController.text,
+                                mnemonicOrKey: mnemonicController.text,
                               );
                         },
                 ),

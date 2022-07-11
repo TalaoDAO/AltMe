@@ -182,7 +182,7 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                           await context
                               .read<OnBoardingRecoveryCubit>()
                               .saveMnemonic(
-                                mnemonic: mnemonicController.text,
+                                mnemonicOrKey: mnemonicController.text,
                                 accountName: widget.accountName,
                               );
                         },

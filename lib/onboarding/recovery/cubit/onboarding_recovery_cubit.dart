@@ -55,20 +55,22 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
   }
 
   Future<void> saveMnemonic({
-    required String mnemonic,
+    required String mnemonicOrKey,
     String? accountName,
   }) async {
     emit(state.loading());
+
+    // TODO(Taleb): if the key is secrect key I should generate random seed phrase
 
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
       await secureStorageProvider.set(
         SecureStorageKeys.ssiMnemonic,
-        mnemonic,
+        mnemonicOrKey,
       );
 
       final ssiKey = await keyGenerator.jwkFromMnemonic(
-        mnemonic: mnemonic,
+        mnemonic: mnemonicOrKey,
         accountType: AccountType.ssi,
       );
       await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
@@ -88,7 +90,7 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
       /// crypto wallet
       await walletCubit.createCryptoWallet(
         accountName: accountName,
-        mnemonicOrKey: mnemonic,
+        mnemonicOrKey: mnemonicOrKey,
       );
       await walletCubit.setCurrentWalletAccount(0);
 

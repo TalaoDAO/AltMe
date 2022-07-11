@@ -130,8 +130,7 @@ class WalletCubit extends Cubit<WalletState> {
     }
     final CryptoAccountData cryptoAccountData = CryptoAccountData(
       name: name,
-      // TODO(Taleb): not sure here I should retrive mnemonic from secret key then save it
-      mnemonics: mnemonicOrKey,
+      mnemonics: isSecretKey ? null : mnemonicOrKey,
       key: cryptoKey,
       walletAddress: cryptoWalletAddress,
       secretKey: cryptoSecretKey,
