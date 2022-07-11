@@ -209,7 +209,7 @@ class ScanCubit extends Cubit<ScanState> {
         }),
         key,
       );
-
+      debugPrint('Formdata $presentation');
       await client.post(
         url,
         data: FormData.fromMap(<String, dynamic>{'presentation': presentation}),

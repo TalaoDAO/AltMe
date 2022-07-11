@@ -136,14 +136,16 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                           keyId: SecureStorageKeys.ssiKey,
                                           credentials: queryState.selection
                                               .map(
-                                                (i) =>
-                                                    walletState.credentials[i],
+                                                (i) => queryState
+                                                    .filteredCredentialList[i],
                                               )
                                               .toList(),
                                           challenge:
                                               preview['challenge'] as String,
                                           domain: preview['domain'] as String,
                                         );
+
+                                        return;
                                       }
                                     },
                                     child: Text(l10n.credentialPickPresent),

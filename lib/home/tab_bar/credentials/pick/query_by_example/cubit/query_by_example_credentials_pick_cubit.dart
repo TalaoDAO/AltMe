@@ -15,9 +15,7 @@ class QueryByExampleCredentialPickCubit
     List<CredentialModel> credentialList = const <CredentialModel>[],
     required CredentialQuery? credentialQuery,
   }) : super(
-          QueryByExampleCredentialPickState(
-            filteredCredentialList: const [],
-          ),
+          QueryByExampleCredentialPickState(filteredCredentialList: const []),
         ) {
     final filteredCredentialList = List<CredentialModel>.from(credentialList);
     if (credentialQuery != null) {
