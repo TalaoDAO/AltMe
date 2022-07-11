@@ -6,6 +6,7 @@ import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
@@ -141,18 +142,43 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                       ),
                     ),
                     const SizedBox(height: Sizes.spaceLarge),
-                    BaseTextField(
-                      height: Sizes.recoveryPhraseTextFieldHeight,
-                      hint: l10n.importWalletHintText,
-                      fillColor: Colors.transparent,
-                      hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
-                      maxLines: 10,
-                      borderRadius: Sizes.normalRadius,
-                      controller: mnemonicController,
-                      error:
-                          state.isTextFieldEdited && !state.isMnemonicOrKeyValid
+                    Stack(
+                      alignment: Alignment.bottomRight,
+                      fit: StackFit.loose,
+                      children: [
+                        BaseTextField(
+                          height: Sizes.recoveryPhraseTextFieldHeight,
+                          hint: l10n.importWalletHintText,
+                          fillColor: Colors.transparent,
+                          hintStyle:
+                              Theme.of(context).textTheme.hintTextFieldStyle,
+                          maxLines: 10,
+                          borderRadius: Sizes.normalRadius,
+                          controller: mnemonicController,
+                          error: state.isTextFieldEdited &&
+                                  !state.isMnemonicOrKeyValid
                               ? l10n.recoveryMnemonicError
                               : null,
+                        ),
+                        if (state.isMnemonicOrKeyValid)
+                          Container(
+                            alignment: Alignment.center,
+                            width: Sizes.icon2x,
+                            height: Sizes.icon2x,
+                            padding: const EdgeInsets.all(2),
+                            margin: const EdgeInsets.all(Sizes.spaceNormal),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color:
+                                  Theme.of(context).colorScheme.checkMarkColor,
+                            ),
+                            child: const Icon(
+                              Icons.check,
+                              size: Sizes.icon,
+                              color: Colors.white,
+                            ),
+                          ),
+                      ],
                     ),
                     const SizedBox(height: Sizes.spaceSmall),
                     Text(

@@ -189,18 +189,43 @@ class _OnBoardingImportFromWalletViewState
                       ),
                     ),
                     const SizedBox(height: Sizes.spaceLarge),
-                    BaseTextField(
-                      height: Sizes.recoveryPhraseTextFieldHeight,
-                      hint: l10n.importWalletHintText,
-                      fillColor: Colors.transparent,
-                      hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
-                      maxLines: 10,
-                      borderRadius: Sizes.normalRadius,
-                      controller: mnemonicController,
-                      error:
-                          state.isTextFieldEdited && !state.isMnemonicOrKeyValid
+                    Stack(
+                      alignment: Alignment.bottomRight,
+                      fit: StackFit.loose,
+                      children: [
+                        BaseTextField(
+                          height: Sizes.recoveryPhraseTextFieldHeight,
+                          hint: l10n.importWalletHintText,
+                          fillColor: Colors.transparent,
+                          hintStyle:
+                          Theme.of(context).textTheme.hintTextFieldStyle,
+                          maxLines: 10,
+                          borderRadius: Sizes.normalRadius,
+                          controller: mnemonicController,
+                          error: state.isTextFieldEdited &&
+                              !state.isMnemonicOrKeyValid
                               ? l10n.recoveryMnemonicError
                               : null,
+                        ),
+                        if (state.isMnemonicOrKeyValid)
+                          Container(
+                            alignment: Alignment.center,
+                            width: Sizes.icon2x,
+                            height: Sizes.icon2x,
+                            padding: const EdgeInsets.all(2),
+                            margin: const EdgeInsets.all(Sizes.spaceNormal),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color:
+                              Theme.of(context).colorScheme.checkMarkColor,
+                            ),
+                            child: const Icon(
+                              Icons.check,
+                              size: Sizes.icon,
+                              color: Colors.white,
+                            ),
+                          ),
+                      ],
                     ),
                     const SizedBox(height: Sizes.spaceSmall),
                     Text(
