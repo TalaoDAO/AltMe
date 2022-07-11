@@ -54,38 +54,47 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
     }
   }
 
-  Future<void> saveMnemonic({
+  Future<void> saveMnemonicOrKey({
     required String mnemonicOrKey,
+    required bool isFromOnboard,
     String? accountName,
   }) async {
     emit(state.loading());
 
-    // TODO(Taleb): if the key is secrect key I should generate random seed phrase
-
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
-      await secureStorageProvider.set(
-        SecureStorageKeys.ssiMnemonic,
-        mnemonicOrKey,
-      );
+      final isSecretKey = mnemonicOrKey.startsWith('edsk');
+      late String mnemonic;
 
-      final ssiKey = await keyGenerator.jwkFromMnemonic(
-        mnemonic: mnemonicOrKey,
-        accountType: AccountType.ssi,
-      );
-      await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
+      if (isSecretKey) {
+        mnemonic = bip39.generateMnemonic();
+      } else {
+        mnemonic = mnemonicOrKey;
+      }
 
-      const didMethod = AltMeStrings.defaultDIDMethod;
-      final did = didKitProvider.keyToDID(didMethod, ssiKey);
-      final verificationMethod =
-          await didKitProvider.keyToVerificationMethod(didMethod, ssiKey);
+      if (isFromOnboard) {
+        await secureStorageProvider.set(
+          SecureStorageKeys.ssiMnemonic,
+          mnemonic,
+        );
+        final ssiKey = await keyGenerator.jwkFromMnemonic(
+          mnemonic: mnemonic,
+          accountType: AccountType.ssi,
+        );
+        await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
 
-      await didCubit.set(
-        did: did,
-        didMethod: didMethod,
-        didMethodName: AltMeStrings.defaultDIDMethodName,
-        verificationMethod: verificationMethod,
-      );
+        const didMethod = AltMeStrings.defaultDIDMethod;
+        final did = didKitProvider.keyToDID(didMethod, ssiKey);
+        final verificationMethod =
+            await didKitProvider.keyToVerificationMethod(didMethod, ssiKey);
+
+        await didCubit.set(
+          did: did,
+          didMethod: didMethod,
+          didMethodName: AltMeStrings.defaultDIDMethodName,
+          verificationMethod: verificationMethod,
+        );
+      }
 
       /// crypto wallet
       await walletCubit.createCryptoWallet(
@@ -96,7 +105,7 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
 
       homeCubit.emitHasWallet();
       emit(state.success());
-    } catch (error,stack) {
+    } catch (error, stack) {
       log.info('error: $error,stack: $stack');
       log.severe('something went wrong when generating a key', error);
       emit(

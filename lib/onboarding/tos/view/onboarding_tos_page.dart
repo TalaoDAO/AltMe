@@ -140,7 +140,7 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
     if (widget.routeType == WalletRouteType.create) {
       routeTo = OnBoardingGenPhrasePage.route();
     } else if (widget.routeType == WalletRouteType.recover) {
-      routeTo = OnBoardingRecoveryPage.route();
+      routeTo = OnBoardingRecoveryPage.route(isFromOnboard: true);
     }
 
     final pinCode = await getSecureStorage.get(SecureStorageKeys.pinCode);

@@ -16,22 +16,26 @@ class OnBoardingImportFromWalletPage extends StatelessWidget {
     Key? key,
     required this.walletTypeModel,
     this.accountName,
+    required this.isFromOnboard,
   }) : super(key: key);
 
   static Route route({
     required WalletTypeModel walletTypeModel,
+    required bool isFromOnboard,
     String? accountName,
   }) =>
       MaterialPageRoute<void>(
         builder: (context) => OnBoardingImportFromWalletPage(
           walletTypeModel: walletTypeModel,
           accountName: accountName,
+          isFromOnboard: isFromOnboard,
         ),
         settings: const RouteSettings(name: '/onBoardingImportFromWalletPage'),
       );
 
   final WalletTypeModel walletTypeModel;
   final String? accountName;
+  final bool isFromOnboard;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,7 @@ class OnBoardingImportFromWalletPage extends StatelessWidget {
       child: OnBoardingImportFromWalletView(
         walletTypeModel: walletTypeModel,
         accountName: accountName,
+        isFromOnboard: isFromOnboard,
       ),
     );
   }
@@ -56,11 +61,13 @@ class OnBoardingImportFromWalletView extends StatefulWidget {
   const OnBoardingImportFromWalletView({
     Key? key,
     required this.walletTypeModel,
+    required this.isFromOnboard,
     this.accountName,
   }) : super(key: key);
 
   final WalletTypeModel walletTypeModel;
   final String? accountName;
+  final bool isFromOnboard;
 
   @override
   _OnBoardingImportFromWalletViewState createState() =>
@@ -94,7 +101,10 @@ class _OnBoardingImportFromWalletViewState
           return false;
         } else {
           await Navigator.of(context).pushReplacement<void, void>(
-            OnBoardingRecoveryPage.route(accountName: widget.accountName),
+            OnBoardingRecoveryPage.route(
+              accountName: widget.accountName,
+              isFromOnboard: widget.isFromOnboard,
+            ),
           );
           return false;
         }
@@ -128,7 +138,10 @@ class _OnBoardingImportFromWalletViewState
             titleLeading: BackLeadingButton(
               onPressed: () {
                 Navigator.of(context).pushReplacement<void, void>(
-                  OnBoardingRecoveryPage.route(accountName: widget.accountName),
+                  OnBoardingRecoveryPage.route(
+                    accountName: widget.accountName,
+                    isFromOnboard: widget.isFromOnboard,
+                  ),
                 );
               },
             ),
@@ -184,9 +197,10 @@ class _OnBoardingImportFromWalletViewState
                       maxLines: 10,
                       borderRadius: Sizes.normalRadius,
                       controller: mnemonicController,
-                      error: state.isTextFieldEdited && !state.isMnemonicOrKeyValid
-                          ? l10n.recoveryMnemonicError
-                          : null,
+                      error:
+                          state.isTextFieldEdited && !state.isMnemonicOrKeyValid
+                              ? l10n.recoveryMnemonicError
+                              : null,
                     ),
                     const SizedBox(height: Sizes.spaceSmall),
                     Text(
@@ -209,7 +223,8 @@ class _OnBoardingImportFromWalletViewState
                       : () async {
                           await context
                               .read<OnBoardingRecoveryCubit>()
-                              .saveMnemonic(
+                              .saveMnemonicOrKey(
+                                isFromOnboard: widget.isFromOnboard,
                                 accountName: widget.accountName,
                                 mnemonicOrKey: mnemonicController.text,
                               );

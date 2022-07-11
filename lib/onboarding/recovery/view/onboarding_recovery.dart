@@ -12,16 +12,21 @@ import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingRecoveryPage extends StatelessWidget {
-  const OnBoardingRecoveryPage({Key? key, this.accountName}) : super(key: key);
+  const OnBoardingRecoveryPage(
+      {Key? key, this.accountName, required this.isFromOnboard})
+      : super(key: key);
 
-  static Route route({String? accountName}) => MaterialPageRoute<void>(
+  static Route route({String? accountName, required bool isFromOnboard}) =>
+      MaterialPageRoute<void>(
         builder: (context) => OnBoardingRecoveryPage(
           accountName: accountName,
+          isFromOnboard: isFromOnboard,
         ),
         settings: const RouteSettings(name: '/onBoardingRecoveryPage'),
       );
 
   final String? accountName;
+  final bool isFromOnboard;
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +41,21 @@ class OnBoardingRecoveryPage extends StatelessWidget {
       ),
       child: OnBoardingRecoveryView(
         accountName: accountName,
+        isFromOnboard: isFromOnboard,
       ),
     );
   }
 }
 
 class OnBoardingRecoveryView extends StatefulWidget {
-  const OnBoardingRecoveryView({Key? key, this.accountName}) : super(key: key);
+  const OnBoardingRecoveryView({
+    Key? key,
+    this.accountName,
+    required this.isFromOnboard,
+  }) : super(key: key);
 
   final String? accountName;
+  final bool isFromOnboard;
 
   @override
   _OnBoardingRecoveryViewState createState() => _OnBoardingRecoveryViewState();
@@ -162,6 +173,7 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                           OnBoardingImportFromWalletPage.route(
                             walletTypeModel: wallet,
                             accountName: widget.accountName,
+                            isFromOnboard: widget.isFromOnboard,
                           ),
                         );
                       },
@@ -181,9 +193,10 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                       : () async {
                           await context
                               .read<OnBoardingRecoveryCubit>()
-                              .saveMnemonic(
+                              .saveMnemonicOrKey(
                                 mnemonicOrKey: mnemonicController.text,
                                 accountName: widget.accountName,
+                                isFromOnboard: widget.isFromOnboard,
                               );
                         },
                 ),
