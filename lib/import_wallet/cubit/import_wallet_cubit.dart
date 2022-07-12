@@ -11,19 +11,19 @@ import 'package:key_generator/key_generator.dart';
 import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-part 'onboarding_recovery_cubit.g.dart';
+part 'import_wallet_cubit.g.dart';
 
-part 'onboarding_recovery_state.dart';
+part 'import_wallet_state.dart';
 
-class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
-  OnBoardingRecoveryCubit({
+class ImportWalletCubit extends Cubit<ImportWalletState> {
+  ImportWalletCubit({
     required this.didKitProvider,
     required this.secureStorageProvider,
     required this.keyGenerator,
     required this.homeCubit,
     required this.didCubit,
     required this.walletCubit,
-  }) : super(const OnBoardingRecoveryState());
+  }) : super(const ImportWalletState());
 
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;

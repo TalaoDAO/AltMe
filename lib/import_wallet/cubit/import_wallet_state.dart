@@ -1,44 +1,44 @@
-part of 'onboarding_recovery_cubit.dart';
+part of 'import_wallet_cubit.dart';
 
 @JsonSerializable()
-class OnBoardingRecoveryState extends Equatable {
-  const OnBoardingRecoveryState({
+class ImportWalletState extends Equatable {
+  const ImportWalletState({
     this.status = AppStatus.init,
     this.message,
     this.isTextFieldEdited = false,
     this.isMnemonicOrKeyValid = false,
   });
 
-  factory OnBoardingRecoveryState.fromJson(Map<String, dynamic> json) =>
-      _$OnBoardingRecoveryStateFromJson(json);
+  factory ImportWalletState.fromJson(Map<String, dynamic> json) =>
+      _$ImportWalletStateFromJson(json);
 
   final AppStatus status;
   final StateMessage? message;
   final bool isTextFieldEdited;
   final bool isMnemonicOrKeyValid;
 
-  OnBoardingRecoveryState loading() {
-    return OnBoardingRecoveryState(
+  ImportWalletState loading() {
+    return ImportWalletState(
       status: AppStatus.loading,
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
     );
   }
 
-  OnBoardingRecoveryState populating({
+  ImportWalletState populating({
     bool? isTextFieldEdited,
     bool? isMnemonicOrKeyValid,
     int? recoveredCredentialLength,
   }) {
-    return OnBoardingRecoveryState(
+    return ImportWalletState(
       status: AppStatus.populate,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid ?? this.isMnemonicOrKeyValid,
     );
   }
 
-  OnBoardingRecoveryState error({required MessageHandler messageHandler}) {
-    return OnBoardingRecoveryState(
+  ImportWalletState error({required MessageHandler messageHandler}) {
+    return ImportWalletState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       isTextFieldEdited: isTextFieldEdited,
@@ -46,10 +46,10 @@ class OnBoardingRecoveryState extends Equatable {
     );
   }
 
-  OnBoardingRecoveryState success({
+  ImportWalletState success({
     MessageHandler? messageHandler,
   }) {
-    return OnBoardingRecoveryState(
+    return ImportWalletState(
       status: AppStatus.success,
       message: messageHandler == null
           ? null
@@ -59,7 +59,7 @@ class OnBoardingRecoveryState extends Equatable {
     );
   }
 
-  Map<String, dynamic> toJson() => _$OnBoardingRecoveryStateToJson(this);
+  Map<String, dynamic> toJson() => _$ImportWalletStateToJson(this);
 
   @override
   List<Object?> get props => [
