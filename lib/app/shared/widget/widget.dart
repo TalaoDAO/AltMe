@@ -4,6 +4,7 @@ export 'back_leading_button.dart';
 export 'base/base.dart';
 export 'button/button.dart';
 export 'custom_app_bar.dart';
+export 'default_dialog.dart';
 export 'dialog/dialog.dart';
 export 'dialog_close_button.dart';
 export 'display_terms.dart';
