@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/onboarding/tos/widgets/widgets.dart';
@@ -140,7 +141,7 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
     if (widget.routeType == WalletRouteType.create) {
       routeTo = OnBoardingGenPhrasePage.route();
     } else if (widget.routeType == WalletRouteType.recover) {
-      routeTo = OnBoardingRecoveryPage.route(isFromOnboarding: true);
+      routeTo = ImportWalletPage.route(isFromOnboarding: true);
     }
 
     final pinCode = await getSecureStorage.get(SecureStorageKeys.pinCode);

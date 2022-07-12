@@ -1,8 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
@@ -11,8 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class OnBoardingImportFromWalletPage extends StatelessWidget {
-  const OnBoardingImportFromWalletPage({
+class ImportFromOtherWalletPage extends StatelessWidget {
+  const ImportFromOtherWalletPage({
     Key? key,
     required this.walletTypeModel,
     this.accountName,
@@ -25,7 +25,7 @@ class OnBoardingImportFromWalletPage extends StatelessWidget {
     String? accountName,
   }) =>
       MaterialPageRoute<void>(
-        builder: (context) => OnBoardingImportFromWalletPage(
+        builder: (context) => ImportFromOtherWalletPage(
           walletTypeModel: walletTypeModel,
           accountName: accountName,
           isFromOnboard: isFromOnboard,
@@ -40,7 +40,7 @@ class OnBoardingImportFromWalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OnBoardingRecoveryCubit(
+      create: (context) => ImportWalletCubit(
         secureStorageProvider: getSecureStorage,
         didCubit: context.read<DIDCubit>(),
         didKitProvider: DIDKitProvider(),
@@ -48,7 +48,7 @@ class OnBoardingImportFromWalletPage extends StatelessWidget {
         homeCubit: context.read<HomeCubit>(),
         walletCubit: context.read<WalletCubit>(),
       ),
-      child: OnBoardingImportFromWalletView(
+      child: ImportFromOtherWalletView(
         walletTypeModel: walletTypeModel,
         accountName: accountName,
         isFromOnboard: isFromOnboard,
@@ -57,8 +57,8 @@ class OnBoardingImportFromWalletPage extends StatelessWidget {
   }
 }
 
-class OnBoardingImportFromWalletView extends StatefulWidget {
-  const OnBoardingImportFromWalletView({
+class ImportFromOtherWalletView extends StatefulWidget {
+  const ImportFromOtherWalletView({
     Key? key,
     required this.walletTypeModel,
     required this.isFromOnboard,
@@ -70,12 +70,11 @@ class OnBoardingImportFromWalletView extends StatefulWidget {
   final bool isFromOnboard;
 
   @override
-  _OnBoardingImportFromWalletViewState createState() =>
-      _OnBoardingImportFromWalletViewState();
+  _ImportFromOtherWalletViewState createState() =>
+      _ImportFromOtherWalletViewState();
 }
 
-class _OnBoardingImportFromWalletViewState
-    extends State<OnBoardingImportFromWalletView> {
+class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
   late TextEditingController mnemonicController;
 
   @override
@@ -85,7 +84,7 @@ class _OnBoardingImportFromWalletViewState
     mnemonicController = TextEditingController();
     mnemonicController.addListener(() {
       context
-          .read<OnBoardingRecoveryCubit>()
+          .read<ImportWalletCubit>()
           .isMnemonicsOrKeyValid(mnemonicController.text);
     });
   }
@@ -94,7 +93,7 @@ class _OnBoardingImportFromWalletViewState
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BlocConsumer<OnBoardingRecoveryCubit, OnBoardingRecoveryState>(
+    return BlocConsumer<ImportWalletCubit, ImportWalletState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -222,7 +221,7 @@ class _OnBoardingImportFromWalletViewState
                     ? null
                     : () async {
                         await context
-                            .read<OnBoardingRecoveryCubit>()
+                            .read<ImportWalletCubit>()
                             .saveMnemonicOrKey(
                               isFromOnboarding: widget.isFromOnboard,
                               accountName: widget.accountName,

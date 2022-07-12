@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/onboarding/recovery/widgets/wallet_type_model.dart';
+import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 

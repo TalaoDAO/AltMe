@@ -1,8 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
@@ -11,8 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class OnBoardingRecoveryPage extends StatelessWidget {
-  const OnBoardingRecoveryPage({
+class ImportWalletPage extends StatelessWidget {
+  const ImportWalletPage({
     Key? key,
     this.accountName,
     required this.isFromOnboarding,
@@ -20,7 +20,7 @@ class OnBoardingRecoveryPage extends StatelessWidget {
 
   static Route route({String? accountName, required bool isFromOnboarding}) =>
       MaterialPageRoute<void>(
-        builder: (context) => OnBoardingRecoveryPage(
+        builder: (context) => ImportWalletPage(
           accountName: accountName,
           isFromOnboarding: isFromOnboarding,
         ),
@@ -33,7 +33,7 @@ class OnBoardingRecoveryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OnBoardingRecoveryCubit(
+      create: (context) => ImportWalletCubit(
         secureStorageProvider: getSecureStorage,
         didCubit: context.read<DIDCubit>(),
         didKitProvider: DIDKitProvider(),
@@ -41,7 +41,7 @@ class OnBoardingRecoveryPage extends StatelessWidget {
         homeCubit: context.read<HomeCubit>(),
         walletCubit: context.read<WalletCubit>(),
       ),
-      child: OnBoardingRecoveryView(
+      child: ImportWalletView(
         accountName: accountName,
         isFromOnboarding: isFromOnboarding,
       ),
@@ -49,8 +49,8 @@ class OnBoardingRecoveryPage extends StatelessWidget {
   }
 }
 
-class OnBoardingRecoveryView extends StatefulWidget {
-  const OnBoardingRecoveryView({
+class ImportWalletView extends StatefulWidget {
+  const ImportWalletView({
     Key? key,
     this.accountName,
     required this.isFromOnboarding,
@@ -60,10 +60,10 @@ class OnBoardingRecoveryView extends StatefulWidget {
   final bool isFromOnboarding;
 
   @override
-  _OnBoardingRecoveryViewState createState() => _OnBoardingRecoveryViewState();
+  _ImportWalletViewState createState() => _ImportWalletViewState();
 }
 
-class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
+class _ImportWalletViewState extends State<ImportWalletView> {
   late TextEditingController mnemonicController;
 
   @override
@@ -73,7 +73,7 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
     mnemonicController = TextEditingController();
     mnemonicController.addListener(() {
       context
-          .read<OnBoardingRecoveryCubit>()
+          .read<ImportWalletCubit>()
           .isMnemonicsOrKeyValid(mnemonicController.text);
     });
   }
@@ -84,13 +84,13 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
 
     return WillPopScope(
       onWillPop: () async {
-        if (context.read<OnBoardingRecoveryCubit>().state.status ==
+        if (context.read<ImportWalletCubit>().state.status ==
             AppStatus.loading) {
           return false;
         }
         return true;
       },
-      child: BlocConsumer<OnBoardingRecoveryCubit, OnBoardingRecoveryState>(
+      child: BlocConsumer<ImportWalletCubit, ImportWalletState>(
         listener: (context, state) {
           if (state.status == AppStatus.loading) {
             LoadingView().show(context: context);
@@ -197,7 +197,7 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                     WalletTypeList(
                       onItemTap: (wallet) {
                         Navigator.of(context).push<void>(
-                          OnBoardingImportFromWalletPage.route(
+                          ImportFromOtherWalletPage.route(
                             walletTypeModel: wallet,
                             accountName: widget.accountName,
                             isFromOnboard: widget.isFromOnboarding,
@@ -219,7 +219,7 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                       ? null
                       : () async {
                           await context
-                              .read<OnBoardingRecoveryCubit>()
+                              .read<ImportWalletCubit>()
                               .saveMnemonicOrKey(
                                 mnemonicOrKey: mnemonicController.text,
                                 accountName: widget.accountName,
