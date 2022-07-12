@@ -9,7 +9,6 @@ part 'crypto_account_data.g.dart';
 class CryptoAccountData extends Equatable {
   CryptoAccountData({
     required this.name,
-    this.mnemonics,
     required this.key,
     required this.secretKey,
     required this.walletAddress,
@@ -19,7 +18,6 @@ class CryptoAccountData extends Equatable {
       _$CryptoAccountDataFromJson(json);
 
   String name;
-  final String? mnemonics;
   final String key;
   final String secretKey;
   final String walletAddress;
@@ -27,5 +25,5 @@ class CryptoAccountData extends Equatable {
   Map<String, dynamic> toJson() => _$CryptoAccountDataToJson(this);
 
   @override
-  List<Object?> get props => [name, mnemonics, key, secretKey, walletAddress];
+  List<Object?> get props => [name, key, secretKey, walletAddress];
 }
