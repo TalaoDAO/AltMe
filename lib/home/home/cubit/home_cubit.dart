@@ -2,7 +2,9 @@ import 'package:altme/app/app.dart';
 import 'package:bloc/bloc.dart';
 
 class HomeCubit extends Cubit<HomeStatus> {
-  HomeCubit() : super(HomeStatus.hasNoWallet);
+  HomeCubit({required this.client}) : super(HomeStatus.hasNoWallet);
+
+  final DioClient client;
 
   void emitHasWallet() {
     emit(HomeStatus.hasWallet);
@@ -10,5 +12,27 @@ class HomeCubit extends Cubit<HomeStatus> {
 
   void emitHasNoWallet() {
     emit(HomeStatus.hasNoWallet);
+  }
+
+  Future<PassBaseStatus> getPassBaseStatus(String did) async {
+    try {
+      final dynamic response = await client.get('/passbase/check/$did');
+      switch (response) {
+        case 'approved':
+          return PassBaseStatus.approved;
+        case 'declined':
+          return PassBaseStatus.declined;
+        case 'pending':
+          return PassBaseStatus.pending;
+        case 'undone':
+          return PassBaseStatus.undone;
+        case 'notdone':
+          return PassBaseStatus.undone;
+        default:
+          return PassBaseStatus.undone;
+      }
+    } catch (e) {
+      return PassBaseStatus.undone;
+    }
   }
 }

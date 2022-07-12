@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 
 class LoadingView {
   factory LoadingView() => _shared;
+
   LoadingView._sharedInstance();
+
   static final LoadingView _shared = LoadingView._sharedInstance();
 
   LoadingViewController? controller;
@@ -44,9 +46,9 @@ class LoadingView {
           color: Colors.grey[800]!.withAlpha(150),
           child: Center(
             child: Container(
+              margin: const EdgeInsets.all(Sizes.spaceNormal),
               constraints: BoxConstraints(
                 maxHeight: size.height * 0.8,
-                maxWidth: size.width * 0.8,
                 minWidth: size.width * 0.5,
               ),
               decoration: BoxDecoration(

@@ -5,6 +5,7 @@ class Urls {
   static const String checkIssuerEbsiUrl =
       'https://api.conformance.intebsi.xyz/trusted-issuers-registry/v2/issuers';
 
+  static const String issuerBaseUrl = 'https://issuer.talao.co';
   static const String phonePassUrl = 'https://issuer.talao.co/phonepass';
   static const String emailPassUrl = 'https://issuer.talao.co/emailpass';
   static const String over18Url = 'https://issuer.talao.co/over18';

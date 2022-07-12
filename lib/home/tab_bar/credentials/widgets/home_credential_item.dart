@@ -1,9 +1,11 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/did/did.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:passbase_flutter/passbase_flutter.dart';
 
 class HomeCredentialItem extends StatelessWidget {
   const HomeCredentialItem({Key? key, required this.homeCredential})
@@ -114,6 +116,27 @@ class DummyCredentialItem extends StatelessWidget {
 
   final HomeCredential homeCredential;
 
+  Future<void> checkForPassBaseStatusThenLaunchUrl(BuildContext context) async {
+    final did = context.read<DIDCubit>().state.did;
+    if (did == null) return;
+
+    LoadingView().show(context: context);
+    final passBaseStatus =
+        await context.read<HomeCubit>().getPassBaseStatus(did);
+    LoadingView().hide();
+    switch (passBaseStatus) {
+      case PassBaseStatus.approved:
+        await LaunchUrl.launch(homeCredential.link!);
+        return;
+      case PassBaseStatus.declined:
+      //show message to user that your verification is declined and then restart the verification
+      case PassBaseStatus.pending:
+      // please wait until your verification complete and try again later.
+      default:
+      // Start verification process
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -130,7 +153,14 @@ class DummyCredentialItem extends StatelessWidget {
             );
             return;
           }
-          await LaunchUrl.launch(homeCredential.link!);
+          if (homeCredential.credentialSubjectType ==
+                  CredentialSubjectType.identityCard ||
+              homeCredential.credentialSubjectType ==
+                  CredentialSubjectType.over18) {
+            await checkForPassBaseStatusThenLaunchUrl(context);
+          } else {
+            await LaunchUrl.launch(homeCredential.link!);
+          }
         },
         child: Column(
           children: [

@@ -47,7 +47,11 @@ class App extends StatelessWidget {
             secureStorageProvider: secure_storage.getSecureStorage,
           ),
         ),
-        BlocProvider<HomeCubit>(create: (context) => HomeCubit()),
+        BlocProvider<HomeCubit>(
+          create: (context) => HomeCubit(
+            client: DioClient(Urls.issuerBaseUrl, Dio()),
+          ),
+        ),
         BlocProvider<CredentialListCubit>(
           create: (context) => CredentialListCubit(),
         ),
