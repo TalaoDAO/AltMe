@@ -17,9 +17,7 @@ class MnemonicDisplay extends StatelessWidget {
         (i) {
           final j = 3 * i;
           return Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 6),
             child: Row(
               children: <Widget>[
                 Expanded(

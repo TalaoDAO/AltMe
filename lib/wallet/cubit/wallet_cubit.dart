@@ -128,7 +128,6 @@ class WalletCubit extends Cubit<WalletState> {
     }
     final CryptoAccountData cryptoAccountData = CryptoAccountData(
       name: name,
-      mnemonics: isSecretKey ? null : mnemonicOrKey,
       key: cryptoKey,
       walletAddress: cryptoWalletAddress,
       secretKey: cryptoSecretKey,

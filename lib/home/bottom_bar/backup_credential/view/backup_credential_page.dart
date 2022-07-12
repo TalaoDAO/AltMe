@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:file_saver/file_saver.dart';
@@ -79,30 +80,27 @@ class BackupCredentialView extends StatelessWidget {
                     Text(
                       l10n.backupCredentialPhrase,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.messageTitle,
                     ),
                     const SizedBox(height: 8),
                     Text(
                       l10n.backupCredentialPhraseExplanation,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.messageSubtitle,
                     ),
                   ],
                 ),
                 const SizedBox(height: 32),
-                MnemonicDisplay(mnemonic: state.mnemonic),
+                if (state.mnemonic != null)
+                  MnemonicDisplay(mnemonic: state.mnemonic!),
                 const SizedBox(height: 32),
-                SizedBox(
-                  height: 42,
-                  child: BaseButton.primary(
-                    context: context,
-                    onPressed: () async {
-                      await context
-                          .read<BackupCredentialCubit>()
-                          .encryptAndDownloadFile();
-                    },
-                    child: Text(l10n.backupCredentialButtonTitle),
-                  ),
+                MyGradientButton(
+                  onPressed: () async {
+                    await context
+                        .read<BackupCredentialCubit>()
+                        .encryptAndDownloadFile();
+                  },
+                  text: l10n.backupCredentialButtonTitle,
                 )
               ],
             );
