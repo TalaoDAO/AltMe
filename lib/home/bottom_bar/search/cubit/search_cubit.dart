@@ -36,12 +36,12 @@ class SearchCubit extends Cubit<SearchState> {
   Future loadAllCredentialsFromRepository() async {
     await repository.findAll(/* filters */).then((values) {
       /// remove tezosAssociatedWallet
-      values.removeWhere(
-        (credential) =>
-            credential.credentialPreview.credentialSubjectModel
-                .credentialSubjectType ==
-            CredentialSubjectType.tezosAssociatedWallet,
-      );
+      // values.removeWhere(
+      //   (credential) =>
+      //       credential.credentialPreview.credentialSubjectModel
+      //           .credentialSubjectType ==
+      //       CredentialSubjectType.tezosAssociatedWallet,
+      // );
       emit(state.populate(credentials: values));
     });
   }

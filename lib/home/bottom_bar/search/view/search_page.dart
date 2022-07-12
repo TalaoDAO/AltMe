@@ -45,7 +45,7 @@ class SearchView extends StatelessWidget {
               child: Column(
                 children: [
                   const Search(),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
                   ...List.generate(
                     _credentialList.length,
                     (index) => Container(
