@@ -72,7 +72,7 @@ class WalletCubit extends Cubit<WalletState> {
 
   Future<void> createCryptoWallet({
     String? accountName,
-    required String mnemonic,
+    required String mnemonicOrKey,
     Function(CryptoAccount cryptoAccount)? onComplete,
   }) async {
     int index = 0;
@@ -89,22 +89,37 @@ class WalletCubit extends Cubit<WalletState> {
       index.toString(),
     );
 
-    final cryptoKey = await keyGenerator.jwkFromMnemonic(
-      mnemonic: mnemonic,
-      accountType: AccountType.crypto,
-      derivePathIndex: index,
-    );
+    late String cryptoKey;
+    late String cryptoWalletAddress;
+    late String cryptoSecretKey;
 
-    final cryptoSecretKey = await keyGenerator.secretKeyFromMnemonic(
-      mnemonic: mnemonic,
-      accountType: AccountType.crypto,
-      derivePathIndex: index,
-    );
+    final isSecretKey = mnemonicOrKey.startsWith('edsk');
 
-    final String cryptoWalletAddress =
-        await keyGenerator.tz1AddressFromSecretKey(
-      secretKey: cryptoSecretKey,
-    );
+    cryptoKey = isSecretKey
+        ? await keyGenerator.jwkFromSecretKey(
+            secretKey: mnemonicOrKey,
+          )
+        : await keyGenerator.jwkFromMnemonic(
+            mnemonic: mnemonicOrKey,
+            accountType: AccountType.crypto,
+            derivePathIndex: index,
+          );
+
+    cryptoSecretKey = isSecretKey
+        ? mnemonicOrKey
+        : await keyGenerator.secretKeyFromMnemonic(
+            mnemonic: mnemonicOrKey,
+            accountType: AccountType.crypto,
+            derivePathIndex: index,
+          );
+
+    cryptoWalletAddress = isSecretKey
+        ? await keyGenerator.tz1AddressFromSecretKey(
+            secretKey: cryptoSecretKey,
+          )
+        : cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
+            secretKey: cryptoSecretKey,
+          );
 
     String name = 'My Account ${index + 1}';
 
@@ -113,7 +128,7 @@ class WalletCubit extends Cubit<WalletState> {
     }
     final CryptoAccountData cryptoAccountData = CryptoAccountData(
       name: name,
-      mnemonics: mnemonic,
+      mnemonics: isSecretKey ? null : mnemonicOrKey,
       key: cryptoKey,
       walletAddress: cryptoWalletAddress,
       secretKey: cryptoSecretKey,
