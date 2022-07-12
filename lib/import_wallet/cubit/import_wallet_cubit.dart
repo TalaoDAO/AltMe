@@ -57,10 +57,10 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
-      final String mnemonic = bip39.generateMnemonic();
-
       if (isFromOnboarding) {
         /// ssi creation
+
+        final String mnemonic = bip39.generateMnemonic();
         await secureStorageProvider.set(
           SecureStorageKeys.ssiMnemonic,
           mnemonic,

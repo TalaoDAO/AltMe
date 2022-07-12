@@ -3,11 +3,10 @@ import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:bip39/bip39.dart' as bip39;
+
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_saver/file_saver.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -23,12 +22,23 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
     required this.cryptoKeys,
     required this.walletCubit,
     required this.fileSaver,
-  }) : super(BackupCredentialState());
+  }) : super(const BackupCredentialState()) {
+    loadMnemonic();
+  }
 
   final SecureStorageProvider secureStorageProvider;
   final CryptocurrencyKeys cryptoKeys;
   final WalletCubit walletCubit;
   final FileSaver fileSaver;
+
+  Future<void> loadMnemonic() async {
+    emit(state.loading());
+
+    final phrase = await secureStorageProvider.get(
+      SecureStorageKeys.ssiMnemonic,
+    );
+    emit(state.setMnemonics(mnemonic: phrase!.split(' ')));
+  }
 
   Future<bool> _getStoragePermission() async {
     if (await Permission.storage.request().isGranted) {
@@ -61,8 +71,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
         'credentials': walletCubit.state.credentials,
       };
 
-      final mnemonicFormatted = state.mnemonic.join(' ');
-      debugPrint(mnemonicFormatted);
+      final String mnemonicFormatted = state.mnemonic!.join(' ');
       final encrypted =
           await cryptoKeys.encrypt(jsonEncode(message), mnemonicFormatted);
       final fileBytes = Uint8List.fromList(utf8.encode(jsonEncode(encrypted)));

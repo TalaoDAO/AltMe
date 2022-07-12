@@ -16,7 +16,7 @@ class PhraseWord extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 12,
-          vertical: 12,
+          vertical: 16,
         ),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.transparent,

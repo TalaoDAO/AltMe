@@ -2,12 +2,12 @@ part of 'backup_credential_cubit.dart';
 
 @JsonSerializable()
 class BackupCredentialState extends Equatable {
-  BackupCredentialState({
+  const BackupCredentialState({
     this.status = AppStatus.init,
     this.message,
     this.filePath = '',
-    List<String>? mnemonic,
-  }) : mnemonic = mnemonic ?? bip39.generateMnemonic().split(' ');
+    this.mnemonic,
+  });
 
   factory BackupCredentialState.fromJson(Map<String, dynamic> json) =>
       _$BackupCredentialStateFromJson(json);
@@ -15,7 +15,7 @@ class BackupCredentialState extends Equatable {
   final AppStatus status;
   final StateMessage? message;
   final String filePath;
-  final List<String> mnemonic;
+  final List<String>? mnemonic;
 
   BackupCredentialState loading() {
     return BackupCredentialState(
@@ -47,6 +47,14 @@ class BackupCredentialState extends Equatable {
           ? null
           : StateMessage.success(messageHandler: messageHandler),
       mnemonic: mnemonic,
+    );
+  }
+
+  BackupCredentialState setMnemonics({List<String>? mnemonic}) {
+    return BackupCredentialState(
+      status: AppStatus.populate,
+      filePath: filePath,
+      mnemonic: mnemonic ?? this.mnemonic,
     );
   }
 
