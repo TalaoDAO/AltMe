@@ -22,7 +22,7 @@ class WalletDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const WalletDialogCloseButton(),
+            const DialogCloseButton(),
             const SizedBox(height: 15),
             Text(
               l10n.walletAltme,
@@ -70,34 +70,6 @@ class WalletDialog extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class WalletDialogCloseButton extends StatelessWidget {
-  const WalletDialogCloseButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pop();
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            l10n.close,
-            style: Theme.of(context).textTheme.walletDialogClose,
-          ),
-          const SizedBox(width: 5),
-          Image.asset(
-            IconStrings.closeCircle,
-            height: 22,
-          )
-        ],
       ),
     );
   }

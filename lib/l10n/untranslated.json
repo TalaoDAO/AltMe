@@ -336,7 +336,13 @@
     "kukaiWallet",
     "other",
     "otherWalletApp",
-    "importWalletHintText"
+    "importWalletHintText",
+    "kycDialogTitle",
+    "idVerificationProcess",
+    "idCheck",
+    "facialRecognition",
+    "kycDialogButton",
+    "kycDialogFooter"
   ],
 
   "es": [
@@ -676,7 +682,13 @@
     "kukaiWallet",
     "other",
     "otherWalletApp",
-    "importWalletHintText"
+    "importWalletHintText",
+    "kycDialogTitle",
+    "idVerificationProcess",
+    "idCheck",
+    "facialRecognition",
+    "kycDialogButton",
+    "kycDialogFooter"
   ],
 
   "fr": [
@@ -1016,7 +1028,13 @@
     "kukaiWallet",
     "other",
     "otherWalletApp",
-    "importWalletHintText"
+    "importWalletHintText",
+    "kycDialogTitle",
+    "idVerificationProcess",
+    "idCheck",
+    "facialRecognition",
+    "kycDialogButton",
+    "kycDialogFooter"
   ],
 
   "it": [
@@ -1356,6 +1374,12 @@
     "kukaiWallet",
     "other",
     "otherWalletApp",
-    "importWalletHintText"
+    "importWalletHintText",
+    "kycDialogTitle",
+    "idVerificationProcess",
+    "idCheck",
+    "facialRecognition",
+    "kycDialogButton",
+    "kycDialogFooter"
   ]
 }

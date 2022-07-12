@@ -61,7 +61,7 @@ class RealCredentialItem extends StatelessWidget {
                     child: Row(
                       children: [
                         Image.asset(
-                          IconStrings.tickCircle,
+                          IconStrings.checkCircleGreen,
                           height: 15,
                         ),
                         const SizedBox(width: 2),
@@ -133,9 +133,17 @@ class DummyCredentialItem extends StatelessWidget {
       case PassBaseStatus.pending:
       // please wait until your verification complete and try again later.
       default:
+        await showDialog<void>(
+          context: context,
+          builder: (_) => KycDialog(
+            startVerificationPressed: startVerificationPressed,
+          ),
+        );
       // Start verification process
     }
   }
+
+  void startVerificationPressed() {}
 
   @override
   Widget build(BuildContext context) {

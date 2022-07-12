@@ -5,6 +5,7 @@ export 'base/base.dart';
 export 'button/button.dart';
 export 'custom_app_bar.dart';
 export 'dialog/dialog.dart';
+export 'dialog_close_button.dart';
 export 'display_terms.dart';
 export 'empty_page_view.dart';
 export 'error_view.dart';

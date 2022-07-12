@@ -1,3 +1,4 @@
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -45,8 +46,11 @@ abstract class AppTheme {
   /// A color use to paint the drop shadows of elevated components.
   static Color darkShadow = const Color(0xff1D1D1D).withOpacity(0.1);
 
+  static Color dividerColor = const Color(0xFF180B2B);
+
   static ThemeData get darkThemeData => ThemeData(
         brightness: Brightness.dark,
+        dividerColor: dividerColor,
         colorScheme: ColorScheme(
           primary: darkPrimary,
           onPrimary: darkOnPrimary,
@@ -83,7 +87,10 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get kycVerifyButton => const Color(0xFF0045FF);
+
   Color get checkMarkColor => const Color(0xFF00B267);
+
   Color get accountBottomSheetBorder => Colors.grey[200]!;
 
   Color get digitPrimaryColor => Colors.white;
@@ -299,7 +306,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get walletDialogClose => GoogleFonts.roboto(
+  TextStyle get dialogClose => GoogleFonts.roboto(
         color: const Color(0xFF030408),
         fontSize: 12,
         fontWeight: FontWeight.w400,
@@ -513,6 +520,30 @@ extension CustomTextTheme on TextTheme {
         fontSize: 25,
         fontWeight: FontWeight.w600,
         color: const Color(0xff180B2B),
+      );
+
+  TextStyle get kycDialogTitle => GoogleFonts.nunito(
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+        color: const Color(0xff180B2B),
+      );
+
+  TextStyle get kycDialogCaption => GoogleFonts.nunito(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: const Color(0xFF0045FF),
+      );
+
+  TextStyle get kycDialogBody => GoogleFonts.nunito(
+        fontSize: 14,
+        fontWeight: FontWeight.w700,
+        color: const Color(0xFF180B2B),
+      );
+
+  TextStyle get kycDialogFooter => GoogleFonts.nunito(
+        fontSize: 10,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF180B2B),
       );
 
   TextStyle get walletAltmeMessage => GoogleFonts.roboto(

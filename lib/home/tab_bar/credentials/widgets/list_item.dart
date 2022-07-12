@@ -98,7 +98,7 @@ class CredentialsListPageItem extends StatelessWidget {
                   child: Row(
                     children: [
                       Image.asset(
-                        IconStrings.tickCircle,
+                        IconStrings.checkCircleGreen,
                         height: 20,
                       ),
                       const SizedBox(width: 2),
