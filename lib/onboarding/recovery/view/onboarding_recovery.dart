@@ -6,28 +6,29 @@ import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingRecoveryPage extends StatelessWidget {
-  const OnBoardingRecoveryPage(
-      {Key? key, this.accountName, required this.isFromOnboard})
-      : super(key: key);
+  const OnBoardingRecoveryPage({
+    Key? key,
+    this.accountName,
+    required this.isFromOnboarding,
+  }) : super(key: key);
 
-  static Route route({String? accountName, required bool isFromOnboard}) =>
+  static Route route({String? accountName, required bool isFromOnboarding}) =>
       MaterialPageRoute<void>(
         builder: (context) => OnBoardingRecoveryPage(
           accountName: accountName,
-          isFromOnboard: isFromOnboard,
+          isFromOnboarding: isFromOnboarding,
         ),
         settings: const RouteSettings(name: '/onBoardingRecoveryPage'),
       );
 
   final String? accountName;
-  final bool isFromOnboard;
+  final bool isFromOnboarding;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class OnBoardingRecoveryPage extends StatelessWidget {
       ),
       child: OnBoardingRecoveryView(
         accountName: accountName,
-        isFromOnboard: isFromOnboard,
+        isFromOnboarding: isFromOnboarding,
       ),
     );
   }
@@ -52,11 +53,11 @@ class OnBoardingRecoveryView extends StatefulWidget {
   const OnBoardingRecoveryView({
     Key? key,
     this.accountName,
-    required this.isFromOnboard,
+    required this.isFromOnboarding,
   }) : super(key: key);
 
   final String? accountName;
-  final bool isFromOnboard;
+  final bool isFromOnboarding;
 
   @override
   _OnBoardingRecoveryViewState createState() => _OnBoardingRecoveryViewState();
@@ -195,11 +196,11 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                     const SizedBox(height: Sizes.spaceSmall),
                     WalletTypeList(
                       onItemTap: (wallet) {
-                        Navigator.of(context).pushReplacement<void, void>(
+                        Navigator.of(context).push<void>(
                           OnBoardingImportFromWalletPage.route(
                             walletTypeModel: wallet,
                             accountName: widget.accountName,
-                            isFromOnboard: widget.isFromOnboard,
+                            isFromOnboard: widget.isFromOnboarding,
                           ),
                         );
                       },
@@ -222,7 +223,7 @@ class _OnBoardingRecoveryViewState extends State<OnBoardingRecoveryView> {
                               .saveMnemonicOrKey(
                                 mnemonicOrKey: mnemonicController.text,
                                 accountName: widget.accountName,
-                                isFromOnboard: widget.isFromOnboard,
+                                isFromOnboarding: widget.isFromOnboarding,
                               );
                         },
                 ),

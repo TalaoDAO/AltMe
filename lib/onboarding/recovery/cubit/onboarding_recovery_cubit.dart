@@ -35,44 +35,32 @@ class OnBoardingRecoveryCubit extends Cubit<OnBoardingRecoveryState> {
   final log = Logger('altme-wallet/on-boarding/key-recovery');
 
   void isMnemonicsOrKeyValid(String value) {
-    if (value.isNotEmpty && value.startsWith('edsk')) {
-      // TODO(all): Need more validation for Tezos private key that started with edsk or edsek
-      emit(
-        state.populating(
-          isTextFieldEdited: value.isNotEmpty,
-          isMnemonicOrKeyValid: true,
-        ),
-      );
-    } else {
-      emit(
-        state.populating(
-          isTextFieldEdited: value.isNotEmpty,
-          isMnemonicOrKeyValid:
-              bip39.validateMnemonic(value) && value.isNotEmpty,
-        ),
-      );
-    }
+    final bool isSecretKey = value.startsWith('edsk');
+    // TODO(all): Need more validation for Tezos private key that s
+    // tarted with edsk or edsek
+
+    emit(
+      state.populating(
+        isTextFieldEdited: value.isNotEmpty,
+        isMnemonicOrKeyValid:
+            (bip39.validateMnemonic(value) || isSecretKey) && value.isNotEmpty,
+      ),
+    );
   }
 
   Future<void> saveMnemonicOrKey({
     required String mnemonicOrKey,
-    required bool isFromOnboard,
+    required bool isFromOnboarding,
     String? accountName,
   }) async {
     emit(state.loading());
-
     await Future<void>.delayed(const Duration(milliseconds: 500));
+
     try {
-      final isSecretKey = mnemonicOrKey.startsWith('edsk');
-      late String mnemonic;
+      final String mnemonic = bip39.generateMnemonic();
 
-      if (isSecretKey) {
-        mnemonic = bip39.generateMnemonic();
-      } else {
-        mnemonic = mnemonicOrKey;
-      }
-
-      if (isFromOnboard) {
+      if (isFromOnboarding) {
+        /// ssi creation
         await secureStorageProvider.set(
           SecureStorageKeys.ssiMnemonic,
           mnemonic,

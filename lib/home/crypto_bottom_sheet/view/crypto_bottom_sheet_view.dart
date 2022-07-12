@@ -200,7 +200,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                       Navigator.of(context).push<void>(
                                         OnBoardingRecoveryPage.route(
                                           accountName: accountName,
-                                          isFromOnboard: false,
+                                          isFromOnboarding: false,
                                         ),
                                       );
                                     },

@@ -95,33 +95,31 @@ class WalletCubit extends Cubit<WalletState> {
 
     final isSecretKey = mnemonicOrKey.startsWith('edsk');
 
-    if (isSecretKey) {
-      cryptoKey = await keyGenerator.jwkFromSecretKey(
-        secretKey: mnemonicOrKey,
-      );
+    cryptoKey = isSecretKey
+        ? await keyGenerator.jwkFromSecretKey(
+            secretKey: mnemonicOrKey,
+          )
+        : await keyGenerator.jwkFromMnemonic(
+            mnemonic: mnemonicOrKey,
+            accountType: AccountType.crypto,
+            derivePathIndex: index,
+          );
 
-      cryptoSecretKey = mnemonicOrKey;
+    cryptoSecretKey = isSecretKey
+        ? mnemonicOrKey
+        : await keyGenerator.secretKeyFromMnemonic(
+            mnemonic: mnemonicOrKey,
+            accountType: AccountType.crypto,
+            derivePathIndex: index,
+          );
 
-      cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
-        secretKey: cryptoSecretKey,
-      );
-    } else {
-      cryptoKey = await keyGenerator.jwkFromMnemonic(
-        mnemonic: mnemonicOrKey,
-        accountType: AccountType.crypto,
-        derivePathIndex: index,
-      );
-
-      cryptoSecretKey = await keyGenerator.secretKeyFromMnemonic(
-        mnemonic: mnemonicOrKey,
-        accountType: AccountType.crypto,
-        derivePathIndex: index,
-      );
-
-      cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
-        secretKey: cryptoSecretKey,
-      );
-    }
+    cryptoWalletAddress = isSecretKey
+        ? await keyGenerator.tz1AddressFromSecretKey(
+            secretKey: cryptoSecretKey,
+          )
+        : cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
+            secretKey: cryptoSecretKey,
+          );
 
     String name = 'My Account ${index + 1}';
 

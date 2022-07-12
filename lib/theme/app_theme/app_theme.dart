@@ -83,7 +83,7 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
-  Color get checkMarkColor => Color(0xFF00B267);
+  Color get checkMarkColor => const Color(0xFF00B267);
   Color get accountBottomSheetBorder => Colors.grey[200]!;
 
   Color get digitPrimaryColor => Colors.white;
