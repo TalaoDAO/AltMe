@@ -23,7 +23,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
   final List<CredentialSubjectType> identityCategories = [
     CredentialSubjectType.emailPass,
     CredentialSubjectType.over18,
-    CredentialSubjectType.identityCard,
+    //CredentialSubjectType.identityCard,
   ];
 
   CredentialSubjectType over18 = CredentialSubjectType.over18;
