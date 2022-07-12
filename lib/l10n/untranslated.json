@@ -344,7 +344,12 @@
     "kycDialogButton",
     "kycDialogFooter",
     "finishedVerificationTitle",
-    "finishedVerificationDescription"
+    "finishedVerificationDescription",
+    "verificationPendingTitle",
+    "verificationPendingDescription",
+    "verificationDeclinedTitle",
+    "restartVerification",
+    "verificationDeclinedDescription"
   ],
 
   "es": [
@@ -692,7 +697,12 @@
     "kycDialogButton",
     "kycDialogFooter",
     "finishedVerificationTitle",
-    "finishedVerificationDescription"
+    "finishedVerificationDescription",
+    "verificationPendingTitle",
+    "verificationPendingDescription",
+    "verificationDeclinedTitle",
+    "restartVerification",
+    "verificationDeclinedDescription"
   ],
 
   "fr": [
@@ -1040,7 +1050,12 @@
     "kycDialogButton",
     "kycDialogFooter",
     "finishedVerificationTitle",
-    "finishedVerificationDescription"
+    "finishedVerificationDescription",
+    "verificationPendingTitle",
+    "verificationPendingDescription",
+    "verificationDeclinedTitle",
+    "restartVerification",
+    "verificationDeclinedDescription"
   ],
 
   "it": [
@@ -1388,6 +1403,11 @@
     "kycDialogButton",
     "kycDialogFooter",
     "finishedVerificationTitle",
-    "finishedVerificationDescription"
+    "finishedVerificationDescription",
+    "verificationPendingTitle",
+    "verificationPendingDescription",
+    "verificationDeclinedTitle",
+    "restartVerification",
+    "verificationDeclinedDescription"
   ]
 }

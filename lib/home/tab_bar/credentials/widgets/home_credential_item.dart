@@ -117,6 +117,7 @@ class DummyCredentialItem extends StatelessWidget {
   final HomeCredential homeCredential;
 
   Future<void> checkForPassBaseStatusThenLaunchUrl(BuildContext context) async {
+    final l10n = context.l10n;
     final did = context.read<DIDCubit>().state.did;
     if (did == null) return;
 
@@ -124,30 +125,42 @@ class DummyCredentialItem extends StatelessWidget {
     final passBaseStatus =
         await context.read<HomeCubit>().getPassBaseStatus(did);
     LoadingView().hide();
-    switch (passBaseStatus) {
-      case PassBaseStatus.approved:
-        await LaunchUrl.launch(homeCredential.link!);
-        return;
-      case PassBaseStatus.declined:
-      //show message to user that your verification is declined and then restart the verification
-      case PassBaseStatus.pending:
-      // please wait until your verification complete and try again later.
-      default:
-        showDialog<void>(
-          context: context,
-          builder: (_) => KycDialog(
-            startVerificationPressed: () =>
-                startVerificationPressed.call(context),
-          ),
-        );
-        break;
-      // Start verification process
+
+    if (passBaseStatus == PassBaseStatus.approved) {
+      await LaunchUrl.launch(homeCredential.link!);
+    } else if (passBaseStatus == PassBaseStatus.declined) {
+      await showDialog<void>(
+        context: context,
+        builder: (_) => DefaultDialog(
+          title: l10n.verificationDeclinedTitle,
+          description: l10n.verificationDeclinedDescription,
+          buttonLabel: l10n.restartVerification.toUpperCase(),
+          onButtonClick: () => startVerificationPressed.call(context),
+        ),
+      );
+    } else if (passBaseStatus == PassBaseStatus.pending) {
+      await showDialog<void>(
+        context: context,
+        builder: (_) => DefaultDialog(
+          title: l10n.verificationPendingTitle,
+          description: l10n.verificationPendingDescription,
+        ),
+      );
+    } else {
+      await showDialog<void>(
+        context: context,
+        builder: (_) => KycDialog(
+          startVerificationPressed: () =>
+              startVerificationPressed.call(context),
+        ),
+      );
     }
   }
 
   void startVerificationPressed(BuildContext context) {
     PassbaseSDK.startVerification(
       onFinish: (identityAccessKey) {
+        // TODO(all): where to save that the user verified ID
         showDialog<void>(
           context: context,
           builder: (_) => const FinishKycDialog(),
