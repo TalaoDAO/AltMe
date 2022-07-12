@@ -87,6 +87,8 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get closeIconColor => const Color(0xFFA79ABA);
+
   Color get kycVerifyButton => const Color(0xFF0045FF);
 
   Color get checkMarkColor => const Color(0xFF00B267);
@@ -307,7 +309,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get dialogClose => GoogleFonts.roboto(
-        color: const Color(0xFF030408),
+        color: const Color(0xFFA79ABA),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
@@ -520,6 +522,18 @@ extension CustomTextTheme on TextTheme {
         fontSize: 25,
         fontWeight: FontWeight.w600,
         color: const Color(0xff180B2B),
+      );
+
+  TextStyle get finishVerificationDialogTitle => GoogleFonts.nunito(
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+        color: const Color(0xff180B2B),
+      );
+
+  TextStyle get finishVerificationDialogBody => GoogleFonts.nunito(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF5F556F),
       );
 
   TextStyle get kycDialogTitle => GoogleFonts.nunito(

@@ -133,17 +133,27 @@ class DummyCredentialItem extends StatelessWidget {
       case PassBaseStatus.pending:
       // please wait until your verification complete and try again later.
       default:
-        await showDialog<void>(
+        showDialog<void>(
           context: context,
           builder: (_) => KycDialog(
             startVerificationPressed: startVerificationPressed,
           ),
         );
+        break;
       // Start verification process
     }
   }
 
-  void startVerificationPressed() {}
+  void startVerificationPressed() {
+    PassbaseSDK.startVerification(
+      onFinish: (identityAccessKey) {
+        showDialog<void>(
+          context: context,
+          builder: (_) => const FinishKycDialog(),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

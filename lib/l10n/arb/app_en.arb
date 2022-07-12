@@ -392,6 +392,8 @@
   "idCheck": "ID Check",
   "facialRecognition": "Facial recognition",
   "kycDialogButton": "Start ID verification",
-  "kycDialogFooter":"GDPR and CCPA Compliant + SOC2 Security Level"
+  "kycDialogFooter":"GDPR and CCPA Compliant + SOC2 Security Level",
+  "finishedVerificationTitle": "ID verification in\nprogress",
+  "finishedVerificationDescription": "You will receive an email to confirm that your ID has been verified"
 
 }

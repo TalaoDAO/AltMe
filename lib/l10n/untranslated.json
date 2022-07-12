@@ -342,7 +342,9 @@
     "idCheck",
     "facialRecognition",
     "kycDialogButton",
-    "kycDialogFooter"
+    "kycDialogFooter",
+    "finishedVerificationTitle",
+    "finishedVerificationDescription"
   ],
 
   "es": [
@@ -688,7 +690,9 @@
     "idCheck",
     "facialRecognition",
     "kycDialogButton",
-    "kycDialogFooter"
+    "kycDialogFooter",
+    "finishedVerificationTitle",
+    "finishedVerificationDescription"
   ],
 
   "fr": [
@@ -1034,7 +1038,9 @@
     "idCheck",
     "facialRecognition",
     "kycDialogButton",
-    "kycDialogFooter"
+    "kycDialogFooter",
+    "finishedVerificationTitle",
+    "finishedVerificationDescription"
   ],
 
   "it": [
@@ -1380,6 +1386,8 @@
     "idCheck",
     "facialRecognition",
     "kycDialogButton",
-    "kycDialogFooter"
+    "kycDialogFooter",
+    "finishedVerificationTitle",
+    "finishedVerificationDescription"
   ]
 }

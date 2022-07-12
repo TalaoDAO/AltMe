@@ -21,9 +21,17 @@ class DialogCloseButton extends StatelessWidget {
             style: Theme.of(context).textTheme.dialogClose,
           ),
           const SizedBox(width: 5),
-          Image.asset(
-            IconStrings.closeCircle,
-            height: 22,
+          Container(
+            padding: const EdgeInsets.all(0.5),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.closeIconColor,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.close,
+              size: Sizes.icon,
+              color: Colors.white,
+            ),
           )
         ],
       ),
