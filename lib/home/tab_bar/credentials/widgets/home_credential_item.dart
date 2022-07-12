@@ -136,7 +136,8 @@ class DummyCredentialItem extends StatelessWidget {
         showDialog<void>(
           context: context,
           builder: (_) => KycDialog(
-            startVerificationPressed: startVerificationPressed,
+            startVerificationPressed: () =>
+                startVerificationPressed.call(context),
           ),
         );
         break;
@@ -144,7 +145,7 @@ class DummyCredentialItem extends StatelessWidget {
     }
   }
 
-  void startVerificationPressed() {
+  void startVerificationPressed(BuildContext context) {
     PassbaseSDK.startVerification(
       onFinish: (identityAccessKey) {
         showDialog<void>(
