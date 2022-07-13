@@ -120,8 +120,7 @@ class DummyCredentialItem extends StatelessWidget {
 
   Future<void> checkForPassBaseStatusThenLaunchUrl(BuildContext context) async {
     final l10n = context.l10n;
-    final did = context.read<DIDCubit>().state.did;
-    if (did == null) return;
+    final did = context.read<DIDCubit>().state.did!;
 
     LoadingView().show(context: context);
     final passBaseStatus =
@@ -163,6 +162,7 @@ class DummyCredentialItem extends StatelessWidget {
     PassbaseSDK.startVerification(
       onFinish: (identityAccessKey) {
         // TODO(all): where to save that the user verified ID
+        print(identityAccessKey);
         showDialog<void>(
           context: context,
           builder: (_) => const FinishKycDialog(),

@@ -100,6 +100,7 @@ class DioClient {
     }
   }
 
+  // TODO(all): remove this approach in future
   void changeHeaders(Map<String, dynamic> headers) =>
       _dio.options.headers = headers;
 }

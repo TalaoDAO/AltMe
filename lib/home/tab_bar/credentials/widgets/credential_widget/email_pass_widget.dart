@@ -66,16 +66,6 @@ class EmailPassRecto extends Recto {
         child: CustomMultiChildLayout(
           delegate: EmailPassRectoDelegate(position: Offset.zero),
           children: [
-            // LayoutId(
-            //   id: 'name',
-            //   child: FractionallySizedBox(
-            //     widthFactor: 0.5,
-            //     child: DisplayNameCard(
-            //       credentialModel: credentialModel,
-            //       style: Theme.of(context).textTheme.credentialTitleCard,
-            //     ),
-            //   ),
-            // ),
             LayoutId(
               id: 'description',
               child: FractionallySizedBox(
@@ -84,6 +74,7 @@ class EmailPassRecto extends Recto {
                 child: DisplayDescriptionCard(
                   credentialModel: credentialModel,
                   style: Theme.of(context).textTheme.credentialTextCard,
+                  maxLines: 2,
                 ),
               ),
             ),

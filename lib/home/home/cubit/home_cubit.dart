@@ -16,7 +16,19 @@ class HomeCubit extends Cubit<HomeStatus> {
 
   Future<PassBaseStatus> getPassBaseStatus(String did) async {
     try {
+      client.changeHeaders(
+        <String, dynamic>{
+          'Accept': 'application/json',
+          'Authorization': 'Bearer mytoken',
+        },
+      );
+
       final dynamic response = await client.get('/passbase/check/$did');
+
+      client.changeHeaders(
+        <String, dynamic>{'Content-Type': 'application/json; charset=UTF-8'},
+      );
+
       switch (response) {
         case 'approved':
           return PassBaseStatus.approved;
