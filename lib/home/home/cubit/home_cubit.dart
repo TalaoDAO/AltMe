@@ -79,6 +79,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void startPassbaseVerification(WalletCubit walletCubit) {
+    // TODO(all): what happens if there is not email pass
+    // what happens if there is multiple email pass
     setKYCMetadata(walletCubit);
     PassbaseSDK.startVerification(
       onFinish: (identityAccessKey) {
