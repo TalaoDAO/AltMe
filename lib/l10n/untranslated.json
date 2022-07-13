@@ -336,7 +336,20 @@
     "kukaiWallet",
     "other",
     "otherWalletApp",
-    "importWalletHintText"
+    "importWalletHintText",
+    "kycDialogTitle",
+    "idVerificationProcess",
+    "idCheck",
+    "facialRecognition",
+    "kycDialogButton",
+    "kycDialogFooter",
+    "finishedVerificationTitle",
+    "finishedVerificationDescription",
+    "verificationPendingTitle",
+    "verificationPendingDescription",
+    "verificationDeclinedTitle",
+    "restartVerification",
+    "verificationDeclinedDescription"
   ],
 
   "es": [
@@ -676,7 +689,20 @@
     "kukaiWallet",
     "other",
     "otherWalletApp",
-    "importWalletHintText"
+    "importWalletHintText",
+    "kycDialogTitle",
+    "idVerificationProcess",
+    "idCheck",
+    "facialRecognition",
+    "kycDialogButton",
+    "kycDialogFooter",
+    "finishedVerificationTitle",
+    "finishedVerificationDescription",
+    "verificationPendingTitle",
+    "verificationPendingDescription",
+    "verificationDeclinedTitle",
+    "restartVerification",
+    "verificationDeclinedDescription"
   ],
 
   "fr": [
@@ -1016,7 +1042,20 @@
     "kukaiWallet",
     "other",
     "otherWalletApp",
-    "importWalletHintText"
+    "importWalletHintText",
+    "kycDialogTitle",
+    "idVerificationProcess",
+    "idCheck",
+    "facialRecognition",
+    "kycDialogButton",
+    "kycDialogFooter",
+    "finishedVerificationTitle",
+    "finishedVerificationDescription",
+    "verificationPendingTitle",
+    "verificationPendingDescription",
+    "verificationDeclinedTitle",
+    "restartVerification",
+    "verificationDeclinedDescription"
   ],
 
   "it": [
@@ -1356,6 +1395,19 @@
     "kukaiWallet",
     "other",
     "otherWalletApp",
-    "importWalletHintText"
+    "importWalletHintText",
+    "kycDialogTitle",
+    "idVerificationProcess",
+    "idCheck",
+    "facialRecognition",
+    "kycDialogButton",
+    "kycDialogFooter",
+    "finishedVerificationTitle",
+    "finishedVerificationDescription",
+    "verificationPendingTitle",
+    "verificationPendingDescription",
+    "verificationDeclinedTitle",
+    "restartVerification",
+    "verificationDeclinedDescription"
   ]
 }

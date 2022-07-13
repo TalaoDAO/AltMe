@@ -386,6 +386,19 @@
   "kukaiWallet": "Kukai wallet",
   "other": "Other",
   "otherWalletApp": "Other wallet App",
-  "importWalletHintText": "Enter your recovery phrase\n(seed phrase) here.Once you have\nentered your 12 words\ncorrectly, tap ≪ Import ≫"
+  "importWalletHintText": "Enter your recovery phrase\n(seed phrase) here.Once you have\nentered your 12 words\ncorrectly, tap ≪ Import ≫",
+  "kycDialogTitle": "To get this card you need to verify your ID",
+  "idVerificationProcess": "ID Verification Process",
+  "idCheck": "ID Check",
+  "facialRecognition": "Facial recognition",
+  "kycDialogButton": "Start ID verification",
+  "kycDialogFooter":"GDPR and CCPA Compliant + SOC2 Security Level",
+  "finishedVerificationTitle": "ID verification in\nprogress",
+  "finishedVerificationDescription": "You will receive an email to confirm that your ID has been verified",
+  "verificationPendingTitle": "Your ID verification\nis pending",
+  "verificationPendingDescription": "Your ID verification is pending. Please wait until your verification is finished.\nYou will receive an email that your ID has been verified.",
+  "verificationDeclinedTitle": "Your verification declined",
+  "restartVerification": "Restart ID Verification",
+  "verificationDeclinedDescription": "Your verification declined. Please restart your ID verification."
 
 }
