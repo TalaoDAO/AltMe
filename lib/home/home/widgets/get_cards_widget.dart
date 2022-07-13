@@ -14,7 +14,7 @@ class GetCardsWidget extends StatelessWidget {
     final l10n = context.l10n;
     return GestureDetector(
       onTap: () {
-        if (context.read<HomeCubit>().state == HomeStatus.hasNoWallet) {
+        if (context.read<HomeCubit>().state.status == HomeStatus.hasNoWallet) {
           showDialog<void>(
             context: context,
             builder: (_) => const WalletDialog(),

@@ -339,19 +339,15 @@ class ScanCubit extends Cubit<ScanState> {
       // execute the request
       // Request is sent to redirect_uri.
 
-      client.changeHeaders(
-        <String, dynamic>{'Content-Type': 'application/x-www-form-urlencoded'},
-      );
       final dynamic result = await client.post(
         sIOPV2Param.redirect_uri!,
         data: FormData.fromMap(<String, dynamic>{
           'vp_token': vpToken,
           'id_token': idToken,
         }),
-      );
-
-      client.changeHeaders(
-        <String, dynamic>{'Content-Type': 'application/json; charset=UTF-8'},
+        headers: <String, dynamic>{
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
       );
 
       if (result == 'Congrats ! Everything is ok') {

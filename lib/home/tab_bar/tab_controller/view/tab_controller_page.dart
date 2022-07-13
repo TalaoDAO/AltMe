@@ -62,7 +62,7 @@ class _TabControllerViewState extends State<TabControllerView>
                             : IconStrings.userSquareBlur,
                         isSelected: state == 0,
                         onPressed: () {
-                          if (context.read<HomeCubit>().state ==
+                          if (context.read<HomeCubit>().state.status ==
                               HomeStatus.hasNoWallet) {
                             showDialog<void>(
                               context: context,
@@ -83,7 +83,7 @@ class _TabControllerViewState extends State<TabControllerView>
                             : IconStrings.ghostBlur,
                         isSelected: state == 1,
                         onPressed: () {
-                          if (context.read<HomeCubit>().state ==
+                          if (context.read<HomeCubit>().state.status ==
                               HomeStatus.hasNoWallet) {
                             showDialog<void>(
                               context: context,
@@ -104,7 +104,7 @@ class _TabControllerViewState extends State<TabControllerView>
                             : IconStrings.healthBlur,
                         isSelected: state == 2,
                         onPressed: () {
-                          if (context.read<HomeCubit>().state ==
+                          if (context.read<HomeCubit>().state.status ==
                               HomeStatus.hasNoWallet) {
                             showDialog<void>(
                               context: context,

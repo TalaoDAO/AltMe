@@ -12,7 +12,7 @@ class MockSecureStorage extends Mock implements SecureStorageProvider {}
 
 class MockDidCubit extends MockCubit<DIDState> implements DIDCubit {}
 
-class MockHomeCubit extends MockCubit<HomeStatus> implements HomeCubit {}
+class MockHomeCubit extends MockCubit<HomeState> implements HomeCubit {}
 
 class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {}
 

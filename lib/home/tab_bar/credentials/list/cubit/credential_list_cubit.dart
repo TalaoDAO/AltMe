@@ -59,8 +59,10 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           identityCredentials.add(HomeCredential.isNotDummy(credential));
 
           /// remove over18 if exists
+
           final credentialSubjectType = credential
               .credentialPreview.credentialSubjectModel.credentialSubjectType;
+
           if (credentialSubjectType == over18) {
             identityCategories.remove(over18);
           }

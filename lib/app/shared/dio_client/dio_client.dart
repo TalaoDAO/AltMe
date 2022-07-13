@@ -15,10 +15,7 @@ class DioClient {
       ..options.baseUrl = baseUrl
       ..options.connectTimeout = _defaultConnectTimeout
       ..options.receiveTimeout = _defaultReceiveTimeout
-      ..httpClientAdapter
-      ..options.headers = <String, dynamic>{
-        'Content-Type': 'application/json; charset=UTF-8'
-      };
+      ..httpClientAdapter;
     if (interceptors?.isNotEmpty ?? false) {
       _dio.interceptors.addAll(interceptors!);
     }
@@ -44,8 +41,12 @@ class DioClient {
     Options? options,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
+    Map<String, dynamic> headers = const <String, dynamic>{
+      'Content-Type': 'application/json; charset=UTF-8'
+    },
   }) async {
     try {
+      _dio.options.headers = headers;
       final response = await _dio.get<dynamic>(
         uri,
         queryParameters: queryParameters,
@@ -75,8 +76,12 @@ class DioClient {
     CancelToken? cancelToken,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    Map<String, dynamic> headers = const <String, dynamic>{
+      'Content-Type': 'application/json; charset=UTF-8'
+    },
   }) async {
     try {
+      _dio.options.headers = headers;
       final response = await _dio.post<dynamic>(
         uri,
         data: data,
@@ -99,8 +104,4 @@ class DioClient {
       }
     }
   }
-
-  // TODO(all): remove this approach in future
-  void changeHeaders(Map<String, dynamic> headers) =>
-      _dio.options.headers = headers;
 }

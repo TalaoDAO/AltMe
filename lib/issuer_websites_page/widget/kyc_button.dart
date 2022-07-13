@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,8 @@ class KYCButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// Sending email and DID to passbase
-    final hasMetadata = context.read<WalletCubit>().setKYCMetadata();
+    final hasMetadata =
+        context.read<HomeCubit>().setKYCMetadata(context.read<WalletCubit>());
     final l10n = context.l10n;
 
     return hasMetadata

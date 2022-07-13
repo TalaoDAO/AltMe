@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return WillPopScope(
       onWillPop: () async {
         if (scaffoldKey.currentState!.isDrawerOpen) {
@@ -38,92 +40,151 @@ class _HomePageState extends State<HomePage> {
         }
         return false;
       },
-      child: BasePage(
-        scrollView: false,
-        scaffoldKey: scaffoldKey,
-        drawer: const DrawerPage(),
-        padding: EdgeInsets.zero,
-        titleLeading: IconButton(
-          icon: ImageIcon(
-            const AssetImage(IconStrings.icMenu),
-            color: Theme.of(context).colorScheme.leadingButton,
+      child: BlocListener<HomeCubit, HomeState>(
+        listener: (context, homeState) {
+          if (homeState.status == AppStatus.loading) {
+            LoadingView().show(context: context);
+          } else {
+            LoadingView().hide();
+          }
+
+          if (homeState.message != null) {
+            AlertMessage.showStateMessage(
+              context: context,
+              stateMessage: homeState.message!,
+            );
+          }
+
+          if (homeState.passBaseStatus == PassBaseStatus.declined) {
+            showDialog<void>(
+              context: context,
+              builder: (_) => DefaultDialog(
+                title: l10n.verificationDeclinedTitle,
+                description: l10n.verificationDeclinedDescription,
+                buttonLabel: l10n.restartVerification.toUpperCase(),
+                onButtonClick: () => context
+                    .read<HomeCubit>()
+                    .startVerificationPressed(context.read<WalletCubit>()),
+              ),
+            );
+          }
+
+          if (homeState.passBaseStatus == PassBaseStatus.pending) {
+            showDialog<void>(
+              context: context,
+              builder: (_) => DefaultDialog(
+                title: l10n.verificationPendingTitle,
+                description: l10n.verificationPendingDescription,
+              ),
+            );
+          }
+
+          if (homeState.passBaseStatus == PassBaseStatus.undone) {
+            showDialog<void>(
+              context: context,
+              builder: (_) => KycDialog(
+                startVerificationPressed: () => context
+                    .read<HomeCubit>()
+                    .startVerificationPressed(context.read<WalletCubit>()),
+              ),
+            );
+          }
+
+          if (homeState.status == AppStatus.success) {
+            showDialog<void>(
+              context: context,
+              builder: (_) => const FinishKycDialog(),
+            );
+          }
+        },
+        child: BasePage(
+          scrollView: false,
+          scaffoldKey: scaffoldKey,
+          drawer: const DrawerPage(),
+          padding: EdgeInsets.zero,
+          titleLeading: IconButton(
+            icon: ImageIcon(
+              const AssetImage(IconStrings.icMenu),
+              color: Theme.of(context).colorScheme.leadingButton,
+            ),
+            onPressed: () {
+              if (context.read<HomeCubit>().state.status ==
+                  HomeStatus.hasNoWallet) {
+                showDialog<void>(
+                  context: context,
+                  builder: (_) => const WalletDialog(),
+                );
+                return;
+              }
+              scaffoldKey.currentState!.openDrawer();
+            },
           ),
-          onPressed: () {
-            if (context.read<HomeCubit>().state == HomeStatus.hasNoWallet) {
-              showDialog<void>(
-                context: context,
-                builder: (_) => const WalletDialog(),
-              );
-              return;
-            }
-            scaffoldKey.currentState!.openDrawer();
-          },
-        ),
-        titleTrailing: BlocBuilder<WalletCubit, WalletState>(
-          builder: (context, state) {
-            final currentIndex = state.currentCryptoIndex;
+          titleTrailing: BlocBuilder<WalletCubit, WalletState>(
+            builder: (context, walletState) {
+              final currentIndex = walletState.currentCryptoIndex;
 
-            String accountName = '';
+              String accountName = '';
 
-            if (state.cryptoAccount.data.isNotEmpty) {
-              accountName = state.cryptoAccount.data[currentIndex].name;
-            }
+              if (walletState.cryptoAccount.data.isNotEmpty) {
+                accountName = walletState.cryptoAccount.data[currentIndex].name;
+              }
 
-            return (state.cryptoAccount.data.isNotEmpty &&
-                    state.cryptoAccount.data[currentIndex].walletAddress
-                        .isNotEmpty)
-                ? InkWell(
-                    onTap: () {
-                      showModalBottomSheet<void>(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(Sizes.largeRadius),
-                            topLeft: Radius.circular(Sizes.largeRadius),
-                          ),
-                        ),
-                        builder: (context) => const CryptoBottomSheetView(),
-                      );
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        SizedBox(
-                          width: 200,
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              accountName,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.titleMedium,
+              return (walletState.cryptoAccount.data.isNotEmpty &&
+                      walletState.cryptoAccount.data[currentIndex].walletAddress
+                          .isNotEmpty)
+                  ? InkWell(
+                      onTap: () {
+                        showModalBottomSheet<void>(
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(Sizes.largeRadius),
+                              topLeft: Radius.circular(Sizes.largeRadius),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 5),
-                        Image.asset(
-                          IconStrings.arrowSquareDown,
-                          width: Sizes.icon,
-                        ),
-                      ],
-                    ),
-                  )
-                : const Center();
-          },
-        ),
-        body: Stack(
-          children: [
-            Column(
-              children: const [
-                Expanded(child: TabControllerPage()),
-                BottomBarPage()
-              ],
-            ),
-            const Align(
-              alignment: Alignment.bottomCenter,
-              child: QRIcon(),
-            ),
-          ],
+                          builder: (context) => const CryptoBottomSheetView(),
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          SizedBox(
+                            width: 200,
+                            child: Container(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                accountName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Image.asset(
+                            IconStrings.arrowSquareDown,
+                            width: Sizes.icon,
+                          ),
+                        ],
+                      ),
+                    )
+                  : const Center();
+            },
+          ),
+          body: Stack(
+            children: [
+              Column(
+                children: const [
+                  Expanded(child: TabControllerPage()),
+                  BottomBarPage()
+                ],
+              ),
+              const Align(
+                alignment: Alignment.bottomCenter,
+                child: QRIcon(),
+              ),
+            ],
+          ),
         ),
       ),
     );
