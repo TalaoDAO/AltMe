@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
               color: Theme.of(context).colorScheme.leadingButton,
             ),
             onPressed: () {
-              if (context.read<HomeCubit>().state.status ==
+              if (context.read<HomeCubit>().state.homeStatus ==
                   HomeStatus.hasNoWallet) {
                 showDialog<void>(
                   context: context,

@@ -123,7 +123,7 @@ class DummyCredentialItem extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       child: InkWell(
         onTap: () async {
-          if (context.read<HomeCubit>().state.status ==
+          if (context.read<HomeCubit>().state.homeStatus ==
               HomeStatus.hasNoWallet) {
             await showDialog<void>(
               context: context,

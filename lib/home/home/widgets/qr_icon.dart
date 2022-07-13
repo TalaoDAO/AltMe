@@ -27,7 +27,7 @@ class QRIcon extends StatelessWidget {
             );
             return;
           } else {
-            if (context.read<HomeCubit>().state.status ==
+            if (context.read<HomeCubit>().state.homeStatus ==
                 HomeStatus.hasNoWallet) {
               showDialog<void>(
                 context: context,

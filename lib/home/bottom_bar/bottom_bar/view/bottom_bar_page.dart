@@ -22,7 +22,7 @@ class BottomBarPage extends StatelessWidget {
               icon: IconStrings.story,
               text: l10n.infos,
               onPressed: () {
-                if (context.read<HomeCubit>().state.status ==
+                if (context.read<HomeCubit>().state.homeStatus ==
                     HomeStatus.hasNoWallet) {
                   showDialog<void>(
                     context: context,
@@ -38,7 +38,7 @@ class BottomBarPage extends StatelessWidget {
               icon: IconStrings.profile,
               text: l10n.profile,
               onPressed: () {
-                if (context.read<HomeCubit>().state.status ==
+                if (context.read<HomeCubit>().state.homeStatus ==
                     HomeStatus.hasNoWallet) {
                   showDialog<void>(
                     context: context,
@@ -55,7 +55,7 @@ class BottomBarPage extends StatelessWidget {
               icon: IconStrings.searchNormal,
               text: l10n.search,
               onPressed: () {
-                if (context.read<HomeCubit>().state.status ==
+                if (context.read<HomeCubit>().state.homeStatus ==
                     HomeStatus.hasNoWallet) {
                   showDialog<void>(
                     context: context,
@@ -70,7 +70,7 @@ class BottomBarPage extends StatelessWidget {
               icon: IconStrings.save,
               text: l10n.save,
               onPressed: () {
-                if (context.read<HomeCubit>().state.status ==
+                if (context.read<HomeCubit>().state.homeStatus ==
                     HomeStatus.hasNoWallet) {
                   showDialog<void>(
                     context: context,
