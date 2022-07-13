@@ -260,7 +260,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get appBar => GoogleFonts.roboto(
+  TextStyle get appBar => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
         fontSize: 24,
         fontWeight: FontWeight.w800,
@@ -626,33 +626,34 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get passPhraseText => GoogleFonts.roboto(
-        fontSize: 13,
-        fontWeight: FontWeight.w500,
+  TextStyle get passPhraseText => GoogleFonts.nunito(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
         color: const Color(0xffD1CCE3),
       );
 
-  TextStyle get passPhraseMessage => GoogleFonts.roboto(
+  TextStyle get passPhraseMessage => GoogleFonts.nunito(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: const Color(0xffEDEAF5),
       );
 
-  TextStyle get passPhraseSubMessage => GoogleFonts.roboto(
+  TextStyle get passPhraseSubMessage => GoogleFonts.nunito(
         fontSize: 15,
         fontWeight: FontWeight.w400,
         color: const Color(0xff71CBFF),
       );
 
-  TextStyle get copyToClipBoard => GoogleFonts.roboto(
-        fontSize: 14,
+  TextStyle get copyToClipBoard => GoogleFonts.nunito(
+        fontSize: 16,
         fontWeight: FontWeight.w400,
         color: const Color(0xffDED6EA),
         decoration: TextDecoration.underline,
       );
 
-  TextStyle get onBoardingCheckMessage => GoogleFonts.roboto(
+  TextStyle get onBoardingCheckMessage => GoogleFonts.nunito(
         fontSize: 15,
+        height: 1.5,
         fontWeight: FontWeight.w600,
         color: const Color(0xffFFFFFF),
       );
