@@ -40,11 +40,11 @@ class TokenItem extends StatelessWidget {
                   ),
           ),
           title: MyText(
-            token.name.toUpperCase(),
+            token.symbol,
             style: Theme.of(context).textTheme.listTileTitle,
           ),
           subtitle: MyText(
-            token.symbol,
+            token.name,
             style: Theme.of(context).textTheme.listTileSubtitle,
           ),
           trailing: MyText(
@@ -66,7 +66,7 @@ class TokenItem extends StatelessWidget {
     if (iconUrl == null) {
       return null;
     } else {
-      return iconUrl.replaceFirst('ipfs://', 'https://ipfs.io/ipfs/');
+      return iconUrl.replaceFirst('ipfs://', Urls.talaoIpfsGateway);
     }
   }
 }
