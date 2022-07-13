@@ -61,8 +61,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "698f893b964f12babfaaed121479292b3496e2d4"
-      resolved-ref: "698f893b964f12babfaaed121479292b3496e2d4"
+      ref: "1be8d4619cbc43cbaa761cab403ed277502b8de4"
+      resolved-ref: "1be8d4619cbc43cbaa761cab403ed277502b8de4"
       url: "https://github.com/TalaoDAO/beacon.git"
     source: git
     version: "1.0.5"
