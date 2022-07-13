@@ -78,7 +78,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  void startVerificationPressed(WalletCubit walletCubit) {
+  void startPassbaseVerification(WalletCubit walletCubit) {
     setKYCMetadata(walletCubit);
     PassbaseSDK.startVerification(
       onFinish: (identityAccessKey) {

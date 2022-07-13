@@ -1,10 +1,12 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,6 +30,24 @@ class _HomePageState extends State<HomePage> {
       context.read<QRCodeScanCubit>().deepLink();
     });
     super.initState();
+  }
+
+  Future<void> _onStartPassBaseVerification() async {
+    final pinCode = await getSecureStorage.get(SecureStorageKeys.pinCode);
+    if (pinCode?.isEmpty ?? true) {
+      context
+          .read<HomeCubit>()
+          .startPassbaseVerification(context.read<WalletCubit>());
+    } else {
+      await Navigator.of(context).push<void>(
+        PinCodePage.route(
+          isValidCallback: () => context
+              .read<HomeCubit>()
+              .startPassbaseVerification(context.read<WalletCubit>()),
+          restrictToBack: false,
+        ),
+      );
+    }
   }
 
   @override
@@ -62,9 +82,7 @@ class _HomePageState extends State<HomePage> {
                 title: l10n.verificationDeclinedTitle,
                 description: l10n.verificationDeclinedDescription,
                 buttonLabel: l10n.restartVerification.toUpperCase(),
-                onButtonClick: () => context
-                    .read<HomeCubit>()
-                    .startVerificationPressed(context.read<WalletCubit>()),
+                onButtonClick: _onStartPassBaseVerification,
               ),
             );
           }
@@ -83,9 +101,7 @@ class _HomePageState extends State<HomePage> {
             showDialog<void>(
               context: context,
               builder: (_) => KycDialog(
-                startVerificationPressed: () => context
-                    .read<HomeCubit>()
-                    .startVerificationPressed(context.read<WalletCubit>()),
+                startVerificationPressed: _onStartPassBaseVerification,
               ),
             );
           }
