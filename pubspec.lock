@@ -61,8 +61,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "1be8d4619cbc43cbaa761cab403ed277502b8de4"
-      resolved-ref: "1be8d4619cbc43cbaa761cab403ed277502b8de4"
+      ref: "04a00c6b68429fb343ed2b1ed09e63a6a5c65e93"
+      resolved-ref: "04a00c6b68429fb343ed2b1ed09e63a6a5c65e93"
       url: "https://github.com/TalaoDAO/beacon.git"
     source: git
     version: "1.0.5"
@@ -682,7 +682,7 @@ packages:
       name: js
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.3"
+    version: "0.6.4"
   json_annotation:
     dependency: "direct main"
     description:
@@ -858,13 +858,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
-  nm:
-    dependency: transitive
-    description:
-      name: nm
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.0"
   node_preamble:
     dependency: transitive
     description:
@@ -1571,7 +1564,7 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.2"
   very_good_analysis:
     dependency: "direct dev"
     description:
