@@ -116,6 +116,8 @@ class DummyCredentialItem extends StatelessWidget {
 
   final HomeCredential homeCredential;
 
+  // TODO(all): move logic to cubit from here
+
   Future<void> checkForPassBaseStatusThenLaunchUrl(BuildContext context) async {
     final l10n = context.l10n;
     final did = context.read<DIDCubit>().state.did;

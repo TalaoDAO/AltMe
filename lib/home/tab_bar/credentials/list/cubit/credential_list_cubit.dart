@@ -59,10 +59,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           identityCredentials.add(HomeCredential.isNotDummy(credential));
 
           /// remove over18 if exists
-          if (identityCategories.contains(over18)) {
+          final credentialSubjectType = credential
+              .credentialPreview.credentialSubjectModel.credentialSubjectType;
+          if (credentialSubjectType == over18) {
             identityCategories.remove(over18);
           }
           break;
+
         case CredentialCategory.othersCards:
 
           /// adding real credentials except tezosAssociatedWallet
