@@ -60,7 +60,15 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
       if (isFromOnboarding) {
         /// ssi creation
 
-        final String mnemonic = bip39.generateMnemonic();
+        late String mnemonic;
+        final isSecretKey = mnemonicOrKey.startsWith('edsk');
+
+        if (isSecretKey) {
+          mnemonic = bip39.generateMnemonic();
+        } else {
+          mnemonic = mnemonicOrKey;
+        }
+
         await secureStorageProvider.set(
           SecureStorageKeys.ssiMnemonic,
           mnemonic,
