@@ -399,6 +399,6 @@
   "verificationPendingDescription": "Your ID verification is pending. Please wait until your verification is finished.\nYou will receive an email that your ID has been verified.",
   "verificationDeclinedTitle": "Your verification declined",
   "restartVerification": "Restart ID Verification",
-  "verificationDeclinedDescription": "Your verification declined. Please restart your ID verification."
-
+  "verificationDeclinedDescription": "Your verification declined. Please restart your ID verification.",
+  "proofOfOwnership": "Proof of Ownership"
 }

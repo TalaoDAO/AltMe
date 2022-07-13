@@ -349,7 +349,8 @@
     "verificationPendingDescription",
     "verificationDeclinedTitle",
     "restartVerification",
-    "verificationDeclinedDescription"
+    "verificationDeclinedDescription",
+    "proofOfOwnership"
   ],
 
   "es": [
@@ -702,7 +703,8 @@
     "verificationPendingDescription",
     "verificationDeclinedTitle",
     "restartVerification",
-    "verificationDeclinedDescription"
+    "verificationDeclinedDescription",
+    "proofOfOwnership"
   ],
 
   "fr": [
@@ -1055,7 +1057,8 @@
     "verificationPendingDescription",
     "verificationDeclinedTitle",
     "restartVerification",
-    "verificationDeclinedDescription"
+    "verificationDeclinedDescription",
+    "proofOfOwnership"
   ],
 
   "it": [
@@ -1408,6 +1411,7 @@
     "verificationPendingDescription",
     "verificationDeclinedTitle",
     "restartVerification",
-    "verificationDeclinedDescription"
+    "verificationDeclinedDescription",
+    "proofOfOwnership"
   ]
 }

@@ -188,6 +188,8 @@ extension CustomColorScheme on ColorScheme {
   Color get startButtonColorA => const Color(0xff8436F8);
 
   Color get startButtonColorB => const Color(0xff6600FF);
+
+  Color get associatedWalletBorder => const Color(0xff524B67);
 }
 
 extension CustomTextTheme on TextTheme {
@@ -446,16 +448,22 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.normal,
       );
 
+  TextStyle get proofOfOwnership => GoogleFonts.nunito(
+        color: const Color(0xffFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get tezosAssociatedAddressData => GoogleFonts.roboto(
-        color: const Color(0xffeee7e7),
+        color: const Color(0xff605A71),
         fontSize: 17,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get tezosAssociatedAddressTitleCard => GoogleFonts.roboto(
-        color: const Color(0xffeee7e7),
+  TextStyle get tezosAssociatedAddressTitleCard => GoogleFonts.nunito(
+        color: const Color(0xffFAFDFF),
         fontSize: 20,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.w700,
       );
 
   TextStyle get credentialStudentCardTextCard => GoogleFonts.roboto(
