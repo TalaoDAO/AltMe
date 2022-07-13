@@ -47,6 +47,7 @@ class TokenItem extends StatelessWidget {
             token.name,
             style: Theme.of(context).textTheme.listTileSubtitle,
           ),
+           // TODO(Taleb): do not forget to consider decimals in balance
           trailing: MyText(
             token.balance == '0'
                 ? token.balance
