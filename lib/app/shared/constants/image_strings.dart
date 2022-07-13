@@ -10,8 +10,7 @@ class ImageStrings {
       '$imagePath/carte-attestation-employeur-recto.png';
   static const String employmentCertificateBack =
       '$imagePath/carte-attestation-employeur-verso.png';
-  static const String emailPassFront = '$imagePath/email_pass_verso.png';
-  static const String emailPassBack = '$imagePath/email_pass_verso.png';
+  static const String emailPassFront = '$imagePath/email_pass_recto.png';
   static const String learningAchievementFront =
       '$imagePath/carte-diplome-recto.png';
   static const String learningAchievementBack =
