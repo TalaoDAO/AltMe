@@ -13,4 +13,5 @@ class Urls {
       'https://issuer.tezotopia.altme.io/issuer/voucher_mobile';
   static const String talaoUrl = 'https://issuer.talao.co/talao_community';
   static const String identityCardUrl = 'http://issuer.talao.co/kyc';
+  static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
 }
