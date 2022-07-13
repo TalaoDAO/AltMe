@@ -15,8 +15,8 @@ class PhraseWord extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 16,
+          horizontal: Sizes.spaceSmall,
+          vertical: Sizes.spaceSmall,
         ),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.transparent,
@@ -27,7 +27,7 @@ class PhraseWord extends StatelessWidget {
           borderRadius: BorderRadius.circular(128),
         ),
         child: MyText(
-          '$order $word',
+          '$order. $word',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.passPhraseText,
         ),
