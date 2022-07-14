@@ -19,28 +19,28 @@ class CredentialListData extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Row(
-              children: const [
-                Spacer(),
-                GetCardsWidget(),
-                Spacer(),
-              ],
-            ),
+            // Row(
+            //   children: const [
+            //     Spacer(),
+            //     GetCardsWidget(),
+            //     Spacer(),
+            //   ],
+            // ),
             if (state.gamingCredentials.isNotEmpty) ...[
-              const SizedBox(height: 10),
               GamingCredentials(credentials: state.gamingCredentials),
+              const SizedBox(height: 10),
             ],
             if (state.communityCredentials.isNotEmpty) ...[
-              const SizedBox(height: 10),
               CommunityCredentials(credentials: state.communityCredentials),
+              const SizedBox(height: 10),
             ],
             if (state.identityCredentials.isNotEmpty) ...[
-              const SizedBox(height: 10),
               IdentityCredentials(credentials: state.identityCredentials),
+              const SizedBox(height: 10),
             ],
             if (state.identityCredentials.isNotEmpty) ...[
-              const SizedBox(height: 10),
               OtherCredentials(credentials: state.othersCredentials),
+              const SizedBox(height: 10),
             ],
           ],
         ),
