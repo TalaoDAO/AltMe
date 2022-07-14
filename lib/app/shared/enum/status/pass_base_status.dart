@@ -1,1 +1,1 @@
-enum PassBaseStatus { approved, declined, pending, undone }
+enum PassBaseStatus { approved, declined, pending, undone, idle }

@@ -85,7 +85,8 @@ class HomeCubit extends Cubit<HomeState> {
     PassbaseSDK.startVerification(
       onFinish: (identityAccessKey) {
         //e.g 7760b08c-15d8-4132-8e7c-b9e39a2c29f0
-        emit(state.copyWith(status: AppStatus.success, passBaseStatus: null));
+        print(identityAccessKey);
+        emit(state.copyWith(status: AppStatus.success, passBaseStatus: PassBaseStatus.idle));
       },
     );
   }
