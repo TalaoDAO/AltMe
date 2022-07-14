@@ -35,7 +35,10 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
   final log = Logger('altme-wallet/on-boarding/key-recovery');
 
   void isMnemonicsOrKeyValid(String value) {
-    final bool isSecretKey = value.startsWith('edsk');
+    //different type of tezos private keys start with 'edsk' , 'pspsk' and 'p2sk;
+    final bool isSecretKey = value.startsWith('edsk') ||
+        value.startsWith('spsk') ||
+        value.startsWith('p2sk');
     // TODO(all): Need more validation for Tezos private key that s
     // tarted with edsk or edsek
 
@@ -61,7 +64,9 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         /// ssi creation
 
         late String mnemonic;
-        final isSecretKey = mnemonicOrKey.startsWith('edsk');
+        final isSecretKey = mnemonicOrKey.startsWith('edsk') ||
+            mnemonicOrKey.startsWith('spsk') ||
+            mnemonicOrKey.startsWith('p2sk');
 
         if (isSecretKey) {
           mnemonic = bip39.generateMnemonic();
