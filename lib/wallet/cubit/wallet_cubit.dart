@@ -92,7 +92,9 @@ class WalletCubit extends Cubit<WalletState> {
     late String cryptoWalletAddress;
     late String cryptoSecretKey;
 
-    final isSecretKey = mnemonicOrKey.startsWith('edsk');
+    final isSecretKey = mnemonicOrKey.startsWith('edsk') ||
+        mnemonicOrKey.startsWith('spsk') ||
+        mnemonicOrKey.startsWith('p2sk');
 
     cryptoKey = isSecretKey
         ? await keyGenerator.jwkFromSecretKey(

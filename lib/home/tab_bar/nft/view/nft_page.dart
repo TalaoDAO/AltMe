@@ -121,7 +121,7 @@ class _NftViewState extends State<NftView> {
                   } else if (state.status == AppStatus.errorWhileFetching) {
                     return ErrorView(message: message, onTap: onRefresh);
                   } else {
-                    return NftList(nftList: const [], onRefresh: onRefresh);
+                    return NftList(nftList: const [], onRefresh: onRefresh,);
                   }
                 },
               ),

@@ -14,7 +14,6 @@ class TokenItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final numberFormatter = NumberFormat('#,###,000');
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: BackgroundCard(
@@ -40,17 +39,15 @@ class TokenItem extends StatelessWidget {
                   ),
           ),
           title: MyText(
-            token.name.toUpperCase(),
+            token.symbol,
             style: Theme.of(context).textTheme.listTileTitle,
           ),
           subtitle: MyText(
-            token.symbol,
+            token.name,
             style: Theme.of(context).textTheme.listTileSubtitle,
           ),
           trailing: MyText(
-            token.balance == '0'
-                ? token.balance
-                : numberFormatter.format(double.parse(token.balance)),
+            getPrice(),
             style: Theme.of(context)
                 .textTheme
                 .listTileTitle
@@ -61,12 +58,36 @@ class TokenItem extends StatelessWidget {
     );
   }
 
+  String getPrice() {
+    final formatter = NumberFormat('#,###');
+    final priceString = token.balance;
+    final decimals = int.parse(token.decimals);
+    if (decimals == 0) {
+      final intPart = formatter.format(double.parse(priceString));
+      return '$intPart.0';
+    } else if (decimals == priceString.length) {
+      return '0.$priceString';
+    } else if (priceString.length < decimals) {
+      final numberOfZero = decimals - priceString.length;
+      return '0.${List.generate(numberOfZero, (index) => '0').join()}$priceString';
+    } else {
+      final rightPart = formatter.format(
+        double.parse(
+          priceString.substring(0, priceString.length - decimals),
+        ),
+      );
+      final realDoublePriceInString =
+          '$rightPart.${priceString.substring(priceString.length - decimals, priceString.length)}';
+      return realDoublePriceInString;
+    }
+  }
+
   String? iconUrl() {
     final iconUrl = token.icon ?? token.thumbnailUri;
     if (iconUrl == null) {
       return null;
     } else {
-      return iconUrl.replaceFirst('ipfs://', 'https://ipfs.io/ipfs/');
+      return iconUrl.replaceFirst('ipfs://', Urls.talaoIpfsGateway);
     }
   }
 }

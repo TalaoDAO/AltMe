@@ -14,6 +14,7 @@ class TokenModel extends Equatable {
     this.icon,
     this.thumbnailUri,
     this.balance,
+    this.decimals,
   );
 
   factory TokenModel.fromJson(Map<String, dynamic> json) =>
@@ -28,10 +29,11 @@ class TokenModel extends Equatable {
   final String? icon;
   final String? thumbnailUri;
   final String balance;
+  final String decimals;
 
   Map<String, dynamic> toJson() => _$TokenModelToJson(this);
 
   @override
   List<Object?> get props =>
-      [contractAddress, name, symbol, icon, thumbnailUri, balance];
+      [contractAddress, name, symbol, icon, thumbnailUri, balance, decimals];
 }

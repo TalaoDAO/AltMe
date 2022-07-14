@@ -68,8 +68,10 @@ class _NftListState extends State<NftList> {
                 childAspectRatio: Sizes.nftItemRatio,
               ),
               itemBuilder: (_, index) => NftItem(
-                assetUrl: widget.nftList[index].displayUri
-                    .replaceAll('ipfs://', 'https://ipfs.io/ipfs/'),
+                assetUrl: widget.nftList[index].displayUri.replaceAll(
+                  'ipfs://',
+                  Urls.talaoIpfsGateway,
+                ),
                 assetValue: widget.nftList[index].balance,
                 description: widget.nftList[index].name,
               ),
