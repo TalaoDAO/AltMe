@@ -134,13 +134,18 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         final _credentials = List.of(state.identityCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
 
-        /// remove dummy over18 credentials if exists
-        final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
-          (element) =>
-              element.isDummy && element.credentialSubjectType == over18,
-        );
-        if (dummyCredential != null) {
-          _credentials.remove(dummyCredential);
+        final credentialSubjectType = credential
+            .credentialPreview.credentialSubjectModel.credentialSubjectType;
+
+        if (credentialSubjectType == over18) {
+          /// remove dummy over18 credentials if exists
+          final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
+            (element) =>
+                element.isDummy && element.credentialSubjectType == over18,
+          );
+          if (dummyCredential != null) {
+            _credentials.remove(dummyCredential);
+          }
         }
 
         emit(state.populate(identityCredentials: _credentials));
