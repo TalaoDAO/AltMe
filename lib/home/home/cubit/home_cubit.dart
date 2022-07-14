@@ -79,14 +79,43 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void startPassbaseVerification(WalletCubit walletCubit) {
-    // TODO(all): what happens if there is not email pass
-    // what happens if there is multiple email pass
-    setKYCMetadata(walletCubit);
+    emit(state.loading());
+    final did = didCubit.state.did!;
+    //setKYCMetadata(walletCubit);
     PassbaseSDK.startVerification(
-      onFinish: (identityAccessKey) {
-        //e.g 7760b08c-15d8-4132-8e7c-b9e39a2c29f0
-        print(identityAccessKey);
-        emit(state.copyWith(status: AppStatus.success, passBaseStatus: PassBaseStatus.idle));
+      onFinish: (identityAccessKey) async {
+        //22a363e6-2f93-4dd3-9ac8-6cba5a046acd
+        try {
+          final dynamic response = await client.post(
+            '/wallet/webhook',
+            headers: <String, dynamic>{
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer mytoken',
+            },
+            data: <String, dynamic>{
+              'identityAccessKey': identityAccessKey,
+              'DID': did,
+            },
+          );
+
+          if (response == 'ok') {
+            emit(
+              state.copyWith(
+                status: AppStatus.success,
+                passBaseStatus: PassBaseStatus.idle,
+              ),
+            );
+          } else {
+            throw Exception();
+          }
+        } catch (e) {
+          emit(
+            state.copyWith(
+              status: AppStatus.populate,
+              passBaseStatus: PassBaseStatus.declined,
+            ),
+          );
+        }
       },
     );
   }
