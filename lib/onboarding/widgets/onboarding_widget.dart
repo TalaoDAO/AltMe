@@ -50,7 +50,7 @@ class OnBoardingWidget extends StatelessWidget {
             /// Removes every stack except first route (splashPage)
             Navigator.pushAndRemoveUntil<void>(
               context,
-              HomePage.route(),
+              DashboardPage.route(),
               (Route<dynamic> route) => route.isFirst,
             );
           },

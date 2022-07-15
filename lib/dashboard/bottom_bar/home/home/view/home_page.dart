@@ -12,11 +12,6 @@ import 'package:secure_storage/secure_storage.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(
-        builder: (context) => const HomePage(),
-        settings: const RouteSettings(name: '/homePage'),
-      );
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -188,20 +183,7 @@ class _HomePageState extends State<HomePage> {
                   : const Center();
             },
           ),
-          body: Stack(
-            children: [
-              Column(
-                children: const [
-                  Expanded(child: TabControllerPage()),
-                  BottomBarPage()
-                ],
-              ),
-              const Align(
-                alignment: Alignment.bottomCenter,
-                child: QRIcon(),
-              ),
-            ],
-          ),
+          body: const TabControllerPage(),
         ),
       ),
     );

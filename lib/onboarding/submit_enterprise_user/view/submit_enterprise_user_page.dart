@@ -68,7 +68,7 @@ class _SubmitEnterpriseUserViewState extends State<SubmitEnterpriseUserView> {
             /// Removes every stack except first route (splashPage)
             await Navigator.pushAndRemoveUntil<void>(
               context,
-              HomePage.route(),
+              DashboardPage.route(),
               (Route<dynamic> route) => route.isFirst,
             );
           }

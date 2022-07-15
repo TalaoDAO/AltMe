@@ -16,7 +16,7 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
       Navigator.of(context).push<void>(
         PinCodePage.route(
           isValidCallback: () {
-            Navigator.of(context).push<void>(HomePage.route());
+            Navigator.of(context).push<void>(DashboardPage.route());
           },
         ),
       );
@@ -43,7 +43,7 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
       /// Removes every stack except first route (splashPage)
       Navigator.pushAndRemoveUntil<void>(
         context,
-        HomePage.route(),
+        DashboardPage.route(),
         (Route<dynamic> route) => route.isFirst,
       );
     }

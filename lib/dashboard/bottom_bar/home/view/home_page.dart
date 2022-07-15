@@ -188,20 +188,7 @@ class _HomePageState extends State<HomePage> {
                   : const Center();
             },
           ),
-          body: Stack(
-            children: [
-              Column(
-                children: const [
-                  Expanded(child: TabControllerPage()),
-                  BottomBarPage()
-                ],
-              ),
-              const Align(
-                alignment: Alignment.bottomCenter,
-                child: QRIcon(),
-              ),
-            ],
-          ),
+          body: const TabControllerPage(),
         ),
       ),
     );

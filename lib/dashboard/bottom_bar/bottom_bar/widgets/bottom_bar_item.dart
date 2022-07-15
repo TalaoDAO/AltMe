@@ -6,17 +6,19 @@ class BottomBarItem extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.text,
-    required this.onPressed,
+    required this.onTap,
+    required this.isSelected,
   }) : super(key: key);
 
   final String text;
   final String icon;
-  final VoidCallback onPressed;
+  final VoidCallback onTap;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
+      onTap: onTap,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -26,7 +28,9 @@ class BottomBarItem extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 5),
             child: ImageIcon(
               AssetImage(icon),
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.unSelectedLabel,
               size: 20,
             ),
           ),
@@ -34,7 +38,11 @@ class BottomBarItem extends StatelessWidget {
             text.toUpperCase(),
             softWrap: false,
             overflow: TextOverflow.fade,
-            style: Theme.of(context).textTheme.bottomBar,
+            style: Theme.of(context).textTheme.bottomBar.copyWith(
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.unSelectedLabel,
+                ),
           ),
         ],
       ),
