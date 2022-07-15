@@ -172,7 +172,7 @@ flutter packages pub run build_runner build --delete-conflicting-outputs
 flutter build apk --release --split-per-abi --flavor production -t lib/main_production.dart
 ```
  ### Release aap bundle generation
- ```
+```
 flutter build appbundle --flavor "production" --target "lib/main_production.dart"
 ```
 ### IOS build

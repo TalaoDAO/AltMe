@@ -45,6 +45,11 @@ class SplashCubit extends Cubit<SplashState> {
 
   Future<void> _getAppVersion() async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    emit(state.copyWith(versionNumber: packageInfo.version));
+    emit(
+      state.copyWith(
+        versionNumber: packageInfo.version,
+        buildNumber: packageInfo.buildNumber,
+      ),
+    );
   }
 }

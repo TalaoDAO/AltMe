@@ -69,26 +69,7 @@ class BottomBarPage extends StatelessWidget {
             BottomBarItem(
               icon: IconStrings.save,
               text: l10n.save,
-              onPressed: () {
-                if (context.read<HomeCubit>().state.homeStatus ==
-                    HomeStatus.hasNoWallet) {
-                  showDialog<void>(
-                    context: context,
-                    builder: (_) => const WalletDialog(),
-                  );
-                  return;
-                }
-
-                Navigator.of(context).push<void>(
-                  PinCodePage.route(
-                    restrictToBack: false,
-                    isValidCallback: () {
-                      Navigator.of(context)
-                          .push<void>(BackupCredentialPage.route());
-                    },
-                  ),
-                );
-              },
+              onPressed: () {},
             ),
           ],
         ),

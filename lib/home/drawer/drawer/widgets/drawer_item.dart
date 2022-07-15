@@ -20,7 +20,7 @@ class DrawerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Theme.of(context).colorScheme.transparent,
-      child: InkWell(
+      child: TransparentInkWell(
         onTap: onTap,
         child: Row(
           children: [
@@ -43,8 +43,8 @@ class DrawerItem extends StatelessWidget {
               const SizedBox(width: 16),
               Icon(
                 Icons.chevron_right,
-                size: 24,
-                color: Theme.of(context).colorScheme.primary,
+                size: 26,
+                color: Theme.of(context).colorScheme.onPrimary,
               )
             ],
           ],

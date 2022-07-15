@@ -4,8 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class AboutItems extends StatelessWidget {
-  const AboutItems({
+class NetworkAnIssuersItems extends StatelessWidget {
+  const NetworkAnIssuersItems({
     Key? key,
   }) : super(key: key);
 
@@ -16,7 +16,7 @@ class AboutItems extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          l10n.about,
+          l10n.networkAndIssuers,
           style: Theme.of(context).textTheme.drawerMenu,
         ),
         const SizedBox(height: 5),
@@ -25,27 +25,21 @@ class AboutItems extends StatelessWidget {
           child: Column(
             children: [
               DrawerItem(
-                icon: IconStrings.terms,
-                title: l10n.termsOfUse,
-                trailing: Icon(
-                  Icons.chevron_right,
-                  size: 24,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                onTap: () =>
-                    Navigator.of(context).push<void>(TermsPage.route()),
+                icon: IconStrings.cloudAdd,
+                title: l10n.manageNetwork,
+                onTap: () async {
+                  await Navigator.of(context)
+                      .push<void>(ManageNetworkPage.route());
+                },
               ),
               const DrawerItemDivider(),
               DrawerItem(
-                icon: IconStrings.terms,
-                title: l10n.privacyTitle,
-                trailing: Icon(
-                  Icons.chevron_right,
-                  size: 24,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                onTap: () =>
-                    Navigator.of(context).push<void>(PrivacyPage.route()),
+                icon: IconStrings.issuer,
+                title: l10n.manageIssuerRegistry,
+                onTap: () async {
+                  await Navigator.of(context)
+                      .push<void>(ManageIssuersRegistryPage.route());
+                },
               ),
             ],
           ),

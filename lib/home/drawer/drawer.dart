@@ -1,4 +1,7 @@
+export 'backup_credential/backup_credential.dart';
 export 'drawer/drawer.dart';
+export 'manage_issuers_registry/manage_issuers_registry.dart';
+export 'manage_network/manage_network.dart';
 export 'notices/notices.dart';
 export 'privacy/privacy.dart';
 export 'recovery_credential/recovery_credential.dart';

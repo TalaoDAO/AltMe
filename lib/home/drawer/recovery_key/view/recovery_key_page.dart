@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/home/drawer/recovery_key/cubit/recovery_key_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,13 +48,13 @@ class RecoveryKeyView extends StatelessWidget {
                   Text(
                     l10n.genPhraseInstruction,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.messageTitle,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 20),
                   Text(
                     l10n.genPhraseExplanation,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.messageSubtitle,
                   ),
                 ],
               ),

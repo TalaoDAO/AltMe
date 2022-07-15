@@ -676,4 +676,16 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
         color: const Color(0xffEDEAF5),
       );
+
+  TextStyle get radioTitle => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get radioOption => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
 }
