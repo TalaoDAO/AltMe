@@ -401,5 +401,8 @@
   "verificationDeclinedDescription": "Your verification declined. Please restart your ID verification.",
   "proofOfOwnership": "Proof of Ownership",
   "manageDecentralizeIDkeys": "Manage Decentralize ID keys",
-  "addressBook":"Address Book"
+  "addressBook":"Address Book",
+  "home": "Home",
+  "discover": "Discover",
+  "settings": "Settings"
 }

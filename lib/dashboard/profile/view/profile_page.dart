@@ -12,11 +12,6 @@ import 'package:secure_storage/secure_storage.dart';
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(
-        builder: (context) => const ProfilePage(),
-        settings: const RouteSettings(name: '/personalPage'),
-      );
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

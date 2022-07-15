@@ -1,5 +1,5 @@
-import 'package:altme/app/shared/widget/base/text_field.dart';
-import 'package:altme/dashboard/bottom_bar/search/cubit/search_cubit.dart';
+import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

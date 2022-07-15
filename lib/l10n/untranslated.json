@@ -351,7 +351,10 @@
     "verificationDeclinedDescription",
     "proofOfOwnership",
     "manageDecentralizeIDkeys",
-    "addressBook"
+    "addressBook",
+    "home",
+    "discover",
+    "settings"
   ],
 
   "es": [
@@ -706,7 +709,10 @@
     "verificationDeclinedDescription",
     "proofOfOwnership",
     "manageDecentralizeIDkeys",
-    "addressBook"
+    "addressBook",
+    "home",
+    "discover",
+    "settings"
   ],
 
   "fr": [
@@ -1061,7 +1067,10 @@
     "verificationDeclinedDescription",
     "proofOfOwnership",
     "manageDecentralizeIDkeys",
-    "addressBook"
+    "addressBook",
+    "home",
+    "discover",
+    "settings"
   ],
 
   "it": [
@@ -1416,6 +1425,9 @@
     "verificationDeclinedDescription",
     "proofOfOwnership",
     "manageDecentralizeIDkeys",
-    "addressBook"
+    "addressBook",
+    "home",
+    "discover",
+    "settings"
   ]
 }

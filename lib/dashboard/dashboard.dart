@@ -1,5 +1,10 @@
-export 'bottom_bar/bottom_bar.dart';
 export 'dashboard/dashboard.dart';
+export 'discover/discover.dart';
 export 'drawer/drawer.dart';
+export 'general_information/general_information.dart';
+export 'home/home.dart';
+export 'profile/profile.dart';
 export 'qr_code/qr_code.dart';
+export 'search/search.dart';
+export 'self_issued_credential_button/self_issued_credential_button.dart';
 export 'tab_bar/tab_bar.dart';

@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/bottom_bar/profile/cubit/profile_cubit.dart';
-import 'package:altme/dashboard/tab_bar/nft/cubit/nft_cubit.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/tab_bar/nft/view/widgets/my_collection_text.dart';
 import 'package:altme/dashboard/tab_bar/nft/view/widgets/nft_list.dart';
 import 'package:altme/dashboard/tab_bar/nft/view/widgets/nft_list_shimmer.dart';

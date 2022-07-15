@@ -100,16 +100,13 @@ class OnBoardingGenPhraseView extends StatelessWidget {
                           Text(
                             l10n.onboardingPleaseStoreMessage,
                             textAlign: TextAlign.center,
-                            style:
-                                Theme.of(context).textTheme.passPhraseMessage,
+                            style: Theme.of(context).textTheme.message,
                           ),
                           const SizedBox(height: Sizes.spaceNormal),
                           Text(
                             l10n.onboardingAltmeMessage,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .passPhraseSubMessage,
+                            style: Theme.of(context).textTheme.subMessage,
                           ),
                           const SizedBox(height: Sizes.spaceNormal),
                           MnemonicDisplay(mnemonic: state.mnemonic),

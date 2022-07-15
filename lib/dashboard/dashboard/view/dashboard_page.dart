@@ -59,17 +59,11 @@ class _DashboardViewState extends State<DashboardView> {
                         controller: pageController,
                         onPageChanged:
                             context.read<DashboardCubit>().onPageChanged,
-                        children: [
-                          const HomePage(),
-                          Container(
-                            color: Theme.of(context).colorScheme.background,
-                            child: const Text('1'),
-                          ),
-                          Container(
-                            color: Theme.of(context).colorScheme.background,
-                            child: const Text('2'),
-                          ),
-                          const ProfilePage(),
+                        children: const [
+                          HomePage(),
+                          DiscoverPage(),
+                          SearchPage(),
+                          ProfilePage(),
                         ],
                       ),
                     ),
@@ -78,14 +72,14 @@ class _DashboardViewState extends State<DashboardView> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           BottomBarItem(
-                            icon: IconStrings.story,
-                            text: l10n.infos,
+                            icon: IconStrings.home,
+                            text: l10n.home,
                             onTap: () => bottomTapped(0),
                             isSelected: state.selectedIndex == 0,
                           ),
                           BottomBarItem(
-                            icon: IconStrings.profile,
-                            text: l10n.profile,
+                            icon: IconStrings.discover,
+                            text: l10n.discover,
                             onTap: () => bottomTapped(1),
                             isSelected: state.selectedIndex == 1,
                           ),
@@ -98,14 +92,15 @@ class _DashboardViewState extends State<DashboardView> {
                             isSelected: state.selectedIndex == 2,
                           ),
                           BottomBarItem(
-                            icon: IconStrings.save,
-                            text: l10n.save,
+                            icon: IconStrings.settings,
+                            text: l10n.settings,
                             onTap: () => bottomTapped(3),
                             isSelected: state.selectedIndex == 3,
                           ),
                         ],
                       ),
-                    )
+                    ),
+                    const SizedBox(height: 2),
                   ],
                 ),
                 const Align(

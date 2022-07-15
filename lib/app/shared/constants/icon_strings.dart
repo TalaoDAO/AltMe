@@ -47,4 +47,7 @@ class IconStrings {
   static const String lockCircle = '$base/lock-circle.png';
   static const String cloudAdd = '$base/cloud-add.png';
   static const String addressBook = '$base/address_book.png';
+  static const String home = '$base/empty-wallet.png';
+  static const String discover = '$base/discover.png';
+  static const String settings = '$base/settings.png';
 }
