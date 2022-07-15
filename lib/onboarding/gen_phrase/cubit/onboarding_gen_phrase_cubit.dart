@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/home/home.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
@@ -12,7 +12,6 @@ import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'onboarding_gen_phrase_cubit.g.dart';
-
 part 'onboarding_gen_phrase_state.dart';
 
 class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
