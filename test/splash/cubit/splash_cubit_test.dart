@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/home/home.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc_test/bloc_test.dart';

@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/home/home.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
@@ -12,7 +12,6 @@ import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'import_wallet_cubit.g.dart';
-
 part 'import_wallet_state.dart';
 
 class ImportWalletCubit extends Cubit<ImportWalletState> {
@@ -35,7 +34,8 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
   final log = Logger('altme-wallet/on-boarding/key-recovery');
 
   void isMnemonicsOrKeyValid(String value) {
-    //different type of tezos private keys start with 'edsk' , 'pspsk' and 'p2sk;
+    //different type of tezos private keys start with 'edsk' ,
+    //'pspsk' and 'p2sk;
     final bool isSecretKey = value.startsWith('edsk') ||
         value.startsWith('spsk') ||
         value.startsWith('p2sk');

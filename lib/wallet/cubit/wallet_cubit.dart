@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/tab_bar/credentials/pick/credential_manifest/helpers/get_credentials_from_filter_list.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/home/home.dart';
-import 'package:altme/home/tab_bar/credentials/pick/credential_manifest/helpers/get_credentials_from_filter_list.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -17,7 +17,6 @@ import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 part 'wallet_cubit.g.dart';
-
 part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {

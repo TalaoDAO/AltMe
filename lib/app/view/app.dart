@@ -6,10 +6,10 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
-import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';

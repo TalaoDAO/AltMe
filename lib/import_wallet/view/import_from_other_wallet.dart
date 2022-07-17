@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/home/home.dart';
 import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
@@ -111,7 +111,7 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
           /// Removes every stack except first route (splashPage)
           Navigator.pushAndRemoveUntil<void>(
             context,
-            HomePage.route(),
+            DashboardPage.route(),
             (Route<dynamic> route) => route.isFirst,
           );
         }

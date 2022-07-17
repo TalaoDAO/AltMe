@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/submit_enterprise_user/cubit/submit_enterprise_user_cubit.dart';
 import 'package:altme/onboarding/submit_enterprise_user/view/widgets/pick_file_button.dart';
@@ -68,7 +68,7 @@ class _SubmitEnterpriseUserViewState extends State<SubmitEnterpriseUserView> {
             /// Removes every stack except first route (splashPage)
             await Navigator.pushAndRemoveUntil<void>(
               context,
-              HomePage.route(),
+              DashboardPage.route(),
               (Route<dynamic> route) => route.isFirst,
             );
           }

@@ -639,13 +639,13 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffD1CCE3),
       );
 
-  TextStyle get passPhraseMessage => GoogleFonts.nunito(
+  TextStyle get message => GoogleFonts.nunito(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: const Color(0xffEDEAF5),
       );
 
-  TextStyle get passPhraseSubMessage => GoogleFonts.nunito(
+  TextStyle get subMessage => GoogleFonts.nunito(
         fontSize: 15,
         fontWeight: FontWeight.w400,
         color: const Color(0xff71CBFF),
@@ -675,5 +675,17 @@ extension CustomTextTheme on TextTheme {
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: const Color(0xffEDEAF5),
+      );
+
+  TextStyle get radioTitle => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get radioOption => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
       );
 }

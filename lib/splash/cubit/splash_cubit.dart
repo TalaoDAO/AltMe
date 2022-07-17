@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/home/home/home.dart';
 import 'package:altme/splash/helper_function/is_wallet_created.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
@@ -45,6 +45,11 @@ class SplashCubit extends Cubit<SplashState> {
 
   Future<void> _getAppVersion() async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    emit(state.copyWith(versionNumber: packageInfo.version));
+    emit(
+      state.copyWith(
+        versionNumber: packageInfo.version,
+        buildNumber: packageInfo.buildNumber,
+      ),
+    );
   }
 }

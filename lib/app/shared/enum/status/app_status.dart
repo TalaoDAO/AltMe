@@ -6,4 +6,5 @@ enum AppStatus {
   error,
   errorWhileFetching,
   success,
+  idle,
 }

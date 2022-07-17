@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/gen_phrase/cubit/onboarding_gen_phrase_cubit.dart';
 import 'package:altme/theme/theme.dart';
@@ -69,7 +69,7 @@ class OnBoardingGenPhraseView extends StatelessWidget {
             /// Removes every stack except first route (splashPage)
             Navigator.pushAndRemoveUntil<void>(
               context,
-              HomePage.route(),
+              DashboardPage.route(),
               (Route<dynamic> route) => route.isFirst,
             );
           }
@@ -100,16 +100,13 @@ class OnBoardingGenPhraseView extends StatelessWidget {
                           Text(
                             l10n.onboardingPleaseStoreMessage,
                             textAlign: TextAlign.center,
-                            style:
-                                Theme.of(context).textTheme.passPhraseMessage,
+                            style: Theme.of(context).textTheme.message,
                           ),
                           const SizedBox(height: Sizes.spaceNormal),
                           Text(
                             l10n.onboardingAltmeMessage,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .passPhraseSubMessage,
+                            style: Theme.of(context).textTheme.subMessage,
                           ),
                           const SizedBox(height: Sizes.spaceNormal),
                           MnemonicDisplay(mnemonic: state.mnemonic),

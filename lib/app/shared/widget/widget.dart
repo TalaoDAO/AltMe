@@ -20,3 +20,4 @@ export 'phrase_word.dart';
 export 'shimmer_widget.dart';
 export 'spinner.dart';
 export 'tooltip_text.dart';
+export 'transparent_ink_well.dart';
