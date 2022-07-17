@@ -34,7 +34,8 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
   final log = Logger('altme-wallet/on-boarding/key-recovery');
 
   void isMnemonicsOrKeyValid(String value) {
-    //different type of tezos private keys start with 'edsk' , 'pspsk' and 'p2sk;
+    //different type of tezos private keys start with 'edsk' ,
+    //'pspsk' and 'p2sk;
     final bool isSecretKey = value.startsWith('edsk') ||
         value.startsWith('spsk') ||
         value.startsWith('p2sk');
