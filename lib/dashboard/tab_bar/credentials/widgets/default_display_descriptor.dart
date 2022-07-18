@@ -19,20 +19,25 @@ class DefaultDisplayDescriptor extends StatelessWidget {
       children: [
         Expanded(
           flex: 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DisplayNameCard(
-                credentialModel: credentialModel,
-                style: Theme.of(context).textTheme.credentialTitle,
-              ),
-              const SizedBox(height: 5),
-              DisplayDescriptionCard(
-                credentialModel: credentialModel,
-                style: Theme.of(context).textTheme.credentialDescription,
-                maxLines: descriptionMaxLine,
-              )
-            ],
+          child: FractionallySizedBox(
+            widthFactor: 0.9,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DisplayNameCard(
+                  credentialModel: credentialModel,
+                  style: Theme.of(context).textTheme.credentialTitle,
+                ),
+                const SizedBox(height: 5),
+                Expanded(
+                  child: DisplayDescriptionCard(
+                    credentialModel: credentialModel,
+                    style: Theme.of(context).textTheme.credentialDescription,
+                    maxLines: descriptionMaxLine,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
         Expanded(
