@@ -33,7 +33,7 @@ class TokenItem extends StatelessWidget {
                 : SizedBox(
                     width: Sizes.tokenLogoSize,
                     height: Sizes.tokenLogoSize,
-                    child: ImageFromNetwork(
+                    child: CachedImageFromNetwork(
                       iconUrl()!,
                     ),
                   ),

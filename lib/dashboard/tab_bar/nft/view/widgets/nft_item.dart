@@ -26,7 +26,7 @@ class NftItem extends StatelessWidget {
             aspectRatio: 1.05,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: ImageFromNetwork(
+              child: CachedImageFromNetwork(
                 assetUrl,
                 fit: BoxFit.fill,
               ),
