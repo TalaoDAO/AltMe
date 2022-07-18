@@ -21,6 +21,7 @@ class DisplayIssuanceDateWidget extends StatelessWidget {
       return Row(
         children: [
           Expanded(
+            flex: 5,
             child: MyText(
               '${l10n.issuanceDate}: ',
               style: textColor == null
@@ -32,14 +33,18 @@ class DisplayIssuanceDateWidget extends StatelessWidget {
             ),
           ),
           Expanded(
+            flex: 4,
             child: MyText(
               UiDate.displayDate(l10n, date),
               style: textColor == null
-                  ? Theme.of(context).textTheme.credentialDescription
+                  ? Theme.of(context)
+                      .textTheme
+                      .credentialFieldTitle
+                      .copyWith(fontWeight: FontWeight.bold)
                   : Theme.of(context)
                       .textTheme
-                      .credentialDescription
-                      .copyWith(color: textColor),
+                      .credentialFieldTitle
+                      .copyWith(color: textColor, fontWeight: FontWeight.bold),
             ),
           ),
         ],
