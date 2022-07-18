@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -94,7 +92,6 @@ class TokensCubit extends Cubit<TokensState> {
       walletAddress,
       rpc,
     );
-
 
     return TokenModel(
       '',

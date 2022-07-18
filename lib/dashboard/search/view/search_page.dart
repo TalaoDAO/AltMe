@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
@@ -25,44 +24,38 @@ class SearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return BasePage(
-      title: l10n.search,
-      padding: EdgeInsets.zero,
-      scrollView: false,
-      body: BlocBuilder<SearchCubit, SearchState>(
-        builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: BackgroundCard(
-              child: Column(
-                children: [
-                  const Search(),
-                  const SizedBox(height: 15),
-                  if (state.status == AppStatus.loading)
-                    const Expanded(child: SearchListShimmer())
-                  else
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: state.credentials.length,
-                        physics: const ScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            child: CredentialsListPageItem(
-                              credentialModel: state.credentials[index],
-                            ),
-                          );
-                        },
-                      ),
+    return BlocBuilder<SearchCubit, SearchState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: BackgroundCard(
+            child: Column(
+              children: [
+                const Search(),
+                const SizedBox(height: 15),
+                if (state.status == AppStatus.loading)
+                  const Expanded(child: SearchListShimmer())
+                else
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state.credentials.length,
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          child: CredentialsListPageItem(
+                            credentialModel: state.credentials[index],
+                          ),
+                        );
+                      },
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

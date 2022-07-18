@@ -22,17 +22,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    Future.delayed(Duration.zero, () {
-      /// If there is a deepLink we give do as if it coming from QRCode
-      context.read<QRCodeScanCubit>().deepLink();
-    });
-    super.initState();
-  }
-
   Future<void> _onStartPassBaseVerification() async {
     final pinCode = await getSecureStorage.get(SecureStorageKeys.pinCode);
     if (pinCode?.isEmpty ?? true) {
@@ -54,142 +43,63 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return WillPopScope(
-      onWillPop: () async {
-        if (scaffoldKey.currentState!.isDrawerOpen) {
-          Navigator.of(context).pop();
+    return BlocListener<HomeCubit, HomeState>(
+      listener: (context, homeState) {
+        if (homeState.status == AppStatus.loading) {
+          LoadingView().show(context: context);
+        } else {
+          LoadingView().hide();
         }
-        return false;
-      },
-      child: BlocListener<HomeCubit, HomeState>(
-        listener: (context, homeState) {
-          if (homeState.status == AppStatus.loading) {
-            LoadingView().show(context: context);
-          } else {
-            LoadingView().hide();
-          }
 
-          if (homeState.message != null) {
-            AlertMessage.showStateMessage(
-              context: context,
-              stateMessage: homeState.message!,
-            );
-          }
+        if (homeState.message != null) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: homeState.message!,
+          );
+        }
 
-          if (homeState.passBaseStatus == PassBaseStatus.declined) {
-            showDialog<void>(
-              context: context,
-              builder: (_) => DefaultDialog(
-                title: l10n.verificationDeclinedTitle,
-                description: l10n.verificationDeclinedDescription,
-                buttonLabel: l10n.restartVerification.toUpperCase(),
-                onButtonClick: _onStartPassBaseVerification,
-              ),
-            );
-          }
-
-          if (homeState.passBaseStatus == PassBaseStatus.pending) {
-            showDialog<void>(
-              context: context,
-              builder: (_) => DefaultDialog(
-                title: l10n.verificationPendingTitle,
-                description: l10n.verificationPendingDescription,
-              ),
-            );
-          }
-
-          if (homeState.passBaseStatus == PassBaseStatus.undone) {
-            showDialog<void>(
-              context: context,
-              builder: (_) => KycDialog(
-                startVerificationPressed: _onStartPassBaseVerification,
-              ),
-            );
-          }
-
-          if (homeState.status == AppStatus.success) {
-            showDialog<void>(
-              context: context,
-              builder: (_) => const FinishKycDialog(),
-            );
-          }
-        },
-        child: BasePage(
-          scrollView: false,
-          scaffoldKey: scaffoldKey,
-          drawer: const DrawerPage(),
-          padding: EdgeInsets.zero,
-          titleLeading: IconButton(
-            icon: ImageIcon(
-              const AssetImage(IconStrings.icMenu),
-              color: Theme.of(context).colorScheme.leadingButton,
+        if (homeState.passBaseStatus == PassBaseStatus.declined) {
+          showDialog<void>(
+            context: context,
+            builder: (_) => DefaultDialog(
+              title: l10n.verificationDeclinedTitle,
+              description: l10n.verificationDeclinedDescription,
+              buttonLabel: l10n.restartVerification.toUpperCase(),
+              onButtonClick: _onStartPassBaseVerification,
             ),
-            onPressed: () {
-              if (context.read<HomeCubit>().state.homeStatus ==
-                  HomeStatus.hasNoWallet) {
-                showDialog<void>(
-                  context: context,
-                  builder: (_) => const WalletDialog(),
-                );
-                return;
-              }
-              scaffoldKey.currentState!.openDrawer();
-            },
-          ),
-          titleTrailing: BlocBuilder<WalletCubit, WalletState>(
-            builder: (context, walletState) {
-              final currentIndex = walletState.currentCryptoIndex;
+          );
+        }
 
-              String accountName = '';
+        if (homeState.passBaseStatus == PassBaseStatus.pending) {
+          showDialog<void>(
+            context: context,
+            builder: (_) => DefaultDialog(
+              title: l10n.verificationPendingTitle,
+              description: l10n.verificationPendingDescription,
+            ),
+          );
+        }
 
-              if (walletState.cryptoAccount.data.isNotEmpty) {
-                accountName = walletState.cryptoAccount.data[currentIndex].name;
-              }
+        if (homeState.passBaseStatus == PassBaseStatus.undone) {
+          showDialog<void>(
+            context: context,
+            builder: (_) => KycDialog(
+              startVerificationPressed: _onStartPassBaseVerification,
+            ),
+          );
+        }
 
-              return (walletState.cryptoAccount.data.isNotEmpty &&
-                      walletState.cryptoAccount.data[currentIndex].walletAddress
-                          .isNotEmpty)
-                  ? InkWell(
-                      onTap: () {
-                        showModalBottomSheet<void>(
-                          context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(Sizes.largeRadius),
-                              topLeft: Radius.circular(Sizes.largeRadius),
-                            ),
-                          ),
-                          builder: (context) => const CryptoBottomSheetView(),
-                        );
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          SizedBox(
-                            width: 200,
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                accountName,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          Image.asset(
-                            IconStrings.arrowSquareDown,
-                            width: Sizes.icon,
-                          ),
-                        ],
-                      ),
-                    )
-                  : const Center();
-            },
-          ),
-          body: const TabControllerPage(),
-        ),
+        if (homeState.status == AppStatus.success) {
+          showDialog<void>(
+            context: context,
+            builder: (_) => const FinishKycDialog(),
+          );
+        }
+      },
+      child: const BasePage(
+        scrollView: false,
+        padding: EdgeInsets.zero,
+        body: TabControllerPage(),
       ),
     );
   }

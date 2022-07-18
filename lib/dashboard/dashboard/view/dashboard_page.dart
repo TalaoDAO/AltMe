@@ -29,6 +29,17 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      /// If there is a deepLink we give do as if it coming from QRCode
+      context.read<QRCodeScanCubit>().deepLink();
+    });
+    super.initState();
+  }
+
   PageController pageController = PageController(
     initialPage: 0,
     keepPage: true,
@@ -55,10 +66,41 @@ class _DashboardViewState extends State<DashboardView> {
       builder: (context, state) {
         final l10n = context.l10n;
         return WillPopScope(
-          onWillPop: () async => false,
+          onWillPop: () async {
+            if (scaffoldKey.currentState!.isDrawerOpen) {
+              Navigator.of(context).pop();
+            }
+            return false;
+          },
           child: BasePage(
             scrollView: false,
+            title: state.selectedIndex == 0
+                ? ''
+                : state.selectedIndex == 1
+                    ? l10n.discover
+                    : state.selectedIndex == 2
+                        ? l10n.search
+                        : '',
+            scaffoldKey: scaffoldKey,
             padding: EdgeInsets.zero,
+            drawer: const DrawerPage(),
+            titleLeading: state.selectedIndex == 0
+                ? HomeTitleLeading(
+                    onPressed: () {
+                      if (context.read<HomeCubit>().state.homeStatus ==
+                          HomeStatus.hasNoWallet) {
+                        showDialog<void>(
+                          context: context,
+                          builder: (_) => const WalletDialog(),
+                        );
+                        return;
+                      }
+                      scaffoldKey.currentState!.openDrawer();
+                    },
+                  )
+                : null,
+            titleTrailing:
+                state.selectedIndex == 0 ? const HomeTitleTrailing() : null,
             body: Stack(
               children: [
                 Column(
@@ -66,32 +108,26 @@ class _DashboardViewState extends State<DashboardView> {
                     Expanded(
                       child: GestureDetector(
                         onHorizontalDragEnd: (drag) {
+                          if (context.read<HomeCubit>().state.homeStatus ==
+                              HomeStatus.hasNoWallet) {
+                            showDialog<void>(
+                              context: context,
+                              builder: (_) => const WalletDialog(),
+                            );
+                            return;
+                          }
+
                           if (drag.primaryVelocity! < 0) {
                             if (state.selectedIndex != 2) {
-                              if (context.read<HomeCubit>().state.homeStatus ==
-                                  HomeStatus.hasNoWallet) {
-                                showDialog<void>(
-                                  context: context,
-                                  builder: (_) => const WalletDialog(),
-                                );
-                                return;
-                              }
-
                               pageController.nextPage(
                                 duration: pageTurnDuration,
                                 curve: pageTurnCurve,
                               );
+                            } else {
+                              scaffoldKey.currentState!.openDrawer();
                             }
                           } else if (drag.primaryVelocity! > 0) {
                             if (state.selectedIndex != 0) {
-                              if (context.read<HomeCubit>().state.homeStatus ==
-                                  HomeStatus.hasNoWallet) {
-                                showDialog<void>(
-                                  context: context,
-                                  builder: (_) => const WalletDialog(),
-                                );
-                                return;
-                              }
                               pageController.previousPage(
                                 duration: pageTurnDuration,
                                 curve: pageTurnCurve,
@@ -140,13 +176,23 @@ class _DashboardViewState extends State<DashboardView> {
                           BottomBarItem(
                             icon: IconStrings.settings,
                             text: l10n.settings,
-                            onTap: () {},
+                            onTap: () {
+                              if (context.read<HomeCubit>().state.homeStatus ==
+                                  HomeStatus.hasNoWallet) {
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (_) => const WalletDialog(),
+                                );
+                                return;
+                              }
+                              scaffoldKey.currentState!.openDrawer();
+                            },
                             isSelected: state.selectedIndex == 3,
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 1),
                   ],
                 ),
                 const Align(
