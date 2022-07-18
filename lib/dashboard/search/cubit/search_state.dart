@@ -44,7 +44,7 @@ class SearchState extends Equatable {
     );
   }
 
-  SearchState success({
+  SearchState copuWith({
     required AppStatus status,
     MessageHandler? messageHandler,
     List<CredentialModel>? credentials,

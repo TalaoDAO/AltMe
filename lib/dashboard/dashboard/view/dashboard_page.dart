@@ -104,11 +104,11 @@ class _DashboardViewState extends State<DashboardView> {
                           onPageChanged:
                               context.read<DashboardCubit>().onPageChanged,
                           physics: const NeverScrollableScrollPhysics(),
-                          children: const [
-                            HomePage(),
-                            DiscoverPage(),
-                            SearchPage(),
-                            ProfilePage(),
+                          children: [
+                            const HomePage(),
+                            const DiscoverPage(),
+                            const SearchPage(),
+                            Container(),
                           ],
                         ),
                       ),
@@ -140,7 +140,7 @@ class _DashboardViewState extends State<DashboardView> {
                           BottomBarItem(
                             icon: IconStrings.settings,
                             text: l10n.settings,
-                            onTap: () => bottomTapped(3),
+                            onTap: () {},
                             isSelected: state.selectedIndex == 3,
                           ),
                         ],

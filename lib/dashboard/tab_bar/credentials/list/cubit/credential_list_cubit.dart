@@ -30,7 +30,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
   Future<void> initialise(WalletCubit walletCubit) async {
     emit(state.fetching());
-    await Future<void>.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     final gamingCredentials = <HomeCredential>[];
     final communityCredentials = <HomeCredential>[];
     final identityCredentials = <HomeCredential>[];

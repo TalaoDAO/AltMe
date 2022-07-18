@@ -29,10 +29,9 @@ class SearchView extends StatelessWidget {
     return BasePage(
       title: l10n.search,
       padding: EdgeInsets.zero,
+      scrollView: false,
       body: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
-          var _credentialList = <CredentialModel>[];
-          _credentialList = state.credentials;
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: BackgroundCard(
@@ -40,15 +39,24 @@ class SearchView extends StatelessWidget {
                 children: [
                   const Search(),
                   const SizedBox(height: 15),
-                  ...List.generate(
-                    _credentialList.length,
-                    (index) => Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      child: CredentialsListPageItem(
-                        credentialModel: _credentialList[index],
+                  if (state.status == AppStatus.loading)
+                    const Expanded(child: SearchListShimmer())
+                  else
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: state.credentials.length,
+                        physics: const ScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            child: CredentialsListPageItem(
+                              credentialModel: state.credentials[index],
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  )
                 ],
               ),
             ),

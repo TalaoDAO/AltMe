@@ -22,6 +22,8 @@ class SearchCubit extends Cubit<SearchState> {
   final SecureStorageProvider secureStorageProvider;
 
   Future initialize() async {
+    emit(state.loading());
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     final key = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
     if (key != null) {
       if (key.isNotEmpty) {
@@ -31,6 +33,7 @@ class SearchCubit extends Cubit<SearchState> {
         await loadAllCredentialsFromRepository();
       }
     }
+    emit(state.copuWith(status: AppStatus.idle));
   }
 
   Future loadAllCredentialsFromRepository() async {
