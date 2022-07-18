@@ -28,7 +28,6 @@ class SearchView extends StatelessWidget {
     final l10n = context.l10n;
     return BasePage(
       title: l10n.search,
-      titleLeading: const BackLeadingButton(),
       padding: EdgeInsets.zero,
       body: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {

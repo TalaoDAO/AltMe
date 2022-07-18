@@ -34,7 +34,17 @@ class _DashboardViewState extends State<DashboardView> {
     keepPage: true,
   );
 
+  Duration pageTurnDuration = const Duration(milliseconds: 500);
+  Curve pageTurnCurve = Curves.ease;
+
   void bottomTapped(int index) {
+    if (context.read<HomeCubit>().state.homeStatus == HomeStatus.hasNoWallet) {
+      showDialog<void>(
+        context: context,
+        builder: (_) => const WalletDialog(),
+      );
+      return;
+    }
     context.read<DashboardCubit>().onPageChanged(index);
     pageController.jumpToPage(index);
   }
@@ -54,16 +64,53 @@ class _DashboardViewState extends State<DashboardView> {
                 Column(
                   children: [
                     Expanded(
-                      child: PageView(
-                        controller: pageController,
-                        onPageChanged:
-                            context.read<DashboardCubit>().onPageChanged,
-                        children: const [
-                          HomePage(),
-                          DiscoverPage(),
-                          SearchPage(),
-                          ProfilePage(),
-                        ],
+                      child: GestureDetector(
+                        onHorizontalDragEnd: (drag) {
+                          if (drag.primaryVelocity! < 0) {
+                            if (state.selectedIndex != 3) {
+                              if (context.read<HomeCubit>().state.homeStatus ==
+                                  HomeStatus.hasNoWallet) {
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (_) => const WalletDialog(),
+                                );
+                                return;
+                              }
+
+                              pageController.nextPage(
+                                duration: pageTurnDuration,
+                                curve: pageTurnCurve,
+                              );
+                            }
+                          } else if (drag.primaryVelocity! > 0) {
+                            if (state.selectedIndex != 0) {
+                              if (context.read<HomeCubit>().state.homeStatus ==
+                                  HomeStatus.hasNoWallet) {
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (_) => const WalletDialog(),
+                                );
+                                return;
+                              }
+                              pageController.previousPage(
+                                duration: pageTurnDuration,
+                                curve: pageTurnCurve,
+                              );
+                            }
+                          }
+                        },
+                        child: PageView(
+                          controller: pageController,
+                          onPageChanged:
+                              context.read<DashboardCubit>().onPageChanged,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: const [
+                            HomePage(),
+                            DiscoverPage(),
+                            SearchPage(),
+                            ProfilePage(),
+                          ],
+                        ),
                       ),
                     ),
                     BottomBarDecoration(
