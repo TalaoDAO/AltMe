@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -58,6 +61,8 @@ class TokensCubit extends Cubit<TokensState> {
       }
 
       if (offset == 0) {
+        final tezosToken = await getXtzBalance(walletAddress);
+        newData.insert(0, tezosToken);
         data = newData;
       } else {
         data.addAll(newData);
@@ -73,5 +78,32 @@ class TokensCubit extends Cubit<TokensState> {
         ),
       );
     }
+  }
+
+  Future<TokenModel> getXtzBalance(String walletAddress) async {
+    try {
+      await Dartez().init();
+    } catch (e) {}
+
+    /// main public RPC endpoints can be accessed at:
+    /// https://rpc.tzstats.com
+    /// https://rpc.edo.tzstats.com
+    /// https://rpc.florence.tzstats.com
+    const rpc = 'https://rpc.tzstats.com';
+    final balance = await Dartez.getBalance(
+      walletAddress,
+      rpc,
+    );
+
+
+    return TokenModel(
+      '',
+      'Tezos',
+      'XTZ',
+      'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
+      '',
+      balance,
+      '6',
+    );
   }
 }
