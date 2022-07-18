@@ -67,7 +67,7 @@ class _DashboardViewState extends State<DashboardView> {
                       child: GestureDetector(
                         onHorizontalDragEnd: (drag) {
                           if (drag.primaryVelocity! < 0) {
-                            if (state.selectedIndex != 3) {
+                            if (state.selectedIndex != 2) {
                               if (context.read<HomeCubit>().state.homeStatus ==
                                   HomeStatus.hasNoWallet) {
                                 showDialog<void>(
