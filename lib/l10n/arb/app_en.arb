@@ -336,7 +336,7 @@
   "biometricsNotSupported": "Biometrics not supported",
   "yourDeviceDoseNotSupportBiometricsAuthentication": "Your device dose not supports biometrics authentication",
   "biometricsEnabledMessage": "You can now unlock app with your biometrics.",
-  "biometricsDisabledMessage": "Your biometrics has been disbled.",
+  "biometricsDisabledMessage": "Your biometrics has been disabled.",
   "exportSecretKey": "Export secret key",
   "secretKey": "Secret Key",
   "copySecretKeyToClipboard": "Copy secret key to clipboard",
