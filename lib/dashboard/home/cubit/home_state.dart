@@ -7,6 +7,7 @@ class HomeState extends Equatable {
     this.message,
     this.homeStatus = HomeStatus.hasNoWallet,
     this.passBaseStatus,
+    this.link,
   });
 
   factory HomeState.fromJson(Map<String, dynamic> json) =>
@@ -16,12 +17,14 @@ class HomeState extends Equatable {
   final StateMessage? message;
   final HomeStatus homeStatus;
   final PassBaseStatus? passBaseStatus;
+  final String? link;
 
   HomeState loading() {
     return HomeState(
       status: AppStatus.loading,
       homeStatus: homeStatus,
       passBaseStatus: null,
+      link: link,
     );
   }
 
@@ -31,6 +34,7 @@ class HomeState extends Equatable {
       message: StateMessage.error(messageHandler: messageHandler),
       homeStatus: homeStatus,
       passBaseStatus: passBaseStatus,
+      link: link,
     );
   }
 
@@ -39,6 +43,7 @@ class HomeState extends Equatable {
     MessageHandler? messageHandler,
     HomeStatus? homeStatus,
     PassBaseStatus? passBaseStatus,
+    String? link,
   }) {
     return HomeState(
       status: status,
@@ -47,6 +52,7 @@ class HomeState extends Equatable {
           : StateMessage.success(messageHandler: messageHandler),
       homeStatus: homeStatus ?? this.homeStatus,
       passBaseStatus: passBaseStatus ?? this.passBaseStatus,
+      link: link ?? this.link,
     );
   }
 
@@ -58,5 +64,6 @@ class HomeState extends Equatable {
         message,
         homeStatus,
         passBaseStatus,
+        link,
       ];
 }
