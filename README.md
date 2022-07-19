@@ -183,3 +183,15 @@ flutter build ios --release
 cd ios 
 fastlane beta
 ```
+
+### Run shortcut scripts
+```
+./script.sh -build_runner
+./script.sh -run
+./script.sh -pod install
+./script.sh -build appbundle
+./script.sh -deploy ios
+
+#For permission
+sudo chmod 777 script.sh
+```
