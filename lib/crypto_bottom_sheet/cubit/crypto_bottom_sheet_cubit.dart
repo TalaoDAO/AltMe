@@ -6,6 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'crypto_bottom_sheet_cubit.g.dart';
+
 part 'crypto_bottom_sheet_state.dart';
 
 class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
@@ -43,6 +44,7 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
 
     await walletCubit.createCryptoWallet(
       accountName: accountName,
+      isImported: false,
       mnemonicOrKey: ssiMnemonic!,
       onComplete: (cryptoAccount) {
         emit(

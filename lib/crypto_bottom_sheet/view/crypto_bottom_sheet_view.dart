@@ -155,12 +155,14 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                   onEditButtonPressed: () => _edit(i),
                                 );
                               },
-                              separatorBuilder: (_, __) => const Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: Sizes.spaceXSmall,
+                              separatorBuilder: (_, __) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: Sizes.spaceSmall,
                                 ),
                                 child: Divider(
-                                  height: 1.2,
+                                  height: 0.2,
+                                  color:
+                                      Theme.of(context).colorScheme.borderColor,
                                 ),
                               ),
                             ),

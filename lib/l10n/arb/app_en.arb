@@ -406,6 +406,7 @@
   "discover": "Discover",
   "settings": "Settings",
   "privateKeyDescriptions": "A private key is a secret number that is used to sign transactions and prove ownership of a blockchain address. On Tezos, private key are usually 54 characters long.",
-  "importAccount": "Import account"
+  "importAccount": "Import account",
+  "imported": "Imported"
 
 }

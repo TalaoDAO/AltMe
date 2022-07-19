@@ -17,6 +17,7 @@ import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 part 'wallet_cubit.g.dart';
+
 part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {
@@ -71,6 +72,7 @@ class WalletCubit extends Cubit<WalletState> {
   Future<void> createCryptoWallet({
     String? accountName,
     required String mnemonicOrKey,
+    required bool isImported,
     Function(CryptoAccount cryptoAccount)? onComplete,
   }) async {
     int index = 0;
@@ -131,6 +133,7 @@ class WalletCubit extends Cubit<WalletState> {
       key: cryptoKey,
       walletAddress: cryptoWalletAddress,
       secretKey: cryptoSecretKey,
+      isImported: isImported,
     );
 
     final cryptoAccounts = List.of(state.cryptoAccount.data)

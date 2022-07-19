@@ -356,7 +356,8 @@
     "discover",
     "settings",
     "privateKeyDescriptions",
-    "importAccount"
+    "importAccount",
+    "imported"
   ],
 
   "es": [
@@ -716,7 +717,8 @@
     "discover",
     "settings",
     "privateKeyDescriptions",
-    "importAccount"
+    "importAccount",
+    "imported"
   ],
 
   "fr": [
@@ -1076,7 +1078,8 @@
     "discover",
     "settings",
     "privateKeyDescriptions",
-    "importAccount"
+    "importAccount",
+    "imported"
   ],
 
   "it": [
@@ -1436,6 +1439,7 @@
     "discover",
     "settings",
     "privateKeyDescriptions",
-    "importAccount"
+    "importAccount",
+    "imported"
   ]
 }

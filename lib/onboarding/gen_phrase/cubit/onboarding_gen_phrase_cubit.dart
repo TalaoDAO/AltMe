@@ -12,6 +12,7 @@ import 'package:logging/logging.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'onboarding_gen_phrase_cubit.g.dart';
+
 part 'onboarding_gen_phrase_state.dart';
 
 class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
@@ -69,7 +70,10 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
       );
 
       /// crypto wallet
-      await walletCubit.createCryptoWallet(mnemonicOrKey: mnemonicFormatted);
+      await walletCubit.createCryptoWallet(
+        mnemonicOrKey: mnemonicFormatted,
+        isImported: false,
+      );
       await walletCubit.setCurrentWalletAccount(0);
 
       homeCubit.emitHasWallet();

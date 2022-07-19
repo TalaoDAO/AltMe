@@ -12,6 +12,7 @@ class CryptoAccountData extends Equatable {
     required this.key,
     required this.secretKey,
     required this.walletAddress,
+    this.isImported = false,
   });
 
   factory CryptoAccountData.fromJson(Map<String, dynamic> json) =>
@@ -21,9 +22,10 @@ class CryptoAccountData extends Equatable {
   final String key;
   final String secretKey;
   final String walletAddress;
+  final bool isImported;
 
   Map<String, dynamic> toJson() => _$CryptoAccountDataToJson(this);
 
   @override
-  List<Object?> get props => [name, key, secretKey, walletAddress];
+  List<Object?> get props => [name, key, secretKey, walletAddress, isImported];
 }
