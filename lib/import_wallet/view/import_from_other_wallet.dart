@@ -117,8 +117,10 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
         }
       },
       builder: (context, state) {
+        final importAccount = l10n.importAccount.split(' ');
         return BasePage(
-          title: '${l10n.import} ${widget.walletTypeModel.walletName}',
+          title:
+              '${importAccount[0]} ${widget.walletTypeModel.walletName} ${importAccount[1]}',
           titleLeading: const BackLeadingButton(),
           scrollView: false,
           useSafeArea: true,
@@ -204,6 +206,13 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
                   const SizedBox(height: Sizes.spaceSmall),
                   Text(
                     l10n.recoveryPhraseDescriptions,
+                    style: Theme.of(context).textTheme.infoSubtitle.copyWith(
+                          fontSize: 12,
+                        ),
+                  ),
+                  const SizedBox(height: Sizes.spaceLarge),
+                  Text(
+                    l10n.privateKeyDescriptions,
                     style: Theme.of(context).textTheme.infoSubtitle.copyWith(
                           fontSize: 12,
                         ),

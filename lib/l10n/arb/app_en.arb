@@ -385,7 +385,7 @@
   "kukaiWallet": "Kukai wallet",
   "other": "Other",
   "otherWalletApp": "Other wallet App",
-  "importWalletHintText": "Enter your recovery phrase\n(seed phrase) here.Once you have\nentered your 12 words\ncorrectly, tap ≪ Import ≫",
+  "importWalletHintText": "Once you have entered your 12 words (recovery phrase) or 54 characters private (private key), tap Import.",
   "kycDialogTitle": "To get this card you need to verify your ID",
   "idVerificationProcess": "ID Verification Process",
   "idCheck": "ID Check",
