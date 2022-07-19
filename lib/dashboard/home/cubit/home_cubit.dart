@@ -45,8 +45,6 @@ class HomeCubit extends Cubit<HomeState> {
     await LaunchUrl.launch(link ?? state.link!);
   }
 
-  int i = 0;
-
   Future<void> checkForPassBaseStatusThenLaunchUrl({
     required String link,
   }) async {
@@ -105,6 +103,7 @@ class HomeCubit extends Cubit<HomeState> {
   void getPassBaseStatusBackground({
     required String link,
   }) {
+    print("triggered");
     timer = Timer.periodic(const Duration(minutes: 3), (timer) async {
       timer.cancel();
 

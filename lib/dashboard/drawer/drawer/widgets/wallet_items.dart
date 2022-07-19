@@ -60,7 +60,7 @@ class WalletItems extends StatelessWidget {
               /// Manage Recovery Phrase
               DrawerItem(
                 icon: IconStrings.key,
-                title: l10n.manageRecoveryPhrase,
+                title: l10n.showRecoveryPhrase,
                 onTap: () async {
                   final confirm = await showDialog<bool>(
                         context: context,
@@ -95,7 +95,7 @@ class WalletItems extends StatelessWidget {
               ///Manage Decentralize ID keys
               DrawerItem(
                 icon: IconStrings.userRound,
-                title: l10n.manageDecentralizeIDkeys,
+                title: l10n.showDecentralizeIDkeys,
                 trailing: Container(),
                 onTap: () async {},
               ),

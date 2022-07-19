@@ -18,7 +18,7 @@ class ManageNetworkPage extends StatelessWidget {
     final l10n = context.l10n;
 
     return BasePage(
-      title: l10n.manageNetwork,
+      title: l10n.network,
       titleLeading: const BackLeadingButton(),
       scrollView: true,
       body: BlocBuilder<ProfileCubit, ProfileState>(
