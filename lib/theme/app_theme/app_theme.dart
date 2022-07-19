@@ -615,6 +615,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffFFFFFF),
       );
 
+  TextStyle get accountsListItemTitle => GoogleFonts.nunito(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xffFFFFFF),
+      );
+
   TextStyle get walletAddress => GoogleFonts.roboto(
         fontSize: 12,
         fontWeight: FontWeight.w400,

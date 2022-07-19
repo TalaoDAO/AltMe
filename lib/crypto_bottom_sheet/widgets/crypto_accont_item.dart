@@ -31,6 +31,7 @@ class CryptoAccountItem extends StatelessWidget {
     return ListTile(
       onTap: onPressed,
       contentPadding: EdgeInsets.zero,
+      horizontalTitleGap: 0,
       leading: Checkbox(
         value: isSelected,
         fillColor: MaterialStateProperty.all(
@@ -50,10 +51,10 @@ class CryptoAccountItem extends StatelessWidget {
               maxLines: 1,
               minFontSize: 12,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.accountsName,
+              style: Theme.of(context).textTheme.accountsListItemTitle,
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: Sizes.spaceXSmall),
           InkWell(
             onTap: onEditButtonPressed,
             child: Icon(
@@ -62,6 +63,19 @@ class CryptoAccountItem extends StatelessWidget {
               color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
+          const SizedBox(width: Sizes.spaceXSmall),
+          if (cryptoAccountData.isImported)
+            Chip(
+              shape: const RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.all(Radius.circular(Sizes.smallRadius)),
+              ),
+              padding: EdgeInsets.zero,
+              label: Text(
+                l10n.imported.toUpperCase(),
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
+            )
         ],
       ),
       subtitle: MyText(

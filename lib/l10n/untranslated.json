@@ -359,7 +359,10 @@
     "addressBook",
     "home",
     "discover",
-    "settings"
+    "settings",
+    "privateKeyDescriptions",
+    "importAccount",
+    "imported"
   ],
 
   "es": [
@@ -722,7 +725,10 @@
     "addressBook",
     "home",
     "discover",
-    "settings"
+    "settings",
+    "privateKeyDescriptions",
+    "importAccount",
+    "imported"
   ],
 
   "fr": [
@@ -1085,7 +1091,10 @@
     "addressBook",
     "home",
     "discover",
-    "settings"
+    "settings",
+    "privateKeyDescriptions",
+    "importAccount",
+    "imported"
   ],
 
   "it": [
@@ -1448,6 +1457,9 @@
     "addressBook",
     "home",
     "discover",
-    "settings"
+    "settings",
+    "privateKeyDescriptions",
+    "importAccount",
+    "imported"
   ]
 }
