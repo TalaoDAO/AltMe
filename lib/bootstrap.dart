@@ -40,6 +40,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
+  await LocalNotification().init();
+
   await PassbaseSDK.initialize(
     publishableApiKey: AltMeStrings.passBasePublishableApiKey,
   );

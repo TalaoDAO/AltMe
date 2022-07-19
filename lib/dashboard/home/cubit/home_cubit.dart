@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
@@ -19,6 +21,8 @@ class HomeCubit extends Cubit<HomeState> {
   final DioClient client;
   final DIDCubit didCubit;
 
+  Timer? timer;
+
   void emitHasWallet() {
     emit(
       state.copyWith(
@@ -37,44 +41,100 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
+  Future<void> launchUrl({String? link}) async {
+    await LaunchUrl.launch(link ?? state.link!);
+  }
+
   Future<void> checkForPassBaseStatusThenLaunchUrl({
     required String link,
   }) async {
     emit(state.loading());
     final did = didCubit.state.did!;
 
-    final passBaseStatus = await getPassBaseStatus(did);
+    try {
+      final passBaseStatus = await getPassBaseStatus(did);
 
-    if (passBaseStatus == PassBaseStatus.approved) {
-      await LaunchUrl.launch(link);
-      emit(
-        state.copyWith(
-          status: AppStatus.populate,
-          passBaseStatus: PassBaseStatus.approved,
-        ),
-      );
-    } else if (passBaseStatus == PassBaseStatus.declined) {
+      if (passBaseStatus == PassBaseStatus.approved) {
+        await launchUrl(link: link);
+        emit(
+          state.copyWith(
+            status: AppStatus.populate,
+            passBaseStatus: PassBaseStatus.approved,
+            link: link,
+          ),
+        );
+      } else if (passBaseStatus == PassBaseStatus.declined) {
+        emit(
+          state.copyWith(
+            status: AppStatus.populate,
+            passBaseStatus: PassBaseStatus.declined,
+            link: link,
+          ),
+        );
+      } else if (passBaseStatus == PassBaseStatus.pending) {
+        getPassBaseStatusBackground(link: link);
+        emit(
+          state.copyWith(
+            status: AppStatus.populate,
+            passBaseStatus: PassBaseStatus.pending,
+            link: link,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            status: AppStatus.populate,
+            passBaseStatus: PassBaseStatus.undone,
+            link: link,
+          ),
+        );
+      }
+    } catch (e) {
       emit(
         state.copyWith(
           status: AppStatus.populate,
           passBaseStatus: PassBaseStatus.declined,
-        ),
-      );
-    } else if (passBaseStatus == PassBaseStatus.pending) {
-      emit(
-        state.copyWith(
-          status: AppStatus.populate,
-          passBaseStatus: PassBaseStatus.pending,
-        ),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          status: AppStatus.populate,
-          passBaseStatus: PassBaseStatus.undone,
+          link: link,
         ),
       );
     }
+  }
+
+  void getPassBaseStatusBackground({
+    required String link,
+  }) {
+    timer = Timer.periodic(const Duration(minutes: 3), (timer) async {
+      timer.cancel();
+
+      final did = didCubit.state.did!;
+
+      try {
+        final passBaseStatus = await getPassBaseStatus(did);
+        if (passBaseStatus == PassBaseStatus.approved) {
+          emit(
+            state.copyWith(
+              status: AppStatus.populate,
+              passBaseStatus: PassBaseStatus.verified,
+              link: link,
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+              status: AppStatus.idle,
+              passBaseStatus: PassBaseStatus.idle,
+            ),
+          );
+        }
+      } catch (e) {
+        emit(
+          state.copyWith(
+            status: AppStatus.idle,
+            passBaseStatus: PassBaseStatus.idle,
+          ),
+        );
+      }
+    });
   }
 
   void startPassbaseVerification(WalletCubit walletCubit) {
@@ -100,8 +160,8 @@ class HomeCubit extends Cubit<HomeState> {
           if (response == 'ok') {
             emit(
               state.copyWith(
-                status: AppStatus.success,
-                passBaseStatus: PassBaseStatus.idle,
+                status: AppStatus.idle,
+                passBaseStatus: PassBaseStatus.complete,
               ),
             );
           } else {
@@ -148,6 +208,17 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  void setAppLifecycleState({required bool isMinimized}) {
+    print(isMinimized);
+    emit(
+      state.copyWith(
+        status: AppStatus.idle,
+        passBaseStatus: PassBaseStatus.idle,
+        isMinimized: isMinimized,
+      ),
+    );
+  }
+
   /// Give user metadata to KYC. Currently we are just sending user DID.
   bool setKYCMetadata(WalletCubit walletCubit) {
     final selectedCredentials = <CredentialModel>[];
@@ -176,5 +247,11 @@ class HomeCubit extends Cubit<HomeState> {
       }
     }
     return false;
+  }
+
+  @override
+  Future<void> close() {
+    timer?.cancel();
+    return super.close();
   }
 }
