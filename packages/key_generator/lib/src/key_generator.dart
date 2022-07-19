@@ -35,7 +35,7 @@ class KeyGenerator {
     late KeyData child;
 
     if (accountType == AccountType.ssi) {
-      child = await ED25519_HD_KEY.derivePath("m/44'/60'/0'/0'/0'", seed);
+      child = await ED25519_HD_KEY.derivePath("m/44'/5467'/0'/0'", seed);
     } else {
       child = await ED25519_HD_KEY.derivePath(
         "m/44'/1729'/$derivePathIndex'/0'",
