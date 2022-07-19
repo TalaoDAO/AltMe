@@ -31,35 +31,16 @@ class DashboardView extends StatefulWidget {
   State<DashboardView> createState() => _DashboardViewState();
 }
 
-class _DashboardViewState extends State<DashboardView>
-    with WidgetsBindingObserver {
+class _DashboardViewState extends State<DashboardView> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
     Future.delayed(Duration.zero, () {
       /// If there is a deepLink we give do as if it coming from QRCode
       context.read<QRCodeScanCubit>().deepLink();
     });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print(state);
-    if (state == AppLifecycleState.resumed) {
-      context.read<HomeCubit>().setAppLifecycleState(isMinimized: false);
-    } else {
-      context.read<HomeCubit>().setAppLifecycleState(isMinimized: true);
-    }
-    super.didChangeAppLifecycleState(state);
   }
 
   PageController pageController = PageController(
@@ -144,23 +125,21 @@ class _DashboardViewState extends State<DashboardView>
         }
 
         if (homeState.passBaseStatus == PassBaseStatus.verified) {
-          if (homeState.isMinimized) {
-            LocalNotification().showNotification(
-              title: l10n.verifiedNotificationTitle,
-              message: l10n.verifiedNotificationDescription,
-              link: homeState.link,
-            );
-          } else {
-            showDialog<void>(
-              context: context,
-              builder: (_) => DefaultDialog(
-                title: l10n.verifiedTitle,
-                description: l10n.verifiedDescription,
-                buttonLabel: l10n.verfiedButton.toUpperCase(),
-                onButtonClick: () => context.read<HomeCubit>().launchUrl(),
-              ),
-            );
-          }
+          // LocalNotification().showNotification(
+          //   title: l10n.verifiedNotificationTitle,
+          //   message: l10n.verifiedNotificationDescription,
+          //   link: homeState.link,
+          // );
+
+          showDialog<void>(
+            context: context,
+            builder: (_) => DefaultDialog(
+              title: l10n.verifiedTitle,
+              description: l10n.verifiedDescription,
+              buttonLabel: l10n.verfiedButton.toUpperCase(),
+              onButtonClick: () => context.read<HomeCubit>().launchUrl(),
+            ),
+          );
         }
       },
       child: BlocBuilder<DashboardCubit, DashboardState>(

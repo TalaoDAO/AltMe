@@ -45,6 +45,8 @@ class HomeCubit extends Cubit<HomeState> {
     await LaunchUrl.launch(link ?? state.link!);
   }
 
+  int i = 0;
+
   Future<void> checkForPassBaseStatusThenLaunchUrl({
     required String link,
   }) async {
@@ -206,17 +208,6 @@ class HomeCubit extends Cubit<HomeState> {
     } catch (e) {
       return PassBaseStatus.undone;
     }
-  }
-
-  void setAppLifecycleState({required bool isMinimized}) {
-    print(isMinimized);
-    emit(
-      state.copyWith(
-        status: AppStatus.idle,
-        passBaseStatus: PassBaseStatus.idle,
-        isMinimized: isMinimized,
-      ),
-    );
   }
 
   /// Give user metadata to KYC. Currently we are just sending user DID.
