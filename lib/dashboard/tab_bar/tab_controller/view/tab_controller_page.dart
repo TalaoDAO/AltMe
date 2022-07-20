@@ -31,7 +31,12 @@ class _TabControllerViewState extends State<TabControllerView>
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 3);
+    _tabController.addListener(_onTabChanged);
     super.initState();
+  }
+
+  void _onTabChanged() {
+    context.read<TabControllerCubit>().setIndex(_tabController.index);
   }
 
   @override
@@ -124,6 +129,10 @@ class _TabControllerViewState extends State<TabControllerView>
                 //height: double.infinity,
                 child: TabBarView(
                   controller: _tabController,
+                  physics: context.read<HomeCubit>().state.homeStatus ==
+                          HomeStatus.hasNoWallet
+                      ? const NeverScrollableScrollPhysics()
+                      : null,
                   children: const [
                     CredentialsListPage(),
                     NftPage(),
