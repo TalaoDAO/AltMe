@@ -131,17 +131,21 @@ class CredentialsListPageItem extends StatelessWidget {
 class CredentialIcon extends StatelessWidget {
   const CredentialIcon({
     Key? key,
-    required this.credential,
+    required this.iconData,
+    this.color,
+    this.size = 24,
   }) : super(key: key);
 
-  final Credential credential;
+  final IconData iconData;
+  final Color? color;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
     return Icon(
-      credential.credentialSubjectModel.credentialSubjectType.iconData(),
-      size: 24,
-      color: Theme.of(context).colorScheme.primaryContainer,
+      iconData,
+      size: size,
+      color: color ?? Theme.of(context).colorScheme.primaryContainer,
     );
   }
 }

@@ -59,56 +59,14 @@ class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
                 ? const <Alignment>[Alignment.bottomRight]
                 : const <Alignment>[],
           ),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: HeroFix(
-                        tag: 'credential/${credentialModel.id}/icon',
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: FractionallySizedBox(
-                            heightFactor: 0.4,
-                            child: FittedBox(
-                              child: Center(
-                                child: CredentialIcon(credential: credential),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: FractionallySizedBox(
-                          heightFactor: 0.4,
-                          child: FittedBox(
-                            child: DisplayStatus(
-                              credentialModel: credentialModel,
-                              displayLabel: false,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10, right: 10, bottom: 2),
-                  child: descriptionWidget,
-                ),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: 10,
+              right: 10,
+              bottom: 2,
+              left: 8,
+            ),
+            child: descriptionWidget,
           ),
         ),
       ),

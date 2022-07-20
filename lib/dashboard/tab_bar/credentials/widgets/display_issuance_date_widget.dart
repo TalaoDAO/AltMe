@@ -21,7 +21,7 @@ class DisplayIssuanceDateWidget extends StatelessWidget {
       return Row(
         children: [
           Expanded(
-            flex: 5,
+            flex: 6,
             child: MyText(
               '${l10n.issuanceDate}: ',
               style: textColor == null

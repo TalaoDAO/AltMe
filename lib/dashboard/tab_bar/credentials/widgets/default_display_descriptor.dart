@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -14,19 +15,33 @@ class DefaultDisplayDescriptor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final credential = Credential.fromJsonOrDummy(credentialModel.data);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           flex: 2,
           child: FractionallySizedBox(
-            widthFactor: 0.9,
+            widthFactor: 0.95,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DisplayNameCard(
-                  credentialModel: credentialModel,
-                  style: Theme.of(context).textTheme.credentialTitle,
+                Row(
+                  children: [
+                    CredentialIcon(
+                      iconData: credential
+                          .credentialSubjectModel.credentialSubjectType
+                          .iconData(),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 2),
+                    Expanded(
+                      child: DisplayNameCard(
+                        credentialModel: credentialModel,
+                        style: Theme.of(context).textTheme.credentialTitle,
+                      ),
+                    )
+                  ],
                 ),
                 const SizedBox(height: 5),
                 Expanded(
@@ -42,12 +57,9 @@ class DefaultDisplayDescriptor extends StatelessWidget {
         ),
         Expanded(
           flex: 1,
-          child: FractionallySizedBox(
-            heightFactor: 0.4,
-            child: DisplayIssuer(
-              issuer: credentialModel
-                  .credentialPreview.credentialSubjectModel.issuedBy!,
-            ),
+          child: DisplayIssuer(
+            issuer: credentialModel
+                .credentialPreview.credentialSubjectModel.issuedBy!,
           ),
         )
       ],

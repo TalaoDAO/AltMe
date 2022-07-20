@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
@@ -16,35 +17,56 @@ class CredentialManifestDisplayDescriptor extends StatelessWidget {
   Widget build(BuildContext context) {
     final textColor =
         getColorFromCredential(outputDescriptor.styles?.text, Colors.black);
+    final credential = Credential.fromJsonOrDummy(credentialModel.data);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           flex: 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (outputDescriptor.display?.title != null)
-                DisplayTitleWidget(
-                  displayMapping: outputDescriptor.display?.title,
+          child: FractionallySizedBox(
+            widthFactor: 0.95,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    CredentialIcon(
+                      iconData: credential
+                          .credentialSubjectModel.credentialSubjectType
+                          .iconData(),
+                      color: textColor,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 2),
+                    Expanded(
+                      child: outputDescriptor.display?.title != null
+                          ? DisplayTitleWidget(
+                              displayMapping: outputDescriptor.display?.title,
+                              credentialModel: credentialModel,
+                              textColor: textColor,
+                            )
+                          : const Text(''),
+                    )
+                  ],
+                ),
+                const Spacer(),
+                DisplayDescriptionWidget(
+                  displayMapping: outputDescriptor.display?.description,
                   credentialModel: credentialModel,
                   textColor: textColor,
                 )
-              else
-                const Text(''),
-              DisplayDescriptionWidget(
-                displayMapping: outputDescriptor.display?.description,
-                credentialModel: credentialModel,
-                textColor: textColor,
-              )
-            ],
+              ],
+            ),
           ),
         ),
         Expanded(
           flex: 1,
-          child: DisplayIssuanceDateWidget(
-            issuanceDate: credentialModel.credentialPreview.issuanceDate,
-            textColor: textColor,
+          child: FractionallySizedBox(
+            widthFactor: 0.8,
+            child: DisplayIssuanceDateWidget(
+              issuanceDate: credentialModel.credentialPreview.issuanceDate,
+              textColor: textColor,
+            ),
           ),
         )
       ],

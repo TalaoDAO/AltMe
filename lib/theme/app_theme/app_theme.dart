@@ -192,8 +192,6 @@ extension CustomColorScheme on ColorScheme {
 
   Color get deleteColor => const Color(0xff322643);
 
-  Color get defaultCredentialManifest => const Color(0xffD1CCE3);
-
   Color get titleColor => const Color(0xffD1CCE3);
 
   Color get valueColor => const Color(0xffFFFFFF);
