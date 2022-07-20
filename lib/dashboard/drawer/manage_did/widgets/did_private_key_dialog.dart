@@ -17,7 +17,7 @@ class DIDPrivateKeyDialog extends StatelessWidget {
     showDialog<void>(
       context: context,
       builder: (_) => BlocProvider(
-        create: (_) => DIDPrivateKeyCubit(),
+        create: (_) => DIDPrivateKeyDialogCubit(),
         child: DIDPrivateKeyDialog(
           onContinueClick: onContinueClick,
         ),
@@ -37,7 +37,7 @@ class DIDPrivateKeyDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
-      content: BlocBuilder<DIDPrivateKeyCubit, bool>(builder: (context, state) {
+      content: BlocBuilder<DIDPrivateKeyDialogCubit, bool>(builder: (context, state) {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -71,7 +71,7 @@ class DIDPrivateKeyDialog extends StatelessWidget {
               text: l10n.didPrivateKeyCheckbox,
               textStyle: Theme.of(context).textTheme.defaultDialogBody,
               onChange: (value) {
-                context.read<DIDPrivateKeyCubit>().toggleState();
+                context.read<DIDPrivateKeyDialogCubit>().toggleState();
               },
             ),
             const SizedBox(height: Sizes.spaceSmall),

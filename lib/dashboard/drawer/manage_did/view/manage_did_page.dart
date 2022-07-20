@@ -6,6 +6,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ManageDIDPage extends StatelessWidget {
@@ -47,12 +48,25 @@ class ManageDIDPage extends StatelessWidget {
               padding: const EdgeInsets.all(Sizes.spaceXLarge),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
-                  CopyButton(),
-                  SizedBox(
+                children: [
+                  CopyButton(
+                    onTap: () async {
+                      await Clipboard.setData(
+                        ClipboardData(
+                          text: context.read<DIDCubit>().state.did ?? '...',
+                        ),
+                      );
+                      AlertMessage.showStringMessage(
+                        context: context,
+                        message: l10n.copyDIDKeyToClipboard,
+                        messageType: MessageType.success,
+                      );
+                    },
+                  ),
+                  const SizedBox(
                     width: Sizes.spaceXLarge,
                   ),
-                  ExportButton(),
+                  const ExportButton(),
                 ],
               ),
             ),
@@ -87,7 +101,8 @@ class ManageDIDPage extends StatelessWidget {
                       PinCodePage.route(
                         restrictToBack: false,
                         isValidCallback: () {
-                          Navigator.push<void>(context, DIDPrivateKeyPage.route());
+                          Navigator.push<void>(
+                              context, DIDPrivateKeyPage.route());
                         },
                       ),
                     );

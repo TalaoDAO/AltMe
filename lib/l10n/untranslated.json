@@ -376,6 +376,7 @@
     "didPrivateKeyCheckbox",
     "beCareful",
     "decentralizedIDKey",
+    "copyDIDKeyToClipboard",
     "cardDetails"
   ],
 
@@ -745,7 +746,6 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
-    "cardDetails",
     "publicAddress",
     "didKey",
     "export",
@@ -756,7 +756,8 @@
     "didPrivateKeyDescriptionAlert",
     "didPrivateKeyCheckbox",
     "beCareful",
-    "decentralizedIDKey"
+    "decentralizedIDKey",
+    "copyDIDKeyToClipboard"
   ],
 
   "fr": [
@@ -1136,7 +1137,8 @@
     "didPrivateKeyCheckbox",
     "beCareful",
     "decentralizedIDKey",
-    "cardDetails"
+    "cardDetails",
+    "copyDIDKeyToClipboard"
   ],
 
   "it": [
@@ -1516,6 +1518,7 @@
     "cardDetails",
     "didPrivateKeyCheckbox",
     "beCareful",
-    "decentralizedIDKey"
+    "decentralizedIDKey",
+    "copyDIDKeyToClipboard"
   ]
 }

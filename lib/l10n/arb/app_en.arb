@@ -426,6 +426,8 @@
   "didPrivateKeyDescriptionAlert": "Please do not share your private key with anyone. Altme is non custodial, we will never ask for it.",
   "didPrivateKeyCheckbox": "I read the message correctly",
   "beCareful": "Be careful",
-  "decentralizedIDKey": "Decentralized ID key"
+  "decentralizedIDKey": "Decentralized ID key",
+  "copySecretKeyToClipboard":"Copied secret key to clipboard!",
+  "copyDIDKeyToClipboard":"Copied DID key to clipboard!"
 
 }
