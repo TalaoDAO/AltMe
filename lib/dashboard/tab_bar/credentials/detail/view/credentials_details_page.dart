@@ -56,9 +56,12 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      context
-          .read<CredentialDetailsCubit>()
-          .setTitle(widget.credentialModel.alias!);
+      final l10n = context.l10n;
+      String title = widget.credentialModel.alias!;
+      if (title == '') {
+        title = l10n.cardDetails;
+      }
+      context.read<CredentialDetailsCubit>().setTitle(title);
       context.read<CredentialDetailsCubit>().verify(widget.credentialModel);
     });
   }
