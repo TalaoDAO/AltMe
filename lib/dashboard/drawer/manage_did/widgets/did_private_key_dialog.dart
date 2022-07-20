@@ -1,7 +1,9 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/drawer/manage_did/manage_did.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DIDPrivateKeyDialog extends StatelessWidget {
   const DIDPrivateKeyDialog({Key? key, this.onContinueClick}) : super(key: key);
@@ -14,8 +16,11 @@ class DIDPrivateKeyDialog extends StatelessWidget {
   }) {
     showDialog<void>(
       context: context,
-      builder: (_) => DIDPrivateKeyDialog(
-        onContinueClick: onContinueClick,
+      builder: (_) => BlocProvider(
+        create: (_) => DIDPrivateKeyCubit(),
+        child: DIDPrivateKeyDialog(
+          onContinueClick: onContinueClick,
+        ),
       ),
     );
   }
@@ -32,11 +37,22 @@ class DIDPrivateKeyDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
-      content: SingleChildScrollView(
-        child: Column(
+      content: BlocBuilder<DIDPrivateKeyCubit, bool>(builder: (context, state) {
+        return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const DialogCloseButton(),
+            DialogCloseButton(
+              showText: false,
+              color: Theme.of(context).colorScheme.defaultDialogDark,
+            ),
+            Image.asset(
+              IconStrings.alert,
+              width: Sizes.icon4x,
+            ),
+            Text(
+              l10n.beCareful,
+              style: Theme.of(context).textTheme.caption2,
+            ),
             const SizedBox(height: Sizes.spaceSmall),
             Text(
               l10n.didPrivateKey,
@@ -48,6 +64,15 @@ class DIDPrivateKeyDialog extends StatelessWidget {
               l10n.didPrivateKeyDescriptionAlert,
               style: Theme.of(context).textTheme.defaultDialogBody,
               textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: Sizes.spaceSmall),
+            CheckboxItem(
+              value: state,
+              text: l10n.didPrivateKeyCheckbox,
+              textStyle: Theme.of(context).textTheme.defaultDialogBody,
+              onChange: (value) {
+                context.read<DIDPrivateKeyCubit>().toggleState();
+              },
             ),
             const SizedBox(height: Sizes.spaceSmall),
             Padding(
@@ -76,19 +101,23 @@ class DIDPrivateKeyDialog extends StatelessWidget {
                       verticalSpacing: 15,
                       fontSize: 15,
                       borderRadius: 12,
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        onContinueClick?.call();
-                      },
+                      backgroundColor: state
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.defaultDialogDark,
+                      onPressed: state
+                          ? () {
+                              Navigator.of(context).pop();
+                              onContinueClick?.call();
+                            }
+                          : () {},
                     ),
                   ),
                 ],
               ),
             ),
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 }

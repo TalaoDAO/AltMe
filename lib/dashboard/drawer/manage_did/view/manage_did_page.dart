@@ -1,7 +1,9 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/drawer/manage_did/view/did_private_key_page.dart';
 import 'package:altme/dashboard/drawer/manage_did/widgets/widgets.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +12,7 @@ class ManageDIDPage extends StatelessWidget {
   const ManageDIDPage({Key? key}) : super(key: key);
 
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => ManageDIDPage());
+    return MaterialPageRoute<void>(builder: (_) => const ManageDIDPage());
   }
 
   @override
@@ -78,7 +80,19 @@ class ManageDIDPage extends StatelessWidget {
             ),
             RevealButton(
               onTap: () {
-                DIDPrivateKeyDialog.show(context: context);
+                DIDPrivateKeyDialog.show(
+                  context: context,
+                  onContinueClick: () {
+                    Navigator.of(context).push<void>(
+                      PinCodePage.route(
+                        restrictToBack: false,
+                        isValidCallback: () {
+                          Navigator.push<void>(context, DIDPrivateKeyPage.route());
+                        },
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ],

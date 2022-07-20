@@ -4,7 +4,11 @@ import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class DialogCloseButton extends StatelessWidget {
-  const DialogCloseButton({Key? key}) : super(key: key);
+  const DialogCloseButton({Key? key, this.color, this.showText = true})
+      : super(key: key);
+
+  final Color? color;
+  final bool showText;
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +20,18 @@ class DialogCloseButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text(
-            l10n.close,
-            style: Theme.of(context).textTheme.dialogClose,
-          ),
+          if (showText)
+            Text(
+              l10n.close,
+              style: Theme.of(context).textTheme.dialogClose.copyWith(
+                    color: color,
+                  ),
+            ),
           const SizedBox(width: 5),
           Container(
             padding: const EdgeInsets.all(0.5),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.closeIconColor,
+              color: color ?? Theme.of(context).colorScheme.closeIconColor,
               shape: BoxShape.circle,
             ),
             child: const Icon(

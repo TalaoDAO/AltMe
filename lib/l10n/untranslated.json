@@ -373,6 +373,9 @@
     "reveal",
     "didPrivateKeyDescription",
     "didPrivateKeyDescriptionAlert",
+    "didPrivateKeyCheckbox",
+    "beCareful",
+    "decentralizedIDKey",
     "cardDetails"
   ],
 
@@ -750,7 +753,10 @@
     "didPrivateKey",
     "reveal",
     "didPrivateKeyDescription",
-    "didPrivateKeyDescriptionAlert"
+    "didPrivateKeyDescriptionAlert",
+    "didPrivateKeyCheckbox",
+    "beCareful",
+    "decentralizedIDKey"
   ],
 
   "fr": [
@@ -1127,6 +1133,9 @@
     "reveal",
     "didPrivateKeyDescription",
     "didPrivateKeyDescriptionAlert",
+    "didPrivateKeyCheckbox",
+    "beCareful",
+    "decentralizedIDKey",
     "cardDetails"
   ],
 
@@ -1504,6 +1513,9 @@
     "reveal",
     "didPrivateKeyDescription",
     "didPrivateKeyDescriptionAlert",
-    "cardDetails"
+    "cardDetails",
+    "didPrivateKeyCheckbox",
+    "beCareful",
+    "decentralizedIDKey"
   ]
 }
