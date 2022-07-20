@@ -7,11 +7,21 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TokenPage extends StatelessWidget {
+class TokenPage extends StatefulWidget {
   const TokenPage({Key? key}) : super(key: key);
 
   @override
+  State<TokenPage> createState() => _TokenPageState();
+}
+
+class _TokenPageState extends State<TokenPage>
+    with AutomaticKeepAliveClientMixin<TokenPage> {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocProvider<TokensCubit>(
       create: (context) => TokensCubit(
         client: DioClient(

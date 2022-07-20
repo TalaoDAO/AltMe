@@ -116,7 +116,7 @@ class JobStudentCardRecto extends Recto {
             ),
             LayoutId(
               id: 'image',
-              child: ImageFromNetwork(
+              child: CachedImageFromNetwork(
                 professionalStudentCardModel.recipient!.image,
                 fit: BoxFit.cover,
               ),

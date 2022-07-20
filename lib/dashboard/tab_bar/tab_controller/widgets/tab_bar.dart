@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -20,15 +21,13 @@ class MyTab extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
+        width: double.infinity,
         padding: const EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 13,
-        ),
-        margin: const EdgeInsets.symmetric(
-          horizontal: 3,
+          horizontal: Sizes.spaceXSmall,
+          vertical: Sizes.spaceSmall,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(Sizes.largeRadius),
           gradient: isSelected
               ? LinearGradient(
                   colors: [
@@ -44,18 +43,16 @@ class MyTab extends StatelessWidget {
               ? null
               : Theme.of(context).colorScheme.tabBarNotSelected,
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: Image.asset(icon, height: 25),
-              ),
-              Text(text, softWrap: false, overflow: TextOverflow.fade),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Image.asset(icon, height: Sizes.icon2x),
+            ),
+            Text(text, softWrap: false, overflow: TextOverflow.fade),
+          ],
         ),
       ),
     );

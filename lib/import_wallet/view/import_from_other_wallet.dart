@@ -134,7 +134,7 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const SizedBox(height: Sizes.spaceNormal),
+                  const SizedBox(height: Sizes.spaceSmall),
                   Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(Sizes.spaceXSmall),

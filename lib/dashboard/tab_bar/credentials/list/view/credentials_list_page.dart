@@ -15,7 +15,11 @@ class CredentialsListPage extends StatefulWidget {
   State<CredentialsListPage> createState() => _CredentialsListPageState();
 }
 
-class _CredentialsListPageState extends State<CredentialsListPage> {
+class _CredentialsListPageState extends State<CredentialsListPage>
+    with AutomaticKeepAliveClientMixin<CredentialsListPage> {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     context.read<CredentialListCubit>().initialise(context.read<WalletCubit>());
@@ -30,6 +34,7 @@ class _CredentialsListPageState extends State<CredentialsListPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BasePage(
       scrollView: false,
       padding: EdgeInsets.zero,

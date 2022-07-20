@@ -192,7 +192,7 @@ class CertificateOfEmploymentVerso extends Verso {
                   if (certificateOfEmploymentModel.workFor!.logo != '')
                     SizedBox(
                       height: 17,
-                      child: ImageFromNetwork(
+                      child: CachedImageFromNetwork(
                         certificateOfEmploymentModel.workFor!.logo,
                       ),
                     )

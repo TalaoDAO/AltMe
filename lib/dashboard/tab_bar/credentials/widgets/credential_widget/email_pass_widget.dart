@@ -95,7 +95,7 @@ class EmailPassRecto extends Recto {
                 children: [
                   FractionallySizedBox(
                     heightFactor: 0.15,
-                    child: ImageFromNetwork(
+                    child: CachedImageFromNetwork(
                       credentialModel.credentialPreview.credentialSubjectModel
                           .issuedBy!.logo,
                       fit: BoxFit.fill,
