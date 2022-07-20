@@ -122,7 +122,7 @@ class WalletItems extends StatelessWidget {
                           yes: l10n.delete,
                           no: l10n.showDialogNo,
                           dialogColor: Theme.of(context).colorScheme.error,
-                          icon: IconStrings.trash,
+                          // icon: IconStrings.trash,
                         ),
                       ) ??
                       false;
