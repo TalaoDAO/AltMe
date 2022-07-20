@@ -18,13 +18,14 @@ class CredentialManifestDisplayDescriptor extends StatelessWidget {
     final textColor =
         getColorFromCredential(outputDescriptor.styles?.text, Colors.black);
     final credential = Credential.fromJsonOrDummy(credentialModel.data);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 2,
-          child: FractionallySizedBox(
-            widthFactor: 0.95,
+    return FractionallySizedBox(
+      widthFactor: 0.95,
+      heightFactor: 0.9,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -37,7 +38,7 @@ class CredentialManifestDisplayDescriptor extends StatelessWidget {
                       color: textColor,
                       size: 20,
                     ),
-                    const SizedBox(width: 2),
+                    const SizedBox(width: 4),
                     Expanded(
                       child: outputDescriptor.display?.title != null
                           ? DisplayTitleWidget(
@@ -49,27 +50,30 @@ class CredentialManifestDisplayDescriptor extends StatelessWidget {
                     )
                   ],
                 ),
-                const Spacer(),
-                DisplayDescriptionWidget(
-                  displayMapping: outputDescriptor.display?.description,
-                  credentialModel: credentialModel,
-                  textColor: textColor,
+                const SizedBox(height: 5),
+                Expanded(
+                  child: DisplayDescriptionWidget(
+                    displayMapping: outputDescriptor.display?.description,
+                    credentialModel: credentialModel,
+                    textColor: textColor,
+                  ),
                 )
               ],
             ),
           ),
-        ),
-        Expanded(
-          flex: 1,
-          child: FractionallySizedBox(
-            widthFactor: 0.8,
-            child: DisplayIssuanceDateWidget(
-              issuanceDate: credentialModel.credentialPreview.issuanceDate,
-              textColor: textColor,
+          const Spacer(),
+          Expanded(
+            flex: 1,
+            child: FractionallySizedBox(
+              widthFactor: 0.8,
+              child: DisplayIssuanceDateWidget(
+                issuanceDate: credentialModel.credentialPreview.issuanceDate,
+                textColor: textColor,
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }
