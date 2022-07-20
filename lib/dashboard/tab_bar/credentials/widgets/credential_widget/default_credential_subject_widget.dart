@@ -192,11 +192,11 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final outputDescriptor =
+    final outputDescriptors =
         credentialModel.credentialManifest?.outputDescriptors;
     // If outputDescriptor exist, the credential has a credential manifest
     // telling us what to display
-    if (outputDescriptor == null) {
+    if (outputDescriptors == null) {
       return AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: DefaultSelectionDisplayDescriptor(
@@ -205,10 +205,35 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
         ),
       );
     } else {
-      return CredentialSelectionManifestDisplayDescriptor(
-        outputDescriptors: outputDescriptor,
+      final backgroundColor = getColorFromCredential(
+        outputDescriptors.first.styles?.background,
+        Colors.white,
+      );
+
+      final Widget descriptionWidget = CredentialManifestDisplayDescriptor(
         credentialModel: credentialModel,
-        showBgDecoration: showBgDecoration,
+        outputDescriptor: outputDescriptors.first,
+      );
+
+      return CredentialContainer(
+        child: AspectRatio(
+          aspectRatio: Sizes.credentialAspectRatio,
+          child: Container(
+            decoration: BaseBoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: backgroundColor,
+              shapeColor: Theme.of(context).colorScheme.documentShape,
+              value: 1,
+              anchors: showBgDecoration
+                  ? const <Alignment>[Alignment.bottomRight]
+                  : const <Alignment>[],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: descriptionWidget,
+            ),
+          ),
+        ),
       );
     }
   }

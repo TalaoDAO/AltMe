@@ -7,12 +7,14 @@ class DisplayMappingWidget extends StatelessWidget {
   const DisplayMappingWidget({
     this.displayMapping,
     required this.credentialModel,
-    this.textColor,
+    this.titleColor,
+    this.valueColor,
     Key? key,
   }) : super(key: key);
   final DisplayMapping? displayMapping;
   final CredentialModel credentialModel;
-  final Color? textColor;
+  final Color? titleColor;
+  final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,8 @@ class DisplayMappingWidget extends StatelessWidget {
     if (object is DisplayMappingText) {
       return CredentialField(
         value: object.text,
-        textColor: textColor,
+        titleColor: titleColor,
+        valueColor: valueColor,
       );
     }
     if (object is DisplayMappingPath) {
@@ -31,7 +34,8 @@ class DisplayMappingWidget extends StatelessWidget {
           widgets.add(
             CredentialField(
               value: element,
-              textColor: textColor,
+              titleColor: titleColor,
+              valueColor: valueColor,
             ),
           );
         }
@@ -45,7 +49,8 @@ class DisplayMappingWidget extends StatelessWidget {
       if (object.fallback != null) {
         return CredentialField(
           value: object.fallback ?? '',
-          textColor: textColor,
+          titleColor: titleColor,
+          valueColor: valueColor,
         );
       }
     }

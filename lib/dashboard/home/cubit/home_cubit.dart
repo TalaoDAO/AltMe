@@ -103,7 +103,6 @@ class HomeCubit extends Cubit<HomeState> {
   void getPassBaseStatusBackground({
     required String link,
   }) {
-    print("triggered");
     timer = Timer.periodic(const Duration(minutes: 3), (timer) async {
       timer.cancel();
 

@@ -6,13 +6,15 @@ class DisplayPropertiesWidget extends StatelessWidget {
   const DisplayPropertiesWidget({
     this.properties,
     required this.credentialModel,
-    this.textColor,
+    this.titleColor,
+    this.valueColor,
     Key? key,
   }) : super(key: key);
 
   final List<DisplayMapping>? properties;
   final CredentialModel credentialModel;
-  final Color? textColor;
+  final Color? titleColor;
+  final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,8 @@ class DisplayPropertiesWidget extends StatelessWidget {
         LabeledDisplayMappingWidget(
           displayMapping: element,
           credentialModel: credentialModel,
-          textColor: textColor,
+          titleColor: titleColor,
+          valueColor: valueColor,
         ),
       );
     });

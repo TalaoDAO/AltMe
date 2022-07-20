@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
@@ -107,6 +108,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final outputDescriptors =
+        widget.credentialModel.credentialManifest?.outputDescriptors;
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
@@ -116,134 +119,134 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         }
       },
       builder: (context, state) {
-        return WillPopScope(
-          onWillPop: () async {
-            if (context.read<CredentialDetailsCubit>().state.status ==
-                AppStatus.loading) {
-              return false;
-            }
-            return true;
-          },
-          child: BasePage(
-            title: state.title ?? l10n.credential,
-            titleTag:
-                'credential/${state.title ?? widget.credentialModel.id}/issuer',
-            titleLeading: BackLeadingButton(
-              onPressed: () {
-                if (context.read<CredentialDetailsCubit>().state.status !=
-                    AppStatus.loading) {
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-            titleTrailing: IconButton(
-              onPressed: _edit,
-              icon: const Icon(Icons.edit),
-            ),
-            navigation: widget.credentialModel.shareLink != ''
-                ? SafeArea(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 5,
-                      ),
-                      height: kBottomNavigationBarHeight,
-                      child: Tooltip(
-                        message: l10n.credentialDetailShare,
-                        child: BaseButton.primary(
-                          context: context,
-                          onPressed: () {
-                            Navigator.of(context).push<void>(
-                              QrCodeDisplayPage.route(
-                                widget.credentialModel.id,
-                                widget.credentialModel,
-                              ),
-                            );
-                          },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              SvgPicture.asset(
-                                IconStrings.qrCode,
-                                width: 24,
-                                height: 24,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                              const SizedBox(width: 16),
-                              Text(l10n.credentialDetailShare),
-                            ],
-                          ),
+        return BasePage(
+          title: state.title ?? l10n.credential,
+          titleTag:
+              'credential/${state.title ?? widget.credentialModel.id}/issuer',
+          titleLeading: BackLeadingButton(
+            onPressed: () {
+              if (context.read<CredentialDetailsCubit>().state.status !=
+                  AppStatus.loading) {
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+          titleTrailing: IconButton(
+            onPressed: _edit,
+            icon: const Icon(Icons.edit),
+          ),
+          navigation: widget.credentialModel.shareLink != ''
+              ? SafeArea(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 5,
+                    ),
+                    height: kBottomNavigationBarHeight,
+                    child: Tooltip(
+                      message: l10n.credentialDetailShare,
+                      child: BaseButton.primary(
+                        context: context,
+                        onPressed: () {
+                          Navigator.of(context).push<void>(
+                            QrCodeDisplayPage.route(
+                              widget.credentialModel.id,
+                              widget.credentialModel,
+                            ),
+                          );
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            SvgPicture.asset(
+                              IconStrings.qrCode,
+                              width: 24,
+                              height: 24,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                            const SizedBox(width: 16),
+                            Text(l10n.credentialDetailShare),
+                          ],
                         ),
                       ),
                     ),
-                  )
-                : null,
-            body: Column(
+                  ),
+                )
+              : null,
+          body: BackgroundCard(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 DisplayDetail(credentialModel: widget.credentialModel),
-                const SizedBox(height: 64),
-                ...<Widget>[
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Text(
-                        l10n.credentialDetailStatus,
-                        style: Theme.of(context).textTheme.bodyText1,
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Icon(
+                                state.verificationState.icon,
+                                color: state.verificationState.color,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                state.verificationState.message(context),
+                                style:
+                                    Theme.of(context).textTheme.caption!.apply(
+                                          color: state.verificationState.color,
+                                        ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Icon(
-                          state.verificationState.icon,
-                          color: state.verificationState.color,
+                    Expanded(
+                      child: Center(
+                        child: DisplayStatus(
+                          credentialModel: widget.credentialModel,
+                          displayLabel: true,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text(
-                          state.verificationState.message(context),
-                          style: Theme.of(context)
-                              .textTheme
-                              .caption!
-                              .apply(color: state.verificationState.color),
-                        ),
-                      ),
-                    ],
+                    )
+                  ],
+                ),
+                if (outputDescriptors != null) ...[
+                  const SizedBox(height: 10),
+                  BackgroundCard(
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: CredentialSelectionManifestDisplayDescriptor(
+                      outputDescriptors: outputDescriptors,
+                      credentialModel: widget.credentialModel,
+                    ),
                   ),
                 ],
-                Center(
-                  child: DisplayStatus(
-                    credentialModel: widget.credentialModel,
-                    displayLabel: true,
-                  ),
-                ),
-                const SizedBox(height: 64),
-                TextButton(
+                const SizedBox(height: 30),
+                TextButton.icon(
+                  icon: Image.asset(IconStrings.trash),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 32,
                       vertical: 16,
                     ),
-                    backgroundColor:
-                        Theme.of(context).colorScheme.error.withOpacity(0.1),
+                    backgroundColor: Theme.of(context).colorScheme.transparent,
                   ),
                   onPressed: delete,
-                  child: Text(
+                  label: Text(
                     l10n.credentialDetailDelete,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .apply(color: Theme.of(context).colorScheme.error),
+                    style: Theme.of(context).textTheme.deleteThisCertificate,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
               ],
             ),
           ),
