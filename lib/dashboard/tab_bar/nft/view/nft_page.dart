@@ -10,11 +10,22 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class NftPage extends StatelessWidget {
+class NftPage extends StatefulWidget {
   const NftPage({Key? key}) : super(key: key);
 
   @override
+  State<NftPage> createState() => _NftPageState();
+}
+
+class _NftPageState extends State<NftPage>
+    with AutomaticKeepAliveClientMixin<NftPage> {
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocProvider<NftCubit>(
       create: (context) => NftCubit(
         client: DioClient(

@@ -51,6 +51,9 @@ class _TabControllerViewState extends State<TabControllerView>
             TabBar(
               controller: _tabController,
               padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+              indicatorPadding: EdgeInsets.zero,
+              labelPadding:
+                  const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
               indicatorWeight: 0.0001,
               indicatorColor: Colors.transparent,
               indicatorSize: TabBarIndicatorSize.label,
@@ -121,7 +124,6 @@ class _TabControllerViewState extends State<TabControllerView>
                 //height: double.infinity,
                 child: TabBarView(
                   controller: _tabController,
-                  //physics: const NeverScrollableScrollPhysics(),
                   children: const [
                     CredentialsListPage(),
                     NftPage(),

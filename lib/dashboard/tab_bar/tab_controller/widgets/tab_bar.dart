@@ -21,6 +21,7 @@ class MyTab extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
+        width: double.infinity,
         padding: const EdgeInsets.symmetric(
           horizontal: Sizes.spaceXSmall,
           vertical: Sizes.spaceSmall,
@@ -42,18 +43,16 @@ class MyTab extends StatelessWidget {
               ? null
               : Theme.of(context).colorScheme.tabBarNotSelected,
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: Image.asset(icon, height: 25),
-              ),
-              Text(text, softWrap: false, overflow: TextOverflow.fade),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Image.asset(icon, height: Sizes.icon2x),
+            ),
+            Text(text, softWrap: false, overflow: TextOverflow.fade),
+          ],
         ),
       ),
     );

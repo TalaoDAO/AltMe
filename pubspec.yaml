@@ -10,7 +10,7 @@ dependencies:
   auto_size_text: ^3.0.0
   bip39: ^1.0.6
   bloc: ^8.0.3
-  cached_network_image: ^3.2.0
+  cached_network_image: ^3.2.1
   credential_manifest:
     path: packages/credential_manifest
   cryptocurrency_keys:
