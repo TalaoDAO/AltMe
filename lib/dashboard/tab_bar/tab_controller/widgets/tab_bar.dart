@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -21,14 +22,11 @@ class MyTab extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 13,
-        ),
-        margin: const EdgeInsets.symmetric(
-          horizontal: 3,
+          horizontal: Sizes.spaceXSmall,
+          vertical: Sizes.spaceSmall,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(Sizes.largeRadius),
           gradient: isSelected
               ? LinearGradient(
                   colors: [

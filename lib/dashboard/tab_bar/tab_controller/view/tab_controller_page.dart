@@ -45,100 +45,92 @@ class _TabControllerViewState extends State<TabControllerView>
     final l10n = context.l10n;
     return BlocBuilder<TabControllerCubit, int>(
       builder: (context, state) {
-        return DefaultTabController(
-          length: 3,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      child: MyTab(
-                        text: l10n.cards,
-                        icon: state == 0
-                            ? IconStrings.userSquare
-                            : IconStrings.userSquareBlur,
-                        isSelected: state == 0,
-                        onPressed: () {
-                          if (context.read<HomeCubit>().state.homeStatus ==
-                              HomeStatus.hasNoWallet) {
-                            showDialog<void>(
-                              context: context,
-                              builder: (_) => const WalletDialog(),
-                            );
-                            return;
-                          }
-                          _tabController.animateTo(0);
-                          context.read<TabControllerCubit>().setIndex(0);
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: MyTab(
-                        text: l10n.nfts,
-                        icon: state == 1
-                            ? IconStrings.ghost
-                            : IconStrings.ghostBlur,
-                        isSelected: state == 1,
-                        onPressed: () {
-                          if (context.read<HomeCubit>().state.homeStatus ==
-                              HomeStatus.hasNoWallet) {
-                            showDialog<void>(
-                              context: context,
-                              builder: (_) => const WalletDialog(),
-                            );
-                            return;
-                          }
-                          _tabController.animateTo(1);
-                          context.read<TabControllerCubit>().setIndex(1);
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: MyTab(
-                        text: l10n.tokens,
-                        icon: state == 2
-                            ? IconStrings.health
-                            : IconStrings.healthBlur,
-                        isSelected: state == 2,
-                        onPressed: () {
-                          if (context.read<HomeCubit>().state.homeStatus ==
-                              HomeStatus.hasNoWallet) {
-                            showDialog<void>(
-                              context: context,
-                              builder: (_) => const WalletDialog(),
-                            );
-                            return;
-                          }
-                          _tabController.animateTo(2);
-                          context.read<TabControllerCubit>().setIndex(2);
-                        },
-                      ),
-                    ),
+        return Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            TabBar(
+              controller: _tabController,
+              padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+              indicatorWeight: 0.0001,
+              indicatorColor: Colors.transparent,
+              indicatorSize: TabBarIndicatorSize.label,
+              tabs: [
+                MyTab(
+                  text: l10n.cards,
+                  icon: state == 0
+                      ? IconStrings.userSquare
+                      : IconStrings.userSquareBlur,
+                  isSelected: state == 0,
+                  onPressed: () {
+                    if (context.read<HomeCubit>().state.homeStatus ==
+                        HomeStatus.hasNoWallet) {
+                      showDialog<void>(
+                        context: context,
+                        builder: (_) => const WalletDialog(),
+                      );
+                      return;
+                    }
+                    _tabController.animateTo(0);
+                    context.read<TabControllerCubit>().setIndex(0);
+                  },
+                ),
+                MyTab(
+                  text: l10n.nfts,
+                  icon: state == 1 ? IconStrings.ghost : IconStrings.ghostBlur,
+                  isSelected: state == 1,
+                  onPressed: () {
+                    if (context.read<HomeCubit>().state.homeStatus ==
+                        HomeStatus.hasNoWallet) {
+                      showDialog<void>(
+                        context: context,
+                        builder: (_) => const WalletDialog(),
+                      );
+                      return;
+                    }
+                    _tabController.animateTo(1);
+                    context.read<TabControllerCubit>().setIndex(1);
+                  },
+                ),
+                MyTab(
+                  text: l10n.tokens,
+                  icon:
+                      state == 2 ? IconStrings.health : IconStrings.healthBlur,
+                  isSelected: state == 2,
+                  onPressed: () {
+                    if (context.read<HomeCubit>().state.homeStatus ==
+                        HomeStatus.hasNoWallet) {
+                      showDialog<void>(
+                        context: context,
+                        builder: (_) => const WalletDialog(),
+                      );
+                      return;
+                    }
+                    _tabController.animateTo(2);
+                    context.read<TabControllerCubit>().setIndex(2);
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: Sizes.spaceSmall),
+            Expanded(
+              child: BackgroundCard(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+                //height: double.infinity,
+                child: TabBarView(
+                  controller: _tabController,
+                  //physics: const NeverScrollableScrollPhysics(),
+                  children: const [
+                    CredentialsListPage(),
+                    NftPage(),
+                    TokenPage(),
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: BackgroundCard(
-                    child: TabBarView(
-                      controller: _tabController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: const [
-                        CredentialsListPage(),
-                        NftPage(),
-                        TokenPage(),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
