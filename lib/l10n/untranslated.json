@@ -365,6 +365,7 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
+    "cardDetails",
     "publicAddress",
     "didKey",
     "export",
@@ -376,8 +377,7 @@
     "didPrivateKeyCheckbox",
     "beCareful",
     "decentralizedIDKey",
-    "copyDIDKeyToClipboard",
-    "cardDetails"
+    "copyDIDKeyToClipboard"
   ],
 
   "es": [
@@ -746,6 +746,7 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
+    "cardDetails",
     "publicAddress",
     "didKey",
     "export",
@@ -1126,6 +1127,7 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
+    "cardDetails",
     "publicAddress",
     "didKey",
     "export",
@@ -1137,7 +1139,6 @@
     "didPrivateKeyCheckbox",
     "beCareful",
     "decentralizedIDKey",
-    "cardDetails",
     "copyDIDKeyToClipboard"
   ],
 
@@ -1507,6 +1508,7 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
+    "cardDetails",
     "publicAddress",
     "didKey",
     "export",
@@ -1515,7 +1517,6 @@
     "reveal",
     "didPrivateKeyDescription",
     "didPrivateKeyDescriptionAlert",
-    "cardDetails",
     "didPrivateKeyCheckbox",
     "beCareful",
     "decentralizedIDKey",
