@@ -123,7 +123,7 @@ class _TabControllerViewState extends State<TabControllerView>
             Expanded(
               child: BackgroundCard(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+                    const EdgeInsets.all(Sizes.spaceSmall),
                 margin:
                     const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
                 //height: double.infinity,
