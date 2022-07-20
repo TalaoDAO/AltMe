@@ -105,7 +105,7 @@ class Ecole42LearningAchievementDisplayDetail extends StatelessWidget {
                           child: SizedBox(
                             height:
                                 80 * MediaQuery.of(context).size.aspectRatio,
-                            child: ImageFromNetwork(
+                            child: CachedImageFromNetwork(
                               ecole42LearningAchievementModel
                                   .signatureLines!.image,
                             ),

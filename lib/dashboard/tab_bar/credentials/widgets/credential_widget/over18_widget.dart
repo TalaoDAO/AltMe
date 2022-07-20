@@ -95,7 +95,7 @@ class Over18Verso extends Verso {
                 borderRadius: BorderRadius.circular(10),
                 child: SizedBox(
                   height: 40,
-                  child: ImageFromNetwork(
+                  child: CachedImageFromNetwork(
                     over18Model.issuedBy!.logo,
                     fit: BoxFit.cover,
                   ),

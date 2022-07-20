@@ -35,23 +35,23 @@ void main() {
       expect(displayIssuer.issuer, issuerWithLogo);
     });
 
-    testWidgets('find ImageFromNetwork', (WidgetTester tester) async {
+    testWidgets('find CachedImageFromNetwork', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: DisplayIssuer(issuer: issuerWithLogo),
         ),
       );
-      expect(find.byType(ImageFromNetwork), findsOneWidget);
+      expect(find.byType(CachedImageFromNetwork), findsOneWidget);
     });
 
-    testWidgets('ImageFromNetwork gone when logo is empty',
+    testWidgets('CachedImageFromNetwork gone when logo is empty',
         (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: DisplayIssuer(issuer: issuerWithoutLogo),
         ),
       );
-      expect(find.byType(ImageFromNetwork), findsNothing);
+      expect(find.byType(CachedImageFromNetwork), findsNothing);
     });
 
     testWidgets('find all widget', (WidgetTester tester) async {
@@ -61,7 +61,7 @@ void main() {
         ),
       );
       expect(find.byType(Padding), findsOneWidget);
-      expect(find.byType(ImageFromNetwork), findsOneWidget);
+      expect(find.byType(CachedImageFromNetwork), findsOneWidget);
       expect(find.byType(Row), findsOneWidget);
       expect(find.byType(Text), findsOneWidget);
       expect(find.byType(Spacer), findsOneWidget);

@@ -37,7 +37,7 @@ class CredentialSelectionManifestDisplayDescriptor extends StatelessWidget {
                 if (element.styles?.hero != null)
                   Padding(
                     padding: const EdgeInsets.all(8),
-                    child: ImageFromNetwork(element.styles!.hero!.uri),
+                    child: CachedImageFromNetwork(element.styles!.hero!.uri),
                   )
                 else
                   const SizedBox.shrink(),
@@ -58,7 +58,7 @@ class CredentialSelectionManifestDisplayDescriptor extends StatelessWidget {
                             maxHeight: 100,
                             maxWidth: 100,
                           ),
-                          child: ImageFromNetwork(
+                          child: CachedImageFromNetwork(
                             element.styles!.thumbnail!.uri,
                           ),
                         ),

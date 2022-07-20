@@ -238,7 +238,7 @@ class StudentCardVerso extends Verso {
               id: 'image',
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: ImageFromNetwork(
+                child: CachedImageFromNetwork(
                   studentCardModel.recipient!.image,
                   fit: BoxFit.fill,
                 ),

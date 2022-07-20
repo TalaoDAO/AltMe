@@ -86,7 +86,7 @@ class IdentityPassDisplayDetail extends StatelessWidget {
           if (identityPassModel.recipient!.image != '')
             Padding(
               padding: const EdgeInsets.all(8),
-              child: ImageFromNetwork(identityPassModel.recipient!.image),
+              child: CachedImageFromNetwork(identityPassModel.recipient!.image),
             )
           else
             const SizedBox.shrink(),

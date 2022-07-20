@@ -22,7 +22,7 @@ class DisplayIssuer extends StatelessWidget {
         ),
         const Spacer(),
         if (issuer.logo.isNotEmpty)
-          ImageFromNetwork(
+          CachedImageFromNetwork(
             issuer.logo,
             fit: BoxFit.cover,
           )
