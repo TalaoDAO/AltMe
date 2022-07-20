@@ -182,7 +182,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                DisplayDetail(credentialModel: widget.credentialModel),
+                DisplayDetail(
+                  credentialModel: widget.credentialModel,
+                  fromCredentialOffer: false,
+                ),
                 const SizedBox(height: 20),
                 Row(
                   children: [
@@ -224,13 +227,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                 ),
                 if (outputDescriptors != null) ...[
                   const SizedBox(height: 10),
-                  BackgroundCard(
-                    color: Theme.of(context).colorScheme.surfaceContainer,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: CredentialSelectionManifestDisplayDescriptor(
-                      outputDescriptors: outputDescriptors,
-                      credentialModel: widget.credentialModel,
-                    ),
+                  CredentialSelectionManifestDisplayDescriptor(
+                    outputDescriptors: outputDescriptors,
+                    credentialModel: widget.credentialModel,
+                    showTile: true,
                   ),
                 ],
                 const SizedBox(height: 30),

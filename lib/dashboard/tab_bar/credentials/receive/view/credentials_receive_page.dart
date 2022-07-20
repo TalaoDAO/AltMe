@@ -82,7 +82,10 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                DisplayDetail(credentialModel: credentialModel),
+                DisplayDetail(
+                  credentialModel: credentialModel,
+                  fromCredentialOffer: true,
+                ),
                 const SizedBox(height: 24),
                 MyGradientButton(
                   text: l10n.credentialAddThisCard,

@@ -1,5 +1,5 @@
-import 'package:altme/app/shared/widget/base/credential_field.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
@@ -7,23 +7,23 @@ class DisplayMappingWidget extends StatelessWidget {
   const DisplayMappingWidget({
     this.displayMapping,
     required this.credentialModel,
-    this.titleColor,
-    this.valueColor,
+    required this.style,
     Key? key,
   }) : super(key: key);
   final DisplayMapping? displayMapping;
   final CredentialModel credentialModel;
-  final Color? titleColor;
-  final Color? valueColor;
+  final TextStyle style;
 
   @override
   Widget build(BuildContext context) {
     final object = displayMapping;
     if (object is DisplayMappingText) {
-      return CredentialField(
-        value: object.text,
-        titleColor: titleColor,
-        valueColor: valueColor,
+      return Padding(
+        padding: const EdgeInsets.all(8),
+        child: ManifestText(
+          text: object.text,
+          style: style,
+        ),
       );
     }
     if (object is DisplayMappingPath) {
@@ -32,10 +32,9 @@ class DisplayMappingWidget extends StatelessWidget {
         final textList = getTextsFromCredential(e, credentialModel.data);
         for (final element in textList) {
           widgets.add(
-            CredentialField(
-              value: element,
-              titleColor: titleColor,
-              valueColor: valueColor,
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: ManifestText(text: element, style: style),
             ),
           );
         }
@@ -47,13 +46,37 @@ class DisplayMappingWidget extends StatelessWidget {
         );
       }
       if (object.fallback != null) {
-        return CredentialField(
-          value: object.fallback ?? '',
-          titleColor: titleColor,
-          valueColor: valueColor,
+        return Padding(
+          padding: const EdgeInsets.all(8),
+          child: ManifestText(
+            text: object.fallback ?? '',
+            style: style,
+          ),
         );
       }
     }
     return const SizedBox.shrink();
+  }
+}
+
+class ManifestText extends StatelessWidget {
+  const ManifestText({
+    Key? key,
+    required this.text,
+    required this.style,
+  }) : super(key: key);
+
+  final String text;
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: style,
+      maxLines: 5,
+      overflow: TextOverflow.fade,
+      softWrap: true,
+    );
   }
 }

@@ -707,4 +707,22 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
         decoration: TextDecoration.underline,
       );
+
+  TextStyle get credentialManifestTitle1 => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+      );
+
+  TextStyle get credentialManifestDescription => GoogleFonts.roboto(
+        color: const Color(0xff86809D),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get credentialManifestTitle2 => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+      );
 }

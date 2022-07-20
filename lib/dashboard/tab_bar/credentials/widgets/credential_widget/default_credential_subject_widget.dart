@@ -18,7 +18,6 @@ class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final credential = Credential.fromJsonOrDummy(credentialModel.data);
     final outputDescriptor =
         credentialModel.credentialManifest?.outputDescriptors?.first;
     // If outputDescriptor exist, the credential has a credential manifest
@@ -143,10 +142,12 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
     Key? key,
     required this.credentialModel,
     required this.showBgDecoration,
+    required this.fromCredentialOffer,
   }) : super(key: key);
 
   final CredentialModel credentialModel;
   final bool showBgDecoration;
+  final bool fromCredentialOffer;
 
   @override
   Widget build(BuildContext context) {
@@ -163,15 +164,13 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
         ),
       );
     } else {
-      final backgroundColor = getColorFromCredential(
-        outputDescriptors.first.styles?.background,
-        Colors.white,
-      );
-
-      final Widget descriptionWidget = CredentialManifestDisplayDescriptor(
-        credentialModel: credentialModel,
-        outputDescriptor: outputDescriptors.first,
-      );
+      if (fromCredentialOffer) {
+        return CredentialSelectionManifestDisplayDescriptor(
+          outputDescriptors: outputDescriptors,
+          credentialModel: credentialModel,
+          showTile: false,
+        );
+      }
 
       return CredentialContainer(
         child: AspectRatio(
@@ -179,7 +178,10 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
           child: Container(
             decoration: BaseBoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: backgroundColor,
+              color: getColorFromCredential(
+                outputDescriptors.first.styles?.background,
+                Colors.white,
+              ),
               shapeColor: Theme.of(context).colorScheme.documentShape,
               value: 1,
               anchors: showBgDecoration
@@ -188,7 +190,10 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: descriptionWidget,
+              child: CredentialManifestDisplayDescriptor(
+                credentialModel: credentialModel,
+                outputDescriptor: outputDescriptors.first,
+              ),
             ),
           ),
         ),
