@@ -365,6 +365,14 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
+    "publicAddress",
+    "didKey",
+    "export",
+    "copy",
+    "didPrivateKey",
+    "reveal",
+    "didPrivateKeyDescription",
+    "didPrivateKeyDescriptionAlert",
     "cardDetails"
   ],
 
@@ -734,7 +742,15 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
-    "cardDetails"
+    "cardDetails",
+    "publicAddress",
+    "didKey",
+    "export",
+    "copy",
+    "didPrivateKey",
+    "reveal",
+    "didPrivateKeyDescription",
+    "didPrivateKeyDescriptionAlert"
   ],
 
   "fr": [
@@ -1103,6 +1119,14 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
+    "publicAddress",
+    "didKey",
+    "export",
+    "copy",
+    "didPrivateKey",
+    "reveal",
+    "didPrivateKeyDescription",
+    "didPrivateKeyDescriptionAlert",
     "cardDetails"
   ],
 
@@ -1472,6 +1496,14 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
+    "publicAddress",
+    "didKey",
+    "export",
+    "copy",
+    "didPrivateKey",
+    "reveal",
+    "didPrivateKeyDescription",
+    "didPrivateKeyDescriptionAlert",
     "cardDetails"
   ]
 }

@@ -94,10 +94,11 @@ class WalletItems extends StatelessWidget {
 
               ///Manage Decentralize ID keys
               DrawerItem(
-                icon: IconStrings.userRound,
+                icon: IconStrings.key,
                 title: l10n.showDecentralizeIDkeys,
-                trailing: Container(),
-                onTap: () async {},
+                onTap: () {
+                  Navigator.of(context).push<void>(ManageDIDPage.route());
+                },
               ),
               const DrawerItemDivider(),
 

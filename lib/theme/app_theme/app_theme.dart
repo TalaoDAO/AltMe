@@ -45,7 +45,7 @@ abstract class AppTheme {
   /// A color use to paint the drop shadows of elevated components.
   static Color darkShadow = const Color(0xff1D1D1D).withOpacity(0.1);
 
-  static Color dividerColor = const Color(0xFF180B2B);
+  static Color dividerColor = const Color(0xFF605A71);
 
   static ThemeData get darkThemeData => ThemeData(
         brightness: Brightness.dark,
@@ -67,7 +67,7 @@ abstract class AppTheme {
           brightness: Brightness.dark,
         ),
         textTheme: TextTheme(
-          caption: GoogleFonts.roboto(
+          caption: GoogleFonts.nunito(
             color: const Color(0xFFFFFFFF),
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -86,6 +86,9 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+
+  Color get defaultDialogDark => const Color(0xFF322643);
+
   Color get closeIconColor => const Color(0xFFA79ABA);
 
   Color get kycVerifyButton => const Color(0xFF0045FF);
@@ -277,6 +280,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xFFFFFFFF),
         fontSize: 10,
         fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get title => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
       );
 
   TextStyle get listTitle => GoogleFonts.roboto(

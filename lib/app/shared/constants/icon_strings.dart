@@ -50,4 +50,6 @@ class IconStrings {
   static const String home = '$base/empty-wallet.png';
   static const String discover = '$base/discover.png';
   static const String settings = '$base/settings.png';
+  static const String export = '$base/export.png';
+  static const String copy = '$base/copy.png';
 }
