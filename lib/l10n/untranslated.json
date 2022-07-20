@@ -364,7 +364,8 @@
     "settings",
     "privateKeyDescriptions",
     "importAccount",
-    "imported"
+    "imported",
+    "cardDetails"
   ],
 
   "es": [
@@ -732,7 +733,8 @@
     "settings",
     "privateKeyDescriptions",
     "importAccount",
-    "imported"
+    "imported",
+    "cardDetails"
   ],
 
   "fr": [
@@ -1100,7 +1102,8 @@
     "settings",
     "privateKeyDescriptions",
     "importAccount",
-    "imported"
+    "imported",
+    "cardDetails"
   ],
 
   "it": [
@@ -1468,6 +1471,7 @@
     "settings",
     "privateKeyDescriptions",
     "importAccount",
-    "imported"
+    "imported",
+    "cardDetails"
   ]
 }

@@ -189,6 +189,12 @@ extension CustomColorScheme on ColorScheme {
   Color get startButtonColorB => const Color(0xff6600FF);
 
   Color get associatedWalletBorder => const Color(0xff524B67);
+
+  Color get deleteColor => const Color(0xff322643);
+
+  Color get titleColor => const Color(0xffD1CCE3);
+
+  Color get valueColor => const Color(0xffFFFFFF);
 }
 
 extension CustomTextTheme on TextTheme {
@@ -693,5 +699,30 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xFFFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get deleteThisCertificate => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        decoration: TextDecoration.underline,
+      );
+
+  TextStyle get credentialManifestTitle1 => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+      );
+
+  TextStyle get credentialManifestDescription => GoogleFonts.roboto(
+        color: const Color(0xff86809D),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get credentialManifestTitle2 => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
       );
 }

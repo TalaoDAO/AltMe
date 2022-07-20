@@ -6,9 +6,11 @@ class DisplayDetail extends StatelessWidget {
   const DisplayDetail({
     Key? key,
     required this.credentialModel,
+    this.fromCredentialOffer = false,
   }) : super(key: key);
 
   final CredentialModel credentialModel;
+  final bool fromCredentialOffer;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class DisplayDetail extends StatelessWidget {
         return DefaultCredentialSubjectDisplayDetail(
           credentialModel: credentialModel,
           showBgDecoration: false,
+          fromCredentialOffer: fromCredentialOffer,
         );
       case CredentialSubjectType.ecole42LearningAchievement:
         return Ecole42LearningAchievementDisplayDetail(

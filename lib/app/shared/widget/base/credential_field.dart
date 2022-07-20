@@ -6,12 +6,14 @@ class CredentialField extends StatelessWidget {
     Key? key,
     required this.value,
     this.title,
-    this.textColor,
+    this.titleColor,
+    this.valueColor,
   }) : super(key: key);
 
   final String value;
   final String? title;
-  final Color? textColor;
+  final Color? titleColor;
+  final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,8 @@ class CredentialField extends StatelessWidget {
       child: DisplayCredentialField(
         title: title,
         value: value,
-        textColor: textColor,
+        titleColor: titleColor,
+        valueColor: valueColor,
       ),
     );
   }
@@ -31,12 +34,14 @@ class DisplayCredentialField extends StatelessWidget {
     Key? key,
     required this.title,
     required this.value,
-    this.textColor,
+    this.titleColor,
+    this.valueColor,
   }) : super(key: key);
 
   final String? title;
   final String value;
-  final Color? textColor;
+  final Color? titleColor;
+  final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
@@ -47,22 +52,22 @@ class DisplayCredentialField extends StatelessWidget {
           if (title != null)
             Text(
               '$title: ',
-              style: textColor == null
+              style: titleColor == null
                   ? Theme.of(context).textTheme.credentialFieldTitle
                   : Theme.of(context)
                       .textTheme
                       .credentialFieldTitle
-                      .copyWith(color: textColor),
+                      .copyWith(color: titleColor),
             ),
           Flexible(
             child: Text(
               value,
-              style: textColor == null
+              style: valueColor == null
                   ? Theme.of(context).textTheme.credentialFieldDescription
                   : Theme.of(context)
                       .textTheme
                       .credentialFieldDescription
-                      .copyWith(color: textColor),
+                      .copyWith(color: valueColor),
               maxLines: 5,
               overflow: TextOverflow.fade,
               softWrap: true,

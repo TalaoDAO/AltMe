@@ -65,7 +65,7 @@
   "onBoardingSuccessButton": "Continue",
   "credentialDetailShare": "Share by QR code",
   "credentialAddedMessage": "A new credential has been successfully added!",
-  "credentialDetailDelete": "Delete credential",
+  "credentialDetailDelete": "Delete this certificate",
   "credentialDetailDeleteConfirmationDialog": "Do you really want to delete this credential?",
   "credentialDetailDeleteConfirmationDialogYes": "Yes",
   "credentialDetailDeleteConfirmationDialogNo": "No",
@@ -414,6 +414,6 @@
   "settings": "Settings",
   "privateKeyDescriptions": "A private key is a secret number that is used to sign transactions and prove ownership of a blockchain address. On Tezos, private key are usually 54 characters long.",
   "importAccount": "Import account",
-  "imported": "Imported"
-
+  "imported": "Imported",
+  "cardDetails": "Card details"
 }
