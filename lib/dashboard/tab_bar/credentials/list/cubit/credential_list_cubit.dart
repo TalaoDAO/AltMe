@@ -34,6 +34,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     final gamingCredentials = <HomeCredential>[];
     final communityCredentials = <HomeCredential>[];
     final identityCredentials = <HomeCredential>[];
+    final proofOfOwnershipsCredentials = <HomeCredential>[];
     final othersCredentials = <HomeCredential>[];
 
     for (final credential in walletCubit.state.credentials) {
@@ -68,7 +69,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           }
           break;
 
-        case CredentialCategory.othersCards:
+        case CredentialCategory.proofOfOwnershipCards:
 
           /// adding real credentials except tezosAssociatedWallet
           // if (credential.credentialPreview.credentialSubjectModel
@@ -77,6 +78,11 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           //   othersCredentials.add(HomeCredential.isNotDummy(credential));
           // }
 
+          proofOfOwnershipsCredentials
+              .add(HomeCredential.isNotDummy(credential));
+          break;
+
+        case CredentialCategory.othersCards:
           othersCredentials.add(HomeCredential.isNotDummy(credential));
           break;
       }
@@ -102,6 +108,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         gamingCredentials: gamingCredentials,
         communityCredentials: communityCredentials,
         identityCredentials: identityCredentials,
+        proofOfOwnershipCredentials: proofOfOwnershipsCredentials,
         othersCredentials: othersCredentials,
       ),
     );
@@ -149,6 +156,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         }
 
         emit(state.populate(identityCredentials: _credentials));
+        break;
+
+      case CredentialCategory.proofOfOwnershipCards:
+
+        /// adding real credentials
+        final _credentials = List.of(state.proofOfOwnershipCredentials)
+          ..insert(0, HomeCredential.isNotDummy(credential));
+        emit(state.populate(proofOfOwnershipCredentials: _credentials));
         break;
 
       case CredentialCategory.othersCards:
@@ -216,6 +231,24 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         emit(state.populate(identityCredentials: _credentials));
         break;
+
+      case CredentialCategory.proofOfOwnershipCards:
+
+        ///finding index of updated credential
+        final index = state.proofOfOwnershipCredentials.indexWhere(
+          (element) => element.credentialModel?.id == credential.id,
+        );
+
+        ///create updated credential list
+        final _credentials = List.of(state.proofOfOwnershipCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          )
+          ..insert(index, HomeCredential.isNotDummy(credential));
+
+        emit(state.populate(proofOfOwnershipCredentials: _credentials));
+        break;
+
       case CredentialCategory.othersCards:
 
         ///finding index of updated credential
@@ -279,6 +312,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         emit(state.populate(identityCredentials: _credentials));
         break;
 
+      case CredentialCategory.proofOfOwnershipCards:
+        final _credentials = List.of(state.proofOfOwnershipCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          );
+        emit(state.populate(proofOfOwnershipCredentials: _credentials));
+        break;
+
       case CredentialCategory.othersCards:
         final _credentials = List.of(state.othersCredentials)
           ..removeWhere(
@@ -295,6 +336,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         gamingCredentials: [],
         communityCredentials: [],
         identityCredentials: [],
+        proofOfOwnershipCredentials: [],
         othersCredentials: [],
       ),
     );

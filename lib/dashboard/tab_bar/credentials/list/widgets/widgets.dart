@@ -4,3 +4,4 @@ export 'credential_list_shimmer.dart';
 export 'game_credentials.dart';
 export 'identity_credentials.dart';
 export 'other_credentials.dart';
+export 'proof_of_ownership_credentials.dart';

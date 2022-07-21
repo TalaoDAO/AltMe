@@ -8,10 +8,12 @@ class CredentialListState extends Equatable {
     List<HomeCredential>? gamingCredentials,
     List<HomeCredential>? communityCredentials,
     List<HomeCredential>? identityCredentials,
+    List<HomeCredential>? proofOfOwnershipCredentials,
     List<HomeCredential>? othersCredentials,
   })  : gamingCredentials = gamingCredentials ?? [],
         communityCredentials = communityCredentials ?? [],
         identityCredentials = identityCredentials ?? [],
+        proofOfOwnershipCredentials = proofOfOwnershipCredentials ?? [],
         othersCredentials = othersCredentials ?? [];
 
   factory CredentialListState.fromJson(Map<String, dynamic> json) =>
@@ -21,6 +23,7 @@ class CredentialListState extends Equatable {
   final List<HomeCredential> gamingCredentials;
   final List<HomeCredential> communityCredentials;
   final List<HomeCredential> identityCredentials;
+  final List<HomeCredential> proofOfOwnershipCredentials;
   final List<HomeCredential> othersCredentials;
   final StateMessage? message;
 
@@ -30,6 +33,7 @@ class CredentialListState extends Equatable {
       gamingCredentials: gamingCredentials,
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
+      proofOfOwnershipCredentials: proofOfOwnershipCredentials,
       othersCredentials: othersCredentials,
     );
   }
@@ -43,6 +47,7 @@ class CredentialListState extends Equatable {
       gamingCredentials: gamingCredentials,
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
+      proofOfOwnershipCredentials: proofOfOwnershipCredentials,
       othersCredentials: othersCredentials,
     );
   }
@@ -53,6 +58,7 @@ class CredentialListState extends Equatable {
       gamingCredentials: gamingCredentials,
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
+      proofOfOwnershipCredentials: proofOfOwnershipCredentials,
       othersCredentials: othersCredentials,
     );
   }
@@ -64,6 +70,7 @@ class CredentialListState extends Equatable {
       gamingCredentials: gamingCredentials,
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
+      proofOfOwnershipCredentials: proofOfOwnershipCredentials,
       othersCredentials: othersCredentials,
     );
   }
@@ -72,6 +79,7 @@ class CredentialListState extends Equatable {
     List<HomeCredential>? gamingCredentials,
     List<HomeCredential>? communityCredentials,
     List<HomeCredential>? identityCredentials,
+    List<HomeCredential>? proofOfOwnershipCredentials,
     List<HomeCredential>? othersCredentials,
   }) {
     return CredentialListState(
@@ -79,6 +87,8 @@ class CredentialListState extends Equatable {
       gamingCredentials: gamingCredentials ?? this.gamingCredentials,
       communityCredentials: communityCredentials ?? this.communityCredentials,
       identityCredentials: identityCredentials ?? this.identityCredentials,
+      proofOfOwnershipCredentials:
+          proofOfOwnershipCredentials ?? this.proofOfOwnershipCredentials,
       othersCredentials: othersCredentials ?? this.othersCredentials,
     );
   }
@@ -95,6 +105,7 @@ class CredentialListState extends Equatable {
       gamingCredentials: gamingCredentials,
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
+      proofOfOwnershipCredentials: proofOfOwnershipCredentials,
       othersCredentials: othersCredentials,
     );
   }
@@ -107,6 +118,7 @@ class CredentialListState extends Equatable {
         gamingCredentials,
         communityCredentials,
         identityCredentials,
+        proofOfOwnershipCredentials,
         othersCredentials,
         message
       ];

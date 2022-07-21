@@ -38,7 +38,13 @@ class CredentialListData extends StatelessWidget {
               IdentityCredentials(credentials: state.identityCredentials),
               const SizedBox(height: 10),
             ],
-            if (state.identityCredentials.isNotEmpty) ...[
+            if (state.proofOfOwnershipCredentials.isNotEmpty) ...[
+              ProofOfOwnershipCredentials(
+                credentials: state.proofOfOwnershipCredentials,
+              ),
+              const SizedBox(height: 10),
+            ],
+            if (state.othersCredentials.isNotEmpty) ...[
               OtherCredentials(credentials: state.othersCredentials),
               const SizedBox(height: 10),
             ],
