@@ -77,17 +77,18 @@ class WalletCubit extends Cubit<WalletState> {
   }) async {
     int index = 0;
 
-    final String? derivePathIndex =
-        await secureStorageProvider.get(SecureStorageKeys.derivePathIndex);
+    if (!isImported) {
+      final String? derivePathIndex =
+          await secureStorageProvider.get(SecureStorageKeys.derivePathIndex);
 
-    if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
-      index = int.parse(derivePathIndex) + 1;
+      if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
+        index = int.parse(derivePathIndex) + 1;
+      }
+      await secureStorageProvider.set(
+        SecureStorageKeys.derivePathIndex,
+        index.toString(),
+      );
     }
-
-    await secureStorageProvider.set(
-      SecureStorageKeys.derivePathIndex,
-      index.toString(),
-    );
 
     late String cryptoKey;
     late String cryptoWalletAddress;

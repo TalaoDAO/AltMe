@@ -68,7 +68,7 @@ void main() {
         expect(walletAddress, cryptoWalletAddress);
       });
 
-      test('tz1 wallet address from mnemonics for crypto', () async {
+      test('tz1 wallet address from secret key for crypto', () async {
         final walletAddress = await keyGenerator.tz1AddressFromSecretKey(
           secretKey: cryptoSecretKey,
         );
