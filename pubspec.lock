@@ -370,9 +370,11 @@ packages:
   file_saver:
     dependency: "direct main"
     description:
-      name: file_saver
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: c0ea840
+      resolved-ref: c0ea84007896c6014c72785a8bcde0e9c53dc804
+      url: "https://github.com/incrediblezayed/file_saver"
+    source: git
     version: "0.1.0"
   fixnum:
     dependency: transitive
@@ -1037,7 +1039,7 @@ packages:
       name: qr_code_scanner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.1"
+    version: "1.0.0"
   qr_flutter:
     dependency: "direct main"
     description:
