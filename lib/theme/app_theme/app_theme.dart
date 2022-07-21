@@ -86,7 +86,6 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
-
   Color get defaultDialogDark => const Color(0xFF322643);
 
   Color get closeIconColor => const Color(0xFFA79ABA);
@@ -198,6 +197,10 @@ extension CustomColorScheme on ColorScheme {
   Color get titleColor => const Color(0xffD1CCE3);
 
   Color get valueColor => const Color(0xffFFFFFF);
+
+  Color get lightGrey => const Color(0xFF616161);
+
+  Color get darkGrey => const Color(0xFF212121);
 }
 
 extension CustomTextTheme on TextTheme {
