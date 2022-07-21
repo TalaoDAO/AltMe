@@ -21,6 +21,7 @@ class NftItem extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           AspectRatio(
             aspectRatio: 1.05,
@@ -42,15 +43,6 @@ class NftItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.caption,
           ),
-          const SizedBox(
-            height: 6,
-          ),
-          MyText(
-            assetValue,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.caption2,
-          )
         ],
       ),
     );
