@@ -34,7 +34,7 @@ void main() {
     testWidgets('nothing happens when button is pressed', (tester) async {
       await tester
           .pumpApp(const OnBoardingTosPage(routeType: WalletRouteType.create));
-      await tester.tap(find.byType(BaseButton));
+      await tester.tap(find.byType(MyElevatedButton));
       await tester.pumpAndSettle();
       expect(find.byType(OnBoardingTosPage), findsOneWidget);
     });

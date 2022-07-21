@@ -148,8 +148,13 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     height: kBottomNavigationBarHeight,
                     child: Tooltip(
                       message: l10n.credentialDetailShare,
-                      child: BaseButton.primary(
-                        context: context,
+                      child: MyElevatedButton.icon(
+                        icon: SvgPicture.asset(
+                          IconStrings.qrCode,
+                          width: 24,
+                          height: 24,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
                         onPressed: () {
                           Navigator.of(context).push<void>(
                             QrCodeDisplayPage.route(
@@ -158,21 +163,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             ),
                           );
                         },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            SvgPicture.asset(
-                              IconStrings.qrCode,
-                              width: 24,
-                              height: 24,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                            const SizedBox(width: 16),
-                            Text(l10n.credentialDetailShare),
-                          ],
-                        ),
+                        text: l10n.credentialDetailShare,
                       ),
                     ),
                   ),

@@ -53,13 +53,15 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage> {
             const SizedBox(
               height: Sizes.spaceNormal,
             ),
-            BlocBuilder<DIDPrivateKeyCubit, String>(builder: (context, state) {
-              return Text(
-                state,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.subtitle1,
-              );
-            }),
+            BlocBuilder<DIDPrivateKeyCubit, String>(
+              builder: (context, state) {
+                return Text(
+                  state,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.subtitle1,
+                );
+              },
+            ),
             Padding(
               padding: const EdgeInsets.all(Sizes.spaceXLarge),
               child: Row(
@@ -82,7 +84,7 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage> {
                   const SizedBox(
                     width: Sizes.spaceXLarge,
                   ),
-                  ExportButton(),
+                  const ExportButton(),
                 ],
               ),
             ),

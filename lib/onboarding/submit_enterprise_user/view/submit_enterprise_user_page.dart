@@ -118,15 +118,16 @@ class _SubmitEnterpriseUserViewState extends State<SubmitEnterpriseUserView> {
                 ),
             ],
           ),
-          navigation: BaseButton.primary(
-            context: context,
+          navigation: Container(
             margin: const EdgeInsets.all(15),
-            onPressed: () {
-              context
-                  .read<SubmitEnterpriseUserCubit>()
-                  .verify(_didController.text);
-            },
-            child: Text(localization.confirm),
+            child: MyElevatedButton(
+              onPressed: () {
+                context
+                    .read<SubmitEnterpriseUserCubit>()
+                    .verify(_didController.text);
+              },
+              text: localization.confirm,
+            ),
           ),
         );
       },

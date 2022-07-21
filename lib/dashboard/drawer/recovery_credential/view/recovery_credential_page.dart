@@ -125,24 +125,19 @@ class _RecoveryCredentialViewState extends State<RecoveryCredentialView> {
                 ),
                 const SizedBox(height: 32),
                 BaseTextField(
-                  label: l10n.recoveryMnemonicHintText,
+                  hint: l10n.recoveryMnemonicHintText,
+                  fillColor: Colors.transparent,
+                  hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
                   controller: mnemonicController,
                   error: state.isTextFieldEdited && !state.isMnemonicValid
                       ? l10n.recoveryMnemonicError
                       : null,
+                  height: 160,
+                  borderRadius: Sizes.normalRadius,
+                  maxLines: 10,
                 ),
                 const SizedBox(height: 24),
-                BaseButton.primary(
-                  context: context,
-                  textColor: Theme.of(context).colorScheme.onPrimary,
-                  gradient: state.isMnemonicValid
-                      ? null
-                      : LinearGradient(
-                          colors: [
-                            Theme.of(context).colorScheme.buttonDisabled,
-                            Theme.of(context).colorScheme.buttonDisabled
-                          ],
-                        ),
+                MyGradientButton(
                   onPressed: !state.isMnemonicValid
                       ? null
                       : () async {
@@ -152,7 +147,7 @@ class _RecoveryCredentialViewState extends State<RecoveryCredentialView> {
                           }
                           await _pickRecoveryFile();
                         },
-                  child: Text(l10n.recoveryCredentialButtonTitle),
+                  text: l10n.recoveryCredentialButtonTitle,
                 )
               ],
             );

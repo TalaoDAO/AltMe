@@ -102,7 +102,9 @@ class ManageDIDPage extends StatelessWidget {
                         restrictToBack: false,
                         isValidCallback: () {
                           Navigator.push<void>(
-                              context, DIDPrivateKeyPage.route());
+                            context,
+                            DIDPrivateKeyPage.route(),
+                          );
                         },
                       ),
                     );

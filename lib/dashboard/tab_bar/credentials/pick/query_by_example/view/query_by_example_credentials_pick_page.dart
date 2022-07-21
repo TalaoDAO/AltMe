@@ -103,8 +103,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                               message: l10n.credentialPickPresent,
                               child: Builder(
                                 builder: (context) {
-                                  return BaseButton.primary(
-                                    context: context,
+                                  return MyGradientButton(
                                     onPressed: () async {
                                       if (queryState.selection.isEmpty) {
                                         AlertMessage.showStringMessage(
@@ -148,7 +147,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                         return;
                                       }
                                     },
-                                    child: Text(l10n.credentialPickPresent),
+                                    text: l10n.credentialPickPresent,
                                   );
                                 },
                               ),

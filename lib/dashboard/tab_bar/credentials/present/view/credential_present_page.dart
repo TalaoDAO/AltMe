@@ -72,8 +72,7 @@ class _CredentialsPresentPageState extends State<CredentialsPresentPage> {
               //         CredentialModel(
               //             id: '', image: '', data: {'issuer': ''}))),
               const SizedBox(height: 24),
-              BaseButton.transparent(
-                context: context,
+              MyGradientButton(
                 onPressed: () =>
                     Navigator.of(context).pushReplacement<void, void>(
                   QueryByExampleCredentialPickPage.route(
@@ -81,15 +80,14 @@ class _CredentialsPresentPageState extends State<CredentialsPresentPage> {
                     widget.preview,
                   ),
                 ),
-                child: Text(l10n.credentialPresentConfirm),
+                text: l10n.credentialPresentConfirm,
               ),
               const SizedBox(height: 8),
-              BaseButton.primary(
-                context: context,
+              MyOutlinedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text(l10n.credentialPresentCancel),
+                text: l10n.credentialPresentCancel,
               ),
             ],
           );
