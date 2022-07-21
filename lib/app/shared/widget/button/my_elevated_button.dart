@@ -30,7 +30,7 @@ class MyElevatedButton extends StatelessWidget {
   }) : super(key: key);
 
   final String text;
-  final GestureTapCallback onPressed;
+  final GestureTapCallback? onPressed;
   final Color? backgroundColor;
   final Color? textColor;
   final double borderRadius;

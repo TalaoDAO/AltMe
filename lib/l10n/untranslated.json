@@ -365,7 +365,19 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
-    "cardDetails"
+    "cardDetails",
+    "publicAddress",
+    "didKey",
+    "export",
+    "copy",
+    "didPrivateKey",
+    "reveal",
+    "didPrivateKeyDescription",
+    "didPrivateKeyDescriptionAlert",
+    "didPrivateKeyCheckbox",
+    "beCareful",
+    "decentralizedIDKey",
+    "copyDIDKeyToClipboard"
   ],
 
   "es": [
@@ -734,7 +746,19 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
-    "cardDetails"
+    "cardDetails",
+    "publicAddress",
+    "didKey",
+    "export",
+    "copy",
+    "didPrivateKey",
+    "reveal",
+    "didPrivateKeyDescription",
+    "didPrivateKeyDescriptionAlert",
+    "didPrivateKeyCheckbox",
+    "beCareful",
+    "decentralizedIDKey",
+    "copyDIDKeyToClipboard"
   ],
 
   "fr": [
@@ -1103,7 +1127,19 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
-    "cardDetails"
+    "cardDetails",
+    "publicAddress",
+    "didKey",
+    "export",
+    "copy",
+    "didPrivateKey",
+    "reveal",
+    "didPrivateKeyDescription",
+    "didPrivateKeyDescriptionAlert",
+    "didPrivateKeyCheckbox",
+    "beCareful",
+    "decentralizedIDKey",
+    "copyDIDKeyToClipboard"
   ],
 
   "it": [
@@ -1472,6 +1508,18 @@
     "privateKeyDescriptions",
     "importAccount",
     "imported",
-    "cardDetails"
+    "cardDetails",
+    "publicAddress",
+    "didKey",
+    "export",
+    "copy",
+    "didPrivateKey",
+    "reveal",
+    "didPrivateKeyDescription",
+    "didPrivateKeyDescriptionAlert",
+    "didPrivateKeyCheckbox",
+    "beCareful",
+    "decentralizedIDKey",
+    "copyDIDKeyToClipboard"
   ]
 }

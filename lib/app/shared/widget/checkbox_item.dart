@@ -5,6 +5,7 @@ class CheckboxItem extends StatelessWidget {
   const CheckboxItem({
     Key? key,
     this.value = false,
+    this.textStyle,
     required this.text,
     required this.onChange,
   }) : super(key: key);
@@ -12,6 +13,7 @@ class CheckboxItem extends StatelessWidget {
   final String text;
   final Function(bool) onChange;
   final bool value;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +38,9 @@ class CheckboxItem extends StatelessWidget {
           const SizedBox(
             width: Sizes.space2XSmall,
           ),
-          MyText(
+          Text(
             text,
-            style: Theme.of(context).textTheme.labelLarge,
+            style: textStyle ?? Theme.of(context).textTheme.labelLarge,
           ),
         ],
       ),
