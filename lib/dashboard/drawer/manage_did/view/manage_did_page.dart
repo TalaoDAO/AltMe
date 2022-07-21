@@ -63,10 +63,10 @@ class ManageDIDPage extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(
-                    width: Sizes.spaceXLarge,
-                  ),
-                  const ExportButton(),
+                  // const SizedBox(
+                  //   width: Sizes.spaceXLarge,
+                  // ),
+                  //const ExportButton(),
                 ],
               ),
             ),

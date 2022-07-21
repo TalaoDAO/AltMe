@@ -1,5 +1,5 @@
 abstract class Sizes {
-  static const double nftItemRatio = 0.78;
+  static const double nftItemRatio = 0.88;
 
   static const double tokenLogoSize = 34;
 

@@ -63,8 +63,8 @@ class _NftListState extends State<NftList> {
               physics: const BouncingScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 4,
-                mainAxisSpacing: 4,
+                crossAxisSpacing: 15,
+                mainAxisSpacing: 20,
                 childAspectRatio: Sizes.nftItemRatio,
               ),
               itemBuilder: (_, index) {

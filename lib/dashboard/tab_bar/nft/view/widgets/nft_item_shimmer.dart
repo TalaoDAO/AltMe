@@ -23,13 +23,6 @@ class NftItemShimmer extends StatelessWidget {
           ShimmerWidget.rectangular(
             height: 12,
           ),
-          SizedBox(
-            height: 6,
-          ),
-          ShimmerWidget.rectangular(
-            height: 10,
-            width: 60,
-          )
         ],
       ),
     );

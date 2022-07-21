@@ -65,9 +65,7 @@ class _TabControllerViewState extends State<TabControllerView>
               tabs: [
                 MyTab(
                   text: l10n.cards,
-                  icon: state == 0
-                      ? IconStrings.userSquare
-                      : IconStrings.userSquareBlur,
+                  icon: state == 0 ? IconStrings.cards : IconStrings.cardsBlur,
                   isSelected: state == 0,
                   onPressed: () {
                     if (context.read<HomeCubit>().state.homeStatus ==
@@ -122,8 +120,7 @@ class _TabControllerViewState extends State<TabControllerView>
             const SizedBox(height: Sizes.spaceSmall),
             Expanded(
               child: BackgroundCard(
-                padding:
-                    const EdgeInsets.all(Sizes.spaceSmall),
+                padding: const EdgeInsets.all(Sizes.spaceSmall),
                 margin:
                     const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
                 //height: double.infinity,

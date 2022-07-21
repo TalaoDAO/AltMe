@@ -45,13 +45,22 @@ class MyTab extends StatelessWidget {
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: Image.asset(icon, height: Sizes.icon2x),
             ),
-            Text(text, softWrap: false, overflow: TextOverflow.fade),
+            Text(
+              text,
+              softWrap: false,
+              style: Theme.of(context).textTheme.caption?.copyWith(
+                    color: isSelected
+                        ? null
+                        : Colors.grey[400],
+                  ),
+              overflow: TextOverflow.fade,
+            ),
           ],
         ),
       ),
