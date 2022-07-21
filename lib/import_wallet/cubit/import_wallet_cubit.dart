@@ -101,7 +101,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
       await walletCubit.createCryptoWallet(
         accountName: accountName,
         mnemonicOrKey: mnemonicOrKey,
-        isImported: true,
+        isImported: !isFromOnboarding,
       );
       await walletCubit.setCurrentWalletAccount(0);
 
