@@ -37,7 +37,8 @@ class DIDPrivateKeyDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
-      content: BlocBuilder<DIDPrivateKeyDialogCubit, bool>(builder: (context, state) {
+      content: BlocBuilder<DIDPrivateKeyDialogCubit, bool>(
+          builder: (context, state) {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -101,15 +102,13 @@ class DIDPrivateKeyDialog extends StatelessWidget {
                       verticalSpacing: 15,
                       fontSize: 15,
                       borderRadius: 12,
-                      backgroundColor: state
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.defaultDialogDark,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       onPressed: state
                           ? () {
                               Navigator.of(context).pop();
                               onContinueClick?.call();
                             }
-                          : () {},
+                          : null,
                     ),
                   ),
                 ],

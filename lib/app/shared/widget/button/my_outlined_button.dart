@@ -31,7 +31,7 @@ class MyOutlinedButton extends StatelessWidget {
   }) : super(key: key);
 
   final String text;
-  final GestureTapCallback onPressed;
+  final GestureTapCallback? onPressed;
   final Color? backgroundColor;
   final Color? textColor;
   final Color? borderColor;
@@ -54,12 +54,14 @@ class MyOutlinedButton extends StatelessWidget {
                 verticalSpacing: verticalSpacing,
                 backgroundColor: backgroundColor,
                 borderColor: borderColor,
+                onPressed: onPressed,
               ),
               onPressed: onPressed,
               child: OutlinedButtonText(
                 text: text,
                 fontSize: fontSize,
                 textColor: textColor,
+                onPressed: onPressed,
               ),
             )
           : OutlinedButton.icon(
@@ -71,12 +73,14 @@ class MyOutlinedButton extends StatelessWidget {
                 verticalSpacing: verticalSpacing,
                 backgroundColor: backgroundColor,
                 borderColor: borderColor,
+                onPressed: onPressed,
               ),
               onPressed: onPressed,
               label: OutlinedButtonText(
                 text: text,
                 fontSize: fontSize,
                 textColor: textColor,
+                onPressed: onPressed,
               ),
             ),
     );
@@ -90,6 +94,7 @@ ButtonStyle outlinedStyleFrom({
   required double verticalSpacing,
   required double elevation,
   required BuildContext context,
+  required GestureTapCallback? onPressed,
 }) {
   return OutlinedButton.styleFrom(
     padding: EdgeInsets.symmetric(vertical: verticalSpacing),
@@ -97,7 +102,9 @@ ButtonStyle outlinedStyleFrom({
     backgroundColor:
         backgroundColor ?? Theme.of(context).colorScheme.background,
     side: BorderSide(
-      color: borderColor ?? Theme.of(context).colorScheme.primary,
+      color: onPressed == null
+          ? Theme.of(context).colorScheme.disabledBgColor
+          : borderColor ?? Theme.of(context).colorScheme.primary,
       width: 2,
     ),
     shape: RoundedRectangleBorder(
@@ -112,18 +119,22 @@ class OutlinedButtonText extends StatelessWidget {
     required this.text,
     this.textColor,
     this.fontSize = 18,
+    required this.onPressed,
   }) : super(key: key);
 
   final String text;
   final Color? textColor;
   final double fontSize;
+  final GestureTapCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text.toUpperCase(),
       style: TextStyle(
-        color: textColor ?? Theme.of(context).colorScheme.onOutlineButton,
+        color: onPressed == null
+            ? Theme.of(context).colorScheme.disabledBgColor
+            : textColor ?? Theme.of(context).colorScheme.onOutlineButton,
         fontSize: fontSize,
         fontWeight: FontWeight.w700,
       ),

@@ -7,4 +7,3 @@ class DIDPrivateKeyDialogCubit extends Cubit<bool> {
     emit(!state);
   }
 }
-
