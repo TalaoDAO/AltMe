@@ -382,7 +382,8 @@
     "revealPrivateKey",
     "share",
     "shareWith",
-    "copiedToClipboard"
+    "copiedToClipboard",
+    "privateKey"
   ],
 
   "es": [
@@ -768,7 +769,8 @@
     "revealPrivateKey",
     "share",
     "shareWith",
-    "copiedToClipboard"
+    "copiedToClipboard",
+    "privateKey"
   ],
 
   "fr": [
@@ -1154,7 +1156,8 @@
     "revealPrivateKey",
     "share",
     "shareWith",
-    "copiedToClipboard"
+    "copiedToClipboard",
+    "privateKey"
   ],
 
   "it": [
@@ -1540,6 +1543,7 @@
     "revealPrivateKey",
     "share",
     "shareWith",
-    "copiedToClipboard"
+    "copiedToClipboard",
+    "privateKey"
   ]
 }

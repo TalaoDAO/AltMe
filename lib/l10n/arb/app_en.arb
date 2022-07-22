@@ -433,6 +433,7 @@
   "revealPrivateKey": "Reveal private key",
   "share": "Share",
   "shareWith": "Share with",
-  "copiedToClipboard": "Copied to clipboard!"
+  "copiedToClipboard": "Copied to clipboard!",
+  "privateKey": "Private key"
 
 }
