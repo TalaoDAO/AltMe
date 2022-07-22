@@ -4,6 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -153,17 +154,15 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                   body: Column(
                     children: <Widget>[
                       Text(
+                        l10n.selectYourTezosAssociatedWallet,
+                        style: Theme.of(context).textTheme.credentialSubtitle,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
                         reasonList == ''
                             ? l10n.credentialPickSelect
-                            : l10n.credentialPresentConfirm,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      Text(
-                        reasonList,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(fontWeight: FontWeight.w600),
+                            : reasonList,
+                        style: Theme.of(context).textTheme.credentialSubtitle,
                       ),
                       const SizedBox(height: 12),
                       ...List.generate(

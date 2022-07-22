@@ -4,6 +4,7 @@ import 'package:altme/dashboard/home/tab_bar/tab_bar.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -106,7 +107,7 @@ class CredentialManifestPickView extends StatelessWidget {
             children: <Widget>[
               Text(
                 l10n.credentialPickSelect,
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.credentialSubtitle,
               ),
               const SizedBox(height: 12),
               ...List.generate(

@@ -740,4 +740,10 @@ extension CustomTextTheme on TextTheme {
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
+
+  TextStyle get credentialSubtitle => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
 }
