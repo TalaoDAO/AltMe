@@ -54,48 +54,15 @@ class RealCredentialItem extends StatelessWidget {
               flex: 2,
               child: Row(
                 children: [
-                  Expanded(
-                    flex: 3,
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          IconStrings.checkCircleGreen,
-                          height: 15,
-                        ),
-                        const SizedBox(width: 2),
-                        Expanded(
-                          child: MyText(
-                            l10n.inMyWallet,
-                            style: Theme.of(context)
-                                .textTheme
-                                .credentialSurfaceText,
-                          ),
-                        ),
-                      ],
-                    ),
+                  Image.asset(
+                    IconStrings.checkCircleGreen,
+                    height: 15,
                   ),
+                  const SizedBox(width: 2),
                   Expanded(
-                    flex: 2,
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          IconStrings.frame,
-                          height: 15,
-                        ),
-                        const SizedBox(width: 2),
-                        Expanded(
-                          child: MyText(
-                            l10n.details,
-                            style: Theme.of(context)
-                                .textTheme
-                                .credentialSurfaceText
-                                .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                ),
-                          ),
-                        ),
-                      ],
+                    child: MyText(
+                      l10n.inMyWallet,
+                      style: Theme.of(context).textTheme.credentialSurfaceText,
                     ),
                   ),
                 ],
