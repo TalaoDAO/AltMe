@@ -47,9 +47,12 @@ abstract class AppTheme {
 
   static Color dividerColor = const Color(0xFF605A71);
 
+  static Color highlightColor = const Color(0xFF3C324C);
+
   static ThemeData get darkThemeData => ThemeData(
         brightness: Brightness.dark,
         dividerColor: dividerColor,
+        highlightColor: highlightColor,
         colorScheme: ColorScheme(
           primary: darkPrimary,
           onPrimary: darkOnPrimary,
@@ -86,6 +89,8 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get cardHighlighted => const Color(0xFF251F38);
+
   Color get defaultDialogDark => const Color(0xFF322643);
 
   Color get closeIconColor => const Color(0xFFA79ABA);
@@ -371,6 +376,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xFFFFFFFF),
         fontSize: 12,
         fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get miniButton => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
       );
 
   TextStyle get credentialTitle => GoogleFonts.roboto(

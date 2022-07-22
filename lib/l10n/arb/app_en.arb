@@ -429,6 +429,13 @@
   "beCareful": "Be careful",
   "decentralizedIDKey": "Decentralized ID key",
   "copySecretKeyToClipboard":"Copied secret key to clipboard!",
-  "copyDIDKeyToClipboard":"Copied DID key to clipboard!"
+  "copyDIDKeyToClipboard":"Copied DID key to clipboard!",
+  "seeAddress": "See address",
+  "revealPrivateKey": "Reveal private key",
+  "share": "Share",
+  "shareWith": "Share with",
+  "copiedToClipboard": "Copied to clipboard!",
+  "privateKey": "Private key",
+  "accountPrivateKeyAlert": "Please do not share your recovery phrase with anyone. Altme is non custodial, we will never ask for it. Sharing your recovery phrase may result in a loss of your funds"
 
 }

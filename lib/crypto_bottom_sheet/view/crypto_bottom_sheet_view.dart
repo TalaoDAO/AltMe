@@ -58,6 +58,39 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
     }
   }
 
+  Future<void> onAddAccountPressed() async {
+    int index = 0;
+
+    final String? derivePathIndex =
+        await getSecureStorage.get(SecureStorageKeys.derivePathIndex);
+
+    if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
+      index = int.parse(derivePathIndex) + 1;
+    }
+
+    await showDialog<void>(
+      context: context,
+      builder: (_) => AddAccountPopUp(
+        defaultAccountName: 'My Account ${index + 1}',
+        onCreateAccount: (String accountName) {
+          Navigator.pop(context);
+          context.read<CryptoBottomSheetCubit>().addCryptoAccount(
+                accountName: accountName,
+              );
+        },
+        onImportAccount: (String accountName) {
+          Navigator.of(context).pop();
+          Navigator.of(context).push<void>(
+            ImportWalletPage.route(
+              accountName: accountName,
+              isFromOnboarding: false,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -171,43 +204,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                           Align(
                             alignment: Alignment.center,
                             child: AddAccountButton(
-                              onPressed: () async {
-                                int index = 0;
-
-                                final String? derivePathIndex =
-                                    await getSecureStorage
-                                        .get(SecureStorageKeys.derivePathIndex);
-
-                                if (derivePathIndex != null &&
-                                    derivePathIndex.isNotEmpty) {
-                                  index = int.parse(derivePathIndex) + 1;
-                                }
-
-                                await showDialog<void>(
-                                  context: context,
-                                  builder: (_) => AddAccountPopUp(
-                                    defaultAccountName:
-                                        'My Account ${index + 1}',
-                                    onCreateAccount: (String accountName) {
-                                      Navigator.pop(context);
-                                      context
-                                          .read<CryptoBottomSheetCubit>()
-                                          .addCryptoAccount(
-                                            accountName: accountName,
-                                          );
-                                    },
-                                    onImportAccount: (String accountName) {
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).push<void>(
-                                        ImportWalletPage.route(
-                                          accountName: accountName,
-                                          isFromOnboarding: false,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
+                              onPressed: onAddAccountPressed,
                             ),
                           ),
                         ],
