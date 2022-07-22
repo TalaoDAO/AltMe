@@ -17,7 +17,7 @@ class CredentialListData extends StatelessWidget {
       onRefresh: onRefresh,
       child: SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           children: [
             // Row(
             //   children: const [
