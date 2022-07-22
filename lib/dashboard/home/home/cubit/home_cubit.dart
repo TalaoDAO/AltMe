@@ -49,16 +49,6 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> checkForPassBaseStatusThenLaunchUrl({
     required String link,
   }) async {
-    // TODO(bibash): remove
-    emit(
-      state.copyWith(
-        status: AppStatus.populate,
-        passBaseStatus: PassBaseStatus.declined,
-        link: link,
-      ),
-    );
-
-    return;
     emit(state.loading());
     final did = didCubit.state.did!;
 
