@@ -6,6 +6,7 @@ import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/rendering.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
 
@@ -48,6 +49,16 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> checkForPassBaseStatusThenLaunchUrl({
     required String link,
   }) async {
+    // TODO(bibash): remove
+    emit(
+      state.copyWith(
+        status: AppStatus.populate,
+        passBaseStatus: PassBaseStatus.declined,
+        link: link,
+      ),
+    );
+
+    return;
     emit(state.loading());
     final did = didCubit.state.did!;
 
@@ -141,42 +152,49 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.loading());
     final did = didCubit.state.did!;
     //setKYCMetadata(walletCubit);
-    PassbaseSDK.startVerification(
-      onFinish: (identityAccessKey) async {
-        //22a363e6-2f93-4dd3-9ac8-6cba5a046acd
-        try {
-          final dynamic response = await client.post(
-            '/wallet/webhook',
-            headers: <String, dynamic>{
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer mytoken',
-            },
-            data: <String, dynamic>{
-              'identityAccessKey': identityAccessKey,
-              'DID': did,
-            },
-          );
+    PassbaseSDK.startVerification(onFinish: (identityAccessKey) async {
+      //22a363e6-2f93-4dd3-9ac8-6cba5a046acd
+      try {
+        final dynamic response = await client.post(
+          '/wallet/webhook',
+          headers: <String, dynamic>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer mytoken',
+          },
+          data: <String, dynamic>{
+            'identityAccessKey': identityAccessKey,
+            'DID': did,
+          },
+        );
 
-          if (response == 'ok') {
-            emit(
-              state.copyWith(
-                status: AppStatus.idle,
-                passBaseStatus: PassBaseStatus.complete,
-              ),
-            );
-          } else {
-            throw Exception();
-          }
-        } catch (e) {
+        if (response == 'ok') {
           emit(
             state.copyWith(
-              status: AppStatus.populate,
-              passBaseStatus: PassBaseStatus.declined,
+              status: AppStatus.idle,
+              passBaseStatus: PassBaseStatus.complete,
             ),
           );
+        } else {
+          throw Exception();
         }
-      },
-    );
+      } catch (e) {
+        emit(
+          state.copyWith(
+            status: AppStatus.populate,
+            passBaseStatus: PassBaseStatus.declined,
+          ),
+        );
+      }
+    }, onError: (e) {
+      debugPrint(e);
+      //if user cancels -> e = CANCELLED_BY_USER
+      emit(
+        state.copyWith(
+          status: AppStatus.idle,
+          passBaseStatus: PassBaseStatus.idle,
+        ),
+      );
+    });
   }
 
   Future<PassBaseStatus> getPassBaseStatus(String did) async {
