@@ -27,6 +27,10 @@ class ManageAccountsItem extends StatelessWidget {
         ? '''${cryptoAccountData.walletAddress.substring(0, walletAddressLength - 16)} ... ${cryptoAccountData.walletAddress.substring(cryptoAccountData.walletAddress.length - 5)}'''
         : '';
 
+    final accountName = cryptoAccountData.name.trim().isEmpty
+        ? '${l10n.cryptoAccount} ${listIndex + 1}'
+        : cryptoAccountData.name;
+
     return Container(
       margin: const EdgeInsets.only(bottom: Sizes.spaceSmall),
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
@@ -52,9 +56,7 @@ class ManageAccountsItem extends StatelessWidget {
               children: [
                 Flexible(
                   child: MyText(
-                    cryptoAccountData.name.trim().isEmpty
-                        ? '${l10n.cryptoAccount} ${listIndex + 1}'
-                        : cryptoAccountData.name,
+                    accountName,
                     maxLines: 1,
                     minFontSize: 12,
                     overflow: TextOverflow.ellipsis,
@@ -86,7 +88,14 @@ class ManageAccountsItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               SeeAddressButton(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push<void>(
+                    AccountPublicAddressPage.route(
+                      accountName: accountName,
+                      accountAddress: cryptoAccountData.walletAddress,
+                    ),
+                  );
+                },
               ),
               const SizedBox(
                 width: Sizes.spaceSmall,

@@ -379,7 +379,10 @@
     "decentralizedIDKey",
     "copyDIDKeyToClipboard",
     "seeAddress",
-    "revealPrivateKey"
+    "revealPrivateKey",
+    "share",
+    "shareWith",
+    "copiedToClipboard"
   ],
 
   "es": [
@@ -762,7 +765,10 @@
     "decentralizedIDKey",
     "copyDIDKeyToClipboard",
     "seeAddress",
-    "revealPrivateKey"
+    "revealPrivateKey",
+    "share",
+    "shareWith",
+    "copiedToClipboard"
   ],
 
   "fr": [
@@ -1145,7 +1151,10 @@
     "decentralizedIDKey",
     "copyDIDKeyToClipboard",
     "seeAddress",
-    "revealPrivateKey"
+    "revealPrivateKey",
+    "share",
+    "shareWith",
+    "copiedToClipboard"
   ],
 
   "it": [
@@ -1528,6 +1537,9 @@
     "decentralizedIDKey",
     "copyDIDKeyToClipboard",
     "seeAddress",
-    "revealPrivateKey"
+    "revealPrivateKey",
+    "share",
+    "shareWith",
+    "copiedToClipboard"
   ]
 }

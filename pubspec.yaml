@@ -59,6 +59,7 @@ dependencies:
   qr_flutter: ^4.0.0
   secure_storage:
     path: packages/secure_storage
+  share_plus: ^4.0.10
   shimmer: ^2.0.0
   tezart:
     git:

@@ -430,6 +430,9 @@
   "copySecretKeyToClipboard":"Copied secret key to clipboard!",
   "copyDIDKeyToClipboard":"Copied DID key to clipboard!",
   "seeAddress": "See address",
-  "revealPrivateKey": "Reveal private key"
+  "revealPrivateKey": "Reveal private key",
+  "share": "Share",
+  "shareWith": "Share with",
+  "copiedToClipboard": "Copied to clipboard!"
 
 }
