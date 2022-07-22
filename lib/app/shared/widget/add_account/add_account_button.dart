@@ -31,7 +31,7 @@ class AddAccountButton extends StatelessWidget {
                 ),
                 Text(
                   l10n.cryptoAddAccount,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.title,
                 ),
               ],
             ),

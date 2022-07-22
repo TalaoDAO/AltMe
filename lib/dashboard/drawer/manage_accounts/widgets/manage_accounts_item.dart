@@ -53,7 +53,7 @@ class ManageAccountsItem extends StatelessWidget {
                 maxLines: 1,
                 minFontSize: 12,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.accountsListItemTitle,
+                style: Theme.of(context).textTheme.title,
               ),
             ),
             const SizedBox(width: Sizes.spaceXSmall),
