@@ -121,6 +121,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                 const SizedBox(height: 8),
                 MyOutlinedButton(
                   verticalSpacing: 20,
+                  borderRadius: 20,
                   text: l10n.credentialReceiveCancel,
                   onPressed: () => Navigator.of(builderContext).pop(),
                 ),
