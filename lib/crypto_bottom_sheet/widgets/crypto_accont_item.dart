@@ -51,7 +51,7 @@ class CryptoAccountItem extends StatelessWidget {
               maxLines: 1,
               minFontSize: 12,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.accountsListItemTitle,
+              style: Theme.of(context).textTheme.title,
             ),
           ),
           const SizedBox(width: Sizes.spaceXSmall),
@@ -64,23 +64,15 @@ class CryptoAccountItem extends StatelessWidget {
             ),
           ),
           const SizedBox(width: Sizes.spaceXSmall),
-          if (cryptoAccountData.isImported)
-            Chip(
-              shape: const RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.all(Radius.circular(Sizes.smallRadius)),
-              ),
-              padding: EdgeInsets.zero,
-              label: Text(
-                l10n.imported.toUpperCase(),
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-            )
+          if (cryptoAccountData.isImported) const ImportedTag()
         ],
       ),
-      subtitle: MyText(
-        walletAddressExtracted,
-        style: Theme.of(context).textTheme.walletAddress,
+      subtitle: Padding(
+        padding: const EdgeInsets.symmetric(vertical: Sizes.spaceXSmall),
+        child: MyText(
+          walletAddressExtracted,
+          style: Theme.of(context).textTheme.walletAddress,
+        ),
       ),
     );
   }

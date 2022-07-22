@@ -378,7 +378,14 @@
     "didPrivateKeyCheckbox",
     "beCareful",
     "decentralizedIDKey",
-    "copyDIDKeyToClipboard"
+    "copyDIDKeyToClipboard",
+    "seeAddress",
+    "revealPrivateKey",
+    "share",
+    "shareWith",
+    "copiedToClipboard",
+    "privateKey",
+    "accountPrivateKeyAlert"
   ],
 
   "es": [
@@ -760,7 +767,14 @@
     "didPrivateKeyCheckbox",
     "beCareful",
     "decentralizedIDKey",
-    "copyDIDKeyToClipboard"
+    "copyDIDKeyToClipboard",
+    "seeAddress",
+    "revealPrivateKey",
+    "share",
+    "shareWith",
+    "copiedToClipboard",
+    "privateKey",
+    "accountPrivateKeyAlert"
   ],
 
   "fr": [
@@ -1142,7 +1156,14 @@
     "didPrivateKeyCheckbox",
     "beCareful",
     "decentralizedIDKey",
-    "copyDIDKeyToClipboard"
+    "copyDIDKeyToClipboard",
+    "seeAddress",
+    "revealPrivateKey",
+    "share",
+    "shareWith",
+    "copiedToClipboard",
+    "privateKey",
+    "accountPrivateKeyAlert"
   ],
 
   "it": [
@@ -1524,6 +1545,13 @@
     "didPrivateKeyCheckbox",
     "beCareful",
     "decentralizedIDKey",
-    "copyDIDKeyToClipboard"
+    "copyDIDKeyToClipboard",
+    "seeAddress",
+    "revealPrivateKey",
+    "share",
+    "shareWith",
+    "copiedToClipboard",
+    "privateKey",
+    "accountPrivateKeyAlert"
   ]
 }

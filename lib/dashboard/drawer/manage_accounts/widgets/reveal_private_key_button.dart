@@ -3,8 +3,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class RevealButton extends StatelessWidget {
-  const RevealButton({Key? key, this.onTap}) : super(key: key);
+class RevealPrivateKeyButton extends StatelessWidget {
+  const RevealPrivateKeyButton({Key? key, this.onTap}) : super(key: key);
 
   final VoidCallback? onTap;
 
@@ -14,10 +14,8 @@ class RevealButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: Sizes.space2XSmall,
-          horizontal: Sizes.spaceXSmall,
-        ),
+        height: 30,
+        padding: const EdgeInsets.all(Sizes.spaceXSmall),
         decoration: BoxDecoration(
           color: Theme.of(context).highlightColor,
           borderRadius: const BorderRadius.all(
@@ -30,14 +28,11 @@ class RevealButton extends StatelessWidget {
           children: [
             Image.asset(
               IconStrings.lockCircle,
-              width: Sizes.icon2x,
+              width: Sizes.icon,
               color: Colors.white,
             ),
-            const SizedBox(
-              height: Sizes.space2XSmall,
-            ),
             Text(
-              l10n.reveal.toUpperCase(),
+              l10n.revealPrivateKey.toUpperCase(),
               style: Theme.of(context).textTheme.miniButton,
             ),
           ],

@@ -1,5 +1,6 @@
 export 'backup_credential/backup_credential.dart';
 export 'drawer/drawer.dart';
+export 'manage_accounts/manage_accounts.dart';
 export 'manage_did/manage_did.dart';
 export 'manage_issuers_registry/manage_issuers_registry.dart';
 export 'manage_network/manage_network.dart';

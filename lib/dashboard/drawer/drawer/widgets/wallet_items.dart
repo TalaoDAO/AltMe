@@ -52,8 +52,9 @@ class WalletItems extends StatelessWidget {
               DrawerItem(
                 icon: IconStrings.userRound,
                 title: l10n.manageAccounts,
-                trailing: Container(),
-                onTap: () async {},
+                onTap: () {
+                  Navigator.of(context).push<void>(ManageAccountsPage.route());
+                },
               ),
               const DrawerItemDivider(),
 
