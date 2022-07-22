@@ -1,1 +1,1 @@
-export 'manage_accont_item.dart';
+export 'manage_accounts_item.dart';

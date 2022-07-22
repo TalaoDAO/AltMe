@@ -86,6 +86,7 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get cardHighlighted => const Color(0xFF251F38);
   Color get defaultDialogDark => const Color(0xFF322643);
 
   Color get closeIconColor => const Color(0xFFA79ABA);

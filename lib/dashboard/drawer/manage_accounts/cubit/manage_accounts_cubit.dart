@@ -5,15 +5,15 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-part 'manage_account_cubit.g.dart';
+part 'manage_accounts_cubit.g.dart';
 
-part 'manage_account_state.dart';
+part 'manage_accounts_state.dart';
 
-class ManageAccountCubit extends Cubit<ManageAccountState> {
-  ManageAccountCubit({
+class ManageAccountsCubit extends Cubit<ManageAccountsState> {
+  ManageAccountsCubit({
     required this.secureStorageProvider,
     required this.walletCubit,
-  }) : super(ManageAccountState()) {
+  }) : super(ManageAccountsState()) {
     initialise();
   }
 
