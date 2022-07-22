@@ -434,6 +434,7 @@
   "share": "Share",
   "shareWith": "Share with",
   "copiedToClipboard": "Copied to clipboard!",
-  "privateKey": "Private key"
+  "privateKey": "Private key",
+  "accountPrivateKeyAlert": "Please do not share your recovery phrase with anyone. Altme is non custodial, we will never ask for it. Sharing your recovery phrase may result in a loss of your funds"
 
 }
