@@ -138,7 +138,6 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       display: Display.emptyDisplay()..toJson(),
       shareLink: '',
       credentialPreview: Credential.fromJson(jsonCredential),
-      revocationStatus: RevocationStatus.unknown,
     );
     await walletCubit.insertCredential(credentialModel);
     emit(

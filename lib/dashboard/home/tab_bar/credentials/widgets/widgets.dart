@@ -19,7 +19,6 @@ export 'display_mapping_widget.dart';
 export 'display_name_card.dart';
 export 'display_properties_widget.dart';
 export 'display_signature.dart';
-export 'display_status.dart';
 export 'display_title_widget.dart';
 export 'home_credential_item.dart';
 export 'labeled_display_mapping_widget.dart';

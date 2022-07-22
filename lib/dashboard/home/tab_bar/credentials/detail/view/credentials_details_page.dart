@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +61,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         title = l10n.cardDetails;
       }
       context.read<CredentialDetailsCubit>().setTitle(title);
-      context.read<CredentialDetailsCubit>().verify(widget.credentialModel);
+      context
+          .read<CredentialDetailsCubit>()
+          .verifyCredential(widget.credentialModel);
     });
   }
 
@@ -177,44 +178,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                   credentialModel: widget.credentialModel,
                   fromCredentialOffer: false,
                 ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Icon(
-                                state.verificationState.icon,
-                                color: state.verificationState.color,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Text(
-                                state.verificationState.message(context),
-                                style:
-                                    Theme.of(context).textTheme.caption!.apply(
-                                          color: state.verificationState.color,
-                                        ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: DisplayStatus(
-                          credentialModel: widget.credentialModel,
-                          displayLabel: true,
-                        ),
-                      ),
-                    )
-                  ],
+                const SizedBox(height: 30),
+                CredentialActiveStatus(
+                  credentialStatus: state.credentialStatus,
                 ),
                 if (outputDescriptors != null) ...[
                   const SizedBox(height: 10),
@@ -224,21 +190,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     showTile: true,
                   ),
                 ],
-                const SizedBox(height: 30),
-                TextButton.icon(
-                  icon: Image.asset(IconStrings.trash),
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 16,
-                    ),
-                    backgroundColor: Theme.of(context).colorScheme.transparent,
-                  ),
+                const SizedBox(height: 40),
+                MyOutlinedButton(
                   onPressed: delete,
-                  label: Text(
-                    l10n.credentialDetailDelete,
-                    style: Theme.of(context).textTheme.deleteThisCertificate,
-                  ),
+                  text: l10n.credentialDetailDeleteCard,
                 ),
                 const SizedBox(height: 10),
               ],

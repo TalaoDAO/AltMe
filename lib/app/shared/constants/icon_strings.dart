@@ -28,7 +28,6 @@ class IconStrings {
   static const String cardReceive = '$base/card-receive.png';
   static const String cardSend = '$base/card-send.png';
   static const String emptyWalletAdd = '$base/empty-wallet-add.png';
-  static const String trash = '$base/trash.png';
   static const String frame = '$base/frame.png';
   static const String checkCircleGreen = '$base/circle-check-green.png';
   static const String checkCircleBlue = '$base/circle-check-blue.png';

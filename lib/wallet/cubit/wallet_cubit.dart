@@ -47,9 +47,6 @@ class WalletCubit extends Cubit<WalletState> {
     final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
     if (ssiKey != null) {
       if (ssiKey.isNotEmpty) {
-        /// When app is initialized, set all credentials with active status to
-        /// unknown status
-        await repository.initializeRevocationStatus();
         await loadAllCredentialsFromRepository();
       }
     }
@@ -442,7 +439,6 @@ class WalletCubit extends Cubit<WalletState> {
       display: Display.emptyDisplay()..toJson(),
       shareLink: '',
       credentialPreview: Credential.fromJson(jsonCredential),
-      revocationStatus: RevocationStatus.unknown,
     );
   }
 }

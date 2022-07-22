@@ -21,7 +21,6 @@ class CredentialModel extends Equatable {
     required this.shareLink,
     required this.display,
     required this.data,
-    required this.revocationStatus,
     this.expirationDate,
     this.credentialManifest,
     this.receivedId,
@@ -53,7 +52,6 @@ class CredentialModel extends Equatable {
       shareLink: oldCredentialModel.shareLink,
       display: oldCredentialModel.display,
       credentialPreview: oldCredentialModel.credentialPreview,
-      revocationStatus: oldCredentialModel.revocationStatus,
       expirationDate: oldCredentialModel.expirationDate,
       credentialManifest: oldCredentialModel.credentialManifest,
       receivedId: oldCredentialModel.receivedId,
@@ -74,7 +72,6 @@ class CredentialModel extends Equatable {
       shareLink: oldCredentialModel.shareLink,
       display: oldCredentialModel.display,
       credentialPreview: Credential.fromJson(newData),
-      revocationStatus: oldCredentialModel.revocationStatus,
       expirationDate: oldCredentialModel.expirationDate,
       credentialManifest: oldCredentialModel.credentialManifest,
       receivedId: oldCredentialModel.receivedId,
@@ -96,8 +93,6 @@ class CredentialModel extends Equatable {
   @JsonKey(fromJson: fromJsonDisplay)
   final Display display;
   final String? expirationDate;
-  @JsonKey(defaultValue: RevocationStatus.unknown)
-  RevocationStatus revocationStatus;
   @JsonKey(name: 'credential_manifest', fromJson: credentialManifestFromJson)
   final CredentialManifest? credentialManifest;
   final String? challenge;
@@ -106,21 +101,6 @@ class CredentialModel extends Equatable {
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
   String get issuer => data['issuer'] as String;
-
-  Future<CredentialStatus> get status async {
-    if (expirationDate != null) {
-      final DateTime dateTimeExpirationDate = DateTime.parse(expirationDate!);
-      if (!dateTimeExpirationDate.isAfter(DateTime.now())) {
-        revocationStatus = RevocationStatus.expired;
-        return CredentialStatus.expired;
-      }
-    }
-    if (credentialPreview.credentialStatus.type != '') {
-      return checkRevocationStatus();
-    } else {
-      return CredentialStatus.active;
-    }
-  }
 
   static String fromJsonId(dynamic json) {
     if (json == null || json == '') {
@@ -143,26 +123,12 @@ class CredentialModel extends Equatable {
   }
 
   Future<CredentialStatus> checkRevocationStatus() async {
-    switch (revocationStatus) {
+    final _status = await getRevocationStatus();
+    switch (_status) {
       case RevocationStatus.active:
         return CredentialStatus.active;
-      case RevocationStatus.expired:
-        revocationStatus = RevocationStatus.expired;
-        return CredentialStatus.expired;
       case RevocationStatus.revoked:
-        return CredentialStatus.revoked;
-      case RevocationStatus.unknown:
-        final _status = await getRevocationStatus();
-        switch (_status) {
-          case RevocationStatus.active:
-            return CredentialStatus.active;
-          case RevocationStatus.expired:
-            return CredentialStatus.expired;
-          case RevocationStatus.revoked:
-            return CredentialStatus.revoked;
-          case RevocationStatus.unknown:
-            throw Exception('Invalid status of credential');
-        }
+        return CredentialStatus.suspended;
     }
   }
 
@@ -179,16 +145,10 @@ class CredentialModel extends Equatable {
     if (result == null) return RevocationStatus.active;
     final jsonResult = jsonDecode(result) as Map<String, dynamic>;
     if (jsonResult['errors']?[0] == 'Credential is revoked.') {
-      revocationStatus = RevocationStatus.revoked;
       return RevocationStatus.revoked;
     } else {
-      revocationStatus = RevocationStatus.active;
       return RevocationStatus.active;
     }
-  }
-
-  void setRevocationStatusToUnknown() {
-    revocationStatus = RevocationStatus.unknown;
   }
 
   @override
@@ -200,7 +160,6 @@ class CredentialModel extends Equatable {
         shareLink,
         credentialPreview,
         display,
-        revocationStatus,
         expirationDate,
         credentialManifest,
       ];

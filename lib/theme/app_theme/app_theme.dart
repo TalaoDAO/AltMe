@@ -201,6 +201,10 @@ extension CustomColorScheme on ColorScheme {
   Color get lightGrey => const Color(0xFF616161);
 
   Color get darkGrey => const Color(0xFF212121);
+
+  Color get activeColor => const Color(0xFF08B530);
+
+  Color get inactiveColor => const Color(0xFFFF0045);
 }
 
 extension CustomTextTheme on TextTheme {
@@ -713,13 +717,6 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get deleteThisCertificate => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        decoration: TextDecoration.underline,
-      );
-
   TextStyle get credentialManifestTitle1 => GoogleFonts.roboto(
         color: const Color(0xffFFFFFF),
         fontSize: 18,
@@ -736,5 +733,11 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w700,
+      );
+
+  TextStyle get credentialStatus => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
       );
 }

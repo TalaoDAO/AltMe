@@ -4,7 +4,7 @@ part of 'credential_details_cubit.dart';
 class CredentialDetailsState extends Equatable {
   const CredentialDetailsState({
     this.status = AppStatus.init,
-    this.verificationState = VerificationState.Unverified,
+    this.credentialStatus = CredentialStatus.pending,
     this.title = '',
   });
 
@@ -12,17 +12,17 @@ class CredentialDetailsState extends Equatable {
       _$CredentialDetailsStateFromJson(json);
 
   final AppStatus status;
-  final VerificationState verificationState;
+  final CredentialStatus credentialStatus;
   final String? title;
 
   CredentialDetailsState copyWith({
     AppStatus? status,
-    VerificationState? verificationState,
+    CredentialStatus? credentialStatus,
     String? title,
   }) {
     return CredentialDetailsState(
       status: status ?? this.status,
-      verificationState: verificationState ?? this.verificationState,
+      credentialStatus: credentialStatus ?? this.credentialStatus,
       title: title ?? this.title,
     );
   }
@@ -30,5 +30,5 @@ class CredentialDetailsState extends Equatable {
   Map<String, dynamic> toJson() => _$CredentialDetailsStateToJson(this);
 
   @override
-  List<Object?> get props => [verificationState, status, title];
+  List<Object?> get props => [credentialStatus, status, title];
 }

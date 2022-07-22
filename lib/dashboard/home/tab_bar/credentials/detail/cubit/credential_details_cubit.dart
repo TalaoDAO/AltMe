@@ -25,9 +25,40 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     emit(state.copyWith(title: title));
   }
 
-  Future<void> verify(CredentialModel item) async {
+  Future<void> verifyCredential(CredentialModel item) async {
     emit(state.copyWith(status: AppStatus.loading));
     await Future<void>.delayed(const Duration(milliseconds: 500));
+    if (item.expirationDate != null) {
+      final DateTime dateTimeExpirationDate =
+          DateTime.parse(item.expirationDate!);
+      if (!dateTimeExpirationDate.isAfter(DateTime.now())) {
+        emit(
+          state.copyWith(
+            credentialStatus: CredentialStatus.suspended,
+            status: AppStatus.idle,
+          ),
+        );
+      }
+    }
+    if (item.credentialPreview.credentialStatus.type != '') {
+      final CredentialStatus credentialStatus =
+          await item.checkRevocationStatus();
+      if (credentialStatus == CredentialStatus.active) {
+        await verifyProofOfPurpose(item);
+      } else {
+        emit(
+          state.copyWith(
+            credentialStatus: CredentialStatus.suspended,
+            status: AppStatus.idle,
+          ),
+        );
+      }
+    } else {
+      await verifyProofOfPurpose(item);
+    }
+  }
+
+  Future<void> verifyProofOfPurpose(CredentialModel item) async {
     final vcStr = jsonEncode(item.data);
     final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
     final result = await didKitProvider.verifyCredential(vcStr, optStr);
@@ -36,31 +67,31 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     if ((jsonResult['warnings'] as List).isNotEmpty) {
       emit(
         state.copyWith(
-          verificationState: VerificationState.VerifiedWithWarning,
-          status: AppStatus.error,
+          credentialStatus: CredentialStatus.active,
+          status: AppStatus.idle,
         ),
       );
     } else if ((jsonResult['errors'] as List).isNotEmpty) {
       if (jsonResult['errors'][0] == 'No applicable proof') {
         emit(
           state.copyWith(
-            verificationState: VerificationState.Unverified,
-            status: AppStatus.error,
+            credentialStatus: CredentialStatus.suspended,
+            status: AppStatus.idle,
           ),
         );
       } else {
         emit(
           state.copyWith(
-            verificationState: VerificationState.VerifiedWithError,
-            status: AppStatus.error,
+            credentialStatus: CredentialStatus.suspended,
+            status: AppStatus.idle,
           ),
         );
       }
     } else {
       emit(
         state.copyWith(
-          verificationState: VerificationState.Verified,
-          status: AppStatus.success,
+          credentialStatus: CredentialStatus.active,
+          status: AppStatus.idle,
         ),
       );
     }

@@ -10,16 +10,6 @@ class CredentialsRepository {
 
   final SecureStorageProvider _secureStorageProvider;
 
-  Future<void> initializeRevocationStatus() async {
-    final _credentialList = await findAll();
-    for (final _credential in _credentialList) {
-      if (_credential.revocationStatus == RevocationStatus.active) {
-        _credential.setRevocationStatusToUnknown();
-        await update(_credential);
-      }
-    }
-  }
-
   Future<List<CredentialModel>> findAll(/* dynamic filters */) async {
     final data = await _secureStorageProvider.getAllValues();
     data.removeWhere(
