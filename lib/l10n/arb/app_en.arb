@@ -428,6 +428,8 @@
   "beCareful": "Be careful",
   "decentralizedIDKey": "Decentralized ID key",
   "copySecretKeyToClipboard":"Copied secret key to clipboard!",
-  "copyDIDKeyToClipboard":"Copied DID key to clipboard!"
+  "copyDIDKeyToClipboard":"Copied DID key to clipboard!",
+  "seeAddress": "See address",
+  "revealPrivateKey": "Reveal private key"
 
 }

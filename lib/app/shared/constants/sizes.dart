@@ -28,6 +28,8 @@ abstract class Sizes {
   static const double credentialAspectRatio = 584 / 317;
 
   //Icon
+  static const double iconXSmall = 12;
+  static const double iconSmall = 14;
   static const double icon = 18;
   static const double icon2x = 24;
   static const double icon3x = 38;
