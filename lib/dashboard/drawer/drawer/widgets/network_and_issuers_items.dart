@@ -26,7 +26,7 @@ class NetworkAnIssuersItems extends StatelessWidget {
             children: [
               DrawerItem(
                 icon: IconStrings.cloudAdd,
-                title: l10n.showNetwork,
+                title: l10n.chooseNetwork,
                 onTap: () async {
                   await Navigator.of(context)
                       .push<void>(ManageNetworkPage.route());
@@ -35,7 +35,7 @@ class NetworkAnIssuersItems extends StatelessWidget {
               const DrawerItemDivider(),
               DrawerItem(
                 icon: IconStrings.issuer,
-                title: l10n.showIssuerRegistry,
+                title: l10n.chooseIssuerRegistry,
                 onTap: () async {
                   await Navigator.of(context)
                       .push<void>(ManageIssuersRegistryPage.route());
