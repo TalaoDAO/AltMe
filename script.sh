@@ -25,6 +25,7 @@ then
 elif [[ "$*" == *-deploy$sios* ]]; 
 then 
   echo "deploy ios"
+  echo "Make sure you are in right branch"
   fvm flutter build ios --release 
   cd ios 
   fastlane beta
