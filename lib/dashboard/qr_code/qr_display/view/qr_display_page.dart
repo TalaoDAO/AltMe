@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 

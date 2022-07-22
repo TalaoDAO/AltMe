@@ -1,3 +1,2 @@
-export 'cubit/home_cubit.dart';
-export 'view/home_page.dart';
-export 'widgets/widgets.dart';
+export 'home/home.dart';
+export 'tab_bar/tab_bar.dart';

@@ -7,4 +7,3 @@ export 'profile/profile.dart';
 export 'qr_code/qr_code.dart';
 export 'search/search.dart';
 export 'self_issued_credential_button/self_issued_credential_button.dart';
-export 'tab_bar/tab_bar.dart';
