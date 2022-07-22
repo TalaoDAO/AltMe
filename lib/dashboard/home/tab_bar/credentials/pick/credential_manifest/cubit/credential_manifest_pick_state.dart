@@ -2,24 +2,25 @@ part of 'credential_manifest_pick_cubit.dart';
 
 @JsonSerializable()
 class CredentialManifestPickState extends Equatable {
-  CredentialManifestPickState({
-    List<int>? selection,
+  const CredentialManifestPickState({
+    this.selected,
     required this.filteredCredentialList,
-  }) : selection = selection ?? <int>[];
+  });
 
   factory CredentialManifestPickState.fromJson(Map<String, dynamic> json) =>
       _$CredentialManifestPickStateFromJson(json);
 
-  final List<int> selection;
+  final int? selected;
   final List<CredentialModel> filteredCredentialList;
 
   CredentialManifestPickState copyWith({
-    List<int>? selection,
-    required List<CredentialModel> filteredCredentialList,
+    int? selected,
+    List<CredentialModel>? filteredCredentialList,
   }) {
     return CredentialManifestPickState(
-      selection: selection ?? this.selection,
-      filteredCredentialList: filteredCredentialList,
+      selected: selected ?? this.selected,
+      filteredCredentialList:
+          filteredCredentialList ?? this.filteredCredentialList,
     );
   }
 
@@ -27,7 +28,7 @@ class CredentialManifestPickState extends Equatable {
 
   @override
   List<Object?> get props => [
-        selection,
+        selected,
         filteredCredentialList,
       ];
 }

@@ -72,7 +72,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
               (index) => CredentialsListPageItem(
                 credentialModel:
                     credentialManifestState.filteredCredentialList[index],
-                selected: credentialManifestState.selection.contains(index),
+                selected: credentialManifestState.selected == index,
                 onTap: () =>
                     context.read<CredentialManifestPickCubit>().toggle(index),
               ),
@@ -101,48 +101,41 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                             child: Builder(
                               builder: (context) {
                                 return MyGradientButton(
-                                  onPressed: () async {
-                                    if (credentialManifestState
-                                        .selection.isEmpty) {
-                                      AlertMessage.showStringMessage(
-                                        context: context,
-                                        message: l10n.credentialPickSelect,
-                                        messageType: MessageType.error,
-                                      );
-                                    } else {
-                                      /// Authenticate
-                                      bool authenticated = false;
-                                      await Navigator.of(context).push<void>(
-                                        PinCodePage.route(
-                                          restrictToBack: false,
-                                          isValidCallback: () {
-                                            authenticated = true;
-                                          },
-                                        ),
-                                      );
-
-                                      if (!authenticated) {
-                                        return;
-                                      }
-
-                                      final selectedCredentialsList =
-                                          credentialManifestState.selection
-                                              .map(
-                                                (i) => credentialManifestState
-                                                    .filteredCredentialList[i],
-                                              )
-                                              .toList();
-                                      await context
-                                          .read<ScanCubit>()
-                                          .credentialOffer(
-                                            url: uri.toString(),
-                                            credentialModel: credential,
-                                            keyId: SecureStorageKeys.ssiKey,
-                                            signatureOwnershipProof:
-                                                selectedCredentialsList.first,
+                                  onPressed: credentialManifestState.selected ==
+                                          null
+                                      ? null
+                                      : () async {
+                                          /// Authenticate
+                                          bool authenticated = false;
+                                          await Navigator.of(context)
+                                              .push<void>(
+                                            PinCodePage.route(
+                                              restrictToBack: false,
+                                              isValidCallback: () {
+                                                authenticated = true;
+                                              },
+                                            ),
                                           );
-                                    }
-                                  },
+
+                                          if (!authenticated) {
+                                            return;
+                                          }
+
+                                          final selectedCredential =
+                                              credentialManifestState
+                                                      .filteredCredentialList[
+                                                  credentialManifestState
+                                                      .selected!];
+                                          await context
+                                              .read<ScanCubit>()
+                                              .credentialOffer(
+                                                url: uri.toString(),
+                                                credentialModel: credential,
+                                                keyId: SecureStorageKeys.ssiKey,
+                                                signatureOwnershipProof:
+                                                    selectedCredential,
+                                              );
+                                        },
                                   text: l10n.credentialPickPresent,
                                 );
                               },

@@ -84,24 +84,16 @@ class CredentialManifestPickView extends StatelessWidget {
                           return;
                         }
 
-                        if (state.selection.isEmpty) {
-                          AlertMessage.showStringMessage(
-                            context: context,
-                            message: l10n.credentialPickSelect,
-                            messageType: MessageType.error,
-                          );
-                        } else {
-                          final scanCubit = context.read<ScanCubit>();
-                          await scanCubit.verifiablePresentationRequest(
-                            url: uri.toString(),
-                            keyId: SecureStorageKeys.ssiKey,
-                            credentials: state.selection
-                                .map((i) => state.filteredCredentialList[i])
-                                .toList(),
-                            challenge: preview['challenge'] as String,
-                            domain: preview['domain'] as String,
-                          );
-                        }
+                        final scanCubit = context.read<ScanCubit>();
+                        await scanCubit.verifiablePresentationRequest(
+                          url: uri.toString(),
+                          keyId: SecureStorageKeys.ssiKey,
+                          credentials: [
+                            state.filteredCredentialList[state.selected!]
+                          ],
+                          challenge: preview['challenge'] as String,
+                          domain: preview['domain'] as String,
+                        );
                       },
                       text: l10n.credentialPickPresent,
                     );
@@ -121,7 +113,7 @@ class CredentialManifestPickView extends StatelessWidget {
                 state.filteredCredentialList.length,
                 (index) => CredentialsListPageItem(
                   credentialModel: state.filteredCredentialList[index],
-                  selected: state.selection.contains(index),
+                  selected: state.selected == index,
                   onTap: () =>
                       context.read<CredentialManifestPickCubit>().toggle(index),
                 ),

@@ -104,49 +104,44 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                               child: Builder(
                                 builder: (context) {
                                   return MyGradientButton(
-                                    onPressed: () async {
-                                      if (queryState.selection.isEmpty) {
-                                        AlertMessage.showStringMessage(
-                                          context: context,
-                                          message: l10n.credentialPickSelect,
-                                          messageType: MessageType.error,
-                                        );
-                                      } else {
-                                        /// Authenticate
-                                        bool authenticated = false;
-                                        await Navigator.of(context).push<void>(
-                                          PinCodePage.route(
-                                            restrictToBack: false,
-                                            isValidCallback: () {
-                                              authenticated = true;
-                                            },
-                                          ),
-                                        );
+                                    onPressed: queryState.selected == null
+                                        ? null
+                                        : () async {
+                                            /// Authenticate
+                                            bool authenticated = false;
+                                            await Navigator.of(context)
+                                                .push<void>(
+                                              PinCodePage.route(
+                                                restrictToBack: false,
+                                                isValidCallback: () {
+                                                  authenticated = true;
+                                                },
+                                              ),
+                                            );
 
-                                        if (!authenticated) {
-                                          return;
-                                        }
+                                            if (!authenticated) {
+                                              return;
+                                            }
 
-                                        final scanCubit =
-                                            context.read<ScanCubit>();
-                                        await scanCubit
-                                            .verifiablePresentationRequest(
-                                          url: uri.toString(),
-                                          keyId: SecureStorageKeys.ssiKey,
-                                          credentials: queryState.selection
-                                              .map(
-                                                (i) => queryState
-                                                    .filteredCredentialList[i],
-                                              )
-                                              .toList(),
-                                          challenge:
-                                              preview['challenge'] as String,
-                                          domain: preview['domain'] as String,
-                                        );
+                                            final scanCubit =
+                                                context.read<ScanCubit>();
+                                            await scanCubit
+                                                .verifiablePresentationRequest(
+                                              url: uri.toString(),
+                                              keyId: SecureStorageKeys.ssiKey,
+                                              credentials: [
+                                                queryState
+                                                        .filteredCredentialList[
+                                                    queryState.selected!]
+                                              ],
+                                              challenge: preview['challenge']
+                                                  as String,
+                                              domain:
+                                                  preview['domain'] as String,
+                                            );
 
-                                        return;
-                                      }
-                                    },
+                                            return;
+                                          },
                                     text: l10n.credentialPickPresent,
                                   );
                                 },
@@ -176,7 +171,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                         (index) => CredentialsListPageItem(
                           credentialModel:
                               queryState.filteredCredentialList[index],
-                          selected: queryState.selection.contains(index),
+                          selected: queryState.selected == index,
                           onTap: () => context
                               .read<QueryByExampleCredentialPickCubit>()
                               .toggle(index),
