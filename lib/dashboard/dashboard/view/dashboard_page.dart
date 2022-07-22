@@ -187,16 +187,15 @@ class _DashboardViewState extends State<DashboardView> {
                       Expanded(
                         child: GestureDetector(
                           onHorizontalDragEnd: (drag) {
-                            if (context.read<HomeCubit>().state.homeStatus ==
-                                HomeStatus.hasNoWallet) {
-                              showDialog<void>(
-                                context: context,
-                                builder: (_) => const WalletDialog(),
-                              );
-                              return;
-                            }
-
                             if (drag.primaryVelocity! < 0) {
+                              if (context.read<HomeCubit>().state.homeStatus ==
+                                  HomeStatus.hasNoWallet) {
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (_) => const WalletDialog(),
+                                );
+                                return;
+                              }
                               if (state.selectedIndex != 2) {
                                 pageController.nextPage(
                                   duration: pageTurnDuration,
@@ -206,6 +205,14 @@ class _DashboardViewState extends State<DashboardView> {
                                 scaffoldKey.currentState!.openDrawer();
                               }
                             } else if (drag.primaryVelocity! > 0) {
+                              if (context.read<HomeCubit>().state.homeStatus ==
+                                  HomeStatus.hasNoWallet) {
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (_) => const WalletDialog(),
+                                );
+                                return;
+                              }
                               if (state.selectedIndex != 0) {
                                 pageController.previousPage(
                                   duration: pageTurnDuration,
