@@ -37,4 +37,7 @@ abstract class Sizes {
 
   //TextField height
   static const double recoveryPhraseTextFieldHeight = 160;
+
+  //TextField height
+  static const double appBarHeight = 70;
 }

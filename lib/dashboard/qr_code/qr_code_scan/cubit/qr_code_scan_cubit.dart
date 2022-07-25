@@ -103,7 +103,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
+  Future<void> emitError(MessageHandler messageHandler) async {
+    emit(state.error(messageHandler: messageHandler));
+  }
+
   Future<void> verify({required Uri? uri}) async {
+    emit(state.loading());
     try {
       ///Check if SIOPV2 request
       if (uri?.queryParameters['scope'] == 'openid') {

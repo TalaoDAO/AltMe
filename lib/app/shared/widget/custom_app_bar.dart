@@ -1,3 +1,4 @@
+import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/app/shared/widget/my_text.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class CustomAppBar extends PreferredSize {
   }) : super(
           key: key,
           child: Container(),
-          preferredSize: const Size.fromHeight(70),
+          preferredSize: const Size.fromHeight(Sizes.appBarHeight),
         );
 
   final String? title;
