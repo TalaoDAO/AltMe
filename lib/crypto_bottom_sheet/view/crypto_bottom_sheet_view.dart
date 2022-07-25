@@ -51,7 +51,8 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
     );
 
     if (newCryptoAccountName != null &&
-        newCryptoAccountName != cryptoAccountData.name) {
+        newCryptoAccountName != cryptoAccountData.name &&
+        newCryptoAccountName.isNotEmpty) {
       if (accountNameList.contains(newCryptoAccountName)) {
         AlertMessage.showStringMessage(
           context: context,
@@ -82,7 +83,8 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
           accountNameList,
         ),
         onCreateAccount: (String accountName) {
-          if (accountNameList.contains(accountName)) {
+          if (accountName.trim().isEmpty ||
+              accountNameList.contains(accountName)) {
             AlertMessage.showStringMessage(
               context: context,
               message: l10n.sameAccountNameError,
@@ -97,7 +99,8 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
           }
         },
         onImportAccount: (String accountName) {
-          if (accountNameList.contains(accountName)) {
+          if (accountName.trim().isEmpty ||
+              accountNameList.contains(accountName)) {
             AlertMessage.showStringMessage(
               context: context,
               message: l10n.sameAccountNameError,

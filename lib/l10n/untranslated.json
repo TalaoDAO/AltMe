@@ -386,9 +386,10 @@
     "copiedToClipboard",
     "privateKey",
     "accountPrivateKeyAlert",
+    "sameAccountNameError",
+    "unknown",
     "decentralizedID",
-    "did",
-    "sameAccountNameError"
+    "did"
   ],
 
   "es": [
@@ -779,6 +780,7 @@
     "privateKey",
     "accountPrivateKeyAlert",
     "sameAccountNameError",
+    "unknown",
     "decentralizedID",
     "did"
   ],
@@ -1170,9 +1172,10 @@
     "copiedToClipboard",
     "privateKey",
     "accountPrivateKeyAlert",
+    "sameAccountNameError",
+    "unknown",
     "decentralizedID",
-    "did",
-    "sameAccountNameError"
+    "did"
   ],
 
   "it": [
@@ -1564,6 +1567,7 @@
     "accountPrivateKeyAlert",
     "decentralizedID",
     "did",
-    "sameAccountNameError"
+    "sameAccountNameError",
+    "unknown"
   ]
 }

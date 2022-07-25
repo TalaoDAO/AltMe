@@ -28,7 +28,6 @@ class ManageAccountsPage extends StatefulWidget {
 }
 
 class _ManageAccountsPageState extends State<ManageAccountsPage> {
-
   Future<void> _edit(int index) async {
     final l10n = context.l10n;
     final List<CryptoAccountData> cryptoAccount =
@@ -49,7 +48,8 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
     );
 
     if (newCryptoAccountName != null &&
-        newCryptoAccountName != cryptoAccountData.name) {
+        newCryptoAccountName != cryptoAccountData.name &&
+        newCryptoAccountName.isNotEmpty) {
       if (accountNameList.contains(newCryptoAccountName)) {
         AlertMessage.showStringMessage(
           context: context,
@@ -80,7 +80,8 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
           accountNameList,
         ),
         onCreateAccount: (String accountName) {
-          if (accountNameList.contains(accountName)) {
+          if (accountName.trim().isEmpty ||
+              accountNameList.contains(accountName)) {
             AlertMessage.showStringMessage(
               context: context,
               message: l10n.sameAccountNameError,
@@ -95,7 +96,8 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
           }
         },
         onImportAccount: (String accountName) {
-          if (accountNameList.contains(accountName)) {
+          if (accountName.trim().isEmpty ||
+              accountNameList.contains(accountName)) {
             AlertMessage.showStringMessage(
               context: context,
               message: l10n.sameAccountNameError,
