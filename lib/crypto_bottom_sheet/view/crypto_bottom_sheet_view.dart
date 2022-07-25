@@ -146,102 +146,106 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
         }
       },
       builder: (context, state) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            boxShadow: [
-              BoxShadow(
-                color: Theme.of(context).colorScheme.inversePrimary,
-                blurRadius: 5,
-                spreadRadius: -3,
-              )
-            ],
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(Sizes.largeRadius),
-              topLeft: Radius.circular(Sizes.largeRadius),
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  blurRadius: 5,
+                  spreadRadius: -3,
+                )
+              ],
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(Sizes.largeRadius),
+                topLeft: Radius.circular(Sizes.largeRadius),
+              ),
             ),
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.account_balance_wallet_rounded,
-                        size: Sizes.icon2x,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                      const SizedBox(width: Sizes.spaceXSmall),
-                      Text(
-                        l10n.selectAccount,
-                        style: Theme.of(context).textTheme.accountsText,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: Sizes.spaceNormal),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .accountBottomSheetBorder,
-                                width: 0.2,
-                              ),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(Sizes.normalRadius),
-                              ),
-                            ),
-                            child: ListView.separated(
-                              itemCount: state.cryptoAccount.data.length,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, i) {
-                                return CryptoAccountItem(
-                                  cryptoAccountData:
-                                      state.cryptoAccount.data[i],
-                                  isSelected: state.currentCryptoIndex == i,
-                                  listIndex: i,
-                                  onPressed: () {
-                                    context
-                                        .read<CryptoBottomSheetCubit>()
-                                        .setCurrentWalletAccount(i);
-                                  },
-                                  onEditButtonPressed: () => _edit(i),
-                                );
-                              },
-                              separatorBuilder: (_, __) => Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: Sizes.spaceSmall,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.account_balance_wallet_rounded,
+                          size: Sizes.icon2x,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                        const SizedBox(width: Sizes.spaceXSmall),
+                        Text(
+                          l10n.selectAccount,
+                          style: Theme.of(context).textTheme.accountsText,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: Sizes.spaceNormal),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .accountBottomSheetBorder,
+                                  width: 0.2,
                                 ),
-                                child: Divider(
-                                  height: 0.2,
-                                  color:
-                                      Theme.of(context).colorScheme.borderColor,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(Sizes.normalRadius),
                                 ),
                               ),
+                              child: ListView.separated(
+                                itemCount: state.cryptoAccount.data.length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, i) {
+                                  return CryptoAccountItem(
+                                    cryptoAccountData:
+                                        state.cryptoAccount.data[i],
+                                    isSelected: state.currentCryptoIndex == i,
+                                    listIndex: i,
+                                    onPressed: () {
+                                      context
+                                          .read<CryptoBottomSheetCubit>()
+                                          .setCurrentWalletAccount(i);
+                                    },
+                                    onEditButtonPressed: () => _edit(i),
+                                  );
+                                },
+                                separatorBuilder: (_, __) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: Sizes.spaceSmall,
+                                  ),
+                                  child: Divider(
+                                    height: 0.2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .borderColor,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                          Container(height: 20),
-                          Align(
-                            alignment: Alignment.center,
-                            child: AddAccountButton(
-                              onPressed: onAddAccountPressed,
+                            Container(height: 20),
+                            Align(
+                              alignment: Alignment.center,
+                              child: AddAccountButton(
+                                onPressed: onAddAccountPressed,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
