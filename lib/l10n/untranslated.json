@@ -387,7 +387,8 @@
     "privateKey",
     "accountPrivateKeyAlert",
     "decentralizedID",
-    "did"
+    "did",
+    "sameAccountNameError"
   ],
 
   "es": [
@@ -777,6 +778,7 @@
     "copiedToClipboard",
     "privateKey",
     "accountPrivateKeyAlert",
+    "sameAccountNameError",
     "decentralizedID",
     "did"
   ],
@@ -1169,7 +1171,8 @@
     "privateKey",
     "accountPrivateKeyAlert",
     "decentralizedID",
-    "did"
+    "did",
+    "sameAccountNameError"
   ],
 
   "it": [
@@ -1560,6 +1563,7 @@
     "privateKey",
     "accountPrivateKeyAlert",
     "decentralizedID",
-    "did"
+    "did",
+    "sameAccountNameError"
   ]
 }

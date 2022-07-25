@@ -436,8 +436,9 @@
   "shareWith": "Share with",
   "copiedToClipboard": "Copied to clipboard!",
   "privateKey": "Private key",
-  "accountPrivateKeyAlert": "Please do not share your recovery phrase with anyone. Altme is non custodial, we will never ask for it. Sharing your recovery phrase may result in a loss of your funds",
   "decentralizedID": "Decentralized IDentifier",
-  "did": "DID"
+  "did": "DID",
+  "accountPrivateKeyAlert": "Please do not share your recovery phrase with anyone. Altme is non custodial, we will never ask for it. Sharing your recovery phrase may result in a loss of your funds",
+  "sameAccountNameError": "This account name was used before; enter the different account name, please"
 
 }

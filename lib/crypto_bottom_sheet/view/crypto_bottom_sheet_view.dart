@@ -35,6 +35,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
     final l10n = context.l10n;
     final List<CryptoAccountData> cryptoAccount =
         context.read<CryptoBottomSheetCubit>().state.cryptoAccount.data;
+    final accountNameList = cryptoAccount.map((e) => e.name).toList();
 
     final cryptoAccountData = cryptoAccount[index];
 
@@ -51,41 +52,67 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
 
     if (newCryptoAccountName != null &&
         newCryptoAccountName != cryptoAccountData.name) {
-      await context.read<CryptoBottomSheetCubit>().editCryptoAccount(
-            newAccountName: newCryptoAccountName,
-            index: index,
-          );
+      if (accountNameList.contains(newCryptoAccountName)) {
+        AlertMessage.showStringMessage(
+          context: context,
+          message: l10n.sameAccountNameError,
+          messageType: MessageType.error,
+        );
+        return;
+      } else {
+        await context.read<CryptoBottomSheetCubit>().editCryptoAccount(
+              newAccountName: newCryptoAccountName,
+              index: index,
+            );
+      }
     }
   }
 
   Future<void> onAddAccountPressed() async {
-    int index = 0;
-
-    final String? derivePathIndex =
-        await getSecureStorage.get(SecureStorageKeys.derivePathIndex);
-
-    if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
-      index = int.parse(derivePathIndex) + 1;
-    }
+    final l10n = context.l10n;
+    final List<CryptoAccountData> cryptoAccount =
+        context.read<CryptoBottomSheetCubit>().state.cryptoAccount.data;
+    final accountNameList = cryptoAccount.map((e) => e.name).toList();
 
     await showDialog<void>(
       context: context,
       builder: (_) => AddAccountPopUp(
-        defaultAccountName: 'My Account ${index + 1}',
+        defaultAccountName: generateDefaultAccountName(
+          accountNameList.length,
+          accountNameList,
+        ),
         onCreateAccount: (String accountName) {
-          Navigator.pop(context);
-          context.read<CryptoBottomSheetCubit>().addCryptoAccount(
-                accountName: accountName,
-              );
+          if (accountNameList.contains(accountName)) {
+            AlertMessage.showStringMessage(
+              context: context,
+              message: l10n.sameAccountNameError,
+              messageType: MessageType.error,
+            );
+            return;
+          } else {
+            Navigator.pop(context);
+            context.read<CryptoBottomSheetCubit>().addCryptoAccount(
+                  accountName: accountName,
+                );
+          }
         },
         onImportAccount: (String accountName) {
-          Navigator.of(context).pop();
-          Navigator.of(context).push<void>(
-            ImportWalletPage.route(
-              accountName: accountName,
-              isFromOnboarding: false,
-            ),
-          );
+          if (accountNameList.contains(accountName)) {
+            AlertMessage.showStringMessage(
+              context: context,
+              message: l10n.sameAccountNameError,
+              messageType: MessageType.error,
+            );
+            return;
+          } else {
+            Navigator.of(context).pop();
+            Navigator.of(context).push<void>(
+              ImportWalletPage.route(
+                accountName: accountName,
+                isFromOnboarding: false,
+              ),
+            );
+          }
         },
       ),
     );
