@@ -119,8 +119,8 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
       builder: (context, state) {
         final importAccount = l10n.importAccount.split(' ');
         return BasePage(
-          title:
-              '${importAccount[0]} ${widget.walletTypeModel.walletName} ${importAccount[1]}',
+          title: '${importAccount[0]} ${widget.walletTypeModel.walletName} '
+              '${importAccount[1]}',
           titleLeading: const BackLeadingButton(),
           scrollView: false,
           useSafeArea: true,

@@ -28,8 +28,6 @@ class SecretKeyPage extends StatelessWidget {
 class SecretKeyView extends StatelessWidget {
   const SecretKeyView({Key? key}) : super(key: key);
 
-  // TODO(all): need loading  in this screen
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;

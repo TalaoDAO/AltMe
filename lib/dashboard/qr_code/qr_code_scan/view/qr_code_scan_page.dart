@@ -1,11 +1,9 @@
-import 'dart:io';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QrCodeScanPage extends StatefulWidget {
   const QrCodeScanPage({Key? key}) : super(key: key);
@@ -21,40 +19,21 @@ class QrCodeScanPage extends StatefulWidget {
 
 class _QrCodeScanPageState extends State<QrCodeScanPage> {
   final qrKey = GlobalKey(debugLabel: 'QR');
-  late QRViewController qrController;
 
-  bool isQrCodeScanned = false;
+  MobileScannerController scannerController = MobileScannerController(
+        formats: [BarcodeFormat.qrCode],
+        );
 
   @override
   void initState() {
+    scannerController.start();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-    qrController.dispose();
-  }
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      qrController.pauseCamera();
-    } else if (Platform.isIOS) {
-      qrController.resumeCamera();
-    }
-  }
-
-  void onQRViewCreated(QRViewController controller) {
-    qrController = controller;
-    qrController.scannedDataStream.listen((scanData) {
-      qrController.pauseCamera();
-      if (scanData.code is String && !isQrCodeScanned) {
-        isQrCodeScanned = true;
-        context.read<QRCodeScanCubit>().host(url: scanData.code);
-      }
-    });
+    scannerController.dispose();
   }
 
   @override
@@ -63,15 +42,15 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
 
     return BlocListener<QRCodeScanCubit, QRCodeScanState>(
       listener: (context, state) async {
-        if (state.status == QrScanStatus.success) {
-          if (state.route != null) {
-            await qrController.stopCamera();
+
+        if(state.status == QrScanStatus.success){
+          if(state.route != null){
+            await scannerController.stop();
           }
-        }
+        } 
         if (state.status == QrScanStatus.error) {
           if (state.message != null) {
-            await qrController.resumeCamera();
-            isQrCodeScanned = false;
+            Navigator.of(context).pop();
           }
         }
       },
@@ -81,11 +60,53 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
         scrollView: false,
         extendBelow: true,
         titleLeading: const BackLeadingButton(),
+        titleTrailing: IconButton(
+          color: Colors.white,
+          icon: ValueListenableBuilder(
+            valueListenable: scannerController.torchState,
+            builder: (context, state, child) {
+              // ignore: cast_nullable_to_non_nullable
+              switch (state as TorchState) {
+                case TorchState.off:
+                  return const Icon(Icons.flash_off, color: Colors.grey);
+                case TorchState.on:
+                  return const Icon(Icons.flash_on, color: Colors.yellow);
+              }
+            },
+          ),
+          iconSize: 32,
+          onPressed: () => scannerController.toggleTorch(),
+        ),
         body: SafeArea(
-          child: QRView(
-            key: qrKey,
-            overlay: QrScannerOverlayShape(borderColor: Colors.white70),
-            onQRViewCreated: onQRViewCreated,
+          child: Center(
+            child: Container(
+              margin: const EdgeInsets.only(bottom: Sizes.appBarHeight),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: SizedBox.square(
+                  dimension: MediaQuery.of(context).size.shortestSide * 0.8,
+                  child: MobileScanner(
+                    key: qrKey,
+                    fit: BoxFit.cover,
+                    controller: scannerController,
+                    allowDuplicates: false,
+                    onDetect: (qrcode, args) {
+                      if (qrcode.rawValue == null) {
+                        context.read<QRCodeScanCubit>().emitError(
+                              ResponseMessage(
+                                ResponseString
+                                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+                              ),
+                            );
+                      } else { 
+                        final String code = qrcode.rawValue!;
+                        context.read<QRCodeScanCubit>().host(url: code);
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),

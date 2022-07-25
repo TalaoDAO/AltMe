@@ -100,6 +100,12 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
   listener: (BuildContext context, QRCodeScanState state) async {
     final l10n = context.l10n;
 
+    if (state.status == QrScanStatus.loading) {
+      LoadingView().show(context: context);
+    } else {
+      LoadingView().hide();
+    }
+
     if (state.status == QrScanStatus.acceptHost) {
       if (state.uri != null) {
         final profileCubit = context.read<ProfileCubit>();
@@ -115,20 +121,14 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             ).isIssuerInApprovedList();
           } catch (e) {
             if (e is MessageHandler) {
-              AlertMessage.showStateMessage(
-                context: context,
-                stateMessage: StateMessage.error(messageHandler: e),
-              );
+              await context.read<QRCodeScanCubit>().emitError(e);
             } else {
-              AlertMessage.showStateMessage(
-                context: context,
-                stateMessage: StateMessage.error(
-                  messageHandler: ResponseMessage(
-                    ResponseString
-                        .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-                  ),
-                ),
-              );
+              await context.read<QRCodeScanCubit>().emitError(
+                    ResponseMessage(
+                      ResponseString
+                          .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                    ),
+                  );
             }
             return;
           }
@@ -144,7 +144,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                       : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''',
                   yes: l10n.communicationHostAllow,
                   no: l10n.communicationHostDeny,
-                  // TODO(bibash): look into this lock thing
                   //lock: state.uri!.scheme == 'http',
                 );
               },
@@ -154,15 +153,11 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         if (acceptHost) {
           await context.read<QRCodeScanCubit>().accept(uri: state.uri!);
         } else {
-          AlertMessage.showStateMessage(
-            context: context,
-            stateMessage: StateMessage(
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
-              ),
-              type: MessageType.error,
-            ),
-          );
+          await context.read<QRCodeScanCubit>().emitError(
+                ResponseMessage(
+                  ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+                ),
+              );
           return;
         }
       }

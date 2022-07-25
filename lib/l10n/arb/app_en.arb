@@ -94,7 +94,7 @@
   "credentialDetailListTitle": "My wallet",
   "communicationHostAllow": "Allow",
   "communicationHostDeny": "Deny",
-  "scanTitle": "Scan",
+  "scanTitle": "Scan QRcode",
   "scanPromptHost": "Do you trust this host?",
   "scanRefuseHost": "The communication request was denied.",
   "scanUnsupportedMessage": "The extracted url is not valid.",

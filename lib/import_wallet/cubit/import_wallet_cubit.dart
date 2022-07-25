@@ -39,8 +39,6 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
     final bool isSecretKey = value.startsWith('edsk') ||
         value.startsWith('spsk') ||
         value.startsWith('p2sk');
-    // TODO(all): Need more validation for Tezos private key that s
-    // tarted with edsk or edsek
 
     emit(
       state.populating(

@@ -69,6 +69,7 @@ class TokenItem extends StatelessWidget {
       return '0.$priceString';
     } else if (priceString.length < decimals) {
       final numberOfZero = decimals - priceString.length;
+      // ignore: lines_longer_than_80_chars
       return '0.${List.generate(numberOfZero, (index) => '0').join()}$priceString';
     } else {
       final rightPart = formatter.format(
@@ -77,6 +78,7 @@ class TokenItem extends StatelessWidget {
         ),
       );
       final realDoublePriceInString =
+          // ignore: lines_longer_than_80_chars
           '$rightPart.${priceString.substring(priceString.length - decimals, priceString.length)}';
       return realDoublePriceInString;
     }

@@ -12,13 +12,14 @@ class ImportedTag extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Sizes.spaceXSmall),
       decoration: BoxDecoration(
-          color: Theme.of(context).highlightColor,
-          border: Border.all(
-            color: Theme.of(context).colorScheme.borderColor,
-            width: 0.35,
-          ),
-          borderRadius:
-              const BorderRadius.all(Radius.circular(Sizes.smallRadius))),
+        color: Theme.of(context).highlightColor,
+        border: Border.all(
+          color: Theme.of(context).colorScheme.borderColor,
+          width: 0.35,
+        ),
+        borderRadius:
+            const BorderRadius.all(Radius.circular(Sizes.smallRadius)),
+      ),
       child: Text(
         l10n.imported.toUpperCase(),
         style: Theme.of(context).textTheme.labelSmall,
