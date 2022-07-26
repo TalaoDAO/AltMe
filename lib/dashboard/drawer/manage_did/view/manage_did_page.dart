@@ -20,7 +20,7 @@ class ManageDIDPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.publicAddress,
+      title: l10n.decentralizedID,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
       body: BackgroundCard(
@@ -33,7 +33,7 @@ class ManageDIDPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             Text(
-              l10n.didKey,
+              l10n.did,
               style: Theme.of(context).textTheme.title,
             ),
             const SizedBox(
