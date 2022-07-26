@@ -385,7 +385,9 @@
     "shareWith",
     "copiedToClipboard",
     "privateKey",
-    "accountPrivateKeyAlert"
+    "accountPrivateKeyAlert",
+    "decentralizedID",
+    "did"
   ],
 
   "es": [
@@ -774,7 +776,9 @@
     "shareWith",
     "copiedToClipboard",
     "privateKey",
-    "accountPrivateKeyAlert"
+    "accountPrivateKeyAlert",
+    "decentralizedID",
+    "did"
   ],
 
   "fr": [
@@ -1163,7 +1167,9 @@
     "shareWith",
     "copiedToClipboard",
     "privateKey",
-    "accountPrivateKeyAlert"
+    "accountPrivateKeyAlert",
+    "decentralizedID",
+    "did"
   ],
 
   "it": [
@@ -1552,6 +1558,8 @@
     "shareWith",
     "copiedToClipboard",
     "privateKey",
-    "accountPrivateKeyAlert"
+    "accountPrivateKeyAlert",
+    "decentralizedID",
+    "did"
   ]
 }
