@@ -69,7 +69,7 @@ class DIDPrivateKeyDialog extends StatelessWidget {
               const SizedBox(height: Sizes.spaceSmall),
               CheckboxItem(
                 value: state,
-                text: l10n.didPrivateKeyCheckbox,
+                text: l10n.iReadTheMessageCorrectly,
                 textStyle: Theme.of(context).textTheme.defaultDialogBody,
                 onChange: (value) {
                   context.read<DIDPrivateKeyDialogCubit>().toggleState();

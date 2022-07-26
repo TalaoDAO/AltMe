@@ -35,9 +35,6 @@ class CheckboxItem extends StatelessWidget {
             ),
             onChanged: (newValue) => onChange.call(newValue ?? value),
           ),
-          const SizedBox(
-            width: Sizes.space2XSmall,
-          ),
           Text(
             text,
             style: textStyle ?? Theme.of(context).textTheme.labelLarge,
