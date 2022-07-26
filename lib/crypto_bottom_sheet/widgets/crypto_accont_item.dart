@@ -46,7 +46,7 @@ class CryptoAccountItem extends StatelessWidget {
           Flexible(
             child: MyText(
               cryptoAccountData.name.trim().isEmpty
-                  ? '${l10n.cryptoAccount} ${listIndex + 1}'
+                  ? l10n.unknown
                   : cryptoAccountData.name,
               maxLines: 1,
               minFontSize: 12,

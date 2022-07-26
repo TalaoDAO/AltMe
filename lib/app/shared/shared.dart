@@ -4,6 +4,7 @@ export 'date/date.dart';
 export 'dio_client/dio_client.dart';
 export 'enum/enum.dart';
 export 'extension/extension.dart';
+export 'helper_functions/helper_functions.dart';
 export 'issuer/issuer.dart';
 export 'launch_url/launch_url.dart';
 export 'loading/loading.dart';

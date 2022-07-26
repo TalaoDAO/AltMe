@@ -385,9 +385,11 @@
     "shareWith",
     "copiedToClipboard",
     "privateKey",
-    "accountPrivateKeyAlert",
     "decentralizedID",
-    "did"
+    "did",
+    "accountPrivateKeyAlert",
+    "sameAccountNameError",
+    "unknown"
   ],
 
   "es": [
@@ -776,9 +778,11 @@
     "shareWith",
     "copiedToClipboard",
     "privateKey",
-    "accountPrivateKeyAlert",
     "decentralizedID",
-    "did"
+    "did",
+    "accountPrivateKeyAlert",
+    "sameAccountNameError",
+    "unknown"
   ],
 
   "fr": [
@@ -1167,9 +1171,11 @@
     "shareWith",
     "copiedToClipboard",
     "privateKey",
-    "accountPrivateKeyAlert",
     "decentralizedID",
-    "did"
+    "did",
+    "accountPrivateKeyAlert",
+    "sameAccountNameError",
+    "unknown"
   ],
 
   "it": [
@@ -1558,8 +1564,10 @@
     "shareWith",
     "copiedToClipboard",
     "privateKey",
-    "accountPrivateKeyAlert",
     "decentralizedID",
-    "did"
+    "did",
+    "accountPrivateKeyAlert",
+    "sameAccountNameError",
+    "unknown"
   ]
 }
