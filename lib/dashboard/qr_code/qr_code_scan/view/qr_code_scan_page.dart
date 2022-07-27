@@ -21,8 +21,10 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
   final qrKey = GlobalKey(debugLabel: 'QR');
 
   MobileScannerController scannerController = MobileScannerController(
-        formats: [BarcodeFormat.qrCode],
-        );
+    formats: [BarcodeFormat.qrCode],
+  );
+
+  bool isScanned = false;
 
   @override
   void initState() {
@@ -33,6 +35,7 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
   @override
   void dispose() {
     super.dispose();
+    scannerController.stop();
     scannerController.dispose();
   }
 
@@ -42,12 +45,6 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
 
     return BlocListener<QRCodeScanCubit, QRCodeScanState>(
       listener: (context, state) async {
-
-        if(state.status == QrScanStatus.success){
-          if(state.route != null){
-            await scannerController.stop();
-          }
-        } 
         if (state.status == QrScanStatus.error) {
           if (state.message != null) {
             Navigator.of(context).pop();
@@ -98,9 +95,13 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
                                     .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
                               ),
                             );
-                      } else { 
-                        final String code = qrcode.rawValue!;
-                        context.read<QRCodeScanCubit>().host(url: code);
+                      } else {
+                        if (!isScanned) {
+                          isScanned = true;
+                          final String code = qrcode.rawValue!;
+                          context.read<QRCodeScanCubit>().host(url: code);
+                          scannerController.stop();
+                        }
                       }
                     },
                   ),
