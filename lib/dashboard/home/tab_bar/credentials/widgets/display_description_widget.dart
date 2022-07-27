@@ -62,7 +62,7 @@ class ManifestText extends StatelessWidget {
       text,
       style: style,
       maxLines: 8,
-      overflow: TextOverflow.fade,
+      overflow: TextOverflow.ellipsis,
       softWrap: true,
     );
   }

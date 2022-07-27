@@ -41,13 +41,11 @@ class CredentialManifestDetails extends StatelessWidget {
               ),
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: DisplayMappingWidget(
+                  padding: const EdgeInsets.all(8),
+                  child: DisplayDescriptionWidget(
                     displayMapping: outputDescriptor.display?.description,
                     credentialModel: credentialModel,
-                    style: Theme.of(context)
-                        .textTheme
-                        .credentialManifestDescription,
+                    textColor: valueColor,
                   ),
                 ),
               ],

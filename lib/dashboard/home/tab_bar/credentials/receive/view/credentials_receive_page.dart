@@ -47,14 +47,6 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
       child: BasePage(
         padding: const EdgeInsets.all(24),
         title: l10n.credentialReceiveTitle,
-        titleTrailing: IconButton(
-          onPressed: () {
-            if (context.read<ScanCubit>().state.status != ScanStatus.loading) {
-              Navigator.of(context).pop();
-            }
-          },
-          icon: const Icon(Icons.close),
-        ),
         body: BlocConsumer<ScanCubit, ScanState>(
           listener: (BuildContext context, ScanState state) async {
             if (state.status == ScanStatus.loading) {
