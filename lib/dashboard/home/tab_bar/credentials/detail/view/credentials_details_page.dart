@@ -135,10 +135,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               }
             },
           ),
-          titleTrailing: IconButton(
-            onPressed: _edit,
-            icon: const Icon(Icons.edit),
-          ),
+          // titleTrailing: IconButton(
+          //   onPressed: _edit,
+          //   icon: const Icon(Icons.edit),
+          // ),
           navigation: widget.credentialModel.shareLink != ''
               ? SafeArea(
                   child: Container(

@@ -85,6 +85,27 @@ class CredentialManifestDetails extends StatelessWidget {
             ),
           ),
         ),
+        BackgroundCard(
+          color: Theme.of(context).colorScheme.surfaceContainer,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          margin: const EdgeInsets.only(bottom: 8),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              unselectedWidgetColor: Theme.of(context).colorScheme.onPrimary,
+              dividerColor: Theme.of(context).colorScheme.surfaceContainer,
+            ),
+            child: ExpansionTile(
+              initiallyExpanded: true,
+              childrenPadding: EdgeInsets.zero,
+              tilePadding: const EdgeInsets.symmetric(horizontal: 8),
+              title: Text(
+                l10n.credentialManifestActivity,
+                style: Theme.of(context).textTheme.credentialManifestTitle2,
+              ),
+              children: const <Widget>[],
+            ),
+          ),
+        ),
       ],
     );
   }

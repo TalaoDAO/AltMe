@@ -442,5 +442,6 @@
   "sameAccountNameError": "This account name was used before; enter the different account name, please",
   "unknown": "Unknown",
   "credentialManifestDescription": "Description",
-  "credentialManifestInformations": "Informations"
+  "credentialManifestInformations": "Informations",
+  "credentialManifestActivity": "Activity"
 }

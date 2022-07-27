@@ -391,7 +391,8 @@
     "sameAccountNameError",
     "unknown",
     "credentialManifestDescription",
-    "credentialManifestInformations"
+    "credentialManifestInformations",
+    "credentialManifestActivity"
   ],
 
   "es": [
@@ -786,7 +787,8 @@
     "sameAccountNameError",
     "unknown",
     "credentialManifestDescription",
-    "credentialManifestInformations"
+    "credentialManifestInformations",
+    "credentialManifestActivity"
   ],
 
   "fr": [
@@ -1181,7 +1183,8 @@
     "sameAccountNameError",
     "unknown",
     "credentialManifestDescription",
-    "credentialManifestInformations"
+    "credentialManifestInformations",
+    "credentialManifestActivity"
   ],
 
   "it": [
@@ -1576,6 +1579,7 @@
     "sameAccountNameError",
     "unknown",
     "credentialManifestDescription",
-    "credentialManifestInformations"
+    "credentialManifestInformations",
+    "credentialManifestActivity"
   ]
 }

@@ -166,53 +166,29 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
       );
     } else {
       if (fromCredentialOffer) {
-        final textColor = getColorFromCredential(
-          outputDescriptors.first.styles?.text,
-          Colors.black,
-        );
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AspectRatio(
-              aspectRatio: Sizes.credentialAspectRatio,
-              child: Container(
-                decoration: BaseBoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: getColorFromCredential(
-                    outputDescriptors.first.styles?.background,
-                    Colors.white,
-                  ),
-                  shapeColor: Theme.of(context).colorScheme.documentShape,
-                  value: 1,
-                  anchors: showBgDecoration
-                      ? const <Alignment>[Alignment.bottomRight]
-                      : const <Alignment>[],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: CredentialManifestCard(
-                    credentialModel: credentialModel,
-                    outputDescriptor: outputDescriptors.first,
-                  ),
-                ),
+        return AspectRatio(
+          aspectRatio: Sizes.credentialAspectRatio,
+          child: Container(
+            decoration: BaseBoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: getColorFromCredential(
+                outputDescriptors.first.styles?.background,
+                Colors.white,
+              ),
+              shapeColor: Theme.of(context).colorScheme.documentShape,
+              value: 1,
+              anchors: showBgDecoration
+                  ? const <Alignment>[Alignment.bottomRight]
+                  : const <Alignment>[],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: CredentialManifestCard(
+                credentialModel: credentialModel,
+                outputDescriptor: outputDescriptors.first,
               ),
             ),
-            const SizedBox(height: 30),
-            Text(
-              '${context.l10n.credentialManifestDescription}:',
-              style: Theme.of(context)
-                  .textTheme
-                  .credentialDescription
-                  .copyWith(color: textColor),
-            ),
-            const SizedBox(height: 10),
-            DisplayDescriptionWidget(
-              displayMapping: outputDescriptors.first.display?.description,
-              credentialModel: credentialModel,
-              textColor: textColor,
-            ),
-            const SizedBox(height: 20),
-          ],
+          ),
         );
       }
 
