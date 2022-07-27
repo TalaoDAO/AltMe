@@ -389,7 +389,9 @@
     "did",
     "accountPrivateKeyAlert",
     "sameAccountNameError",
-    "unknown"
+    "unknown",
+    "credentialManifestDescription",
+    "credentialManifestInformations"
   ],
 
   "es": [
@@ -782,7 +784,9 @@
     "did",
     "accountPrivateKeyAlert",
     "sameAccountNameError",
-    "unknown"
+    "unknown",
+    "credentialManifestDescription",
+    "credentialManifestInformations"
   ],
 
   "fr": [
@@ -1175,7 +1179,9 @@
     "did",
     "accountPrivateKeyAlert",
     "sameAccountNameError",
-    "unknown"
+    "unknown",
+    "credentialManifestDescription",
+    "credentialManifestInformations"
   ],
 
   "it": [
@@ -1568,6 +1574,8 @@
     "did",
     "accountPrivateKeyAlert",
     "sameAccountNameError",
-    "unknown"
+    "unknown",
+    "credentialManifestDescription",
+    "credentialManifestInformations"
   ]
 }

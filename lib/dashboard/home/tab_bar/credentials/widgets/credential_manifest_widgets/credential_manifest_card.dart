@@ -3,8 +3,8 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
-class CredentialManifestDisplayDescriptor extends StatelessWidget {
-  const CredentialManifestDisplayDescriptor({
+class CredentialManifestCard extends StatelessWidget {
+  const CredentialManifestCard({
     Key? key,
     required this.credentialModel,
     required this.outputDescriptor,
@@ -50,10 +50,10 @@ class CredentialManifestDisplayDescriptor extends StatelessWidget {
                     )
                   ],
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 10),
                 Expanded(
-                  child: DisplayDescriptionWidget(
-                    displayMapping: outputDescriptor.display?.description,
+                  child: DisplayTitleWidget(
+                    displayMapping: outputDescriptor.display?.subtitle,
                     credentialModel: credentialModel,
                     textColor: textColor,
                   ),

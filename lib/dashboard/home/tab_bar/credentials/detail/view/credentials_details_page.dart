@@ -183,11 +183,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                   credentialStatus: state.credentialStatus,
                 ),
                 if (outputDescriptors != null) ...[
-                  const SizedBox(height: 10),
-                  CredentialSelectionManifestDisplayDescriptor(
-                    outputDescriptors: outputDescriptors,
+                  const SizedBox(height: 30),
+                  CredentialManifestDetails(
+                    outputDescriptor: outputDescriptors.first,
                     credentialModel: widget.credentialModel,
-                    showTile: true,
                   ),
                 ],
                 const SizedBox(height: 40),

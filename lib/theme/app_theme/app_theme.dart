@@ -735,7 +735,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get credentialManifestDescription => GoogleFonts.roboto(
-        color: const Color(0xff86809D),
+        color: const Color(0xffFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
@@ -746,15 +746,15 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w700,
       );
 
+  TextStyle get credentialSubtitle => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get credentialStatus => GoogleFonts.roboto(
         color: const Color(0xffFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w800,
-      );
-
-  TextStyle get credentialSubtitle => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
       );
 }
