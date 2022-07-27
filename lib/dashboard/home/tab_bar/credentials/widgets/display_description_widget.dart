@@ -1,4 +1,3 @@
-import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -19,7 +18,7 @@ class DisplayDescriptionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final object = displayMapping;
 
-    final color = textColor == null
+    final style = textColor == null
         ? Theme.of(context).textTheme.credentialDescription
         : Theme.of(context)
             .textTheme
@@ -27,7 +26,7 @@ class DisplayDescriptionWidget extends StatelessWidget {
             .copyWith(color: textColor);
 
     if (object is DisplayMappingText) {
-      return MyText(object.text, style: color, maxLines: 2);
+      return ManifestText(text: object.text, style: style);
     }
 
     if (object is DisplayMappingPath) {
@@ -36,13 +35,35 @@ class DisplayDescriptionWidget extends StatelessWidget {
         textList.addAll(getTextsFromCredential(e, credentialModel.data));
       }
       if (textList.isNotEmpty) {
-        return MyText(textList.first, style: color, maxLines: 2);
+        return ManifestText(text: textList.first, style: style);
       }
       if (object.fallback != null) {
-        return MyText(object.fallback ?? '', style: color, maxLines: 2);
+        return ManifestText(text: object.fallback ?? '', style: style);
       }
     }
 
     return const SizedBox.shrink();
+  }
+}
+
+class ManifestText extends StatelessWidget {
+  const ManifestText({
+    Key? key,
+    required this.text,
+    required this.style,
+  }) : super(key: key);
+
+  final String text;
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: style,
+      maxLines: 8,
+      overflow: TextOverflow.ellipsis,
+      softWrap: true,
+    );
   }
 }

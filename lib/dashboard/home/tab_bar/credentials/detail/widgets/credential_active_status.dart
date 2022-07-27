@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -11,14 +10,8 @@ class CredentialActiveStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return Column(
       children: [
-        Text(
-          l10n.verificationStatus,
-          style: Theme.of(context).textTheme.credentialStatus,
-        ),
-        const SizedBox(height: 10),
         Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

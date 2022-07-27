@@ -1,4 +1,3 @@
-import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class CheckboxItem extends StatelessWidget {

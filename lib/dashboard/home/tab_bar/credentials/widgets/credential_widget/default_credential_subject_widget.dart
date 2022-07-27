@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class DefaultCredentialSubjectDisplayInList extends StatelessWidget {
         descriptionMaxLine: descriptionMaxLine,
       );
     } else {
-      descriptionWidget = CredentialManifestDisplayDescriptor(
+      descriptionWidget = CredentialManifestCard(
         credentialModel: credentialModel,
         outputDescriptor: outputDescriptor,
       );
@@ -109,7 +110,7 @@ class DefaultCredentialSubjectDisplayInSelectionList extends StatelessWidget {
         descriptionMaxLine: descriptionMaxLine,
       );
     } else {
-      descriptionWidget = CredentialManifestDisplayDescriptor(
+      descriptionWidget = CredentialManifestCard(
         credentialModel: credentialModel,
         outputDescriptor: outputDescriptor,
       );
@@ -165,10 +166,29 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
       );
     } else {
       if (fromCredentialOffer) {
-        return CredentialSelectionManifestDisplayDescriptor(
-          outputDescriptors: outputDescriptors,
-          credentialModel: credentialModel,
-          showTile: false,
+        return AspectRatio(
+          aspectRatio: Sizes.credentialAspectRatio,
+          child: Container(
+            decoration: BaseBoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: getColorFromCredential(
+                outputDescriptors.first.styles?.background,
+                Colors.white,
+              ),
+              shapeColor: Theme.of(context).colorScheme.documentShape,
+              value: 1,
+              anchors: showBgDecoration
+                  ? const <Alignment>[Alignment.bottomRight]
+                  : const <Alignment>[],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: CredentialManifestCard(
+                credentialModel: credentialModel,
+                outputDescriptor: outputDescriptors.first,
+              ),
+            ),
+          ),
         );
       }
 
@@ -190,7 +210,7 @@ class DefaultCredentialSubjectDisplayDetail extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: CredentialManifestDisplayDescriptor(
+              child: CredentialManifestCard(
                 credentialModel: credentialModel,
                 outputDescriptor: outputDescriptors.first,
               ),
