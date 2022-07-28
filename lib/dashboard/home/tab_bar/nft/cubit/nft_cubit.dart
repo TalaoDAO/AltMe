@@ -22,7 +22,11 @@ class NftCubit extends Cubit<NftState> {
 
   List<NftModel> data = [];
 
-  Future<void> getTezosNftList({required int offset, int limit = 15}) async {
+  Future<void> getTezosNftList({
+    String baseUrl = '',
+    required int offset,
+    int limit = 15,
+  }) async {
     if (data.length < offset) return;
     try {
       if (offset == 0) {
@@ -32,12 +36,13 @@ class NftCubit extends Cubit<NftState> {
       final walletAddress =
           walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
       final List<dynamic> response = await client.get(
-        '/v1/tokens/balances',
+        '$baseUrl/v1/tokens/balances',
         queryParameters: <String, dynamic>{
           'account': walletAddress,
           'balance.eq': 1,
           'select':
-              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance', // ignore: lines_longer_than_80_chars
+              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance',
+          // ignore: lines_longer_than_80_chars
           'offset': offset,
           'limit': limit,
         },

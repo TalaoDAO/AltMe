@@ -20,4 +20,9 @@ class TezosNetwork {
   final String apiKey;
 
   Map<String, dynamic> toJson() => _$TezosNetworkToJson(this);
+
+  @override
+  String toString() {
+    return 'TezosNetwork{networkName: $networkname, tzktUrl: $tzktUrl, apiKey: $apiKey}';
+  }
 }
