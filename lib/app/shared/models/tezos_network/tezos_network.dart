@@ -10,9 +10,10 @@ class TezosNetwork {
       _$TezosNetworkFromJson(json);
 
   factory TezosNetwork.mainNet() =>
-      const TezosNetwork('mainnet', 'https://api.tzkt.io', '');
-  factory TezosNetwork.ithacaNet() =>
-      const TezosNetwork('ithacanet', 'https://api.ithacanet.tzkt.io', '');
+      const TezosNetwork('Mainnet', 'https://api.tzkt.io', '');
+
+  factory TezosNetwork.ghostnet() =>
+      const TezosNetwork('Ghostnet', 'https://api.ghostnet.tzkt.io', '');
 
   final String networkname;
   final String tzktUrl;
