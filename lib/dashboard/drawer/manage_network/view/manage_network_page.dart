@@ -26,11 +26,11 @@ class ManageNetworkPage extends StatelessWidget {
         builder: (context, state) {
           var groupValue = TezosNetwork.mainNet();
           switch (state.model.tezosNetwork.networkname) {
-            case 'mainnet':
+            case 'Mainnet':
               groupValue = TezosNetwork.mainNet();
               break;
-            case 'ithacanet':
-              groupValue = TezosNetwork.ithacaNet();
+              case 'Ghostnet':
+              groupValue = TezosNetwork.ghostnet();
               break;
           }
           return BackgroundCard(
@@ -51,7 +51,7 @@ class ManageNetworkPage extends StatelessWidget {
                       groupValue: groupValue,
                     ),
                     TezosNetworkSelector(
-                      tezosNetwork: TezosNetwork.ithacaNet(),
+                      tezosNetwork: TezosNetwork.ghostnet(),
                       groupValue: groupValue,
                     ),
                   ],
