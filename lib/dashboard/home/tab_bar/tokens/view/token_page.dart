@@ -49,13 +49,21 @@ class _TokenViewState extends State<TokenView> {
 
   Future<void> onRefresh() async {
     _offset = 0;
-    await context.read<TokensCubit>().getBalanceOfAssetList(offset: _offset);
+    await context.read<TokensCubit>().getBalanceOfAssetList(
+          baseUrl:
+              context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+          offset: _offset,
+        );
   }
 
   Future<void> onScrollEnded() async {
     _offset += _limit;
     LoadingView().show(context: context);
-    await context.read<TokensCubit>().getBalanceOfAssetList(offset: _offset);
+    await context.read<TokensCubit>().getBalanceOfAssetList(
+          baseUrl:
+              context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+          offset: _offset,
+        );
     LoadingView().hide();
   }
 
