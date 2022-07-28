@@ -12,7 +12,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
   CredentialListCubit() : super(CredentialListState());
 
   final List<CredentialSubjectType> gamingCategories = [
-    CredentialSubjectType.tezVoucher
+    //CredentialSubjectType.tezVoucher
   ];
 
   final List<CredentialSubjectType> communityCategories = [
