@@ -79,9 +79,7 @@ class TokensCubit extends Cubit<TokensState> {
   }
 
   Future<TokenModel> getXtzBalance(String walletAddress) async {
-    try {
-      await Dartez().init();
-    } catch (e) {}
+    await Dartez().init();
 
     /// main public RPC endpoints can be accessed at:
     /// https://rpc.tzstats.com

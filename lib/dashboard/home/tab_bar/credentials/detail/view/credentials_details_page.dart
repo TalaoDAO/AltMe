@@ -86,28 +86,28 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     }
   }
 
-  Future<void> _edit() async {
-    final l10n = context.l10n;
-    logger.info('Start edit flow');
-    final credentialDetailsCubit = context.read<CredentialDetailsCubit>();
-    final newAlias = await showDialog<String>(
-      context: context,
-      builder: (_) => TextFieldDialog(
-        label: l10n.credentialAlias,
-        title: l10n.credentialDetailEditConfirmationDialog,
-        initialValue: credentialDetailsCubit.state.title,
-        yes: l10n.credentialDetailEditConfirmationDialogYes,
-        no: l10n.credentialDetailEditConfirmationDialogNo,
-      ),
-    );
+  // Future<void> _edit() async {
+  //   final l10n = context.l10n;
+  //   logger.info('Start edit flow');
+  //   final credentialDetailsCubit = context.read<CredentialDetailsCubit>();
+  //   final newAlias = await showDialog<String>(
+  //     context: context,
+  //     builder: (_) => TextFieldDialog(
+  //       label: l10n.credentialAlias,
+  //       title: l10n.credentialDetailEditConfirmationDialog,
+  //       initialValue: credentialDetailsCubit.state.title,
+  //       yes: l10n.credentialDetailEditConfirmationDialogYes,
+  //       no: l10n.credentialDetailEditConfirmationDialogNo,
+  //     ),
+  //   );
 
-    logger.info('Edit flow answered with: $newAlias');
+  //   logger.info('Edit flow answered with: $newAlias');
 
-    if (newAlias != null && newAlias != credentialDetailsCubit.state.title) {
-      logger.info('New alias is different, going to update credential');
-      await credentialDetailsCubit.update(widget.credentialModel, newAlias);
-    }
-  }
+  //   if (newAlias != null && newAlias != credentialDetailsCubit.state.title) {
+  //     logger.info('New alias is different, going to update credential');
+  //     await credentialDetailsCubit.update(widget.credentialModel, newAlias);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -80,7 +80,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                 //           '${widget.uri.host} ${l10n.credentialReceiveHost}',
                 //           maxLines: 3,
                 //           textAlign: TextAlign.center,
-                //           style: Theme.of(builderContext).textTheme.bodyText1,
+                //          style: Theme.of(builderContext).textTheme.bodyText1,
                 //         ),
                 //       ),
                 //     ),
