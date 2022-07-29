@@ -50,13 +50,21 @@ class _NftViewState extends State<NftView> {
 
   Future<void> onRefresh() async {
     _offset = 0;
-    await context.read<NftCubit>().getTezosNftList(offset: _offset);
+    await context.read<NftCubit>().getTezosNftList(
+          baseUrl:
+              context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+          offset: _offset,
+        );
   }
 
   Future<void> onScrollEnded() async {
     _offset += _limit;
     LoadingView().show(context: context);
-    await context.read<NftCubit>().getTezosNftList(offset: _offset);
+    await context.read<NftCubit>().getTezosNftList(
+          baseUrl:
+              context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+          offset: _offset,
+        );
     LoadingView().hide();
   }
 

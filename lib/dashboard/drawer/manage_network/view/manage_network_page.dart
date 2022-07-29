@@ -29,7 +29,7 @@ class ManageNetworkPage extends StatelessWidget {
             case 'Mainnet':
               groupValue = TezosNetwork.mainNet();
               break;
-              case 'Ghostnet':
+            case 'Ghostnet':
               groupValue = TezosNetwork.ghostnet();
               break;
           }
