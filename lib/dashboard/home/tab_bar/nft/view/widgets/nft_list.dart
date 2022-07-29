@@ -75,6 +75,7 @@ class _NftListState extends State<NftList> {
                   ),
                   assetValue: widget.nftList[index].balance,
                   description: widget.nftList[index].name,
+                  id: widget.nftList[index].id,
                 );
               },
               itemCount: widget.nftList.length,

@@ -8,11 +8,13 @@ class NftItem extends StatelessWidget {
     required this.assetUrl,
     required this.description,
     required this.assetValue,
+    required this.id,
   }) : super(key: key);
 
   final String assetUrl;
   final String description;
   final String assetValue;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class NftItem extends StatelessWidget {
             height: 8,
           ),
           MyText(
-            description,
+            '$description $id',
             maxLines: 1,
             minFontSize: 12,
             overflow: TextOverflow.ellipsis,

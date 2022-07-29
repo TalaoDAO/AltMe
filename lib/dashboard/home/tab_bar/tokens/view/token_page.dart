@@ -25,7 +25,7 @@ class _TokenPageState extends State<TokenPage>
     return BlocProvider<TokensCubit>(
       create: (context) => TokensCubit(
         client: DioClient(
-          context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+          context.read<ManageNetworkCubit>().state.network.tzktUrl,
           Dio(),
         ),
         walletCubit: context.read<WalletCubit>(),
@@ -51,7 +51,7 @@ class _TokenViewState extends State<TokenView> {
     _offset = 0;
     await context.read<TokensCubit>().getBalanceOfAssetList(
           baseUrl:
-              context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+          context.read<ManageNetworkCubit>().state.network.tzktUrl,
           offset: _offset,
         );
   }
@@ -69,13 +69,22 @@ class _TokenViewState extends State<TokenView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WalletCubit, WalletState>(
-      listener: (context, state) {
-        if (activeIndex != state.currentCryptoIndex) {
-          onRefresh();
-        }
-        activeIndex = state.currentCryptoIndex;
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<WalletCubit, WalletState>(
+          listener: (context, state) {
+            if (activeIndex != state.currentCryptoIndex) {
+              onRefresh();
+            }
+            activeIndex = state.currentCryptoIndex;
+          },
+        ),
+        BlocListener<ManageNetworkCubit, ManageNetworkState>(
+          listener: (context, state) {
+            onRefresh();
+          },
+        ),
+      ],
       child: BasePage(
         scrollView: false,
         padding: EdgeInsets.zero,
