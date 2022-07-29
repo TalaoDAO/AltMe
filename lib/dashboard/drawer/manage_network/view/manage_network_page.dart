@@ -21,11 +21,11 @@ class ManageNetworkPage extends StatelessWidget {
       title: l10n.network,
       titleLeading: const BackLeadingButton(),
       scrollView: true,
-      body: BlocBuilder<ProfileCubit, ProfileState>(
-        bloc: context.read<ProfileCubit>(),
+      body: BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
+        bloc: context.read<ManageNetworkCubit>(),
         builder: (context, state) {
           var groupValue = TezosNetwork.mainNet();
-          switch (state.model.tezosNetwork.networkname) {
+          switch (state.network.networkname) {
             case 'Mainnet':
               groupValue = TezosNetwork.mainNet();
               break;

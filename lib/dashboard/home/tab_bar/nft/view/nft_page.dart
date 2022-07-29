@@ -26,7 +26,7 @@ class _NftPageState extends State<NftPage>
     return BlocProvider<NftCubit>(
       create: (context) => NftCubit(
         client: DioClient(
-          context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+          context.read<ManageNetworkCubit>().state.network.tzktUrl,
           Dio(),
         ),
         walletCubit: context.read<WalletCubit>(),
@@ -52,7 +52,7 @@ class _NftViewState extends State<NftView> {
     _offset = 0;
     await context.read<NftCubit>().getTezosNftList(
           baseUrl:
-              context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+              context.read<ManageNetworkCubit>().state.network.tzktUrl,
           offset: _offset,
         );
   }
@@ -71,13 +71,22 @@ class _NftViewState extends State<NftView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocListener<WalletCubit, WalletState>(
-      listener: (context, state) {
-        if (activeIndex != state.currentCryptoIndex) {
-          onRefresh();
-        }
-        activeIndex = state.currentCryptoIndex;
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<WalletCubit, WalletState>(
+          listener: (context, state) {
+            if (activeIndex != state.currentCryptoIndex) {
+              onRefresh();
+            }
+            activeIndex = state.currentCryptoIndex;
+          },
+        ),
+        BlocListener<ManageNetworkCubit, ManageNetworkState>(
+          listener: (context, state) {
+            onRefresh();
+          },
+        ),
+      ],
       child: BasePage(
         scrollView: false,
         padding: EdgeInsets.zero,

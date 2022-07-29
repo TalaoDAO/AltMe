@@ -13,9 +13,10 @@ class TezosNetworkSelector extends StatelessWidget {
 
   final TezosNetwork tezosNetwork;
   final TezosNetwork groupValue;
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileCubit, ProfileState>(
+    return BlocConsumer<ManageNetworkCubit, ManageNetworkState>(
       listener: (context, state) {},
       builder: (context, state) {
         return ListTile(
@@ -31,7 +32,7 @@ class TezosNetworkSelector extends StatelessWidget {
             activeColor: Theme.of(context).colorScheme.onPrimary,
             onChanged: (TezosNetwork? value) async {
               if (value != null) {
-                await context.read<ProfileCubit>().updateTezosNetwork(value);
+                await context.read<ManageNetworkCubit>().setNetwork(value);
               }
             },
           ),

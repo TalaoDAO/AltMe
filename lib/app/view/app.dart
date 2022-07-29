@@ -47,6 +47,11 @@ class App extends StatelessWidget {
             secureStorageProvider: secure_storage.getSecureStorage,
           ),
         ),
+        BlocProvider<ManageNetworkCubit>(
+          create: (context) => ManageNetworkCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+          ),
+        ),
         BlocProvider<CredentialListCubit>(
           create: (context) => CredentialListCubit(),
         ),

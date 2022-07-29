@@ -67,7 +67,7 @@ class TokensCubit extends Cubit<TokensState> {
         data.addAll(newData);
       }
       emit(state.populate(data: data));
-    } catch (e) {
+    } catch (e,s) {
       if (isClosed) return;
       emit(
         state.errorWhileFetching(
@@ -80,8 +80,9 @@ class TokensCubit extends Cubit<TokensState> {
   }
 
   Future<TokenModel> getXtzBalance(String walletAddress) async {
-    await Dartez().init();
-
+    try {
+      await Dartez().init();
+    }catch(e,s){}
     /// main public RPC endpoints can be accessed at:
     /// https://rpc.tzstats.com
     /// https://rpc.edo.tzstats.com

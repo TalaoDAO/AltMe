@@ -142,11 +142,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await secureStorageProvider.set(
-        SecureStorageKeys.tezosNetworkKey,
-        jsonEncode(profileModel.tezosNetwork.toJson()),
-      );
-
-      await secureStorageProvider.set(
         SecureStorageKeys.isEnterpriseUser,
         profileModel.isEnterprise.toString(),
       );
@@ -183,14 +178,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
     final _newModel =
         state.model.copyWith(issuerVerificationUrl: _issuerVerificationUrl);
-    await update(_newModel);
-  }
-
-  Future<void> updateTezosNetwork(
-    TezosNetwork newTezosNetwork,
-  ) async {
-    Logger('altme-wallet/profile/updateTezosNetwork');
-    final _newModel = state.model.copyWith(tezosNetwork: newTezosNetwork);
     await update(_newModel);
   }
 }
