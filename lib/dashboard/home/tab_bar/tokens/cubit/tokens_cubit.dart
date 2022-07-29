@@ -24,6 +24,7 @@ class TokensCubit extends Cubit<TokensState> {
   List<TokenModel> data = [];
 
   Future<void> getBalanceOfAssetList({
+    String baseUrl = '',
     required int offset,
     int limit = 15,
   }) async {
@@ -38,7 +39,7 @@ class TokensCubit extends Cubit<TokensState> {
           walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
 
       final List<dynamic> tokensBalancesJsonArray = await client.get(
-        '/v1/tokens/balances',
+        '$baseUrl/v1/tokens/balances',
         queryParameters: <String, dynamic>{
           'account': walletAddress,
           'balance.ne': 1,
