@@ -60,14 +60,14 @@ class TokensCubit extends Cubit<TokensState> {
       }
 
       if (offset == 0) {
-        final tezosToken = await getXtzBalance(walletAddress);
+        final tezosToken = await getXtzBalance(baseUrl, walletAddress);
         newData.insert(0, tezosToken);
         data = newData;
       } else {
         data.addAll(newData);
       }
       emit(state.populate(data: data));
-    } catch (e,s) {
+    } catch (e, s) {
       if (isClosed) return;
       emit(
         state.errorWhileFetching(
@@ -79,19 +79,9 @@ class TokensCubit extends Cubit<TokensState> {
     }
   }
 
-  Future<TokenModel> getXtzBalance(String walletAddress) async {
-    try {
-      await Dartez().init();
-    }catch(e,s){}
-    /// main public RPC endpoints can be accessed at:
-    /// https://rpc.tzstats.com
-    /// https://rpc.edo.tzstats.com
-    /// https://rpc.florence.tzstats.com
-    const rpc = 'https://rpc.tzstats.com';
-    final balance = await Dartez.getBalance(
-      walletAddress,
-      rpc,
-    );
+  Future<TokenModel> getXtzBalance(String baseUrl, String walletAddress) async {
+    final int balance =
+        await client.get('$baseUrl/v1/accounts/$walletAddress/balance') as int;
 
     return TokenModel(
       '',
@@ -99,7 +89,7 @@ class TokensCubit extends Cubit<TokensState> {
       'XTZ',
       'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
       '',
-      balance,
+      balance.toString(),
       '6',
     );
   }
