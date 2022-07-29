@@ -23,6 +23,7 @@ class TezosNetwork {
 
   @override
   String toString() {
+    // ignore: lines_longer_than_80_chars
     return 'TezosNetwork{networkName: $networkname, tzktUrl: $tzktUrl, apiKey: $apiKey}';
   }
 }

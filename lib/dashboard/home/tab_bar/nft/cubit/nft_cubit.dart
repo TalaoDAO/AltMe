@@ -41,8 +41,7 @@ class NftCubit extends Cubit<NftState> {
           'account': walletAddress,
           'balance.eq': 1,
           'select':
-              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance',
-          // ignore: lines_longer_than_80_chars
+              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance', // ignore: lines_longer_than_80_chars
           'offset': offset,
           'limit': limit,
         },
