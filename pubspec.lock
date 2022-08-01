@@ -363,12 +363,10 @@ packages:
   file_saver:
     dependency: "direct main"
     description:
-      path: "."
-      ref: c0ea840
-      resolved-ref: c0ea84007896c6014c72785a8bcde0e9c53dc804
-      url: "https://github.com/incrediblezayed/file_saver"
-    source: git
-    version: "0.1.0"
+      name: file_saver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   fixnum:
     dependency: transitive
     description:

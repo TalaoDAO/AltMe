@@ -25,10 +25,7 @@ dependencies:
   ed25519_hd_key: ^2.2.0
   equatable: ^2.0.3
   file_picker: ^4.5.1
-  file_saver:
-    git:
-      url: https://github.com/incrediblezayed/file_saver
-      ref: c0ea840
+  file_saver: ^0.1.1
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
