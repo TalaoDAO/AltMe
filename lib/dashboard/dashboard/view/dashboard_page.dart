@@ -178,8 +178,9 @@ class _DashboardViewState extends State<DashboardView> {
                       },
                     )
                   : null,
-              titleTrailing:
-                  state.selectedIndex == 0 ? const HomeTitleTrailing() : null,
+              titleTrailing: state.selectedIndex == 0
+                  ? const AccountSwitcherButton()
+                  : null,
               body: Stack(
                 children: [
                   Column(

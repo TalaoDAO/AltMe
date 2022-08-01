@@ -396,7 +396,9 @@
     "credentialDetailsOrganisationDetail",
     "credentialDetailsInWalletSince",
     "termsOfUseAndLicenses",
-    "licenses"
+    "licenses",
+    "sendTo",
+    "next"
   ],
 
   "es": [
@@ -796,7 +798,9 @@
     "credentialDetailsOrganisationDetail",
     "credentialDetailsInWalletSince",
     "termsOfUseAndLicenses",
-    "licenses"
+    "licenses",
+    "sendTo",
+    "next"
   ],
 
   "fr": [
@@ -1196,7 +1200,9 @@
     "credentialDetailsOrganisationDetail",
     "credentialDetailsInWalletSince",
     "termsOfUseAndLicenses",
-    "licenses"
+    "licenses",
+    "sendTo",
+    "next"
   ],
 
   "it": [
@@ -1596,6 +1602,8 @@
     "credentialDetailsOrganisationDetail",
     "credentialDetailsInWalletSince",
     "termsOfUseAndLicenses",
-    "licenses"
+    "licenses",
+    "sendTo",
+    "next"
   ]
 }

@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/view/widgets/widgets.dart';
+import 'package:altme/deposit_tokens/deposit_tokens.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:dio/dio.dart';
@@ -65,6 +66,10 @@ class _TokenViewState extends State<TokenView> {
           offset: _offset,
         );
     LoadingView().hide();
+  }
+
+  void onItemTap() {
+    Navigator.of(context).push<void>(SendToPage.route());
   }
 
   @override
@@ -132,6 +137,7 @@ class _TokenViewState extends State<TokenView> {
                       tokenList: state.data,
                       onRefresh: onRefresh,
                       onScrollEnded: onScrollEnded,
+                      onItemTap: onItemTap,
                     );
                   } else if (state.status == AppStatus.errorWhileFetching) {
                     return ErrorView(message: message, onTap: onRefresh);

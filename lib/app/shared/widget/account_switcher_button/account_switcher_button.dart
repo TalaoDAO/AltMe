@@ -5,8 +5,8 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeTitleTrailing extends StatelessWidget {
-  const HomeTitleTrailing({
+class AccountSwitcherButton extends StatelessWidget {
+  const AccountSwitcherButton({
     Key? key,
   }) : super(key: key);
 

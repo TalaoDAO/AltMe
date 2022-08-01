@@ -84,7 +84,7 @@ class ProfessionalExperienceAssessmentDisplayDetail extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  '${l10n.from} ',
+                  '${l10n.from.toLowerCase()} ',
                   style: Theme.of(context).textTheme.credentialFieldTitle,
                 ),
                 Text(
@@ -92,7 +92,7 @@ class ProfessionalExperienceAssessmentDisplayDetail extends StatelessWidget {
                   style: Theme.of(context).textTheme.credentialFieldDescription,
                 ),
                 Text(
-                  ' ${l10n.to} ',
+                  ' ${l10n.to.toLowerCase()} ',
                   style: Theme.of(context).textTheme.credentialFieldTitle,
                 ),
                 Text(
