@@ -20,7 +20,7 @@ class AccountSelectBoxView extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.all(Sizes.spaceSmall),
             decoration: BoxDecoration(
-              color: Theme.of(context).highlightColor,
+              color: Theme.of(context).hoverColor,
               borderRadius: const BorderRadius.all(
                 Radius.circular(Sizes.normalRadius),
               ),
