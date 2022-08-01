@@ -25,7 +25,9 @@ class HomePage extends StatelessWidget {
 
         if (homeState.status == AppStatus.success) {}
       },
-      child: const TabControllerPage(),
+      child: isAndroid()
+          ? const TabControllerPage()
+          : const IosTabControllerPage(),
     );
   }
 }

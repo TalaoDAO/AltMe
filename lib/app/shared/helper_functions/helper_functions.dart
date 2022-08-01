@@ -1,3 +1,5 @@
+import 'dart:io';
+
 String generateDefaultAccountName(
   int accountIndex,
   List<String> accountNameList,
@@ -9,4 +11,8 @@ String generateDefaultAccountName(
   } else {
     return defaultAccountName;
   }
+}
+
+bool isAndroid() {
+  return Platform.isAndroid;
 }

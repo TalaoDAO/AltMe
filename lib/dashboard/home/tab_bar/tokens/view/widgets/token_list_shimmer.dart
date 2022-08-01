@@ -10,7 +10,7 @@ class TokenListShimmer extends StatelessWidget {
       //physics: const BouncingScrollPhysics(),
       physics: const AlwaysScrollableScrollPhysics(),
       itemBuilder: (_, __) => const TokenItemShimmer(),
-      itemCount: 3,
+      itemCount: 10,
     );
   }
 }
