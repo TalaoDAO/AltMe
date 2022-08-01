@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/withdrawal_tokens/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class SendToPage extends StatefulWidget {
@@ -42,6 +43,8 @@ class _SendToPageState extends State<SendToPage> {
                   height: Sizes.spaceXLarge,
                 ),
                 AccountSelectBoxView(caption: l10n.from,),
+                const SizedBox(height: Sizes.spaceNormal,),
+                WithdrawalAddressInput(caption: l10n.to,),
               ],
             ),
           ),

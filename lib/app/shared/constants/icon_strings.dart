@@ -55,4 +55,6 @@ class IconStrings {
   static const String alert = '$base/alert.png';
   static const String cardsBlur = '$base/cards-blur.png';
   static const String cards = '$base/cards.png';
+  static const String scanAddress = '$base/scan-address.png';
+  static const String whiteList = '$base/whitelist.png';
 }

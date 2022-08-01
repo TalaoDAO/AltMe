@@ -450,5 +450,6 @@
   "licenses": "Licenses",
   "credentialDetailsInWalletSince": "In wallet since:",
   "sendTo":"Send to",
-  "next": "Next"
+  "next": "Next",
+  "withdrawalInputHint": "Copy address, scan or whitelist"
 }

@@ -398,7 +398,8 @@
     "termsOfUseAndLicenses",
     "licenses",
     "sendTo",
-    "next"
+    "next",
+    "withdrawalInputHint"
   ],
 
   "es": [
@@ -800,7 +801,8 @@
     "termsOfUseAndLicenses",
     "licenses",
     "sendTo",
-    "next"
+    "next",
+    "withdrawalInputHint"
   ],
 
   "fr": [
@@ -1202,7 +1204,8 @@
     "termsOfUseAndLicenses",
     "licenses",
     "sendTo",
-    "next"
+    "next",
+    "withdrawalInputHint"
   ],
 
   "it": [
@@ -1604,6 +1607,7 @@
     "termsOfUseAndLicenses",
     "licenses",
     "sendTo",
-    "next"
+    "next",
+    "withdrawalInputHint"
   ]
 }
