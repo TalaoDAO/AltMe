@@ -26,8 +26,6 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
 
   bool isScanned = false;
 
-  final log = getLogger('QR');
-
   @override
   void dispose() {
     super.dispose();
