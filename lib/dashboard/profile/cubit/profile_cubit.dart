@@ -5,7 +5,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:logging/logging.dart';
+
 import 'package:secure_storage/secure_storage.dart';
 
 part 'profile_cubit.g.dart';
@@ -22,7 +22,8 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> load() async {
     emit(state.loading());
-    final log = Logger('altme-wallet/profile/load');
+
+    final log = getLogger('ProfileCubit - load');
     try {
       final firstName =
           await secureStorageProvider.get(SecureStorageKeys.firstNameKey) ?? '';
@@ -71,7 +72,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       emit(state.success(model: profileModel));
     } catch (e) {
-      log.severe('something went wrong', e);
+      log.e('something went wrong', e);
       emit(
         state.error(
           messageHandler: ResponseMessage(
@@ -101,7 +102,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> update(ProfileModel profileModel) async {
     emit(state.loading());
-    final log = Logger('altme-wallet/profile/update');
+    final log = getLogger('ProfileCubit - update');
 
     try {
       await secureStorageProvider.set(
@@ -148,7 +149,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       emit(state.success(model: profileModel));
     } catch (e) {
-      log.severe('something went wrong', e);
+      log.e('something went wrong', e);
 
       emit(
         state.error(
@@ -163,7 +164,6 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateIssuerVerificationUrl(
     IssuerVerificationRegistry registry,
   ) async {
-    Logger('altme-wallet/profile/updateIssuerVerificationUrl');
     var _issuerVerificationUrl = Urls.checkIssuerTalaoUrl;
     switch (registry) {
       case IssuerVerificationRegistry.EBSI:

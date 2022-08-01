@@ -12,7 +12,7 @@ import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:logging/logging.dart';
+
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -362,7 +362,7 @@ class WalletCubit extends Cubit<WalletState> {
     required String cryptoKey,
     String? oldId,
   }) async {
-    final log = Logger('altme/associated_wallet_credential/create');
+    final log = getLogger('WalletCubit - generateAssociatedWalletCredential');
     try {
       const didMethod = AltMeStrings.defaultDIDMethod;
       final didSsi = didCubit.state.did!;
@@ -403,14 +403,14 @@ class WalletCubit extends Cubit<WalletState> {
       final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
 
       if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
-        log.warning(
+        log.w(
           'credential verification return warnings',
           jsonVerification['warnings'],
         );
       }
 
       if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
-        log.severe('failed to verify credential', jsonVerification['errors']);
+        log.e('failed to verify credential', jsonVerification['errors']);
         if (jsonVerification['errors'][0] != 'No applicable proof') {
           throw ResponseMessage(
             ResponseString
@@ -423,7 +423,7 @@ class WalletCubit extends Cubit<WalletState> {
         return _createCredential(vc, oldId);
       }
     } catch (e, s) {
-      log.severe('something went wrong e: $e, stackTrace: $s', e, s);
+      log.e('something went wrong e: $e, stackTrace: $s', e, s);
       return null;
     }
   }

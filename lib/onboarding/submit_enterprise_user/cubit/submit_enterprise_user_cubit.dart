@@ -9,7 +9,7 @@ import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
-import 'package:logging/logging.dart';
+
 import 'package:secure_storage/secure_storage.dart';
 
 part 'submit_enterprise_user_cubit.g.dart';
@@ -33,7 +33,7 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
 
   Future<void> verify(String did) async {
     emit(state.loading());
-    final log = Logger('altme-wallet/onBoarding/VerifyRSAAndDIDCubit/verify');
+    final log = getLogger('SubmitEnterpriseUserCubit - verify');
     try {
       if (did.isEmpty) {
         throw ResponseMessage(
@@ -103,7 +103,7 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
       }
       emit(state.success());
     } catch (e, s) {
-      log.info('error in verifying RSA key :${e.toString()}, s: $s', e, s);
+      log.e('error in verifying RSA key :${e.toString()}, s: $s', e, s);
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {

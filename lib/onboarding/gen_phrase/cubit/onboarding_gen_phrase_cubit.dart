@@ -8,7 +8,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:logging/logging.dart';
+
 import 'package:secure_storage/secure_storage.dart';
 
 part 'onboarding_gen_phrase_cubit.g.dart';
@@ -32,7 +32,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
   final HomeCubit homeCubit;
   final WalletCubit walletCubit;
 
-  final log = Logger('altme-wallet/on-boarding/key-generation');
+  final log = getLogger('OnBoardingGenPhraseCubit');
 
   Future<void> switchTick() async {
     emit(state.copyWith(isTicked: !state.isTicked));
@@ -79,7 +79,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
       homeCubit.emitHasWallet();
       emit(state.success());
     } catch (error) {
-      log.severe('something went wrong when generating a key', error);
+      log.e('something went wrong when generating a key', error);
       emit(
         state.error(
           messageHandler: ResponseMessage(

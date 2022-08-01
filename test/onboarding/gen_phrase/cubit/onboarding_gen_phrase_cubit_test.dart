@@ -13,7 +13,6 @@ Future<void> main() async {
         mnemonic: mnemonic,
         accountType: AccountType.ssi,
       );
-      debugPrint(jwk);
       const expectedJwk =
           '''{"kty":"OKP","crv":"Ed25519","d":"cMGD8eAmjDn6MqvJoscsaPoyAMrjG41xbLDfE-uQkYw=","x":"-PeGBkVyMz2-yketwH2lbQqiflneee3jmaTafMCsURE="}''';
       expect(jwk, equals(expectedJwk));
@@ -24,7 +23,6 @@ Future<void> main() async {
         mnemonic: mnemonic,
         accountType: AccountType.ssi,
       );
-      debugPrint(address);
       const expectedAddress = 'tz1NvqicaUW7v6sEbM4UYi3Wes7GHDft4kqY';
       expect(address, equals(expectedAddress));
     });
@@ -34,7 +32,6 @@ Future<void> main() async {
         mnemonic: mnemonic,
         accountType: AccountType.ssi,
       );
-      debugPrint(secretKey);
       const expectedSecretKey =
           '''edskRrmNgPfAAvbZyzTptfvTju9X7ooLR5VVN9u8sXA42hXdMBd8CgrhykP7sZQf8hWLCYuqfEoWUFzL6Us3aKtMD9NsELGkuP''';
       expect(secretKey, equals(expectedSecretKey));
@@ -46,7 +43,6 @@ Future<void> main() async {
 
     test('jwk', () async {
       final jwk = await keyGenerator.jwkFromSecretKey(secretKey: secretKey);
-      debugPrint(jwk);
       const expectedJwk =
           '''{"kty":"OKP","crv":"Ed25519","d":"cMGD8eAmjDn6MqvJoscsaPoyAMrjG41xbLDfE-uQkYw=","x":"-PeGBkVyMz2-yketwH2lbQqiflneee3jmaTafMCsURE="}''';
       expect(jwk, equals(expectedJwk));
@@ -55,7 +51,6 @@ Future<void> main() async {
     test('address', () async {
       final address =
           await keyGenerator.tz1AddressFromSecretKey(secretKey: secretKey);
-      debugPrint(address);
       const expectedAddress = 'tz1NvqicaUW7v6sEbM4UYi3Wes7GHDft4kqY';
       expect(address, equals(expectedAddress));
     });

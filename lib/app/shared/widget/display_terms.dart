@@ -4,7 +4,6 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:logging/logging.dart';
 
 class DisplayTermsofUse extends StatefulWidget {
   const DisplayTermsofUse({
@@ -24,7 +23,7 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
   late String privacyPath;
   late String termsPath;
 
-  final log = Logger('onboarding_tos_page');
+  final log = getLogger('DisplayTermsofUse');
 
   void setPath(String localeName) {
     final languagesList = ['fr', 'it', 'es', 'de'];
@@ -55,7 +54,7 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
             }
 
             if (snapshot.error != null) {
-              log.severe(
+              log.e(
                 'something went wrong when loading $privacyPath',
                 snapshot.error,
               );
@@ -83,7 +82,7 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
             }
 
             if (snapshot.error != null) {
-              log.severe(
+              log.e(
                 'something went wrong when loading $termsPath',
                 snapshot.error,
               );

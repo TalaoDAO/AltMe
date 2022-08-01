@@ -11,7 +11,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:logging/logging.dart';
+
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -34,7 +34,8 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
   Future<void> createSelfIssuedCredential({
     required SelfIssuedCredentialDataModel selfIssuedCredentialDataModel,
   }) async {
-    final log = Logger('altme/sef_issued_credential/create');
+    final log =
+        getLogger('SelfIssuedCredentialCubit - createSelfIssuedCredential');
     try {
       emit(state.loading());
       await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -83,18 +84,18 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
           await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions));
       final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
 
-      log.info('vc: $vc');
-      log.info('verifyResult: ${jsonVerification.toString()}');
+      log.i('vc: $vc');
+      log.i('verifyResult: ${jsonVerification.toString()}');
 
       if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
-        log.warning(
+        log.w(
           'credential verification return warnings',
           jsonVerification['warnings'],
         );
       }
 
       if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
-        log.severe('failed to verify credential', jsonVerification['errors']);
+        log.e('failed to verify credential', jsonVerification['errors']);
         if (jsonVerification['errors'][0] != 'No applicable proof') {
           throw ResponseMessage(
             ResponseString
@@ -108,8 +109,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       }
       emit(state.success());
     } catch (e, s) {
-      debugPrint('e: $e,s: $s');
-      log.severe('something went wrong', e, s);
+      log.e('something went wrong', e, s);
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {

@@ -8,7 +8,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:logging/logging.dart';
+
 import 'package:secure_storage/secure_storage.dart';
 
 part 'import_wallet_cubit.g.dart';
@@ -31,8 +31,6 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
   final DIDCubit didCubit;
   final WalletCubit walletCubit;
 
-  final log = Logger('altme-wallet/on-boarding/key-recovery');
-
   void isMnemonicsOrKeyValid(String value) {
     //different type of tezos private keys start with 'edsk' ,
     //'pspsk' and 'p2sk;
@@ -54,6 +52,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
     required bool isFromOnboarding,
     String? accountName,
   }) async {
+    final log = getLogger('ImportWalletCubit - saveMnemonicOrKey');
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
@@ -106,8 +105,8 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
       homeCubit.emitHasWallet();
       emit(state.success());
     } catch (error, stack) {
-      log.info('error: $error,stack: $stack');
-      log.severe('something went wrong when generating a key', error);
+      log.e('error: $error,stack: $stack');
+      log.e('something went wrong when generating a key', error);
       emit(
         state.error(
           messageHandler: ResponseMessage(

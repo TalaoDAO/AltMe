@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:logging/logging.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -228,7 +227,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> accept({required Uri uri}) async {
     emit(state.loading());
-    final log = Logger('altme-wallet/qrcode/accept');
+    final log = getLogger('QRCodeScanCubit - accept');
 
     late final dynamic data;
 
@@ -238,7 +237,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       switch (data['type']) {
         case 'CredentialOffer':
-          log.info('Credential Offer');
+          log.i('Credential Offer');
           emit(
             state.success(
               route: CredentialsReceivePage.route(
@@ -255,18 +254,18 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               (data['query']).first as Map<String, dynamic>,
             );
             if (data['query'].first['type'] == 'DIDAuth') {
-              log.info('DIDAuth');
+              log.i('DIDAuth');
               await scanCubit.askPermissionDIDAuthCHAPI(
                 keyId: SecureStorageKeys.ssiKey,
                 done: (done) {
-                  debugPrint('done');
+                  log.i('done');
                 },
                 uri: uri,
                 challenge: data['challenge'] as String,
                 domain: data['domain'] as String,
               );
             } else if (data['query'].first['type'] == 'QueryByExample') {
-              log.info('QueryByExample');
+              log.i('QueryByExample');
               emit(
                 state.success(
                   route: CredentialsPresentPage.route(
@@ -298,7 +297,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           );
       }
     } catch (e) {
-      log.severe('An error occurred while connecting to the server.', e);
+      log.e('An error occurred while connecting to the server.', e);
 
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
@@ -374,27 +373,27 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<dynamic> fetchRequestUriPayload({required String url}) async {
-    final log = Logger('altme-wallet/qrcode/fetchRequestUriPayload');
+    final log = getLogger('QRCodeScanCubit - fetchRequestUriPayload');
     late final dynamic data;
 
     try {
       final dynamic response = await requestClient.get(url);
       data = response.toString();
     } catch (e) {
-      log.severe('An error occurred while connecting to the server.', e);
+      log.e('An error occurred while connecting to the server.', e);
     }
     return data;
   }
 
   String decoder({required String token}) {
-    final log = Logger('altme-wallet/qrcode/jwtDecode');
+    final log = getLogger('QRCodeScanCubit - jwtDecode');
     late final String data;
 
     try {
       final payload = jwtDecode.parseJwt(token);
       data = payload.toString();
     } catch (e) {
-      log.severe('An error occurred while decoding.', e);
+      log.e('An error occurred while decoding.', e);
     }
     return data;
   }

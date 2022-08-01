@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 /// Ignoring this part which is already tested in Flutter framework.
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 
 // coverage:ignore-start
 class MyRouteObserver extends RouteObserver<PageRoute<dynamic>> {
+  final log = getLogger('Navigation');
   @override
   void didPush(Route<dynamic>? route, Route<dynamic>? previousRoute) {
     super.didPush(route!, previousRoute);
@@ -28,13 +30,7 @@ class MyRouteObserver extends RouteObserver<PageRoute<dynamic>> {
 
   void sendScreenView(PageRoute<dynamic> route) {
     final String? routeName = route.settings.name;
-    debugPrint(
-      '-----------------------------------------------------------------------',
-    );
-    debugPrint('                 Screen -> $routeName'); // track screen of user
-    debugPrint(
-      '-----------------------------------------------------------------------',
-    );
+    log.i('Screen -> $routeName'); // track screen of user
   }
 }
 // coverage:ignore-end
