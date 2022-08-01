@@ -19,17 +19,12 @@ class SelectedAccountItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final walletAddressLength = cryptoAccountData.walletAddress.length;
-    final walletAddressExtracted = walletAddressLength > 0
-        ? '''${cryptoAccountData.walletAddress.substring(0, walletAddressLength - 16)} ... ${cryptoAccountData.walletAddress.substring(cryptoAccountData.walletAddress.length - 5)}'''
-        : '';
-
     return ListTile(
       onTap: onPressed,
       contentPadding: EdgeInsets.zero,
       minVerticalPadding: 0,
       horizontalTitleGap: 0,
-      visualDensity: const VisualDensity(vertical: -3,horizontal: 0),
+      visualDensity: const VisualDensity(vertical: -3, horizontal: 0),
       title: MyText(
         cryptoAccountData.name.trim().isEmpty
             ? l10n.unknown
@@ -42,7 +37,8 @@ class SelectedAccountItem extends StatelessWidget {
       subtitle: Padding(
         padding: const EdgeInsets.only(top: Sizes.spaceXSmall),
         child: MyText(
-          walletAddressExtracted,
+          cryptoAccountData.walletAddress,
+          maxLines: 2,
           style: Theme.of(context).textTheme.walletAddress,
         ),
       ),
