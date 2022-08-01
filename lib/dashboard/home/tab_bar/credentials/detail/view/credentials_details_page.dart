@@ -6,7 +6,6 @@ import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:logging/logging.dart';
 
 class CredentialsDetailsPage extends StatelessWidget {
   const CredentialsDetailsPage({
@@ -49,8 +48,6 @@ class CredentialsDetailsView extends StatefulWidget {
 }
 
 class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
-  final logger = Logger('altme-wallet/credentials/detail');
-
   @override
   void initState() {
     super.initState();

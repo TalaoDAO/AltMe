@@ -3,7 +3,6 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:logging/logging.dart';
 
 class MarkdownPage extends StatelessWidget {
   MarkdownPage({Key? key, required this.title, required this.file})
@@ -12,7 +11,7 @@ class MarkdownPage extends StatelessWidget {
   final String title;
   final String file;
 
-  final _log = Logger('altme/markdown_page');
+  final log = getLogger('MarkdownPage');
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,7 @@ class MarkdownPage extends StatelessWidget {
           }
 
           if (snapshot.error != null) {
-            _log.severe(
+            log.e(
               'something went wrong when loading $file',
               snapshot.error,
             );

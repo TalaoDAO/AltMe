@@ -139,6 +139,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void startPassbaseVerification(WalletCubit walletCubit) {
+    final log = getLogger('HomeCubit - startPassbaseVerification');
     emit(state.loading());
     final did = didCubit.state.did!;
     //setKYCMetadata(walletCubit);
@@ -178,8 +179,11 @@ class HomeCubit extends Cubit<HomeState> {
         }
       },
       onError: (e) {
-        debugPrint(e);
-        //if user cancels -> e = CANCELLED_BY_USER
+        if (e == 'CANCELLED_BY_USER') {
+          log.e('Cancelled by user');
+        } else {
+          log.e('Unknown error');
+        }
         emit(
           state.copyWith(
             status: AppStatus.idle,

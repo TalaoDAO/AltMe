@@ -49,13 +49,15 @@ class _SplashViewState extends State<SplashView> {
   /// Handle incoming links - the ones that the app will recieve from the OS
   /// while already started.
   void _handleIncomingLinks(BuildContext context) {
+    final log = getLogger('DeepLink - _handleIncomingLinks');
+
     if (!kIsWeb) {
       // It will handle app links while the app is already started - be it in
       // the foreground or in the background.
       _sub = uriLinkStream.listen(
         (Uri? uri) {
           if (!mounted) return;
-          debugPrint('got uri: $uri');
+          log.i('got uri: $uri');
           uri?.queryParameters.forEach((key, value) async {
             if (key == 'uri') {
               final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
@@ -70,7 +72,7 @@ class _SplashViewState extends State<SplashView> {
         },
         onError: (Object err) {
           if (!mounted) return;
-          debugPrint('got err: $err');
+          log.e('got err: $err');
         },
       );
     }
@@ -87,16 +89,17 @@ class _SplashViewState extends State<SplashView> {
     // In this example app this is an almost useless guard, but it is here to
     // show we are not going to call getInitialUri multiple times, even if this
     // was a widget that will be disposed of (ex. a navigation route change).
+    final log = getLogger('DeepLink - _handleInitialUri');
     if (!_initialUriIsHandled) {
       _initialUriIsHandled = true;
       try {
         final uri = await getInitialUri();
         if (uri == null) {
-          debugPrint('no initial uri');
+          log.i('no initial uri');
         } else {
-          debugPrint('got initial uri: $uri');
+          log.i('got initial uri: $uri');
           if (!mounted) return;
-          debugPrint('got uri: $uri');
+          log.i('got uri: $uri');
           uri.queryParameters.forEach((key, value) {
             if (key == 'uri') {
               /// add uri to deepLink cubit
@@ -108,10 +111,10 @@ class _SplashViewState extends State<SplashView> {
         if (!mounted) return;
       } on services.PlatformException {
         // Platform messages may fail but we ignore the exception
-        debugPrint('falied to get initial uri');
+        log.e('falied to get initial uri');
       } on FormatException catch (err) {
         if (!mounted) return;
-        debugPrint('malformed initial uri: $err');
+        log.e('malformed initial uri: $err');
       }
     }
   }

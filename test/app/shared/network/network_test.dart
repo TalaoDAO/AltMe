@@ -17,12 +17,12 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: baseUrl));
       final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
       dio.httpClientAdapter = dioAdapter;
-      final interceptor = DioInterceptor(dio: dio);
-      final service = DioClient(baseUrl, dio, interceptors: [interceptor]);
+      // final interceptor = DioInterceptor(dio: dio);
+      //final service = DioClient(baseUrl, dio, interceptors: [interceptor]);
 
-      test('set interceptors', () {
-        expect(service.interceptors?.length, greaterThan(0));
-      });
+      // test('set interceptors', () {
+      //   expect(service.interceptors?.length, greaterThan(0));
+      // });
     });
 
     group('exceptions', () {
