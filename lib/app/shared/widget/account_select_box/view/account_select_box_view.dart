@@ -55,9 +55,9 @@ class AccountSelectBoxView extends StatelessWidget {
                         isSelected: state.selectedAccountIndex == i,
                         listIndex: i,
                         onPressed: () {
-                          context
-                              .read<AccountSelectBoxCubit>()
-                              .setSelectedAccount(i);
+                          context.read<AccountSelectBoxCubit>()
+                            ..setSelectedAccount(i)
+                            ..toggleSelectBox();
                         },
                       );
                     },

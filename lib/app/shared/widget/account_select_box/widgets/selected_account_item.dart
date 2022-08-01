@@ -27,7 +27,9 @@ class SelectedAccountItem extends StatelessWidget {
     return ListTile(
       onTap: onPressed,
       contentPadding: EdgeInsets.zero,
+      minVerticalPadding: 0,
       horizontalTitleGap: 0,
+      visualDensity: const VisualDensity(vertical: -3,horizontal: 0),
       title: MyText(
         cryptoAccountData.name.trim().isEmpty
             ? l10n.unknown
@@ -38,7 +40,7 @@ class SelectedAccountItem extends StatelessWidget {
         style: Theme.of(context).textTheme.title,
       ),
       subtitle: Padding(
-        padding: const EdgeInsets.symmetric(vertical: Sizes.spaceXSmall),
+        padding: const EdgeInsets.only(top: Sizes.spaceXSmall),
         child: MyText(
           walletAddressExtracted,
           style: Theme.of(context).textTheme.walletAddress,
