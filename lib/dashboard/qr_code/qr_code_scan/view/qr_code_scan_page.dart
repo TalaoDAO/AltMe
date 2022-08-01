@@ -27,15 +27,8 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
   bool isScanned = false;
 
   @override
-  void initState() {
-    scannerController.start();
-    super.initState();
-  }
-
-  @override
   void dispose() {
     super.dispose();
-    scannerController.stop();
     scannerController.dispose();
   }
 
