@@ -16,7 +16,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
   ];
 
   final List<CredentialSubjectType> communityCategories = [
-    CredentialSubjectType.talaoCommunityCard
+    // CredentialSubjectType.talaoCommunityCard
   ];
 
   final List<CredentialSubjectType> identityCategories = [
