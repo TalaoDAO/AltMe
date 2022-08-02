@@ -66,7 +66,7 @@ class TokensCubit extends Cubit<TokensState> {
         data.addAll(newData);
       }
       emit(state.populate(data: data));
-    } catch (e, s) {
+    } catch (e) {
       if (isClosed) return;
       emit(
         state.errorWhileFetching(

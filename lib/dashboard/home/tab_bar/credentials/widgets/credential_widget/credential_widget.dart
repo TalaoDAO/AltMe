@@ -14,6 +14,7 @@ export 'professional_student_card_widget.dart';
 export 'resident_card_widget.dart';
 export 'self_issued_widget.dart';
 export 'student_card_widget.dart';
+export 'talao_community_card_widget.dart';
 export 'tezos_associated_address_widget.dart';
 export 'tezotopia_voucher_widget.dart';
 export 'voucher_widget.dart';

@@ -16,8 +16,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
   ];
 
   final List<CredentialSubjectType> communityCategories = [
-    /// This will be available in V2 or V3.. Also, do add models for Talao Card
-    //CredentialSubjectType.talao
+    CredentialSubjectType.talaoCommunityCard
   ];
 
   final List<CredentialSubjectType> identityCategories = [

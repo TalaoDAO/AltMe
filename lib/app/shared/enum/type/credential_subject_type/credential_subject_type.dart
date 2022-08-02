@@ -21,7 +21,7 @@ enum CredentialSubjectType {
   residentCard,
   selfIssued,
   studentCard,
-  talao,
   voucher,
-  tezVoucher
+  tezVoucher,
+  talaoCommunityCard
 }

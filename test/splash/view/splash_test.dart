@@ -95,7 +95,7 @@ void main() {
         expect(assetImage.assetName, equals(ImageStrings.splash));
       });
 
-      // TODO(bibash): this test fails which does not make sense
+      // this test fails which does not make sense
       // testWidgets('there is only one ScaleTransition widget', (tester) async
       // {
       //   await tester.pumpApp(const SplashView());

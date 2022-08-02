@@ -33,13 +33,17 @@ class ImageStrings {
       '$imagePath/associated_wallet_recto.png';
   static const String associatedWalletBack =
       '$imagePath/associated-wallet-verso.png';
+  static const String talaoCommunityCard =
+      '$imagePath/talao_community_card.png';
 
+  /// dummy
   static const String dummyEmailPassCard =
       '$imagePath/dummy_email_pass_card.png';
   static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
   static const String dummyTezotopiaVoucherCard =
       '$imagePath/dummy_tezotopia_voucher_card.png';
-  static const String dummyTalaoCard = '$imagePath/dummy_talao_card.png';
+  static const String dummyTalaoCommunityCardCard =
+      '$imagePath/dummy_talao_community_card.png';
   static const String dummyIdentityCard = '$imagePath/dummy_identity_card.png';
 
   static const String onBoardingFirstImage =

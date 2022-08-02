@@ -24,6 +24,7 @@ export 'resident_card/resident_card_model.dart';
 export 'self_issued/self_issued_model.dart';
 export 'signature/signature.dart';
 export 'student_card/student_card_model.dart';
+export 'talao_community_card/talao_community_card_model.dart';
 export 'tezos_associated_address/tezos_associated_address_credential.dart';
 export 'tezos_associated_address/tezos_associated_address_model.dart';
 export 'tezotopia_voucher/tezotopia_voucher_model.dart';
