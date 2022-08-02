@@ -5,7 +5,9 @@ import 'package:bip39/bip39.dart' as bip39;
 import 'package:ed25519_hd_key/ed25519_hd_key.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:pinenacl/ed25519.dart';
+// ignore: implementation_imports
 import 'package:tezart/src/crypto/crypto.dart' as crypto hide Prefixes;
+// ignore: implementation_imports, unnecessary_import
 import 'package:tezart/src/crypto/crypto.dart' show Prefixes;
 import 'package:tezart/tezart.dart';
 

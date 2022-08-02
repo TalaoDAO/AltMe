@@ -94,8 +94,10 @@ class DisplayDetail extends StatelessWidget {
         return TezotopiaVoucherDisplayDetail(
           credentialModel: credentialModel,
         );
-      case CredentialSubjectType.talao:
-        return Container();
+      case CredentialSubjectType.talaoCommunityCard:
+        return TalaoCommunityCardDisplayDetail(
+          credentialModel: credentialModel,
+        );
     }
   }
 }

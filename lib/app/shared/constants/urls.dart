@@ -11,7 +11,8 @@ class Urls {
   static const String over18Url = 'https://issuer.talao.co/over18';
   static const String tezotopiaVoucherUrl =
       'https://issuer.tezotopia.altme.io/issuer/voucher_mobile';
-  static const String talaoUrl = 'https://issuer.talao.co/talao_community';
+  static const String talaoCommunityCardUrl =
+      'https://issuer.talao.co/talao_community';
   static const String identityCardUrl = 'http://issuer.talao.co/kyc';
   static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
 }

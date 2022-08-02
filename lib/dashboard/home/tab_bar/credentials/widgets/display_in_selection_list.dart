@@ -91,8 +91,10 @@ class DisplayInSelectionList extends StatelessWidget {
         return TezotopiaVoucherDisplayInSelectionList(
           credentialModel: credentialModel,
         );
-      case CredentialSubjectType.talao:
-        return Container();
+      case CredentialSubjectType.talaoCommunityCard:
+        return TalaoCommunityCardDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
     }
   }
 }
