@@ -8,6 +8,7 @@ class IconStrings {
   static const String icMenu = '$base/ic-menu.png';
   static const String walletAdd = '$base/wallet-add.png';
   static const String closeCircle = '$base/close-circle.png';
+  static const String closeCircleWhite = '$base/close-circle-white.png';
   static const String story = '$base/story.png';
   static const String profile = '$base/profile.png';
   static const String searchNormal = '$base/search-normal.png';

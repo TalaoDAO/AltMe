@@ -44,7 +44,7 @@ class _SendToPageState extends State<SendToPage> {
                 ),
                 AccountSelectBoxView(caption: l10n.from,),
                 const SizedBox(height: Sizes.spaceNormal,),
-                WithdrawalAddressInput(caption: l10n.to,),
+                WithdrawalAddressInputView(caption: l10n.to,),
               ],
             ),
           ),
