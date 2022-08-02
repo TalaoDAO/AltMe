@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
@@ -25,7 +26,8 @@ class CredentialModel extends Equatable {
     this.receivedId,
     this.challenge,
     this.domain,
-  });
+    List<Activity>? activities,
+  }) : activities = activities ?? [];
 
   factory CredentialModel.fromJson(Map<String, dynamic> json) {
     final Map<String, dynamic> newJson = Map<String, dynamic>.from(json);
@@ -55,6 +57,7 @@ class CredentialModel extends Equatable {
       receivedId: oldCredentialModel.receivedId,
       challenge: oldCredentialModel.challenge,
       domain: oldCredentialModel.domain,
+      activities: oldCredentialModel.activities,
     );
   }
 
@@ -74,6 +77,7 @@ class CredentialModel extends Equatable {
   final CredentialManifest? credentialManifest;
   final String? challenge;
   final String? domain;
+  final List<Activity> activities;
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
@@ -128,18 +132,6 @@ class CredentialModel extends Equatable {
     }
   }
 
-  @override
-  List<Object?> get props => [
-        id,
-        image,
-        data,
-        shareLink,
-        credentialPreview,
-        display,
-        expirationDate,
-        credentialManifest,
-      ];
-
   static CredentialManifest? credentialManifestFromJson(
     Map<String, dynamic>? json,
   ) {
@@ -160,4 +152,17 @@ class CredentialModel extends Equatable {
     }
     return map['id'] as String?;
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        image,
+        data,
+        shareLink,
+        credentialPreview,
+        display,
+        expirationDate,
+        credentialManifest,
+        activities,
+      ];
 }

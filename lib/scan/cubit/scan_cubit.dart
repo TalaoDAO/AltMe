@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
@@ -34,6 +35,7 @@ class ScanCubit extends Cubit<ScanState> {
     required CredentialModel credentialModel,
     required String keyId,
     CredentialModel? signatureOwnershipProof,
+    required Issuer issuer,
   }) async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -152,6 +154,13 @@ class ScanCubit extends Cubit<ScanState> {
         ),
       );
 
+      if (signatureOwnershipProof != null) {
+        await addActivity(
+          credentialModels: [signatureOwnershipProof],
+          issuer: issuer,
+        );
+      }
+
       emit(state.success());
     } catch (e) {
       log.e('something went wrong', e);
@@ -178,6 +187,7 @@ class ScanCubit extends Cubit<ScanState> {
     required List<CredentialModel> credentials,
     required String challenge,
     required String domain,
+    required Issuer issuer,
   }) async {
     final log = getLogger('ScanCubit - verifiablePresentationRequest');
 
@@ -212,6 +222,11 @@ class ScanCubit extends Cubit<ScanState> {
       await client.post(
         url,
         data: FormData.fromMap(<String, dynamic>{'presentation': presentation}),
+      );
+
+      await addActivity(
+        credentialModels: credentials,
+        issuer: issuer,
       );
 
       emit(
@@ -316,6 +331,7 @@ class ScanCubit extends Cubit<ScanState> {
   Future<dynamic> presentCredentialToSiopV2Request({
     required CredentialModel credential,
     required SIOPV2Param sIOPV2Param,
+    required Issuer issuer,
   }) async {
     final log = getLogger('ScanCubit - presentCredentialToSiopV2Request');
     emit(state.loading());
@@ -349,6 +365,10 @@ class ScanCubit extends Cubit<ScanState> {
       );
 
       if (result == 'Congrats ! Everything is ok') {
+        await addActivity(
+          credentialModels: [credential],
+          issuer: issuer,
+        );
         emit(
           state.success(
             messageHandler: ResponseMessage(
@@ -461,5 +481,24 @@ class ScanCubit extends Cubit<ScanState> {
     log.i('jwt compact serialization: ${jws.toCompactSerialization()}');
 
     return jws.toCompactSerialization();
+  }
+
+  Future<void> addActivity({
+    required List<CredentialModel> credentialModels,
+    required Issuer issuer,
+  }) async {
+    final log = getLogger('ScanCubit');
+
+    for (final credentialModel in credentialModels) {
+      final Activity activity = Activity(
+        issuer: issuer,
+        presentedAt: DateTime.now(),
+      );
+      credentialModel.activities.add(activity);
+
+      log.i('presentation activity added to the credential');
+      log.e(credentialModel);
+      await walletCubit.updateCredential(credentialModel);
+    }
   }
 }

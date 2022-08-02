@@ -14,16 +14,23 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     Key? key,
     required this.uri,
     required this.credential,
+    required this.issuer,
   }) : super(key: key);
 
   final Uri uri;
   final CredentialModel credential;
+  final Issuer issuer;
 
-  static Route route(Uri routeUri, CredentialModel credential) {
+  static Route route({
+    required Uri uri,
+    required CredentialModel credential,
+    required Issuer issuer,
+  }) {
     return MaterialPageRoute<void>(
       builder: (context) => CredentialManifestOfferPickPage(
-        uri: routeUri,
+        uri: uri,
         credential: credential,
+        issuer: issuer,
       ),
       settings: const RouteSettings(name: '/CredentialManifestOfferPickPage'),
     );
@@ -45,6 +52,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
       child: CredentialManifestOfferPickView(
         uri: uri,
         credential: credential,
+        issuer: issuer,
       ),
     );
   }
@@ -55,10 +63,12 @@ class CredentialManifestOfferPickView extends StatelessWidget {
     Key? key,
     required this.uri,
     required this.credential,
+    required this.issuer,
   }) : super(key: key);
 
   final Uri uri;
   final CredentialModel credential;
+  final Issuer issuer;
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +145,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                                 keyId: SecureStorageKeys.ssiKey,
                                                 signatureOwnershipProof:
                                                     selectedCredential,
+                                                issuer: issuer,
                                               );
                                         },
                                   text: l10n.credentialPickPresent,

@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
@@ -155,6 +156,35 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     credentialModel: widget.credentialModel,
                   ),
                 ],
+                if (outputDescriptors == null) const SizedBox(height: 30),
+                ExpansionTileContainer(
+                  child: ExpansionTile(
+                    initiallyExpanded: true,
+                    childrenPadding: EdgeInsets.zero,
+                    tilePadding: const EdgeInsets.symmetric(horizontal: 8),
+                    title: Text(
+                      l10n.credentialDetailsActivity,
+                      style:
+                          Theme.of(context).textTheme.credentialManifestTitle2,
+                    ),
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.credentialModel.activities.length,
+                          itemBuilder: (context, index) {
+                            return ActivityWidget(
+                              activity:
+                                  widget.credentialModel.activities[index],
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 40),
                 MyOutlinedButton(
                   onPressed: delete,

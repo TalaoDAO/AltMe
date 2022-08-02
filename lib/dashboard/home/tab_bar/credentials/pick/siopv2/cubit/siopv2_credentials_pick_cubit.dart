@@ -22,11 +22,13 @@ class SIOPV2CredentialPickCubit extends Cubit<SIOPV2CredentialPickState> {
   Future<void> presentCredentialToSIOPV2Request({
     required CredentialModel credential,
     required SIOPV2Param sIOPV2Param,
+    required Issuer issuer,
   }) async {
     emit(state.copyWith(index: state.index, status: AppStatus.loading));
     await scanCubit.presentCredentialToSiopV2Request(
       credential: credential,
       sIOPV2Param: sIOPV2Param,
+      issuer: issuer,
     );
     emit(state.copyWith(status: AppStatus.success));
   }

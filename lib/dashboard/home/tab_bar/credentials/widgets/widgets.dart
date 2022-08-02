@@ -1,3 +1,4 @@
+export 'activity_widget.dart';
 export 'card_animation.dart';
 export 'credential_background.dart';
 export 'credential_container.dart';

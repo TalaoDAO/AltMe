@@ -13,18 +13,24 @@ class CredentialsReceivePage extends StatefulWidget {
     Key? key,
     required this.uri,
     required this.preview,
+    required this.issuer,
   }) : super(key: key);
 
   final Uri uri;
   final Map<String, dynamic> preview;
+  final Issuer issuer;
 
   static Route route({
     required Uri uri,
     required Map<String, dynamic> preview,
+    required Issuer issuer,
   }) =>
       MaterialPageRoute<void>(
-        builder: (context) =>
-            CredentialsReceivePage(uri: uri, preview: preview),
+        builder: (context) => CredentialsReceivePage(
+          uri: uri,
+          preview: preview,
+          issuer: issuer,
+        ),
         settings: const RouteSettings(name: '/credentialsReceive'),
       );
 
@@ -118,8 +124,9 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                       null) {
                     await Navigator.of(context).pushReplacement<void, void>(
                       CredentialManifestOfferPickPage.route(
-                        widget.uri,
-                        credentialModel,
+                        uri: widget.uri,
+                        credential: credentialModel,
+                        issuer: widget.issuer,
                       ),
                     );
                   } else {
@@ -127,6 +134,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                           url: widget.uri.toString(),
                           credentialModel: credentialModel,
                           keyId: SecureStorageKeys.ssiKey,
+                          issuer: widget.issuer,
                         );
                   }
                 },

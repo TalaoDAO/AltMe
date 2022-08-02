@@ -203,6 +203,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             route: SIOPV2CredentialPickPage.route(
               credentials: selectedCredentials,
               sIOPV2Param: sIOPV2Param,
+              issuer: Issuer.emptyIssuer(),
             ),
           ),
         );
@@ -225,7 +226,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> accept({required Uri uri}) async {
+  Future<void> accept({
+    required Uri uri,
+    required Issuer issuer,
+  }) async {
     emit(state.loading());
     final log = getLogger('QRCodeScanCubit - accept');
 
@@ -243,6 +247,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               route: CredentialsReceivePage.route(
                 uri: uri,
                 preview: data as Map<String, dynamic>,
+                issuer: issuer,
               ),
             ),
           );
@@ -271,6 +276,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                   route: CredentialsPresentPage.route(
                     uri: uri,
                     preview: data as Map<String, dynamic>,
+                    issuer: issuer,
                   ),
                 ),
               );
@@ -285,6 +291,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 route: CredentialsPresentPage.route(
                   uri: uri,
                   preview: data as Map<String, dynamic>,
+                  issuer: issuer,
                 ),
               ),
             );
