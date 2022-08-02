@@ -13,7 +13,9 @@ class AccountSelectBoxView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<AccountSelectBoxCubit>(
       create: (context) => AccountSelectBoxCubit(
-        walletCubit: context.read<WalletCubit>(),
+        accounts: context.read<WalletCubit>().state.cryptoAccount.data,
+        selectedAccountIndex:
+            context.read<WalletCubit>().state.currentCryptoIndex,
       ),
       child: BlocBuilder<AccountSelectBoxCubit, AccountSelectBoxState>(
         builder: (context, state) {

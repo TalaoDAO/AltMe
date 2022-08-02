@@ -9,15 +9,18 @@ part 'account_select_box_state.dart';
 
 class AccountSelectBoxCubit extends Cubit<AccountSelectBoxState> {
   AccountSelectBoxCubit({
-    required this.walletCubit,
+    required List<CryptoAccountData> accounts,
+    required int selectedAccountIndex,
   }) : super(
           AccountSelectBoxState(
-            selectedAccountIndex: walletCubit.state.currentCryptoIndex,
-            accounts: walletCubit.state.cryptoAccount.data,
+            selectedAccountIndex: selectedAccountIndex,
+            accounts: accounts,
           ),
         );
 
-  final WalletCubit walletCubit;
+  void setAccounts(List<CryptoAccountData> accounts) {
+    emit(state.copyWith(accounts: accounts));
+  }
 
   void setSelectedAccount(int index) {
     emit(state.copyWith(selectedAccountIndex: index));
