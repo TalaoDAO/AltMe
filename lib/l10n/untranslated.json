@@ -399,7 +399,8 @@
     "licenses",
     "sendTo",
     "next",
-    "withdrawalInputHint"
+    "withdrawalInputHint",
+    "amount"
   ],
 
   "es": [
@@ -802,7 +803,8 @@
     "licenses",
     "sendTo",
     "next",
-    "withdrawalInputHint"
+    "withdrawalInputHint",
+    "amount"
   ],
 
   "fr": [
@@ -1205,7 +1207,8 @@
     "licenses",
     "sendTo",
     "next",
-    "withdrawalInputHint"
+    "withdrawalInputHint",
+    "amount"
   ],
 
   "it": [
@@ -1608,6 +1611,7 @@
     "licenses",
     "sendTo",
     "next",
-    "withdrawalInputHint"
+    "withdrawalInputHint",
+    "amount"
   ]
 }

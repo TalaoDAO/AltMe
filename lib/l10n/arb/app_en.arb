@@ -451,5 +451,6 @@
   "credentialDetailsInWalletSince": "In wallet since:",
   "sendTo":"Send to",
   "next": "Next",
-  "withdrawalInputHint": "Copy address, scan or whitelist"
+  "withdrawalInputHint": "Copy address, scan or whitelist",
+  "amount": "Amount"
 }
