@@ -24,48 +24,22 @@ class IssuerWebsitesPage extends StatelessWidget {
       titleLeading: const BackLeadingButton(),
       body: Column(
         children: [
-          BaseButton.primary(
-            context: context,
+          MyElevatedButton(
+            icon: const Icon(Icons.language),
             onPressed: () async {
               await LaunchUrl.launch(Urls.emailPassUrl);
               Navigator.pop(context);
             },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Icon(Icons.language),
-                ),
-                const SizedBox(width: 20),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(l10n.emailPassCredential),
-                ),
-              ],
-            ),
+            text: l10n.emailPassCredential,
           ),
           const SizedBox(height: 20),
-          BaseButton.primary(
-            context: context,
+          MyElevatedButton(
+            icon: const Icon(Icons.phone),
             onPressed: () async {
               await LaunchUrl.launch(Urls.phonePassUrl);
               Navigator.pop(context);
             },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Icon(Icons.phone),
-                ),
-                const SizedBox(width: 20),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(l10n.phonePassCredential),
-                ),
-              ],
-            ),
+            text: l10n.phonePassCredential,
           ),
           const SizedBox(height: 20),
           const KYCButton(),

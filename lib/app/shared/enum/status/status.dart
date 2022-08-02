@@ -1,9 +1,9 @@
 export 'app_status.dart';
 export 'credential_status.dart';
 export 'home_status.dart';
+export 'pass_base_status.dart';
 export 'qr_scan_status.dart';
 export 'revocation_status.dart';
 export 'scan_status.dart';
 export 'splash_status.dart';
-export 'verification_status.dart';
 export 'wallet_status.dart';

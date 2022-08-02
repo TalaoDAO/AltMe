@@ -68,7 +68,7 @@ class _PinCodeViewState extends State<PinCodeView> {
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final fingerprintEnabled =
           await getSecureStorage.get(SecureStorageKeys.fingerprintEnabled);
       if (fingerprintEnabled == true.toString()) {

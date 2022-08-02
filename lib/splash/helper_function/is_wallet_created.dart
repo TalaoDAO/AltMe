@@ -80,7 +80,10 @@ Future<bool> isWalletCreated({
       await walletCubit.setCurrentWalletAccount(0);
     }
   } else {
-    await walletCubit.createCryptoWallet(mnemonic: ssiMnemonic);
+    await walletCubit.createCryptoWallet(
+      mnemonicOrKey: ssiMnemonic,
+      isImported: false,
+    );
     await walletCubit.setCurrentWalletAccount(0);
   }
 

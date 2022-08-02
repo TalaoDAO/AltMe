@@ -5,7 +5,6 @@ import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
 
 class PinCodeWidget extends StatefulWidget {
   const PinCodeWidget({
@@ -56,7 +55,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
   late AnimationController controller;
   late Animation<double> animation;
 
-  final log = Logger('altme-wallet/pin_code/enter_pin_code');
+  final log = getLogger('PinCodeWidget');
 
   @override
   void initState() {
@@ -278,7 +277,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
       widget.isValidCallback!.call();
     } else {
       Navigator.maybePop(context);
-      log.warning(
+      log.w(
         '''You didn't implement validation callback. Please handle a state by yourself then.''',
       );
     }

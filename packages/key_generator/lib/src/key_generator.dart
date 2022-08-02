@@ -5,7 +5,9 @@ import 'package:bip39/bip39.dart' as bip39;
 import 'package:ed25519_hd_key/ed25519_hd_key.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:pinenacl/ed25519.dart';
+// ignore: implementation_imports
 import 'package:tezart/src/crypto/crypto.dart' as crypto hide Prefixes;
+// ignore: implementation_imports, unnecessary_import
 import 'package:tezart/src/crypto/crypto.dart' show Prefixes;
 import 'package:tezart/tezart.dart';
 
@@ -35,7 +37,7 @@ class KeyGenerator {
     late KeyData child;
 
     if (accountType == AccountType.ssi) {
-      child = await ED25519_HD_KEY.derivePath("m/44'/60'/0'/0'/0'", seed);
+      child = await ED25519_HD_KEY.derivePath("m/44'/5467'/0'/0'", seed);
     } else {
       child = await ED25519_HD_KEY.derivePath(
         "m/44'/1729'/$derivePathIndex'/0'",

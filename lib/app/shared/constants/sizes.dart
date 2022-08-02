@@ -1,5 +1,5 @@
 abstract class Sizes {
-  static const double nftItemRatio = 0.78;
+  static const double nftItemRatio = 0.88;
 
   static const double tokenLogoSize = 34;
 
@@ -28,10 +28,16 @@ abstract class Sizes {
   static const double credentialAspectRatio = 584 / 317;
 
   //Icon
+  static const double iconXSmall = 12;
+  static const double iconSmall = 14;
   static const double icon = 18;
   static const double icon2x = 24;
-  static const double icon3x = 34;
+  static const double icon3x = 38;
+  static const double icon4x = 54;
 
   //TextField height
   static const double recoveryPhraseTextFieldHeight = 160;
+
+  //TextField height
+  static const double appBarHeight = 70;
 }

@@ -1,11 +1,12 @@
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyElevatedButton extends StatelessWidget {
   const MyElevatedButton({
     Key? key,
     required this.text,
-    required this.onPressed,
+    this.onPressed,
     this.icon,
     this.backgroundColor,
     this.textColor,
@@ -18,7 +19,7 @@ class MyElevatedButton extends StatelessWidget {
   const MyElevatedButton.icon({
     Key? key,
     required this.text,
-    required this.onPressed,
+    this.onPressed,
     required this.icon,
     this.backgroundColor,
     this.textColor,
@@ -29,7 +30,7 @@ class MyElevatedButton extends StatelessWidget {
   }) : super(key: key);
 
   final String text;
-  final GestureTapCallback onPressed;
+  final GestureTapCallback? onPressed;
   final Color? backgroundColor;
   final Color? textColor;
   final double borderRadius;
@@ -50,6 +51,7 @@ class MyElevatedButton extends StatelessWidget {
                 elevation: elevation,
                 verticalSpacing: verticalSpacing,
                 backgroundColor: backgroundColor,
+                onPressed: onPressed,
               ),
               onPressed: onPressed,
               child: ElevatedButtonText(
@@ -66,6 +68,7 @@ class MyElevatedButton extends StatelessWidget {
                 elevation: elevation,
                 verticalSpacing: verticalSpacing,
                 backgroundColor: backgroundColor,
+                onPressed: onPressed,
               ),
               onPressed: onPressed,
               label: ElevatedButtonText(
@@ -84,13 +87,22 @@ ButtonStyle elevatedStyleFrom({
   required double verticalSpacing,
   required double elevation,
   required BuildContext context,
+  GestureTapCallback? onPressed,
 }) {
-  return ElevatedButton.styleFrom(
-    elevation: elevation,
-    padding: EdgeInsets.symmetric(vertical: verticalSpacing),
-    primary: backgroundColor ?? Theme.of(context).colorScheme.primary,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(borderRadius),
+  return ButtonStyle(
+    elevation: MaterialStateProperty.all(elevation),
+    padding: MaterialStateProperty.all(
+      EdgeInsets.symmetric(vertical: verticalSpacing),
+    ),
+    backgroundColor: MaterialStateProperty.all(
+      onPressed == null
+          ? Theme.of(context).colorScheme.disabledBgColor
+          : backgroundColor ?? Theme.of(context).colorScheme.primary,
+    ),
+    shape: MaterialStateProperty.all(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(borderRadius),
+      ),
     ),
   );
 }
@@ -111,7 +123,7 @@ class ElevatedButtonText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.toUpperCase(),
-      style: TextStyle(
+      style: GoogleFonts.nunito(
         color: textColor ?? Theme.of(context).colorScheme.onElevatedButton,
         fontSize: fontSize,
         fontWeight: FontWeight.w700,

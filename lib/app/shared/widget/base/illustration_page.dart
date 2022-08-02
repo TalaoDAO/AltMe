@@ -45,10 +45,9 @@ class BaseIllustrationPage extends StatelessWidget {
                       Theme.of(context).textTheme.illustrationPageDescription,
                 ),
               Expanded(child: Container()),
-              BaseButton.white(
+              MyOutlinedButton(
                 onPressed: onPressed,
-                context: context,
-                child: Text(action),
+                text: action,
               ),
             ],
           ),

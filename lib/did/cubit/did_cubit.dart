@@ -3,7 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:logging/logging.dart';
+
 import 'package:secure_storage/secure_storage.dart';
 
 part 'did_cubit.g.dart';
@@ -25,7 +25,7 @@ class DIDCubit extends Cubit<DIDState> {
     required String didMethodName,
     required String verificationMethod,
   }) async {
-    final log = Logger('altme-wallet/DID/set');
+    final log = getLogger('DIDCubit - set');
 
     emit(state.loading());
     await secureStorageProvider.set(SecureStorageKeys.did, did);
@@ -47,7 +47,7 @@ class DIDCubit extends Cubit<DIDState> {
         verificationMethod: verificationMethod,
       ),
     );
-    log.info('successfully Set');
+    log.i('successfully Set');
   }
 
   Future<void> load({
@@ -56,7 +56,7 @@ class DIDCubit extends Cubit<DIDState> {
     required String didMethodName,
     required String verificationMethod,
   }) async {
-    final log = Logger('altme-wallet/DID/load');
+    final log = getLogger('DIDCubit - load');
     emit(state.loading());
     emit(
       state.success(
@@ -66,6 +66,6 @@ class DIDCubit extends Cubit<DIDState> {
         verificationMethod: verificationMethod,
       ),
     );
-    log.info('successfully Loaded');
+    log.i('successfully Loaded');
   }
 }

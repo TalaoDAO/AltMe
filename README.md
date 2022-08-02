@@ -164,19 +164,34 @@ Update the `CFBundleLocalizations` array in the `Info.plist` at `ios/Runner/Info
 [very_good_cli_link]: https://github.com/VeryGoodOpenSource/very_good_cli
 
 ### Generate
+```
 flutter packages pub run build_runner build --delete-conflicting-outputs
-
+```
 ### Apk generate
+```
 flutter build apk --release --split-per-abi --flavor production -t lib/main_production.dart
-
- 
-### Release aap bundle generation
+```
+ ### Release aap bundle generation
+```
 flutter build appbundle --flavor "production" --target "lib/main_production.dart"
-
-
+```
 ### IOS build
+```
 flutter pub get
 flutter packages pub run build_runner build --delete-conflicting-outputs
 flutter build ios --release 
 cd ios 
 fastlane beta
+```
+
+### Run shortcut scripts
+```
+./script.sh -build_runner
+./script.sh -run
+./script.sh -pod install
+./script.sh -build appbundle
+./script.sh -deploy ios
+
+#For permission
+sudo chmod 777 script.sh
+```

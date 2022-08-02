@@ -12,7 +12,6 @@ import 'package:altme/app/app.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:logging/logging.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
 
 class AppBlocObserver extends BlocObserver {
@@ -33,12 +32,10 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
-  Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((record) {
-    debugPrint(record.toString());
-  });
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  await LocalNotification().init();
 
   await PassbaseSDK.initialize(
     publishableApiKey: AltMeStrings.passBasePublishableApiKey,

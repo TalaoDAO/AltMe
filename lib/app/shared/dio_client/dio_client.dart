@@ -1,42 +1,36 @@
 import 'package:altme/app/app.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
+part 'logging.dart';
 
 const _defaultConnectTimeout = Duration.millisecondsPerMinute;
 const _defaultReceiveTimeout = Duration.millisecondsPerMinute;
 
 class DioClient {
-  DioClient(
-    this.baseUrl,
-    this._dio, {
-    this.interceptors,
-  }) {
+  DioClient(this.baseUrl, this._dio) {
     _dio
       ..options.baseUrl = baseUrl
       ..options.connectTimeout = _defaultConnectTimeout
       ..options.receiveTimeout = _defaultReceiveTimeout
       ..httpClientAdapter
-      ..options.headers = <String, dynamic>{
-        'Content-Type': 'application/json; charset=UTF-8'
-      };
-    if (interceptors?.isNotEmpty ?? false) {
-      _dio.interceptors.addAll(interceptors!);
-    }
-    if (kDebugMode) {
-      _dio.interceptors.add(
-        LogInterceptor(
-          responseBody: true,
-          requestHeader: false,
-          responseHeader: false,
-          request: false,
-        ),
-      );
-    }
+      ..interceptors.add(Logging());
+
+    // if (kDebugMode) {
+    //   _dio.interceptors.add(
+    //     LogInterceptor(
+    //       responseBody: true,
+    //       requestHeader: false,
+    //       responseHeader: false,
+    //       request: false,
+    //     ),
+    //   );
+    // }
   }
+
+  final log = getLogger('DioClient');
 
   final String baseUrl;
   final Dio _dio;
-  final List<Interceptor>? interceptors;
 
   Future<dynamic> get(
     String uri, {
@@ -44,8 +38,13 @@ class DioClient {
     Options? options,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
+    Map<String, dynamic> headers = const <String, dynamic>{
+      'Content-Type': 'application/json; charset=UTF-8'
+    },
   }) async {
     try {
+      final stopwatch = Stopwatch()..start();
+      _dio.options.headers = headers;
       final response = await _dio.get<dynamic>(
         uri,
         queryParameters: queryParameters,
@@ -53,6 +52,7 @@ class DioClient {
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
+      log.i('Time - ${stopwatch.elapsed}');
       return response.data;
     } on FormatException catch (_) {
       throw ResponseMessage(
@@ -75,8 +75,13 @@ class DioClient {
     CancelToken? cancelToken,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    Map<String, dynamic> headers = const <String, dynamic>{
+      'Content-Type': 'application/json; charset=UTF-8'
+    },
   }) async {
     try {
+      final stopwatch = Stopwatch()..start();
+      _dio.options.headers = headers;
       final response = await _dio.post<dynamic>(
         uri,
         data: data,
@@ -86,6 +91,7 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
+      log.i('Time - ${stopwatch.elapsed}');
       return response.data;
     } on FormatException catch (_) {
       throw ResponseMessage(
@@ -99,7 +105,4 @@ class DioClient {
       }
     }
   }
-
-  void changeHeaders(Map<String, dynamic> headers) =>
-      _dio.options.headers = headers;
 }

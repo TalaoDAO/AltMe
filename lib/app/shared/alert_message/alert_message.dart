@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AlertMessage {
@@ -10,8 +11,11 @@ class AlertMessage {
     final String message = messageHandler.getMessage(context, messageHandler);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
-        backgroundColor: stateMessage.type!.getColor(context),
+        content: SnackBarContent(
+          message: message,
+          color: stateMessage.type!.getColor(context),
+        ),
+        backgroundColor: Colors.transparent,
       ),
     );
   }
@@ -23,8 +27,67 @@ class AlertMessage {
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
-        backgroundColor: messageType.getColor(context),
+        content: SnackBarContent(
+          message: message,
+          color: messageType.getColor(context),
+        ),
+        backgroundColor: Colors.transparent,
+      ),
+    );
+  }
+}
+
+class SnackBarContent extends StatelessWidget {
+  const SnackBarContent({
+    Key? key,
+    required this.color,
+    required this.message,
+  }) : super(key: key);
+
+  final Color color;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        vertical: Sizes.space2XSmall,
+        horizontal: Sizes.spaceXSmall,
+      ),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius:
+            const BorderRadius.all(Radius.circular(Sizes.smallRadius)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: MyText(
+              message,
+              style: Theme.of(context).textTheme.bodySmall,
+              maxLines: 2,
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.zero,
+              primary: Colors.transparent,
+              shadowColor: Colors.transparent,
+            ),
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+            child: Text(
+              l10n.close.toUpperCase(),
+              style: Theme.of(context)
+                  .textTheme
+                  .button
+                  ?.copyWith(color: Colors.white),
+            ),
+          )
+        ],
       ),
     );
   }

@@ -13,32 +13,16 @@ void main() {
     //   expect(getDioClient(baseUrl: baseUrl), isNotNull);
     // });
 
-    group('headers', () {
-      final dio = Dio(BaseOptions(baseUrl: baseUrl));
-      final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
-      dio.httpClientAdapter = dioAdapter;
-      //final service = DioClient(baseUrl, dio);
-
-      test('set and get headers', () {
-        // final headers = <String, dynamic>{
-        //   'content-type': 'application/json; charset=utf-8'
-        // };
-        // TODO(Taleb): test
-        // service.headers = headers;
-        // expect(service.headers, headers);
-      });
-    });
-
     group('interceptors', () {
       final dio = Dio(BaseOptions(baseUrl: baseUrl));
       final dioAdapter = DioAdapter(dio: Dio(BaseOptions(baseUrl: baseUrl)));
       dio.httpClientAdapter = dioAdapter;
-      final interceptor = DioInterceptor(dio: dio);
-      final service = DioClient(baseUrl, dio, interceptors: [interceptor]);
+      // final interceptor = DioInterceptor(dio: dio);
+      //final service = DioClient(baseUrl, dio, interceptors: [interceptor]);
 
-      test('set interceptors', () {
-        expect(service.interceptors?.length, greaterThan(0));
-      });
+      // test('set interceptors', () {
+      //   expect(service.interceptors?.length, greaterThan(0));
+      // });
     });
 
     group('exceptions', () {

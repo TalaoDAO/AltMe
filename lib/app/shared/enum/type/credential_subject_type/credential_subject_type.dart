@@ -1,10 +1,10 @@
-import 'package:altme/home/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:flutter/material.dart';
 
 part 'credential_subject_type_extension.dart';
 
 enum CredentialSubjectType {
-  associatedWallet,
+  tezosAssociatedWallet,
   certificateOfEmployment,
   defaultCredential,
   ecole42LearningAchievement,
@@ -21,7 +21,7 @@ enum CredentialSubjectType {
   residentCard,
   selfIssued,
   studentCard,
-  talao,
   voucher,
-  tezVoucher
+  tezVoucher,
+  talaoCommunityCard
 }

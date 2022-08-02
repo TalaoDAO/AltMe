@@ -1,16 +1,15 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/home/home.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:jose/jose.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:logging/logging.dart';
+
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -38,7 +37,7 @@ class ScanCubit extends Cubit<ScanState> {
   }) async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
-    final log = Logger('altme-wallet/scan/credential-offer');
+    final log = getLogger('ScanCubit - credentialOffer');
     try {
       final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
 
@@ -115,14 +114,14 @@ class ScanCubit extends Cubit<ScanState> {
       await Future<void>.delayed(const Duration(milliseconds: 500));
       final verification = await didKitProvider.verifyCredential(vcStr, optStr);
 
-      debugPrint('[wallet/credential-offer/verify/vc] $vcStr');
-      debugPrint('[wallet/credential-offer/verify/options] $optStr');
-      debugPrint('[wallet/credential-offer/verify/result] $verification');
+      log.i('[wallet/credential-offer/verify/vc] $vcStr');
+      log.i('[wallet/credential-offer/verify/options] $optStr');
+      log.i('[wallet/credential-offer/verify/result] $verification');
 
       final jsonVerification = jsonDecode(verification) as Map<String, dynamic>;
 
       if ((jsonVerification['warnings'] as List).isNotEmpty) {
-        log.warning(
+        log.w(
           'credential verification return warnings',
           jsonVerification['warnings'],
         );
@@ -138,7 +137,7 @@ class ScanCubit extends Cubit<ScanState> {
       }
 
       if ((jsonVerification['errors'] as List).isNotEmpty) {
-        log.severe('failed to verify credential', jsonVerification['errors']);
+        log.w('failed to verify credential', jsonVerification['errors']);
         if (jsonVerification['errors'][0] != 'No applicable proof') {
           throw ResponseMessage(
             ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
@@ -155,7 +154,7 @@ class ScanCubit extends Cubit<ScanState> {
 
       emit(state.success());
     } catch (e) {
-      log.severe('something went wrong', e);
+      log.e('something went wrong', e);
       if (e is MessageHandler) {
         emit(
           state.error(messageHandler: e),
@@ -180,7 +179,7 @@ class ScanCubit extends Cubit<ScanState> {
     required String challenge,
     required String domain,
   }) async {
-    final log = Logger('altme-wallet/scan/verifiable-presentation-request');
+    final log = getLogger('ScanCubit - verifiablePresentationRequest');
 
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -209,7 +208,7 @@ class ScanCubit extends Cubit<ScanState> {
         }),
         key,
       );
-
+      log.i('Formdata $presentation');
       await client.post(
         url,
         data: FormData.fromMap(<String, dynamic>{'presentation': presentation}),
@@ -224,7 +223,7 @@ class ScanCubit extends Cubit<ScanState> {
         ),
       );
     } catch (e) {
-      log.severe('something went wrong', e);
+      log.e('something went wrong', e);
       if (e is MessageHandler) {
         emit(
           state.error(messageHandler: e),
@@ -249,7 +248,7 @@ class ScanCubit extends Cubit<ScanState> {
     required String challenge,
     required String domain,
   }) async {
-    final log = Logger('altme-wallet/scan/chapi-get-didauth');
+    final log = getLogger('ScanCubit - getDIDAuthCHAPI');
 
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -296,7 +295,7 @@ class ScanCubit extends Cubit<ScanState> {
         throw Exception('DID is not set. It is required to present DIDAuth');
       }
     } catch (e) {
-      log.severe('something went wrong', e);
+      log.e('something went wrong', e);
       if (e is MessageHandler) {
         emit(
           state.error(messageHandler: e),
@@ -318,8 +317,7 @@ class ScanCubit extends Cubit<ScanState> {
     required CredentialModel credential,
     required SIOPV2Param sIOPV2Param,
   }) async {
-    final log =
-        Logger('altme-wallet/scan/present-credential-to-siop-v2-request');
+    final log = getLogger('ScanCubit - presentCredentialToSiopV2Request');
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
@@ -339,19 +337,15 @@ class ScanCubit extends Cubit<ScanState> {
       // execute the request
       // Request is sent to redirect_uri.
 
-      client.changeHeaders(
-        <String, dynamic>{'Content-Type': 'application/x-www-form-urlencoded'},
-      );
       final dynamic result = await client.post(
         sIOPV2Param.redirect_uri!,
         data: FormData.fromMap(<String, dynamic>{
           'vp_token': vpToken,
           'id_token': idToken,
         }),
-      );
-
-      client.changeHeaders(
-        <String, dynamic>{'Content-Type': 'application/json; charset=UTF-8'},
+        headers: <String, dynamic>{
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
       );
 
       if (result == 'Congrats ! Everything is ok') {
@@ -369,7 +363,7 @@ class ScanCubit extends Cubit<ScanState> {
         );
       }
     } catch (e) {
-      log.severe('something went wrong', e);
+      log.e('something went wrong', e);
       if (e is MessageHandler) {
         emit(
           state.error(messageHandler: e),
@@ -434,6 +428,7 @@ class ScanCubit extends Cubit<ScanState> {
   }
 
   Future<String> createIdToken({required String nonce}) async {
+    final log = getLogger('ScanCubit - createIdToken');
     final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
     final did = await secureStorageProvider.get(SecureStorageKeys.did);
 
@@ -463,7 +458,7 @@ class ScanCubit extends Cubit<ScanState> {
     final jws = builder.build();
 
     // output the compact serialization
-    debugPrint('jwt compact serialization: ${jws.toCompactSerialization()}');
+    log.i('jwt compact serialization: ${jws.toCompactSerialization()}');
 
     return jws.toCompactSerialization();
   }

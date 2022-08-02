@@ -1,6 +1,6 @@
+import 'package:altme/app/app.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:logging/logging.dart';
 
 class LocalAuthApi {
   factory LocalAuthApi() {
@@ -12,7 +12,7 @@ class LocalAuthApi {
 
   static final _auth = LocalAuthentication();
   static LocalAuthApi? _instance;
-  final logger = Logger('altme/shared/local_auth_api');
+  final log = getLogger('LocalAuthApi');
 
   Future<bool> hasBiometrics() async {
     try {
@@ -45,7 +45,7 @@ class LocalAuthApi {
         ),
       );
     } on PlatformException catch (e, s) {
-      logger.info('${e.message} stack: $s');
+      log.e('${e.message} stack: $s');
       return false;
     }
   }

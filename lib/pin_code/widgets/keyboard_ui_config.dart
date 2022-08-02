@@ -7,7 +7,7 @@ typedef KeyboardTapCallback = void Function(String text);
 @immutable
 class KeyboardUIConfig {
   const KeyboardUIConfig({
-    this.digitBorderWidth = 1,
+    this.digitBorderWidth = 3.5,
     this.keyboardRowMargin = const EdgeInsets.only(top: 15, left: 4, right: 4),
     this.digitInnerMargin = const EdgeInsets.all(24),
     this.keyboardSize,
@@ -80,50 +80,46 @@ class NumericKeyboard extends StatelessWidget {
         child: AlignedGrid(
           keyboardSize: keyboardSize,
           children: List.generate(10, (index) {
-            return _buildKeyboardDigit(keyboardItems[index], context);
+            return Container(
+              margin: const EdgeInsets.all(4),
+              child: ClipOval(
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    highlightColor: Theme.of(context).colorScheme.primary,
+                    onTap: () {
+                      onKeyboardTap(keyboardItems[index]);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.transparent,
+                        border: Border.all(
+                          color:
+                              Theme.of(context).colorScheme.digitPrimaryColor,
+                          width: keyboardUIConfig.digitBorderWidth,
+                        ),
+                      ),
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Theme.of(context).colorScheme.digitFillColor,
+                        ),
+                        child: Text(
+                          keyboardItems[index],
+                          style: Theme.of(context)
+                              .textTheme
+                              .keyboardDigitTextStyle,
+                          semanticsLabel: keyboardItems[index],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
           }),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildKeyboardDigit(String text, BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(4),
-      child: ClipOval(
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            splashColor: Theme.of(context)
-                .colorScheme
-                .digitPrimaryColor
-                .withOpacity(0.4),
-            onTap: () {
-              onKeyboardTap(text);
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.transparent,
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.digitPrimaryColor,
-                  width: keyboardUIConfig.digitBorderWidth,
-                ),
-              ),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.digitFillColor,
-                ),
-                child: Text(
-                  text,
-                  style: Theme.of(context).textTheme.keyboardDigitTextStyle,
-                  semanticsLabel: text,
-                ),
-              ),
-            ),
-          ),
         ),
       ),
     );

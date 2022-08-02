@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/pick/credential_manifest/helpers/get_credentials_from_filter_list.dart';
 import 'package:altme/did/did.dart';
-import 'package:altme/home/home.dart';
-import 'package:altme/home/tab_bar/credentials/pick/credential_manifest/helpers/get_credentials_from_filter_list.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -12,8 +12,7 @@ import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:logging/logging.dart';
-import 'package:passbase_flutter/passbase_flutter.dart';
+
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -48,9 +47,6 @@ class WalletCubit extends Cubit<WalletState> {
     final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
     if (ssiKey != null) {
       if (ssiKey.isNotEmpty) {
-        /// When app is initialized, set all credentials with active status to
-        /// unknown status
-        await repository.initializeRevocationStatus();
         await loadAllCredentialsFromRepository();
       }
     }
@@ -72,39 +68,58 @@ class WalletCubit extends Cubit<WalletState> {
 
   Future<void> createCryptoWallet({
     String? accountName,
-    required String mnemonic,
+    required String mnemonicOrKey,
+    required bool isImported,
     Function(CryptoAccount cryptoAccount)? onComplete,
   }) async {
     int index = 0;
 
-    final String? derivePathIndex =
-        await secureStorageProvider.get(SecureStorageKeys.derivePathIndex);
+    if (!isImported) {
+      final String? derivePathIndex =
+          await secureStorageProvider.get(SecureStorageKeys.derivePathIndex);
 
-    if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
-      index = int.parse(derivePathIndex) + 1;
+      if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
+        index = int.parse(derivePathIndex) + 1;
+      }
+      await secureStorageProvider.set(
+        SecureStorageKeys.derivePathIndex,
+        index.toString(),
+      );
     }
 
-    await secureStorageProvider.set(
-      SecureStorageKeys.derivePathIndex,
-      index.toString(),
-    );
+    late String cryptoKey;
+    late String cryptoWalletAddress;
+    late String cryptoSecretKey;
 
-    final cryptoKey = await keyGenerator.jwkFromMnemonic(
-      mnemonic: mnemonic,
-      accountType: AccountType.crypto,
-      derivePathIndex: index,
-    );
+    final isSecretKey = mnemonicOrKey.startsWith('edsk') ||
+        mnemonicOrKey.startsWith('spsk') ||
+        mnemonicOrKey.startsWith('p2sk');
 
-    final cryptoSecretKey = await keyGenerator.secretKeyFromMnemonic(
-      mnemonic: mnemonic,
-      accountType: AccountType.crypto,
-      derivePathIndex: index,
-    );
+    cryptoKey = isSecretKey
+        ? await keyGenerator.jwkFromSecretKey(
+            secretKey: mnemonicOrKey,
+          )
+        : await keyGenerator.jwkFromMnemonic(
+            mnemonic: mnemonicOrKey,
+            accountType: AccountType.crypto,
+            derivePathIndex: index,
+          );
 
-    final String cryptoWalletAddress =
-        await keyGenerator.tz1AddressFromSecretKey(
-      secretKey: cryptoSecretKey,
-    );
+    cryptoSecretKey = isSecretKey
+        ? mnemonicOrKey
+        : await keyGenerator.secretKeyFromMnemonic(
+            mnemonic: mnemonicOrKey,
+            accountType: AccountType.crypto,
+            derivePathIndex: index,
+          );
+
+    cryptoWalletAddress = isSecretKey
+        ? await keyGenerator.tz1AddressFromSecretKey(
+            secretKey: cryptoSecretKey,
+          )
+        : cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
+            secretKey: cryptoSecretKey,
+          );
 
     String name = 'My Account ${index + 1}';
 
@@ -113,10 +128,10 @@ class WalletCubit extends Cubit<WalletState> {
     }
     final CryptoAccountData cryptoAccountData = CryptoAccountData(
       name: name,
-      mnemonics: mnemonic,
       key: cryptoKey,
       walletAddress: cryptoWalletAddress,
       secretKey: cryptoSecretKey,
+      isImported: isImported,
     );
 
     final cryptoAccounts = List.of(state.cryptoAccount.data)
@@ -340,35 +355,6 @@ class WalletCubit extends Cubit<WalletState> {
     emit(state.copyWith(status: WalletStatus.init, credentials: credentials));
   }
 
-  /// Give user metadata to KYC. Currently we are just sending user DID.
-  bool setKYCMetadata() {
-    final selectedCredentials = <CredentialModel>[];
-    for (final credentialModel in state.credentials) {
-      final credentialTypeList = credentialModel.credentialPreview.type;
-
-      ///credential and issuer provided in claims
-      if (credentialTypeList.contains('EmailPass')) {
-        final credentialSubjectModel = credentialModel
-            .credentialPreview.credentialSubjectModel as EmailPassModel;
-        if (credentialSubjectModel.passbaseMetadata != '') {
-          selectedCredentials.add(credentialModel);
-        }
-      }
-    }
-    if (selectedCredentials.isNotEmpty) {
-      final firstEmailPassCredentialSubject =
-          selectedCredentials.first.credentialPreview.credentialSubjectModel;
-      if (firstEmailPassCredentialSubject is EmailPassModel) {
-        /// Give user email from first EmailPass to KYC. When KYC is successful
-        /// this email is used to send the over18 credential link to user.
-        PassbaseSDK.prefillUserEmail = firstEmailPassCredentialSubject.email;
-        PassbaseSDK.metaData = firstEmailPassCredentialSubject.passbaseMetadata;
-        return true;
-      }
-    }
-    return false;
-  }
-
   ///helper function to generate TezosAssociatedAddressCredential
   Future<CredentialModel?> generateAssociatedWalletCredential({
     required String accountName,
@@ -376,7 +362,7 @@ class WalletCubit extends Cubit<WalletState> {
     required String cryptoKey,
     String? oldId,
   }) async {
-    final log = Logger('altme/associated_wallet_credential/create');
+    final log = getLogger('WalletCubit - generateAssociatedWalletCredential');
     try {
       const didMethod = AltMeStrings.defaultDIDMethod;
       final didSsi = didCubit.state.did!;
@@ -417,14 +403,14 @@ class WalletCubit extends Cubit<WalletState> {
       final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
 
       if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
-        log.warning(
+        log.w(
           'credential verification return warnings',
           jsonVerification['warnings'],
         );
       }
 
       if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
-        log.severe('failed to verify credential', jsonVerification['errors']);
+        log.e('failed to verify credential', jsonVerification['errors']);
         if (jsonVerification['errors'][0] != 'No applicable proof') {
           throw ResponseMessage(
             ResponseString
@@ -437,7 +423,7 @@ class WalletCubit extends Cubit<WalletState> {
         return _createCredential(vc, oldId);
       }
     } catch (e, s) {
-      log.severe('something went wrong e: $e, stackTrace: $s', e, s);
+      log.e('something went wrong e: $e, stackTrace: $s', e, s);
       return null;
     }
   }
@@ -453,7 +439,6 @@ class WalletCubit extends Cubit<WalletState> {
       display: Display.emptyDisplay()..toJson(),
       shareLink: '',
       credentialPreview: Credential.fromJson(jsonCredential),
-      revocationStatus: RevocationStatus.unknown,
     );
   }
 }

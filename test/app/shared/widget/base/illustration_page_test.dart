@@ -53,7 +53,7 @@ void main() {
       );
       expect(find.byType(BaseIllustrationPage), findsOneWidget);
       expect(find.byType(BasePage), findsOneWidget);
-      expect(find.byType(BaseButton), findsOneWidget);
+      expect(find.byType(MyElevatedButton), findsOneWidget);
       expect(find.byType(SvgPicture), findsOneWidget);
     });
 

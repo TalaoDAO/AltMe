@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
@@ -13,19 +14,16 @@ class KYCButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// Sending email and DID to passbase
-    final hasMetadata = context.read<WalletCubit>().setKYCMetadata();
+    final hasMetadata =
+        context.read<HomeCubit>().setKYCMetadata(context.read<WalletCubit>());
     final l10n = context.l10n;
 
     return hasMetadata
         ? Stack(
             children: [
-              BaseButton.primary(
-                context: context,
+              MyElevatedButton(
                 onPressed: () {},
-                child: const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Text(''),
-                ),
+                text: '',
               ),
               Padding(
                 padding: const EdgeInsets.all(5),
@@ -62,8 +60,7 @@ class KYCButton extends StatelessWidget {
               ),
             ],
           )
-        : BaseButton.primary(
-            context: context,
+        : MyElevatedButton(
             onPressed: () async {
               await showDialog<bool>(
                 context: context,
@@ -85,18 +82,17 @@ class KYCButton extends StatelessWidget {
                       Row(
                         children: <Widget>[
                           Expanded(
-                            child: BaseButton.transparent(
+                            child: MyOutlinedButton(
                               borderColor: Theme.of(context)
                                   .colorScheme
                                   .secondaryContainer,
                               textColor: Theme.of(context)
                                   .colorScheme
                                   .secondaryContainer,
-                              context: context,
                               onPressed: () {
                                 Navigator.of(context).pop(true);
                               },
-                              child: Text(l10n.ok),
+                              text: l10n.ok,
                             ),
                           ),
                         ],
@@ -106,10 +102,7 @@ class KYCButton extends StatelessWidget {
                 ),
               );
             },
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(l10n.verifyMe),
-            ),
+            text: l10n.verifyMe,
           );
   }
 }

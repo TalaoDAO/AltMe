@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/home/home.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/first/onboarding_first.dart';
 import 'package:altme/pin_code/pin_code.dart';
@@ -16,7 +16,7 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
       Navigator.of(context).push<void>(
         PinCodePage.route(
           isValidCallback: () {
-            Navigator.of(context).push<void>(HomePage.route());
+            Navigator.of(context).push<void>(DashboardPage.route());
           },
         ),
       );
@@ -43,7 +43,7 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
       /// Removes every stack except first route (splashPage)
       Navigator.pushAndRemoveUntil<void>(
         context,
-        HomePage.route(),
+        DashboardPage.route(),
         (Route<dynamic> route) => route.isFirst,
       );
     }
@@ -100,6 +100,12 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
   listener: (BuildContext context, QRCodeScanState state) async {
     final l10n = context.l10n;
 
+    if (state.status == QrScanStatus.loading) {
+      LoadingView().show(context: context);
+    } else {
+      LoadingView().hide();
+    }
+
     if (state.status == QrScanStatus.acceptHost) {
       if (state.uri != null) {
         final profileCubit = context.read<ProfileCubit>();
@@ -115,54 +121,47 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             ).isIssuerInApprovedList();
           } catch (e) {
             if (e is MessageHandler) {
-              AlertMessage.showStateMessage(
-                context: context,
-                stateMessage: StateMessage.error(messageHandler: e),
-              );
+              await context.read<QRCodeScanCubit>().emitError(e);
             } else {
-              AlertMessage.showStateMessage(
-                context: context,
-                stateMessage: StateMessage.error(
-                  messageHandler: ResponseMessage(
-                    ResponseString
-                        .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-                  ),
-                ),
-              );
+              await context.read<QRCodeScanCubit>().emitError(
+                    ResponseMessage(
+                      ResponseString
+                          .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                    ),
+                  );
             }
             return;
           }
         }
 
-        final acceptHost = await showDialog<bool>(
-              context: context,
-              builder: (BuildContext context) {
-                return ConfirmDialog(
-                  title: l10n.scanPromptHost,
-                  subtitle: (approvedIssuer.did.isEmpty)
-                      ? state.uri!.host
-                      : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''',
-                  yes: l10n.communicationHostAllow,
-                  no: l10n.communicationHostDeny,
-                  // TODO(bibash): look into this lock thing
-                  //lock: state.uri!.scheme == 'http',
-                );
-              },
-            ) ??
-            false;
+        var acceptHost = true;
+
+        if (approvedIssuer.did.isEmpty) {
+          acceptHost = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext context) {
+                  return ConfirmDialog(
+                    title: l10n.scanPromptHost,
+                    subtitle: (approvedIssuer.did.isEmpty)
+                        ? state.uri!.host
+                        : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''',
+                    yes: l10n.communicationHostAllow,
+                    no: l10n.communicationHostDeny,
+                    //lock: state.uri!.scheme == 'http',
+                  );
+                },
+              ) ??
+              false;
+        }
 
         if (acceptHost) {
           await context.read<QRCodeScanCubit>().accept(uri: state.uri!);
         } else {
-          AlertMessage.showStateMessage(
-            context: context,
-            stateMessage: StateMessage(
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
-              ),
-              type: MessageType.error,
-            ),
-          );
+          await context.read<QRCodeScanCubit>().emitError(
+                ResponseMessage(
+                  ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+                ),
+              );
           return;
         }
       }

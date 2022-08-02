@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/home/home.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc_test/bloc_test.dart';
@@ -12,7 +12,7 @@ class MockSecureStorage extends Mock implements SecureStorageProvider {}
 
 class MockDidCubit extends MockCubit<DIDState> implements DIDCubit {}
 
-class MockHomeCubit extends MockCubit<HomeStatus> implements HomeCubit {}
+class MockHomeCubit extends MockCubit<HomeState> implements HomeCubit {}
 
 class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {}
 

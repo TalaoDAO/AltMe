@@ -6,10 +6,10 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
-import 'package:altme/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
@@ -47,9 +47,10 @@ class App extends StatelessWidget {
             secureStorageProvider: secure_storage.getSecureStorage,
           ),
         ),
-        BlocProvider<HomeCubit>(create: (context) => HomeCubit()),
-        BlocProvider<CredentialListCubit>(
-          create: (context) => CredentialListCubit(),
+        BlocProvider<ManageNetworkCubit>(
+          create: (context) => ManageNetworkCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+          ),
         ),
         BlocProvider<CredentialListCubit>(
           create: (context) => CredentialListCubit(),
@@ -58,6 +59,12 @@ class App extends StatelessWidget {
           create: (context) => DIDCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
             didKitProvider: DIDKitProvider(),
+          ),
+        ),
+        BlocProvider<HomeCubit>(
+          create: (context) => HomeCubit(
+            client: DioClient(Urls.issuerBaseUrl, Dio()),
+            didCubit: context.read<DIDCubit>(),
           ),
         ),
         BlocProvider<WalletCubit>(
