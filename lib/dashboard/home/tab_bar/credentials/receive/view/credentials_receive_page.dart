@@ -113,29 +113,19 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
               MyGradientButton(
                 text: l10n.credentialAddThisCard,
                 onPressed: () async {
-                  /// We removed dialog box which is asking for the user
-                  /// to provide alias to the credential.
-                  const alias = '';
-
                   if (credentialModel
                           .credentialManifest?.presentationDefinition !=
                       null) {
                     await Navigator.of(context).pushReplacement<void, void>(
                       CredentialManifestOfferPickPage.route(
                         widget.uri,
-                        CredentialModel.copyWithAlias(
-                          oldCredentialModel: credentialModel,
-                          newAlias: alias,
-                        ),
+                        credentialModel,
                       ),
                     );
                   } else {
                     await context.read<ScanCubit>().credentialOffer(
                           url: widget.uri.toString(),
-                          credentialModel: CredentialModel.copyWithAlias(
-                            oldCredentialModel: credentialModel,
-                            newAlias: alias,
-                          ),
+                          credentialModel: credentialModel,
                           keyId: SecureStorageKeys.ssiKey,
                         );
                   }

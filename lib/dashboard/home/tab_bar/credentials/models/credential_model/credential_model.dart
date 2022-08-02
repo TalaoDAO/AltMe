@@ -15,7 +15,6 @@ part 'credential_model.g.dart';
 class CredentialModel extends Equatable {
   CredentialModel({
     required this.id,
-    required this.alias,
     required this.image,
     required this.credentialPreview,
     required this.shareLink,
@@ -40,33 +39,12 @@ class CredentialModel extends Equatable {
     return _$CredentialModelFromJson(newJson);
   }
 
-  factory CredentialModel.copyWithAlias({
-    required CredentialModel oldCredentialModel,
-    required String? newAlias,
-  }) {
-    return CredentialModel(
-      id: oldCredentialModel.id,
-      alias: newAlias ?? '',
-      image: oldCredentialModel.image,
-      data: oldCredentialModel.data,
-      shareLink: oldCredentialModel.shareLink,
-      display: oldCredentialModel.display,
-      credentialPreview: oldCredentialModel.credentialPreview,
-      expirationDate: oldCredentialModel.expirationDate,
-      credentialManifest: oldCredentialModel.credentialManifest,
-      receivedId: oldCredentialModel.receivedId,
-      challenge: oldCredentialModel.challenge,
-      domain: oldCredentialModel.domain,
-    );
-  }
-
   factory CredentialModel.copyWithData({
     required CredentialModel oldCredentialModel,
     required Map<String, dynamic> newData,
   }) {
     return CredentialModel(
       id: oldCredentialModel.id,
-      alias: oldCredentialModel.alias,
       image: oldCredentialModel.image,
       data: newData,
       shareLink: oldCredentialModel.shareLink,
@@ -84,7 +62,6 @@ class CredentialModel extends Equatable {
   final String id;
   @JsonKey(readValue: readValueReceivedId)
   late String? receivedId;
-  final String? alias;
   final String? image;
   final Map<String, dynamic> data;
   @JsonKey(defaultValue: '')
@@ -154,7 +131,6 @@ class CredentialModel extends Equatable {
   @override
   List<Object?> get props => [
         id,
-        alias,
         image,
         data,
         shareLink,

@@ -52,12 +52,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      final l10n = context.l10n;
-      String title = widget.credentialModel.alias!;
-      if (title == '') {
-        title = l10n.cardDetails;
-      }
-      context.read<CredentialDetailsCubit>().setTitle(title);
       context
           .read<CredentialDetailsCubit>()
           .verifyCredential(widget.credentialModel);
@@ -83,29 +77,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     }
   }
 
-  // Future<void> _edit() async {
-  //   final l10n = context.l10n;
-  //   logger.info('Start edit flow');
-  //   final credentialDetailsCubit = context.read<CredentialDetailsCubit>();
-  //   final newAlias = await showDialog<String>(
-  //     context: context,
-  //     builder: (_) => TextFieldDialog(
-  //       label: l10n.credentialAlias,
-  //       title: l10n.credentialDetailEditConfirmationDialog,
-  //       initialValue: credentialDetailsCubit.state.title,
-  //       yes: l10n.credentialDetailEditConfirmationDialogYes,
-  //       no: l10n.credentialDetailEditConfirmationDialogNo,
-  //     ),
-  //   );
-
-  //   logger.info('Edit flow answered with: $newAlias');
-
-  //   if (newAlias != null && newAlias != credentialDetailsCubit.state.title) {
-  //     logger.info('New alias is different, going to update credential');
-  //     await credentialDetailsCubit.update(widget.credentialModel, newAlias);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -121,9 +92,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
       },
       builder: (context, state) {
         return BasePage(
-          title: state.title ?? l10n.credential,
-          titleTag:
-              'credential/${state.title ?? widget.credentialModel.id}/issuer',
+          title: l10n.cardDetails,
           titleLeading: BackLeadingButton(
             onPressed: () {
               if (context.read<CredentialDetailsCubit>().state.status !=

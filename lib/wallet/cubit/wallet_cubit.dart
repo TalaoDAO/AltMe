@@ -433,7 +433,6 @@ class WalletCubit extends Cubit<WalletState> {
     final id = oldId ?? 'urn:uuid:${const Uuid().v4()}';
     return CredentialModel(
       id: id,
-      alias: '',
       image: 'image',
       data: jsonCredential,
       display: Display.emptyDisplay()..toJson(),

@@ -5,7 +5,6 @@ class CredentialDetailsState extends Equatable {
   const CredentialDetailsState({
     this.status = AppStatus.init,
     this.credentialStatus = CredentialStatus.pending,
-    this.title = '',
   });
 
   factory CredentialDetailsState.fromJson(Map<String, dynamic> json) =>
@@ -13,7 +12,6 @@ class CredentialDetailsState extends Equatable {
 
   final AppStatus status;
   final CredentialStatus credentialStatus;
-  final String? title;
 
   CredentialDetailsState copyWith({
     AppStatus? status,
@@ -23,12 +21,11 @@ class CredentialDetailsState extends Equatable {
     return CredentialDetailsState(
       status: status ?? this.status,
       credentialStatus: credentialStatus ?? this.credentialStatus,
-      title: title ?? this.title,
     );
   }
 
   Map<String, dynamic> toJson() => _$CredentialDetailsStateToJson(this);
 
   @override
-  List<Object?> get props => [credentialStatus, status, title];
+  List<Object?> get props => [credentialStatus, status];
 }
