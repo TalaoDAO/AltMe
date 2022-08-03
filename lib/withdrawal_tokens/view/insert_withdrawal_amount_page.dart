@@ -47,26 +47,24 @@ class _InsertWithdrawalAmountPageState
         height: double.infinity,
         width: double.infinity,
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(Sizes.spaceSmall),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  l10n.amount,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(
-                  height: Sizes.spaceXLarge,
-                ),
-                TokenSelectBoxView(),
-                TokenAmountCalculatorView(),
-              ],
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(Sizes.spaceSmall),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                l10n.amount,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(
+                height: Sizes.spaceXLarge,
+              ),
+              TokenSelectBoxView(),
+              TokenAmountCalculatorView(),
+            ],
           ),
         ),
       ),

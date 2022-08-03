@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class TokenAmountCalculatorView extends StatelessWidget {
@@ -20,14 +21,37 @@ class _TokenAmountCalculator extends StatefulWidget {
 class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(Sizes.spaceNormal),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          NumericKeyboard(
-              keyboardUIConfig: KeyboardUIConfig(digitShape: BoxShape.rectangle,digitBorderWidth: 0.0), onKeyboardTap: (key) {})
-        ],
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(Sizes.spaceSmall),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            TextField(),
+            Text('data'),
+            Expanded(
+              child: SizedBox(
+                child: LayoutBuilder(
+                  builder: (_, constraint) {
+                    return NumericKeyboard(
+                      keyboardUIConfig: KeyboardUIConfig(
+                        digitShape: BoxShape.rectangle,
+                        digitInnerMargin: EdgeInsets.zero,
+                        keyboardRowMargin: EdgeInsets.symmetric(horizontal: 100),
+                        digitBorderWidth: 0,
+                        digitTextStyle: Theme.of(context)
+                            .textTheme
+                            .calculatorKeyboardDigitTextStyle,
+                        keyboardSize: constraint.biggest,
+                      ),
+                      onKeyboardTap: (key) {},
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -12,6 +12,7 @@ class KeyboardUIConfig {
     this.keyboardRowMargin = const EdgeInsets.only(top: 15, left: 4, right: 4),
     this.digitInnerMargin = const EdgeInsets.all(24),
     this.keyboardSize,
+    this.digitTextStyle,
   });
 
   //Digits have a round thin borders, [digitBorderWidth] define their thickness
@@ -19,6 +20,7 @@ class KeyboardUIConfig {
   final BoxShape digitShape;
   final EdgeInsetsGeometry keyboardRowMargin;
   final EdgeInsetsGeometry digitInnerMargin;
+  final TextStyle? digitTextStyle;
 
   //Size for the keyboard can be define and provided from the app.
   //If it will not be provided the size will be adjusted to a screen size.
@@ -116,9 +118,10 @@ class NumericKeyboard extends StatelessWidget {
                               ),
                               child: Text(
                                 keyboardItems[index],
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .keyboardDigitTextStyle,
+                                style: keyboardUIConfig.digitTextStyle ??
+                                    Theme.of(context)
+                                        .textTheme
+                                        .keyboardDigitTextStyle,
                                 semanticsLabel: keyboardItems[index],
                               ),
                             ),
@@ -157,9 +160,10 @@ class NumericKeyboard extends StatelessWidget {
                               ),
                               child: Text(
                                 keyboardItems[index],
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .keyboardDigitTextStyle,
+                                style: keyboardUIConfig.digitTextStyle ??
+                                    Theme.of(context)
+                                        .textTheme
+                                        .keyboardDigitTextStyle,
                                 semanticsLabel: keyboardItems[index],
                               ),
                             ),

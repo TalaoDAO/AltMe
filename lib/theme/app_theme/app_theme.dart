@@ -89,7 +89,6 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
-
   Color get greyText => const Color(0xFFD1CCE3);
 
   Color get cardHighlighted => const Color(0xFF251F38);
@@ -226,6 +225,12 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get keyboardDigitTextStyle =>
       GoogleFonts.roboto(fontSize: 30, color: Colors.white);
+
+  TextStyle get calculatorKeyboardDigitTextStyle => GoogleFonts.roboto(
+        fontSize: 30,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      );
 
   TextStyle get keyboardDeleteButtonTextStyle =>
       GoogleFonts.roboto(fontSize: 16, color: Colors.white);
