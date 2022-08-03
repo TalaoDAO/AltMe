@@ -8,6 +8,7 @@ typedef KeyboardTapCallback = void Function(String text);
 class KeyboardUIConfig {
   const KeyboardUIConfig({
     this.digitBorderWidth = 3.5,
+    this.digitShape = BoxShape.circle,
     this.keyboardRowMargin = const EdgeInsets.only(top: 15, left: 4, right: 4),
     this.digitInnerMargin = const EdgeInsets.all(24),
     this.keyboardSize,
@@ -15,6 +16,7 @@ class KeyboardUIConfig {
 
   //Digits have a round thin borders, [digitBorderWidth] define their thickness
   final double digitBorderWidth;
+  final BoxShape digitShape;
   final EdgeInsetsGeometry keyboardRowMargin;
   final EdgeInsetsGeometry digitInnerMargin;
 
@@ -82,42 +84,89 @@ class NumericKeyboard extends StatelessWidget {
           children: List.generate(10, (index) {
             return Container(
               margin: const EdgeInsets.all(4),
-              child: ClipOval(
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    highlightColor: Theme.of(context).colorScheme.primary,
-                    onTap: () {
-                      onKeyboardTap(keyboardItems[index]);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
+              child: keyboardUIConfig.digitShape == BoxShape.circle
+                  ? ClipOval(
+                      child: Material(
                         color: Colors.transparent,
-                        border: Border.all(
-                          color:
-                              Theme.of(context).colorScheme.digitPrimaryColor,
-                          width: keyboardUIConfig.digitBorderWidth,
+                        child: InkWell(
+                          highlightColor: Theme.of(context).colorScheme.primary,
+                          onTap: () {
+                            onKeyboardTap(keyboardItems[index]);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: keyboardUIConfig.digitShape,
+                              color: Colors.transparent,
+                              border: keyboardUIConfig.digitBorderWidth > 0.0
+                                  ? Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .digitPrimaryColor,
+                                      width: keyboardUIConfig.digitBorderWidth,
+                                    )
+                                  : null,
+                            ),
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .digitFillColor,
+                              ),
+                              child: Text(
+                                keyboardItems[index],
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .keyboardDigitTextStyle,
+                                semanticsLabel: keyboardItems[index],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Theme.of(context).colorScheme.digitFillColor,
-                        ),
-                        child: Text(
-                          keyboardItems[index],
-                          style: Theme.of(context)
-                              .textTheme
-                              .keyboardDigitTextStyle,
-                          semanticsLabel: keyboardItems[index],
+                    )
+                  : ClipRect(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          highlightColor: Theme.of(context).colorScheme.primary,
+                          onTap: () {
+                            onKeyboardTap(keyboardItems[index]);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: keyboardUIConfig.digitShape,
+                              color: Colors.transparent,
+                              border: keyboardUIConfig.digitBorderWidth > 0.0
+                                  ? Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .digitPrimaryColor,
+                                      width: keyboardUIConfig.digitBorderWidth,
+                                    )
+                                  : null,
+                            ),
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .digitFillColor,
+                              ),
+                              child: Text(
+                                keyboardItems[index],
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .keyboardDigitTextStyle,
+                                semanticsLabel: keyboardItems[index],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
             );
           }),
         ),

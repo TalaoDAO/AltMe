@@ -64,6 +64,7 @@ class _InsertWithdrawalAmountPageState
                   height: Sizes.spaceXLarge,
                 ),
                 TokenSelectBoxView(),
+                TokenAmountCalculatorView(),
               ],
             ),
           ),
