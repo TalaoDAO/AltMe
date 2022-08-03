@@ -32,7 +32,7 @@ class ActivityWidget extends StatelessWidget {
         const SizedBox(height: 5),
         CredentialField(
           title: l10n.credentialDetailsPresented,
-          value: DateFormat('yyyy-MM-dd').format(activity.presentedAt),
+          value: UiDate.formatDateTime(activity.presentedAt),
           titleColor: titleColor,
           valueColor: valueColor,
           padding: EdgeInsets.zero,

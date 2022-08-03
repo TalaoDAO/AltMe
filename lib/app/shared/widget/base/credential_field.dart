@@ -53,6 +53,7 @@ class DisplayCredentialField extends StatelessWidget {
     return Padding(
       padding: padding,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (title != null)
             Text(

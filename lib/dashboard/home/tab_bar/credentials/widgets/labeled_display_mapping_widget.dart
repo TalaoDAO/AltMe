@@ -1,8 +1,8 @@
+import 'package:altme/app/shared/date/date.dart';
 import 'package:altme/app/shared/widget/base/credential_field.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class LabeledDisplayMappingWidget extends StatelessWidget {
   const LabeledDisplayMappingWidget({
@@ -35,10 +35,11 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
         for (final element in textList) {
           String value = element;
 
-          if (DateTime.tryParse(element) != null) {
-            final DateTime dt = DateTime.parse(element);
-            final outputFormat = DateFormat('dd/MM/yyyy');
-            value = outputFormat.format(dt);
+          if (object.schema.format == 'date') {
+            if (DateTime.tryParse(element) != null) {
+              final DateTime dt = DateTime.parse(element);
+              value = UiDate.formatDateTime(dt);
+            }
           }
 
           widgets.add(
@@ -57,10 +58,18 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
           children: widgets,
         );
       }
-      if (object.fallback != null) {
+      final String? fallback = object.fallback;
+      if (fallback != null) {
+        String value = fallback;
+
+        if (DateTime.tryParse(fallback) != null) {
+          final DateTime dt = DateTime.parse(fallback);
+          value = UiDate.formatDateTime(dt);
+        }
+
         return CredentialField(
           title: object.label,
-          value: object.fallback ?? '',
+          value: value,
           titleColor: titleColor,
           valueColor: valueColor,
         );

@@ -64,7 +64,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
               .RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE,
         );
       }
-      final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      final date = UiDate.formatDateTime(DateTime.now());
       final fileName = 'altme-credential-$date';
       final message = {
         'date': date,
