@@ -52,14 +52,11 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>
+	    <string>fetch</string>
 	</array>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>getPassBaseStatusBackground</string>
-    </array>
-    <key>UIBackgroundModes</key>
-    <array>
-	    <string>fetch</string>
     </array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
