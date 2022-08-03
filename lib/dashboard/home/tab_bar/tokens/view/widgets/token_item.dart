@@ -24,7 +24,7 @@ class TokenItem extends StatelessWidget {
           minVerticalPadding: 0,
           leading: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(100)),
-            child: iconUrl() == null
+            child: token.iconUrl == null
                 ? Container(
                     color: Theme.of(context).primaryColorDark,
                     width: Sizes.tokenLogoSize,
@@ -34,7 +34,7 @@ class TokenItem extends StatelessWidget {
                     width: Sizes.tokenLogoSize,
                     height: Sizes.tokenLogoSize,
                     child: CachedImageFromNetwork(
-                      iconUrl()!,
+                      token.iconUrl!,
                     ),
                   ),
           ),
@@ -47,7 +47,7 @@ class TokenItem extends StatelessWidget {
             style: Theme.of(context).textTheme.listTileSubtitle,
           ),
           trailing: MyText(
-            getPrice(),
+            token.price,
             style: Theme.of(context)
                 .textTheme
                 .listTileTitle
@@ -56,40 +56,5 @@ class TokenItem extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String getPrice() {
-    final formatter = NumberFormat('#,###');
-    final priceString = token.balance;
-    final decimals = int.parse(token.decimals);
-    if (decimals == 0) {
-      final intPart = formatter.format(double.parse(priceString));
-      return '$intPart.0';
-    } else if (decimals == priceString.length) {
-      return '0.$priceString';
-    } else if (priceString.length < decimals) {
-      final numberOfZero = decimals - priceString.length;
-      // ignore: lines_longer_than_80_chars
-      return '0.${List.generate(numberOfZero, (index) => '0').join()}$priceString';
-    } else {
-      final rightPart = formatter.format(
-        double.parse(
-          priceString.substring(0, priceString.length - decimals),
-        ),
-      );
-      final realDoublePriceInString =
-          // ignore: lines_longer_than_80_chars
-          '$rightPart.${priceString.substring(priceString.length - decimals, priceString.length)}';
-      return realDoublePriceInString;
-    }
-  }
-
-  String? iconUrl() {
-    final iconUrl = token.icon ?? token.thumbnailUri;
-    if (iconUrl == null) {
-      return null;
-    } else {
-      return iconUrl.replaceFirst('ipfs://', Urls.talaoIpfsGateway);
-    }
   }
 }
