@@ -4,32 +4,30 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class TokenSelectBoxView extends StatelessWidget {
-  const TokenSelectBoxView({Key? key}) : super(key: key);
+  const TokenSelectBoxView({Key? key, required this.initialToken})
+      : super(key: key);
+
+  final TokenModel initialToken;
 
   @override
   Widget build(BuildContext context) {
-    return const _TokenSelectBox();
+    return _TokenSelectBox(
+      initialToken: initialToken,
+    );
   }
 }
 
 class _TokenSelectBox extends StatefulWidget {
-  const _TokenSelectBox({Key? key}) : super(key: key);
+  const _TokenSelectBox({Key? key, required this.initialToken})
+      : super(key: key);
+
+  final TokenModel initialToken;
 
   @override
   State<_TokenSelectBox> createState() => _TokenSelectBoxState();
 }
 
 class _TokenSelectBoxState extends State<_TokenSelectBox> {
-  final tempModel = const TokenModel(
-    'contractAddress',
-    'Tezos',
-    'XTZ',
-    'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
-    null,
-    '12345667',
-    '6',
-  );
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -54,7 +52,7 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
                   width: Sizes.icon2x,
                   height: Sizes.icon2x,
                   child: CachedImageFromNetwork(
-                    tempModel.iconUrl ?? '',
+                    widget.initialToken.iconUrl ?? '',
                   ),
                 ),
               ),
@@ -62,7 +60,7 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
                 width: Sizes.spaceXSmall,
               ),
               MyText(
-                tempModel.name,
+                widget.initialToken.name,
                 style: Theme.of(context).textTheme.listTileTitle,
               ),
               const SizedBox(
@@ -75,10 +73,8 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
               ),
               const Spacer(),
               MyText(
-                '${tempModel.calculatedBalance} ${tempModel.symbol}',
-                style: Theme.of(context)
-                    .textTheme
-                    .caption,
+                '${widget.initialToken.calculatedBalance} ${widget.initialToken.symbol}',
+                style: Theme.of(context).textTheme.caption,
               ),
             ],
           ),

@@ -452,5 +452,6 @@
   "sendTo":"Send to",
   "next": "Next",
   "withdrawalInputHint": "Copy address, scan or whitelist",
-  "amount": "Amount"
+  "amount": "Amount",
+  "max": "Max"
 }

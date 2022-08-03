@@ -400,7 +400,8 @@
     "sendTo",
     "next",
     "withdrawalInputHint",
-    "amount"
+    "amount",
+    "max"
   ],
 
   "es": [
@@ -804,7 +805,8 @@
     "sendTo",
     "next",
     "withdrawalInputHint",
-    "amount"
+    "amount",
+    "max"
   ],
 
   "fr": [
@@ -1208,7 +1210,8 @@
     "sendTo",
     "next",
     "withdrawalInputHint",
-    "amount"
+    "amount",
+    "max"
   ],
 
   "it": [
@@ -1612,6 +1615,7 @@
     "sendTo",
     "next",
     "withdrawalInputHint",
-    "amount"
+    "amount",
+    "max"
   ]
 }

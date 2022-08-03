@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/home/tab_bar/tokens/models/token_model.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
@@ -36,6 +37,16 @@ class _InsertWithdrawalAmountPageState
   final TextEditingController withdrawalAddressController =
       TextEditingController();
 
+  final tempModel = const TokenModel(
+    'contractAddress',
+    'Tezos',
+    'XTZ',
+    'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
+    null,
+    '12345667',
+    '6',
+  );
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -60,10 +71,13 @@ class _InsertWithdrawalAmountPageState
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(
-                height: Sizes.spaceXLarge,
+                height: Sizes.spaceLarge,
               ),
-              TokenSelectBoxView(),
-              TokenAmountCalculatorView(),
+              TokenSelectBoxView(initialToken: tempModel),
+              TokenAmountCalculatorView(
+                tokenSymbol: 'XTZ',
+                tokenModel: tempModel,
+              ),
             ],
           ),
         ),

@@ -66,7 +66,7 @@ class NumericKeyboard extends StatelessWidget {
       width: keyboardSize.width,
       height: keyboardSize.height,
       margin: const EdgeInsets.only(top: 16),
-      alignment: Alignment.bottomCenter,
+      alignment: Alignment.center,
       child: RawKeyboardListener(
         focusNode: _focusNode,
         autofocus: true,
@@ -130,6 +130,7 @@ class KeyboardButton extends StatelessWidget {
     this.label,
     this.icon,
     this.onTap,
+    this.onLongPress,
     this.digitShape = BoxShape.circle,
     this.digitBorderWidth = 3.4,
     this.digitTextStyle,
@@ -140,6 +141,7 @@ class KeyboardButton extends StatelessWidget {
   final String? label;
   final Widget? icon;
   final Function(String)? onTap;
+  final Function(String)? onLongPress;
   final String semanticsLabel;
   final TextStyle? digitTextStyle;
 
@@ -153,6 +155,9 @@ class KeyboardButton extends StatelessWidget {
                 color: Colors.transparent,
                 child: InkWell(
                   highlightColor: Theme.of(context).colorScheme.primary,
+                  onLongPress: () {
+                    onLongPress?.call(semanticsLabel);
+                  },
                   onTap: () {
                     onTap?.call(semanticsLabel);
                   },
