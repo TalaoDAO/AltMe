@@ -11,17 +11,24 @@ class CredentialsPresentPage extends StatefulWidget {
     Key? key,
     required this.uri,
     required this.preview,
+    required this.issuer,
   }) : super(key: key);
 
   final Uri uri;
   final Map<String, dynamic> preview;
+  final Issuer issuer;
 
   static Route route({
     required Uri uri,
     required Map<String, dynamic> preview,
+    required Issuer issuer,
   }) {
     return MaterialPageRoute<void>(
-      builder: (context) => CredentialsPresentPage(uri: uri, preview: preview),
+      builder: (context) => CredentialsPresentPage(
+        uri: uri,
+        preview: preview,
+        issuer: issuer,
+      ),
       settings: const RouteSettings(name: '/credentialsPresent'),
     );
   }
@@ -76,8 +83,9 @@ class _CredentialsPresentPageState extends State<CredentialsPresentPage> {
                 onPressed: () =>
                     Navigator.of(context).pushReplacement<void, void>(
                   QueryByExampleCredentialPickPage.route(
-                    widget.uri,
-                    widget.preview,
+                    uri: widget.uri,
+                    preview: widget.preview,
+                    issuer: widget.issuer,
                   ),
                 ),
                 text: l10n.credentialPresentConfirm,

@@ -13,18 +13,24 @@ class CredentialsReceivePage extends StatefulWidget {
     Key? key,
     required this.uri,
     required this.preview,
+    required this.issuer,
   }) : super(key: key);
 
   final Uri uri;
   final Map<String, dynamic> preview;
+  final Issuer issuer;
 
   static Route route({
     required Uri uri,
     required Map<String, dynamic> preview,
+    required Issuer issuer,
   }) =>
       MaterialPageRoute<void>(
-        builder: (context) =>
-            CredentialsReceivePage(uri: uri, preview: preview),
+        builder: (context) => CredentialsReceivePage(
+          uri: uri,
+          preview: preview,
+          issuer: issuer,
+        ),
         settings: const RouteSettings(name: '/credentialsReceive'),
       );
 
@@ -113,30 +119,22 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
               MyGradientButton(
                 text: l10n.credentialAddThisCard,
                 onPressed: () async {
-                  /// We removed dialog box which is asking for the user
-                  /// to provide alias to the credential.
-                  const alias = '';
-
                   if (credentialModel
                           .credentialManifest?.presentationDefinition !=
                       null) {
                     await Navigator.of(context).pushReplacement<void, void>(
                       CredentialManifestOfferPickPage.route(
-                        widget.uri,
-                        CredentialModel.copyWithAlias(
-                          oldCredentialModel: credentialModel,
-                          newAlias: alias,
-                        ),
+                        uri: widget.uri,
+                        credential: credentialModel,
+                        issuer: widget.issuer,
                       ),
                     );
                   } else {
                     await context.read<ScanCubit>().credentialOffer(
                           url: widget.uri.toString(),
-                          credentialModel: CredentialModel.copyWithAlias(
-                            oldCredentialModel: credentialModel,
-                            newAlias: alias,
-                          ),
+                          credentialModel: credentialModel,
                           keyId: SecureStorageKeys.ssiKey,
+                          issuer: widget.issuer,
                         );
                   }
                 },

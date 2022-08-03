@@ -155,7 +155,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         }
 
         if (acceptHost) {
-          await context.read<QRCodeScanCubit>().accept(uri: state.uri!);
+          await context.read<QRCodeScanCubit>().accept(
+                uri: state.uri!,
+                issuer: approvedIssuer,
+              );
         } else {
           await context.read<QRCodeScanCubit>().emitError(
                 ResponseMessage(

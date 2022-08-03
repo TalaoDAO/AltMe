@@ -14,15 +14,24 @@ class CredentialManifestPickPage extends StatelessWidget {
     Key? key,
     required this.uri,
     required this.preview,
+    required this.issuer,
   }) : super(key: key);
 
   final Uri uri;
   final Map<String, dynamic> preview;
+  final Issuer issuer;
 
-  static Route route(Uri routeUri, Map<String, dynamic> preview) {
+  static Route route({
+    required Uri uri,
+    required Map<String, dynamic> preview,
+    required Issuer issuer,
+  }) {
     return MaterialPageRoute<void>(
-      builder: (context) =>
-          CredentialManifestPickPage(uri: routeUri, preview: preview),
+      builder: (context) => CredentialManifestPickPage(
+        uri: uri,
+        preview: preview,
+        issuer: issuer,
+      ),
       settings: const RouteSettings(name: '/credentialManifestPickPage'),
     );
   }
@@ -35,7 +44,11 @@ class CredentialManifestPickPage extends StatelessWidget {
             ['presentation_definition'] as Map<String, dynamic>,
         credentialList: context.read<WalletCubit>().state.credentials,
       ),
-      child: CredentialManifestPickView(uri: uri, preview: preview),
+      child: CredentialManifestPickView(
+        uri: uri,
+        preview: preview,
+        issuer: issuer,
+      ),
     );
   }
 }
@@ -45,10 +58,13 @@ class CredentialManifestPickView extends StatelessWidget {
     Key? key,
     required this.uri,
     required this.preview,
+    required this.issuer,
   }) : super(key: key);
 
   final Uri uri;
   final Map<String, dynamic> preview;
+  final Issuer issuer;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -94,6 +110,7 @@ class CredentialManifestPickView extends StatelessWidget {
                           ],
                           challenge: preview['challenge'] as String,
                           domain: preview['domain'] as String,
+                          issuer: issuer,
                         );
                       },
                       text: l10n.credentialPickPresent,

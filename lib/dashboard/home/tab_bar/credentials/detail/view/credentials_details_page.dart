@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
@@ -52,12 +53,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      final l10n = context.l10n;
-      String title = widget.credentialModel.alias!;
-      if (title == '') {
-        title = l10n.cardDetails;
-      }
-      context.read<CredentialDetailsCubit>().setTitle(title);
       context
           .read<CredentialDetailsCubit>()
           .verifyCredential(widget.credentialModel);
@@ -83,29 +78,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     }
   }
 
-  // Future<void> _edit() async {
-  //   final l10n = context.l10n;
-  //   logger.info('Start edit flow');
-  //   final credentialDetailsCubit = context.read<CredentialDetailsCubit>();
-  //   final newAlias = await showDialog<String>(
-  //     context: context,
-  //     builder: (_) => TextFieldDialog(
-  //       label: l10n.credentialAlias,
-  //       title: l10n.credentialDetailEditConfirmationDialog,
-  //       initialValue: credentialDetailsCubit.state.title,
-  //       yes: l10n.credentialDetailEditConfirmationDialogYes,
-  //       no: l10n.credentialDetailEditConfirmationDialogNo,
-  //     ),
-  //   );
-
-  //   logger.info('Edit flow answered with: $newAlias');
-
-  //   if (newAlias != null && newAlias != credentialDetailsCubit.state.title) {
-  //     logger.info('New alias is different, going to update credential');
-  //     await credentialDetailsCubit.update(widget.credentialModel, newAlias);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -121,9 +93,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
       },
       builder: (context, state) {
         return BasePage(
-          title: state.title ?? l10n.credential,
-          titleTag:
-              'credential/${state.title ?? widget.credentialModel.id}/issuer',
+          title: l10n.cardDetails,
           titleLeading: BackLeadingButton(
             onPressed: () {
               if (context.read<CredentialDetailsCubit>().state.status !=
@@ -186,6 +156,35 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     credentialModel: widget.credentialModel,
                   ),
                 ],
+                if (outputDescriptors == null) const SizedBox(height: 30),
+                ExpansionTileContainer(
+                  child: ExpansionTile(
+                    initiallyExpanded: true,
+                    childrenPadding: EdgeInsets.zero,
+                    tilePadding: const EdgeInsets.symmetric(horizontal: 8),
+                    title: Text(
+                      l10n.credentialDetailsActivity,
+                      style:
+                          Theme.of(context).textTheme.credentialManifestTitle2,
+                    ),
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.credentialModel.activities.length,
+                          itemBuilder: (context, index) {
+                            return ActivityWidget(
+                              activity:
+                                  widget.credentialModel.activities[index],
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 40),
                 MyOutlinedButton(
                   onPressed: delete,

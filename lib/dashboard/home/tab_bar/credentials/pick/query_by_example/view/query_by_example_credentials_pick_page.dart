@@ -14,15 +14,24 @@ class QueryByExampleCredentialPickPage extends StatelessWidget {
     Key? key,
     required this.uri,
     required this.preview,
+    required this.issuer,
   }) : super(key: key);
 
   final Uri uri;
   final Map<String, dynamic> preview;
+  final Issuer issuer;
 
-  static Route route(Uri routeUri, Map<String, dynamic> preview) =>
+  static Route route({
+    required Uri uri,
+    required Map<String, dynamic> preview,
+    required Issuer issuer,
+  }) =>
       MaterialPageRoute<void>(
-        builder: (context) =>
-            QueryByExampleCredentialPickPage(uri: routeUri, preview: preview),
+        builder: (context) => QueryByExampleCredentialPickPage(
+          uri: uri,
+          preview: preview,
+          issuer: issuer,
+        ),
         settings:
             const RouteSettings(name: '/QueryByExampleCredentialPickPage'),
       );
@@ -39,7 +48,11 @@ class QueryByExampleCredentialPickPage extends StatelessWidget {
           credentialList: context.read<WalletCubit>().state.credentials,
         );
       },
-      child: QueryByExampleCredentialPickView(uri: uri, preview: preview),
+      child: QueryByExampleCredentialPickView(
+        uri: uri,
+        preview: preview,
+        issuer: issuer,
+      ),
     );
   }
 }
@@ -49,10 +62,12 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
     Key? key,
     required this.uri,
     required this.preview,
+    required this.issuer,
   }) : super(key: key);
 
   final Uri uri;
   final Map<String, dynamic> preview;
+  final Issuer issuer;
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +154,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                                   as String,
                                               domain:
                                                   preview['domain'] as String,
+                                              issuer: issuer,
                                             );
 
                                             return;

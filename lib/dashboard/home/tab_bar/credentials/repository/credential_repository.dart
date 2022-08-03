@@ -11,21 +11,25 @@ class CredentialsRepository {
   final SecureStorageProvider _secureStorageProvider;
 
   Future<List<CredentialModel>> findAll(/* dynamic filters */) async {
-    final data = await _secureStorageProvider.getAllValues();
-    data.removeWhere(
-      (key, value) => !key.startsWith(
-        '${SecureStorageKeys.credentialKey}/',
-      ),
-    );
-
-    final _credentialList = <CredentialModel>[];
-    data.forEach((key, value) {
-      _credentialList.add(
-        CredentialModel.fromJson(json.decode(value) as Map<String, dynamic>),
+    try {
+      final data = await _secureStorageProvider.getAllValues();
+      data.removeWhere(
+        (key, value) => !key.startsWith(
+          '${SecureStorageKeys.credentialKey}/',
+        ),
       );
-    });
-
-    return _credentialList;
+      final _credentialList = <CredentialModel>[];
+      data.forEach((key, value) {
+        _credentialList.add(
+          CredentialModel.fromJson(json.decode(value) as Map<String, dynamic>),
+        );
+      });
+      return _credentialList;
+    } catch (e) {
+      throw ResponseMessage(
+        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+      );
+    }
   }
 
   Future<CredentialModel?> findById(String id) async {

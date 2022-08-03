@@ -443,5 +443,8 @@
   "unknown": "Unknown",
   "credentialManifestDescription": "Description",
   "credentialManifestInformations": "Informations",
-  "credentialManifestActivity": "Activity"
+  "credentialDetailsActivity": "Activity",
+  "credentialDetailsOrganisation": "Organisation",
+  "credentialDetailsPresented": "Presented", 
+  "credentialDetailsOrganisationDetail": "Organisation Detail:"
 }

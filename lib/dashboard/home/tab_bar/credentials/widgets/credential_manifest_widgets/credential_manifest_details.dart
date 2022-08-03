@@ -64,18 +64,6 @@ class CredentialManifestDetails extends StatelessWidget {
             ],
           ),
         ),
-        ExpansionTileContainer(
-          child: ExpansionTile(
-            initiallyExpanded: true,
-            childrenPadding: EdgeInsets.zero,
-            tilePadding: const EdgeInsets.symmetric(horizontal: 8),
-            title: Text(
-              l10n.credentialManifestActivity,
-              style: Theme.of(context).textTheme.credentialManifestTitle2,
-            ),
-            children: const <Widget>[],
-          ),
-        ),
       ],
     );
   }

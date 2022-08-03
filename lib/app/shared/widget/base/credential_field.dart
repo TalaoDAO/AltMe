@@ -8,12 +8,14 @@ class CredentialField extends StatelessWidget {
     this.title,
     this.titleColor,
     this.valueColor,
+    this.padding = const EdgeInsets.all(8),
   }) : super(key: key);
 
   final String value;
   final String? title;
   final Color? titleColor;
   final Color? valueColor;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class CredentialField extends StatelessWidget {
         value: value,
         titleColor: titleColor,
         valueColor: valueColor,
+        padding: padding,
       ),
     );
   }
@@ -36,17 +39,19 @@ class DisplayCredentialField extends StatelessWidget {
     required this.value,
     this.titleColor,
     this.valueColor,
+    required this.padding,
   }) : super(key: key);
 
   final String? title;
   final String value;
   final Color? titleColor;
   final Color? valueColor;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: padding,
       child: Row(
         children: [
           if (title != null)
