@@ -35,7 +35,7 @@ class TokenModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$TokenModelToJson(this);
 
-  String get price {
+  String get calculatedBalance {
     final formatter = NumberFormat('#,###');
     final priceString = balance;
     final decimalsNum = int.parse(decimals);

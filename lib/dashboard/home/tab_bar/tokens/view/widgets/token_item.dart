@@ -47,7 +47,7 @@ class TokenItem extends StatelessWidget {
             style: Theme.of(context).textTheme.listTileSubtitle,
           ),
           trailing: MyText(
-            token.price,
+            token.calculatedBalance,
             style: Theme.of(context)
                 .textTheme
                 .listTileTitle

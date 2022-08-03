@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:flutter/material.dart';
 
 class InsertWithdrawalAmountPage extends StatefulWidget {
@@ -62,6 +63,7 @@ class _InsertWithdrawalAmountPageState
                 const SizedBox(
                   height: Sizes.spaceXLarge,
                 ),
+                TokenSelectBoxView(),
               ],
             ),
           ),
