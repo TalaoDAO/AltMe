@@ -488,7 +488,7 @@ class ScanCubit extends Cubit<ScanState> {
     required Issuer issuer,
   }) async {
     final log = getLogger('ScanCubit');
-
+    log.i('adding Activity');
     for (final credentialModel in credentialModels) {
       final Activity activity = Activity(
         issuer: issuer,
@@ -497,7 +497,6 @@ class ScanCubit extends Cubit<ScanState> {
       credentialModel.activities.add(activity);
 
       log.i('presentation activity added to the credential');
-      log.e(credentialModel);
       await walletCubit.updateCredential(credentialModel);
     }
   }

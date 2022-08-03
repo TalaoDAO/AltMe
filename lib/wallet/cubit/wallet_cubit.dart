@@ -30,9 +30,7 @@ class WalletCubit extends Cubit<WalletState> {
     required this.keyGenerator,
     required this.didCubit,
     required this.didKitProvider,
-  }) : super(WalletState()) {
-    initialize();
-  }
+  }) : super(WalletState());
 
   final CredentialsRepository repository;
   final SecureStorageProvider secureStorageProvider;
