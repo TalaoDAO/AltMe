@@ -11,6 +11,8 @@ import Flutter
     if #available(iOS 10.0, *) {
       UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
     }
+    WorkmanagerPlugin.registerTask(withIdentifier: "getPassBaseStatusBackground")
+    UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(60*1))
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
