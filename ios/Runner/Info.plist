@@ -49,6 +49,10 @@
 	<string>Why is my app authenticating using face id?</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Please give us access to your photo library to verify you.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>processing</string>
+	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
