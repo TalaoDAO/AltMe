@@ -39,7 +39,8 @@ class CheckIssuer {
           ),
         );
       }
-      final issuer = Issuer.fromJson(response as Map<String, dynamic>);
+      final issuer =
+          Issuer.fromJson(response['issuer'] as Map<String, dynamic>);
       if (issuer.organizationInfo.issuerDomain.contains(uriToCheck.host)) {
         return issuer;
       }
