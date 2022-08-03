@@ -401,7 +401,10 @@
     "next",
     "withdrawalInputHint",
     "amount",
-    "max"
+    "max",
+    "edit",
+    "networkFee",
+    "totalAmount"
   ],
 
   "es": [
@@ -806,7 +809,10 @@
     "next",
     "withdrawalInputHint",
     "amount",
-    "max"
+    "max",
+    "edit",
+    "networkFee",
+    "totalAmount"
   ],
 
   "fr": [
@@ -1211,7 +1217,10 @@
     "next",
     "withdrawalInputHint",
     "amount",
-    "max"
+    "max",
+    "edit",
+    "networkFee",
+    "totalAmount"
   ],
 
   "it": [
@@ -1616,6 +1625,9 @@
     "next",
     "withdrawalInputHint",
     "amount",
-    "max"
+    "max",
+    "edit",
+    "networkFee",
+    "totalAmount"
   ]
 }

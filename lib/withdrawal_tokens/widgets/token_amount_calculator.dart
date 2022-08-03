@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TokenAmountCalculatorView extends StatelessWidget {
   const TokenAmountCalculatorView({
@@ -39,6 +40,11 @@ class _TokenAmountCalculator extends StatefulWidget {
 class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
   final amountController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   void _insertKey(String key) {
     if (key.length > 1) return;
     final text = amountController.text;
@@ -65,10 +71,13 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                 ),
             maxLines: 1,
             cursorWidth: 4,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ],
             cursorRadius: const Radius.circular(4),
             textAlign: TextAlign.center,
             decoration: InputDecoration(
-              //isDense: true,
               border: InputBorder.none,
               hintText: '0',
               contentPadding: EdgeInsets.zero,

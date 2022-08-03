@@ -88,7 +88,9 @@ class _InsertWithdrawalAmountPageState
           child: MyElevatedButton(
             borderRadius: Sizes.normalRadius,
             text: l10n.next,
-            onPressed: null,
+            onPressed: () {
+              Navigator.of(context).push<void>(ConfirmWithdrawalPage.route());
+            },
           ),
         ),
       ),

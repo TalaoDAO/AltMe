@@ -453,5 +453,8 @@
   "next": "Next",
   "withdrawalInputHint": "Copy address, scan or whitelist",
   "amount": "Amount",
-  "max": "Max"
+  "max": "Max",
+  "edit":"Edit",
+  "networkFee": "Network Fee",
+  "totalAmount": "Total amount"
 }
