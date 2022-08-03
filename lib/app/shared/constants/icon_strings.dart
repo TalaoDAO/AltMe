@@ -58,4 +58,5 @@ class IconStrings {
   static const String cards = '$base/cards.png';
   static const String scanAddress = '$base/scan-address.png';
   static const String whiteList = '$base/whitelist.png';
+  static const String keyboardDelete = '$base/keyboard-delete.png';
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +10,7 @@ typedef KeyboardTapCallback = void Function(String text);
 class KeyboardUIConfig {
   const KeyboardUIConfig({
     this.digitBorderWidth = 3.5,
+    this.spacing = 4,
     this.digitShape = BoxShape.circle,
     this.keyboardRowMargin = const EdgeInsets.only(top: 15, left: 4, right: 4),
     this.digitInnerMargin = const EdgeInsets.all(24),
@@ -17,6 +20,7 @@ class KeyboardUIConfig {
 
   //Digits have a round thin borders, [digitBorderWidth] define their thickness
   final double digitBorderWidth;
+  final double spacing;
   final BoxShape digitShape;
   final EdgeInsetsGeometry keyboardRowMargin;
   final EdgeInsetsGeometry digitInnerMargin;
@@ -32,7 +36,8 @@ class NumericKeyboard extends StatelessWidget {
     Key? key,
     required this.keyboardUIConfig,
     required this.onKeyboardTap,
-    this.digits,
+    this.leadingButton,
+    this.trailingButton,
   }) : super(key: key);
 
   final KeyboardUIConfig keyboardUIConfig;
@@ -41,18 +46,14 @@ class NumericKeyboard extends StatelessWidget {
   static String deleteButton = 'keyboard_delete_button';
 
   //should have a proper order [1...9, 0]
-  final List<String>? digits;
+  final Widget? leadingButton, trailingButton;
 
   @override
   Widget build(BuildContext context) => _buildKeyboard(context);
 
   Widget _buildKeyboard(BuildContext context) {
     List<String> keyboardItems = List.filled(10, '0');
-    if (digits == null || digits!.isEmpty) {
-      keyboardItems = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-    } else {
-      keyboardItems = digits!;
-    }
+    keyboardItems = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
     final screenSize = MediaQuery.of(context).size;
     final keyboardHeight = screenSize.height > screenSize.width
         ? screenSize.height / 2
@@ -65,6 +66,7 @@ class NumericKeyboard extends StatelessWidget {
       width: keyboardSize.width,
       height: keyboardSize.height,
       margin: const EdgeInsets.only(top: 16),
+      alignment: Alignment.bottomCenter,
       child: RawKeyboardListener(
         focusNode: _focusNode,
         autofocus: true,
@@ -83,98 +85,153 @@ class NumericKeyboard extends StatelessWidget {
         },
         child: AlignedGrid(
           keyboardSize: keyboardSize,
-          children: List.generate(10, (index) {
-            return Container(
-              margin: const EdgeInsets.all(4),
-              child: keyboardUIConfig.digitShape == BoxShape.circle
-                  ? ClipOval(
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          highlightColor: Theme.of(context).colorScheme.primary,
-                          onTap: () {
-                            onKeyboardTap(keyboardItems[index]);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: keyboardUIConfig.digitShape,
-                              color: Colors.transparent,
-                              border: keyboardUIConfig.digitBorderWidth > 0.0
-                                  ? Border.all(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .digitPrimaryColor,
-                                      width: keyboardUIConfig.digitBorderWidth,
-                                    )
-                                  : null,
-                            ),
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .digitFillColor,
-                              ),
-                              child: Text(
-                                keyboardItems[index],
-                                style: keyboardUIConfig.digitTextStyle ??
-                                    Theme.of(context)
-                                        .textTheme
-                                        .keyboardDigitTextStyle,
-                                semanticsLabel: keyboardItems[index],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  : ClipRect(
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          highlightColor: Theme.of(context).colorScheme.primary,
-                          onTap: () {
-                            onKeyboardTap(keyboardItems[index]);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: keyboardUIConfig.digitShape,
-                              color: Colors.transparent,
-                              border: keyboardUIConfig.digitBorderWidth > 0.0
-                                  ? Border.all(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .digitPrimaryColor,
-                                      width: keyboardUIConfig.digitBorderWidth,
-                                    )
-                                  : null,
-                            ),
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .digitFillColor,
-                              ),
-                              child: Text(
-                                keyboardItems[index],
-                                style: keyboardUIConfig.digitTextStyle ??
-                                    Theme.of(context)
-                                        .textTheme
-                                        .keyboardDigitTextStyle,
-                                semanticsLabel: keyboardItems[index],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-            );
-          }),
+          spacing: keyboardUIConfig.spacing,
+          children: buildButtons(context, keyboardItems),
         ),
       ),
+    );
+  }
+
+  List<Widget> buildButtons(BuildContext context, List<String> keyboardItems) {
+    final List<Widget> allKeyboardButtons =
+        List.generate(keyboardItems.length, (index) {
+      return KeyboardButton(
+        digitBorderWidth: keyboardUIConfig.digitBorderWidth,
+        digitShape: keyboardUIConfig.digitShape,
+        semanticsLabel: keyboardItems[index],
+        onTap: onKeyboardTap,
+        label: keyboardItems[index],
+        digitTextStyle: keyboardUIConfig.digitTextStyle,
+      );
+    });
+
+    if (leadingButton != null) {
+      allKeyboardButtons.insert(keyboardItems.length - 1, leadingButton!);
+      if (trailingButton == null) {
+        allKeyboardButtons.insert(keyboardItems.length + 1, const Center());
+      }
+    }
+
+    if (trailingButton != null) {
+      if (leadingButton == null) {
+        allKeyboardButtons.insert(keyboardItems.length - 1, const Center());
+      }
+      allKeyboardButtons.insert(keyboardItems.length + 1, trailingButton!);
+    }
+
+    return allKeyboardButtons;
+  }
+}
+
+class KeyboardButton extends StatelessWidget {
+  const KeyboardButton({
+    Key? key,
+    required this.semanticsLabel,
+    this.label,
+    this.icon,
+    this.onTap,
+    this.digitShape = BoxShape.circle,
+    this.digitBorderWidth = 3.4,
+    this.digitTextStyle,
+  }) : super(key: key);
+
+  final BoxShape digitShape;
+  final double digitBorderWidth;
+  final String? label;
+  final Widget? icon;
+  final Function(String)? onTap;
+  final String semanticsLabel;
+  final TextStyle? digitTextStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(4),
+      child: digitShape == BoxShape.circle
+          ? ClipOval(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  highlightColor: Theme.of(context).colorScheme.primary,
+                  onTap: () {
+                    onTap?.call(semanticsLabel);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: digitShape,
+                      color: Colors.transparent,
+                      border: digitBorderWidth > 0.0
+                          ? Border.all(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .digitPrimaryColor,
+                              width: digitBorderWidth,
+                            )
+                          : null,
+                    ),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).colorScheme.digitFillColor,
+                      ),
+                      child: label != null
+                          ? Text(
+                              label!,
+                              style: digitTextStyle ??
+                                  Theme.of(context)
+                                      .textTheme
+                                      .keyboardDigitTextStyle,
+                              semanticsLabel: semanticsLabel,
+                            )
+                          : icon,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : ClipRect(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  highlightColor: Theme.of(context).colorScheme.primary,
+                  onTap: () {
+                    onTap?.call(semanticsLabel);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: digitShape,
+                      color: Colors.transparent,
+                      border: digitBorderWidth > 0.0
+                          ? Border.all(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .digitPrimaryColor,
+                              width: digitBorderWidth,
+                            )
+                          : null,
+                    ),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).colorScheme.digitFillColor,
+                      ),
+                      child: label != null
+                          ? Text(
+                              label!,
+                              style: digitTextStyle ??
+                                  Theme.of(context)
+                                      .textTheme
+                                      .keyboardDigitTextStyle,
+                              semanticsLabel: semanticsLabel,
+                            )
+                          : icon,
+                    ),
+                  ),
+                ),
+              ),
+            ),
     );
   }
 }
@@ -184,22 +241,23 @@ class AlignedGrid extends StatelessWidget {
     Key? key,
     required this.children,
     required this.keyboardSize,
-  })  : listSize = children.length,
-        super(key: key);
+    this.spacing = 4,
+    this.runSpacing = 4,
+  }) : super(key: key);
 
-  static const double runSpacing = 4;
-  static const double spacing = 4;
-  final int listSize;
+  final double runSpacing;
+  final double spacing;
   static const columns = 3;
   final List<Widget> children;
   final Size keyboardSize;
 
   @override
   Widget build(BuildContext context) {
-    final primarySize = keyboardSize.width > keyboardSize.height
-        ? keyboardSize.height
-        : keyboardSize.width;
-    final itemSize = (primarySize - runSpacing * (columns - 1)) / columns;
+    final itemWidth =
+        (keyboardSize.width - (spacing * (columns - 1))) / columns;
+    final rows = children.length / columns;
+    final itemHeight = (keyboardSize.height - (runSpacing * (rows - 1))) / rows;
+    final itemSize = min(itemHeight, itemWidth);
     return Wrap(
       runSpacing: runSpacing,
       spacing: spacing,

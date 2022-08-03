@@ -36,15 +36,38 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                     return NumericKeyboard(
                       keyboardUIConfig: KeyboardUIConfig(
                         digitShape: BoxShape.rectangle,
+                        spacing: 40,
                         digitInnerMargin: EdgeInsets.zero,
-                        keyboardRowMargin: EdgeInsets.symmetric(horizontal: 100),
+                        keyboardRowMargin: EdgeInsets.zero,
                         digitBorderWidth: 0,
                         digitTextStyle: Theme.of(context)
                             .textTheme
                             .calculatorKeyboardDigitTextStyle,
                         keyboardSize: constraint.biggest,
                       ),
-                      onKeyboardTap: (key) {},
+                      leadingButton: KeyboardButton(
+                        digitShape: BoxShape.rectangle,
+                        digitBorderWidth: 0,
+                        label: '.',
+                        semanticsLabel: '.',
+                        onTap: (semanticLabel) {
+                        },
+                      ),
+                      trailingButton: KeyboardButton(
+                        digitShape: BoxShape.rectangle,
+                        digitBorderWidth: 0,
+                        semanticsLabel: 'delete',
+                        icon: Image.asset(
+                          IconStrings.keyboardDelete,
+                          width: Sizes.icon2x,
+                          color: Colors.white,
+                        ),
+                        onTap: (semanticLabel) {
+                        },
+                      ),
+                      onKeyboardTap: (key) {
+                        print('key: $key');
+                      },
                     );
                   },
                 ),
