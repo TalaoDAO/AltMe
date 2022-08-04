@@ -49,15 +49,15 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(
-                  height: Sizes.spaceNormal,
+                  height: Sizes.spaceSmall,
                 ),
                 Text(
                   '139.2319 XTZ',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline4
-                      ?.copyWith(color: Colors.white),
+                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                      ),
                 ),
                 const SizedBox(
                   height: Sizes.spaceSmall,
@@ -68,7 +68,7 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
                   style: Theme.of(context).textTheme.caption2,
                 ),
                 const SizedBox(
-                  height: Sizes.spaceNormal,
+                  height: Sizes.spaceSmall,
                 ),
                 AccountSelectBoxView(
                   controller: accountSelectBoxController,

@@ -61,7 +61,11 @@ class _WithdrawalAddressInputState extends State<_WithdrawalAddressInput> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Container(
-      padding: const EdgeInsets.all(Sizes.spaceSmall),
+      padding: const EdgeInsets.only(
+        top: Sizes.spaceSmall,
+        right: Sizes.spaceSmall,
+        left: Sizes.spaceSmall,
+      ),
       decoration: BoxDecoration(
         color: Theme.of(context).hoverColor,
         borderRadius: const BorderRadius.all(
