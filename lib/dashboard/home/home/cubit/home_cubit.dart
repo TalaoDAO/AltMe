@@ -5,9 +5,11 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
+import 'package:workmanager/workmanager.dart';
 
 part 'home_cubit.g.dart';
 part 'home_state.dart';
@@ -103,38 +105,12 @@ class HomeCubit extends Cubit<HomeState> {
   void getPassBaseStatusBackground({
     required String link,
   }) {
-    timer = Timer.periodic(const Duration(minutes: 3), (timer) async {
-      timer.cancel();
-
-      final did = didCubit.state.did!;
-
-      try {
-        final passBaseStatus = await getPassBaseStatus(did);
-        if (passBaseStatus == PassBaseStatus.approved) {
-          emit(
-            state.copyWith(
-              status: AppStatus.populate,
-              passBaseStatus: PassBaseStatus.verified,
-              link: link,
-            ),
-          );
-        } else {
-          emit(
-            state.copyWith(
-              status: AppStatus.idle,
-              passBaseStatus: PassBaseStatus.idle,
-            ),
-          );
-        }
-      } catch (e) {
-        emit(
-          state.copyWith(
-            status: AppStatus.idle,
-            passBaseStatus: PassBaseStatus.idle,
-          ),
-        );
-      }
-    });
+    final did = didCubit.state.did!;
+    Workmanager().registerOneOffTask(
+      'getPassBaseStatusBackground',
+      'getPassBaseStatusBackground',
+      inputData: <String, dynamic>{'did': did},
+    );
   }
 
   void startPassbaseVerification(WalletCubit walletCubit) {
@@ -193,35 +169,6 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<PassBaseStatus> getPassBaseStatus(String did) async {
-    try {
-      final dynamic response = await client.get(
-        '/passbase/check/$did',
-        headers: <String, dynamic>{
-          'Accept': 'application/json',
-          'Authorization': 'Bearer mytoken',
-        },
-      );
-
-      switch (response) {
-        case 'approved':
-          return PassBaseStatus.approved;
-        case 'declined':
-          return PassBaseStatus.declined;
-        case 'pending':
-          return PassBaseStatus.pending;
-        case 'undone':
-          return PassBaseStatus.undone;
-        case 'notdone':
-          return PassBaseStatus.undone;
-        default:
-          return PassBaseStatus.undone;
-      }
-    } catch (e) {
-      return PassBaseStatus.undone;
-    }
-  }
-
   /// Give user metadata to KYC. Currently we are just sending user DID.
   bool setKYCMetadata(WalletCubit walletCubit) {
     final selectedCredentials = <CredentialModel>[];
@@ -256,5 +203,35 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> close() {
     timer?.cancel();
     return super.close();
+  }
+}
+
+Future<PassBaseStatus> getPassBaseStatus(String did) async {
+  try {
+    final client = DioClient(Urls.issuerBaseUrl, Dio());
+    final dynamic response = await client.get(
+      '/passbase/check/$did',
+      headers: <String, dynamic>{
+        'Accept': 'application/json',
+        'Authorization': 'Bearer mytoken',
+      },
+    );
+
+    switch (response) {
+      case 'approved':
+        return PassBaseStatus.approved;
+      case 'declined':
+        return PassBaseStatus.declined;
+      case 'pending':
+        return PassBaseStatus.pending;
+      case 'undone':
+        return PassBaseStatus.undone;
+      case 'notdone':
+        return PassBaseStatus.undone;
+      default:
+        return PassBaseStatus.undone;
+    }
+  } catch (e) {
+    return PassBaseStatus.undone;
   }
 }
