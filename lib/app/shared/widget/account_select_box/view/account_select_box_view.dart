@@ -51,6 +51,13 @@ class _AccountSelectBoxViewState extends State<AccountSelectBoxView> {
                 accountSelectBoxCubit
                     .setAccounts(walletState.cryptoAccount.data);
               }
+
+              if (state.selectedAccountIndex !=
+                  walletState.currentCryptoIndex) {
+                accountSelectBoxCubit
+                    .setSelectedAccount(walletState.currentCryptoIndex);
+              }
+
               return Container(
                 padding: const EdgeInsets.all(Sizes.spaceSmall),
                 decoration: BoxDecoration(
@@ -89,6 +96,9 @@ class _AccountSelectBoxViewState extends State<AccountSelectBoxView> {
                               accountSelectBoxCubit
                                 ..setSelectedAccount(i)
                                 ..toggleSelectBox();
+                              context
+                                  .read<WalletCubit>()
+                                  .setCurrentWalletAccount(i);
                             },
                           );
                         },
