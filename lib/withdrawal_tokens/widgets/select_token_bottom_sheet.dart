@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/view/widgets/widgets.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
