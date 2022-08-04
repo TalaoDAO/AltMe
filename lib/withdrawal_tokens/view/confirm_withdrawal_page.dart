@@ -101,7 +101,13 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
           child: MyElevatedButton(
             borderRadius: Sizes.normalRadius,
             text: l10n.confirm,
-            onPressed: () {},
+            onPressed: () async {
+              ///send to this account : tz1Z5ad29RQnbn6bcN8E9YTz3djnqhTSgStf
+              ///this is EmptyAcc1
+
+              //1. validate user password
+              //2. call withdraw function after validation
+            },
           ),
         ),
       ),
