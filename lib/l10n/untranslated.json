@@ -404,7 +404,8 @@
     "max",
     "edit",
     "networkFee",
-    "totalAmount"
+    "totalAmount",
+    "selectToken"
   ],
 
   "es": [
@@ -812,7 +813,8 @@
     "max",
     "edit",
     "networkFee",
-    "totalAmount"
+    "totalAmount",
+    "selectToken"
   ],
 
   "fr": [
@@ -1220,7 +1222,8 @@
     "max",
     "edit",
     "networkFee",
-    "totalAmount"
+    "totalAmount",
+    "selectToken"
   ],
 
   "it": [
@@ -1628,6 +1631,7 @@
     "max",
     "edit",
     "networkFee",
-    "totalAmount"
+    "totalAmount",
+    "selectToken"
   ]
 }

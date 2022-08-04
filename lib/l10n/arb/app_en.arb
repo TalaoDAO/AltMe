@@ -456,5 +456,6 @@
   "max": "Max",
   "edit":"Edit",
   "networkFee": "Network Fee",
-  "totalAmount": "Total amount"
+  "totalAmount": "Total amount",
+  "selectToken": "Select token"
 }
