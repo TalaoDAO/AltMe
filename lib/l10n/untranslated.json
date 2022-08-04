@@ -395,7 +395,8 @@
     "credentialDetailsActivity",
     "credentialDetailsOrganisation",
     "credentialDetailsPresented",
-    "credentialDetailsOrganisationDetail"
+    "credentialDetailsOrganisationDetail",
+    "credentialDetailsInWalletSince"
   ],
 
   "es": [
@@ -794,7 +795,8 @@
     "credentialDetailsActivity",
     "credentialDetailsOrganisation",
     "credentialDetailsPresented",
-    "credentialDetailsOrganisationDetail"
+    "credentialDetailsOrganisationDetail",
+    "credentialDetailsInWalletSince"
   ],
 
   "fr": [
@@ -1193,7 +1195,8 @@
     "credentialDetailsActivity",
     "credentialDetailsOrganisation",
     "credentialDetailsPresented",
-    "credentialDetailsOrganisationDetail"
+    "credentialDetailsOrganisationDetail",
+    "credentialDetailsInWalletSince"
   ],
 
   "it": [
@@ -1592,6 +1595,7 @@
     "credentialDetailsActivity",
     "credentialDetailsOrganisation",
     "credentialDetailsPresented",
-    "credentialDetailsOrganisationDetail"
+    "credentialDetailsOrganisationDetail",
+    "credentialDetailsInWalletSince"
   ]
 }

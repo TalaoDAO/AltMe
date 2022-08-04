@@ -446,5 +446,6 @@
   "credentialDetailsActivity": "Activity",
   "credentialDetailsOrganisation": "Organisation",
   "credentialDetailsPresented": "Presented", 
-  "credentialDetailsOrganisationDetail": "Organisation Detail:"
+  "credentialDetailsOrganisationDetail": "Organisation Detail:",
+  "credentialDetailsInWalletSince": "In wallet since:"
 }

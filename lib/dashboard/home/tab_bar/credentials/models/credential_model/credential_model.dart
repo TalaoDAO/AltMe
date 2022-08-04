@@ -44,6 +44,7 @@ class CredentialModel extends Equatable {
   factory CredentialModel.copyWithData({
     required CredentialModel oldCredentialModel,
     required Map<String, dynamic> newData,
+    required List<Activity> activities,
   }) {
     return CredentialModel(
       id: oldCredentialModel.id,
@@ -57,7 +58,7 @@ class CredentialModel extends Equatable {
       receivedId: oldCredentialModel.receivedId,
       challenge: oldCredentialModel.challenge,
       domain: oldCredentialModel.domain,
-      activities: oldCredentialModel.activities,
+      activities: activities,
     );
   }
 

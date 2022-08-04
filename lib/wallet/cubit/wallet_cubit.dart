@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/pick/credential_manifest/helpers/get_credentials_from_filter_list.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -438,6 +439,7 @@ class WalletCubit extends Cubit<WalletState> {
       display: Display.emptyDisplay()..toJson(),
       shareLink: '',
       credentialPreview: Credential.fromJson(jsonCredential),
+      activities: [Activity(acquisitionAt: DateTime.now())],
     );
   }
 }
