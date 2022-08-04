@@ -71,7 +71,8 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                 ),
             maxLines: 1,
             cursorWidth: 4,
-            keyboardType: TextInputType.number,
+            autofocus: false,
+            keyboardType: TextInputType.none,
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.digitsOnly
             ],
