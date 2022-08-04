@@ -87,6 +87,7 @@ class _WithdrawalAddressInputState extends State<_WithdrawalAddressInput> {
                 child: TextField(
                   controller: withdrawalAddressController,
                   style: Theme.of(context).textTheme.labelMedium,
+                  textInputAction: TextInputAction.done,
                   maxLines: 2,
                   decoration: InputDecoration(
                     border: InputBorder.none,
