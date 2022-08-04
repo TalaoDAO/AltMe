@@ -27,4 +27,13 @@ class UiDate {
   static String formatDateTime(DateTime dateTime) {
     return outputFormat.format(dateTime);
   }
+
+  static String? formatTime(String formattedString) {
+    try {
+      final DateTime dt = DateFormat('hh:mm:ss').parse(formattedString);
+      return DateFormat.jm().format(dt);
+    } on FormatException {
+      return null;
+    }
+  }
 }

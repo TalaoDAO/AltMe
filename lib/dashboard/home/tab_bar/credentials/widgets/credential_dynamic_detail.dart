@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CredentialDynamicDetial extends StatelessWidget {
   const CredentialDynamicDetial({
@@ -10,6 +11,7 @@ class CredentialDynamicDetial extends StatelessWidget {
     this.titleColor,
     this.valueColor,
     this.padding = const EdgeInsets.all(8),
+    required this.format,
   }) : super(key: key);
 
   final String? title;
@@ -17,25 +19,32 @@ class CredentialDynamicDetial extends StatelessWidget {
   final Color? titleColor;
   final Color? valueColor;
   final EdgeInsetsGeometry padding;
+  final String? format;
 
   @override
   Widget build(BuildContext context) {
     String valueData = value;
 
-    if (DateTime.tryParse(value) != null) {
-      final DateTime dt = DateTime.parse(value);
-      valueData = UiDate.formatDateTime(dt);
+    if (format != null) {
+      if (format == AltMeStrings.date) {
+        if (DateTime.tryParse(value) != null) {
+          final DateTime dt = DateTime.parse(value);
+          valueData = UiDate.formatDateTime(dt);
+        }
+      }
+
+      if (format == AltMeStrings.time) {
+        final String? time = UiDate.formatTime(value);
+        if (time != null) {
+          valueData = time;
+        }
+      }
     }
 
-    final bool isValidURL = Uri.parse(valueData).isAbsolute;
-    final bool isEmail = valueData.isValidEmail();
-
     final textTheme = Theme.of(context).textTheme;
-
     final titleTheme = titleColor == null
         ? textTheme.credentialFieldTitle
         : textTheme.credentialFieldTitle.copyWith(color: titleColor);
-
     final valueTheme = valueColor == null
         ? Theme.of(context).textTheme.credentialFieldDescription
         : Theme.of(context)
@@ -55,16 +64,23 @@ class CredentialDynamicDetial extends StatelessWidget {
           Flexible(
             child: TransparentInkWell(
               onTap: () async {
-                if (isValidURL) {
-                  await LaunchUrl.launch(valueData);
-                } else if (isEmail) {
-                  await LaunchUrl.launch('mailto:$valueData');
+                if (format != null) {
+                  if (format == AltMeStrings.uri) {
+                    await LaunchUrl.launch(valueData);
+                  } else if (format == AltMeStrings.email) {
+                    await LaunchUrl.launch('mailto:$valueData');
+                  }
                 }
               },
               child: Text(
                 valueData,
-                style: isValidURL || isEmail
-                    ? valueTheme.copyWith(decoration: TextDecoration.underline)
+                style: (format != null &&
+                        (format == AltMeStrings.uri ||
+                            format == AltMeStrings.email))
+                    ? valueTheme.copyWith(
+                        color: Theme.of(context).colorScheme.markDownA,
+                        decoration: TextDecoration.underline,
+                      )
                     : valueTheme,
                 maxLines: 5,
                 overflow: TextOverflow.fade,
