@@ -16,7 +16,7 @@ class TokenList extends StatefulWidget {
   final List<TokenModel> tokenList;
   final RefreshCallback onRefresh;
   final OnScrollEnded? onScrollEnded;
-  final VoidCallback? onItemTap;
+  final Function(TokenModel)? onItemTap;
 
   @override
   State<TokenList> createState() => _TokenListState();
@@ -48,7 +48,7 @@ class _TokenListState extends State<TokenList> {
         controller: _scrollController,
         physics: const AlwaysScrollableScrollPhysics(),
         itemBuilder: (_, index) => InkWell(
-          onTap: widget.onItemTap,
+          onTap: () => widget.onItemTap?.call(widget.tokenList[index]),
           child: TokenItem(token: widget.tokenList[index]),
         ),
         itemCount: widget.tokenList.length,

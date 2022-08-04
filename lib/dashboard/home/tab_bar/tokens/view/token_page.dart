@@ -51,8 +51,7 @@ class _TokenViewState extends State<TokenView> {
   Future<void> onRefresh() async {
     _offset = 0;
     await context.read<TokensCubit>().getBalanceOfAssetList(
-          baseUrl:
-          context.read<ManageNetworkCubit>().state.network.tzktUrl,
+          baseUrl: context.read<ManageNetworkCubit>().state.network.tzktUrl,
           offset: _offset,
         );
   }
@@ -68,7 +67,7 @@ class _TokenViewState extends State<TokenView> {
     LoadingView().hide();
   }
 
-  void onItemTap() {
+  void onItemTap(TokenModel _) {
     Navigator.of(context).push<void>(SendToPage.route());
   }
 
