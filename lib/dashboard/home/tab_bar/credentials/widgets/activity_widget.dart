@@ -3,7 +3,6 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activit
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ActivityWidget extends StatelessWidget {
   const ActivityWidget({

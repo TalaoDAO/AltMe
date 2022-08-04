@@ -2,6 +2,7 @@ export 'activity_widget.dart';
 export 'card_animation.dart';
 export 'credential_background.dart';
 export 'credential_container.dart';
+export 'credential_dynamic_detail.dart';
 export 'credential_image.dart';
 export 'credential_manifest_widgets/credential_manifest.dart';
 export 'credential_selection_padding.dart';
