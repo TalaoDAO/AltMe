@@ -101,8 +101,7 @@ class _SelectTokenBottomSheetViewState
             children: [
               Text(
                 l10n.selectToken,
-                // TODO(Taleb): change the style
-                style: Theme.of(context).textTheme.accountsText,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: Sizes.spaceNormal),
               MultiBlocListener(
