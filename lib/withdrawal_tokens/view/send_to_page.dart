@@ -95,7 +95,11 @@ class _SendToPageState extends State<SendToPage> {
         ),
         navigation: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(Sizes.spaceSmall),
+            padding: const EdgeInsets.only(
+              left: Sizes.spaceSmall,
+              right: Sizes.spaceSmall,
+              bottom: Sizes.spaceSmall,
+            ),
             child: BlocBuilder<SendToCubit, SendToState>(
               builder: (context, state) {
                 return MyElevatedButton(

@@ -58,33 +58,34 @@ class _InsertWithdrawalAmountPageState
         height: double.infinity,
         width: double.infinity,
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: Padding(
-          padding: const EdgeInsets.all(Sizes.spaceSmall),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Text(
-                l10n.amount,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(
-                height: Sizes.spaceLarge,
-              ),
-              TokenSelectBoxView(initialToken: tempModel),
-              TokenAmountCalculatorView(
-                tokenSymbol: 'XTZ',
-                tokenModel: tempModel,
-              ),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              l10n.amount,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(
+              height: Sizes.spaceNormal,
+            ),
+            TokenSelectBoxView(initialToken: tempModel),
+            TokenAmountCalculatorView(
+              tokenSymbol: 'XTZ',
+              tokenModel: tempModel,
+            ),
+          ],
         ),
       ),
       navigation: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(Sizes.spaceSmall),
+          padding: const EdgeInsets.only(
+            left: Sizes.spaceSmall,
+            right: Sizes.spaceSmall,
+            bottom: Sizes.spaceSmall,
+          ),
           child: MyElevatedButton(
             borderRadius: Sizes.normalRadius,
             text: l10n.next,

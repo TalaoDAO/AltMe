@@ -36,67 +36,68 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
         width: double.infinity,
         padding: const EdgeInsets.all(Sizes.spaceSmall),
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(Sizes.spaceSmall),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  l10n.confirm,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleLarge,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                l10n.confirm,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(
+                height: Sizes.spaceSmall,
+              ),
+              Text(
+                '139.2319 XTZ',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                    ),
+              ),
+              const SizedBox(
+                height: Sizes.spaceSmall,
+              ),
+              Text(
+                l10n.amount,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.caption2,
+              ),
+              const SizedBox(
+                height: Sizes.spaceSmall,
+              ),
+              AccountSelectBoxView(
+                controller: accountSelectBoxController,
+                caption: l10n.from,
+              ),
+              const SizedBox(
+                height: Sizes.spaceNormal,
+              ),
+              WithdrawalAddressInputView(
+                withdrawalAddressController: withdrawalAddressController,
+                caption: l10n.to,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(Sizes.spaceSmall),
+                child: Image.asset(
+                  IconStrings.arrowDown,
+                  height: Sizes.icon3x,
                 ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
-                Text(
-                  '139.2319 XTZ',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                      ),
-                ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
-                Text(
-                  l10n.amount,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.caption2,
-                ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
-                AccountSelectBoxView(
-                  controller: accountSelectBoxController,
-                  caption: l10n.from,
-                ),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
-                WithdrawalAddressInputView(
-                  withdrawalAddressController: withdrawalAddressController,
-                  caption: l10n.to,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(Sizes.spaceSmall),
-                  child: Image.asset(
-                    IconStrings.arrowDown,
-                    height: Sizes.icon3x,
-                  ),
-                ),
-                ConfirmDetailsCard(),
-              ],
-            ),
+              ),
+              ConfirmDetailsCard(),
+            ],
           ),
         ),
       ),
       navigation: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(Sizes.spaceSmall),
+          padding: const EdgeInsets.only(
+            left: Sizes.spaceSmall,
+            right: Sizes.spaceSmall,
+            bottom: Sizes.spaceSmall,
+          ),
           child: MyElevatedButton(
             borderRadius: Sizes.normalRadius,
             text: l10n.confirm,

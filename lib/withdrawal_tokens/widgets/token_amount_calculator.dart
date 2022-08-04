@@ -61,7 +61,7 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
         mainAxisSize: MainAxisSize.max,
         children: [
           const SizedBox(
-            height: Sizes.spaceNormal,
+            height: Sizes.spaceLarge,
           ),
           TextField(
             controller: amountController,
@@ -101,57 +101,64 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
             },
           ),
           Expanded(
-            child: SizedBox(
-              child: LayoutBuilder(
-                builder: (_, constraint) {
-                  return NumericKeyboard(
-                    keyboardUIConfig: KeyboardUIConfig(
-                      digitShape: BoxShape.rectangle,
-                      spacing: 40,
-                      digitInnerMargin: EdgeInsets.zero,
-                      keyboardRowMargin: EdgeInsets.zero,
-                      digitBorderWidth: 0,
-                      digitTextStyle: Theme.of(context)
-                          .textTheme
-                          .calculatorKeyboardDigitTextStyle,
-                      keyboardSize: constraint.biggest,
-                    ),
-                    leadingButton: KeyboardButton(
-                      digitShape: BoxShape.rectangle,
-                      digitBorderWidth: 0,
-                      label: '.',
-                      semanticsLabel: '.',
-                      onTap: _insertKey,
-                    ),
-                    trailingButton: KeyboardButton(
-                      digitShape: BoxShape.rectangle,
-                      digitBorderWidth: 0,
-                      semanticsLabel: 'delete',
-                      icon: Image.asset(
-                        IconStrings.keyboardDelete,
-                        width: Sizes.icon2x,
-                        color: Colors.white,
-                      ),
-                      onLongPress: (_) {
-                        amountController.text = '';
-                      },
-                      onTap: (_) {
-                        final text = amountController.text;
-                        if (text.isNotEmpty) {
-                          amountController.text =
-                              text.substring(0, text.length - 1);
-                          amountController.selection =
-                              TextSelection.fromPosition(
-                            TextPosition(
-                              offset: amountController.text.length,
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                    onKeyboardTap: _insertKey,
-                  );
-                },
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.width * 0.7,
+                  child: LayoutBuilder(
+                    builder: (_, constraint) {
+                      return NumericKeyboard(
+                        keyboardUIConfig: KeyboardUIConfig(
+                          digitShape: BoxShape.rectangle,
+                          spacing: 40,
+                          digitInnerMargin: EdgeInsets.zero,
+                          keyboardRowMargin: EdgeInsets.zero,
+                          digitBorderWidth: 0,
+                          digitTextStyle: Theme.of(context)
+                              .textTheme
+                              .calculatorKeyboardDigitTextStyle,
+                          keyboardSize: constraint.biggest,
+                        ),
+                        leadingButton: KeyboardButton(
+                          digitShape: BoxShape.rectangle,
+                          digitBorderWidth: 0,
+                          label: '.',
+                          semanticsLabel: '.',
+                          onTap: _insertKey,
+                        ),
+                        trailingButton: KeyboardButton(
+                          digitShape: BoxShape.rectangle,
+                          digitBorderWidth: 0,
+                          semanticsLabel: 'delete',
+                          icon: Image.asset(
+                            IconStrings.keyboardDelete,
+                            width: Sizes.icon2x,
+                            color: Colors.white,
+                          ),
+                          onLongPress: (_) {
+                            amountController.text = '';
+                          },
+                          onTap: (_) {
+                            final text = amountController.text;
+                            if (text.isNotEmpty) {
+                              amountController.text =
+                                  text.substring(0, text.length - 1);
+                              amountController.selection =
+                                  TextSelection.fromPosition(
+                                TextPosition(
+                                  offset: amountController.text.length,
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                        onKeyboardTap: _insertKey,
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
           ),
