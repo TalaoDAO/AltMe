@@ -1,3 +1,4 @@
+import 'package:altme/app/shared/widget/base/credential_field.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final object = displayMapping;
     if (object is LabeledDisplayMappingText) {
-      return CredentialDynamicDetial(
+      return CredentialField(
         value: object.text,
         title: object.label,
         titleColor: titleColor,
@@ -37,6 +38,7 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
               title: object.label,
               titleColor: titleColor,
               valueColor: valueColor,
+              format: object.schema.format,
             ),
           );
         }
@@ -49,7 +51,7 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
       }
       final String? fallback = object.fallback;
       if (fallback != null) {
-        return CredentialDynamicDetial(
+        return CredentialField(
           title: object.label,
           value: fallback,
           titleColor: titleColor,

@@ -10,4 +10,9 @@ class AltMeStrings {
   static const String additionalAuthenticatedData = 'Credible';
   static const String passBasePublishableApiKey =
       'Ww3TIde3B8nh5M3EZ57tkzIbMyAVwzh9YzW8FcwADKgpQ76UfT5bqox2dvdNTDVo';
+
+  static const String date = 'date';
+  static const String uri = 'uri';
+  static const String email = 'email';
+  static const String time = 'time';
 }
