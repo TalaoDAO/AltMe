@@ -3,7 +3,6 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activit
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ActivityWidget extends StatelessWidget {
   const ActivityWidget({
@@ -32,7 +31,7 @@ class ActivityWidget extends StatelessWidget {
         const SizedBox(height: 5),
         CredentialField(
           title: l10n.credentialDetailsPresented,
-          value: DateFormat('yyyy-MM-dd').format(activity.presentedAt),
+          value: UiDate.formatDateTime(activity.presentedAt),
           titleColor: titleColor,
           valueColor: valueColor,
           padding: EdgeInsets.zero,
