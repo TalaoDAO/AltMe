@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/models/token_model.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -108,20 +109,26 @@ class _InsertWithdrawalAmountPageState
             right: Sizes.spaceSmall,
             bottom: Sizes.spaceSmall,
           ),
-          child: BlocBuilder<InsertWithdrawalPageCubit, bool>(
-            builder: (context, isValidWithdrawal) {
-              return MyElevatedButton(
-                borderRadius: Sizes.normalRadius,
-                text: l10n.next,
-                onPressed: isValidWithdrawal
-                    ? () {
-                        Navigator.of(context)
-                            .push<void>(ConfirmWithdrawalPage.route());
-                      }
-                    : null,
-              );
-            },
-          ),
+          child:
+              BlocBuilder<WalletCubit, WalletState>(builder: (context, state) {
+            _tokenSelectBoxController.setSelectedAccount(
+              selectedToken: tempModel,
+            );
+            return BlocBuilder<InsertWithdrawalPageCubit, bool>(
+              builder: (context, isValidWithdrawal) {
+                return MyElevatedButton(
+                  borderRadius: Sizes.normalRadius,
+                  text: l10n.next,
+                  onPressed: isValidWithdrawal
+                      ? () {
+                          Navigator.of(context)
+                              .push<void>(ConfirmWithdrawalPage.route());
+                        }
+                      : null,
+                );
+              },
+            );
+          }),
         ),
       ),
     );

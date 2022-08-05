@@ -32,6 +32,7 @@ class _TokenSelectBox extends StatefulWidget {
 }
 
 class _TokenSelectBoxState extends State<_TokenSelectBox> {
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
