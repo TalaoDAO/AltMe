@@ -43,7 +43,7 @@ class TokenItem extends StatelessWidget {
             style: Theme.of(context).textTheme.listTileTitle,
           ),
           subtitle: MyText(
-            token.name,
+            token.name.isEmpty ? token.symbol : token.name,
             style: Theme.of(context).textTheme.listTileSubtitle,
           ),
           trailing: MyText(

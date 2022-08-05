@@ -62,7 +62,8 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.all(
-                          Radius.circular(Sizes.smallRadius)),
+                        Radius.circular(Sizes.smallRadius),
+                      ),
                       child: SizedBox(
                         width: Sizes.icon2x,
                         height: Sizes.icon2x,
@@ -75,7 +76,9 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
                       width: Sizes.spaceXSmall,
                     ),
                     MyText(
-                      state.selectedToken.name,
+                      state.selectedToken.name.isEmpty
+                          ? state.selectedToken.symbol
+                          : state.selectedToken.name,
                       style: Theme.of(context).textTheme.listTileTitle,
                       minFontSize: 10,
                       textAlign: TextAlign.left,
