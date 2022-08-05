@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +57,7 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -73,33 +75,49 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                       Flexible(
                         child: Padding(
                           padding: const EdgeInsets.all(Sizes.space2XSmall),
-                          child: TextField(
-                            controller: amountController,
-                            style:
-                                Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                            maxLines: 1,
-                            cursorWidth: 4,
-                            autofocus: false,
-                            keyboardType: TextInputType.none,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            cursorRadius: const Radius.circular(4),
-                            onChanged: (value) {
-                              if (value != amountController.text) {
-                                context
+                          child: Form(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            child: TextFormField(
+                              controller: amountController,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                              maxLines: 1,
+                              cursorWidth: 4,
+                              autofocus: false,
+                              validator: (value) {
+                                final isValid = context
                                     .read<TokenAmountCalculatorCubit>()
-                                    .setAmount(amount: value);
-                              }
-                            },
-                            textAlign: TextAlign.center,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: '0',
-                              contentPadding: EdgeInsets.zero,
+                                    .validateAmount(amount: value);
+                                if (isValid) {
+                                  return null;
+                                } else {
+                                  return l10n.insufficientBalance;
+                                }
+                              },
+                              keyboardType: TextInputType.none,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              cursorRadius: const Radius.circular(4),
+                              onChanged: (value) {
+                                if (value != amountController.text) {
+                                  context
+                                      .read<TokenAmountCalculatorCubit>()
+                                      .setAmount(amount: value);
+                                }
+                              },
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '0',
+                                contentPadding: EdgeInsets.zero,
+                              ),
                             ),
                           ),
                         ),

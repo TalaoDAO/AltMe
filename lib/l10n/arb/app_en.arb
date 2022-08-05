@@ -457,5 +457,6 @@
   "edit":"Edit",
   "networkFee": "Network Fee",
   "totalAmount": "Total amount",
-  "selectToken": "Select token"
+  "selectToken": "Select token",
+  "insufficientBalance": "Insufficient balance"
 }

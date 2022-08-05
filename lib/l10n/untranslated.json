@@ -405,7 +405,8 @@
     "edit",
     "networkFee",
     "totalAmount",
-    "selectToken"
+    "selectToken",
+    "insufficientBalance"
   ],
 
   "es": [
@@ -814,7 +815,8 @@
     "edit",
     "networkFee",
     "totalAmount",
-    "selectToken"
+    "selectToken",
+    "insufficientBalance"
   ],
 
   "fr": [
@@ -1223,7 +1225,8 @@
     "edit",
     "networkFee",
     "totalAmount",
-    "selectToken"
+    "selectToken",
+    "insufficientBalance"
   ],
 
   "it": [
@@ -1632,6 +1635,7 @@
     "edit",
     "networkFee",
     "totalAmount",
-    "selectToken"
+    "selectToken",
+    "insufficientBalance"
   ]
 }

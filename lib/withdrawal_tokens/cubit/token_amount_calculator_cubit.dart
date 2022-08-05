@@ -38,6 +38,22 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     emit(state.copyWith(amount: amount));
   }
 
+  bool validateAmount({required String? amount}) {
+    if (amount == null) return false;
+    try {
+      final insertedAmount = double.parse(amount);
+      final maxAmount = double.parse(state.selectedToken.calculatedBalance);
+      if (insertedAmount > maxAmount) {
+        return false;
+      } else {
+        return true;
+      }
+    } catch (e, s) {
+      print('heyy; e; $e , s: $s');
+      return true;
+    }
+  }
+
   @override
   Future<void> close() {
     tokenSelectBoxController.dispose();
