@@ -1,28 +1,27 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/models/token_model.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InsertWithdrawalAmountPage extends StatefulWidget {
   const InsertWithdrawalAmountPage({
     Key? key,
     required this.withdrawalAddress,
-    required this.accountData,
   }) : super(key: key);
 
   final String withdrawalAddress;
-  final CryptoAccountData accountData;
 
   static Route route({
     required String withdrawalAddress,
-    required CryptoAccountData accountData,
   }) {
     return MaterialPageRoute<void>(
-      builder: (_) => InsertWithdrawalAmountPage(
-        withdrawalAddress: withdrawalAddress,
-        accountData: accountData,
+      builder: (_) => BlocProvider<InsertWithdrawalPageCubit>(
+        create: (_) => InsertWithdrawalPageCubit(),
+        child: InsertWithdrawalAmountPage(
+          withdrawalAddress: withdrawalAddress,
+        ),
       ),
     );
   }
@@ -38,17 +37,35 @@ class _InsertWithdrawalAmountPageState
       TextEditingController();
 
   final tempModel = const TokenModel(
-    'contractAddress',
+    '',
     'Tezos',
     'XTZ',
     'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
     null,
-    '12345667',
+    '00000000',
     '6',
   );
 
   late final TokenSelectBoxController _tokenSelectBoxController =
       TokenSelectBoxController(selectedToken: tempModel);
+
+  final TokenAmountCalculatorController _tokenAmountCalculatorController =
+      TokenAmountCalculatorController();
+
+  @override
+  void initState() {
+    _tokenAmountCalculatorController.addListener(() {
+      context.read<InsertWithdrawalPageCubit>().isValidWithdrawal(
+            isValid: _tokenAmountCalculatorController.insertedAmount > 0.0,
+          );
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +95,7 @@ class _InsertWithdrawalAmountPageState
               controller: _tokenSelectBoxController,
             ),
             TokenAmountCalculatorView(
+              controller: _tokenAmountCalculatorController,
               tokenSelectBoxController: _tokenSelectBoxController,
             ),
           ],
@@ -90,11 +108,18 @@ class _InsertWithdrawalAmountPageState
             right: Sizes.spaceSmall,
             bottom: Sizes.spaceSmall,
           ),
-          child: MyElevatedButton(
-            borderRadius: Sizes.normalRadius,
-            text: l10n.next,
-            onPressed: () {
-              Navigator.of(context).push<void>(ConfirmWithdrawalPage.route());
+          child: BlocBuilder<InsertWithdrawalPageCubit, bool>(
+            builder: (context, isValidWithdrawal) {
+              return MyElevatedButton(
+                borderRadius: Sizes.normalRadius,
+                text: l10n.next,
+                onPressed: isValidWithdrawal
+                    ? () {
+                        Navigator.of(context)
+                            .push<void>(ConfirmWithdrawalPage.route());
+                      }
+                    : null,
+              );
             },
           ),
         ),

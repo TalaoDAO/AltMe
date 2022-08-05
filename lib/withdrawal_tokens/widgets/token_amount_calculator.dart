@@ -10,14 +10,17 @@ class TokenAmountCalculatorView extends StatelessWidget {
   const TokenAmountCalculatorView({
     Key? key,
     required this.tokenSelectBoxController,
+    required this.controller,
   }) : super(key: key);
 
   final TokenSelectBoxController tokenSelectBoxController;
+  final TokenAmountCalculatorController controller;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TokenAmountCalculatorCubit>(
       create: (_) => TokenAmountCalculatorCubit(
+        controller: controller,
         tokenSelectBoxController: tokenSelectBoxController,
       ),
       child: const _TokenAmountCalculator(),
@@ -40,6 +43,12 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    amountController.dispose();
+    super.dispose();
   }
 
   void _insertKey(String key) {
@@ -71,24 +80,20 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
               return Column(
                 children: [
                   Form(
-                    autovalidateMode:
-                    AutovalidateMode.onUserInteraction,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: TextFormField(
                       controller: amountController,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
                       maxLines: 1,
                       cursorWidth: 4,
                       autofocus: false,
                       validator: (value) {
                         final isValid = context
                             .read<TokenAmountCalculatorCubit>()
-                            .validateAmount(amount: value);
+                            .isValidateAmount(amount: value);
                         if (isValid) {
                           return null;
                         } else {
@@ -120,13 +125,11 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                           horizontal: 10,
                         ),
                         suffixText: state.selectedToken.symbol,
-                        suffixStyle: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            ?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                        ),
+                        suffixStyle:
+                            Theme.of(context).textTheme.headline6?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                ),
                       ),
                     ),
                   ),
@@ -190,10 +193,14 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                           onTap: (_) {
                             final text = amountController.text;
                             if (text.isNotEmpty) {
+                              String amount = '';
+                              if (text.length > 1) {
+                                amount = text.substring(0, text.length - 1);
+                              }
                               context
                                   .read<TokenAmountCalculatorCubit>()
                                   .setAmount(
-                                    amount: text.substring(0, text.length - 1),
+                                    amount: amount,
                                   );
                             }
                           },

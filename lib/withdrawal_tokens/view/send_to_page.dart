@@ -111,7 +111,6 @@ class _SendToPageState extends State<SendToPage> {
                           Navigator.of(context).push<void>(
                             InsertWithdrawalAmountPage.route(
                               withdrawalAddress: state.withdrawalAddress,
-                              accountData: state.selectedAccount,
                             ),
                           );
                         },

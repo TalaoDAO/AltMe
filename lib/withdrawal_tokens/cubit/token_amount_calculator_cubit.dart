@@ -11,6 +11,7 @@ part 'token_amount_calculator_cubit.g.dart';
 class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
   TokenAmountCalculatorCubit({
     required this.tokenSelectBoxController,
+    required this.controller,
   }) : super(TokenAmountCalculatorState(
             selectedToken: tokenSelectBoxController.selectedToken)) {
     _init();
@@ -26,6 +27,7 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
   }
 
   final TokenSelectBoxController tokenSelectBoxController;
+  final TokenAmountCalculatorController controller;
 
   void setSelectedToken({required TokenModel tokenModel}) {
     tokenSelectBoxController.removeListener(_onTokenSelectBoxChangeListener);
@@ -36,9 +38,18 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
 
   void setAmount({required String amount}) {
     emit(state.copyWith(amount: amount));
+    if (isValidateAmount(amount: amount)) {
+      controller.setAmount(
+        insertedAmount: double.parse(
+          amount.replaceAll(',', ''),
+        ),
+      );
+    }else {
+      controller.setAmount(insertedAmount: 0);
+    }
   }
 
-  bool validateAmount({required String? amount}) {
+  bool isValidateAmount({required String? amount}) {
     if (amount == null) return false;
     try {
       final insertedAmount = double.parse(amount.replaceAll(',', ''));
@@ -51,13 +62,13 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
         return true;
       }
     } catch (e, s) {
-      return true;
+      return false;
     }
   }
 
   @override
   Future<void> close() {
-    tokenSelectBoxController.dispose();
+    controller.dispose();
     return super.close();
   }
 }
