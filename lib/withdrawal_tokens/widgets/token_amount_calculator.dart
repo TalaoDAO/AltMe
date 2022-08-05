@@ -53,6 +53,7 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
 
   void _insertKey(String key) {
     if (key.length > 1) return;
+    if(key == '.' && amountController.text.contains('.')) return;
     final text = amountController.text;
     context.read<TokenAmountCalculatorCubit>().setAmount(amount: text + key);
   }
