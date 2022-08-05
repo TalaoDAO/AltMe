@@ -1,25 +1,43 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/withdrawal_tokens/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmWithdrawalPage extends StatefulWidget {
-  const ConfirmWithdrawalPage({Key? key}) : super(key: key);
+  const ConfirmWithdrawalPage({
+    Key? key,
+    required this.selectedToken,
+    required this.withdrawalAddress,
+    required this.amount,
+  }) : super(key: key);
 
-  static Route route() {
+  static Route route({
+    required TokenModel selectedToken,
+    required String withdrawalAddress,
+    required double amount,
+  }) {
     return MaterialPageRoute<void>(
-      builder: (_) => const ConfirmWithdrawalPage(),
+      builder: (_) => ConfirmWithdrawalPage(
+        selectedToken: selectedToken,
+        withdrawalAddress: withdrawalAddress,
+        amount: amount,
+      ),
     );
   }
+
+  final TokenModel selectedToken;
+  final String withdrawalAddress;
+  final double amount;
 
   @override
   State<ConfirmWithdrawalPage> createState() => _ConfirmWithdrawalPageState();
 }
 
 class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
-  final TextEditingController withdrawalAddressController =
-      TextEditingController();
+  late final TextEditingController withdrawalAddressController =
+      TextEditingController(text: widget.withdrawalAddress);
 
   final AccountSelectBoxController accountSelectBoxController =
       AccountSelectBoxController();
@@ -49,9 +67,10 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
               const SizedBox(
                 height: Sizes.spaceSmall,
               ),
-              Text(
-                '139.2319 XTZ',
+              MyText(
+                '${widget.amount.toString().formatNumber()} ${widget.selectedToken.symbol}',
                 textAlign: TextAlign.center,
+                minFontSize: 12,
                 style: Theme.of(context).textTheme.headline5?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w900,

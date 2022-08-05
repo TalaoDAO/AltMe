@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 extension NumberFormatter on String {
-  String format() {
+  String formatNumber() {
     if (isEmpty || length < 3) return this;
     final formatter = NumberFormat('#,###');
     final value = this;

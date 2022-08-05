@@ -75,7 +75,7 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
   }
 
   void _setAmountControllerText(String text) {
-    amountController.text = text.format();
+    amountController.text = text.formatNumber();
     amountController.selection = TextSelection.fromPosition(
       TextPosition(offset: amountController.text.length),
     );

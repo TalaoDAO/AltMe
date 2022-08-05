@@ -121,8 +121,15 @@ class _InsertWithdrawalAmountPageState
                   text: l10n.next,
                   onPressed: isValidWithdrawal
                       ? () {
-                          Navigator.of(context)
-                              .push<void>(ConfirmWithdrawalPage.route());
+                          Navigator.of(context).push<void>(
+                            ConfirmWithdrawalPage.route(
+                              selectedToken:
+                                  _tokenSelectBoxController.selectedToken,
+                              withdrawalAddress: widget.withdrawalAddress,
+                              amount: _tokenAmountCalculatorController
+                                  .insertedAmount,
+                            ),
+                          );
                         }
                       : null,
                 );
