@@ -21,39 +21,54 @@ class ActivityWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 5),
-        CredentialField(
-          title: l10n.credentialDetailsOrganisation,
-          value: activity.issuer.preferredName,
-          titleColor: titleColor,
-          valueColor: valueColor,
-          padding: EdgeInsets.zero,
-        ),
-        const SizedBox(height: 5),
-        CredentialField(
-          title: l10n.credentialDetailsPresented,
-          value: UiDate.formatDateTime(activity.presentedAt),
-          titleColor: titleColor,
-          valueColor: valueColor,
-          padding: EdgeInsets.zero,
-        ),
-        const SizedBox(height: 10),
-        Text(
-          l10n.credentialDetailsOrganisationDetail,
-          style: Theme.of(context)
-              .textTheme
-              .credentialFieldTitle
-              .copyWith(color: titleColor),
-        ),
-        const SizedBox(height: 5),
-        Text(
-          activity.issuer.organizationInfo.currentAddress,
-          style: Theme.of(context)
-              .textTheme
-              .credentialFieldDescription
-              .copyWith(color: valueColor),
-          maxLines: 5,
-          overflow: TextOverflow.ellipsis,
-        ),
+        if (activity.presentation != null) ...[
+          CredentialField(
+            title: l10n.credentialDetailsOrganisation,
+            value: activity.presentation!.issuer.preferredName,
+            titleColor: titleColor,
+            valueColor: valueColor,
+            padding: EdgeInsets.zero,
+          ),
+          const SizedBox(height: 5),
+          CredentialField(
+            title: l10n.credentialDetailsPresented,
+            value: UiDate.formatDateTime(activity.presentation!.presentedAt),
+            titleColor: titleColor,
+            valueColor: valueColor,
+            padding: EdgeInsets.zero,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            l10n.credentialDetailsOrganisationDetail,
+            style: Theme.of(context)
+                .textTheme
+                .credentialFieldTitle
+                .copyWith(color: titleColor),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            activity.presentation!.issuer.organizationInfo.currentAddress
+                    .isNotEmpty
+                ? activity.presentation!.issuer.organizationInfo.currentAddress
+                : activity.presentation!.issuer.organizationInfo.website,
+            style: Theme.of(context)
+                .textTheme
+                .credentialFieldDescription
+                .copyWith(color: valueColor),
+            maxLines: 5,
+            overflow: TextOverflow.ellipsis,
+          )
+        ],
+        if (activity.acquisitionAt != null) ...[
+          CredentialField(
+            title: l10n.credentialDetailsInWalletSince,
+            value: UiDate.formatDateTime(activity.acquisitionAt!),
+            titleColor: titleColor,
+            valueColor: valueColor,
+            padding: EdgeInsets.zero,
+          ),
+          const SizedBox(height: 5),
+        ],
         Divider(color: valueColor),
       ],
     );

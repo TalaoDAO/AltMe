@@ -203,7 +203,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             route: SIOPV2CredentialPickPage.route(
               credentials: selectedCredentials,
               sIOPV2Param: sIOPV2Param,
-              issuer: Issuer.emptyIssuer(),
+              issuer: Issuer.emptyIssuer(uri.toString()),
             ),
           ),
         );

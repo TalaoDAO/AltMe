@@ -147,15 +147,20 @@ class ScanCubit extends Cubit<ScanState> {
         }
       }
 
+      final List<Activity> activities =
+          List<Activity>.of(credentialModel.activities)
+            ..add(Activity(acquisitionAt: DateTime.now()));
+
       await walletCubit.insertCredential(
         CredentialModel.copyWithData(
           oldCredentialModel: credentialModel,
           newData: jsonCredential as Map<String, dynamic>,
+          activities: activities,
         ),
       );
 
       if (signatureOwnershipProof != null) {
-        await addActivity(
+        await presentationActivity(
           credentialModels: [signatureOwnershipProof],
           issuer: issuer,
         );
@@ -163,7 +168,7 @@ class ScanCubit extends Cubit<ScanState> {
 
       emit(state.success());
     } catch (e) {
-      log.e('something went wrong', e);
+      log.e('something went wrong - $e');
       if (e is MessageHandler) {
         emit(
           state.error(messageHandler: e),
@@ -224,7 +229,7 @@ class ScanCubit extends Cubit<ScanState> {
         data: FormData.fromMap(<String, dynamic>{'presentation': presentation}),
       );
 
-      await addActivity(
+      await presentationActivity(
         credentialModels: credentials,
         issuer: issuer,
       );
@@ -238,7 +243,6 @@ class ScanCubit extends Cubit<ScanState> {
         ),
       );
     } catch (e) {
-      log.e('something went wrong', e);
       if (e is MessageHandler) {
         emit(
           state.error(messageHandler: e),
@@ -365,7 +369,7 @@ class ScanCubit extends Cubit<ScanState> {
       );
 
       if (result == 'Congrats ! Everything is ok') {
-        await addActivity(
+        await presentationActivity(
           credentialModels: [credential],
           issuer: issuer,
         );
@@ -483,16 +487,18 @@ class ScanCubit extends Cubit<ScanState> {
     return jws.toCompactSerialization();
   }
 
-  Future<void> addActivity({
+  Future<void> presentationActivity({
     required List<CredentialModel> credentialModels,
     required Issuer issuer,
   }) async {
     final log = getLogger('ScanCubit');
-    log.i('adding Activity');
+    log.i('adding presentation Activity');
     for (final credentialModel in credentialModels) {
       final Activity activity = Activity(
-        issuer: issuer,
-        presentedAt: DateTime.now(),
+        presentation: Presentation(
+          issuer: issuer,
+          presentedAt: DateTime.now(),
+        ),
       );
       credentialModel.activities.add(activity);
 
