@@ -6,6 +6,11 @@ extension NumberFormatter on String {
     final formatter = NumberFormat('#,###');
     final value = this;
     final number = value.replaceAll(',', '');
+    try {
+      double.parse(number);
+    } catch (e, s) {
+      return this;
+    }
 
     final splits = number.split('.');
     if (splits.length == 2) {
