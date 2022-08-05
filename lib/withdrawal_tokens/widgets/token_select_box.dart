@@ -79,6 +79,7 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
                       state.selectedToken.name.isEmpty
                           ? state.selectedToken.symbol
                           : state.selectedToken.name,
+                      maxLength: 10,
                       style: Theme.of(context).textTheme.listTileTitle,
                       minFontSize: 10,
                       textAlign: TextAlign.left,
@@ -96,8 +97,17 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
                       flex: 1,
                     ),
                     MyText(
-                      '${state.selectedToken.calculatedBalance} ${state.selectedToken.symbol}',
+                      state.selectedToken.calculatedBalance,
                       minFontSize: 10,
+                      maxLength: 15,
+                      textAlign: TextAlign.right,
+                      style: Theme.of(context).textTheme.caption,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    MyText(
+                      state.selectedToken.symbol,
+                      minFontSize: 10,
+                      maxLength: 10,
                       textAlign: TextAlign.right,
                       style: Theme.of(context).textTheme.caption,
                       overflow: TextOverflow.ellipsis,
