@@ -70,69 +70,65 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
               _setAmountControllerText(state.amount);
               return Column(
                 children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.all(Sizes.space2XSmall),
-                          child: Form(
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            child: SizedBox(
-                              height: 60,
-                              child: TextFormField(
-                                controller: amountController,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                maxLines: 1,
-                                cursorWidth: 4,
-                                autofocus: false,
-                                validator: (value) {
-                                  final isValid = context
-                                      .read<TokenAmountCalculatorCubit>()
-                                      .validateAmount(amount: value);
-                                  if (isValid) {
-                                    return null;
-                                  } else {
-                                    return l10n.insufficientBalance;
-                                  }
-                                },
-                                keyboardType: TextInputType.none,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                cursorRadius: const Radius.circular(4),
-                                onChanged: (value) {
-                                  if (value != amountController.text) {
-                                    context
-                                        .read<TokenAmountCalculatorCubit>()
-                                        .setAmount(amount: value);
-                                  }
-                                },
-                                textAlign: TextAlign.center,
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: '0',
-                                  contentPadding: EdgeInsets.zero,
-                                ),
-                              ),
-                            ),
+                  Form(
+                    autovalidateMode:
+                    AutovalidateMode.onUserInteraction,
+                    child: TextFormField(
+                      controller: amountController,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          ?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      cursorWidth: 4,
+                      autofocus: false,
+                      validator: (value) {
+                        final isValid = context
+                            .read<TokenAmountCalculatorCubit>()
+                            .validateAmount(amount: value);
+                        if (isValid) {
+                          return null;
+                        } else {
+                          return l10n.insufficientBalance;
+                        }
+                      },
+                      keyboardType: TextInputType.none,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      cursorRadius: const Radius.circular(4),
+                      onChanged: (value) {
+                        if (value != amountController.text) {
+                          context
+                              .read<TokenAmountCalculatorCubit>()
+                              .setAmount(amount: value);
+                        }
+                      },
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(Sizes.smallRadius),
                           ),
                         ),
+                        hintText: '0',
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 10,
+                        ),
+                        suffixText: state.selectedToken.symbol,
+                        suffixStyle: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
-                      Text(
-                        state.selectedToken.symbol,
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                            ),
-                      )
-                    ],
+                    ),
                   ),
                   const UsdValueText(),
                   MaxButton(
