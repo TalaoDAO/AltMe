@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
@@ -40,9 +42,23 @@ class _TokenAmountCalculator extends StatefulWidget {
 class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
   final amountController = TextEditingController();
 
+  late final _selectionControls = Platform.isIOS
+      ? AppCupertinoTextSelectionControls(onPaste: _onPaste)
+      : AppMaterialTextSelectionControls(onPaste: _onPaste);
+
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> _onPaste(TextSelectionDelegate value) async {
+    final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+    final text = data?.text ?? '';
+    if (text.isEmpty) {
+      return;
+    } else {
+      context.read<TokenAmountCalculatorCubit>().setAmount(amount: text);
+    }
   }
 
   @override
@@ -53,7 +69,7 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
 
   void _insertKey(String key) {
     if (key.length > 1) return;
-    if(key == '.' && amountController.text.contains('.')) return;
+    if (key == '.' && amountController.text.contains('.')) return;
     final text = amountController.text;
     context.read<TokenAmountCalculatorCubit>().setAmount(amount: text + key);
   }
@@ -83,6 +99,7 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                   Form(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: TextFormField(
+                      selectionControls: _selectionControls,
                       controller: amountController,
                       style: Theme.of(context).textTheme.headline6?.copyWith(
                             color: Colors.white,

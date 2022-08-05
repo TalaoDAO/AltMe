@@ -53,6 +53,7 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     if (amount == null) return false;
     try {
       final insertedAmount = double.parse(amount.replaceAll(',', ''));
+      if(insertedAmount == 0.0) return false;
       final maxAmount = double.parse(
         state.selectedToken.calculatedBalance.replaceAll(',', ''),
       );
