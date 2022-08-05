@@ -41,15 +41,16 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
   bool validateAmount({required String? amount}) {
     if (amount == null) return false;
     try {
-      final insertedAmount = double.parse(amount);
-      final maxAmount = double.parse(state.selectedToken.calculatedBalance);
+      final insertedAmount = double.parse(amount.replaceAll(',', ''));
+      final maxAmount = double.parse(
+        state.selectedToken.calculatedBalance.replaceAll(',', ''),
+      );
       if (insertedAmount > maxAmount) {
         return false;
       } else {
         return true;
       }
     } catch (e, s) {
-      print('heyy; e; $e , s: $s');
       return true;
     }
   }

@@ -49,7 +49,7 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
   }
 
   void _setAmountControllerText(String text) {
-    amountController.text = text;
+    amountController.text = text.format();
     amountController.selection = TextSelection.fromPosition(
       TextPosition(offset: amountController.text.length),
     );
@@ -102,7 +102,7 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                               },
                               keyboardType: TextInputType.none,
                               inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.digitsOnly
+                                FilteringTextInputFormatter.digitsOnly,
                               ],
                               cursorRadius: const Radius.circular(4),
                               onChanged: (value) {
@@ -184,19 +184,18 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                             color: Colors.white,
                           ),
                           onLongPress: (_) {
-                            amountController.text = '';
+                            context
+                                .read<TokenAmountCalculatorCubit>()
+                                .setAmount(amount: '');
                           },
                           onTap: (_) {
                             final text = amountController.text;
                             if (text.isNotEmpty) {
-                              amountController.text =
-                                  text.substring(0, text.length - 1);
-                              amountController.selection =
-                                  TextSelection.fromPosition(
-                                TextPosition(
-                                  offset: amountController.text.length,
-                                ),
-                              );
+                              context
+                                  .read<TokenAmountCalculatorCubit>()
+                                  .setAmount(
+                                    amount: text.substring(0, text.length - 1),
+                                  );
                             }
                           },
                         ),
