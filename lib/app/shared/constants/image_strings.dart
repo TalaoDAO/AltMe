@@ -35,6 +35,7 @@ class ImageStrings {
       '$imagePath/associated-wallet-verso.png';
   static const String talaoCommunityCard =
       '$imagePath/talao_community_card.png';
+  static const String identityCard = '$imagePath/identity_card.png';
 
   /// dummy
   static const String dummyEmailPassCard =
