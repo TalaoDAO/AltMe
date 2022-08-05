@@ -1,17 +1,17 @@
-import 'package:altme/wallet/wallet.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/foundation.dart';
 
-class AccountSelectBoxController extends ChangeNotifier {
-  AccountSelectBoxController({CryptoAccountData? selectedAccount}) {
-    _selectedAccount = selectedAccount;
+class TokenSelectBoxController extends ChangeNotifier {
+  TokenSelectBoxController({TokenModel? selectedToken}) {
+    _selectedToken = selectedToken;
   }
 
-  CryptoAccountData? _selectedAccount;
+  TokenModel? _selectedToken;
 
-  CryptoAccountData? get selectedAccount => _selectedAccount;
+  TokenModel? get selectedToken => _selectedToken;
 
-  void setSelectedAccount({required CryptoAccountData selectedAccount}) {
-    _selectedAccount = selectedAccount;
+  void setSelectedAccount({required TokenModel selectedToken}) {
+    _selectedToken = selectedToken;
     notifyListeners();
   }
 }

@@ -48,57 +48,66 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
           ),
         ),
         child: BlocBuilder<TokenSelectBoxCubit, TokenSelectBoxState>(
-            builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.all(
-                        Radius.circular(Sizes.smallRadius)),
-                    child: SizedBox(
-                      width: Sizes.icon2x,
-                      height: Sizes.icon2x,
-                      child: CachedImageFromNetwork(
-                        state.selectedToken.iconUrl ?? '',
+          builder: (context, state) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.all(
+                          Radius.circular(Sizes.smallRadius)),
+                      child: SizedBox(
+                        width: Sizes.icon2x,
+                        height: Sizes.icon2x,
+                        child: CachedImageFromNetwork(
+                          state.selectedToken.iconUrl ?? '',
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: Sizes.spaceXSmall,
-                  ),
-                  MyText(
-                    state.selectedToken.name,
-                    style: Theme.of(context).textTheme.listTileTitle,
-                  ),
-                  const SizedBox(
-                    width: Sizes.spaceXSmall,
-                  ),
-                  Icon(
-                    Icons.keyboard_arrow_down_outlined,
-                    size: Sizes.icon,
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                  ),
-                  const Spacer(),
-                  MyText(
-                    '${state.selectedToken.calculatedBalance} ${state.selectedToken.symbol}',
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                ],
-              ),
-              MyText(
-                // TODO(Taleb): show usd value of token
-                '\$--.--',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.greyText,
+                    const SizedBox(
+                      width: Sizes.spaceXSmall,
                     ),
-              ),
-            ],
-          );
-        }),
+                    MyText(
+                      state.selectedToken.name,
+                      style: Theme.of(context).textTheme.listTileTitle,
+                      minFontSize: 10,
+                      textAlign: TextAlign.left,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(
+                      width: Sizes.spaceXSmall,
+                    ),
+                    Icon(
+                      Icons.keyboard_arrow_down_outlined,
+                      size: Sizes.icon,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                    const Spacer(
+                      flex: 1,
+                    ),
+                    MyText(
+                      '${state.selectedToken.calculatedBalance} ${state.selectedToken.symbol}',
+                      minFontSize: 10,
+                      textAlign: TextAlign.right,
+                      style: Theme.of(context).textTheme.caption,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+                MyText(
+                  // TODO(Taleb): show usd value of token
+                  '\$--.--',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.greyText,
+                      ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
