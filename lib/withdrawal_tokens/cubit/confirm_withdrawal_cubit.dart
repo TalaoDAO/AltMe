@@ -17,6 +17,7 @@ class ConfirmWithdrawalCubit extends Cubit<void> {
       final sourceKeystore = Keystore.fromSecretKey(secretKey);
 
       final client = TezartClient(Urls.rpc);
+
       final operationsList = await client.transferOperation(
         source: sourceKeystore,
         destination: toAddress,
@@ -31,6 +32,30 @@ class ConfirmWithdrawalCubit extends Cubit<void> {
       logger.info('after withdrawal execute');
     } catch (e, s) {
       logger.severe('error after withdrawal execute: e: $e, stack: $s', e, s);
+    }
+  }
+
+  Future<List<Operation>> getContractOperation({
+    required String tokenContractAddress,
+    required String secretKey,
+  }) async {
+    try {
+      final sourceKeystore = Keystore.fromSecretKey(secretKey);
+
+      final rpcInterface = RpcInterface(Urls.rpc);
+      final contract = Contract(
+          contractAddress: tokenContractAddress, rpcInterface: rpcInterface);
+
+      final operationsList = await contract.callOperation(
+        source: sourceKeystore,
+        amount: 30,
+      );
+      await operationsList.execute();
+      logger.info('operation execute');
+      return operationsList.operations;
+    } catch (e, s) {
+      logger.severe('error e: $e, stack: $s', e, s);
+      return [];
     }
   }
 }
