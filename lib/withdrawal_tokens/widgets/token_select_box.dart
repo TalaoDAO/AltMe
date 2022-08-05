@@ -6,15 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TokenSelectBoxView extends StatelessWidget {
-  const TokenSelectBoxView({Key? key, required this.initialToken})
-      : super(key: key);
+  const TokenSelectBoxView({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
 
-  final TokenModel initialToken;
+  final TokenSelectBoxController controller;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TokenSelectBoxCubit>(
-      create: (_) => TokenSelectBoxCubit(selectedToken: initialToken),
+      create: (_) => TokenSelectBoxCubit(
+        controller: controller,
+      ),
       child: const _TokenSelectBox(),
     );
   }

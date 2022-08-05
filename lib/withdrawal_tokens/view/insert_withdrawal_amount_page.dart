@@ -47,6 +47,9 @@ class _InsertWithdrawalAmountPageState
     '6',
   );
 
+  late final TokenSelectBoxController _tokenSelectBoxController =
+      TokenSelectBoxController(selectedToken: tempModel);
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -71,10 +74,11 @@ class _InsertWithdrawalAmountPageState
             const SizedBox(
               height: Sizes.spaceNormal,
             ),
-            TokenSelectBoxView(initialToken: tempModel),
+            TokenSelectBoxView(
+              controller: _tokenSelectBoxController,
+            ),
             TokenAmountCalculatorView(
-              tokenSymbol: 'XTZ',
-              tokenModel: tempModel,
+              tokenSelectBoxController: _tokenSelectBoxController,
             ),
           ],
         ),

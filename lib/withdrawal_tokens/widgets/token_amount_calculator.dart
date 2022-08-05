@@ -1,25 +1,25 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TokenAmountCalculatorView extends StatelessWidget {
   const TokenAmountCalculatorView({
     Key? key,
-    required this.tokenSymbol,
-    required this.tokenModel,
+    required this.tokenSelectBoxController,
   }) : super(key: key);
 
-  final String tokenSymbol;
-  final TokenModel tokenModel;
+  final TokenSelectBoxController tokenSelectBoxController;
 
   @override
   Widget build(BuildContext context) {
-    return _TokenAmountCalculator(
-      tokenSymbol: tokenSymbol,
-      tokenModel: tokenModel,
+    return BlocProvider<TokenAmountCalculatorCubit>(
+      create: (_) => TokenAmountCalculatorCubit(
+        tokenSelectBoxController: tokenSelectBoxController,
+      ),
+      child: const _TokenAmountCalculator(),
     );
   }
 }
@@ -27,11 +27,7 @@ class TokenAmountCalculatorView extends StatelessWidget {
 class _TokenAmountCalculator extends StatefulWidget {
   const _TokenAmountCalculator({
     Key? key,
-    required this.tokenSymbol,
-    required this.tokenModel,
   }) : super(key: key);
-  final String tokenSymbol;
-  final TokenModel tokenModel;
 
   @override
   State<_TokenAmountCalculator> createState() => _TokenAmountCalculatorState();
@@ -48,7 +44,11 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
   void _insertKey(String key) {
     if (key.length > 1) return;
     final text = amountController.text;
-    amountController.text = text + key;
+    context.read<TokenAmountCalculatorCubit>().setAmount(amount: text + key);
+  }
+
+  void _setAmountControllerText(String text) {
+    amountController.text = text;
     amountController.selection = TextSelection.fromPosition(
       TextPosition(offset: amountController.text.length),
     );
@@ -63,40 +63,68 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
           const SizedBox(
             height: Sizes.spaceLarge,
           ),
-          TextField(
-            controller: amountController,
-            style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                ),
-            maxLines: 1,
-            cursorWidth: 4,
-            autofocus: false,
-            keyboardType: TextInputType.none,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly
-            ],
-            cursorRadius: const Radius.circular(4),
-            textAlign: TextAlign.center,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: '0',
-              contentPadding: EdgeInsets.zero,
-              suffixIcon: Text(
-                widget.tokenSymbol,
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
-                    ),
-              ),
-            ),
-          ),
-          const UsdValueText(),
-          MaxButton(
-            onTap: () {
-              amountController.text = widget.tokenModel.calculatedBalance;
-              amountController.selection = TextSelection.fromPosition(
-                TextPosition(offset: amountController.text.length),
+          BlocBuilder<TokenAmountCalculatorCubit, TokenAmountCalculatorState>(
+            builder: (context, state) {
+              _setAmountControllerText(state.amount);
+              return Column(
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.all(Sizes.space2XSmall),
+                          child: TextField(
+                            controller: amountController,
+                            style:
+                                Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                            maxLines: 1,
+                            cursorWidth: 4,
+                            autofocus: false,
+                            keyboardType: TextInputType.none,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            cursorRadius: const Radius.circular(4),
+                            onChanged: (value) {
+                              if (value != amountController.text) {
+                                context
+                                    .read<TokenAmountCalculatorCubit>()
+                                    .setAmount(amount: value);
+                              }
+                            },
+                            textAlign: TextAlign.center,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: '0',
+                              contentPadding: EdgeInsets.zero,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        state.selectedToken.symbol,
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900,
+                            ),
+                      )
+                    ],
+                  ),
+                  const UsdValueText(),
+                  MaxButton(
+                    onTap: () {
+                      _setAmountControllerText(
+                        state.selectedToken.calculatedBalance,
+                      );
+                      context
+                          .read<TokenAmountCalculatorCubit>()
+                          .setAmount(amount: amountController.text);
+                    },
+                  ),
+                ],
               );
             },
           ),
