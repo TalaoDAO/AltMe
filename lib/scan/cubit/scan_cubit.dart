@@ -31,7 +31,7 @@ class ScanCubit extends Cubit<ScanState> {
   final SecureStorageProvider secureStorageProvider;
 
   Future<void> credentialOffer({
-    required String url,
+    required Uri uri,
     required CredentialModel credentialModel,
     required String keyId,
     CredentialModel? signatureOwnershipProof,
@@ -103,47 +103,56 @@ class ScanCubit extends Cubit<ScanState> {
       }
 
       final dynamic credential = await client.post(
-        url,
+        uri.toString(),
         data: data,
       );
 
       final dynamic jsonCredential =
           credential is String ? jsonDecode(credential) : credential;
 
-      final vcStr = jsonEncode(jsonCredential);
-      final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
+      final String issuerDid = getIssuerDid(uriToCheck: uri);
 
-      await Future<void>.delayed(const Duration(milliseconds: 500));
-      final verification = await didKitProvider.verifyCredential(vcStr, optStr);
+      if (!issuerDid.startsWith('did:ebsi')) {
+        /// not verifying credential for did:ebsi issuer
+        log.i('verifying Credential');
 
-      log.i('[wallet/credential-offer/verify/vc] $vcStr');
-      log.i('[wallet/credential-offer/verify/options] $optStr');
-      log.i('[wallet/credential-offer/verify/result] $verification');
+        final vcStr = jsonEncode(jsonCredential);
+        final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
 
-      final jsonVerification = jsonDecode(verification) as Map<String, dynamic>;
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        final verification =
+            await didKitProvider.verifyCredential(vcStr, optStr);
 
-      if ((jsonVerification['warnings'] as List).isNotEmpty) {
-        log.w(
-          'credential verification return warnings',
-          jsonVerification['warnings'],
-        );
+        log.i('[wallet/credential-offer/verify/vc] $vcStr');
+        log.i('[wallet/credential-offer/verify/options] $optStr');
+        log.i('[wallet/credential-offer/verify/result] $verification');
 
-        emit(
-          state.warning(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING,
-            ),
-          ),
-        );
-      }
+        final jsonVerification =
+            jsonDecode(verification) as Map<String, dynamic>;
 
-      if ((jsonVerification['errors'] as List).isNotEmpty) {
-        log.w('failed to verify credential', jsonVerification['errors']);
-        if (jsonVerification['errors'][0] != 'No applicable proof') {
-          throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
+        if ((jsonVerification['warnings'] as List).isNotEmpty) {
+          log.w(
+            'credential verification return warnings',
+            jsonVerification['warnings'],
           );
+
+          emit(
+            state.warning(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING,
+              ),
+            ),
+          );
+        }
+
+        if ((jsonVerification['errors'] as List).isNotEmpty) {
+          log.w('failed to verify credential', jsonVerification['errors']);
+          if (jsonVerification['errors'][0] != 'No applicable proof') {
+            throw ResponseMessage(
+              ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
+            );
+          }
         }
       }
 

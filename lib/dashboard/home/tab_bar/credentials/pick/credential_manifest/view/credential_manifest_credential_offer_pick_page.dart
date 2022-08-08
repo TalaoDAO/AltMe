@@ -140,7 +140,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                           await context
                                               .read<ScanCubit>()
                                               .credentialOffer(
-                                                url: uri.toString(),
+                                                uri: uri,
                                                 credentialModel: credential,
                                                 keyId: SecureStorageKeys.ssiKey,
                                                 signatureOwnershipProof:

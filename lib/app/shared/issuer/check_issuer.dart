@@ -14,11 +14,7 @@ class CheckIssuer {
 
   Future<Issuer> isIssuerInApprovedList() async {
     var didToTest = '';
-    uriToCheck.queryParameters.forEach((key, value) {
-      if (key == 'issuer') {
-        didToTest = value;
-      }
-    });
+    didToTest = getIssuerDid(uriToCheck: uriToCheck);
     if (checkIssuerServerUrl == Urls.checkIssuerEbsiUrl &&
         !didToTest.startsWith('did:ebsi')) {
       return Issuer.emptyIssuer(uriToCheck.host);

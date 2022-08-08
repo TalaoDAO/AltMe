@@ -131,7 +131,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                     );
                   } else {
                     await context.read<ScanCubit>().credentialOffer(
-                          url: widget.uri.toString(),
+                          uri: widget.uri,
                           credentialModel: credentialModel,
                           keyId: SecureStorageKeys.ssiKey,
                           issuer: widget.issuer,
