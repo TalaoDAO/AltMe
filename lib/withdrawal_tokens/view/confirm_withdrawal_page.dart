@@ -55,6 +55,9 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
   final AccountSelectBoxController accountSelectBoxController =
       AccountSelectBoxController();
 
+  late final amountAndSymbol =
+      '${widget.amount.toStringAsFixed(6).formatNumber()} ${widget.selectedToken.symbol}';
+
   @override
   void initState() {
     withdrawalAddressController.addListener(() {
@@ -96,7 +99,7 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
                     height: Sizes.spaceSmall,
                   ),
                   MyText(
-                    '${widget.amount.toStringAsFixed(6).formatNumber()} ${widget.selectedToken.symbol}',
+                    amountAndSymbol,
                     textAlign: TextAlign.center,
                     minFontSize: 12,
                     style: Theme.of(context).textTheme.headline5?.copyWith(
@@ -169,11 +172,21 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
                             isValidCallback: () async {
                               LoadingView().show(context: context);
                               final isSuccess = await context
-                                  .read<ConfirmWithdrawalCubit>().withdrawTezos();
+                                  .read<ConfirmWithdrawalCubit>()
+                                  .withdrawTezos();
                               LoadingView().hide();
-                              if(isSuccess){
+                              if (isSuccess) {
                                 //show success alert and pop to home when user press OK
-                              }else {
+                                await TransactionDoneDialog.show(
+                                  context: context,
+                                  amountAndSymbol: amountAndSymbol,
+                                  onDoneButtonClick: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                );
+                              } else {
                                 //show alert
                               }
                             },

@@ -410,7 +410,10 @@
     "slow",
     "average",
     "fast",
-    "changeFee"
+    "changeFee",
+    "sent",
+    "done",
+    "transactionDoneDialogDescription"
   ],
 
   "es": [
@@ -824,7 +827,10 @@
     "slow",
     "average",
     "fast",
-    "changeFee"
+    "changeFee",
+    "sent",
+    "done",
+    "transactionDoneDialogDescription"
   ],
 
   "fr": [
@@ -1238,7 +1244,10 @@
     "slow",
     "average",
     "fast",
-    "changeFee"
+    "changeFee",
+    "sent",
+    "done",
+    "transactionDoneDialogDescription"
   ],
 
   "it": [
@@ -1652,6 +1661,9 @@
     "slow",
     "average",
     "fast",
-    "changeFee"
+    "changeFee",
+    "sent",
+    "done",
+    "transactionDoneDialogDescription"
   ]
 }

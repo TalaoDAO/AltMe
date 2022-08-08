@@ -53,6 +53,8 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
             .replaceAll(',', ''),
       );
 
+      await Future<void>.delayed(const Duration(seconds: 1));
+
       // final operationsList = await client.transferOperation(
       //   source: sourceKeystore,
       //   destination: state.withdrawalAddress,

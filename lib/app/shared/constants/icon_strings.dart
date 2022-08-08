@@ -61,4 +61,5 @@ class IconStrings {
   static const String keyboardDelete = '$base/keyboard-delete.png';
   static const String exchangeArrow = '$base/exchange-arrow.png';
   static const String arrowDown = '$base/arrow-down.png';
+  static const String bigCheckCircle = '$base/big-check-circle.png';
 }
