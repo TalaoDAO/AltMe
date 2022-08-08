@@ -96,7 +96,7 @@ class WalletItems extends StatelessWidget {
               ///Manage Decentralize ID keys
               DrawerItem(
                 icon: IconStrings.key,
-                title: l10n.showDecentralizeIDkeys,
+                title: l10n.showDecentralizedID,
                 onTap: () {
                   Navigator.of(context).push<void>(ManageDIDPage.route());
                 },
