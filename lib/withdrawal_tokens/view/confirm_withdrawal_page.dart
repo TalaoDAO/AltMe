@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,12 +17,14 @@ class ConfirmWithdrawalPage extends StatefulWidget {
   static Route route({
     required TokenModel selectedToken,
     required String withdrawalAddress,
+    required String selectedAccountSecretKey,
     required double amount,
   }) {
     return MaterialPageRoute<void>(
       builder: (_) => BlocProvider<ConfirmWithdrawalCubit>(
         create: (_) => ConfirmWithdrawalCubit(
-          ConfirmWithdrawalState(
+          selectedAccountSecretKey: selectedAccountSecretKey,
+          initialState: ConfirmWithdrawalState(
             withdrawalAddress: withdrawalAddress,
             selectedToken: selectedToken,
             amount: amount,
@@ -93,7 +96,7 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
                     height: Sizes.spaceSmall,
                   ),
                   MyText(
-                    '${widget.amount.toString().formatNumber()} ${widget.selectedToken.symbol}',
+                    '${widget.amount.toStringAsFixed(6).formatNumber()} ${widget.selectedToken.symbol}',
                     textAlign: TextAlign.center,
                     minFontSize: 12,
                     style: Theme.of(context).textTheme.headline5?.copyWith(
@@ -156,12 +159,26 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
                 onPressed: context
                         .read<ConfirmWithdrawalCubit>()
                         .canConfirmTheWithdrawal()
-                    ? () async {
-                        ///send to this account : tz1Z5ad29RQnbn6bcN8E9YTz3djnqhTSgStf
+                    ? () {
+                        ///send to this account for test : tz1Z5ad29RQnbn6bcN8E9YTz3djnqhTSgStf
                         ///this is EmptyAcc1
-
-                        //1. validate user password
-                        //2. call withdraw function after validation
+                        context.read<ConfirmWithdrawalCubit>().withdrawTezos();
+                        Navigator.of(context).push<void>(
+                          PinCodePage.route(
+                            restrictToBack: false,
+                            isValidCallback: () async {
+                              LoadingView().show(context: context);
+                              final isSuccess = await context
+                                  .read<ConfirmWithdrawalCubit>().withdrawTezos();
+                              LoadingView().hide();
+                              if(isSuccess){
+                                //show success alert and pop to home when user press OK
+                              }else {
+                                //show alert
+                              }
+                            },
+                          ),
+                        );
                       }
                     : null,
               ),

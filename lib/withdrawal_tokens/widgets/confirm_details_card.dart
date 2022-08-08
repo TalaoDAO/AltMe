@@ -41,7 +41,7 @@ class ConfirmDetailsCard extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '${amount.toString().formatNumber()} $symbol',
+                '${amount.toStringAsFixed(6).formatNumber()} $symbol',
                 style: Theme.of(context).textTheme.caption,
               ),
             ],
@@ -61,7 +61,7 @@ class ConfirmDetailsCard extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '${networkFee.fee.toString().formatNumber()} ${networkFee.tokenSymbol}',
+                '${networkFee.fee.toStringAsFixed(6).formatNumber()} ${networkFee.tokenSymbol}',
                 style: Theme.of(context).textTheme.caption,
               ),
             ],
@@ -80,7 +80,7 @@ class ConfirmDetailsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '${amount.toString().formatNumber()} $symbol',
+                    '${amount.toStringAsFixed(6).formatNumber()} $symbol',
                     style: Theme.of(context).textTheme.caption,
                   ),
                   Text('\$--.--', style: Theme.of(context).textTheme.caption2),

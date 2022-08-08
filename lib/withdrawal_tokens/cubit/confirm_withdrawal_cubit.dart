@@ -12,8 +12,12 @@ part 'confirm_withdrawal_cubit.g.dart';
 part 'confirm_withdrawal_state.dart';
 
 class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
-  ConfirmWithdrawalCubit(ConfirmWithdrawalState initialState)
-      : super(initialState);
+  ConfirmWithdrawalCubit({
+    required ConfirmWithdrawalState initialState,
+    required this.selectedAccountSecretKey,
+  }) : super(initialState);
+
+  final String selectedAccountSecretKey;
 
   final logger = Logger('altme-wallet/Withdrawal/ConfirmWithdrawal');
 
@@ -26,33 +30,48 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
   }
 
   bool canConfirmTheWithdrawal() {
-    return state.amount > 0.0 && state.withdrawalAddress.trim().isNotEmpty;
+    // TODO(Taleb): update minimum withdrawal later for every token
+    return state.amount > 0.00001 &&
+        state.withdrawalAddress.trim().isNotEmpty &&
+        // TODO(Taleb): remove the last condition when added support to send other tokens like Tezos
+        state.selectedToken.symbol == 'XTZ';
   }
 
-  Future<void> withdrawTezos({
-    required String secretKey,
-    required String toAddress,
-    required int amount,
-  }) async {
+  Future<bool> withdrawTezos() async {
     try {
-      final sourceKeystore = Keystore.fromSecretKey(secretKey);
+      final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
 
       final client = TezartClient(Urls.rpc);
 
-      final operationsList = await client.transferOperation(
-        source: sourceKeystore,
-        destination: toAddress,
-        amount: amount,
+      final amount = int.parse(
+        state.amount.toStringAsFixed(6).replaceAll(',', '').replaceAll('.', ''),
       );
-      logger.info(
-        'before execute: withdrawal from secretKey: ${sourceKeystore.secretKey} '
-        ', publicKey: ${sourceKeystore.publicKey} '
-        'address: ${sourceKeystore.address} =>To address: $toAddress',
+      final customFee = int.parse(
+        state.networkFee.fee
+            .toStringAsFixed(6)
+            .replaceAll('.', '')
+            .replaceAll(',', ''),
       );
-      await operationsList.executeAndMonitor();
-      logger.info('after withdrawal execute');
+
+      // final operationsList = await client.transferOperation(
+      //   source: sourceKeystore,
+      //   destination: state.withdrawalAddress,
+      //   amount: amount,
+      //   customFee: customFee,
+      // );
+      // logger.info(
+      //   'before execute: withdrawal from secretKey: ${sourceKeystore.secretKey} '
+      //   ', publicKey: ${sourceKeystore.publicKey} '
+      //   'amount: $amount '
+      //   'networkFee: $customFee '
+      //   'address: ${sourceKeystore.address} =>To address: ${state.withdrawalAddress}',
+      // );
+      // await operationsList.executeAndMonitor();
+      // logger.info('after withdrawal execute');
+      return true;
     } catch (e, s) {
       logger.severe('error after withdrawal execute: e: $e, stack: $s', e, s);
+      return false;
     }
   }
 

@@ -109,8 +109,8 @@ class _InsertWithdrawalAmountPageState
             right: Sizes.spaceSmall,
             bottom: Sizes.spaceSmall,
           ),
-          child:
-              BlocBuilder<WalletCubit, WalletState>(builder: (context, state) {
+          child: BlocBuilder<WalletCubit, WalletState>(
+              builder: (context, walletState) {
             _tokenSelectBoxController.setSelectedAccount(
               selectedToken: tempModel,
             );
@@ -128,6 +128,10 @@ class _InsertWithdrawalAmountPageState
                               withdrawalAddress: widget.withdrawalAddress,
                               amount: _tokenAmountCalculatorController
                                   .insertedAmount,
+                              selectedAccountSecretKey: walletState
+                                  .cryptoAccount
+                                  .data[walletState.currentCryptoIndex]
+                                  .secretKey,
                             ),
                           );
                         }
