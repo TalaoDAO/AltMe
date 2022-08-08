@@ -465,5 +465,6 @@
   "changeFee": "Change Fee",
   "sent": "Sent",
   "done": "Done",
-  "transactionDoneDialogDescription": "It can take a few minutes for the transfer to complete"
+  "transactionDoneDialogDescription": "It can take a few minutes for the transfer to complete",
+  "withdrawalFailedMessage": "The withdrawal from the account was unsuccessful"
 }

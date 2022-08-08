@@ -413,7 +413,8 @@
     "changeFee",
     "sent",
     "done",
-    "transactionDoneDialogDescription"
+    "transactionDoneDialogDescription",
+    "withdrawalFailedMessage"
   ],
 
   "es": [
@@ -830,7 +831,8 @@
     "changeFee",
     "sent",
     "done",
-    "transactionDoneDialogDescription"
+    "transactionDoneDialogDescription",
+    "withdrawalFailedMessage"
   ],
 
   "fr": [
@@ -1247,7 +1249,8 @@
     "changeFee",
     "sent",
     "done",
-    "transactionDoneDialogDescription"
+    "transactionDoneDialogDescription",
+    "withdrawalFailedMessage"
   ],
 
   "it": [
@@ -1664,6 +1667,7 @@
     "changeFee",
     "sent",
     "done",
-    "transactionDoneDialogDescription"
+    "transactionDoneDialogDescription",
+    "withdrawalFailedMessage"
   ]
 }

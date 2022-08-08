@@ -176,7 +176,6 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
                                   .withdrawTezos();
                               LoadingView().hide();
                               if (isSuccess) {
-                                //show success alert and pop to home when user press OK
                                 await TransactionDoneDialog.show(
                                   context: context,
                                   amountAndSymbol: amountAndSymbol,
@@ -187,7 +186,11 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
                                   },
                                 );
                               } else {
-                                //show alert
+                                AlertMessage.showStringMessage(
+                                  context: context,
+                                  message: l10n.withdrawalFailedMessage,
+                                  messageType: MessageType.error,
+                                );
                               }
                             },
                           ),
