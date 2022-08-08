@@ -76,7 +76,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
       );
       await walletCubit.setCurrentWalletAccount(0);
 
-      homeCubit.emitHasWallet();
+      await homeCubit.emitHasWallet();
       emit(state.success());
     } catch (error) {
       log.e('something went wrong when generating a key', error);

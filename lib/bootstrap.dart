@@ -23,35 +23,17 @@ void callbackDispatcher() {
     switch (task) {
       case 'getPassBaseStatusBackground':
         if (inputData!['did'] != null) {
-          Timer.periodic(const Duration(minutes: 10), (timer) async {
+          Timer.periodic(const Duration(seconds: 20), (timer) async {
             final String did = inputData['did'] as String;
             final secureStorageProvider = secure_storage.getSecureStorage;
             final String? passbaseStatusFromStorage =
                 await secureStorageProvider.get(
               SecureStorageKeys.passBaseStatus,
             );
-            late PassBaseStatus oldPassBaseStatus;
-            switch (passbaseStatusFromStorage) {
-              case 'approved':
-              case 'declined':
-                oldPassBaseStatus = PassBaseStatus.declined;
-                break;
-              case 'verified':
-                oldPassBaseStatus = PassBaseStatus.verified;
-                break;
-              case 'pending':
-                oldPassBaseStatus = PassBaseStatus.pending;
-                break;
-              case 'undone':
-                oldPassBaseStatus = PassBaseStatus.undone;
-                break;
-              case 'complete':
-                oldPassBaseStatus = PassBaseStatus.complete;
-                break;
-              case 'idle':
-              default:
-                oldPassBaseStatus = PassBaseStatus.idle;
-            }
+            final PassBaseStatus oldPassBaseStatus =
+                getPassBaseStatusFromString(
+              passbaseStatusFromStorage,
+            );
 
             if (oldPassBaseStatus != PassBaseStatus.approved) {
               try {
@@ -63,11 +45,15 @@ void callbackDispatcher() {
                   case PassBaseStatus.verified:
                     await secureStorageProvider.set(
                       SecureStorageKeys.passBaseStatus,
-                      newPassBaseStatus.toString(),
+                      newPassBaseStatus.name,
                     );
                     timer.cancel();
                     break;
                   case PassBaseStatus.pending:
+                    await secureStorageProvider.set(
+                      SecureStorageKeys.passBaseStatus,
+                      newPassBaseStatus.name,
+                    );
                     break;
                   case PassBaseStatus.undone:
                     break;
@@ -80,7 +66,7 @@ void callbackDispatcher() {
                 log.i(e.toString());
                 await secureStorageProvider.set(
                   SecureStorageKeys.passBaseStatus,
-                  PassBaseStatus.idle.toString(),
+                  PassBaseStatus.idle.name,
                 );
                 timer.cancel();
               }

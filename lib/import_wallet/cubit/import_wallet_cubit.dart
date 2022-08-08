@@ -102,7 +102,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
       );
       await walletCubit.setCurrentWalletAccount(0);
 
-      homeCubit.emitHasWallet();
+      await homeCubit.emitHasWallet();
       emit(state.success());
     } catch (error, stack) {
       log.e('error: $error,stack: $stack');
