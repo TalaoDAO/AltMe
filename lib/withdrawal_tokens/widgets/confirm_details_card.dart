@@ -5,7 +5,20 @@ import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmDetailsCard extends StatelessWidget {
-  const ConfirmDetailsCard({Key? key}) : super(key: key);
+  const ConfirmDetailsCard({
+    Key? key,
+    required this.amount,
+    required this.symbol,
+    required this.networkFee,
+    required this.networkFeeSymbol,
+    this.onEditButtonPressed,
+  }) : super(key: key);
+
+  final double amount;
+  final String symbol;
+  final double networkFee;
+  final String networkFeeSymbol;
+  final VoidCallback? onEditButtonPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +42,10 @@ class ConfirmDetailsCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.caption,
               ),
               const Spacer(),
-              Text('180.60 XTZ', style: Theme.of(context).textTheme.caption),
+              Text(
+                '${amount.toString().formatNumber()} $symbol',
+                style: Theme.of(context).textTheme.caption,
+              ),
             ],
           ),
           _buildDivider(context),
@@ -39,10 +55,17 @@ class ConfirmDetailsCard extends StatelessWidget {
                 l10n.networkFee,
                 style: Theme.of(context).textTheme.caption,
               ),
-              const SizedBox(width: Sizes.spaceXSmall,),
-              const EditButton(),
+              const SizedBox(
+                width: Sizes.spaceXSmall,
+              ),
+              EditButton(
+                onTap: onEditButtonPressed,
+              ),
               const Spacer(),
-              Text('180.60 XTZ', style: Theme.of(context).textTheme.caption),
+              Text(
+                '${networkFee.toString().formatNumber()} $networkFeeSymbol',
+                style: Theme.of(context).textTheme.caption,
+              ),
             ],
           ),
           _buildDivider(context),
@@ -58,8 +81,11 @@ class ConfirmDetailsCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text('180.60 XTZ', style: Theme.of(context).textTheme.caption),
-                  Text('\$132.13', style: Theme.of(context).textTheme.caption2),
+                  Text(
+                    '${amount.toString().formatNumber()} $symbol',
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                  Text('\$--.--', style: Theme.of(context).textTheme.caption2),
                 ],
               ),
             ],

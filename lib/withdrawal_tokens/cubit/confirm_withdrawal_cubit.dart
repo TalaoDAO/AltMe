@@ -1,10 +1,18 @@
 import 'package:altme/app/shared/constants/urls.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:tezart/tezart.dart';
 
-class ConfirmWithdrawalCubit extends Cubit<void> {
-  ConfirmWithdrawalCubit(super.initialState);
+part 'confirm_withdrawal_cubit.g.dart';
+
+part 'confirm_withdrawal_state.dart';
+
+class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
+  ConfirmWithdrawalCubit(ConfirmWithdrawalState initialState)
+      : super(initialState);
 
   final logger = Logger('altme-wallet/Withdrawal/ConfirmWithdrawal');
 
@@ -48,9 +56,9 @@ class ConfirmWithdrawalCubit extends Cubit<void> {
 
       final operationsList = await contract.callOperation(
         source: sourceKeystore,
-        amount: 30,
+        amount: 1,
       );
-      await operationsList.execute();
+      await operationsList.executeAndMonitor();
       logger.info('operation execute');
       return operationsList.operations;
     } catch (e, s) {

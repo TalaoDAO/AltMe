@@ -5,11 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AccountSelectBoxView extends StatefulWidget {
-  const AccountSelectBoxView({Key? key, this.caption, this.controller})
-      : super(key: key);
+  const AccountSelectBoxView({
+    Key? key,
+    this.caption,
+    this.controller,
+    this.isEnabled = true,
+  }) : super(key: key);
 
   final String? caption;
   final AccountSelectBoxController? controller;
+  final bool isEnabled;
 
   @override
   State<AccountSelectBoxView> createState() => _AccountSelectBoxViewState();
@@ -80,7 +85,9 @@ class _AccountSelectBoxViewState extends State<AccountSelectBoxView> {
                       cryptoAccountData:
                           state.accounts[state.selectedAccountIndex],
                       isBoxOpen: state.isBoxOpen,
-                      onPressed: accountSelectBoxCubit.toggleSelectBox,
+                      onPressed: widget.isEnabled
+                          ? accountSelectBoxCubit.toggleSelectBox
+                          : null,
                     ),
                     if (state.isBoxOpen)
                       ListView.separated(

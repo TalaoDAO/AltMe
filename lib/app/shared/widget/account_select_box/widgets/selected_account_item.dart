@@ -14,7 +14,7 @@ class SelectedAccountItem extends StatelessWidget {
 
   final CryptoAccountData cryptoAccountData;
   final bool isBoxOpen;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +42,15 @@ class SelectedAccountItem extends StatelessWidget {
           style: Theme.of(context).textTheme.walletAddress,
         ),
       ),
-      trailing: Icon(
-        isBoxOpen
-            ? Icons.keyboard_arrow_up_rounded
-            : Icons.keyboard_arrow_down_rounded,
-        size: Sizes.icon2x,
-        color: Theme.of(context).colorScheme.inversePrimary,
-      ),
+      trailing: onPressed == null
+          ? null
+          : Icon(
+              isBoxOpen
+                  ? Icons.keyboard_arrow_up_rounded
+                  : Icons.keyboard_arrow_down_rounded,
+              size: Sizes.icon2x,
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
     );
   }
 }
