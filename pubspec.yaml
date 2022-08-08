@@ -54,6 +54,7 @@ dependencies:
   path_provider: ^2.0.8
   permission_handler: ^9.2.0
   pointycastle: ^3.5.2
+  provider: ^6.0.3
   qr_flutter: ^4.0.0
   secure_storage:
     path: packages/secure_storage

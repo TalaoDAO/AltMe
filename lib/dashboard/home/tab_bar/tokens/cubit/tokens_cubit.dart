@@ -18,16 +18,16 @@ class TokensCubit extends Cubit<TokensState> {
   }
 
   final DioClient client;
-  final WalletCubit walletCubit;
+  WalletCubit walletCubit;
 
   List<TokenModel> data = [];
 
-  Future<void> getBalanceOfAssetList({
+  Future<List<TokenModel>> getBalanceOfAssetList({
     String baseUrl = '',
     required int offset,
     int limit = 15,
   }) async {
-    if (data.length < offset) return;
+    if (data.length < offset) return data;
     try {
       if (offset == 0) {
         emit(state.fetching());
@@ -66,8 +66,9 @@ class TokensCubit extends Cubit<TokensState> {
         data.addAll(newData);
       }
       emit(state.populate(data: data));
-    } catch (e) {
-      if (isClosed) return;
+      return data;
+    } catch (e, s) {
+      if (isClosed) return data;
       emit(
         state.errorWhileFetching(
           messageHandler: ResponseMessage(
@@ -75,6 +76,7 @@ class TokensCubit extends Cubit<TokensState> {
           ),
         ),
       );
+      return data;
     }
   }
 

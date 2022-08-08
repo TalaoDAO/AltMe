@@ -3,14 +3,17 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/view/widgets/widgets.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectTokenBottomSheet extends StatelessWidget {
-  const SelectTokenBottomSheet({Key? key}) : super(key: key);
+  const SelectTokenBottomSheet({Key? key, required this.tokensCubit})
+      : super(key: key);
 
-  static Future<TokenModel?> show(BuildContext context) {
+  final TokensCubit tokensCubit;
+
+  static Future<TokenModel?> show(
+      BuildContext context, TokensCubit tokensCubit) {
     return showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -19,21 +22,18 @@ class SelectTokenBottomSheet extends StatelessWidget {
         ),
       ),
       context: context,
-      builder: (_) => const SelectTokenBottomSheet(),
+      builder: (_) => SelectTokenBottomSheet(
+        tokensCubit: tokensCubit,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<TokensCubit>(
-        create: (context) => TokensCubit(
-              client: DioClient(
-                context.read<ManageNetworkCubit>().state.network.tzktUrl,
-                Dio(),
-              ),
-              walletCubit: context.read<WalletCubit>(),
-            ),
-        child: const _SelectTokenBottomSheetView());
+    return BlocProvider<TokensCubit>.value(
+      value: tokensCubit,
+      child: const _SelectTokenBottomSheetView(),
+    );
   }
 }
 

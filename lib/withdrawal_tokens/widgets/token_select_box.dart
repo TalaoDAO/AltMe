@@ -1,9 +1,12 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class TokenSelectBoxView extends StatelessWidget {
   const TokenSelectBoxView({
@@ -15,10 +18,31 @@ class TokenSelectBoxView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<TokenSelectBoxCubit>(
-      create: (_) => TokenSelectBoxCubit(
-        controller: controller,
-      ),
+    return MultiProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => TokenSelectBoxCubit(
+            controller: controller,
+          ),
+        ),
+        ProxyProvider<WalletCubit, TokensCubit>(
+          create: (_) => TokensCubit(
+            client: DioClient(
+              context.read<ManageNetworkCubit>().state.network.tzktUrl,
+              Dio(),
+            ),
+            walletCubit: context.read<WalletCubit>(),
+          ),
+          update: (_, walletCubit, tokensCubit) {
+            tokensCubit!.walletCubit = walletCubit;
+            tokensCubit.getBalanceOfAssetList(offset: 0).then((value) {
+              controller.setSelectedAccount(selectedToken: value.first);
+            });
+            return tokensCubit;
+          },
+          dispose: (_, bloc) => bloc.close(),
+        ),
+      ],
       child: const _TokenSelectBox(),
     );
   }
@@ -32,12 +56,26 @@ class _TokenSelectBox extends StatefulWidget {
 }
 
 class _TokenSelectBoxState extends State<_TokenSelectBox> {
+  @override
+  void initState() {
+    context.read<TokensCubit>().getBalanceOfAssetList(offset: 0).then((value) {
+      if (value.isNotEmpty) {
+        context
+            .read<TokenSelectBoxCubit>()
+            .setSelectedToken(tokenModel: value.first);
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        final selectedToken = await SelectTokenBottomSheet.show(context);
+        final selectedToken = await SelectTokenBottomSheet.show(
+          context,
+          context.read<TokensCubit>(),
+        );
         if (selectedToken != null) {
           context
               .read<TokenSelectBoxCubit>()
