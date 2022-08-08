@@ -458,5 +458,9 @@
   "networkFee": "Network Fee",
   "totalAmount": "Total amount",
   "selectToken": "Select token",
-  "insufficientBalance": "Insufficient balance"
+  "insufficientBalance": "Insufficient balance",
+  "slow": "Slow",
+  "average": "Average",
+  "fast": "Fast",
+  "changeFee": "Change Fee"
 }

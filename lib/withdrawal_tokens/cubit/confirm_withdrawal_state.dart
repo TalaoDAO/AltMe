@@ -7,7 +7,6 @@ class ConfirmWithdrawalState extends Equatable {
     required this.selectedToken,
     required this.amount,
     required this.networkFee,
-    this.networkFeeSymbol = 'XTZ',
   });
 
   factory ConfirmWithdrawalState.fromJson(Map<String, dynamic> json) =>
@@ -16,14 +15,12 @@ class ConfirmWithdrawalState extends Equatable {
   final String withdrawalAddress;
   final TokenModel selectedToken;
   final double amount;
-  final double networkFee;
-  final String networkFeeSymbol;
+  final NetworkFeeModel networkFee;
 
   ConfirmWithdrawalState copyWith({
     String? withdrawalAddress,
     TokenModel? selectedToken,
-    double? networkFee,
-    String? networkFeeSymbol,
+    NetworkFeeModel? networkFee,
     double? amount,
   }) {
     return ConfirmWithdrawalState(
@@ -31,7 +28,6 @@ class ConfirmWithdrawalState extends Equatable {
       selectedToken: selectedToken ?? this.selectedToken,
       networkFee: networkFee ?? this.networkFee,
       amount: amount ?? this.amount,
-      networkFeeSymbol: networkFeeSymbol ?? this.networkFeeSymbol,
     );
   }
 
@@ -39,5 +35,5 @@ class ConfirmWithdrawalState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [withdrawalAddress, selectedToken, amount, networkFee, networkFeeSymbol];
+      [withdrawalAddress, selectedToken, amount, networkFee];
 }

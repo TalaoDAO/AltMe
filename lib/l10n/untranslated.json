@@ -406,7 +406,11 @@
     "networkFee",
     "totalAmount",
     "selectToken",
-    "insufficientBalance"
+    "insufficientBalance",
+    "slow",
+    "average",
+    "fast",
+    "changeFee"
   ],
 
   "es": [
@@ -816,7 +820,11 @@
     "networkFee",
     "totalAmount",
     "selectToken",
-    "insufficientBalance"
+    "insufficientBalance",
+    "slow",
+    "average",
+    "fast",
+    "changeFee"
   ],
 
   "fr": [
@@ -1226,7 +1234,11 @@
     "networkFee",
     "totalAmount",
     "selectToken",
-    "insufficientBalance"
+    "insufficientBalance",
+    "slow",
+    "average",
+    "fast",
+    "changeFee"
   ],
 
   "it": [
@@ -1636,6 +1648,10 @@
     "networkFee",
     "totalAmount",
     "selectToken",
-    "insufficientBalance"
+    "insufficientBalance",
+    "slow",
+    "average",
+    "fast",
+    "changeFee"
   ]
 }

@@ -1,5 +1,6 @@
 import 'package:altme/app/shared/constants/urls.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -15,6 +16,18 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
       : super(initialState);
 
   final logger = Logger('altme-wallet/Withdrawal/ConfirmWithdrawal');
+
+  void setWithdrawalAddress({required String withdrawalAddress}) {
+    emit(state.copyWith(withdrawalAddress: withdrawalAddress));
+  }
+
+  void setNetworkFee({required NetworkFeeModel networkFee}) {
+    emit(state.copyWith(networkFee: networkFee));
+  }
+
+  bool canConfirmTheWithdrawal() {
+    return state.amount > 0.0 && state.withdrawalAddress.trim().isNotEmpty;
+  }
 
   Future<void> withdrawTezos({
     required String secretKey,

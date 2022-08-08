@@ -10,14 +10,12 @@ class ConfirmDetailsCard extends StatelessWidget {
     required this.amount,
     required this.symbol,
     required this.networkFee,
-    required this.networkFeeSymbol,
     this.onEditButtonPressed,
   }) : super(key: key);
 
   final double amount;
   final String symbol;
-  final double networkFee;
-  final String networkFeeSymbol;
+  final NetworkFeeModel networkFee;
   final VoidCallback? onEditButtonPressed;
 
   @override
@@ -63,7 +61,7 @@ class ConfirmDetailsCard extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '${networkFee.toString().formatNumber()} $networkFeeSymbol',
+                '${networkFee.fee.toString().formatNumber()} ${networkFee.tokenSymbol}',
                 style: Theme.of(context).textTheme.caption,
               ),
             ],

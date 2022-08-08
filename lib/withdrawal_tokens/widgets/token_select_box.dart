@@ -36,7 +36,9 @@ class TokenSelectBoxView extends StatelessWidget {
           update: (_, walletCubit, tokensCubit) {
             tokensCubit!.walletCubit = walletCubit;
             tokensCubit.getBalanceOfAssetList(offset: 0).then((value) {
-              controller.setSelectedAccount(selectedToken: value.first);
+              if (value.isNotEmpty) {
+                controller.setSelectedAccount(selectedToken: value.first);
+              }
             });
             return tokensCubit;
           },
