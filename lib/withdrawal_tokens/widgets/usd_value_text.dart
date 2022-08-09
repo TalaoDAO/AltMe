@@ -19,7 +19,7 @@ class UsdValueText extends StatelessWidget {
             width: Sizes.spaceXSmall,
           ),
           Text(
-            '\$85.3135 (Fake data)',
+            r'$85.3135 (Fake data)',
             style: Theme.of(context).textTheme.caption,
           ),
         ],

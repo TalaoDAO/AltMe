@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WithdrawalAddressInputView extends StatelessWidget {
-  const WithdrawalAddressInputView(
-      {Key? key, this.caption, this.withdrawalAddressController})
-      : super(key: key);
+  const WithdrawalAddressInputView({
+    Key? key,
+    this.caption,
+    this.withdrawalAddressController,
+  }) : super(key: key);
 
   final String? caption;
   final TextEditingController? withdrawalAddressController;
@@ -25,9 +27,11 @@ class WithdrawalAddressInputView extends StatelessWidget {
 }
 
 class _WithdrawalAddressInput extends StatefulWidget {
-  const _WithdrawalAddressInput(
-      {Key? key, this.caption, this.withdrawalAddressController})
-      : super(key: key);
+  const _WithdrawalAddressInput({
+    Key? key,
+    this.caption,
+    this.withdrawalAddressController,
+  }) : super(key: key);
 
   final String? caption;
   final TextEditingController? withdrawalAddressController;

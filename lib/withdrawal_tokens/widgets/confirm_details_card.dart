@@ -61,7 +61,7 @@ class ConfirmDetailsCard extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '${networkFee.fee.toStringAsFixed(6).formatNumber()} ${networkFee.tokenSymbol}',
+                '''${networkFee.fee.toStringAsFixed(6).formatNumber()} ${networkFee.tokenSymbol}''',
                 style: Theme.of(context).textTheme.caption,
               ),
             ],
@@ -83,7 +83,7 @@ class ConfirmDetailsCard extends StatelessWidget {
                     '${amount.toStringAsFixed(6).formatNumber()} $symbol',
                     style: Theme.of(context).textTheme.caption,
                   ),
-                  Text('\$--.--', style: Theme.of(context).textTheme.caption2),
+                  Text(r'$--.--', style: Theme.of(context).textTheme.caption2),
                 ],
               ),
             ],

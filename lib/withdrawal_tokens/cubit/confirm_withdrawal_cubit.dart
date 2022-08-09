@@ -32,7 +32,8 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
     // TODO(Taleb): update minimum withdrawal later for every token
     return state.amount > 0.00001 &&
         state.withdrawalAddress.trim().isNotEmpty &&
-        // TODO(Taleb): remove the last condition when added support to send other tokens like Tezos
+        // TODO(Taleb): remove the last condition when added support to
+        // send other tokens like Tezos
         state.selectedToken.symbol == 'XTZ';
   }
 
@@ -59,13 +60,14 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
         customFee: customFee,
       );
       logger.i(
-        'before execute: withdrawal from secretKey: ${sourceKeystore.secretKey} '
-        ', publicKey: ${sourceKeystore.publicKey} '
+        'before execute: withdrawal from secretKey: ${sourceKeystore.secretKey}'
+        ' , publicKey: ${sourceKeystore.publicKey} '
         'amount: $amount '
         'networkFee: $customFee '
-        'address: ${sourceKeystore.address} =>To address: ${state.withdrawalAddress}',
+        'address: ${sourceKeystore.address} =>To address: '
+        '${state.withdrawalAddress}',
       );
-      operationsList.executeAndMonitor();
+      await operationsList.executeAndMonitor();
       logger.i('after withdrawal execute');
       return true;
     } catch (e, s) {
@@ -83,7 +85,9 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
 
       final rpcInterface = RpcInterface(Urls.rpc);
       final contract = Contract(
-          contractAddress: tokenContractAddress, rpcInterface: rpcInterface);
+        contractAddress: tokenContractAddress,
+        rpcInterface: rpcInterface,
+      );
 
       final operationsList = await contract.callOperation(
         source: sourceKeystore,

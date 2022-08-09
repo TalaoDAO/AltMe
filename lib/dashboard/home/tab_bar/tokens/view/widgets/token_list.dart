@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/view/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class _TokenListState extends State<TokenList> {
       child: ListView.builder(
         controller: _scrollController,
         physics: const AlwaysScrollableScrollPhysics(),
-        itemBuilder: (_, index) => InkWell(
+        itemBuilder: (_, index) => TransparentInkWell(
           onTap: () => widget.onItemTap?.call(widget.tokenList[index]),
           child: TokenItem(token: widget.tokenList[index]),
         ),

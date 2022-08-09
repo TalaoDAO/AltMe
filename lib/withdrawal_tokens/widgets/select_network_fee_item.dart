@@ -45,14 +45,14 @@ class SelectNetworkFeeItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           MyText(
-            '${networkFeeModel.fee.toString().formatNumber()} ${networkFeeModel.tokenSymbol}',
+            '''${networkFeeModel.fee.toString().formatNumber()} ${networkFeeModel.tokenSymbol}''',
             style: Theme.of(context).textTheme.caption,
           ),
           const SizedBox(
             height: Sizes.space2XSmall,
           ),
           MyText(
-            '\$${networkFeeModel.feeInUSD == 0.0 ? '--.--' : networkFeeModel.feeInUSD.toString().formatNumber()}',
+            '''\$${networkFeeModel.feeInUSD == 0.0 ? '--.--' : networkFeeModel.feeInUSD.toString().formatNumber()}''',
             style: Theme.of(context).textTheme.caption2,
           )
         ],

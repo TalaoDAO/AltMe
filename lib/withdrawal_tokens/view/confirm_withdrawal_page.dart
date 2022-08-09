@@ -56,7 +56,7 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
       AccountSelectBoxController();
 
   late final amountAndSymbol =
-      '${widget.amount.toStringAsFixed(6).formatNumber()} ${widget.selectedToken.symbol}';
+      '''${widget.amount.toStringAsFixed(6).formatNumber()} ${widget.selectedToken.symbol}''';
 
   @override
   void initState() {
@@ -163,7 +163,8 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
                         .read<ConfirmWithdrawalCubit>()
                         .canConfirmTheWithdrawal()
                     ? () {
-                        ///send to this account for test : tz1Z5ad29RQnbn6bcN8E9YTz3djnqhTSgStf
+                        ///send to this account for test :
+                        ///tz1Z5ad29RQnbn6bcN8E9YTz3djnqhTSgStf
                         ///this is EmptyAcc1
                         context.read<ConfirmWithdrawalCubit>().withdrawTezos();
                         Navigator.of(context).push<void>(

@@ -13,7 +13,9 @@ class SelectTokenBottomSheet extends StatelessWidget {
   final TokensCubit tokensCubit;
 
   static Future<TokenModel?> show(
-      BuildContext context, TokensCubit tokensCubit) {
+    BuildContext context,
+    TokensCubit tokensCubit,
+  ) {
     return showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -162,7 +164,9 @@ class _SelectTokenBottomSheetViewState
                         return ErrorView(message: message, onTap: onRefresh);
                       } else {
                         return TokenList(
-                            tokenList: const [], onRefresh: onRefresh);
+                          tokenList: const [],
+                          onRefresh: onRefresh,
+                        );
                       }
                     },
                   ),

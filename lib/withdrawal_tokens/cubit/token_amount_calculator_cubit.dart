@@ -12,8 +12,11 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
   TokenAmountCalculatorCubit({
     required this.tokenSelectBoxController,
     required this.controller,
-  }) : super(TokenAmountCalculatorState(
-            selectedToken: tokenSelectBoxController.selectedToken)) {
+  }) : super(
+          TokenAmountCalculatorState(
+            selectedToken: tokenSelectBoxController.selectedToken,
+          ),
+        ) {
     _init();
   }
 
@@ -44,7 +47,7 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
           amount.replaceAll(',', ''),
         ),
       );
-    }else {
+    } else {
       controller.setAmount(insertedAmount: 0);
     }
   }
@@ -53,7 +56,7 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     if (amount == null) return false;
     try {
       final insertedAmount = double.parse(amount.replaceAll(',', ''));
-      if(insertedAmount <= 0.00001) return false;
+      if (insertedAmount <= 0.00001) return false;
       final maxAmount = double.parse(
         state.selectedToken.calculatedBalance.replaceAll(',', ''),
       );
@@ -62,7 +65,7 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
       } else {
         return true;
       }
-    } catch (e, s) {
+    } catch (e) {
       return false;
     }
   }

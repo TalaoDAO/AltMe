@@ -110,36 +110,37 @@ class _InsertWithdrawalAmountPageState
             bottom: Sizes.spaceSmall,
           ),
           child: BlocBuilder<WalletCubit, WalletState>(
-              builder: (context, walletState) {
-            _tokenSelectBoxController.setSelectedAccount(
-              selectedToken: tempModel,
-            );
-            return BlocBuilder<InsertWithdrawalPageCubit, bool>(
-              builder: (context, isValidWithdrawal) {
-                return MyElevatedButton(
-                  borderRadius: Sizes.normalRadius,
-                  text: l10n.next,
-                  onPressed: isValidWithdrawal
-                      ? () {
-                          Navigator.of(context).push<void>(
-                            ConfirmWithdrawalPage.route(
-                              selectedToken:
-                                  _tokenSelectBoxController.selectedToken,
-                              withdrawalAddress: widget.withdrawalAddress,
-                              amount: _tokenAmountCalculatorController
-                                  .insertedAmount,
-                              selectedAccountSecretKey: walletState
-                                  .cryptoAccount
-                                  .data[walletState.currentCryptoIndex]
-                                  .secretKey,
-                            ),
-                          );
-                        }
-                      : null,
-                );
-              },
-            );
-          }),
+            builder: (context, walletState) {
+              _tokenSelectBoxController.setSelectedAccount(
+                selectedToken: tempModel,
+              );
+              return BlocBuilder<InsertWithdrawalPageCubit, bool>(
+                builder: (context, isValidWithdrawal) {
+                  return MyElevatedButton(
+                    borderRadius: Sizes.normalRadius,
+                    text: l10n.next,
+                    onPressed: isValidWithdrawal
+                        ? () {
+                            Navigator.of(context).push<void>(
+                              ConfirmWithdrawalPage.route(
+                                selectedToken:
+                                    _tokenSelectBoxController.selectedToken,
+                                withdrawalAddress: widget.withdrawalAddress,
+                                amount: _tokenAmountCalculatorController
+                                    .insertedAmount,
+                                selectedAccountSecretKey: walletState
+                                    .cryptoAccount
+                                    .data[walletState.currentCryptoIndex]
+                                    .secretKey,
+                              ),
+                            );
+                          }
+                        : null,
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );
