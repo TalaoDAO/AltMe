@@ -16,15 +16,16 @@ class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
     _addTokenSelectBoxSubscription();
   }
 
-  late final StreamSubscription _tokenSelectBoxSubscription;
+  StreamSubscription<TokenModel>? _tokenSelectBoxSubscription;
 
   void _addTokenSelectBoxSubscription() {
-    _tokenSelectBoxSubscription =
+    _tokenSelectBoxSubscription ??=
         controller.stream.listen(_onControllerChangeListener);
   }
 
-  Future<void> _removeTokenSelectBoxSubscription() {
-    return _tokenSelectBoxSubscription.cancel();
+  Future<void> _removeTokenSelectBoxSubscription() async {
+    await _tokenSelectBoxSubscription?.cancel();
+    _tokenSelectBoxSubscription = null;
   }
 
   void _onControllerChangeListener(TokenModel selectedToken) {
@@ -36,8 +37,11 @@ class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
   final TokenSelectBoxController controller;
 
   void setSelectedToken({required TokenModel tokenModel}) {
-    controller.setSelectedAccount(selectedToken: tokenModel);
-    emit(state.copyWith(selectedToken: tokenModel));
+    _removeTokenSelectBoxSubscription().then((value) {
+      controller.setSelectedAccount(selectedToken: tokenModel);
+      emit(state.copyWith(selectedToken: tokenModel));
+      _addTokenSelectBoxSubscription();
+    });
   }
 
   @override
