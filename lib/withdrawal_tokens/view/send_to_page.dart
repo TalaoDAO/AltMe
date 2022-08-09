@@ -39,13 +39,19 @@ class _SendToPageState extends State<SendToPage> {
       );
     });
 
-    accountSelectBoxController.addListener(() {
+    accountSelectBoxController.stream.listen((selectedAccount) {
       sendToCubit.setSelectedAccount(
-        selectedAccount: accountSelectBoxController.selectedAccount!,
+        selectedAccount: selectedAccount!,
       );
     });
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    accountSelectBoxController.close();
+    super.dispose();
   }
 
   @override

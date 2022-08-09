@@ -1,17 +1,11 @@
 import 'package:altme/wallet/wallet.dart';
-import 'package:flutter/foundation.dart';
+import 'package:bloc/bloc.dart';
 
-class AccountSelectBoxController extends ChangeNotifier {
-  AccountSelectBoxController({CryptoAccountData? selectedAccount}) {
-    _selectedAccount = selectedAccount;
-  }
-
-  CryptoAccountData? _selectedAccount;
-
-  CryptoAccountData? get selectedAccount => _selectedAccount;
+class AccountSelectBoxController extends Cubit<CryptoAccountData?> {
+  AccountSelectBoxController({CryptoAccountData? selectedAccount})
+      : super(selectedAccount);
 
   void setSelectedAccount({required CryptoAccountData selectedAccount}) {
-    _selectedAccount = selectedAccount;
-    notifyListeners();
+    emit(selectedAccount);
   }
 }
