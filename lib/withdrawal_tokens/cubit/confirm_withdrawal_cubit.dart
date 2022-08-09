@@ -1,10 +1,9 @@
-import 'package:altme/app/shared/constants/urls.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:logging/logging.dart';
 import 'package:tezart/tezart.dart';
 
 part 'confirm_withdrawal_cubit.g.dart';
@@ -19,7 +18,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
 
   final String selectedAccountSecretKey;
 
-  final logger = Logger('altme-wallet/Withdrawal/ConfirmWithdrawal');
+  final logger = getLogger('ConfirmWithdrawal');
 
   void setWithdrawalAddress({required String withdrawalAddress}) {
     emit(state.copyWith(withdrawalAddress: withdrawalAddress));
@@ -59,7 +58,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
         amount: amount,
         customFee: customFee,
       );
-      logger.info(
+      logger.i(
         'before execute: withdrawal from secretKey: ${sourceKeystore.secretKey} '
         ', publicKey: ${sourceKeystore.publicKey} '
         'amount: $amount '
@@ -67,10 +66,10 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
         'address: ${sourceKeystore.address} =>To address: ${state.withdrawalAddress}',
       );
       operationsList.executeAndMonitor();
-      logger.info('after withdrawal execute');
+      logger.i('after withdrawal execute');
       return true;
     } catch (e, s) {
-      logger.severe('error after withdrawal execute: e: $e, stack: $s', e, s);
+      logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
       return false;
     }
   }
@@ -91,10 +90,10 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
         amount: 1,
       );
       await operationsList.executeAndMonitor();
-      logger.info('operation execute');
+      logger.i('operation execute');
       return operationsList.operations;
     } catch (e, s) {
-      logger.severe('error e: $e, stack: $s', e, s);
+      logger.e('error e: $e, stack: $s', e, s);
       return [];
     }
   }
