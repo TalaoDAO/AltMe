@@ -1,15 +1,10 @@
-import 'package:flutter/foundation.dart';
+import 'package:bloc/bloc.dart';
 
-class TokenAmountCalculatorController extends ChangeNotifier {
+class TokenAmountCalculatorController extends Cubit<double> {
   TokenAmountCalculatorController({double insertedAmount = 0.0})
-      : _insertedAmount = insertedAmount;
-
-  double _insertedAmount;
-
-  double get insertedAmount => _insertedAmount;
+      : super(insertedAmount);
 
   void setAmount({required double insertedAmount}) {
-    _insertedAmount = insertedAmount;
-    notifyListeners();
+    emit(insertedAmount);
   }
 }
