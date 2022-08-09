@@ -145,10 +145,12 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                   credentialModel: widget.credentialModel,
                   fromCredentialOffer: false,
                 ),
-                const SizedBox(height: 30),
-                CredentialActiveStatus(
-                  credentialStatus: state.credentialStatus,
-                ),
+                if (!isEbsiIssuer(widget.credentialModel)) ...[
+                  const SizedBox(height: 30),
+                  CredentialActiveStatus(
+                    credentialStatus: state.credentialStatus,
+                  ),
+                ],
                 if (outputDescriptors != null) ...[
                   const SizedBox(height: 30),
                   CredentialManifestDetails(

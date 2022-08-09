@@ -15,7 +15,7 @@ class Logging extends Interceptor {
     ResponseInterceptorHandler handler,
   ) {
     log.i(
-      '''RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path} => ${response.data}''',
+      '''RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path} => ${jsonEncode(response.data)}''',
     );
     return super.onResponse(response, handler);
   }

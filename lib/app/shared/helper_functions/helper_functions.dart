@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:altme/dashboard/home/home.dart';
+
 String generateDefaultAccountName(
   int accountIndex,
   List<String> accountNameList,
@@ -25,4 +27,8 @@ String getIssuerDid({required Uri uriToCheck}) {
     }
   });
   return did;
+}
+
+bool isEbsiIssuer(CredentialModel credentialModel) {
+  return credentialModel.issuer.startsWith('did:ebsi');
 }
