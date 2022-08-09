@@ -123,8 +123,7 @@ class _InsertWithdrawalAmountPageState
                         ? () {
                             Navigator.of(context).push<void>(
                               ConfirmWithdrawalPage.route(
-                                selectedToken:
-                                    _tokenSelectBoxController.selectedToken,
+                                selectedToken: _tokenSelectBoxController.state,
                                 withdrawalAddress: widget.withdrawalAddress,
                                 amount: _tokenAmountCalculatorController.state,
                                 selectedAccountSecretKey: walletState

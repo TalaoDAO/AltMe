@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:bloc/bloc.dart';
@@ -10,17 +12,24 @@ part 'token_select_box_cubit.g.dart';
 
 class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
   TokenSelectBoxCubit({required this.controller})
-      : super(TokenSelectBoxState(selectedToken: controller.selectedToken)) {
-    _init();
+      : super(TokenSelectBoxState(selectedToken: controller.state)) {
+    _addTokenSelectBoxSubscription();
   }
 
-  void _init() {
-    controller.addListener(_onControllerChangeListener);
+  late final StreamSubscription _tokenSelectBoxSubscription;
+
+  void _addTokenSelectBoxSubscription() {
+    _tokenSelectBoxSubscription =
+        controller.stream.listen(_onControllerChangeListener);
   }
 
-  void _onControllerChangeListener() {
-    if (state.selectedToken != controller.selectedToken) {
-      emit(state.copyWith(selectedToken: controller.selectedToken));
+  Future<void> _removeTokenSelectBoxSubscription() {
+    return _tokenSelectBoxSubscription.cancel();
+  }
+
+  void _onControllerChangeListener(TokenModel selectedToken) {
+    if (state.selectedToken != selectedToken) {
+      emit(state.copyWith(selectedToken: selectedToken));
     }
   }
 
@@ -33,7 +42,8 @@ class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
 
   @override
   Future<void> close() {
-    controller.dispose();
+    _removeTokenSelectBoxSubscription();
+    controller.close();
     return super.close();
   }
 }

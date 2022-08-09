@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:bloc/bloc.dart';
@@ -14,18 +16,25 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     required this.controller,
   }) : super(
           TokenAmountCalculatorState(
-            selectedToken: tokenSelectBoxController.selectedToken,
+            selectedToken: tokenSelectBoxController.state,
           ),
         ) {
-    _init();
+    _addTokenSelectBoxSubscription();
   }
 
-  void _init() {
-    tokenSelectBoxController.addListener(_onTokenSelectBoxChangeListener);
+  late final StreamSubscription tokenSelectBoxSubscription;
+
+  void _addTokenSelectBoxSubscription() {
+    tokenSelectBoxSubscription =
+        tokenSelectBoxController.stream.listen(_onTokenSelectBoxChangeListener);
   }
 
-  void _onTokenSelectBoxChangeListener() {
-    setSelectedToken(tokenModel: tokenSelectBoxController.selectedToken);
+  Future<void> _removeTokenSelectBoxSubscription() {
+    return tokenSelectBoxSubscription.cancel();
+  }
+
+  void _onTokenSelectBoxChangeListener(TokenModel selectedToken) {
+    setSelectedToken(tokenModel: selectedToken);
     setAmount(amount: '');
   }
 
@@ -33,10 +42,11 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
   final TokenAmountCalculatorController controller;
 
   void setSelectedToken({required TokenModel tokenModel}) {
-    tokenSelectBoxController.removeListener(_onTokenSelectBoxChangeListener);
-    tokenSelectBoxController.setSelectedAccount(selectedToken: tokenModel);
-    emit(state.copyWith(selectedToken: tokenModel, amount: ''));
-    tokenSelectBoxController.addListener(_onTokenSelectBoxChangeListener);
+    _removeTokenSelectBoxSubscription().then((value) {
+      tokenSelectBoxController.setSelectedAccount(selectedToken: tokenModel);
+      emit(state.copyWith(selectedToken: tokenModel, amount: ''));
+      _addTokenSelectBoxSubscription();
+    });
   }
 
   void setAmount({required String amount}) {
@@ -72,6 +82,7 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
 
   @override
   Future<void> close() {
+    _removeTokenSelectBoxSubscription();
     controller.close();
     return super.close();
   }
