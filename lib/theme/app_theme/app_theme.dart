@@ -480,6 +480,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.normal,
       );
 
+  TextStyle get identityCardData => GoogleFonts.roboto(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+      );
+
   TextStyle get proofOfOwnership => GoogleFonts.nunito(
         color: const Color(0xffFFFFFF),
         fontSize: 16,

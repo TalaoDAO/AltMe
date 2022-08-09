@@ -14,14 +14,10 @@ class CheckIssuer {
 
   Future<Issuer> isIssuerInApprovedList() async {
     var didToTest = '';
-    uriToCheck.queryParameters.forEach((key, value) {
-      if (key == 'issuer') {
-        didToTest = value;
-      }
-    });
+    didToTest = getIssuerDid(uriToCheck: uriToCheck);
     if (checkIssuerServerUrl == Urls.checkIssuerEbsiUrl &&
         !didToTest.startsWith('did:ebsi')) {
-      return Issuer.emptyIssuer();
+      return Issuer.emptyIssuer(uriToCheck.host);
     }
     try {
       final dynamic response =
@@ -35,19 +31,23 @@ class CheckIssuer {
             currentAddress: '',
             id: '',
             issuerDomain: [],
-            website: '',
+            website: uriToCheck.host,
           ),
         );
       }
-      final issuer = Issuer.fromJson(response as Map<String, dynamic>);
+
+      final issuer =
+          Issuer.fromJson(response['issuer'] as Map<String, dynamic>);
+
       if (issuer.organizationInfo.issuerDomain.contains(uriToCheck.host)) {
         return issuer;
       }
-      return Issuer.emptyIssuer();
+
+      return Issuer.emptyIssuer(uriToCheck.host);
     } catch (e) {
       if (e is NetworkException) {
         if (e.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
-          return Issuer.emptyIssuer();
+          return Issuer.emptyIssuer(uriToCheck.toString());
         }
       }
       rethrow;

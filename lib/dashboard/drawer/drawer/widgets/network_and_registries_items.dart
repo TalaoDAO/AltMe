@@ -4,8 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class NetworkAnIssuersItems extends StatelessWidget {
-  const NetworkAnIssuersItems({
+class NetworkAndRegistriesItems extends StatelessWidget {
+  const NetworkAndRegistriesItems({
     Key? key,
   }) : super(key: key);
 
@@ -16,7 +16,7 @@ class NetworkAnIssuersItems extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          l10n.networkAndIssuers,
+          l10n.networkAndRegistries,
           style: Theme.of(context).textTheme.drawerMenu,
         ),
         const SizedBox(height: 5),
@@ -35,7 +35,7 @@ class NetworkAnIssuersItems extends StatelessWidget {
               const DrawerItemDivider(),
               DrawerItem(
                 icon: IconStrings.issuer,
-                title: l10n.chooseIssuerRegistry,
+                title: l10n.chooseRegistry,
                 onTap: () async {
                   await Navigator.of(context)
                       .push<void>(ManageIssuersRegistryPage.route());

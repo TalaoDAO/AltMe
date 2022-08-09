@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
@@ -15,7 +16,6 @@ part 'credential_model.g.dart';
 class CredentialModel extends Equatable {
   CredentialModel({
     required this.id,
-    required this.alias,
     required this.image,
     required this.credentialPreview,
     required this.shareLink,
@@ -26,6 +26,7 @@ class CredentialModel extends Equatable {
     this.receivedId,
     this.challenge,
     this.domain,
+    this.activities = const [],
   });
 
   factory CredentialModel.fromJson(Map<String, dynamic> json) {
@@ -40,33 +41,13 @@ class CredentialModel extends Equatable {
     return _$CredentialModelFromJson(newJson);
   }
 
-  factory CredentialModel.copyWithAlias({
-    required CredentialModel oldCredentialModel,
-    required String? newAlias,
-  }) {
-    return CredentialModel(
-      id: oldCredentialModel.id,
-      alias: newAlias ?? '',
-      image: oldCredentialModel.image,
-      data: oldCredentialModel.data,
-      shareLink: oldCredentialModel.shareLink,
-      display: oldCredentialModel.display,
-      credentialPreview: oldCredentialModel.credentialPreview,
-      expirationDate: oldCredentialModel.expirationDate,
-      credentialManifest: oldCredentialModel.credentialManifest,
-      receivedId: oldCredentialModel.receivedId,
-      challenge: oldCredentialModel.challenge,
-      domain: oldCredentialModel.domain,
-    );
-  }
-
   factory CredentialModel.copyWithData({
     required CredentialModel oldCredentialModel,
     required Map<String, dynamic> newData,
+    required List<Activity> activities,
   }) {
     return CredentialModel(
       id: oldCredentialModel.id,
-      alias: oldCredentialModel.alias,
       image: oldCredentialModel.image,
       data: newData,
       shareLink: oldCredentialModel.shareLink,
@@ -77,6 +58,7 @@ class CredentialModel extends Equatable {
       receivedId: oldCredentialModel.receivedId,
       challenge: oldCredentialModel.challenge,
       domain: oldCredentialModel.domain,
+      activities: activities,
     );
   }
 
@@ -84,7 +66,6 @@ class CredentialModel extends Equatable {
   final String id;
   @JsonKey(readValue: readValueReceivedId)
   late String? receivedId;
-  final String? alias;
   final String? image;
   final Map<String, dynamic> data;
   @JsonKey(defaultValue: '')
@@ -97,6 +78,7 @@ class CredentialModel extends Equatable {
   final CredentialManifest? credentialManifest;
   final String? challenge;
   final String? domain;
+  final List<Activity> activities;
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
@@ -151,19 +133,6 @@ class CredentialModel extends Equatable {
     }
   }
 
-  @override
-  List<Object?> get props => [
-        id,
-        alias,
-        image,
-        data,
-        shareLink,
-        credentialPreview,
-        display,
-        expirationDate,
-        credentialManifest,
-      ];
-
   static CredentialManifest? credentialManifestFromJson(
     Map<String, dynamic>? json,
   ) {
@@ -184,4 +153,17 @@ class CredentialModel extends Equatable {
     }
     return map['id'] as String?;
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        image,
+        data,
+        shareLink,
+        credentialPreview,
+        display,
+        expirationDate,
+        credentialManifest,
+        activities,
+      ];
 }

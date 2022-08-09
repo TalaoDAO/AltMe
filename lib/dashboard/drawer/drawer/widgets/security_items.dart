@@ -74,7 +74,7 @@ class SecurityItems extends StatelessWidget {
               const DrawerItemDivider(),
               DrawerItem(
                 icon: IconStrings.fingerprint,
-                title: l10n.loginWithBiometrics,
+                title: l10n.drawerBiometrics,
                 trailing: SizedBox(
                   height: 25,
                   child: Switch(

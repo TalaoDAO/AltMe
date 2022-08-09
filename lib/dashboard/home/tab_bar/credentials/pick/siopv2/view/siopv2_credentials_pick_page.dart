@@ -12,19 +12,23 @@ class SIOPV2CredentialPickPage extends StatelessWidget {
     Key? key,
     required this.credentials,
     required this.sIOPV2Param,
+    required this.issuer,
   }) : super(key: key);
 
   final List<CredentialModel> credentials;
   final SIOPV2Param sIOPV2Param;
+  final Issuer issuer;
 
   static Route route({
     required List<CredentialModel> credentials,
     required SIOPV2Param sIOPV2Param,
+    required Issuer issuer,
   }) =>
       MaterialPageRoute<void>(
         builder: (context) => SIOPV2CredentialPickPage(
           credentials: credentials,
           sIOPV2Param: sIOPV2Param,
+          issuer: issuer,
         ),
         settings: const RouteSettings(name: '/SIOPV2CredentialPickPage'),
       );
@@ -37,6 +41,7 @@ class SIOPV2CredentialPickPage extends StatelessWidget {
       child: SIOPV2CredentialPickView(
         credentials: credentials,
         sIOPV2Param: sIOPV2Param,
+        issuer: issuer,
       ),
     );
   }
@@ -47,10 +52,12 @@ class SIOPV2CredentialPickView extends StatelessWidget {
     Key? key,
     required this.credentials,
     required this.sIOPV2Param,
+    required this.issuer,
   }) : super(key: key);
 
   final List<CredentialModel> credentials;
   final SIOPV2Param sIOPV2Param;
+  final Issuer issuer;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +115,7 @@ class SIOPV2CredentialPickView extends StatelessWidget {
                               .presentCredentialToSIOPV2Request(
                                 credential: credentials[state.index],
                                 sIOPV2Param: sIOPV2Param,
+                                issuer: issuer,
                               );
                         },
                         text: l10n.credentialPickPresent,
