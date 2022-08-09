@@ -11,6 +11,12 @@ List<String> getTextsFromCredential(
       if (a.value is String) {
         textList.add(a.value as String);
       }
+      if (a.value is bool) {
+        textList.add(a.value.toString());
+      }
+      if (a.value is num) {
+        textList.add(a.value.toString());
+      }
       if (a.value is List) {
         for (final value in a.value) {
           if (value is String) {

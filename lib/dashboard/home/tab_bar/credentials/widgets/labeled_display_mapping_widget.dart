@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/shared/widget/base/credential_field.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -27,10 +29,12 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
         valueColor: valueColor,
       );
     }
+
     if (object is LabeledDisplayMappingPath) {
       final widgets = <Widget>[];
       for (final e in object.path) {
         final textList = getTextsFromCredential(e, credentialModel.data);
+
         for (final element in textList) {
           widgets.add(
             CredentialDynamicDetial(
