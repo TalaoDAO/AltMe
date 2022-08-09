@@ -47,9 +47,11 @@ class _TokenSelectBox extends StatefulWidget {
 }
 
 class _TokenSelectBoxState extends State<_TokenSelectBox> {
+  late TokensCubit tokensCubit = context.read<TokensCubit>();
+
   @override
   void initState() {
-    context.read<TokensCubit>().getBalanceOfAssetList(offset: 0).then((value) {
+    tokensCubit.getBalanceOfAssetList(offset: 0).then((value) {
       if (value.isNotEmpty) {
         context
             .read<TokenSelectBoxCubit>()
@@ -65,7 +67,7 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
       onTap: () async {
         final selectedToken = await SelectTokenBottomSheet.show(
           context,
-          context.read<TokensCubit>(),
+          tokensCubit,
         );
         if (selectedToken != null) {
           context
@@ -82,13 +84,11 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
           ),
         ),
         child: BlocConsumer<WalletCubit, WalletState>(
+          listenWhen: (previous, current) =>
+              current.currentCryptoIndex != previous.currentCryptoIndex,
           listener: (context, walletState) {
-            context.read<TokensCubit>().walletCubit =
-                context.read<WalletCubit>();
-            context
-                .read<TokensCubit>()
-                .getBalanceOfAssetList(offset: 0)
-                .then((value) {
+            tokensCubit.walletCubit = context.read<WalletCubit>();
+            tokensCubit.getBalanceOfAssetList(offset: 0).then((value) {
               if (value.isNotEmpty) {
                 context
                     .read<TokenSelectBoxCubit>()
