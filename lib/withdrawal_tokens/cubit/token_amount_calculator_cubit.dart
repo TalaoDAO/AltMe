@@ -22,15 +22,19 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     _addTokenSelectBoxSubscription();
   }
 
-  late final StreamSubscription tokenSelectBoxSubscription;
+  StreamSubscription<TokenModel>? _tokenSelectBoxSubscription;
 
   void _addTokenSelectBoxSubscription() {
-    tokenSelectBoxSubscription =
-        tokenSelectBoxController.stream.listen(_onTokenSelectBoxChangeListener);
+    if (_tokenSelectBoxSubscription == null) {
+      _tokenSelectBoxSubscription = tokenSelectBoxController.stream
+          .listen(_onTokenSelectBoxChangeListener);
+    } else {
+      _tokenSelectBoxSubscription!.resume();
+    }
   }
 
-  Future<void> _removeTokenSelectBoxSubscription() {
-    return tokenSelectBoxSubscription.cancel();
+  Future<void> _removeTokenSelectBoxSubscription() async {
+    await _tokenSelectBoxSubscription?.cancel();
   }
 
   void _onTokenSelectBoxChangeListener(TokenModel selectedToken) {
