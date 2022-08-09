@@ -72,7 +72,7 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
 
   @override
   Future<void> close() {
-    controller.dispose();
+    controller.close();
     return super.close();
   }
 }

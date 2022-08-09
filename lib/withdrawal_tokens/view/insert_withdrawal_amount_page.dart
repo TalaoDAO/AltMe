@@ -55,9 +55,9 @@ class _InsertWithdrawalAmountPageState
 
   @override
   void initState() {
-    _tokenAmountCalculatorController.addListener(() {
+    _tokenAmountCalculatorController.stream.listen((calculatorAmount) {
       context.read<InsertWithdrawalPageCubit>().isValidWithdrawal(
-            isValid: _tokenAmountCalculatorController.insertedAmount > 0.0,
+            isValid: calculatorAmount > 0.0,
           );
     });
     super.initState();
@@ -126,8 +126,7 @@ class _InsertWithdrawalAmountPageState
                                 selectedToken:
                                     _tokenSelectBoxController.selectedToken,
                                 withdrawalAddress: widget.withdrawalAddress,
-                                amount: _tokenAmountCalculatorController
-                                    .insertedAmount,
+                                amount: _tokenAmountCalculatorController.state,
                                 selectedAccountSecretKey: walletState
                                     .cryptoAccount
                                     .data[walletState.currentCryptoIndex]
