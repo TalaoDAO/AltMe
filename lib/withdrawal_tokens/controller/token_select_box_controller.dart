@@ -1,13 +1,11 @@
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:flutter/foundation.dart';
+import 'package:bloc/bloc.dart';
 
-class TokenSelectBoxController extends ChangeNotifier {
-  TokenSelectBoxController({required this.selectedToken});
-
-  TokenModel selectedToken;
+class TokenSelectBoxController extends Cubit<TokenModel> {
+  TokenSelectBoxController({required TokenModel selectedToken})
+      : super(selectedToken);
 
   void setSelectedAccount({required TokenModel selectedToken}) {
-    this.selectedToken = selectedToken;
-    notifyListeners();
+    emit(selectedToken);
   }
 }
