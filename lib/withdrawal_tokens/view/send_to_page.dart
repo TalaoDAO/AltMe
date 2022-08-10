@@ -87,7 +87,7 @@ class _SendToViewState extends State<SendToView> {
         padding: const EdgeInsets.all(Sizes.spaceSmall),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(Sizes.spaceSmall),
+            padding: const EdgeInsets.all(Sizes.spaceXSmall),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
