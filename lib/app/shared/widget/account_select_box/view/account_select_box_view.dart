@@ -100,8 +100,9 @@ class _AccountSelectBoxViewState extends State<AccountSelectBoxView> {
                             isSelected: state.selectedAccountIndex == i,
                             listIndex: i,
                             onPressed: () {
-                              accountSelectBoxCubit.setSelectedAccount(i);
-
+                              accountSelectBoxCubit
+                                ..setSelectedAccount(i)
+                                ..toggleSelectBox();
                               context
                                   .read<WalletCubit>()
                                   .setCurrentWalletAccount(i);
