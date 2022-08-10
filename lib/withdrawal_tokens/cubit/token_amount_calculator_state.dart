@@ -4,6 +4,7 @@ part of 'token_amount_calculator_cubit.dart';
 class TokenAmountCalculatorState extends Equatable {
   const TokenAmountCalculatorState({
     this.amount = '',
+    this.validAmount = 0.0,
     required this.selectedToken,
   });
 
@@ -11,14 +12,17 @@ class TokenAmountCalculatorState extends Equatable {
       _$TokenAmountCalculatorStateFromJson(json);
 
   final String amount;
+  final double validAmount;
   final TokenModel selectedToken;
 
   TokenAmountCalculatorState copyWith({
     String? amount,
+    double? validAmount,
     TokenModel? selectedToken,
   }) {
     return TokenAmountCalculatorState(
       amount: amount ?? this.amount,
+      validAmount: validAmount ?? this.validAmount,
       selectedToken: selectedToken ?? this.selectedToken,
     );
   }
@@ -26,5 +30,5 @@ class TokenAmountCalculatorState extends Equatable {
   Map<String, dynamic> toJson() => _$TokenAmountCalculatorStateToJson(this);
 
   @override
-  List<Object?> get props => [amount, selectedToken];
+  List<Object?> get props => [amount, selectedToken, validAmount];
 }

@@ -8,23 +8,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+typedef OnAmountChanged = Function(double);
+
 class TokenAmountCalculatorView extends StatelessWidget {
   const TokenAmountCalculatorView({
     Key? key,
-    required this.tokenSelectBoxController,
-    required this.controller,
+    required this.tokenAmountCalculatorCubit,
   }) : super(key: key);
 
-  final TokenSelectBoxController tokenSelectBoxController;
-  final TokenAmountCalculatorController controller;
+  final TokenAmountCalculatorCubit tokenAmountCalculatorCubit;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TokenAmountCalculatorCubit>(
-      create: (_) => TokenAmountCalculatorCubit(
-        controller: controller,
-        tokenSelectBoxController: tokenSelectBoxController,
-      ),
+      create: (_) => tokenAmountCalculatorCubit,
       child: const _TokenAmountCalculator(),
     );
   }

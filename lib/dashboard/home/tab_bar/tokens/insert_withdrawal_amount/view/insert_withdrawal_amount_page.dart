@@ -25,7 +25,20 @@ class InsertWithdrawalAmountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<InsertWithdrawalPageCubit>(
-      create: (_) => InsertWithdrawalPageCubit(),
+      create: (_) => InsertWithdrawalPageCubit(
+        initialState: InsertWithdrawalPageState(
+          withdrawalAddress: withdrawalAddress,
+          selectedToken: const TokenModel(
+            '',
+            'Tezos',
+            'XTZ',
+            'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
+            null,
+            '00000000',
+            '6',
+          ),
+        ),
+      ),
       child: InsertWithdrawalAmountView(withdrawalAddress: withdrawalAddress),
     );
   }
@@ -46,32 +59,18 @@ class InsertWithdrawalAmountView extends StatefulWidget {
 
 class _InsertWithdrawalAmountViewState
     extends State<InsertWithdrawalAmountView> {
-  final TextEditingController withdrawalAddressController =
-      TextEditingController();
+  late final insertWithdrawalPageCubit =
+      context.read<InsertWithdrawalPageCubit>();
 
-  final tempModel = const TokenModel(
-    '',
-    'Tezos',
-    'XTZ',
-    'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
-    null,
-    '00000000',
-    '6',
+  late final tokenAmountCalculatorCubit = TokenAmountCalculatorCubit(
+    selectedToken: insertWithdrawalPageCubit.state.selectedToken,
+    onAmountChanged: (double amount) {
+      insertWithdrawalPageCubit.setAmount(amount: amount);
+    },
   );
-
-  late final TokenSelectBoxController _tokenSelectBoxController =
-      TokenSelectBoxController(selectedToken: tempModel);
-
-  final TokenAmountCalculatorController _tokenAmountCalculatorController =
-      TokenAmountCalculatorController();
 
   @override
   void initState() {
-    _tokenAmountCalculatorController.stream.listen((calculatorAmount) {
-      context.read<InsertWithdrawalPageCubit>().isValidWithdrawal(
-            isValid: calculatorAmount > 0.0,
-          );
-    });
     super.initState();
   }
 
@@ -83,76 +82,76 @@ class _InsertWithdrawalAmountViewState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BasePage(
-      scrollView: false,
-      titleLeading: const BackLeadingButton(),
-      titleTrailing: const CryptoAccountSwitcherButton(),
-      body: BackgroundCard(
-        height: double.infinity,
-        width: double.infinity,
-        padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(
-              l10n.amount,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleLarge,
+    return BlocBuilder<InsertWithdrawalPageCubit, InsertWithdrawalPageState>(
+      builder: (context, state) {
+        getLogger(toStringShort()).i('state: $state');
+        return BasePage(
+          scrollView: false,
+          titleLeading: const BackLeadingButton(),
+          titleTrailing: const CryptoAccountSwitcherButton(),
+          body: BackgroundCard(
+            height: double.infinity,
+            width: double.infinity,
+            padding: const EdgeInsets.all(Sizes.spaceSmall),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  l10n.amount,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(
+                  height: Sizes.spaceNormal,
+                ),
+                TokenSelectBoxView(
+                  selectedToken: state.selectedToken,
+                  tokenSelectBoxChanged: (selectedToken) {
+                    insertWithdrawalPageCubit.setSelectedToken(
+                      selectedToken: selectedToken,
+                    );
+                    tokenAmountCalculatorCubit.setSelectedToken(
+                      tokenModel: selectedToken,
+                    );
+                  },
+                ),
+                TokenAmountCalculatorView(
+                  tokenAmountCalculatorCubit: tokenAmountCalculatorCubit,
+                ),
+              ],
             ),
-            const SizedBox(
-              height: Sizes.spaceNormal,
-            ),
-            TokenSelectBoxView(
-              controller: _tokenSelectBoxController,
-            ),
-            TokenAmountCalculatorView(
-              controller: _tokenAmountCalculatorController,
-              tokenSelectBoxController: _tokenSelectBoxController,
-            ),
-          ],
-        ),
-      ),
-      navigation: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: Sizes.spaceSmall,
-            right: Sizes.spaceSmall,
-            bottom: Sizes.spaceSmall,
           ),
-          child: BlocBuilder<WalletCubit, WalletState>(
-            builder: (context, walletState) {
-              _tokenSelectBoxController.setSelectedAccount(
-                selectedToken: tempModel,
-              );
-              return BlocBuilder<InsertWithdrawalPageCubit, bool>(
-                builder: (context, isValidWithdrawal) {
-                  return MyElevatedButton(
-                    borderRadius: Sizes.normalRadius,
-                    text: l10n.next,
-                    onPressed: isValidWithdrawal
-                        ? () {
-                            Navigator.of(context).push<void>(
-                              ConfirmWithdrawalPage.route(
-                                selectedToken: _tokenSelectBoxController.state,
-                                withdrawalAddress: widget.withdrawalAddress,
-                                amount: _tokenAmountCalculatorController.state,
-                                selectedAccountSecretKey: walletState
-                                    .cryptoAccount
-                                    .data[walletState.currentCryptoIndex]
-                                    .secretKey,
-                              ),
-                            );
-                          }
-                        : null,
-                  );
-                },
-              );
-            },
+          navigation: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: Sizes.spaceSmall,
+                right: Sizes.spaceSmall,
+                bottom: Sizes.spaceSmall,
+              ),
+              child: MyElevatedButton(
+                borderRadius: Sizes.normalRadius,
+                text: l10n.next,
+                onPressed: state.isValidWithdrawal
+                    ? () {
+                        final walletState = context.read<WalletCubit>().state;
+                        Navigator.of(context).push<void>(
+                          ConfirmWithdrawalPage.route(
+                            selectedToken: state.selectedToken,
+                            withdrawalAddress: widget.withdrawalAddress,
+                            amount: state.amount,
+                            selectedAccountSecretKey: walletState.cryptoAccount
+                                .data[walletState.currentCryptoIndex].secretKey,
+                          ),
+                        );
+                      }
+                    : null,
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
