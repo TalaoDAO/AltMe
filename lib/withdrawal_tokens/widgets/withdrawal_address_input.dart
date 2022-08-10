@@ -108,41 +108,34 @@ class _WithdrawalAddressInputState extends State<_WithdrawalAddressInput> {
                 width: Sizes.spaceSmall,
               ),
               BlocBuilder<WithdrawalInputCubit, bool>(
-                builder: (_, isEmpty) =>
-                    isEmpty ? _buildActionButton() : _buildDeleteButton(),
+                builder: (_, isEmpty) => isEmpty
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                            IconStrings.scanAddress,
+                            width: Sizes.icon2x,
+                          ),
+                          const SizedBox(
+                            width: Sizes.spaceSmall,
+                          ),
+                          Image.asset(
+                            IconStrings.whiteList,
+                            width: Sizes.icon2x,
+                          ),
+                        ],
+                      )
+                    : InkWell(
+                        onTap: withdrawalAddressController.clear,
+                        child: Image.asset(
+                          IconStrings.closeCircleWhite,
+                          width: Sizes.icon2x,
+                        ),
+                      ),
               ),
             ],
           )
         ],
-      ),
-    );
-  }
-
-  Widget _buildActionButton() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Image.asset(
-          IconStrings.scanAddress,
-          width: Sizes.icon2x,
-        ),
-        const SizedBox(
-          width: Sizes.spaceSmall,
-        ),
-        Image.asset(
-          IconStrings.whiteList,
-          width: Sizes.icon2x,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDeleteButton() {
-    return InkWell(
-      onTap: withdrawalAddressController.clear,
-      child: Image.asset(
-        IconStrings.closeCircleWhite,
-        width: Sizes.icon2x,
       ),
     );
   }
