@@ -17,6 +17,10 @@ class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
     emit(state.copyWith(selectedToken: tokenModel));
   }
 
+  void setLoading({required bool isLoading}) {
+    emit(state.copyWith(isLoading: isLoading));
+  }
+
   @override
   Future<void> close() {
     return super.close();
