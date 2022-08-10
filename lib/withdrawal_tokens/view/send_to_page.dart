@@ -9,7 +9,10 @@ class SendToPage extends StatefulWidget {
   const SendToPage({Key? key}) : super(key: key);
 
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => const SendToPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => const SendToPage(),
+      settings: const RouteSettings(name: '/sendToPage'),
+    );
   }
 
   @override
