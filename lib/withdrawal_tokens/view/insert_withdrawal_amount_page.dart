@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/models/token_model.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -74,7 +75,7 @@ class _InsertWithdrawalAmountPageState
     return BasePage(
       scrollView: false,
       titleLeading: const BackLeadingButton(),
-      titleTrailing: const AccountSwitcherButton(),
+      titleTrailing: const CryptoAccountSwitcherButton(),
       body: BackgroundCard(
         height: double.infinity,
         width: double.infinity,

@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/crypto_bottom_sheet/crypto_bottom_sheet.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';

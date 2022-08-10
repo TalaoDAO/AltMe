@@ -179,7 +179,7 @@ class _DashboardViewState extends State<DashboardView> {
                     )
                   : null,
               titleTrailing: state.selectedIndex == 0
-                  ? const AccountSwitcherButton()
+                  ? const CryptoAccountSwitcherButton()
                   : null,
               body: Stack(
                 children: [

@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
@@ -80,7 +81,7 @@ class _SendToViewState extends State<SendToView> {
     return BasePage(
       scrollView: false,
       titleLeading: const BackLeadingButton(),
-      titleTrailing: const AccountSwitcherButton(),
+      titleTrailing: const CryptoAccountSwitcherButton(),
       body: BackgroundCard(
         height: double.infinity,
         width: double.infinity,

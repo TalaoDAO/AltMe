@@ -1,12 +1,12 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/crypto_bottom_sheet/crypto_bottom_sheet.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AccountSwitcherButton extends StatelessWidget {
-  const AccountSwitcherButton({
+class CryptoAccountSwitcherButton extends StatelessWidget {
+  const CryptoAccountSwitcherButton({
     Key? key,
   }) : super(key: key);
 
