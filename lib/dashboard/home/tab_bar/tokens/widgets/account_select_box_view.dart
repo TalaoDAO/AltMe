@@ -54,7 +54,7 @@ class _AccountSelectBoxViewState extends State<AccountSelectBoxView> {
                     ),
                   ),
                   child: ExpansionTile(
-                    initiallyExpanded: true,
+                    initiallyExpanded: false,
                     childrenPadding: EdgeInsets.zero,
                     tilePadding: const EdgeInsets.symmetric(horizontal: 8),
                     title: SelectedAccountItem(
