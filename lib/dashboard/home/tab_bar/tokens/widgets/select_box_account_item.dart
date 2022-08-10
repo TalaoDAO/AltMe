@@ -33,9 +33,9 @@ class SelectBoxAccountItem extends StatelessWidget {
       leading: Checkbox(
         value: isSelected,
         fillColor: MaterialStateProperty.all(
-          Theme.of(context).colorScheme.inversePrimary,
+          Theme.of(context).colorScheme.primary,
         ),
-        checkColor: Theme.of(context).colorScheme.primary,
+        checkColor: Theme.of(context).colorScheme.onPrimary,
         onChanged: (_) => onPressed.call(),
         shape: const CircleBorder(),
       ),

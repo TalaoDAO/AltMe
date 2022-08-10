@@ -49,9 +49,6 @@ class _SendToViewState extends State<SendToView> {
   final TextEditingController withdrawalAddressController =
       TextEditingController();
 
-  final AccountSelectBoxController accountSelectBoxController =
-      AccountSelectBoxController();
-
   @override
   void initState() {
     withdrawalAddressController.addListener(() {
@@ -60,19 +57,7 @@ class _SendToViewState extends State<SendToView> {
           );
     });
 
-    accountSelectBoxController.stream.listen((selectedAccount) {
-      context.read<SendToCubit>().setSelectedAccount(
-            selectedAccount: selectedAccount!,
-          );
-    });
-
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    accountSelectBoxController.close();
-    super.dispose();
   }
 
   @override
@@ -102,10 +87,7 @@ class _SendToViewState extends State<SendToView> {
                 const SizedBox(
                   height: Sizes.spaceXLarge,
                 ),
-                AccountSelectBoxView(
-                  controller: accountSelectBoxController,
-                  caption: l10n.from,
-                ),
+                const AccountSelectBoxView(),
                 const SizedBox(
                   height: Sizes.spaceNormal,
                 ),

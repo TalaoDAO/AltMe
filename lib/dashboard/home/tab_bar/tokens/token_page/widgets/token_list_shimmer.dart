@@ -1,4 +1,4 @@
-import 'package:altme/dashboard/home/tab_bar/tokens/view/widgets/widgets.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class TokenListShimmer extends StatelessWidget {

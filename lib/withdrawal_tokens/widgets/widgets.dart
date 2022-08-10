@@ -8,4 +8,3 @@ export 'token_amount_calculator.dart';
 export 'token_select_box.dart';
 export 'transaction_done_dialog.dart';
 export 'usd_value_text.dart';
-export 'withdrawal_address_input.dart';

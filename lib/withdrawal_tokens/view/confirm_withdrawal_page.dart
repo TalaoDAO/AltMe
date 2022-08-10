@@ -52,9 +52,6 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
   late final TextEditingController withdrawalAddressController =
       TextEditingController(text: widget.withdrawalAddress);
 
-  final AccountSelectBoxController accountSelectBoxController =
-      AccountSelectBoxController();
-
   late final amountAndSymbol =
       '''${widget.amount.toStringAsFixed(6).formatNumber()} ${widget.selectedToken.symbol}''';
 
@@ -110,11 +107,7 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
                   const SizedBox(
                     height: Sizes.spaceSmall,
                   ),
-                  AccountSelectBoxView(
-                    controller: accountSelectBoxController,
-                    caption: l10n.from,
-                    isEnabled: false,
-                  ),
+                  const AccountSelectBoxView(isEnabled: false),
                   const SizedBox(
                     height: Sizes.spaceNormal,
                   ),
