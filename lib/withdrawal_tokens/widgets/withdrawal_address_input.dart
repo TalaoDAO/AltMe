@@ -42,8 +42,8 @@ class _WithdrawalAddressInput extends StatefulWidget {
 }
 
 class _WithdrawalAddressInputState extends State<_WithdrawalAddressInput> {
-  late final withdrawalAddressController =
-      widget.withdrawalAddressController ?? TextEditingController();
+  final TextEditingController withdrawalAddressController =
+      TextEditingController();
 
   @override
   void initState() {
