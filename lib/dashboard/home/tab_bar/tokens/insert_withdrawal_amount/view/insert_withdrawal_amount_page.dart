@@ -6,7 +6,7 @@ import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class InsertWithdrawalAmountPage extends StatefulWidget {
+class InsertWithdrawalAmountPage extends StatelessWidget {
   const InsertWithdrawalAmountPage({
     Key? key,
     required this.withdrawalAddress,
@@ -14,26 +14,38 @@ class InsertWithdrawalAmountPage extends StatefulWidget {
 
   final String withdrawalAddress;
 
-  static Route route({
-    required String withdrawalAddress,
-  }) {
+  static Route route({required String withdrawalAddress}) {
     return MaterialPageRoute<void>(
-      builder: (_) => BlocProvider<InsertWithdrawalPageCubit>(
-        create: (_) => InsertWithdrawalPageCubit(),
-        child: InsertWithdrawalAmountPage(
-          withdrawalAddress: withdrawalAddress,
-        ),
-      ),
+      builder: (_) =>
+          InsertWithdrawalAmountPage(withdrawalAddress: withdrawalAddress),
+      settings: const RouteSettings(name: '/insertWithdrawalAmountPage'),
     );
   }
 
   @override
-  State<InsertWithdrawalAmountPage> createState() =>
-      _InsertWithdrawalAmountPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider<InsertWithdrawalPageCubit>(
+      create: (_) => InsertWithdrawalPageCubit(),
+      child: InsertWithdrawalAmountView(withdrawalAddress: withdrawalAddress),
+    );
+  }
 }
 
-class _InsertWithdrawalAmountPageState
-    extends State<InsertWithdrawalAmountPage> {
+class InsertWithdrawalAmountView extends StatefulWidget {
+  const InsertWithdrawalAmountView({
+    Key? key,
+    required this.withdrawalAddress,
+  }) : super(key: key);
+
+  final String withdrawalAddress;
+
+  @override
+  State<InsertWithdrawalAmountView> createState() =>
+      _InsertWithdrawalAmountViewState();
+}
+
+class _InsertWithdrawalAmountViewState
+    extends State<InsertWithdrawalAmountView> {
   final TextEditingController withdrawalAddressController =
       TextEditingController();
 
