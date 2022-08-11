@@ -5,7 +5,7 @@ import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ConfirmWithdrawalPage extends StatefulWidget {
+class ConfirmWithdrawalPage extends StatelessWidget {
   const ConfirmWithdrawalPage({
     Key? key,
     required this.selectedToken,
@@ -21,7 +21,7 @@ class ConfirmWithdrawalPage extends StatefulWidget {
     required double amount,
   }) {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: '/confirmWithdrawalPage'),
+      settings: const RouteSettings(name: '/ConfirmWithdrawalView'),
       builder: (_) => BlocProvider<ConfirmWithdrawalCubit>(
         create: (_) => ConfirmWithdrawalCubit(
           initialState: ConfirmWithdrawalState(
@@ -45,10 +45,68 @@ class ConfirmWithdrawalPage extends StatefulWidget {
   final double amount;
 
   @override
-  State<ConfirmWithdrawalPage> createState() => _ConfirmWithdrawalPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider<ConfirmWithdrawalCubit>(
+      create: (_) => ConfirmWithdrawalCubit(
+        initialState: ConfirmWithdrawalState(
+          withdrawalAddress: withdrawalAddress,
+          networkFee: NetworkFeeModel.networks()[1],
+        ),
+      ),
+      child: ConfirmWithdrawalView(
+        selectedToken: selectedToken,
+        withdrawalAddress: withdrawalAddress,
+        selectedAccountSecretKey: selectedAccountSecretKey,
+        amount: amount,
+      ),
+    );
+  }
 }
 
-class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
+class ConfirmWithdrawalView extends StatefulWidget {
+  const ConfirmWithdrawalView({
+    Key? key,
+    required this.selectedToken,
+    required this.withdrawalAddress,
+    required this.selectedAccountSecretKey,
+    required this.amount,
+  }) : super(key: key);
+
+  static Route route({
+    required TokenModel selectedToken,
+    required String withdrawalAddress,
+    required String selectedAccountSecretKey,
+    required double amount,
+  }) {
+    return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/ConfirmWithdrawalView'),
+      builder: (_) => BlocProvider<ConfirmWithdrawalCubit>(
+        create: (_) => ConfirmWithdrawalCubit(
+          initialState: ConfirmWithdrawalState(
+            withdrawalAddress: withdrawalAddress,
+            networkFee: NetworkFeeModel.networks()[1],
+          ),
+        ),
+        child: ConfirmWithdrawalView(
+          selectedToken: selectedToken,
+          withdrawalAddress: withdrawalAddress,
+          selectedAccountSecretKey: selectedAccountSecretKey,
+          amount: amount,
+        ),
+      ),
+    );
+  }
+
+  final TokenModel selectedToken;
+  final String withdrawalAddress;
+  final String selectedAccountSecretKey;
+  final double amount;
+
+  @override
+  State<ConfirmWithdrawalView> createState() => _ConfirmWithdrawalViewState();
+}
+
+class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
   late final TextEditingController withdrawalAddressController =
       TextEditingController(text: widget.withdrawalAddress);
 
