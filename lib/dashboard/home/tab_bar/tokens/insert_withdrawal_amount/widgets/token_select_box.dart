@@ -98,6 +98,8 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
               },
             ),
             BlocListener<TokenSelectBoxCubit, TokenSelectBoxState>(
+              listenWhen: (prev, next) =>
+                  prev.selectedToken != next.selectedToken,
               listener: (context, tokenSelectBoxState) {
                 widget.tokenSelectBoxChanged
                     ?.call(tokenSelectBoxState.selectedToken);
