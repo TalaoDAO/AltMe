@@ -101,8 +101,7 @@
   "qrCodeSharing": "You are now sharing",
   "qrCodeNoValidMessage": "This QRCode does not contain a valid message.",
   "profileTitle": "Profile",
-  "personalTitle": "Personal",
-  "privacyTitle": "Privacy & Security",
+  "personalTitle": "Personal", 
   "termsTitle": "Terms & Conditions",
   "recoveryKeyTitle": "Recovery phrase",
   "showRecoveryPhrase": "Show Recovery Phrase",
@@ -446,5 +445,7 @@
   "credentialDetailsOrganisation": "Organisation",
   "credentialDetailsPresented": "Presented", 
   "credentialDetailsOrganisationDetail": "Organisation Detail:",
-  "credentialDetailsInWalletSince": "In wallet since:"
+  "credentialDetailsInWalletSince": "In wallet since:",
+  "termsOfUseAndLicenses" : "Terms of use and Licences",
+  "licenses": "Licenses"
 }

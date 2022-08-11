@@ -59,7 +59,6 @@
     "qrCodeNoValidMessage",
     "profileTitle",
     "personalTitle",
-    "privacyTitle",
     "termsTitle",
     "recoveryKeyTitle",
     "showRecoveryPhrase",
@@ -395,7 +394,9 @@
     "credentialDetailsOrganisation",
     "credentialDetailsPresented",
     "credentialDetailsOrganisationDetail",
-    "credentialDetailsInWalletSince"
+    "credentialDetailsInWalletSince",
+    "termsOfUseAndLicenses",
+    "licenses"
   ],
 
   "es": [
@@ -458,7 +459,6 @@
     "qrCodeNoValidMessage",
     "profileTitle",
     "personalTitle",
-    "privacyTitle",
     "termsTitle",
     "recoveryKeyTitle",
     "showRecoveryPhrase",
@@ -794,7 +794,9 @@
     "credentialDetailsOrganisation",
     "credentialDetailsPresented",
     "credentialDetailsOrganisationDetail",
-    "credentialDetailsInWalletSince"
+    "credentialDetailsInWalletSince",
+    "termsOfUseAndLicenses",
+    "licenses"
   ],
 
   "fr": [
@@ -857,7 +859,6 @@
     "qrCodeNoValidMessage",
     "profileTitle",
     "personalTitle",
-    "privacyTitle",
     "termsTitle",
     "recoveryKeyTitle",
     "showRecoveryPhrase",
@@ -1193,7 +1194,9 @@
     "credentialDetailsOrganisation",
     "credentialDetailsPresented",
     "credentialDetailsOrganisationDetail",
-    "credentialDetailsInWalletSince"
+    "credentialDetailsInWalletSince",
+    "termsOfUseAndLicenses",
+    "licenses"
   ],
 
   "it": [
@@ -1256,7 +1259,6 @@
     "qrCodeNoValidMessage",
     "profileTitle",
     "personalTitle",
-    "privacyTitle",
     "termsTitle",
     "recoveryKeyTitle",
     "showRecoveryPhrase",
@@ -1592,6 +1594,8 @@
     "credentialDetailsOrganisation",
     "credentialDetailsPresented",
     "credentialDetailsOrganisationDetail",
-    "credentialDetailsInWalletSince"
+    "credentialDetailsInWalletSince",
+    "termsOfUseAndLicenses",
+    "licenses"
   ]
 }

@@ -102,18 +102,6 @@ class OtherItems extends StatelessWidget {
               ),
               const DrawerItemDivider(),
               DrawerItem(
-                icon: IconStrings.terms,
-                title: l10n.privacyTitle,
-                trailing: Icon(
-                  Icons.chevron_right,
-                  size: 24,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                onTap: () =>
-                    Navigator.of(context).push<void>(PrivacyPage.route()),
-              ),
-              const DrawerItemDivider(),
-              DrawerItem(
                 icon: IconStrings.wallet,
                 title: l10n.changePinCode,
                 trailing: Icon(

@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/widget/base/markdown_page.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +14,26 @@ class TermsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final languagesList = ['fr', 'it', 'es', 'de'];
-    var language = 'en';
-    if (languagesList.contains(l10n.localeName)) {
-      language = l10n.localeName;
-    }
-    return MarkdownPage(
-      title: l10n.onBoardingTosTitle,
-      file: 'assets/terms/mobile_cgu_$language.md',
+    return BasePage(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      title: l10n.termsOfUse,
+      titleLeading: const BackLeadingButton(),
+      scrollView: false,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      body: BackgroundCard(
+        padding: EdgeInsets.zero,
+        child: SingleChildScrollView(
+          child: Column(
+            children: const [
+              DisplayTermsofUse(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+              ),
+              SizedBox(height: 15),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
