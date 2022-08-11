@@ -75,13 +75,6 @@ class _InsertWithdrawalAmountViewState
   late final insertWithdrawalPageCubit =
       context.read<InsertWithdrawalPageCubit>();
 
-  late final tokenAmountCalculatorCubit = TokenAmountCalculatorCubit(
-    selectedToken: insertWithdrawalPageCubit.state.selectedToken,
-    onAmountChanged: (double amount) {
-      insertWithdrawalPageCubit.setAmount(amount: amount);
-    },
-  );
-
   @override
   void initState() {
     super.initState();
@@ -125,13 +118,13 @@ class _InsertWithdrawalAmountViewState
                     insertWithdrawalPageCubit.setSelectedToken(
                       selectedToken: selectedToken,
                     );
-                    tokenAmountCalculatorCubit.setSelectedToken(
-                      tokenModel: selectedToken,
-                    );
                   },
                 ),
                 TokenAmountCalculatorView(
-                  tokenAmountCalculatorCubit: tokenAmountCalculatorCubit,
+                  selectedToken: state.selectedToken,
+                  onAmountChanged: (double amount) {
+                    insertWithdrawalPageCubit.setAmount(amount: amount);
+                  },
                 ),
               ],
             ),

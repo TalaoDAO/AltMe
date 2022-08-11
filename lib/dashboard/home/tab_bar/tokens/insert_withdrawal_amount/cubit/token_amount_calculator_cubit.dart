@@ -12,18 +12,14 @@ part 'token_amount_calculator_cubit.g.dart';
 class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
   TokenAmountCalculatorCubit({
     required TokenModel selectedToken,
-    this.onAmountChanged,
   }) : super(
           TokenAmountCalculatorState(
             selectedToken: selectedToken,
           ),
         );
 
-  final OnAmountChanged? onAmountChanged;
-
   void setSelectedToken({required TokenModel tokenModel}) {
-    emit(state.copyWith(selectedToken: tokenModel, amount: ''));
-    onAmountChanged?.call(0);
+    emit(state.copyWith(selectedToken: tokenModel, amount: '', validAmount: 0));
   }
 
   void setAmount({required String amount}) {
@@ -37,7 +33,6 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
             : 0.0,
       ),
     );
-    onAmountChanged?.call(state.validAmount);
   }
 
   bool isValidateAmount({required String? amount}) {

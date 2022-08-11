@@ -13,16 +13,20 @@ typedef OnAmountChanged = Function(double);
 class TokenAmountCalculatorView extends StatelessWidget {
   const TokenAmountCalculatorView({
     Key? key,
-    required this.tokenAmountCalculatorCubit,
+    required this.selectedToken,
+    this.onAmountChanged,
   }) : super(key: key);
 
-  final TokenAmountCalculatorCubit tokenAmountCalculatorCubit;
+  final TokenModel selectedToken;
+  final OnAmountChanged? onAmountChanged;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TokenAmountCalculatorCubit>(
-      create: (_) => tokenAmountCalculatorCubit,
-      child: const _TokenAmountCalculator(),
+      create: (_) => TokenAmountCalculatorCubit(selectedToken: selectedToken),
+      child: _TokenAmountCalculator(
+        onAmountChanged: onAmountChanged,
+      ),
     );
   }
 }
@@ -30,7 +34,10 @@ class TokenAmountCalculatorView extends StatelessWidget {
 class _TokenAmountCalculator extends StatefulWidget {
   const _TokenAmountCalculator({
     Key? key,
+    this.onAmountChanged,
   }) : super(key: key);
+
+  final OnAmountChanged? onAmountChanged;
 
   @override
   State<_TokenAmountCalculator> createState() => _TokenAmountCalculatorState();
@@ -88,7 +95,10 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
           const SizedBox(
             height: Sizes.spaceLarge,
           ),
-          BlocBuilder<TokenAmountCalculatorCubit, TokenAmountCalculatorState>(
+          BlocConsumer<TokenAmountCalculatorCubit, TokenAmountCalculatorState>(
+            listener: (_, state) {
+              widget.onAmountChanged?.call(state.validAmount);
+            },
             builder: (context, state) {
               _setAmountControllerText(state.amount);
               return Column(
