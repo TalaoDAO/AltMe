@@ -1,10 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class TermsOfUseAndLicences extends StatelessWidget {
   const TermsOfUseAndLicences({
@@ -29,11 +27,6 @@ class TermsOfUseAndLicences extends StatelessWidget {
               DrawerItem(
                 icon: IconStrings.terms,
                 title: l10n.termsOfUse,
-                trailing: Icon(
-                  Icons.chevron_right,
-                  size: 24,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
                 onTap: () =>
                     Navigator.of(context).push<void>(TermsPage.route()),
               ),
@@ -41,13 +34,8 @@ class TermsOfUseAndLicences extends StatelessWidget {
               DrawerItem(
                 icon: IconStrings.terms,
                 title: l10n.licenses,
-                trailing: Icon(
-                  Icons.chevron_right,
-                  size: 24,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                onTap: () =>
-                    Navigator.of(context).push<void>(TermsPage.route()),
+                onTap: null,
+                trailing: Container(),
               ),
             ],
           ),
