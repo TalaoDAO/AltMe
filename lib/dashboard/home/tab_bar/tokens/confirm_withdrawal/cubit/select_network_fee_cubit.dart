@@ -1,4 +1,4 @@
-import 'package:altme/withdrawal_tokens/model/network_fee_model.dart';
+import 'package:altme/dashboard/home/tab_bar/tokens/tokens.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';

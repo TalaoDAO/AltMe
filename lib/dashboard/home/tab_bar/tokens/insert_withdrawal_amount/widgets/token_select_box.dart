@@ -33,8 +33,9 @@ class TokenSelectBoxView extends StatelessWidget {
         ),
         BlocProvider<TokenSelectBoxCubit>(
           create: (_) => TokenSelectBoxCubit(
-              selectedToken: selectedToken,
-              tokensCubit: context.read<TokensCubit>()),
+            selectedToken: selectedToken,
+            tokensCubit: context.read<TokensCubit>(),
+          ),
         ),
       ],
       child: _TokenSelectBox(
