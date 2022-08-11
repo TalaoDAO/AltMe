@@ -52,26 +52,14 @@ class _CredentialsPresentPageState extends State<CredentialsPresentPage> {
       body: BlocBuilder<ScanCubit, ScanState>(
         builder: (context, state) {
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Row(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.175,
-                    height: MediaQuery.of(context).size.width * 0.175,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.profileDummy,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      '''${l10n.credentialPresentRequiredCredential} credential(s).''',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  '''${l10n.credentialPresentRequiredCredential} credential(s).''',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
               ),
               // const SizedBox(height: 16.0),
               // DocumentWidget(
