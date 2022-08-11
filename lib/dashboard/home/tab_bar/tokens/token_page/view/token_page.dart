@@ -56,7 +56,8 @@ class _TokenViewState extends State<TokenView> {
   }
 
   void onItemTap(TokenModel _) {
-    Navigator.of(context).push<void>(SendToPage.route());
+    // Navigator.of(context).push<void>(SendToPage.route());
+    Navigator.of(context).push<void>(SendReceiveHomePage.route());
   }
 
   @override
