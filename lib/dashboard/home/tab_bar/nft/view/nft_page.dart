@@ -51,8 +51,7 @@ class _NftViewState extends State<NftView> {
   Future<void> onRefresh() async {
     _offset = 0;
     await context.read<NftCubit>().getTezosNftList(
-          baseUrl:
-              context.read<ManageNetworkCubit>().state.network.tzktUrl,
+          baseUrl: context.read<ManageNetworkCubit>().state.network.tzktUrl,
           offset: _offset,
         );
   }
@@ -130,9 +129,8 @@ class _NftViewState extends State<NftView> {
                     return const NftListShimmer();
                   } else if (state.status == AppStatus.populate) {
                     if (state.data.isEmpty) {
-                      return EmptyPageView(
-                        imagePath: 'assets/image/nft.png',
-                        message: l10n.noNftProvidedWithYourAccount,
+                      return ErrorView(
+                        message: l10n.nftEmptyMessage,
                         onTap: onRefresh,
                       );
                     } else {
