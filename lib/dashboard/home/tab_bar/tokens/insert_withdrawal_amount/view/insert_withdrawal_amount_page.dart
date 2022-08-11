@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:altme/withdrawal_tokens/withdrawal_tokens.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,21 +25,34 @@ class InsertWithdrawalAmountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<InsertWithdrawalPageCubit>(
-      create: (_) => InsertWithdrawalPageCubit(
-        initialState: InsertWithdrawalPageState(
-          withdrawalAddress: withdrawalAddress,
-          selectedToken: const TokenModel(
-            '',
-            'Tezos',
-            'XTZ',
-            'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
-            null,
-            '00000000',
-            '6',
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<InsertWithdrawalPageCubit>(
+          create: (_) => InsertWithdrawalPageCubit(
+            initialState: InsertWithdrawalPageState(
+              withdrawalAddress: withdrawalAddress,
+              selectedToken: const TokenModel(
+                '',
+                'Tezos',
+                'XTZ',
+                'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
+                null,
+                '00000000',
+                '6',
+              ),
+            ),
           ),
         ),
-      ),
+        BlocProvider<TokensCubit>(
+          create: (context) => TokensCubit(
+            client: DioClient(
+              context.read<ManageNetworkCubit>().state.network.tzktUrl,
+              Dio(),
+            ),
+            walletCubit: context.read<WalletCubit>(),
+          ),
+        )
+      ],
       child: InsertWithdrawalAmountView(withdrawalAddress: withdrawalAddress),
     );
   }

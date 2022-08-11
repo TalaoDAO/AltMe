@@ -22,11 +22,6 @@ class TokenSelectBoxView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<TokenSelectBoxCubit>(
-          create: (_) => TokenSelectBoxCubit(
-            selectedToken: selectedToken,
-          ),
-        ),
         BlocProvider<TokensCubit>(
           create: (_) => TokensCubit(
             client: DioClient(
@@ -35,6 +30,11 @@ class TokenSelectBoxView extends StatelessWidget {
             ),
             walletCubit: context.read<WalletCubit>(),
           ),
+        ),
+        BlocProvider<TokenSelectBoxCubit>(
+          create: (_) => TokenSelectBoxCubit(
+              selectedToken: selectedToken,
+              tokensCubit: context.read<TokensCubit>()),
         ),
       ],
       child: _TokenSelectBox(
@@ -61,15 +61,7 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
 
   @override
   void initState() {
-    tokenSelectBoxCubit.setLoading(isLoading: true);
-    tokensCubit.getBalanceOfAssetList(offset: 0).then((value) {
-      if (value.isNotEmpty) {
-        context
-            .read<TokenSelectBoxCubit>()
-            .setSelectedToken(tokenModel: value.first);
-      }
-      tokenSelectBoxCubit.setLoading(isLoading: false);
-    });
+    tokenSelectBoxCubit.getBalanceOfAssetList();
     super.initState();
   }
 
@@ -101,16 +93,7 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
               listenWhen: (previous, current) =>
                   current.currentCryptoIndex != previous.currentCryptoIndex,
               listener: (context, walletState) {
-                tokensCubit.walletCubit = context.read<WalletCubit>();
-                tokenSelectBoxCubit.setLoading(isLoading: true);
-                tokensCubit.getBalanceOfAssetList(offset: 0).then((value) {
-                  if (value.isNotEmpty) {
-                    context
-                        .read<TokenSelectBoxCubit>()
-                        .setSelectedToken(tokenModel: value.first);
-                  }
-                  tokenSelectBoxCubit.setLoading(isLoading: false);
-                });
+                tokenSelectBoxCubit.getBalanceOfAssetList();
               },
             ),
             BlocListener<TokenSelectBoxCubit, TokenSelectBoxState>(
