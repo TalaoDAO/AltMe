@@ -10,6 +10,7 @@ class ConfirmWithdrawalPage extends StatefulWidget {
     Key? key,
     required this.selectedToken,
     required this.withdrawalAddress,
+    required this.selectedAccountSecretKey,
     required this.amount,
   }) : super(key: key);
 
@@ -20,19 +21,18 @@ class ConfirmWithdrawalPage extends StatefulWidget {
     required double amount,
   }) {
     return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/confirmWithdrawalPage'),
       builder: (_) => BlocProvider<ConfirmWithdrawalCubit>(
         create: (_) => ConfirmWithdrawalCubit(
-          selectedAccountSecretKey: selectedAccountSecretKey,
           initialState: ConfirmWithdrawalState(
             withdrawalAddress: withdrawalAddress,
-            selectedToken: selectedToken,
-            amount: amount,
             networkFee: NetworkFeeModel.networks()[1],
           ),
         ),
         child: ConfirmWithdrawalPage(
           selectedToken: selectedToken,
           withdrawalAddress: withdrawalAddress,
+          selectedAccountSecretKey: selectedAccountSecretKey,
           amount: amount,
         ),
       ),
@@ -41,6 +41,7 @@ class ConfirmWithdrawalPage extends StatefulWidget {
 
   final TokenModel selectedToken;
   final String withdrawalAddress;
+  final String selectedAccountSecretKey;
   final double amount;
 
   @override
@@ -67,7 +68,38 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocBuilder<ConfirmWithdrawalCubit, ConfirmWithdrawalState>(
+    return BlocConsumer<ConfirmWithdrawalCubit, ConfirmWithdrawalState>(
+      listener: (context, state) {
+        if (state.status == AppStatus.loading) {
+          LoadingView().show(context: context);
+        } else {
+          LoadingView().hide();
+        }
+
+        if (state.message != null) {
+          AlertMessage.showStringMessage(
+            context: context,
+            message: l10n.withdrawalFailedMessage,
+            messageType: MessageType.error,
+          );
+          // TODO(Taleb): update to this later
+          // AlertMessage.showStateMessage(
+          //   context: context,
+          //   stateMessage: state.message!,
+          // );
+        }
+        if (state.status == AppStatus.success) {
+          TransactionDoneDialog.show(
+            context: context,
+            amountAndSymbol: amountAndSymbol,
+            onDoneButtonClick: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+          );
+        }
+      },
       builder: (context, state) {
         return BasePage(
           scrollView: false,
@@ -122,8 +154,8 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
                     ),
                   ),
                   ConfirmDetailsCard(
-                    amount: state.amount,
-                    symbol: state.selectedToken.symbol,
+                    amount: widget.amount,
+                    symbol: widget.selectedToken.symbol,
                     networkFee: state.networkFee,
                     onEditButtonPressed: () {
                       SelectNetworkFeeBottomSheet.show(
@@ -153,38 +185,25 @@ class _ConfirmWithdrawalPageState extends State<ConfirmWithdrawalPage> {
                 text: l10n.confirm,
                 onPressed: context
                         .read<ConfirmWithdrawalCubit>()
-                        .canConfirmTheWithdrawal()
+                        .canConfirmTheWithdrawal(
+                          amount: widget.amount,
+                          selectedToken: widget.selectedToken,
+                        )
                     ? () {
                         ///send to this account for test :
                         ///tz1Z5ad29RQnbn6bcN8E9YTz3djnqhTSgStf
                         ///this is EmptyAcc1
-                        context.read<ConfirmWithdrawalCubit>().withdrawTezos();
                         Navigator.of(context).push<void>(
                           PinCodePage.route(
                             restrictToBack: false,
-                            isValidCallback: () async {
-                              LoadingView().show(context: context);
-                              final isSuccess = await context
+                            isValidCallback: () {
+                              context
                                   .read<ConfirmWithdrawalCubit>()
-                                  .withdrawTezos();
-                              LoadingView().hide();
-                              if (isSuccess) {
-                                await TransactionDoneDialog.show(
-                                  context: context,
-                                  amountAndSymbol: amountAndSymbol,
-                                  onDoneButtonClick: () {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  },
-                                );
-                              } else {
-                                AlertMessage.showStringMessage(
-                                  context: context,
-                                  message: l10n.withdrawalFailedMessage,
-                                  messageType: MessageType.error,
-                                );
-                              }
+                                  .withdrawTezos(
+                                    tokenAmount: widget.amount,
+                                    selectedAccountSecretKey:
+                                        widget.selectedAccountSecretKey,
+                                  );
                             },
                           ),
                         );

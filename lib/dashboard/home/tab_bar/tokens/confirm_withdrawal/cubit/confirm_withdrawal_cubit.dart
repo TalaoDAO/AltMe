@@ -12,10 +12,7 @@ part 'confirm_withdrawal_state.dart';
 class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
   ConfirmWithdrawalCubit({
     required ConfirmWithdrawalState initialState,
-    required this.selectedAccountSecretKey,
   }) : super(initialState);
-
-  final String selectedAccountSecretKey;
 
   final logger = getLogger('ConfirmWithdrawal');
 
@@ -27,23 +24,31 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
     emit(state.copyWith(networkFee: networkFee));
   }
 
-  bool canConfirmTheWithdrawal() {
+  bool canConfirmTheWithdrawal({
+    required double amount,
+    required TokenModel selectedToken,
+  }) {
     // TODO(Taleb): update minimum withdrawal later for every token
-    return state.amount > 0.00001 &&
+    return amount > 0.00001 &&
         state.withdrawalAddress.trim().isNotEmpty &&
         // TODO(Taleb): remove the last condition when added support to
         // send other tokens like Tezos
-        state.selectedToken.symbol == 'XTZ';
+        selectedToken.symbol == 'XTZ' &&
+        state.status != AppStatus.loading;
   }
 
-  Future<bool> withdrawTezos() async {
+  Future<void> withdrawTezos({
+    required double tokenAmount,
+    required String selectedAccountSecretKey,
+  }) async {
     try {
+      emit(state.loading());
       final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
 
       final client = TezartClient(Urls.rpc);
 
       final amount = int.parse(
-        state.amount.toStringAsFixed(6).replaceAll(',', '').replaceAll('.', ''),
+        tokenAmount.toStringAsFixed(6).replaceAll(',', '').replaceAll('.', ''),
       );
       final customFee = int.parse(
         state.networkFee.fee
@@ -68,36 +73,36 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
       );
       operationsList.executeAndMonitor();
       logger.i('after withdrawal execute');
-      return true;
+      emit(state.success());
     } catch (e, s) {
       logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
-      return false;
+      emit(state.error(messageHandler: MessageHandler()));
     }
   }
 
-  Future<List<Operation>> getContractOperation({
-    required String tokenContractAddress,
-    required String secretKey,
-  }) async {
-    try {
-      final sourceKeystore = Keystore.fromSecretKey(secretKey);
-
-      final rpcInterface = RpcInterface(Urls.rpc);
-      final contract = Contract(
-        contractAddress: tokenContractAddress,
-        rpcInterface: rpcInterface,
-      );
-
-      final operationsList = await contract.callOperation(
-        source: sourceKeystore,
-        amount: 1,
-      );
-      await operationsList.executeAndMonitor();
-      logger.i('operation execute');
-      return operationsList.operations;
-    } catch (e, s) {
-      logger.e('error e: $e, stack: $s', e, s);
-      return [];
-    }
-  }
+// Future<List<Operation>> getContractOperation({
+//   required String tokenContractAddress,
+//   required String secretKey,
+// }) async {
+//   try {
+//     final sourceKeystore = Keystore.fromSecretKey(secretKey);
+//
+//     final rpcInterface = RpcInterface(Urls.rpc);
+//     final contract = Contract(
+//       contractAddress: tokenContractAddress,
+//       rpcInterface: rpcInterface,
+//     );
+//
+//     final operationsList = await contract.callOperation(
+//       source: sourceKeystore,
+//       amount: 1,
+//     );
+//     await operationsList.executeAndMonitor();
+//     logger.i('operation execute');
+//     return operationsList.operations;
+//   } catch (e, s) {
+//     logger.e('error e: $e, stack: $s', e, s);
+//     return [];
+//   }
+// }
 }
