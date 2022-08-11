@@ -34,8 +34,8 @@ class TermsOfUseAndLicences extends StatelessWidget {
               DrawerItem(
                 icon: IconStrings.terms,
                 title: l10n.licenses,
-                onTap: null,
-                trailing: Container(),
+                onTap: () =>
+                    Navigator.of(context).push<void>(LicensesPage.route()),
               ),
             ],
           ),
