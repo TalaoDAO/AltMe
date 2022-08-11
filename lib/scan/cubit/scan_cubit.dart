@@ -110,9 +110,7 @@ class ScanCubit extends Cubit<ScanState> {
       final dynamic jsonCredential =
           credential is String ? jsonDecode(credential) : credential;
 
-      final String issuerDid = getIssuerDid(uriToCheck: uri);
-
-      if (!issuerDid.startsWith('did:ebsi')) {
+      if (!isEbsiIssuer(credentialModel)) {
         /// not verifying credential for did:ebsi issuer
         log.i('verifying Credential');
 

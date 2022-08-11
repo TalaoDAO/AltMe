@@ -66,12 +66,15 @@ class IdentityCardRecto extends StatelessWidget {
           children: [
             LayoutId(
               id: 'issuanceDate',
-              child: ImageCardText(
-                text: UiDate.displayDate(
-                  l10n,
-                  credentialModel.credentialPreview.issuanceDate,
+              child: FractionallySizedBox(
+                widthFactor: 0.25,
+                child: MyText(
+                  UiDate.displayDate(
+                    l10n,
+                    credentialModel.credentialPreview.issuanceDate,
+                  ),
+                  style: Theme.of(context).textTheme.identityCardData,
                 ),
-                textStyle: Theme.of(context).textTheme.identityCardData,
               ),
             ),
           ],
@@ -92,7 +95,7 @@ class IdentityPassRectoDelegate extends MultiChildLayoutDelegate {
       layoutChild('issuanceDate', BoxConstraints.loose(size));
       positionChild(
         'issuanceDate',
-        Offset(size.width * 0.35, size.height * 0.77),
+        Offset(size.width * 0.32, size.height * 0.76),
       );
     }
   }

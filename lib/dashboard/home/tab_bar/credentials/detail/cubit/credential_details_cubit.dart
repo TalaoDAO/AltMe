@@ -22,6 +22,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   final DIDKitProvider didKitProvider;
 
   Future<void> verifyCredential(CredentialModel item) async {
+    if (isEbsiIssuer(item)) return;
+
     emit(state.copyWith(status: AppStatus.loading));
     await Future<void>.delayed(const Duration(milliseconds: 500));
     if (item.expirationDate != null) {
