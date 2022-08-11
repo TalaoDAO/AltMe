@@ -12,10 +12,22 @@ class InsertWithdrawalPageCubit extends Cubit<InsertWithdrawalPageState> {
       : super(initialState);
 
   void setAmount({required double amount}) {
-    emit(state.copyWith(amount: amount, isValidWithdrawal: amount > 0));
+    emit(
+      state.copyWith(
+        amount: amount,
+        isValidWithdrawal: amount > 0 &&
+            amount <= state.selectedToken.calculatedBalanceInDouble,
+      ),
+    );
   }
 
   void setSelectedToken({required TokenModel selectedToken}) {
-    emit(state.copyWith(selectedToken: selectedToken));
+    emit(
+      state.copyWith(
+        selectedToken: selectedToken,
+        isValidWithdrawal: state.amount > 0 &&
+            state.amount <= selectedToken.calculatedBalanceInDouble,
+      ),
+    );
   }
 }

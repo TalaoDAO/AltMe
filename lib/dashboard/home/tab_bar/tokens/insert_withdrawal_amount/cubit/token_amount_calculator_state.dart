@@ -5,7 +5,6 @@ class TokenAmountCalculatorState extends Equatable {
   const TokenAmountCalculatorState({
     this.amount = '',
     this.validAmount = 0.0,
-    required this.selectedToken,
   });
 
   factory TokenAmountCalculatorState.fromJson(Map<String, dynamic> json) =>
@@ -13,7 +12,6 @@ class TokenAmountCalculatorState extends Equatable {
 
   final String amount;
   final double validAmount;
-  final TokenModel selectedToken;
 
   TokenAmountCalculatorState copyWith({
     String? amount,
@@ -23,12 +21,11 @@ class TokenAmountCalculatorState extends Equatable {
     return TokenAmountCalculatorState(
       amount: amount ?? this.amount,
       validAmount: validAmount ?? this.validAmount,
-      selectedToken: selectedToken ?? this.selectedToken,
     );
   }
 
   Map<String, dynamic> toJson() => _$TokenAmountCalculatorStateToJson(this);
 
   @override
-  List<Object?> get props => [amount, selectedToken, validAmount];
+  List<Object?> get props => [amount, validAmount];
 }

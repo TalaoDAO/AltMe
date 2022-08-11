@@ -61,6 +61,10 @@ class TokenModel extends Equatable {
     }
   }
 
+  double get calculatedBalanceInDouble {
+    return double.parse(calculatedBalance.replaceAll(',', ''));
+  }
+
   String? get iconUrl {
     final iconUrl = icon ?? thumbnailUri;
     if (iconUrl == null) {

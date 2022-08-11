@@ -28,9 +28,8 @@ class InsertWithdrawalAmountPage extends StatelessWidget {
       providers: [
         BlocProvider<InsertWithdrawalPageCubit>(
           create: (_) => InsertWithdrawalPageCubit(
-            initialState: InsertWithdrawalPageState(
-              withdrawalAddress: withdrawalAddress,
-              selectedToken: const TokenModel(
+            initialState: const InsertWithdrawalPageState(
+              selectedToken: TokenModel(
                 '',
                 'Tezos',
                 'XTZ',
@@ -121,7 +120,7 @@ class _InsertWithdrawalAmountViewState
                   },
                 ),
                 TokenAmountCalculatorView(
-                  selectedToken: state.selectedToken,
+                  selectedTokenChangedCallback: () => state.selectedToken,
                   onAmountChanged: (double amount) {
                     insertWithdrawalPageCubit.setAmount(amount: amount);
                   },

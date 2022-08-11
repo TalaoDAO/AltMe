@@ -8,24 +8,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-typedef OnAmountChanged = Function(double);
+typedef OnAmountChanged = void Function(double);
+typedef SelectedTokenChangedCallback = TokenModel Function();
 
 class TokenAmountCalculatorView extends StatelessWidget {
   const TokenAmountCalculatorView({
     Key? key,
-    required this.selectedToken,
     this.onAmountChanged,
+    required this.selectedTokenChangedCallback,
   }) : super(key: key);
 
-  final TokenModel selectedToken;
   final OnAmountChanged? onAmountChanged;
+  final SelectedTokenChangedCallback selectedTokenChangedCallback;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<TokenAmountCalculatorCubit>(
-      create: (_) => TokenAmountCalculatorCubit(selectedToken: selectedToken),
+      create: (_) => TokenAmountCalculatorCubit(),
       child: _TokenAmountCalculator(
         onAmountChanged: onAmountChanged,
+        selectedTokenChangedCallback: selectedTokenChangedCallback,
       ),
     );
   }
@@ -35,9 +37,11 @@ class _TokenAmountCalculator extends StatefulWidget {
   const _TokenAmountCalculator({
     Key? key,
     this.onAmountChanged,
+    required this.selectedTokenChangedCallback,
   }) : super(key: key);
 
   final OnAmountChanged? onAmountChanged;
+  final SelectedTokenChangedCallback selectedTokenChangedCallback;
 
   @override
   State<_TokenAmountCalculator> createState() => _TokenAmountCalculatorState();
@@ -61,7 +65,10 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
     if (text.isEmpty) {
       return;
     } else {
-      context.read<TokenAmountCalculatorCubit>().setAmount(amount: text);
+      context.read<TokenAmountCalculatorCubit>().setAmount(
+            amount: text,
+            selectedToken: widget.selectedTokenChangedCallback.call(),
+          );
     }
   }
 
@@ -75,7 +82,10 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
     if (key.length > 1) return;
     if (key == '.' && amountController.text.contains('.')) return;
     final text = amountController.text;
-    context.read<TokenAmountCalculatorCubit>().setAmount(amount: text + key);
+    context.read<TokenAmountCalculatorCubit>().setAmount(
+          amount: text + key,
+          selectedToken: widget.selectedTokenChangedCallback.call(),
+        );
   }
 
   void _setAmountControllerText(String text) {
@@ -118,7 +128,11 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                       validator: (value) {
                         final isValid = context
                             .read<TokenAmountCalculatorCubit>()
-                            .isValidateAmount(amount: value);
+                            .isValidateAmount(
+                              amount: value,
+                              selectedToken:
+                                  widget.selectedTokenChangedCallback.call(),
+                            );
                         if (isValid) {
                           return null;
                         } else {
@@ -132,9 +146,11 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                       cursorRadius: const Radius.circular(4),
                       onChanged: (value) {
                         if (value != amountController.text) {
-                          context
-                              .read<TokenAmountCalculatorCubit>()
-                              .setAmount(amount: value);
+                          context.read<TokenAmountCalculatorCubit>().setAmount(
+                                amount: value,
+                                selectedToken:
+                                    widget.selectedTokenChangedCallback.call(),
+                              );
                         }
                       },
                       textAlign: TextAlign.start,
@@ -149,7 +165,8 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                           vertical: 5,
                           horizontal: 10,
                         ),
-                        suffixText: state.selectedToken.symbol,
+                        suffixText:
+                            widget.selectedTokenChangedCallback.call().symbol,
                         suffixStyle:
                             Theme.of(context).textTheme.headline6?.copyWith(
                                   color: Colors.white,
@@ -162,11 +179,15 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                   MaxButton(
                     onTap: () {
                       _setAmountControllerText(
-                        state.selectedToken.calculatedBalance,
+                        widget.selectedTokenChangedCallback
+                            .call()
+                            .calculatedBalance,
                       );
-                      context
-                          .read<TokenAmountCalculatorCubit>()
-                          .setAmount(amount: amountController.text);
+                      context.read<TokenAmountCalculatorCubit>().setAmount(
+                            amount: amountController.text,
+                            selectedToken:
+                                widget.selectedTokenChangedCallback.call(),
+                          );
                     },
                   ),
                 ],
@@ -213,7 +234,12 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                           onLongPress: (_) {
                             context
                                 .read<TokenAmountCalculatorCubit>()
-                                .setAmount(amount: '');
+                                .setAmount(
+                                  amount: '',
+                                  selectedToken: widget
+                                      .selectedTokenChangedCallback
+                                      .call(),
+                                );
                           },
                           onTap: (_) {
                             final text = amountController.text;
@@ -226,6 +252,9 @@ class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
                                   .read<TokenAmountCalculatorCubit>()
                                   .setAmount(
                                     amount: amount,
+                                    selectedToken: widget
+                                        .selectedTokenChangedCallback
+                                        .call(),
                                   );
                             }
                           },
