@@ -59,7 +59,6 @@
     "qrCodeNoValidMessage",
     "profileTitle",
     "personalTitle",
-    "privacyTitle",
     "termsTitle",
     "recoveryKeyTitle",
     "showRecoveryPhrase",
@@ -243,7 +242,7 @@
     "splashLoading",
     "version",
     "cards",
-    "nfts",
+    "gallery",
     "tokens",
     "getCards",
     "close",
@@ -293,7 +292,7 @@
     "secretKey",
     "copySecretKeyToClipboard",
     "chooseNetWork",
-    "noNftProvidedWithYourAccount",
+    "nftEmptyMessage",
     "myAccount",
     "cryptoAccounts",
     "cryptoAccount",
@@ -395,7 +394,9 @@
     "credentialDetailsOrganisation",
     "credentialDetailsPresented",
     "credentialDetailsOrganisationDetail",
-    "credentialDetailsInWalletSince"
+    "credentialDetailsInWalletSince",
+    "termsOfUseAndLicenses",
+    "licenses"
   ],
 
   "es": [
@@ -458,7 +459,6 @@
     "qrCodeNoValidMessage",
     "profileTitle",
     "personalTitle",
-    "privacyTitle",
     "termsTitle",
     "recoveryKeyTitle",
     "showRecoveryPhrase",
@@ -642,7 +642,7 @@
     "splashLoading",
     "version",
     "cards",
-    "nfts",
+    "gallery",
     "tokens",
     "getCards",
     "close",
@@ -692,7 +692,7 @@
     "secretKey",
     "copySecretKeyToClipboard",
     "chooseNetWork",
-    "noNftProvidedWithYourAccount",
+    "nftEmptyMessage",
     "myAccount",
     "cryptoAccounts",
     "cryptoAccount",
@@ -794,7 +794,9 @@
     "credentialDetailsOrganisation",
     "credentialDetailsPresented",
     "credentialDetailsOrganisationDetail",
-    "credentialDetailsInWalletSince"
+    "credentialDetailsInWalletSince",
+    "termsOfUseAndLicenses",
+    "licenses"
   ],
 
   "fr": [
@@ -857,7 +859,6 @@
     "qrCodeNoValidMessage",
     "profileTitle",
     "personalTitle",
-    "privacyTitle",
     "termsTitle",
     "recoveryKeyTitle",
     "showRecoveryPhrase",
@@ -1041,7 +1042,7 @@
     "splashLoading",
     "version",
     "cards",
-    "nfts",
+    "gallery",
     "tokens",
     "getCards",
     "close",
@@ -1091,7 +1092,7 @@
     "secretKey",
     "copySecretKeyToClipboard",
     "chooseNetWork",
-    "noNftProvidedWithYourAccount",
+    "nftEmptyMessage",
     "myAccount",
     "cryptoAccounts",
     "cryptoAccount",
@@ -1193,7 +1194,9 @@
     "credentialDetailsOrganisation",
     "credentialDetailsPresented",
     "credentialDetailsOrganisationDetail",
-    "credentialDetailsInWalletSince"
+    "credentialDetailsInWalletSince",
+    "termsOfUseAndLicenses",
+    "licenses"
   ],
 
   "it": [
@@ -1256,7 +1259,6 @@
     "qrCodeNoValidMessage",
     "profileTitle",
     "personalTitle",
-    "privacyTitle",
     "termsTitle",
     "recoveryKeyTitle",
     "showRecoveryPhrase",
@@ -1440,7 +1442,7 @@
     "splashLoading",
     "version",
     "cards",
-    "nfts",
+    "gallery",
     "tokens",
     "getCards",
     "close",
@@ -1490,7 +1492,7 @@
     "secretKey",
     "copySecretKeyToClipboard",
     "chooseNetWork",
-    "noNftProvidedWithYourAccount",
+    "nftEmptyMessage",
     "myAccount",
     "cryptoAccounts",
     "cryptoAccount",
@@ -1592,6 +1594,8 @@
     "credentialDetailsOrganisation",
     "credentialDetailsPresented",
     "credentialDetailsOrganisationDetail",
-    "credentialDetailsInWalletSince"
+    "credentialDetailsInWalletSince",
+    "termsOfUseAndLicenses",
+    "licenses"
   ]
 }

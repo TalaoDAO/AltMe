@@ -101,8 +101,7 @@
   "qrCodeSharing": "You are now sharing",
   "qrCodeNoValidMessage": "This QRCode does not contain a valid message.",
   "profileTitle": "Profile",
-  "personalTitle": "Personal",
-  "privacyTitle": "Privacy & Security",
+  "personalTitle": "Personal", 
   "termsTitle": "Terms & Conditions",
   "recoveryKeyTitle": "Recovery phrase",
   "showRecoveryPhrase": "Show Recovery Phrase",
@@ -293,7 +292,7 @@
   "splashLoading": "Loading...",
   "version": "Version",
   "cards": "Credentials",
-  "nfts": "NFTs",
+  "gallery": "Gallery",
   "tokens": "Tokens",
   "getCards": "Get Credentials",
   "close": "Close",
@@ -343,7 +342,7 @@
   "secretKey": "Secret Key",
   "copySecretKeyToClipboard": "Copy secret key to clipboard",
   "chooseNetWork": "Choose Network",
-  "noNftProvidedWithYourAccount": "No NFT provided with your account!",
+  "nftEmptyMessage": "Your digital gallery is empty !",
   "myAccount": "My Account",
   "cryptoAccounts": "Accounts",
   "cryptoAccount": "Account",
@@ -446,5 +445,7 @@
   "credentialDetailsOrganisation": "Organisation",
   "credentialDetailsPresented": "Presented", 
   "credentialDetailsOrganisationDetail": "Organisation Detail:",
-  "credentialDetailsInWalletSince": "In wallet since:"
+  "credentialDetailsInWalletSince": "In wallet since:",
+  "termsOfUseAndLicenses" : "Terms of use and Licences",
+  "licenses": "Licenses"
 }

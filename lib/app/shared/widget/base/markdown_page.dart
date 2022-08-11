@@ -19,33 +19,37 @@ class MarkdownPage extends StatelessWidget {
       title: title,
       titleLeading: const BackLeadingButton(),
       scrollView: false,
-      padding: EdgeInsets.zero,
-      body: FutureBuilder<String>(
-        future: _loadFile(),
-        builder: (context, snapshot) {
-          if (snapshot.data != null) {
-            return Markdown(
-              data: snapshot.data!,
-              styleSheet: MarkdownStyleSheet(
-                h1: TextStyle(color: Theme.of(context).colorScheme.markDownH1),
-                h2: TextStyle(color: Theme.of(context).colorScheme.markDownH2),
-                a: TextStyle(color: Theme.of(context).colorScheme.markDownA),
-                p: TextStyle(color: Theme.of(context).colorScheme.markDownP),
-              ),
-              onTapLink: (text, href, title) => _onTapLink(href),
-            );
-          }
+      body: BackgroundCard(
+        padding: EdgeInsets.zero,
+        child: FutureBuilder<String>(
+          future: _loadFile(),
+          builder: (context, snapshot) {
+            if (snapshot.data != null) {
+              return Markdown(
+                data: snapshot.data!,
+                styleSheet: MarkdownStyleSheet(
+                  h1: TextStyle(
+                      color: Theme.of(context).colorScheme.markDownH1),
+                  h2: TextStyle(
+                      color: Theme.of(context).colorScheme.markDownH2),
+                  a: TextStyle(color: Theme.of(context).colorScheme.markDownA),
+                  p: TextStyle(color: Theme.of(context).colorScheme.markDownP),
+                ),
+                onTapLink: (text, href, title) => _onTapLink(href),
+              );
+            }
 
-          if (snapshot.error != null) {
-            log.e(
-              'something went wrong when loading $file',
-              snapshot.error,
-            );
-            return Container();
-          }
+            if (snapshot.error != null) {
+              log.e(
+                'something went wrong when loading $file',
+                snapshot.error,
+              );
+              return Container();
+            }
 
-          return const Spinner();
-        },
+            return const Spinner();
+          },
+        ),
       ),
     );
   }
