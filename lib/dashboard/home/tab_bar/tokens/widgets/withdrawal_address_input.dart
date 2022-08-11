@@ -18,7 +18,7 @@ class WithdrawalAddressInputView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => WithdrawalInputCubit(),
-      child: WithdrawalAddressInputPage(
+      child: _WithdrawalAddressInputPage(
         withdrawalAddressController: withdrawalAddressController,
         caption: caption,
       ),
@@ -26,8 +26,8 @@ class WithdrawalAddressInputView extends StatelessWidget {
   }
 }
 
-class WithdrawalAddressInputPage extends StatefulWidget {
-  const WithdrawalAddressInputPage({
+class _WithdrawalAddressInputPage extends StatefulWidget {
+  const _WithdrawalAddressInputPage({
     Key? key,
     this.caption,
     this.withdrawalAddressController,
@@ -37,12 +37,12 @@ class WithdrawalAddressInputPage extends StatefulWidget {
   final TextEditingController? withdrawalAddressController;
 
   @override
-  State<WithdrawalAddressInputPage> createState() =>
-      WithdrawalAddressInputPageState();
+  State<_WithdrawalAddressInputPage> createState() =>
+      _WithdrawalAddressInputPageState();
 }
 
-class WithdrawalAddressInputPageState
-    extends State<WithdrawalAddressInputPage> {
+class _WithdrawalAddressInputPageState
+    extends State<_WithdrawalAddressInputPage> {
   late final withdrawalAddressController =
       widget.withdrawalAddressController ?? TextEditingController();
 
