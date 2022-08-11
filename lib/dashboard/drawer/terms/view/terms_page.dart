@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/widget/base/markdown_page.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
