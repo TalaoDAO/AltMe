@@ -66,7 +66,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
         'address: ${sourceKeystore.address} =>To address: '
         '${state.withdrawalAddress}',
       );
-      await operationsList.executeAndMonitor();
+      operationsList.executeAndMonitor();
       logger.i('after withdrawal execute');
       return true;
     } catch (e, s) {
