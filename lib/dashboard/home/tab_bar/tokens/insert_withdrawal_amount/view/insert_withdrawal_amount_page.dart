@@ -49,6 +49,9 @@ class InsertWithdrawalAmountPage extends StatelessWidget {
             ),
             walletCubit: context.read<WalletCubit>(),
           ),
+        ),
+        BlocProvider<TokenAmountCalculatorCubit>(
+          create: (_) => TokenAmountCalculatorCubit(),
         )
       ],
       child: InsertWithdrawalAmountView(withdrawalAddress: withdrawalAddress),
@@ -73,16 +76,6 @@ class _InsertWithdrawalAmountViewState
     extends State<InsertWithdrawalAmountView> {
   late final insertWithdrawalPageCubit =
       context.read<InsertWithdrawalPageCubit>();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

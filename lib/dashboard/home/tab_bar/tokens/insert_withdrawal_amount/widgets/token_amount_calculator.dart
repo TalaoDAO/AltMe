@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 typedef OnAmountChanged = void Function(double);
 typedef SelectedTokenChangedCallback = TokenModel Function();
 
-class TokenAmountCalculatorView extends StatelessWidget {
+class TokenAmountCalculatorView extends StatefulWidget {
   const TokenAmountCalculatorView({
     Key? key,
     this.onAmountChanged,
@@ -22,32 +22,11 @@ class TokenAmountCalculatorView extends StatelessWidget {
   final SelectedTokenChangedCallback selectedTokenChangedCallback;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider<TokenAmountCalculatorCubit>(
-      create: (_) => TokenAmountCalculatorCubit(),
-      child: _TokenAmountCalculator(
-        onAmountChanged: onAmountChanged,
-        selectedTokenChangedCallback: selectedTokenChangedCallback,
-      ),
-    );
-  }
+  State<TokenAmountCalculatorView> createState() =>
+      _TokenAmountCalculatorViewState();
 }
 
-class _TokenAmountCalculator extends StatefulWidget {
-  const _TokenAmountCalculator({
-    Key? key,
-    this.onAmountChanged,
-    required this.selectedTokenChangedCallback,
-  }) : super(key: key);
-
-  final OnAmountChanged? onAmountChanged;
-  final SelectedTokenChangedCallback selectedTokenChangedCallback;
-
-  @override
-  State<_TokenAmountCalculator> createState() => _TokenAmountCalculatorState();
-}
-
-class _TokenAmountCalculatorState extends State<_TokenAmountCalculator> {
+class _TokenAmountCalculatorViewState extends State<TokenAmountCalculatorView> {
   final amountController = TextEditingController();
 
   late final _selectionControls = Platform.isIOS
