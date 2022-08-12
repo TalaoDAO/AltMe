@@ -23,14 +23,11 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     final bool isValid =
         isValidateAmount(amount: amount, selectedToken: selectedToken);
 
-    final insertedAmount = double.parse(amount.replaceAll(',', ''));
+    final insertedAmount =
+        isValid ? double.parse(amount.replaceAll(',', '')) : 0.0;
 
-    emit(
-      state.copyWith(
-        amount: amount,
-        validAmount: isValid ? insertedAmount : 0.0,
-      ),
-    );
+    emit(state.copyWith(amount: amount, validAmount: insertedAmount));
+
     insertWithdrawalPageCubit.setAmount(amount: insertedAmount);
   }
 

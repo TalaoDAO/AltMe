@@ -138,7 +138,6 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                       cursorRadius: const Radius.circular(4),
                       onChanged: (value) {
                         if (value != amountController.text) {
-                          _setAmountControllerText(state.amount);
                           context.read<TokenAmountCalculatorCubit>().setAmount(
                                 amount: value,
                                 selectedToken: widget.selectedToken,
