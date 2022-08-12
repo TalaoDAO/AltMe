@@ -50,15 +50,26 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
       titleLeading: const BackLeadingButton(),
       titleTrailing: const CryptoAccountSwitcherButton(),
       body: Stack(
+        fit: StackFit.expand,
         children: [
           const BackgroundCard(
             height: double.infinity,
             width: double.infinity,
-            margin: EdgeInsets.only(top: Sizes.icon4x / 2),
+            margin: EdgeInsets.only(top: Sizes.icon3x / 2),
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
             children: [
-              CachedImageFromNetwork(tempToken.iconUrl ?? '',),
+              CachedImageFromNetwork(
+                tempToken.iconUrl ?? '',
+                width: Sizes.icon3x,
+                height: Sizes.icon3x,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(Sizes.icon3x),
+                ),
+              ),
             ],
           )
         ],
