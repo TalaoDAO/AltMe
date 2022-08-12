@@ -23,12 +23,15 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     final bool isValid =
         isValidateAmount(amount: amount, selectedToken: selectedToken);
 
+    final insertedAmount = double.parse(amount.replaceAll(',', ''));
+
     emit(
       state.copyWith(
         amount: amount,
-        validAmount: isValid ? double.parse(amount.replaceAll(',', '')) : 0.0,
+        validAmount: isValid ? insertedAmount : 0.0,
       ),
     );
+    insertWithdrawalPageCubit.setAmount(amount: insertedAmount);
   }
 
   bool isValidateAmount({
@@ -45,7 +48,6 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
       if (insertedAmount > maxAmount) {
         return false;
       } else {
-        insertWithdrawalPageCubit.setAmount(amount: insertedAmount);
         return true;
       }
     } catch (e) {
