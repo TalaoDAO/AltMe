@@ -40,15 +40,19 @@ class SelectNetworkFeeBottomSheet extends StatelessWidget {
     return BlocProvider<SelectNetworkFeeCubit>(
       create: (_) => SelectNetworkFeeCubit(
         selectedNetworkFee: selectedNetwork,
-        onChanged: onChange,
       ),
-      child: const _SelectNetworkFeeBottomSheetView(),
+      child: _SelectNetworkFeeBottomSheetView(
+        onChange: onChange,
+      ),
     );
   }
 }
 
 class _SelectNetworkFeeBottomSheetView extends StatefulWidget {
-  const _SelectNetworkFeeBottomSheetView({Key? key}) : super(key: key);
+  const _SelectNetworkFeeBottomSheetView({Key? key, this.onChange})
+      : super(key: key);
+
+  final Function(NetworkFeeModel)? onChange;
 
   @override
   State<_SelectNetworkFeeBottomSheetView> createState() =>
@@ -92,7 +96,10 @@ class _SelectNetworkFeeBottomSheetViewState
               const SizedBox(height: Sizes.spaceNormal),
               Expanded(
                 child:
-                    BlocBuilder<SelectNetworkFeeCubit, SelectNetworkFeeState>(
+                    BlocConsumer<SelectNetworkFeeCubit, SelectNetworkFeeState>(
+                  listener: (_, state) {
+                    widget.onChange?.call(state.selectedNetworkFee);
+                  },
                   builder: (context, state) {
                     return ListView.separated(
                       itemCount: state.networkFeeList.length,
