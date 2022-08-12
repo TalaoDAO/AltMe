@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/scan.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,17 +10,24 @@ class CredentialsPresentPage extends StatefulWidget {
     Key? key,
     required this.uri,
     required this.preview,
+    required this.issuer,
   }) : super(key: key);
 
   final Uri uri;
   final Map<String, dynamic> preview;
+  final Issuer issuer;
 
   static Route route({
     required Uri uri,
     required Map<String, dynamic> preview,
+    required Issuer issuer,
   }) {
     return MaterialPageRoute<void>(
-      builder: (context) => CredentialsPresentPage(uri: uri, preview: preview),
+      builder: (context) => CredentialsPresentPage(
+        uri: uri,
+        preview: preview,
+        issuer: issuer,
+      ),
       settings: const RouteSettings(name: '/credentialsPresent'),
     );
   }
@@ -45,26 +51,14 @@ class _CredentialsPresentPageState extends State<CredentialsPresentPage> {
       body: BlocBuilder<ScanCubit, ScanState>(
         builder: (context, state) {
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Row(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.175,
-                    height: MediaQuery.of(context).size.width * 0.175,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.profileDummy,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      '''${l10n.credentialPresentRequiredCredential} credential(s).''',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  '''${l10n.credentialPresentRequiredCredential} credential(s).''',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
               ),
               // const SizedBox(height: 16.0),
               // DocumentWidget(
@@ -76,8 +70,9 @@ class _CredentialsPresentPageState extends State<CredentialsPresentPage> {
                 onPressed: () =>
                     Navigator.of(context).pushReplacement<void, void>(
                   QueryByExampleCredentialPickPage.route(
-                    widget.uri,
-                    widget.preview,
+                    uri: widget.uri,
+                    preview: widget.preview,
+                    issuer: widget.issuer,
                   ),
                 ),
                 text: l10n.credentialPresentConfirm,

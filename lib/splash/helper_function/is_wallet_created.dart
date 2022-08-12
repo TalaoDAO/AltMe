@@ -59,6 +59,8 @@ Future<bool> isWalletCreated({
     }
   }
 
+  await walletCubit.initialize();
+
   final String? currentCryptoIndex =
       await secureStorageProvider.get(SecureStorageKeys.currentCryptoIndex);
   if (currentCryptoIndex != null && currentCryptoIndex.isNotEmpty) {

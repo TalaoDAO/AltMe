@@ -11,13 +11,12 @@ class Issuer {
     required this.organizationInfo,
   });
 
-  factory Issuer.fromJson(Map<String, dynamic> json) =>
-      _$IssuerFromJson(json['issuer'] as Map<String, dynamic>);
+  factory Issuer.fromJson(Map<String, dynamic> json) => _$IssuerFromJson(json);
 
-  factory Issuer.emptyIssuer() => Issuer(
+  factory Issuer.emptyIssuer(String domain) => Issuer(
         preferredName: '',
         did: [],
-        organizationInfo: OrganizationInfo.emptyOrganizationInfo(),
+        organizationInfo: OrganizationInfo.emptyOrganizationInfo(domain),
       );
 
   @JsonKey(defaultValue: '')

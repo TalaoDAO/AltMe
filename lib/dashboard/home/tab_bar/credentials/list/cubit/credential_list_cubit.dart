@@ -22,10 +22,12 @@ class CredentialListCubit extends Cubit<CredentialListState> {
   final List<CredentialSubjectType> identityCategories = [
     CredentialSubjectType.emailPass,
     CredentialSubjectType.over18,
-    //CredentialSubjectType.identityCard,
+    CredentialSubjectType.identityCard,
   ];
 
   CredentialSubjectType over18 = CredentialSubjectType.over18;
+  CredentialSubjectType identityCredentialCard =
+      CredentialSubjectType.identityCard;
 
   Future<void> initialise(WalletCubit walletCubit) async {
     emit(state.fetching());
@@ -65,6 +67,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
           if (credentialSubjectType == over18) {
             identityCategories.remove(over18);
+          } else if (credentialSubjectType == identityCredentialCard) {
+            identityCategories.remove(identityCredentialCard);
           }
           break;
 
@@ -148,6 +152,16 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
             (element) =>
                 element.isDummy && element.credentialSubjectType == over18,
+          );
+          if (dummyCredential != null) {
+            _credentials.remove(dummyCredential);
+          }
+        } else if (credentialSubjectType == identityCredentialCard) {
+          /// remove dummy over18 credentials if exists
+          final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
+            (element) =>
+                element.isDummy &&
+                element.credentialSubjectType == identityCredentialCard,
           );
           if (dummyCredential != null) {
             _credentials.remove(dummyCredential);
@@ -301,6 +315,12 @@ class CredentialListCubit extends Cubit<CredentialListState> {
               (element) => element.credentialModel?.id == credential.id,
             )
             ..add(HomeCredential.isDummy(over18));
+        } else if (credentialSubjectType == identityCredentialCard) {
+          _credentials = List.of(state.identityCredentials)
+            ..removeWhere(
+              (element) => element.credentialModel?.id == credential.id,
+            )
+            ..add(HomeCredential.isDummy(identityCredentialCard));
         } else {
           _credentials = List.of(state.identityCredentials)
             ..removeWhere(

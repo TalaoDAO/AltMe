@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 class UiDate {
   UiDate._();
 
+  static final outputFormat = DateFormat('yyyy-MM-dd');
+
   static String displayDate(AppLocalizations localizations, String dateString) {
     if (dateString == '') return '';
     late DateTime date;
@@ -20,5 +22,18 @@ class UiDate {
     }
 
     return DateFormat.yMd(localizations.localeName).format(date);
+  }
+
+  static String formatDateTime(DateTime dateTime) {
+    return outputFormat.format(dateTime);
+  }
+
+  static String? formatTime(String formattedString) {
+    try {
+      final DateTime dt = DateFormat('hh:mm:ss').parse(formattedString);
+      return DateFormat.jm().format(dt);
+    } on FormatException {
+      return null;
+    }
   }
 }

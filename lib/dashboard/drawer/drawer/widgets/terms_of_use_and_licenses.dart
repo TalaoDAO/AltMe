@@ -4,8 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class NetworkAnIssuersItems extends StatelessWidget {
-  const NetworkAnIssuersItems({
+class TermsOfUseAndLicences extends StatelessWidget {
+  const TermsOfUseAndLicences({
     Key? key,
   }) : super(key: key);
 
@@ -16,7 +16,7 @@ class NetworkAnIssuersItems extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          l10n.networkAndIssuers,
+          l10n.termsOfUseAndLicenses,
           style: Theme.of(context).textTheme.drawerMenu,
         ),
         const SizedBox(height: 5),
@@ -25,21 +25,17 @@ class NetworkAnIssuersItems extends StatelessWidget {
           child: Column(
             children: [
               DrawerItem(
-                icon: IconStrings.cloudAdd,
-                title: l10n.chooseNetwork,
-                onTap: () async {
-                  await Navigator.of(context)
-                      .push<void>(ManageNetworkPage.route());
-                },
+                icon: IconStrings.terms,
+                title: l10n.termsOfUse,
+                onTap: () =>
+                    Navigator.of(context).push<void>(TermsPage.route()),
               ),
               const DrawerItemDivider(),
               DrawerItem(
-                icon: IconStrings.issuer,
-                title: l10n.chooseIssuerRegistry,
-                onTap: () async {
-                  await Navigator.of(context)
-                      .push<void>(ManageIssuersRegistryPage.route());
-                },
+                icon: IconStrings.terms,
+                title: l10n.licenses,
+                onTap: () =>
+                    Navigator.of(context).push<void>(LicensesPage.route()),
               ),
             ],
           ),

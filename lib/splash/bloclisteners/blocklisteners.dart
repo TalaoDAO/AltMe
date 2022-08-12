@@ -109,7 +109,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
     if (state.status == QrScanStatus.acceptHost) {
       if (state.uri != null) {
         final profileCubit = context.read<ProfileCubit>();
-        var approvedIssuer = Issuer.emptyIssuer();
+        var approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
         final isIssuerVerificationSettingTrue =
             profileCubit.state.model.issuerVerificationUrl != '';
         if (isIssuerVerificationSettingTrue) {
@@ -155,7 +155,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         }
 
         if (acceptHost) {
-          await context.read<QRCodeScanCubit>().accept(uri: state.uri!);
+          await context.read<QRCodeScanCubit>().accept(
+                uri: state.uri!,
+                issuer: approvedIssuer,
+              );
         } else {
           await context.read<QRCodeScanCubit>().emitError(
                 ResponseMessage(

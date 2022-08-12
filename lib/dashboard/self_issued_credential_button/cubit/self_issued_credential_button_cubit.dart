@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/self_issued_credential_button/models/self_issued_credential.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -131,12 +132,12 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
     final id = 'urn:uuid:${const Uuid().v4()}';
     final credentialModel = CredentialModel(
       id: id,
-      alias: '',
       image: 'image',
       data: jsonCredential,
       display: Display.emptyDisplay()..toJson(),
       shareLink: '',
       credentialPreview: Credential.fromJson(jsonCredential),
+      activities: [Activity(acquisitionAt: DateTime.now())],
     );
     await walletCubit.insertCredential(credentialModel);
     emit(

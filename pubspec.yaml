@@ -1,6 +1,6 @@
 name: altme
 description: AltMe Flutter App 
-version: 1.0.31+32
+version: 1.0.32+33
 publish_to: none
 
 environment:
@@ -91,3 +91,4 @@ flutter:
     - assets/image/
     - assets/privacy/
     - assets/terms/
+    - assets/notices/

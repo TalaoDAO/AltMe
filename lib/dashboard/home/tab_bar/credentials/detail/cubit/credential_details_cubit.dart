@@ -21,11 +21,9 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   final WalletCubit walletCubit;
   final DIDKitProvider didKitProvider;
 
-  void setTitle(String title) {
-    emit(state.copyWith(title: title));
-  }
-
   Future<void> verifyCredential(CredentialModel item) async {
+    if (isEbsiIssuer(item)) return;
+
     emit(state.copyWith(status: AppStatus.loading));
     await Future<void>.delayed(const Duration(milliseconds: 500));
     if (item.expirationDate != null) {
@@ -95,14 +93,5 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         ),
       );
     }
-  }
-
-  Future<void> update(CredentialModel item, String newAlias) async {
-    final newCredential = CredentialModel.copyWithAlias(
-      oldCredentialModel: item,
-      newAlias: newAlias,
-    );
-    await walletCubit.updateCredential(newCredential);
-    setTitle(newAlias);
   }
 }

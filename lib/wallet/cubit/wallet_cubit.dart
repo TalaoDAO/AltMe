@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/pick/credential_manifest/helpers/get_credentials_from_filter_list.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -30,9 +31,7 @@ class WalletCubit extends Cubit<WalletState> {
     required this.keyGenerator,
     required this.didCubit,
     required this.didKitProvider,
-  }) : super(WalletState()) {
-    initialize();
-  }
+  }) : super(WalletState());
 
   final CredentialsRepository repository;
   final SecureStorageProvider secureStorageProvider;
@@ -262,9 +261,11 @@ class WalletCubit extends Cubit<WalletState> {
     await repository.update(credential);
     final index =
         state.credentials.indexWhere((element) => element.id == credential.id);
+
     final credentials = List.of(state.credentials)
       ..removeWhere((element) => element.id == credential.id)
       ..insert(index, credential);
+
     await credentialListCubit.updateCredential(credential);
     emit(
       state.copyWith(
@@ -433,12 +434,12 @@ class WalletCubit extends Cubit<WalletState> {
     final id = oldId ?? 'urn:uuid:${const Uuid().v4()}';
     return CredentialModel(
       id: id,
-      alias: '',
       image: 'image',
       data: jsonCredential,
       display: Display.emptyDisplay()..toJson(),
       shareLink: '',
       credentialPreview: Credential.fromJson(jsonCredential),
+      activities: [Activity(acquisitionAt: DateTime.now())],
     );
   }
 }

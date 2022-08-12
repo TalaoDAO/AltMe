@@ -15,10 +15,11 @@ class OrganizationInfo {
   factory OrganizationInfo.fromJson(Map<String, dynamic> json) =>
       _$OrganizationInfoFromJson(json);
 
-  factory OrganizationInfo.emptyOrganizationInfo() => OrganizationInfo(
+  factory OrganizationInfo.emptyOrganizationInfo(String domain) =>
+      OrganizationInfo(
         id: '',
         legalName: '',
-        website: '',
+        website: domain,
         issuerDomain: [],
         currentAddress: '',
       );

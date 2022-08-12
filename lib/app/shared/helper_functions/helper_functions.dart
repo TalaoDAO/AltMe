@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:altme/dashboard/home/home.dart';
+
 String generateDefaultAccountName(
   int accountIndex,
   List<String> accountNameList,
@@ -15,4 +17,18 @@ String generateDefaultAccountName(
 
 bool isAndroid() {
   return Platform.isAndroid;
+}
+
+String getIssuerDid({required Uri uriToCheck}) {
+  String did = '';
+  uriToCheck.queryParameters.forEach((key, value) {
+    if (key == 'issuer') {
+      did = value;
+    }
+  });
+  return did;
+}
+
+bool isEbsiIssuer(CredentialModel credentialModel) {
+  return credentialModel.issuer.startsWith('did:ebsi');
 }

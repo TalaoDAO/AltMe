@@ -12,7 +12,6 @@ export 'default_dialog.dart';
 export 'dialog/dialog.dart';
 export 'dialog_close_button.dart';
 export 'display_terms.dart';
-export 'empty_page_view.dart';
 export 'error_view.dart';
 export 'hero_workaround.dart';
 export 'image_card_text.dart';

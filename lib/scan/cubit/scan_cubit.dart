@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
@@ -30,10 +31,11 @@ class ScanCubit extends Cubit<ScanState> {
   final SecureStorageProvider secureStorageProvider;
 
   Future<void> credentialOffer({
-    required String url,
+    required Uri uri,
     required CredentialModel credentialModel,
     required String keyId,
     CredentialModel? signatureOwnershipProof,
+    required Issuer issuer,
   }) async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -101,60 +103,79 @@ class ScanCubit extends Cubit<ScanState> {
       }
 
       final dynamic credential = await client.post(
-        url,
+        uri.toString(),
         data: data,
       );
 
       final dynamic jsonCredential =
           credential is String ? jsonDecode(credential) : credential;
 
-      final vcStr = jsonEncode(jsonCredential);
-      final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
+      if (!isEbsiIssuer(credentialModel)) {
+        /// not verifying credential for did:ebsi issuer
+        log.i('verifying Credential');
 
-      await Future<void>.delayed(const Duration(milliseconds: 500));
-      final verification = await didKitProvider.verifyCredential(vcStr, optStr);
+        final vcStr = jsonEncode(jsonCredential);
+        final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
 
-      log.i('[wallet/credential-offer/verify/vc] $vcStr');
-      log.i('[wallet/credential-offer/verify/options] $optStr');
-      log.i('[wallet/credential-offer/verify/result] $verification');
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        final verification =
+            await didKitProvider.verifyCredential(vcStr, optStr);
 
-      final jsonVerification = jsonDecode(verification) as Map<String, dynamic>;
+        log.i('[wallet/credential-offer/verify/vc] $vcStr');
+        log.i('[wallet/credential-offer/verify/options] $optStr');
+        log.i('[wallet/credential-offer/verify/result] $verification');
 
-      if ((jsonVerification['warnings'] as List).isNotEmpty) {
-        log.w(
-          'credential verification return warnings',
-          jsonVerification['warnings'],
-        );
+        final jsonVerification =
+            jsonDecode(verification) as Map<String, dynamic>;
 
-        emit(
-          state.warning(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING,
+        if ((jsonVerification['warnings'] as List).isNotEmpty) {
+          log.w(
+            'credential verification return warnings',
+            jsonVerification['warnings'],
+          );
+
+          emit(
+            state.warning(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING,
+              ),
             ),
-          ),
-        );
-      }
-
-      if ((jsonVerification['errors'] as List).isNotEmpty) {
-        log.w('failed to verify credential', jsonVerification['errors']);
-        if (jsonVerification['errors'][0] != 'No applicable proof') {
-          throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
           );
         }
+
+        if ((jsonVerification['errors'] as List).isNotEmpty) {
+          log.w('failed to verify credential', jsonVerification['errors']);
+          if (jsonVerification['errors'][0] != 'No applicable proof') {
+            throw ResponseMessage(
+              ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
+            );
+          }
+        }
       }
+
+      final List<Activity> activities =
+          List<Activity>.of(credentialModel.activities)
+            ..add(Activity(acquisitionAt: DateTime.now()));
 
       await walletCubit.insertCredential(
         CredentialModel.copyWithData(
           oldCredentialModel: credentialModel,
           newData: jsonCredential as Map<String, dynamic>,
+          activities: activities,
         ),
       );
 
+      if (signatureOwnershipProof != null) {
+        await presentationActivity(
+          credentialModels: [signatureOwnershipProof],
+          issuer: issuer,
+        );
+      }
+
       emit(state.success());
     } catch (e) {
-      log.e('something went wrong', e);
+      log.e('something went wrong - $e');
       if (e is MessageHandler) {
         emit(
           state.error(messageHandler: e),
@@ -178,6 +199,7 @@ class ScanCubit extends Cubit<ScanState> {
     required List<CredentialModel> credentials,
     required String challenge,
     required String domain,
+    required Issuer issuer,
   }) async {
     final log = getLogger('ScanCubit - verifiablePresentationRequest');
 
@@ -214,6 +236,11 @@ class ScanCubit extends Cubit<ScanState> {
         data: FormData.fromMap(<String, dynamic>{'presentation': presentation}),
       );
 
+      await presentationActivity(
+        credentialModels: credentials,
+        issuer: issuer,
+      );
+
       emit(
         state.success(
           messageHandler: ResponseMessage(
@@ -223,7 +250,6 @@ class ScanCubit extends Cubit<ScanState> {
         ),
       );
     } catch (e) {
-      log.e('something went wrong', e);
       if (e is MessageHandler) {
         emit(
           state.error(messageHandler: e),
@@ -316,6 +342,7 @@ class ScanCubit extends Cubit<ScanState> {
   Future<dynamic> presentCredentialToSiopV2Request({
     required CredentialModel credential,
     required SIOPV2Param sIOPV2Param,
+    required Issuer issuer,
   }) async {
     final log = getLogger('ScanCubit - presentCredentialToSiopV2Request');
     emit(state.loading());
@@ -349,6 +376,10 @@ class ScanCubit extends Cubit<ScanState> {
       );
 
       if (result == 'Congrats ! Everything is ok') {
+        await presentationActivity(
+          credentialModels: [credential],
+          issuer: issuer,
+        );
         emit(
           state.success(
             messageHandler: ResponseMessage(
@@ -461,5 +492,25 @@ class ScanCubit extends Cubit<ScanState> {
     log.i('jwt compact serialization: ${jws.toCompactSerialization()}');
 
     return jws.toCompactSerialization();
+  }
+
+  Future<void> presentationActivity({
+    required List<CredentialModel> credentialModels,
+    required Issuer issuer,
+  }) async {
+    final log = getLogger('ScanCubit');
+    log.i('adding presentation Activity');
+    for (final credentialModel in credentialModels) {
+      final Activity activity = Activity(
+        presentation: Presentation(
+          issuer: issuer,
+          presentedAt: DateTime.now(),
+        ),
+      );
+      credentialModel.activities.add(activity);
+
+      log.i('presentation activity added to the credential');
+      await walletCubit.updateCredential(credentialModel);
+    }
   }
 }

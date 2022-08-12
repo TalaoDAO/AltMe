@@ -2,7 +2,6 @@ import 'package:altme/app/shared/widget/base/credential_field.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class LabeledDisplayMappingWidget extends StatelessWidget {
   const LabeledDisplayMappingWidget({
@@ -28,25 +27,20 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
         valueColor: valueColor,
       );
     }
+
     if (object is LabeledDisplayMappingPath) {
       final widgets = <Widget>[];
       for (final e in object.path) {
         final textList = getTextsFromCredential(e, credentialModel.data);
+
         for (final element in textList) {
-          String value = element;
-
-          if (DateTime.tryParse(element) != null) {
-            final DateTime dt = DateTime.parse(element);
-            final outputFormat = DateFormat('dd/MM/yyyy');
-            value = outputFormat.format(dt);
-          }
-
           widgets.add(
-            CredentialField(
-              value: value,
+            CredentialDynamicDetial(
+              value: element,
               title: object.label,
               titleColor: titleColor,
               valueColor: valueColor,
+              format: object.schema.format,
             ),
           );
         }
@@ -57,10 +51,11 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
           children: widgets,
         );
       }
-      if (object.fallback != null) {
+      final String? fallback = object.fallback;
+      if (fallback != null) {
         return CredentialField(
           title: object.label,
-          value: object.fallback ?? '',
+          value: fallback,
           titleColor: titleColor,
           valueColor: valueColor,
         );

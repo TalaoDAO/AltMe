@@ -8,7 +8,6 @@ import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -64,7 +63,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
               .RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE,
         );
       }
-      final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      final date = UiDate.formatDateTime(DateTime.now());
       final fileName = 'altme-credential-$date';
       final message = {
         'date': date,
