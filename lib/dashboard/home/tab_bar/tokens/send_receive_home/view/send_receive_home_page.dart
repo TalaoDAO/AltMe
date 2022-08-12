@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -81,7 +82,47 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
               MyText(
                 '${tempToken.calculatedBalance.formatNumber()} ${tempToken.symbol}',
                 style: Theme.of(context).textTheme.headline4,
-              )
+              ),
+              MyText(
+                r'$--.--',
+                style: Theme.of(context).textTheme.normal,
+              ),
+              const SizedBox(
+                height: Sizes.spaceNormal,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  MyGradientButton(
+                    upperCase: false,
+                    text: l10n.send,
+                    verticalSpacing: 0,
+                    margin: const EdgeInsets.all(Sizes.spaceSmall),
+                    fontSize: 16,
+                    borderRadius: Sizes.smallRadius,
+                    height: Sizes.normalButton,
+                    icon: Image.asset(
+                      IconStrings.send,
+                      width: Sizes.icon,
+                    ),
+                    onPressed: () {},
+                  ),
+                  MyGradientButton(
+                    upperCase: false,
+                    text: l10n.receive,
+                    verticalSpacing: 0,
+                    fontSize: 16,
+                    margin: const EdgeInsets.all(Sizes.spaceSmall),
+                    borderRadius: Sizes.smallRadius,
+                    height: Sizes.normalButton,
+                    icon: Image.asset(
+                      IconStrings.receive,
+                      width: Sizes.icon,
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
             ],
           )
         ],

@@ -475,5 +475,7 @@
   "withdrawalFailedMessage": "The withdrawal from the account was unsuccessful",
   "link": "Link",
   "myTokens": "My tokens",
-  "tezosMainNetwork": "Tezos Main Network"
+  "tezosMainNetwork": "Tezos Main Network",
+  "send": "Send",
+  "receive":"Receive"
 }

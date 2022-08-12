@@ -423,7 +423,9 @@
     "withdrawalFailedMessage",
     "link",
     "myTokens",
-    "tezosMainNetwork"
+    "tezosMainNetwork",
+    "send",
+    "receive"
   ],
 
   "es": [
@@ -850,7 +852,9 @@
     "withdrawalFailedMessage",
     "link",
     "myTokens",
-    "tezosMainNetwork"
+    "tezosMainNetwork",
+    "send",
+    "receive"
   ],
 
   "fr": [
@@ -1277,7 +1281,9 @@
     "withdrawalFailedMessage",
     "link",
     "myTokens",
-    "tezosMainNetwork"
+    "tezosMainNetwork",
+    "send",
+    "receive"
   ],
 
   "it": [
@@ -1698,6 +1704,8 @@
     "withdrawalFailedMessage",
     "link",
     "myTokens",
-    "tezosMainNetwork"
+    "tezosMainNetwork",
+    "send",
+    "receive"
   ]
 }

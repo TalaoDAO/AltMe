@@ -11,6 +11,10 @@ class MyGradientButton extends StatelessWidget {
     this.fontSize = 18,
     this.gradient,
     this.onPressed,
+    this.icon,
+    this.upperCase = true,
+    this.height,
+    this.margin = EdgeInsets.zero,
   }) : super(key: key);
 
   final String text;
@@ -20,6 +24,10 @@ class MyGradientButton extends StatelessWidget {
   final double fontSize;
   final Gradient? gradient;
   final GestureTapCallback? onPressed;
+  final Widget? icon;
+  final bool upperCase;
+  final double? height;
+  final EdgeInsets margin;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +41,10 @@ class MyGradientButton extends StatelessWidget {
           ],
           stops: const [0.0, 0.4],
         );
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
+    return Expanded(
       child: Container(
+        margin: margin,
+        height: height,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
           gradient: onPressed == null ? null : gradientValue,
@@ -43,7 +52,7 @@ class MyGradientButton extends StatelessWidget {
               ? Theme.of(context).colorScheme.disabledBgColor
               : null,
         ),
-        child: ElevatedButton(
+        child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
             elevation: elevation,
             padding: EdgeInsets.symmetric(vertical: verticalSpacing),
@@ -54,8 +63,9 @@ class MyGradientButton extends StatelessWidget {
             ),
           ),
           onPressed: onPressed,
-          child: Text(
-            text.toUpperCase(),
+          icon: icon ?? const Center(),
+          label: Text(
+            upperCase ? text.toUpperCase() : text,
             style: TextStyle(
               color: onPressed != null
                   ? Theme.of(context).colorScheme.onElevatedButton
