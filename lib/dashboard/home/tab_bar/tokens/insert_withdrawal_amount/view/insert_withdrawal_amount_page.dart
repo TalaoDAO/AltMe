@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -92,14 +91,11 @@ class _InsertWithdrawalAmountViewState
                 text: l10n.next,
                 onPressed: state.isValidWithdrawal
                     ? () {
-                        final walletState = context.read<WalletCubit>().state;
                         Navigator.of(context).push<void>(
                           ConfirmWithdrawalPage.route(
                             selectedToken: state.selectedToken,
                             withdrawalAddress: widget.withdrawalAddress,
                             amount: state.amount,
-                            selectedAccountSecretKey: walletState.cryptoAccount
-                                .data[walletState.currentCryptoIndex].secretKey,
                           ),
                         );
                       }
