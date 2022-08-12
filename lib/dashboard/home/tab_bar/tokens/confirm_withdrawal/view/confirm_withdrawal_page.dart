@@ -37,10 +37,8 @@ class ConfirmWithdrawalPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ConfirmWithdrawalCubit>(
       create: (_) => ConfirmWithdrawalCubit(
-        initialState: ConfirmWithdrawalState(
-          withdrawalAddress: withdrawalAddress,
-          networkFee: NetworkFeeModel.networks()[1],
-        ),
+        initialState:
+            ConfirmWithdrawalState(withdrawalAddress: withdrawalAddress),
       ),
       child: ConfirmWithdrawalView(
         selectedToken: selectedToken,
@@ -177,16 +175,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     symbol: widget.selectedToken.symbol,
                     networkFee: state.networkFee,
                     onEditButtonPressed: () {
-                      SelectNetworkFeeBottomSheet.show(
-                        context: context,
-                        selectedNetwork: state.networkFee,
-                        //TODO(all) : do some adjustment
-                        onChange: (networkFee) {
-                          context
-                              .read<ConfirmWithdrawalCubit>()
-                              .setNetworkFee(networkFee: networkFee);
-                        },
-                      );
+                      SelectNetworkFeeBottomSheet.show(context: context);
                     },
                   ),
                 ],

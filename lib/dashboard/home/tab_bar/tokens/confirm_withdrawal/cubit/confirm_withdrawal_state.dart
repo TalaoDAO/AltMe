@@ -2,12 +2,12 @@ part of 'confirm_withdrawal_cubit.dart';
 
 @JsonSerializable()
 class ConfirmWithdrawalState extends Equatable {
-  const ConfirmWithdrawalState({
+  ConfirmWithdrawalState({
     required this.withdrawalAddress,
-    required this.networkFee,
+    NetworkFeeModel? networkFee,
     this.status = AppStatus.init,
     this.message,
-  });
+  }) : networkFee = networkFee ?? NetworkFeeModel.networks()[1];
 
   factory ConfirmWithdrawalState.fromJson(Map<String, dynamic> json) =>
       _$ConfirmWithdrawalStateFromJson(json);
