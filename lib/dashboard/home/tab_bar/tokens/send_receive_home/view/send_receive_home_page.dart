@@ -105,7 +105,9 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                       IconStrings.send,
                       width: Sizes.icon,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push<void>(SendToPage.route());
+                    },
                   ),
                   MyGradientButton(
                     upperCase: false,
