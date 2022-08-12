@@ -6,15 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectTokenBottomSheet extends StatelessWidget {
-  const SelectTokenBottomSheet({Key? key, required this.tokensCubit})
-      : super(key: key);
+  const SelectTokenBottomSheet({Key? key}) : super(key: key);
 
-  final TokensCubit tokensCubit;
-
-  static Future<TokenModel?> show(
-    BuildContext context,
-    TokensCubit tokensCubit,
-  ) {
+  static Future<TokenModel?> show(BuildContext context) {
     return showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -23,18 +17,13 @@ class SelectTokenBottomSheet extends StatelessWidget {
         ),
       ),
       context: context,
-      builder: (_) => SelectTokenBottomSheet(
-        tokensCubit: tokensCubit,
-      ),
+      builder: (_) => const SelectTokenBottomSheet(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<TokensCubit>.value(
-      value: tokensCubit,
-      child: const _SelectTokenBottomSheetView(),
-    );
+    return const _SelectTokenBottomSheetView();
   }
 }
 

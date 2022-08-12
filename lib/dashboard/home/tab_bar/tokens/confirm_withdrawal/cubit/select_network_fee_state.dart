@@ -2,10 +2,10 @@ part of 'select_network_fee_cubit.dart';
 
 @JsonSerializable()
 class SelectNetworkFeeState extends Equatable {
-  const SelectNetworkFeeState({
-    required this.networkFeeList,
+  SelectNetworkFeeState({
     required this.selectedNetworkFee,
-  });
+    List<NetworkFeeModel>? networkFeeList,
+  }) : networkFeeList = networkFeeList ?? NetworkFeeModel.networks();
 
   factory SelectNetworkFeeState.fromJson(Map<String, dynamic> json) =>
       _$SelectNetworkFeeStateFromJson(json);

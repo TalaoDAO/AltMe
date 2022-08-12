@@ -107,7 +107,16 @@ class App extends StatelessWidget {
             homeCubit: context.read<HomeCubit>(),
             walletCubit: context.read<WalletCubit>(),
           ),
-        )
+        ),
+        BlocProvider<TokensCubit>(
+          create: (context) => TokensCubit(
+            client: DioClient(
+              context.read<ManageNetworkCubit>().state.network.tzktUrl,
+              Dio(),
+            ),
+            walletCubit: context.read<WalletCubit>(),
+          ),
+        ),
       ],
       child: const MaterialAppDefinition(),
     );

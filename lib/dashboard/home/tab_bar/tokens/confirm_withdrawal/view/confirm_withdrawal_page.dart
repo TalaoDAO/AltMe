@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,53 +11,38 @@ class ConfirmWithdrawalPage extends StatelessWidget {
     Key? key,
     required this.selectedToken,
     required this.withdrawalAddress,
-    required this.selectedAccountSecretKey,
     required this.amount,
   }) : super(key: key);
 
   static Route route({
     required TokenModel selectedToken,
     required String withdrawalAddress,
-    required String selectedAccountSecretKey,
     required double amount,
   }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/ConfirmWithdrawalView'),
-      builder: (_) => BlocProvider<ConfirmWithdrawalCubit>(
-        create: (_) => ConfirmWithdrawalCubit(
-          initialState: ConfirmWithdrawalState(
-            withdrawalAddress: withdrawalAddress,
-            networkFee: NetworkFeeModel.networks()[1],
-          ),
-        ),
-        child: ConfirmWithdrawalPage(
-          selectedToken: selectedToken,
-          withdrawalAddress: withdrawalAddress,
-          selectedAccountSecretKey: selectedAccountSecretKey,
-          amount: amount,
-        ),
+      builder: (_) => ConfirmWithdrawalPage(
+        selectedToken: selectedToken,
+        withdrawalAddress: withdrawalAddress,
+        amount: amount,
       ),
     );
   }
 
   final TokenModel selectedToken;
   final String withdrawalAddress;
-  final String selectedAccountSecretKey;
   final double amount;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ConfirmWithdrawalCubit>(
       create: (_) => ConfirmWithdrawalCubit(
-        initialState: ConfirmWithdrawalState(
-          withdrawalAddress: withdrawalAddress,
-          networkFee: NetworkFeeModel.networks()[1],
-        ),
+        initialState:
+            ConfirmWithdrawalState(withdrawalAddress: withdrawalAddress),
       ),
       child: ConfirmWithdrawalView(
         selectedToken: selectedToken,
         withdrawalAddress: withdrawalAddress,
-        selectedAccountSecretKey: selectedAccountSecretKey,
         amount: amount,
       ),
     );
@@ -68,38 +54,11 @@ class ConfirmWithdrawalView extends StatefulWidget {
     Key? key,
     required this.selectedToken,
     required this.withdrawalAddress,
-    required this.selectedAccountSecretKey,
     required this.amount,
   }) : super(key: key);
 
-  static Route route({
-    required TokenModel selectedToken,
-    required String withdrawalAddress,
-    required String selectedAccountSecretKey,
-    required double amount,
-  }) {
-    return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: '/ConfirmWithdrawalView'),
-      builder: (_) => BlocProvider<ConfirmWithdrawalCubit>(
-        create: (_) => ConfirmWithdrawalCubit(
-          initialState: ConfirmWithdrawalState(
-            withdrawalAddress: withdrawalAddress,
-            networkFee: NetworkFeeModel.networks()[1],
-          ),
-        ),
-        child: ConfirmWithdrawalView(
-          selectedToken: selectedToken,
-          withdrawalAddress: withdrawalAddress,
-          selectedAccountSecretKey: selectedAccountSecretKey,
-          amount: amount,
-        ),
-      ),
-    );
-  }
-
   final TokenModel selectedToken;
   final String withdrawalAddress;
-  final String selectedAccountSecretKey;
   final double amount;
 
   @override
@@ -216,15 +175,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     symbol: widget.selectedToken.symbol,
                     networkFee: state.networkFee,
                     onEditButtonPressed: () {
-                      SelectNetworkFeeBottomSheet.show(
-                        context: context,
-                        selectedNetwork: state.networkFee,
-                        onChange: (networkFee) {
-                          context
-                              .read<ConfirmWithdrawalCubit>()
-                              .setNetworkFee(networkFee: networkFee);
-                        },
-                      );
+                      SelectNetworkFeeBottomSheet.show(context: context);
                     },
                   ),
                 ],
@@ -255,12 +206,16 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                           PinCodePage.route(
                             restrictToBack: false,
                             isValidCallback: () {
+                              final walletState =
+                                  context.read<WalletCubit>().state;
                               context
                                   .read<ConfirmWithdrawalCubit>()
                                   .withdrawTezos(
                                     tokenAmount: widget.amount,
-                                    selectedAccountSecretKey:
-                                        widget.selectedAccountSecretKey,
+                                    selectedAccountSecretKey: walletState
+                                        .cryptoAccount
+                                        .data[walletState.currentCryptoIndex]
+                                        .secretKey,
                                   );
                             },
                           ),

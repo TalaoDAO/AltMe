@@ -1,8 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,33 +22,8 @@ class InsertWithdrawalAmountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<InsertWithdrawalPageCubit>(
-          create: (_) => InsertWithdrawalPageCubit(
-            initialState: const InsertWithdrawalPageState(
-              selectedToken: TokenModel(
-                '',
-                'Tezos',
-                'XTZ',
-                'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
-                null,
-                '00000000',
-                '6',
-              ),
-            ),
-          ),
-        ),
-        BlocProvider<TokensCubit>(
-          create: (context) => TokensCubit(
-            client: DioClient(
-              context.read<ManageNetworkCubit>().state.network.tzktUrl,
-              Dio(),
-            ),
-            walletCubit: context.read<WalletCubit>(),
-          ),
-        )
-      ],
+    return BlocProvider<InsertWithdrawalPageCubit>(
+      create: (_) => InsertWithdrawalPageCubit(),
       child: InsertWithdrawalAmountView(withdrawalAddress: withdrawalAddress),
     );
   }
@@ -73,16 +46,6 @@ class _InsertWithdrawalAmountViewState
     extends State<InsertWithdrawalAmountView> {
   late final insertWithdrawalPageCubit =
       context.read<InsertWithdrawalPageCubit>();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,20 +74,8 @@ class _InsertWithdrawalAmountViewState
                 const SizedBox(
                   height: Sizes.spaceNormal,
                 ),
-                TokenSelectBoxView(
-                  selectedToken: state.selectedToken,
-                  tokenSelectBoxChanged: (selectedToken) {
-                    insertWithdrawalPageCubit.setSelectedToken(
-                      selectedToken: selectedToken,
-                    );
-                  },
-                ),
-                TokenAmountCalculatorView(
-                  selectedTokenChangedCallback: () => state.selectedToken,
-                  onAmountChanged: (double amount) {
-                    insertWithdrawalPageCubit.setAmount(amount: amount);
-                  },
-                ),
+                TokenSelectBoxView(selectedToken: state.selectedToken),
+                TokenAmountCalculatorView(selectedToken: state.selectedToken),
               ],
             ),
           ),
@@ -140,14 +91,11 @@ class _InsertWithdrawalAmountViewState
                 text: l10n.next,
                 onPressed: state.isValidWithdrawal
                     ? () {
-                        final walletState = context.read<WalletCubit>().state;
                         Navigator.of(context).push<void>(
                           ConfirmWithdrawalPage.route(
                             selectedToken: state.selectedToken,
                             withdrawalAddress: widget.withdrawalAddress,
                             amount: state.amount,
-                            selectedAccountSecretKey: walletState.cryptoAccount
-                                .data[walletState.currentCryptoIndex].secretKey,
                           ),
                         );
                       }

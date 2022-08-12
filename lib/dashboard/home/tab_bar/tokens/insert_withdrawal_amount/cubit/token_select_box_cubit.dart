@@ -9,11 +9,12 @@ part 'token_select_box_cubit.g.dart';
 
 class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
   TokenSelectBoxCubit({
-    required TokenModel selectedToken,
     required this.tokensCubit,
-  }) : super(TokenSelectBoxState(selectedToken: selectedToken));
+    required this.insertWithdrawalPageCubit,
+  }) : super(const TokenSelectBoxState());
 
   final TokensCubit tokensCubit;
+  final InsertWithdrawalPageCubit insertWithdrawalPageCubit;
 
   void getBalanceOfAssetList() {
     setLoading(isLoading: true);
@@ -26,7 +27,7 @@ class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
   }
 
   void setSelectedToken({required TokenModel tokenModel}) {
-    emit(state.copyWith(selectedToken: tokenModel));
+    insertWithdrawalPageCubit.setSelectedToken(selectedToken: tokenModel);
   }
 
   void setLoading({required bool isLoading}) {

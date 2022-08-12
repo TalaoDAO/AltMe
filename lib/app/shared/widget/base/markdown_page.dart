@@ -29,9 +29,11 @@ class MarkdownPage extends StatelessWidget {
                 data: snapshot.data!,
                 styleSheet: MarkdownStyleSheet(
                   h1: TextStyle(
-                      color: Theme.of(context).colorScheme.markDownH1),
+                    color: Theme.of(context).colorScheme.markDownH1,
+                  ),
                   h2: TextStyle(
-                      color: Theme.of(context).colorScheme.markDownH2),
+                    color: Theme.of(context).colorScheme.markDownH2,
+                  ),
                   a: TextStyle(color: Theme.of(context).colorScheme.markDownA),
                   p: TextStyle(color: Theme.of(context).colorScheme.markDownP),
                 ),

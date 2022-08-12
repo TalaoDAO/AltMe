@@ -10,26 +10,28 @@ part 'token_amount_calculator_state.dart';
 part 'token_amount_calculator_cubit.g.dart';
 
 class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
-  TokenAmountCalculatorCubit()
-      : super(
-          const TokenAmountCalculatorState(),
-        );
+  TokenAmountCalculatorCubit({
+    required this.insertWithdrawalPageCubit,
+  }) : super(const TokenAmountCalculatorState());
+
+  final InsertWithdrawalPageCubit insertWithdrawalPageCubit;
 
   void setAmount({
     required String amount,
     required TokenModel selectedToken,
   }) {
+    final bool isValid =
+        isValidateAmount(amount: amount, selectedToken: selectedToken);
+
+    final insertedAmount = double.parse(amount.replaceAll(',', ''));
+
     emit(
       state.copyWith(
         amount: amount,
-        validAmount:
-            isValidateAmount(amount: amount, selectedToken: selectedToken)
-                ? double.parse(
-                    amount.replaceAll(',', ''),
-                  )
-                : 0.0,
+        validAmount: isValid ? insertedAmount : 0.0,
       ),
     );
+    insertWithdrawalPageCubit.setAmount(amount: insertedAmount);
   }
 
   bool isValidateAmount({
