@@ -32,6 +32,16 @@ class _SendReceiveHomePageView extends StatefulWidget {
 }
 
 class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
+  final tempToken = const TokenModel(
+    '',
+    'Tezos',
+    'XTZ',
+    'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
+    null,
+    '00000000',
+    '6',
+  );
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -39,21 +49,19 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
       scrollView: false,
       titleLeading: const BackLeadingButton(),
       titleTrailing: const CryptoAccountSwitcherButton(),
-      body: BackgroundCard(
-        height: double.infinity,
-        width: double.infinity,
-        padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(Sizes.spaceXSmall),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [],
-            ),
+      body: Stack(
+        children: [
+          const BackgroundCard(
+            height: double.infinity,
+            width: double.infinity,
+            margin: EdgeInsets.only(top: Sizes.icon4x / 2),
           ),
-        ),
+          Column(
+            children: [
+              CachedImageFromNetwork(tempToken.iconUrl ?? '',),
+            ],
+          )
+        ],
       ),
     );
   }
