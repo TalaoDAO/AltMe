@@ -30,6 +30,9 @@ void callbackDispatcher() {
                 await secureStorageProvider.get(
               SecureStorageKeys.passBaseStatus,
             );
+            log.i(
+                'passbase isolate passbaseStatusFrom storage: $passbaseStatusFromStorage');
+
             final PassBaseStatus oldPassBaseStatus =
                 getPassBaseStatusFromString(
               passbaseStatusFromStorage,
@@ -39,6 +42,8 @@ void callbackDispatcher() {
               try {
                 final PassBaseStatus newPassBaseStatus =
                     await getPassBaseStatus(did);
+                log.i('passbase isolate newPassBaseStatus: $newPassBaseStatus');
+
                 switch (newPassBaseStatus) {
                   case PassBaseStatus.approved:
                   case PassBaseStatus.declined:

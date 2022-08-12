@@ -78,11 +78,14 @@ class HomeCubit extends Cubit<HomeState> {
     } else {
       passBaseStatus = PassBaseStatus.undone;
     }
-
     if (passBaseStatus != PassBaseStatus.approved) {
       try {
         final did = didCubit.state.did!;
         passBaseStatus = await getPassBaseStatus(did);
+        await secureStorageProvider.set(
+          SecureStorageKeys.passBaseStatus,
+          passBaseStatus.name,
+        );
       } catch (e) {
         emit(
           state.copyWith(
