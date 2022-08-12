@@ -23,12 +23,13 @@ class TokenItem extends StatelessWidget {
           minVerticalPadding: 0,
           leading: token.iconUrl == null
               ? Container(
-                  color: Theme.of(context).primaryColorDark,
                   width: Sizes.tokenLogoSize,
                   height: Sizes.tokenLogoSize,
-                  decoration: const BoxDecoration(
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(Sizes.tokenLogoSize)),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColorDark,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(Sizes.tokenLogoSize),
+                    ),
                   ),
                 )
               : CachedImageFromNetwork(
