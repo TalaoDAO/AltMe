@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,16 +20,7 @@ class _TokenPageState extends State<TokenPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocProvider<TokensCubit>(
-      create: (context) => TokensCubit(
-        client: DioClient(
-          context.read<ManageNetworkCubit>().state.network.tzktUrl,
-          Dio(),
-        ),
-        walletCubit: context.read<WalletCubit>(),
-      ),
-      child: const TokenView(),
-    );
+    return const TokenView();
   }
 }
 

@@ -8,8 +8,7 @@ part 'send_to_state.dart';
 part 'send_to_cubit.g.dart';
 
 class SendToCubit extends Cubit<SendToState> {
-  SendToCubit({required CryptoAccountData selectedAccount})
-      : super(SendToState(selectedAccount: selectedAccount));
+  SendToCubit() : super(const SendToState());
 
   void setSelectedAccount({required CryptoAccountData selectedAccount}) {
     emit(state.copyWith(selectedAccount: selectedAccount));

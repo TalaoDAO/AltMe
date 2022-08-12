@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,27 +19,12 @@ class TokenSelectBoxView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<TokensCubit>(
-          create: (_) => TokensCubit(
-            client: DioClient(
-              context.read<ManageNetworkCubit>().state.network.tzktUrl,
-              Dio(),
-            ),
-            walletCubit: context.read<WalletCubit>(),
-          ),
-        ),
-        BlocProvider<TokenSelectBoxCubit>(
-          create: (_) => TokenSelectBoxCubit(
-            selectedToken: selectedToken,
-            tokensCubit: context.read<TokensCubit>(),
-          ),
-        ),
-      ],
-      child: _TokenSelectBox(
-        tokenSelectBoxChanged: tokenSelectBoxChanged,
+    return BlocProvider<TokenSelectBoxCubit>(
+      create: (_) => TokenSelectBoxCubit(
+        selectedToken: selectedToken,
+        tokensCubit: context.read<TokensCubit>(),
       ),
+      child: _TokenSelectBox(tokenSelectBoxChanged: tokenSelectBoxChanged),
     );
   }
 }
@@ -115,7 +99,6 @@ class _TokenSelectBoxItem extends StatelessWidget {
       onTap: () async {
         final selectedToken = await SelectTokenBottomSheet.show(
           context,
-          context.read<TokenSelectBoxCubit>().tokensCubit,
         );
         if (selectedToken != null) {
           context

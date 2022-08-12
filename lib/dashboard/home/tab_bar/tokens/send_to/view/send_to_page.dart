@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,13 +17,7 @@ class SendToPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SendToCubit(
-        selectedAccount: context
-            .read<WalletCubit>()
-            .state
-            .cryptoAccount
-            .data[context.read<WalletCubit>().state.currentCryptoIndex],
-      ),
+      create: (_) => SendToCubit(),
       child: const SendToView(),
     );
   }
@@ -32,13 +25,6 @@ class SendToPage extends StatelessWidget {
 
 class SendToView extends StatefulWidget {
   const SendToView({Key? key}) : super(key: key);
-
-  static Route route() {
-    return MaterialPageRoute<void>(
-      builder: (_) => const SendToView(),
-      settings: const RouteSettings(name: '/SendToView'),
-    );
-  }
 
   @override
   State<SendToView> createState() => _SendToViewState();

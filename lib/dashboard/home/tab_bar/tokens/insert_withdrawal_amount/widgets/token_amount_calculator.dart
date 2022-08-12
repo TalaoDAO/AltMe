@@ -8,25 +8,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-typedef OnAmountChanged = void Function(double);
 typedef SelectedTokenChangedCallback = TokenModel Function();
 
-class TokenAmountCalculatorView extends StatefulWidget {
+class TokenAmountCalculatorView extends StatelessWidget {
   const TokenAmountCalculatorView({
     Key? key,
-    this.onAmountChanged,
-    required this.selectedTokenChangedCallback,
+    required this.selectedToken,
   }) : super(key: key);
 
-  final OnAmountChanged? onAmountChanged;
-  final SelectedTokenChangedCallback selectedTokenChangedCallback;
+  final TokenModel selectedToken;
 
   @override
-  State<TokenAmountCalculatorView> createState() =>
-      _TokenAmountCalculatorViewState();
+  Widget build(BuildContext context) {
+    return BlocProvider<TokenAmountCalculatorCubit>(
+      create: (_) => TokenAmountCalculatorCubit(
+        insertWithdrawalPageCubit: context.read<InsertWithdrawalPageCubit>(),
+      ),
+      child: TokenAmountCalculatorPage(selectedToken: selectedToken),
+    );
+  }
 }
 
-class _TokenAmountCalculatorViewState extends State<TokenAmountCalculatorView> {
+class TokenAmountCalculatorPage extends StatefulWidget {
+  const TokenAmountCalculatorPage({
+    Key? key,
+    required this.selectedToken,
+  }) : super(key: key);
+
+  final TokenModel selectedToken;
+
+  @override
+  State<TokenAmountCalculatorPage> createState() =>
+      _TokenAmountCalculatorPageState();
+}
+
+class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
   final amountController = TextEditingController();
 
   late final _selectionControls = Platform.isIOS
@@ -46,7 +62,7 @@ class _TokenAmountCalculatorViewState extends State<TokenAmountCalculatorView> {
     } else {
       context.read<TokenAmountCalculatorCubit>().setAmount(
             amount: text,
-            selectedToken: widget.selectedTokenChangedCallback.call(),
+            selectedToken: widget.selectedToken,
           );
     }
   }
@@ -63,7 +79,7 @@ class _TokenAmountCalculatorViewState extends State<TokenAmountCalculatorView> {
     final text = amountController.text;
     context.read<TokenAmountCalculatorCubit>().setAmount(
           amount: text + key,
-          selectedToken: widget.selectedTokenChangedCallback.call(),
+          selectedToken: widget.selectedToken,
         );
   }
 
@@ -84,10 +100,7 @@ class _TokenAmountCalculatorViewState extends State<TokenAmountCalculatorView> {
           const SizedBox(
             height: Sizes.spaceLarge,
           ),
-          BlocConsumer<TokenAmountCalculatorCubit, TokenAmountCalculatorState>(
-            listener: (_, state) {
-              widget.onAmountChanged?.call(state.validAmount);
-            },
+          BlocBuilder<TokenAmountCalculatorCubit, TokenAmountCalculatorState>(
             builder: (context, state) {
               _setAmountControllerText(state.amount);
               return Column(
@@ -109,8 +122,7 @@ class _TokenAmountCalculatorViewState extends State<TokenAmountCalculatorView> {
                             .read<TokenAmountCalculatorCubit>()
                             .isValidateAmount(
                               amount: value,
-                              selectedToken:
-                                  widget.selectedTokenChangedCallback.call(),
+                              selectedToken: widget.selectedToken,
                             );
                         if (isValid) {
                           return null;
@@ -125,10 +137,10 @@ class _TokenAmountCalculatorViewState extends State<TokenAmountCalculatorView> {
                       cursorRadius: const Radius.circular(4),
                       onChanged: (value) {
                         if (value != amountController.text) {
+                          _setAmountControllerText(state.amount);
                           context.read<TokenAmountCalculatorCubit>().setAmount(
                                 amount: value,
-                                selectedToken:
-                                    widget.selectedTokenChangedCallback.call(),
+                                selectedToken: widget.selectedToken,
                               );
                         }
                       },
@@ -144,8 +156,7 @@ class _TokenAmountCalculatorViewState extends State<TokenAmountCalculatorView> {
                           vertical: 5,
                           horizontal: 10,
                         ),
-                        suffixText:
-                            widget.selectedTokenChangedCallback.call().symbol,
+                        suffixText: widget.selectedToken.symbol,
                         suffixStyle:
                             Theme.of(context).textTheme.headline6?.copyWith(
                                   color: Colors.white,
@@ -158,14 +169,11 @@ class _TokenAmountCalculatorViewState extends State<TokenAmountCalculatorView> {
                   MaxButton(
                     onTap: () {
                       _setAmountControllerText(
-                        widget.selectedTokenChangedCallback
-                            .call()
-                            .calculatedBalance,
+                        widget.selectedToken.calculatedBalance,
                       );
                       context.read<TokenAmountCalculatorCubit>().setAmount(
                             amount: amountController.text,
-                            selectedToken:
-                                widget.selectedTokenChangedCallback.call(),
+                            selectedToken: widget.selectedToken,
                           );
                     },
                   ),
@@ -215,9 +223,7 @@ class _TokenAmountCalculatorViewState extends State<TokenAmountCalculatorView> {
                                 .read<TokenAmountCalculatorCubit>()
                                 .setAmount(
                                   amount: '',
-                                  selectedToken: widget
-                                      .selectedTokenChangedCallback
-                                      .call(),
+                                  selectedToken: widget.selectedToken,
                                 );
                           },
                           onTap: (_) {
@@ -231,9 +237,7 @@ class _TokenAmountCalculatorViewState extends State<TokenAmountCalculatorView> {
                                   .read<TokenAmountCalculatorCubit>()
                                   .setAmount(
                                     amount: amount,
-                                    selectedToken: widget
-                                        .selectedTokenChangedCallback
-                                        .call(),
+                                    selectedToken: widget.selectedToken,
                                   );
                             }
                           },
