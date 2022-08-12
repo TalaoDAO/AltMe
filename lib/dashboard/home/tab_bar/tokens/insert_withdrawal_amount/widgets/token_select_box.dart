@@ -48,19 +48,14 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        //TODO(all) : do some adjustment
-        BlocListener<WalletCubit, WalletState>(
-          listenWhen: (previous, current) =>
-              current.currentCryptoIndex != previous.currentCryptoIndex,
-          listener: (context, walletState) {
-            //when walletState changed we need to update TokensCubit because it
-            // used walletCubit inside itself
-            context.read<TokenSelectBoxCubit>().getBalanceOfAssetList();
-          },
-        ),
-      ],
+    return BlocListener<WalletCubit, WalletState>(
+      listenWhen: (previous, current) =>
+          current.currentCryptoIndex != previous.currentCryptoIndex,
+      listener: (context, walletState) {
+        //when walletState changed we need to update TokensCubit because it
+        // used walletCubit inside itself
+        context.read<TokenSelectBoxCubit>().getBalanceOfAssetList();
+      },
       child: _TokenSelectBoxItem(selectedToken: widget.selectedToken),
     );
   }
