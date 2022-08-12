@@ -73,8 +73,15 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
               const SizedBox(
                 height: Sizes.spaceSmall,
               ),
-              Text(l10n.myTokens, style: Theme.of(context).textTheme.headline6),
-              TezosNetworkSwitcherButton(),
+              Text(l10n.myTokens, style: Theme.of(context).textTheme.headline5),
+              const TezosNetworkSwitcherButton(),
+              const SizedBox(
+                height: Sizes.spaceLarge,
+              ),
+              MyText(
+                '${tempToken.calculatedBalance.formatNumber()} ${tempToken.symbol}',
+                style: Theme.of(context).textTheme.headline4,
+              )
             ],
           )
         ],

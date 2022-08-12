@@ -76,7 +76,18 @@ abstract class AppTheme {
             fontWeight: FontWeight.w600,
           ),
           headline6: GoogleFonts.nunito(
+            color: const Color(0xFFFFFFFF),
             fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+          headline5: GoogleFonts.nunito(
+            color: const Color(0xFFFFFFFF),
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+          headline4: GoogleFonts.nunito(
+            color: const Color(0xFFFFFFFF),
+            fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
         ),
