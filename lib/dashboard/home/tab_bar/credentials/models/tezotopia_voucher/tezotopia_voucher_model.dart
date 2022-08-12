@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/author/author.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/tezotopia_voucher/offers.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'tezotopia_voucher_model.g.dart';
@@ -12,6 +13,7 @@ class TezotopiaVoucherModel extends CredentialSubjectModel {
     String? type,
     Author? issuedBy,
     this.identifier,
+    this.offers,
   }) : super(
           id: id,
           type: type,
@@ -19,6 +21,8 @@ class TezotopiaVoucherModel extends CredentialSubjectModel {
           credentialSubjectType: CredentialSubjectType.tezVoucher,
           credentialCategory: CredentialCategory.gamingCards,
         );
+
+  final Offers? offers;
 
   factory TezotopiaVoucherModel.fromJson(Map<String, dynamic> json) =>
       _$TezotopiaVoucherModelFromJson(json);

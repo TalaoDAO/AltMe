@@ -13,7 +13,7 @@ class TezotopiaVoucherDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const TezotopiaVoucherRecto();
+    return TezotopiaVoucherRecto(credentialModel);
   }
 }
 
@@ -27,7 +27,7 @@ class TezotopiaVoucherDisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const TezotopiaVoucherRecto();
+    return TezotopiaVoucherRecto(credentialModel);
   }
 }
 
@@ -41,15 +41,23 @@ class TezotopiaVoucherDisplayDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const TezotopiaVoucherRecto();
+    return TezotopiaVoucherRecto(credentialModel);
   }
 }
 
 class TezotopiaVoucherRecto extends Recto {
-  const TezotopiaVoucherRecto({Key? key}) : super(key: key);
-
+  const TezotopiaVoucherRecto(
+    this.credentialModel, {
+    Key? key,
+  }) : super(
+          key: key,
+        );
+  final CredentialModel credentialModel;
   @override
   Widget build(BuildContext context) {
+    final tezotopiaVoucherModel = credentialModel
+        .credentialPreview.credentialSubjectModel as TezotopiaVoucherModel;
+
     return CredentialImage(
       image: ImageStrings.tezotopiaVoucher,
       child: AspectRatio(
@@ -62,7 +70,7 @@ class TezotopiaVoucherRecto extends Recto {
               child: FractionallySizedBox(
                 widthFactor: 0.3,
                 child: MyText(
-                  '15%',
+                  tezotopiaVoucherModel.offers?.benefit!.discount ?? '',
                   style: Theme.of(context).textTheme.voucherValueCard,
                 ),
               ),
