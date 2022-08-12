@@ -425,7 +425,8 @@
     "myTokens",
     "tezosMainNetwork",
     "send",
-    "receive"
+    "receive",
+    "recentTransactions"
   ],
 
   "es": [
@@ -854,7 +855,8 @@
     "myTokens",
     "tezosMainNetwork",
     "send",
-    "receive"
+    "receive",
+    "recentTransactions"
   ],
 
   "fr": [
@@ -1283,7 +1285,8 @@
     "myTokens",
     "tezosMainNetwork",
     "send",
-    "receive"
+    "receive",
+    "recentTransactions"
   ],
 
   "it": [
@@ -1706,6 +1709,7 @@
     "myTokens",
     "tezosMainNetwork",
     "send",
-    "receive"
+    "receive",
+    "recentTransactions"
   ]
 }

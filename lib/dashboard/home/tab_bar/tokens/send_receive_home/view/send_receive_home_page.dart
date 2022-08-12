@@ -125,6 +125,8 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                   ),
                 ],
               ),
+              const SizedBox(height: Sizes.spaceNormal,),
+              const RecentTransactions()
             ],
           )
         ],

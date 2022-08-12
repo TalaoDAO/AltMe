@@ -477,5 +477,6 @@
   "myTokens": "My tokens",
   "tezosMainNetwork": "Tezos Main Network",
   "send": "Send",
-  "receive":"Receive"
+  "receive":"Receive",
+  "recentTransactions": "Recent transactions"
 }
