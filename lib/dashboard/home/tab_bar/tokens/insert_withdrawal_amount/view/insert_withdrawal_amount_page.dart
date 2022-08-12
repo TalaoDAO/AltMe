@@ -23,12 +23,8 @@ class InsertWithdrawalAmountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<InsertWithdrawalPageCubit>(
-          create: (_) => InsertWithdrawalPageCubit(),
-        ),
-      ],
+    return BlocProvider<InsertWithdrawalPageCubit>(
+      create: (_) => InsertWithdrawalPageCubit(),
       child: InsertWithdrawalAmountView(withdrawalAddress: withdrawalAddress),
     );
   }

@@ -65,6 +65,7 @@ class _TokenViewState extends State<TokenView> {
       listeners: [
         BlocListener<WalletCubit, WalletState>(
           listener: (context, state) {
+            //TODO(all) : do some adjustment
             if (activeIndex != state.currentCryptoIndex) {
               onRefresh();
             }
@@ -73,6 +74,7 @@ class _TokenViewState extends State<TokenView> {
         ),
         BlocListener<ManageNetworkCubit, ManageNetworkState>(
           listener: (context, state) {
+            //TODO(all) : do some adjustment
             onRefresh();
           },
         ),

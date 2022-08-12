@@ -219,6 +219,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                       SelectNetworkFeeBottomSheet.show(
                         context: context,
                         selectedNetwork: state.networkFee,
+                        //TODO(all) : do some adjustment
                         onChange: (networkFee) {
                           context
                               .read<ConfirmWithdrawalCubit>()

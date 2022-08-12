@@ -18,7 +18,7 @@ class TokensCubit extends Cubit<TokensState> {
   }
 
   final DioClient client;
-  WalletCubit walletCubit;
+  final WalletCubit walletCubit;
 
   List<TokenModel> data = [];
 
