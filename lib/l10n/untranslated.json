@@ -421,7 +421,8 @@
     "done",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
-    "link"
+    "link",
+    "myTokens"
   ],
 
   "es": [
@@ -846,7 +847,8 @@
     "done",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
-    "link"
+    "link",
+    "myTokens"
   ],
 
   "fr": [
@@ -1271,7 +1273,8 @@
     "done",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
-    "link"
+    "link",
+    "myTokens"
   ],
 
   "it": [
@@ -1696,6 +1699,7 @@
     "done",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
-    "link"
+    "link",
+    "myTokens"
   ]
 }

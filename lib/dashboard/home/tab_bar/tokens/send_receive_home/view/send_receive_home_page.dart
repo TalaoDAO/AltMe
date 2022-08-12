@@ -70,6 +70,10 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                   Radius.circular(Sizes.icon3x),
                 ),
               ),
+              const SizedBox(
+                height: Sizes.spaceSmall,
+              ),
+              Text(l10n.myTokens, style: Theme.of(context).textTheme.headline6),
             ],
           )
         ],

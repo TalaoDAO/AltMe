@@ -75,6 +75,10 @@ abstract class AppTheme {
             fontSize: 13,
             fontWeight: FontWeight.w600,
           ),
+          headline6: GoogleFonts.nunito(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         iconTheme: const IconThemeData(color: Color(0xff6600FF)),
         snackBarTheme: SnackBarThemeData(
