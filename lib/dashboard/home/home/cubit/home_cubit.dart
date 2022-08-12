@@ -5,9 +5,12 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
+import 'package:secure_storage/secure_storage.dart';
+import 'package:workmanager/workmanager.dart';
 
 part 'home_cubit.g.dart';
 part 'home_state.dart';
@@ -16,14 +19,27 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit({
     required this.client,
     required this.didCubit,
+    required this.secureStorageProvider,
   }) : super(const HomeState());
 
   final DioClient client;
   final DIDCubit didCubit;
+  final SecureStorageProvider secureStorageProvider;
 
-  Timer? timer;
+  Future<void> emitHasWallet() async {
+    final String? passbaseStatusFromStorage = await secureStorageProvider.get(
+      SecureStorageKeys.passBaseStatus,
+    );
 
-  void emitHasWallet() {
+    if (passbaseStatusFromStorage != null) {
+      final passBaseStatus = getPassBaseStatusFromString(
+        passbaseStatusFromStorage,
+      );
+      if (passBaseStatus == PassBaseStatus.pending) {
+        getPassBaseStatusBackground();
+      }
+    }
+
     emit(
       state.copyWith(
         status: AppStatus.populate,
@@ -49,21 +65,28 @@ class HomeCubit extends Cubit<HomeState> {
     required String link,
   }) async {
     emit(state.loading());
-    final did = didCubit.state.did!;
 
-    try {
-      final passBaseStatus = await getPassBaseStatus(did);
+    late PassBaseStatus passBaseStatus;
 
-      if (passBaseStatus == PassBaseStatus.approved) {
-        await launchUrl(link: link);
-        emit(
-          state.copyWith(
-            status: AppStatus.populate,
-            passBaseStatus: PassBaseStatus.approved,
-            link: link,
-          ),
+    /// check if status is already approved in DB
+    final String? passbaseStatusFromStorage = await secureStorageProvider.get(
+      SecureStorageKeys.passBaseStatus,
+    );
+
+    if (passbaseStatusFromStorage != null) {
+      passBaseStatus = getPassBaseStatusFromString(passbaseStatusFromStorage);
+    } else {
+      passBaseStatus = PassBaseStatus.undone;
+    }
+    if (passBaseStatus != PassBaseStatus.approved) {
+      try {
+        final did = didCubit.state.did!;
+        passBaseStatus = await getPassBaseStatus(did);
+        await secureStorageProvider.set(
+          SecureStorageKeys.passBaseStatus,
+          passBaseStatus.name,
         );
-      } else if (passBaseStatus == PassBaseStatus.declined) {
+      } catch (e) {
         emit(
           state.copyWith(
             status: AppStatus.populate,
@@ -71,70 +94,24 @@ class HomeCubit extends Cubit<HomeState> {
             link: link,
           ),
         );
-      } else if (passBaseStatus == PassBaseStatus.pending) {
-        getPassBaseStatusBackground(link: link);
-        emit(
-          state.copyWith(
-            status: AppStatus.populate,
-            passBaseStatus: PassBaseStatus.pending,
-            link: link,
-          ),
-        );
-      } else {
-        emit(
-          state.copyWith(
-            status: AppStatus.populate,
-            passBaseStatus: PassBaseStatus.undone,
-            link: link,
-          ),
-        );
       }
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: AppStatus.populate,
-          passBaseStatus: PassBaseStatus.declined,
-          link: link,
-        ),
-      );
     }
-  }
 
-  void getPassBaseStatusBackground({
-    required String link,
-  }) {
-    timer = Timer.periodic(const Duration(minutes: 3), (timer) async {
-      timer.cancel();
+    if (passBaseStatus == PassBaseStatus.approved) {
+      await launchUrl(link: link);
+    }
 
-      final did = didCubit.state.did!;
+    if (passBaseStatus == PassBaseStatus.pending) {
+      getPassBaseStatusBackground();
+    }
 
-      try {
-        final passBaseStatus = await getPassBaseStatus(did);
-        if (passBaseStatus == PassBaseStatus.approved) {
-          emit(
-            state.copyWith(
-              status: AppStatus.populate,
-              passBaseStatus: PassBaseStatus.verified,
-              link: link,
-            ),
-          );
-        } else {
-          emit(
-            state.copyWith(
-              status: AppStatus.idle,
-              passBaseStatus: PassBaseStatus.idle,
-            ),
-          );
-        }
-      } catch (e) {
-        emit(
-          state.copyWith(
-            status: AppStatus.idle,
-            passBaseStatus: PassBaseStatus.idle,
-          ),
-        );
-      }
-    });
+    emit(
+      state.copyWith(
+        status: AppStatus.populate,
+        passBaseStatus: passBaseStatus,
+        link: link,
+      ),
+    );
   }
 
   void startPassbaseVerification(WalletCubit walletCubit) {
@@ -193,35 +170,6 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<PassBaseStatus> getPassBaseStatus(String did) async {
-    try {
-      final dynamic response = await client.get(
-        '/passbase/check/$did',
-        headers: <String, dynamic>{
-          'Accept': 'application/json',
-          'Authorization': 'Bearer mytoken',
-        },
-      );
-
-      switch (response) {
-        case 'approved':
-          return PassBaseStatus.approved;
-        case 'declined':
-          return PassBaseStatus.declined;
-        case 'pending':
-          return PassBaseStatus.pending;
-        case 'undone':
-          return PassBaseStatus.undone;
-        case 'notdone':
-          return PassBaseStatus.undone;
-        default:
-          return PassBaseStatus.undone;
-      }
-    } catch (e) {
-      return PassBaseStatus.undone;
-    }
-  }
-
   /// Give user metadata to KYC. Currently we are just sending user DID.
   bool setKYCMetadata(WalletCubit walletCubit) {
     final selectedCredentials = <CredentialModel>[];
@@ -254,7 +202,88 @@ class HomeCubit extends Cubit<HomeState> {
 
   @override
   Future<void> close() {
-    timer?.cancel();
     return super.close();
   }
+
+  void getPassBaseStatusBackground() {
+    final did = didCubit.state.did!;
+    Workmanager().registerOneOffTask(
+      'getPassBaseStatusBackground',
+      'getPassBaseStatusBackground',
+      inputData: <String, dynamic>{'did': did},
+    );
+    periodicCheckPassBaseStatus();
+  }
+
+  Future<void> periodicCheckPassBaseStatus() async {
+    Timer.periodic(const Duration(minutes: 1), (timer) async {
+      final String? passbaseStatusFromStorage = await secureStorageProvider.get(
+        SecureStorageKeys.passBaseStatus,
+      );
+
+      if (passbaseStatusFromStorage != null) {
+        final passBaseStatus = getPassBaseStatusFromString(
+          passbaseStatusFromStorage,
+        );
+        if (passBaseStatus == PassBaseStatus.approved) {
+          emit(
+            state.copyWith(
+              status: AppStatus.populate,
+              passBaseStatus: PassBaseStatus.approved,
+            ),
+          );
+        }
+      }
+    });
+  }
+}
+
+Future<PassBaseStatus> getPassBaseStatus(String did) async {
+  try {
+    final client = DioClient(Urls.issuerBaseUrl, Dio());
+    final dynamic response = await client.get(
+      '/passbase/check/$did',
+      headers: <String, dynamic>{
+        'Accept': 'application/json',
+        'Authorization': 'Bearer mytoken',
+      },
+    );
+    final PassBaseStatus passBaseStatus = getPassBaseStatusFromString(
+      response as String,
+    );
+    return passBaseStatus;
+  } catch (e) {
+    return PassBaseStatus.undone;
+  }
+}
+
+PassBaseStatus getPassBaseStatusFromString(String? string) {
+  late PassBaseStatus passBaseStatus;
+  switch (string) {
+    case 'approved':
+      passBaseStatus = PassBaseStatus.approved;
+      break;
+    case 'declined':
+      passBaseStatus = PassBaseStatus.declined;
+      break;
+    case 'verified':
+      passBaseStatus = PassBaseStatus.verified;
+      break;
+    case 'pending':
+      passBaseStatus = PassBaseStatus.pending;
+      break;
+    case 'undone':
+      passBaseStatus = PassBaseStatus.undone;
+      break;
+    case 'notdone':
+      passBaseStatus = PassBaseStatus.undone;
+      break;
+    case 'complete':
+      passBaseStatus = PassBaseStatus.complete;
+      break;
+    case 'idle':
+    default:
+      passBaseStatus = PassBaseStatus.idle;
+  }
+  return passBaseStatus;
 }

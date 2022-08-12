@@ -122,6 +122,7 @@ class _DashboardViewState extends State<DashboardView> {
             context: context,
             builder: (_) => const FinishKycDialog(),
           );
+          context.read<HomeCubit>().getPassBaseStatusBackground();
         }
 
         if (homeState.passBaseStatus == PassBaseStatus.verified) {

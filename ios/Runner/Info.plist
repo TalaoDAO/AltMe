@@ -47,6 +47,15 @@
 	<string>Authenticate with Face Id for better privacy for your personal data</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Please give us access to your photo library to verify you.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>processing</string>
+	    <string>fetch</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>getPassBaseStatusBackground</string>
+    </array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

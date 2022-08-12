@@ -31,4 +31,5 @@ class SecureStorageKeys {
   static const String cryptoAccount = 'cryptoAccount';
   static const String currentCryptoIndex = 'currentCryptoIndex';
   static const String derivePathIndex = 'derivePathIndex';
+  static const String passBaseStatus = 'passBaseStatus';
 }
