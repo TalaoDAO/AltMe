@@ -422,7 +422,8 @@
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
     "link",
-    "myTokens"
+    "myTokens",
+    "tezosMainNetwork"
   ],
 
   "es": [
@@ -848,7 +849,8 @@
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
     "link",
-    "myTokens"
+    "myTokens",
+    "tezosMainNetwork"
   ],
 
   "fr": [
@@ -1274,7 +1276,8 @@
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
     "link",
-    "myTokens"
+    "myTokens",
+    "tezosMainNetwork"
   ],
 
   "it": [
@@ -1549,12 +1552,6 @@
     "details",
     "getThisCard",
     "drawerBiometrics",
-    "drawerTalaoCommunityCard",
-    "drawerTalaoCommunityCardTitle",
-    "drawerTalaoCommunityCardSubtitle",
-    "drawerTalaoCommunityCardTextBoxMessage",
-    "drawerTalaoCommunityCardSubtitle2",
-    "drawerTalaoCommunityCardKeyError",
     "loginWithBiometricsMessage",
     "manage",
     "wallet",
@@ -1700,6 +1697,7 @@
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
     "link",
-    "myTokens"
+    "myTokens",
+    "tezosMainNetwork"
   ]
 }

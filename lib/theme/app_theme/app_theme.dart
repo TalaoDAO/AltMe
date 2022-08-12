@@ -93,6 +93,8 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get activeColorOfNetwork => const Color(0xFF2C7DF7);
+
   Color get greyText => const Color(0xFFD1CCE3);
 
   Color get cardHighlighted => const Color(0xFF251F38);
