@@ -75,14 +75,7 @@ class _InsertWithdrawalAmountViewState
                 const SizedBox(
                   height: Sizes.spaceNormal,
                 ),
-                TokenSelectBoxView(
-                  selectedToken: state.selectedToken,
-                  tokenSelectBoxChanged: (selectedToken) {
-                    insertWithdrawalPageCubit.setSelectedToken(
-                      selectedToken: selectedToken,
-                    );
-                  },
-                ),
+                TokenSelectBoxView(selectedToken: state.selectedToken),
                 TokenAmountCalculatorView(selectedToken: state.selectedToken),
               ],
             ),
