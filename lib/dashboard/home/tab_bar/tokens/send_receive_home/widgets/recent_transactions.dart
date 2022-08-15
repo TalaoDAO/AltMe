@@ -1,15 +1,17 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class RecentTransactions extends StatefulWidget {
-  const RecentTransactions({Key? key}) : super(key: key);
+class RecentTransactions extends StatelessWidget {
+  const RecentTransactions({
+    Key? key,
+    this.operations = const [],
+  }) : super(key: key);
 
-  @override
-  State<RecentTransactions> createState() => _RecentTransactionsState();
-}
+  final List<OperationModel> operations;
 
-class _RecentTransactionsState extends State<RecentTransactions> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -34,12 +36,25 @@ class _RecentTransactionsState extends State<RecentTransactions> {
               height: Sizes.spaceNormal,
             ),
             Expanded(
-              child: ListView.builder(
-                itemBuilder: (_, index) => Container(
-                  height: 20,
-                ),
-                itemCount: 10,
-              ),
+              child: operations.isEmpty
+                  ? Container()
+                  : ListView.separated(
+                      itemBuilder: (_, index) => TransactionItem(
+                        operationModel: operations[index],
+                      ),
+                      separatorBuilder: (_, __) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: Sizes.spaceSmall,
+                          ),
+                          child: Divider(
+                            height: 0.2,
+                            color: Theme.of(context).colorScheme.borderColor,
+                          ),
+                        );
+                      },
+                      itemCount: operations.length,
+                    ),
             ),
           ],
         ),

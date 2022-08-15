@@ -1,5 +1,6 @@
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'operation_model.g.dart';
@@ -50,6 +51,41 @@ class OperationModel extends Equatable {
   final int amount;
   final String status;
   final bool hasInternals;
+
+  String get dateAndTime {
+    // TODO(Taleb): convert to correct data and time
+    return timestamp;
+  }
+
+  String get XTZAmount {
+    final formatter = NumberFormat('#,###');
+    final priceString = amount.toString();
+    const decimalsNum = 6;
+    if (decimalsNum == 0) {
+      final intPart = formatter.format(double.parse(priceString));
+      return '$intPart.0 XTZ';
+    } else if (decimalsNum == priceString.length) {
+      return '0.$priceString XTZ';
+    } else if (priceString.length < decimalsNum) {
+      final numberOfZero = decimalsNum - priceString.length;
+      // ignore: lines_longer_than_80_chars
+      return '0.${List.generate(numberOfZero, (index) => '0').join()}$priceString XTZ';
+    } else {
+      final rightPart = formatter.format(
+        double.parse(
+          priceString.substring(0, priceString.length - decimalsNum),
+        ),
+      );
+      final realDoublePriceInString =
+          // ignore: lines_longer_than_80_chars
+          '$rightPart.${priceString.substring(priceString.length - decimalsNum, priceString.length)} XTZ';
+      return realDoublePriceInString;
+    }
+  }
+
+  bool isSender({required String walletAddress}) {
+    return sender.address == walletAddress;
+  }
 
   Map<String, dynamic> toJson() => _$OperationModelToJson(this);
 

@@ -3,7 +3,7 @@ part of 'send_receive_home_cubit.dart';
 @JsonSerializable()
 class SendReceiveHomeState extends Equatable {
   const SendReceiveHomeState({
-    this.operations,
+    this.operations = const [],
     this.status = AppStatus.init,
     this.message,
   });
@@ -11,7 +11,7 @@ class SendReceiveHomeState extends Equatable {
   factory SendReceiveHomeState.fromJson(Map<String, dynamic> json) =>
       _$SendReceiveHomeStateFromJson(json);
 
-  final dynamic operations;
+  final List<OperationModel> operations;
   final AppStatus status;
   final StateMessage? message;
 
@@ -32,9 +32,11 @@ class SendReceiveHomeState extends Equatable {
 
   SendReceiveHomeState success({
     MessageHandler? messageHandler,
+    List<OperationModel>? operations,
   }) {
     return copyWith(
       status: AppStatus.success,
+      operations: operations ?? this.operations,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
@@ -42,7 +44,7 @@ class SendReceiveHomeState extends Equatable {
   }
 
   SendReceiveHomeState copyWith({
-    dynamic operations,
+    List<OperationModel>? operations,
     AppStatus? status,
     StateMessage? message,
   }) {
