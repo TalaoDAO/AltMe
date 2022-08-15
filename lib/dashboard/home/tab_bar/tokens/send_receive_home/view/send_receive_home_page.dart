@@ -18,7 +18,7 @@ class SendReceiveHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SendReceiveHomePageCubit(),
+      create: (_) => SendReceiveHomeCubit(),
       child: const _SendReceiveHomePageView(),
     );
   }
