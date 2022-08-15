@@ -400,8 +400,8 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get credentialDescription => GoogleFonts.roboto(
         color: const Color(0xFF757575),
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
       );
 
   TextStyle get credentialFieldTitle => GoogleFonts.roboto(
