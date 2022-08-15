@@ -19,6 +19,10 @@ class MarkdownPage extends StatelessWidget {
       title: title,
       titleLeading: const BackLeadingButton(),
       scrollView: false,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 0,
+      ),
       body: BackgroundCard(
         padding: EdgeInsets.zero,
         child: FutureBuilder<String>(
