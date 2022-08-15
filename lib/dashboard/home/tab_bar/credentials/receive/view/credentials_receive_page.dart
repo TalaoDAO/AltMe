@@ -58,14 +58,8 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
           final outputDescriptors =
               credentialModel.credentialManifest?.outputDescriptors;
 
-          late Color? textColor;
+          final textColor = Theme.of(context).colorScheme.valueColor;
 
-          if (outputDescriptors != null) {
-            textColor = getColorFromCredential(
-              outputDescriptors.first.styles?.text,
-              Colors.white,
-            );
-          }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
