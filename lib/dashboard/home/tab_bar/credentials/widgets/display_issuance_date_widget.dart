@@ -18,6 +18,7 @@ class DisplayIssuanceDateWidget extends StatelessWidget {
     final date = issuanceDate;
 
     if (date != null) {
+      final DateTime dt = DateTime.parse(date);
       return Row(
         children: [
           Expanded(
@@ -35,7 +36,7 @@ class DisplayIssuanceDateWidget extends StatelessWidget {
           Expanded(
             flex: 4,
             child: MyText(
-              UiDate.displayDate(l10n, date),
+              UiDate.formatDateTime(dt),
               style: textColor == null
                   ? Theme.of(context)
                       .textTheme
