@@ -48,6 +48,17 @@ class WalletItems extends StatelessWidget {
           color: Theme.of(context).colorScheme.drawerSurface,
           child: Column(
             children: [
+              ///Address Book
+              DrawerItem(
+                icon: IconStrings.addressBook,
+                title: l10n.drawerTalaoCommunityCard,
+                onTap: () {
+                  Navigator.of(context)
+                      .push<void>(ImportTalaoCommunityCardPage.route());
+                },
+              ),
+              const DrawerItemDivider(),
+
               ///Mange Accounts
               DrawerItem(
                 icon: IconStrings.userRound,

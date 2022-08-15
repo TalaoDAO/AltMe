@@ -34,9 +34,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
   void isMnemonicsOrKeyValid(String value) {
     //different type of tezos private keys start with 'edsk' ,
     //'pspsk' and 'p2sk;
-    final bool isSecretKey = value.startsWith('edsk') ||
-        value.startsWith('spsk') ||
-        value.startsWith('p2sk');
+    final bool isSecretKey = isValidPrivateKey(value);
 
     emit(
       state.populating(
