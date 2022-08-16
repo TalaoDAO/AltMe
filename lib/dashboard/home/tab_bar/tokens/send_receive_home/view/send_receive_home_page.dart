@@ -33,7 +33,7 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
   @override
   void initState() {
     Future.microtask(
-      sendReceiveHomeCubit.getOperations,
+      sendReceiveHomeCubit.init,
     );
     super.initState();
   }
@@ -56,16 +56,6 @@ class _SendReceiveHomePageView extends StatefulWidget {
 }
 
 class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
-  final tempToken = const TokenModel(
-    '',
-    'Tezos',
-    'XTZ',
-    'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
-    null,
-    '00000000',
-    '6',
-  );
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -79,7 +69,13 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
             listenWhen: (prev, next) =>
                 prev.currentCryptoIndex != next.currentCryptoIndex,
             listener: (_, walletState) {
-              context.read<SendReceiveHomeCubit>().getOperations();
+              context.read<SendReceiveHomeCubit>().init(
+                    baseUrl: context
+                        .read<ManageNetworkCubit>()
+                        .state
+                        .network
+                        .tzktUrl,
+                  );
             },
           ),
           BlocListener<ManageNetworkCubit, ManageNetworkState>(
@@ -87,7 +83,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
             listener: (_, manageNetworkState) {
               context
                   .read<SendReceiveHomeCubit>()
-                  .getOperations(baseUrl: manageNetworkState.network.tzktUrl);
+                  .init(baseUrl: manageNetworkState.network.tzktUrl);
             },
           ),
           BlocListener<SendReceiveHomeCubit, SendReceiveHomeState>(
@@ -124,7 +120,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   CachedImageFromNetwork(
-                    tempToken.iconUrl ?? '',
+                    state.xtz.iconUrl ?? '',
                     width: Sizes.icon3x,
                     height: Sizes.icon3x,
                     borderRadius: const BorderRadius.all(
@@ -141,7 +137,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                     height: Sizes.spaceLarge,
                   ),
                   MyText(
-                    '${tempToken.calculatedBalance.formatNumber()} ${tempToken.symbol}',
+                    '${state.xtz.calculatedBalance.formatNumber()} ${state.xtz.symbol}',
                     style: Theme.of(context).textTheme.headline4,
                   ),
                   MyText(
