@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -80,7 +79,6 @@ class LoyaltyCardVerso extends Verso {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return CredentialContainer(
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
@@ -106,7 +104,7 @@ class LoyaltyCardVerso extends Verso {
                 ),
               ),
               TextWithLoyaltyCardStyle(
-                value: UiDate.displayDate(l10n, loyaltyCardModel.birthDate!),
+                value: UiDate.formatStringDate(loyaltyCardModel.birthDate!),
               ),
               TextWithLoyaltyCardStyle(value: loyaltyCardModel.email!),
               TextWithLoyaltyCardStyle(value: loyaltyCardModel.telephone!),

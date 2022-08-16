@@ -28,7 +28,7 @@ class CredentialDynamicDetial extends StatelessWidget {
       if (format == AltMeStrings.date) {
         if (DateTime.tryParse(value) != null) {
           final DateTime dt = DateTime.parse(value);
-          valueData = UiDate.formatDateTime(dt);
+          valueData = UiDate.formatDate(dt);
         }
       }
 

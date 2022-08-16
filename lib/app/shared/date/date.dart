@@ -6,7 +6,10 @@ class UiDate {
 
   static final outputFormat = DateFormat('yyyy-MM-dd');
 
-  static String displayDate(AppLocalizations localizations, String dateString) {
+  static String displayRegionalDate(
+    AppLocalizations localizations,
+    String dateString,
+  ) {
     if (dateString == '') return '';
     late DateTime date;
     try {
@@ -24,7 +27,15 @@ class UiDate {
     return DateFormat.yMd(localizations.localeName).format(date);
   }
 
-  static String formatDateTime(DateTime dateTime) {
+  static String formatStringDate(String dateTime) {
+    if (DateTime.tryParse(dateTime) != null) {
+      final DateTime dt = DateTime.parse(dateTime);
+      return formatDate(dt);
+    }
+    return '';
+  }
+
+  static String formatDate(DateTime dateTime) {
     return outputFormat.format(dateTime);
   }
 

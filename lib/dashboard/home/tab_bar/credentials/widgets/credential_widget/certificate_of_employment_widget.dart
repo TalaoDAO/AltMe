@@ -213,8 +213,7 @@ class CertificateOfEmploymentVerso extends Verso {
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
-                    text: UiDate.displayDate(
-                      l10n,
+                    text: UiDate.formatStringDate(
                       certificateOfEmploymentModel.startDate!,
                     ),
                     textStyle:
@@ -292,8 +291,7 @@ class CertificateOfEmploymentVerso extends Verso {
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
-                    text: UiDate.displayDate(
-                      l10n,
+                    text: UiDate.formatStringDate(
                       credentialModel.credentialPreview.issuanceDate,
                     ),
                     textStyle:

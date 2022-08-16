@@ -36,7 +36,7 @@ class DisplayIssuanceDateWidget extends StatelessWidget {
           Expanded(
             flex: 4,
             child: MyText(
-              UiDate.formatDateTime(dt),
+              UiDate.formatDate(dt),
               style: textColor == null
                   ? Theme.of(context)
                       .textTheme

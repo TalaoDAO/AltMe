@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +55,6 @@ class IdentityCardRecto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return CredentialImage(
       image: ImageStrings.identityCard,
       child: AspectRatio(
@@ -69,8 +67,7 @@ class IdentityCardRecto extends StatelessWidget {
               child: FractionallySizedBox(
                 widthFactor: 0.25,
                 child: MyText(
-                  UiDate.displayDate(
-                    l10n,
+                  UiDate.formatStringDate(
                     credentialModel.credentialPreview.issuanceDate,
                   ),
                   style: Theme.of(context).textTheme.identityCardData,

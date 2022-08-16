@@ -25,8 +25,9 @@ class ImportTalaoCommunityCardState extends Equatable {
     );
   }
 
-  ImportTalaoCommunityCardState error(
-      {required MessageHandler messageHandler}) {
+  ImportTalaoCommunityCardState error({
+    required MessageHandler messageHandler,
+  }) {
     return ImportTalaoCommunityCardState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
