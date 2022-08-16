@@ -273,7 +273,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               log.i('QueryByExample');
               emit(
                 state.success(
-                  route: CredentialsPresentPage.route(
+                  route: QueryByExamplePresentPage.route(
                     uri: uri,
                     preview: data as Map<String, dynamic>,
                     issuer: issuer,
@@ -288,7 +288,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           } else {
             emit(
               state.success(
-                route: CredentialsPresentPage.route(
+                route: QueryByExamplePresentPage.route(
                   uri: uri,
                   preview: data as Map<String, dynamic>,
                   issuer: issuer,
