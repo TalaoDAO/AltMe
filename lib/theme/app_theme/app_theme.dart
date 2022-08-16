@@ -75,6 +75,21 @@ abstract class AppTheme {
             fontSize: 13,
             fontWeight: FontWeight.w600,
           ),
+          headline6: GoogleFonts.nunito(
+            color: const Color(0xFFFFFFFF),
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+          headline5: GoogleFonts.nunito(
+            color: const Color(0xFFFFFFFF),
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+          headline4: GoogleFonts.nunito(
+            color: const Color(0xFFFFFFFF),
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         iconTheme: const IconThemeData(color: Color(0xff6600FF)),
         snackBarTheme: SnackBarThemeData(
@@ -89,6 +104,8 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get activeColorOfNetwork => const Color(0xFF2C7DF7);
+
   Color get greyText => const Color(0xFFD1CCE3);
 
   Color get cardHighlighted => const Color(0xFF251F38);

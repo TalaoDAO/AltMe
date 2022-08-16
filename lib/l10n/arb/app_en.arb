@@ -473,5 +473,10 @@
   "done": "Done",
   "transactionDoneDialogDescription": "It can take a few minutes for the transfer to complete",
   "withdrawalFailedMessage": "The withdrawal from the account was unsuccessful",
-  "link": "Link"
+  "link": "Link",
+  "myTokens": "My tokens",
+  "tezosMainNetwork": "Tezos Main Network",
+  "send": "Send",
+  "receive":"Receive",
+  "recentTransactions": "Recent transactions"
 }

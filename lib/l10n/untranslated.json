@@ -421,7 +421,12 @@
     "done",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
-    "link"
+    "link",
+    "myTokens",
+    "tezosMainNetwork",
+    "send",
+    "receive",
+    "recentTransactions"
   ],
 
   "es": [
@@ -846,7 +851,12 @@
     "done",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
-    "link"
+    "link",
+    "myTokens",
+    "tezosMainNetwork",
+    "send",
+    "receive",
+    "recentTransactions"
   ],
 
   "fr": [
@@ -1271,7 +1281,12 @@
     "done",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
-    "link"
+    "link",
+    "myTokens",
+    "tezosMainNetwork",
+    "send",
+    "receive",
+    "recentTransactions"
   ],
 
   "it": [
@@ -1696,6 +1711,11 @@
     "done",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
-    "link"
+    "link",
+    "myTokens",
+    "tezosMainNetwork",
+    "send",
+    "receive",
+    "recentTransactions"
   ]
 }
