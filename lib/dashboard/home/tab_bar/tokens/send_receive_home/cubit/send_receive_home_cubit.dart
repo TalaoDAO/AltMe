@@ -27,9 +27,8 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
       );
       emit(state.copyWith(xtz: xtz));
       final operations = await _getOperations(baseUrl);
-      emit(state.copyWith(operations: operations));
+      emit(state.success(operations: operations));
 
-      emit(state.success());
     } catch (e, s) {
       emit(state.error(messageHandler: MessageHandler()));
       getLogger(runtimeType.toString()).e('error in init() e: $e, $s', e, s);
