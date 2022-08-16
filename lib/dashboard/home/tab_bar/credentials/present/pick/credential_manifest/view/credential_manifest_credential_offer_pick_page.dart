@@ -40,11 +40,9 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final presentationDefinition =
-            credential.credentialManifest?.presentationDefinition;
+            credential.credentialManifest!.presentationDefinition!;
         return CredentialManifestPickCubit(
-          presentationDefinition: presentationDefinition == null
-              ? <String, dynamic>{}
-              : presentationDefinition.toJson(),
+          presentationDefinition: presentationDefinition.toJson(),
           credentialList: context.read<WalletCubit>().state.credentials,
         );
       },
