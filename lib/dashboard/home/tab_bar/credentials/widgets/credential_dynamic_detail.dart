@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -57,16 +58,17 @@ class CredentialDynamicDetial extends StatelessWidget {
       child: RichText(
         textAlign: TextAlign.left,
         text: TextSpan(
-          children: <TextSpan>[
-            TextSpan(text: '$title:   ', style: titleTheme),
+          children: <InlineSpan>[
+            TextSpan(text: '$title: ', style: titleTheme),
             TextSpan(
-              text: valueData,
+              text: (format != null && format == AltMeStrings.uri)
+                  ? context.l10n.link
+                  : valueData,
               style: (format != null &&
                       (format == AltMeStrings.uri ||
                           format == AltMeStrings.email))
                   ? valueTheme.copyWith(
                       color: Theme.of(context).colorScheme.markDownA,
-                      decoration: TextDecoration.underline,
                     )
                   : valueTheme,
               recognizer: TapGestureRecognizer()
@@ -79,7 +81,20 @@ class CredentialDynamicDetial extends StatelessWidget {
                     }
                   }
                 },
-            )
+            ),
+            if (format != null && format == AltMeStrings.uri)
+              WidgetSpan(
+                child: TransparentInkWell(
+                  onTap: () async {
+                    await LaunchUrl.launch(valueData);
+                  },
+                  child: ImageIcon(
+                    const AssetImage(IconStrings.link),
+                    color: Theme.of(context).colorScheme.markDownA,
+                    size: 17,
+                  ),
+                ),
+              ),
           ],
         ),
       ),

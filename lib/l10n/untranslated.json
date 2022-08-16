@@ -420,7 +420,8 @@
     "sent",
     "done",
     "transactionDoneDialogDescription",
-    "withdrawalFailedMessage"
+    "withdrawalFailedMessage",
+    "link"
   ],
 
   "es": [
@@ -844,7 +845,8 @@
     "sent",
     "done",
     "transactionDoneDialogDescription",
-    "withdrawalFailedMessage"
+    "withdrawalFailedMessage",
+    "link"
   ],
 
   "fr": [
@@ -1268,7 +1270,8 @@
     "sent",
     "done",
     "transactionDoneDialogDescription",
-    "withdrawalFailedMessage"
+    "withdrawalFailedMessage",
+    "link"
   ],
 
   "it": [
@@ -1692,6 +1695,7 @@
     "sent",
     "done",
     "transactionDoneDialogDescription",
-    "withdrawalFailedMessage"
+    "withdrawalFailedMessage",
+    "link"
   ]
 }
