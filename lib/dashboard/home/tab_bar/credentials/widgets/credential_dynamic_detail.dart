@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class CredentialDynamicDetial extends StatelessWidget {
@@ -53,41 +54,34 @@ class CredentialDynamicDetial extends StatelessWidget {
 
     return Padding(
       padding: padding,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '$title: ',
-            style: titleTheme,
-          ),
-          Flexible(
-            child: TransparentInkWell(
-              onTap: () async {
-                if (format != null) {
-                  if (format == AltMeStrings.uri) {
-                    await LaunchUrl.launch(valueData);
-                  } else if (format == AltMeStrings.email) {
-                    await LaunchUrl.launch('mailto:$valueData');
+      child: RichText(
+        textAlign: TextAlign.left,
+        text: TextSpan(
+          children: <TextSpan>[
+            TextSpan(text: '$title:   ', style: titleTheme),
+            TextSpan(
+              text: valueData,
+              style: (format != null &&
+                      (format == AltMeStrings.uri ||
+                          format == AltMeStrings.email))
+                  ? valueTheme.copyWith(
+                      color: Theme.of(context).colorScheme.markDownA,
+                      decoration: TextDecoration.underline,
+                    )
+                  : valueTheme,
+              recognizer: TapGestureRecognizer()
+                ..onTap = () async {
+                  if (format != null) {
+                    if (format == AltMeStrings.uri) {
+                      await LaunchUrl.launch(valueData);
+                    } else if (format == AltMeStrings.email) {
+                      await LaunchUrl.launch('mailto:$valueData');
+                    }
                   }
-                }
-              },
-              child: Text(
-                valueData,
-                style: (format != null &&
-                        (format == AltMeStrings.uri ||
-                            format == AltMeStrings.email))
-                    ? valueTheme.copyWith(
-                        color: Theme.of(context).colorScheme.markDownA,
-                        decoration: TextDecoration.underline,
-                      )
-                    : valueTheme,
-                maxLines: 5,
-                overflow: TextOverflow.fade,
-                softWrap: true,
-              ),
-            ),
-          ),
-        ],
+                },
+            )
+          ],
+        ),
       ),
     );
   }
