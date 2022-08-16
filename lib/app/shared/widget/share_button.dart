@@ -13,16 +13,17 @@ class ShareButton extends StatelessWidget {
     final l10n = context.l10n;
     return InkWell(
       onTap: onTap,
-      child: Column(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
             IconStrings.share,
             width: Sizes.icon2x,
+            height: Sizes.icon2x,
           ),
           const SizedBox(
-            height: Sizes.space2XSmall,
+            width: Sizes.spaceSmall,
           ),
           Text(
             l10n.share,

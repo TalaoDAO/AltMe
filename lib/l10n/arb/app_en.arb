@@ -478,5 +478,6 @@
   "tezosMainNetwork": "Tezos Main Network",
   "send": "Send",
   "receive":"Receive",
-  "recentTransactions": "Recent transactions"
+  "recentTransactions": "Recent transactions",
+  "sendOnlyXtzToThisAddressDescription": "Only send XTZ to this address. Sending other tokens may result in permanent loss."
 }
