@@ -8,9 +8,11 @@ class RecentTransactions extends StatelessWidget {
   const RecentTransactions({
     Key? key,
     this.operations = const [],
+    required this.onRefresh,
   }) : super(key: key);
 
   final List<OperationModel> operations;
+  final RefreshCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -38,22 +40,25 @@ class RecentTransactions extends StatelessWidget {
             Expanded(
               child: operations.isEmpty
                   ? Container()
-                  : ListView.separated(
-                      itemBuilder: (_, index) => TransactionItem(
-                        operationModel: operations[index],
+                  : RefreshIndicator(
+                      onRefresh: onRefresh,
+                      child: ListView.separated(
+                        itemBuilder: (_, index) => TransactionItem(
+                          operationModel: operations[index],
+                        ),
+                        separatorBuilder: (_, __) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: Sizes.spaceSmall,
+                            ),
+                            child: Divider(
+                              height: 0.2,
+                              color: Theme.of(context).colorScheme.borderColor,
+                            ),
+                          );
+                        },
+                        itemCount: operations.length,
                       ),
-                      separatorBuilder: (_, __) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: Sizes.spaceSmall,
-                          ),
-                          child: Divider(
-                            height: 0.2,
-                            color: Theme.of(context).colorScheme.borderColor,
-                          ),
-                        );
-                      },
-                      itemCount: operations.length,
                     ),
             ),
           ],

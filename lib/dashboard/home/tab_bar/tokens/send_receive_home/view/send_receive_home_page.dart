@@ -190,6 +190,15 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                     height: Sizes.spaceNormal,
                   ),
                   RecentTransactions(
+                    onRefresh: () async {
+                      await context.read<SendReceiveHomeCubit>().getOperations(
+                            baseUrl: context
+                                .read<ManageNetworkCubit>()
+                                .state
+                                .network
+                                .tzktUrl,
+                          );
+                    },
                     operations: state.operations,
                   )
                 ],
