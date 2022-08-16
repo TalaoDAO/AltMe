@@ -73,95 +73,131 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
       scrollView: false,
       titleLeading: const BackLeadingButton(),
       titleTrailing: const CryptoAccountSwitcherButton(),
-      body: BlocBuilder<SendReceiveHomeCubit, SendReceiveHomeState>(
-          builder: (context, state) {
-        return Stack(
-          fit: StackFit.expand,
-          children: [
-            const BackgroundCard(
-              height: double.infinity,
-              width: double.infinity,
-              margin: EdgeInsets.only(top: Sizes.icon3x / 2),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                CachedImageFromNetwork(
-                  tempToken.iconUrl ?? '',
-                  width: Sizes.icon3x,
-                  height: Sizes.icon3x,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(Sizes.icon3x),
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<WalletCubit, WalletState>(
+            listenWhen: (prev, next) =>
+                prev.currentCryptoIndex != next.currentCryptoIndex,
+            listener: (_, walletState) {
+              context.read<SendReceiveHomeCubit>().getOperations();
+            },
+          ),
+          BlocListener<ManageNetworkCubit, ManageNetworkState>(
+            listenWhen: (prev, next) => prev.network != next.network,
+            listener: (_, manageNetworkState) {
+              context
+                  .read<SendReceiveHomeCubit>()
+                  .getOperations(baseUrl: manageNetworkState.network.tzktUrl);
+            },
+          ),
+          BlocListener<SendReceiveHomeCubit, SendReceiveHomeState>(
+            listenWhen: (prev, next) => prev.status != next.status,
+            listener: (_, sendReceiveHomeState) {
+              if (sendReceiveHomeState.status == AppStatus.loading) {
+                LoadingView().show(context: context);
+              } else {
+                LoadingView().hide();
+                if (sendReceiveHomeState.status == AppStatus.error) {
+                  AlertMessage.showStateMessage(
+                    context: context,
+                    stateMessage:
+                        sendReceiveHomeState.message ?? const StateMessage(),
+                  );
+                }
+              }
+            },
+          ),
+        ],
+        child: BlocBuilder<SendReceiveHomeCubit, SendReceiveHomeState>(
+            builder: (context, state) {
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              const BackgroundCard(
+                height: double.infinity,
+                width: double.infinity,
+                margin: EdgeInsets.only(top: Sizes.icon3x / 2),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  CachedImageFromNetwork(
+                    tempToken.iconUrl ?? '',
+                    width: Sizes.icon3x,
+                    height: Sizes.icon3x,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(Sizes.icon3x),
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
-                Text(l10n.myTokens,
-                    style: Theme.of(context).textTheme.headline5),
-                const TezosNetworkSwitcherButton(),
-                const SizedBox(
-                  height: Sizes.spaceLarge,
-                ),
-                MyText(
-                  '${tempToken.calculatedBalance.formatNumber()} ${tempToken.symbol}',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                MyText(
-                  r'$--.--',
-                  style: Theme.of(context).textTheme.normal,
-                ),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    MyGradientButton(
-                      upperCase: false,
-                      text: l10n.send,
-                      verticalSpacing: 0,
-                      margin: const EdgeInsets.all(Sizes.spaceSmall),
-                      fontSize: 16,
-                      borderRadius: Sizes.smallRadius,
-                      height: Sizes.normalButton,
-                      icon: Image.asset(
-                        IconStrings.send,
-                        width: Sizes.icon,
+                  const SizedBox(
+                    height: Sizes.spaceSmall,
+                  ),
+                  Text(l10n.myTokens,
+                      style: Theme.of(context).textTheme.headline5),
+                  const TezosNetworkSwitcherButton(),
+                  const SizedBox(
+                    height: Sizes.spaceLarge,
+                  ),
+                  MyText(
+                    '${tempToken.calculatedBalance.formatNumber()} ${tempToken.symbol}',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  MyText(
+                    r'$--.--',
+                    style: Theme.of(context).textTheme.normal,
+                  ),
+                  const SizedBox(
+                    height: Sizes.spaceNormal,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      MyGradientButton(
+                        upperCase: false,
+                        text: l10n.send,
+                        verticalSpacing: 0,
+                        margin: const EdgeInsets.all(Sizes.spaceSmall),
+                        fontSize: 16,
+                        borderRadius: Sizes.smallRadius,
+                        height: Sizes.normalButton,
+                        icon: Image.asset(
+                          IconStrings.send,
+                          width: Sizes.icon,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push<void>(SendToPage.route());
+                        },
                       ),
-                      onPressed: () {
-                        Navigator.of(context).push<void>(SendToPage.route());
-                      },
-                    ),
-                    MyGradientButton(
-                      upperCase: false,
-                      text: l10n.receive,
-                      verticalSpacing: 0,
-                      fontSize: 16,
-                      margin: const EdgeInsets.all(Sizes.spaceSmall),
-                      borderRadius: Sizes.smallRadius,
-                      height: Sizes.normalButton,
-                      icon: Image.asset(
-                        IconStrings.receive,
-                        width: Sizes.icon,
+                      MyGradientButton(
+                        upperCase: false,
+                        text: l10n.receive,
+                        verticalSpacing: 0,
+                        fontSize: 16,
+                        margin: const EdgeInsets.all(Sizes.spaceSmall),
+                        borderRadius: Sizes.smallRadius,
+                        height: Sizes.normalButton,
+                        icon: Image.asset(
+                          IconStrings.receive,
+                          width: Sizes.icon,
+                        ),
+                        onPressed: () {},
                       ),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
-                RecentTransactions(
-                  operations: state.operations,
-                )
-              ],
-            )
-          ],
-        );
-      }),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: Sizes.spaceNormal,
+                  ),
+                  RecentTransactions(
+                    operations: state.operations,
+                  )
+                ],
+              )
+            ],
+          );
+        }),
+      ),
     );
   }
 }
