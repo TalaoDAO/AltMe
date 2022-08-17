@@ -149,42 +149,43 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                     const SizedBox(
                       height: Sizes.spaceNormal,
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        MyGradientButton(
-                          upperCase: false,
-                          text: l10n.send,
-                          verticalSpacing: 0,
-                          margin: const EdgeInsets.all(Sizes.spaceSmall),
-                          fontSize: 16,
-                          borderRadius: Sizes.smallRadius,
-                          height: Sizes.normalButton,
-                          icon: Image.asset(
-                            IconStrings.send,
-                            width: Sizes.icon,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .push<void>(SendToPage.route());
-                          },
-                        ),
-                        MyGradientButton(
-                          upperCase: false,
-                          text: l10n.receive,
-                          verticalSpacing: 0,
-                          fontSize: 16,
-                          margin: const EdgeInsets.all(Sizes.spaceSmall),
-                          borderRadius: Sizes.smallRadius,
-                          height: Sizes.normalButton,
-                          icon: Image.asset(
-                            IconStrings.receive,
-                            width: Sizes.icon,
-                          ),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
+                    // TODO(Taleb) : adjust based on MyGradientButton
+                    // Row(
+                    //   mainAxisSize: MainAxisSize.max,
+                    //   children: [
+                    //     MyGradientButton.icon(
+                    //       upperCase: false,
+                    //       text: l10n.send,
+                    //       verticalSpacing: 0,
+                    //       margin: const EdgeInsets.all(Sizes.spaceSmall),
+                    //       fontSize: 16,
+                    //       borderRadius: Sizes.smallRadius,
+                    //       height: Sizes.normalButton,
+                    //       icon: Image.asset(
+                    //         IconStrings.send,
+                    //         width: Sizes.icon,
+                    //       ),
+                    //       onPressed: () {
+                    //         Navigator.of(context)
+                    //             .push<void>(SendToPage.route());
+                    //       },
+                    //     ),
+                    //     MyGradientButton.icon(
+                    //       upperCase: false,
+                    //       text: l10n.receive,
+                    //       verticalSpacing: 0,
+                    //       fontSize: 16,
+                    //       margin: const EdgeInsets.all(Sizes.spaceSmall),
+                    //       borderRadius: Sizes.smallRadius,
+                    //       height: Sizes.normalButton,
+                    //       icon: Image.asset(
+                    //         IconStrings.receive,
+                    //         width: Sizes.icon,
+                    //       ),
+                    //       onPressed: () {},
+                    //     ),
+                    //   ],
+                    // ),
                     const SizedBox(
                       height: Sizes.spaceNormal,
                     ),

@@ -5,16 +5,27 @@ class MyGradientButton extends StatelessWidget {
   const MyGradientButton({
     Key? key,
     required this.text,
+    this.icon,
     this.borderRadius = 20,
     this.verticalSpacing = 20,
     this.elevation = 2,
     this.fontSize = 18,
     this.gradient,
     this.onPressed,
-    this.icon,
     this.upperCase = true,
-    this.height,
-    this.margin = EdgeInsets.zero,
+  }) : super(key: key);
+
+  const MyGradientButton.icon({
+    Key? key,
+    required this.text,
+    required this.icon,
+    this.borderRadius = 20,
+    this.verticalSpacing = 20,
+    this.elevation = 2,
+    this.fontSize = 18,
+    this.gradient,
+    this.onPressed,
+    this.upperCase = true,
   }) : super(key: key);
 
   final String text;
@@ -26,8 +37,6 @@ class MyGradientButton extends StatelessWidget {
   final GestureTapCallback? onPressed;
   final Widget? icon;
   final bool upperCase;
-  final double? height;
-  final EdgeInsets margin;
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +50,9 @@ class MyGradientButton extends StatelessWidget {
           ],
           stops: const [0.0, 0.4],
         );
-    return Expanded(
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
       child: Container(
-        margin: margin,
-        height: height,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
           gradient: onPressed == null ? null : gradientValue,
@@ -52,29 +60,84 @@ class MyGradientButton extends StatelessWidget {
               ? Theme.of(context).colorScheme.disabledBgColor
               : null,
         ),
-        child: ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(
-            elevation: elevation,
-            padding: EdgeInsets.symmetric(vertical: verticalSpacing),
-            primary: Theme.of(context).colorScheme.transparent,
-            shadowColor: Theme.of(context).colorScheme.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
-          ),
-          onPressed: onPressed,
-          icon: icon ?? const Center(),
-          label: Text(
-            upperCase ? text.toUpperCase() : text,
-            style: TextStyle(
-              color: onPressed != null
-                  ? Theme.of(context).colorScheme.onElevatedButton
-                  : Theme.of(context).colorScheme.disabledTextColor,
-              fontSize: fontSize,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
+        child: icon == null
+            ? ElevatedButton(
+                style: gradientStyleFrom(
+                  elevation: elevation,
+                  verticalSpacing: verticalSpacing,
+                  borderRadius: borderRadius,
+                  context: context,
+                ),
+                onPressed: onPressed,
+                child: GradientButtonText(
+                  text: text.toUpperCase(),
+                  onPressed: onPressed,
+                  fontSize: fontSize,
+                  upperCase: upperCase,
+                ),
+              )
+            : ElevatedButton.icon(
+                icon: icon!,
+                style: gradientStyleFrom(
+                  elevation: elevation,
+                  verticalSpacing: verticalSpacing,
+                  borderRadius: borderRadius,
+                  context: context,
+                ),
+                onPressed: onPressed,
+                label: GradientButtonText(
+                  text: text.toUpperCase(),
+                  onPressed: onPressed,
+                  fontSize: fontSize,
+                  upperCase: upperCase,
+                ),
+              ),
+      ),
+    );
+  }
+}
+
+ButtonStyle gradientStyleFrom({
+  required double borderRadius,
+  required double verticalSpacing,
+  required double elevation,
+  required BuildContext context,
+}) {
+  return ElevatedButton.styleFrom(
+    elevation: elevation,
+    padding: EdgeInsets.symmetric(vertical: verticalSpacing),
+    primary: Theme.of(context).colorScheme.transparent,
+    shadowColor: Theme.of(context).colorScheme.transparent,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(borderRadius),
+    ),
+  );
+}
+
+class GradientButtonText extends StatelessWidget {
+  const GradientButtonText({
+    Key? key,
+    required this.text,
+    required this.onPressed,
+    this.fontSize = 18,
+    required this.upperCase,
+  }) : super(key: key);
+
+  final String text;
+  final GestureTapCallback? onPressed;
+  final double fontSize;
+  final bool upperCase;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      upperCase ? text.toUpperCase() : text,
+      style: TextStyle(
+        color: onPressed != null
+            ? Theme.of(context).colorScheme.onElevatedButton
+            : Theme.of(context).colorScheme.disabledTextColor,
+        fontSize: fontSize,
+        fontWeight: FontWeight.w700,
       ),
     );
   }

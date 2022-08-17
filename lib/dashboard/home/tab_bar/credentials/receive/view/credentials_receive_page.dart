@@ -83,7 +83,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
               //     ),
               //   ],
               // ),
-              //const SizedBox(height: 16),
+              const SizedBox(height: 16),
               DisplayDetail(
                 credentialModel: credentialModel,
                 fromCredentialOffer: true,
@@ -138,6 +138,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                   }
                 },
               ),
+
               const SizedBox(height: 8),
               MyOutlinedButton(
                 verticalSpacing: 20,
