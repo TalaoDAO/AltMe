@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/credential.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/pick/credential_manifest/credential_manifest_pick.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
@@ -41,11 +40,9 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final presentationDefinition =
-            credential.credentialManifest?.presentationDefinition;
+            credential.credentialManifest!.presentationDefinition!;
         return CredentialManifestPickCubit(
-          presentationDefinition: presentationDefinition == null
-              ? <String, dynamic>{}
-              : presentationDefinition.toJson(),
+          presentationDefinition: presentationDefinition.toJson(),
           credentialList: context.read<WalletCubit>().state.credentials,
         );
       },

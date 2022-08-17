@@ -105,116 +105,110 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
           ),
         ],
         child: BlocBuilder<SendReceiveHomeCubit, SendReceiveHomeState>(
-            builder: (context, state) {
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              const BackgroundCard(
-                height: double.infinity,
-                width: double.infinity,
-                margin: EdgeInsets.only(top: Sizes.icon3x / 2),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  CachedImageFromNetwork(
-                    state.xtz.iconUrl ?? '',
-                    width: Sizes.icon3x,
-                    height: Sizes.icon3x,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(Sizes.icon3x),
+          builder: (context, state) {
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                const BackgroundCard(
+                  height: double.infinity,
+                  width: double.infinity,
+                  margin: EdgeInsets.only(top: Sizes.icon3x / 2),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    CachedImageFromNetwork(
+                      state.xtz.iconUrl ?? '',
+                      width: Sizes.icon3x,
+                      height: Sizes.icon3x,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(Sizes.icon3x),
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: Sizes.spaceSmall,
-                  ),
-                  Text(l10n.myTokens,
-                      style: Theme.of(context).textTheme.headline5),
-                  const TezosNetworkSwitcherButton(),
-                  const SizedBox(
-                    height: Sizes.spaceLarge,
-                  ),
-                  MyText(
-                    '${state.xtz.calculatedBalance.formatNumber()} ${state.xtz.symbol}',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  MyText(
-                    r'$--.--',
-                    style: Theme.of(context).textTheme.normal,
-                  ),
-                  const SizedBox(
-                    height: Sizes.spaceNormal,
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      MyGradientButton(
-                        upperCase: false,
-                        text: l10n.send,
-                        verticalSpacing: 0,
-                        margin: const EdgeInsets.all(Sizes.spaceSmall),
-                        fontSize: 16,
-                        borderRadius: Sizes.smallRadius,
-                        height: Sizes.normalButton,
-                        icon: Image.asset(
-                          IconStrings.send,
-                          width: Sizes.icon,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push<void>(SendToPage.route());
-                        },
-                      ),
-                      MyGradientButton(
-                        upperCase: false,
-                        text: l10n.receive,
-                        verticalSpacing: 0,
-                        fontSize: 16,
-                        margin: const EdgeInsets.all(Sizes.spaceSmall),
-                        borderRadius: Sizes.smallRadius,
-                        height: Sizes.normalButton,
-                        icon: Image.asset(
-                          IconStrings.receive,
-                          width: Sizes.icon,
-                        ),
-                        onPressed: () {
-                          final currentAccount =
-                              context.read<WalletCubit>().state.currentAccount;
-                          Navigator.of(context).push<void>(
-                            ReceivePage.route(
-                              accountAddress: currentAccount.walletAddress,
-                              tokenSymbol: context
-                                  .read<SendReceiveHomeCubit>()
+                    const SizedBox(
+                      height: Sizes.spaceSmall,
+                    ),
+                    Text(
+                      l10n.myTokens,
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                    const TezosNetworkSwitcherButton(),
+                    const SizedBox(
+                      height: Sizes.spaceLarge,
+                    ),
+                    MyText(
+                      '''${state.xtz.calculatedBalance.formatNumber()} ${state.xtz.symbol}''',
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                    MyText(
+                      r'$--.--',
+                      style: Theme.of(context).textTheme.normal,
+                    ),
+                    const SizedBox(
+                      height: Sizes.spaceNormal,
+                    ),
+                    // TODO(Taleb) : adjust based on MyGradientButton
+                    // Row(
+                    //   mainAxisSize: MainAxisSize.max,
+                    //   children: [
+                    //     MyGradientButton.icon(
+                    //       upperCase: false,
+                    //       text: l10n.send,
+                    //       verticalSpacing: 0,
+                    //       margin: const EdgeInsets.all(Sizes.spaceSmall),
+                    //       fontSize: 16,
+                    //       borderRadius: Sizes.smallRadius,
+                    //       height: Sizes.normalButton,
+                    //       icon: Image.asset(
+                    //         IconStrings.send,
+                    //         width: Sizes.icon,
+                    //       ),
+                    //       onPressed: () {
+                    //         Navigator.of(context)
+                    //             .push<void>(SendToPage.route());
+                    //       },
+                    //     ),
+                    //     MyGradientButton.icon(
+                    //       upperCase: false,
+                    //       text: l10n.receive,
+                    //       verticalSpacing: 0,
+                    //       fontSize: 16,
+                    //       margin: const EdgeInsets.all(Sizes.spaceSmall),
+                    //       borderRadius: Sizes.smallRadius,
+                    //       height: Sizes.normalButton,
+                    //       icon: Image.asset(
+                    //         IconStrings.receive,
+                    //         width: Sizes.icon,
+                    //       ),
+                    //       onPressed: () {},
+                    //     ),
+                    //   ],
+                    // ),
+                    const SizedBox(
+                      height: Sizes.spaceNormal,
+                    ),
+                    RecentTransactions(
+                      onRefresh: () async {
+                        await context
+                            .read<SendReceiveHomeCubit>()
+                            .getOperations(
+                              baseUrl: context
+                                  .read<ManageNetworkCubit>()
                                   .state
-                                  .xtz
-                                  .symbol,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: Sizes.spaceNormal,
-                  ),
-                  RecentTransactions(
-                    onRefresh: () async {
-                      await context.read<SendReceiveHomeCubit>().getOperations(
-                            baseUrl: context
-                                .read<ManageNetworkCubit>()
-                                .state
-                                .network
-                                .tzktUrl,
-                          );
-                    },
-                    operations: state.operations,
-                  )
-                ],
-              )
-            ],
-          );
-        }),
+                                  .network
+                                  .tzktUrl,
+                            );
+                      },
+                      operations: state.operations,
+                    )
+                  ],
+                )
+              ],
+            );
+          },
+        ),
       ),
     );
   }

@@ -5,8 +5,8 @@ import 'package:altme/scan/scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CredentialsPresentPage extends StatefulWidget {
-  const CredentialsPresentPage({
+class QueryByExamplePresentPage extends StatefulWidget {
+  const QueryByExamplePresentPage({
     Key? key,
     required this.uri,
     required this.preview,
@@ -23,20 +23,21 @@ class CredentialsPresentPage extends StatefulWidget {
     required Issuer issuer,
   }) {
     return MaterialPageRoute<void>(
-      builder: (context) => CredentialsPresentPage(
+      builder: (context) => QueryByExamplePresentPage(
         uri: uri,
         preview: preview,
         issuer: issuer,
       ),
-      settings: const RouteSettings(name: '/credentialsPresent'),
+      settings: const RouteSettings(name: '/QueryByExamplePresent'),
     );
   }
 
   @override
-  _CredentialsPresentPageState createState() => _CredentialsPresentPageState();
+  _QueryByExamplePresentPageState createState() =>
+      _QueryByExamplePresentPageState();
 }
 
-class _CredentialsPresentPageState extends State<CredentialsPresentPage> {
+class _QueryByExamplePresentPageState extends State<QueryByExamplePresentPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;

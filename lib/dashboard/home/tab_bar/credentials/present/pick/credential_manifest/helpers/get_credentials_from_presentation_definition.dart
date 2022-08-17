@@ -1,5 +1,4 @@
 import 'package:altme/dashboard/home/tab_bar/credentials/credential.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/pick/credential_manifest/helpers/get_credentials_from_filter_list.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 
 List<CredentialModel> getCredentialsFromPresentationDefinition(
