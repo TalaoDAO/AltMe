@@ -426,7 +426,8 @@
     "tezosMainNetwork",
     "send",
     "receive",
-    "recentTransactions"
+    "recentTransactions",
+    "sendOnlyXtzToThisAddressDescription"
   ],
 
   "es": [
@@ -856,7 +857,8 @@
     "tezosMainNetwork",
     "send",
     "receive",
-    "recentTransactions"
+    "recentTransactions",
+    "sendOnlyXtzToThisAddressDescription"
   ],
 
   "fr": [
@@ -1286,7 +1288,8 @@
     "tezosMainNetwork",
     "send",
     "receive",
-    "recentTransactions"
+    "recentTransactions",
+    "sendOnlyXtzToThisAddressDescription"
   ],
 
   "it": [
@@ -1716,6 +1719,7 @@
     "tezosMainNetwork",
     "send",
     "receive",
-    "recentTransactions"
+    "recentTransactions",
+    "sendOnlyXtzToThisAddressDescription"
   ]
 }
