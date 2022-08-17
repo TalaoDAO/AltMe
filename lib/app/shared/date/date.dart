@@ -28,11 +28,12 @@ class UiDate {
   }
 
   static String formatStringDate(String dateTime) {
-    if (DateTime.tryParse(dateTime) != null) {
+    try {
       final DateTime dt = DateTime.parse(dateTime);
       return formatDate(dt);
+    } catch (e) {
+      return '';
     }
-    return '';
   }
 
   static String formatDate(DateTime dateTime) {

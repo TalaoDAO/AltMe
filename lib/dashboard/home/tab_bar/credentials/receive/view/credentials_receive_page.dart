@@ -117,19 +117,21 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
               const SizedBox(height: 24),
               MyGradientButton(
                 text: l10n.credentialAddThisCard,
-                onPressed: () async {
+                onPressed: () {
                   if (credentialModel
                           .credentialManifest?.presentationDefinition !=
                       null) {
-                    await Navigator.of(context).pushReplacement<void, void>(
+                    Navigator.of(context).pushReplacement<void, void>(
                       CredentialManifestOfferPickPage.route(
                         uri: widget.uri,
                         credential: credentialModel,
                         issuer: widget.issuer,
+                        inputDescriptorIndex: 0,
+                        credentialsToBePresented: [],
                       ),
                     );
                   } else {
-                    await context.read<ScanCubit>().credentialOffer(
+                    context.read<ScanCubit>().credentialOffer(
                           uri: widget.uri,
                           credentialModel: credentialModel,
                           keyId: SecureStorageKeys.ssiKey,
