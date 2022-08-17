@@ -16,7 +16,11 @@ class TokensState extends Equatable {
   final List<TokenModel> data;
 
   TokensState fetching() {
-    return TokensState(status: AppStatus.fetching, data: data);
+    return TokensState(
+      status: AppStatus.fetching,
+      data: data,
+      message: message,
+    );
   }
 
   TokensState errorWhileFetching({
@@ -30,7 +34,7 @@ class TokensState extends Equatable {
   }
 
   TokensState loading() {
-    return TokensState(status: AppStatus.loading, data: data);
+    return TokensState(status: AppStatus.loading, data: data, message: message);
   }
 
   TokensState error({
@@ -48,6 +52,7 @@ class TokensState extends Equatable {
   }) {
     return TokensState(
       status: AppStatus.populate,
+      message: message,
       data: data ?? this.data,
     );
   }

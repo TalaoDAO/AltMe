@@ -4,13 +4,12 @@ part of 'insert_withdrawal_page_cubit.dart';
 class InsertWithdrawalPageState extends Equatable {
   const InsertWithdrawalPageState({
     this.selectedToken = const TokenModel(
-      '',
-      'Tezos',
-      'XTZ',
-      'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
-      null,
-      '00000000',
-      '6',
+      contractAddress: '',
+      name: 'Tezos',
+      symbol: 'XTZ',
+      icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
+      balance: '00000000',
+      decimals: '6',
     ),
     this.amount = 0.0,
     this.isValidWithdrawal = false,

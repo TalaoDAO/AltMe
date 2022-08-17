@@ -9,15 +9,17 @@ part 'token_model.g.dart';
 @JsonSerializable()
 @immutable
 class TokenModel extends Equatable {
-  const TokenModel(
-    this.contractAddress,
-    this.name,
-    this.symbol,
+  const TokenModel({
+    required this.contractAddress,
+    required this.name,
+    required this.symbol,
     this.icon,
     this.thumbnailUri,
-    this.balance,
-    this.decimals,
-  );
+    required this.balance,
+    required this.decimals,
+    this.tokenUSDPrice,
+    this.balanceUSDPrice,
+  });
 
   factory TokenModel.fromJson(Map<String, dynamic> json) =>
       _$TokenModelFromJson(json);
@@ -32,8 +34,34 @@ class TokenModel extends Equatable {
   final String? thumbnailUri;
   final String balance;
   final String decimals;
+  final double? tokenUSDPrice;
+  final double? balanceUSDPrice;
 
   Map<String, dynamic> toJson() => _$TokenModelToJson(this);
+
+  TokenModel copyWith({
+    String? contractAddress,
+    String? symbol,
+    String? name,
+    String? icon,
+    String? thumbnailUri,
+    String? balance,
+    String? decimals,
+    double? tokenUSDPrice,
+    double? balanceUSDPrice,
+  }) {
+    return TokenModel(
+      contractAddress: contractAddress ?? this.contractAddress,
+      name: name ?? this.name,
+      symbol: symbol ?? this.symbol,
+      balance: balance ?? this.balance,
+      thumbnailUri: thumbnailUri ?? this.thumbnailUri,
+      icon: icon ?? this.icon,
+      decimals: decimals ?? this.decimals,
+      tokenUSDPrice: tokenUSDPrice ?? this.tokenUSDPrice,
+      balanceUSDPrice: balanceUSDPrice ?? this.balanceUSDPrice,
+    );
+  }
 
   String get calculatedBalance {
     final formatter = NumberFormat('#,###');
@@ -75,6 +103,15 @@ class TokenModel extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [contractAddress, name, symbol, icon, thumbnailUri, balance, decimals];
+  List<Object?> get props => [
+        contractAddress,
+        name,
+        symbol,
+        icon,
+        thumbnailUri,
+        balance,
+        decimals,
+        tokenUSDPrice,
+        balanceUSDPrice,
+      ];
 }
