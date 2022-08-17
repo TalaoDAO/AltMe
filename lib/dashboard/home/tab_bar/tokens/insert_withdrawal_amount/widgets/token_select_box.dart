@@ -157,8 +157,12 @@ class _TokenSelectBoxItem extends StatelessWidget {
                         ],
                       ),
                       MyText(
-                        // TODO(Taleb): show usd value of token
-                        r'$--.--',
+                        r'$' +
+                            (selectedToken.balanceUSDPrice == null
+                                ? '--.--'
+                                : selectedToken.balanceUSDPrice!
+                                    .toStringAsFixed(2)
+                                    .formatNumber()),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Theme.of(context).colorScheme.greyText,
                             ),

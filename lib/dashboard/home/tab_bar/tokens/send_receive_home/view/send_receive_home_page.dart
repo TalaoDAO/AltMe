@@ -8,11 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SendReceiveHomePage extends StatefulWidget {
-  const SendReceiveHomePage({Key? key}) : super(key: key);
+  const SendReceiveHomePage({
+    Key? key,
+    required this.selectedToken,
+  }) : super(key: key);
 
-  static Route route() {
+  final TokenModel selectedToken;
+
+  static Route route({required TokenModel selectedToken}) {
     return MaterialPageRoute<void>(
-      builder: (_) => const SendReceiveHomePage(),
+      builder: (_) => SendReceiveHomePage(
+        selectedToken: selectedToken,
+      ),
       settings: const RouteSettings(name: '/sendReceiveHomePage'),
     );
   }
@@ -22,12 +29,18 @@ class SendReceiveHomePage extends StatefulWidget {
 }
 
 class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
+  late final dioClient = DioClient(
+    context.read<ManageNetworkCubit>().state.network.tzktUrl,
+    Dio(),
+  );
+
   late final sendReceiveHomeCubit = SendReceiveHomeCubit(
-    client: DioClient(
-      context.read<ManageNetworkCubit>().state.network.tzktUrl,
-      Dio(),
-    ),
+    client: dioClient,
     walletCubit: context.read<WalletCubit>(),
+    tokensCubit: TokensCubit(
+      client: dioClient,
+      walletCubit: context.read<WalletCubit>(),
+    ),
   );
 
   @override
@@ -42,13 +55,20 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
   Widget build(BuildContext context) {
     return BlocProvider<SendReceiveHomeCubit>(
       create: (_) => sendReceiveHomeCubit,
-      child: const _SendReceiveHomePageView(),
+      child: _SendReceiveHomePageView(
+        selectedToken: widget.selectedToken,
+      ),
     );
   }
 }
 
 class _SendReceiveHomePageView extends StatefulWidget {
-  const _SendReceiveHomePageView({Key? key}) : super(key: key);
+  const _SendReceiveHomePageView({
+    Key? key,
+    required this.selectedToken,
+  }) : super(key: key);
+
+  final TokenModel selectedToken;
 
   @override
   State<_SendReceiveHomePageView> createState() =>
@@ -120,7 +140,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     CachedImageFromNetwork(
-                      state.xtz.iconUrl ?? '',
+                      widget.selectedToken.iconUrl ?? '',
                       width: Sizes.icon3x,
                       height: Sizes.icon3x,
                       borderRadius: const BorderRadius.all(
@@ -138,54 +158,72 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                     const SizedBox(
                       height: Sizes.spaceLarge,
                     ),
-                    MyText(
-                      '''${state.xtz.calculatedBalance.formatNumber()} ${state.xtz.symbol}''',
-                      style: Theme.of(context).textTheme.headline4,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MyText(
+                          widget.selectedToken.calculatedBalance.formatNumber(),
+                          style: Theme.of(context).textTheme.headline4,
+                          maxLength: 12,
+                        ),
+                        const SizedBox(
+                          width: Sizes.spaceXSmall,
+                        ),
+                        MyText(
+                          widget.selectedToken.symbol,
+                          style: Theme.of(context).textTheme.headline4,
+                          maxLength: 8,
+                        ),
+                      ],
                     ),
                     MyText(
-                      r'$--.--',
+                      r'$' +
+                          (widget.selectedToken.balanceUSDPrice == null
+                              ? '--.--'
+                              : widget.selectedToken.balanceUSDPrice!
+                                  .toStringAsFixed(2)
+                                  .formatNumber()),
                       style: Theme.of(context).textTheme.normal,
                     ),
                     const SizedBox(
                       height: Sizes.spaceNormal,
                     ),
-                    // TODO(Taleb) : adjust based on MyGradientButton
-                    // Row(
-                    //   mainAxisSize: MainAxisSize.max,
-                    //   children: [
-                    //     MyGradientButton.icon(
-                    //       upperCase: false,
-                    //       text: l10n.send,
-                    //       verticalSpacing: 0,
-                    //       margin: const EdgeInsets.all(Sizes.spaceSmall),
-                    //       fontSize: 16,
-                    //       borderRadius: Sizes.smallRadius,
-                    //       height: Sizes.normalButton,
-                    //       icon: Image.asset(
-                    //         IconStrings.send,
-                    //         width: Sizes.icon,
-                    //       ),
-                    //       onPressed: () {
-                    //         Navigator.of(context)
-                    //             .push<void>(SendToPage.route());
-                    //       },
-                    //     ),
-                    //     MyGradientButton.icon(
-                    //       upperCase: false,
-                    //       text: l10n.receive,
-                    //       verticalSpacing: 0,
-                    //       fontSize: 16,
-                    //       margin: const EdgeInsets.all(Sizes.spaceSmall),
-                    //       borderRadius: Sizes.smallRadius,
-                    //       height: Sizes.normalButton,
-                    //       icon: Image.asset(
-                    //         IconStrings.receive,
-                    //         width: Sizes.icon,
-                    //       ),
-                    //       onPressed: () {},
-                    //     ),
-                    //   ],
-                    // ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        MyGradientButton(
+                          upperCase: false,
+                          text: l10n.send,
+                          verticalSpacing: 0,
+                          margin: const EdgeInsets.all(Sizes.spaceSmall),
+                          fontSize: 16,
+                          borderRadius: Sizes.smallRadius,
+                          height: Sizes.normalButton,
+                          icon: Image.asset(
+                            IconStrings.send,
+                            width: Sizes.icon,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .push<void>(SendToPage.route());
+                          },
+                        ),
+                        MyGradientButton(
+                          upperCase: false,
+                          text: l10n.receive,
+                          verticalSpacing: 0,
+                          fontSize: 16,
+                          margin: const EdgeInsets.all(Sizes.spaceSmall),
+                          borderRadius: Sizes.smallRadius,
+                          height: Sizes.normalButton,
+                          icon: Image.asset(
+                            IconStrings.receive,
+                            width: Sizes.icon,
+                          ),
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
                     const SizedBox(
                       height: Sizes.spaceNormal,
                     ),

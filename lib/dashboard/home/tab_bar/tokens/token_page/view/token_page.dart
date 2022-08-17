@@ -55,9 +55,12 @@ class _TokenViewState extends State<TokenView> {
     LoadingView().hide();
   }
 
-  void onItemTap(TokenModel _) {
-    // Navigator.of(context).push<void>(SendToPage.route());
-    Navigator.of(context).push<void>(SendReceiveHomePage.route());
+  void onItemTap(TokenModel selectedToken) {
+    Navigator.of(context).push<void>(
+      SendReceiveHomePage.route(
+        selectedToken: selectedToken,
+      ),
+    );
   }
 
   @override
@@ -120,7 +123,8 @@ class _TokenViewState extends State<TokenView> {
 
                   if (state.status == AppStatus.fetching) {
                     return const TokenListShimmer();
-                  } else if (state.status == AppStatus.populate) {
+                  } else if (state.status == AppStatus.populate ||
+                      state.status == AppStatus.success) {
                     return TokenList(
                       tokenList: state.data,
                       onRefresh: onRefresh,

@@ -48,12 +48,28 @@ class TokenItem extends StatelessWidget {
             token.name.isEmpty ? token.symbol : token.name,
             style: Theme.of(context).textTheme.listTileSubtitle,
           ),
-          trailing: MyText(
-            token.calculatedBalance,
-            style: Theme.of(context)
-                .textTheme
-                .listTileTitle
-                .copyWith(fontSize: 13),
+          trailing: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              MyText(
+                token.calculatedBalance,
+                style: Theme.of(context)
+                    .textTheme
+                    .listTileTitle
+                    .copyWith(fontSize: 13),
+              ),
+              MyText(
+                r'$' +
+                    (token.balanceUSDPrice == null
+                        ? '--.--'
+                        : token.balanceUSDPrice!
+                            .toStringAsFixed(2)
+                            .formatNumber()),
+                style: Theme.of(context).textTheme.listTileSubtitle,
+              ),
+            ],
           ),
         ),
       ),

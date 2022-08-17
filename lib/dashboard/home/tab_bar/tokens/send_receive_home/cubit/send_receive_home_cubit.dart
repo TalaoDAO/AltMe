@@ -13,19 +13,16 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
   SendReceiveHomeCubit({
     required this.client,
     required this.walletCubit,
+    required this.tokensCubit,
   }) : super(const SendReceiveHomeState());
 
   final DioClient client;
   final WalletCubit walletCubit;
+  final TokensCubit tokensCubit;
 
   Future<void> init({String baseUrl = ''}) async {
     try {
       emit(state.loading());
-      final xtz = await getXtzBalance(
-        baseUrl,
-        walletCubit.state.currentAccount.walletAddress,
-      );
-      emit(state.copyWith(xtz: xtz));
       final operations = await _getOperations(baseUrl);
       emit(state.success(operations: operations));
     } catch (e, s) {
@@ -67,20 +64,5 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
         )
         .toList();
     return operations;
-  }
-
-  Future<TokenModel> getXtzBalance(String baseUrl, String walletAddress) async {
-    final int balance =
-        await client.get('$baseUrl/v1/accounts/$walletAddress/balance') as int;
-
-    return TokenModel(
-      '',
-      'Tezos',
-      'XTZ',
-      'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
-      '',
-      balance.toString(),
-      '6',
-    );
   }
 }

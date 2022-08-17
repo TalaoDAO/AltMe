@@ -51,13 +51,11 @@ class _SelectTokenBottomSheetViewState
 
   Future<void> onScrollEnded() async {
     _offset += _limit;
-    LoadingView().show(context: context);
     await context.read<TokensCubit>().getBalanceOfAssetList(
           baseUrl:
               context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
           offset: _offset,
         );
-    LoadingView().hide();
   }
 
   void onItemTap(TokenModel tokenModel) {
@@ -95,6 +93,23 @@ class _SelectTokenBottomSheetViewState
               const SizedBox(height: Sizes.spaceNormal),
               MultiBlocListener(
                 listeners: [
+                  BlocListener<TokensCubit, TokensState>(
+                    listener: (_, tokensState) {
+                      if (tokensState.status == AppStatus.loading) {
+                        LoadingView().show(context: context);
+                      } else {
+                        LoadingView().hide();
+                      }
+
+                      if (tokensState.message != null &&
+                          tokensState.status != AppStatus.errorWhileFetching) {
+                        AlertMessage.showStateMessage(
+                          context: context,
+                          stateMessage: tokensState.message!,
+                        );
+                      }
+                    },
+                  ),
                   BlocListener<WalletCubit, WalletState>(
                     listener: (context, state) {
                       if (activeIndex != state.currentCryptoIndex) {
@@ -110,26 +125,7 @@ class _SelectTokenBottomSheetViewState
                   ),
                 ],
                 child: Expanded(
-                  child: BlocConsumer<TokensCubit, TokensState>(
-                    listener: (context, state) {
-                      if (state.status == AppStatus.loading) {
-                        LoadingView().show(context: context);
-                      } else {
-                        LoadingView().hide();
-                      }
-
-                      if (state.message != null &&
-                          state.status != AppStatus.errorWhileFetching) {
-                        AlertMessage.showStateMessage(
-                          context: context,
-                          stateMessage: state.message!,
-                        );
-                      }
-
-                      if (state.status == AppStatus.success) {
-                        //some action
-                      }
-                    },
+                  child: BlocBuilder<TokensCubit, TokensState>(
                     builder: (context, state) {
                       String message = '';
                       if (state.message != null) {
@@ -141,7 +137,8 @@ class _SelectTokenBottomSheetViewState
 
                       if (state.status == AppStatus.fetching) {
                         return const TokenListShimmer();
-                      } else if (state.status == AppStatus.populate) {
+                      } else if (state.status == AppStatus.populate ||
+                          state.status == AppStatus.success) {
                         return TokenList(
                           tokenList: state.data,
                           onRefresh: onRefresh,
