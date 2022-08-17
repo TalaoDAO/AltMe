@@ -28,7 +28,6 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
       emit(state.copyWith(xtz: xtz));
       final operations = await _getOperations(baseUrl);
       emit(state.success(operations: operations));
-
     } catch (e, s) {
       emit(state.error(messageHandler: MessageHandler()));
       getLogger(runtimeType.toString()).e('error in init() e: $e, $s', e, s);
@@ -54,8 +53,13 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     final walletAddress =
         walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
 
-    final result = await client
-        .get('$baseUrl/v1/accounts/$walletAddress/operations') as List<dynamic>;
+    final result = await client.get(
+      '$baseUrl/v1/operations/transactions',
+      queryParameters: <String, dynamic>{
+        'anyof.sender.target': walletAddress,
+        'amount.gt': 0,
+      },
+    ) as List<dynamic>;
 
     final operations = result
         .map(
