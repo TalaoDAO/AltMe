@@ -85,8 +85,10 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                     context.read<CredentialManifestPickCubit>().toggle(index),
               ),
             );
+
             final _purpose = credential.credentialManifest
                 ?.presentationDefinition?.inputDescriptors.first.purpose;
+
             return BlocListener<ScanCubit, ScanState>(
               listener: (context, scanState) {
                 if (scanState.status == ScanStatus.loading) {

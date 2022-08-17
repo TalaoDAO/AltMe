@@ -13,6 +13,16 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
     List<CredentialModel> credentialList = const <CredentialModel>[],
     Map<String, dynamic> presentationDefinition = const <String, dynamic>{},
   }) : super(const CredentialManifestPickState(filteredCredentialList: [])) {
+    filterList(
+      credentialList: credentialList,
+      presentationDefinition: presentationDefinition,
+    );
+  }
+
+  void filterList({
+    required List<CredentialModel> credentialList,
+    required Map<String, dynamic> presentationDefinition,
+  }) {
     /// Get instruction to filter credentials of the wallet
     final filteredCredentialList = getCredentialsFromPresentationDefinition(
       presentationDefinition,
