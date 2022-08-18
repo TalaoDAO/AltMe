@@ -21,7 +21,6 @@ class PinCodeWidget extends StatefulWidget {
     this.bottomWidget,
     this.backgroundColor,
     this.cancelCallback,
-    this.digits,
   })  : circleUIConfig = circleUIConfig ?? const CircleUIConfig(),
         keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig(),
         super(key: key);
@@ -43,7 +42,6 @@ class PinCodeWidget extends StatefulWidget {
 
   final Color? backgroundColor;
   final Widget? bottomWidget;
-  final List<String>? digits;
 
   @override
   State<StatefulWidget> createState() => _PinCodeWidgetState();
@@ -114,7 +112,6 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                     widget.passwordEnteredCallback,
                                 keyboardUIConfig: widget.keyboardUIConfig,
                                 passwordDigits: widget.passwordDigits,
-                                digits: widget.digits,
                                 cancelCallback: widget.cancelCallback,
                               ),
                               widget.bottomWidget ?? Container()
@@ -197,7 +194,6 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                     widget.passwordEnteredCallback,
                                 keyboardUIConfig: widget.keyboardUIConfig,
                                 passwordDigits: widget.passwordDigits,
-                                digits: widget.digits,
                                 cancelCallback: widget.cancelCallback,
                               ),
                             ],

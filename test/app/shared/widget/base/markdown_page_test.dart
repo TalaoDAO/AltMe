@@ -24,7 +24,7 @@ void main() {
   setUpAll(() {
     ///do mock the assets
     TestWidgetsFlutterBinding.ensureInitialized();
-    services.ServicesBinding.instance?.defaultBinaryMessenger
+    services.ServicesBinding.instance.defaultBinaryMessenger
         .setMockMessageHandler('flutter/assets', (message) {
       if (isFirstCase) {
         final Uint8List encoded =

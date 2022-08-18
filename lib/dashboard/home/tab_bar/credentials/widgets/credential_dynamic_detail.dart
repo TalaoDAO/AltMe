@@ -1,5 +1,7 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class CredentialDynamicDetial extends StatelessWidget {
@@ -28,7 +30,7 @@ class CredentialDynamicDetial extends StatelessWidget {
       if (format == AltMeStrings.date) {
         if (DateTime.tryParse(value) != null) {
           final DateTime dt = DateTime.parse(value);
-          valueData = UiDate.formatDateTime(dt);
+          valueData = UiDate.formatDate(dt);
         }
       }
 
@@ -53,41 +55,48 @@ class CredentialDynamicDetial extends StatelessWidget {
 
     return Padding(
       padding: padding,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '$title: ',
-            style: titleTheme,
-          ),
-          Flexible(
-            child: TransparentInkWell(
-              onTap: () async {
-                if (format != null) {
-                  if (format == AltMeStrings.uri) {
-                    await LaunchUrl.launch(valueData);
-                  } else if (format == AltMeStrings.email) {
-                    await LaunchUrl.launch('mailto:$valueData');
+      child: RichText(
+        textAlign: TextAlign.left,
+        text: TextSpan(
+          children: <InlineSpan>[
+            TextSpan(text: '$title: ', style: titleTheme),
+            TextSpan(
+              text: (format != null && format == AltMeStrings.uri)
+                  ? context.l10n.link
+                  : valueData,
+              style: (format != null &&
+                      (format == AltMeStrings.uri ||
+                          format == AltMeStrings.email))
+                  ? valueTheme.copyWith(
+                      color: Theme.of(context).colorScheme.markDownA,
+                    )
+                  : valueTheme,
+              recognizer: TapGestureRecognizer()
+                ..onTap = () async {
+                  if (format != null) {
+                    if (format == AltMeStrings.uri) {
+                      await LaunchUrl.launch(valueData);
+                    } else if (format == AltMeStrings.email) {
+                      await LaunchUrl.launch('mailto:$valueData');
+                    }
                   }
-                }
-              },
-              child: Text(
-                valueData,
-                style: (format != null &&
-                        (format == AltMeStrings.uri ||
-                            format == AltMeStrings.email))
-                    ? valueTheme.copyWith(
-                        color: Theme.of(context).colorScheme.markDownA,
-                        decoration: TextDecoration.underline,
-                      )
-                    : valueTheme,
-                maxLines: 5,
-                overflow: TextOverflow.fade,
-                softWrap: true,
-              ),
+                },
             ),
-          ),
-        ],
+            if (format != null && format == AltMeStrings.uri)
+              WidgetSpan(
+                child: TransparentInkWell(
+                  onTap: () async {
+                    await LaunchUrl.launch(valueData);
+                  },
+                  child: ImageIcon(
+                    const AssetImage(IconStrings.link),
+                    color: Theme.of(context).colorScheme.markDownA,
+                    size: 17,
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

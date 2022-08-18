@@ -20,6 +20,7 @@ class CredentialManifestDetails extends StatelessWidget {
     final valueColor = Theme.of(context).colorScheme.valueColor;
     final l10n = context.l10n;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ExpansionTileContainer(
           child: ExpansionTile(
@@ -52,13 +53,16 @@ class CredentialManifestDetails extends StatelessWidget {
               style: Theme.of(context).textTheme.credentialManifestTitle2,
             ),
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: DisplayPropertiesWidget(
-                  properties: outputDescriptor.display?.properties,
-                  credentialModel: credentialModel,
-                  titleColor: titleColor,
-                  valueColor: valueColor,
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: DisplayPropertiesWidget(
+                    properties: outputDescriptor.display?.properties,
+                    credentialModel: credentialModel,
+                    titleColor: titleColor,
+                    valueColor: valueColor,
+                  ),
                 ),
               ),
             ],

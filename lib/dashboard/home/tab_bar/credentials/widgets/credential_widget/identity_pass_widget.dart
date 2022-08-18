@@ -100,8 +100,7 @@ class IdentityPassDisplayDetail extends StatelessWidget {
           if (identityPassModel.recipient!.birthDate != '')
             CredentialField(
               title: l10n.birthdate,
-              value: UiDate.displayDate(
-                l10n,
+              value: UiDate.formatStringDate(
                 identityPassModel.recipient!.birthDate,
               ),
             )

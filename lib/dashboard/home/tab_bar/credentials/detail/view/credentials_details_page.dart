@@ -139,7 +139,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               : null,
           body: BackgroundCard(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 DisplayDetail(
                   credentialModel: widget.credentialModel,

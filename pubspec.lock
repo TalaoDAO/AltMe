@@ -272,8 +272,8 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: e32d72b25b0e183b5626dc490001815c1e203404
-      url: "https://github.com/Tezsure/Dartez.git"
+      resolved-ref: "7f031c8a5928dae0ba353409b94694db928112b3"
+      url: "https://github.com/TalebRafiepour/Dartez.git"
     source: git
     version: "1.0.0"
   dbus:

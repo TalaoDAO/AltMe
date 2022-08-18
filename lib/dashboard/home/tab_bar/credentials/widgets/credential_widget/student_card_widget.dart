@@ -197,8 +197,7 @@ class StudentCardVerso extends Verso {
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
-                    text: UiDate.displayDate(
-                      l10n,
+                    text: UiDate.formatStringDate(
                       studentCardModel.recipient!.birthDate,
                     ),
                     textStyle: Theme.of(context).textTheme.studentCardData,
@@ -218,7 +217,7 @@ class StudentCardVerso extends Verso {
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   ImageCardText(
-                    text: UiDate.displayDate(l10n, studentCardModel.expires!),
+                    text: UiDate.formatStringDate(studentCardModel.expires!),
                     textStyle: Theme.of(context).textTheme.studentCardData,
                   ),
                 ],

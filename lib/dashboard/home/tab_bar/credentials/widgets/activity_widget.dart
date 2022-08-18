@@ -32,7 +32,7 @@ class ActivityWidget extends StatelessWidget {
           const SizedBox(height: 5),
           CredentialField(
             title: l10n.credentialDetailsPresented,
-            value: UiDate.formatDateTime(activity.presentation!.presentedAt),
+            value: UiDate.formatDate(activity.presentation!.presentedAt),
             titleColor: titleColor,
             valueColor: valueColor,
             padding: EdgeInsets.zero,
@@ -62,7 +62,7 @@ class ActivityWidget extends StatelessWidget {
         if (activity.acquisitionAt != null) ...[
           CredentialField(
             title: l10n.credentialDetailsInWalletSince,
-            value: UiDate.formatDateTime(activity.acquisitionAt!),
+            value: UiDate.formatDate(activity.acquisitionAt!),
             titleColor: titleColor,
             valueColor: valueColor,
             padding: EdgeInsets.zero,
