@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:dartez/dartez.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -91,6 +92,9 @@ class _TokenViewState extends State<TokenView> {
           children: [
             const MyAssetsText(),
             const SizedBox(height: 10),
+            TotalWalletBalance(
+              tokensCubit: context.read<TokensCubit>(),
+            ),
             Expanded(
               child: BlocConsumer<TokensCubit, TokensState>(
                 listener: (context, state) {
@@ -130,6 +134,7 @@ class _TokenViewState extends State<TokenView> {
                       onRefresh: onRefresh,
                       onScrollEnded: onScrollEnded,
                       onItemTap: onItemTap,
+                      isSecure: state.isSecure,
                     );
                   } else if (state.status == AppStatus.errorWhileFetching) {
                     return ErrorView(message: message, onTap: onRefresh);

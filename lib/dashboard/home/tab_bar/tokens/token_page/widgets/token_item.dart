@@ -7,9 +7,11 @@ class TokenItem extends StatelessWidget {
   const TokenItem({
     Key? key,
     required this.token,
+    this.isSecure = false,
   }) : super(key: key);
 
   final TokenModel token;
+  final bool isSecure;
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +56,21 @@ class TokenItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               MyText(
-                token.calculatedBalance,
+                isSecure ? '****' : token.calculatedBalance,
                 style: Theme.of(context)
                     .textTheme
                     .listTileTitle
                     .copyWith(fontSize: 13),
               ),
               MyText(
-                r'$' +
-                    (token.balanceUSDPrice == null
-                        ? '--.--'
-                        : token.balanceUSDPrice!
-                            .toStringAsFixed(2)
-                            .formatNumber()),
+                isSecure
+                    ? '****'
+                    : (r'$' +
+                        (token.balanceUSDPrice == null
+                            ? '--.--'
+                            : token.balanceUSDPrice!
+                                .toStringAsFixed(2)
+                                .formatNumber())),
                 style: Theme.of(context).textTheme.listTileSubtitle,
               ),
             ],
