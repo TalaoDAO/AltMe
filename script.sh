@@ -31,6 +31,19 @@ then
   fastlane beta
   cd ..
 
+elif [[ "$*" == *-completeIos* ]]; 
+then 
+  echo "build runner"
+  fvm flutter clean
+  fvm flutter pub get
+  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+  echo "deploy ios"
+  echo "Make sure you are in right branch"
+  fvm flutter build ios --release --flavor "production" --target "lib/main_production.dart"
+  cd ios 
+  fastlane beta
+  cd ..
+
 else
   echo "build runner"
   fvm flutter clean
