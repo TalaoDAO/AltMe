@@ -226,7 +226,18 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                                 IconStrings.receive,
                                 width: Sizes.icon,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).push<void>(
+                                  ReceivePage.route(
+                                    accountAddress: context
+                                        .read<WalletCubit>()
+                                        .state
+                                        .currentAccount
+                                        .walletAddress,
+                                    tokenSymbol: widget.selectedToken.symbol,
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ],
