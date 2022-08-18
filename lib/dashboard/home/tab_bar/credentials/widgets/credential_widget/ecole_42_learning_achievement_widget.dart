@@ -52,8 +52,7 @@ class Ecole42LearningAchievementDisplayDetail extends StatelessWidget {
     final l10n = context.l10n;
     final studentIdentity = '${ecole42LearningAchievementModel.givenName}'
         ' ${ecole42LearningAchievementModel.familyName},'
-        ' born ${UiDate.displayDate(
-      l10n,
+        ' born ${UiDate.formatStringDate(
       ecole42LearningAchievementModel.birthDate!,
     )}';
     final evidenceText =

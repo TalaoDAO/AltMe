@@ -10,11 +10,13 @@ class MyText extends StatelessWidget {
     this.textAlign = TextAlign.left,
     this.overflow,
     this.minFontSize = 0,
+    this.maxLength,
   }) : super(key: key);
 
   final String text;
   final TextStyle? style;
   final int maxLines;
+  final int? maxLength;
   final TextAlign textAlign;
   final TextOverflow? overflow;
   final double minFontSize;
@@ -23,12 +25,17 @@ class MyText extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = this.style ?? Theme.of(context).textTheme.subtitle1;
     return AutoSizeText(
-      text,
+      textWithDesiredLength,
       style: style,
       overflow: overflow,
       maxLines: maxLines,
       minFontSize: minFontSize,
       textAlign: textAlign,
     );
+  }
+
+  String get textWithDesiredLength {
+    if (maxLength == null || maxLength! > text.length) return text;
+    return text.substring(0, maxLength);
   }
 }

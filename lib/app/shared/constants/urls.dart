@@ -15,4 +15,8 @@ class Urls {
       'https://issuer.talao.co/talao_community';
   static const String identityCardUrl = 'http://issuer.talao.co/kyc';
   static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
+
+  /// main tezos rpc
+  static const rpc = 'https://rpc.tzstats.com';
+  static const tezToolPrices = 'https://api.teztools.io/v1/prices';
 }

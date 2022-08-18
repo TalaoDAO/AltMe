@@ -19,6 +19,10 @@ class MarkdownPage extends StatelessWidget {
       title: title,
       titleLeading: const BackLeadingButton(),
       scrollView: false,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 0,
+      ),
       body: BackgroundCard(
         padding: EdgeInsets.zero,
         child: FutureBuilder<String>(
@@ -29,9 +33,11 @@ class MarkdownPage extends StatelessWidget {
                 data: snapshot.data!,
                 styleSheet: MarkdownStyleSheet(
                   h1: TextStyle(
-                      color: Theme.of(context).colorScheme.markDownH1),
+                    color: Theme.of(context).colorScheme.markDownH1,
+                  ),
                   h2: TextStyle(
-                      color: Theme.of(context).colorScheme.markDownH2),
+                    color: Theme.of(context).colorScheme.markDownH2,
+                  ),
                   a: TextStyle(color: Theme.of(context).colorScheme.markDownA),
                   p: TextStyle(color: Theme.of(context).colorScheme.markDownP),
                 ),

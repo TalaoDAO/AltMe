@@ -86,10 +86,7 @@ class ResidentCardDisplayDetail extends StatelessWidget {
               ),
               CredentialField(
                 title: l10n.birthdate,
-                value: UiDate.displayDate(
-                  l10n,
-                  residentCardModel.birthDate!,
-                ),
+                value: UiDate.formatStringDate(residentCardModel.birthDate!),
               ),
               CredentialField(
                 title: l10n.birthplace,

@@ -32,3 +32,9 @@ String getIssuerDid({required Uri uriToCheck}) {
 bool isEbsiIssuer(CredentialModel credentialModel) {
   return credentialModel.issuer.startsWith('did:ebsi');
 }
+
+bool isValidPrivateKey(String value) {
+  return value.startsWith('edsk') ||
+      value.startsWith('spsk') ||
+      value.startsWith('p2sk');
+}

@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ProfessionalStudentCardDisplayInList extends StatelessWidget {
@@ -70,8 +69,6 @@ class JobStudentCardRecto extends Recto {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     return CredentialImage(
       image: ImageStrings.professionalStudentCardFront,
       child: AspectRatio(
@@ -94,8 +91,7 @@ class JobStudentCardRecto extends Recto {
             LayoutId(
               id: 'birthDate',
               child: ImageCardText(
-                text: UiDate.displayDate(
-                  l10n,
+                text: UiDate.formatStringDate(
                   professionalStudentCardModel.recipient!.birthDate,
                 ),
               ),
@@ -103,8 +99,7 @@ class JobStudentCardRecto extends Recto {
             LayoutId(
               id: 'expires',
               child: ImageCardText(
-                text: UiDate.displayDate(
-                  l10n,
+                text: UiDate.formatStringDate(
                   professionalStudentCardModel.expires!,
                 ),
               ),

@@ -1,5 +1,6 @@
 export 'backup_credential/backup_credential.dart';
 export 'drawer/drawer.dart';
+export 'import_talao_community_card/import_talao_community_card.dart';
 export 'licenses/licenses.dart';
 export 'manage_accounts/manage_accounts.dart';
 export 'manage_did/manage_did.dart';

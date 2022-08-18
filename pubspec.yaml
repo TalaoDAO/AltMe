@@ -1,6 +1,6 @@
 name: altme
 description: AltMe Flutter App 
-version: 1.0.35+36
+version: 1.0.41+43
 publish_to: none
 
 environment:
@@ -17,7 +17,7 @@ dependencies:
     path: packages/cryptocurrency_keys
   dartez:
     git:
-      url: https://github.com/Tezsure/Dartez.git
+      url: https://github.com/TalebRafiepour/Dartez.git
   did_kit:
     path: packages/did_kit
   dio: ^4.0.6

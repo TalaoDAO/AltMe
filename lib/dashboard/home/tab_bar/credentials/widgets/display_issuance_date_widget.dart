@@ -15,9 +15,8 @@ class DisplayIssuanceDateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final date = issuanceDate;
 
-    if (date != null) {
+    if (issuanceDate != null) {
       return Row(
         children: [
           Expanded(
@@ -35,7 +34,7 @@ class DisplayIssuanceDateWidget extends StatelessWidget {
           Expanded(
             flex: 4,
             child: MyText(
-              UiDate.displayDate(l10n, date),
+              UiDate.formatStringDate(issuanceDate!),
               style: textColor == null
                   ? Theme.of(context)
                       .textTheme

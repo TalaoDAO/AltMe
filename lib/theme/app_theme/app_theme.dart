@@ -75,6 +75,21 @@ abstract class AppTheme {
             fontSize: 13,
             fontWeight: FontWeight.w600,
           ),
+          headline6: GoogleFonts.nunito(
+            color: const Color(0xFFFFFFFF),
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+          headline5: GoogleFonts.nunito(
+            color: const Color(0xFFFFFFFF),
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+          headline4: GoogleFonts.nunito(
+            color: const Color(0xFFFFFFFF),
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         iconTheme: const IconThemeData(color: Color(0xff6600FF)),
         snackBarTheme: SnackBarThemeData(
@@ -89,6 +104,10 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get activeColorOfNetwork => const Color(0xFF2C7DF7);
+
+  Color get greyText => const Color(0xFFD1CCE3);
+
   Color get cardHighlighted => const Color(0xFF251F38);
 
   Color get defaultDialogDark => const Color(0xFF322643);
@@ -223,6 +242,12 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get keyboardDigitTextStyle =>
       GoogleFonts.roboto(fontSize: 30, color: Colors.white);
+
+  TextStyle get calculatorKeyboardDigitTextStyle => GoogleFonts.roboto(
+        fontSize: 30,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      );
 
   TextStyle get keyboardDeleteButtonTextStyle =>
       GoogleFonts.roboto(fontSize: 16, color: Colors.white);
@@ -392,8 +417,8 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get credentialDescription => GoogleFonts.roboto(
         color: const Color(0xFF757575),
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
       );
 
   TextStyle get credentialFieldTitle => GoogleFonts.roboto(
