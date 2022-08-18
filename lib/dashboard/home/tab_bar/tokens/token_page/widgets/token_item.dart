@@ -43,11 +43,12 @@ class TokenItem extends StatelessWidget {
                   ),
                 ),
           title: MyText(
-            token.symbol,
+            token.name.isEmpty ? token.symbol : token.name,
             style: Theme.of(context).textTheme.listTileTitle,
+            maxLength: 10,
           ),
           subtitle: MyText(
-            token.name.isEmpty ? token.symbol : token.name,
+            token.symbol,
             style: Theme.of(context).textTheme.listTileSubtitle,
           ),
           trailing: Column(
@@ -55,23 +56,29 @@ class TokenItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              MyText(
-                isSecure ? '****' : token.calculatedBalance,
-                style: Theme.of(context)
-                    .textTheme
-                    .listTileTitle
-                    .copyWith(fontSize: 13),
+              Flexible(
+                child: MyText(
+                  isSecure
+                      ? '****'
+                      : ('''${token.calculatedBalanceInDouble.toStringAsFixed(2).formatNumber()} ${token.symbol}'''),
+                  style: Theme.of(context)
+                      .textTheme
+                      .listTileTitle
+                      .copyWith(fontSize: 13),
+                ),
               ),
-              MyText(
-                isSecure
-                    ? '****'
-                    : (r'$' +
-                        (token.balanceUSDPrice == null
-                            ? '--.--'
-                            : token.balanceUSDPrice!
-                                .toStringAsFixed(2)
-                                .formatNumber())),
-                style: Theme.of(context).textTheme.listTileSubtitle,
+              Flexible(
+                child: MyText(
+                  isSecure
+                      ? '****'
+                      : (r'$' +
+                          (token.balanceUSDPrice == null
+                              ? '--.--'
+                              : token.balanceUSDPrice!
+                                  .toStringAsFixed(2)
+                                  .formatNumber())),
+                  style: Theme.of(context).textTheme.listTileSubtitle,
+                ),
               ),
             ],
           ),
