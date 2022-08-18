@@ -427,7 +427,8 @@
     "send",
     "receive",
     "recentTransactions",
-    "sendOnlyXtzToThisAddressDescription"
+    "sendOnlyXtzToThisAddressDescription",
+    "addTokens"
   ],
 
   "es": [
@@ -858,7 +859,8 @@
     "send",
     "receive",
     "recentTransactions",
-    "sendOnlyXtzToThisAddressDescription"
+    "sendOnlyXtzToThisAddressDescription",
+    "addTokens"
   ],
 
   "fr": [
@@ -1289,7 +1291,8 @@
     "send",
     "receive",
     "recentTransactions",
-    "sendOnlyXtzToThisAddressDescription"
+    "sendOnlyXtzToThisAddressDescription",
+    "addTokens"
   ],
 
   "it": [
@@ -1720,6 +1723,7 @@
     "send",
     "receive",
     "recentTransactions",
-    "sendOnlyXtzToThisAddressDescription"
+    "sendOnlyXtzToThisAddressDescription",
+    "addTokens"
   ]
 }

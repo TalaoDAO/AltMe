@@ -91,10 +91,13 @@ class _TokenViewState extends State<TokenView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const MyAssetsText(),
-            const SizedBox(height: 10),
+            const SizedBox(height: Sizes.spaceSmall),
             TotalWalletBalance(
               tokensCubit: context.read<TokensCubit>(),
             ),
+            const SizedBox(height: Sizes.spaceSmall,),
+            const AddTokenButton(),
+            const SizedBox(height: Sizes.spaceSmall,),
             Expanded(
               child: BlocConsumer<TokensCubit, TokensState>(
                 listener: (context, state) {
