@@ -37,6 +37,10 @@ then
   fvm flutter clean
   fvm flutter pub get
   fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+  echo "pod install"
+  cd ios
+  pod install
+  cd ..
   echo "deploy ios"
   echo "Make sure you are in right branch"
   fvm flutter build ios --release --flavor "production" --target "lib/main_production.dart"
