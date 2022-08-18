@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tezart/tezart.dart';
@@ -42,44 +43,90 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
     required String selectedAccountSecretKey,
   }) async {
     try {
-      emit(state.loading());
-      final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
-
-      final client = TezartClient(Urls.rpc);
-
-      final amount = int.parse(
-        tokenAmount.toStringAsFixed(6).replaceAll(',', '').replaceAll('.', ''),
-      );
-      final customFee = int.parse(
-        state.networkFee.fee
-            .toStringAsFixed(6)
-            .replaceAll('.', '')
-            .replaceAll(',', ''),
-      );
-
-      final operationsList = await client.transferOperation(
-        source: sourceKeystore,
-        destination: state.withdrawalAddress,
-        amount: amount,
-        customFee: customFee,
-      );
-      logger.i(
-        'before execute: withdrawal from secretKey: ${sourceKeystore.secretKey}'
-        ' , publicKey: ${sourceKeystore.publicKey} '
-        'amount: $amount '
-        'networkFee: $customFee '
-        'address: ${sourceKeystore.address} =>To address: '
-        '${state.withdrawalAddress}',
-      );
-      // ignore: unawaited_futures
-      operationsList.executeAndMonitor();
-      logger.i('after withdrawal execute');
-      emit(state.success());
+      await Dartez().init();
+      getLogger(runtimeType.toString()).i('Dartez initialized');
     } catch (e, s) {
-      logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
-      emit(state.error(messageHandler: MessageHandler()));
+      getLogger(runtimeType.toString())
+          .e('error in intializing Dartez e : $e , s: $s');
     }
-  }
+
+    // var server = '';
+
+    // var contract = """parameter string;
+    // storage string;
+    // code { DUP;
+    //     DIP { CDR ; NIL string ; SWAP ; CONS } ;
+    //     CAR ; CONS ;
+    //     CONCAT;
+    //     NIL operation; PAIR}""";
+
+    // var storage = '"Sample"';
+
+    // var keyStore = KeyStoreModel(
+    //   publicKey: 'edpkvQtuhdZQmjdjVfaY9Kf4hHfrRJYugaJErkCGvV3ER1S7XWsrrj',
+    //   secretKey:
+    //       'edskRgu8wHxjwayvnmpLDDijzD3VZDoAH7ZLqJWuG4zg7LbxmSWZWhtkSyM5Uby41rGfsBGk4iPKWHSDniFyCRv3j7YFCknyHH',
+    //   publicKeyHash: 'tz1QSHaKpTFhgHLbqinyYRjxD5sLcbfbzhxy',
+    // );
+
+    // var signer = await Dartez.createSigner(
+    //     TezsterDart.writeKeyWithHint(keyStore.secretKey, 'edsk'));
+
+    // var result = await Dartez.sendContractOriginationOperation(
+    //   server,
+    //   signer,
+    //   keyStore,
+    //   0,
+    //   null,
+    //   100000,
+    //   1000,
+    //   100000,
+    //   contract,
+    //   storage,
+    //   codeFormat: TezosParameterFormat.Michelson,
+    // );
+
+    // print("Operation groupID ===> $result['operationGroupID']");
+
+    //   try {
+    //     emit(state.loading());
+    //     final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
+
+    //     final client = TezartClient(Urls.rpc);
+
+    //     final amount = int.parse(
+    //       tokenAmount.toStringAsFixed(6).replaceAll(',', '').replaceAll('.', ''),
+    //     );
+    //     final customFee = int.parse(
+    //       state.networkFee.fee
+    //           .toStringAsFixed(6)
+    //           .replaceAll('.', '')
+    //           .replaceAll(',', ''),
+    //     );
+
+    //     final operationsList = await client.transferOperation(
+    //       source: sourceKeystore,
+    //       destination: state.withdrawalAddress,
+    //       amount: amount,
+    //       customFee: customFee,
+    //     );
+    //     logger.i(
+    //       'before execute: withdrawal from secretKey: ${sourceKeystore.secretKey}'
+    //       ' , publicKey: ${sourceKeystore.publicKey} '
+    //       'amount: $amount '
+    //       'networkFee: $customFee '
+    //       'address: ${sourceKeystore.address} =>To address: '
+    //       '${state.withdrawalAddress}',
+    //     );
+    //     // ignore: unawaited_futures
+    //     operationsList.executeAndMonitor();
+    //     logger.i('after withdrawal execute');
+    //     emit(state.success());
+    //   } catch (e, s) {
+    //     logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
+    //     emit(state.error(messageHandler: MessageHandler()));
+    //   }
+    // }
 
 // Future<List<Operation>> getContractOperation({
 //   required String tokenContractAddress,
@@ -105,5 +152,5 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
 //     logger.e('error e: $e, stack: $s', e, s);
 //     return [];
 //   }
-// }
+  }
 }
