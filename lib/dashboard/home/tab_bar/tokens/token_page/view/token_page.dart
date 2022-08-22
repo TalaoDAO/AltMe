@@ -94,9 +94,19 @@ class _TokenViewState extends State<TokenView> {
             TotalWalletBalance(
               tokensCubit: context.read<TokensCubit>(),
             ),
-            const SizedBox(height: Sizes.spaceSmall,),
-            const AddTokenButton(),
-            const SizedBox(height: Sizes.spaceSmall,),
+            const SizedBox(
+              height: Sizes.spaceSmall,
+            ),
+            AddTokenButton(
+              onTap: () {
+                Navigator.of(context).push<void>(
+                  AddTokensPage.route(),
+                );
+              },
+            ),
+            const SizedBox(
+              height: Sizes.spaceSmall,
+            ),
             Expanded(
               child: BlocConsumer<TokensCubit, TokensState>(
                 listener: (context, state) {
