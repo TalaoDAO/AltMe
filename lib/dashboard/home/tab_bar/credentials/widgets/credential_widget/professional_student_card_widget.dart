@@ -105,8 +105,8 @@ class JobStudentCardRecto extends Recto {
               ),
             ),
             LayoutId(
+              // This field is missing in the creential
               id: 'signature',
-              // TODO(all): Missing field
               child: const ImageCardText(text: ''),
             ),
             LayoutId(

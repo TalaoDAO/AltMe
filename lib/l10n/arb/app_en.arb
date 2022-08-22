@@ -321,7 +321,7 @@
   "details": "Details",
   "getThisCard": "Get it",
   "drawerBiometrics": "Biometrics",
-  "drawerTalaoCommunityCard": "Talao CommunityCard",
+  "drawerTalaoCommunityCard": "Talao Community Card",
   "drawerTalaoCommunityCardTitle": "Import your Ethereum address and get your Community Card.",
   "drawerTalaoCommunityCardSubtitle": "It will give you access to the best discounts, memberships and vouchers cards from our ecosystem of partners.",
   "drawerTalaoCommunityCardTextBoxMessage": "Once you have entered your private key, tap Import.\nPlease, make sure to enter the ethereum private key which contains your Talao Token.",
@@ -477,5 +477,6 @@
   "send": "Send",
   "receive": "Receive",
   "recentTransactions": "Recent transactions",
-  "sendOnlyXtzToThisAddressDescription": "Only send XTZ to this address. Sending other tokens may result in permanent loss."
+  "sendOnlyXtzToThisAddressDescription": "Only send XTZ to this address. Sending other tokens may result in permanent loss.",
+  "addTokens": "Add tokens"
 }

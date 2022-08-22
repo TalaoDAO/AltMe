@@ -97,13 +97,17 @@ class ScanCubit extends Cubit<ScanState> {
       if (credentialModel.receivedId == null) {
         data = FormData.fromMap(<String, dynamic>{
           'subject_id': did,
-          'presentation': jsonEncode(presentations),
+          'presentation': presentations.length > 1
+              ? jsonEncode(presentations)
+              : presentations,
         });
       } else {
         data = FormData.fromMap(<String, dynamic>{
           'id': credentialModel.receivedId,
           'subject_id': did,
-          'presentation': jsonEncode(presentations),
+          'presentation': presentations.length > 1
+              ? jsonEncode(presentations)
+              : presentations,
         });
       }
 

@@ -39,7 +39,7 @@ class IconStrings {
   static const String wallet = '$base/wallet.png';
   static const String userRound = '$base/user-round.png';
   static const String arrowSquareDown = '$base/arrow-square-down.png';
-  static const String addSquare = '$base/add-square@2x.png';
+  static const String addSquare = '$base/add-square.png';
   static const String templeWallet = '$base/temple-wallet.png';
   static const String metaMaskWallet = '$base/metamask-wallet.png';
   static const String kukaiWallet = '$base/kukai-wallet.png';

@@ -11,12 +11,14 @@ class TokenList extends StatefulWidget {
     required this.onRefresh,
     this.onScrollEnded,
     this.onItemTap,
+    this.isSecure = false,
   }) : super(key: key);
 
   final List<TokenModel> tokenList;
   final RefreshCallback onRefresh;
   final OnScrollEnded? onScrollEnded;
   final Function(TokenModel)? onItemTap;
+  final bool isSecure;
 
   @override
   State<TokenList> createState() => _TokenListState();
@@ -49,7 +51,10 @@ class _TokenListState extends State<TokenList> {
         physics: const AlwaysScrollableScrollPhysics(),
         itemBuilder: (_, index) => TransparentInkWell(
           onTap: () => widget.onItemTap?.call(widget.tokenList[index]),
-          child: TokenItem(token: widget.tokenList[index]),
+          child: TokenItem(
+            token: widget.tokenList[index],
+            isSecure: widget.isSecure,
+          ),
         ),
         itemCount: widget.tokenList.length,
       ),
