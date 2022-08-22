@@ -15,6 +15,7 @@ class AddTokenButton extends StatelessWidget {
     final l10n = context.l10n;
     return Center(
       child: InkWell(
+        onTap: onTap,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
