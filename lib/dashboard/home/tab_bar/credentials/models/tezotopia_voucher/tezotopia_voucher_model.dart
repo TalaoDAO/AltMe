@@ -22,10 +22,10 @@ class TezotopiaVoucherModel extends CredentialSubjectModel {
           credentialCategory: CredentialCategory.gamingCards,
         );
 
-  final Offers? offers;
-
   factory TezotopiaVoucherModel.fromJson(Map<String, dynamic> json) =>
       _$TezotopiaVoucherModelFromJson(json);
+
+  final Offers? offers;
 
   @JsonKey(defaultValue: '')
   final String? identifier;

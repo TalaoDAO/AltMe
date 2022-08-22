@@ -28,7 +28,11 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
+        '#ff6666',
+        'Cancel',
+        true,
+        ScanMode.QR,
+      );
     } on PlatformException {
       await context.read<QRCodeScanCubit>().emitError(
             ResponseMessage(

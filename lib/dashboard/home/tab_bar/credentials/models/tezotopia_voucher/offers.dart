@@ -9,9 +9,9 @@ class Offers {
     this.benefit,
   });
 
-  final Benefit? benefit;
   factory Offers.fromJson(Map<String, dynamic> json) => _$OffersFromJson(json);
 
-  @override
+  final Benefit? benefit;
+
   Map<String, dynamic> toJson() => _$OffersToJson(this);
 }

@@ -94,9 +94,13 @@ class _TokenViewState extends State<TokenView> {
             TotalWalletBalance(
               tokensCubit: context.read<TokensCubit>(),
             ),
-            const SizedBox(height: Sizes.spaceSmall,),
+            const SizedBox(
+              height: Sizes.spaceSmall,
+            ),
             const AddTokenButton(),
-            const SizedBox(height: Sizes.spaceSmall,),
+            const SizedBox(
+              height: Sizes.spaceSmall,
+            ),
             Expanded(
               child: BlocConsumer<TokensCubit, TokensState>(
                 listener: (context, state) {
@@ -135,7 +139,9 @@ class _TokenViewState extends State<TokenView> {
                       tokenList: state.data,
                       onRefresh: onRefresh,
                       onScrollEnded: onScrollEnded,
-                      onItemTap: onItemTap,
+
+                      // TODO(all): Enable it again when token send is ready
+                      /// onItemTap: onItemTap,
                       isSecure: state.isSecure,
                     );
                   } else if (state.status == AppStatus.errorWhileFetching) {

@@ -9,12 +9,11 @@ class Benefit {
     this.discount,
   });
 
-  final String? category;
-  final String? discount;
-
   factory Benefit.fromJson(Map<String, dynamic> json) =>
       _$BenefitFromJson(json);
 
-  @override
+  final String? category;
+  final String? discount;
+
   Map<String, dynamic> toJson() => _$BenefitToJson(this);
 }

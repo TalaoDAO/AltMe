@@ -49,6 +49,8 @@ class WalletItems extends StatelessWidget {
           child: Column(
             children: [
               ///Address Book
+              /* commented for V1 release
+              TODO enable community card again
               DrawerItem(
                 icon: IconStrings.addressBook,
                 title: l10n.drawerTalaoCommunityCard,
@@ -58,7 +60,7 @@ class WalletItems extends StatelessWidget {
                 },
               ),
               const DrawerItemDivider(),
-
+*/
               ///Mange Accounts
               DrawerItem(
                 icon: IconStrings.userRound,
