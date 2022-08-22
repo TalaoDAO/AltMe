@@ -6,6 +6,8 @@ class TokensState extends Equatable {
     this.status = AppStatus.init,
     this.message,
     this.data = const [],
+    this.isSecure = false,
+    this.totalBalanceInUSD = 0.0,
   });
 
   factory TokensState.fromJson(Map<String, dynamic> json) =>
@@ -14,46 +16,45 @@ class TokensState extends Equatable {
   final AppStatus status;
   final StateMessage? message;
   final List<TokenModel> data;
+  final bool isSecure;
+  final double totalBalanceInUSD;
 
   TokensState fetching() {
-    return TokensState(
+    return copyWith(
       status: AppStatus.fetching,
-      data: data,
-      message: message,
     );
   }
 
   TokensState errorWhileFetching({
     required MessageHandler messageHandler,
   }) {
-    return TokensState(
+    return copyWith(
       status: AppStatus.errorWhileFetching,
       message: StateMessage.error(messageHandler: messageHandler),
-      data: data,
     );
   }
 
   TokensState loading() {
-    return TokensState(status: AppStatus.loading, data: data, message: message);
+    return copyWith(
+      status: AppStatus.loading,
+    );
   }
 
   TokensState error({
     required MessageHandler messageHandler,
   }) {
-    return TokensState(
+    return copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
-      data: data,
     );
   }
 
   TokensState populate({
     List<TokenModel>? data,
   }) {
-    return TokensState(
+    return copyWith(
       status: AppStatus.populate,
-      message: message,
-      data: data ?? this.data,
+      data: data,
     );
   }
 
@@ -61,17 +62,33 @@ class TokensState extends Equatable {
     MessageHandler? messageHandler,
     List<TokenModel>? data,
   }) {
-    return TokensState(
+    return copyWith(
       status: AppStatus.success,
-      data: data ?? this.data,
+      data: data,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
     );
   }
 
+  TokensState copyWith({
+    AppStatus? status,
+    StateMessage? message,
+    List<TokenModel>? data,
+    bool? isSecure,
+    double? totalBalanceInUSD,
+  }) {
+    return TokensState(
+      status: status ?? this.status,
+      message: message ?? this.message,
+      data: data ?? this.data,
+      isSecure: isSecure ?? this.isSecure,
+      totalBalanceInUSD: totalBalanceInUSD ?? this.totalBalanceInUSD,
+    );
+  }
+
   Map<String, dynamic> toJson() => _$TokensStateToJson(this);
 
   @override
-  List<Object?> get props => [status, message, data];
+  List<Object?> get props => [status, message, data, isSecure];
 }
