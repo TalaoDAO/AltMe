@@ -9,9 +9,13 @@ class TokenContractItem extends StatelessWidget {
   const TokenContractItem({
     Key? key,
     required this.tokenContractModel,
+    this.isOn = false,
+    required this.onChange,
   }) : super(key: key);
 
   final ContractModel tokenContractModel;
+  final bool isOn;
+  final Function(bool) onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +45,8 @@ class TokenContractItem extends StatelessWidget {
           size: SwitcherSize.small,
           colorOn: Theme.of(context).colorScheme.primary,
           colorOff: Theme.of(context).hoverColor,
-          onChanged: (_) {},
-          value: true,
+          onChanged: onChange,
+          value: isOn,
         ),
       ),
     );

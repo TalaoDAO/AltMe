@@ -112,6 +112,13 @@ class TokensCubit extends Cubit<TokensState> {
             totalBalanceInUSD: totalBalanceInUSD,
           ),
         );
+      } else {
+        emit(
+          state.copyWith(
+            status: AppStatus.success,
+            data: data,
+          ),
+        );
       }
 
       return data;

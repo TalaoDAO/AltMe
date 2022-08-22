@@ -5,6 +5,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class AddTokensPage extends StatelessWidget {
   const AddTokensPage({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class AddTokensPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<AddTokensCubit>(
       create: (_) => AddTokensCubit(
+        secureStorageProvider: getSecureStorage,
         client: DioClient(
           Urls.tezToolBase,
           Dio(),
@@ -38,10 +40,9 @@ class _AddTokensView extends StatefulWidget {
 }
 
 class __AddTokensViewState extends State<_AddTokensView> {
-  
   @override
   void initState() {
-    Future<void>.microtask(context.read<AddTokensCubit>().getAllContracts);
+    Future<void>.microtask(context.read<AddTokensCubit>().init);
     super.initState();
   }
 
@@ -64,30 +65,65 @@ class __AddTokensViewState extends State<_AddTokensView> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                l10n.addTokens,
-                style: Theme.of(context).textTheme.headline5,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    l10n.addTokens,
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  TextButton(
+                    onPressed: (state.status == AppStatus.loading ||
+                            state.status == AppStatus.fetching)
+                        ? null
+                        : () async {
+                            await context
+                                .read<AddTokensCubit>()
+                                .saveSelectedContracts();
+                            Navigator.of(context).pop();
+                          },
+                    child: Text(
+                      l10n.save,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                ],
               ),
               Expanded(
-                child: ListView.separated(
-                  itemBuilder: (_, index) {
-                    return TokenContractItem(
-                      tokenContractModel: state.contracts[index],
-                    );
-                  },
-                  separatorBuilder: (_, __) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: Sizes.spaceXSmall,
+                child: state.status == AppStatus.loading
+                    ? const TokenListShimmer()
+                    : ListView.separated(
+                        itemBuilder: (_, index) {
+                          final tokenContractModel = state.contracts[index];
+                          return TokenContractItem(
+                            tokenContractModel: tokenContractModel,
+                            isOn: state.selectedContracts
+                                .contains(tokenContractModel.tokenAddress),
+                            onChange: (isChecked) {
+                              if (isChecked) {
+                                context.read<AddTokensCubit>().addContract(
+                                      contractAddress:
+                                          tokenContractModel.tokenAddress,
+                                    );
+                              } else {
+                                context.read<AddTokensCubit>().removeContract(
+                                      contractAddress:
+                                          tokenContractModel.tokenAddress,
+                                    );
+                              }
+                            },
+                          );
+                        },
+                        separatorBuilder: (_, __) {
+                          return Divider(
+                            height: 0.3,
+                            color: Theme.of(context).colorScheme.borderColor,
+                          );
+                        },
+                        itemCount: state.contracts.length,
                       ),
-                      child: Divider(
-                        height: 0.3,
-                        color: Theme.of(context).colorScheme.borderColor,
-                      ),
-                    );
-                  },
-                  itemCount: state.contracts.length,
-                ),
               ),
             ],
           ),
