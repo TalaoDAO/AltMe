@@ -23,6 +23,10 @@ class TokensCubit extends Cubit<TokensState> {
 
   List<TokenModel> data = [];
 
+  void toggleIsSecure() {
+    emit(state.copyWith(isSecure: !state.isSecure));
+  }
+
   Future<List<TokenModel>> getBalanceOfAssetList({
     String baseUrl = '',
     required int offset,
@@ -97,7 +101,17 @@ class TokensCubit extends Cubit<TokensState> {
                 .e('error in finding contract for token to get price');
           }
         }
-        emit(state.success(data: data));
+        double totalBalanceInUSD = 0;
+        for (final tokenElement in data) {
+          totalBalanceInUSD += tokenElement.balanceUSDPrice ?? 0;
+        }
+        emit(
+          state.copyWith(
+            status: AppStatus.success,
+            data: data,
+            totalBalanceInUSD: totalBalanceInUSD,
+          ),
+        );
       }
 
       return data;
