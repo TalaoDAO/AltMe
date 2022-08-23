@@ -1,7 +1,9 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tezart/tezart.dart';
 
@@ -33,7 +35,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
         state.withdrawalAddress.trim().isNotEmpty &&
         // TODO(Taleb): remove the last condition when added support to
         // send other tokens like Tezos
-        selectedToken.symbol == 'XTZ' &&
+        //selectedToken.symbol == 'XTZ' &&
         state.status != AppStatus.loading;
   }
 
@@ -78,6 +80,81 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
     } catch (e, s) {
       logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
       emit(state.error(messageHandler: MessageHandler()));
+    }
+  }
+
+  // TODO(Taleb): clean-up this method and transfer real amount of tokens
+  Future<void> sendContractInvocationOperation({
+    required double tokenAmount,
+    required String selectedAccountSecretKey,
+    required TokenModel token,
+  }) async {
+    try {
+      if (token.symbol == 'XTZ') {
+        await withdrawTezos(
+          tokenAmount: tokenAmount,
+          selectedAccountSecretKey: selectedAccountSecretKey,
+        );
+        return;
+      }
+      if (token.contractAddress.isEmpty) return;
+      await Dartez().init();
+
+      const server = Urls.rpc;
+
+      emit(state.loading());
+      final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
+
+      final keyStore = KeyStoreModel(
+        publicKey: sourceKeystore.publicKey,
+        secretKey: sourceKeystore.secretKey,
+        publicKeyHash: sourceKeystore.address,
+      );
+
+      final dynamic signer = await Dartez.createSigner(
+        Dartez.writeKeyWithHint(keyStore.secretKey, 'edsk'),
+      );
+
+      final List<String> contractAddress = [token.contractAddress];
+
+      final customFee = int.parse(
+        state.networkFee.fee
+            .toStringAsFixed(6)
+            .replaceAll('.', '')
+            .replaceAll(',', ''),
+      );
+
+      final dateFormat = DateFormat('y-M-dThh:mm:ss');
+      final currentDateTime = '${dateFormat.format(DateTime.now())}Z';
+
+      getLogger(runtimeType.toString()).i('sendContractInvocationOperation');
+
+      int amount = 1;
+
+      final parameters =
+          '''(Pair "${keyStore.publicKeyHash}" (Pair "${state.withdrawalAddress}" $amount))''';
+
+      final dynamic resultInvoke = await Dartez.sendContractInvocationOperation(
+        server,
+        signer as SoftSigner,
+        keyStore,
+        contractAddress,
+        [0],
+        120000,
+        1000,
+        100000,
+        ['transfer'],
+        [parameters],
+        codeFormat: TezosParameterFormat.Michelson,
+      );
+      emit(state.success());
+
+      getLogger(runtimeType.toString())
+          .i('Operation groupID ===> $resultInvoke,');
+    } catch (e, s) {
+      emit(state.error(messageHandler: MessageHandler()));
+      getLogger(runtimeType.toString())
+          .e('error in transferOperation , e: $e, s: $s');
     }
   }
 

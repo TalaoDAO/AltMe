@@ -19,6 +19,7 @@ class TokenModel extends Equatable {
     required this.decimals,
     this.tokenUSDPrice,
     this.balanceUSDPrice,
+    required this.id,
   });
 
   factory TokenModel.fromJson(Map<String, dynamic> json) =>
@@ -36,6 +37,7 @@ class TokenModel extends Equatable {
   final String decimals;
   final double? tokenUSDPrice;
   final double? balanceUSDPrice;
+  final int id;
 
   Map<String, dynamic> toJson() => _$TokenModelToJson(this);
 
@@ -49,6 +51,7 @@ class TokenModel extends Equatable {
     String? decimals,
     double? tokenUSDPrice,
     double? balanceUSDPrice,
+    int? id,
   }) {
     return TokenModel(
       contractAddress: contractAddress ?? this.contractAddress,
@@ -60,6 +63,7 @@ class TokenModel extends Equatable {
       decimals: decimals ?? this.decimals,
       tokenUSDPrice: tokenUSDPrice ?? this.tokenUSDPrice,
       balanceUSDPrice: balanceUSDPrice ?? this.balanceUSDPrice,
+      id: id ?? this.id,
     );
   }
 
@@ -113,5 +117,6 @@ class TokenModel extends Equatable {
         decimals,
         tokenUSDPrice,
         balanceUSDPrice,
+        id,
       ];
 }
