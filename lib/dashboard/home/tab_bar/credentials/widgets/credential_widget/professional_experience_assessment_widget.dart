@@ -54,14 +54,7 @@ class ProfessionalExperienceAssessmentDisplayDetail extends StatelessWidget {
     final professionalExperienceAssessmentModel = credentialModel
         .credentialPreview
         .credentialSubjectModel as ProfessionalExperienceAssessmentModel;
-    final _startDate = UiDate.displayDate(
-      l10n,
-      professionalExperienceAssessmentModel.startDate!,
-    );
-    final _endDate = UiDate.displayDate(
-      l10n,
-      professionalExperienceAssessmentModel.endDate!,
-    );
+
     return CredentialBackground(
       credentialModel: credentialModel,
       child: Column(
@@ -84,19 +77,23 @@ class ProfessionalExperienceAssessmentDisplayDetail extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  '${l10n.from} ',
+                  '${l10n.from.toLowerCase()} ',
                   style: Theme.of(context).textTheme.credentialFieldTitle,
                 ),
                 Text(
-                  UiDate.displayDate(l10n, _startDate),
+                  UiDate.formatStringDate(
+                    professionalExperienceAssessmentModel.startDate!,
+                  ),
                   style: Theme.of(context).textTheme.credentialFieldDescription,
                 ),
                 Text(
-                  ' ${l10n.to} ',
+                  ' ${l10n.to.toLowerCase()} ',
                   style: Theme.of(context).textTheme.credentialFieldTitle,
                 ),
                 Text(
-                  UiDate.displayDate(l10n, _endDate),
+                  UiDate.formatStringDate(
+                    professionalExperienceAssessmentModel.endDate!,
+                  ),
                   style: Theme.of(context).textTheme.credentialFieldDescription,
                 ),
               ],

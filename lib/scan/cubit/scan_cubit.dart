@@ -34,7 +34,7 @@ class ScanCubit extends Cubit<ScanState> {
     required Uri uri,
     required CredentialModel credentialModel,
     required String keyId,
-    CredentialModel? signatureOwnershipProof,
+    List<CredentialModel>? credentialsToBePresented,
     required Issuer issuer,
   }) async {
     emit(state.loading());
@@ -53,8 +53,8 @@ class ScanCubit extends Cubit<ScanState> {
       final verificationMethod =
           await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
 
-      String presentation;
-      if (signatureOwnershipProof == null) {
+      List<String> presentations = <String>[];
+      if (credentialsToBePresented == null) {
         final options = <String, dynamic>{
           'verificationMethod': verificationMethod,
           'proofPurpose': 'authentication',
@@ -62,43 +62,52 @@ class ScanCubit extends Cubit<ScanState> {
           'domain': credentialModel.domain ?? '',
         };
 
-        presentation = await didKitProvider.didAuth(
+        final presentation = await didKitProvider.didAuth(
           did,
           jsonEncode(options),
           key,
         );
-      } else {
-        final presentationId = 'urn:uuid:${const Uuid().v4()}';
 
-        presentation = await didKitProvider.issuePresentation(
-          jsonEncode({
-            '@context': ['https://www.w3.org/2018/credentials/v1'],
-            'type': ['VerifiablePresentation'],
-            'id': presentationId,
-            'holder': did,
-            'verifiableCredential': signatureOwnershipProof.data,
-          }),
-          jsonEncode({
-            'verificationMethod': verificationMethod,
-            'proofPurpose': 'assertionMethod',
-            'challenge': credentialModel.challenge,
-            'domain': credentialModel.domain,
-          }),
-          key,
-        );
+        presentations = List.of(presentations)..add(presentation);
+      } else {
+        for (final item in credentialsToBePresented) {
+          final presentationId = 'urn:uuid:${const Uuid().v4()}';
+
+          final presentation = await didKitProvider.issuePresentation(
+            jsonEncode({
+              '@context': ['https://www.w3.org/2018/credentials/v1'],
+              'type': ['VerifiablePresentation'],
+              'id': presentationId,
+              'holder': did,
+              'verifiableCredential': item.data,
+            }),
+            jsonEncode({
+              'verificationMethod': verificationMethod,
+              'proofPurpose': 'assertionMethod',
+              'challenge': credentialModel.challenge,
+              'domain': credentialModel.domain,
+            }),
+            key,
+          );
+          presentations = List.of(presentations)..add(presentation);
+        }
       }
 
       FormData data;
       if (credentialModel.receivedId == null) {
         data = FormData.fromMap(<String, dynamic>{
           'subject_id': did,
-          'presentation': [presentation],
+          'presentation': presentations.length > 1
+              ? jsonEncode(presentations)
+              : presentations,
         });
       } else {
         data = FormData.fromMap(<String, dynamic>{
           'id': credentialModel.receivedId,
           'subject_id': did,
-          'presentation': [presentation],
+          'presentation': presentations.length > 1
+              ? jsonEncode(presentations)
+              : presentations,
         });
       }
 
@@ -166,9 +175,9 @@ class ScanCubit extends Cubit<ScanState> {
         ),
       );
 
-      if (signatureOwnershipProof != null) {
+      if (credentialsToBePresented != null) {
         await presentationActivity(
-          credentialModels: [signatureOwnershipProof],
+          credentialModels: credentialsToBePresented,
           issuer: issuer,
         );
       }

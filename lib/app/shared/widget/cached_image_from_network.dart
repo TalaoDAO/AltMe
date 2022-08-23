@@ -7,24 +7,35 @@ class CachedImageFromNetwork extends StatelessWidget {
     this.url, {
     Key? key,
     this.fit = BoxFit.cover,
+    this.width,
+    this.height,
+    this.borderRadius,
   }) : super(key: key);
 
   final String url;
   final BoxFit fit;
+  final double? width;
+  final double? height;
+  final BorderRadius? borderRadius;
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: url,
-      fit: fit,
-      progressIndicatorBuilder: (context, _, loadingProgress) => Container(
-        color: Theme.of(context).colorScheme.lightGrey,
-      ),
-      errorWidget: (context, error, dynamic _) => Container(
-        color: Theme.of(context).colorScheme.lightGrey,
-        child: Icon(
-          Icons.error,
-          color: Theme.of(context).colorScheme.darkGrey,
+    return ClipRRect(
+      borderRadius: borderRadius ?? BorderRadius.zero,
+      child: CachedNetworkImage(
+        imageUrl: url,
+        fit: fit,
+        width: width,
+        height: height,
+        progressIndicatorBuilder: (context, _, loadingProgress) => Container(
+          color: Theme.of(context).colorScheme.lightGrey,
+        ),
+        errorWidget: (context, error, dynamic _) => Container(
+          color: Theme.of(context).colorScheme.lightGrey,
+          child: Icon(
+            Icons.error,
+            color: Theme.of(context).colorScheme.darkGrey,
+          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,13 +9,11 @@ class NumKeyboard extends StatelessWidget {
     KeyboardUIConfig? keyboardUIConfig,
     this.passwordDigits = 4,
     required this.passwordEnteredCallback,
-    this.digits,
     this.cancelCallback,
   })  : keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig(),
         super(key: key);
 
   final KeyboardUIConfig keyboardUIConfig;
-  final List<String>? digits;
   final int passwordDigits;
   final PasswordEnteredCallback passwordEnteredCallback;
   final CancelCallback? cancelCallback;
@@ -30,7 +29,6 @@ class NumKeyboard extends StatelessWidget {
                 cancelCallback: cancelCallback,
               ),
       keyboardUIConfig: keyboardUIConfig,
-      digits: digits,
     );
   }
 }

@@ -272,8 +272,8 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: e32d72b25b0e183b5626dc490001815c1e203404
-      url: "https://github.com/Tezsure/Dartez.git"
+      resolved-ref: "7f031c8a5928dae0ba353409b94694db928112b3"
+      url: "https://github.com/TalebRafiepour/Dartez.git"
     source: git
     version: "1.0.0"
   dbus:
@@ -379,6 +379,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_barcode_scanner:
+    dependency: "direct main"
+    description:
+      name: flutter_barcode_scanner
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -730,13 +737,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  mobile_scanner:
-    dependency: "direct main"
-    description:
-      name: mobile_scanner
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   mockingjay:
     dependency: "direct dev"
     description:

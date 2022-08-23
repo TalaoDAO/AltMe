@@ -31,7 +31,8 @@ void callbackDispatcher() {
               SecureStorageKeys.passBaseStatus,
             );
             log.i(
-                'passbase isolate passbaseStatusFrom storage: $passbaseStatusFromStorage');
+              'isolate passbaseStatusFrom storage: $passbaseStatusFromStorage',
+            );
 
             final PassBaseStatus oldPassBaseStatus =
                 getPassBaseStatusFromString(

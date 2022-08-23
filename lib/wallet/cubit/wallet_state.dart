@@ -20,6 +20,10 @@ class WalletState extends Equatable {
   final int currentCryptoIndex;
   final CryptoAccount cryptoAccount;
 
+  CryptoAccountData get currentAccount {
+    return cryptoAccount.data[currentCryptoIndex];
+  }
+
   WalletState loading() {
     return WalletState(
       status: WalletStatus.loading,

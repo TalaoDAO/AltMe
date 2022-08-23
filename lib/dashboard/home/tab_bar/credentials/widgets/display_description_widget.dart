@@ -58,12 +58,6 @@ class ManifestText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: style,
-      maxLines: 8,
-      overflow: TextOverflow.ellipsis,
-      softWrap: true,
-    );
+    return Text(text, style: style);
   }
 }

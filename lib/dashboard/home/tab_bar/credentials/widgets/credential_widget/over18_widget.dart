@@ -104,8 +104,7 @@ class Over18Verso extends Verso {
             ),
             if (expirationDate != null)
               TextWithOver18CardStyle(
-                value: '${l10n.expires}: ${UiDate.displayDate(
-                  l10n,
+                value: '${l10n.expires}: ${UiDate.formatStringDate(
                   expirationDate,
                 )}',
               )

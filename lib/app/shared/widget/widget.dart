@@ -19,6 +19,7 @@ export 'imported_tag.dart';
 export 'mnemonic.dart';
 export 'my_rich_text.dart';
 export 'my_text.dart';
+export 'numeric_keyboard.dart';
 export 'phrase_word.dart';
 export 'share_button.dart';
 export 'shimmer_widget.dart';

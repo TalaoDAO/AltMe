@@ -8,6 +8,7 @@ class IconStrings {
   static const String icMenu = '$base/ic-menu.png';
   static const String walletAdd = '$base/wallet-add.png';
   static const String closeCircle = '$base/close-circle.png';
+  static const String closeCircleWhite = '$base/close-circle-white.png';
   static const String story = '$base/story.png';
   static const String profile = '$base/profile.png';
   static const String searchNormal = '$base/search-normal.png';
@@ -38,7 +39,7 @@ class IconStrings {
   static const String wallet = '$base/wallet.png';
   static const String userRound = '$base/user-round.png';
   static const String arrowSquareDown = '$base/arrow-square-down.png';
-  static const String addSquare = '$base/add-square@2x.png';
+  static const String addSquare = '$base/add-square.png';
   static const String templeWallet = '$base/temple-wallet.png';
   static const String metaMaskWallet = '$base/metamask-wallet.png';
   static const String kukaiWallet = '$base/kukai-wallet.png';
@@ -55,4 +56,13 @@ class IconStrings {
   static const String alert = '$base/alert.png';
   static const String cardsBlur = '$base/cards-blur.png';
   static const String cards = '$base/cards.png';
+  static const String scanAddress = '$base/scan-address.png';
+  static const String whiteList = '$base/whitelist.png';
+  static const String keyboardDelete = '$base/keyboard-delete.png';
+  static const String exchangeArrow = '$base/exchange-arrow.png';
+  static const String arrowDown = '$base/arrow-down.png';
+  static const String bigCheckCircle = '$base/big-check-circle.png';
+  static const String link = '$base/link.png';
+  static const String send = '$base/send.png';
+  static const String receive = '$base/receive.png';
 }

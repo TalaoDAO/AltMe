@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:bloc/bloc.dart';
 

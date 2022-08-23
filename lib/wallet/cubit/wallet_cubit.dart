@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/pick/credential_manifest/helpers/get_credentials_from_filter_list.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
@@ -329,6 +328,7 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// credentials
     await repository.deleteAll();
+    await secureStorageProvider.delete(SecureStorageKeys.passBaseStatus);
 
     /// user data
     await profileCubit.resetProfile();
