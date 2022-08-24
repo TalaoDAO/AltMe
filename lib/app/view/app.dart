@@ -111,6 +111,7 @@ class App extends StatelessWidget {
         ),
         BlocProvider<TokensCubit>(
           create: (context) => TokensCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
             client: DioClient(
               context.read<ManageNetworkCubit>().state.network.tzktUrl,
               Dio(),
