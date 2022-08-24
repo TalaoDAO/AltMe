@@ -210,13 +210,6 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                                   context.read<WalletCubit>().state;
                               context
                                   .read<ConfirmWithdrawalCubit>()
-                                  // .withdrawTezos(
-                                  //   tokenAmount: widget.amount,
-                                  //   selectedAccountSecretKey: walletState
-                                  //       .cryptoAccount
-                                  //       .data[walletState.currentCryptoIndex]
-                                  //       .secretKey,
-                                  // );
                                   .sendContractInvocationOperation(
                                     token: widget.selectedToken,
                                     tokenAmount: widget.amount,

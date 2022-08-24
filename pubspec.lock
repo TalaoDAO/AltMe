@@ -271,7 +271,7 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
+      ref: main
       resolved-ref: "2a581511cde364aa365080b9a50d929b4b8c2e80"
       url: "https://github.com/TalebRafiepour/Dartez.git"
     source: git
