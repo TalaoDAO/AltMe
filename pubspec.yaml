@@ -18,6 +18,7 @@ dependencies:
   dartez:
     git:
       url: https://github.com/TalebRafiepour/Dartez.git
+      ref: main
   did_kit:
     path: packages/did_kit
   dio: ^4.0.6
@@ -59,6 +60,7 @@ dependencies:
     path: packages/secure_storage
   share_plus: ^4.0.10
   shimmer: ^2.0.0
+  switcher: ^1.0.0
   tezart:
     git:
       url: https://github.com/TalebRafiepour/tezart.git

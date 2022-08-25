@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tezart/tezart.dart';
@@ -31,13 +32,10 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
     // TODO(Taleb): update minimum withdrawal later for every token
     return amount > 0.00001 &&
         state.withdrawalAddress.trim().isNotEmpty &&
-        // TODO(Taleb): remove the last condition when added support to
-        // send other tokens like Tezos
-        selectedToken.symbol == 'XTZ' &&
         state.status != AppStatus.loading;
   }
 
-  Future<void> withdrawTezos({
+  Future<void> _withdrawTezos({
     required double tokenAmount,
     required String selectedAccountSecretKey,
   }) async {
@@ -81,29 +79,89 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
     }
   }
 
-// Future<List<Operation>> getContractOperation({
-//   required String tokenContractAddress,
-//   required String secretKey,
-// }) async {
-//   try {
-//     final sourceKeystore = Keystore.fromSecretKey(secretKey);
-//
-//     final rpcInterface = RpcInterface(Urls.rpc);
-//     final contract = Contract(
-//       contractAddress: tokenContractAddress,
-//       rpcInterface: rpcInterface,
-//     );
-//
-//     final operationsList = await contract.callOperation(
-//       source: sourceKeystore,
-//       amount: 1,
-//     );
-//     await operationsList.executeAndMonitor();
-//     logger.i('operation execute');
-//     return operationsList.operations;
-//   } catch (e, s) {
-//     logger.e('error e: $e, stack: $s', e, s);
-//     return [];
-//   }
-// }
+  Future<void> sendContractInvocationOperation({
+    required double tokenAmount,
+    required String selectedAccountSecretKey,
+    required TokenModel token,
+  }) async {
+    try {
+      if (token.symbol == 'XTZ') {
+        await _withdrawTezos(
+          tokenAmount: tokenAmount,
+          selectedAccountSecretKey: selectedAccountSecretKey,
+        );
+        return;
+      }
+      if (token.contractAddress.isEmpty) return;
+
+      emit(state.loading());
+      await Dartez().init();
+
+      // TODO(Taleb): get rpc server depends on selected network(mainnet/ghostnet)
+      const server = Urls.rpc;
+
+      final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
+
+      final keyStore = KeyStoreModel(
+        publicKey: sourceKeystore.publicKey,
+        secretKey: sourceKeystore.secretKey,
+        publicKeyHash: sourceKeystore.address,
+      );
+
+      final dynamic signer = await Dartez.createSigner(
+        Dartez.writeKeyWithHint(keyStore.secretKey, 'edsk'),
+      );
+
+      final List<String> contractAddress = [token.contractAddress];
+
+      // fee calculated by XTZ
+      final customFee = int.parse(
+        state.networkFee.fee
+            .toStringAsFixed(
+              6,
+            ) // 6 is because the deciaml of XTZ is alway 6 (mutez)
+            .replaceAll('.', '')
+            .replaceAll(',', ''),
+      );
+
+      final amount = (tokenAmount *
+              double.parse(
+                1
+                    .toStringAsFixed(int.parse(token.decimals))
+                    .replaceAll('.', ''),
+              ))
+          .toInt();
+
+      final parameters =
+          '''(Pair "${keyStore.publicKeyHash}" (Pair "${state.withdrawalAddress}" $amount))''';
+
+      getLogger(runtimeType.toString()).i(
+        'sending from: ${keyStore.publicKeyHash}'
+        ',to: ${state.withdrawalAddress} ,amountInInt: $amount '
+        'amountInDecimal: $tokenAmount tokenSymbol: ${token.symbol}',
+      );
+
+      final dynamic resultInvoke = await Dartez.sendContractInvocationOperation(
+        server,
+        signer as SoftSigner,
+        keyStore,
+        contractAddress,
+        [0],
+        customFee,
+        1000,
+        customFee,
+        ['transfer'],
+        [parameters],
+        codeFormat: TezosParameterFormat.Michelson,
+      );
+      getLogger(runtimeType.toString())
+          .i('Operation groupID ===> $resultInvoke');
+
+      emit(state.success());
+    } catch (e, s) {
+      emit(state.error(messageHandler: MessageHandler()));
+      getLogger(runtimeType.toString())
+          .e('error in transferOperation , e: $e, s: $s');
+    }
+  }
 }

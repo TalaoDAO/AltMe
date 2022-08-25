@@ -48,7 +48,7 @@ class TokensCubit extends Cubit<TokensState> {
           'account': walletAddress,
           'balance.ne': 1,
           'select':
-              '''token.contract.address as contractAddress,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals''',
+              '''token.contract.address as contractAddress,token.id as id,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals''',
           'offset': offset,
           'limit': limit,
         },
@@ -112,6 +112,13 @@ class TokensCubit extends Cubit<TokensState> {
             totalBalanceInUSD: totalBalanceInUSD,
           ),
         );
+      } else {
+        emit(
+          state.copyWith(
+            status: AppStatus.success,
+            data: data,
+          ),
+        );
       }
 
       return data;
@@ -151,8 +158,9 @@ class TokensCubit extends Cubit<TokensState> {
   ) async {
     final int balance =
         await client.get('$baseUrl/v1/accounts/$walletAddress/balance') as int;
-
+        
     final token = TokenModel(
+      id: -1,
       contractAddress: '',
       name: 'Tezos',
       symbol: 'XTZ',

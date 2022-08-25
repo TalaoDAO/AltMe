@@ -271,8 +271,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: "7f031c8a5928dae0ba353409b94694db928112b3"
+      ref: main
+      resolved-ref: "2a581511cde364aa365080b9a50d929b4b8c2e80"
       url: "https://github.com/TalebRafiepour/Dartez.git"
     source: git
     version: "1.0.0"
@@ -1246,6 +1246,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  switcher:
+    dependency: "direct main"
+    description:
+      name: switcher
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   synchronized:
     dependency: transitive
     description:
