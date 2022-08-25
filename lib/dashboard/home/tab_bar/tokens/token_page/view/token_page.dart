@@ -139,9 +139,7 @@ class _TokenViewState extends State<TokenView> {
                       tokenList: state.data,
                       onRefresh: onRefresh,
                       onScrollEnded: onScrollEnded,
-
-                      // TODO(all): Enable it again when token send is ready
-                      /// onItemTap: onItemTap,
+                      onItemTap: onItemTap,
                       isSecure: state.isSecure,
                     );
                   } else if (state.status == AppStatus.errorWhileFetching) {

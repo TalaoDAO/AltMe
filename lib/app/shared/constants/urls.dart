@@ -19,4 +19,5 @@ class Urls {
   /// main tezos rpc
   static const rpc = 'https://rpc.tzstats.com';
   static const tezToolPrices = 'https://api.teztools.io/v1/prices';
+  static const tezToolBase = 'https://api.teztools.io';
 }

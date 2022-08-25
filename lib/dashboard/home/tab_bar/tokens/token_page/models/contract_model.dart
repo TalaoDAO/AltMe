@@ -1,3 +1,4 @@
+import 'package:altme/app/shared/constants/urls.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -8,6 +9,7 @@ class ContractModel extends Equatable {
   const ContractModel({
     required this.symbol,
     required this.tokenAddress,
+    required this.thumbnailUri,
     required this.decimals,
     required this.name,
     required this.currentPrice,
@@ -25,6 +27,7 @@ class ContractModel extends Equatable {
 
   final String symbol;
   final String tokenAddress;
+  final String? thumbnailUri;
   final int decimals;
   final String? name;
   final double currentPrice;
@@ -38,10 +41,15 @@ class ContractModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$ContractModelToJson(this);
 
+  String? get iconUrl {
+    return thumbnailUri?.replaceFirst('ipfs://', Urls.talaoIpfsGateway);
+  }
+
   @override
   List<Object?> get props => [
         symbol,
         tokenAddress,
+        thumbnailUri,
         decimals,
         name,
         currentPrice,
