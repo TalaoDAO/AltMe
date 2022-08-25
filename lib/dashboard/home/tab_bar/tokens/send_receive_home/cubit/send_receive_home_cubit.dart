@@ -63,6 +63,10 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
           (dynamic e) => OperationModel.fromJson(e as Map<String, dynamic>),
         )
         .toList();
+    operations.sort(
+      (a, b) =>
+          b.dateTime.compareTo(a.dateTime),
+    );
     return operations;
   }
 }
