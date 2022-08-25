@@ -91,12 +91,36 @@ class __AddTokensViewState extends State<_AddTokensView> {
                   ),
                 ],
               ),
+              TextField(
+                textInputAction: TextInputAction.search,
+                onChanged: (value) {
+                  context.read<AddTokensCubit>().filterTokens(value: value);
+                },
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.space2XSmall,
+                    ),
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.search,
+                      size: Sizes.icon2x,
+                    ),
+                  ),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(Sizes.smallRadius),
+                    ),
+                  ),
+                ),
+              ),
               Expanded(
                 child: state.status == AppStatus.loading
                     ? const TokenListShimmer()
                     : ListView.separated(
                         itemBuilder: (_, index) {
-                          final tokenContractModel = state.contracts[index];
+                          final tokenContractModel =
+                              state.filteredContracts[index];
                           return TokenContractItem(
                             tokenContractModel: tokenContractModel,
                             isOn: state.selectedContracts
@@ -122,7 +146,7 @@ class __AddTokensViewState extends State<_AddTokensView> {
                             color: Theme.of(context).colorScheme.borderColor,
                           );
                         },
-                        itemCount: state.contracts.length,
+                        itemCount: state.filteredContracts.length,
                       ),
               ),
             ],

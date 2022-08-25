@@ -33,7 +33,10 @@ class AddTokensCubit extends Cubit<AddTokensState> {
             (dynamic e) => ContractModel.fromJson(e as Map<String, dynamic>),
           )
           .toList();
-      emit(state.copyWith(contracts: contracts, status: AppStatus.populate));
+      emit(state.copyWith(
+          contracts: contracts,
+          filteredContracts: contracts,
+          status: AppStatus.populate));
       return contracts;
     } catch (e, s) {
       emit(
@@ -45,6 +48,22 @@ class AddTokensCubit extends Cubit<AddTokensState> {
       getLogger(runtimeType.toString())
           .e('error in getAllContracts(), e: $e, s:$s');
       return null;
+    }
+  }
+
+  void filterTokens({String? value}) {
+    if (value == null || value.isEmpty) {
+      emit(state.copyWith(filteredContracts: state.contracts));
+    } else {
+      final filteredContracts = state.contracts
+          .where(
+            (element) =>
+                (element.name?.toLowerCase().contains(value.toLowerCase()) ??
+                    false) ||
+                element.symbol.toLowerCase().contains(value.toLowerCase()),
+          )
+          .toList();
+      emit(state.copyWith(filteredContracts: filteredContracts));
     }
   }
 

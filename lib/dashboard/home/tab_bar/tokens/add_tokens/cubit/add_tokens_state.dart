@@ -6,24 +6,28 @@ class AddTokensState extends Equatable {
     this.status = AppStatus.init,
     this.message,
     this.contracts = const [],
+    this.filteredContracts = const [],
     this.selectedContracts = const [],
   });
 
   final AppStatus status;
   final StateMessage? message;
   final List<ContractModel> contracts;
+  final List<ContractModel> filteredContracts;
   final List<String> selectedContracts;
 
   AddTokensState copyWith({
     AppStatus? status,
     StateMessage? message,
     List<ContractModel>? contracts,
+    List<ContractModel>? filteredContracts,
     List<String>? selectedContracts,
   }) {
     return AddTokensState(
       status: status ?? this.status,
       message: message ?? this.message,
       contracts: contracts ?? this.contracts,
+      filteredContracts: filteredContracts ?? this.filteredContracts,
       selectedContracts: selectedContracts ?? this.selectedContracts,
     );
   }
@@ -34,5 +38,6 @@ class AddTokensState extends Equatable {
         message,
         contracts,
         selectedContracts,
+        filteredContracts,
       ];
 }
