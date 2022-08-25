@@ -36,6 +36,7 @@ class TokensCubit extends Cubit<TokensState> {
     String baseUrl = '',
     required int offset,
     int limit = 100,
+    bool filterTokens = true,
   }) async {
     if (data.length < offset) return data;
     try {
@@ -79,41 +80,43 @@ class TokensCubit extends Cubit<TokensState> {
       final contracts = await _getUSDBalanceOfTokens();
       if (contracts?.isNotEmpty ?? false) {
         // Filter just selected tokens to show for user
-        final selectedContracts = await _getSelectedTokens();
-        data = data
-            .where(
-              (element) =>
-                  element.symbol == 'XTZ' ||
-                  selectedContracts.contains(element.contractAddress),
-            )
-            .toList();
-        final contractsNotInserted = selectedContracts
-            .where(
-              (element) => !data
-                  .map((e) => e.contractAddress)
-                  .toList()
-                  .contains(element),
-            )
-            .toList();
-
-        data.addAll(
-          contracts!
+        if (filterTokens) {
+          final selectedContracts = await _getSelectedTokens();
+          data = data
               .where(
                 (element) =>
-                    contractsNotInserted.contains(element.tokenAddress),
+                    element.symbol == 'XTZ' ||
+                    selectedContracts.contains(element.contractAddress),
               )
-              .map(
-                (e) => TokenModel(
-                  contractAddress: e.tokenAddress,
-                  name: e.name ?? '',
-                  symbol: e.symbol,
-                  balance: '0',
-                  icon: e.thumbnailUri,
-                  decimals: e.decimals.toString(),
-                  id: -1,
+              .toList();
+          final contractsNotInserted = selectedContracts
+              .where(
+                (element) => !data
+                    .map((e) => e.contractAddress)
+                    .toList()
+                    .contains(element),
+              )
+              .toList();
+
+          data.addAll(
+            contracts!
+                .where(
+                  (element) =>
+                      contractsNotInserted.contains(element.tokenAddress),
+                )
+                .map(
+                  (e) => TokenModel(
+                    contractAddress: e.tokenAddress,
+                    name: e.name ?? '',
+                    symbol: e.symbol,
+                    balance: '0',
+                    icon: e.thumbnailUri,
+                    decimals: e.decimals.toString(),
+                    id: -1,
+                  ),
                 ),
-              ),
-        );
+          );
+        }
 
         for (int i = 0; i < data.length; i++) {
           //we know that the first element is XTZ token all the time
@@ -127,7 +130,7 @@ class TokensCubit extends Cubit<TokensState> {
           }
           try {
             final token = data[i];
-            final contract = contracts.firstWhere(
+            final contract = contracts!.firstWhere(
               (element) =>
                   element.symbol == token.symbol &&
                   element.tokenAddress == token.contractAddress,
