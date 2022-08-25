@@ -28,7 +28,7 @@ class TransactionItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              operationModel.dateAndTime,
+              operationModel.formatedDateTime,
               style: Theme.of(context).textTheme.caption2,
             ),
             Text(
@@ -78,8 +78,9 @@ class TransactionItem extends StatelessWidget {
               style: Theme.of(context).textTheme.titleSmall,
             ),
             const Spacer(),
-            Text(
-              operationModel.XTZAmount,
+            MyText(
+              '${double.parse(operationModel.XTZAmount).toStringAsFixed(2)} XTZ',
+              minFontSize: 8,
               style: Theme.of(context).textTheme.headline6,
             ),
           ],
