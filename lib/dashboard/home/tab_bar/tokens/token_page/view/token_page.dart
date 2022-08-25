@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
-import 'package:dartez/dartez.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -140,9 +139,7 @@ class _TokenViewState extends State<TokenView> {
                       tokenList: state.data,
                       onRefresh: onRefresh,
                       onScrollEnded: onScrollEnded,
-
-                      // TODO(all): Enable it again when token send is ready
-                      /// onItemTap: onItemTap,
+                      onItemTap: onItemTap,
                       isSecure: state.isSecure,
                     );
                   } else if (state.status == AppStatus.errorWhileFetching) {
