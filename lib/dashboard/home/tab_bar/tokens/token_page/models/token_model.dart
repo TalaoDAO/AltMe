@@ -20,7 +20,7 @@ class TokenModel extends Equatable {
     this.tokenUSDPrice,
     this.balanceUSDPrice,
     required this.id,
-    required this.standard,
+    this.standard,
     this.tokenId = '0',
   });
 
@@ -40,10 +40,8 @@ class TokenModel extends Equatable {
   final double? tokenUSDPrice;
   final double? balanceUSDPrice;
   final int id;
-  @JsonKey(defaultValue: '0')
-  final String tokenId;
-  @JsonKey(defaultValue: 'fa1.2')
-  final String standard;
+  final String? tokenId;
+  final String? standard;
 
   Map<String, dynamic> toJson() => _$TokenModelToJson(this);
 
@@ -77,7 +75,7 @@ class TokenModel extends Equatable {
     );
   }
 
-  bool get isFA1 => standard.toLowerCase() == 'fa1.2';
+  bool get isFA1 => standard?.toLowerCase() == 'fa1.2';
 
   String get calculatedBalance {
     final formatter = NumberFormat('#,###');

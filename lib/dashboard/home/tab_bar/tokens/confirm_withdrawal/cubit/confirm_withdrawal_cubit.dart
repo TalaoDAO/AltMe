@@ -134,7 +134,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
 
       final parameters = token.isFA1
           ? '''(Pair "${keyStore.publicKeyHash}" (Pair "${state.withdrawalAddress}" $amount))'''
-          : '''{Pair "${keyStore.publicKeyHash}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(token.tokenId)} $amount)}}''';
+          : '''{Pair "${keyStore.publicKeyHash}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(token.tokenId ?? '0')} $amount)}}''';
 
       getLogger(runtimeType.toString()).i(
         'sending from: ${keyStore.publicKeyHash}'
