@@ -113,6 +113,7 @@ class TokensCubit extends Cubit<TokensState> {
                     icon: e.thumbnailUri,
                     decimals: e.decimals.toString(),
                     id: -1,
+                    standard: e.type,
                   ),
                 ),
           );
@@ -225,6 +226,7 @@ class TokensCubit extends Cubit<TokensState> {
       icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
       balance: balance.toString(),
       decimals: '6',
+      standard: 'fa1.2',
     );
 
     return token.copyWith(
