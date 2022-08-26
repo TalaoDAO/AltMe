@@ -52,9 +52,13 @@ class OperationModel extends Equatable {
   final String status;
   final bool hasInternals;
 
-  String get dateAndTime {
-    // TODO(Taleb): convert to correct data and time
-    return timestamp;
+  DateTime get dateTime {
+    return DateFormat('y-M-dThh:mm:ssZ').parse(timestamp);
+  }
+
+  String get formatedDateTime {
+    final formatedDateTime = DateFormat.yMEd().add_jm().format(dateTime);
+    return formatedDateTime;
   }
 
   String get XTZAmount {
@@ -63,13 +67,13 @@ class OperationModel extends Equatable {
     const decimalsNum = 6;
     if (decimalsNum == 0) {
       final intPart = formatter.format(double.parse(priceString));
-      return '$intPart.0 XTZ';
+      return '$intPart.0';
     } else if (decimalsNum == priceString.length) {
-      return '0.$priceString XTZ';
+      return '0.$priceString';
     } else if (priceString.length < decimalsNum) {
       final numberOfZero = decimalsNum - priceString.length;
       // ignore: lines_longer_than_80_chars
-      return '0.${List.generate(numberOfZero, (index) => '0').join()}$priceString XTZ';
+      return '0.${List.generate(numberOfZero, (index) => '0').join()}$priceString';
     } else {
       final rightPart = formatter.format(
         double.parse(
@@ -78,7 +82,7 @@ class OperationModel extends Equatable {
       );
       final realDoublePriceInString =
           // ignore: lines_longer_than_80_chars
-          '$rightPart.${priceString.substring(priceString.length - decimalsNum, priceString.length)} XTZ';
+          '$rightPart.${priceString.substring(priceString.length - decimalsNum, priceString.length)}';
       return realDoublePriceInString;
     }
   }

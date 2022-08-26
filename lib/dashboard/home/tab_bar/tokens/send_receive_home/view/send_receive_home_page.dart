@@ -6,6 +6,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class SendReceiveHomePage extends StatefulWidget {
   const SendReceiveHomePage({
@@ -38,6 +39,7 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
     client: dioClient,
     walletCubit: context.read<WalletCubit>(),
     tokensCubit: TokensCubit(
+      secureStorageProvider: getSecureStorage,
       client: dioClient,
       walletCubit: context.read<WalletCubit>(),
     ),
