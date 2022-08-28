@@ -54,7 +54,7 @@ class TokensCubit extends Cubit<TokensState> {
           'account': walletAddress,
           'balance.ne': 1,
           'select':
-              '''token.contract.address as contractAddress,token.id as id,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals''',
+              '''token.contract.address as contractAddress,token.id as id,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals,token.standard as standard''',
           'offset': offset,
           'limit': limit,
         },
@@ -113,6 +113,7 @@ class TokensCubit extends Cubit<TokensState> {
                     icon: e.thumbnailUri,
                     decimals: e.decimals.toString(),
                     id: -1,
+                    standard: e.type,
                   ),
                 ),
           );
@@ -168,7 +169,8 @@ class TokensCubit extends Cubit<TokensState> {
       );
 
       return data;
-    } catch (e) {
+    } catch (e, s) {
+      getLogger(runtimeType.toString()).e('error in get tokens e: $e , s:$s');
       if (isClosed) return data;
       emit(
         state.errorWhileFetching(
@@ -225,6 +227,7 @@ class TokensCubit extends Cubit<TokensState> {
       icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
       balance: balance.toString(),
       decimals: '6',
+      standard: 'fa1.2',
     );
 
     return token.copyWith(

@@ -37,7 +37,7 @@ class TokenItem extends StatelessWidget {
             maxLength: 10,
           ),
           subtitle: MyText(
-            token.symbol,
+            token.symbol + " ${token.standard}",
             style: Theme.of(context).textTheme.listTileSubtitle,
           ),
           trailing: Column(
