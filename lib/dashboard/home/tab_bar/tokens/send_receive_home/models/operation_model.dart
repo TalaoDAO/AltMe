@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
@@ -63,30 +65,9 @@ class OperationModel extends Equatable {
     return formatedDateTime;
   }
 
-  String get XTZAmount {
-    final formatter = NumberFormat('#,###');
-    final priceString = amount.toString();
-    const decimalsNum = 6;
-    if (decimalsNum == 0) {
-      final intPart = formatter.format(double.parse(priceString));
-      return '$intPart.0';
-    } else if (decimalsNum == priceString.length) {
-      return '0.$priceString';
-    } else if (priceString.length < decimalsNum) {
-      final numberOfZero = decimalsNum - priceString.length;
-      // ignore: lines_longer_than_80_chars
-      return '0.${List.generate(numberOfZero, (index) => '0').join()}$priceString';
-    } else {
-      final rightPart = formatter.format(
-        double.parse(
-          priceString.substring(0, priceString.length - decimalsNum),
-        ),
-      );
-      final realDoublePriceInString =
-          // ignore: lines_longer_than_80_chars
-          '$rightPart.${priceString.substring(priceString.length - decimalsNum, priceString.length)}';
-      return realDoublePriceInString;
-    }
+  double calcAmount({required int decimal, required String value}) {
+    final double realValue = double.parse(value) / (pow(10, decimal));
+    return realValue;
   }
 
   bool isSender({required String walletAddress}) {

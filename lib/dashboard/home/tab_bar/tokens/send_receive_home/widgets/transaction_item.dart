@@ -10,9 +10,13 @@ class TransactionItem extends StatelessWidget {
   const TransactionItem({
     Key? key,
     required this.operationModel,
+    required this.decimal,
+    required this.symbol,
   }) : super(key: key);
 
   final OperationModel operationModel;
+  final int decimal;
+  final String symbol;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +83,8 @@ class TransactionItem extends StatelessWidget {
             ),
             const Spacer(),
             MyText(
-              '${double.parse(operationModel.XTZAmount).toStringAsFixed(2)} XTZ',
+              '${operationModel.calcAmount(decimal: decimal, value: operationModel.parameter?.value?.value ?? operationModel.amount.toString()).toStringAsFixed(2).formatNumber()} '
+              '$symbol',
               minFontSize: 8,
               style: Theme.of(context).textTheme.headline6,
             ),
