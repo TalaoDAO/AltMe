@@ -18,7 +18,9 @@ class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
 
   void getBalanceOfAssetList() {
     setLoading(isLoading: true);
-    tokensCubit.getBalanceOfAssetList(offset: 0).then((value) {
+    tokensCubit
+        .getBalanceOfAssetList(offset: 0, filterTokens: false)
+        .then((value) {
       if (value.isNotEmpty) {
         setSelectedToken(tokenModel: value.first);
       }

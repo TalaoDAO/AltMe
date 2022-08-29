@@ -97,7 +97,19 @@ class _TokenViewState extends State<TokenView> {
             const SizedBox(
               height: Sizes.spaceSmall,
             ),
-            const AddTokenButton(),
+            AddTokenButton(
+              onTap: () {
+                Navigator.of(context)
+                    .push<void>(
+                      AddTokensPage.route(),
+                    )
+                    .then(
+                      (value) => context
+                          .read<TokensCubit>()
+                          .getBalanceOfAssetList(offset: _offset),
+                    );
+              },
+            ),
             const SizedBox(
               height: Sizes.spaceSmall,
             ),

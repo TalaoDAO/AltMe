@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'tokens_cubit.g.dart';
 
@@ -13,10 +16,12 @@ class TokensCubit extends Cubit<TokensState> {
   TokensCubit({
     required this.client,
     required this.walletCubit,
+    required this.secureStorageProvider,
   }) : super(const TokensState()) {
     getBalanceOfAssetList(offset: 0);
   }
 
+  final SecureStorageProvider secureStorageProvider;
   final DioClient client;
   final WalletCubit walletCubit;
   double? _xtzUsdValue;
@@ -30,7 +35,8 @@ class TokensCubit extends Cubit<TokensState> {
   Future<List<TokenModel>> getBalanceOfAssetList({
     String baseUrl = '',
     required int offset,
-    int limit = 15,
+    int limit = 100,
+    bool filterTokens = true,
   }) async {
     if (data.length < offset) return data;
     try {
@@ -48,7 +54,7 @@ class TokensCubit extends Cubit<TokensState> {
           'account': walletAddress,
           'balance.ne': 1,
           'select':
-              '''token.contract.address as contractAddress,token.id as id,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals''',
+              '''token.contract.address as contractAddress,token.id as id,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals,token.standard as standard''',
           'offset': offset,
           'limit': limit,
         },
@@ -70,10 +76,49 @@ class TokensCubit extends Cubit<TokensState> {
       } else {
         data.addAll(newData);
       }
-      emit(state.populate(data: data));
       //get usd balance of tokens and update tokens
       final contracts = await _getUSDBalanceOfTokens();
       if (contracts?.isNotEmpty ?? false) {
+        // Filter just selected tokens to show for user
+        if (filterTokens) {
+          final selectedContracts = await _getSelectedTokens();
+          data = data
+              .where(
+                (element) =>
+                    element.symbol == 'XTZ' ||
+                    selectedContracts.contains(element.contractAddress),
+              )
+              .toList();
+          final contractsNotInserted = selectedContracts
+              .where(
+                (element) => !data
+                    .map((e) => e.contractAddress)
+                    .toList()
+                    .contains(element),
+              )
+              .toList();
+
+          data.addAll(
+            contracts!
+                .where(
+                  (element) =>
+                      contractsNotInserted.contains(element.tokenAddress),
+                )
+                .map(
+                  (e) => TokenModel(
+                    contractAddress: e.tokenAddress,
+                    name: e.name ?? '',
+                    symbol: e.symbol,
+                    balance: '0',
+                    icon: e.thumbnailUri,
+                    decimals: e.decimals.toString(),
+                    id: -1,
+                    standard: e.type,
+                  ),
+                ),
+          );
+        }
+
         for (int i = 0; i < data.length; i++) {
           //we know that the first element is XTZ token all the time
           if (i == 0 && _xtzUsdValue != null) {
@@ -105,6 +150,7 @@ class TokensCubit extends Cubit<TokensState> {
         for (final tokenElement in data) {
           totalBalanceInUSD += tokenElement.balanceUSDPrice ?? 0;
         }
+
         emit(
           state.copyWith(
             status: AppStatus.success,
@@ -112,17 +158,19 @@ class TokensCubit extends Cubit<TokensState> {
             totalBalanceInUSD: totalBalanceInUSD,
           ),
         );
-      } else {
-        emit(
-          state.copyWith(
-            status: AppStatus.success,
-            data: data,
-          ),
-        );
+        return data;
       }
 
+      emit(
+        state.copyWith(
+          status: AppStatus.success,
+          data: data,
+        ),
+      );
+
       return data;
-    } catch (e) {
+    } catch (e, s) {
+      getLogger(runtimeType.toString()).e('error in get tokens e: $e , s:$s');
       if (isClosed) return data;
       emit(
         state.errorWhileFetching(
@@ -132,6 +180,18 @@ class TokensCubit extends Cubit<TokensState> {
         ),
       );
       return data;
+    }
+  }
+
+  Future<List<String>> _getSelectedTokens() async {
+    final result =
+        await secureStorageProvider.get(SecureStorageKeys.selectedContracts);
+    if (result == null) {
+      return [];
+    } else {
+      final json = jsonDecode(result) as List<dynamic>;
+      final selectedContracts = json.map((dynamic e) => e as String).toList();
+      return selectedContracts;
     }
   }
 
@@ -158,7 +218,7 @@ class TokensCubit extends Cubit<TokensState> {
   ) async {
     final int balance =
         await client.get('$baseUrl/v1/accounts/$walletAddress/balance') as int;
-        
+
     final token = TokenModel(
       id: -1,
       contractAddress: '',
@@ -167,6 +227,7 @@ class TokensCubit extends Cubit<TokensState> {
       icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
       balance: balance.toString(),
       decimals: '6',
+      standard: 'fa1.2',
     );
 
     return token.copyWith(
