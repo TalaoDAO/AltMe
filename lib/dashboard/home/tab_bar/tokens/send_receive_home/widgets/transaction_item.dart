@@ -12,15 +12,22 @@ class TransactionItem extends StatelessWidget {
     required this.operationModel,
     required this.decimal,
     required this.symbol,
+    this.tokenUsdPrice,
   }) : super(key: key);
 
   final OperationModel operationModel;
   final int decimal;
+  final double? tokenUsdPrice;
   final String symbol;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final amount = operationModel.calcAmount(
+      decimal: decimal,
+      value: operationModel.parameter?.value?.value ??
+          operationModel.amount.toString(),
+    );
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -36,7 +43,12 @@ class TransactionItem extends StatelessWidget {
               style: Theme.of(context).textTheme.caption2,
             ),
             Text(
-              r'$--.--',
+              tokenUsdPrice != null
+                  ? (tokenUsdPrice! * amount)
+                          .toStringAsFixed(2)
+                          .formatNumber() +
+                      r'$'
+                  : r'$--.--',
               style: Theme.of(context).textTheme.caption2,
             ),
           ],
@@ -83,7 +95,7 @@ class TransactionItem extends StatelessWidget {
             ),
             const Spacer(),
             MyText(
-              '${operationModel.calcAmount(decimal: decimal, value: operationModel.parameter?.value?.value ?? operationModel.amount.toString()).toStringAsFixed(2).formatNumber()} '
+              '${amount.toStringAsFixed(2).formatNumber()} '
               '$symbol',
               minFontSize: 8,
               style: Theme.of(context).textTheme.headline6,

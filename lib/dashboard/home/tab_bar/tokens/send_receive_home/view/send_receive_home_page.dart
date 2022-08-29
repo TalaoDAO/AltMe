@@ -252,6 +252,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                     RecentTransactions(
                       decimal: int.parse(widget.selectedToken.decimals),
                       symbol: widget.selectedToken.symbol,
+                      tokenUsdPrice: widget.selectedToken.tokenUSDPrice,
                       onRefresh: () async {
                         await context
                             .read<SendReceiveHomeCubit>()
