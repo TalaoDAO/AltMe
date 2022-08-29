@@ -37,6 +37,7 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
 
   late final sendReceiveHomeCubit = SendReceiveHomeCubit(
     client: dioClient,
+    selectedToken: widget.selectedToken,
     walletCubit: context.read<WalletCubit>(),
     tokensCubit: TokensCubit(
       secureStorageProvider: getSecureStorage,

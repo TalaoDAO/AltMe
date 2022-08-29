@@ -27,6 +27,7 @@ class OperationModel extends Equatable {
     required this.amount,
     required this.status,
     required this.hasInternals,
+    this.parameter,
   });
 
   factory OperationModel.fromJson(Map<String, dynamic> json) =>
@@ -51,6 +52,7 @@ class OperationModel extends Equatable {
   final int amount;
   final String status;
   final bool hasInternals;
+  final OperationParameterModel? parameter;
 
   DateTime get dateTime {
     return DateFormat('y-M-dThh:mm:ssZ').parse(timestamp);
@@ -114,5 +116,6 @@ class OperationModel extends Equatable {
         amount,
         status,
         hasInternals,
+        parameter,
       ];
 }
