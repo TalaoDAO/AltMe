@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -14,11 +16,13 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     required this.client,
     required this.walletCubit,
     required this.tokensCubit,
+    required this.selectedToken,
   }) : super(const SendReceiveHomeState());
 
   final DioClient client;
   final WalletCubit walletCubit;
   final TokensCubit tokensCubit;
+  final TokenModel selectedToken;
 
   Future<void> init({String baseUrl = ''}) async {
     try {
@@ -50,12 +54,27 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     final walletAddress =
         walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
 
-    final result = await client.get(
-      '$baseUrl/v1/operations/transactions',
-      queryParameters: <String, dynamic>{
+    late Map<String, dynamic> params;
+
+    if (selectedToken.symbol == 'XTZ') {
+      params = <String, dynamic>{
         'anyof.sender.target': walletAddress,
         'amount.gt': 0,
-      },
+      };
+    } else {
+      params = <String, dynamic>{
+        'anyof.sender.target': selectedToken.contractAddress,
+        'entrypoint': 'transfer',
+        'parameter.in': jsonEncode([
+          {'to': walletAddress},
+          {'from': walletAddress}
+        ]),
+      };
+    }
+
+    final result = await client.get(
+      '$baseUrl/v1/operations/transactions',
+      queryParameters: params,
     ) as List<dynamic>;
 
     final operations = result
@@ -64,8 +83,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
         )
         .toList();
     operations.sort(
-      (a, b) =>
-          b.dateTime.compareTo(a.dateTime),
+      (a, b) => b.dateTime.compareTo(a.dateTime),
     );
     return operations;
   }

@@ -8,10 +8,16 @@ class RecentTransactions extends StatelessWidget {
   const RecentTransactions({
     Key? key,
     this.operations = const [],
+    required this.decimal,
+    required this.symbol,
+    this.tokenUsdPrice,
     required this.onRefresh,
   }) : super(key: key);
 
   final List<OperationModel> operations;
+  final int decimal;
+  final String symbol;
+  final double? tokenUsdPrice;
   final RefreshCallback onRefresh;
 
   @override
@@ -45,6 +51,9 @@ class RecentTransactions extends StatelessWidget {
                       child: ListView.separated(
                         itemBuilder: (_, index) => TransactionItem(
                           operationModel: operations[index],
+                          symbol: symbol,
+                          decimal: decimal,
+                          tokenUsdPrice:tokenUsdPrice,
                         ),
                         separatorBuilder: (_, __) {
                           return Padding(
