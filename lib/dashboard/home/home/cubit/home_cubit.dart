@@ -27,15 +27,22 @@ class HomeCubit extends Cubit<HomeState> {
   final SecureStorageProvider secureStorageProvider;
 
   Future<void> emitHasWallet() async {
+    final log = getLogger('emitHasWallet');
+
     final String? passbaseStatusFromStorage = await secureStorageProvider.get(
       SecureStorageKeys.passBaseStatus,
     );
+    log.i('passbaseStatusFromStorage: $passbaseStatusFromStorage');
 
     if (passbaseStatusFromStorage != null) {
       final passBaseStatus = getPassBaseStatusFromString(
         passbaseStatusFromStorage,
       );
       if (passBaseStatus == PassBaseStatus.pending) {
+        log.i(
+          'Launch getPassBaseStatusBackground from emitHasWallet',
+        );
+
         getPassBaseStatusBackground();
       }
     }
@@ -102,6 +109,11 @@ class HomeCubit extends Cubit<HomeState> {
     }
 
     if (passBaseStatus == PassBaseStatus.pending) {
+      final log = getLogger('checkForPassBaseStatusThenLaunchUrl');
+      log.i(
+        'Launch getPassBaseStatusBackground from url check',
+      );
+
       getPassBaseStatusBackground();
     }
 
