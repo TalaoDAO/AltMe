@@ -117,13 +117,6 @@ class _WithdrawalAddressInputPageState
                             IconStrings.scanAddress,
                             width: Sizes.icon2x,
                           ),
-                          const SizedBox(
-                            width: Sizes.spaceSmall,
-                          ),
-                          Image.asset(
-                            IconStrings.whiteList,
-                            width: Sizes.icon2x,
-                          ),
                         ],
                       )
                     : InkWell(
