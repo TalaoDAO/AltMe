@@ -37,6 +37,7 @@ class ConfirmWithdrawalPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ConfirmWithdrawalCubit>(
       create: (_) => ConfirmWithdrawalCubit(
+        manageNetworkCubit: context.read<ManageNetworkCubit>(),
         initialState:
             ConfirmWithdrawalState(withdrawalAddress: withdrawalAddress),
       ),

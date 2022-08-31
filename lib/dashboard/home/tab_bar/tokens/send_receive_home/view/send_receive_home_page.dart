@@ -39,11 +39,7 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
     client: dioClient,
     selectedToken: widget.selectedToken,
     walletCubit: context.read<WalletCubit>(),
-    tokensCubit: TokensCubit(
-      secureStorageProvider: getSecureStorage,
-      client: dioClient,
-      walletCubit: context.read<WalletCubit>(),
-    ),
+    tokensCubit: context.read<TokensCubit>(),
   );
 
   @override
