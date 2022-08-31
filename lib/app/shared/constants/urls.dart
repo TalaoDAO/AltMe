@@ -17,7 +17,9 @@ class Urls {
   static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
 
   /// main tezos rpc
-  static const rpc = 'https://rpc.tzstats.com';
+  static const mainnetRPC = 'https://rpc.tzstats.com';
+  static const ghostnetRPC = 'https://rpc.tzkt.io/ghostnet';
+  
   static const tezToolPrices = 'https://api.teztools.io/v1/prices';
   static const tezToolBase = 'https://api.teztools.io';
 }

@@ -13,7 +13,10 @@ part 'confirm_withdrawal_state.dart';
 class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
   ConfirmWithdrawalCubit({
     required ConfirmWithdrawalState initialState,
+    required this.manageNetworkCubit,
   }) : super(initialState);
+
+  final ManageNetworkCubit manageNetworkCubit;
 
   final logger = getLogger('ConfirmWithdrawal');
 
@@ -43,7 +46,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
       emit(state.loading());
       final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
 
-      final client = TezartClient(Urls.rpc);
+      final client = TezartClient(manageNetworkCubit.state.network.rpcNodeUrl);
 
       final amount = int.parse(
         tokenAmount.toStringAsFixed(6).replaceAll(',', '').replaceAll('.', ''),
@@ -97,8 +100,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
       emit(state.loading());
       await Dartez().init();
 
-      // TODO(Taleb): get rpc server depends on selected network(mainnet/ghostnet)
-      const server = Urls.rpc;
+      final server = manageNetworkCubit.state.network.rpcNodeUrl;
 
       final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
 
