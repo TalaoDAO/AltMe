@@ -1,32 +1,36 @@
-part of 'add_tokens_cubit.dart';
+part of 'all_tokens_cubit.dart';
 
 @JsonSerializable()
-class AddTokensState extends Equatable {
-  const AddTokensState({
+class AllTokensState extends Equatable {
+  const AllTokensState({
     this.status = AppStatus.init,
     this.message,
     this.contracts = const [],
     this.filteredContracts = const [],
     this.selectedContracts = const [],
+    this.xtzUsdValue,
   });
 
   final AppStatus status;
   final StateMessage? message;
+  final double? xtzUsdValue;
   final List<ContractModel> contracts;
   final List<ContractModel> filteredContracts;
   final List<String> selectedContracts;
 
-  AddTokensState copyWith({
+  AllTokensState copyWith({
     AppStatus? status,
     StateMessage? message,
     List<ContractModel>? contracts,
     List<ContractModel>? filteredContracts,
     List<String>? selectedContracts,
+    double? xtzUsdValue,
   }) {
-    return AddTokensState(
+    return AllTokensState(
       status: status ?? this.status,
       message: message ?? this.message,
       contracts: contracts ?? this.contracts,
+      xtzUsdValue: xtzUsdValue ?? this.xtzUsdValue,
       filteredContracts: filteredContracts ?? this.filteredContracts,
       selectedContracts: selectedContracts ?? this.selectedContracts,
     );
@@ -39,5 +43,6 @@ class AddTokensState extends Equatable {
         contracts,
         selectedContracts,
         filteredContracts,
+        xtzUsdValue,
       ];
 }

@@ -6,14 +6,14 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-part 'add_tokens_cubit.g.dart';
-part 'add_tokens_state.dart';
+part 'all_tokens_cubit.g.dart';
+part 'all_tokens_state.dart';
 
-class AddTokensCubit extends Cubit<AddTokensState> {
-  AddTokensCubit({
+class AllTokensCubit extends Cubit<AllTokensState> {
+  AllTokensCubit({
     required this.client,
     required this.secureStorageProvider,
-  }) : super(const AddTokensState());
+  }) : super(const AllTokensState());
 
   final DioClient client;
   final SecureStorageProvider secureStorageProvider;
@@ -33,10 +33,14 @@ class AddTokensCubit extends Cubit<AddTokensState> {
             (dynamic e) => ContractModel.fromJson(e as Map<String, dynamic>),
           )
           .toList();
-      emit(state.copyWith(
+      emit(
+        state.copyWith(
           contracts: contracts,
           filteredContracts: contracts,
-          status: AppStatus.populate));
+          xtzUsdValue: result['xtzusdValue'] as double?,
+          status: AppStatus.populate,
+        ),
+      );
       return contracts;
     } catch (e, s) {
       emit(

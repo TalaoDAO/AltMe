@@ -2,54 +2,43 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
-class AddTokensPage extends StatelessWidget {
-  const AddTokensPage({Key? key}) : super(key: key);
+class AllTokensPage extends StatelessWidget {
+  const AllTokensPage({Key? key}) : super(key: key);
 
   static Route route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/addTokensPage'),
-      builder: (_) => const AddTokensPage(),
+      builder: (_) => const AllTokensPage(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AddTokensCubit>(
-      create: (_) => AddTokensCubit(
-        secureStorageProvider: getSecureStorage,
-        client: DioClient(
-          Urls.tezToolBase,
-          Dio(),
-        ),
-      ),
-      child: const _AddTokensView(),
-    );
+    return const _AllTokensView();
   }
 }
 
-class _AddTokensView extends StatefulWidget {
-  const _AddTokensView({Key? key}) : super(key: key);
+class _AllTokensView extends StatefulWidget {
+  const _AllTokensView({Key? key}) : super(key: key);
 
   @override
-  State<_AddTokensView> createState() => __AddTokensViewState();
+  State<_AllTokensView> createState() => _AllTokensViewState();
 }
 
-class __AddTokensViewState extends State<_AddTokensView> {
+class _AllTokensViewState extends State<_AllTokensView> {
   @override
   void initState() {
-    Future<void>.microtask(context.read<AddTokensCubit>().init);
+    Future<void>.microtask(context.read<AllTokensCubit>().init);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocBuilder<AddTokensCubit, AddTokensState>(
+    return BlocBuilder<AllTokensCubit, AllTokensState>(
         builder: (context, state) {
       return BasePage(
         scrollView: false,
@@ -79,7 +68,7 @@ class __AddTokensViewState extends State<_AddTokensView> {
                         ? null
                         : () async {
                             await context
-                                .read<AddTokensCubit>()
+                                .read<AllTokensCubit>()
                                 .saveSelectedContracts();
                             Navigator.of(context).pop();
                           },
@@ -94,7 +83,7 @@ class __AddTokensViewState extends State<_AddTokensView> {
               TextField(
                 textInputAction: TextInputAction.search,
                 onChanged: (value) {
-                  context.read<AddTokensCubit>().filterTokens(value: value);
+                  context.read<AllTokensCubit>().filterTokens(value: value);
                 },
                 decoration: InputDecoration(
                   suffixIcon: IconButton(
@@ -115,39 +104,36 @@ class __AddTokensViewState extends State<_AddTokensView> {
                 ),
               ),
               Expanded(
-                child: state.status == AppStatus.loading
-                    ? const TokenListShimmer()
-                    : ListView.separated(
-                        itemBuilder: (_, index) {
-                          final tokenContractModel =
-                              state.filteredContracts[index];
-                          return TokenContractItem(
-                            tokenContractModel: tokenContractModel,
-                            isOn: state.selectedContracts
-                                .contains(tokenContractModel.tokenAddress),
-                            onChange: (isChecked) {
-                              if (isChecked) {
-                                context.read<AddTokensCubit>().addContract(
-                                      contractAddress:
-                                          tokenContractModel.tokenAddress,
-                                    );
-                              } else {
-                                context.read<AddTokensCubit>().removeContract(
-                                      contractAddress:
-                                          tokenContractModel.tokenAddress,
-                                    );
-                              }
-                            },
-                          );
-                        },
-                        separatorBuilder: (_, __) {
-                          return Divider(
-                            height: 0.3,
-                            color: Theme.of(context).colorScheme.borderColor,
-                          );
-                        },
-                        itemCount: state.filteredContracts.length,
-                      ),
+                child: ListView.separated(
+                  itemBuilder: (_, index) {
+                    final tokenContractModel = state.filteredContracts[index];
+                    return TokenContractItem(
+                      tokenContractModel: tokenContractModel,
+                      isOn: state.selectedContracts
+                          .contains(tokenContractModel.tokenAddress),
+                      onChange: (isChecked) {
+                        if (isChecked) {
+                          context.read<AllTokensCubit>().addContract(
+                                contractAddress:
+                                    tokenContractModel.tokenAddress,
+                              );
+                        } else {
+                          context.read<AllTokensCubit>().removeContract(
+                                contractAddress:
+                                    tokenContractModel.tokenAddress,
+                              );
+                        }
+                      },
+                    );
+                  },
+                  separatorBuilder: (_, __) {
+                    return Divider(
+                      height: 0.3,
+                      color: Theme.of(context).colorScheme.borderColor,
+                    );
+                  },
+                  itemCount: state.filteredContracts.length,
+                ),
               ),
             ],
           ),
