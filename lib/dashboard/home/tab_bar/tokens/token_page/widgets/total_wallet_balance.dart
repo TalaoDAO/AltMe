@@ -21,23 +21,17 @@ class TotalWalletBalance extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Flexible(
-              child: MyText(
-                state.isSecure
-                    ? '****'
-                    : '''${state.totalBalanceInUSD.toStringAsFixed(2).formatNumber()} \$''',
-                minFontSize: 8,
-                style: Theme.of(context).textTheme.headline4,
+              child: InkWell(
+                onTap: tokensCubit.toggleIsSecure,
+                child: MyText(
+                  state.isSecure
+                      ? '****'
+                      : '''${state.totalBalanceInUSD.toStringAsFixed(2).formatNumber()} \$''',
+                  minFontSize: 8,
+                  style: Theme.of(context).textTheme.headline4,
+                ),
               ),
             ),
-            IconButton(
-              padding: EdgeInsets.zero,
-              onPressed: tokensCubit.toggleIsSecure,
-              icon: Icon(
-                state.isSecure ? Icons.visibility_off : Icons.visibility,
-                color: Theme.of(context).colorScheme.inversePrimary,
-                size: Sizes.icon,
-              ),
-            )
           ],
         );
       },

@@ -37,12 +37,9 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
 
   late final sendReceiveHomeCubit = SendReceiveHomeCubit(
     client: dioClient,
+    selectedToken: widget.selectedToken,
     walletCubit: context.read<WalletCubit>(),
-    tokensCubit: TokensCubit(
-      secureStorageProvider: getSecureStorage,
-      client: dioClient,
-      walletCubit: context.read<WalletCubit>(),
-    ),
+    tokensCubit: context.read<TokensCubit>(),
   );
 
   @override
@@ -249,6 +246,9 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                       height: Sizes.spaceNormal,
                     ),
                     RecentTransactions(
+                      decimal: int.parse(widget.selectedToken.decimals),
+                      symbol: widget.selectedToken.symbol,
+                      tokenUsdPrice: widget.selectedToken.tokenUSDPrice,
                       onRefresh: () async {
                         await context
                             .read<SendReceiveHomeCubit>()

@@ -1,7 +1,9 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/drawer/manage_network/cubit/manage_network_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TezosNetworkSwitcherButton extends StatelessWidget {
   const TezosNetworkSwitcherButton({Key? key, this.onTap}) : super(key: key);
@@ -26,12 +28,15 @@ class TezosNetworkSwitcherButton extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
-            child: Text(
-              l10n.tezosMainNetwork,
-              style: Theme.of(context).textTheme.caption?.copyWith(
-                    decoration: TextDecoration.underline,
-                  ),
-            ),
+            child: BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
+                builder: (context, state) {
+              return Text(
+                state.network.description,
+                style: Theme.of(context).textTheme.caption?.copyWith(
+                      decoration: TextDecoration.underline,
+                    ),
+              );
+            }),
           ),
           Icon(
             Icons.keyboard_arrow_down_rounded,

@@ -16,6 +16,7 @@ class TokensCubit extends Cubit<TokensState> {
   TokensCubit({
     required this.client,
     required this.walletCubit,
+    required this.networkCubit,
     required this.secureStorageProvider,
   }) : super(const TokensState()) {
     getBalanceOfAssetList(offset: 0);
@@ -24,6 +25,7 @@ class TokensCubit extends Cubit<TokensState> {
   final SecureStorageProvider secureStorageProvider;
   final DioClient client;
   final WalletCubit walletCubit;
+  final ManageNetworkCubit networkCubit;
   double? _xtzUsdValue;
 
   List<TokenModel> data = [];
@@ -33,7 +35,6 @@ class TokensCubit extends Cubit<TokensState> {
   }
 
   Future<List<TokenModel>> getBalanceOfAssetList({
-    String baseUrl = '',
     required int offset,
     int limit = 100,
     bool filterTokens = true,
@@ -47,6 +48,8 @@ class TokensCubit extends Cubit<TokensState> {
       final activeIndex = walletCubit.state.currentCryptoIndex;
       final walletAddress =
           walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
+
+      final baseUrl = networkCubit.state.network.tzktUrl;
 
       final List<dynamic> tokensBalancesJsonArray = await client.get(
         '$baseUrl/v1/tokens/balances',
@@ -70,7 +73,7 @@ class TokensCubit extends Cubit<TokensState> {
       }
 
       if (offset == 0) {
-        final tezosToken = await _getXtzBalance(baseUrl, walletAddress);
+        final tezosToken = await _getXtzBalance(walletAddress);
         newData.insert(0, tezosToken);
         data = newData;
       } else {
@@ -213,9 +216,9 @@ class TokensCubit extends Cubit<TokensState> {
   }
 
   Future<TokenModel> _getXtzBalance(
-    String baseUrl,
     String walletAddress,
   ) async {
+    final baseUrl = networkCubit.state.network.tzktUrl;
     final int balance =
         await client.get('$baseUrl/v1/accounts/$walletAddress/balance') as int;
 

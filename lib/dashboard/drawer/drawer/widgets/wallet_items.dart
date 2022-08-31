@@ -116,15 +116,6 @@ class WalletItems extends StatelessWidget {
               ),
               const DrawerItemDivider(),
 
-              ///Address Book
-              DrawerItem(
-                icon: IconStrings.addressBook,
-                title: l10n.addressBook,
-                trailing: Container(),
-                onTap: () async {},
-              ),
-              const DrawerItemDivider(),
-
               /// Reset Wallet
               DrawerItem(
                 icon: IconStrings.reset,

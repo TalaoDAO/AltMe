@@ -44,7 +44,6 @@ class _SelectTokenBottomSheetViewState
   Future<void> onRefresh() async {
     _offset = 0;
     await context.read<TokensCubit>().getBalanceOfAssetList(
-          baseUrl: context.read<ManageNetworkCubit>().state.network.tzktUrl,
           offset: _offset,
         );
   }
@@ -52,8 +51,6 @@ class _SelectTokenBottomSheetViewState
   Future<void> onScrollEnded() async {
     _offset += _limit;
     await context.read<TokensCubit>().getBalanceOfAssetList(
-          baseUrl:
-              context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
           offset: _offset,
         );
   }
