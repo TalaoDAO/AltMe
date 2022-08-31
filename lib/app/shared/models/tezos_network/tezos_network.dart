@@ -9,6 +9,7 @@ class TezosNetwork {
     required this.networkname,
     required this.tzktUrl,
     required this.rpcNodeUrl,
+    required this.description,
     this.apiKey = '',
   });
 
@@ -19,24 +20,27 @@ class TezosNetwork {
         networkname: 'Mainnet',
         tzktUrl: 'https://api.tzkt.io',
         rpcNodeUrl: Urls.mainnetRPC,
+        description: 'Tezos Main Network',
       );
 
   factory TezosNetwork.ghostnet() => const TezosNetwork(
         networkname: 'Ghostnet',
         tzktUrl: 'https://api.ghostnet.tzkt.io',
         rpcNodeUrl: Urls.ghostnetRPC,
+        description: 'Tezos Test Network',
       );
 
   final String networkname;
   final String tzktUrl;
   final String apiKey;
   final String rpcNodeUrl;
+  final String description;
 
   Map<String, dynamic> toJson() => _$TezosNetworkToJson(this);
 
   @override
   String toString() {
-    // ignore: lines_longer_than_80_chars
-    return 'TezosNetwork{networkName: $networkname, tzktUrl: $tzktUrl, rpcNodeUrl: $rpcNodeUrl , apiKey: $apiKey}';
+    return 'TezosNetwork{networkName: $networkname, tzktUrl: $tzktUrl'
+        ', rpcNodeUrl: $rpcNodeUrl , apiKey: $apiKey , description: $description}';
   }
 }
