@@ -76,39 +76,40 @@ class TokensCubit extends Cubit<TokensState> {
         newData.insert(0, tezosToken);
         data = newData;
         if (allTokensCubit.state.contracts.isEmpty) {
-          await allTokensCubit.getAllContracts();
+          await allTokensCubit.init();
         } else {
           // ignore: unawaited_futures
-          allTokensCubit.getAllContracts();
+          allTokensCubit.init();
         }
       } else {
         data.addAll(newData);
         // ignore: unawaited_futures
-        allTokensCubit.getAllContracts();
+        allTokensCubit.init();
       }
       //get usd balance of tokens and update tokens
       if (allTokensCubit.state.contracts.isNotEmpty) {
         // Filter just selected tokens to show for user
         if (filterTokens) {
-          final selectedContracts = await allTokensCubit.getSelectedContracts();
+          final selectedContracts = allTokensCubit.state.selectedContracts;
           final contractsNotInserted = selectedContracts
               .where(
                 (element) => !data
-                    .map((e) => e.contractAddress)
+                    .map((e) => e.symbol)
                     .toList()
-                    .contains(element),
+                    .contains(element.symbol),
               )
               .toList();
 
           data.addAll(
             allTokensCubit.state.contracts
                 .where(
-                  (element) =>
-                      contractsNotInserted.contains(element.tokenAddress),
+                  (element) => contractsNotInserted
+                      .map((e) => e.symbol)
+                      .contains(element.symbol),
                 )
                 .map(
                   (e) => TokenModel(
-                    contractAddress: e.tokenAddress,
+                    contractAddress: e.address,
                     name: e.name ?? '',
                     symbol: e.symbol,
                     balance: '0',
@@ -134,18 +135,17 @@ class TokensCubit extends Cubit<TokensState> {
           try {
             final token = data[i];
             final contract = allTokensCubit.state.contracts.firstWhere(
-              (element) =>
-                  element.symbol == token.symbol &&
-                  element.tokenAddress == token.contractAddress,
+              (element) => element.symbol == token.symbol,
             );
             data[i] = token.copyWith(
               tokenUSDPrice: contract.usdValue,
               balanceUSDPrice:
                   token.calculatedBalanceInDouble * contract.usdValue,
             );
-          } catch (e) {
-            getLogger(runtimeType.toString())
-                .e('error in finding contract for token to get price');
+          } catch (e, s) {
+            getLogger(runtimeType.toString()).e(
+              'error in finding contract, error: $e, s: $s',
+            );
           }
         }
         double totalBalanceInUSD = 0;

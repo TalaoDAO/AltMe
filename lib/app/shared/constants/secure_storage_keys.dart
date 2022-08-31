@@ -1,4 +1,6 @@
 class SecureStorageKeys {
+  static const String isFirstSelectedTokenContracts =
+      'isFirstSelectedTokenContracts';
   static const String selectedContracts = 'selectedContracts';
   static const String fingerprintEnabled = 'fingerprintEnabled';
   static const String pinCode = 'pinCode';

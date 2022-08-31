@@ -40,6 +40,8 @@ class _AllTokensViewState extends State<_AllTokensView> {
     final l10n = context.l10n;
     return BlocBuilder<AllTokensCubit, AllTokensState>(
         builder: (context, state) {
+      getLogger(runtimeType.toString())
+          .i('list of selected contract: ${state.selectedContracts}');
       return BasePage(
         scrollView: false,
         padding: EdgeInsets.zero,
@@ -109,18 +111,17 @@ class _AllTokensViewState extends State<_AllTokensView> {
                     final tokenContractModel = state.filteredContracts[index];
                     return TokenContractItem(
                       tokenContractModel: tokenContractModel,
-                      isOn: state.selectedContracts
-                          .contains(tokenContractModel.tokenAddress),
+                      isOn: state.containContract(
+                        contractModel: tokenContractModel,
+                      ),
                       onChange: (isChecked) {
                         if (isChecked) {
                           context.read<AllTokensCubit>().addContract(
-                                contractAddress:
-                                    tokenContractModel.tokenAddress,
+                                contractModel: tokenContractModel,
                               );
                         } else {
                           context.read<AllTokensCubit>().removeContract(
-                                contractAddress:
-                                    tokenContractModel.tokenAddress,
+                                contractModel: tokenContractModel,
                               );
                         }
                       },

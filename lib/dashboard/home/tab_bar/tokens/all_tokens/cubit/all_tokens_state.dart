@@ -16,14 +16,14 @@ class AllTokensState extends Equatable {
   final double? xtzUsdValue;
   final List<ContractModel> contracts;
   final List<ContractModel> filteredContracts;
-  final List<String> selectedContracts;
+  final List<ContractModel> selectedContracts;
 
   AllTokensState copyWith({
     AppStatus? status,
     StateMessage? message,
     List<ContractModel>? contracts,
     List<ContractModel>? filteredContracts,
-    List<String>? selectedContracts,
+    List<ContractModel>? selectedContracts,
     double? xtzUsdValue,
   }) {
     return AllTokensState(
@@ -33,6 +33,12 @@ class AllTokensState extends Equatable {
       xtzUsdValue: xtzUsdValue ?? this.xtzUsdValue,
       filteredContracts: filteredContracts ?? this.filteredContracts,
       selectedContracts: selectedContracts ?? this.selectedContracts,
+    );
+  }
+
+  bool containContract({required ContractModel contractModel}) {
+    return selectedContracts.any(
+      (element) => element.isEqualTo(contractModel: contractModel),
     );
   }
 
