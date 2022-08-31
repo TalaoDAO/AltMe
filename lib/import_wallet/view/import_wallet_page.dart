@@ -134,7 +134,54 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                           ),
                     ),
                   ),
-                  const SizedBox(height: Sizes.space2XLarge),
+                  if (widget.isFromOnboarding)
+                    Column(
+                      children: [
+                        const SizedBox(height: Sizes.spaceLarge),
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          fit: StackFit.loose,
+                          children: [
+                            BaseTextField(
+                              height: Sizes.recoveryPhraseTextFieldHeight,
+                              hint: l10n.importWalletHintText,
+                              fillColor: Colors.transparent,
+                              hintStyle: Theme.of(context)
+                                  .textTheme
+                                  .hintTextFieldStyle,
+                              maxLines: 10,
+                              borderRadius: Sizes.normalRadius,
+                              controller: mnemonicController,
+                              error: state.isTextFieldEdited &&
+                                      !state.isMnemonicOrKeyValid
+                                  ? l10n.recoveryMnemonicError
+                                  : null,
+                            ),
+                            if (state.isMnemonicOrKeyValid)
+                              Container(
+                                alignment: Alignment.center,
+                                width: Sizes.icon2x,
+                                height: Sizes.icon2x,
+                                padding: const EdgeInsets.all(2),
+                                margin: const EdgeInsets.all(Sizes.spaceNormal),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .checkMarkColor,
+                                ),
+                                child: const Icon(
+                                  Icons.check,
+                                  size: Sizes.icon,
+                                  color: Colors.white,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    )
+                  else
+                    const SizedBox(height: Sizes.space2XLarge),
                   Text(
                     l10n.importEasilyFrom,
                     style: Theme.of(context).textTheme.titleMedium,
@@ -170,25 +217,27 @@ class _ImportWalletViewState extends State<ImportWalletView> {
               ),
             ),
           ),
-          navigation: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(Sizes.spaceSmall),
-              child: MyGradientButton(
-                text: l10n.import,
-                onPressed: !state.isMnemonicOrKeyValid
-                    ? null
-                    : () async {
-                        await context
-                            .read<ImportWalletCubit>()
-                            .saveMnemonicOrKey(
-                              mnemonicOrKey: mnemonicController.text,
-                              accountName: widget.accountName,
-                              isFromOnboarding: widget.isFromOnboarding,
-                            );
-                      },
-              ),
-            ),
-          ),
+          navigation: widget.isFromOnboarding
+              ? SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(Sizes.spaceSmall),
+                    child: MyGradientButton(
+                      text: l10n.import,
+                      onPressed: !state.isMnemonicOrKeyValid
+                          ? null
+                          : () async {
+                              await context
+                                  .read<ImportWalletCubit>()
+                                  .saveMnemonicOrKey(
+                                    mnemonicOrKey: mnemonicController.text,
+                                    accountName: widget.accountName,
+                                    isFromOnboarding: widget.isFromOnboarding,
+                                  );
+                            },
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
         );
       },
     );
