@@ -17,7 +17,12 @@ class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
   final InsertWithdrawalPageCubit insertWithdrawalPageCubit;
 
   void getBalanceOfAssetList() {
-    setLoading(isLoading: true);
+    final defaultData = tokensCubit.state.data;
+    if (defaultData.isNotEmpty) {
+      setSelectedToken(tokenModel: defaultData.first);
+    } else {
+      setLoading(isLoading: true);
+    }
     tokensCubit
         .getBalanceOfAssetList(offset: 0, filterTokens: false)
         .then((value) {
