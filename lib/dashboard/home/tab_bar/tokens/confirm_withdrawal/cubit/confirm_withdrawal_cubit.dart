@@ -138,7 +138,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
           ? '''(Pair "${keyStore.publicKeyHash}" (Pair "${state.withdrawalAddress}" $amount))'''
           : '''{Pair "${keyStore.publicKeyHash}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(token.tokenId ?? '0')} $amount)}}''';
 
-      getLogger(runtimeType.toString()).i(
+      getLogger('sendContractInvocationOperation').i(
         'sending from: ${keyStore.publicKeyHash}'
         ',to: ${state.withdrawalAddress} ,amountInInt: $amount '
         'amountInDecimal: $tokenAmount tokenSymbol: ${token.symbol}',
@@ -157,7 +157,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
         [parameters],
         codeFormat: TezosParameterFormat.Michelson,
       );
-      getLogger(runtimeType.toString())
+      getLogger('sendContractInvocationOperation')
           .i('Operation groupID ===> $resultInvoke');
 
       emit(state.success());

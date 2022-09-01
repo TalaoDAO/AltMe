@@ -103,8 +103,7 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
           ),
           BlocBuilder<TokenAmountCalculatorCubit, TokenAmountCalculatorState>(
             builder: (context, state) {
-              // TODO(all): is there any way to optimise this??
-              getLogger(runtimeType.toString())
+              getLogger('_setAmountControllerText')
                   .i('amount builder: ${state.amount}');
               _setAmountControllerText(state.amount);
               return Column(

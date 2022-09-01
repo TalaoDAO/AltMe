@@ -40,7 +40,7 @@ class _AllTokensViewState extends State<_AllTokensView> {
     final l10n = context.l10n;
     return BlocBuilder<AllTokensCubit, AllTokensState>(
       builder: (context, state) {
-        getLogger(runtimeType.toString())
+        getLogger('_AllTokensView')
             .i('list of selected contract: ${state.selectedContracts}');
         return BasePage(
           scrollView: false,
