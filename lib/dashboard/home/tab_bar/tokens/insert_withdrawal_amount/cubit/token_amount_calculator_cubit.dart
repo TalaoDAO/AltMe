@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:altme/app/logger/logger.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -20,15 +21,32 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     required String amount,
     required TokenModel selectedToken,
   }) {
-    final bool isValid =
-        isValidateAmount(amount: amount, selectedToken: selectedToken);
+    double validAmount = 0;
+    double insertedAmount = 0;
+    try {
+      if (amount.isEmpty || amount == '0' || amount == '0.0') {
+        insertedAmount = 0;
+        validAmount = 0;
+      } else {
+        insertedAmount = double.parse(amount.replaceAll(',', ''));
+        final bool isValid =
+            isValidateAmount(amount: amount, selectedToken: selectedToken);
+        validAmount = isValid ? double.parse(amount.replaceAll(',', '')) : 0.0;
+      }
+    } catch (e, s) {
+      getLogger(runtimeType.toString())
+          .e('error in calculate amount,e: $e, s: $s');
+    }
 
-    final insertedAmount =
-        isValid ? double.parse(amount.replaceAll(',', '')) : 0.0;
+    emit(
+      state.copyWith(
+        amount: amount,
+        validAmount: validAmount,
+        insertedAmount: insertedAmount,
+      ),
+    );
 
-    emit(state.copyWith(amount: amount, validAmount: insertedAmount));
-
-    insertWithdrawalPageCubit.setAmount(amount: insertedAmount);
+    insertWithdrawalPageCubit.setAmount(amount: validAmount);
   }
 
   bool isValidateAmount({

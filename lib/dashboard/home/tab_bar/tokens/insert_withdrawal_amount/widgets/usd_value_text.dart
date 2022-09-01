@@ -2,7 +2,12 @@ import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class UsdValueText extends StatelessWidget {
-  const UsdValueText({Key? key}) : super(key: key);
+  const UsdValueText({
+    Key? key,
+    required this.usdValue,
+  }) : super(key: key);
+
+  final double usdValue;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +24,7 @@ class UsdValueText extends StatelessWidget {
             width: Sizes.spaceXSmall,
           ),
           Text(
-            r'$85.3135 (Fake data)',
+            r'$' + usdValue.toStringAsFixed(2).formatNumber(),
             style: Theme.of(context).textTheme.caption,
           ),
         ],

@@ -174,6 +174,8 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                   ConfirmDetailsCard(
                     amount: widget.amount,
                     symbol: widget.selectedToken.symbol,
+                    amountUsdValue:
+                        widget.amount * widget.selectedToken.tokenUSDPrice,
                     networkFee: state.networkFee,
                     onEditButtonPressed: () {
                       SelectNetworkFeeBottomSheet.show(context: context);

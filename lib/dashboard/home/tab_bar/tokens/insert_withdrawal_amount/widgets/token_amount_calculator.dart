@@ -84,7 +84,8 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
   }
 
   void _setAmountControllerText(String text) {
-    amountController.text = text.formatNumber();
+    // no need to format when text end with .
+    amountController.text = text.endsWith('.') ? text : text.formatNumber();
     amountController.selection = TextSelection.fromPosition(
       TextPosition(offset: amountController.text.length),
     );
@@ -102,7 +103,8 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
           ),
           BlocBuilder<TokenAmountCalculatorCubit, TokenAmountCalculatorState>(
             builder: (context, state) {
-              // TODO(all): is there any way to optimise this??
+              getLogger('_setAmountControllerText')
+                  .i('amount builder: ${state.amount}');
               _setAmountControllerText(state.amount);
               return Column(
                 children: [
@@ -165,7 +167,10 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                       ),
                     ),
                   ),
-                  const UsdValueText(),
+                  UsdValueText(
+                    usdValue: state.insertedAmount *
+                        widget.selectedToken.tokenUSDPrice,
+                  ),
                   MaxButton(
                     onTap: () {
                       _setAmountControllerText(
