@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -17,6 +15,7 @@ class TokensCubit extends Cubit<TokensState> {
     required this.client,
     required this.walletCubit,
     required this.networkCubit,
+    required this.allTokensCubit,
     required this.secureStorageProvider,
   }) : super(const TokensState()) {
     getBalanceOfAssetList(offset: 0);
@@ -26,7 +25,7 @@ class TokensCubit extends Cubit<TokensState> {
   final DioClient client;
   final WalletCubit walletCubit;
   final ManageNetworkCubit networkCubit;
-  double? _xtzUsdValue;
+  final AllTokensCubit allTokensCubit;
 
   List<TokenModel> data = [];
 
@@ -76,46 +75,47 @@ class TokensCubit extends Cubit<TokensState> {
         final tezosToken = await _getXtzBalance(walletAddress);
         newData.insert(0, tezosToken);
         data = newData;
+        if (allTokensCubit.state.contracts.isEmpty) {
+          await allTokensCubit.init();
+        } else {
+          // ignore: unawaited_futures
+          allTokensCubit.init();
+        }
       } else {
         data.addAll(newData);
+        // ignore: unawaited_futures
+        allTokensCubit.init();
       }
       //get usd balance of tokens and update tokens
-      final contracts = await _getUSDBalanceOfTokens();
-      if (contracts?.isNotEmpty ?? false) {
+      if (allTokensCubit.state.contracts.isNotEmpty) {
         // Filter just selected tokens to show for user
         if (filterTokens) {
-          final selectedContracts = await _getSelectedTokens();
-          data = data
-              .where(
-                (element) =>
-                    element.symbol == 'XTZ' ||
-                    selectedContracts.contains(element.contractAddress),
-              )
-              .toList();
+          final selectedContracts = allTokensCubit.state.selectedContracts;
           final contractsNotInserted = selectedContracts
               .where(
                 (element) => !data
-                    .map((e) => e.contractAddress)
+                    .map((e) => e.symbol)
                     .toList()
-                    .contains(element),
+                    .contains(element.symbol),
               )
               .toList();
 
           data.addAll(
-            contracts!
+            allTokensCubit.state.contracts
                 .where(
-                  (element) =>
-                      contractsNotInserted.contains(element.tokenAddress),
+                  (element) => contractsNotInserted
+                      .map((e) => e.symbol)
+                      .contains(element.symbol),
                 )
                 .map(
                   (e) => TokenModel(
-                    contractAddress: e.tokenAddress,
+                    contractAddress: e.address,
                     name: e.name ?? '',
                     symbol: e.symbol,
                     balance: '0',
                     icon: e.thumbnailUri,
                     decimals: e.decimals.toString(),
-                    id: -1,
+                    id: -2,
                     standard: e.type,
                   ),
                 ),
@@ -124,29 +124,28 @@ class TokensCubit extends Cubit<TokensState> {
 
         for (int i = 0; i < data.length; i++) {
           //we know that the first element is XTZ token all the time
-          if (i == 0 && _xtzUsdValue != null) {
+          if (i == 0 && allTokensCubit.state.xtzUsdValue != null) {
             data[i] = data[i].copyWith(
-              tokenUSDPrice: _xtzUsdValue,
-              balanceUSDPrice:
-                  data[i].calculatedBalanceInDouble * _xtzUsdValue!,
+              tokenUSDPrice: allTokensCubit.state.xtzUsdValue,
+              balanceUSDPrice: data[i].calculatedBalanceInDouble *
+                  allTokensCubit.state.xtzUsdValue!,
             );
             continue;
           }
           try {
             final token = data[i];
-            final contract = contracts!.firstWhere(
-              (element) =>
-                  element.symbol == token.symbol &&
-                  element.tokenAddress == token.contractAddress,
+            final contract = allTokensCubit.state.contracts.firstWhere(
+              (element) => element.symbol == token.symbol,
             );
             data[i] = token.copyWith(
               tokenUSDPrice: contract.usdValue,
               balanceUSDPrice:
                   token.calculatedBalanceInDouble * contract.usdValue,
             );
-          } catch (e) {
-            getLogger(runtimeType.toString())
-                .e('error in finding contract for token to get price');
+          } catch (e, s) {
+            getLogger(runtimeType.toString()).e(
+              'error in finding contract, error: $e, s: $s',
+            );
           }
         }
         double totalBalanceInUSD = 0;
@@ -186,35 +185,6 @@ class TokensCubit extends Cubit<TokensState> {
     }
   }
 
-  Future<List<String>> _getSelectedTokens() async {
-    final result =
-        await secureStorageProvider.get(SecureStorageKeys.selectedContracts);
-    if (result == null) {
-      return [];
-    } else {
-      final json = jsonDecode(result) as List<dynamic>;
-      final selectedContracts = json.map((dynamic e) => e as String).toList();
-      return selectedContracts;
-    }
-  }
-
-  Future<List<ContractModel>?> _getUSDBalanceOfTokens() async {
-    try {
-      final dynamic result = await client.get(Urls.tezToolPrices);
-      _xtzUsdValue = result['xtzusdValue'] as double?;
-      final contracts = result['contracts'] as List<dynamic>;
-      return List.of(
-        contracts.map(
-          (dynamic e) => ContractModel.fromJson(e as Map<String, dynamic>),
-        ),
-      );
-    } catch (e, s) {
-      getLogger(runtimeType.toString())
-          .e('error in get balance of tokens, e: $e, s: $s', e, s);
-      return null;
-    }
-  }
-
   Future<TokenModel> _getXtzBalance(
     String walletAddress,
   ) async {
@@ -234,9 +204,10 @@ class TokensCubit extends Cubit<TokensState> {
     );
 
     return token.copyWith(
-      tokenUSDPrice: _xtzUsdValue,
-      balanceUSDPrice: _xtzUsdValue != null
-          ? token.calculatedBalanceInDouble * (_xtzUsdValue!)
+      tokenUSDPrice: allTokensCubit.state.xtzUsdValue,
+      balanceUSDPrice: allTokensCubit.state.xtzUsdValue != null
+          ? token.calculatedBalanceInDouble *
+              (allTokensCubit.state.xtzUsdValue!)
           : null,
     );
   }

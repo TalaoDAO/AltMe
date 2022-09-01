@@ -29,14 +29,15 @@ class TezosNetworkSwitcherButton extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
             child: BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
-                builder: (context, state) {
-              return Text(
-                state.network.description,
-                style: Theme.of(context).textTheme.caption?.copyWith(
-                      decoration: TextDecoration.underline,
-                    ),
-              );
-            }),
+              builder: (context, state) {
+                return Text(
+                  state.network.description,
+                  style: Theme.of(context).textTheme.caption?.copyWith(
+                        decoration: TextDecoration.underline,
+                      ),
+                );
+              },
+            ),
           ),
           Icon(
             Icons.keyboard_arrow_down_rounded,

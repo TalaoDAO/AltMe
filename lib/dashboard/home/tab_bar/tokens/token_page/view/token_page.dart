@@ -98,7 +98,7 @@ class _TokenViewState extends State<TokenView> {
               onTap: () {
                 Navigator.of(context)
                     .push<void>(
-                      AddTokensPage.route(),
+                      AllTokensPage.route(),
                     )
                     .then(
                       (value) => context

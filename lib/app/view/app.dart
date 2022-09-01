@@ -109,8 +109,18 @@ class App extends StatelessWidget {
             walletCubit: context.read<WalletCubit>(),
           ),
         ),
+        BlocProvider(
+          create: (context) => AllTokensCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            client: DioClient(
+              Urls.tezToolBase,
+              Dio(),
+            ),
+          ),
+        ),
         BlocProvider<TokensCubit>(
           create: (context) => TokensCubit(
+            allTokensCubit: context.read<AllTokensCubit>(),
             networkCubit: context.read<ManageNetworkCubit>(),
             secureStorageProvider: secure_storage.getSecureStorage,
             client: DioClient(

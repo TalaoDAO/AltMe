@@ -8,7 +8,7 @@ part 'contract_model.g.dart';
 class ContractModel extends Equatable {
   const ContractModel({
     required this.symbol,
-    required this.tokenAddress,
+    required this.address,
     required this.thumbnailUri,
     required this.decimals,
     required this.name,
@@ -26,7 +26,7 @@ class ContractModel extends Equatable {
       _$ContractModelFromJson(json);
 
   final String symbol;
-  final String tokenAddress;
+  final String address;
   final String? thumbnailUri;
   final int decimals;
   final String? name;
@@ -45,10 +45,14 @@ class ContractModel extends Equatable {
     return thumbnailUri?.replaceFirst('ipfs://', Urls.talaoIpfsGateway);
   }
 
+  bool isEqualTo({required ContractModel contractModel}) {
+    return address == contractModel.address;
+  }
+
   @override
   List<Object?> get props => [
         symbol,
-        tokenAddress,
+        address,
         thumbnailUri,
         decimals,
         name,
