@@ -104,6 +104,9 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
+  Color get transactionApplied => const Color(0xFF00B267);
+  Color get transactionFailed => const Color(0xFFFF0045);
+  Color get transactionSkipped => const Color(0xFFFF5F0A);
   Color get activeColorOfNetwork => const Color(0xFF2C7DF7);
 
   Color get greyText => const Color(0xFFD1CCE3);
