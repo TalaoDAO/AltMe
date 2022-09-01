@@ -5,11 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SendToPage extends StatelessWidget {
-  const SendToPage({Key? key}) : super(key: key);
+  const SendToPage({
+    Key? key,
+    required this.defaultSelectedToken,
+  }) : super(key: key);
 
-  static Route route() {
+  final TokenModel defaultSelectedToken;
+
+  static Route route({required TokenModel defaultSelectedToken}) {
     return MaterialPageRoute<void>(
-      builder: (_) => const SendToPage(),
+      builder: (_) => SendToPage(
+        defaultSelectedToken: defaultSelectedToken,
+      ),
       settings: const RouteSettings(name: '/sendToPage'),
     );
   }
@@ -18,13 +25,20 @@ class SendToPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SendToCubit(),
-      child: const SendToView(),
+      child: SendToView(
+        defaultSelectedToken: defaultSelectedToken,
+      ),
     );
   }
 }
 
 class SendToView extends StatefulWidget {
-  const SendToView({Key? key}) : super(key: key);
+  const SendToView({
+    Key? key,
+    required this.defaultSelectedToken,
+  }) : super(key: key);
+
+  final TokenModel defaultSelectedToken;
 
   @override
   State<SendToView> createState() => _SendToViewState();
@@ -102,6 +116,7 @@ class _SendToViewState extends State<SendToView> {
                     : () {
                         Navigator.of(context).push<void>(
                           InsertWithdrawalAmountPage.route(
+                            defualtSelectedToken: widget.defaultSelectedToken,
                             withdrawalAddress: state.withdrawalAddress,
                           ),
                         );

@@ -8,14 +8,21 @@ class InsertWithdrawalAmountPage extends StatelessWidget {
   const InsertWithdrawalAmountPage({
     Key? key,
     required this.withdrawalAddress,
+    required this.defaultSelectedToken,
   }) : super(key: key);
 
   final String withdrawalAddress;
+  final TokenModel defaultSelectedToken;
 
-  static Route route({required String withdrawalAddress}) {
+  static Route route({
+    required String withdrawalAddress,
+    required TokenModel defualtSelectedToken,
+  }) {
     return MaterialPageRoute<void>(
-      builder: (_) =>
-          InsertWithdrawalAmountPage(withdrawalAddress: withdrawalAddress),
+      builder: (_) => InsertWithdrawalAmountPage(
+        withdrawalAddress: withdrawalAddress,
+        defaultSelectedToken: defualtSelectedToken,
+      ),
       settings: const RouteSettings(name: '/insertWithdrawalAmountPage'),
     );
   }
@@ -23,7 +30,8 @@ class InsertWithdrawalAmountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<InsertWithdrawalPageCubit>(
-      create: (_) => InsertWithdrawalPageCubit(),
+      create: (_) =>
+          InsertWithdrawalPageCubit(defaultSelectedToken: defaultSelectedToken),
       child: InsertWithdrawalAmountView(withdrawalAddress: withdrawalAddress),
     );
   }
@@ -52,7 +60,6 @@ class _InsertWithdrawalAmountViewState
     final l10n = context.l10n;
     return BlocBuilder<InsertWithdrawalPageCubit, InsertWithdrawalPageState>(
       builder: (context, state) {
-        getLogger(toStringShort()).i('state: $state');
         return BasePage(
           scrollView: false,
           titleLeading: const BackLeadingButton(),
