@@ -150,9 +150,9 @@ class TokensCubit extends Cubit<TokensState> {
         }
         double totalBalanceInUSD = 0;
         for (final tokenElement in data) {
-          totalBalanceInUSD += tokenElement.balanceUSDPrice ?? 0;
+          totalBalanceInUSD += tokenElement.balanceUSDPrice;
         }
-
+        data.sort((a, b) => b.balanceUSDPrice.compareTo(a.balanceUSDPrice));
         emit(
           state.copyWith(
             status: AppStatus.success,
@@ -162,7 +162,7 @@ class TokensCubit extends Cubit<TokensState> {
         );
         return data;
       }
-
+      data.sort((a, b) => b.balanceUSDPrice.compareTo(a.balanceUSDPrice));
       emit(
         state.copyWith(
           status: AppStatus.success,
@@ -173,6 +173,7 @@ class TokensCubit extends Cubit<TokensState> {
       return data;
     } catch (e, s) {
       getLogger(runtimeType.toString()).e('error in get tokens e: $e , s:$s');
+      data.sort((a, b) => b.balanceUSDPrice.compareTo(a.balanceUSDPrice));
       if (isClosed) return data;
       emit(
         state.errorWhileFetching(

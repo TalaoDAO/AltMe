@@ -40,7 +40,7 @@ class TezosNetwork {
 
   @override
   String toString() {
-    return 'TezosNetwork{networkName: $networkname, tzktUrl: $tzktUrl'
-        ', rpcNodeUrl: $rpcNodeUrl , apiKey: $apiKey , description: $description}';
+    return 'TezosNetwork{networkName: $networkname,tzktUrl: $tzktUrl, '
+        'rpcNodeUrl: $rpcNodeUrl, apiKey: $apiKey ,description:$description}';
   }
 }

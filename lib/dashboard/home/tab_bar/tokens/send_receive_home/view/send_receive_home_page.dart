@@ -176,11 +176,9 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                     ),
                     MyText(
                       r'$' +
-                          (widget.selectedToken.balanceUSDPrice == null
-                              ? '--.--'
-                              : widget.selectedToken.balanceUSDPrice!
-                                  .toStringAsFixed(2)
-                                  .formatNumber()),
+                          widget.selectedToken.balanceUSDPrice
+                              .toStringAsFixed(2)
+                              .formatNumber(),
                       style: Theme.of(context).textTheme.normal,
                     ),
                     const SizedBox(

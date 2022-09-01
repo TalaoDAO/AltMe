@@ -170,7 +170,7 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                   ),
                   UsdValueText(
                     usdValue: state.insertedAmount *
-                        (widget.selectedToken.tokenUSDPrice ?? 0),
+                        widget.selectedToken.tokenUSDPrice,
                   ),
                   MaxButton(
                     onTap: () {
