@@ -138,6 +138,7 @@ class TokensCubit extends Cubit<TokensState> {
               (element) => element.symbol == token.symbol,
             );
             data[i] = token.copyWith(
+              icon: token.icon ?? contract.iconUrl,
               tokenUSDPrice: contract.usdValue,
               balanceUSDPrice:
                   token.calculatedBalanceInDouble * contract.usdValue,
