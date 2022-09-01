@@ -16,21 +16,33 @@ class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
   final TokensCubit tokensCubit;
   final InsertWithdrawalPageCubit insertWithdrawalPageCubit;
 
-  void getBalanceOfAssetList() {
+  Future<void> getBalanceOfAssetList() async {
     final defaultData = tokensCubit.state.data;
-    if (defaultData.isNotEmpty) {
-      setSelectedToken(tokenModel: defaultData.first);
-    } else {
+    if (defaultData.isEmpty ||
+        !defaultData.map((e) => e.symbol).contains(
+              insertWithdrawalPageCubit.defaultSelectedToken.symbol,
+            )) {
       setLoading(isLoading: true);
-    }
-    tokensCubit
-        .getBalanceOfAssetList(offset: 0, filterTokens: false)
-        .then((value) {
+      final value = await tokensCubit.getBalanceOfAssetList(
+        offset: 0,
+        filterTokens: false,
+      );
       if (value.isNotEmpty) {
         setSelectedToken(tokenModel: value.first);
       }
       setLoading(isLoading: false);
-    });
+    } else {
+      final value = await tokensCubit.getBalanceOfAssetList(
+        offset: 0,
+        filterTokens: false,
+      );
+      if (value.isNotEmpty &&
+          !value.map((e) => e.symbol).contains(
+                insertWithdrawalPageCubit.defaultSelectedToken.symbol,
+              )) {
+        setSelectedToken(tokenModel: value.first);
+      }
+    }
   }
 
   void setSelectedToken({required TokenModel tokenModel}) {

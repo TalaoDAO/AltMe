@@ -9,12 +9,19 @@ part 'insert_withdrawal_page_state.dart';
 part 'insert_withdrawal_page_cubit.g.dart';
 
 class InsertWithdrawalPageCubit extends Cubit<InsertWithdrawalPageState> {
-  InsertWithdrawalPageCubit() : super(const InsertWithdrawalPageState());
+  InsertWithdrawalPageCubit({
+    required this.defaultSelectedToken,
+  }) : super(
+          InsertWithdrawalPageState(
+            selectedToken: defaultSelectedToken,
+          ),
+        );
+
+  final TokenModel defaultSelectedToken;
 
   final log = getLogger('InsertWithdrawalPageCubit');
 
   void setAmount({required double amount}) {
-    log.i('amount set $amount');
     emit(
       state.copyWith(
         amount: amount,

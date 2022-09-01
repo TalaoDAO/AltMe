@@ -8,12 +8,14 @@ class ConfirmDetailsCard extends StatelessWidget {
   const ConfirmDetailsCard({
     Key? key,
     required this.amount,
+    required this.amountUsdValue,
     required this.symbol,
     required this.networkFee,
     this.onEditButtonPressed,
   }) : super(key: key);
 
   final double amount;
+  final double amountUsdValue;
   final String symbol;
   final NetworkFeeModel networkFee;
   final VoidCallback? onEditButtonPressed;
@@ -83,7 +85,10 @@ class ConfirmDetailsCard extends StatelessWidget {
                     '${amount.toStringAsFixed(6).formatNumber()} $symbol',
                     style: Theme.of(context).textTheme.caption,
                   ),
-                  Text(r'$--.--', style: Theme.of(context).textTheme.caption2),
+                  Text(
+                    r'$' + amountUsdValue.toStringAsFixed(2).formatNumber(),
+                    style: Theme.of(context).textTheme.caption2,
+                  ),
                 ],
               ),
             ],

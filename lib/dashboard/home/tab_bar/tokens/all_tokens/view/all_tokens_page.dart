@@ -39,107 +39,108 @@ class _AllTokensViewState extends State<_AllTokensView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BlocBuilder<AllTokensCubit, AllTokensState>(
-        builder: (context, state) {
-      getLogger(runtimeType.toString())
-          .i('list of selected contract: ${state.selectedContracts}');
-      return BasePage(
-        scrollView: false,
-        padding: EdgeInsets.zero,
-        titleLeading: const BackLeadingButton(),
-        titleTrailing: const CryptoAccountSwitcherButton(),
-        body: BackgroundCard(
-          width: double.infinity,
-          height: double.infinity,
-          padding: const EdgeInsets.all(Sizes.spaceSmall),
-          margin: const EdgeInsets.all(Sizes.spaceSmall),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    l10n.addTokens,
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  TextButton(
-                    onPressed: (state.status == AppStatus.loading ||
-                            state.status == AppStatus.fetching)
-                        ? null
-                        : () async {
-                            await context
-                                .read<AllTokensCubit>()
-                                .saveSelectedContracts();
-                            Navigator.of(context).pop();
-                          },
-                    child: Text(
-                      l10n.save,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleMedium,
+      builder: (context, state) {
+        getLogger(runtimeType.toString())
+            .i('list of selected contract: ${state.selectedContracts}');
+        return BasePage(
+          scrollView: false,
+          padding: EdgeInsets.zero,
+          titleLeading: const BackLeadingButton(),
+          titleTrailing: const CryptoAccountSwitcherButton(),
+          body: BackgroundCard(
+            width: double.infinity,
+            height: double.infinity,
+            padding: const EdgeInsets.all(Sizes.spaceSmall),
+            margin: const EdgeInsets.all(Sizes.spaceSmall),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      l10n.addTokens,
+                      style: Theme.of(context).textTheme.headline5,
                     ),
-                  ),
-                ],
-              ),
-              TextField(
-                textInputAction: TextInputAction.search,
-                onChanged: (value) {
-                  context.read<AllTokensCubit>().filterTokens(value: value);
-                },
-                decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.space2XSmall,
-                    ),
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.search,
-                      size: Sizes.icon2x,
-                    ),
-                  ),
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(Sizes.smallRadius),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: ListView.separated(
-                  itemBuilder: (_, index) {
-                    final tokenContractModel = state.filteredContracts[index];
-                    return TokenContractItem(
-                      tokenContractModel: tokenContractModel,
-                      isOn: state.containContract(
-                        contractModel: tokenContractModel,
+                    TextButton(
+                      onPressed: (state.status == AppStatus.loading ||
+                              state.status == AppStatus.fetching)
+                          ? null
+                          : () async {
+                              await context
+                                  .read<AllTokensCubit>()
+                                  .saveSelectedContracts();
+                              Navigator.of(context).pop();
+                            },
+                      child: Text(
+                        l10n.save,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
-                      onChange: (isChecked) {
-                        if (isChecked) {
-                          context.read<AllTokensCubit>().addContract(
-                                contractModel: tokenContractModel,
-                              );
-                        } else {
-                          context.read<AllTokensCubit>().removeContract(
-                                contractModel: tokenContractModel,
-                              );
-                        }
-                      },
-                    );
-                  },
-                  separatorBuilder: (_, __) {
-                    return Divider(
-                      height: 0.3,
-                      color: Theme.of(context).colorScheme.borderColor,
-                    );
-                  },
-                  itemCount: state.filteredContracts.length,
+                    ),
+                  ],
                 ),
-              ),
-            ],
+                TextField(
+                  textInputAction: TextInputAction.search,
+                  onChanged: (value) {
+                    context.read<AllTokensCubit>().filterTokens(value: value);
+                  },
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Sizes.space2XSmall,
+                      ),
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.search,
+                        size: Sizes.icon2x,
+                      ),
+                    ),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(Sizes.smallRadius),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.separated(
+                    itemBuilder: (_, index) {
+                      final tokenContractModel = state.filteredContracts[index];
+                      return TokenContractItem(
+                        tokenContractModel: tokenContractModel,
+                        isOn: state.containContract(
+                          contractModel: tokenContractModel,
+                        ),
+                        onChange: (isChecked) {
+                          if (isChecked) {
+                            context.read<AllTokensCubit>().addContract(
+                                  contractModel: tokenContractModel,
+                                );
+                          } else {
+                            context.read<AllTokensCubit>().removeContract(
+                                  contractModel: tokenContractModel,
+                                );
+                          }
+                        },
+                      );
+                    },
+                    separatorBuilder: (_, __) {
+                      return Divider(
+                        height: 0.3,
+                        color: Theme.of(context).colorScheme.borderColor,
+                      );
+                    },
+                    itemCount: state.filteredContracts.length,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

@@ -6,7 +6,6 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class SendReceiveHomePage extends StatefulWidget {
   const SendReceiveHomePage({
@@ -177,11 +176,9 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                     ),
                     MyText(
                       r'$' +
-                          (widget.selectedToken.balanceUSDPrice == null
-                              ? '--.--'
-                              : widget.selectedToken.balanceUSDPrice!
-                                  .toStringAsFixed(2)
-                                  .formatNumber()),
+                          widget.selectedToken.balanceUSDPrice
+                              .toStringAsFixed(2)
+                              .formatNumber(),
                       style: Theme.of(context).textTheme.normal,
                     ),
                     const SizedBox(
@@ -206,8 +203,11 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                                 width: Sizes.icon,
                               ),
                               onPressed: () {
-                                Navigator.of(context)
-                                    .push<void>(SendToPage.route());
+                                Navigator.of(context).push<void>(
+                                  SendToPage.route(
+                                    defaultSelectedToken: widget.selectedToken,
+                                  ),
+                                );
                               },
                             ),
                           ),

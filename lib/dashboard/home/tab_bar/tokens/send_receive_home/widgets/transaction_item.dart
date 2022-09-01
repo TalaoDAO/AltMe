@@ -91,14 +91,29 @@ class TransactionItem extends StatelessWidget {
             ),
             Text(
               operationModel.status,
-              style: Theme.of(context).textTheme.titleSmall,
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: operationModel.status.toLowerCase() == 'applied'
+                        ? Theme.of(context).colorScheme.transactionApplied
+                        : operationModel.status.toLowerCase() == 'failed' ||
+                                operationModel.status.toLowerCase() ==
+                                    'backtracked'
+                            ? Theme.of(context).colorScheme.transactionFailed
+                            : operationModel.status.toLowerCase() == 'skipped'
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .transactionSkipped
+                                : null,
+                  ),
             ),
-            const Spacer(),
-            MyText(
-              '${amount.toStringAsFixed(2).formatNumber()} '
-              '$symbol',
-              minFontSize: 8,
-              style: Theme.of(context).textTheme.headline6,
+            const SizedBox(width: Sizes.space2XSmall,),
+            Expanded(
+              child: MyText(
+                '${amount.toStringAsFixed(2).formatNumber()} '
+                '$symbol',
+                minFontSize: 8,
+                textAlign: TextAlign.end,
+                style: Theme.of(context).textTheme.headline6,
+              ),
             ),
           ],
         )
