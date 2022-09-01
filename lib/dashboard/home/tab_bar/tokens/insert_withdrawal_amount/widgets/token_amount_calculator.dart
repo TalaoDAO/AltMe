@@ -84,7 +84,8 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
   }
 
   void _setAmountControllerText(String text) {
-    amountController.text = text.formatNumber();
+    // no need to format when text end with .
+    amountController.text = text.endsWith('.') ? text : text.formatNumber();
     amountController.selection = TextSelection.fromPosition(
       TextPosition(offset: amountController.text.length),
     );
