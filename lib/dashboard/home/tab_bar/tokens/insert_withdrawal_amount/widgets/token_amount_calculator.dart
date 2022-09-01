@@ -103,6 +103,8 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
           BlocBuilder<TokenAmountCalculatorCubit, TokenAmountCalculatorState>(
             builder: (context, state) {
               // TODO(all): is there any way to optimise this??
+              getLogger(runtimeType.toString())
+                  .i('amount builder: ${state.amount}');
               _setAmountControllerText(state.amount);
               return Column(
                 children: [
@@ -165,7 +167,10 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                       ),
                     ),
                   ),
-                  const UsdValueText(),
+                  UsdValueText(
+                    usdValue: state.insertedAmount *
+                        (widget.selectedToken.tokenUSDPrice ?? 0),
+                  ),
                   MaxButton(
                     onTap: () {
                       _setAmountControllerText(

@@ -22,7 +22,6 @@ class InsertWithdrawalPageCubit extends Cubit<InsertWithdrawalPageState> {
   final log = getLogger('InsertWithdrawalPageCubit');
 
   void setAmount({required double amount}) {
-    log.i('amount set $amount');
     emit(
       state.copyWith(
         amount: amount,
