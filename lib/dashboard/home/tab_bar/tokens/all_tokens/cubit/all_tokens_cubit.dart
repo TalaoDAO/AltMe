@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:bloc/bloc.dart';
@@ -84,8 +83,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
         final json = jsonDecode(result) as List<dynamic>;
         final selectedContracts = json
             .map(
-              (dynamic e) =>
-                  ContractModel.fromJson(e as Map<String, dynamic>),
+              (dynamic e) => ContractModel.fromJson(e as Map<String, dynamic>),
             )
             .toList();
         final data =
