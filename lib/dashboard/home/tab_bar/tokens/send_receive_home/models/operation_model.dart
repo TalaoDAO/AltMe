@@ -35,6 +35,34 @@ class OperationModel extends Equatable {
   factory OperationModel.fromJson(Map<String, dynamic> json) =>
       _$OperationModelFromJson(json);
 
+  factory OperationModel.fromFa2Json(Map<String, dynamic> json) {
+    return OperationModel(
+      type: json['token']['standard'] as String,
+      id: json['id'] as int,
+      level: json['level'] as int,
+      timestamp: json['timestamp'] as String,
+      block: (json['transactionId'] as int).toString(),
+      hash: (json['transactionId'] as int).toString(),
+      counter: -1,
+      sender: OperationAddressModel(
+        address: (json['from']?['address'] as String?) ?? '',
+      ),
+      gasLimit: 0,
+      gasUsed: 0,
+      storageLimit: 0,
+      storageUsed: 0,
+      bakerFee: 0,
+      storageFee: 0,
+      allocationFee: 0,
+      target: OperationAddressModel(
+        address: (json['to']?['address'] as String?) ?? '',
+      ),
+      amount: int.parse(json['amount'] as String),
+      status: 'applied',
+      hasInternals: true,
+    );
+  }
+
   final String type;
   final int id;
   final int level;
