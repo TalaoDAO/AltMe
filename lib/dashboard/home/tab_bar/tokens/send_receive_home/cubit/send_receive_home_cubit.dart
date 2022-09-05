@@ -49,7 +49,36 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     }
   }
 
+  Future<List<OperationModel>> _getFa2Transfers(String baseUrl) async {
+    final activeIndex = walletCubit.state.currentCryptoIndex;
+    final walletAddress =
+        walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
+
+    final params = <String, dynamic>{
+      'anyof.from.to': walletAddress,
+      'token.contract.eq': selectedToken.contractAddress,
+    };
+    final result = await client.get(
+      '$baseUrl/v1/tokens/transfers',
+      queryParameters: params,
+    ) as List<dynamic>;
+
+    final operations = result
+        .map(
+          (dynamic e) => OperationModel.fromFa2Json(e as Map<String, dynamic>),
+        )
+        .toList();
+    operations.sort(
+      (a, b) => b.dateTime.compareTo(a.dateTime),
+    );
+    return operations;
+  }
+
   Future<List<OperationModel>> _getOperations(String baseUrl) async {
+    if (selectedToken.standard?.toLowerCase() == 'fa2') {
+      return _getFa2Transfers(baseUrl);
+    }
+
     final activeIndex = walletCubit.state.currentCryptoIndex;
     final walletAddress =
         walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
