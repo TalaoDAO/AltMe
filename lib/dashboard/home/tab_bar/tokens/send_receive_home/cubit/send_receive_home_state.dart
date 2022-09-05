@@ -4,6 +4,7 @@ part of 'send_receive_home_cubit.dart';
 class SendReceiveHomeState extends Equatable {
   const SendReceiveHomeState({
     this.operations = const [],
+    required this.selectedToken,
     this.status = AppStatus.init,
     this.message,
   });
@@ -12,6 +13,7 @@ class SendReceiveHomeState extends Equatable {
       _$SendReceiveHomeStateFromJson(json);
 
   final List<OperationModel> operations;
+  final TokenModel selectedToken;
   final AppStatus status;
   final StateMessage? message;
 
@@ -33,9 +35,11 @@ class SendReceiveHomeState extends Equatable {
   SendReceiveHomeState success({
     MessageHandler? messageHandler,
     List<OperationModel>? operations,
+    TokenModel? selectedToken,
   }) {
     return copyWith(
       status: AppStatus.success,
+      selectedToken: selectedToken,
       operations: operations ?? this.operations,
       message: messageHandler == null
           ? null
@@ -45,11 +49,13 @@ class SendReceiveHomeState extends Equatable {
 
   SendReceiveHomeState copyWith({
     List<OperationModel>? operations,
+    TokenModel? selectedToken,
     AppStatus? status,
     StateMessage? message,
   }) {
     return SendReceiveHomeState(
       operations: operations ?? this.operations,
+      selectedToken: selectedToken ?? this.selectedToken,
       status: status ?? this.status,
       message: message ?? this.message,
     );
@@ -58,5 +64,10 @@ class SendReceiveHomeState extends Equatable {
   Map<String, dynamic> toJson() => _$SendReceiveHomeStateToJson(this);
 
   @override
-  List<Object?> get props => [status, message, operations];
+  List<Object?> get props => [
+        status,
+        message,
+        operations,
+        selectedToken,
+      ];
 }
