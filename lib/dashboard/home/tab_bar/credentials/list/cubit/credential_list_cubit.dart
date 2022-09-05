@@ -11,7 +11,9 @@ part 'credential_list_state.dart';
 class CredentialListCubit extends Cubit<CredentialListState> {
   CredentialListCubit() : super(CredentialListState());
 
-  final List<CredentialSubjectType> gamingCategories = [];
+  final List<CredentialSubjectType> gamingCategories = [
+    CredentialSubjectType.tezVoucher,
+  ];
 
   final List<CredentialSubjectType> communityCategories = [
     // CredentialSubjectType.talaoCommunityCard
@@ -30,10 +32,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
   Future<void> initialise(WalletCubit walletCubit) async {
     emit(state.fetching());
 
-    /// tezVoucher is available only on Android platform
-    if (isAndroid()) {
-      gamingCategories.add(CredentialSubjectType.tezVoucher);
-    }
     await Future<void>.delayed(const Duration(milliseconds: 500));
     final gamingCredentials = <HomeCredential>[];
     final communityCredentials = <HomeCredential>[];
@@ -50,6 +48,11 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
           /// adding real credentials
           gamingCredentials.add(HomeCredential.isNotDummy(credential));
+
+          /// tezVoucher is available only on Android platform
+          if (!isAndroid()) {
+            gamingCategories.remove(CredentialSubjectType.tezVoucher);
+          }
           break;
 
         case CredentialCategory.communityCards:
