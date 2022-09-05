@@ -147,7 +147,11 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                       l10n.myTokens,
                       style: Theme.of(context).textTheme.headline5,
                     ),
-                    const TezosNetworkSwitcherButton(),
+                    TezosNetworkSwitcherButton(
+                      onTap: () {
+                        ChangeNetworkBottomSheetView.show(context: context);
+                      },
+                    ),
                     const SizedBox(
                       height: Sizes.spaceLarge,
                     ),
