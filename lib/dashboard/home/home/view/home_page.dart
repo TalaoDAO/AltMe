@@ -25,9 +25,11 @@ class HomePage extends StatelessWidget {
 
         if (homeState.status == AppStatus.success) {}
       },
-      child: isAndroid()
-          ? const TabControllerPage()
-          : const IosTabControllerPage(),
+      // Setting to hide gallery when on ios
+      // child: isAndroid()
+      //     ? const TabControllerPage()
+      //     : const IosTabControllerPage(),
+      child: const TabControllerPage(),
     );
   }
 }
