@@ -39,6 +39,11 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     final proofOfOwnershipsCredentials = <HomeCredential>[];
     final othersCredentials = <HomeCredential>[];
 
+    /// tezVoucher is available only on Android platform
+    if (!isAndroid()) {
+      gamingCategories.remove(CredentialSubjectType.tezVoucher);
+    }
+
     for (final credential in walletCubit.state.credentials) {
       final CredentialSubjectModel credentialSubject =
           credential.credentialPreview.credentialSubjectModel;
@@ -48,11 +53,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
           /// adding real credentials
           gamingCredentials.add(HomeCredential.isNotDummy(credential));
-
-          /// tezVoucher is available only on Android platform
-          if (!isAndroid()) {
-            gamingCategories.remove(CredentialSubjectType.tezVoucher);
-          }
           break;
 
         case CredentialCategory.communityCards:
