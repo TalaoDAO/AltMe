@@ -7,6 +7,7 @@ import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.queryByExampleCubit,
     required this.deepLinkCubit,
     required this.jwtDecode,
+    required this.beacon,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -37,6 +39,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final QueryByExampleCubit queryByExampleCubit;
   final DeepLinkCubit deepLinkCubit;
   final JWTDecode jwtDecode;
+  final Beacon beacon;
 
   @override
   Future<void> close() async {
@@ -44,24 +47,50 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return super.close();
   }
 
-  Future<void> host({required String? url}) async {
+  Future<void> process({required String? scannedResponse}) async {
     emit(state.loading(isDeepLink: false));
     try {
-      if (url == null || url.isEmpty) {
+      if (scannedResponse == null || scannedResponse.isEmpty) {
         throw ResponseMessage(
           ResponseString
               .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
         );
+      } else if (scannedResponse.startsWith('tezos://')) {
+        final String code = scannedResponse.substring(
+          scannedResponse.indexOf('data=') + 5,
+          scannedResponse.length,
+        );
+        final Map response = await beacon.pair(pairingRequest: code);
+
+        final bool success =
+            json.decode(response['success'].toString()) as bool;
+
+        if (success) {
+          emit(
+            state.showMessage(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON,
+              ),
+            ),
+          );
+        } else {
+          emit(
+            state.error(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON,
+              ),
+            ),
+          );
+        }
       } else {
-        final uri = Uri.parse(url);
-        await verify(uri: uri);
+        await host(url: scannedResponse);
       }
     } on FormatException {
       emit(
         state.error(
           messageHandler: ResponseMessage(
             ResponseString
-                .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
+                .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
           ),
         ),
       );
@@ -73,7 +102,44 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           state.error(
             messageHandler: ResponseMessage(
               ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> host({required String? url}) async {
+    emit(state.loading(isDeepLink: false));
+    try {
+      if (url == null || url.isEmpty) {
+        throw ResponseMessage(
+          ResponseString
+              .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
+        );
+      } else {
+        final uri = Uri.parse(url);
+        await verify(uri: uri);
+      }
+    } on FormatException {
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
+          ),
+        ),
+      );
+    } catch (e) {
+      if (e is MessageHandler) {
+        emit(state.error(messageHandler: e));
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
         );

@@ -16,6 +16,7 @@ import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +100,7 @@ class App extends StatelessWidget {
             jwtDecode: JWTDecode(),
             profileCubit: context.read<ProfileCubit>(),
             walletCubit: context.read<WalletCubit>(),
+            beacon: Beacon(),
           ),
         ),
         BlocProvider(

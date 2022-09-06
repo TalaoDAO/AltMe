@@ -149,6 +149,12 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED:
         return globalMessage.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED;
+
+      case ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON:
+        return globalMessage.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON;
+
+      case ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON:
+        return globalMessage.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON;
     }
   }
 }

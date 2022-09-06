@@ -47,9 +47,18 @@ class QRCodeScanState extends Equatable {
     );
   }
 
+  QRCodeScanState showMessage({required MessageHandler messageHandler}) {
+    return QRCodeScanState(
+      status: QrScanStatus.message,
+      message: StateMessage.success(messageHandler: messageHandler),
+      isDeepLink: isDeepLink,
+      uri: uri,
+    );
+  }
+
   QRCodeScanState success({
     MessageHandler? messageHandler,
-    required Route route,
+    Route? route,
   }) {
     return QRCodeScanState(
       status: QrScanStatus.success,
@@ -58,7 +67,7 @@ class QRCodeScanState extends Equatable {
           : StateMessage.success(messageHandler: messageHandler),
       isDeepLink: isDeepLink,
       uri: uri,
-      route: route,
+      route: route ?? this.route,
     );
   }
 

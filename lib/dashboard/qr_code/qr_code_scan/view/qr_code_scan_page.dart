@@ -54,9 +54,9 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
             ),
           );
     } else {
-      await context.read<QRCodeScanCubit>().host(
-            url: barcodeScanRes,
-          );
+      await context
+          .read<QRCodeScanCubit>()
+          .process(scannedResponse: barcodeScanRes);
     }
     // Navigator.of(context).pop();
   }
@@ -71,7 +71,8 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
   Widget build(BuildContext context) {
     return BlocListener<QRCodeScanCubit, QRCodeScanState>(
       listener: (context, state) async {
-        if (state.status == QrScanStatus.error) {
+        if (state.status == QrScanStatus.error ||
+            state.status == QrScanStatus.message) {
           if (state.message != null) {
             Navigator.of(context).pop();
           }
