@@ -12,7 +12,11 @@ part 'manage_network_state.dart';
 
 class ManageNetworkCubit extends Cubit<ManageNetworkState> {
   ManageNetworkCubit({required this.secureStorageProvider})
-      : super(ManageNetworkState(network: TezosNetwork.mainNet())) {
+      : super(
+          ManageNetworkState(
+            network: TezosNetwork.mainNet(),
+          ),
+        ) {
     _load();
   }
 

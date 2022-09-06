@@ -16,19 +16,34 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     required this.client,
     required this.walletCubit,
     required this.tokensCubit,
-    required this.selectedToken,
-  }) : super(const SendReceiveHomeState());
+    required TokenModel selectedToken,
+  }) : super(
+          SendReceiveHomeState(selectedToken: selectedToken),
+        );
 
   final DioClient client;
   final WalletCubit walletCubit;
   final TokensCubit tokensCubit;
-  final TokenModel selectedToken;
 
   Future<void> init({String baseUrl = ''}) async {
     try {
       emit(state.loading());
       final operations = await _getOperations(baseUrl);
-      emit(state.success(operations: operations));
+      final tokens = await tokensCubit.getBalanceOfAssetList(offset: 0);
+      late TokenModel selectedToken;
+      try {
+        selectedToken = tokens.firstWhere(
+          (e) =>
+              e.symbol == state.selectedToken.symbol &&
+              e.contractAddress == state.selectedToken.contractAddress,
+        );
+      } catch (e, s) {
+        selectedToken = state.selectedToken
+            .copyWith(balance: '0', tokenUSDPrice: 0, balanceUSDPrice: 0);
+        getLogger(runtimeType.toString())
+            .e('did not found the token: e: $e, s: $s');
+      }
+      emit(state.success(operations: operations, selectedToken: selectedToken));
     } catch (e, s) {
       emit(state.error(messageHandler: MessageHandler()));
       getLogger(runtimeType.toString()).e('error in init() e: $e, $s', e, s);
@@ -56,7 +71,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
 
     final params = <String, dynamic>{
       'anyof.from.to': walletAddress,
-      'token.contract.eq': selectedToken.contractAddress,
+      'token.contract.eq': state.selectedToken.contractAddress,
     };
     final result = await client.get(
       '$baseUrl/v1/tokens/transfers',
@@ -75,7 +90,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
   }
 
   Future<List<OperationModel>> _getOperations(String baseUrl) async {
-    if (selectedToken.standard?.toLowerCase() == 'fa2') {
+    if (state.selectedToken.standard?.toLowerCase() == 'fa2') {
       return _getFa2Transfers(baseUrl);
     }
 
@@ -85,14 +100,14 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
 
     late Map<String, dynamic> params;
 
-    if (selectedToken.symbol == 'XTZ') {
+    if (state.selectedToken.symbol == 'XTZ') {
       params = <String, dynamic>{
         'anyof.sender.target': walletAddress,
         'amount.gt': 0,
       };
     } else {
       params = <String, dynamic>{
-        'anyof.sender.target': selectedToken.contractAddress,
+        'anyof.sender.target': state.selectedToken.contractAddress,
         'entrypoint': 'transfer',
         'parameter.in': jsonEncode([
           {'to': walletAddress},
