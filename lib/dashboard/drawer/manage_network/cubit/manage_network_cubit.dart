@@ -15,10 +15,6 @@ class ManageNetworkCubit extends Cubit<ManageNetworkState> {
       : super(
           ManageNetworkState(
             network: TezosNetwork.mainNet(),
-            allNetworks: [
-              TezosNetwork.mainNet(),
-              TezosNetwork.ghostnet(),
-            ],
           ),
         ) {
     _load();
