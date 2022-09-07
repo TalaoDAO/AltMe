@@ -56,11 +56,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
         );
       } else if (scannedResponse.startsWith('tezos://')) {
-        final String code = scannedResponse.substring(
-          scannedResponse.indexOf('data=') + 5,
-          scannedResponse.length,
-        );
-        final Map response = await beacon.pair(pairingRequest: code);
+        final String pairingRequest =
+            Uri.parse(scannedResponse).queryParameters['data'].toString();
+
+        final Map response =
+            await beacon.addPeer(pairingRequest: pairingRequest);
 
         final bool success =
             json.decode(response['success'].toString()) as bool;
