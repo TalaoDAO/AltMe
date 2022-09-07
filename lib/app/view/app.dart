@@ -6,6 +6,7 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:altme/app/app.dart';
+import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
@@ -103,12 +104,16 @@ class App extends StatelessWidget {
             beacon: Beacon(),
           ),
         ),
+        BlocProvider<BeaconCubit>(
+          create: (context) => BeaconCubit(beacon: Beacon()),
+        ),
         BlocProvider(
           create: (context) => SplashCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
             didCubit: context.read<DIDCubit>(),
             homeCubit: context.read<HomeCubit>(),
             walletCubit: context.read<WalletCubit>(),
+            beaconCubit: context.read<BeaconCubit>(),
           ),
         ),
         BlocProvider(

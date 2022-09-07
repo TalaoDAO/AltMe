@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
@@ -16,17 +17,21 @@ class MockHomeCubit extends MockCubit<HomeState> implements HomeCubit {}
 
 class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {}
 
+class MockBeaconCubit extends MockCubit<BeaconState> implements BeaconCubit {}
+
 void main() {
   late SecureStorageProvider mockSecureStorage;
   late DIDCubit didCubit;
   late HomeCubit homeCubit;
   late WalletCubit walletCubit;
+  late BeaconCubit beaconCubit;
 
   setUp(() {
     mockSecureStorage = MockSecureStorage();
     didCubit = MockDidCubit();
     homeCubit = MockHomeCubit();
     walletCubit = MockWalletCubit();
+    beaconCubit = MockBeaconCubit();
   });
 
   group('Splash Cubit', () {
@@ -37,6 +42,7 @@ void main() {
           didCubit: didCubit,
           homeCubit: homeCubit,
           walletCubit: walletCubit,
+          beaconCubit: beaconCubit,
         ).state,
         SplashStatus.init,
       );
@@ -55,6 +61,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            beaconCubit: beaconCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -72,6 +79,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            beaconCubit: beaconCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -96,6 +104,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            beaconCubit: beaconCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -113,6 +122,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            beaconCubit: beaconCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -139,6 +149,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            beaconCubit: beaconCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -156,6 +167,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            beaconCubit: beaconCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -184,6 +196,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            beaconCubit: beaconCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -201,6 +214,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            beaconCubit: beaconCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -231,6 +245,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            beaconCubit: beaconCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -248,6 +263,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            beaconCubit: beaconCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -272,6 +288,7 @@ void main() {
               didCubit: didCubit,
               homeCubit: homeCubit,
               walletCubit: walletCubit,
+              beaconCubit: beaconCubit,
             );
             await splashCubit.initialiseApp();
 
@@ -289,6 +306,7 @@ void main() {
               didCubit: didCubit,
               homeCubit: homeCubit,
               walletCubit: walletCubit,
+              beaconCubit: beaconCubit,
             );
             await splashCubit.initialiseApp();
 
@@ -306,6 +324,7 @@ void main() {
               didCubit: didCubit,
               homeCubit: homeCubit,
               walletCubit: walletCubit,
+              beaconCubit: beaconCubit,
             );
             await splashCubit.initialiseApp();
 
