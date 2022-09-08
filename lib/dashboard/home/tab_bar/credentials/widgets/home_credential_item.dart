@@ -47,6 +47,7 @@ class RealCredentialItem extends StatelessWidget {
               flex: 8,
               child: CredentialsListPageItem(
                 credentialModel: credentialModel,
+                displayInGrid: true,
               ),
             ),
             const SizedBox(height: 5),

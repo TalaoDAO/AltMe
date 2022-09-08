@@ -6,8 +6,10 @@ class DisplayInList extends StatelessWidget {
   const DisplayInList({
     Key? key,
     required this.credentialModel,
+    required this.displayInGrid,
   }) : super(key: key);
 
+  final bool displayInGrid;
   final CredentialModel credentialModel;
 
   @override
@@ -17,6 +19,7 @@ class DisplayInList extends StatelessWidget {
       case CredentialSubjectType.tezosAssociatedWallet:
         return TezosAssociatedAddressDisplayInList(
           credentialModel: credentialModel,
+          displayInGrid: displayInGrid,
         );
       case CredentialSubjectType.certificateOfEmployment:
         return CertificateOfEmploymentDisplayInList(

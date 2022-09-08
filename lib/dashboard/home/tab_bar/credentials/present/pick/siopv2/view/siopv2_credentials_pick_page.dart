@@ -136,6 +136,7 @@ class SIOPV2CredentialPickView extends StatelessWidget {
                   credentials.length,
                   (index) => CredentialsListPageItem(
                     credentialModel: credentials[index],
+                    displayInGrid: false,
                     selected: state.index == index,
                     onTap: () =>
                         context.read<SIOPV2CredentialPickCubit>().toggle(index),

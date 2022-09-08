@@ -54,11 +54,13 @@ class CredentialsListPageItem extends StatelessWidget {
   const CredentialsListPageItem({
     Key? key,
     required this.credentialModel,
+    required this.displayInGrid,
     this.onTap,
     this.selected,
   }) : super(key: key);
 
   final CredentialModel credentialModel;
+  final bool displayInGrid;
   final VoidCallback? onTap;
   final bool? selected;
 
@@ -76,7 +78,10 @@ class CredentialsListPageItem extends StatelessWidget {
           .credentialPreview.credentialSubjectModel.credentialSubjectType
           .backgroundColor(credentialModel),
       child: selected == null
-          ? DisplayInList(credentialModel: credentialModel)
+          ? DisplayInList(
+              credentialModel: credentialModel,
+              displayInGrid: displayInGrid,
+            )
           : displaySelectionElement(context),
     );
   }

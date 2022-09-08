@@ -184,6 +184,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                       ...List.generate(
                         queryState.filteredCredentialList.length,
                         (index) => CredentialsListPageItem(
+                          displayInGrid: false,
                           credentialModel:
                               queryState.filteredCredentialList[index],
                           selected: queryState.selected == index,
