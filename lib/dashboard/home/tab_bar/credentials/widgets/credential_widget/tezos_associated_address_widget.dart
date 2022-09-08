@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -56,14 +58,22 @@ class TezosAssociatedAddressRecto extends Recto {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final tezosAssociatedAddress = credentialModel.credentialPreview
         .credentialSubjectModel as TezosAssociatedAddressModel;
     return CredentialContainer(
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: Container(
+          padding: const EdgeInsets.only(top: Sizes.spaceLarge),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.credentialBackground,
+            image: const DecorationImage(
+              image: AssetImage(
+                ImageStrings.paymentAssetCard,
+              ),
+              fit: BoxFit.fill,
+            ),
             border: Border.all(
               color: Theme.of(context).colorScheme.associatedWalletBorder,
               width: 1.5,
@@ -75,12 +85,13 @@ class TezosAssociatedAddressRecto extends Recto {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Spacer(),
                 FractionallySizedBox(
-                  widthFactor: 0.75,
+                  widthFactor: 0.8,
                   child: MyText(
-                    context.l10n.proofOfOwnership,
-                    style: Theme.of(context).textTheme.proofOfOwnership,
+                    l10n.tezosNetwork,
+                    style: Theme.of(context)
+                        .textTheme
+                        .caption2,
                   ),
                 ),
                 const Spacer(),
@@ -90,7 +101,7 @@ class TezosAssociatedAddressRecto extends Recto {
                     tezosAssociatedAddress.accountName!,
                     style: Theme.of(context)
                         .textTheme
-                        .tezosAssociatedAddressTitleCard,
+                        .subtitle2,
                   ),
                 ),
                 const Spacer(),
@@ -98,7 +109,7 @@ class TezosAssociatedAddressRecto extends Recto {
                   tezosAssociatedAddress.associatedAddress?.isEmpty == true
                       ? ''
                       : tezosAssociatedAddress.associatedAddress.toString(),
-                  style: Theme.of(context).textTheme.tezosAssociatedAddressData,
+                  style: Theme.of(context).textTheme.caption2,
                   maxLines: 2,
                 ),
                 const Spacer(),
