@@ -96,22 +96,17 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           break;
       }
     }
-
+/* Disable display of dummies when displaying credentials.
+// TODO(all)Uncomment if we need to display dummies again. 
     /// adding dummy gaming credentials
-    for (final credentialSubjectType in gamingCategories) {
-      gamingCredentials.add(HomeCredential.isDummy(credentialSubjectType));
-    }
+    gamingCredentials.addAll(dummyListFromCategory(gamingCategories));
 
     /// adding dummy community credentials
-    for (final credentialSubjectType in communityCategories) {
-      communityCredentials.add(HomeCredential.isDummy(credentialSubjectType));
-    }
+    communityCredentials.addAll(dummyListFromCategory(communityCategories));
 
     /// adding dummy identity credentials
-    for (final credentialSubjectType in identityCategories) {
-      identityCredentials.add(HomeCredential.isDummy(credentialSubjectType));
-    }
-
+    identityCredentials.addAll(dummyListFromCategory(identityCategories));
+*/
     emit(
       state.populate(
         gamingCredentials: gamingCredentials,
@@ -121,6 +116,16 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         othersCredentials: othersCredentials,
       ),
     );
+  }
+
+  List<HomeCredential> dummyListFromCategory(
+    List<CredentialSubjectType> categories,
+  ) {
+    final List<HomeCredential> dummyCredentialsList = [];
+    for (final credentialSubjectType in categories) {
+      dummyCredentialsList.add(HomeCredential.isDummy(credentialSubjectType));
+    }
+    return dummyCredentialsList;
   }
 
   Future insertCredential(CredentialModel credential) async {
