@@ -75,65 +75,68 @@ class TezosAssociatedAddressRecto extends Recto {
     return CredentialContainer(
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
-        child: Container(
-          padding: EdgeInsets.only(
-            top: largeSize ? Sizes.space3XLarge : Sizes.spaceLarge,
-            left: Sizes.space2XSmall,
-          ),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.credentialBackground,
-            image: const DecorationImage(
-              image: AssetImage(
-                ImageStrings.paymentAssetCard,
+        child: LayoutBuilder(
+          builder: (_, constraint) => Container(
+            padding: EdgeInsets.only(
+              top: constraint.biggest.height * 0.245,
+              left: largeSize ? Sizes.space2XSmall : 0,
+            ),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.credentialBackground,
+              image: const DecorationImage(
+                image: AssetImage(
+                  ImageStrings.paymentAssetCard,
+                ),
+                fit: BoxFit.fill,
               ),
-              fit: BoxFit.fill,
+              border: Border.all(
+                color: Theme.of(context).colorScheme.associatedWalletBorder,
+                width: 1.5,
+              ),
+              borderRadius: BorderRadius.circular(Sizes.credentialBorderRadius),
             ),
-            border: Border.all(
-              color: Theme.of(context).colorScheme.associatedWalletBorder,
-              width: 1.5,
-            ),
-            borderRadius: BorderRadius.circular(Sizes.credentialBorderRadius),
-          ),
-          child: FractionallySizedBox(
-            widthFactor: 0.9,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                FractionallySizedBox(
-                  widthFactor: 0.8,
-                  child: MyText(
-                    l10n.tezosNetwork,
+            child: FractionallySizedBox(
+              widthFactor: 0.9,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FractionallySizedBox(
+                    widthFactor: 0.8,
+                    child: MyText(
+                      l10n.tezosNetwork,
+                      style: largeSize
+                          ? Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.subtitle2,
+                              )
+                          : Theme.of(context).textTheme.caption2,
+                    ),
+                  ),
+                  const Spacer(),
+                  FractionallySizedBox(
+                    widthFactor: 0.8,
+                    child: MyText(
+                      tezosAssociatedAddress.accountName!,
+                      style: largeSize
+                          ? Theme.of(context).textTheme.headline6
+                          : Theme.of(context).textTheme.subtitle2,
+                    ),
+                  ),
+                  const Spacer(),
+                  MyText(
+                    tezosAssociatedAddress.associatedAddress?.isEmpty == true
+                        ? ''
+                        : tezosAssociatedAddress.associatedAddress.toString(),
                     style: largeSize
                         ? Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.titleColor,
+                              color: Theme.of(context).colorScheme.subtitle2,
                             )
                         : Theme.of(context).textTheme.caption2,
+                    minFontSize: 8,
+                    maxLines: 2,
                   ),
-                ),
-                const Spacer(),
-                FractionallySizedBox(
-                  widthFactor: 0.8,
-                  child: MyText(
-                    tezosAssociatedAddress.accountName!,
-                    style: largeSize
-                        ? Theme.of(context).textTheme.headline6
-                        : Theme.of(context).textTheme.subtitle2,
-                  ),
-                ),
-                const Spacer(),
-                MyText(
-                  tezosAssociatedAddress.associatedAddress?.isEmpty == true
-                      ? ''
-                      : tezosAssociatedAddress.associatedAddress.toString(),
-                  style: largeSize
-                      ? Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.titleColor,
-                          )
-                      : Theme.of(context).textTheme.caption2,
-                  maxLines: 2,
-                ),
-                const Spacer(),
-              ],
+                  const Spacer(),
+                ],
+              ),
             ),
           ),
         ),
