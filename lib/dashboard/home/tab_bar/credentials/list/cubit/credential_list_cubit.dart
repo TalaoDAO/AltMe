@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/constants/discover_list.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
@@ -160,8 +161,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           );
           if (dummyCredential != null) {
             _credentials.remove(dummyCredential);
-            identityCategories.remove(over18);
           }
+          identityCategories.remove(over18);
         }
         if (credentialSubjectType == identityCredentialCard) {
           /// remove dummy over18 credentials if exists
@@ -172,8 +173,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           );
           if (dummyCredential != null) {
             _credentials.remove(dummyCredential);
-            identityCategories.remove(identityCredentialCard);
           }
+          identityCategories.remove(identityCredentialCard);
         }
 
         emit(
@@ -372,6 +373,9 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         identityCredentials: [],
         proofOfOwnershipCredentials: [],
         othersCredentials: [],
+        gamingCategories: List.from(DiscoverList.gamingCategories),
+        communityCategories: List.from(DiscoverList.communityCategories),
+        identityCategories: List.from(DiscoverList.identityCategories),
       ),
     );
   }

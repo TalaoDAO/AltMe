@@ -18,20 +18,12 @@ class CredentialListState extends Equatable {
         identityCredentials = identityCredentials ?? [],
         proofOfOwnershipCredentials = proofOfOwnershipCredentials ?? [],
         othersCredentials = othersCredentials ?? [],
-        gamingCategories = gamingCategories ??
-            [
-              CredentialSubjectType.tezVoucher,
-            ],
-        communityCategories = communityCategories ??
-            [
-              // CredentialSubjectType.talaoCommunityCard
-            ],
-        identityCategories = identityCategories ??
-            [
-              CredentialSubjectType.emailPass,
-              CredentialSubjectType.over18,
-              CredentialSubjectType.identityCard,
-            ];
+        gamingCategories =
+            gamingCategories ?? List.from(DiscoverList.gamingCategories),
+        communityCategories =
+            communityCategories ?? List.from(DiscoverList.communityCategories),
+        identityCategories =
+            identityCategories ?? List.from(DiscoverList.identityCategories);
 
   factory CredentialListState.fromJson(Map<String, dynamic> json) =>
       _$CredentialListStateFromJson(json);
