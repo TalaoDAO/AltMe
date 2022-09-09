@@ -29,13 +29,13 @@ class DiscoverPage extends StatelessWidget {
             },
             state: state.populate(
               gamingCredentials: credentialListCubit.dummyListFromCategory(
-                credentialListCubit.gamingCategories,
+                state.gamingCategories,
               ),
               communityCredentials: credentialListCubit.dummyListFromCategory(
-                credentialListCubit.communityCategories,
+                state.communityCategories,
               ),
               identityCredentials: credentialListCubit.dummyListFromCategory(
-                credentialListCubit.identityCategories,
+                state.identityCategories,
               ),
               proofOfOwnershipCredentials: [],
               othersCredentials: [],
