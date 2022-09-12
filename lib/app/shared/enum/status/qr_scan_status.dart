@@ -1,5 +1,6 @@
 enum QrScanStatus {
   init,
+  idle,
   loading,
   acceptHost,
   message,

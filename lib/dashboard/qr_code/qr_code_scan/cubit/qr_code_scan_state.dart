@@ -56,12 +56,13 @@ class QRCodeScanState extends Equatable {
     );
   }
 
-  QRCodeScanState success({
+  QRCodeScanState copyWith({
+    QrScanStatus qrScanStatus = QrScanStatus.idle,
     MessageHandler? messageHandler,
     Route? route,
   }) {
     return QRCodeScanState(
-      status: QrScanStatus.success,
+      status: qrScanStatus,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),

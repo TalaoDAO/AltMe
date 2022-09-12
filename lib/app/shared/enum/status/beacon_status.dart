@@ -4,4 +4,8 @@ enum BeaconStatus {
   error,
   success,
   idle,
+  permission,
+  signPayload,
+  operation,
+  broadcast,
 }

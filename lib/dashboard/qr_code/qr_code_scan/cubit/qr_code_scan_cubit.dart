@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -29,6 +30,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.deepLinkCubit,
     required this.jwtDecode,
     required this.beacon,
+    required this.secureStorageProvider,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -40,6 +42,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final DeepLinkCubit deepLinkCubit;
   final JWTDecode jwtDecode;
   final Beacon beacon;
+  final SecureStorageProvider secureStorageProvider;
 
   @override
   Future<void> close() async {
@@ -59,29 +62,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final String pairingRequest =
             Uri.parse(scannedResponse).queryParameters['data'].toString();
 
-        final Map response =
-            await beacon.addPeer(pairingRequest: pairingRequest);
+        await beacon.pair(pairingRequest: pairingRequest);
 
-        final bool success =
-            json.decode(response['success'].toString()) as bool;
+        await secureStorageProvider.set(
+          SecureStorageKeys.pairingRequest,
+          pairingRequest,
+        );
 
-        if (success) {
-          emit(
-            state.showMessage(
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON,
-              ),
-            ),
-          );
-        } else {
-          emit(
-            state.error(
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON,
-              ),
-            ),
-          );
-        }
+        emit(state.copyWith(qrScanStatus: QrScanStatus.idle));
       } else {
         await host(url: scannedResponse);
       }
@@ -193,7 +181,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               ),
             ),
           );
-          emit(state.success(route: IssuerWebsitesPage.route('')));
+          emit(
+            state.copyWith(
+              qrScanStatus: QrScanStatus.success,
+              route: IssuerWebsitesPage.route(''),
+            ),
+          );
 
           return;
         }
@@ -259,13 +252,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         if (selectedCredentials.isEmpty) {
           emit(
-            state.success(route: IssuerWebsitesPage.route(openIdCredential)),
+            state.copyWith(
+              qrScanStatus: QrScanStatus.success,
+              route: IssuerWebsitesPage.route(openIdCredential),
+            ),
           );
           return;
         }
 
         emit(
-          state.success(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.success,
             route: SIOPV2CredentialPickPage.route(
               credentials: selectedCredentials,
               sIOPV2Param: sIOPV2Param,
@@ -309,7 +306,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         case 'CredentialOffer':
           log.i('Credential Offer');
           emit(
-            state.success(
+            state.copyWith(
+              qrScanStatus: QrScanStatus.success,
               route: CredentialsReceivePage.route(
                 uri: uri,
                 preview: data as Map<String, dynamic>,
@@ -338,7 +336,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             } else if (data['query'].first['type'] == 'QueryByExample') {
               log.i('QueryByExample');
               emit(
-                state.success(
+                state.copyWith(
+                  qrScanStatus: QrScanStatus.success,
                   route: QueryByExamplePresentPage.route(
                     uri: uri,
                     preview: data as Map<String, dynamic>,
@@ -353,7 +352,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             }
           } else {
             emit(
-              state.success(
+              state.copyWith(
+                qrScanStatus: QrScanStatus.success,
                 route: QueryByExamplePresentPage.route(
                   uri: uri,
                   preview: data as Map<String, dynamic>,

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:altme/app/shared/constants/constants.dart';
-import 'package:altme/beacon/beacon.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -10,7 +9,6 @@ Future<bool> isWalletCreated({
   required SecureStorageProvider secureStorageProvider,
   required DIDCubit didCubit,
   required WalletCubit walletCubit,
-  required BeaconCubit beaconCubit,
 }) async {
   final String? ssiMnemonic =
       await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
@@ -97,8 +95,6 @@ Future<bool> isWalletCreated({
     didMethodName: didMethodName,
     verificationMethod: verificationMethod,
   );
-
-  await beaconCubit.startBeacon();
 
   return true;
 }

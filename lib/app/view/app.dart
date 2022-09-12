@@ -102,10 +102,8 @@ class App extends StatelessWidget {
             profileCubit: context.read<ProfileCubit>(),
             walletCubit: context.read<WalletCubit>(),
             beacon: Beacon(),
+            secureStorageProvider: secure_storage.getSecureStorage,
           ),
-        ),
-        BlocProvider<BeaconCubit>(
-          create: (context) => BeaconCubit(beacon: Beacon()),
         ),
         BlocProvider(
           create: (context) => SplashCubit(
@@ -113,7 +111,6 @@ class App extends StatelessWidget {
             didCubit: context.read<DIDCubit>(),
             homeCubit: context.read<HomeCubit>(),
             walletCubit: context.read<WalletCubit>(),
-            beaconCubit: context.read<BeaconCubit>(),
           ),
         ),
         BlocProvider(
@@ -136,6 +133,9 @@ class App extends StatelessWidget {
             ),
             walletCubit: context.read<WalletCubit>(),
           ),
+        ),
+        BlocProvider<BeaconCubit>(
+          create: (context) => BeaconCubit(beacon: Beacon()),
         ),
       ],
       child: const MaterialAppDefinition(),
