@@ -51,13 +51,12 @@ class UiDate {
 
   static String formatDateForCredentialCard(String date) {
     try {
-      return DateFormat('ddFF MMM yyyy')
-          .format(
-            DateFormat('y-M-dThh:mm:ssZ').parse(
-              date,
-            ),
-          )
-          .replaceFirst('FF', 'th');
+      return DateFormat("dd'th' MMM yyyy").format(
+        DateFormat('y-M-dThh:mm:ssZ').parse(
+          date,
+        ),
+      );
+      //.replaceFirst('FF', 'th');
     } catch (_) {
       return '';
     }
