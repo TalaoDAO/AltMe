@@ -3,7 +3,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class EmailPassDisplayInList extends StatelessWidget {
   const EmailPassDisplayInList({
@@ -141,7 +140,6 @@ class EmailPassRecto extends Recto {
                 heightFactor: 0.12,
                 widthFactor: 0.4,
                 child: MyText(
-                  // TODO(all): change to expiration date
                   credentialModel.expirationDate == null
                       ? '--'
                       : UiDate.formatDateForCredentialCard(
