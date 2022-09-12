@@ -48,4 +48,18 @@ class UiDate {
       return null;
     }
   }
+
+  static String formatDateForCredentialCard(String date) {
+    try {
+      return DateFormat('ddFF MMM yyyy')
+          .format(
+            DateFormat('y-M-dThh:mm:ssZ').parse(
+              date,
+            ),
+          )
+          .replaceFirst('FF', 'th');
+    } catch (_) {
+      return '';
+    }
+  }
 }

@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EmailPassDisplayInList extends StatelessWidget {
   const EmailPassDisplayInList({
@@ -103,7 +104,7 @@ class EmailPassRecto extends Recto {
               id: 'issued-on',
               child: FractionallySizedBox(
                 heightFactor: 0.12,
-                widthFactor: 0.40,
+                widthFactor: 0.4,
                 child: MyText(
                   l10n.issuedOn,
                   style: Theme.of(context).textTheme.subMessage,
@@ -114,9 +115,11 @@ class EmailPassRecto extends Recto {
               id: 'issued-on-value',
               child: FractionallySizedBox(
                 heightFactor: 0.12,
-                widthFactor: 0.40,
+                widthFactor: 0.4,
                 child: MyText(
-                  credentialModel.credentialPreview.issuanceDate,
+                  UiDate.formatDateForCredentialCard(
+                    credentialModel.credentialPreview.issuanceDate,
+                  ),
                   style: Theme.of(context).textTheme.title,
                 ),
               ),
@@ -125,7 +128,7 @@ class EmailPassRecto extends Recto {
               id: 'expiration-date',
               child: FractionallySizedBox(
                 heightFactor: 0.12,
-                widthFactor: 0.40,
+                widthFactor: 0.4,
                 child: MyText(
                   l10n.expirationDate,
                   style: Theme.of(context).textTheme.subMessage,
@@ -136,10 +139,14 @@ class EmailPassRecto extends Recto {
               id: 'expiration-date-value',
               child: FractionallySizedBox(
                 heightFactor: 0.12,
-                widthFactor: 0.40,
+                widthFactor: 0.4,
                 child: MyText(
                   // TODO(all): change to expiration date
-                  credentialModel.credentialPreview.issuanceDate,
+                  credentialModel.expirationDate == null
+                      ? '--'
+                      : UiDate.formatDateForCredentialCard(
+                          credentialModel.expirationDate!,
+                        ),
                   style: Theme.of(context).textTheme.title,
                 ),
               ),
