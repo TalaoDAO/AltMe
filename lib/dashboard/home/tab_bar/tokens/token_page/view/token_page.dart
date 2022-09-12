@@ -120,7 +120,8 @@ class _TokenViewState extends State<TokenView> {
                   }
 
                   if (state.message != null &&
-                      state.status != AppStatus.errorWhileFetching) {
+                          state.status == AppStatus.error ||
+                      state.status == AppStatus.errorWhileFetching) {
                     AlertMessage.showStateMessage(
                       context: context,
                       stateMessage: state.message!,

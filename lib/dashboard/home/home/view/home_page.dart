@@ -25,11 +25,12 @@ class HomePage extends StatelessWidget {
 
         if (homeState.status == AppStatus.success) {}
       },
+      // TODO(all): Remove IosTabControllerPage when apple accept our NFT #664, https://github.com/TalaoDAO/AltMe/issues/664
       // Setting to hide gallery when on ios
-      // child: isAndroid()
-      //     ? const TabControllerPage()
-      //     : const IosTabControllerPage(),
-      child: const TabControllerPage(),
+      child: isAndroid()
+          ? const TabControllerPage()
+          : const IosTabControllerPage(),
+      // child: const TabControllerPage(),
     );
   }
 }

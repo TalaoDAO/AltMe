@@ -53,9 +53,7 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
   Widget build(BuildContext context) {
     return BlocProvider<SendReceiveHomeCubit>(
       create: (_) => sendReceiveHomeCubit,
-      child: _SendReceiveHomePageView(
-        selectedToken: widget.selectedToken,
-      ),
+      child: const _SendReceiveHomePageView(),
     );
   }
 }
@@ -63,10 +61,7 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
 class _SendReceiveHomePageView extends StatefulWidget {
   const _SendReceiveHomePageView({
     Key? key,
-    required this.selectedToken,
   }) : super(key: key);
-
-  final TokenModel selectedToken;
 
   @override
   State<_SendReceiveHomePageView> createState() =>
@@ -138,7 +133,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     CachedImageFromNetwork(
-                      widget.selectedToken.iconUrl ?? '',
+                      state.selectedToken.iconUrl ?? '',
                       width: Sizes.icon3x,
                       height: Sizes.icon3x,
                       borderRadius: const BorderRadius.all(
@@ -152,7 +147,11 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                       l10n.myTokens,
                       style: Theme.of(context).textTheme.headline5,
                     ),
-                    const TezosNetworkSwitcherButton(),
+                    TezosNetworkSwitcherButton(
+                      onTap: () {
+                        ChangeNetworkBottomSheetView.show(context: context);
+                      },
+                    ),
                     const SizedBox(
                       height: Sizes.spaceLarge,
                     ),
@@ -160,7 +159,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         MyText(
-                          widget.selectedToken.calculatedBalance.formatNumber(),
+                          state.selectedToken.calculatedBalance.formatNumber(),
                           style: Theme.of(context).textTheme.headline4,
                           maxLength: 12,
                         ),
@@ -168,7 +167,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                           width: Sizes.spaceXSmall,
                         ),
                         MyText(
-                          widget.selectedToken.symbol,
+                          state.selectedToken.symbol,
                           style: Theme.of(context).textTheme.headline4,
                           maxLength: 8,
                         ),
@@ -176,7 +175,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                     ),
                     MyText(
                       r'$' +
-                          widget.selectedToken.balanceUSDPrice
+                          state.selectedToken.balanceUSDPrice
                               .toStringAsFixed(2)
                               .formatNumber(),
                       style: Theme.of(context).textTheme.normal,
@@ -205,7 +204,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                               onPressed: () {
                                 Navigator.of(context).push<void>(
                                   SendToPage.route(
-                                    defaultSelectedToken: widget.selectedToken,
+                                    defaultSelectedToken: state.selectedToken,
                                   ),
                                 );
                               },
@@ -233,7 +232,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                                         .state
                                         .currentAccount
                                         .walletAddress,
-                                    tokenSymbol: widget.selectedToken.symbol,
+                                    tokenSymbol: state.selectedToken.symbol,
                                   ),
                                 );
                               },
@@ -246,9 +245,9 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                       height: Sizes.spaceNormal,
                     ),
                     RecentTransactions(
-                      decimal: int.parse(widget.selectedToken.decimals),
-                      symbol: widget.selectedToken.symbol,
-                      tokenUsdPrice: widget.selectedToken.tokenUSDPrice,
+                      decimal: int.parse(state.selectedToken.decimals),
+                      symbol: state.selectedToken.symbol,
+                      tokenUsdPrice: state.selectedToken.tokenUSDPrice,
                       onRefresh: () async {
                         await context
                             .read<SendReceiveHomeCubit>()

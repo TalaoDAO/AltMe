@@ -4,6 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// TODO(all): Remove IosTabControllerPage when apple accept our NFT #664, https://github.com/TalaoDAO/AltMe/issues/664
 class IosTabControllerPage extends StatelessWidget {
   const IosTabControllerPage({Key? key}) : super(key: key);
 
