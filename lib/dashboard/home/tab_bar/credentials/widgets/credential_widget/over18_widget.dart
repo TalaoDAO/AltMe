@@ -14,7 +14,7 @@ class Over18DisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Over18Recto();
+    return Over18Recto(credentialModel: credentialModel);
   }
 }
 
@@ -28,7 +28,7 @@ class Over18DisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Over18Recto();
+    return Over18Recto(credentialModel: credentialModel);
   }
 }
 
@@ -42,34 +42,12 @@ class Over18DisplayDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CardAnimation(
-          recto: const Over18Recto(),
-          verso: Over18Verso(credentialModel: credentialModel),
-        ),
-      ],
-    );
+    return Over18Recto(credentialModel: credentialModel);
   }
 }
 
-class Over18Recto extends Recto {
-  const Over18Recto({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const CredentialImage(
-      image: ImageStrings.over18Back,
-      child: AspectRatio(
-        aspectRatio: Sizes.credentialAspectRatio,
-        child: SizedBox.shrink(),
-      ),
-    );
-  }
-}
-
-class Over18Verso extends Verso {
-  const Over18Verso({Key? key, required this.credentialModel})
+class Over18Recto extends Verso {
+  const Over18Recto({Key? key, required this.credentialModel})
       : super(key: key);
   final CredentialModel credentialModel;
 
@@ -77,41 +55,82 @@ class Over18Verso extends Verso {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final over18Model =
-        credentialModel.credentialPreview.credentialSubjectModel as Over18Model;
-    final expirationDate = credentialModel.expirationDate;
-    final issuerName = over18Model.issuedBy!.name;
-
     return CredentialImage(
-      image: ImageStrings.over18Front,
+      image: ImageStrings.over18,
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: CustomMultiChildLayout(
+          delegate: Over18RectoDelegate(position: Offset.zero),
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 24, left: 24),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: SizedBox(
-                  height: 40,
-                  child: CachedImageFromNetwork(
-                    over18Model.issuedBy!.logo,
-                    fit: BoxFit.cover,
+            LayoutId(
+              id: 'provided-by',
+              child: FractionallySizedBox(
+                widthFactor: 0.75,
+                heightFactor: 0.15,
+                child: MyRichText(
+                  text: TextSpan(
+                    text: '${l10n.providedBy} ',
+                    style: Theme.of(context).textTheme.subMessage,
+                    children: [
+                      TextSpan(
+                        text: credentialModel.credentialPreview
+                            .credentialSubjectModel.issuedBy?.name,
+                        style: Theme.of(context).textTheme.title,
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-            if (expirationDate != null)
-              TextWithOver18CardStyle(
-                value: '${l10n.expires}: ${UiDate.formatStringDate(
-                  expirationDate,
-                )}',
-              )
-            else
-              const SizedBox.shrink(),
-            TextWithOver18CardStyle(
-              value: '${l10n.issuer}: $issuerName',
+            LayoutId(
+              id: 'issued-on',
+              child: FractionallySizedBox(
+                heightFactor: 0.12,
+                widthFactor: 0.4,
+                child: MyText(
+                  l10n.issuedOn,
+                  style: Theme.of(context).textTheme.subMessage,
+                ),
+              ),
+            ),
+            LayoutId(
+              id: 'issued-on-value',
+              child: FractionallySizedBox(
+                heightFactor: 0.12,
+                widthFactor: 0.4,
+                child: MyText(
+                  UiDate.formatDateForCredentialCard(
+                    credentialModel.credentialPreview.issuanceDate,
+                  ),
+                  style: Theme.of(context).textTheme.title,
+                ),
+              ),
+            ),
+            LayoutId(
+              id: 'expiration-date',
+              child: FractionallySizedBox(
+                heightFactor: 0.12,
+                widthFactor: 0.4,
+                child: MyText(
+                  l10n.expirationDate,
+                  style: Theme.of(context).textTheme.subMessage,
+                ),
+              ),
+            ),
+            LayoutId(
+              id: 'expiration-date-value',
+              child: FractionallySizedBox(
+                heightFactor: 0.12,
+                widthFactor: 0.4,
+                child: MyText(
+                  credentialModel.expirationDate == null
+                      ? '--'
+                      : UiDate.formatDateForCredentialCard(
+                          credentialModel.expirationDate!,
+                        ),
+                  style: Theme.of(context).textTheme.title,
+                ),
+              ),
             ),
           ],
         ),
@@ -120,23 +139,57 @@ class Over18Verso extends Verso {
   }
 }
 
-class TextWithOver18CardStyle extends StatelessWidget {
-  const TextWithOver18CardStyle({
-    Key? key,
-    required this.value,
-  }) : super(key: key);
+class Over18RectoDelegate extends MultiChildLayoutDelegate {
+  Over18RectoDelegate({this.position = Offset.zero});
 
-  final String value;
+  final Offset position;
 
   @override
-  Widget build(BuildContext context) {
-    if (value != '') {
-      return Padding(
-        padding: const EdgeInsets.all(24),
-        child: Text(value, style: Theme.of(context).textTheme.over18),
-      );
-    } else {
-      return const SizedBox.shrink();
+  void performLayout(Size size) {
+    if (hasChild('name')) {
+      layoutChild('name', BoxConstraints.loose(size));
+      positionChild('name', Offset(size.width * 0.06, size.height * 0.14));
     }
+    if (hasChild('provided-by')) {
+      layoutChild('provided-by', BoxConstraints.loose(size));
+      positionChild(
+        'provided-by',
+        Offset(size.width * 0.06, size.height * 0.27),
+      );
+    }
+
+    if (hasChild('issued-on')) {
+      layoutChild('issued-on', BoxConstraints.loose(size));
+      positionChild(
+        'issued-on',
+        Offset(size.width * 0.06, size.height * 0.70),
+      );
+    }
+    if (hasChild('issued-on-value')) {
+      layoutChild('issued-on-value', BoxConstraints.loose(size));
+      positionChild(
+        'issued-on-value',
+        Offset(size.width * 0.06, size.height * 0.82),
+      );
+    }
+    if (hasChild('expiration-date')) {
+      layoutChild('expiration-date', BoxConstraints.loose(size));
+      positionChild(
+        'expiration-date',
+        Offset(size.width * 0.5, size.height * 0.70),
+      );
+    }
+    if (hasChild('expiration-date-value')) {
+      layoutChild('expiration-date-value', BoxConstraints.loose(size));
+      positionChild(
+        'expiration-date-value',
+        Offset(size.width * 0.5, size.height * 0.82),
+      );
+    }
+  }
+
+  @override
+  bool shouldRelayout(Over18RectoDelegate oldDelegate) {
+    return oldDelegate.position != position;
   }
 }

@@ -162,10 +162,6 @@ class IdentityPassRectoDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    if (hasChild('name')) {
-      layoutChild('name', BoxConstraints.loose(size));
-      positionChild('name', Offset(size.width * 0.06, size.height * 0.14));
-    }
     if (hasChild('provided-by')) {
       layoutChild('provided-by', BoxConstraints.loose(size));
       positionChild(
