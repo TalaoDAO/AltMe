@@ -8,17 +8,14 @@ class TezosAssociatedAddressDisplayInList extends StatelessWidget {
   const TezosAssociatedAddressDisplayInList({
     Key? key,
     required this.credentialModel,
-    required this.displayInGrid,
   }) : super(key: key);
 
   final CredentialModel credentialModel;
-  final bool displayInGrid;
 
   @override
   Widget build(BuildContext context) {
     return TezosAssociatedAddressRecto(
       credentialModel: credentialModel,
-      largeSize: !displayInGrid,
     );
   }
 }
@@ -35,7 +32,6 @@ class TezosAssociatedAddressDisplayInSelectionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return TezosAssociatedAddressRecto(
       credentialModel: credentialModel,
-      largeSize: true,
     );
   }
 }
@@ -52,7 +48,6 @@ class TezosAssociatedAddressDisplayDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return TezosAssociatedAddressRecto(
       credentialModel: credentialModel,
-      largeSize: true,
     );
   }
 }
@@ -61,10 +56,8 @@ class TezosAssociatedAddressRecto extends Recto {
   const TezosAssociatedAddressRecto({
     Key? key,
     required this.credentialModel,
-    this.largeSize = false,
   }) : super(key: key);
 
-  final bool largeSize;
   final CredentialModel credentialModel;
 
   @override
@@ -79,7 +72,6 @@ class TezosAssociatedAddressRecto extends Recto {
           builder: (_, constraint) => Container(
             padding: EdgeInsets.only(
               top: constraint.biggest.height * 0.245,
-              left: largeSize ? Sizes.space2XSmall : 0,
             ),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.credentialBackground,
@@ -104,11 +96,7 @@ class TezosAssociatedAddressRecto extends Recto {
                     widthFactor: 0.8,
                     child: MyText(
                       l10n.tezosNetwork,
-                      style: largeSize
-                          ? Theme.of(context).textTheme.titleMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.subtitle2,
-                              )
-                          : Theme.of(context).textTheme.caption2,
+                      style: Theme.of(context).textTheme.caption2,
                     ),
                   ),
                   const Spacer(),
@@ -116,9 +104,7 @@ class TezosAssociatedAddressRecto extends Recto {
                     widthFactor: 0.8,
                     child: MyText(
                       tezosAssociatedAddress.accountName!,
-                      style: largeSize
-                          ? Theme.of(context).textTheme.headline6
-                          : Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.subtitle2,
                     ),
                   ),
                   const Spacer(),
@@ -126,11 +112,7 @@ class TezosAssociatedAddressRecto extends Recto {
                     tezosAssociatedAddress.associatedAddress?.isEmpty == true
                         ? ''
                         : tezosAssociatedAddress.associatedAddress.toString(),
-                    style: largeSize
-                        ? Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.subtitle2,
-                            )
-                        : Theme.of(context).textTheme.caption2,
+                    style: Theme.of(context).textTheme.caption2,
                     minFontSize: 8,
                     maxLines: 2,
                   ),
