@@ -50,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
+  base_codecs:
+    dependency: transitive
+    description:
+      name: base_codecs
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   beacon_flutter:
     dependency: "direct main"
     description:
