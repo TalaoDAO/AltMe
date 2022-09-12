@@ -791,4 +791,28 @@ extension CustomTextTheme on TextTheme {
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
+
+  TextStyle get beaconRequestPermission => GoogleFonts.roboto(
+        color: const Color(0xff86809D),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get beaconSelectAccont => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+      );
+
+  TextStyle get beaconPermissionTitle => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+      );
+
+  TextStyle get beaconPermissions => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
 }

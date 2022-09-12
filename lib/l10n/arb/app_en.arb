@@ -481,5 +481,13 @@
   "addTokens": "Add tokens",
   "providedBy": "Provided by",
   "issuedOn": "Issued on",
-  "expirationDate": "Expiration date"
+  "expirationDate": "Expiration date",
+  "connect": "Connect",
+  "connection": "Connection",
+  "selectAccountToGrantAccess": "Select account to grant access:",
+  "requestPersmissionTo": "Request Permission to:",
+  "viewAccountBalanceAndNFTs": "View account balance and NFT's",
+  "requestApprovalForTransaction": "Request approval for transaction",
+  "connectedWithBeacon" : "Successfully connect with dApp",
+  "failedToConnectWithBeacon": "Failed to connect with dApp"
 }

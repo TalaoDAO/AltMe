@@ -6,6 +6,7 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:altme/app/app.dart';
+import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
@@ -16,6 +17,7 @@ import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +101,8 @@ class App extends StatelessWidget {
             jwtDecode: JWTDecode(),
             profileCubit: context.read<ProfileCubit>(),
             walletCubit: context.read<WalletCubit>(),
+            beacon: Beacon(),
+            secureStorageProvider: secure_storage.getSecureStorage,
           ),
         ),
         BlocProvider(
@@ -129,6 +133,9 @@ class App extends StatelessWidget {
             ),
             walletCubit: context.read<WalletCubit>(),
           ),
+        ),
+        BlocProvider<BeaconCubit>(
+          create: (context) => BeaconCubit(beacon: Beacon()),
         ),
       ],
       child: const MaterialAppDefinition(),

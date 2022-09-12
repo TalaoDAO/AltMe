@@ -431,7 +431,15 @@
     "addTokens",
     "providedBy",
     "issuedOn",
-    "expirationDate"
+    "expirationDate",
+    "connect",
+    "connection",
+    "selectAccountToGrantAccess",
+    "requestPersmissionTo",
+    "viewAccountBalanceAndNFTs",
+    "requestApprovalForTransaction",
+    "connectedWithBeacon",
+    "failedToConnectWithBeacon"
   ],
 
   "es": [
@@ -866,7 +874,15 @@
     "addTokens",
     "providedBy",
     "issuedOn",
-    "expirationDate"
+    "expirationDate",
+    "connect",
+    "connection",
+    "selectAccountToGrantAccess",
+    "requestPersmissionTo",
+    "viewAccountBalanceAndNFTs",
+    "requestApprovalForTransaction",
+    "connectedWithBeacon",
+    "failedToConnectWithBeacon"
   ],
 
   "fr": [
@@ -1301,7 +1317,15 @@
     "addTokens",
     "providedBy",
     "issuedOn",
-    "expirationDate"
+    "expirationDate",
+    "connect",
+    "connection",
+    "selectAccountToGrantAccess",
+    "requestPersmissionTo",
+    "viewAccountBalanceAndNFTs",
+    "requestApprovalForTransaction",
+    "connectedWithBeacon",
+    "failedToConnectWithBeacon"
   ],
 
   "it": [
@@ -1736,6 +1760,14 @@
     "addTokens",
     "providedBy",
     "issuedOn",
-    "expirationDate"
+    "expirationDate",
+    "connect",
+    "connection",
+    "selectAccountToGrantAccess",
+    "requestPersmissionTo",
+    "viewAccountBalanceAndNFTs",
+    "requestApprovalForTransaction",
+    "connectedWithBeacon",
+    "failedToConnectWithBeacon"
   ]
 }

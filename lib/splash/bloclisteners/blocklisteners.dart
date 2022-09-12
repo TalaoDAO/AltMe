@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/first/onboarding_first.dart';
@@ -184,6 +185,16 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
       AlertMessage.showStateMessage(
         context: context,
         stateMessage: state.message!,
+      );
+    }
+  },
+);
+
+final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
+  listener: (BuildContext context, BeaconState state) {
+    if (state.status == BeaconStatus.permission) {
+      Navigator.of(context).pushReplacement<void, void>(
+        BeaconConfirmConnectionPage.route(beaconRequest: state.beaconRequest!),
       );
     }
   },

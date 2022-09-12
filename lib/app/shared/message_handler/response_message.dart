@@ -196,6 +196,14 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED:
           return ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED
               .localise(context);
+
+        case ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON:
+          return ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON:
+          return ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON
+              .localise(context);
       }
     }
     return '';

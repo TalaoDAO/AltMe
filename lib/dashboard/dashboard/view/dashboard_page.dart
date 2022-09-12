@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
@@ -39,6 +40,7 @@ class _DashboardViewState extends State<DashboardView> {
     Future.delayed(Duration.zero, () {
       /// If there is a deepLink we give do as if it coming from QRCode
       context.read<QRCodeScanCubit>().deepLink();
+      context.read<BeaconCubit>().startBeacon();
     });
     super.initState();
   }

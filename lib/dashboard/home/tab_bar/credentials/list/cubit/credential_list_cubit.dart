@@ -329,12 +329,12 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           );
         //add dummmy over18 credentials
         if (credentialSubjectType == over18) {
-          // TODO(all)Uncomment if we need to display dummies again.
+          // TODO(all): Uncomment if we need to display dummies again.
           // _credentials.add(HomeCredential.isDummy(over18));
           identityCategories.add(over18);
         }
         if (credentialSubjectType == identityCredentialCard) {
-          // TODO(all)Uncomment if we need to display dummies again.
+          // TODO(all): Uncomment if we need to display dummies again.
           // _credentials.add(HomeCredential.isDummy(identityCredentialCard));
           identityCategories.add(identityCredentialCard);
         }
