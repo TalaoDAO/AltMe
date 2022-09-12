@@ -122,6 +122,8 @@ class HomeCubit extends Cubit<HomeState> {
     PassbaseSDK.startVerification(
       onFinish: (identityAccessKey) async {
         //22a363e6-2f93-4dd3-9ac8-6cba5a046acd
+        print('identityAccessKey ******************** : $identityAccessKey');
+
         try {
           final dynamic response = await client.post(
             '/wallet/webhook',
