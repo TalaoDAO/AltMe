@@ -487,5 +487,7 @@
   "selectAccountToGrantAccess": "Select account to grant access:",
   "requestPersmissionTo": "Request Permission to:",
   "viewAccountBalanceAndNFTs": "View account balance and NFT's",
-  "requestApprovalForTransaction": "Request approval for transaction"
+  "requestApprovalForTransaction": "Request approval for transaction",
+  "connectedWithBeacon" : "Successfully connect with dApp",
+  "failedToConnectWithBeacon": "Failed to connect with dApp"
 }

@@ -429,14 +429,17 @@
     "recentTransactions",
     "sendOnlyXtzToThisAddressDescription",
     "addTokens",
-    "connectedWithBeacon",
-    "failedToConnectWithBeacon",
+    "providedBy",
+    "issuedOn",
+    "expirationDate",
     "connect",
     "connection",
     "selectAccountToGrantAccess",
     "requestPersmissionTo",
     "viewAccountBalanceAndNFTs",
-    "requestApprovalForTransaction"
+    "requestApprovalForTransaction",
+    "connectedWithBeacon",
+    "failedToConnectWithBeacon"
   ],
 
   "es": [
@@ -869,14 +872,17 @@
     "recentTransactions",
     "sendOnlyXtzToThisAddressDescription",
     "addTokens",
-    "connectedWithBeacon",
-    "failedToConnectWithBeacon",
+    "providedBy",
+    "issuedOn",
+    "expirationDate",
     "connect",
     "connection",
     "selectAccountToGrantAccess",
     "requestPersmissionTo",
     "viewAccountBalanceAndNFTs",
-    "requestApprovalForTransaction"
+    "requestApprovalForTransaction",
+    "connectedWithBeacon",
+    "failedToConnectWithBeacon"
   ],
 
   "fr": [
@@ -1309,14 +1315,17 @@
     "recentTransactions",
     "sendOnlyXtzToThisAddressDescription",
     "addTokens",
-    "connectedWithBeacon",
-    "failedToConnectWithBeacon",
+    "providedBy",
+    "issuedOn",
+    "expirationDate",
     "connect",
     "connection",
     "selectAccountToGrantAccess",
     "requestPersmissionTo",
     "viewAccountBalanceAndNFTs",
-    "requestApprovalForTransaction"
+    "requestApprovalForTransaction",
+    "connectedWithBeacon",
+    "failedToConnectWithBeacon"
   ],
 
   "it": [
@@ -1749,13 +1758,16 @@
     "recentTransactions",
     "sendOnlyXtzToThisAddressDescription",
     "addTokens",
-    "connectedWithBeacon",
-    "failedToConnectWithBeacon",
+    "providedBy",
+    "issuedOn",
+    "expirationDate",
     "connect",
     "connection",
     "selectAccountToGrantAccess",
     "requestPersmissionTo",
     "viewAccountBalanceAndNFTs",
-    "requestApprovalForTransaction"
+    "requestApprovalForTransaction",
+    "connectedWithBeacon",
+    "failedToConnectWithBeacon"
   ]
 }
