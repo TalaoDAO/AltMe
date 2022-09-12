@@ -65,64 +65,95 @@ class TezosAssociatedAddressRecto extends Recto {
     final l10n = context.l10n;
     final tezosAssociatedAddress = credentialModel.credentialPreview
         .credentialSubjectModel as TezosAssociatedAddressModel;
-    return CredentialContainer(
+    return CredentialImage(
+      image: ImageStrings.paymentAssetCard,
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
-        child: LayoutBuilder(
-          builder: (_, constraint) => Container(
-            padding: EdgeInsets.only(
-              top: constraint.biggest.height * 0.245,
-            ),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.credentialBackground,
-              image: const DecorationImage(
-                image: AssetImage(
-                  ImageStrings.paymentAssetCard,
+        child: CustomMultiChildLayout(
+          delegate: TezosAssociatedAddressRectoDelegate(position: Offset.zero),
+          children: [
+            LayoutId(
+              id: 'name',
+              child: FractionallySizedBox(
+                widthFactor: 0.8,
+                heightFactor: 0.14,
+                child: MyText(
+                  l10n.tezosNetwork,
+                  style: Theme.of(context).textTheme.subMessage.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                 ),
-                fit: BoxFit.fill,
-              ),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.associatedWalletBorder,
-                width: 1.5,
-              ),
-              borderRadius: BorderRadius.circular(Sizes.credentialBorderRadius),
-            ),
-            child: FractionallySizedBox(
-              widthFactor: 0.9,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FractionallySizedBox(
-                    widthFactor: 0.8,
-                    child: MyText(
-                      l10n.tezosNetwork,
-                      style: Theme.of(context).textTheme.caption2,
-                    ),
-                  ),
-                  const Spacer(),
-                  FractionallySizedBox(
-                    widthFactor: 0.8,
-                    child: MyText(
-                      tezosAssociatedAddress.accountName!,
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                  ),
-                  const Spacer(),
-                  MyText(
-                    tezosAssociatedAddress.associatedAddress?.isEmpty == true
-                        ? ''
-                        : tezosAssociatedAddress.associatedAddress.toString(),
-                    style: Theme.of(context).textTheme.caption2,
-                    minFontSize: 8,
-                    maxLines: 2,
-                  ),
-                  const Spacer(),
-                ],
               ),
             ),
-          ),
+            LayoutId(
+              id: 'accountName',
+              child: FractionallySizedBox(
+                widthFactor: 0.8,
+                heightFactor: 0.16,
+                child: MyText(
+                  tezosAssociatedAddress.accountName!,
+                  style: Theme.of(context).textTheme.title,
+                ),
+              ),
+            ),
+            LayoutId(
+              id: 'walletAddress',
+              child: FractionallySizedBox(
+                widthFactor: 0.88,
+                heightFactor: 0.26,
+                child: MyText(
+                  tezosAssociatedAddress.associatedAddress?.isEmpty == true
+                      ? ''
+                      : tezosAssociatedAddress.associatedAddress.toString(),
+                  style: Theme.of(context).textTheme.subMessage.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                  minFontSize: 8,
+                  maxLines: 2,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+}
+
+class TezosAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
+  TezosAssociatedAddressRectoDelegate({this.position = Offset.zero});
+
+  final Offset position;
+
+  @override
+  void performLayout(Size size) {
+    if (hasChild('name')) {
+      layoutChild('name', BoxConstraints.loose(size));
+      positionChild(
+        'name',
+        Offset(size.width * 0.06, size.height * 0.27),
+      );
+    }
+
+    if (hasChild('accountName')) {
+      layoutChild('accountName', BoxConstraints.loose(size));
+      positionChild(
+        'accountName',
+        Offset(size.width * 0.06, size.height * 0.5),
+      );
+    }
+
+    if (hasChild('walletAddress')) {
+      layoutChild('walletAddress', BoxConstraints.loose(size));
+      positionChild(
+        'walletAddress',
+        Offset(size.width * 0.06, size.height * 0.70),
+      );
+    }
+  }
+
+  @override
+  bool shouldRelayout(TezosAssociatedAddressRectoDelegate oldDelegate) {
+    return oldDelegate.position != position;
   }
 }
