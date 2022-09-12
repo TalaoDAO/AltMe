@@ -56,7 +56,6 @@ class UiDate {
           date,
         ),
       );
-      //.replaceFirst('FF', 'th');
     } catch (_) {
       return '';
     }
