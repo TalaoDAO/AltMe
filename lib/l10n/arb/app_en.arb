@@ -478,5 +478,8 @@
   "receive": "Receive",
   "recentTransactions": "Recent transactions",
   "sendOnlyXtzToThisAddressDescription": "Only send XTZ to this address. Sending other tokens may result in permanent loss.",
-  "addTokens": "Add tokens"
+  "addTokens": "Add tokens",
+  "providedBy": "Provided by",
+  "issuedOn": "Issued on",
+  "expirationDate": "Expiration date"
 }
