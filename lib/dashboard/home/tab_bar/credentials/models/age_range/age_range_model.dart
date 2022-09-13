@@ -17,7 +17,6 @@ class AgeRangeModel extends CredentialSubjectModel {
           type: type,
           issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.ageRange,
-          // TODO(all): Not sure that I added correct category for ageRange
           credentialCategory: CredentialCategory.othersCards,
         );
 
