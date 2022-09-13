@@ -490,5 +490,10 @@
   "requestApprovalForTransaction": "Request approval for transaction",
   "connectedWithBeacon" : "Successfully connect with dApp",
   "failedToConnectWithBeacon": "Failed to connect with dApp",
-  "tezosNetwork": "Tezos Network"
+  "tezosNetwork": "Tezos Network",
+  "confirm_sign": "Confirm Sign",
+  "sign": "Sign",
+  "payload_to_sign" : "Payload to Sign",
+  "signedPayload" : "Successfully signed payload",
+  "failedToSignPayload": "Failed to sign the payload"
 }

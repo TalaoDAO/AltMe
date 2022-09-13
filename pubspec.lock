@@ -639,6 +639,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.1"
+  json_rpc_2:
+    dependency: transitive
+    description:
+      name: json_rpc_2
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.2"
   json_serializable:
     dependency: "direct dev"
     description:
@@ -1451,6 +1458,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  web3dart:
+    dependency: "direct main"
+    description:
+      name: web3dart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.5"
   web_socket_channel:
     dependency: transitive
     description:
