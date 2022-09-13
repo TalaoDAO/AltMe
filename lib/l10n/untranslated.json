@@ -432,6 +432,7 @@
     "providedBy",
     "issuedOn",
     "expirationDate",
+    "tezosNetwork",
     "connect",
     "connection",
     "selectAccountToGrantAccess",
@@ -882,7 +883,8 @@
     "viewAccountBalanceAndNFTs",
     "requestApprovalForTransaction",
     "connectedWithBeacon",
-    "failedToConnectWithBeacon"
+    "failedToConnectWithBeacon",
+    "tezosNetwork"
   ],
 
   "fr": [
@@ -1325,7 +1327,8 @@
     "viewAccountBalanceAndNFTs",
     "requestApprovalForTransaction",
     "connectedWithBeacon",
-    "failedToConnectWithBeacon"
+    "failedToConnectWithBeacon",
+    "tezosNetwork"
   ],
 
   "it": [
@@ -1768,6 +1771,7 @@
     "viewAccountBalanceAndNFTs",
     "requestApprovalForTransaction",
     "connectedWithBeacon",
-    "failedToConnectWithBeacon"
+    "failedToConnectWithBeacon",
+    "tezosNetwork"
   ]
 }

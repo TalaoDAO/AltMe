@@ -514,12 +514,6 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get proofOfOwnership => GoogleFonts.nunito(
-        color: const Color(0xffFFFFFF),
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-      );
-
   TextStyle get tezosAssociatedAddressData => GoogleFonts.roboto(
         color: const Color(0xff605A71),
         fontSize: 17,
