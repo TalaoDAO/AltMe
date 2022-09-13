@@ -432,7 +432,6 @@
     "providedBy",
     "issuedOn",
     "expirationDate",
-    "tezosNetwork",
     "connect",
     "connection",
     "selectAccountToGrantAccess",
@@ -440,7 +439,8 @@
     "viewAccountBalanceAndNFTs",
     "requestApprovalForTransaction",
     "connectedWithBeacon",
-    "failedToConnectWithBeacon"
+    "failedToConnectWithBeacon",
+    "tezosNetwork"
   ],
 
   "es": [

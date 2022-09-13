@@ -65,52 +65,61 @@ class BeaconConfirmConnectionView extends StatelessWidget {
           Navigator.of(context).pop();
         }
       },
-      child: BasePage(
-        scrollView: false,
-        title: l10n.connection,
-        titleLeading: const BackLeadingButton(),
-        body: BackgroundCard(
-          height: double.infinity,
-          width: double.infinity,
-          padding: const EdgeInsets.all(Sizes.spaceSmall),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(Sizes.spaceXSmall),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(
-                    beaconRequest.request!.appMetadata!.name!,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: Sizes.spaceXLarge),
-                  const Permissions(),
-                  const SizedBox(height: Sizes.spaceXLarge),
-                  const SelectAccount(),
-                  const SizedBox(
-                    height: Sizes.spaceNormal,
-                  ),
-                ],
+      child: WillPopScope(
+        onWillPop: () async {
+          context.read<BeaconConfirmConnectionCubit>().rejectConnection();
+          return true;
+        },
+        child: BasePage(
+          scrollView: false,
+          title: l10n.connection,
+          titleLeading: BackLeadingButton(
+            onPressed: () =>
+                context.read<BeaconConfirmConnectionCubit>().rejectConnection(),
+          ),
+          body: BackgroundCard(
+            height: double.infinity,
+            width: double.infinity,
+            padding: const EdgeInsets.all(Sizes.spaceSmall),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(Sizes.spaceXSmall),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      beaconRequest.request!.appMetadata!.name!,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: Sizes.spaceXLarge),
+                    const Permissions(),
+                    const SizedBox(height: Sizes.spaceXLarge),
+                    const SelectAccount(),
+                    const SizedBox(
+                      height: Sizes.spaceNormal,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        navigation: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: Sizes.spaceSmall,
-              right: Sizes.spaceSmall,
-              bottom: Sizes.spaceSmall,
-            ),
-            child: MyElevatedButton(
-              borderRadius: Sizes.normalRadius,
-              text: l10n.connect,
-              onPressed: () {
-                context.read<BeaconConfirmConnectionCubit>().connect();
-              },
+          navigation: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: Sizes.spaceSmall,
+                right: Sizes.spaceSmall,
+                bottom: Sizes.spaceSmall,
+              ),
+              child: MyElevatedButton(
+                borderRadius: Sizes.normalRadius,
+                text: l10n.connect,
+                onPressed: () {
+                  context.read<BeaconConfirmConnectionCubit>().connect();
+                },
+              ),
             ),
           ),
         ),

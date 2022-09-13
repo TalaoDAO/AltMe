@@ -54,4 +54,13 @@ class BeaconConfirmConnectionCubit extends Cubit<BeaconConfirmConnectionState> {
       );
     }
   }
+
+  void rejectConnection() {
+    beacon.permissionResponse(
+      id: beaconRequest.request!.id!,
+      publicKey: null,
+      address: null,
+    );
+    emit(state.copyWith(appStatus: AppStatus.success));
+  }
 }
