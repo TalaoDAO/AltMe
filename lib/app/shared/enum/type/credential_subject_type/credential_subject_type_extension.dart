@@ -37,6 +37,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xFF9BF6FF);
       case CredentialSubjectType.emailPass:
         return const Color(0xFFffD6A5);
+      case CredentialSubjectType.ageRange:
+        return const Color(0xFFffC6B5);
       case CredentialSubjectType.phonePass:
         return const Color(0xFFffD6A5);
       case CredentialSubjectType.professionalExperienceAssessment:
@@ -80,6 +82,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return Icons.work;
       case CredentialSubjectType.emailPass:
         return Icons.mail;
+      case CredentialSubjectType.ageRange:
+        return Icons.boy;
       case CredentialSubjectType.phonePass:
         return Icons.phone;
       case CredentialSubjectType.professionalExperienceAssessment:

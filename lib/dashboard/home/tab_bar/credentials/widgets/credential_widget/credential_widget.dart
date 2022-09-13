@@ -1,3 +1,4 @@
+export 'age_range_widget.dart';
 export 'certificate_of_employment_widget.dart';
 export 'default_credential_subject_widget.dart';
 export 'ecole_42_learning_achievement_widget.dart';

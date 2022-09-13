@@ -1,3 +1,4 @@
+export 'age_range/age_range_model.dart';
 export 'author/author.dart';
 export 'certificate_of_employment/certificate_of_employment_model.dart';
 export 'credential/credential.dart';
