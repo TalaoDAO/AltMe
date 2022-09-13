@@ -9,64 +9,72 @@ import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'beacon_confirm_connection_cubit.g.dart';
-part 'beacon_confirm_connection_state.dart';
+part 'beacon_sign_payload_cubit.g.dart';
+part 'beacon_sign_payload_state.dart';
 
-class BeaconConfirmConnectionCubit extends Cubit<BeaconConfirmConnectionState> {
-  BeaconConfirmConnectionCubit({
+class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
+  BeaconSignPayloadCubit({
     required this.walletCubit,
     required this.beacon,
     required this.beaconCubit,
-  }) : super(const BeaconConfirmConnectionState());
+  }) : super(const BeaconSignPayloadState());
 
   final WalletCubit walletCubit;
   final Beacon beacon;
   final BeaconCubit beaconCubit;
 
-  final log = getLogger('BeaconConfirmConnectionCubit');
+  final log = getLogger('BeaconSignPayloadCubit');
 
-  Future<void> connect() async {
+  Future<void> sign() async {
+    log.i('Started signing');
     emit(state.loading());
-    final CryptoAccountData currentAccount = walletCubit.state.currentAccount;
-    final KeyStoreModel sourceKeystore =
-        getKeysFromSecretKey(secretKey: currentAccount.secretKey);
 
-    final Map response = await beacon.permissionResponse(
+    final CryptoAccountData currentAccount = walletCubit.state.currentAccount;
+
+    final dynamic signer = await Dartez.createSigner(
+      Dartez.writeKeyWithHint(currentAccount.secretKey, 'edsk'),
+    );
+
+    //TODO(bibash): Should we sign with current address
+    final signature = Dartez.signPayload(
+      signer: signer as SoftSigner,
+      payload: beaconCubit.state.beaconRequest!.request!.payload!,
+    );
+
+    final Map response = await beacon.signPayloadResponse(
       id: beaconCubit.state.beaconRequest!.request!.id!,
-      publicKey: sourceKeystore.publicKey,
-      address: currentAccount.walletAddress,
+      signature: signature,
     );
 
     final bool success = json.decode(response['success'].toString()) as bool;
 
     if (success) {
-      log.i('Connected to beacon');
+      log.i('Signing success');
       emit(
         state.copyWith(
           appStatus: AppStatus.success,
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON,
+            ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
           ),
         ),
       );
     } else {
-      log.i('error connecting to beacon');
+      log.e('Signing failure');
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON,
+            ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD,
           ),
         ),
       );
     }
   }
 
-  void rejectConnection() {
-    log.i('beacon connection rejected');
-    beacon.permissionResponse(
+  void rejectSigning() {
+    log.i('Signing rejected');
+    beacon.signPayloadResponse(
       id: beaconCubit.state.beaconRequest!.request!.id!,
-      publicKey: null,
-      address: null,
+      signature: null,
     );
     emit(state.copyWith(appStatus: AppStatus.success));
   }

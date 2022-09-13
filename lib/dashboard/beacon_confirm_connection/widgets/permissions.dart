@@ -8,17 +8,27 @@ class Permissions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.requestPersmissionTo,
-          style: Theme.of(context).textTheme.beaconRequestPermission,
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).colorScheme.beaconBorder,
+          width: 1.5,
         ),
-        const SizedBox(height: 5),
-        PermissionText(text: l10n.viewAccountBalanceAndNFTs),
-        PermissionText(text: l10n.requestApprovalForTransaction),
-      ],
+        borderRadius: BorderRadius.circular(15),
+      ),
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.requestPersmissionTo,
+            style: Theme.of(context).textTheme.beaconRequestPermission,
+          ),
+          const SizedBox(height: 5),
+          PermissionText(text: l10n.viewAccountBalanceAndNFTs),
+          PermissionText(text: l10n.requestApprovalForTransaction),
+        ],
+      ),
     );
   }
 }

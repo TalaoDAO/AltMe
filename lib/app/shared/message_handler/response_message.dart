@@ -204,6 +204,14 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON:
           return ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON
               .localise(context);
+
+        case ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD:
+          return ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD:
+          return ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD
+              .localise(context);
       }
     }
     return '';

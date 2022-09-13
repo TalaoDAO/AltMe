@@ -1,47 +1,55 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:web3dart/crypto.dart';
 
-class BeaconConfirmConnectionPage extends StatelessWidget {
-  const BeaconConfirmConnectionPage({
+class BeaconSignPayloadPage extends StatelessWidget {
+  const BeaconSignPayloadPage({
     Key? key,
   }) : super(key: key);
 
   static Route route() {
     return MaterialPageRoute<void>(
-      builder: (_) => const BeaconConfirmConnectionPage(),
-      settings: const RouteSettings(name: '/beaconConfirmConnectionPage'),
+      builder: (_) => const BeaconSignPayloadPage(),
+      settings: const RouteSettings(name: '/BeaconSignPayloadPage'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => BeaconConfirmConnectionCubit(
+      create: (_) => BeaconSignPayloadCubit(
         beacon: Beacon(),
         beaconCubit: context.read<BeaconCubit>(),
         walletCubit: context.read<WalletCubit>(),
       ),
-      child: const BeaconConfirmConnectionView(),
+      child: const BeaconSignPayloadView(),
     );
   }
 }
 
-class BeaconConfirmConnectionView extends StatelessWidget {
-  const BeaconConfirmConnectionView({
+class BeaconSignPayloadView extends StatelessWidget {
+  const BeaconSignPayloadView({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final beaconCubitState = context.read<BeaconCubit>().state;
+    final message =
+        hexToBytes(beaconCubitState.beaconRequest!.request!.payload!);
+    final messageInUtf8 = utf8.decode(message, allowMalformed: true);
+
     final l10n = context.l10n;
-    return BlocListener<BeaconConfirmConnectionCubit,
-        BeaconConfirmConnectionState>(
+    return BlocListener<BeaconSignPayloadCubit, BeaconSignPayloadState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -62,15 +70,15 @@ class BeaconConfirmConnectionView extends StatelessWidget {
       },
       child: WillPopScope(
         onWillPop: () async {
-          context.read<BeaconConfirmConnectionCubit>().rejectConnection();
+          context.read<BeaconSignPayloadCubit>().rejectSigning();
           return true;
         },
         child: BasePage(
           scrollView: false,
-          title: l10n.connection,
+          title: l10n.confirm_sign,
           titleLeading: BackLeadingButton(
             onPressed: () =>
-                context.read<BeaconConfirmConnectionCubit>().rejectConnection(),
+                context.read<BeaconSignPayloadCubit>().rejectSigning(),
           ),
           body: BackgroundCard(
             height: double.infinity,
@@ -85,23 +93,26 @@ class BeaconConfirmConnectionView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Text(
-                      context
-                          .read<BeaconCubit>()
-                          .state
-                          .beaconRequest!
-                          .request!
-                          .appMetadata!
-                          .name!,
+                      beaconCubitState
+                          .beaconRequest!.request!.appMetadata!.name!,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: Sizes.spaceXLarge),
                     const Permissions(),
                     const SizedBox(height: Sizes.spaceXLarge),
-                    const SelectAccount(),
-                    const SizedBox(
-                      height: Sizes.spaceNormal,
+                    Text(
+                      l10n.payload_to_sign,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
+                    const SizedBox(height: Sizes.spaceXSmall),
+                    Text(
+                      messageInUtf8,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.beaconPayload,
+                    ),
+                    const SizedBox(height: Sizes.spaceNormal),
                   ],
                 ),
               ),
@@ -116,9 +127,9 @@ class BeaconConfirmConnectionView extends StatelessWidget {
               ),
               child: MyElevatedButton(
                 borderRadius: Sizes.normalRadius,
-                text: l10n.connect,
+                text: l10n.sign,
                 onPressed: () {
-                  context.read<BeaconConfirmConnectionCubit>().connect();
+                  context.read<BeaconSignPayloadCubit>().sign();
                 },
               ),
             ),

@@ -161,4 +161,9 @@ class GlobalMessage {
 
   String get RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON =>
       l10n.failedToConnectWithBeacon;
+
+  String get RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD => l10n.signedPayload;
+
+  String get RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD =>
+      l10n.failedToSignPayload;
 }

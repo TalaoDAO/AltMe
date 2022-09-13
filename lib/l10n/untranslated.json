@@ -432,7 +432,6 @@
     "providedBy",
     "issuedOn",
     "expirationDate",
-    "tezosNetwork",
     "connect",
     "connection",
     "selectAccountToGrantAccess",
@@ -440,7 +439,13 @@
     "viewAccountBalanceAndNFTs",
     "requestApprovalForTransaction",
     "connectedWithBeacon",
-    "failedToConnectWithBeacon"
+    "failedToConnectWithBeacon",
+    "tezosNetwork",
+    "confirm_sign",
+    "sign",
+    "payload_to_sign",
+    "signedPayload",
+    "failedToSignPayload"
   ],
 
   "es": [
@@ -884,7 +889,12 @@
     "requestApprovalForTransaction",
     "connectedWithBeacon",
     "failedToConnectWithBeacon",
-    "tezosNetwork"
+    "tezosNetwork",
+    "confirm_sign",
+    "sign",
+    "payload_to_sign",
+    "signedPayload",
+    "failedToSignPayload"
   ],
 
   "fr": [
@@ -1328,7 +1338,12 @@
     "requestApprovalForTransaction",
     "connectedWithBeacon",
     "failedToConnectWithBeacon",
-    "tezosNetwork"
+    "tezosNetwork",
+    "confirm_sign",
+    "sign",
+    "payload_to_sign",
+    "signedPayload",
+    "failedToSignPayload"
   ],
 
   "it": [
@@ -1772,6 +1787,11 @@
     "requestApprovalForTransaction",
     "connectedWithBeacon",
     "failedToConnectWithBeacon",
-    "tezosNetwork"
+    "tezosNetwork",
+    "confirm_sign",
+    "sign",
+    "payload_to_sign",
+    "signedPayload",
+    "failedToSignPayload"
   ]
 }
