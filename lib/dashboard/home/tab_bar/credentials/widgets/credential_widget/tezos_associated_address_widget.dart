@@ -14,7 +14,9 @@ class TezosAssociatedAddressDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(credentialModel: credentialModel);
+    return TezosAssociatedAddressRecto(
+      credentialModel: credentialModel,
+    );
   }
 }
 
@@ -28,7 +30,9 @@ class TezosAssociatedAddressDisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(credentialModel: credentialModel);
+    return TezosAssociatedAddressRecto(
+      credentialModel: credentialModel,
+    );
   }
 }
 
@@ -42,7 +46,9 @@ class TezosAssociatedAddressDisplayDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(credentialModel: credentialModel);
+    return TezosAssociatedAddressRecto(
+      credentialModel: credentialModel,
+    );
   }
 }
 
@@ -56,57 +62,98 @@ class TezosAssociatedAddressRecto extends Recto {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final tezosAssociatedAddress = credentialModel.credentialPreview
         .credentialSubjectModel as TezosAssociatedAddressModel;
-    return CredentialContainer(
+    return CredentialImage(
+      image: ImageStrings.paymentAssetCard,
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.credentialBackground,
-            border: Border.all(
-              color: Theme.of(context).colorScheme.associatedWalletBorder,
-              width: 1.5,
+        child: CustomMultiChildLayout(
+          delegate: TezosAssociatedAddressRectoDelegate(position: Offset.zero),
+          children: [
+            LayoutId(
+              id: 'name',
+              child: FractionallySizedBox(
+                widthFactor: 0.8,
+                heightFactor: 0.14,
+                child: MyText(
+                  l10n.tezosNetwork,
+                  style: Theme.of(context).textTheme.subMessage.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                ),
+              ),
             ),
-            borderRadius: BorderRadius.circular(Sizes.credentialBorderRadius),
-          ),
-          child: FractionallySizedBox(
-            widthFactor: 0.9,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Spacer(),
-                FractionallySizedBox(
-                  widthFactor: 0.75,
-                  child: MyText(
-                    context.l10n.proofOfOwnership,
-                    style: Theme.of(context).textTheme.proofOfOwnership,
-                  ),
+            LayoutId(
+              id: 'accountName',
+              child: FractionallySizedBox(
+                widthFactor: 0.8,
+                heightFactor: 0.16,
+                child: MyText(
+                  tezosAssociatedAddress.accountName!,
+                  style: Theme.of(context).textTheme.title,
                 ),
-                const Spacer(),
-                FractionallySizedBox(
-                  widthFactor: 0.8,
-                  child: MyText(
-                    tezosAssociatedAddress.accountName!,
-                    style: Theme.of(context)
-                        .textTheme
-                        .tezosAssociatedAddressTitleCard,
-                  ),
-                ),
-                const Spacer(),
-                MyText(
+              ),
+            ),
+            LayoutId(
+              id: 'walletAddress',
+              child: FractionallySizedBox(
+                widthFactor: 0.88,
+                heightFactor: 0.26,
+                child: MyText(
                   tezosAssociatedAddress.associatedAddress?.isEmpty == true
                       ? ''
                       : tezosAssociatedAddress.associatedAddress.toString(),
-                  style: Theme.of(context).textTheme.tezosAssociatedAddressData,
+                  style: Theme.of(context).textTheme.subMessage.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                  minFontSize: 8,
                   maxLines: 2,
                 ),
-                const Spacer(),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
+  }
+}
+
+class TezosAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
+  TezosAssociatedAddressRectoDelegate({this.position = Offset.zero});
+
+  final Offset position;
+
+  @override
+  void performLayout(Size size) {
+    if (hasChild('name')) {
+      layoutChild('name', BoxConstraints.loose(size));
+      positionChild(
+        'name',
+        Offset(size.width * 0.06, size.height * 0.27),
+      );
+    }
+
+    if (hasChild('accountName')) {
+      layoutChild('accountName', BoxConstraints.loose(size));
+      positionChild(
+        'accountName',
+        Offset(size.width * 0.06, size.height * 0.5),
+      );
+    }
+
+    if (hasChild('walletAddress')) {
+      layoutChild('walletAddress', BoxConstraints.loose(size));
+      positionChild(
+        'walletAddress',
+        Offset(size.width * 0.06, size.height * 0.70),
+      );
+    }
+  }
+
+  @override
+  bool shouldRelayout(TezosAssociatedAddressRectoDelegate oldDelegate) {
+    return oldDelegate.position != position;
   }
 }

@@ -76,7 +76,9 @@ class CredentialsListPageItem extends StatelessWidget {
           .credentialPreview.credentialSubjectModel.credentialSubjectType
           .backgroundColor(credentialModel),
       child: selected == null
-          ? DisplayInList(credentialModel: credentialModel)
+          ? DisplayInList(
+              credentialModel: credentialModel,
+            )
           : displaySelectionElement(context),
     );
   }

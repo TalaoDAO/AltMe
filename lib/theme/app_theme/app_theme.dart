@@ -232,6 +232,8 @@ extension CustomColorScheme on ColorScheme {
   Color get activeColor => const Color(0xFF08B530);
 
   Color get inactiveColor => const Color(0xFFFF0045);
+
+  Color get beaconBorder => const Color(0xff86809D);
 }
 
 extension CustomTextTheme on TextTheme {
@@ -514,12 +516,6 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get proofOfOwnership => GoogleFonts.nunito(
-        color: const Color(0xffFFFFFF),
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-      );
-
   TextStyle get tezosAssociatedAddressData => GoogleFonts.roboto(
         color: const Color(0xff605A71),
         fontSize: 17,
@@ -790,5 +786,35 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w800,
+      );
+
+  TextStyle get beaconRequestPermission => GoogleFonts.roboto(
+        color: const Color(0xff86809D),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get beaconSelectAccont => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+      );
+
+  TextStyle get beaconPermissionTitle => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+      );
+
+  TextStyle get beaconPermissions => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
+  TextStyle get beaconPayload => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
       );
 }

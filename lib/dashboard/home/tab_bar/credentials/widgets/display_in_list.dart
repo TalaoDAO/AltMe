@@ -14,6 +14,18 @@ class DisplayInList extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
+      case CredentialSubjectType.ageRange:
+        return AgeRangeDisplayInList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.nationality:
+        return NationalityDisplayInList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.gender:
+        return GenderDisplayInList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.tezosAssociatedWallet:
         return TezosAssociatedAddressDisplayInList(
           credentialModel: credentialModel,

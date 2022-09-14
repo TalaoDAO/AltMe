@@ -478,5 +478,22 @@
   "receive": "Receive",
   "recentTransactions": "Recent transactions",
   "sendOnlyXtzToThisAddressDescription": "Only send XTZ to this address. Sending other tokens may result in permanent loss.",
-  "addTokens": "Add tokens"
+  "addTokens": "Add tokens",
+  "providedBy": "Provided by",
+  "issuedOn": "Issued on",
+  "expirationDate": "Expiration date",
+  "connect": "Connect",
+  "connection": "Connection",
+  "selectAccountToGrantAccess": "Select account to grant access:",
+  "requestPersmissionTo": "Request Permission to:",
+  "viewAccountBalanceAndNFTs": "View account balance and NFT's",
+  "requestApprovalForTransaction": "Request approval for transaction",
+  "connectedWithBeacon" : "Successfully connect with dApp",
+  "failedToConnectWithBeacon": "Failed to connect with dApp",
+  "tezosNetwork": "Tezos Network",
+  "confirm_sign": "Confirm Sign",
+  "sign": "Sign",
+  "payload_to_sign" : "Payload to Sign",
+  "signedPayload" : "Successfully signed payload",
+  "failedToSignPayload": "Failed to sign the payload"
 }

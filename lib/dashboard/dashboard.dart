@@ -1,3 +1,5 @@
+export 'beacon_confirm_connection/beacon_confirm_connection.dart';
+export 'beacon_sign_payload/beacon_sign_payload.dart';
 export 'crypto_account_switcher/crypto_account_switcher.dart';
 export 'dashboard/dashboard.dart';
 export 'discover/discover.dart';
