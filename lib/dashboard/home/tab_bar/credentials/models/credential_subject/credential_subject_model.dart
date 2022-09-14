@@ -20,6 +20,8 @@ class CredentialSubjectModel {
         return NationalityModel.fromJson(json);
       case 'ResidentCard':
         return ResidentCardModel.fromJson(json);
+      case 'Gender':
+        return GenderModel.fromJson(json);
       case 'TezosAssociatedAddress':
         return TezosAssociatedAddressModel.fromJson(json);
       case 'SelfIssued':

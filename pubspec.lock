@@ -63,7 +63,7 @@ packages:
       path: "../beacon"
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.4"
   bip32:
     dependency: transitive
     description:

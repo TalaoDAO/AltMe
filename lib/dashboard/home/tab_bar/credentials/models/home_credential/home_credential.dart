@@ -39,6 +39,10 @@ class HomeCredential extends Equatable {
         image = ImageStrings.dummyNationalityCard;
         link = Urls.nationalityUrl;
         break;
+      case CredentialSubjectType.gender:
+        image = ImageStrings.dummyGenderCard;
+        link = Urls.genderUrl;
+        break;
       case CredentialSubjectType.emailPass:
         image = ImageStrings.dummyEmailPassCard;
         link = Urls.emailPassUrl;
