@@ -17,6 +17,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.nationality:
         return const Color(0xff273496);
+      case CredentialSubjectType.gender:
+        return const Color(0xff8C0D8E);
       case CredentialSubjectType.tezosAssociatedWallet:
         return const Color(0xffFE7400);
       case CredentialSubjectType.residentCard:
@@ -66,6 +68,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.nationality:
         return Icons.supervised_user_circle_sharp;
+      case CredentialSubjectType.gender:
+        return Icons.supervised_user_circle_rounded;
       case CredentialSubjectType.tezosAssociatedWallet:
         return Icons.account_balance_wallet;
       case CredentialSubjectType.residentCard:

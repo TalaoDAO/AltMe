@@ -22,6 +22,10 @@ class DisplayInList extends StatelessWidget {
         return NationalityDisplayInList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.gender:
+        return GenderDisplayInList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.tezosAssociatedWallet:
         return TezosAssociatedAddressDisplayInList(
           credentialModel: credentialModel,
