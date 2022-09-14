@@ -270,6 +270,7 @@ class _DashboardViewState extends State<DashboardView> {
                                 getIdentityCredentials(
                                   '94dbad02-cd09-4d96-9c54-3edc6b55218f',
                                   DioClient(Urls.issuerBaseUrl, Dio()),
+                                  context.read<WalletCubit>(),
                                 );
                                 // getIdentityCredentials(
                                 //   'afec916a-2736-46e7-9eaf-6ecf2cfc44a3',

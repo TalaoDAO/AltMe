@@ -1,7 +1,9 @@
 import 'dart:convert';
 
-import 'package:altme/app/shared/constants/secure_storage_keys.dart';
 import 'package:altme/app/shared/dio_client/dio_client.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
@@ -16,6 +18,7 @@ import 'package:secure_storage/secure_storage.dart' as secure_storage;
 Future<void> getIdentityCredentials(
   String preAuthorizedCode,
   DioClient client,
+  WalletCubit walletCubit,
 ) async {
   print('in the place');
 // TODO(all): getCredentialManifest()
@@ -41,7 +44,26 @@ Future<void> getIdentityCredentials(
   final String accessToken = data['access_token'] as String;
   final String nonce = data['c_nonce'] as String;
   for (final type in credentialTypeList) {
-    await getCredential(accessToken, nonce, credentialEndPoint, type, client);
+    final dynamic credential = await getCredential(
+        accessToken, nonce, credentialEndPoint, type, client);
+    if (credential != null) {
+      final Map<String, dynamic> newCredential =
+          Map<String, dynamic>.from(credential as Map<String, dynamic>);
+      newCredential['credentialPreview'] = credential;
+
+      final credentialModel = CredentialModel.copyWithData(
+        oldCredentialModel: CredentialModel.fromJson(
+          newCredential,
+        ),
+        newData: credential,
+        activities: [Activity(acquisitionAt: DateTime.now())],
+      );
+      await walletCubit.insertCredential(
+        CredentialModel.fromJson(
+          newCredential,
+        ),
+      );
+    }
   }
 // show popup telling user he will receive multiple credentials
 // 	Loop on credential types to get each credentials
@@ -50,7 +72,7 @@ Future<void> getIdentityCredentials(
   // });
 }
 
-Future<void> getCredential(
+Future<dynamic> getCredential(
   String accessToken,
   String nonce,
   String credentialEndPoint,
@@ -107,7 +129,7 @@ Future<void> getCredential(
       },
     );
     print('got the response 2');
-    return response;
+    return jsonDecode(response['credential'] as String);
   } catch (e) {
     print('got a problem 2');
   }
