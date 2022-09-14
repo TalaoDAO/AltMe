@@ -445,8 +445,7 @@
     "sign",
     "payload_to_sign",
     "signedPayload",
-    "failedToSignPayload",
-    "tezosNetwork"
+    "failedToSignPayload"
   ],
 
   "es": [
