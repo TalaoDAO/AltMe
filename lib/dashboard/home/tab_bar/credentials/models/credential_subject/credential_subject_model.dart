@@ -44,6 +44,8 @@ class CredentialSubjectModel {
         return CertificateOfEmploymentModel.fromJson(json);
       case 'EmailPass':
         return EmailPassModel.fromJson(json);
+      case 'AgeRange':
+        return AgeRangeModel.fromJson(json);
       case 'PhonePass':
         return PhonePassModel.fromJson(json);
       case 'ProfessionalExperienceAssessment':
