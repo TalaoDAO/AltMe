@@ -428,7 +428,24 @@
     "receive",
     "recentTransactions",
     "sendOnlyXtzToThisAddressDescription",
-    "addTokens"
+    "addTokens",
+    "providedBy",
+    "issuedOn",
+    "expirationDate",
+    "connect",
+    "connection",
+    "selectAccountToGrantAccess",
+    "requestPersmissionTo",
+    "viewAccountBalanceAndNFTs",
+    "requestApprovalForTransaction",
+    "connectedWithBeacon",
+    "failedToConnectWithBeacon",
+    "tezosNetwork",
+    "confirm_sign",
+    "sign",
+    "payload_to_sign",
+    "signedPayload",
+    "failedToSignPayload"
   ],
 
   "es": [
@@ -860,7 +877,24 @@
     "receive",
     "recentTransactions",
     "sendOnlyXtzToThisAddressDescription",
-    "addTokens"
+    "addTokens",
+    "providedBy",
+    "issuedOn",
+    "expirationDate",
+    "connect",
+    "connection",
+    "selectAccountToGrantAccess",
+    "requestPersmissionTo",
+    "viewAccountBalanceAndNFTs",
+    "requestApprovalForTransaction",
+    "connectedWithBeacon",
+    "failedToConnectWithBeacon",
+    "tezosNetwork",
+    "confirm_sign",
+    "sign",
+    "payload_to_sign",
+    "signedPayload",
+    "failedToSignPayload"
   ],
 
   "fr": [
@@ -1292,7 +1326,24 @@
     "receive",
     "recentTransactions",
     "sendOnlyXtzToThisAddressDescription",
-    "addTokens"
+    "addTokens",
+    "providedBy",
+    "issuedOn",
+    "expirationDate",
+    "connect",
+    "connection",
+    "selectAccountToGrantAccess",
+    "requestPersmissionTo",
+    "viewAccountBalanceAndNFTs",
+    "requestApprovalForTransaction",
+    "connectedWithBeacon",
+    "failedToConnectWithBeacon",
+    "tezosNetwork",
+    "confirm_sign",
+    "sign",
+    "payload_to_sign",
+    "signedPayload",
+    "failedToSignPayload"
   ],
 
   "it": [
@@ -1724,6 +1775,23 @@
     "receive",
     "recentTransactions",
     "sendOnlyXtzToThisAddressDescription",
-    "addTokens"
+    "addTokens",
+    "providedBy",
+    "issuedOn",
+    "expirationDate",
+    "connect",
+    "connection",
+    "selectAccountToGrantAccess",
+    "requestPersmissionTo",
+    "viewAccountBalanceAndNFTs",
+    "requestApprovalForTransaction",
+    "connectedWithBeacon",
+    "failedToConnectWithBeacon",
+    "tezosNetwork",
+    "confirm_sign",
+    "sign",
+    "payload_to_sign",
+    "signedPayload",
+    "failedToSignPayload"
   ]
 }

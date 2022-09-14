@@ -1,13 +1,15 @@
 name: altme
 description: AltMe Flutter App 
-version: 1.1.7+55
+version: 1.1.8+56
 publish_to: none
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  auto_size_text: ^3.0.0
+  auto_size_text: ^3.0.0 
+  beacon_flutter:
+    path: ../beacon
   bip39: ^1.0.6
   bloc: ^8.0.3
   cached_network_image: ^3.2.1
@@ -67,7 +69,9 @@ dependencies:
   uni_links: ^0.5.1
   url_launcher: ^6.0.17
   uuid: ^3.0.5
+  web3dart: ^2.3.3
   workmanager: ^0.5.0
+  
 
 
 dev_dependencies:

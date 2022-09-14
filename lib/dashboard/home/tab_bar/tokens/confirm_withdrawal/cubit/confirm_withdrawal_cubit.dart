@@ -98,10 +98,10 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
       if (token.contractAddress.isEmpty) return;
 
       emit(state.loading());
-      await Dartez().init();
 
       final server = manageNetworkCubit.state.network.rpcNodeUrl;
 
+      //TODO(all): Do check this getKeysFromSecretKey() in helper function
       final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
 
       final keyStore = KeyStoreModel(

@@ -7,12 +7,14 @@ import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -27,6 +29,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.queryByExampleCubit,
     required this.deepLinkCubit,
     required this.jwtDecode,
+    required this.beacon,
+    required this.secureStorageProvider,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -37,6 +41,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final QueryByExampleCubit queryByExampleCubit;
   final DeepLinkCubit deepLinkCubit;
   final JWTDecode jwtDecode;
+  final Beacon beacon;
+  final SecureStorageProvider secureStorageProvider;
 
   @override
   Future<void> close() async {
@@ -44,24 +50,35 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return super.close();
   }
 
-  Future<void> host({required String? url}) async {
+  Future<void> process({required String? scannedResponse}) async {
     emit(state.loading(isDeepLink: false));
     try {
-      if (url == null || url.isEmpty) {
+      if (scannedResponse == null || scannedResponse.isEmpty) {
         throw ResponseMessage(
           ResponseString
               .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
         );
+      } else if (scannedResponse.startsWith('tezos://')) {
+        final String pairingRequest =
+            Uri.parse(scannedResponse).queryParameters['data'].toString();
+
+        await beacon.pair(pairingRequest: pairingRequest);
+
+        await secureStorageProvider.set(
+          SecureStorageKeys.pairingRequest,
+          pairingRequest,
+        );
+
+        emit(state.copyWith(qrScanStatus: QrScanStatus.idle));
       } else {
-        final uri = Uri.parse(url);
-        await verify(uri: uri);
+        await host(url: scannedResponse);
       }
     } on FormatException {
       emit(
         state.error(
           messageHandler: ResponseMessage(
             ResponseString
-                .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
+                .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
           ),
         ),
       );
@@ -73,7 +90,44 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           state.error(
             messageHandler: ResponseMessage(
               ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> host({required String? url}) async {
+    emit(state.loading(isDeepLink: false));
+    try {
+      if (url == null || url.isEmpty) {
+        throw ResponseMessage(
+          ResponseString
+              .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
+        );
+      } else {
+        final uri = Uri.parse(url);
+        await verify(uri: uri);
+      }
+    } on FormatException {
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString
+                .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
+          ),
+        ),
+      );
+    } catch (e) {
+      if (e is MessageHandler) {
+        emit(state.error(messageHandler: e));
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
         );
@@ -127,7 +181,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               ),
             ),
           );
-          emit(state.success(route: IssuerWebsitesPage.route('')));
+          emit(
+            state.copyWith(
+              qrScanStatus: QrScanStatus.success,
+              route: IssuerWebsitesPage.route(''),
+            ),
+          );
 
           return;
         }
@@ -193,13 +252,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         if (selectedCredentials.isEmpty) {
           emit(
-            state.success(route: IssuerWebsitesPage.route(openIdCredential)),
+            state.copyWith(
+              qrScanStatus: QrScanStatus.success,
+              route: IssuerWebsitesPage.route(openIdCredential),
+            ),
           );
           return;
         }
 
         emit(
-          state.success(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.success,
             route: SIOPV2CredentialPickPage.route(
               credentials: selectedCredentials,
               sIOPV2Param: sIOPV2Param,
@@ -243,7 +306,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         case 'CredentialOffer':
           log.i('Credential Offer');
           emit(
-            state.success(
+            state.copyWith(
+              qrScanStatus: QrScanStatus.success,
               route: CredentialsReceivePage.route(
                 uri: uri,
                 preview: data as Map<String, dynamic>,
@@ -272,7 +336,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             } else if (data['query'].first['type'] == 'QueryByExample') {
               log.i('QueryByExample');
               emit(
-                state.success(
+                state.copyWith(
+                  qrScanStatus: QrScanStatus.success,
                   route: QueryByExamplePresentPage.route(
                     uri: uri,
                     preview: data as Map<String, dynamic>,
@@ -287,7 +352,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             }
           } else {
             emit(
-              state.success(
+              state.copyWith(
+                qrScanStatus: QrScanStatus.success,
                 route: QueryByExamplePresentPage.route(
                   uri: uri,
                   preview: data as Map<String, dynamic>,

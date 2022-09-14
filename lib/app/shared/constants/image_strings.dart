@@ -10,14 +10,16 @@ class ImageStrings {
       '$imagePath/carte-attestation-employeur-recto.png';
   static const String employmentCertificateBack =
       '$imagePath/carte-attestation-employeur-verso.png';
-  static const String emailPassFront = '$imagePath/email_pass_recto.png';
+  static const String emailProof = '$imagePath/email-proof.png';
+  static const String genderProof = '$imagePath/gender-proof.png';
+  static const String ageRangeProof = '$imagePath/age_range.png';
+  static const String nationalityProof = '$imagePath/nationality-proof.png';
   static const String learningAchievementFront =
       '$imagePath/carte-diplome-recto.png';
   static const String learningAchievementBack =
       '$imagePath/carte-diplome-verso.png';
   static const String loyaltyCard = '$imagePath/tezotopia_loyalty_card.jpeg';
-  static const String over18Front = '$imagePath/over18_verso.png';
-  static const String over18Back = '$imagePath/over18_recto.png';
+  static const String over18 = '$imagePath/over18.png';
   static const String professionalStudentCardFront =
       '$imagePath/adecco_student_card_recto.png';
   static const String professionalStudentCardBack =
@@ -36,11 +38,16 @@ class ImageStrings {
   static const String talaoCommunityCard =
       '$imagePath/talao_community_card.png';
   static const String identityCard = '$imagePath/identity_card.png';
+  static const String paymentAssetCard = '$imagePath/payment-asset-card.png';
 
   /// dummy
   static const String dummyEmailPassCard =
       '$imagePath/dummy_email_pass_card.png';
+  static const String dummyNationalityCard =
+      '$imagePath/dummy_nationality_card.png';
+  static const String dummyGenderCard = '$imagePath/dummy_gender_card.png';
   static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
+  static const String dummyAgeRangeCard = '$imagePath/dummy_age_range_card.png';
   static const String dummyTezotopiaVoucherCard =
       '$imagePath/dummy_tezotopia_voucher_card.png';
   static const String dummyTalaoCommunityCardCard =
