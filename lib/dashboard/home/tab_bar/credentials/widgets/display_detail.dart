@@ -20,6 +20,10 @@ class DisplayDetail extends StatelessWidget {
         return AgeRangeDisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.nationality:
+        return NationalityDisplayDetail(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.tezosAssociatedWallet:
         return TezosAssociatedAddressDisplayDetail(
           credentialModel: credentialModel,

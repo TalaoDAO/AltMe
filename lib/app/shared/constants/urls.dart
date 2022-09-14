@@ -9,6 +9,7 @@ class Urls {
   static const String phonePassUrl = 'https://issuer.talao.co/phonepass';
   static const String emailPassUrl = 'https://issuer.talao.co/emailpass';
   static const String ageRangeUrl = 'https://issuer.talao.co/agerange';
+  static const String nationalityUrl = 'https://issuer.talao.co/nationality';
   static const String over18Url = 'https://issuer.talao.co/over18';
   static const String tezotopiaVoucherUrl =
       'https://issuer.tezotopia.altme.io/issuer/voucher_mobile';

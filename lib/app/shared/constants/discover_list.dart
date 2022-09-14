@@ -10,6 +10,7 @@ class DiscoverList {
   static final List<CredentialSubjectType> identityCategories = [
     CredentialSubjectType.emailPass,
     CredentialSubjectType.ageRange,
+    CredentialSubjectType.nationality,
     CredentialSubjectType.over18,
     CredentialSubjectType.identityCard,
   ];

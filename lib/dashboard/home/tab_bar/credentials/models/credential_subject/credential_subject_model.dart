@@ -16,6 +16,8 @@ class CredentialSubjectModel {
 
   factory CredentialSubjectModel.fromJson(Map<String, dynamic> json) {
     switch (json['type']) {
+      case 'Nationality':
+        return NationalityModel.fromJson(json);
       case 'ResidentCard':
         return ResidentCardModel.fromJson(json);
       case 'TezosAssociatedAddress':

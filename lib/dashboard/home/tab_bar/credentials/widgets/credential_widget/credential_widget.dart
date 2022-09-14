@@ -7,6 +7,7 @@ export 'identity_card_widget.dart';
 export 'identity_pass_widget.dart';
 export 'learning_achievement_widget.dart';
 export 'loyalty_card_widget.dart';
+export 'nationality_widget.dart';
 export 'over18_widget.dart';
 export 'phone_pass_widget.dart';
 export 'professional_experience_assessment_widget.dart';

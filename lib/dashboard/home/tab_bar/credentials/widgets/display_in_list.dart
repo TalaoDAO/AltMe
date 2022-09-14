@@ -18,6 +18,10 @@ class DisplayInList extends StatelessWidget {
         return AgeRangeDisplayInList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.nationality:
+        return NationalityDisplayInList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.tezosAssociatedWallet:
         return TezosAssociatedAddressDisplayInList(
           credentialModel: credentialModel,
