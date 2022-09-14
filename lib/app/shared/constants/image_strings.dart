@@ -12,6 +12,7 @@ class ImageStrings {
       '$imagePath/carte-attestation-employeur-verso.png';
   static const String emailProof = '$imagePath/email-proof.png';
   static const String ageRangeProof = '$imagePath/age_range.png';
+  static const String nationalityProof = '$imagePath/nationality-proof.png';
   static const String learningAchievementFront =
       '$imagePath/carte-diplome-recto.png';
   static const String learningAchievementBack =
@@ -41,6 +42,8 @@ class ImageStrings {
   /// dummy
   static const String dummyEmailPassCard =
       '$imagePath/dummy_email_pass_card.png';
+  static const String dummyNationalityCard =
+      '$imagePath/dummy_nationality_card.png';
   static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
   static const String dummyAgeRangeCard = '$imagePath/dummy_age_range_card.png';
   static const String dummyTezotopiaVoucherCard =
