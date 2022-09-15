@@ -16,6 +16,10 @@ class DisplayDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
+      case CredentialSubjectType.tezotopiaMembership:
+        return TezotopiaMemberShipDisplayDetail(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.ageRange:
         return AgeRangeDisplayDetail(
           credentialModel: credentialModel,

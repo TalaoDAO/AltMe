@@ -499,5 +499,6 @@
   "voucher": "Voucher",
   "tezotopia": "Tezotopia",
   "operationCompleted": "Your requested operation has been completed.",
-  "operationFailed": "Your requested operation has failed"
+  "operationFailed": "Your requested operation has failed",
+  "membership": "Membership"
 }
