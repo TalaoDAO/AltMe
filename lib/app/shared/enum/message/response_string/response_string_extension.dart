@@ -161,6 +161,12 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD:
         return globalMessage.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD;
+
+      case ResponseString.RESPONSE_STRING_OPERATION_COMPLETED:
+        return globalMessage.RESPONSE_STRING_OPERATION_COMPLETED;
+
+      case ResponseString.RESPONSE_STRING_OPERATION_FAILED:
+        return globalMessage.RESPONSE_STRING_OPERATION_FAILED;
     }
   }
 }

@@ -497,5 +497,7 @@
   "signedPayload" : "Successfully signed payload",
   "failedToSignPayload": "Failed to sign the payload",
   "voucher": "Voucher",
-  "tezotopia": "Tezotopia"
+  "tezotopia": "Tezotopia",
+  "operationCompleted": "Your requested operation has been completed.",
+  "operationFailed": "Your requested operation has failed"
 }

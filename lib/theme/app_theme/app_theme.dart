@@ -234,6 +234,8 @@ extension CustomColorScheme on ColorScheme {
   Color get inactiveColor => const Color(0xFFFF0045);
 
   Color get beaconBorder => const Color(0xff86809D);
+
+  Color get cardBackground => const Color(0xFF211F33);
 }
 
 extension CustomTextTheme on TextTheme {

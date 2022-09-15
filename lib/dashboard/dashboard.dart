@@ -1,4 +1,5 @@
 export 'beacon_confirm_connection/beacon_confirm_connection.dart';
+export 'beacon_operation/beacon_operation.dart';
 export 'beacon_sign_payload/beacon_sign_payload.dart';
 export 'crypto_account_switcher/crypto_account_switcher.dart';
 export 'dashboard/dashboard.dart';
@@ -9,4 +10,5 @@ export 'home/home.dart';
 export 'profile/profile.dart';
 export 'qr_code/qr_code.dart';
 export 'search/search.dart';
+export 'select_network_fee_bottom_sheet/select_network_fee_bottom_sheet.dart';
 export 'self_issued_credential_button/self_issued_credential_button.dart';

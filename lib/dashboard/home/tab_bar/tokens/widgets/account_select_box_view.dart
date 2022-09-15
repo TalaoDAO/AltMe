@@ -22,14 +22,8 @@ class _AccountSelectBoxViewState extends State<AccountSelectBoxView> {
   Widget build(BuildContext context) {
     return BlocBuilder<WalletCubit, WalletState>(
       builder: (context, walletState) {
-        return Container(
-          padding: const EdgeInsets.all(Sizes.spaceSmall),
-          decoration: BoxDecoration(
-            color: Theme.of(context).hoverColor,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(Sizes.normalRadius),
-            ),
-          ),
+        return BackgroundCard(
+          color: Theme.of(context).colorScheme.cardBackground,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,8 +39,7 @@ class _AccountSelectBoxViewState extends State<AccountSelectBoxView> {
                   data: Theme.of(context).copyWith(
                     unselectedWidgetColor:
                         Theme.of(context).colorScheme.onPrimary,
-                    dividerColor:
-                        Theme.of(context).colorScheme.surfaceContainer,
+                    dividerColor: Theme.of(context).colorScheme.cardBackground,
                     splashColor: Theme.of(context).colorScheme.transparent,
                     highlightColor: Theme.of(context).colorScheme.transparent,
                     colorScheme: ColorScheme.dark(

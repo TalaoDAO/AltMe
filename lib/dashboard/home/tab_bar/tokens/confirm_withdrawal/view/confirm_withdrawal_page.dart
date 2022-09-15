@@ -153,13 +153,9 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                           fontWeight: FontWeight.w900,
                         ),
                   ),
-                  const SizedBox(
-                    height: Sizes.spaceSmall,
-                  ),
+                  const SizedBox(height: Sizes.spaceSmall),
                   const AccountSelectBoxView(isEnabled: false),
-                  const SizedBox(
-                    height: Sizes.spaceNormal,
-                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
                   WithdrawalAddressInputView(
                     withdrawalAddressController: withdrawalAddressController,
                     caption: l10n.to,
@@ -177,8 +173,18 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     amountUsdValue:
                         widget.amount * widget.selectedToken.tokenUSDPrice,
                     networkFee: state.networkFee,
-                    onEditButtonPressed: () {
-                      SelectNetworkFeeBottomSheet.show(context: context);
+                    onEditButtonPressed: () async {
+                      final NetworkFeeModel? networkFeeModel =
+                          await SelectNetworkFeeBottomSheet.show(
+                        context: context,
+                        selectedNetworkFee: state.networkFee,
+                      );
+
+                      if (networkFeeModel != null) {
+                        context
+                            .read<ConfirmWithdrawalCubit>()
+                            .setNetworkFee(networkFee: networkFeeModel);
+                      }
                     },
                   ),
                 ],

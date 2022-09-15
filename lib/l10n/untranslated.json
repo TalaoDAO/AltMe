@@ -447,7 +447,9 @@
     "signedPayload",
     "failedToSignPayload",
     "voucher",
-    "tezotopia"
+    "tezotopia",
+    "operationCompleted",
+    "operationFailed"
   ],
 
   "es": [
@@ -898,7 +900,9 @@
     "signedPayload",
     "failedToSignPayload",
     "voucher",
-    "tezotopia"
+    "tezotopia",
+    "operationCompleted",
+    "operationFailed"
   ],
 
   "fr": [
@@ -1349,7 +1353,9 @@
     "signedPayload",
     "failedToSignPayload",
     "voucher",
-    "tezotopia"
+    "tezotopia",
+    "operationCompleted",
+    "operationFailed"
   ],
 
   "it": [
@@ -1800,6 +1806,8 @@
     "signedPayload",
     "failedToSignPayload",
     "voucher",
-    "tezotopia"
+    "tezotopia",
+    "operationCompleted",
+    "operationFailed"
   ]
 }
