@@ -328,10 +328,16 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// credentials
     await repository.deleteAll();
+
+    /// passBase
     await secureStorageProvider.delete(SecureStorageKeys.passBaseStatus);
+    await secureStorageProvider
+        .delete(SecureStorageKeys.passBaseVerificationDate);
+    await secureStorageProvider.delete(SecureStorageKeys.preAuthorizedCode);
 
     /// user data
     await profileCubit.resetProfile();
+    await secureStorageProvider.delete(SecureStorageKeys.pinCode);
 
     /// clear app states
     homeCubit.emitHasNoWallet();
