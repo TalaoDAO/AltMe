@@ -51,6 +51,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
       final amount = int.parse(
         tokenAmount.toStringAsFixed(6).replaceAll(',', '').replaceAll('.', ''),
       );
+
       final customFee = int.parse(
         state.networkFee.fee
             .toStringAsFixed(6)
@@ -107,7 +108,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
 
       final server = manageNetworkCubit.state.network.rpcNodeUrl;
 
-      //TODO(all): Do check this getKeysFromSecretKey() in helper function
+      // TODO(all): Do check this getKeysFromSecretKey() in helper function
       final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
 
       final keyStore = KeyStoreModel(
