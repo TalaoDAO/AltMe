@@ -197,8 +197,13 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
         BeaconConfirmConnectionPage.route(),
       );
     }
+
     if (state.status == BeaconStatus.signPayload) {
       Navigator.of(context).push<void>(BeaconSignPayloadPage.route());
+    }
+
+    if (state.status == BeaconStatus.operation) {
+      Navigator.of(context).push<void>(BeaconOperationPage.route());
     }
   },
 );

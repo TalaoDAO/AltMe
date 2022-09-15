@@ -56,7 +56,7 @@ class ReceivePage extends StatelessWidget {
                 ),
                 BackgroundCard(
                   padding: const EdgeInsets.all(Sizes.spaceNormal),
-                  color: Theme.of(context).hoverColor,
+                  color: Theme.of(context).colorScheme.cardBackground,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

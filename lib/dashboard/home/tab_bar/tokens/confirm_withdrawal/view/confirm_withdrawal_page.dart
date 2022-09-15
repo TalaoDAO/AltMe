@@ -153,13 +153,9 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                           fontWeight: FontWeight.w900,
                         ),
                   ),
-                  const SizedBox(
-                    height: Sizes.spaceSmall,
-                  ),
+                  const SizedBox(height: Sizes.spaceSmall),
                   const AccountSelectBoxView(isEnabled: false),
-                  const SizedBox(
-                    height: Sizes.spaceNormal,
-                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
                   WithdrawalAddressInputView(
                     withdrawalAddressController: withdrawalAddressController,
                     caption: l10n.to,
