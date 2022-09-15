@@ -11,6 +11,7 @@ import 'dart:developer';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home/cubit/home_cubit.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dartez/dartez.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
@@ -122,6 +123,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         false, // If enabled it will post a notification whenever the task is
     // running. Handy for debugging tasks
   );
+
+  await Dartez().init();
 
   await runZonedGuarded(
     () async {

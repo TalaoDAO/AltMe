@@ -36,6 +36,7 @@ class TokenModel extends Equatable {
   final String? icon;
   final String? thumbnailUri;
   final String balance;
+  @JsonKey(defaultValue: '0')
   final String decimals;
   @JsonKey(defaultValue: 0)
   final double tokenUSDPrice;

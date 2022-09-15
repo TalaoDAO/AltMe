@@ -1,3 +1,4 @@
+export 'age_range/age_range_model.dart';
 export 'author/author.dart';
 export 'certificate_of_employment/certificate_of_employment_model.dart';
 export 'credential/credential.dart';
@@ -10,11 +11,13 @@ export 'default_credential_subject/default_credential_subject_model.dart';
 export 'display/display.dart';
 export 'ecole_42_learning_achievement/ecole_42_learning_achievement_model.dart';
 export 'email_pass/email_pass_model.dart';
+export 'gender/gender_model.dart';
 export 'home_credential/home_credential.dart';
 export 'identity_card/identity_card_model.dart';
 export 'identity_pass/identity_pass_model.dart';
 export 'learning_achievement/learning_achievement_model.dart';
 export 'loyalty_card/loyalty_card_model.dart';
+export 'nationality/nationality_model.dart';
 export 'over18/over18_model.dart';
 export 'phone_pass/phone_pass_model.dart';
 export 'professional_experience_assessment/professional_experience_assessment_model.dart';

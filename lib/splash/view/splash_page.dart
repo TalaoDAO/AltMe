@@ -128,7 +128,8 @@ class _SplashViewState extends State<SplashView> {
         splashBlocListener,
         walletBlocListener,
         scanBlocListener,
-        qrCodeBlocListener
+        qrCodeBlocListener,
+        beaconBlocListener,
       ],
       child: BasePage(
         scrollView: false,

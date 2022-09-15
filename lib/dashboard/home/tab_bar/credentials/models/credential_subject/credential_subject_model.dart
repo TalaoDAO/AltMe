@@ -16,8 +16,12 @@ class CredentialSubjectModel {
 
   factory CredentialSubjectModel.fromJson(Map<String, dynamic> json) {
     switch (json['type']) {
+      case 'Nationality':
+        return NationalityModel.fromJson(json);
       case 'ResidentCard':
         return ResidentCardModel.fromJson(json);
+      case 'Gender':
+        return GenderModel.fromJson(json);
       case 'TezosAssociatedAddress':
         return TezosAssociatedAddressModel.fromJson(json);
       case 'SelfIssued':
@@ -44,6 +48,8 @@ class CredentialSubjectModel {
         return CertificateOfEmploymentModel.fromJson(json);
       case 'EmailPass':
         return EmailPassModel.fromJson(json);
+      case 'AgeRange':
+        return AgeRangeModel.fromJson(json);
       case 'PhonePass':
         return PhonePassModel.fromJson(json);
       case 'ProfessionalExperienceAssessment':

@@ -1,4 +1,5 @@
 export 'app_status.dart';
+export 'beacon_status.dart';
 export 'credential_status.dart';
 export 'home_status.dart';
 export 'pass_base_status.dart';
