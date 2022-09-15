@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
+import 'package:altme/get_identity_credentials/get_multiple_credentials.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
@@ -30,7 +31,6 @@ class HomeCubit extends Cubit<HomeState> {
     final String? passbaseStatusFromStorage = await secureStorageProvider.get(
       SecureStorageKeys.passBaseStatus,
     );
-
     if (passbaseStatusFromStorage != null) {
       final passBaseStatus = getPassBaseStatusFromString(
         passbaseStatusFromStorage,
@@ -117,36 +117,20 @@ class HomeCubit extends Cubit<HomeState> {
   void startPassbaseVerification(WalletCubit walletCubit) {
     final log = getLogger('HomeCubit - startPassbaseVerification');
     emit(state.loading());
-    final did = didCubit.state.did!;
-    //setKYCMetadata(walletCubit);
     PassbaseSDK.startVerification(
       onFinish: (identityAccessKey) async {
-        //22a363e6-2f93-4dd3-9ac8-6cba5a046acd
-        print('identityAccessKey ******************** : $identityAccessKey');
+        // IdentityAccessKey to run the process manually:
+        // 22a363e6-2f93-4dd3-9ac8-6cba5a046acd
 
         try {
-          final dynamic response = await client.post(
-            '/wallet/webhook',
-            headers: <String, dynamic>{
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer mytoken',
-            },
-            data: <String, dynamic>{
-              'identityAccessKey': identityAccessKey,
-              'DID': did,
-            },
+          unawaited(
+            getMutipleCredentials(
+              identityAccessKey,
+              client,
+              walletCubit,
+              secureStorageProvider,
+            ),
           );
-
-          if (response == 'ok') {
-            emit(
-              state.copyWith(
-                status: AppStatus.idle,
-                passBaseStatus: PassBaseStatus.complete,
-              ),
-            );
-          } else {
-            throw Exception();
-          }
         } catch (e) {
           emit(
             state.copyWith(

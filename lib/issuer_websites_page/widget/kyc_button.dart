@@ -30,8 +30,6 @@ class KYCButton extends StatelessWidget {
                 child: PassbaseButton(
                   height: 100 * MediaQuery.of(context).size.aspectRatio,
                   onFinish: (identityAccessKey) {
-                    print(
-                        'identityAccessKey *****************  : $identityAccessKey');
                     Navigator.pop(context);
                     Navigator.pop(context);
                     showDialog<void>(
@@ -51,10 +49,7 @@ class KYCButton extends StatelessWidget {
                       },
                     );
                   },
-                  onSubmitted: (identityAccessKey) {
-                    print(
-                        'identityAccessKey ******************** : $identityAccessKey');
-                  },
+                  onSubmitted: (identityAccessKey) {},
                   onError: (errorCode) {
                     // do stuff in case of cancel
                   },

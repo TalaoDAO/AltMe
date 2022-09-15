@@ -1,11 +1,9 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/get_identity_credentials/get_identity_credentials.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -269,27 +267,18 @@ class _DashboardViewState extends State<DashboardView> {
                               icon: IconStrings.settings,
                               text: l10n.settings,
                               onTap: () {
-                                getIdentityCredentials(
-                                  '94dbad02-cd09-4d96-9c54-3edc6b55218f',
-                                  DioClient(Urls.issuerBaseUrl, Dio()),
-                                  context.read<WalletCubit>(),
-                                );
-                                // getIdentityCredentials(
-                                //   'afec916a-2736-46e7-9eaf-6ecf2cfc44a3',
-                                //   DioClient(Urls.issuerBaseUrl, Dio()),
-                                // );
-                                // if (context
-                                //         .read<HomeCubit>()
-                                //         .state
-                                //         .homeStatus ==
-                                //     HomeStatus.hasNoWallet) {
-                                //   showDialog<void>(
-                                //     context: context,
-                                //     builder: (_) => const WalletDialog(),
-                                //   );
-                                //   return;
-                                // }
-                                // scaffoldKey.currentState!.openDrawer();
+                                if (context
+                                        .read<HomeCubit>()
+                                        .state
+                                        .homeStatus ==
+                                    HomeStatus.hasNoWallet) {
+                                  showDialog<void>(
+                                    context: context,
+                                    builder: (_) => const WalletDialog(),
+                                  );
+                                  return;
+                                }
+                                scaffoldKey.currentState!.openDrawer();
                               },
                               isSelected: state.selectedIndex == 3,
                             ),
