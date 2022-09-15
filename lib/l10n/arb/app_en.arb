@@ -495,5 +495,7 @@
   "sign": "Sign",
   "payload_to_sign" : "Payload to Sign",
   "signedPayload" : "Successfully signed payload",
-  "failedToSignPayload": "Failed to sign the payload"
+  "failedToSignPayload": "Failed to sign the payload",
+  "voucher": "Voucher",
+  "tezotopia": "Tezotopia"
 }
