@@ -35,6 +35,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     try {
       log.i('started sending');
       emit(state.loading());
+
       final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
 
       final CryptoAccountData? currentAccount =
@@ -44,6 +45,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       );
 
       if (currentAccount == null) {
+        // TODO(bibash): account data not available error message may be
         throw ResponseMessage(
           ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
         );
@@ -79,8 +81,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
         '${beaconRequest.request!.operationDetails!.first.destination!}',
       );
 
-      // ignore: unawaited_futures
-      operationsList.executeAndMonitor();
+      await operationsList.executeAndMonitor();
       log.i('after withdrawal execute');
       final String transactionHash = operationsList.result.id!;
 
