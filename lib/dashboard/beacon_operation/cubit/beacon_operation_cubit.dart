@@ -55,13 +55,8 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
 
       final client = TezartClient(beaconRequest.request!.network!.rpcUrl!);
 
-      final amount = int.parse(
-        (int.parse(beaconRequest.request!.operationDetails!.first.amount!) /
-                1e6)
-            .toStringAsFixed(6)
-            .replaceAll(',', '')
-            .replaceAll('.', ''),
-      );
+      final amount =
+          int.parse(beaconRequest.request!.operationDetails!.first.amount!);
 
       final customFee = int.parse(
         state.networkFee.fee
