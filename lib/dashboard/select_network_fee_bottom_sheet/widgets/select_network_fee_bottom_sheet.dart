@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/tokens/tokens.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +8,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SelectNetworkFeeBottomSheet extends StatelessWidget {
   const SelectNetworkFeeBottomSheet({
     Key? key,
-    required this.confirmWithdrawalCubit,
+    required this.selectedNetworkFee,
   }) : super(key: key);
 
-  final ConfirmWithdrawalCubit confirmWithdrawalCubit;
+  final NetworkFeeModel selectedNetworkFee;
 
-  static Future<void> show({required BuildContext context}) {
-    return showModalBottomSheet(
+  static Future<NetworkFeeModel?> show({
+    required BuildContext context,
+    required NetworkFeeModel selectedNetworkFee,
+  }) {
+    return showModalBottomSheet<NetworkFeeModel?>(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(Sizes.largeRadius),
@@ -23,7 +26,7 @@ class SelectNetworkFeeBottomSheet extends StatelessWidget {
       ),
       context: context,
       builder: (_) => SelectNetworkFeeBottomSheet(
-        confirmWithdrawalCubit: context.read<ConfirmWithdrawalCubit>(),
+        selectedNetworkFee: selectedNetworkFee,
       ),
     );
   }
@@ -32,8 +35,7 @@ class SelectNetworkFeeBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<SelectNetworkFeeCubit>(
       create: (_) => SelectNetworkFeeCubit(
-        selectedNetworkFee: confirmWithdrawalCubit.state.networkFee,
-        confirmWithdrawalCubit: confirmWithdrawalCubit,
+        selectedNetworkFee: selectedNetworkFee,
       ),
       child: const _SelectNetworkFeeBottomSheetView(),
     );
@@ -97,7 +99,7 @@ class _SelectNetworkFeeBottomSheetViewState
                                 .setSelectedNetworkFee(
                                   selectedNetworkFee: state.networkFeeList[i],
                                 );
-                            Navigator.pop(context);
+                            Navigator.of(context).pop(state.networkFeeList[i]);
                           },
                         );
                       },

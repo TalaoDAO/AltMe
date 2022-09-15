@@ -2,19 +2,24 @@ part of 'beacon_operation_cubit.dart';
 
 @JsonSerializable()
 class BeaconOperationState extends Equatable {
-  const BeaconOperationState({
+  BeaconOperationState({
+    NetworkFeeModel? networkFee,
     this.status = AppStatus.init,
     this.message,
-  });
+  }) : networkFee = networkFee ?? NetworkFeeModel.networks()[1];
 
   factory BeaconOperationState.fromJson(Map<String, dynamic> json) =>
       _$BeaconOperationStateFromJson(json);
 
   final AppStatus status;
   final StateMessage? message;
+  final NetworkFeeModel networkFee;
 
   BeaconOperationState loading() {
-    return const BeaconOperationState(status: AppStatus.loading);
+    return BeaconOperationState(
+      status: AppStatus.loading,
+      networkFee: networkFee,
+    );
   }
 
   BeaconOperationState error({
@@ -23,12 +28,14 @@ class BeaconOperationState extends Equatable {
     return BeaconOperationState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
+      networkFee: networkFee,
     );
   }
 
   BeaconOperationState copyWith({
     AppStatus appStatus = AppStatus.idle,
     MessageHandler? messageHandler,
+    NetworkFeeModel? networkFee,
     int? selectedIndex,
   }) {
     return BeaconOperationState(
@@ -36,11 +43,12 @@ class BeaconOperationState extends Equatable {
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
+      networkFee: networkFee ?? this.networkFee,
     );
   }
 
   Map<String, dynamic> toJson() => _$BeaconOperationStateToJson(this);
 
   @override
-  List<Object?> get props => [status, message];
+  List<Object?> get props => [status, message, networkFee];
 }

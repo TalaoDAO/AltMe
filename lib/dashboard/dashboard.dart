@@ -10,4 +10,5 @@ export 'home/home.dart';
 export 'profile/profile.dart';
 export 'qr_code/qr_code.dart';
 export 'search/search.dart';
+export 'select_network_fee_bottom_sheet/select_network_fee_bottom_sheet.dart';
 export 'self_issued_credential_button/self_issued_credential_button.dart';

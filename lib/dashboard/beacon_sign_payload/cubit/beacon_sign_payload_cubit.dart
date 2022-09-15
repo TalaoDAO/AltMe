@@ -26,47 +26,58 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
   final log = getLogger('BeaconSignPayloadCubit');
 
   Future<void> sign() async {
-    log.i('Started signing');
-    emit(state.loading());
+    try {
+      log.i('Started signing');
+      emit(state.loading());
 
-    final CryptoAccountData currentAccount = walletCubit.state.currentAccount;
+      final CryptoAccountData currentAccount = walletCubit.state.currentAccount;
 
-    final dynamic signer = await Dartez.createSigner(
-      Dartez.writeKeyWithHint(currentAccount.secretKey, 'edsk'),
-    );
-
-    //TODO(bibash): Should we sign with current address
-    final signature = Dartez.signPayload(
-      signer: signer as SoftSigner,
-      payload: beaconCubit.state.beaconRequest!.request!.payload!,
-    );
-
-    final Map response = await beacon.signPayloadResponse(
-      id: beaconCubit.state.beaconRequest!.request!.id!,
-      signature: signature,
-    );
-
-    final bool success = json.decode(response['success'].toString()) as bool;
-
-    if (success) {
-      log.i('Signing success');
-      emit(
-        state.copyWith(
-          appStatus: AppStatus.success,
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
-          ),
-        ),
+      final dynamic signer = await Dartez.createSigner(
+        Dartez.writeKeyWithHint(currentAccount.secretKey, 'edsk'),
       );
-    } else {
-      log.e('Signing failure');
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD,
-          ),
-        ),
+
+      //TODO(bibash): Should we sign with current address
+      final signature = Dartez.signPayload(
+        signer: signer as SoftSigner,
+        payload: beaconCubit.state.beaconRequest!.request!.payload!,
       );
+
+      final Map response = await beacon.signPayloadResponse(
+        id: beaconCubit.state.beaconRequest!.request!.id!,
+        signature: signature,
+      );
+
+      final bool success = json.decode(response['success'].toString()) as bool;
+
+      if (success) {
+        log.i('Signing success');
+        emit(
+          state.copyWith(
+            appStatus: AppStatus.success,
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+            ),
+          ),
+        );
+      } else {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD,
+        );
+      }
+    } catch (e) {
+      log.e('Signing failure , e: $e');
+      if (e is MessageHandler) {
+        emit(state.error(messageHandler: e));
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
+      }
     }
   }
 

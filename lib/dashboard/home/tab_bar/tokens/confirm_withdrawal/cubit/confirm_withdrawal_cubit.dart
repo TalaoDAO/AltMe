@@ -78,7 +78,13 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
       emit(state.success());
     } catch (e, s) {
       logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
-      emit(state.error(messageHandler: MessageHandler()));
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        ),
+      );
     }
   }
 
@@ -162,7 +168,13 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
 
       emit(state.success());
     } catch (e, s) {
-      emit(state.error(messageHandler: MessageHandler()));
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        ),
+      );
       getLogger(runtimeType.toString())
           .e('error in transferOperation , e: $e, s: $s');
     }

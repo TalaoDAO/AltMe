@@ -173,8 +173,18 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     amountUsdValue:
                         widget.amount * widget.selectedToken.tokenUSDPrice,
                     networkFee: state.networkFee,
-                    onEditButtonPressed: () {
-                      SelectNetworkFeeBottomSheet.show(context: context);
+                    onEditButtonPressed: () async {
+                      final NetworkFeeModel? networkFeeModel =
+                          await SelectNetworkFeeBottomSheet.show(
+                        context: context,
+                        selectedNetworkFee: state.networkFee,
+                      );
+
+                      if (networkFeeModel != null) {
+                        context
+                            .read<ConfirmWithdrawalCubit>()
+                            .setNetworkFee(networkFee: networkFeeModel);
+                      }
                     },
                   ),
                 ],

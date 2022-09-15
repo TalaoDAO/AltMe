@@ -76,7 +76,7 @@ class ConfirmDetailsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '${amount.toStringAsFixed(6).formatNumber()} $symbol',
+                    '''${(amount + networkFee.fee).toStringAsFixed(6).formatNumber()} $symbol''',
                     style: Theme.of(context).textTheme.caption,
                   ),
                   Text(
