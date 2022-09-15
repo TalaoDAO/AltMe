@@ -71,7 +71,7 @@ class TezotopiaVoucherRecto extends Recto {
               id: 'voucherValue',
               child: FractionallySizedBox(
                 widthFactor: 0.8,
-                heightFactor: 0.24,
+                heightFactor: 0.20,
                 child: MyText(
                   '${l10n.voucher}'
                   ' ${tezotopiaVoucherModel.offers?.benefit!.discount ?? ''}',
@@ -83,7 +83,7 @@ class TezotopiaVoucherRecto extends Recto {
               id: 'tozotopia',
               child: FractionallySizedBox(
                 widthFactor: 0.4,
-                heightFactor: 0.18,
+                heightFactor: 0.14,
                 child: MyText(
                   l10n.tezotopia,
                   style: Theme.of(context).textTheme.subMessage.copyWith(
@@ -110,14 +110,14 @@ class TezotopiaVoucherDelegate extends MultiChildLayoutDelegate {
       layoutChild('voucherValue', BoxConstraints.loose(size));
       positionChild(
         'voucherValue',
-        Offset(size.width * 0.1, size.height * 0.5),
+        Offset(size.width * 0.1, size.height * 0.55),
       );
     }
     if (hasChild('tozotopia')) {
       layoutChild('tozotopia', BoxConstraints.loose(size));
       positionChild(
         'tozotopia',
-        Offset(size.width * 0.1, size.height * 0.75),
+        Offset(size.width * 0.1, size.height * 0.73),
       );
     }
   }

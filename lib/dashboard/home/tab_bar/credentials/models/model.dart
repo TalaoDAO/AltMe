@@ -30,5 +30,6 @@ export 'student_card/student_card_model.dart';
 export 'talao_community_card/talao_community_card_model.dart';
 export 'tezos_associated_address/tezos_associated_address_credential.dart';
 export 'tezos_associated_address/tezos_associated_address_model.dart';
+export 'tezotopia_membership/tezotopia_membership_model.dart';
 export 'tezotopia_voucher/tezotopia_voucher_model.dart';
 export 'voucher/voucher_model.dart';

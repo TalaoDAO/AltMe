@@ -16,6 +16,8 @@ class CredentialSubjectModel {
 
   factory CredentialSubjectModel.fromJson(Map<String, dynamic> json) {
     switch (json['type']) {
+      case 'MembershipCard_1':
+        return TezotopiaMembershipModel.fromJson(json);
       case 'Nationality':
         return NationalityModel.fromJson(json);
       case 'ResidentCard':

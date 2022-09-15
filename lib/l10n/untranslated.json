@@ -449,7 +449,8 @@
     "voucher",
     "tezotopia",
     "operationCompleted",
-    "operationFailed"
+    "operationFailed",
+    "membership"
   ],
 
   "es": [
@@ -902,7 +903,8 @@
     "voucher",
     "tezotopia",
     "operationCompleted",
-    "operationFailed"
+    "operationFailed",
+    "membership"
   ],
 
   "fr": [
@@ -1355,7 +1357,8 @@
     "voucher",
     "tezotopia",
     "operationCompleted",
-    "operationFailed"
+    "operationFailed",
+    "membership"
   ],
 
   "it": [
@@ -1808,6 +1811,7 @@
     "voucher",
     "tezotopia",
     "operationCompleted",
-    "operationFailed"
+    "operationFailed",
+    "membership"
   ]
 }
