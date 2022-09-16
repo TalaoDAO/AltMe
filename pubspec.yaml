@@ -10,7 +10,7 @@ dependencies:
   auto_size_text: ^3.0.0 
   beacon_flutter:
     git:
-      url: https://github.com/TalaoDAO/beacon
+      url: https://github.com/TalaoDAO/beacon.git
       ref: main
   bip39: ^1.0.6
   bloc: ^8.0.3
