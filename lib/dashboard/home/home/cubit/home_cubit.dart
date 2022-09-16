@@ -122,23 +122,20 @@ class HomeCubit extends Cubit<HomeState> {
         // IdentityAccessKey to run the process manually:
         // 22a363e6-2f93-4dd3-9ac8-6cba5a046acd
 
-        try {
-          unawaited(
-            getMutipleCredentials(
-              identityAccessKey,
-              client,
-              walletCubit,
-              secureStorageProvider,
-            ),
-          );
-        } catch (e) {
-          emit(
-            state.copyWith(
-              status: AppStatus.populate,
-              passBaseStatus: PassBaseStatus.declined,
-            ),
-          );
-        }
+        unawaited(
+          getMutipleCredentials(
+            identityAccessKey,
+            client,
+            walletCubit,
+            secureStorageProvider,
+          ),
+        );
+        emit(
+          state.copyWith(
+            status: AppStatus.populate,
+            passBaseStatus: PassBaseStatus.pending,
+          ),
+        );
       },
       onError: (e) {
         if (e == 'CANCELLED_BY_USER') {

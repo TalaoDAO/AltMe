@@ -46,6 +46,7 @@ class SplashCubit extends Cubit<SplashState> {
         final String? preAuthorizedCode = await secureStorageProvider.get(
           SecureStorageKeys.preAuthorizedCode,
         );
+        print('preAuthorizedCode: $preAuthorizedCode');
         if (preAuthorizedCode != null) {
           unawaited(
             getCredentialsFromIssuer(

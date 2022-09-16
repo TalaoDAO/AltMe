@@ -29,11 +29,9 @@ Future<void> getMutipleCredentials(
 // use jsonpath to handle this
   // record starting date in order to finish process on next phone start
   // if current thread had not finished properly
-  unawaited(
-    RegisterMultipleCredentialsProcess(
-      secureStorageProvider,
-      preAuthorizedCode,
-    ),
+  await RegisterMultipleCredentialsProcess(
+    secureStorageProvider,
+    preAuthorizedCode,
   );
 // Wait 5 minutes to let passbase verification time to happen
   Future.delayed(
@@ -67,6 +65,8 @@ Future<void> getCredentialsFromIssuer(
       : accessTokenAndNonce;
   final String accessToken = data['access_token'] as String;
   final String nonce = data['c_nonce'] as String;
+  print('accessToken: $accessToken');
+  print('nonce: $nonce');
 
   for (final type in credentialTypeList) {
     final dynamic credential = await getCredential(
@@ -139,6 +139,10 @@ Future<dynamic> getCredential(
       jsonEncode(options),
       key,
     );
+    print('did_auth: $did_auth');
+    print('did: $did');
+    print('accessToken: $accessToken');
+    print('nonce: $nonce');
     final dynamic response = await client.post(
       credentialEndPoint,
       headers: <String, dynamic>{
