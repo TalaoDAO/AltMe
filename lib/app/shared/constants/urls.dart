@@ -18,7 +18,7 @@ class Urls {
       'https://issuer.talao.co/talao_community';
   // TODO(all): not sure about the issuer url for tezotopiaMembershipCard
   static const String tezotopiaMembershipCardUrl =
-      'http://issuer.talao.co/membership_1';
+      'https://issuer.tezotopia.altme.io/issuer/membershipcard_mobile';
   static const String identityCardUrl = 'http://issuer.talao.co/kyc';
   static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
 
