@@ -200,25 +200,14 @@ Future<void> RegisterMultipleCredentialsProcess(
 Future<void> UnregisterMultipleCredentialsProcess(
   secure_storage.SecureStorageProvider secureStorageProvider,
 ) async {
-  await secureStorageProvider.set(
-    SecureStorageKeys.passBaseVerificationDate,
-    '',
-  );
+  // await secureStorageProvider.set(
+  //   SecureStorageKeys.passBaseVerificationDate,
+  //   '',
+  // );
 }
 
 Future<bool> isGettingMultipleCredentialsNeeded(
   secure_storage.SecureStorageProvider secureStorageProvider,
 ) async {
-  final String? passBaseVerificationDate = await secureStorageProvider.get(
-    SecureStorageKeys.passBaseVerificationDate,
-  );
-  if (passBaseVerificationDate != null && passBaseVerificationDate != '') {
-    final DateTime date = DateTime.parse(passBaseVerificationDate);
-    final DateTime now = DateTime.now();
-    final Duration timeDifference = now.difference(date);
-    if (timeDifference.inMinutes > Parameters.multipleCredentialsProcessDelay) {
-      return true;
-    }
-  }
-  return false;
+  return true;
 }
