@@ -722,6 +722,17 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff71CBFF),
       );
 
+  TextStyle get identitiyBaseSmallText => GoogleFonts.roboto(
+        fontSize: 15,
+        fontWeight: FontWeight.w300,
+        color: const Color(0xffFFFFFF),
+      );
+  TextStyle get identitiyBaseMediumBoldText => GoogleFonts.roboto(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: const Color(0xffFFFFFF),
+      );
+
   TextStyle get copyToClipBoard => GoogleFonts.nunito(
         fontSize: 16,
         fontWeight: FontWeight.w400,

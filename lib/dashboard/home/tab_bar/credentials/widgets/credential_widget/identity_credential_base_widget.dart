@@ -36,25 +36,23 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
               id: 'provided-by',
               child: FractionallySizedBox(
                 widthFactor: 0.75,
-                heightFactor: 0.15,
-                child: MyText(
-                  '${l10n.providedBy} ',
-                  style: Theme.of(context).textTheme.subMessage,
-                ),
-              ),
-            ),
-            if (issuerName != null)
-              LayoutId(
-                id: 'provided-by-value',
-                child: FractionallySizedBox(
-                  widthFactor: 0.75,
-                  heightFactor: 0.15,
-                  child: MyText(
-                    issuerName!,
-                    style: Theme.of(context).textTheme.title,
+                heightFactor: 0.14,
+                child: MyRichText(
+                  text: TextSpan(
+                    text: '${l10n.providedBy} ',
+                    style: Theme.of(context).textTheme.identitiyBaseSmallText,
+                    children: [
+                      TextSpan(
+                        text: issuerName,
+                        style: Theme.of(context)
+                            .textTheme
+                            .identitiyBaseMediumBoldText,
+                      ),
+                    ],
                   ),
                 ),
               ),
+            ),
             if (value != null)
               LayoutId(
                 id: 'value',
@@ -63,7 +61,8 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
                   heightFactor: 0.15,
                   child: MyText(
                     value!,
-                    style: Theme.of(context).textTheme.title,
+                    style:
+                        Theme.of(context).textTheme.identitiyBaseMediumBoldText,
                   ),
                 ),
               ),
@@ -71,11 +70,11 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
               LayoutId(
                 id: 'issued-on',
                 child: FractionallySizedBox(
-                  heightFactor: 0.12,
+                  heightFactor: 0.11,
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.issuedOn,
-                    style: Theme.of(context).textTheme.subMessage,
+                    style: Theme.of(context).textTheme.identitiyBaseSmallText,
                   ),
                 ),
               ),
@@ -83,13 +82,12 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
               LayoutId(
                 id: 'issued-on-value',
                 child: FractionallySizedBox(
-                  heightFactor: 0.12,
+                  heightFactor: 0.11,
                   widthFactor: 0.4,
                   child: MyText(
-                    UiDate.formatDateForCredentialCard(
-                      issuanceDate!,
-                    ),
-                    style: Theme.of(context).textTheme.title,
+                    issuanceDate!,
+                    style:
+                        Theme.of(context).textTheme.identitiyBaseMediumBoldText,
                   ),
                 ),
               ),
@@ -97,11 +95,11 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
               LayoutId(
                 id: 'expiration-date',
                 child: FractionallySizedBox(
-                  heightFactor: 0.12,
+                  heightFactor: 0.11,
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.expirationDate,
-                    style: Theme.of(context).textTheme.subMessage,
+                    style: Theme.of(context).textTheme.identitiyBaseSmallText,
                   ),
                 ),
               ),
@@ -109,11 +107,12 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
               LayoutId(
                 id: 'expiration-date-value',
                 child: FractionallySizedBox(
-                  heightFactor: 0.12,
+                  heightFactor: 0.11,
                   widthFactor: 0.4,
                   child: MyText(
                     expirationDate!,
-                    style: Theme.of(context).textTheme.title,
+                    style:
+                        Theme.of(context).textTheme.identitiyBaseMediumBoldText,
                   ),
                 ),
               ),
@@ -136,13 +135,6 @@ class IdentityCredentialBaseWidgetDelegate extends MultiChildLayoutDelegate {
       positionChild(
         'provided-by',
         Offset(size.width * 0.06, size.height * 0.27),
-      );
-    }
-    if (hasChild('provided-by-value')) {
-      layoutChild('provided-by-value', BoxConstraints.loose(size));
-      positionChild(
-        'provided-by-value',
-        Offset(size.width * 0.20, size.height * 0.27),
       );
     }
 
