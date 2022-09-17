@@ -90,7 +90,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
             await setDefaultSelectedContractIfFirstTime(selectedContracts);
         emit(state.copyWith(selectedContracts: data));
         getLogger(
-          runtimeType.toString(),
+          'Tokens cubit',
         ).i('returned selectedContracts from storage: $selectedContracts');
         return data;
       }
@@ -285,7 +285,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
         jsonEncode(state.selectedContracts.map((e) => e.toJson()).toList()),
       );
       emit(state.copyWith(status: AppStatus.success));
-      getLogger(runtimeType.toString())
+      getLogger('Tokens cubit')
           .i('saved selected contracts: ${state.selectedContracts}');
     } catch (e, s) {
       getLogger(runtimeType.toString())
