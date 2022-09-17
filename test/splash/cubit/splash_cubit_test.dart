@@ -4,6 +4,7 @@ import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -37,6 +38,7 @@ void main() {
           didCubit: didCubit,
           homeCubit: homeCubit,
           walletCubit: walletCubit,
+          client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
         ).state,
         SplashStatus.init,
       );
@@ -55,6 +57,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
 
@@ -72,6 +75,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
 
@@ -96,6 +100,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
 
@@ -113,6 +118,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
 
@@ -139,6 +145,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
 
@@ -156,6 +163,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
 
@@ -184,6 +192,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
 
@@ -201,6 +210,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
 
@@ -231,6 +241,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
 
@@ -248,6 +259,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
 
@@ -272,6 +284,7 @@ void main() {
               didCubit: didCubit,
               homeCubit: homeCubit,
               walletCubit: walletCubit,
+              client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             );
             await splashCubit.initialiseApp();
 
@@ -289,6 +302,7 @@ void main() {
               didCubit: didCubit,
               homeCubit: homeCubit,
               walletCubit: walletCubit,
+              client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             );
             await splashCubit.initialiseApp();
 
@@ -306,6 +320,7 @@ void main() {
               didCubit: didCubit,
               homeCubit: homeCubit,
               walletCubit: walletCubit,
+              client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             );
             await splashCubit.initialiseApp();
 

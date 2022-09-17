@@ -323,10 +323,16 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// credentials
     await repository.deleteAll();
+
+    /// passBase
     await secureStorageProvider.delete(SecureStorageKeys.passBaseStatus);
+    await secureStorageProvider
+        .delete(SecureStorageKeys.passBaseVerificationDate);
+    await secureStorageProvider.delete(SecureStorageKeys.preAuthorizedCode);
 
     /// user data
     await profileCubit.resetProfile();
+    await secureStorageProvider.delete(SecureStorageKeys.pinCode);
 
     /// clear app states
     homeCubit.emitHasNoWallet();
@@ -399,15 +405,14 @@ class WalletCubit extends Cubit<WalletState> {
       final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
 
       if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
-        getLogger(runtimeType.toString()).w(
+        log.w(
           'credential verification return warnings',
           jsonVerification['warnings'],
         );
       }
 
       if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
-        getLogger(runtimeType.toString())
-            .e('failed to verify credential, ${jsonVerification['errors']}');
+        log.e('failed to verify credential, ${jsonVerification['errors']}');
         if (jsonVerification['errors'][0] != 'No applicable proof') {
           throw ResponseMessage(
             ResponseString

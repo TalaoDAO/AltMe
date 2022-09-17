@@ -141,15 +141,18 @@ class TokensCubit extends Cubit<TokensState> {
           }
           try {
             final token = data[i];
-            final contract = allTokensCubit.state.contracts.firstWhere(
-              (element) => element.symbol == token.symbol,
+            final contract = allTokensCubit.state.contracts.firstWhereOrNull(
+              (element) =>
+                  element.symbol.toLowerCase() == token.symbol.toLowerCase(),
             );
-            data[i] = token.copyWith(
-              icon: token.icon ?? contract.iconUrl,
-              tokenUSDPrice: contract.usdValue,
-              balanceUSDPrice:
-                  token.calculatedBalanceInDouble * contract.usdValue,
-            );
+            if (contract != null) {
+              data[i] = token.copyWith(
+                icon: token.icon ?? contract.iconUrl,
+                tokenUSDPrice: contract.usdValue,
+                balanceUSDPrice:
+                    token.calculatedBalanceInDouble * contract.usdValue,
+              );
+            }
           } catch (e, s) {
             getLogger(runtimeType.toString()).e(
               'error in finding contract, error: $e, s: $s',

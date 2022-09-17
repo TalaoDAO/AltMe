@@ -35,6 +35,8 @@ class SecureStorageKeys {
   static const String currentCryptoIndex = 'currentCryptoIndex';
   static const String derivePathIndex = 'derivePathIndex';
   static const String passBaseStatus = 'passBaseStatus';
+  static const String passBaseVerificationDate = 'passBaseVerificationDate';
+  static const String preAuthorizedCode = 'preAuthorizedCode';
 
   static const String pairingRequest = 'pairingRequest';
 }

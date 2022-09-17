@@ -1,4 +1,3 @@
-import 'package:altme/app/logger/logger.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
@@ -31,12 +30,14 @@ class CredentialListData extends StatelessWidget {
             IdentityCredentials(credentials: state.identityCredentials),
             const SizedBox(height: 10),
           ],
-          if (state.proofOfOwnershipCredentials.isNotEmpty) ...[
-            ProofOfOwnershipCredentials(
-              credentials: state.proofOfOwnershipCredentials,
-            ),
-            const SizedBox(height: 10),
-          ],
+          // ProofOfOwnershipCredentials is hidden. Later we will
+          // give user an option to show it
+          // if (state.proofOfOwnershipCredentials.isNotEmpty) ...[
+          //   ProofOfOwnershipCredentials(
+          //     credentials: state.proofOfOwnershipCredentials,
+          //   ),
+          //   const SizedBox(height: 10),
+          // ],
           if (state.othersCredentials.isNotEmpty) ...[
             OtherCredentials(credentials: state.othersCredentials),
             const SizedBox(height: 10),
