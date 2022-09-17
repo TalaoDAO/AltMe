@@ -65,8 +65,6 @@ Future<void> getCredentialsFromIssuer(
       : accessTokenAndNonce;
   final String accessToken = data['access_token'] as String;
   final String nonce = data['c_nonce'] as String;
-  print('accessToken: $accessToken');
-  print('nonce: $nonce');
 
   for (final type in credentialTypeList) {
     final dynamic credential = await getCredential(
@@ -139,10 +137,6 @@ Future<dynamic> getCredential(
       jsonEncode(options),
       key,
     );
-    print('did_auth: $did_auth');
-    print('did: $did');
-    print('accessToken: $accessToken');
-    print('nonce: $nonce');
     final dynamic response = await client.post(
       credentialEndPoint,
       headers: <String, dynamic>{
@@ -159,7 +153,7 @@ Future<dynamic> getCredential(
     );
     return jsonDecode(response['credential'] as String);
   } catch (e) {
-    print('got a problem 2');
+    throw Exception();
   }
 }
 
@@ -183,7 +177,7 @@ Future<dynamic> getAccessTokenAndNonce(
     );
     return accessTokenAndNonce;
   } catch (e) {
-    print('got a problem');
+    throw Exception();
   }
 }
 

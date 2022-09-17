@@ -131,6 +131,9 @@ class HomeCubit extends Cubit<HomeState> {
             secureStorageProvider,
           ),
         );
+
+        /// Do not remove: Following POST tell backend the relation between DID
+        /// and passbase token.
         try {
           final dynamic response = await client.post(
             '/wallet/webhook',
