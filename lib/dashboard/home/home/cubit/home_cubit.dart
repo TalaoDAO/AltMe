@@ -116,6 +116,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   void startPassbaseVerification(WalletCubit walletCubit) {
     final log = getLogger('HomeCubit - startPassbaseVerification');
+    final did = didCubit.state.did!;
     emit(state.loading());
     PassbaseSDK.startVerification(
       onFinish: (identityAccessKey) async {
@@ -130,12 +131,37 @@ class HomeCubit extends Cubit<HomeState> {
             secureStorageProvider,
           ),
         );
-        emit(
-          state.copyWith(
-            status: AppStatus.populate,
-            passBaseStatus: PassBaseStatus.pending,
-          ),
-        );
+        try {
+          final dynamic response = await client.post(
+            '/wallet/webhook',
+            headers: <String, dynamic>{
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer mytoken',
+            },
+            data: <String, dynamic>{
+              'identityAccessKey': identityAccessKey,
+              'DID': did,
+            },
+          );
+
+          if (response == 'ok') {
+            emit(
+              state.copyWith(
+                status: AppStatus.idle,
+                passBaseStatus: PassBaseStatus.complete,
+              ),
+            );
+          } else {
+            throw Exception();
+          }
+        } catch (e) {
+          emit(
+            state.copyWith(
+              status: AppStatus.populate,
+              passBaseStatus: PassBaseStatus.declined,
+            ),
+          );
+        }
       },
       onError: (e) {
         if (e == 'CANCELLED_BY_USER') {
