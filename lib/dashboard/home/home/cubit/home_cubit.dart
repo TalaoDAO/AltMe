@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
+import 'package:altme/get_identity_credentials/get_multiple_credentials.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
@@ -30,7 +31,6 @@ class HomeCubit extends Cubit<HomeState> {
     final String? passbaseStatusFromStorage = await secureStorageProvider.get(
       SecureStorageKeys.passBaseStatus,
     );
-
     if (passbaseStatusFromStorage != null) {
       final passBaseStatus = getPassBaseStatusFromString(
         passbaseStatusFromStorage,
@@ -116,12 +116,24 @@ class HomeCubit extends Cubit<HomeState> {
 
   void startPassbaseVerification(WalletCubit walletCubit) {
     final log = getLogger('HomeCubit - startPassbaseVerification');
-    emit(state.loading());
     final did = didCubit.state.did!;
-    //setKYCMetadata(walletCubit);
+    emit(state.loading());
     PassbaseSDK.startVerification(
       onFinish: (identityAccessKey) async {
-        //22a363e6-2f93-4dd3-9ac8-6cba5a046acd
+        // IdentityAccessKey to run the process manually:
+        // 22a363e6-2f93-4dd3-9ac8-6cba5a046acd
+
+        unawaited(
+          getMutipleCredentials(
+            identityAccessKey,
+            client,
+            walletCubit,
+            secureStorageProvider,
+          ),
+        );
+
+        /// Do not remove: Following POST tell backend the relation between DID
+        /// and passbase token.
         try {
           final dynamic response = await client.post(
             '/wallet/webhook',
