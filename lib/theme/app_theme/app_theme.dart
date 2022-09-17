@@ -723,13 +723,13 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get identitiyBaseSmallText => GoogleFonts.roboto(
-        fontSize: 15,
+        fontSize: 12,
         fontWeight: FontWeight.w300,
         color: const Color(0xffFFFFFF),
       );
   TextStyle get identitiyBaseMediumBoldText => GoogleFonts.roboto(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
+        fontSize: 21,
+        fontWeight: FontWeight.w500,
         color: const Color(0xffFFFFFF),
       );
 

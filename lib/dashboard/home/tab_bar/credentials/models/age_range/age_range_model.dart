@@ -17,7 +17,7 @@ class AgeRangeModel extends CredentialSubjectModel {
           type: type,
           issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.ageRange,
-          credentialCategory: CredentialCategory.othersCards,
+          credentialCategory: CredentialCategory.identityCards,
         );
 
   factory AgeRangeModel.fromJson(Map<String, dynamic> json) =>

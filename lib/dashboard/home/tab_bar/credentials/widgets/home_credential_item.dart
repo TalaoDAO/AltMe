@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/constants/discover_list.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
@@ -98,10 +99,12 @@ class DummyCredentialItem extends StatelessWidget {
             );
             return;
           }
-          if (homeCredential.credentialSubjectType ==
-                  CredentialSubjectType.identityCard ||
-              homeCredential.credentialSubjectType ==
-                  CredentialSubjectType.over18) {
+          final List<CredentialSubjectType> credentialSubjectTypeList =
+              List.of(DiscoverList.identityCategories);
+          credentialSubjectTypeList.remove(CredentialSubjectType.emailPass);
+          if (credentialSubjectTypeList.contains(
+            homeCredential.credentialSubjectType,
+          )) {
             await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
                   link: homeCredential.link!,
                 );

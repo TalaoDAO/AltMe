@@ -12,7 +12,6 @@ part 'credential_list_state.dart';
 class CredentialListCubit extends Cubit<CredentialListState> {
   CredentialListCubit() : super(CredentialListState());
 
-  CredentialSubjectType over18 = CredentialSubjectType.over18;
   CredentialSubjectType identityCredentialCard =
       CredentialSubjectType.identityCard;
 
@@ -43,12 +42,63 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       final credentialSubjectType = credential
           .credentialPreview.credentialSubjectModel.credentialSubjectType;
 
-      if (credentialSubjectType == over18) {
-        identityCategories.remove(over18);
-      } else if (credentialSubjectType == identityCredentialCard) {
-        identityCategories.remove(identityCredentialCard);
+      switch (credentialSubjectType) {
+        case CredentialSubjectType.tezotopiaMembership:
+          break;
+        case CredentialSubjectType.ageRange:
+          identityCategories.remove(CredentialSubjectType.ageRange);
+          break;
+        case CredentialSubjectType.nationality:
+          identityCategories.remove(CredentialSubjectType.nationality);
+          break;
+        case CredentialSubjectType.gender:
+          identityCategories.remove(CredentialSubjectType.gender);
+          break;
+        case CredentialSubjectType.tezosAssociatedWallet:
+          break;
+        case CredentialSubjectType.certificateOfEmployment:
+          break;
+        case CredentialSubjectType.defaultCredential:
+          break;
+        case CredentialSubjectType.ecole42LearningAchievement:
+          break;
+        case CredentialSubjectType.emailPass:
+          break;
+        case CredentialSubjectType.identityPass:
+          identityCategories.remove(CredentialSubjectType.identityPass);
+          break;
+        case CredentialSubjectType.identityCard:
+          identityCategories.remove(CredentialSubjectType.identityCard);
+          break;
+        case CredentialSubjectType.learningAchievement:
+          break;
+        case CredentialSubjectType.loyaltyCard:
+          break;
+        case CredentialSubjectType.over18:
+          identityCategories.remove(CredentialSubjectType.over18);
+          break;
+        case CredentialSubjectType.phonePass:
+          break;
+        case CredentialSubjectType.professionalExperienceAssessment:
+          break;
+        case CredentialSubjectType.professionalSkillAssessment:
+          break;
+        case CredentialSubjectType.professionalStudentCard:
+          break;
+        case CredentialSubjectType.residentCard:
+          identityCategories.remove(CredentialSubjectType.residentCard);
+          break;
+        case CredentialSubjectType.selfIssued:
+          break;
+        case CredentialSubjectType.studentCard:
+          break;
+        case CredentialSubjectType.voucher:
+          break;
+        case CredentialSubjectType.tezVoucher:
+          break;
+        case CredentialSubjectType.talaoCommunityCard:
+          break;
       }
-
       switch (credentialSubject.credentialCategory) {
         case CredentialCategory.gamingCards:
 
@@ -152,29 +202,90 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         final credentialSubjectType = credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
-
-        if (credentialSubjectType == over18) {
-          /// remove dummy over18 credentials if exists
-          final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
-            (element) =>
-                element.isDummy && element.credentialSubjectType == over18,
-          );
-          if (dummyCredential != null) {
-            _credentials.remove(dummyCredential);
-          }
-          identityCategories.remove(over18);
-        }
-        if (credentialSubjectType == identityCredentialCard) {
-          /// remove dummy over18 credentials if exists
-          final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
-            (element) =>
-                element.isDummy &&
-                element.credentialSubjectType == identityCredentialCard,
-          );
-          if (dummyCredential != null) {
-            _credentials.remove(dummyCredential);
-          }
-          identityCategories.remove(identityCredentialCard);
+        switch (credentialSubjectType) {
+          case CredentialSubjectType.tezotopiaMembership:
+            break;
+          case CredentialSubjectType.ageRange:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              identityCategories,
+              CredentialSubjectType.ageRange,
+            );
+            break;
+          case CredentialSubjectType.nationality:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              identityCategories,
+              CredentialSubjectType.nationality,
+            );
+            break;
+          case CredentialSubjectType.gender:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              identityCategories,
+              CredentialSubjectType.gender,
+            );
+            break;
+          case CredentialSubjectType.tezosAssociatedWallet:
+            break;
+          case CredentialSubjectType.certificateOfEmployment:
+            break;
+          case CredentialSubjectType.defaultCredential:
+            break;
+          case CredentialSubjectType.ecole42LearningAchievement:
+            break;
+          case CredentialSubjectType.emailPass:
+            break;
+          case CredentialSubjectType.identityPass:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              identityCategories,
+              CredentialSubjectType.identityPass,
+            );
+            break;
+          case CredentialSubjectType.identityCard:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              identityCategories,
+              CredentialSubjectType.identityCard,
+            );
+            break;
+          case CredentialSubjectType.learningAchievement:
+            break;
+          case CredentialSubjectType.loyaltyCard:
+            break;
+          case CredentialSubjectType.over18:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              identityCategories,
+              CredentialSubjectType.over18,
+            );
+            break;
+          case CredentialSubjectType.phonePass:
+            break;
+          case CredentialSubjectType.professionalExperienceAssessment:
+            break;
+          case CredentialSubjectType.professionalSkillAssessment:
+            break;
+          case CredentialSubjectType.professionalStudentCard:
+            break;
+          case CredentialSubjectType.residentCard:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              identityCategories,
+              CredentialSubjectType.residentCard,
+            );
+            break;
+          case CredentialSubjectType.selfIssued:
+            break;
+          case CredentialSubjectType.studentCard:
+            break;
+          case CredentialSubjectType.voucher:
+            break;
+          case CredentialSubjectType.tezVoucher:
+            break;
+          case CredentialSubjectType.talaoCommunityCard:
+            break;
         }
 
         emit(
@@ -201,6 +312,22 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         emit(state.populate(othersCredentials: _credentials));
         break;
     }
+  }
+
+  void _removeDummyIfCredentialExist(
+    List<HomeCredential> _credentials,
+    List<CredentialSubjectType> identityCategoriesqs,
+    CredentialSubjectType credentialSubjectType,
+  ) {
+    final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
+      (element) =>
+          element.isDummy &&
+          element.credentialSubjectType == credentialSubjectType,
+    );
+    if (dummyCredential != null) {
+      _credentials.remove(dummyCredential);
+    }
+    identityCategoriesqs.remove(credentialSubjectType);
   }
 
   Future updateCredential(CredentialModel credential) async {
@@ -327,16 +454,91 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
-        //add dummmy over18 credentials
-        if (credentialSubjectType == over18) {
-          // TODO(all): Uncomment if we need to display dummies again.
-          // _credentials.add(HomeCredential.isDummy(over18));
-          identityCategories.add(over18);
-        }
-        if (credentialSubjectType == identityCredentialCard) {
-          // TODO(all): Uncomment if we need to display dummies again.
-          // _credentials.add(HomeCredential.isDummy(identityCredentialCard));
-          identityCategories.add(identityCredentialCard);
+
+        switch (credentialSubjectType) {
+          case CredentialSubjectType.tezotopiaMembership:
+            break;
+          case CredentialSubjectType.ageRange:
+            // TODO(all): Uncomment if we need to display dummies again.
+            // _credentials.add(
+            //   HomeCredential.isDummy(
+            //     CredentialSubjectType.ageRange,
+            //   ),
+            // );
+            identityCategories.add(CredentialSubjectType.ageRange);
+            break;
+          case CredentialSubjectType.nationality:
+            // TODO(all): Uncomment if we need to display dummies again.
+            // _credentials.add(
+            //   HomeCredential.isDummy(
+            //     CredentialSubjectType.nationality,
+            //   ),
+            // );
+            identityCategories.add(CredentialSubjectType.nationality);
+            break;
+          case CredentialSubjectType.gender:
+            // TODO(all): Uncomment if we need to display dummies again.
+            // _credentials.add(
+            //   HomeCredential.isDummy(
+            //     CredentialSubjectType.gender,
+            //   ),
+            // );
+            identityCategories.add(CredentialSubjectType.gender);
+            break;
+          case CredentialSubjectType.tezosAssociatedWallet:
+            break;
+          case CredentialSubjectType.certificateOfEmployment:
+            break;
+          case CredentialSubjectType.defaultCredential:
+            break;
+          case CredentialSubjectType.ecole42LearningAchievement:
+            break;
+          case CredentialSubjectType.emailPass:
+            break;
+          case CredentialSubjectType.identityPass:
+            break;
+          case CredentialSubjectType.identityCard:
+            // TODO(all): Uncomment if we need to display dummies again.
+            // _credentials.add(
+            //   HomeCredential.isDummy(
+            //     CredentialSubjectType.identityCard,
+            //   ),
+            // );
+            identityCategories.add(CredentialSubjectType.identityCard);
+            break;
+          case CredentialSubjectType.learningAchievement:
+            break;
+          case CredentialSubjectType.loyaltyCard:
+            break;
+          case CredentialSubjectType.over18:
+            // TODO(all): Uncomment if we need to display dummies again.
+            // _credentials.add(
+            //   HomeCredential.isDummy(
+            //     CredentialSubjectType.over18,
+            //   ),
+            // );
+            identityCategories.add(CredentialSubjectType.over18);
+            break;
+          case CredentialSubjectType.phonePass:
+            break;
+          case CredentialSubjectType.professionalExperienceAssessment:
+            break;
+          case CredentialSubjectType.professionalSkillAssessment:
+            break;
+          case CredentialSubjectType.professionalStudentCard:
+            break;
+          case CredentialSubjectType.residentCard:
+            break;
+          case CredentialSubjectType.selfIssued:
+            break;
+          case CredentialSubjectType.studentCard:
+            break;
+          case CredentialSubjectType.voucher:
+            break;
+          case CredentialSubjectType.tezVoucher:
+            break;
+          case CredentialSubjectType.talaoCommunityCard:
+            break;
         }
 
         emit(
