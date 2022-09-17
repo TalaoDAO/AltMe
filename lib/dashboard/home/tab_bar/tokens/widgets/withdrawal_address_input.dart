@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/tokens.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -65,17 +66,12 @@ class _WithdrawalAddressInputPageState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Container(
+    return BackgroundCard(
+      color: Theme.of(context).colorScheme.cardBackground,
       padding: const EdgeInsets.only(
         top: Sizes.spaceSmall,
         right: Sizes.spaceSmall,
         left: Sizes.spaceSmall,
-      ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).hoverColor,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(Sizes.normalRadius),
-        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

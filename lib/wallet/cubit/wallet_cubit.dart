@@ -164,25 +164,19 @@ class WalletCubit extends Cubit<WalletState> {
     final CryptoAccountData cryptoAccountData = state.cryptoAccount.data[index];
     cryptoAccountData.name = newAccountName;
 
-    final cryptoAccounts = List.of(state.cryptoAccount.data)
-      ..removeWhere(
-        (element) => element.walletAddress == cryptoAccountData.walletAddress,
-      )
-      ..insert(index, cryptoAccountData);
+    final cryptoAccounts = List.of(state.cryptoAccount.data);
+    cryptoAccounts[index] = cryptoAccountData;
 
     final CryptoAccount cryptoAccount = CryptoAccount(data: cryptoAccounts);
-    final String cryptoAccountString = jsonEncode(cryptoAccount);
+    final String cryptoAccountString = jsonEncode(cryptoAccount.toJson());
     await secureStorageProvider.set(
       SecureStorageKeys.cryptoAccount,
       cryptoAccountString,
     );
 
-    if (onComplete != null) {
-      onComplete.call(cryptoAccount);
-    }
-
     /// get id of current AssociatedAddres credential of this account
-    final oldCredentialList = getCredentialsFromFilterList(
+    final oldCredentialList = List<CredentialModel>.from(state.credentials);
+    final filteredCredentialList = getCredentialsFromFilterList(
       [
         Field([r'$..type'], Filter('String', 'TezosAssociatedAddress')),
         Field(
@@ -190,16 +184,16 @@ class WalletCubit extends Cubit<WalletState> {
           Filter('String', cryptoAccountData.walletAddress),
         ),
       ],
-      state.credentials,
+      oldCredentialList,
     );
 
     /// update or create AssociatedAddres credential with new name
-    if (oldCredentialList.isNotEmpty) {
+    if (filteredCredentialList.isNotEmpty) {
       final credential = await generateAssociatedWalletCredential(
         accountName: cryptoAccountData.name,
         walletAddress: cryptoAccountData.walletAddress,
         cryptoKey: cryptoAccountData.key,
-        oldId: oldCredentialList.first.id,
+        oldId: filteredCredentialList.first.id,
       );
       if (credential != null) {
         await updateCredential(credential);
@@ -216,6 +210,8 @@ class WalletCubit extends Cubit<WalletState> {
     }
 
     emitCryptoAccount(cryptoAccount);
+
+    onComplete?.call(cryptoAccount);
   }
 
   void emitCryptoAccount(CryptoAccount cryptoAccount) {
@@ -261,9 +257,8 @@ class WalletCubit extends Cubit<WalletState> {
     final index =
         state.credentials.indexWhere((element) => element.id == credential.id);
 
-    final credentials = List.of(state.credentials)
-      ..removeWhere((element) => element.id == credential.id)
-      ..insert(index, credential);
+    final credentials = List.of(state.credentials);
+    credentials[index] = credential;
 
     await credentialListCubit.updateCredential(credential);
     emit(
@@ -404,14 +399,15 @@ class WalletCubit extends Cubit<WalletState> {
       final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
 
       if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
-        log.w(
+        getLogger(runtimeType.toString()).w(
           'credential verification return warnings',
           jsonVerification['warnings'],
         );
       }
 
       if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
-        log.e('failed to verify credential', jsonVerification['errors']);
+        getLogger(runtimeType.toString())
+            .e('failed to verify credential, ${jsonVerification['errors']}');
         if (jsonVerification['errors'][0] != 'No applicable proof') {
           throw ResponseMessage(
             ResponseString
@@ -424,7 +420,8 @@ class WalletCubit extends Cubit<WalletState> {
         return _createCredential(vc, oldId);
       }
     } catch (e, s) {
-      log.e('something went wrong e: $e, stackTrace: $s', e, s);
+      getLogger(runtimeType.toString())
+          .e('something went wrong e: $e, stackTrace: $s', e, s);
       return null;
     }
   }

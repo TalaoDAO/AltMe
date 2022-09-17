@@ -24,15 +24,10 @@ class RecentTransactions extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Expanded(
-      child: Container(
+      child: BackgroundCard(
+        color: Theme.of(context).colorScheme.cardBackground,
         margin: const EdgeInsets.all(Sizes.spaceSmall),
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(Sizes.normalRadius),
-          ),
-          color: Theme.of(context).hoverColor,
-        ),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -53,7 +48,7 @@ class RecentTransactions extends StatelessWidget {
                           operationModel: operations[index],
                           symbol: symbol,
                           decimal: decimal,
-                          tokenUsdPrice:tokenUsdPrice,
+                          tokenUsdPrice: tokenUsdPrice,
                         ),
                         separatorBuilder: (_, __) {
                           return Padding(

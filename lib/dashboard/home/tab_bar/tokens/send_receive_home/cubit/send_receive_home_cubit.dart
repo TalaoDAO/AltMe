@@ -45,8 +45,14 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
       }
       emit(state.success(operations: operations, selectedToken: selectedToken));
     } catch (e, s) {
-      emit(state.error(messageHandler: MessageHandler()));
       getLogger(runtimeType.toString()).e('error in init() e: $e, $s', e, s);
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        ),
+      );
     }
   }
 
@@ -58,9 +64,15 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
 
       emit(state.success(operations: operations));
     } catch (e, s) {
-      emit(state.error(messageHandler: MessageHandler()));
       getLogger(runtimeType.toString())
           .e('error in getOperations() e: $e, $s', e, s);
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        ),
+      );
     }
   }
 

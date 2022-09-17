@@ -45,6 +45,13 @@ class TokensCubit extends Cubit<TokensState> {
       }
 
       final activeIndex = walletCubit.state.currentCryptoIndex;
+      if (walletCubit.state.cryptoAccount.data.isEmpty) {
+        await walletCubit.initialize();
+        if (walletCubit.state.cryptoAccount.data.isEmpty) {
+          emit(state.populate());
+          return [];
+        }
+      }
       final walletAddress =
           walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
 

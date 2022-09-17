@@ -11,6 +11,7 @@ class ImageStrings {
   static const String employmentCertificateBack =
       '$imagePath/carte-attestation-employeur-verso.png';
   static const String emailProof = '$imagePath/email-proof.png';
+  static const String tezotopiaMemberShip = '$imagePath/tezotopia-membership.png';
   static const String genderProof = '$imagePath/gender-proof.png';
   static const String ageRangeProof = '$imagePath/age_range.png';
   static const String nationalityProof = '$imagePath/nationality-proof.png';
@@ -45,6 +46,7 @@ class ImageStrings {
       '$imagePath/dummy_email_pass_card.png';
   static const String dummyNationalityCard =
       '$imagePath/dummy_nationality_card.png';
+  static const String tezotopiaMemberShipDummy = '$imagePath/tezotopia-membership-dummy.png';
   static const String dummyGenderCard = '$imagePath/dummy_gender_card.png';
   static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
   static const String dummyAgeRangeCard = '$imagePath/dummy_age_range_card.png';

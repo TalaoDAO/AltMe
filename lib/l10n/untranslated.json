@@ -445,7 +445,12 @@
     "sign",
     "payload_to_sign",
     "signedPayload",
-    "failedToSignPayload"
+    "failedToSignPayload",
+    "voucher",
+    "tezotopia",
+    "operationCompleted",
+    "operationFailed",
+    "membership"
   ],
 
   "es": [
@@ -894,7 +899,12 @@
     "sign",
     "payload_to_sign",
     "signedPayload",
-    "failedToSignPayload"
+    "failedToSignPayload",
+    "voucher",
+    "tezotopia",
+    "operationCompleted",
+    "operationFailed",
+    "membership"
   ],
 
   "fr": [
@@ -1343,7 +1353,12 @@
     "sign",
     "payload_to_sign",
     "signedPayload",
-    "failedToSignPayload"
+    "failedToSignPayload",
+    "voucher",
+    "tezotopia",
+    "operationCompleted",
+    "operationFailed",
+    "membership"
   ],
 
   "it": [
@@ -1792,6 +1807,11 @@
     "sign",
     "payload_to_sign",
     "signedPayload",
-    "failedToSignPayload"
+    "failedToSignPayload",
+    "voucher",
+    "tezotopia",
+    "operationCompleted",
+    "operationFailed",
+    "membership"
   ]
 }

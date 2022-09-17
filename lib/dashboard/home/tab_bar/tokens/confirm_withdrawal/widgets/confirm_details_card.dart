@@ -23,14 +23,8 @@ class ConfirmDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Container(
-      padding: const EdgeInsets.all(Sizes.spaceSmall),
-      decoration: BoxDecoration(
-        color: Theme.of(context).hoverColor,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(Sizes.normalRadius),
-        ),
-      ),
+    return BackgroundCard(
+      color: Theme.of(context).colorScheme.cardBackground,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -82,7 +76,7 @@ class ConfirmDetailsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '${amount.toStringAsFixed(6).formatNumber()} $symbol',
+                    '''${(amount + networkFee.fee).toStringAsFixed(6).formatNumber()} $symbol''',
                     style: Theme.of(context).textTheme.caption,
                   ),
                   Text(

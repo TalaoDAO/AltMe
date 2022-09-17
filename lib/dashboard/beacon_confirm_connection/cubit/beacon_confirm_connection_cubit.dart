@@ -26,38 +26,50 @@ class BeaconConfirmConnectionCubit extends Cubit<BeaconConfirmConnectionState> {
   final log = getLogger('BeaconConfirmConnectionCubit');
 
   Future<void> connect() async {
-    emit(state.loading());
-    final CryptoAccountData currentAccount = walletCubit.state.currentAccount;
-    final KeyStoreModel sourceKeystore =
-        getKeysFromSecretKey(secretKey: currentAccount.secretKey);
+    try {
+      emit(state.loading());
+      log.i('Start connecting to beacon');
+      final CryptoAccountData currentAccount = walletCubit.state.currentAccount;
+      final KeyStoreModel sourceKeystore =
+          getKeysFromSecretKey(secretKey: currentAccount.secretKey);
 
-    final Map response = await beacon.permissionResponse(
-      id: beaconCubit.state.beaconRequest!.request!.id!,
-      publicKey: sourceKeystore.publicKey,
-      address: currentAccount.walletAddress,
-    );
-
-    final bool success = json.decode(response['success'].toString()) as bool;
-
-    if (success) {
-      log.i('Connected to beacon');
-      emit(
-        state.copyWith(
-          appStatus: AppStatus.success,
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON,
-          ),
-        ),
+      final Map response = await beacon.permissionResponse(
+        id: beaconCubit.state.beaconRequest!.request!.id!,
+        publicKey: sourceKeystore.publicKey,
+        address: currentAccount.walletAddress,
       );
-    } else {
-      log.i('error connecting to beacon');
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON,
+
+      final bool success = json.decode(response['success'].toString()) as bool;
+
+      if (success) {
+        log.i('Connected to beacon');
+        emit(
+          state.copyWith(
+            appStatus: AppStatus.success,
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON,
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON,
+        );
+      }
+    } catch (e) {
+      log.e('error connecting to beacon , e: $e');
+      if (e is MessageHandler) {
+        emit(state.error(messageHandler: e));
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
+      }
     }
   }
 
