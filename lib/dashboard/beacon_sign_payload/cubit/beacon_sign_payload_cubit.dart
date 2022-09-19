@@ -30,7 +30,20 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
       log.i('Started signing');
       emit(state.loading());
 
-      final CryptoAccountData currentAccount = walletCubit.state.currentAccount;
+      final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
+
+      final CryptoAccountData? currentAccount =
+          walletCubit.state.cryptoAccount.data.firstWhereOrNull(
+        (element) =>
+            element.walletAddress == beaconRequest.request!.sourceAddress!,
+      );
+
+      if (currentAccount == null) {
+        // TODO(bibash): account data not available error message may be
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
 
       final dynamic signer = await Dartez.createSigner(
         Dartez.writeKeyWithHint(currentAccount.secretKey, 'edsk'),
