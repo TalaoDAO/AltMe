@@ -19,7 +19,9 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     required this.beacon,
     required this.beaconCubit,
     required this.dioClient,
-  }) : super(BeaconOperationState());
+  }) : super(BeaconOperationState()) {
+    getXtzPrice();
+  }
 
   final WalletCubit walletCubit;
   final Beacon beacon;
@@ -31,6 +33,19 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
   // set network fee
   void setNetworkFee({required NetworkFeeModel networkFee}) {
     emit(state.copyWith(networkFee: networkFee));
+  }
+
+  Future<void> getXtzPrice() async {
+    try {
+      log.i('fetching xtz price');
+      final response =
+          await dioClient.get(Urls.xtzPrice) as Map<String, dynamic>;
+      final XtzData xtzData = XtzData.fromJson(response);
+      log.i('response - ${xtzData.toJson()}');
+      emit(state.copyWith(xtzUSDRate: xtzData.price));
+    } catch (e) {
+      log.e(e);
+    }
   }
 
   Future<void> send() async {

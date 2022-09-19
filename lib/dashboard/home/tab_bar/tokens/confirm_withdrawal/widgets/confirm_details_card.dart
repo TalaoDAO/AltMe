@@ -8,14 +8,14 @@ class ConfirmDetailsCard extends StatelessWidget {
   const ConfirmDetailsCard({
     Key? key,
     required this.amount,
-    required this.amountUsdValue,
+    required this.tokenUSDRate,
     required this.symbol,
     required this.networkFee,
     this.onEditButtonPressed,
   }) : super(key: key);
 
   final double amount;
-  final double amountUsdValue;
+  final double tokenUSDRate;
   final String symbol;
   final NetworkFeeModel networkFee;
   final VoidCallback? onEditButtonPressed;
@@ -23,6 +23,8 @@ class ConfirmDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    final double grandTotal = amount + networkFee.fee;
     return BackgroundCard(
       color: Theme.of(context).colorScheme.cardBackground,
       child: Column(
@@ -76,13 +78,17 @@ class ConfirmDetailsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '''${(amount + networkFee.fee).toStringAsFixed(6).formatNumber()} $symbol''',
+                    '''${grandTotal.toStringAsFixed(6).formatNumber()} $symbol''',
                     style: Theme.of(context).textTheme.caption,
                   ),
-                  Text(
-                    r'$' + amountUsdValue.toStringAsFixed(2).formatNumber(),
-                    style: Theme.of(context).textTheme.caption2,
-                  ),
+                  if (tokenUSDRate > 0)
+                    Text(
+                      r'$' +
+                          (grandTotal * tokenUSDRate)
+                              .toStringAsFixed(2)
+                              .formatNumber(),
+                      style: Theme.of(context).textTheme.caption2,
+                    ),
                 ],
               ),
             ],
