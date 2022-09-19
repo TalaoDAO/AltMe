@@ -220,6 +220,10 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_OPERATION_FAILED:
           return ResponseString.RESPONSE_STRING_OPERATION_FAILED
               .localise(context);
+
+        case ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE:
+          return ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE
+              .localise(context);
       }
     }
     return '';

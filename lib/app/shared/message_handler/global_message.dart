@@ -170,4 +170,6 @@ class GlobalMessage {
   String get RESPONSE_STRING_OPERATION_COMPLETED => l10n.operationCompleted;
 
   String get RESPONSE_STRING_OPERATION_FAILED => l10n.operationFailed;
+
+  String get RESPONSE_STRING_INSUFFICIENT_BALANCE => l10n.insufficientBalance;
 }

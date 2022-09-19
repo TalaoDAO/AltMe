@@ -18,14 +18,17 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     required this.walletCubit,
     required this.beacon,
     required this.beaconCubit,
+    required this.dioClient,
   }) : super(BeaconOperationState());
 
   final WalletCubit walletCubit;
   final Beacon beacon;
   final BeaconCubit beaconCubit;
+  final DioClient dioClient;
 
   final log = getLogger('BeaconOperationCubit');
 
+  // set network fee
   void setNetworkFee({required NetworkFeeModel networkFee}) {
     emit(state.copyWith(networkFee: networkFee));
   }
@@ -64,6 +67,40 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
             .replaceAll(',', ''),
       );
 
+      // check xtz balance
+      late String baseUrl;
+
+      if (beaconRequest.request!.network!.type! == NetworkType.mainnet) {
+        baseUrl = TezosNetwork.mainNet().tzktUrl;
+      } else if (beaconRequest.request!.network!.type! ==
+          NetworkType.ghostnet) {
+        baseUrl = TezosNetwork.ghostnet().tzktUrl;
+      } else {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
+
+      log.i('checking xtz');
+      final int balance = await dioClient.get(
+        '$baseUrl/v1/accounts/${beaconRequest.request!.sourceAddress!}/balance',
+      ) as int;
+      log.i('total xtz - $balance');
+      final formattedBalance = int.parse(
+        balance.toStringAsFixed(6).replaceAll('.', '').replaceAll(',', ''),
+      );
+
+      if ((amount + customFee) > formattedBalance) {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
+        );
+      }
+
+      throw ResponseMessage(
+        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+      );
+
+      // send xtz
       final operationsList = await client.transferOperation(
         source: sourceKeystore,
         destination:
