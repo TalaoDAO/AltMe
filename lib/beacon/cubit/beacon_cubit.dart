@@ -14,20 +14,24 @@ class BeaconCubit extends Cubit<BeaconState> {
 
   final Beacon beacon;
 
+  final log = getLogger('BeaconCubit');
   Future<void> startBeacon() async {
     await beacon.startBeacon();
     if (state.isBeaconStarted) return;
+    log.i('beacon started');
     emit(state.copyWith(isBeaconStarted: true));
-    Future.delayed(const Duration(seconds: 3), listenToBeacon);
+    Future.delayed(const Duration(seconds: 1), listenToBeacon);
   }
 
   void listenToBeacon() {
+    log.i('listening to beacon');
     beacon.getBeaconResponse().listen(
       (data) {
         final Map<String, dynamic> requestJson =
             jsonDecode(data) as Map<String, dynamic>;
         final BeaconRequest beaconRequest = BeaconRequest.fromJson(requestJson);
 
+        log.i('beacon response - $BeaconState');
         switch (beaconRequest.type) {
           case RequestType.permission:
             emit(
