@@ -167,6 +167,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_OPERATION_FAILED:
         return globalMessage.RESPONSE_STRING_OPERATION_FAILED;
+
+      case ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE:
+        return globalMessage.RESPONSE_STRING_INSUFFICIENT_BALANCE;
     }
   }
 }
