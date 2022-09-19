@@ -6,6 +6,7 @@ class BeaconOperationState extends Equatable {
     NetworkFeeModel? networkFee,
     this.status = AppStatus.init,
     this.message,
+    this.xtzUSDRate = 0,
   }) : networkFee = networkFee ?? NetworkFeeModel.networks()[1];
 
   factory BeaconOperationState.fromJson(Map<String, dynamic> json) =>
@@ -14,11 +15,13 @@ class BeaconOperationState extends Equatable {
   final AppStatus status;
   final StateMessage? message;
   final NetworkFeeModel networkFee;
+  final double xtzUSDRate;
 
   BeaconOperationState loading() {
     return BeaconOperationState(
       status: AppStatus.loading,
       networkFee: networkFee,
+      xtzUSDRate: xtzUSDRate,
     );
   }
 
@@ -29,6 +32,7 @@ class BeaconOperationState extends Equatable {
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       networkFee: networkFee,
+      xtzUSDRate: xtzUSDRate,
     );
   }
 
@@ -37,6 +41,7 @@ class BeaconOperationState extends Equatable {
     MessageHandler? messageHandler,
     NetworkFeeModel? networkFee,
     int? selectedIndex,
+    double? xtzUSDRate,
   }) {
     return BeaconOperationState(
       status: appStatus,
@@ -44,11 +49,12 @@ class BeaconOperationState extends Equatable {
           ? null
           : StateMessage.success(messageHandler: messageHandler),
       networkFee: networkFee ?? this.networkFee,
+      xtzUSDRate: xtzUSDRate ?? this.xtzUSDRate,
     );
   }
 
   Map<String, dynamic> toJson() => _$BeaconOperationStateToJson(this);
 
   @override
-  List<Object?> get props => [status, message, networkFee];
+  List<Object?> get props => [status, message, networkFee, xtzUSDRate];
 }
