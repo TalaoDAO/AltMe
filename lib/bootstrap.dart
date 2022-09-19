@@ -115,7 +115,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   );
 
   /// Disable Http google font
-  GoogleFonts.config.allowRuntimeFetching = false;
+  GoogleFonts.config.allowRuntimeFetching = true;
 
   await Workmanager().initialize(
     callbackDispatcher, // The top level function, aka callbackDispatcher

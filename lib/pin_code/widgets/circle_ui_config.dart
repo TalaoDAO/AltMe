@@ -5,7 +5,7 @@ class CircleUIConfig {
   const CircleUIConfig({
     this.borderColor = Colors.white,
     this.borderWidth = 1.5,
-    this.fillColor = const Color(0xFF6600FF),
+    this.fillColor = const Color(0xFF75FD92),
     this.defaultColor = Colors.white,
     this.circleSize = 18,
   });

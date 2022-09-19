@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppTheme {
   /// A color frequently across your app’s screens and components.
-  static Color darkPrimary = const Color(0xff6600FF);
+  static Color darkPrimary = const Color(0xff75FD92);
 
   /// A color that's clearly legible when drawn on primary
   static Color darkOnPrimary = const Color(0xffFFFFFF);
@@ -70,28 +70,28 @@ abstract class AppTheme {
           brightness: Brightness.dark,
         ),
         textTheme: TextTheme(
-          caption: GoogleFonts.nunito(
+          caption: GoogleFonts.sora(
             color: const Color(0xFFFFFFFF),
             fontSize: 13,
             fontWeight: FontWeight.w600,
           ),
-          headline6: GoogleFonts.nunito(
+          headline6: GoogleFonts.sora(
             color: const Color(0xFFFFFFFF),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
-          headline5: GoogleFonts.nunito(
+          headline5: GoogleFonts.sora(
             color: const Color(0xFFFFFFFF),
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
-          headline4: GoogleFonts.nunito(
+          headline4: GoogleFonts.sora(
             color: const Color(0xFFFFFFFF),
             fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: const IconThemeData(color: Color(0xff6600FF)),
+        iconTheme: const IconThemeData(color: Color(0xff75FD92)),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: Colors.green,
           contentTextStyle: GoogleFonts.roboto(
@@ -137,7 +137,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get transparent => Colors.transparent;
 
-  Color get onOutlineButton => const Color(0xFF6600FF);
+  Color get onOutlineButton => const Color(0xFF75FD92);
 
   Color get onElevatedButton => const Color(0xFFFFFFFF);
 
@@ -215,7 +215,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get startButtonColorA => const Color(0xff8436F8);
 
-  Color get startButtonColorB => const Color(0xff6600FF);
+  Color get startButtonColorB => const Color(0xff75FD92);
 
   Color get associatedWalletBorder => const Color(0xff524B67);
 
@@ -239,7 +239,7 @@ extension CustomColorScheme on ColorScheme {
 }
 
 extension CustomTextTheme on TextTheme {
-  TextStyle get hintTextFieldStyle => GoogleFonts.nunito(
+  TextStyle get hintTextFieldStyle => GoogleFonts.sora(
         fontSize: 14,
         height: 1.5,
         letterSpacing: 1.02,
@@ -314,7 +314,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get appBar => GoogleFonts.nunito(
+  TextStyle get appBar => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 24,
         fontWeight: FontWeight.w800,
@@ -326,7 +326,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get title => GoogleFonts.nunito(
+  TextStyle get title => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w800,
@@ -410,7 +410,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get miniButton => GoogleFonts.nunito(
+  TextStyle get miniButton => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 11,
         fontWeight: FontWeight.w500,
@@ -524,7 +524,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get tezosAssociatedAddressTitleCard => GoogleFonts.nunito(
+  TextStyle get tezosAssociatedAddressTitleCard => GoogleFonts.sora(
         color: const Color(0xffFAFDFF),
         fontSize: 20,
         fontWeight: FontWeight.w700,
@@ -596,49 +596,49 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff180B2B),
       );
 
-  TextStyle get finishVerificationDialogTitle => GoogleFonts.nunito(
+  TextStyle get finishVerificationDialogTitle => GoogleFonts.sora(
         fontSize: 25,
         fontWeight: FontWeight.bold,
         color: const Color(0xff180B2B),
       );
 
-  TextStyle get finishVerificationDialogBody => GoogleFonts.nunito(
+  TextStyle get finishVerificationDialogBody => GoogleFonts.sora(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF5F556F),
       );
 
-  TextStyle get defaultDialogTitle => GoogleFonts.nunito(
+  TextStyle get defaultDialogTitle => GoogleFonts.sora(
         fontSize: 25,
         fontWeight: FontWeight.bold,
         color: const Color(0xff180B2B),
       );
 
-  TextStyle get defaultDialogBody => GoogleFonts.nunito(
+  TextStyle get defaultDialogBody => GoogleFonts.sora(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF5F556F),
       );
 
-  TextStyle get kycDialogTitle => GoogleFonts.nunito(
+  TextStyle get kycDialogTitle => GoogleFonts.sora(
         fontSize: 25,
         fontWeight: FontWeight.bold,
         color: const Color(0xff180B2B),
       );
 
-  TextStyle get kycDialogCaption => GoogleFonts.nunito(
+  TextStyle get kycDialogCaption => GoogleFonts.sora(
         fontSize: 20,
         fontWeight: FontWeight.bold,
         color: const Color(0xFF0045FF),
       );
 
-  TextStyle get kycDialogBody => GoogleFonts.nunito(
+  TextStyle get kycDialogBody => GoogleFonts.sora(
         fontSize: 14,
         fontWeight: FontWeight.w700,
         color: const Color(0xFF180B2B),
       );
 
-  TextStyle get kycDialogFooter => GoogleFonts.nunito(
+  TextStyle get kycDialogFooter => GoogleFonts.sora(
         fontSize: 10,
         fontWeight: FontWeight.w500,
         color: const Color(0xFF180B2B),
@@ -680,7 +680,7 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get accountsListItemTitle => GoogleFonts.nunito(
+  TextStyle get accountsListItemTitle => GoogleFonts.sora(
         fontSize: 16,
         fontWeight: FontWeight.w500,
         color: const Color(0xffFFFFFF),
@@ -695,7 +695,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get textButton => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w700,
-        color: const Color(0xff6600FF),
+        color: const Color(0xff75FD92),
       );
 
   TextStyle get scrollText => GoogleFonts.roboto(
@@ -704,19 +704,19 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get passPhraseText => GoogleFonts.nunito(
+  TextStyle get passPhraseText => GoogleFonts.sora(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: const Color(0xffD1CCE3),
       );
 
-  TextStyle get message => GoogleFonts.nunito(
+  TextStyle get message => GoogleFonts.sora(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: const Color(0xffEDEAF5),
       );
 
-  TextStyle get subMessage => GoogleFonts.nunito(
+  TextStyle get subMessage => GoogleFonts.sora(
         fontSize: 15,
         fontWeight: FontWeight.w400,
         color: const Color(0xff71CBFF),
@@ -733,14 +733,14 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get copyToClipBoard => GoogleFonts.nunito(
+  TextStyle get copyToClipBoard => GoogleFonts.sora(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: const Color(0xffDED6EA),
         decoration: TextDecoration.underline,
       );
 
-  TextStyle get onBoardingCheckMessage => GoogleFonts.nunito(
+  TextStyle get onBoardingCheckMessage => GoogleFonts.sora(
         fontSize: 15,
         height: 1.5,
         fontWeight: FontWeight.w600,
@@ -759,13 +759,13 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffEDEAF5),
       );
 
-  TextStyle get radioTitle => GoogleFonts.nunito(
+  TextStyle get radioTitle => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get radioOption => GoogleFonts.nunito(
+  TextStyle get radioOption => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w400,
