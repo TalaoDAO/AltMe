@@ -170,6 +170,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE:
         return globalMessage.RESPONSE_STRING_INSUFFICIENT_BALANCE;
+
+      case ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE:
+        return globalMessage.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE;
     }
   }
 }

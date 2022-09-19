@@ -130,7 +130,7 @@ class BeaconOperationView extends StatelessWidget {
                       ConfirmDetailsCard(
                         amount: amount,
                         symbol: symbol,
-                        amountUsdValue: 0, // TODO(bibash): show dollar value
+                        tokenUSDRate: state.xtzUSDRate,
                         networkFee: state.networkFee,
                         onEditButtonPressed: () async {
                           final NetworkFeeModel? networkFeeModel =

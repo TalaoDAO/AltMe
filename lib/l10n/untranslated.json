@@ -450,7 +450,8 @@
     "tezotopia",
     "operationCompleted",
     "operationFailed",
-    "membership"
+    "membership",
+    "switchNetworkMessage"
   ],
 
   "es": [
@@ -904,7 +905,8 @@
     "tezotopia",
     "operationCompleted",
     "operationFailed",
-    "membership"
+    "membership",
+    "switchNetworkMessage"
   ],
 
   "fr": [
@@ -1358,7 +1360,8 @@
     "tezotopia",
     "operationCompleted",
     "operationFailed",
-    "membership"
+    "membership",
+    "switchNetworkMessage"
   ],
 
   "it": [
@@ -1812,6 +1815,7 @@
     "tezotopia",
     "operationCompleted",
     "operationFailed",
-    "membership"
+    "membership",
+    "switchNetworkMessage"
   ]
 }

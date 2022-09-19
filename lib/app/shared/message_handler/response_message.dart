@@ -224,6 +224,10 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE:
           return ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE
               .localise(context);
+
+        case ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE:
+          return ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE
+              .localise(context);
       }
     }
     return '';

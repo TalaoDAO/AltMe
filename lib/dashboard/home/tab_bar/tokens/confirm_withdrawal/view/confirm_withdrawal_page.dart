@@ -170,8 +170,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                   ConfirmDetailsCard(
                     amount: widget.amount,
                     symbol: widget.selectedToken.symbol,
-                    amountUsdValue:
-                        widget.amount * widget.selectedToken.tokenUSDPrice,
+                    tokenUSDRate: widget.selectedToken.tokenUSDPrice,
                     networkFee: state.networkFee,
                     onEditButtonPressed: () async {
                       final NetworkFeeModel? networkFeeModel =

@@ -500,5 +500,6 @@
   "tezotopia": "Tezotopia",
   "operationCompleted": "Your requested operation has been completed.",
   "operationFailed": "Your requested operation has failed",
-  "membership": "Membership"
+  "membership": "Membership",
+  "switchNetworkMessage": "Please switch your network to"
 }

@@ -28,4 +28,6 @@ class Urls {
 
   static const tezToolPrices = 'https://api.teztools.io/v1/prices';
   static const tezToolBase = 'https://api.teztools.io';
+
+  static const xtzPrice = 'https://api.teztools.io/v1/xtz-price';
 }
