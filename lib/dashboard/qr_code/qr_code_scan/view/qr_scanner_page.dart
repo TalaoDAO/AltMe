@@ -32,6 +32,7 @@ class _QrScannerPageState extends State<QrScannerPage> {
       Navigator.of(context).pop(barcodeScanRes);
     } on PlatformException catch (e, s) {
       getLogger(runtimeType.toString()).e('error: $e, stack: $s');
+      Navigator.of(context).pop();
     }
   }
 
