@@ -62,6 +62,7 @@ class TokensCubit extends Cubit<TokensState> {
         queryParameters: <String, dynamic>{
           'account': walletAddress,
           'balance.ne': 1,
+          'token.metadata.artifactUri.null': true,
           'select':
               '''token.contract.address as contractAddress,token.id as id,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals,token.standard as standard''',
           'offset': offset,
