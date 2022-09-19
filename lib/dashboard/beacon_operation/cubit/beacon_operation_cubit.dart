@@ -96,10 +96,6 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
         );
       }
 
-      throw ResponseMessage(
-        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-      );
-
       // send xtz
       final operationsList = await client.transferOperation(
         source: sourceKeystore,
