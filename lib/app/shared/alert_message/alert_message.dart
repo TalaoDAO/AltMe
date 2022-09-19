@@ -13,7 +13,7 @@ class AlertMessage {
       SnackBar(
         content: SnackBarContent(
           message: message,
-          color: stateMessage.type!.getColor(context),
+          iconPath: stateMessage.type!.iconPath,
         ),
         backgroundColor: Colors.transparent,
       ),
@@ -29,7 +29,7 @@ class AlertMessage {
       SnackBar(
         content: SnackBarContent(
           message: message,
-          color: messageType.getColor(context),
+          iconPath: messageType.iconPath,
         ),
         backgroundColor: Colors.transparent,
       ),
@@ -40,12 +40,12 @@ class AlertMessage {
 class SnackBarContent extends StatelessWidget {
   const SnackBarContent({
     Key? key,
-    required this.color,
     required this.message,
+    required this.iconPath,
   }) : super(key: key);
 
-  final Color color;
   final String message;
+  final String iconPath;
 
   @override
   Widget build(BuildContext context) {
@@ -55,18 +55,29 @@ class SnackBarContent extends StatelessWidget {
         vertical: Sizes.space2XSmall,
         horizontal: Sizes.spaceXSmall,
       ),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius:
-            const BorderRadius.all(Radius.circular(Sizes.smallRadius)),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(Sizes.smallRadius),
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+            child: Image.asset(
+              iconPath,
+              width: Sizes.icon,
+              height: Sizes.icon,
+            ),
+          ),
           Expanded(
             child: MyText(
               message,
-              style: Theme.of(context).textTheme.bodySmall,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.black,
+                  ),
               maxLines: 2,
             ),
           ),
@@ -81,10 +92,10 @@ class SnackBarContent extends StatelessWidget {
             },
             child: Text(
               l10n.close.toUpperCase(),
-              style: Theme.of(context)
-                  .textTheme
-                  .button
-                  ?.copyWith(color: Colors.white),
+              style: Theme.of(context).textTheme.button?.copyWith(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           )
         ],
