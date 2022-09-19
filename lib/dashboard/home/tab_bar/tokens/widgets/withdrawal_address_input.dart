@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/tokens.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
@@ -106,14 +107,12 @@ class _WithdrawalAddressInputPageState
               ),
               BlocBuilder<WithdrawalInputCubit, bool>(
                 builder: (_, isEmpty) => isEmpty
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.asset(
-                            IconStrings.scanAddress,
-                            width: Sizes.icon2x,
-                          ),
-                        ],
+                    ? InkWell(
+                        onTap: _openQRScanner,
+                        child: Image.asset(
+                          IconStrings.scanAddress,
+                          width: Sizes.icon2x,
+                        ),
                       )
                     : InkWell(
                         onTap: withdrawalAddressController.clear,
@@ -128,5 +127,13 @@ class _WithdrawalAddressInputPageState
         ],
       ),
     );
+  }
+
+  Future<void> _openQRScanner() async {
+    final result =
+        await Navigator.push<String?>(context, QrScannerPage.route());
+    if ((result?.isNotEmpty ?? false) && result!.length > 8) {
+      withdrawalAddressController.text = result;
+    }
   }
 }
