@@ -24,51 +24,57 @@ class BeaconCubit extends Cubit<BeaconState> {
   }
 
   void listenToBeacon() {
-    log.i('listening to beacon');
-    beacon.getBeaconResponse().listen(
-      (data) {
-        final Map<String, dynamic> requestJson =
-            jsonDecode(data) as Map<String, dynamic>;
-        final BeaconRequest beaconRequest = BeaconRequest.fromJson(requestJson);
+    try {
+      log.i('listening to beacon');
+      beacon.getBeaconResponse().listen(
+        (data) {
+          final Map<String, dynamic> requestJson =
+              jsonDecode(data) as Map<String, dynamic>;
+          final BeaconRequest beaconRequest =
+              BeaconRequest.fromJson(requestJson);
 
-        log.i('beacon response - $BeaconState');
-        switch (beaconRequest.type) {
-          case RequestType.permission:
-            emit(
-              state.copyWith(
-                status: BeaconStatus.permission,
-                beaconRequest: beaconRequest,
-              ),
-            );
-            break;
-          case RequestType.signPayload:
-            emit(
-              state.copyWith(
-                status: BeaconStatus.signPayload,
-                beaconRequest: beaconRequest,
-              ),
-            );
-            break;
-          case RequestType.operation:
-            emit(
-              state.copyWith(
-                status: BeaconStatus.operation,
-                beaconRequest: beaconRequest,
-              ),
-            );
-            break;
-          case RequestType.broadcast:
-            emit(
-              state.copyWith(
-                status: BeaconStatus.broadcast,
-                beaconRequest: beaconRequest,
-              ),
-            );
-            break;
-          // ignore: no_default_cases
-          default:
-        }
-      },
-    );
+          log.i('beacon response - $requestJson');
+          log.i('beaconRequest.type - ${beaconRequest.type}');
+          switch (beaconRequest.type) {
+            case RequestType.permission:
+              emit(
+                state.copyWith(
+                  status: BeaconStatus.permission,
+                  beaconRequest: beaconRequest,
+                ),
+              );
+              break;
+            case RequestType.signPayload:
+              emit(
+                state.copyWith(
+                  status: BeaconStatus.signPayload,
+                  beaconRequest: beaconRequest,
+                ),
+              );
+              break;
+            case RequestType.operation:
+              emit(
+                state.copyWith(
+                  status: BeaconStatus.operation,
+                  beaconRequest: beaconRequest,
+                ),
+              );
+              break;
+            case RequestType.broadcast:
+              emit(
+                state.copyWith(
+                  status: BeaconStatus.broadcast,
+                  beaconRequest: beaconRequest,
+                ),
+              );
+              break;
+            // ignore: no_default_cases
+            default:
+          }
+        },
+      );
+    } catch (e) {
+      log.e('beacon listening error - $e');
+    }
   }
 }
