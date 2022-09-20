@@ -117,6 +117,8 @@ extension CustomColorScheme on ColorScheme {
 
   Color get closeIconColor => const Color(0xFFA79ABA);
 
+  Color get iconBackgroundColor => const Color(0xFF5CCA78);
+
   Color get kycVerifyButton => const Color(0xFF0045FF);
 
   Color get checkMarkColor => const Color(0xFF00B267);
@@ -151,7 +153,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get label => Colors.white;
 
-  Color get unSelectedLabel => const Color(0xff86809D);
+  Color get unSelectedLabel => const Color(0xff143F32);
 
   Color get leadingButton => const Color(0xffF1EFF8);
 
@@ -199,11 +201,13 @@ extension CustomColorScheme on ColorScheme {
 
   Color get alertSuccessMessage => Colors.green;
 
-  Color get qrScanBackground => const Color(0xff2B1C48);
+  Color get qrScanBackground => const Color(0xff143F32);
 
-  Color get qrScanInnerShadow => const Color(0xff000000).withOpacity(0.16);
+  Color get qrScanInnerShadow => const Color(0xff143F32).withOpacity(0.16);
 
-  Color get qrScanOuterShadow => const Color(0xff430F91);
+  Color get qrScanOuterShadow => const Color(0xff143F32);
+
+  Color get qrScanIconBackground => const Color(0xff143930);
 
   Color get dialogText => const Color(0xFF180B2B);
 

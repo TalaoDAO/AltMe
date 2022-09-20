@@ -75,7 +75,7 @@ class QRIcon extends StatelessWidget {
               width: 40,
               child: ImageIcon(
                 const AssetImage(IconStrings.scan),
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: Theme.of(context).colorScheme.qrScanIconBackground,
               ),
             ),
           ],
