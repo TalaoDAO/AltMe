@@ -115,7 +115,7 @@ class _IosTabControllerViewState extends State<IosTabControllerView>
                       : null,
                   children: const [
                     CredentialsListPage(),
-                    TokenPage(),
+                    TokensPage(),
                   ],
                 ),
               ),

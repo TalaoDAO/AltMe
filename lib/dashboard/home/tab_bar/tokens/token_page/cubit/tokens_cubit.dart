@@ -61,7 +61,7 @@ class TokensCubit extends Cubit<TokensState> {
         '$baseUrl/v1/tokens/balances',
         queryParameters: <String, dynamic>{
           'account': walletAddress,
-          'token.metadata.decimals.ne':'0',
+          'token.metadata.decimals.ne': '0',
           'token.metadata.artifactUri.null': true,
           'select':
               '''token.contract.address as contractAddress,token.id as id,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals,token.standard as standard''',
@@ -83,37 +83,38 @@ class TokensCubit extends Cubit<TokensState> {
         final tezosToken = await _getXtzBalance(walletAddress);
         newData.insert(0, tezosToken);
         data = newData;
-        if (allTokensCubit.state.contracts.isEmpty) {
-          await allTokensCubit.init();
-        } else {
-          // ignore: unawaited_futures
-          allTokensCubit.init();
-        }
       } else {
         data.addAll(newData);
+      }
+
+      // get all contract(for usd balance of every tokens) if not loaded yet
+      // or is empty
+      if (allTokensCubit.state.contracts.isEmpty) {
+        await allTokensCubit.init();
+      } else {
         // ignore: unawaited_futures
         allTokensCubit.init();
       }
+
       //get usd balance of tokens and update tokens
       if (allTokensCubit.state.contracts.isNotEmpty) {
         // Filter just selected tokens to show for user
         if (filterTokens) {
           final selectedContracts = allTokensCubit.state.selectedContracts;
+          final loadedTokensSymbols = data.map((e) => e.symbol).toList();
           final contractsNotInserted = selectedContracts
               .where(
-                (element) => !data
-                    .map((e) => e.symbol)
-                    .toList()
-                    .contains(element.symbol),
+                (element) => !loadedTokensSymbols.contains(element.symbol),
               )
               .toList();
 
+          final contractsNotInsertedSymbols =
+              contractsNotInserted.map((e) => e.symbol);
           data.addAll(
             allTokensCubit.state.contracts
                 .where(
-                  (element) => contractsNotInserted
-                      .map((e) => e.symbol)
-                      .contains(element.symbol),
+                  (element) =>
+                      contractsNotInsertedSymbols.contains(element.symbol),
                 )
                 .map(
                   (e) => TokenModel(
@@ -131,13 +132,9 @@ class TokensCubit extends Cubit<TokensState> {
         }
 
         for (int i = 0; i < data.length; i++) {
-          //we know that the first element is XTZ token all the time
-          if (i == 0 && allTokensCubit.state.xtzUsdValue != null) {
-            data[i] = data[i].copyWith(
-              tokenUSDPrice: allTokensCubit.state.xtzUsdValue,
-              balanceUSDPrice: data[i].calculatedBalanceInDouble *
-                  allTokensCubit.state.xtzUsdValue!,
-            );
+          if (i == 0) {
+            //we know that the first element is XTZ token all the time
+            //and we calculated the usd balanc of it when we got xtz token
             continue;
           }
           try {
@@ -150,21 +147,25 @@ class TokensCubit extends Cubit<TokensState> {
               data[i] = token.copyWith(
                 icon: token.icon ?? contract.iconUrl,
                 tokenUSDPrice: contract.usdValue,
-                balanceUSDPrice:
+                balanceInUSD:
                     token.calculatedBalanceInDouble * contract.usdValue,
+              );
+            } else {
+              getLogger(toString()).i(
+                'not found any contract for token to read usd balance from it',
               );
             }
           } catch (e, s) {
-            getLogger(runtimeType.toString()).e(
+            getLogger(toString()).e(
               'error in finding contract, error: $e, s: $s',
             );
           }
         }
         double totalBalanceInUSD = 0;
         for (final tokenElement in data) {
-          totalBalanceInUSD += tokenElement.balanceUSDPrice;
+          totalBalanceInUSD += tokenElement.balanceInUSD;
         }
-        data.sort((a, b) => b.balanceUSDPrice.compareTo(a.balanceUSDPrice));
+        data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
         emit(
           state.copyWith(
             status: AppStatus.success,
@@ -173,19 +174,25 @@ class TokensCubit extends Cubit<TokensState> {
           ),
         );
         return data;
-      }
-      data.sort((a, b) => b.balanceUSDPrice.compareTo(a.balanceUSDPrice));
-      emit(
-        state.copyWith(
-          status: AppStatus.success,
-          data: data,
-        ),
-      );
+      } else {
+        double totalBalanceInUSD = 0;
+        for (final tokenElement in data) {
+          totalBalanceInUSD += tokenElement.balanceInUSD;
+        }
+        data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
+        emit(
+          state.copyWith(
+            status: AppStatus.success,
+            data: data,
+            totalBalanceInUSD: totalBalanceInUSD,
+          ),
+        );
 
-      return data;
+        return data;
+      }
     } catch (e, s) {
       getLogger(runtimeType.toString()).e('error in get tokens e: $e , s:$s');
-      data.sort((a, b) => b.balanceUSDPrice.compareTo(a.balanceUSDPrice));
+      data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
       if (isClosed) return data;
       emit(
         state.errorWhileFetching(
@@ -216,12 +223,24 @@ class TokensCubit extends Cubit<TokensState> {
       standard: 'fa1.2',
     );
 
-    return token.copyWith(
-      tokenUSDPrice: allTokensCubit.state.xtzUsdValue,
-      balanceUSDPrice: allTokensCubit.state.xtzUsdValue != null
-          ? token.calculatedBalanceInDouble *
-              (allTokensCubit.state.xtzUsdValue!)
-          : null,
-    );
+    try {
+      // get usd balance of xtz from teztools api
+      final responseOfXTZUsdPrice = await client
+          .get('${Urls.tezToolBase}/v1/xtz-price') as Map<String, dynamic>;
+      final xtzUSDPrice = responseOfXTZUsdPrice['price'] as double;
+
+      return token.copyWith(
+        tokenUSDPrice: xtzUSDPrice,
+        balanceInUSD: token.calculatedBalanceInDouble * xtzUSDPrice,
+      );
+    } catch (e, s) {
+      getLogger(toString()).e('unable to get usd balance of XTZ, e: $e, s: $s');
+      return token;
+    }
+  }
+
+  @override
+  String toString() {
+    return 'TokensCubit';
   }
 }
