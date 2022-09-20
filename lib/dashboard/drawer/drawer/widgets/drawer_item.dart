@@ -24,11 +24,26 @@ class DrawerItem extends StatelessWidget {
         onTap: onTap,
         child: Row(
           children: [
-            Image.asset(
-              icon,
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(7)),
+                  color: Colors.white),
               height: 30,
               width: 30,
-              fit: BoxFit.cover,
+              child: Padding(
+                padding: EdgeInsets.all(5),
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                      Theme.of(context).colorScheme.iconBackgroundColor,
+                      BlendMode.srcATop),
+                  child: Image.asset(
+                    icon,
+                    // height: 16,
+                    // width: 16,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
