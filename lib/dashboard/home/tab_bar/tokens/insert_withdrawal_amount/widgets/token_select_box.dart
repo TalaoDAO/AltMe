@@ -152,7 +152,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                       ),
                       MyText(
                         r'$' +
-                            selectedToken.balanceUSDPrice
+                            selectedToken.balanceInUSD
                                 .toStringAsFixed(2)
                                 .formatNumber(),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
