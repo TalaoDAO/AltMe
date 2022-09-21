@@ -94,7 +94,7 @@ abstract class AppTheme {
         iconTheme: const IconThemeData(color: Color(0xff75FD92)),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: Colors.green,
-          contentTextStyle: GoogleFonts.roboto(
+          contentTextStyle: GoogleFonts.sora(
             color: const Color(0xFFFFFFFF),
             fontSize: 12,
             fontWeight: FontWeight.w400,
@@ -252,67 +252,67 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get keyboardDigitTextStyle =>
-      GoogleFonts.roboto(fontSize: 30, color: Colors.white);
+      GoogleFonts.sora(fontSize: 30, color: Colors.white);
 
-  TextStyle get calculatorKeyboardDigitTextStyle => GoogleFonts.roboto(
+  TextStyle get calculatorKeyboardDigitTextStyle => GoogleFonts.sora(
         fontSize: 30,
         color: Colors.white,
         fontWeight: FontWeight.bold,
       );
 
   TextStyle get keyboardDeleteButtonTextStyle =>
-      GoogleFonts.roboto(fontSize: 16, color: Colors.white);
+      GoogleFonts.sora(fontSize: 16, color: Colors.white);
 
-  TextStyle get loadingText => GoogleFonts.roboto(
+  TextStyle get loadingText => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get starterTitleStyle => GoogleFonts.roboto(
+  TextStyle get starterTitleStyle => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 32,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get starterSubTitleStyle => GoogleFonts.roboto(
+  TextStyle get starterSubTitleStyle => GoogleFonts.sora(
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get onBoardingTitleStyle => GoogleFonts.roboto(
+  TextStyle get onBoardingTitleStyle => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 22,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get onBoardingSubTitleStyle => GoogleFonts.roboto(
+  TextStyle get onBoardingSubTitleStyle => GoogleFonts.sora(
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get learnMoreTextStyle => GoogleFonts.roboto(
+  TextStyle get learnMoreTextStyle => GoogleFonts.sora(
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
         fontWeight: FontWeight.w400,
         decoration: TextDecoration.underline,
       );
 
-  TextStyle get infoTitle => GoogleFonts.roboto(
+  TextStyle get infoTitle => GoogleFonts.sora(
         color: const Color(0xFFEDEAF5),
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get infoSubtitle => GoogleFonts.roboto(
+  TextStyle get infoSubtitle => GoogleFonts.sora(
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get normal => GoogleFonts.roboto(
+  TextStyle get normal => GoogleFonts.sora(
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
         fontWeight: FontWeight.w400,
@@ -324,7 +324,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get bottomBar => GoogleFonts.roboto(
+  TextStyle get bottomBar => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 10,
         fontWeight: FontWeight.w600,
@@ -336,79 +336,79 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get listTitle => GoogleFonts.roboto(
+  TextStyle get listTitle => GoogleFonts.sora(
         color: const Color(0xFFEDEAF5),
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get listSubtitle => GoogleFonts.roboto(
+  TextStyle get listSubtitle => GoogleFonts.sora(
         color: const Color(0xFFEDEAF5),
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get caption2 => GoogleFonts.roboto(
+  TextStyle get caption2 => GoogleFonts.sora(
         color: const Color(0xFF8682A8),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get listTileTitle => GoogleFonts.roboto(
+  TextStyle get listTileTitle => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 14,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get listTileSubtitle => GoogleFonts.roboto(
+  TextStyle get listTileSubtitle => GoogleFonts.sora(
         color: const Color(0xFF8682A8),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get close => GoogleFonts.roboto(
+  TextStyle get close => GoogleFonts.sora(
         color: const Color(0xFFD6C3F2),
         fontSize: 13,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get dialogClose => GoogleFonts.roboto(
+  TextStyle get dialogClose => GoogleFonts.sora(
         color: const Color(0xFFA79ABA),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get drawerMenu => GoogleFonts.roboto(
+  TextStyle get drawerMenu => GoogleFonts.sora(
         color: const Color(0xFFD1CCE3),
         fontSize: 15,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get drawerItem => GoogleFonts.roboto(
+  TextStyle get drawerItem => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get biometricMessage => GoogleFonts.roboto(
+  TextStyle get biometricMessage => GoogleFonts.sora(
         color: const Color(0xFFB1ADC3),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get pinCodeTitle => GoogleFonts.roboto(
+  TextStyle get pinCodeTitle => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get pinCodeMessage => GoogleFonts.roboto(
+  TextStyle get pinCodeMessage => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 14,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get getCardsButton => GoogleFonts.roboto(
+  TextStyle get getCardsButton => GoogleFonts.sora(
         color: const Color(0xFF000000),
         fontSize: 12,
         fontWeight: FontWeight.w600,
@@ -420,109 +420,109 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get credentialTitle => GoogleFonts.roboto(
+  TextStyle get credentialTitle => GoogleFonts.sora(
         color: const Color(0xFF424242),
         fontSize: 15,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get credentialDescription => GoogleFonts.roboto(
+  TextStyle get credentialDescription => GoogleFonts.sora(
         color: const Color(0xFF757575),
         fontSize: 13,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialFieldTitle => GoogleFonts.roboto(
+  TextStyle get credentialFieldTitle => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialFieldDescription => GoogleFonts.roboto(
+  TextStyle get credentialFieldDescription => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 13,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get learningAchievementTitle => GoogleFonts.roboto(
+  TextStyle get learningAchievementTitle => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 12,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get learningAchievementDescription => GoogleFonts.roboto(
+  TextStyle get learningAchievementDescription => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialIssuer => GoogleFonts.roboto(
+  TextStyle get credentialIssuer => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get imageCard => GoogleFonts.roboto(
+  TextStyle get imageCard => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 12,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get loyaltyCard => GoogleFonts.roboto(
+  TextStyle get loyaltyCard => GoogleFonts.sora(
         color: const Color(0xffffffff),
         fontSize: 13,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get professionalExperienceAssessmentRating => GoogleFonts.roboto(
+  TextStyle get professionalExperienceAssessmentRating => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get voucherOverlay => GoogleFonts.roboto(
+  TextStyle get voucherOverlay => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get ecole42LearningAchievementStudentIdentity => GoogleFonts.roboto(
+  TextStyle get ecole42LearningAchievementStudentIdentity => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 6,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get ecole42LearningAchievementLevel => GoogleFonts.roboto(
+  TextStyle get ecole42LearningAchievementLevel => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 5,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.roboto(
+  TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.sora(
         color: const Color(0xFF0650C6),
         fontSize: 20,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get certificateOfEmploymentDescription => GoogleFonts.roboto(
+  TextStyle get certificateOfEmploymentDescription => GoogleFonts.sora(
         color: const Color(0xFF757575),
         fontSize: 13,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get certificateOfEmploymentData => GoogleFonts.roboto(
+  TextStyle get certificateOfEmploymentData => GoogleFonts.sora(
         color: const Color(0xFF434e62),
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get identityCardData => GoogleFonts.roboto(
+  TextStyle get identityCardData => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get tezosAssociatedAddressData => GoogleFonts.roboto(
+  TextStyle get tezosAssociatedAddressData => GoogleFonts.sora(
         color: const Color(0xff605A71),
         fontSize: 17,
         fontWeight: FontWeight.normal,
@@ -534,67 +534,67 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get credentialStudentCardTextCard => GoogleFonts.roboto(
+  TextStyle get credentialStudentCardTextCard => GoogleFonts.sora(
         color: const Color(0xffffffff),
         fontSize: 14,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get over18 => GoogleFonts.roboto(
+  TextStyle get over18 => GoogleFonts.sora(
         color: const Color(0xffffffff),
         fontSize: 20,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get studentCardSchool => GoogleFonts.roboto(
+  TextStyle get studentCardSchool => GoogleFonts.sora(
         color: const Color(0xff9dc5ff),
         fontSize: 18,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get studentCardData => GoogleFonts.roboto(
+  TextStyle get studentCardData => GoogleFonts.sora(
         color: const Color(0xffffffff),
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get credentialTitleCard => GoogleFonts.roboto(
+  TextStyle get credentialTitleCard => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 20,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get voucherValueCard => GoogleFonts.roboto(
+  TextStyle get voucherValueCard => GoogleFonts.sora(
         color: const Color(0xFFFEEA00),
         fontSize: 50,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get credentialTextCard => GoogleFonts.roboto(
+  TextStyle get credentialTextCard => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 14,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get illustrationPageDescription => GoogleFonts.roboto(
+  TextStyle get illustrationPageDescription => GoogleFonts.sora(
         color: Colors.white,
         fontSize: 16,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get dialogTitle => GoogleFonts.roboto(
+  TextStyle get dialogTitle => GoogleFonts.sora(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: Colors.white,
       );
 
-  TextStyle get dialogSubtitle => GoogleFonts.roboto(
+  TextStyle get dialogSubtitle => GoogleFonts.sora(
         fontSize: 13,
         fontWeight: FontWeight.w400,
         color: Colors.white.withOpacity(0.67),
       );
 
-  TextStyle get walletAltme => GoogleFonts.roboto(
+  TextStyle get walletAltme => GoogleFonts.sora(
         fontSize: 25,
         fontWeight: FontWeight.w600,
         color: const Color(0xff180B2B),
@@ -648,37 +648,37 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xFF180B2B),
       );
 
-  TextStyle get walletAltmeMessage => GoogleFonts.roboto(
+  TextStyle get walletAltmeMessage => GoogleFonts.sora(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: const Color(0xff9A8BB1),
       );
 
-  TextStyle get credentialCategoryTitle => GoogleFonts.roboto(
+  TextStyle get credentialCategoryTitle => GoogleFonts.sora(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: const Color(0xffEDEAF5),
       );
 
-  TextStyle get credentialSurfaceText => GoogleFonts.roboto(
+  TextStyle get credentialSurfaceText => GoogleFonts.sora(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         color: const Color(0xff00B267),
       );
 
-  TextStyle get errorMessage => GoogleFonts.roboto(
+  TextStyle get errorMessage => GoogleFonts.sora(
         fontSize: 15,
         fontWeight: FontWeight.w400,
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get accountsText => GoogleFonts.roboto(
+  TextStyle get accountsText => GoogleFonts.sora(
         fontSize: 22,
         fontWeight: FontWeight.w600,
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get accountsName => GoogleFonts.roboto(
+  TextStyle get accountsName => GoogleFonts.sora(
         fontSize: 18,
         fontWeight: FontWeight.w500,
         color: const Color(0xffFFFFFF),
@@ -690,19 +690,19 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get walletAddress => GoogleFonts.roboto(
+  TextStyle get walletAddress => GoogleFonts.sora(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         color: const Color(0xFF757575),
       );
 
-  TextStyle get textButton => GoogleFonts.roboto(
+  TextStyle get textButton => GoogleFonts.sora(
         fontSize: 16,
         fontWeight: FontWeight.w700,
         color: const Color(0xff75FD92),
       );
 
-  TextStyle get scrollText => GoogleFonts.roboto(
+  TextStyle get scrollText => GoogleFonts.sora(
         fontSize: 9,
         fontWeight: FontWeight.w500,
         color: const Color(0xffFFFFFF),
@@ -726,12 +726,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff71CBFF),
       );
 
-  TextStyle get identitiyBaseSmallText => GoogleFonts.roboto(
+  TextStyle get identitiyBaseSmallText => GoogleFonts.sora(
         fontSize: 12,
         fontWeight: FontWeight.w300,
         color: const Color(0xffFFFFFF),
       );
-  TextStyle get identitiyBaseMediumBoldText => GoogleFonts.roboto(
+  TextStyle get identitiyBaseMediumBoldText => GoogleFonts.sora(
         fontSize: 21,
         fontWeight: FontWeight.w500,
         color: const Color(0xffFFFFFF),
@@ -751,13 +751,13 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get messageTitle => GoogleFonts.roboto(
+  TextStyle get messageTitle => GoogleFonts.sora(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: const Color(0xffEDEAF5),
       );
 
-  TextStyle get messageSubtitle => GoogleFonts.roboto(
+  TextStyle get messageSubtitle => GoogleFonts.sora(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: const Color(0xffEDEAF5),
@@ -775,61 +775,61 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialManifestTitle1 => GoogleFonts.roboto(
+  TextStyle get credentialManifestTitle1 => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get credentialManifestDescription => GoogleFonts.roboto(
+  TextStyle get credentialManifestDescription => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialManifestTitle2 => GoogleFonts.roboto(
+  TextStyle get credentialManifestTitle2 => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get credentialSubtitle => GoogleFonts.roboto(
+  TextStyle get credentialSubtitle => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 14,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialStatus => GoogleFonts.roboto(
+  TextStyle get credentialStatus => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get beaconRequestPermission => GoogleFonts.roboto(
+  TextStyle get beaconRequestPermission => GoogleFonts.sora(
         color: const Color(0xff86809D),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get beaconSelectAccont => GoogleFonts.roboto(
+  TextStyle get beaconSelectAccont => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get beaconPermissionTitle => GoogleFonts.roboto(
+  TextStyle get beaconPermissionTitle => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get beaconPermissions => GoogleFonts.roboto(
+  TextStyle get beaconPermissions => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get beaconPayload => GoogleFonts.roboto(
+  TextStyle get beaconPayload => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w400,
