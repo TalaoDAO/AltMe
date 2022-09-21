@@ -72,8 +72,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
 
       final client = TezartClient(beaconRequest.request!.network!.rpcUrl!);
 
-      final amount =
-          int.parse(beaconRequest.request!.operationDetails!.first.amount!);
+      final amount = int.parse(beaconRequest.operationDetails!.first.amount!);
 
       final customFee = int.parse(
         state.networkFee.fee
@@ -114,8 +113,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       // send xtz
       final operationsList = await client.transferOperation(
         source: sourceKeystore,
-        destination:
-            beaconRequest.request!.operationDetails!.first.destination!,
+        destination: beaconRequest.operationDetails!.first.destination!,
         amount: amount,
         customFee: customFee,
       );
@@ -125,7 +123,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
         'amount: $amount '
         'networkFee: $customFee '
         'address: ${sourceKeystore.address} =>To address: '
-        '${beaconRequest.request!.operationDetails!.first.destination!}',
+        '${beaconRequest.operationDetails!.first.destination!}',
       );
 
       await operationsList.executeAndMonitor();

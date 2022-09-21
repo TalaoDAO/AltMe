@@ -47,7 +47,7 @@ class BeaconOperationView extends StatelessWidget {
         context.read<BeaconCubit>().state.beaconRequest!;
 
     final amount =
-        int.parse(beaconRequest.request!.operationDetails!.first.amount!) / 1e6;
+        int.parse(beaconRequest.operationDetails!.first.amount!) / 1e6;
 
     const symbol = 'XTZ';
 
@@ -118,8 +118,7 @@ class BeaconOperationView extends StatelessWidget {
                       const SizedBox(height: Sizes.spaceSmall),
                       SenderReceiver(
                         from: beaconRequest.request!.sourceAddress!,
-                        to: beaconRequest
-                            .request!.operationDetails!.first.destination!,
+                        to: beaconRequest.operationDetails!.first.destination!,
                       ),
                       const SizedBox(height: Sizes.spaceNormal),
                       Image.asset(

@@ -62,10 +62,10 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: c62e213bb84753ba06da1afd49ac3d924c137077
+      resolved-ref: c89d3772cbfe2a76c11f392dffffae1cde358b16
       url: "https://github.com/TalaoDAO/beacon.git"
     source: git
-    version: "0.0.4"
+    version: "0.0.5"
   bip32:
     dependency: transitive
     description:
