@@ -129,11 +129,11 @@ extension CustomColorScheme on ColorScheme {
 
   Color get digitFillColor => Colors.transparent;
 
-  Color get disabledBgColor => const Color(0xFF6A5F7B);
+  Color get disabledBgColor => const Color(0xFF122E25);
 
-  Color get disabledTextColor => const Color(0xFF000000);
+  Color get disabledTextColor => Colors.white;
 
-  Color get darkGradientStartColor => const Color(0xff0A0421);
+  Color get darkGradientStartColor => const Color(0xff25095B);
 
   Color get darkGradientEndColor => const Color(0xff25095B);
 
@@ -141,7 +141,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get onOutlineButton => const Color(0xFF75FD92);
 
-  Color get onElevatedButton => const Color(0xFFFFFFFF);
+  Color get onElevatedButton => const Color(0xFF000000);
 
   Color get appBarUpperLayer => const Color(0xff25095B);
 
@@ -149,7 +149,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get surfaceContainer => const Color(0xff707070).withOpacity(0.07);
 
-  Color get drawerSurface => const Color(0xff232630);
+  Color get drawerSurface => const Color(0xff31343D);
 
   Color get label => Colors.white;
 
@@ -217,7 +217,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
 
-  Color get startButtonColorA => const Color(0xff8436F8);
+  Color get startButtonColorA => const Color(0xff75FD92);
 
   Color get startButtonColorB => const Color(0xff75FD92);
 
