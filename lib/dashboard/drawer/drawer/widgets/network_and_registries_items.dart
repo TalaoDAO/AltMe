@@ -24,15 +24,15 @@ class NetworkAndRegistriesItems extends StatelessWidget {
           color: Theme.of(context).colorScheme.drawerSurface,
           child: Column(
             children: [
-              DrawerItem(
-                icon: IconStrings.cloudAdd,
-                title: l10n.chooseNetwork,
-                onTap: () async {
-                  await Navigator.of(context)
-                      .push<void>(ManageNetworkPage.route());
-                },
-              ),
-              const DrawerItemDivider(),
+              // DrawerItem(
+              //   icon: IconStrings.cloudAdd,
+              //   title: l10n.chooseNetwork,
+              //   onTap: () async {
+              //     await Navigator.of(context)
+              //         .push<void>(ManageNetworkPage.route());
+              //   },
+              // ),
+              // const DrawerItemDivider(),
               DrawerItem(
                 icon: IconStrings.issuer,
                 title: l10n.chooseRegistry,

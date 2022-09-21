@@ -25,17 +25,19 @@ class DrawerItem extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(7)),
-                  color: Colors.white),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(7)),
+                color: Colors.white,
+              ),
               height: 30,
               width: 30,
               child: Padding(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 child: ColorFiltered(
                   colorFilter: ColorFilter.mode(
-                      Theme.of(context).colorScheme.iconBackgroundColor,
-                      BlendMode.srcATop),
+                    Theme.of(context).colorScheme.iconBackgroundColor,
+                    BlendMode.srcATop,
+                  ),
                   child: Image.asset(
                     icon,
                     // height: 16,

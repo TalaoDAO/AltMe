@@ -24,13 +24,13 @@ abstract class AppTheme {
   static Color darkOnTertiary = const Color(0xffD1CCE3);
 
   /// The background color for widgets like Card.
-  static Color darkSurface = const Color(0xff0A1914);
+  static Color darkSurface = const Color(0xff020D09);
 
   /// A color that's clearly legible when drawn on surface.
   static Color darkOnSurface = const Color(0xffEDEAF5);
 
   /// A color that typically appears behind scrollable content.
-  static Color darkBackground = const Color(0xff0A0421);
+  static Color darkBackground = const Color(0xff020D09);
 
   /// A color that's clearly legible when drawn on background.
   static Color darkOnBackground = const Color(0xffFFFFFF);
@@ -141,15 +141,15 @@ extension CustomColorScheme on ColorScheme {
 
   Color get onOutlineButton => const Color(0xFF75FD92);
 
-  Color get onElevatedButton => const Color(0xFF000000);
+  Color get onElevatedButton => Colors.black;
 
-  Color get appBarUpperLayer => const Color(0xff25095B);
+  Color get appBarUpperLayer => Colors.black;
 
   Color get appBarLowerLayer => background;
 
   Color get surfaceContainer => const Color(0xff707070).withOpacity(0.07);
 
-  Color get drawerSurface => const Color(0xff0A1914);
+  Color get drawerSurface => const Color(0xff020D09);
 
   Color get label => Colors.white;
 
@@ -213,7 +213,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get tabBarNotSelected => const Color(0xFF280164);
 
-  Color get credentialBackground => const Color(0xFF465C5E);
+  Color get credentialBackground => const Color(0xFF0A1914);
 
   Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
 

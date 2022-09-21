@@ -63,14 +63,14 @@ class WalletItems extends StatelessWidget {
 */
 
               ///Mange Accounts
-              DrawerItem(
-                icon: IconStrings.userRound,
-                title: l10n.manageAccounts,
-                onTap: () {
-                  Navigator.of(context).push<void>(ManageAccountsPage.route());
-                },
-              ),
-              const DrawerItemDivider(),
+              // DrawerItem(
+              //   icon: IconStrings.userRound,
+              //   title: l10n.manageAccounts,
+              //   onTap: () {
+              //     Navigator.of(context).push<void>(ManageAccountsPage.route());
+              //   },
+              // ),
+              // const DrawerItemDivider(),
 
               /// Manage Recovery Phrase
               DrawerItem(
