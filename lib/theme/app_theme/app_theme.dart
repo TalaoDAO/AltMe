@@ -24,7 +24,7 @@ abstract class AppTheme {
   static Color darkOnTertiary = const Color(0xffD1CCE3);
 
   /// The background color for widgets like Card.
-  static Color darkSurface = const Color(0xff1A182D);
+  static Color darkSurface = const Color(0xff0A1914);
 
   /// A color that's clearly legible when drawn on surface.
   static Color darkOnSurface = const Color(0xffEDEAF5);
@@ -149,7 +149,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get surfaceContainer => const Color(0xff707070).withOpacity(0.07);
 
-  Color get drawerSurface => const Color(0xff31343D);
+  Color get drawerSurface => const Color(0xff0A1914);
 
   Color get label => Colors.white;
 
@@ -213,7 +213,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get tabBarNotSelected => const Color(0xFF280164);
 
-  Color get credentialBackground => const Color(0xFF211F33);
+  Color get credentialBackground => const Color(0xFF465C5E);
 
   Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
 
@@ -409,7 +409,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get getCardsButton => GoogleFonts.roboto(
-        color: const Color(0xFFFFFFFF),
+        color: const Color(0xFF000000),
         fontSize: 12,
         fontWeight: FontWeight.w600,
       );
@@ -661,7 +661,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get credentialSurfaceText => GoogleFonts.roboto(
-        fontSize: 10,
+        fontSize: 12,
         fontWeight: FontWeight.w400,
         color: const Color(0xff00B267),
       );

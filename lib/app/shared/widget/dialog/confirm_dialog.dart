@@ -85,7 +85,7 @@ class ConfirmDialog extends StatelessWidget {
                   text: yes ?? l10n.yes,
                   verticalSpacing: 8,
                   backgroundColor: color,
-                  textColor: background,
+                  textColor: Colors.black,
                   fontSize: 13,
                   elevation: 0,
                   onPressed: () {
