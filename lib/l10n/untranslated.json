@@ -453,7 +453,12 @@
     "membership",
     "switchNetworkMessage",
     "fee",
-    "addCards"
+    "addCards",
+    "gaming",
+    "identity",
+    "payment",
+    "socialMedia",
+    "advanceSettings"
   ],
 
   "es": [
@@ -910,7 +915,12 @@
     "membership",
     "switchNetworkMessage",
     "fee",
-    "addCards"
+    "addCards",
+    "gaming",
+    "identity",
+    "payment",
+    "socialMedia",
+    "advanceSettings"
   ],
 
   "fr": [
@@ -1367,7 +1377,12 @@
     "membership",
     "switchNetworkMessage",
     "fee",
-    "addCards"
+    "addCards",
+    "gaming",
+    "identity",
+    "payment",
+    "socialMedia",
+    "advanceSettings"
   ],
 
   "it": [
@@ -1824,6 +1839,11 @@
     "membership",
     "switchNetworkMessage",
     "fee",
-    "addCards"
+    "addCards",
+    "gaming",
+    "identity",
+    "payment",
+    "socialMedia",
+    "advanceSettings"
   ]
 }
