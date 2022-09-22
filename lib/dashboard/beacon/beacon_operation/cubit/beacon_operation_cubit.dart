@@ -106,7 +106,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       await operationList.estimate();
 
       final fee = operationList.operations
-          .map((Operation e) => e.fee)
+          .map((Operation e) => e.totalFee)
           .reduce((int value, int element) => value + element);
 
       emit(state.copyWith(status: AppStatus.idle, totalFee: fee));
@@ -411,17 +411,9 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
         final String amount = operationDetail.amount ?? '0';
         final String? entrypoint = operationDetail.entrypoint;
 
-        final dynamic param = operationDetail.parameters != null
+        final dynamic parameters = operationDetail.parameters != null
             ? jsonDecode(jsonEncode(operationDetail.parameters))
             : null;
-
-        Map<String, dynamic>? parameters;
-
-        if (param != null) {
-          parameters = param is List
-              ? param[0] as Map<String, dynamic>
-              : param as Map<String, dynamic>;
-        }
 
         final operation = TransactionOperation(
             amount: int.parse(amount),

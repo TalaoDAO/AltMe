@@ -21,7 +21,9 @@ class FeeDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final double grandTotal = amount + fee;
+    final formattedFee = fee / 1e6;
+
+    final double grandTotal = amount + formattedFee;
     return BackgroundCard(
       color: Theme.of(context).colorScheme.cardBackground,
       child: Column(
@@ -50,7 +52,7 @@ class FeeDetails extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '''${fee.toStringAsFixed(6).formatNumber()} $symbol''',
+                '''${formattedFee.toStringAsFixed(6).formatNumber()} $symbol''',
                 style: Theme.of(context).textTheme.caption,
               ),
             ],
