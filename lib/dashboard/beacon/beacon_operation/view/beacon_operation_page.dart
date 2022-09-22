@@ -7,6 +7,7 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:key_generator/key_generator.dart';
 
 class BeaconOperationPage extends StatelessWidget {
   const BeaconOperationPage({
@@ -28,6 +29,7 @@ class BeaconOperationPage extends StatelessWidget {
         beaconCubit: context.read<BeaconCubit>(),
         walletCubit: context.read<WalletCubit>(),
         dioClient: DioClient('', Dio()),
+        keyGenerator: KeyGenerator(),
       ),
       child: const BeaconOperationView(),
     );
@@ -71,6 +73,12 @@ class BeaconOperationView extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        String message = '';
+        if (state.message != null) {
+          final MessageHandler messageHandler = state.message!.messageHandler!;
+          message = messageHandler.getMessage(context, messageHandler);
+        }
+
         return WillPopScope(
           onWillPop: () async {
             context.read<BeaconOperationCubit>().rejectOperation();
@@ -87,69 +95,67 @@ class BeaconOperationView extends StatelessWidget {
               height: double.infinity,
               width: double.infinity,
               padding: const EdgeInsets.all(Sizes.spaceSmall),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(Sizes.spaceXSmall),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Text(
-                        beaconRequest.request!.appMetadata!.name!,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: Sizes.spaceSmall),
-                      MyText(
-                        '${amount.toStringAsFixed(6).formatNumber()} $symbol',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headline5?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
+              child: state.status == AppStatus.errorWhileFetching
+                  ? ErrorView(
+                      message: message,
+                      onTap: () {
+                        context.read<BeaconOperationCubit>().initial();
+                      },
+                    )
+                  : SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(Sizes.spaceXSmall),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              beaconRequest.request!.appMetadata!.name!,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
+                            const SizedBox(height: Sizes.spaceSmall),
+                            MyText(
+                              '${amount.toStringAsFixed(6).formatNumber()} $symbol',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                            ),
+                            const SizedBox(height: Sizes.space2XSmall),
+                            Text(
+                              l10n.amount,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const SizedBox(height: Sizes.spaceSmall),
+                            SenderReceiver(
+                              from: beaconRequest.request!.sourceAddress!,
+                              to: beaconRequest
+                                  .operationDetails!.first.destination!,
+                            ),
+                            const SizedBox(height: Sizes.spaceNormal),
+                            Image.asset(
+                              IconStrings.arrowDown,
+                              height: Sizes.icon3x,
+                            ),
+                            const SizedBox(height: Sizes.spaceNormal),
+                            FeeDetails(
+                              amount: amount,
+                              symbol: symbol,
+                              tokenUSDRate: state.xtzUSDRate,
+                              fee: state.totalFee ?? 0,
+                            ),
+                            const SizedBox(height: Sizes.spaceNormal),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: Sizes.space2XSmall),
-                      Text(
-                        l10n.amount,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: Sizes.spaceSmall),
-                      SenderReceiver(
-                        from: beaconRequest.request!.sourceAddress!,
-                        to: beaconRequest.operationDetails!.first.destination!,
-                      ),
-                      const SizedBox(height: Sizes.spaceNormal),
-                      Image.asset(
-                        IconStrings.arrowDown,
-                        height: Sizes.icon3x,
-                      ),
-                      const SizedBox(height: Sizes.spaceNormal),
-                      ConfirmDetailsCard(
-                        amount: amount,
-                        symbol: symbol,
-                        tokenUSDRate: state.xtzUSDRate,
-                        networkFee: state.networkFee,
-                        onEditButtonPressed: () async {
-                          final NetworkFeeModel? networkFeeModel =
-                              await SelectNetworkFeeBottomSheet.show(
-                            context: context,
-                            selectedNetworkFee: state.networkFee,
-                          );
-
-                          if (networkFeeModel != null) {
-                            context
-                                .read<BeaconOperationCubit>()
-                                .setNetworkFee(networkFee: networkFeeModel);
-                          }
-                        },
-                      ),
-                      const SizedBox(height: Sizes.spaceNormal),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
             ),
             navigation: SafeArea(
               child: Padding(
@@ -162,7 +168,7 @@ class BeaconOperationView extends StatelessWidget {
                   borderRadius: Sizes.normalRadius,
                   text: l10n.send,
                   onPressed: () {
-                    context.read<BeaconOperationCubit>().send();
+                    context.read<BeaconOperationCubit>().sendOperataion();
                   },
                 ),
               ),
