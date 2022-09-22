@@ -2,25 +2,25 @@ part of 'beacon_operation_cubit.dart';
 
 @JsonSerializable()
 class BeaconOperationState extends Equatable {
-  BeaconOperationState({
-    NetworkFeeModel? networkFee,
+  const BeaconOperationState({
     this.status = AppStatus.init,
     this.message,
     this.xtzUSDRate = 0,
-  }) : networkFee = networkFee ?? NetworkFeeModel.networks()[1];
+    this.totalFee,
+  });
 
   factory BeaconOperationState.fromJson(Map<String, dynamic> json) =>
       _$BeaconOperationStateFromJson(json);
 
   final AppStatus status;
   final StateMessage? message;
-  final NetworkFeeModel networkFee;
   final double xtzUSDRate;
+  final int? totalFee;
 
   BeaconOperationState loading() {
     return BeaconOperationState(
       status: AppStatus.loading,
-      networkFee: networkFee,
+      totalFee: totalFee,
       xtzUSDRate: xtzUSDRate,
     );
   }
@@ -31,24 +31,24 @@ class BeaconOperationState extends Equatable {
     return BeaconOperationState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
-      networkFee: networkFee,
       xtzUSDRate: xtzUSDRate,
+      totalFee: totalFee,
     );
   }
 
   BeaconOperationState copyWith({
-    AppStatus appStatus = AppStatus.idle,
+    AppStatus status = AppStatus.idle,
     MessageHandler? messageHandler,
-    NetworkFeeModel? networkFee,
+    int? totalFee,
     int? selectedIndex,
     double? xtzUSDRate,
   }) {
     return BeaconOperationState(
-      status: appStatus,
+      status: status,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
-      networkFee: networkFee ?? this.networkFee,
+      totalFee: totalFee ?? this.totalFee,
       xtzUSDRate: xtzUSDRate ?? this.xtzUSDRate,
     );
   }
@@ -56,5 +56,5 @@ class BeaconOperationState extends Equatable {
   Map<String, dynamic> toJson() => _$BeaconOperationStateToJson(this);
 
   @override
-  List<Object?> get props => [status, message, networkFee, xtzUSDRate];
+  List<Object?> get props => [status, message, totalFee, xtzUSDRate];
 }

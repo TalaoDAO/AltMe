@@ -130,4 +130,9 @@ class KeyGenerator {
 
     return keystore.address;
   }
+
+  Keystore getKeystore({required String secretKey}) {
+    final keystore = Keystore.fromSecretKey(secretKey);
+    return keystore;
+  }
 }
