@@ -1,4 +1,5 @@
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/widgets/credential_widget/expansion_tile_title.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -27,9 +28,8 @@ class CredentialManifestDetails extends StatelessWidget {
             initiallyExpanded: true,
             childrenPadding: EdgeInsets.zero,
             tilePadding: const EdgeInsets.symmetric(horizontal: 8),
-            title: Text(
-              l10n.credentialManifestDescription,
-              style: Theme.of(context).textTheme.credentialManifestTitle2,
+            title: ExpansionTileTitle(
+              title: l10n.credentialManifestDescription,
             ),
             children: <Widget>[
               Padding(
@@ -48,9 +48,8 @@ class CredentialManifestDetails extends StatelessWidget {
             initiallyExpanded: true,
             childrenPadding: EdgeInsets.zero,
             tilePadding: const EdgeInsets.symmetric(horizontal: 8),
-            title: Text(
-              l10n.credentialManifestInformations,
-              style: Theme.of(context).textTheme.credentialManifestTitle2,
+            title: ExpansionTileTitle(
+              title: l10n.credentialManifestInformations,
             ),
             children: <Widget>[
               Container(
