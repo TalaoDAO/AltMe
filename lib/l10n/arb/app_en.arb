@@ -502,5 +502,6 @@
   "operationFailed": "Your requested operation has failed",
   "membership": "Membership",
   "switchNetworkMessage": "Please switch your network to",
-  "fee": "Fee"
+  "fee": "Fee",
+  "addCards": "Add cards"
 }

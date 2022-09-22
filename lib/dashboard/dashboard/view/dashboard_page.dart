@@ -86,65 +86,76 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocListener<HomeCubit, HomeState>(
-      listener: (context, homeState) {
-        if (homeState.passBaseStatus == PassBaseStatus.declined) {
-          showDialog<void>(
-            context: context,
-            builder: (_) => DefaultDialog(
-              title: l10n.verificationDeclinedTitle,
-              description: l10n.verificationDeclinedDescription,
-              buttonLabel: l10n.restartVerification.toUpperCase(),
-              onButtonClick: _onStartPassBaseVerification,
-            ),
-          );
-        }
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<HomeCubit, HomeState>(
+          listener: (context, homeState) {
+            if (homeState.passBaseStatus == PassBaseStatus.declined) {
+              showDialog<void>(
+                context: context,
+                builder: (_) => DefaultDialog(
+                  title: l10n.verificationDeclinedTitle,
+                  description: l10n.verificationDeclinedDescription,
+                  buttonLabel: l10n.restartVerification.toUpperCase(),
+                  onButtonClick: _onStartPassBaseVerification,
+                ),
+              );
+            }
 
-        if (homeState.passBaseStatus == PassBaseStatus.pending) {
-          showDialog<void>(
-            context: context,
-            builder: (_) => DefaultDialog(
-              title: l10n.verificationPendingTitle,
-              description: l10n.verificationPendingDescription,
-            ),
-          );
-        }
+            if (homeState.passBaseStatus == PassBaseStatus.pending) {
+              showDialog<void>(
+                context: context,
+                builder: (_) => DefaultDialog(
+                  title: l10n.verificationPendingTitle,
+                  description: l10n.verificationPendingDescription,
+                ),
+              );
+            }
 
-        if (homeState.passBaseStatus == PassBaseStatus.undone) {
-          showDialog<void>(
-            context: context,
-            builder: (_) => KycDialog(
-              startVerificationPressed: _onStartPassBaseVerification,
-            ),
-          );
-        }
+            if (homeState.passBaseStatus == PassBaseStatus.undone) {
+              showDialog<void>(
+                context: context,
+                builder: (_) => KycDialog(
+                  startVerificationPressed: _onStartPassBaseVerification,
+                ),
+              );
+            }
 
-        if (homeState.passBaseStatus == PassBaseStatus.complete) {
-          showDialog<void>(
-            context: context,
-            builder: (_) => const FinishKycDialog(),
-          );
-          context.read<HomeCubit>().getPassBaseStatusBackground();
-        }
+            if (homeState.passBaseStatus == PassBaseStatus.complete) {
+              showDialog<void>(
+                context: context,
+                builder: (_) => const FinishKycDialog(),
+              );
+              context.read<HomeCubit>().getPassBaseStatusBackground();
+            }
 
-        if (homeState.passBaseStatus == PassBaseStatus.verified) {
-          // LocalNotification().showNotification(
-          //   title: l10n.verifiedNotificationTitle,
-          //   message: l10n.verifiedNotificationDescription,
-          //   link: homeState.link,
-          // );
+            if (homeState.passBaseStatus == PassBaseStatus.verified) {
+              // LocalNotification().showNotification(
+              //   title: l10n.verifiedNotificationTitle,
+              //   message: l10n.verifiedNotificationDescription,
+              //   link: homeState.link,
+              // );
 
-          showDialog<void>(
-            context: context,
-            builder: (_) => DefaultDialog(
-              title: l10n.verifiedTitle,
-              description: l10n.verifiedDescription,
-              buttonLabel: l10n.verfiedButton.toUpperCase(),
-              onButtonClick: () => context.read<HomeCubit>().launchUrl(),
-            ),
-          );
-        }
-      },
+              showDialog<void>(
+                context: context,
+                builder: (_) => DefaultDialog(
+                  title: l10n.verifiedTitle,
+                  description: l10n.verifiedDescription,
+                  buttonLabel: l10n.verfiedButton.toUpperCase(),
+                  onButtonClick: () => context.read<HomeCubit>().launchUrl(),
+                ),
+              );
+            }
+          },
+        ),
+        BlocListener<DashboardCubit, DashboardState>(
+          listener: (_, state) {
+            if (state.selectedIndex != pageController.page?.toInt()) {
+              pageController.jumpToPage(state.selectedIndex);
+            }
+          },
+        )
+      ],
       child: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
           return WillPopScope(

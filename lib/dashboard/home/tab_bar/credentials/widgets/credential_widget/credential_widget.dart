@@ -1,3 +1,4 @@
+export 'add_credential_button.dart';
 export 'age_range_widget.dart';
 export 'certificate_of_employment_widget.dart';
 export 'default_credential_subject_widget.dart';
