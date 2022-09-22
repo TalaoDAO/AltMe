@@ -87,14 +87,8 @@ class _TokenSelectBoxItem extends StatelessWidget {
                         .setSelectedToken(tokenModel: selectedToken);
                   }
                 },
-                child: Container(
-                  padding: const EdgeInsets.all(Sizes.spaceSmall),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).hoverColor,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(Sizes.normalRadius),
-                    ),
-                  ),
+                child: BackgroundCard(
+                  color: Theme.of(context).colorScheme.cardBackground,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
@@ -158,7 +152,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                       ),
                       MyText(
                         r'$' +
-                            selectedToken.balanceUSDPrice
+                            selectedToken.balanceInUSD
                                 .toStringAsFixed(2)
                                 .formatNumber(),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(

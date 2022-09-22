@@ -63,6 +63,10 @@ class HomeCredential extends Equatable {
         image = ImageStrings.dummyIdentityCard;
         link = Urls.identityCardUrl;
         break;
+      case CredentialSubjectType.tezotopiaMembership:
+        image = ImageStrings.tezotopiaMemberShipDummy;
+        link = Urls.tezotopiaMembershipCardUrl;
+        break;
       case CredentialSubjectType.voucher:
       case CredentialSubjectType.selfIssued:
       case CredentialSubjectType.defaultCredential:

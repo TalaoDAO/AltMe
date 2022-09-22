@@ -212,6 +212,22 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD:
           return ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD
               .localise(context);
+
+        case ResponseString.RESPONSE_STRING_OPERATION_COMPLETED:
+          return ResponseString.RESPONSE_STRING_OPERATION_COMPLETED
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_OPERATION_FAILED:
+          return ResponseString.RESPONSE_STRING_OPERATION_FAILED
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE:
+          return ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE:
+          return ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE
+              .localise(context);
       }
     }
     return '';

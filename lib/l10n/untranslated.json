@@ -445,7 +445,15 @@
     "sign",
     "payload_to_sign",
     "signedPayload",
-    "failedToSignPayload"
+    "failedToSignPayload",
+    "voucher",
+    "tezotopia",
+    "operationCompleted",
+    "operationFailed",
+    "membership",
+    "switchNetworkMessage",
+    "fee",
+    "addCards"
   ],
 
   "es": [
@@ -894,7 +902,15 @@
     "sign",
     "payload_to_sign",
     "signedPayload",
-    "failedToSignPayload"
+    "failedToSignPayload",
+    "voucher",
+    "tezotopia",
+    "operationCompleted",
+    "operationFailed",
+    "membership",
+    "switchNetworkMessage",
+    "fee",
+    "addCards"
   ],
 
   "fr": [
@@ -1343,7 +1359,15 @@
     "sign",
     "payload_to_sign",
     "signedPayload",
-    "failedToSignPayload"
+    "failedToSignPayload",
+    "voucher",
+    "tezotopia",
+    "operationCompleted",
+    "operationFailed",
+    "membership",
+    "switchNetworkMessage",
+    "fee",
+    "addCards"
   ],
 
   "it": [
@@ -1792,6 +1816,14 @@
     "sign",
     "payload_to_sign",
     "signedPayload",
-    "failedToSignPayload"
+    "failedToSignPayload",
+    "voucher",
+    "tezotopia",
+    "operationCompleted",
+    "operationFailed",
+    "membership",
+    "switchNetworkMessage",
+    "fee",
+    "addCards"
   ]
 }

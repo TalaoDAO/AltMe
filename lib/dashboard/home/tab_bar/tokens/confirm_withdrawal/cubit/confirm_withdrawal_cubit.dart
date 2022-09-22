@@ -51,6 +51,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
       final amount = int.parse(
         tokenAmount.toStringAsFixed(6).replaceAll(',', '').replaceAll('.', ''),
       );
+
       final customFee = int.parse(
         state.networkFee.fee
             .toStringAsFixed(6)
@@ -78,7 +79,13 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
       emit(state.success());
     } catch (e, s) {
       logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
-      emit(state.error(messageHandler: MessageHandler()));
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        ),
+      );
     }
   }
 
@@ -101,7 +108,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
 
       final server = manageNetworkCubit.state.network.rpcNodeUrl;
 
-      //TODO(all): Do check this getKeysFromSecretKey() in helper function
+      // TODO(all): Do check this getKeysFromSecretKey() in helper function
       final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
 
       final keyStore = KeyStoreModel(
@@ -162,7 +169,13 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
 
       emit(state.success());
     } catch (e, s) {
-      emit(state.error(messageHandler: MessageHandler()));
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        ),
+      );
       getLogger(runtimeType.toString())
           .e('error in transferOperation , e: $e, s: $s');
     }

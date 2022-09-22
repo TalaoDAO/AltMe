@@ -234,6 +234,8 @@ extension CustomColorScheme on ColorScheme {
   Color get inactiveColor => const Color(0xFFFF0045);
 
   Color get beaconBorder => const Color(0xff86809D);
+
+  Color get cardBackground => const Color(0xFF211F33);
 }
 
 extension CustomTextTheme on TextTheme {
@@ -718,6 +720,17 @@ extension CustomTextTheme on TextTheme {
         fontSize: 15,
         fontWeight: FontWeight.w400,
         color: const Color(0xff71CBFF),
+      );
+
+  TextStyle get identitiyBaseSmallText => GoogleFonts.roboto(
+        fontSize: 12,
+        fontWeight: FontWeight.w300,
+        color: const Color(0xffFFFFFF),
+      );
+  TextStyle get identitiyBaseMediumBoldText => GoogleFonts.roboto(
+        fontSize: 21,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xffFFFFFF),
       );
 
   TextStyle get copyToClipBoard => GoogleFonts.nunito(

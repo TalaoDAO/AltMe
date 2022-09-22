@@ -136,7 +136,7 @@ class _TabControllerViewState extends State<TabControllerView>
                     else
                       const CredentialsListPage(),
                     const NftPage(),
-                    const TokenPage(),
+                    const TokensPage(),
                   ],
                 ),
               ),

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class CredentialImage extends StatelessWidget {
   const CredentialImage({
-    required this.child,
+    this.child,
     required this.image,
     Key? key,
   }) : super(key: key);
-  final Widget child;
+  final Widget? child;
   final String image;
 
   @override

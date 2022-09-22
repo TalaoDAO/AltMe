@@ -5,35 +5,35 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TokenPage extends StatefulWidget {
-  const TokenPage({Key? key}) : super(key: key);
+class TokensPage extends StatefulWidget {
+  const TokensPage({Key? key}) : super(key: key);
 
   @override
-  State<TokenPage> createState() => _TokenPageState();
+  State<TokensPage> createState() => _TokensPageState();
 }
 
-class _TokenPageState extends State<TokenPage>
-    with AutomaticKeepAliveClientMixin<TokenPage> {
+class _TokensPageState extends State<TokensPage>
+    with AutomaticKeepAliveClientMixin<TokensPage> {
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return const TokenView();
+    return const TokensView();
   }
 }
 
-class TokenView extends StatefulWidget {
-  const TokenView({Key? key}) : super(key: key);
+class TokensView extends StatefulWidget {
+  const TokensView({Key? key}) : super(key: key);
 
   @override
-  _TokenViewState createState() => _TokenViewState();
+  _TokensViewState createState() => _TokensViewState();
 }
 
-class _TokenViewState extends State<TokenView> {
+class _TokensViewState extends State<TokensView> {
   int _offset = 0;
-  final _limit = 15;
+  final _limit = 100;
   int activeIndex = -1;
 
   Future<void> onRefresh() async {

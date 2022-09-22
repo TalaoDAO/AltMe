@@ -175,7 +175,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                     ),
                     MyText(
                       r'$' +
-                          state.selectedToken.balanceUSDPrice
+                          state.selectedToken.balanceInUSD
                               .toStringAsFixed(2)
                               .formatNumber(),
                       style: Theme.of(context).textTheme.normal,

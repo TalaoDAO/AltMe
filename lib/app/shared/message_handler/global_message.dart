@@ -166,4 +166,13 @@ class GlobalMessage {
 
   String get RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD =>
       l10n.failedToSignPayload;
+
+  String get RESPONSE_STRING_OPERATION_COMPLETED => l10n.operationCompleted;
+
+  String get RESPONSE_STRING_OPERATION_FAILED => l10n.operationFailed;
+
+  String get RESPONSE_STRING_INSUFFICIENT_BALANCE => l10n.insufficientBalance;
+
+  String get RESPONSE_STRING_SWITCH_NETWORK_MESSAGE =>
+      l10n.switchNetworkMessage;
 }

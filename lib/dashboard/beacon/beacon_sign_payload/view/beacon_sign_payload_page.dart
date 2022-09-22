@@ -43,9 +43,10 @@ class BeaconSignPayloadView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final beaconCubitState = context.read<BeaconCubit>().state;
-    final message =
-        hexToBytes(beaconCubitState.beaconRequest!.request!.payload!);
+    final BeaconRequest beaconRequest =
+        context.read<BeaconCubit>().state.beaconRequest!;
+
+    final message = hexToBytes(beaconRequest.request!.payload!);
     final messageInUtf8 = utf8.decode(message, allowMalformed: true);
 
     final l10n = context.l10n;
@@ -93,13 +94,24 @@ class BeaconSignPayloadView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Text(
-                      beaconCubitState
-                          .beaconRequest!.request!.appMetadata!.name!,
+                      beaconRequest.request!.appMetadata!.name!,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: Sizes.spaceXLarge),
                     const Permissions(),
+                    const SizedBox(height: Sizes.spaceXLarge),
+                    Text(
+                      l10n.cryptoAccount,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: Sizes.spaceXSmall),
+                    MyText(
+                      beaconRequest.request!.sourceAddress!,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.beaconPayload,
+                    ),
                     const SizedBox(height: Sizes.spaceXLarge),
                     Text(
                       l10n.payload_to_sign,

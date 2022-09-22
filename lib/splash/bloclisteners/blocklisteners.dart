@@ -7,7 +7,9 @@ import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -192,13 +194,67 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
 final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
   listener: (BuildContext context, BeaconState state) {
-    if (state.status == BeaconStatus.permission) {
-      Navigator.of(context).pushReplacement<void, void>(
-        BeaconConfirmConnectionPage.route(),
-      );
-    }
-    if (state.status == BeaconStatus.signPayload) {
-      Navigator.of(context).push<void>(BeaconSignPayloadPage.route());
+    final log = getLogger('beaconBlocListener');
+    try {
+      final Beacon beacon = Beacon();
+
+      //signPayload is not network sensitive
+      if (state.status != BeaconStatus.signPayload) {
+        final manageNetworkCubit = context.read<ManageNetworkCubit>();
+
+        final incomingNetworkType =
+            describeEnum(state.beaconRequest!.request!.network!.type!);
+        final currentNetworkType =
+            manageNetworkCubit.state.network.networkname.toLowerCase();
+
+        // if network type does not match
+        if (incomingNetworkType != currentNetworkType) {
+          final MessageHandler messageHandler = ResponseMessage(
+            ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE,
+          );
+          final String message =
+              messageHandler.getMessage(context, messageHandler);
+
+          AlertMessage.showStringMessage(
+            context: context,
+            message: '$message $incomingNetworkType.',
+            messageType: MessageType.error,
+          );
+
+          final requestId = state.beaconRequest!.request!.id!;
+
+          if (state.status == BeaconStatus.permission) {
+            beacon.permissionResponse(
+              id: requestId,
+              publicKey: null,
+              address: null,
+            );
+            Navigator.pop(context);
+          }
+          // if (state.status == BeaconStatus.signPayload) {
+          //   beacon.signPayloadResponse(id: requestId, signature: null);
+          // }
+          if (state.status == BeaconStatus.operation) {
+            beacon.operationResponse(id: requestId, transactionHash: null);
+          }
+
+          return;
+        }
+      }
+
+      if (state.status == BeaconStatus.permission) {
+        Navigator.of(context).pushReplacement<void, void>(
+          BeaconConfirmConnectionPage.route(),
+        );
+      }
+      if (state.status == BeaconStatus.signPayload) {
+        Navigator.of(context).push<void>(BeaconSignPayloadPage.route());
+      }
+      if (state.status == BeaconStatus.operation) {
+        Navigator.of(context).push<void>(BeaconOperationPage.route());
+      }
+    } catch (e) {
+      log.e(e);
     }
   },
 );

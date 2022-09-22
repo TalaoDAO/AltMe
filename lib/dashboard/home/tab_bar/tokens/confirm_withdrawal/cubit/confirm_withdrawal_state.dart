@@ -20,6 +20,8 @@ class ConfirmWithdrawalState extends Equatable {
   ConfirmWithdrawalState loading() {
     return copyWith(
       status: AppStatus.loading,
+      withdrawalAddress: withdrawalAddress,
+      networkFee: networkFee,
     );
   }
 
@@ -29,6 +31,8 @@ class ConfirmWithdrawalState extends Equatable {
     return copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
+      withdrawalAddress: withdrawalAddress,
+      networkFee: networkFee,
     );
   }
 
@@ -40,6 +44,8 @@ class ConfirmWithdrawalState extends Equatable {
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
+      withdrawalAddress: withdrawalAddress,
+      networkFee: networkFee,
     );
   }
 
