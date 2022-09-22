@@ -458,7 +458,8 @@
     "identity",
     "payment",
     "socialMedia",
-    "advanceSettings"
+    "advanceSettings",
+    "selectCredentialCategoryWhichYouWantToShowInCredentialList"
   ],
 
   "es": [
@@ -920,7 +921,8 @@
     "identity",
     "payment",
     "socialMedia",
-    "advanceSettings"
+    "advanceSettings",
+    "selectCredentialCategoryWhichYouWantToShowInCredentialList"
   ],
 
   "fr": [
@@ -1382,7 +1384,8 @@
     "identity",
     "payment",
     "socialMedia",
-    "advanceSettings"
+    "advanceSettings",
+    "selectCredentialCategoryWhichYouWantToShowInCredentialList"
   ],
 
   "it": [
@@ -1844,6 +1847,7 @@
     "identity",
     "payment",
     "socialMedia",
-    "advanceSettings"
+    "advanceSettings",
+    "selectCredentialCategoryWhichYouWantToShowInCredentialList"
   ]
 }

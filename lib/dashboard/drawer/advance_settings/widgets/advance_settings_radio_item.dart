@@ -7,12 +7,12 @@ class AdvanceSettingsRadioItem extends StatelessWidget {
     Key? key,
     required this.title,
     required this.isSelected,
-    required this.onPressed,
+    this.onPressed,
   }) : super(key: key);
 
   final String title;
   final bool isSelected;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class AdvanceSettingsRadioItem extends StatelessWidget {
           Theme.of(context).colorScheme.inversePrimary,
         ),
         checkColor: Theme.of(context).colorScheme.primary,
-        onChanged: (_) => onPressed.call(),
+        onChanged: (_) => onPressed?.call(),
         shape: const CircleBorder(),
       ),
       title: MyText(

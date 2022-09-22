@@ -48,6 +48,10 @@ class _AdvanceSettingsViewState extends State<AdvanceSettingsView> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  l10n.selectCredentialCategoryWhichYouWantToShowInCredentialList,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
                 AdvanceSettingsRadioItem(
                   title: l10n.gaming,
                   isSelected: state.isGamingEnabled,
@@ -63,10 +67,13 @@ class _AdvanceSettingsViewState extends State<AdvanceSettingsView> {
                   isSelected: state.isPaymentEnabled,
                   onPressed: advanceSEttingsCubit.togglePaymentRadio,
                 ),
-                AdvanceSettingsRadioItem(
-                  title: l10n.socialMedia,
-                  isSelected: state.isSocialMediaEnabled,
-                  onPressed: advanceSEttingsCubit.toggleSocialMediaRadio,
+                Opacity(
+                  opacity: 0.5,
+                  child: AdvanceSettingsRadioItem(
+                    title: l10n.socialMedia,
+                    isSelected: state.isSocialMediaEnabled,
+                    //onPressed: advanceSEttingsCubit.toggleSocialMediaRadio,
+                  ),
                 ),
               ],
             );
