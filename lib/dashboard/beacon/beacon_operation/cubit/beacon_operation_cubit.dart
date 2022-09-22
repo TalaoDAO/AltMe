@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/beacon/beacon.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
@@ -21,9 +20,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     required this.beaconCubit,
     required this.dioClient,
     required this.keyGenerator,
-  }) : super(const BeaconOperationState()) {
-    initial();
-  }
+  }) : super(const BeaconOperationState());
 
   final WalletCubit walletCubit;
   final Beacon beacon;
@@ -33,9 +30,8 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
 
   final log = getLogger('BeaconOperationCubit');
 
-  void initial() {
-    getXtzPrice();
-    getFees();
+  Future<void> initial() async {
+    await getFees();
   }
 
   Future<void> getXtzPrice() async {
@@ -56,55 +52,9 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       emit(state.loading());
       log.i('estimateOperationFee');
 
-      final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
-
-      final CryptoAccountData? currentAccount =
-          walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-        (element) =>
-            element.walletAddress == beaconRequest.request!.sourceAddress!,
-      );
-
-      if (currentAccount == null) {
-        throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-        );
-      }
-
-      late String rpcNodeUrl;
-
-      if (beaconRequest.request!.network!.type! == NetworkType.mainnet) {
-        rpcNodeUrl = TezosNetwork.mainNet().rpcNodeUrl;
-      } else if (beaconRequest.request!.network!.type! ==
-          NetworkType.ghostnet) {
-        rpcNodeUrl = TezosNetwork.ghostnet().rpcNodeUrl;
-      } else {
-        throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-        );
-      }
-
-      final client = TezartClient(rpcNodeUrl);
-
-      final keystore =
-          keyGenerator.getKeystore(secretKey: currentAccount.secretKey);
-
-      final operationList =
-          OperationsList(source: keystore, rpcInterface: client.rpcInterface);
-
-      final List<Operation> operations =
-          getOperation(beaconRequest: beaconRequest);
-
-      for (final element in operations) {
-        operationList.appendOperation(element);
-      }
-
-      final isReveal = await client.isKeyRevealed(keystore.address);
-      if (!isReveal) {
-        operationList.prependOperation(RevealOperation());
-      }
-
+      final operationList = await getOperationList();
       await operationList.estimate();
-
+      log.i('after operationList.estimate()');
       final fee = operationList.operations
           .map((Operation e) => e.totalFee)
           .reduce((int value, int element) => value + element);
@@ -113,7 +63,34 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     } catch (e) {
       log.e('cost estimation failure , e: $e');
       if (e is MessageHandler) {
-        emit(state.error(messageHandler: e));
+        emit(
+          state.copyWith(
+            status: AppStatus.errorWhileFetching,
+            messageHandler: e,
+          ),
+        );
+      } else if (e is TezartNodeError) {
+        final Map<String, String> json = e.metadata;
+        if (json['reason'] == 'contract.balance_too_low') {
+          emit(
+            state.copyWith(
+              status: AppStatus.errorWhileFetching,
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
+              ),
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+              status: AppStatus.errorWhileFetching,
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          );
+        }
       } else {
         emit(
           state.copyWith(
@@ -130,87 +107,12 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
 
   Future<void> sendOperataion() async {
     try {
+      emit(state.loading());
       log.i('sendOperataion');
 
-      final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
-
-      final CryptoAccountData? currentAccount =
-          walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-        (element) =>
-            element.walletAddress == beaconRequest.request!.sourceAddress!,
-      );
-
-      if (currentAccount == null) {
-        throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-        );
-      }
-
-      final amount = int.parse(beaconRequest.operationDetails!.first.amount!);
-
-      // check xtz balance
-      late String baseUrl;
-      late String rpcNodeUrl;
-
-      if (beaconRequest.request!.network!.type! == NetworkType.mainnet) {
-        baseUrl = TezosNetwork.mainNet().tzktUrl;
-        rpcNodeUrl = TezosNetwork.mainNet().rpcNodeUrl;
-      } else if (beaconRequest.request!.network!.type! ==
-          NetworkType.ghostnet) {
-        baseUrl = TezosNetwork.ghostnet().tzktUrl;
-        rpcNodeUrl = TezosNetwork.ghostnet().rpcNodeUrl;
-      } else {
-        throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-        );
-      }
-
-      log.i('checking xtz');
-      final int balance = await dioClient.get(
-        '$baseUrl/v1/accounts/${beaconRequest.request!.sourceAddress!}/balance',
-      ) as int;
-      log.i('total xtz - $balance');
-      final formattedBalance = int.parse(
-        balance.toStringAsFixed(6).replaceAll('.', '').replaceAll(',', ''),
-      );
-
-      if ((amount + state.totalFee!) > formattedBalance) {
-        throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
-        );
-      }
-
-      final client = TezartClient(rpcNodeUrl);
-
-      final keystore =
-          keyGenerator.getKeystore(secretKey: currentAccount.secretKey);
-
-      final operationList =
-          OperationsList(source: keystore, rpcInterface: client.rpcInterface);
-
-      final List<Operation> operations =
-          getOperation(beaconRequest: beaconRequest);
-
-      for (final element in operations) {
-        operationList.appendOperation(element);
-      }
-
-      final isReveal = await client.isKeyRevealed(keystore.address);
-      if (!isReveal) {
-        operationList.prependOperation(RevealOperation());
-      }
-
-      log.i(
-        'before execute: withdrawal from secretKey: ${keystore.secretKey}'
-        ' , publicKey: ${keystore.publicKey} '
-        'amount: $amount '
-        'networkFee: ${state.totalFee} '
-        'address: ${keystore.address} =>To address: '
-        '${beaconRequest.operationDetails!.first.destination!}',
-      );
-
+      final operationList = await getOperationList();
       await operationList.executeAndMonitor();
-      log.i('after withdrawal execute');
+      log.i('after operationList.executeAndMonitor()');
 
       final transactionHash = operationList.result.id;
 
@@ -240,6 +142,26 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       log.e('sendOperataion , e: $e');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
+      } else if (e is TezartNodeError) {
+        final Map<String, String> json = e.metadata;
+        if (json['reason'] == 'contract.balance_too_low') {
+          emit(
+            state.error(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
+              ),
+            ),
+          );
+        } else {
+          emit(
+            state.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          );
+        }
       } else {
         emit(
           state.error(
@@ -253,127 +175,6 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     }
   }
 
-  // Future<void> send() async {
-  //   try {
-  //     log.i('started sending');
-  //     emit(state.loading());
-
-  //     final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
-
-  //     final CryptoAccountData? currentAccount =
-  //         walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-  //       (element) =>
-  //           element.walletAddress == beaconRequest.request!.sourceAddress!,
-  //     );
-
-  //     if (currentAccount == null) {
-  //       // TODO(bibash): account data not available error message may be
-  //       throw ResponseMessage(
-  //         ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-  //       );
-  //     }
-
-  //     final sourceKeystore = Keystore.fromSecretKey(currentAccount.secretKey);
-
-  //     final client = TezartClient(beaconRequest.request!.network!.rpcUrl!);
-
-  //     final amount = int.parse(beaconRequest.operationDetails!.first.amount!);
-
-  //     final customFee = int.parse(
-  //       state.networkFee.fee
-  //           .toStringAsFixed(6)
-  //           .replaceAll('.', '')
-  //           .replaceAll(',', ''),
-  //     );
-
-  //     // check xtz balance
-  //     late String baseUrl;
-
-  //     if (beaconRequest.request!.network!.type! == NetworkType.mainnet) {
-  //       baseUrl = TezosNetwork.mainNet().tzktUrl;
-  //     } else if (beaconRequest.request!.network!.type! ==
-  //         NetworkType.ghostnet) {
-  //       baseUrl = TezosNetwork.ghostnet().tzktUrl;
-  //     } else {
-  //       throw ResponseMessage(
-  //         ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-  //       );
-  //     }
-
-  //     log.i('checking xtz');
-  //     final int balance = await dioClient.get(
-  //       '$baseUrl/v1/accounts/${beaconRequest.request!.sourceAddress!}/balance',
-  //     ) as int;
-  //     log.i('total xtz - $balance');
-  //     final formattedBalance = int.parse(
-  //       balance.toStringAsFixed(6).replaceAll('.', '').replaceAll(',', ''),
-  //     );
-
-  //     if ((amount + customFee) > formattedBalance) {
-  //       throw ResponseMessage(
-  //         ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
-  //       );
-  //     }
-
-  //     // send xtz
-  //     final operationsList = await client.transferOperation(
-  //       source: sourceKeystore,
-  //       destination: beaconRequest.operationDetails!.first.destination!,
-  //       amount: amount,
-  //       customFee: customFee,
-  //     );
-  //     log.i(
-  //       'before execute: withdrawal from secretKey: ${sourceKeystore.secretKey}'
-  //       ' , publicKey: ${sourceKeystore.publicKey} '
-  //       'amount: $amount '
-  //       'networkFee: $customFee '
-  //       'address: ${sourceKeystore.address} =>To address: '
-  //       '${beaconRequest.operationDetails!.first.destination!}',
-  //     );
-
-  //     await operationsList.executeAndMonitor();
-  //     log.i('after withdrawal execute');
-  //     final String transactionHash = operationsList.result.id!;
-
-  //     final Map response = await beacon.operationResponse(
-  //       id: beaconCubit.state.beaconRequest!.request!.id!,
-  //       transactionHash: transactionHash,
-  //     );
-
-  //     final bool success = json.decode(response['success'].toString()) as bool;
-
-  //     if (success) {
-  //       log.i('operation success');
-  //       emit(
-  //         state.copyWith(
-  //           appStatus: AppStatus.success,
-  //           messageHandler: ResponseMessage(
-  //             ResponseString.RESPONSE_STRING_OPERATION_COMPLETED,
-  //           ),
-  //         ),
-  //       );
-  //     } else {
-  //       throw ResponseMessage(
-  //         ResponseString.RESPONSE_STRING_OPERATION_FAILED,
-  //       );
-  //     }
-  //   } catch (e) {
-  //     log.e('operation failure , e: $e');
-  //     if (e is MessageHandler) {
-  //       emit(state.error(messageHandler: e));
-  //     } else {
-  //       emit(
-  //         state.error(
-  //           messageHandler: ResponseMessage(
-  //             ResponseString
-  //                 .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-  //           ),
-  //         ),
-  //       );
-  //     }
-  //   }
-  // }
-
   void rejectOperation() {
     log.i('beacon connection rejected');
     beacon.operationResponse(
@@ -383,8 +184,104 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     emit(state.copyWith(status: AppStatus.success));
   }
 
-  List<Operation> getOperation({required BeaconRequest beaconRequest}) {
+  Future<OperationsList> getOperationList() async {
+    try {
+      log.i('getOperationList');
+
+      final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
+
+      final CryptoAccountData? currentAccount =
+          walletCubit.state.cryptoAccount.data.firstWhereOrNull(
+        (element) =>
+            element.walletAddress == beaconRequest.request!.sourceAddress!,
+      );
+
+      if (currentAccount == null) {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
+
+      /// check xtz balance
+      //late String baseUrl;
+      late String rpcNodeUrl;
+
+      if (beaconRequest.request!.network!.type! == NetworkType.mainnet) {
+        //baseUrl = TezosNetwork.mainNet().tzktUrl;
+        rpcNodeUrl = TezosNetwork.mainNet().rpcNodeUrl;
+      } else if (beaconRequest.request!.network!.type! ==
+          NetworkType.ghostnet) {
+        //baseUrl = TezosNetwork.ghostnet().tzktUrl;
+        rpcNodeUrl = TezosNetwork.ghostnet().rpcNodeUrl;
+      } else {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
+
+      final amount = int.parse(beaconRequest.operationDetails!.first.amount!);
+
+      // TezartErro handles low balande
+      // log.i('checking xtz');
+      // final int balance = await dioClient.get(
+      //   '$baseUrl/v1/accounts/${beaconRequest.request!.sourceAddress!}/balance',
+      // ) as int;
+      // log.i('total xtz - $balance');
+      // final formattedBalance = int.parse(
+      //   balance.toStringAsFixed(6).replaceAll('.', '').replaceAll(',', ''),
+      // );
+
+      // if ((amount + state.totalFee!) > formattedBalance) {
+      //   throw ResponseMessage(
+      //     ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
+      //   );
+      // }
+
+      final client = TezartClient(rpcNodeUrl);
+      final keystore =
+          keyGenerator.getKeystore(secretKey: currentAccount.secretKey);
+
+      final operationList =
+          OperationsList(source: keystore, rpcInterface: client.rpcInterface);
+
+      final List<Operation> operations = getOperation();
+      for (final element in operations) {
+        operationList.appendOperation(element);
+      }
+
+      final isReveal = await client.isKeyRevealed(keystore.address);
+      if (!isReveal) {
+        operationList.prependOperation(RevealOperation());
+      }
+
+      log.i(
+        'secretKey: ${keystore.secretKey}'
+        'publicKey: ${keystore.publicKey} '
+        'amount: $amount '
+        'networkFee: ${state.totalFee} '
+        'address: ${keystore.address} =>To address: '
+        '${beaconRequest.operationDetails!.first.destination!}',
+      );
+
+      return operationList;
+    } catch (e) {
+      if (e is MessageHandler) {
+        rethrow;
+      } else if (e is TezartNodeError) {
+        log.e(e.metadata);
+        rethrow;
+      } else {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
+    }
+  }
+
+  List<Operation> getOperation() {
     final List<Operation> operations = [];
+
+    final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
 
     for (final operationDetail in beaconRequest.operationDetails!) {
       final String? storageLimit = operationDetail.storageLimit;
@@ -416,19 +313,21 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
             : null;
 
         final operation = TransactionOperation(
-            amount: int.parse(amount),
-            destination: destination,
-            entrypoint: entrypoint,
-            params: parameters,
-            customFee: fee != null ? int.parse(fee) : null,
-            customGasLimit: gasLimit != null ? int.parse(gasLimit) : null,
-            customStorageLimit:
-                storageLimit != null ? int.parse(storageLimit) : null);
+          amount: int.parse(amount),
+          destination: destination,
+          entrypoint: entrypoint,
+          params: parameters,
+          customFee: fee != null ? int.parse(fee) : null,
+          customGasLimit: gasLimit != null ? int.parse(gasLimit) : null,
+          customStorageLimit:
+              storageLimit != null ? int.parse(storageLimit) : null,
+        );
 
         operations.add(operation);
       }
     }
 
+    log.i('operations - $operations');
     return operations;
   }
 }

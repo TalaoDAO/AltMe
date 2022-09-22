@@ -49,7 +49,6 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
         Dartez.writeKeyWithHint(currentAccount.secretKey, 'edsk'),
       );
 
-      // TODO(bibash): Should we sign with current address
       final signature = Dartez.signPayload(
         signer: signer as SoftSigner,
         payload: beaconCubit.state.beaconRequest!.request!.payload!,
