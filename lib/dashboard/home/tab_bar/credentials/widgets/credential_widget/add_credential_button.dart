@@ -29,7 +29,7 @@ class AddCredentialButton extends StatelessWidget {
             ),
             Text(
               l10n.addCards,
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.credentialCategoryTitle,
             ),
           ],
         ),
