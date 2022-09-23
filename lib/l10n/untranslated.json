@@ -453,7 +453,13 @@
     "membership",
     "switchNetworkMessage",
     "fee",
-    "addCards"
+    "addCards",
+    "gaming",
+    "identity",
+    "payment",
+    "socialMedia",
+    "advanceSettings",
+    "selectCredentialCategoryWhichYouWantToShowInCredentialList"
   ],
 
   "es": [
@@ -910,7 +916,13 @@
     "membership",
     "switchNetworkMessage",
     "fee",
-    "addCards"
+    "addCards",
+    "gaming",
+    "identity",
+    "payment",
+    "socialMedia",
+    "advanceSettings",
+    "selectCredentialCategoryWhichYouWantToShowInCredentialList"
   ],
 
   "fr": [
@@ -1367,7 +1379,13 @@
     "membership",
     "switchNetworkMessage",
     "fee",
-    "addCards"
+    "addCards",
+    "gaming",
+    "identity",
+    "payment",
+    "socialMedia",
+    "advanceSettings",
+    "selectCredentialCategoryWhichYouWantToShowInCredentialList"
   ],
 
   "it": [
@@ -1824,6 +1842,12 @@
     "membership",
     "switchNetworkMessage",
     "fee",
-    "addCards"
+    "addCards",
+    "gaming",
+    "identity",
+    "payment",
+    "socialMedia",
+    "advanceSettings",
+    "selectCredentialCategoryWhichYouWantToShowInCredentialList"
   ]
 }

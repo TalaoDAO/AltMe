@@ -37,14 +37,14 @@ class BeaconOperationState extends Equatable {
   }
 
   BeaconOperationState copyWith({
-    AppStatus status = AppStatus.idle,
+    AppStatus? status,
     MessageHandler? messageHandler,
     int? totalFee,
     int? selectedIndex,
     double? xtzUSDRate,
   }) {
     return BeaconOperationState(
-      status: status,
+      status: status ?? this.status,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),

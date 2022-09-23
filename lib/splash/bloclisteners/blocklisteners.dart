@@ -196,6 +196,10 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
   listener: (BuildContext context, BeaconState state) {
     final log = getLogger('beaconBlocListener');
     try {
+      final BeaconRequest? beaconRequest = state.beaconRequest;
+
+      if (beaconRequest == null) return;
+
       final Beacon beacon = Beacon();
 
       //signPayload is not network sensitive
@@ -203,7 +207,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
         final manageNetworkCubit = context.read<ManageNetworkCubit>();
 
         final incomingNetworkType =
-            describeEnum(state.beaconRequest!.request!.network!.type!);
+            describeEnum(beaconRequest.request!.network!.type!);
         final currentNetworkType =
             manageNetworkCubit.state.network.networkname.toLowerCase();
 
@@ -221,7 +225,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
             messageType: MessageType.error,
           );
 
-          final requestId = state.beaconRequest!.request!.id!;
+          final requestId = beaconRequest.request!.id!;
 
           if (state.status == BeaconStatus.permission) {
             beacon.permissionResponse(
@@ -231,9 +235,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
             );
             Navigator.pop(context);
           }
-          // if (state.status == BeaconStatus.signPayload) {
-          //   beacon.signPayloadResponse(id: requestId, signature: null);
-          // }
+
           if (state.status == BeaconStatus.operation) {
             beacon.operationResponse(id: requestId, transactionHash: null);
           }
