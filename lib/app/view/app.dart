@@ -143,6 +143,16 @@ class App extends StatelessWidget {
             walletCubit: context.read<WalletCubit>(),
           ),
         ),
+        BlocProvider<NftCubit>(
+          create: (context) => NftCubit(
+            client: DioClient(
+              context.read<ManageNetworkCubit>().state.network.tzktUrl,
+              Dio(),
+            ),
+            walletCubit: context.read<WalletCubit>(),
+            manageNetworkCubit: context.read<ManageNetworkCubit>(),
+          ),
+        ),
         BlocProvider<BeaconCubit>(
           create: (context) => BeaconCubit(beacon: Beacon()),
         ),

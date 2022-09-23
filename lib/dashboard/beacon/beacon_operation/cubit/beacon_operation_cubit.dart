@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/beacon/beacon.dart';
+import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
@@ -20,6 +22,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     required this.beaconCubit,
     required this.dioClient,
     required this.keyGenerator,
+    required this.nftCubit,
   }) : super(const BeaconOperationState());
 
   final WalletCubit walletCubit;
@@ -27,6 +30,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
   final BeaconCubit beaconCubit;
   final DioClient dioClient;
   final KeyGenerator keyGenerator;
+  final NftCubit nftCubit;
 
   final log = getLogger('BeaconOperationCubit');
 
@@ -133,6 +137,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
             ),
           ),
         );
+        unawaited(nftCubit.onRefresh());
       } else {
         throw ResponseMessage(
           ResponseString.RESPONSE_STRING_OPERATION_FAILED,
