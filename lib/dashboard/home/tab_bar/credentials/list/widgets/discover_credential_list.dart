@@ -41,7 +41,7 @@ class DiscoverCredentialList extends StatelessWidget {
           ],
           // ProofOfOwnershipCredentials is hidden. Later we will
           // give user an option to show it
-          // if (state.proofOfOwnershipCredentials.isNotEmpty) ...[
+          //  if (state.proofOfOwnershipCredentials.isNotEmpty) ...[
           //   ProofOfOwnershipCredentials(
           //     credentials: state.proofOfOwnershipCredentials,
           //     isDiscover: true,

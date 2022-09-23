@@ -503,5 +503,11 @@
   "membership": "Membership",
   "switchNetworkMessage": "Please switch your network to",
   "fee": "Fee",
-  "addCards": "Add cards"
+  "addCards": "Add cards",
+  "gaming": "Gaming",
+  "identity": "Identity",
+  "payment": "Payment",
+  "socialMedia": "Social media",
+  "advanceSettings": "Advance settings",
+  "selectCredentialCategoryWhichYouWantToShowInCredentialList": "Select credential categories that you want to show in credentials list:"
 }
