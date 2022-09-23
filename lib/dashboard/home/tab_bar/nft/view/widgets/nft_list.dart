@@ -60,7 +60,7 @@ class _NftListState extends State<NftList> {
             onRefresh: widget.onRefresh,
             child: GridView.builder(
               controller: _scrollController,
-              physics: const BouncingScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 15,
