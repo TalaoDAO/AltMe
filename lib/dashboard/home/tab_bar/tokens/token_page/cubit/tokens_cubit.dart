@@ -33,6 +33,10 @@ class TokensCubit extends Cubit<TokensState> {
     emit(state.copyWith(isSecure: !state.isSecure));
   }
 
+  Future<void> onRefresh() async {
+    await getBalanceOfAssetList(offset: 0);
+  }
+
   Future<List<TokenModel>> getBalanceOfAssetList({
     required int offset,
     int limit = 100,
