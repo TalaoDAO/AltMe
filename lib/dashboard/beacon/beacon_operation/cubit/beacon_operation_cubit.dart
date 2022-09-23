@@ -23,6 +23,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     required this.dioClient,
     required this.keyGenerator,
     required this.nftCubit,
+    required this.tokensCubit,
   }) : super(const BeaconOperationState());
 
   final WalletCubit walletCubit;
@@ -31,6 +32,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
   final DioClient dioClient;
   final KeyGenerator keyGenerator;
   final NftCubit nftCubit;
+  final TokensCubit tokensCubit;
 
   final log = getLogger('BeaconOperationCubit');
 
@@ -138,6 +140,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
           ),
         );
         unawaited(nftCubit.onRefresh());
+        unawaited(tokensCubit.onRefresh());
       } else {
         throw ResponseMessage(
           ResponseString.RESPONSE_STRING_OPERATION_FAILED,
