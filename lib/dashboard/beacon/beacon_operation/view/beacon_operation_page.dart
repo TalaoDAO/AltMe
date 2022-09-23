@@ -30,6 +30,7 @@ class BeaconOperationPage extends StatelessWidget {
         walletCubit: context.read<WalletCubit>(),
         dioClient: DioClient('', Dio()),
         keyGenerator: KeyGenerator(),
+        nftCubit: context.read<NftCubit>(),
       ),
       child: const BeaconOperationView(),
     );
