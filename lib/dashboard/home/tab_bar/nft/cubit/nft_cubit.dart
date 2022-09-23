@@ -26,9 +26,12 @@ class NftCubit extends Cubit<NftState> {
 
   List<NftModel> data = [];
 
+  final log = getLogger('NftCubit');
+
   Future<void> getTezosNftList() async {
     if (data.length < state.offset) return;
     try {
+      log.i('starting funtion getTezosNftList()');
       if (state.offset == 0) {
         emit(state.fetching());
       } else {
@@ -68,9 +71,11 @@ class NftCubit extends Cubit<NftState> {
       } else {
         data.addAll(newData);
       }
+      log.i('nfts - $data');
       emit(state.populate(data: data));
     } catch (e) {
       if (isClosed) return;
+      log.e('failed to fetch nfts');
       emit(
         state.copyWith(
           status: state.offset == 0
@@ -86,11 +91,13 @@ class NftCubit extends Cubit<NftState> {
   }
 
   Future<void> onRefresh() async {
+    log.i('refreshing nft page');
     emit(state.copyWith(offset: 0));
     await getTezosNftList();
   }
 
   Future<void> fetchMoreTezosNfts() async {
+    log.i('fetching more nfts');
     final offset = state.offset + _limit;
     emit(state.copyWith(offset: offset));
     await getTezosNftList();
