@@ -36,10 +36,26 @@ class BeaconOperationPage extends StatelessWidget {
   }
 }
 
-class BeaconOperationView extends StatelessWidget {
+class BeaconOperationView extends StatefulWidget {
   const BeaconOperationView({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<BeaconOperationView> createState() => _BeaconOperationViewState();
+}
+
+class _BeaconOperationViewState extends State<BeaconOperationView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        await context.read<BeaconOperationCubit>().getXtzPrice();
+        await context.read<BeaconOperationCubit>().getFees();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +78,12 @@ class BeaconOperationView extends StatelessWidget {
         }
 
         if (state.message != null) {
-          AlertMessage.showStateMessage(
-            context: context,
-            stateMessage: state.message!,
-          );
+          if (state.status != AppStatus.errorWhileFetching) {
+            AlertMessage.showStateMessage(
+              context: context,
+              stateMessage: state.message!,
+            );
+          }
         }
 
         if (state.status == AppStatus.success) {
@@ -99,7 +117,7 @@ class BeaconOperationView extends StatelessWidget {
                   ? ErrorView(
                       message: message,
                       onTap: () {
-                        context.read<BeaconOperationCubit>().initial();
+                        context.read<BeaconOperationCubit>().getFees();
                       },
                     )
                   : SingleChildScrollView(
@@ -117,7 +135,7 @@ class BeaconOperationView extends StatelessWidget {
                             ),
                             const SizedBox(height: Sizes.spaceSmall),
                             MyText(
-                              '${amount.toStringAsFixed(6).formatNumber()} $symbol',
+                              '''${amount.toStringAsFixed(6).formatNumber()} $symbol''',
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
@@ -167,9 +185,11 @@ class BeaconOperationView extends StatelessWidget {
                 child: MyElevatedButton(
                   borderRadius: Sizes.normalRadius,
                   text: l10n.send,
-                  onPressed: () {
-                    context.read<BeaconOperationCubit>().sendOperataion();
-                  },
+                  onPressed: state.status != AppStatus.idle
+                      ? null
+                      : () {
+                          context.read<BeaconOperationCubit>().sendOperataion();
+                        },
                 ),
               ),
             ),
