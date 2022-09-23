@@ -39,11 +39,11 @@ class IdentityCredentials extends StatelessWidget {
           ),
           itemCount: credentials.length + (isDiscover ? 0 : 1),
           itemBuilder: (_, index) {
-            if (!isDiscover && index == 0) {
+            if (!isDiscover && index == credentials.length) {
               return const AddCredentialButton();
             } else {
               return HomeCredentialItem(
-                homeCredential: credentials[index - (isDiscover ? 0 : 1)],
+                homeCredential: credentials[index],
               );
             }
           },
