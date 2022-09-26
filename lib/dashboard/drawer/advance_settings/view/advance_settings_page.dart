@@ -62,6 +62,16 @@ class _AdvanceSettingsViewState extends State<AdvanceSettingsView> {
                   isSelected: state.isPaymentEnabled,
                   onPressed: advanceSEttingsCubit.togglePaymentRadio,
                 ),
+                AdvanceSettingsRadioItem(
+                  title: l10n.community,
+                  isSelected: state.isCommunityEnabled,
+                  onPressed: advanceSEttingsCubit.toggleCommunityRadio,
+                ),
+                AdvanceSettingsRadioItem(
+                  title: l10n.other,
+                  isSelected: state.isOtherEnabled,
+                  onPressed: advanceSEttingsCubit.toggleOtherRadio,
+                ),
                 Opacity(
                   opacity: 0.5,
                   child: AdvanceSettingsRadioItem(

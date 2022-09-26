@@ -17,6 +17,8 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
             isIdentityEnabled: true,
             isPaymentEnabled: false,
             isSocialMediaEnabled: false,
+            isCommunityEnabled: true,
+            isOtherEnabled: true,
           ),
         ) {
     initialise();
@@ -33,6 +35,14 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
         (await secureStorageProvider.get(SecureStorageKeys.isIdentityEnabled) ??
                 true.toString()) ==
             'true';
+    final isCommunityEnabled = (await secureStorageProvider
+                .get(SecureStorageKeys.isCommunityEnabled) ??
+            true.toString()) ==
+        'true';
+    final isOtherEnabled =
+        (await secureStorageProvider.get(SecureStorageKeys.isOtherEnabled) ??
+                true.toString()) ==
+            'true';
     final isPaymentEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isPaymentEnabled) ??
                 false.toString()) ==
@@ -47,6 +57,8 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
         isIdentityEnabled: isIdentityEnabled,
         isPaymentEnabled: isPaymentEnabled,
         isSocialMediaEnabled: isSocialMediaEnabled,
+        isCommunityEnabled: isCommunityEnabled,
+        isOtherEnabled: isOtherEnabled,
       ),
     );
   }
@@ -80,6 +92,22 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
     secureStorageProvider.set(
       SecureStorageKeys.isSocialMediaEnabled,
       state.isSocialMediaEnabled.toString(),
+    );
+  }
+
+  void toggleCommunityRadio() {
+    emit(state.copyWith(isCommunityEnabled: !state.isCommunityEnabled));
+    secureStorageProvider.set(
+      SecureStorageKeys.isCommunityEnabled,
+      state.isCommunityEnabled.toString(),
+    );
+  }
+
+  void toggleOtherRadio() {
+    emit(state.copyWith(isOtherEnabled: !state.isOtherEnabled));
+    secureStorageProvider.set(
+      SecureStorageKeys.isOtherEnabled,
+      state.isOtherEnabled.toString(),
     );
   }
 }

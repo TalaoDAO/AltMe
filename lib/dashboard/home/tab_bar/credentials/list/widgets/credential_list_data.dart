@@ -26,22 +26,26 @@ class CredentialListData extends StatelessWidget {
               GamingCredentials(credentials: state.gamingCredentials),
               const SizedBox(height: Sizes.spaceNormal),
             ],
-            CommunityCredentials(credentials: state.communityCredentials),
-            const SizedBox(height: Sizes.spaceNormal),
+            if (advanceSettingsState.isCommunityEnabled) ...[
+              CommunityCredentials(credentials: state.communityCredentials),
+              const SizedBox(height: Sizes.spaceNormal),
+            ],
             if (advanceSettingsState.isIdentityEnabled) ...[
               IdentityCredentials(credentials: state.identityCredentials),
               const SizedBox(height: Sizes.spaceNormal),
             ],
             // ProofOfOwnershipCredentials is hidden. Later we will
             // give user an option to show it
-            // if (advanceSettingsState.isPaymentEnabled) ...[
-            //   ProofOfOwnershipCredentials(
-            //     credentials: state.proofOfOwnershipCredentials,
-            //   ),
-            //   const SizedBox(height: Sizes.spaceNormal),
-            // ],
-            OtherCredentials(credentials: state.othersCredentials),
-            const SizedBox(height: Sizes.spaceNormal),
+            if (advanceSettingsState.isPaymentEnabled) ...[
+              ProofOfOwnershipCredentials(
+                credentials: state.proofOfOwnershipCredentials,
+              ),
+              const SizedBox(height: Sizes.spaceNormal),
+            ],
+            if (advanceSettingsState.isOtherEnabled) ...[
+              OtherCredentials(credentials: state.othersCredentials),
+              const SizedBox(height: Sizes.spaceNormal),
+            ],
           ],
         ),
       );

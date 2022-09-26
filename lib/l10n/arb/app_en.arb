@@ -509,5 +509,6 @@
   "payment": "Payment",
   "socialMedia": "Social media",
   "advanceSettings": "Advance settings",
-  "selectCredentialCategoryWhichYouWantToShowInCredentialList": "Select credential categories that you want to show in credentials list:"
+  "selectCredentialCategoryWhichYouWantToShowInCredentialList": "Select credential categories that you want to show in credentials list:",
+  "community": "Community"
 }
