@@ -34,12 +34,12 @@ class CredentialListData extends StatelessWidget {
             ],
             // ProofOfOwnershipCredentials is hidden. Later we will
             // give user an option to show it
-            // if (advanceSettingsState.isPaymentEnabled) ...[
-            //   ProofOfOwnershipCredentials(
-            //     credentials: state.proofOfOwnershipCredentials,
-            //   ),
-            //   const SizedBox(height: Sizes.spaceNormal),
-            // ],
+            if (advanceSettingsState.isPaymentEnabled) ...[
+              ProofOfOwnershipCredentials(
+                credentials: state.proofOfOwnershipCredentials,
+              ),
+              const SizedBox(height: Sizes.spaceNormal),
+            ],
             OtherCredentials(credentials: state.othersCredentials),
             const SizedBox(height: Sizes.spaceNormal),
           ],
