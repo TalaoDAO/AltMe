@@ -44,12 +44,11 @@ class CryptoAccountItem extends StatelessWidget {
       title: Row(
         children: [
           Flexible(
-            child: MyText(
+            child: Text(
               cryptoAccountData.name.trim().isEmpty
                   ? l10n.unknown
                   : cryptoAccountData.name,
               maxLines: 1,
-              minFontSize: 12,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.title,
             ),
