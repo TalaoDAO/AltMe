@@ -41,6 +41,9 @@ class App extends StatelessWidget {
         BlocProvider<FlavorCubit>(
           create: (context) => FlavorCubit(flavorMode),
         ),
+        BlocProvider<BeaconCubit>(
+          create: (context) => BeaconCubit(beacon: Beacon()),
+        ),
         BlocProvider<DeepLinkCubit>(create: (context) => DeepLinkCubit()),
         BlocProvider<QueryByExampleCubit>(
           create: (context) => QueryByExampleCubit(),
@@ -110,7 +113,6 @@ class App extends StatelessWidget {
             profileCubit: context.read<ProfileCubit>(),
             walletCubit: context.read<WalletCubit>(),
             beacon: Beacon(),
-            secureStorageProvider: secure_storage.getSecureStorage,
           ),
         ),
         BlocProvider(
@@ -152,9 +154,6 @@ class App extends StatelessWidget {
             walletCubit: context.read<WalletCubit>(),
             manageNetworkCubit: context.read<ManageNetworkCubit>(),
           ),
-        ),
-        BlocProvider<BeaconCubit>(
-          create: (context) => BeaconCubit(beacon: Beacon()),
         ),
       ],
       child: const MaterialAppDefinition(),
