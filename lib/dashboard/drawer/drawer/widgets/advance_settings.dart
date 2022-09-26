@@ -25,8 +25,9 @@ class AdvanceSettings extends StatelessWidget {
               DrawerItem(
                 icon: IconStrings.advanceSettings,
                 title: l10n.advanceSettings,
-                onTap: () =>
-                    Navigator.of(context).push<void>(AdvanceSettingsPage.route()),
+                onTap: () => Navigator.of(context).push<void>(
+                  AdvanceSettingsPage.route(),
+                ),
               ),
             ],
           ),
