@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';

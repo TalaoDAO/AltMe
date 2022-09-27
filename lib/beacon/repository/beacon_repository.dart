@@ -13,7 +13,7 @@ class BeaconRepository {
   final log = getLogger('BeaconRepository');
 
   Future<List<BeaconRequest>> findAll(/* dynamic filters */) async {
-    log.i('fetching all data');
+    log.i('fetching all ');
     try {
       final data = await _secureStorageProvider.getAllValues();
       data.removeWhere(
@@ -21,13 +21,13 @@ class BeaconRepository {
           '${SecureStorageKeys.beaconPeerKey}/',
         ),
       );
-      final _credentialList = <BeaconRequest>[];
+      final _permittedList = <BeaconRequest>[];
       data.forEach((key, value) {
-        _credentialList.add(
+        _permittedList.add(
           BeaconRequest.fromJson(json.decode(value) as Map<String, dynamic>),
         );
       });
-      return _credentialList;
+      return _permittedList;
     } catch (e) {
       throw ResponseMessage(
         ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,

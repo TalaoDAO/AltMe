@@ -60,11 +60,9 @@ packages:
   beacon_flutter:
     dependency: "direct main"
     description:
-      path: "."
-      ref: main
-      resolved-ref: bd7911d9fbb7fb784a40f308dfb7bc72c7eaf24a
-      url: "https://github.com/TalaoDAO/beacon.git"
-    source: git
+      path: "../beacon"
+      relative: true
+    source: path
     version: "0.0.5"
   bip32:
     dependency: transitive

@@ -16,39 +16,40 @@ class CredentialListData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AdvanceSettingsCubit, AdvanceSettingsState>(
-        builder: (context, advanceSettingsState) {
-      return RefreshIndicator(
-        onRefresh: onRefresh,
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: [
-            if (advanceSettingsState.isGamingEnabled) ...[
-              GamingCredentials(credentials: state.gamingCredentials),
-              const SizedBox(height: Sizes.spaceNormal),
+      builder: (context, advanceSettingsState) {
+        return RefreshIndicator(
+          onRefresh: onRefresh,
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: [
+              if (advanceSettingsState.isGamingEnabled) ...[
+                GamingCredentials(credentials: state.gamingCredentials),
+                const SizedBox(height: Sizes.spaceNormal),
+              ],
+              if (advanceSettingsState.isCommunityEnabled) ...[
+                CommunityCredentials(credentials: state.communityCredentials),
+                const SizedBox(height: Sizes.spaceNormal),
+              ],
+              if (advanceSettingsState.isIdentityEnabled) ...[
+                IdentityCredentials(credentials: state.identityCredentials),
+                const SizedBox(height: Sizes.spaceNormal),
+              ],
+              // ProofOfOwnershipCredentials is hidden. Later we will
+              // give user an option to show it
+              if (advanceSettingsState.isPaymentEnabled) ...[
+                ProofOfOwnershipCredentials(
+                  credentials: state.proofOfOwnershipCredentials,
+                ),
+                const SizedBox(height: Sizes.spaceNormal),
+              ],
+              if (advanceSettingsState.isOtherEnabled) ...[
+                OtherCredentials(credentials: state.othersCredentials),
+                const SizedBox(height: Sizes.spaceNormal),
+              ],
             ],
-            if (advanceSettingsState.isCommunityEnabled) ...[
-              CommunityCredentials(credentials: state.communityCredentials),
-              const SizedBox(height: Sizes.spaceNormal),
-            ],
-            if (advanceSettingsState.isIdentityEnabled) ...[
-              IdentityCredentials(credentials: state.identityCredentials),
-              const SizedBox(height: Sizes.spaceNormal),
-            ],
-            // ProofOfOwnershipCredentials is hidden. Later we will
-            // give user an option to show it
-            if (advanceSettingsState.isPaymentEnabled) ...[
-              ProofOfOwnershipCredentials(
-                credentials: state.proofOfOwnershipCredentials,
-              ),
-              const SizedBox(height: Sizes.spaceNormal),
-            ],
-            if (advanceSettingsState.isOtherEnabled) ...[
-              OtherCredentials(credentials: state.othersCredentials),
-              const SizedBox(height: Sizes.spaceNormal),
-            ],
-          ],
-        ),
-      );
-    });
+          ),
+        );
+      },
+    );
   }
 }

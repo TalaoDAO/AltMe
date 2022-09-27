@@ -60,6 +60,15 @@ class BeaconConfirmConnectionView extends StatelessWidget {
 
         if (state.status == AppStatus.success) {
           Navigator.of(context).pop();
+          Navigator.of(context).push<void>(
+            BeaconConnectedDappsPage.route(
+              walletAddress: context
+                  .read<WalletCubit>()
+                  .state
+                  .currentAccount
+                  .walletAddress,
+            ),
+          );
         }
       },
       child: WillPopScope(

@@ -44,6 +44,7 @@ class _AdvanceSettingsViewState extends State<AdvanceSettingsView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
+                  // ignore: lines_longer_than_80_chars
                   l10n.selectCredentialCategoryWhichYouWantToShowInCredentialList,
                   style: Theme.of(context).textTheme.headline6,
                 ),

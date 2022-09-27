@@ -13,12 +13,12 @@ part 'beacon_confirm_connection_cubit.g.dart';
 part 'beacon_confirm_connection_state.dart';
 
 class BeaconConfirmConnectionCubit extends Cubit<BeaconConfirmConnectionState> {
-  BeaconConfirmConnectionCubit(
-      {required this.walletCubit,
-      required this.beacon,
-      required this.beaconCubit,
-      required this.beaconRepository})
-      : super(const BeaconConfirmConnectionState());
+  BeaconConfirmConnectionCubit({
+    required this.walletCubit,
+    required this.beacon,
+    required this.beaconCubit,
+    required this.beaconRepository,
+  }) : super(const BeaconConfirmConnectionState());
 
   final WalletCubit walletCubit;
   final Beacon beacon;
@@ -45,7 +45,6 @@ class BeaconConfirmConnectionCubit extends Cubit<BeaconConfirmConnectionState> {
 
       if (success) {
         log.i('Connected to beacon');
-
         await beaconRepository.insert(beaconCubit.state.beaconRequest!);
         emit(
           state.copyWith(

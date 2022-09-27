@@ -42,7 +42,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
 
   Future<void> getXtzPrice() async {
     try {
-      log.i('fetching xtz price');
+      log.i('fetching xtz USDprice');
       final response =
           await dioClient.get(Urls.xtzPrice) as Map<String, dynamic>;
       final XtzData xtzData = XtzData.fromJson(response);
