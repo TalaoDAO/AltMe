@@ -29,10 +29,11 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     final communityCategories = state.communityCategories;
 
     /// tezVoucher and tezotopiaMembership is available only on Android platform
-    if (!isAndroid()) {
-      gamingCategories.remove(CredentialSubjectType.tezVoucher);
-      gamingCategories.remove(CredentialSubjectType.tezotopiaMembership);
-    }
+    /// Currently attempt to get it on ios
+    // if (!isAndroid()) {
+    //   gamingCategories.remove(CredentialSubjectType.tezVoucher);
+    //   gamingCategories.remove(CredentialSubjectType.tezotopiaMembership);
+    // }
 
     for (final credential in walletCubit.state.credentials) {
       final CredentialSubjectModel credentialSubject =
