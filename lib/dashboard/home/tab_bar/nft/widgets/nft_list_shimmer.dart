@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/nft/view/widgets/widgets.dart';
+import 'package:altme/dashboard/home/tab_bar/nft/widgets/nft_item_shimmer.dart';
 import 'package:flutter/material.dart';
+
 
 class NftListShimmer extends StatelessWidget {
   const NftListShimmer({Key? key}) : super(key: key);
