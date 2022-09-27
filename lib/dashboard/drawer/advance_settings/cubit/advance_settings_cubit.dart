@@ -17,8 +17,8 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
             isIdentityEnabled: true,
             isPaymentEnabled: false,
             isSocialMediaEnabled: false,
-            isCommunityEnabled: true,
-            isOtherEnabled: true,
+            isCommunityEnabled: false,
+            isOtherEnabled: false,
           ),
         ) {
     initialise();
@@ -37,11 +37,11 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
             'true';
     final isCommunityEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isCommunityEnabled) ??
-            true.toString()) ==
+            false.toString()) ==
         'true';
     final isOtherEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isOtherEnabled) ??
-                true.toString()) ==
+                false.toString()) ==
             'true';
     final isPaymentEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isPaymentEnabled) ??
