@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class NftDetailsPage extends StatelessWidget {
   const NftDetailsPage({
@@ -77,10 +78,13 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               const SizedBox(
                 height: Sizes.spaceNormal,
               ),
-              Text(
-                widget.nftModel.description ?? '',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
+              if (widget.nftModel.description?.contains('<p>') ?? false)
+                Html(data: widget.nftModel.description ?? '')
+              else
+                Text(
+                  widget.nftModel.description ?? '',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
             ],
           ),
         ),
