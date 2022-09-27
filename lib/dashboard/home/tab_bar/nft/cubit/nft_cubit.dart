@@ -49,7 +49,7 @@ class NftCubit extends Cubit<NftState> {
           'account': walletAddress,
           'balance.eq': 1,
           'select':
-              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance', // ignore: lines_longer_than_80_chars
+              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri', // ignore: lines_longer_than_80_chars
           'offset': state.offset,
           'limit': _limit,
         },
@@ -57,12 +57,6 @@ class NftCubit extends Cubit<NftState> {
       // TODO(all): check the balance variable of NFTModel
       // and get right value from api
       final List<NftModel> newData = response
-          // .where(
-          //   (dynamic json) => json['displayUri'] != null,
-          // )
-          // .where(
-          //   (dynamic json) => json['balance'] != '0',
-          // )
           .map((dynamic e) => NftModel.fromJson(e as Map<String, dynamic>))
           .toList();
 

@@ -510,5 +510,6 @@
   "socialMedia": "Social media",
   "advanceSettings": "Advance settings",
   "selectCredentialCategoryWhichYouWantToShowInCredentialList": "Select credential categories that you want to show in credentials list:",
-  "community": "Community"
+  "community": "Community",
+  "nftDetails": "NFT's details"
 }

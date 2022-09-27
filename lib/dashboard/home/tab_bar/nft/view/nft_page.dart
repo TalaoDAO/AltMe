@@ -51,6 +51,10 @@ class _NftViewState extends State<NftView> {
     await context.read<NftCubit>().onRefresh();
   }
 
+  void onItemClick(NftModel nftModel) {
+    Navigator.of(context).push<void>(NftDetailsPage.route(nftModel: nftModel));
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -116,6 +120,7 @@ class _NftViewState extends State<NftView> {
                     } else {
                       return NftList(
                         nftList: state.data,
+                        onItemClick: onItemClick,
                         onRefresh: onRefresh,
                         onScrollEnded: () =>
                             context.read<NftCubit>().fetchMoreTezosNfts(),

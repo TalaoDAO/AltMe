@@ -13,11 +13,13 @@ class NftList extends StatefulWidget {
     required this.nftList,
     required this.onRefresh,
     this.onScrollEnded,
+    this.onItemClick,
   }) : super(key: key);
 
   final List<NftModel> nftList;
   final RefreshCallback onRefresh;
   final OnScrollEnded? onScrollEnded;
+  final Function(NftModel)? onItemClick;
 
   @override
   State<NftList> createState() => _NftListState();
@@ -69,10 +71,10 @@ class _NftListState extends State<NftList> {
               ),
               itemBuilder: (_, index) {
                 return NftItem(
-                  assetUrl: widget.nftList[index].displayUri.replaceAll(
-                    'ipfs://',
-                    Urls.talaoIpfsGateway,
-                  ),
+                  assetUrl: widget.nftList[index].displayUrl,
+                  onClick: () {
+                    widget.onItemClick?.call(widget.nftList[index]);
+                  },
                   assetValue: widget.nftList[index].balance,
                   description: widget.nftList[index].name,
                   id: widget.nftList[index].id,
