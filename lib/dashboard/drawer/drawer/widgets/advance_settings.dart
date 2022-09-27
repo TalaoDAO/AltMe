@@ -10,18 +10,29 @@ class AdvanceSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BackgroundCard(
-      color: Theme.of(context).colorScheme.drawerSurface,
-      child: Column(
-        children: [
-          DrawerItem(
-            icon: IconStrings.advanceSettings,
-            title: l10n.advanceSettings,
-            onTap: () =>
-                Navigator.of(context).push<void>(AdvanceSettingsPage.route()),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.advanceSettings,
+          style: Theme.of(context).textTheme.drawerMenu,
+        ),
+        const SizedBox(height: 5),
+        BackgroundCard(
+          color: Theme.of(context).colorScheme.drawerSurface,
+          child: Column(
+            children: [
+              DrawerItem(
+                icon: IconStrings.advanceSettings,
+                title: l10n.advanceSettings,
+                onTap: () => Navigator.of(context).push<void>(
+                  AdvanceSettingsPage.route(),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

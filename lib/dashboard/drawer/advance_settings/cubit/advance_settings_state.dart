@@ -7,6 +7,8 @@ class AdvanceSettingsState extends Equatable {
     required this.isIdentityEnabled,
     required this.isPaymentEnabled,
     required this.isSocialMediaEnabled,
+    required this.isCommunityEnabled,
+    required this.isOtherEnabled,
   });
 
   factory AdvanceSettingsState.fromJson(Map<String, dynamic> json) =>
@@ -16,6 +18,8 @@ class AdvanceSettingsState extends Equatable {
   final bool isIdentityEnabled;
   final bool isPaymentEnabled;
   final bool isSocialMediaEnabled;
+  final bool isCommunityEnabled;
+  final bool isOtherEnabled;
 
   Map<String, dynamic> toJson() => _$AdvanceSettingsStateToJson(this);
 
@@ -24,12 +28,16 @@ class AdvanceSettingsState extends Equatable {
     bool? isIdentityEnabled,
     bool? isPaymentEnabled,
     bool? isSocialMediaEnabled,
+    bool? isCommunityEnabled,
+    bool? isOtherEnabled,
   }) {
     return AdvanceSettingsState(
       isGamingEnabled: isGamingEnabled ?? this.isGamingEnabled,
       isIdentityEnabled: isIdentityEnabled ?? this.isIdentityEnabled,
       isPaymentEnabled: isPaymentEnabled ?? this.isPaymentEnabled,
       isSocialMediaEnabled: isSocialMediaEnabled ?? this.isSocialMediaEnabled,
+      isCommunityEnabled: isCommunityEnabled ?? this.isCommunityEnabled,
+      isOtherEnabled: isOtherEnabled ?? this.isOtherEnabled,
     );
   }
 
@@ -39,5 +47,7 @@ class AdvanceSettingsState extends Equatable {
         isIdentityEnabled,
         isPaymentEnabled,
         isSocialMediaEnabled,
+        isCommunityEnabled,
+        isOtherEnabled,
       ];
 }
