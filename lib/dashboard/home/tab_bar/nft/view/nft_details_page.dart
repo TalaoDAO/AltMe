@@ -69,7 +69,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 height: Sizes.spaceSmall,
               ),
               MyText(
-                '${widget.nftModel.name} #${widget.nftModel.id}',
+                '${widget.nftModel.name} ${widget.nftModel.id}',
                 style: Theme.of(context).textTheme.headline6,
                 maxLines: 1,
                 minFontSize: 16,
@@ -77,8 +77,8 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               const SizedBox(
                 height: Sizes.spaceNormal,
               ),
-              MyText(
-                widget.nftModel.description,
+              Text(
+                widget.nftModel.description ?? '',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ],

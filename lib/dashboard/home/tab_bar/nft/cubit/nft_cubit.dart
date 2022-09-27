@@ -49,7 +49,7 @@ class NftCubit extends Cubit<NftState> {
           'account': walletAddress,
           'balance.eq': 1,
           'select':
-              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri', // ignore: lines_longer_than_80_chars
+              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri,token.metadata.description as description', // ignore: lines_longer_than_80_chars
           'offset': state.offset,
           'limit': _limit,
         },
@@ -67,9 +67,9 @@ class NftCubit extends Cubit<NftState> {
       }
       log.i('nfts - $data');
       emit(state.populate(data: data));
-    } catch (e) {
+    } catch (e,s) {
       if (isClosed) return;
-      log.e('failed to fetch nfts');
+      log.e('failed to fetch nfts, e: $e, s: $s');
       emit(
         state.copyWith(
           status: state.offset == 0

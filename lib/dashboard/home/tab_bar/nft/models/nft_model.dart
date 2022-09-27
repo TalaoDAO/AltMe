@@ -14,7 +14,6 @@ class NftModel extends Equatable {
     this.displayUri,
     this.balance,
     this.description,
-    this.thumbnailUri,
   );
 
   factory NftModel.fromJson(Map<String, dynamic> json) =>
@@ -26,9 +25,8 @@ class NftModel extends Equatable {
   final String name;
   @JsonKey(defaultValue: '')
   final String displayUri;
-  final String? thumbnailUri;
   final String balance;
-  final String description;
+  final String? description;
 
   Map<String, dynamic> toJson() => _$NftModelToJson(this);
 
@@ -36,12 +34,6 @@ class NftModel extends Equatable {
         'ipfs://',
         Urls.talaoIpfsGateway,
       );
-  String get thumbnailUrl {
-    return (thumbnailUri ?? displayUri).replaceAll(
-      'ipfs://',
-      Urls.talaoIpfsGateway,
-    );
-  }
 
   @override
   List<Object?> get props => [
@@ -50,6 +42,5 @@ class NftModel extends Equatable {
         displayUri,
         balance,
         description,
-        thumbnailUri,
       ];
 }
