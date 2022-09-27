@@ -48,6 +48,7 @@ class NftCubit extends Cubit<NftState> {
         queryParameters: <String, dynamic>{
           'account': walletAddress,
           'balance.eq': 1,
+          'token.metadata.null': false,
           'select':
               'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance', // ignore: lines_longer_than_80_chars
           'offset': state.offset,
