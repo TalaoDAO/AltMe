@@ -50,7 +50,7 @@ class NftCubit extends Cubit<NftState> {
           'balance.eq': 1,
           'token.metadata.null': false,
           'select':
-              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri,token.metadata.description as description', // ignore: lines_longer_than_80_chars
+              'token.tokenId as tokenId,token.id as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri,token.metadata.description as description,token.standard as standard,token.metadata.symbol as symbol,token.contract.address as contractAddress', // ignore: lines_longer_than_80_chars
           'offset': state.offset,
           'limit': _limit,
         },
