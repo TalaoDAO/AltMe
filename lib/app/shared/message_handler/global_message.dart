@@ -175,4 +175,7 @@ class GlobalMessage {
 
   String get RESPONSE_STRING_SWITCH_NETWORK_MESSAGE =>
       l10n.switchNetworkMessage;
+
+  String get RESPONSE_STRING_DISCONNECTED_FROM_DAPP =>
+      l10n.succesfullyDisconnected;
 }

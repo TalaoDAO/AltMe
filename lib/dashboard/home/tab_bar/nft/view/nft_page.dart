@@ -4,7 +4,6 @@ import 'package:altme/dashboard/home/tab_bar/nft/widgets/widgets.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,17 +22,7 @@ class _NftPageState extends State<NftPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocProvider<NftCubit>(
-      create: (context) => NftCubit(
-        client: DioClient(
-          context.read<ManageNetworkCubit>().state.network.tzktUrl,
-          Dio(),
-        ),
-        walletCubit: context.read<WalletCubit>(),
-        manageNetworkCubit: context.read<ManageNetworkCubit>(),
-      ),
-      child: const NftView(),
-    );
+    return const NftView();
   }
 }
 

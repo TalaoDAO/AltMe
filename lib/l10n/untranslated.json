@@ -461,6 +461,15 @@
     "advanceSettings",
     "selectCredentialCategoryWhichYouWantToShowInCredentialList",
     "community",
+    "tezos",
+    "rights",
+    "disconnectAndRevokeRights",
+    "revokeAllRights",
+    "revokeSubtitleMessage",
+    "revokeAll",
+    "succesfullyDisconnected",
+    "connectedApps",
+    "noDappConnected",
     "nftDetails"
   ],
 
@@ -926,6 +935,15 @@
     "advanceSettings",
     "selectCredentialCategoryWhichYouWantToShowInCredentialList",
     "community",
+    "tezos",
+    "rights",
+    "disconnectAndRevokeRights",
+    "revokeAllRights",
+    "revokeSubtitleMessage",
+    "revokeAll",
+    "succesfullyDisconnected",
+    "connectedApps",
+    "noDappConnected",
     "nftDetails"
   ],
 
@@ -1391,6 +1409,15 @@
     "advanceSettings",
     "selectCredentialCategoryWhichYouWantToShowInCredentialList",
     "community",
+    "tezos",
+    "rights",
+    "disconnectAndRevokeRights",
+    "revokeAllRights",
+    "revokeSubtitleMessage",
+    "revokeAll",
+    "succesfullyDisconnected",
+    "connectedApps",
+    "noDappConnected",
     "nftDetails"
   ],
 
@@ -1856,6 +1883,15 @@
     "advanceSettings",
     "selectCredentialCategoryWhichYouWantToShowInCredentialList",
     "community",
+    "tezos",
+    "rights",
+    "disconnectAndRevokeRights",
+    "revokeAllRights",
+    "revokeSubtitleMessage",
+    "revokeAll",
+    "succesfullyDisconnected",
+    "connectedApps",
+    "noDappConnected",
     "nftDetails"
   ]
 }

@@ -6,6 +6,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class BeaconConfirmConnectionPage extends StatelessWidget {
   const BeaconConfirmConnectionPage({
@@ -26,6 +27,7 @@ class BeaconConfirmConnectionPage extends StatelessWidget {
         beacon: Beacon(),
         beaconCubit: context.read<BeaconCubit>(),
         walletCubit: context.read<WalletCubit>(),
+        beaconRepository: BeaconRepository(secure_storage.getSecureStorage),
       ),
       child: const BeaconConfirmConnectionView(),
     );
@@ -58,6 +60,15 @@ class BeaconConfirmConnectionView extends StatelessWidget {
 
         if (state.status == AppStatus.success) {
           Navigator.of(context).pop();
+          Navigator.of(context).push<void>(
+            BeaconConnectedDappsPage.route(
+              walletAddress: context
+                  .read<WalletCubit>()
+                  .state
+                  .currentAccount
+                  .walletAddress,
+            ),
+          );
         }
       },
       child: WillPopScope(

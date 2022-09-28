@@ -37,10 +37,7 @@ class _TokensViewState extends State<TokensView> {
   int activeIndex = -1;
 
   Future<void> onRefresh() async {
-    _offset = 0;
-    await context.read<TokensCubit>().getBalanceOfAssetList(
-          offset: _offset,
-        );
+    await context.read<TokensCubit>().onRefresh();
   }
 
   Future<void> onScrollEnded() async {

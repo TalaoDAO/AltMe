@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -30,7 +29,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.deepLinkCubit,
     required this.jwtDecode,
     required this.beacon,
-    required this.secureStorageProvider,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -42,7 +40,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final DeepLinkCubit deepLinkCubit;
   final JWTDecode jwtDecode;
   final Beacon beacon;
-  final SecureStorageProvider secureStorageProvider;
 
   @override
   Future<void> close() async {
@@ -63,11 +60,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             Uri.parse(scannedResponse).queryParameters['data'].toString();
 
         await beacon.pair(pairingRequest: pairingRequest);
-
-        await secureStorageProvider.set(
-          SecureStorageKeys.pairingRequest,
-          pairingRequest,
-        );
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.idle));
       } else {

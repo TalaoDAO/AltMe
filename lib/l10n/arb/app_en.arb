@@ -511,5 +511,14 @@
   "advanceSettings": "Advance settings",
   "selectCredentialCategoryWhichYouWantToShowInCredentialList": "Select credential categories that you want to show in credentials list:",
   "community": "Community",
+  "tezos": "Tezos",
+  "rights": "Rights",
+  "disconnectAndRevokeRights": "Disconnect & Revoke Rights",
+  "revokeAllRights": "Revoke all rights",
+  "revokeSubtitleMessage": "Are your sure you want to revoke all rights",
+  "revokeAll": "Revoke All",
+  "succesfullyDisconnected": "succesfully disconnected from dApp.",
+  "connectedApps": "Connected dApps",
+  "noDappConnected": "No dApp connected yet",
   "nftDetails": "NFT's details"
 }
