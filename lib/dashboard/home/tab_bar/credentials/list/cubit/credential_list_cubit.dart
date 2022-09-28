@@ -139,7 +139,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       }
     }
 /* Disable display of dummies when displaying credentials.
-// TODO(all)Uncomment if we need to display dummies again. 
+    /// Uncomment if we need to display dummies again. 
     /// adding dummy gaming credentials
     gamingCredentials.addAll(dummyListFromCategory(gamingCategories));
 
