@@ -139,7 +139,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       }
     }
 /* Disable display of dummies when displaying credentials.
-    /// Uncomment if we need to display dummies again. 
+    /// Note: Uncomment if we need to display dummies again. 
     /// adding dummy gaming credentials
     gamingCredentials.addAll(dummyListFromCategory(gamingCategories));
 
@@ -460,7 +460,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.tezotopiaMembership:
             break;
           case CredentialSubjectType.ageRange:
-            // TODO(all): Uncomment if we need to display dummies again.
+            // Note: Uncomment if we need to display dummies again.
             // _credentials.add(
             //   HomeCredential.isDummy(
             //     CredentialSubjectType.ageRange,
@@ -469,7 +469,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             identityCategories.add(CredentialSubjectType.ageRange);
             break;
           case CredentialSubjectType.nationality:
-            // TODO(all): Uncomment if we need to display dummies again.
+            // Note: Uncomment if we need to display dummies again.
             // _credentials.add(
             //   HomeCredential.isDummy(
             //     CredentialSubjectType.nationality,
@@ -478,7 +478,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             identityCategories.add(CredentialSubjectType.nationality);
             break;
           case CredentialSubjectType.gender:
-            // TODO(all): Uncomment if we need to display dummies again.
+            // Note: Uncomment if we need to display dummies again.
             // _credentials.add(
             //   HomeCredential.isDummy(
             //     CredentialSubjectType.gender,
@@ -499,7 +499,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.identityPass:
             break;
           case CredentialSubjectType.identityCard:
-            // TODO(all): Uncomment if we need to display dummies again.
+            // Note: Uncomment if we need to display dummies again.
             // _credentials.add(
             //   HomeCredential.isDummy(
             //     CredentialSubjectType.identityCard,
@@ -512,7 +512,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.loyaltyCard:
             break;
           case CredentialSubjectType.over18:
-            // TODO(all): Uncomment if we need to display dummies again.
+            // Note: Uncomment if we need to display dummies again.
             // _credentials.add(
             //   HomeCredential.isDummy(
             //     CredentialSubjectType.over18,
