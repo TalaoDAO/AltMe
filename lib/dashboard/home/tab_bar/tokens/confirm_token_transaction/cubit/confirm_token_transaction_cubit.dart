@@ -6,13 +6,13 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tezart/tezart.dart';
 
-part 'confirm_withdrawal_cubit.g.dart';
+part 'confirm_token_transaction_cubit.g.dart';
 
-part 'confirm_withdrawal_state.dart';
+part 'confirm_token_transaction_state.dart';
 
-class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
-  ConfirmWithdrawalCubit({
-    required ConfirmWithdrawalState initialState,
+class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
+  ConfirmTokenTransactionCubit({
+    required ConfirmTokenTransactionState initialState,
     required this.manageNetworkCubit,
   }) : super(initialState);
 

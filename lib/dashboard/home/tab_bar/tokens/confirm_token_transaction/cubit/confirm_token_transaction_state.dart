@@ -1,23 +1,23 @@
-part of 'confirm_withdrawal_cubit.dart';
+part of 'confirm_token_transaction_cubit.dart';
 
 @JsonSerializable()
-class ConfirmWithdrawalState extends Equatable {
-  ConfirmWithdrawalState({
+class ConfirmTokenTransactionState extends Equatable {
+  ConfirmTokenTransactionState({
     required this.withdrawalAddress,
     NetworkFeeModel? networkFee,
     this.status = AppStatus.init,
     this.message,
   }) : networkFee = networkFee ?? NetworkFeeModel.networks()[1];
 
-  factory ConfirmWithdrawalState.fromJson(Map<String, dynamic> json) =>
-      _$ConfirmWithdrawalStateFromJson(json);
+  factory ConfirmTokenTransactionState.fromJson(Map<String, dynamic> json) =>
+      _$ConfirmTokenTransactionStateFromJson(json);
 
   final String withdrawalAddress;
   final NetworkFeeModel networkFee;
   final AppStatus status;
   final StateMessage? message;
 
-  ConfirmWithdrawalState loading() {
+  ConfirmTokenTransactionState loading() {
     return copyWith(
       status: AppStatus.loading,
       withdrawalAddress: withdrawalAddress,
@@ -25,7 +25,7 @@ class ConfirmWithdrawalState extends Equatable {
     );
   }
 
-  ConfirmWithdrawalState error({
+  ConfirmTokenTransactionState error({
     required MessageHandler messageHandler,
   }) {
     return copyWith(
@@ -36,7 +36,7 @@ class ConfirmWithdrawalState extends Equatable {
     );
   }
 
-  ConfirmWithdrawalState success({
+  ConfirmTokenTransactionState success({
     MessageHandler? messageHandler,
   }) {
     return copyWith(
@@ -49,13 +49,13 @@ class ConfirmWithdrawalState extends Equatable {
     );
   }
 
-  ConfirmWithdrawalState copyWith({
+  ConfirmTokenTransactionState copyWith({
     String? withdrawalAddress,
     NetworkFeeModel? networkFee,
     AppStatus? status,
     StateMessage? message,
   }) {
-    return ConfirmWithdrawalState(
+    return ConfirmTokenTransactionState(
       withdrawalAddress: withdrawalAddress ?? this.withdrawalAddress,
       networkFee: networkFee ?? this.networkFee,
       status: status ?? this.status,
@@ -63,7 +63,7 @@ class ConfirmWithdrawalState extends Equatable {
     );
   }
 
-  Map<String, dynamic> toJson() => _$ConfirmWithdrawalStateToJson(this);
+  Map<String, dynamic> toJson() => _$ConfirmTokenTransactionStateToJson(this);
 
   @override
   List<Object?> get props => [withdrawalAddress, status, message, networkFee];

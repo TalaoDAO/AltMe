@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/tokens/confirm_token_transaction/confirm_token_transaction.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,7 +100,7 @@ class _InsertWithdrawalAmountViewState
                 onPressed: state.isValidWithdrawal
                     ? () {
                         Navigator.of(context).push<void>(
-                          ConfirmWithdrawalPage.route(
+                          ConfirmTokenTransactionPage.route(
                             selectedToken: state.selectedToken,
                             withdrawalAddress: widget.withdrawalAddress,
                             amount: state.amount,
