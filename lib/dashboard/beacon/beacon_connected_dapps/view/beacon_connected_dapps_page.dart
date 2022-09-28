@@ -133,33 +133,34 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
                                 Theme.of(context).textTheme.beaconWalletAddress,
                           ),
                           const SizedBox(height: Sizes.spaceXLarge),
-                          TokenItem(
-                            token: state.xtzModel != null
-                                ? state.xtzModel!
-                                : const TokenModel(
-                                    id: -1,
-                                    contractAddress: '',
-                                    name: 'Tezos',
-                                    symbol: 'XTZ',
-                                    icon:
-                                        'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
-                                    balance: '0',
-                                    decimals: '6',
-                                    standard: 'fa1.2',
-                                    tokenUSDPrice: 0,
-                                    balanceInUSD: 0,
-                                  ),
-                          ),
-                          // TransparentInkWell(
-                          //   child: TokenItem(token: state.xtzModel!),
-                          //   onTap: () {
-                          //     Navigator.of(context).push<void>(
-                          //       SendReceiveHomePage.route(
-                          //         selectedToken: state.xtzModel!,
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
+                          if (state.xtzModel != null)
+                            TransparentInkWell(
+                              child: TokenItem(token: state.xtzModel!),
+                              onTap: () {
+                                // Navigator.of(context).push<void>(
+                                //   SendReceiveHomePage.route(
+                                //     selectedToken: state.xtzModel!,
+                                //    beaconWalletAddress: widget.walletAddress,
+                                //   ),
+                                // );
+                              },
+                            )
+                          else
+                            const TokenItem(
+                              token: TokenModel(
+                                id: -1,
+                                contractAddress: '',
+                                name: 'Tezos',
+                                symbol: 'XTZ',
+                                icon:
+                                    'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
+                                balance: '0',
+                                decimals: '6',
+                                standard: 'fa1.2',
+                                tokenUSDPrice: 0,
+                                balanceInUSD: 0,
+                              ),
+                            ),
                           const SizedBox(height: Sizes.spaceNormal),
                           Center(
                             child: ShareButton(
