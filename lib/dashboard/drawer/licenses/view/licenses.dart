@@ -14,7 +14,7 @@ class LicensesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final languagesList = ['fr', 'it', 'es', 'de'];
-    var language = 'en';
+    var language = 'fr';
     if (languagesList.contains(l10n.localeName)) {
       language = l10n.localeName;
     }

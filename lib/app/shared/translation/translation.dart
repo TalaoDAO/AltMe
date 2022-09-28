@@ -11,7 +11,7 @@ class GetTranslation {
         translations.where((element) => element.language == l10n.localeName);
     if (translated.isEmpty) {
       final List<Translation> translationList =
-          translations.where((element) => element.language == 'en').toList();
+          translations.where((element) => element.language == 'fr').toList();
       if (translationList.isEmpty) {
         _translation = '';
       } else {

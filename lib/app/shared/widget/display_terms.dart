@@ -27,7 +27,7 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
 
   void setPath(String localeName) {
     final languagesList = ['fr', 'it', 'es', 'de'];
-    var language = 'en';
+    var language = 'fr';
     if (languagesList.contains(localeName)) {
       language = localeName;
     }
