@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -83,25 +85,52 @@ class BeaconConnectedDappsCubit extends Cubit<BeaconConnectedDappsState> {
 
   Future<void> getPeers(String walletAddress) async {
     try {
-      log.i('fetching connected peers');
       emit(state.loading());
 
-      // final peers = await beacon.getPeers();
-      // final Map<String, dynamic> requestJson =
-      //     jsonDecode(jsonEncode(peers)) as Map<String, dynamic>;
-      // final ConnectedPeers connectedPeers =
-      //     ConnectedPeers.fromJson(requestJson);
-      // TODO(bibash): filter list based on paired and walletaddress
+      log.i('fetching connected peers from dApp');
+      final peers = await beacon.getPeers();
+      final Map<String, dynamic> requestJson =
+          jsonDecode(jsonEncode(peers)) as Map<String, dynamic>;
+      final ConnectedPeers connectedPeers =
+          ConnectedPeers.fromJson(requestJson);
 
-      final List<BeaconRequest> beaconRequests =
+      log.i('fetching saved peers');
+      final List<SavedPeerData> savedPeerDatas =
           await beaconRepository.findAll();
 
-      final _peersList = <P2PPeer>[];
-      // TODO(bibash): filter list based on walletaddress
-      for (final request in beaconRequests) {
-        _peersList.add(request.peer!);
+      final _peersListToShow = <P2PPeer>[];
+
+      //final _peersToRemove = <P2PPeer>[];
+
+      /// loop in saved permitted peer data
+      for (final savedPeerData in savedPeerDatas) {
+        //bool _isPeerMatched = false;
+
+        /// loop in connected peers from dApp
+        for (final connectedPeer in connectedPeers.peer!) {
+          if (savedPeerData.peer.publicKey == connectedPeer.publicKey) {
+            //_isPeerMatched = true;
+
+            /// display data for selected walletAddress only
+            if (walletAddress == savedPeerData.walletAddress) {
+              _peersListToShow.add(savedPeerData.peer);
+              break;
+            }
+          }
+        }
+
+        // if (!_isPeerMatched) {
+        //   _peersToRemove.add(savedPeerData.peer);
+        // }
       }
-      emit(state.copyWith(status: AppStatus.idle, peers: _peersList));
+
+      /// Peer that are disconnected from dApp
+
+      // for (final peer in _peersToRemove) {
+      //   await beaconRepository.deleteByPublicKey(peer.publicKey);
+      // }
+
+      emit(state.copyWith(status: AppStatus.idle, peers: _peersListToShow));
     } catch (e) {
       log.e('getPeers failure , e: $e');
       if (e is MessageHandler) {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/beacon/beacon.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -12,7 +13,7 @@ class BeaconRepository {
 
   final log = getLogger('BeaconRepository');
 
-  Future<List<BeaconRequest>> findAll(/* dynamic filters */) async {
+  Future<List<SavedPeerData>> findAll(/* dynamic filters */) async {
     log.i('fetching all ');
     try {
       final data = await _secureStorageProvider.getAllValues();
@@ -21,13 +22,13 @@ class BeaconRepository {
           '${SecureStorageKeys.beaconPeerKey}/',
         ),
       );
-      final _permittedList = <BeaconRequest>[];
+      final _savedPeerData = <SavedPeerData>[];
       data.forEach((key, value) {
-        _permittedList.add(
-          BeaconRequest.fromJson(json.decode(value) as Map<String, dynamic>),
+        _savedPeerData.add(
+          SavedPeerData.fromJson(json.decode(value) as Map<String, dynamic>),
         );
       });
-      return _permittedList;
+      return _savedPeerData;
     } catch (e) {
       throw ResponseMessage(
         ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
@@ -68,20 +69,20 @@ class BeaconRepository {
     return true;
   }
 
-  Future<int> insert(BeaconRequest beaconRequest) async {
+  Future<int> insert(SavedPeerData savedPeerData) async {
     log.i('saving beaconData');
     await _secureStorageProvider.set(
-      '${SecureStorageKeys.beaconPeerKey}/${beaconRequest.peer!.publicKey}',
-      json.encode(beaconRequest.toJson()),
+      '${SecureStorageKeys.beaconPeerKey}/${savedPeerData.peer.publicKey}',
+      json.encode(savedPeerData.toJson()),
     );
     return 1;
   }
 
-  Future<int> update(BeaconRequest beaconRequest) async {
+  Future<int> update(SavedPeerData savedPeerData) async {
     log.i('updating beaconData');
     await _secureStorageProvider.set(
-      '${SecureStorageKeys.beaconPeerKey}/${beaconRequest.peer!.publicKey}',
-      json.encode(beaconRequest.toJson()),
+      '${SecureStorageKeys.beaconPeerKey}/${savedPeerData.peer.publicKey}',
+      json.encode(savedPeerData.toJson()),
     );
     return 1;
   }

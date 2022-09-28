@@ -45,7 +45,11 @@ class BeaconConfirmConnectionCubit extends Cubit<BeaconConfirmConnectionState> {
 
       if (success) {
         log.i('Connected to beacon');
-        await beaconRepository.insert(beaconCubit.state.beaconRequest!);
+        final savedPeerData = SavedPeerData(
+          peer: beaconCubit.state.beaconRequest!.peer!,
+          walletAddress: currentAccount.walletAddress,
+        );
+        await beaconRepository.insert(savedPeerData);
         emit(
           state.copyWith(
             appStatus: AppStatus.success,
