@@ -164,10 +164,22 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         [parameters],
         codeFormat: TezosParameterFormat.Michelson,
       );
-      getLogger('sendContractInvocationOperation')
-          .i('Operation groupID ===> $resultInvoke');
-
-      emit(state.success());
+      getLogger('sendContractInvocationOperation').i(
+        'Operation groupID ===> $resultInvoke',
+      );
+      if (resultInvoke['appliedOp']['contents'][0]['metadata']
+              ['operation_result']['status'] ==
+          'failed') {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION,
+            ),
+          ),
+        );
+      } else {
+        emit(state.success());
+      }
     } catch (e, s) {
       emit(
         state.error(

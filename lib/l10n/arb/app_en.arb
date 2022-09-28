@@ -520,5 +520,6 @@
   "succesfullyDisconnected": "succesfully disconnected from dApp.",
   "connectedApps": "Connected dApps",
   "noDappConnected": "No dApp connected yet",
-  "nftDetails": "NFT's details"
+  "nftDetails": "NFT's details",
+  "failedToDoOperation": "Failed to do operation"
 }
