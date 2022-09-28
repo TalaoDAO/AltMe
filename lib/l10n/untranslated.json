@@ -460,7 +460,8 @@
     "socialMedia",
     "advanceSettings",
     "selectCredentialCategoryWhichYouWantToShowInCredentialList",
-    "community"
+    "community",
+    "nftDetails"
   ],
 
   "es": [
@@ -924,7 +925,8 @@
     "socialMedia",
     "advanceSettings",
     "selectCredentialCategoryWhichYouWantToShowInCredentialList",
-    "community"
+    "community",
+    "nftDetails"
   ],
 
   "fr": [
@@ -1388,7 +1390,8 @@
     "socialMedia",
     "advanceSettings",
     "selectCredentialCategoryWhichYouWantToShowInCredentialList",
-    "community"
+    "community",
+    "nftDetails"
   ],
 
   "it": [
@@ -1852,6 +1855,7 @@
     "socialMedia",
     "advanceSettings",
     "selectCredentialCategoryWhichYouWantToShowInCredentialList",
-    "community"
+    "community",
+    "nftDetails"
   ]
 }

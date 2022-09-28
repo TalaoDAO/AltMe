@@ -50,7 +50,7 @@ class NftCubit extends Cubit<NftState> {
           'balance.eq': 1,
           'token.metadata.null': false,
           'select':
-              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance', // ignore: lines_longer_than_80_chars
+              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri,token.metadata.description as description', // ignore: lines_longer_than_80_chars
           'offset': state.offset,
           'limit': _limit,
         },
@@ -58,12 +58,6 @@ class NftCubit extends Cubit<NftState> {
       // TODO(all): check the balance variable of NFTModel
       // and get right value from api
       final List<NftModel> newData = response
-          // .where(
-          //   (dynamic json) => json['displayUri'] != null,
-          // )
-          // .where(
-          //   (dynamic json) => json['balance'] != '0',
-          // )
           .map((dynamic e) => NftModel.fromJson(e as Map<String, dynamic>))
           .toList();
 
@@ -74,9 +68,9 @@ class NftCubit extends Cubit<NftState> {
       }
       log.i('nfts - $data');
       emit(state.populate(data: data));
-    } catch (e) {
+    } catch (e,s) {
       if (isClosed) return;
-      log.e('failed to fetch nfts');
+      log.e('failed to fetch nfts, e: $e, s: $s');
       emit(
         state.copyWith(
           status: state.offset == 0

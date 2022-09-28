@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/nft/view/widgets/widgets.dart';
+import 'package:altme/dashboard/home/tab_bar/nft/widgets/widgets.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -49,6 +49,10 @@ class _NftViewState extends State<NftView> {
 
   Future<void> onRefresh() async {
     await context.read<NftCubit>().onRefresh();
+  }
+
+  void onItemClick(NftModel nftModel) {
+    Navigator.of(context).push<void>(NftDetailsPage.route(nftModel: nftModel));
   }
 
   @override
@@ -116,6 +120,7 @@ class _NftViewState extends State<NftView> {
                     } else {
                       return NftList(
                         nftList: state.data,
+                        onItemClick: onItemClick,
                         onRefresh: onRefresh,
                         onScrollEnded: () =>
                             context.read<NftCubit>().fetchMoreTezosNfts(),

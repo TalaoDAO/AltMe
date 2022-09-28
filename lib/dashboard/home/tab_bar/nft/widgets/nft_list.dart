@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/nft/view/widgets/widgets.dart';
+import 'package:altme/dashboard/home/tab_bar/nft/widgets/nft_item.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +13,13 @@ class NftList extends StatefulWidget {
     required this.nftList,
     required this.onRefresh,
     this.onScrollEnded,
+    this.onItemClick,
   }) : super(key: key);
 
   final List<NftModel> nftList;
   final RefreshCallback onRefresh;
   final OnScrollEnded? onScrollEnded;
+  final Function(NftModel)? onItemClick;
 
   @override
   State<NftList> createState() => _NftListState();
@@ -69,10 +71,10 @@ class _NftListState extends State<NftList> {
               ),
               itemBuilder: (_, index) {
                 return NftItem(
-                  assetUrl: widget.nftList[index].displayUri.replaceAll(
-                    'ipfs://',
-                    Urls.talaoIpfsGateway,
-                  ),
+                  assetUrl: widget.nftList[index].displayUrl,
+                  onClick: () {
+                    widget.onItemClick?.call(widget.nftList[index]);
+                  },
                   assetValue: widget.nftList[index].balance,
                   description: widget.nftList[index].name,
                   id: widget.nftList[index].id,
