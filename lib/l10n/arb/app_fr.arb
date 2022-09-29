@@ -50,6 +50,13 @@
     "type": "text",
     "placeholders": {}
   },
+  "@recoveryCredentialSuccessMessage": {
+    "description": "Compteur d'attestations restaurées",
+    "type": "text",
+    "placeholders": {
+      "postfix": {}
+    }
+  },
   "onBoardingStartSubtitle": "Lorem ipsum dolor sit ame",
   "onBoardingTosTitle": "Conditions d'utilisation",
   "onBoardingTosText": "En appuyant sur accepter \"J'accepte les conditions d'utilisation et l'enregistrement de cette acceptation.\"",
@@ -226,13 +233,6 @@
   "recoveryCredentialJSONFormatErrorMessage": "Merci de charger un fichier valide.",
   "recoveryCredentialAuthErrorMessage": "Désolé, les mots sont incorrects ou le fichier est corrompu.",
   "recoveryCredentialDefaultErrorMessage": "Une erreur est survenue. Veuillez essayer de nouveau plus tard.",
-  "@recoveryCredentialSuccessMessage": {
-    "description": "Compteur d'attestations restaurées",
-    "type": "text",
-    "placeholders": {
-      "postfix": {}
-    }
-  },
   "submit": "Valider",
   "insertYourDIDKey": "Entrez votre DID",
   "importYourRSAKeyJsonFile": "Importez vore fichier de clef RSA",
