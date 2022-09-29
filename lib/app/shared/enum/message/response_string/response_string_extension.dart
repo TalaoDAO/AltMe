@@ -6,6 +6,8 @@ extension ResponseStringX on ResponseString {
     switch (this) {
       case ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE:
         return globalMessage.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE;
+      case ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION:
+        return globalMessage.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE;
 
       case ResponseString.RESPONSE_STRING_FAILED_TO_SAVE_PROFILE:
         return globalMessage.RESPONSE_STRING_FAILED_TO_SAVE_PROFILE;

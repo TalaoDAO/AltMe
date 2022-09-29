@@ -3,7 +3,9 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/nft/widgets/nft_item.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 typedef OnScrollEnded = Future<void> Function();
 
@@ -55,7 +57,44 @@ class _NftListState extends State<NftList> {
           style: Theme.of(context).textTheme.listSubtitle,
         ),
         const SizedBox(
-          height: 8,
+          height: Sizes.space2XSmall,
+        ),
+        Center(
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).push<void>(
+                ReceivePage.route(
+                  accountAddress: context
+                      .read<WalletCubit>()
+                      .state
+                      .currentAccount
+                      .walletAddress,
+                  tokenSymbol: l10n.nft,
+                  description: l10n.sendOnlyNftToThisAddressDescription,
+                ),
+              );
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  IconStrings.addSquare,
+                  width: Sizes.icon,
+                  height: Sizes.icon,
+                ),
+                const SizedBox(
+                  width: Sizes.spaceXSmall,
+                ),
+                Text(
+                  l10n.receiveNft,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: Sizes.spaceNormal,
         ),
         Expanded(
           child: RefreshIndicator(
@@ -77,7 +116,7 @@ class _NftListState extends State<NftList> {
                   },
                   assetValue: widget.nftList[index].balance,
                   description: widget.nftList[index].name,
-                  id: widget.nftList[index].id,
+                  id: widget.nftList[index].tokenId,
                 );
               },
               itemCount: widget.nftList.length,

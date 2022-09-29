@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -70,10 +71,16 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 height: Sizes.spaceSmall,
               ),
               MyText(
-                '${widget.nftModel.name} ${widget.nftModel.id}',
+                '${widget.nftModel.name} ${widget.nftModel.tokenId}',
                 style: Theme.of(context).textTheme.headline6,
                 maxLines: 1,
                 minFontSize: 16,
+              ),
+              MyText(
+                widget.nftModel.symbol,
+                style: Theme.of(context).textTheme.caption2,
+                maxLines: 1,
+                minFontSize: 12,
               ),
               const SizedBox(
                 height: Sizes.spaceNormal,
@@ -94,7 +101,15 @@ class _NftDetailsViewState extends State<NftDetailsView> {
           padding: const EdgeInsets.all(Sizes.spaceSmall),
           child: MyGradientButton(
             text: l10n.send,
-            onPressed: null,
+            onPressed: () {
+              Navigator.of(context).push<void>(
+                ConfirmTokenTransactionPage.route(
+                  selectedToken: widget.nftModel.getToken(),
+                  withdrawalAddress: '',
+                  amount: 1,
+                ),
+              );
+            },
           ),
         ),
       ),

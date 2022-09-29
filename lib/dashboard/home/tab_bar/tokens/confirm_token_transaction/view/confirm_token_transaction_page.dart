@@ -6,8 +6,8 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ConfirmWithdrawalPage extends StatelessWidget {
-  const ConfirmWithdrawalPage({
+class ConfirmTokenTransactionPage extends StatelessWidget {
+  const ConfirmTokenTransactionPage({
     Key? key,
     required this.selectedToken,
     required this.withdrawalAddress,
@@ -20,8 +20,8 @@ class ConfirmWithdrawalPage extends StatelessWidget {
     required double amount,
   }) {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: '/ConfirmWithdrawalView'),
-      builder: (_) => ConfirmWithdrawalPage(
+      settings: const RouteSettings(name: '/ConfirmTokenTransactionPage'),
+      builder: (_) => ConfirmTokenTransactionPage(
         selectedToken: selectedToken,
         withdrawalAddress: withdrawalAddress,
         amount: amount,
@@ -35,11 +35,11 @@ class ConfirmWithdrawalPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ConfirmWithdrawalCubit>(
-      create: (_) => ConfirmWithdrawalCubit(
+    return BlocProvider<ConfirmTokenTransactionCubit>(
+      create: (_) => ConfirmTokenTransactionCubit(
         manageNetworkCubit: context.read<ManageNetworkCubit>(),
         initialState:
-            ConfirmWithdrawalState(withdrawalAddress: withdrawalAddress),
+            ConfirmTokenTransactionState(withdrawalAddress: withdrawalAddress),
       ),
       child: ConfirmWithdrawalView(
         selectedToken: selectedToken,
@@ -76,7 +76,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
   @override
   void initState() {
     withdrawalAddressController.addListener(() {
-      context.read<ConfirmWithdrawalCubit>().setWithdrawalAddress(
+      context.read<ConfirmTokenTransactionCubit>().setWithdrawalAddress(
             withdrawalAddress: withdrawalAddressController.text,
           );
     });
@@ -86,7 +86,8 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocConsumer<ConfirmWithdrawalCubit, ConfirmWithdrawalState>(
+    return BlocConsumer<ConfirmTokenTransactionCubit,
+        ConfirmTokenTransactionState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -111,9 +112,10 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
             context: context,
             amountAndSymbol: amountAndSymbol,
             onDoneButtonClick: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.popUntil(
+                context,
+                (route) => route.settings.name == '/dashboardPage',
+              );
             },
           );
         }
@@ -181,7 +183,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
 
                       if (networkFeeModel != null) {
                         context
-                            .read<ConfirmWithdrawalCubit>()
+                            .read<ConfirmTokenTransactionCubit>()
                             .setNetworkFee(networkFee: networkFeeModel);
                       }
                     },
@@ -201,7 +203,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                 borderRadius: Sizes.normalRadius,
                 text: l10n.confirm,
                 onPressed: context
-                        .read<ConfirmWithdrawalCubit>()
+                        .read<ConfirmTokenTransactionCubit>()
                         .canConfirmTheWithdrawal(
                           amount: widget.amount,
                           selectedToken: widget.selectedToken,
@@ -217,7 +219,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                               final walletState =
                                   context.read<WalletCubit>().state;
                               context
-                                  .read<ConfirmWithdrawalCubit>()
+                                  .read<ConfirmTokenTransactionCubit>()
                                   .sendContractInvocationOperation(
                                     token: widget.selectedToken,
                                     tokenAmount: widget.amount,

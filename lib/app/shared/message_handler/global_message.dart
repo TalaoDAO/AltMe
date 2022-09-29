@@ -50,6 +50,8 @@ class GlobalMessage {
   String get NETWORK_ERROR_NOT_FOUND => l10n.networkErrorNotFound;
 
   String get RESPONSE_STRING_FAILED_TO_LOAD_PROFILE => l10n.failedToLoadProfile;
+  
+  String get RESPONSE_STRING_FAILED_TO_DO_OPERATION => l10n.failedToDoOperation;
 
   String get RESPONSE_STRING_FAILED_TO_SAVE_PROFILE => l10n.failedToSaveProfile;
 

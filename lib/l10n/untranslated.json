@@ -470,7 +470,11 @@
     "succesfullyDisconnected",
     "connectedApps",
     "noDappConnected",
-    "nftDetails"
+    "nftDetails",
+    "failedToDoOperation",
+    "nft",
+    "receiveNft",
+    "sendOnlyNftToThisAddressDescription"
   ],
 
   "es": [
@@ -944,7 +948,11 @@
     "succesfullyDisconnected",
     "connectedApps",
     "noDappConnected",
-    "nftDetails"
+    "nftDetails",
+    "failedToDoOperation",
+    "nft",
+    "receiveNft",
+    "sendOnlyNftToThisAddressDescription"
   ],
 
   "fr": [
@@ -1418,7 +1426,11 @@
     "succesfullyDisconnected",
     "connectedApps",
     "noDappConnected",
-    "nftDetails"
+    "nftDetails",
+    "failedToDoOperation",
+    "nft",
+    "receiveNft",
+    "sendOnlyNftToThisAddressDescription"
   ],
 
   "it": [
@@ -1892,6 +1904,10 @@
     "succesfullyDisconnected",
     "connectedApps",
     "noDappConnected",
-    "nftDetails"
+    "nftDetails",
+    "failedToDoOperation",
+    "nft",
+    "receiveNft",
+    "sendOnlyNftToThisAddressDescription"
   ]
 }

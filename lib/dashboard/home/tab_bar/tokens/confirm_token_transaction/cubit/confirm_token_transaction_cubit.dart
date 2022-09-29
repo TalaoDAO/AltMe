@@ -6,13 +6,13 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tezart/tezart.dart';
 
-part 'confirm_withdrawal_cubit.g.dart';
+part 'confirm_token_transaction_cubit.g.dart';
 
-part 'confirm_withdrawal_state.dart';
+part 'confirm_token_transaction_state.dart';
 
-class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
-  ConfirmWithdrawalCubit({
-    required ConfirmWithdrawalState initialState,
+class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
+  ConfirmTokenTransactionCubit({
+    required ConfirmTokenTransactionState initialState,
     required this.manageNetworkCubit,
   }) : super(initialState);
 
@@ -164,10 +164,22 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
         [parameters],
         codeFormat: TezosParameterFormat.Michelson,
       );
-      getLogger('sendContractInvocationOperation')
-          .i('Operation groupID ===> $resultInvoke');
-
-      emit(state.success());
+      getLogger('sendContractInvocationOperation').i(
+        'Operation groupID ===> $resultInvoke',
+      );
+      if (resultInvoke['appliedOp']['contents'][0]['metadata']
+              ['operation_result']['status'] ==
+          'failed') {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION,
+            ),
+          ),
+        );
+      } else {
+        emit(state.success());
+      }
     } catch (e, s) {
       emit(
         state.error(
