@@ -144,14 +144,14 @@ class WalletCubit extends Cubit<WalletState> {
 
     onComplete?.call(cryptoAccount);
 
-    final credential = await generateAssociatedWalletCredential(
-      accountName: cryptoAccountData.name,
-      walletAddress: cryptoWalletAddress,
-      cryptoKey: cryptoKey,
-    );
-    if (credential != null) {
-      await insertCredential(credential);
-    }
+    // final credential = await generateAssociatedWalletCredential(
+    //   accountName: cryptoAccountData.name,
+    //   walletAddress: cryptoWalletAddress,
+    //   cryptoKey: cryptoKey,
+    // );
+    // if (credential != null) {
+    //   await insertCredential(credential);
+    // }
 
     emitCryptoAccount(cryptoAccount);
   }
