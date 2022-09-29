@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/get_identity_credentials/get_multiple_credentials.dart';
 import 'package:altme/splash/helper_function/is_wallet_created.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';

@@ -80,7 +80,7 @@ class _TabControllerViewState extends State<TabControllerView>
                   },
                 ),
                 MyTab(
-                  text: l10n.gallery,
+                  text: l10n.nfts,
                   icon: state == 1 ? IconStrings.ghost : IconStrings.ghostBlur,
                   isSelected: state == 1,
                   onPressed: () {
