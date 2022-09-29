@@ -91,6 +91,10 @@ class _BeaconOperationViewState extends State<BeaconOperationView> {
         if (state.status == AppStatus.success) {
           Navigator.of(context).pop();
         }
+
+        if (state.status == AppStatus.goBack) {
+          Navigator.of(context).pop();
+        }
       },
       builder: (context, state) {
         String message = '';
@@ -184,14 +188,30 @@ class _BeaconOperationViewState extends State<BeaconOperationView> {
                   right: Sizes.spaceSmall,
                   bottom: Sizes.spaceSmall,
                 ),
-                child: MyElevatedButton(
-                  borderRadius: Sizes.normalRadius,
-                  text: l10n.send,
-                  onPressed: state.status != AppStatus.idle
-                      ? null
-                      : () {
-                          context.read<BeaconOperationCubit>().sendOperataion();
-                        },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    MyGradientButton(
+                      verticalSpacing: 15,
+                      borderRadius: Sizes.normalRadius,
+                      text: l10n.send,
+                      onPressed: state.status != AppStatus.idle
+                          ? null
+                          : () {
+                              context
+                                  .read<BeaconOperationCubit>()
+                                  .sendOperataion();
+                            },
+                    ),
+                    const SizedBox(height: 8),
+                    MyOutlinedButton(
+                      borderRadius: Sizes.normalRadius,
+                      text: l10n.cancel,
+                      onPressed: () {
+                        context.read<BeaconOperationCubit>().rejectOperation();
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),

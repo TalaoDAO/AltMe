@@ -70,6 +70,10 @@ class BeaconConfirmConnectionView extends StatelessWidget {
             ),
           );
         }
+
+        if (state.status == AppStatus.goBack) {
+          Navigator.of(context).pop();
+        }
       },
       child: WillPopScope(
         onWillPop: () async {
@@ -125,12 +129,28 @@ class BeaconConfirmConnectionView extends StatelessWidget {
                 right: Sizes.spaceSmall,
                 bottom: Sizes.spaceSmall,
               ),
-              child: MyElevatedButton(
-                borderRadius: Sizes.normalRadius,
-                text: l10n.connect,
-                onPressed: () {
-                  context.read<BeaconConfirmConnectionCubit>().connect();
-                },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MyGradientButton(
+                    verticalSpacing: 15,
+                    borderRadius: Sizes.normalRadius,
+                    text: l10n.connect,
+                    onPressed: () {
+                      context.read<BeaconConfirmConnectionCubit>().connect();
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  MyOutlinedButton(
+                    borderRadius: Sizes.normalRadius,
+                    text: l10n.cancel,
+                    onPressed: () {
+                      context
+                          .read<BeaconConfirmConnectionCubit>()
+                          .rejectConnection();
+                    },
+                  ),
+                ],
               ),
             ),
           ),

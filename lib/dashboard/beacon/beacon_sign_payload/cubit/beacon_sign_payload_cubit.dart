@@ -99,6 +99,6 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
       id: beaconCubit.state.beaconRequest!.request!.id!,
       signature: null,
     );
-    emit(state.copyWith(appStatus: AppStatus.success));
+    emit(state.copyWith(appStatus: AppStatus.goBack));
   }
 }
