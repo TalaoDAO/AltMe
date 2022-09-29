@@ -1,4 +1,5 @@
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class DiscoverCredentialList extends StatelessWidget {
@@ -13,43 +14,54 @@ class DiscoverCredentialList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView(
         scrollDirection: Axis.vertical,
         children: [
           if (state.gamingCredentials.isNotEmpty) ...[
-            GamingCredentials(
+            /// Gaming Credentials
+            HomeCredentialWidget(
+              title: l10n.gamingCards,
               credentials: state.gamingCredentials,
               isDiscover: true,
             ),
             const SizedBox(height: 10),
           ],
           if (state.communityCredentials.isNotEmpty) ...[
-            CommunityCredentials(
+            /// Community Credentials
+            HomeCredentialWidget(
+              title: l10n.communityCards,
               credentials: state.communityCredentials,
               isDiscover: true,
             ),
             const SizedBox(height: 10),
           ],
           if (state.identityCredentials.isNotEmpty) ...[
-            IdentityCredentials(
+            /// Identity Credentials
+            HomeCredentialWidget(
+              title: l10n.identityCards,
               credentials: state.identityCredentials,
               isDiscover: true,
             ),
             const SizedBox(height: 10),
           ],
-          // ProofOfOwnershipCredentials is hidden. Later we will
+          // Note: ProofOfOwnershipCredentials is hidden. Later we will
           // give user an option to show it
-          //  if (state.proofOfOwnershipCredentials.isNotEmpty) ...[
-          //   ProofOfOwnershipCredentials(
+          // if (state.proofOfOwnershipCredentials.isNotEmpty) ...[
+          //   /// ProofOfOwnership Credentials
+          //   HomeCredentialWidget(
+          //     title: l10n.proofOfOwnership,
           //     credentials: state.proofOfOwnershipCredentials,
           //     isDiscover: true,
           //   ),
           //   const SizedBox(height: 10),
           // ],
           if (state.othersCredentials.isNotEmpty) ...[
-            OtherCredentials(
+            /// Other Credentials
+            HomeCredentialWidget(
+              title: l10n.otherCards,
               credentials: state.othersCredentials,
               isDiscover: true,
             ),

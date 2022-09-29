@@ -1,28 +1,28 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class IdentityCredentials extends StatelessWidget {
-  const IdentityCredentials({
+class HomeCredentialWidget extends StatelessWidget {
+  const HomeCredentialWidget({
     Key? key,
     required this.credentials,
+    required this.title,
     this.isDiscover = false,
   }) : super(key: key);
 
   final List<HomeCredential> credentials;
+  final String title;
   final bool isDiscover;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          '''${l10n.identityCards} (${credentials.where((element) => !element.isDummy).toList().length})''',
+          '''$title (${credentials.where((element) => !element.isDummy).toList().length})''',
           style: Theme.of(context).textTheme.credentialCategoryTitle,
         ),
         const SizedBox(
