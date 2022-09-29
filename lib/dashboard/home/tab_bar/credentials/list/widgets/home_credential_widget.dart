@@ -8,12 +8,12 @@ class HomeCredentialWidget extends StatelessWidget {
     Key? key,
     required this.credentials,
     required this.title,
-    this.isDiscover = false,
+    this.showAddOption = false,
   }) : super(key: key);
 
   final List<HomeCredential> credentials;
   final String title;
-  final bool isDiscover;
+  final bool showAddOption;
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +37,9 @@ class HomeCredentialWidget extends StatelessWidget {
             mainAxisSpacing: 4,
             childAspectRatio: Sizes.homeCredentialRatio,
           ),
-          itemCount: credentials.length + (isDiscover ? 0 : 1),
+          itemCount: credentials.length + (showAddOption ? 1 : 0),
           itemBuilder: (_, index) {
-            if (!isDiscover && index == credentials.length) {
+            if (showAddOption && index == credentials.length) {
               return const AddCredentialButton();
             } else {
               return HomeCredentialItem(

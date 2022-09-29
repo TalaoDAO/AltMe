@@ -29,6 +29,7 @@ class CredentialListData extends StatelessWidget {
                 HomeCredentialWidget(
                   title: l10n.gamingCards,
                   credentials: state.gamingCredentials,
+                  showAddOption: true,
                 ),
                 const SizedBox(height: Sizes.spaceNormal),
               ],
@@ -37,6 +38,7 @@ class CredentialListData extends StatelessWidget {
                 HomeCredentialWidget(
                   title: l10n.communityCards,
                   credentials: state.communityCredentials,
+                  showAddOption: true,
                 ),
                 const SizedBox(height: Sizes.spaceNormal),
               ],
@@ -45,6 +47,7 @@ class CredentialListData extends StatelessWidget {
                 HomeCredentialWidget(
                   title: l10n.identityCards,
                   credentials: state.identityCredentials,
+                  showAddOption: true,
                 ),
                 const SizedBox(height: Sizes.spaceNormal),
               ],
@@ -63,6 +66,7 @@ class CredentialListData extends StatelessWidget {
                 HomeCredentialWidget(
                   title: l10n.otherCards,
                   credentials: state.othersCredentials,
+                  showAddOption: true,
                 ),
                 const SizedBox(height: Sizes.spaceNormal),
               ],
