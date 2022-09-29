@@ -87,6 +87,6 @@ class BeaconConfirmConnectionCubit extends Cubit<BeaconConfirmConnectionState> {
       publicKey: null,
       address: null,
     );
-    emit(state.copyWith(appStatus: AppStatus.success));
+    emit(state.copyWith(appStatus: AppStatus.goBack));
   }
 }

@@ -68,6 +68,10 @@ class BeaconSignPayloadView extends StatelessWidget {
         if (state.status == AppStatus.success) {
           Navigator.of(context).pop();
         }
+
+        if (state.status == AppStatus.goBack) {
+          Navigator.of(context).pop();
+        }
       },
       child: WillPopScope(
         onWillPop: () async {
@@ -137,12 +141,26 @@ class BeaconSignPayloadView extends StatelessWidget {
                 right: Sizes.spaceSmall,
                 bottom: Sizes.spaceSmall,
               ),
-              child: MyElevatedButton(
-                borderRadius: Sizes.normalRadius,
-                text: l10n.sign,
-                onPressed: () {
-                  context.read<BeaconSignPayloadCubit>().sign();
-                },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MyGradientButton(
+                    verticalSpacing: 15,
+                    borderRadius: Sizes.normalRadius,
+                    text: l10n.sign,
+                    onPressed: () {
+                      context.read<BeaconSignPayloadCubit>().sign();
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  MyOutlinedButton(
+                    borderRadius: Sizes.normalRadius,
+                    text: l10n.cancel,
+                    onPressed: () {
+                      context.read<BeaconSignPayloadCubit>().rejectSigning();
+                    },
+                  ),
+                ],
               ),
             ),
           ),

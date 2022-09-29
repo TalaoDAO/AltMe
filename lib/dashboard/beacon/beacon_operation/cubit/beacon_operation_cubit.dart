@@ -189,7 +189,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       id: beaconCubit.state.beaconRequest!.request!.id!,
       transactionHash: null,
     );
-    emit(state.copyWith(status: AppStatus.success));
+    emit(state.copyWith(status: AppStatus.goBack));
   }
 
   Future<OperationsList> getOperationList() async {
