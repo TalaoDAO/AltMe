@@ -1,7 +1,6 @@
 import 'package:altme/app/shared/alert_message/alert_message.dart';
 import 'package:altme/app/shared/enum/status/app_status.dart';
 import 'package:altme/app/shared/loading/loading_view.dart';
-import 'package:altme/app/shared/widget/base/page.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/dashboard/home/tab_bar/tab_bar.dart';
 import 'package:altme/theme/theme.dart';

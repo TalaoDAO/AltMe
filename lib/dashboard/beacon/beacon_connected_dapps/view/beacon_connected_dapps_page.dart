@@ -169,6 +169,7 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
                                   ReceivePage.route(
                                     accountAddress: widget.walletAddress,
                                     tokenSymbol: 'XTZ',
+                                    description: '',
                                   ),
                                 );
                               },
