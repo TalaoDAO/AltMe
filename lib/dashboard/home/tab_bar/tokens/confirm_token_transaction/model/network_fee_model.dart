@@ -26,9 +26,9 @@ class NetworkFeeModel extends Equatable {
 
   static List<NetworkFeeModel> networks() {
     return const [
-      NetworkFeeModel(fee: 0.001250, networkSpeed: NetworkSpeed.slow),
-      NetworkFeeModel(fee: 0.002496, networkSpeed: NetworkSpeed.average),
-      NetworkFeeModel(fee: 0.021900, networkSpeed: NetworkSpeed.fast),
+      NetworkFeeModel(fee: 0.002496, networkSpeed: NetworkSpeed.slow),
+      NetworkFeeModel(fee: 0.021900, networkSpeed: NetworkSpeed.average),
+      NetworkFeeModel(fee: 0.050000, networkSpeed: NetworkSpeed.fast),
     ];
   }
 

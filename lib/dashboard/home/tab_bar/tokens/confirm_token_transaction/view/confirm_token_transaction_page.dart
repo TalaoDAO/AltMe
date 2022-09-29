@@ -112,9 +112,10 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
             context: context,
             amountAndSymbol: amountAndSymbol,
             onDoneButtonClick: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.popUntil(
+                context,
+                (route) => route.settings.name == '/dashboardPage',
+              );
             },
           );
         }
