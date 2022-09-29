@@ -62,19 +62,15 @@ class EmailPassRecto extends Recto {
     getLogger('className')
         .i('emailPassModel: ${credentialModel.credentialPreview.issuanceDate}');
 
-    return IdentityCredentialBaseWidget(
+    return const IdentityCredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.emailProof,
-      issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
-      value: emailPassModel.email,
-      issuanceDate: UiDate.formatDateForCredentialCard(
-        credentialModel.credentialPreview.issuanceDate,
-      ),
-      expirationDate: credentialModel.expirationDate == null
-          ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+      // issuerName: credentialModel
+      //     .credentialPreview.credentialSubjectModel.issuedBy?.name,
+      // value: emailPassModel.email,
+      // issuanceDate: UiDate.formatDateForCredentialCard(
+      //   credentialModel.credentialPreview.issuanceDate,
+      // ),
+      expirationDate: '--',
     );
   }
 }

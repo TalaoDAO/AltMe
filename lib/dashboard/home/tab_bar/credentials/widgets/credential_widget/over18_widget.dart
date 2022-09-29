@@ -52,18 +52,14 @@ class Over18Recto extends Verso {
 
   @override
   Widget build(BuildContext context) {
-    return IdentityCredentialBaseWidget(
+    return const IdentityCredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.over18,
-      issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
-      issuanceDate: UiDate.formatDateForCredentialCard(
-        credentialModel.credentialPreview.issuanceDate,
-      ),
-      expirationDate: credentialModel.expirationDate == null
-          ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+      // issuerName: credentialModel
+      //     .credentialPreview.credentialSubjectModel.issuedBy?.name,
+      // issuanceDate: UiDate.formatDateForCredentialCard(
+      //   credentialModel.credentialPreview.issuanceDate,
+      // ),
+      expirationDate: '--',
     );
   }
 }

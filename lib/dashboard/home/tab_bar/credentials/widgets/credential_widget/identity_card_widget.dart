@@ -58,20 +58,16 @@ class IdentityCardRecto extends StatelessWidget {
     final identityCardModel = credentialModel
         .credentialPreview.credentialSubjectModel as IdentityCardModel;
 
-    return IdentityCredentialBaseWidget(
+    return const IdentityCredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.identityCard,
-      issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
-      value: '${identityCardModel.givenName}'
-          ' ${identityCardModel.familyName}',
-      issuanceDate: UiDate.formatDateForCredentialCard(
-        credentialModel.credentialPreview.issuanceDate,
-      ),
-      expirationDate: credentialModel.expirationDate == null
-          ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+      // issuerName: credentialModel
+      //     .credentialPreview.credentialSubjectModel.issuedBy?.name,
+      // value: '${identityCardModel.givenName}'
+      //     ' ${identityCardModel.familyName}',
+      // issuanceDate: UiDate.formatDateForCredentialCard(
+      //   credentialModel.credentialPreview.issuanceDate,
+      // ),
+      expirationDate: '--',
     );
   }
 }
