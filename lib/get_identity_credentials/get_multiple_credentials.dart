@@ -29,7 +29,7 @@ Future<void> getMutipleCredentials(
 // use jsonpath to handle this
   // record starting date in order to finish process on next phone start
   // if current thread had not finished properly
-  await RegisterMultipleCredentialsProcess(
+  await registerMultipleCredentialsProcess(
     secureStorageProvider,
     preAuthorizedCode,
   );
@@ -93,7 +93,7 @@ Future<void> getCredentialsFromIssuer(
       await walletCubit.insertCredential(credentialModel);
     }
   }
-  unawaited(UnregisterMultipleCredentialsProcess(secureStorageProvider));
+  unawaited(unregisterMultipleCredentialsProcess(secureStorageProvider));
 }
 
 Future<dynamic> getCredential(
@@ -181,7 +181,7 @@ Future<dynamic> getAccessTokenAndNonce(
   }
 }
 
-Future<void> RegisterMultipleCredentialsProcess(
+Future<void> registerMultipleCredentialsProcess(
   secure_storage.SecureStorageProvider secureStorageProvider,
   String preAuthorizedCode,
 ) async {
@@ -195,7 +195,7 @@ Future<void> RegisterMultipleCredentialsProcess(
   );
 }
 
-Future<void> UnregisterMultipleCredentialsProcess(
+Future<void> unregisterMultipleCredentialsProcess(
   secure_storage.SecureStorageProvider secureStorageProvider,
 ) async {
   await secureStorageProvider.set(
