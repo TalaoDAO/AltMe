@@ -11,23 +11,27 @@ class ReceivePage extends StatelessWidget {
     Key? key,
     required this.accountAddress,
     required this.tokenSymbol,
+    required this.description,
   }) : super(key: key);
 
   static Route route({
     required String accountAddress,
     required String tokenSymbol,
+    required String description,
   }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/receivePage'),
       builder: (_) => ReceivePage(
         accountAddress: accountAddress,
         tokenSymbol: tokenSymbol,
+        description: description,
       ),
     );
   }
 
   final String accountAddress;
   final String tokenSymbol;
+  final String description;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +96,7 @@ class ReceivePage extends StatelessWidget {
                 // TODO(Taleb): pass token symbol to l10n to return translation
                 //depends on variable ( How to pass variable to l10n object?)
                 Text(
-                  l10n.sendOnlyXtzToThisAddressDescription,
+                  description,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.caption2,
                 ),

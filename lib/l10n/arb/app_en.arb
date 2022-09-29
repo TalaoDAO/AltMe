@@ -521,5 +521,8 @@
   "connectedApps": "Connected dApps",
   "noDappConnected": "No dApp connected yet",
   "nftDetails": "NFT's details",
-  "failedToDoOperation": "Failed to do operation"
+  "failedToDoOperation": "Failed to do operation",
+  "nft":"NFT",
+  "receiveNft": "Receive NFT",
+  "sendOnlyNftToThisAddressDescription": "Only send Tezos NFT to this address. Sending NFT from other network may result in permanent loss."
 }
