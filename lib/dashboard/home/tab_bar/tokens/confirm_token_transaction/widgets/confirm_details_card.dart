@@ -24,7 +24,8 @@ class ConfirmDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final double grandTotal = amount + networkFee.fee;
+    final double grandTotal =
+        symbol.toLowerCase() == 'xtz' ? (amount + networkFee.fee) : amount;
     return BackgroundCard(
       color: Theme.of(context).colorScheme.cardBackground,
       child: Column(
