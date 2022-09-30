@@ -1,58 +1,57 @@
 {
   "@@locale": "en",
-  "genericError": "An error has occurred!",
+  "genericError": "Une erreur est survenue !",
   "@genericError": {
-    "description": "Generic error message",
-    "@@locale": "en",
+    "description": "Message d’erreur générique",
     "type": "text",
     "placeholders": {}
   },
-  "credentialListTitle": "Credentials",
+  "credentialListTitle": "Liste des attestations",
   "@credentialListTitle": {
-    "description": "Title for the Credentials List Page",
+    "description": "Titre de la page d’administration des attestations",
     "type": "text",
     "placeholders": {}
   },
-  "credentialDetailIssuedBy": "Issued by {issuer}",
+  "credentialDetailIssuedBy": "Émit par {issuer}",
   "@credentialDetailIssuedBy": {
-    "description": "Credential issuer on detail page",
+    "description": "Émetteur de l'attestation sur la page de détail",
     "type": "text",
     "placeholders": {
       "issuer": {}
     }
   },
-  "listActionRefresh": "Refresh",
+  "listActionRefresh": "Rafraîchir",
   "@listActionRefresh": {
-    "description": "List action button to refresh the content",
+    "description": "Bouton pour rafraîchir la liste",
     "type": "text",
     "placeholders": {}
   },
-  "listActionViewList": "View as list",
+  "listActionViewList": "Visualiser en liste",
   "@listActionViewList": {
-    "description": "List action button to set view to list mode",
+    "description": "Bouton pour visionner les données en liste",
     "type": "text",
     "placeholders": {}
   },
-  "listActionViewGrid": "View as grid",
+  "listActionViewGrid": "Visualiser en grille",
   "@listActionViewGrid": {
-    "description": "List action button to set view to grid mode",
+    "description": "Bouton pour visionner les données en tableau",
     "type": "text",
     "placeholders": {}
   },
-  "listActionFilter": "Filter",
+  "listActionFilter": "Filtrer",
   "@listActionFilter": {
-    "description": "List action button to open filter options",
+    "description": "Bouton pour ouvrir les options de filtrage",
     "type": "text",
     "placeholders": {}
   },
-  "listActionSort": "Sort",
+  "listActionSort": "Trier",
   "@listActionSort": {
-    "description": "List action button to open sort options",
+    "description": "Bouton pour ouvrir les options de tri",
     "type": "text",
     "placeholders": {}
   },
   "@recoveryCredentialSuccessMessage": {
-    "description": "Success Message Count",
+    "description": "Compteur d'attestations restaurées",
     "type": "text",
     "placeholders": {
       "postfix": {}
