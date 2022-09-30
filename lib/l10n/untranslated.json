@@ -474,7 +474,8 @@
     "failedToDoOperation",
     "nft",
     "receiveNft",
-    "sendOnlyNftToThisAddressDescription"
+    "sendOnlyNftToThisAddressDescription",
+    "membershipRequiredListAlerMessage"
   ],
 
   "es": [
@@ -952,7 +953,8 @@
     "failedToDoOperation",
     "nft",
     "receiveNft",
-    "sendOnlyNftToThisAddressDescription"
+    "sendOnlyNftToThisAddressDescription",
+    "membershipRequiredListAlerMessage"
   ],
 
   "fr": [
@@ -1430,7 +1432,8 @@
     "failedToDoOperation",
     "nft",
     "receiveNft",
-    "sendOnlyNftToThisAddressDescription"
+    "sendOnlyNftToThisAddressDescription",
+    "membershipRequiredListAlerMessage"
   ],
 
   "it": [
@@ -1908,6 +1911,7 @@
     "failedToDoOperation",
     "nft",
     "receiveNft",
-    "sendOnlyNftToThisAddressDescription"
+    "sendOnlyNftToThisAddressDescription",
+    "membershipRequiredListAlerMessage"
   ]
 }

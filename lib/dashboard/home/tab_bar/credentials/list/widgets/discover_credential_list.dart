@@ -25,6 +25,7 @@ class DiscoverCredentialList extends StatelessWidget {
             HomeCredentialWidget(
               title: l10n.gamingCards,
               credentials: state.gamingCredentials,
+              fromDiscover: true,
             ),
             const SizedBox(height: 10),
           ],
@@ -33,6 +34,7 @@ class DiscoverCredentialList extends StatelessWidget {
             HomeCredentialWidget(
               title: l10n.communityCards,
               credentials: state.communityCredentials,
+              fromDiscover: true,
             ),
             const SizedBox(height: 10),
           ],
@@ -41,6 +43,7 @@ class DiscoverCredentialList extends StatelessWidget {
             HomeCredentialWidget(
               title: l10n.identityCards,
               credentials: state.identityCredentials,
+              fromDiscover: true,
             ),
             const SizedBox(height: 10),
           ],
@@ -51,6 +54,7 @@ class DiscoverCredentialList extends StatelessWidget {
           //   HomeCredentialWidget(
           //     title: l10n.proofOfOwnership,
           //     credentials: state.proofOfOwnershipCredentials,
+          //     fromDiscover: true,
           //   ),
           //   const SizedBox(height: 10),
           // ],
@@ -59,6 +63,7 @@ class DiscoverCredentialList extends StatelessWidget {
             HomeCredentialWidget(
               title: l10n.otherCards,
               credentials: state.othersCredentials,
+              fromDiscover: true,
             ),
             const SizedBox(height: 10),
           ],

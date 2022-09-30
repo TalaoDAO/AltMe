@@ -524,5 +524,6 @@
   "failedToDoOperation": "Failed to do operation",
   "nft":"NFT",
   "receiveNft": "Receive NFT",
-  "sendOnlyNftToThisAddressDescription": "Only send Tezos NFT to this address. Sending NFT from other network may result in permanent loss."
+  "sendOnlyNftToThisAddressDescription": "Only send Tezos NFT to this address. Sending NFT from other network may result in permanent loss.",
+  "membershipRequiredListAlerMessage": "You need to get those credentials in your wallet to acquire membership card:"
 }

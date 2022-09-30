@@ -17,3 +17,8 @@ class DiscoverList {
     CredentialSubjectType.identityCard,
   ];
 }
+
+final List<CredentialSubjectType> membershipRequiredList = [
+  CredentialSubjectType.ageRange,
+  CredentialSubjectType.nationality,
+];

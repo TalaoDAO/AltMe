@@ -9,11 +9,13 @@ class HomeCredentialWidget extends StatelessWidget {
     required this.credentials,
     required this.title,
     this.showAddOption = false,
+    this.fromDiscover = false,
   }) : super(key: key);
 
   final List<HomeCredential> credentials;
   final String title;
   final bool showAddOption;
+  final bool fromDiscover;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,7 @@ class HomeCredentialWidget extends StatelessWidget {
             } else {
               return HomeCredentialItem(
                 homeCredential: credentials[index],
+                fromDiscover: fromDiscover,
               );
             }
           },
