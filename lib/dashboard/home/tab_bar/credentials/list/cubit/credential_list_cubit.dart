@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/constants/discover_list.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';

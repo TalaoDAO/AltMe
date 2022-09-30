@@ -40,6 +40,7 @@ class WalletCubit extends Cubit<WalletState> {
   final KeyGenerator keyGenerator;
   final DIDCubit didCubit;
   final DIDKitProvider didKitProvider;
+
   Future initialize() async {
     final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
     if (ssiKey != null) {

@@ -1,26 +1,29 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/constants/discover_list.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class HomeCredentialItem extends StatelessWidget {
-  const HomeCredentialItem({Key? key, required this.homeCredential})
-      : super(key: key);
+  const HomeCredentialItem({
+    Key? key,
+    required this.homeCredential,
+    required this.fromDiscover,
+  }) : super(key: key);
 
   final HomeCredential homeCredential;
+  final bool fromDiscover;
 
   @override
   Widget build(BuildContext context) {
     return homeCredential.isDummy
         ? DummyCredentialItem(
             homeCredential: homeCredential,
+            fromDiscover: fromDiscover,
           )
-        : RealCredentialItem(
-            credentialModel: homeCredential.credentialModel!,
-          );
+        : RealCredentialItem(credentialModel: homeCredential.credentialModel!);
   }
 }
 
@@ -77,10 +80,14 @@ class RealCredentialItem extends StatelessWidget {
 }
 
 class DummyCredentialItem extends StatelessWidget {
-  const DummyCredentialItem({Key? key, required this.homeCredential})
-      : super(key: key);
+  const DummyCredentialItem({
+    Key? key,
+    required this.homeCredential,
+    required this.fromDiscover,
+  }) : super(key: key);
 
   final HomeCredential homeCredential;
+  final bool fromDiscover;
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +106,7 @@ class DummyCredentialItem extends StatelessWidget {
             );
             return;
           }
+
           final List<CredentialSubjectType> credentialSubjectTypeList =
               List.of(DiscoverList.identityCategories);
           credentialSubjectTypeList.remove(CredentialSubjectType.emailPass);
@@ -109,6 +117,42 @@ class DummyCredentialItem extends StatelessWidget {
                   link: homeCredential.link!,
                 );
           } else {
+            /// check if  credential it is
+            /// [CredentialSubjectType.tezotopiaMembership]
+            if (homeCredential.credentialSubjectType ==
+                CredentialSubjectType.tezotopiaMembership) {
+              final CredentialsRepository repository =
+                  CredentialsRepository(getSecureStorage);
+
+              final List<CredentialModel> allCredentials =
+                  await repository.findAll();
+
+              bool isPresentable = false;
+
+              for (final type in membershipRequiredList) {
+                for (final credential in allCredentials) {
+                  if (type ==
+                      credential.credentialPreview.credentialSubjectModel
+                          .credentialSubjectType) {
+                    isPresentable = true;
+                    break;
+                  } else {
+                    isPresentable = false;
+                  }
+                }
+                if (!isPresentable) {
+                  await showDialog<bool>(
+                    context: context,
+                    builder: (context) => InfoDialog(
+                      title:
+                          '''${l10n.membershipRequiredListAlerMessage}\n\n 1. Nationality Proof\n 2. Age Range Proof''',
+                      button: l10n.ok,
+                    ),
+                  );
+                  return;
+                }
+              }
+            }
             await LaunchUrl.launch(homeCredential.link!);
           }
         },
