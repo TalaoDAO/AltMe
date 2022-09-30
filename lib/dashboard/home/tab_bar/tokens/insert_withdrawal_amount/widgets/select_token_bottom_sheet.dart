@@ -42,11 +42,17 @@ class _SelectTokenBottomSheetViewState
   int activeIndex = -1;
 
   Future<void> onRefresh() async {
-    await context.read<TokensCubit>().fetchFromZero();
+    _offset = 0;
+    await context.read<TokensCubit>().getBalanceOfAssetList(
+          offset: _offset,
+        );
   }
 
   Future<void> onScrollEnded() async {
-    await context.read<TokensCubit>().fetchMoreTokens();
+    _offset += _limit;
+    await context.read<TokensCubit>().getBalanceOfAssetList(
+          offset: _offset,
+        );
   }
 
   void onItemTap(TokenModel tokenModel) {

@@ -23,18 +23,24 @@ class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
               insertWithdrawalPageCubit.defaultSelectedToken.symbol,
             )) {
       setLoading(isLoading: true);
-      await tokensCubit.getTokens();
-      if (tokensCubit.state.data.isNotEmpty) {
-        setSelectedToken(tokenModel: tokensCubit.state.data.first);
+      final value = await tokensCubit.getBalanceOfAssetList(
+        offset: 0,
+        filterTokens: false,
+      );
+      if (value.isNotEmpty) {
+        setSelectedToken(tokenModel: value.first);
       }
       setLoading(isLoading: false);
     } else {
-      await tokensCubit.getTokens();
-      if (tokensCubit.state.data.isNotEmpty &&
-          !tokensCubit.state.data.map((e) => e.symbol).contains(
+      final value = await tokensCubit.getBalanceOfAssetList(
+        offset: 0,
+        filterTokens: false,
+      );
+      if (value.isNotEmpty &&
+          !value.map((e) => e.symbol).contains(
                 insertWithdrawalPageCubit.defaultSelectedToken.symbol,
               )) {
-        setSelectedToken(tokenModel: tokensCubit.state.data.first);
+        setSelectedToken(tokenModel: value.first);
       }
     }
   }

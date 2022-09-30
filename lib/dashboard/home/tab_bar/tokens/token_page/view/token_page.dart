@@ -32,14 +32,21 @@ class TokensView extends StatefulWidget {
 }
 
 class _TokensViewState extends State<TokensView> {
+  int _offset = 0;
+  final _limit = 100;
   int activeIndex = -1;
 
   Future<void> onRefresh() async {
-    await context.read<TokensCubit>().fetchFromZero();
+    await context.read<TokensCubit>().onRefresh();
   }
 
   Future<void> onScrollEnded() async {
-    await context.read<TokensCubit>().fetchMoreTokens();
+    _offset += _limit;
+    LoadingView().show(context: context);
+    await context.read<TokensCubit>().getBalanceOfAssetList(
+          offset: _offset,
+        );
+    LoadingView().hide();
   }
 
   void onItemTap(TokenModel selectedToken) {
@@ -67,22 +74,6 @@ class _TokensViewState extends State<TokensView> {
             onRefresh();
           },
         ),
-        BlocListener<TokensCubit, TokensState>(
-          listener: (context, state) {
-            if (state.status == AppStatus.loading) {
-              LoadingView().show(context: context);
-            } else {
-              LoadingView().hide();
-            }
-            if (state.message != null &&
-                state.status != AppStatus.errorWhileFetching) {
-              AlertMessage.showStateMessage(
-                context: context,
-                stateMessage: state.message!,
-              );
-            }
-          },
-        ),
       ],
       child: BasePage(
         scrollView: false,
@@ -107,7 +98,9 @@ class _TokensViewState extends State<TokensView> {
                       AllTokensPage.route(),
                     )
                     .then(
-                      (value) => context.read<TokensCubit>().fetchFromZero(),
+                      (value) => context
+                          .read<TokensCubit>()
+                          .getBalanceOfAssetList(offset: _offset),
                     );
               },
             ),
