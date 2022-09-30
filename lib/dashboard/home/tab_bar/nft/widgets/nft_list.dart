@@ -69,7 +69,7 @@ class _NftListState extends State<NftList> {
                       .state
                       .currentAccount
                       .walletAddress,
-                  tokenSymbol: l10n.nft,
+                  item: l10n.nft,
                   description: l10n.sendOnlyNftToThisAddressDescription,
                 ),
               );

@@ -525,5 +525,6 @@
   "nft":"NFT",
   "receiveNft": "Receive NFT",
   "sendOnlyNftToThisAddressDescription": "Only send Tezos NFT to this address. Sending NFT from other network may result in permanent loss.",
-  "membershipRequiredListAlerMessage": "You need to get those credentials in your wallet to acquire membership card:"
+  "membershipRequiredListAlerMessage": "You need to get those credentials in your wallet to acquire membership card:",
+  "beaconShareMessage": "Only send Tezos(XTZ) and Tezos NFTs(FA2 Standard) to this address. Sending Tezos and NFTs from other networks may result in permanent loss"
 }
