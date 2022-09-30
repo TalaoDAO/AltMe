@@ -232,7 +232,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                                         .state
                                         .currentAccount
                                         .walletAddress,
-                                    tokenSymbol: state.selectedToken.symbol,
+                                    item: state.selectedToken.symbol,
                                     description: l10n
                                         .sendOnlyXtzToThisAddressDescription,
                                   ),

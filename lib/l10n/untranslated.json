@@ -475,7 +475,8 @@
     "nft",
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
-    "membershipRequiredListAlerMessage"
+    "membershipRequiredListAlerMessage",
+    "beaconShareMessage"
   ],
 
   "es": [
@@ -954,7 +955,8 @@
     "nft",
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
-    "membershipRequiredListAlerMessage"
+    "membershipRequiredListAlerMessage",
+    "beaconShareMessage"
   ],
 
   "fr": [
@@ -1433,7 +1435,8 @@
     "nft",
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
-    "membershipRequiredListAlerMessage"
+    "membershipRequiredListAlerMessage",
+    "beaconShareMessage"
   ],
 
   "it": [
@@ -1912,6 +1915,7 @@
     "nft",
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
-    "membershipRequiredListAlerMessage"
+    "membershipRequiredListAlerMessage",
+    "beaconShareMessage"
   ]
 }

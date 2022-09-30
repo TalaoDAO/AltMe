@@ -10,27 +10,27 @@ class ReceivePage extends StatelessWidget {
   const ReceivePage({
     Key? key,
     required this.accountAddress,
-    required this.tokenSymbol,
+    required this.item,
     required this.description,
   }) : super(key: key);
 
   static Route route({
     required String accountAddress,
-    required String tokenSymbol,
+    required String item,
     required String description,
   }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/receivePage'),
       builder: (_) => ReceivePage(
         accountAddress: accountAddress,
-        tokenSymbol: tokenSymbol,
+        item: item,
         description: description,
       ),
     );
   }
 
   final String accountAddress;
-  final String tokenSymbol;
+  final String item;
   final String description;
 
   @override
@@ -52,7 +52,7 @@ class ReceivePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
-                  '${l10n.receive} $tokenSymbol',
+                  '${l10n.receive} $item',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(

@@ -168,8 +168,8 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
                                 Navigator.of(context).push<void>(
                                   ReceivePage.route(
                                     accountAddress: widget.walletAddress,
-                                    tokenSymbol: 'XTZ',
-                                    description: '',
+                                    item: 'XTZ or NFTs',
+                                    description: l10n.beaconShareMessage,
                                   ),
                                 );
                               },
