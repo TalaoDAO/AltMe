@@ -18,7 +18,7 @@ class TokensCubit extends Cubit<TokensState> {
     required this.allTokensCubit,
     required this.secureStorageProvider,
   }) : super(const TokensState()) {
-    getBalanceOfAssetList(offset: 0);
+    getTokens();
   }
 
   final SecureStorageProvider secureStorageProvider;
@@ -28,23 +28,31 @@ class TokensCubit extends Cubit<TokensState> {
   final AllTokensCubit allTokensCubit;
 
   List<TokenModel> data = [];
+  final int _limit = 50;
+  int _offsetOfLoadedData = -1;
 
   void toggleIsSecure() {
     emit(state.copyWith(isSecure: !state.isSecure));
   }
 
-  Future<void> onRefresh() async {
-    await getBalanceOfAssetList(offset: 0);
+  Future<void> fetchFromZero() async {
+    _offsetOfLoadedData = -1;
+    emit(state.copyWith(offset: 0));
+    await getTokens();
   }
 
-  Future<List<TokenModel>> getBalanceOfAssetList({
-    required int offset,
-    int limit = 100,
-    bool filterTokens = true,
-  }) async {
-    if (data.length < offset) return data;
+  Future<void> fetchMoreTokens() async {
+    final offset = state.offset + _limit;
+    emit(state.copyWith(offset: offset));
+    await getTokens();
+  }
+
+  Future<void> getTokens() async {
+    if (state.offset == _offsetOfLoadedData) return;
+    _offsetOfLoadedData = state.offset;
+    if (data.length < state.offset) return;
     try {
-      if (offset == 0) {
+      if (state.offset == 0) {
         emit(state.fetching());
       }
 
@@ -52,8 +60,8 @@ class TokensCubit extends Cubit<TokensState> {
       if (walletCubit.state.cryptoAccount.data.isEmpty) {
         await walletCubit.initialize();
         if (walletCubit.state.cryptoAccount.data.isEmpty) {
-          emit(state.populate());
-          return [];
+          emit(state.populate(data: []));
+          return;
         }
       }
       final walletAddress =
@@ -69,8 +77,8 @@ class TokensCubit extends Cubit<TokensState> {
           'token.metadata.artifactUri.null': true,
           'select':
               '''token.contract.address as contractAddress,token.id as id,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals,token.standard as standard''',
-          'offset': offset,
-          'limit': limit,
+          'offset': state.offset,
+          'limit': _limit,
         },
       ) as List<dynamic>;
       List<TokenModel> newData = [];
@@ -83,7 +91,7 @@ class TokensCubit extends Cubit<TokensState> {
             .toList();
       }
 
-      if (offset == 0) {
+      if (state.offset == 0) {
         final tezosToken = await _getXtzBalance(walletAddress);
         newData.insert(0, tezosToken);
         data = newData;
@@ -103,37 +111,35 @@ class TokensCubit extends Cubit<TokensState> {
       //get usd balance of tokens and update tokens
       if (allTokensCubit.state.contracts.isNotEmpty) {
         // Filter just selected tokens to show for user
-        if (filterTokens) {
-          final selectedContracts = allTokensCubit.state.selectedContracts;
-          final loadedTokensSymbols = data.map((e) => e.symbol).toList();
-          final contractsNotInserted = selectedContracts
-              .where(
-                (element) => !loadedTokensSymbols.contains(element.symbol),
-              )
-              .toList();
+        final selectedContracts = allTokensCubit.state.selectedContracts;
+        final loadedTokensSymbols = data.map((e) => e.symbol).toList();
+        final contractsNotInserted = selectedContracts
+            .where(
+              (element) => !loadedTokensSymbols.contains(element.symbol),
+            )
+            .toList();
 
-          final contractsNotInsertedSymbols =
-              contractsNotInserted.map((e) => e.symbol);
-          data.addAll(
-            allTokensCubit.state.contracts
-                .where(
-                  (element) =>
-                      contractsNotInsertedSymbols.contains(element.symbol),
-                )
-                .map(
-                  (e) => TokenModel(
-                    contractAddress: e.address,
-                    name: e.name ?? '',
-                    symbol: e.symbol,
-                    balance: '0',
-                    icon: e.thumbnailUri,
-                    decimals: e.decimals.toString(),
-                    id: -2,
-                    standard: e.type,
-                  ),
+        final contractsNotInsertedSymbols =
+            contractsNotInserted.map((e) => e.symbol);
+        data.addAll(
+          allTokensCubit.state.contracts
+              .where(
+                (element) =>
+                    contractsNotInsertedSymbols.contains(element.symbol),
+              )
+              .map(
+                (e) => TokenModel(
+                  contractAddress: e.address,
+                  name: e.name ?? '',
+                  symbol: e.symbol,
+                  balance: '0',
+                  icon: e.thumbnailUri,
+                  decimals: e.decimals.toString(),
+                  id: -2,
+                  standard: e.type,
                 ),
-          );
-        }
+              ),
+        );
 
         for (int i = 0; i < data.length; i++) {
           if (i == 0) {
@@ -177,7 +183,6 @@ class TokensCubit extends Cubit<TokensState> {
             totalBalanceInUSD: totalBalanceInUSD,
           ),
         );
-        return data;
       } else {
         double totalBalanceInUSD = 0;
         for (final tokenElement in data) {
@@ -191,13 +196,12 @@ class TokensCubit extends Cubit<TokensState> {
             totalBalanceInUSD: totalBalanceInUSD,
           ),
         );
-
-        return data;
       }
     } catch (e, s) {
       getLogger(runtimeType.toString()).e('error in get tokens e: $e , s:$s');
       data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
-      if (isClosed) return data;
+      emit(state.copyWith(data: data));
+      if (isClosed) return;
       emit(
         state.errorWhileFetching(
           messageHandler: ResponseMessage(
@@ -205,7 +209,6 @@ class TokensCubit extends Cubit<TokensState> {
           ),
         ),
       );
-      return data;
     }
   }
 

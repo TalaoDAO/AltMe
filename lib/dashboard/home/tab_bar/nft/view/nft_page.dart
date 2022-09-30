@@ -37,7 +37,7 @@ class _NftViewState extends State<NftView> {
   int activeIndex = -1;
 
   Future<void> onRefresh() async {
-    await context.read<NftCubit>().onRefresh();
+    await context.read<NftCubit>().fetchFromZero();
   }
 
   void onItemClick(NftModel nftModel) {
@@ -47,48 +47,49 @@ class _NftViewState extends State<NftView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<WalletCubit, WalletState>(
-          listener: (context, state) {
-            if (activeIndex != state.currentCryptoIndex) {
-              onRefresh();
-            }
-            activeIndex = state.currentCryptoIndex;
-          },
-        ),
-        BlocListener<ManageNetworkCubit, ManageNetworkState>(
-          listener: (context, state) {
-            onRefresh();
-          },
-        ),
-      ],
-      child: BasePage(
-        scrollView: false,
-        padding: EdgeInsets.zero,
-        backgroundColor: Theme.of(context).colorScheme.transparent,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MyCollectionText(),
-            Expanded(
-              child: BlocConsumer<NftCubit, NftState>(
-                listener: (context, state) {
-                  if (state.status == AppStatus.loading) {
-                    LoadingView().show(context: context);
-                  } else {
-                    LoadingView().hide();
-                  }
+    return BasePage(
+      scrollView: false,
+      padding: EdgeInsets.zero,
+      backgroundColor: Theme.of(context).colorScheme.transparent,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const MyCollectionText(),
+          Expanded(
+            child: MultiBlocListener(
+              listeners: [
+                BlocListener<WalletCubit, WalletState>(
+                  listener: (context, state) {
+                    if (activeIndex != state.currentCryptoIndex) {
+                      onRefresh();
+                    }
+                    activeIndex = state.currentCryptoIndex;
+                  },
+                ),
+                BlocListener<ManageNetworkCubit, ManageNetworkState>(
+                  listener: (context, state) {
+                    onRefresh();
+                  },
+                ),
+                BlocListener<NftCubit, NftState>(
+                  listener: (context, state) {
+                    if (state.status == AppStatus.loading) {
+                      LoadingView().show(context: context);
+                    } else {
+                      LoadingView().hide();
+                    }
 
-                  if (state.message != null &&
-                      state.status != AppStatus.errorWhileFetching) {
-                    AlertMessage.showStateMessage(
-                      context: context,
-                      stateMessage: state.message!,
-                    );
-                  }
-                },
+                    if (state.message != null) {
+                      AlertMessage.showStateMessage(
+                        context: context,
+                        stateMessage: state.message!,
+                      );
+                    }
+                  },
+                ),
+              ],
+              child: BlocBuilder<NftCubit, NftState>(
                 builder: (_, state) {
                   String message = '';
                   if (state.message != null) {
@@ -126,8 +127,8 @@ class _NftViewState extends State<NftView> {
                 },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

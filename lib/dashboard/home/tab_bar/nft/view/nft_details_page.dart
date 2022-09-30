@@ -77,7 +77,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 minFontSize: 16,
               ),
               MyText(
-                widget.nftModel.symbol,
+                widget.nftModel.symbol ?? '--',
                 style: Theme.of(context).textTheme.caption2,
                 maxLines: 1,
                 minFontSize: 12,
