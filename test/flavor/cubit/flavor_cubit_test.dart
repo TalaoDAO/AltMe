@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/flavor/cubit/flavor_cubit.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/flavor/cubit/flavor_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

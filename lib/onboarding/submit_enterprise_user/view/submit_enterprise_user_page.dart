@@ -1,10 +1,10 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/submit_enterprise_user/cubit/submit_enterprise_user_cubit.dart';
-import 'package:altme/onboarding/submit_enterprise_user/view/widgets/pick_file_button.dart';
-import 'package:altme/onboarding/submit_enterprise_user/view/widgets/picked_file.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/did/cubit/did_cubit.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/onboarding/submit_enterprise_user/cubit/submit_enterprise_user_cubit.dart';
+import 'package:arago_wallet/onboarding/submit_enterprise_user/view/widgets/pick_file_button.dart';
+import 'package:arago_wallet/onboarding/submit_enterprise_user/view/widgets/picked_file.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';

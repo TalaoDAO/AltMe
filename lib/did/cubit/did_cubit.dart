@@ -1,4 +1,4 @@
-import 'package:altme/app/app.dart';
+import 'package:arago_wallet/app/app.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';

@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class MyTab extends StatelessWidget {
@@ -55,9 +55,7 @@ class MyTab extends StatelessWidget {
               text,
               softWrap: false,
               style: Theme.of(context).textTheme.caption?.copyWith(
-                    color: isSelected
-                        ? null
-                        : Colors.grey[400],
+                    color: isSelected ? null : Colors.grey[400],
                   ),
               overflow: TextOverflow.fade,
             ),

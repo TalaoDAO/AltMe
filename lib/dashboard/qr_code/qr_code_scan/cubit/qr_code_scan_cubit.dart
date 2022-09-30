@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/deep_link/deep_link.dart';
-import 'package:altme/issuer_websites_page/issuer_websites.dart';
-import 'package:altme/query_by_example/query_by_example.dart';
-import 'package:altme/scan/scan.dart';
-import 'package:altme/wallet/wallet.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/deep_link/deep_link.dart';
+import 'package:arago_wallet/issuer_websites_page/issuer_websites.dart';
+import 'package:arago_wallet/query_by_example/query_by_example.dart';
+import 'package:arago_wallet/scan/scan.dart';
+import 'package:arago_wallet/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';

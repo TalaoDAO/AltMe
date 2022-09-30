@@ -1,4 +1,4 @@
-import 'package:altme/dashboard/home/tab_bar/credentials/credential.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/credential.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 
 List<CredentialModel> getCredentialsFromFilterList(

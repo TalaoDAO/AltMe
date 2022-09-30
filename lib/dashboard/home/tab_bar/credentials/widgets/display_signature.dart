@@ -1,6 +1,6 @@
-import 'package:altme/app/shared/widget/base/credential_field.dart';
-import 'package:altme/app/shared/widget/cached_image_from_network.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/signature/signature.dart';
+import 'package:arago_wallet/app/shared/widget/base/credential_field.dart';
+import 'package:arago_wallet/app/shared/widget/cached_image_from_network.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/signature/signature.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/l10n/l10n.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';

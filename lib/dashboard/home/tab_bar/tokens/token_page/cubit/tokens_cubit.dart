@@ -1,6 +1,6 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/wallet/wallet.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -61,7 +61,7 @@ class TokensCubit extends Cubit<TokensState> {
         '$baseUrl/v1/tokens/balances',
         queryParameters: <String, dynamic>{
           'account': walletAddress,
-          'token.metadata.decimals.ne':'0',
+          'token.metadata.decimals.ne': '0',
           'token.metadata.artifactUri.null': true,
           'select':
               '''token.contract.address as contractAddress,token.id as id,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals,token.standard as standard''',

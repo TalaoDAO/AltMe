@@ -1,7 +1,7 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/model/model.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/theme/theme.dart';
+import 'package:arago_wallet/wallet/model/model.dart';
 import 'package:flutter/material.dart';
 
 class SelectBoxAccountItem extends StatelessWidget {

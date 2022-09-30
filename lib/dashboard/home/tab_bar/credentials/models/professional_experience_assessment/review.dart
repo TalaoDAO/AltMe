@@ -1,5 +1,5 @@
-import 'package:altme/app/shared/models/translation/translation.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/professional_experience_assessment/review_rating.dart';
+import 'package:arago_wallet/app/shared/models/translation/translation.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/professional_experience_assessment/review_rating.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'review.g.dart';

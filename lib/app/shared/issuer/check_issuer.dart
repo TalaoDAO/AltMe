@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/issuer/models/organization_info.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/app/shared/issuer/models/organization_info.dart';
 
 class CheckIssuer {
   CheckIssuer(

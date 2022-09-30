@@ -8,8 +8,8 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/home/cubit/home_cubit.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/home/home/cubit/home_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:flutter/widgets.dart';

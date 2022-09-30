@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:altme/app/shared/shared.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
-import 'package:altme/wallet/wallet.dart';
+import 'package:arago_wallet/app/shared/shared.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:arago_wallet/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 

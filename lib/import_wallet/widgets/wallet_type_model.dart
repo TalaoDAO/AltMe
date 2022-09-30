@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/enum/type/import_wallet_types.dart';
+import 'package:arago_wallet/app/shared/enum/type/import_wallet_types.dart';
 
 class WalletTypeModel {
   WalletTypeModel({

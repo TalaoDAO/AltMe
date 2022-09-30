@@ -1,6 +1,6 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/tezotopia_voucher/offers.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/tezotopia_voucher/offers.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'tezotopia_membership_model.g.dart';

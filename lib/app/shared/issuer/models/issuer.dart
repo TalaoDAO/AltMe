@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/issuer/models/organization_info.dart';
+import 'package:arago_wallet/app/shared/issuer/models/organization_info.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'issuer.g.dart';

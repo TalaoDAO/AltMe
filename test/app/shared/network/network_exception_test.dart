@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:altme/app/app.dart';
+import 'package:arago_wallet/app/app.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

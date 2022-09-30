@@ -1,4 +1,4 @@
-import 'package:altme/dashboard/home/tab_bar/credentials/models/tezotopia_voucher/benefit.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/tezotopia_voucher/benefit.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'offers.g.dart';

@@ -1,4 +1,4 @@
-import 'package:altme/dashboard/dashboard.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'self_issued_credential.g.dart';

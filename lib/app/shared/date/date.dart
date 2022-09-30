@@ -1,4 +1,4 @@
-import 'package:altme/app/logger/logger.dart';
+import 'package:arago_wallet/app/logger/logger.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 

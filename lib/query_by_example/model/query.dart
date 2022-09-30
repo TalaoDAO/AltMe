@@ -1,4 +1,4 @@
-import 'package:altme/query_by_example/model/credential_query.dart';
+import 'package:arago_wallet/query_by_example/model/credential_query.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'query.g.dart';

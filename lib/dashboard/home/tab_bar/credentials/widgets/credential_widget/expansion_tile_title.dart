@@ -1,4 +1,4 @@
-import 'package:altme/theme/theme.dart';
+import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class ExpansionTileTitle extends StatelessWidget {

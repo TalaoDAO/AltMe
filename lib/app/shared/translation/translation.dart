@@ -1,5 +1,5 @@
-import 'package:altme/app/shared/models/translation/translation.dart';
-import 'package:altme/l10n/l10n.dart';
+import 'package:arago_wallet/app/shared/models/translation/translation.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
 
 class GetTranslation {
   static String getTranslation(

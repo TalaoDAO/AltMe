@@ -1,5 +1,5 @@
-import 'package:altme/app/logger/logger.dart';
-import 'package:altme/dashboard/home/tab_bar/tokens/token_page/models/token_model.dart';
+import 'package:arago_wallet/app/logger/logger.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/tokens/token_page/models/token_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';

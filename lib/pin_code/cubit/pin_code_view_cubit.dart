@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/pin_code/pin_code.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/pin_code/pin_code.dart';
 import 'package:bloc/bloc.dart';
 
 part 'pin_code_view_state.dart';

@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/widget/base/box_decoration.dart';
+import 'package:arago_wallet/app/shared/widget/base/box_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

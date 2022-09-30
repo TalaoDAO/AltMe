@@ -1,7 +1,7 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/professional_experience_assessment/review.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/professional_experience_assessment/skill.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/professional_experience_assessment/review.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/professional_experience_assessment/skill.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'professional_experience_assessment_model.g.dart';

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:altme/dashboard/home/home.dart';
+import 'package:arago_wallet/dashboard/home/home.dart';
 import 'package:dartez/dartez.dart';
 
 String generateDefaultAccountName(

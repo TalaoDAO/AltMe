@@ -5,18 +5,18 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
-import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/deep_link/deep_link.dart';
-import 'package:altme/did/did.dart';
-import 'package:altme/flavor/cubit/flavor_cubit.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/query_by_example/query_by_example.dart';
-import 'package:altme/scan/scan.dart';
-import 'package:altme/splash/splash.dart';
-import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/wallet.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/beacon/beacon.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/deep_link/deep_link.dart';
+import 'package:arago_wallet/did/did.dart';
+import 'package:arago_wallet/flavor/cubit/flavor_cubit.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/query_by_example/query_by_example.dart';
+import 'package:arago_wallet/scan/scan.dart';
+import 'package:arago_wallet/splash/splash.dart';
+import 'package:arago_wallet/theme/theme.dart';
+import 'package:arago_wallet/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';

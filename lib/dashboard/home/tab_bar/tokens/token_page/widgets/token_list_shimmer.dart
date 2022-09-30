@@ -1,4 +1,4 @@
-import 'package:altme/dashboard/dashboard.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class TokenListShimmer extends StatelessWidget {

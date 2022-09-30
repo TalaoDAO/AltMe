@@ -1,5 +1,5 @@
-import 'package:altme/app/shared/widget/base/credential_field.dart';
-import 'package:altme/dashboard/dashboard.dart';
+import 'package:arago_wallet/app/shared/widget/base/credential_field.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 

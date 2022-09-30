@@ -1,4 +1,4 @@
-import 'package:altme/dashboard/home/tab_bar/tokens/tokens.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/tokens/tokens.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
