@@ -34,7 +34,7 @@ class NftModel extends Equatable {
   final String? description;
   final String? standard;
   final int id;
-  final String? symbol;
+  final String symbol;
   final String contractAddress;
 
   Map<String, dynamic> toJson() => _$NftModelToJson(this);
@@ -48,7 +48,7 @@ class NftModel extends Equatable {
     return TokenModel(
       contractAddress: contractAddress,
       name: name,
-      symbol: symbol ?? name,
+      symbol: symbol,
       balance: balance,
       standard: standard ?? 'fa2',
       decimals: '0',

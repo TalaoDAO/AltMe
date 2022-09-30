@@ -29,10 +29,10 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     try {
       emit(state.loading());
       final operations = await _getOperations(baseUrl);
-      await tokensCubit.getTokens();
+      final tokens = await tokensCubit.getBalanceOfAssetList(offset: 0);
       late TokenModel selectedToken;
       try {
-        selectedToken = tokensCubit.state.data.firstWhere(
+        selectedToken = tokens.firstWhere(
           (e) =>
               e.symbol == state.selectedToken.symbol &&
               e.contractAddress == state.selectedToken.contractAddress,

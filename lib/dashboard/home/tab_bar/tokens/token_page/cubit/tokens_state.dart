@@ -8,7 +8,6 @@ class TokensState extends Equatable {
     this.data = const [],
     this.isSecure = false,
     this.totalBalanceInUSD = 0.0,
-    this.offset = 0,
   });
 
   factory TokensState.fromJson(Map<String, dynamic> json) =>
@@ -19,7 +18,6 @@ class TokensState extends Equatable {
   final List<TokenModel> data;
   final bool isSecure;
   final double totalBalanceInUSD;
-  final int offset;
 
   TokensState fetching() {
     return copyWith(
@@ -79,7 +77,6 @@ class TokensState extends Equatable {
     List<TokenModel>? data,
     bool? isSecure,
     double? totalBalanceInUSD,
-    int? offset,
   }) {
     return TokensState(
       status: status ?? this.status,
@@ -87,19 +84,11 @@ class TokensState extends Equatable {
       data: data ?? this.data,
       isSecure: isSecure ?? this.isSecure,
       totalBalanceInUSD: totalBalanceInUSD ?? this.totalBalanceInUSD,
-      offset: offset ?? this.offset,
     );
   }
 
   Map<String, dynamic> toJson() => _$TokensStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        status,
-        message,
-        data,
-        isSecure,
-        totalBalanceInUSD,
-        offset,
-      ];
+  List<Object?> get props => [status, message, data, isSecure];
 }

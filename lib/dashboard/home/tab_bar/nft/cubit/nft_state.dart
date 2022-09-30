@@ -51,7 +51,6 @@ class NftState extends Equatable {
       status: AppStatus.populate,
       data: data ?? this.data,
       offset: offset,
-      message: null,
     );
   }
 
@@ -60,12 +59,13 @@ class NftState extends Equatable {
     MessageHandler? messageHandler,
     List<NftModel>? data,
     int? offset,
-    StateMessage? message,
   }) {
     return NftState(
       status: status ?? this.status,
       data: data ?? this.data,
-      message: message ?? this.message,
+      message: messageHandler == null
+          ? null
+          : StateMessage.success(messageHandler: messageHandler),
       offset: offset ?? this.offset,
     );
   }
