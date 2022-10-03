@@ -451,16 +451,7 @@
     "operationCompleted",
     "operationFailed",
     "membership",
-    "switchNetworkMessage",
-    "fee",
-    "addCards",
-    "gaming",
-    "identity",
-    "payment",
-    "socialMedia",
-    "advanceSettings",
-    "selectCredentialCategoryWhichYouWantToShowInCredentialList",
-    "community"
+    "switchNetworkMessage"
   ],
 
   "es": [
@@ -915,16 +906,7 @@
     "operationCompleted",
     "operationFailed",
     "membership",
-    "switchNetworkMessage",
-    "fee",
-    "addCards",
-    "gaming",
-    "identity",
-    "payment",
-    "socialMedia",
-    "advanceSettings",
-    "selectCredentialCategoryWhichYouWantToShowInCredentialList",
-    "community"
+    "switchNetworkMessage"
   ],
 
   "fr": [
@@ -1379,16 +1361,7 @@
     "operationCompleted",
     "operationFailed",
     "membership",
-    "switchNetworkMessage",
-    "fee",
-    "addCards",
-    "gaming",
-    "identity",
-    "payment",
-    "socialMedia",
-    "advanceSettings",
-    "selectCredentialCategoryWhichYouWantToShowInCredentialList",
-    "community"
+    "switchNetworkMessage"
   ],
 
   "it": [
@@ -1843,15 +1816,6 @@
     "operationCompleted",
     "operationFailed",
     "membership",
-    "switchNetworkMessage",
-    "fee",
-    "addCards",
-    "gaming",
-    "identity",
-    "payment",
-    "socialMedia",
-    "advanceSettings",
-    "selectCredentialCategoryWhichYouWantToShowInCredentialList",
-    "community"
+    "switchNetworkMessage"
   ]
 }
