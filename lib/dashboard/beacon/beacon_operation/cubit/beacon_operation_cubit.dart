@@ -139,8 +139,8 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
             ),
           ),
         );
-        unawaited(nftCubit.onRefresh());
-        unawaited(tokensCubit.onRefresh());
+        unawaited(nftCubit.fetchFromZero());
+        unawaited(tokensCubit.fetchFromZero());
       } else {
         throw ResponseMessage(
           ResponseString.RESPONSE_STRING_OPERATION_FAILED,

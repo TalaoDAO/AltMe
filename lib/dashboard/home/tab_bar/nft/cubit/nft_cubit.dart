@@ -23,12 +23,15 @@ class NftCubit extends Cubit<NftState> {
   final ManageNetworkCubit manageNetworkCubit;
 
   final int _limit = 10;
+  int _offsetOfLoadedData = -1;
 
   List<NftModel> data = [];
 
   final log = getLogger('NftCubit');
 
   Future<void> getTezosNftList() async {
+    if (state.offset == _offsetOfLoadedData) return;
+    _offsetOfLoadedData = state.offset;
     if (data.length < state.offset) return;
     try {
       log.i('starting funtion getTezosNftList()');
@@ -68,7 +71,7 @@ class NftCubit extends Cubit<NftState> {
       }
       log.i('nfts - $data');
       emit(state.populate(data: data));
-    } catch (e,s) {
+    } catch (e, s) {
       if (isClosed) return;
       log.e('failed to fetch nfts, e: $e, s: $s');
       emit(
@@ -76,8 +79,11 @@ class NftCubit extends Cubit<NftState> {
           status: state.offset == 0
               ? AppStatus.errorWhileFetching
               : AppStatus.error,
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          message: StateMessage.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
           ),
           offset: state.offset == 0 ? 0 : state.offset - 1,
         ),
@@ -85,8 +91,9 @@ class NftCubit extends Cubit<NftState> {
     }
   }
 
-  Future<void> onRefresh() async {
+  Future<void> fetchFromZero() async {
     log.i('refreshing nft page');
+    _offsetOfLoadedData = -1;
     emit(state.copyWith(offset: 0));
     await getTezosNftList();
   }
