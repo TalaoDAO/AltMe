@@ -1,5 +1,9 @@
 import 'package:arago_wallet/app/app.dart';
 import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credential_widget/arago_email_pass_widget.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credential_widget/arago_identity_card_widget.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credential_widget/arago_learning_achievement_widget.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credential_widget/arago_over18_widget.dart';
 import 'package:flutter/material.dart';
 
 class DisplayInSelectionList extends StatelessWidget {
@@ -109,6 +113,22 @@ class DisplayInSelectionList extends StatelessWidget {
         );
       case CredentialSubjectType.talaoCommunityCard:
         return TalaoCommunityCardDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.aragoEmailPass:
+        return AragoEmailPassDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.aragoIdentityCard:
+        return AragoIdentityCardDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.aragoLearningAchievement:
+        return AragoLearningAchievementDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.aragoOver18:
+        return AragoOver18DisplayInSelectionList(
           credentialModel: credentialModel,
         );
     }

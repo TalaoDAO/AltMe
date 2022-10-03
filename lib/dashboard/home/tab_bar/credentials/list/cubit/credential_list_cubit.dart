@@ -98,6 +98,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           break;
         case CredentialSubjectType.talaoCommunityCard:
           break;
+        case CredentialSubjectType.aragoEmailPass:
+          break;
+        case CredentialSubjectType.aragoIdentityCard:
+          break;
+        case CredentialSubjectType.aragoLearningAchievement:
+          break;
+        case CredentialSubjectType.aragoOver18:
+          break;
       }
       switch (credentialSubject.credentialCategory) {
         case CredentialCategory.gamingCards:
@@ -285,6 +293,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.tezVoucher:
             break;
           case CredentialSubjectType.talaoCommunityCard:
+            break;
+          case CredentialSubjectType.aragoEmailPass:
+            break;
+          case CredentialSubjectType.aragoIdentityCard:
+            break;
+          case CredentialSubjectType.aragoLearningAchievement:
+            break;
+          case CredentialSubjectType.aragoOver18:
             break;
         }
 
@@ -538,6 +554,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.tezVoucher:
             break;
           case CredentialSubjectType.talaoCommunityCard:
+            break;
+          case CredentialSubjectType.aragoEmailPass:
+            break;
+          case CredentialSubjectType.aragoIdentityCard:
+            break;
+          case CredentialSubjectType.aragoLearningAchievement:
+            break;
+          case CredentialSubjectType.aragoOver18:
             break;
         }
 

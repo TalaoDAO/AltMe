@@ -109,135 +109,135 @@ class LearningAchievementVerso extends Verso {
 
   @override
   Widget build(BuildContext context) {
-    // final l10n = context.l10n;
-    // final learningAchievementModel = credentialModel
-    //     .credentialPreview.credentialSubjectModel as LearningAchievementModel;
+    final l10n = context.l10n;
+    final learningAchievementModel = credentialModel
+        .credentialPreview.credentialSubjectModel as LearningAchievementModel;
 
-    return const CredentialImage(
+    return CredentialImage(
       image: ImageStrings.learningAchievementBack,
-      // child: AspectRatio(
-      //   aspectRatio: Sizes.credentialAspectRatio,
-      //   child: CustomMultiChildLayout(
-      //     delegate: LearningAchievementDelegate(position: Offset.zero),
-      //     children: [
-      //       LayoutId(
-      //         id: 'name',
-      //         child: DisplayNameCard(
-      //           credentialModel: credentialModel,
-      //           style: Theme.of(context).textTheme.credentialTitleCard,
-      //         ),
-      //       ),
-      //       LayoutId(
-      //         id: 'school',
-      //         child: MyText(
-      //           learningAchievementModel.issuedBy!.name,
-      //           overflow: TextOverflow.fade,
-      //           style: Theme.of(context).textTheme.studentCardSchool,
-      //         ),
-      //       ),
-      //       LayoutId(
-      //         id: 'familyName',
-      //         child: Row(
-      //           children: [
-      //             ImageCardText(
-      //               text: '${l10n.personalLastName}: ',
-      //               textStyle: Theme.of(context)
-      //                   .textTheme
-      //                   .studentCardData
-      //                   .copyWith(fontWeight: FontWeight.bold),
-      //             ),
-      //             ImageCardText(
-      //               text: learningAchievementModel.familyName!,
-      //               textStyle: Theme.of(context).textTheme.studentCardData,
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //       LayoutId(
-      //         id: 'givenName',
-      //         child: Row(
-      //           children: [
-      //             ImageCardText(
-      //               text: '${l10n.personalFirstName}: ',
-      //               textStyle: Theme.of(context)
-      //                   .textTheme
-      //                   .studentCardData
-      //                   .copyWith(fontWeight: FontWeight.bold),
-      //             ),
-      //             ImageCardText(
-      //               text: learningAchievementModel.givenName!,
-      //               textStyle: Theme.of(context).textTheme.studentCardData,
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //       LayoutId(
-      //         id: 'birthDate',
-      //         child: Row(
-      //           children: [
-      //             ImageCardText(
-      //               text: '${l10n.birthdate}: ',
-      //               textStyle: Theme.of(context)
-      //                   .textTheme
-      //                   .studentCardData
-      //                   .copyWith(fontWeight: FontWeight.bold),
-      //             ),
-      //             ImageCardText(
-      //               text: UiDate.formatStringDate(
-      //                 learningAchievementModel.birthDate!,
-      //               ),
-      //               textStyle: Theme.of(context).textTheme.studentCardData,
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //       LayoutId(
-      //         id: 'hasCredential',
-      //         child: Row(
-      //           children: [
-      //             ImageCardText(
-      //               text:
-      //                   '''${learningAchievementModel.hasCredential!.title}: ''',
-      //               textStyle: Theme.of(context)
-      //                   .textTheme
-      //                   .studentCardData
-      //                   .copyWith(fontWeight: FontWeight.bold),
-      //             ),
-      //             ImageCardText(
-      //               text: learningAchievementModel.hasCredential!.description,
-      //               textStyle: Theme.of(context).textTheme.studentCardData,
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //       LayoutId(
-      //         id: 'proof',
-      //         child: Row(
-      //           children: [
-      //             ImageCardText(
-      //               text: '${l10n.proof}: ',
-      //               textStyle: Theme.of(context)
-      //                   .textTheme
-      //                   .studentCardData
-      //                   .copyWith(fontWeight: FontWeight.bold),
-      //             ),
-      //             InkWell(
-      //               onTap: () async {
-      //                 await LaunchUrl.launch(
-      //                   credentialModel.credentialPreview.evidence.first.id,
-      //                 );
-      //               },
-      //               child: ImageCardText(
-      //                 text: credentialModel.credentialPreview.evidence.first.id,
-      //                 textStyle: Theme.of(context).textTheme.studentCardData,
-      //               ),
-      //             )
-      //           ],
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
+      child: AspectRatio(
+        aspectRatio: Sizes.credentialAspectRatio,
+        child: CustomMultiChildLayout(
+          delegate: LearningAchievementDelegate(position: Offset.zero),
+          children: [
+            LayoutId(
+              id: 'name',
+              child: DisplayNameCard(
+                credentialModel: credentialModel,
+                style: Theme.of(context).textTheme.credentialTitleCard,
+              ),
+            ),
+            LayoutId(
+              id: 'school',
+              child: MyText(
+                learningAchievementModel.issuedBy!.name,
+                overflow: TextOverflow.fade,
+                style: Theme.of(context).textTheme.studentCardSchool,
+              ),
+            ),
+            LayoutId(
+              id: 'familyName',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.personalLastName}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .studentCardData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: learningAchievementModel.familyName!,
+                    textStyle: Theme.of(context).textTheme.studentCardData,
+                  ),
+                ],
+              ),
+            ),
+            LayoutId(
+              id: 'givenName',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.personalFirstName}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .studentCardData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: learningAchievementModel.givenName!,
+                    textStyle: Theme.of(context).textTheme.studentCardData,
+                  ),
+                ],
+              ),
+            ),
+            LayoutId(
+              id: 'birthDate',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.birthdate}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .studentCardData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: UiDate.formatStringDate(
+                      learningAchievementModel.birthDate!,
+                    ),
+                    textStyle: Theme.of(context).textTheme.studentCardData,
+                  ),
+                ],
+              ),
+            ),
+            LayoutId(
+              id: 'hasCredential',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text:
+                        '''${learningAchievementModel.hasCredential!.title}: ''',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .studentCardData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  ImageCardText(
+                    text: learningAchievementModel.hasCredential!.description,
+                    textStyle: Theme.of(context).textTheme.studentCardData,
+                  ),
+                ],
+              ),
+            ),
+            LayoutId(
+              id: 'proof',
+              child: Row(
+                children: [
+                  ImageCardText(
+                    text: '${l10n.proof}: ',
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .studentCardData
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      await LaunchUrl.launch(
+                        credentialModel.credentialPreview.evidence.first.id,
+                      );
+                    },
+                    child: ImageCardText(
+                      text: credentialModel.credentialPreview.evidence.first.id,
+                      textStyle: Theme.of(context).textTheme.studentCardData,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -3,8 +3,8 @@ import 'package:arago_wallet/dashboard/dashboard.dart';
 import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credential_widget/identity_credential_base_widget.dart';
 import 'package:flutter/material.dart';
 
-class EmailPassDisplayInList extends StatelessWidget {
-  const EmailPassDisplayInList({
+class AragoEmailPassDisplayInList extends StatelessWidget {
+  const AragoEmailPassDisplayInList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -13,12 +13,12 @@ class EmailPassDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EmailPassRecto(credentialModel: credentialModel);
+    return AragoEmailPassRecto(credentialModel: credentialModel);
   }
 }
 
-class EmailPassDisplayInSelectionList extends StatelessWidget {
-  const EmailPassDisplayInSelectionList({
+class AragoEmailPassDisplayInSelectionList extends StatelessWidget {
+  const AragoEmailPassDisplayInSelectionList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -27,12 +27,12 @@ class EmailPassDisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EmailPassRecto(credentialModel: credentialModel);
+    return AragoEmailPassRecto(credentialModel: credentialModel);
   }
 }
 
-class EmailPassDisplayDetail extends StatelessWidget {
-  const EmailPassDisplayDetail({
+class AragoEmailPassDisplayDetail extends StatelessWidget {
+  const AragoEmailPassDisplayDetail({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -43,33 +43,31 @@ class EmailPassDisplayDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        EmailPassRecto(credentialModel: credentialModel),
+        AragoEmailPassRecto(credentialModel: credentialModel),
       ],
     );
   }
 }
 
-class EmailPassRecto extends Recto {
-  const EmailPassRecto({Key? key, required this.credentialModel})
+class AragoEmailPassRecto extends Recto {
+  const AragoEmailPassRecto({Key? key, required this.credentialModel})
       : super(key: key);
 
   final CredentialModel credentialModel;
 
   @override
   Widget build(BuildContext context) {
-    final emailPassModel = credentialModel
-        .credentialPreview.credentialSubjectModel as EmailPassModel;
     getLogger('className')
         .i('emailPassModel: ${credentialModel.credentialPreview.issuanceDate}');
 
-    return IdentityCredentialBaseWidget(
-      cardBackgroundImagePath: ImageStrings.emailProof,
-      issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
-      value: emailPassModel.email,
-      issuanceDate: UiDate.formatDateForCredentialCard(
-        credentialModel.credentialPreview.issuanceDate,
-      ),
+    return const IdentityCredentialBaseWidget(
+      cardBackgroundImagePath: ImageStrings.aragoEmailProof,
+      // issuerName: credentialModel
+      //     .credentialPreview.credentialSubjectModel.issuedBy?.name,
+      // value: emailPassModel.email,
+      // issuanceDate: UiDate.formatDateForCredentialCard(
+      //   credentialModel.credentialPreview.issuanceDate,
+      // ),
       expirationDate: '--',
     );
   }

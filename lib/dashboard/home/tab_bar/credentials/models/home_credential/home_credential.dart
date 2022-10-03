@@ -83,6 +83,14 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.certificateOfEmployment:
         break;
+      case CredentialSubjectType.aragoEmailPass:
+        break;
+      case CredentialSubjectType.aragoIdentityCard:
+        break;
+      case CredentialSubjectType.aragoLearningAchievement:
+        break;
+      case CredentialSubjectType.aragoOver18:
+        break;
     }
     return HomeCredential(
       isDummy: true,

@@ -3,8 +3,8 @@ import 'package:arago_wallet/dashboard/dashboard.dart';
 import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credential_widget/identity_credential_base_widget.dart';
 import 'package:flutter/material.dart';
 
-class Over18DisplayInList extends StatelessWidget {
-  const Over18DisplayInList({
+class AragoOver18DisplayInList extends StatelessWidget {
+  const AragoOver18DisplayInList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -13,12 +13,12 @@ class Over18DisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Over18Recto(credentialModel: credentialModel);
+    return AragoOver18Recto(credentialModel: credentialModel);
   }
 }
 
-class Over18DisplayInSelectionList extends StatelessWidget {
-  const Over18DisplayInSelectionList({
+class AragoOver18DisplayInSelectionList extends StatelessWidget {
+  const AragoOver18DisplayInSelectionList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -27,12 +27,12 @@ class Over18DisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Over18Recto(credentialModel: credentialModel);
+    return AragoOver18Recto(credentialModel: credentialModel);
   }
 }
 
-class Over18DisplayDetail extends StatelessWidget {
-  const Over18DisplayDetail({
+class AragoOver18DisplayDetail extends StatelessWidget {
+  const AragoOver18DisplayDetail({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -41,24 +41,24 @@ class Over18DisplayDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Over18Recto(credentialModel: credentialModel);
+    return AragoOver18Recto(credentialModel: credentialModel);
   }
 }
 
-class Over18Recto extends Verso {
-  const Over18Recto({Key? key, required this.credentialModel})
+class AragoOver18Recto extends Verso {
+  const AragoOver18Recto({Key? key, required this.credentialModel})
       : super(key: key);
   final CredentialModel credentialModel;
 
   @override
   Widget build(BuildContext context) {
-    return IdentityCredentialBaseWidget(
+    return const IdentityCredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.over18,
-      issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
-      issuanceDate: UiDate.formatDateForCredentialCard(
-        credentialModel.credentialPreview.issuanceDate,
-      ),
+      // issuerName: credentialModel
+      //     .credentialPreview.credentialSubjectModel.issuedBy?.name,
+      // issuanceDate: UiDate.formatDateForCredentialCard(
+      //   credentialModel.credentialPreview.issuanceDate,
+      // ),
       expirationDate: '--',
     );
   }
