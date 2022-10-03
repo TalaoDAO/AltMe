@@ -4,11 +4,11 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AdvanceSettingsPage extends StatelessWidget {
-  const AdvanceSettingsPage({Key? key}) : super(key: key);
+class AdvancedSettingsPage extends StatelessWidget {
+  const AdvancedSettingsPage({Key? key}) : super(key: key);
 
   static Route route() => MaterialPageRoute<void>(
-        builder: (_) => const AdvanceSettingsPage(),
+        builder: (_) => const AdvancedSettingsPage(),
         settings: const RouteSettings(name: '/advanceSettingsPage'),
       );
 
@@ -16,25 +16,25 @@ class AdvanceSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<AdvanceSettingsCubit>.value(
       value: context.read<AdvanceSettingsCubit>(),
-      child: const AdvanceSettingsView(),
+      child: const AdvancedSettingsView(),
     );
   }
 }
 
-class AdvanceSettingsView extends StatefulWidget {
-  const AdvanceSettingsView({Key? key}) : super(key: key);
+class AdvancedSettingsView extends StatefulWidget {
+  const AdvancedSettingsView({Key? key}) : super(key: key);
 
   @override
-  State<AdvanceSettingsView> createState() => _AdvanceSettingsViewState();
+  State<AdvancedSettingsView> createState() => _AdvancedSettingsViewState();
 }
 
-class _AdvanceSettingsViewState extends State<AdvanceSettingsView> {
+class _AdvancedSettingsViewState extends State<AdvancedSettingsView> {
   late final advanceSEttingsCubit = context.read<AdvanceSettingsCubit>();
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.advanceSettings,
+      title: l10n.categories,
       titleLeading: const BackLeadingButton(),
       body: SingleChildScrollView(
         child: BlocBuilder<AdvanceSettingsCubit, AdvanceSettingsState>(
