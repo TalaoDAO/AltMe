@@ -5,20 +5,20 @@ then
   fvm flutter pub get
   fvm flutter packages pub run build_runner build --delete-conflicting-outputs 
 
-      elif [[ "$*" == *-run* ]]; 
-then
-  echo "flutter run production"
-  fvm flutter run --flavor production --target lib/main_production.dart
-
-  elif [[ "$*" == *-run$sdev* ]]; 
+  elif [[ "$*" == *-rundev* ]]; 
 then
   echo "flutter run development"
   fvm flutter run --flavor development --target lib/main_development.dart
 
-elif [[ "$*" == *-run$sstage* ]]; 
+elif [[ "$*" == *-runstage* ]]; 
 then
   echo "flutter run staging"
   fvm flutter run --flavor staging --target lib/main_staging.dart
+
+elif [[ "$*" == *-run* ]]; 
+then
+  echo "flutter run production"
+  fvm flutter run --flavor production --target lib/main_production.dart
 
 elif [[ "$*" == *-pod$sinstall* ]]; 
 then 

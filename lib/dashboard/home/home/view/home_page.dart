@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
           ? isAndroid()
               ? const TabControllerPage()
               : const IosTabControllerPage()
-          : const IosTabControllerPage(),
+          : const TabControllerPage(),
       // child: const TabControllerPage(),
     );
   }
