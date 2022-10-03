@@ -128,9 +128,9 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void startPassbaseVerification(WalletCubit walletCubit) {
-    final log = getLogger('HomeCubit - startPassbaseVerification');
-    final did = didCubit.state.did!;
-    emit(state.loading());
+    // final log = getLogger('HomeCubit - startPassbaseVerification');
+    // final did = didCubit.state.did!;
+    // emit(state.loading());
     // PassbaseSDK.startVerification(
     //   onFinish: (identityAccessKey) async {
     //     // IdentityAccessKey to run the process manually:

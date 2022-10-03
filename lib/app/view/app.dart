@@ -26,7 +26,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
-import 'package:secure_storage/secure_storage.dart';
 
 class App extends StatelessWidget {
   const App({Key? key, this.flavorMode = FlavorMode.production})
@@ -49,13 +48,6 @@ class App extends StatelessWidget {
           create: (context) => ProfileCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
           ),
-        ),
-        BlocProvider<AdvanceSettingsCubit>(
-          create: (context) {
-            return AdvanceSettingsCubit(
-              secureStorageProvider: getSecureStorage,
-            );
-          },
         ),
         BlocProvider<ManageNetworkCubit>(
           create: (context) => ManageNetworkCubit(

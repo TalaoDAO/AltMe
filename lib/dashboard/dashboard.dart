@@ -1,7 +1,5 @@
-export 'beacon/beacon.dart';
 export 'crypto_account_switcher/crypto_account_switcher.dart';
 export 'dashboard/dashboard.dart';
-export 'discover/discover.dart';
 export 'drawer/drawer.dart';
 export 'general_information/general_information.dart';
 export 'home/home.dart';

@@ -40,13 +40,9 @@ class ProofOfOwnershipCredentials extends StatelessWidget {
           ),
           itemCount: credentials.length + (isDiscover ? 0 : 1),
           itemBuilder: (_, index) {
-            if (!isDiscover && index == credentials.length) {
-              return const AddCredentialButton();
-            } else {
-              return HomeCredentialItem(
-                homeCredential: credentials[index],
-              );
-            }
+            return HomeCredentialItem(
+              homeCredential: credentials[index],
+            );
           },
         ),
       ],

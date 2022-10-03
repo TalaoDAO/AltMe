@@ -243,7 +243,7 @@ class _DashboardViewState extends State<DashboardView> {
                             physics: const NeverScrollableScrollPhysics(),
                             children: [
                               const HomePage(),
-                              const DiscoverPage(),
+                              const SizedBox.shrink(),
                               const SearchPage(),
                               Container(),
                             ],
