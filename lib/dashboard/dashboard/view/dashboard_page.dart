@@ -252,8 +252,8 @@ class _DashboardViewState extends State<DashboardView> {
                             BottomBarItem(
                               icon: IconStrings.discover,
                               text: l10n.discover,
-                              onTap: () => bottomTapped(1),
-                              isSelected: state.selectedIndex == 1,
+                              onTap: () => null,
+                              isSelected: false,
                             ),
                             const SizedBox.shrink(),
                             const SizedBox.shrink(),
