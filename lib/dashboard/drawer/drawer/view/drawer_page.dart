@@ -79,7 +79,7 @@ class DrawerView extends StatelessWidget {
                       const SizedBox(height: 15),
                       const TermsOfUseAndLicences(),
                       const SizedBox(height: 15),
-                      const AdvanceSettings(),
+                      const AdvancedSettings(),
                       const SizedBox(height: 15),
                       const DrawerAppVersion(),
                       const SizedBox(height: 15),
