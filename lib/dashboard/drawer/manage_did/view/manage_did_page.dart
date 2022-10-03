@@ -1,10 +1,10 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/manage_did/view/did_private_key_page.dart';
-import 'package:altme/dashboard/drawer/manage_did/widgets/widgets.dart';
-import 'package:altme/did/did.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/drawer/manage_did/view/did_private_key_page.dart';
+import 'package:arago_wallet/dashboard/drawer/manage_did/widgets/widgets.dart';
+import 'package:arago_wallet/did/did.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/pin_code/pin_code.dart';
+import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

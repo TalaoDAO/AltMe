@@ -1,7 +1,7 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,7 +75,7 @@ class QRIcon extends StatelessWidget {
               width: 40,
               child: ImageIcon(
                 const AssetImage(IconStrings.scan),
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: Theme.of(context).colorScheme.qrScanIconBackground,
               ),
             ),
           ],

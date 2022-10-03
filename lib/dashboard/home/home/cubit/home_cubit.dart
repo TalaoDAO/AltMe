@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/get_identity_credentials/get_multiple_credentials.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/did/cubit/did_cubit.dart';
+import 'package:arago_wallet/get_identity_credentials/get_multiple_credentials.dart';
+import 'package:arago_wallet/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';

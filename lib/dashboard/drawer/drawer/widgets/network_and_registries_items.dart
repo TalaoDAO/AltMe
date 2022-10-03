@@ -1,7 +1,7 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class NetworkAndRegistriesItems extends StatelessWidget {
@@ -24,15 +24,15 @@ class NetworkAndRegistriesItems extends StatelessWidget {
           color: Theme.of(context).colorScheme.drawerSurface,
           child: Column(
             children: [
-              DrawerItem(
-                icon: IconStrings.cloudAdd,
-                title: l10n.chooseNetwork,
-                onTap: () async {
-                  await Navigator.of(context)
-                      .push<void>(ManageNetworkPage.route());
-                },
-              ),
-              const DrawerItemDivider(),
+              // DrawerItem(
+              //   icon: IconStrings.cloudAdd,
+              //   title: l10n.chooseNetwork,
+              //   onTap: () async {
+              //     await Navigator.of(context)
+              //         .push<void>(ManageNetworkPage.route());
+              //   },
+              // ),
+              // const DrawerItemDivider(),
               DrawerItem(
                 icon: IconStrings.issuer,
                 title: l10n.chooseRegistry,

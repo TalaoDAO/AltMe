@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppTheme {
   /// A color frequently across your app’s screens and components.
-  static Color darkPrimary = const Color(0xff6600FF);
+  static Color darkPrimary = const Color(0xff75FD92);
 
   /// A color that's clearly legible when drawn on primary
   static Color darkOnPrimary = const Color(0xffFFFFFF);
@@ -24,13 +24,13 @@ abstract class AppTheme {
   static Color darkOnTertiary = const Color(0xffD1CCE3);
 
   /// The background color for widgets like Card.
-  static Color darkSurface = const Color(0xff1A182D);
+  static Color darkSurface = const Color(0xff020D09);
 
   /// A color that's clearly legible when drawn on surface.
   static Color darkOnSurface = const Color(0xffEDEAF5);
 
   /// A color that typically appears behind scrollable content.
-  static Color darkBackground = const Color(0xff0A0421);
+  static Color darkBackground = const Color(0xff020D09);
 
   /// A color that's clearly legible when drawn on background.
   static Color darkOnBackground = const Color(0xffFFFFFF);
@@ -70,31 +70,31 @@ abstract class AppTheme {
           brightness: Brightness.dark,
         ),
         textTheme: TextTheme(
-          caption: GoogleFonts.nunito(
+          caption: GoogleFonts.sora(
             color: const Color(0xFFFFFFFF),
             fontSize: 13,
             fontWeight: FontWeight.w600,
           ),
-          headline6: GoogleFonts.nunito(
+          headline6: GoogleFonts.sora(
             color: const Color(0xFFFFFFFF),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
-          headline5: GoogleFonts.nunito(
+          headline5: GoogleFonts.sora(
             color: const Color(0xFFFFFFFF),
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
-          headline4: GoogleFonts.nunito(
+          headline4: GoogleFonts.sora(
             color: const Color(0xFFFFFFFF),
             fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: const IconThemeData(color: Color(0xff6600FF)),
+        iconTheme: const IconThemeData(color: Color(0xff75FD92)),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: Colors.green,
-          contentTextStyle: GoogleFonts.roboto(
+          contentTextStyle: GoogleFonts.sora(
             color: const Color(0xFFFFFFFF),
             fontSize: 12,
             fontWeight: FontWeight.w400,
@@ -117,6 +117,8 @@ extension CustomColorScheme on ColorScheme {
 
   Color get closeIconColor => const Color(0xFFA79ABA);
 
+  Color get iconBackgroundColor => const Color(0xFF5CCA78);
+
   Color get kycVerifyButton => const Color(0xFF0045FF);
 
   Color get checkMarkColor => const Color(0xFF00B267);
@@ -127,31 +129,31 @@ extension CustomColorScheme on ColorScheme {
 
   Color get digitFillColor => Colors.transparent;
 
-  Color get disabledBgColor => const Color(0xFF6A5F7B);
+  Color get disabledBgColor => const Color(0xFF122E25);
 
-  Color get disabledTextColor => const Color(0xFF000000);
+  Color get disabledTextColor => Colors.white;
 
-  Color get darkGradientStartColor => const Color(0xff0A0421);
+  Color get darkGradientStartColor => const Color(0xff25095B);
 
   Color get darkGradientEndColor => const Color(0xff25095B);
 
   Color get transparent => Colors.transparent;
 
-  Color get onOutlineButton => const Color(0xFF6600FF);
+  Color get onOutlineButton => const Color(0xFF75FD92);
 
-  Color get onElevatedButton => const Color(0xFFFFFFFF);
+  Color get onElevatedButton => Colors.black;
 
-  Color get appBarUpperLayer => const Color(0xff25095B);
+  Color get appBarUpperLayer => Colors.black;
 
   Color get appBarLowerLayer => background;
 
   Color get surfaceContainer => const Color(0xff707070).withOpacity(0.07);
 
-  Color get drawerSurface => const Color(0xff232630);
+  Color get drawerSurface => const Color(0xff020D09);
 
   Color get label => Colors.white;
 
-  Color get unSelectedLabel => const Color(0xff86809D);
+  Color get unSelectedLabel => const Color(0xff143F32);
 
   Color get leadingButton => const Color(0xffF1EFF8);
 
@@ -199,29 +201,31 @@ extension CustomColorScheme on ColorScheme {
 
   Color get alertSuccessMessage => Colors.green;
 
-  Color get qrScanBackground => const Color(0xff2B1C48);
+  Color get qrScanBackground => const Color(0xff143F32);
 
-  Color get qrScanInnerShadow => const Color(0xff000000).withOpacity(0.16);
+  Color get qrScanInnerShadow => const Color(0xff143F32).withOpacity(0.16);
 
-  Color get qrScanOuterShadow => const Color(0xff430F91);
+  Color get qrScanOuterShadow => const Color(0xff143F32);
+
+  Color get qrScanIconBackground => const Color(0xff143930);
 
   Color get dialogText => const Color(0xFF180B2B);
 
   Color get tabBarNotSelected => const Color(0xFF280164);
 
-  Color get credentialBackground => const Color(0xFF211F33);
+  Color get credentialBackground => const Color(0xFF0A1914);
 
   Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
 
-  Color get startButtonColorA => const Color(0xff8436F8);
+  Color get startButtonColorA => const Color(0xff75FD92);
 
-  Color get startButtonColorB => const Color(0xff6600FF);
+  Color get startButtonColorB => const Color(0xff75FD92);
 
   Color get associatedWalletBorder => const Color(0xff524B67);
 
   Color get deleteColor => const Color(0xff322643);
 
-  Color get titleColor => const Color(0xffD1CCE3);
+  Color get titleColor => const Color(0xff2C6955);
 
   Color get valueColor => const Color(0xffFFFFFF);
 
@@ -239,7 +243,7 @@ extension CustomColorScheme on ColorScheme {
 }
 
 extension CustomTextTheme on TextTheme {
-  TextStyle get hintTextFieldStyle => GoogleFonts.nunito(
+  TextStyle get hintTextFieldStyle => GoogleFonts.sora(
         fontSize: 14,
         height: 1.5,
         letterSpacing: 1.02,
@@ -248,584 +252,584 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get keyboardDigitTextStyle =>
-      GoogleFonts.roboto(fontSize: 30, color: Colors.white);
+      GoogleFonts.sora(fontSize: 30, color: Colors.white);
 
-  TextStyle get calculatorKeyboardDigitTextStyle => GoogleFonts.roboto(
+  TextStyle get calculatorKeyboardDigitTextStyle => GoogleFonts.sora(
         fontSize: 30,
         color: Colors.white,
         fontWeight: FontWeight.bold,
       );
 
   TextStyle get keyboardDeleteButtonTextStyle =>
-      GoogleFonts.roboto(fontSize: 16, color: Colors.white);
+      GoogleFonts.sora(fontSize: 16, color: Colors.white);
 
-  TextStyle get loadingText => GoogleFonts.roboto(
+  TextStyle get loadingText => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get starterTitleStyle => GoogleFonts.roboto(
+  TextStyle get starterTitleStyle => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 32,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get starterSubTitleStyle => GoogleFonts.roboto(
+  TextStyle get starterSubTitleStyle => GoogleFonts.sora(
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get onBoardingTitleStyle => GoogleFonts.roboto(
+  TextStyle get onBoardingTitleStyle => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 22,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get onBoardingSubTitleStyle => GoogleFonts.roboto(
+  TextStyle get onBoardingSubTitleStyle => GoogleFonts.sora(
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get learnMoreTextStyle => GoogleFonts.roboto(
+  TextStyle get learnMoreTextStyle => GoogleFonts.sora(
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
         fontWeight: FontWeight.w400,
         decoration: TextDecoration.underline,
       );
 
-  TextStyle get infoTitle => GoogleFonts.roboto(
+  TextStyle get infoTitle => GoogleFonts.sora(
         color: const Color(0xFFEDEAF5),
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get infoSubtitle => GoogleFonts.roboto(
+  TextStyle get infoSubtitle => GoogleFonts.sora(
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get normal => GoogleFonts.roboto(
+  TextStyle get normal => GoogleFonts.sora(
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get appBar => GoogleFonts.nunito(
+  TextStyle get appBar => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 24,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get bottomBar => GoogleFonts.roboto(
+  TextStyle get bottomBar => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 10,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get title => GoogleFonts.nunito(
+  TextStyle get title => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get listTitle => GoogleFonts.roboto(
+  TextStyle get listTitle => GoogleFonts.sora(
         color: const Color(0xFFEDEAF5),
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get listSubtitle => GoogleFonts.roboto(
+  TextStyle get listSubtitle => GoogleFonts.sora(
         color: const Color(0xFFEDEAF5),
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get caption2 => GoogleFonts.roboto(
+  TextStyle get caption2 => GoogleFonts.sora(
         color: const Color(0xFF8682A8),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get listTileTitle => GoogleFonts.roboto(
+  TextStyle get listTileTitle => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 14,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get listTileSubtitle => GoogleFonts.roboto(
+  TextStyle get listTileSubtitle => GoogleFonts.sora(
         color: const Color(0xFF8682A8),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get close => GoogleFonts.roboto(
+  TextStyle get close => GoogleFonts.sora(
         color: const Color(0xFFD6C3F2),
         fontSize: 13,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get dialogClose => GoogleFonts.roboto(
+  TextStyle get dialogClose => GoogleFonts.sora(
         color: const Color(0xFFA79ABA),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get drawerMenu => GoogleFonts.roboto(
+  TextStyle get drawerMenu => GoogleFonts.sora(
         color: const Color(0xFFD1CCE3),
         fontSize: 15,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get drawerItem => GoogleFonts.roboto(
+  TextStyle get drawerItem => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get biometricMessage => GoogleFonts.roboto(
+  TextStyle get biometricMessage => GoogleFonts.sora(
         color: const Color(0xFFB1ADC3),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get pinCodeTitle => GoogleFonts.roboto(
+  TextStyle get pinCodeTitle => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get pinCodeMessage => GoogleFonts.roboto(
+  TextStyle get pinCodeMessage => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 14,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get getCardsButton => GoogleFonts.roboto(
-        color: const Color(0xFFFFFFFF),
+  TextStyle get getCardsButton => GoogleFonts.sora(
+        color: const Color(0xFF000000),
         fontSize: 12,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get miniButton => GoogleFonts.nunito(
+  TextStyle get miniButton => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 11,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get credentialTitle => GoogleFonts.roboto(
+  TextStyle get credentialTitle => GoogleFonts.sora(
         color: const Color(0xFF424242),
         fontSize: 15,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get credentialDescription => GoogleFonts.roboto(
+  TextStyle get credentialDescription => GoogleFonts.sora(
         color: const Color(0xFF757575),
         fontSize: 13,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialFieldTitle => GoogleFonts.roboto(
+  TextStyle get credentialFieldTitle => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialFieldDescription => GoogleFonts.roboto(
+  TextStyle get credentialFieldDescription => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 13,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get learningAchievementTitle => GoogleFonts.roboto(
+  TextStyle get learningAchievementTitle => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 12,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get learningAchievementDescription => GoogleFonts.roboto(
+  TextStyle get learningAchievementDescription => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialIssuer => GoogleFonts.roboto(
+  TextStyle get credentialIssuer => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get imageCard => GoogleFonts.roboto(
+  TextStyle get imageCard => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 12,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get loyaltyCard => GoogleFonts.roboto(
+  TextStyle get loyaltyCard => GoogleFonts.sora(
         color: const Color(0xffffffff),
         fontSize: 13,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get professionalExperienceAssessmentRating => GoogleFonts.roboto(
+  TextStyle get professionalExperienceAssessmentRating => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get voucherOverlay => GoogleFonts.roboto(
+  TextStyle get voucherOverlay => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get ecole42LearningAchievementStudentIdentity => GoogleFonts.roboto(
+  TextStyle get ecole42LearningAchievementStudentIdentity => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 6,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get ecole42LearningAchievementLevel => GoogleFonts.roboto(
+  TextStyle get ecole42LearningAchievementLevel => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 5,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.roboto(
+  TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.sora(
         color: const Color(0xFF0650C6),
         fontSize: 20,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get certificateOfEmploymentDescription => GoogleFonts.roboto(
+  TextStyle get certificateOfEmploymentDescription => GoogleFonts.sora(
         color: const Color(0xFF757575),
         fontSize: 13,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get certificateOfEmploymentData => GoogleFonts.roboto(
+  TextStyle get certificateOfEmploymentData => GoogleFonts.sora(
         color: const Color(0xFF434e62),
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get identityCardData => GoogleFonts.roboto(
+  TextStyle get identityCardData => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get tezosAssociatedAddressData => GoogleFonts.roboto(
+  TextStyle get tezosAssociatedAddressData => GoogleFonts.sora(
         color: const Color(0xff605A71),
         fontSize: 17,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get tezosAssociatedAddressTitleCard => GoogleFonts.nunito(
+  TextStyle get tezosAssociatedAddressTitleCard => GoogleFonts.sora(
         color: const Color(0xffFAFDFF),
         fontSize: 20,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get credentialStudentCardTextCard => GoogleFonts.roboto(
+  TextStyle get credentialStudentCardTextCard => GoogleFonts.sora(
         color: const Color(0xffffffff),
         fontSize: 14,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get over18 => GoogleFonts.roboto(
+  TextStyle get over18 => GoogleFonts.sora(
         color: const Color(0xffffffff),
         fontSize: 20,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get studentCardSchool => GoogleFonts.roboto(
+  TextStyle get studentCardSchool => GoogleFonts.sora(
         color: const Color(0xff9dc5ff),
         fontSize: 18,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get studentCardData => GoogleFonts.roboto(
+  TextStyle get studentCardData => GoogleFonts.sora(
         color: const Color(0xffffffff),
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get credentialTitleCard => GoogleFonts.roboto(
+  TextStyle get credentialTitleCard => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 20,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get voucherValueCard => GoogleFonts.roboto(
+  TextStyle get voucherValueCard => GoogleFonts.sora(
         color: const Color(0xFFFEEA00),
         fontSize: 50,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get credentialTextCard => GoogleFonts.roboto(
+  TextStyle get credentialTextCard => GoogleFonts.sora(
         color: const Color(0xff212121),
         fontSize: 14,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get illustrationPageDescription => GoogleFonts.roboto(
+  TextStyle get illustrationPageDescription => GoogleFonts.sora(
         color: Colors.white,
         fontSize: 16,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get dialogTitle => GoogleFonts.roboto(
+  TextStyle get dialogTitle => GoogleFonts.sora(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: Colors.white,
       );
 
-  TextStyle get dialogSubtitle => GoogleFonts.roboto(
+  TextStyle get dialogSubtitle => GoogleFonts.sora(
         fontSize: 13,
         fontWeight: FontWeight.w400,
         color: Colors.white.withOpacity(0.67),
       );
 
-  TextStyle get walletAltme => GoogleFonts.roboto(
+  TextStyle get walletAltme => GoogleFonts.sora(
         fontSize: 25,
         fontWeight: FontWeight.w600,
         color: const Color(0xff180B2B),
       );
 
-  TextStyle get finishVerificationDialogTitle => GoogleFonts.nunito(
+  TextStyle get finishVerificationDialogTitle => GoogleFonts.sora(
         fontSize: 25,
         fontWeight: FontWeight.bold,
         color: const Color(0xff180B2B),
       );
 
-  TextStyle get finishVerificationDialogBody => GoogleFonts.nunito(
+  TextStyle get finishVerificationDialogBody => GoogleFonts.sora(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF5F556F),
       );
 
-  TextStyle get defaultDialogTitle => GoogleFonts.nunito(
+  TextStyle get defaultDialogTitle => GoogleFonts.sora(
         fontSize: 25,
         fontWeight: FontWeight.bold,
         color: const Color(0xff180B2B),
       );
 
-  TextStyle get defaultDialogBody => GoogleFonts.nunito(
+  TextStyle get defaultDialogBody => GoogleFonts.sora(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF5F556F),
       );
 
-  TextStyle get kycDialogTitle => GoogleFonts.nunito(
+  TextStyle get kycDialogTitle => GoogleFonts.sora(
         fontSize: 25,
         fontWeight: FontWeight.bold,
         color: const Color(0xff180B2B),
       );
 
-  TextStyle get kycDialogCaption => GoogleFonts.nunito(
+  TextStyle get kycDialogCaption => GoogleFonts.sora(
         fontSize: 20,
         fontWeight: FontWeight.bold,
         color: const Color(0xFF0045FF),
       );
 
-  TextStyle get kycDialogBody => GoogleFonts.nunito(
+  TextStyle get kycDialogBody => GoogleFonts.sora(
         fontSize: 14,
         fontWeight: FontWeight.w700,
         color: const Color(0xFF180B2B),
       );
 
-  TextStyle get kycDialogFooter => GoogleFonts.nunito(
+  TextStyle get kycDialogFooter => GoogleFonts.sora(
         fontSize: 10,
         fontWeight: FontWeight.w500,
         color: const Color(0xFF180B2B),
       );
 
-  TextStyle get walletAltmeMessage => GoogleFonts.roboto(
+  TextStyle get walletAltmeMessage => GoogleFonts.sora(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: const Color(0xff9A8BB1),
       );
 
-  TextStyle get credentialCategoryTitle => GoogleFonts.roboto(
+  TextStyle get credentialCategoryTitle => GoogleFonts.sora(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: const Color(0xffEDEAF5),
       );
 
-  TextStyle get credentialSurfaceText => GoogleFonts.roboto(
-        fontSize: 10,
+  TextStyle get credentialSurfaceText => GoogleFonts.sora(
+        fontSize: 12,
         fontWeight: FontWeight.w400,
         color: const Color(0xff00B267),
       );
 
-  TextStyle get errorMessage => GoogleFonts.roboto(
+  TextStyle get errorMessage => GoogleFonts.sora(
         fontSize: 15,
         fontWeight: FontWeight.w400,
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get accountsText => GoogleFonts.roboto(
+  TextStyle get accountsText => GoogleFonts.sora(
         fontSize: 22,
         fontWeight: FontWeight.w600,
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get accountsName => GoogleFonts.roboto(
+  TextStyle get accountsName => GoogleFonts.sora(
         fontSize: 18,
         fontWeight: FontWeight.w500,
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get accountsListItemTitle => GoogleFonts.nunito(
+  TextStyle get accountsListItemTitle => GoogleFonts.sora(
         fontSize: 16,
         fontWeight: FontWeight.w500,
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get walletAddress => GoogleFonts.roboto(
+  TextStyle get walletAddress => GoogleFonts.sora(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         color: const Color(0xFF757575),
       );
 
-  TextStyle get textButton => GoogleFonts.roboto(
+  TextStyle get textButton => GoogleFonts.sora(
         fontSize: 16,
         fontWeight: FontWeight.w700,
-        color: const Color(0xff6600FF),
+        color: const Color(0xff75FD92),
       );
 
-  TextStyle get scrollText => GoogleFonts.roboto(
+  TextStyle get scrollText => GoogleFonts.sora(
         fontSize: 9,
         fontWeight: FontWeight.w500,
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get passPhraseText => GoogleFonts.nunito(
+  TextStyle get passPhraseText => GoogleFonts.sora(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: const Color(0xffD1CCE3),
       );
 
-  TextStyle get message => GoogleFonts.nunito(
+  TextStyle get message => GoogleFonts.sora(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: const Color(0xffEDEAF5),
       );
 
-  TextStyle get subMessage => GoogleFonts.nunito(
+  TextStyle get subMessage => GoogleFonts.sora(
         fontSize: 15,
         fontWeight: FontWeight.w400,
         color: const Color(0xff71CBFF),
       );
 
-  TextStyle get identitiyBaseSmallText => GoogleFonts.roboto(
+  TextStyle get identitiyBaseSmallText => GoogleFonts.sora(
         fontSize: 12,
         fontWeight: FontWeight.w300,
         color: const Color(0xffFFFFFF),
       );
-  TextStyle get identitiyBaseMediumBoldText => GoogleFonts.roboto(
+  TextStyle get identitiyBaseMediumBoldText => GoogleFonts.sora(
         fontSize: 21,
         fontWeight: FontWeight.w500,
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get copyToClipBoard => GoogleFonts.nunito(
+  TextStyle get copyToClipBoard => GoogleFonts.sora(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: const Color(0xffDED6EA),
         decoration: TextDecoration.underline,
       );
 
-  TextStyle get onBoardingCheckMessage => GoogleFonts.nunito(
+  TextStyle get onBoardingCheckMessage => GoogleFonts.sora(
         fontSize: 15,
         height: 1.5,
         fontWeight: FontWeight.w600,
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get messageTitle => GoogleFonts.roboto(
+  TextStyle get messageTitle => GoogleFonts.sora(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: const Color(0xffEDEAF5),
       );
 
-  TextStyle get messageSubtitle => GoogleFonts.roboto(
+  TextStyle get messageSubtitle => GoogleFonts.sora(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: const Color(0xffEDEAF5),
       );
 
-  TextStyle get radioTitle => GoogleFonts.nunito(
+  TextStyle get radioTitle => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get radioOption => GoogleFonts.nunito(
+  TextStyle get radioOption => GoogleFonts.sora(
         color: const Color(0xFFFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialManifestTitle1 => GoogleFonts.roboto(
+  TextStyle get credentialManifestTitle1 => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get credentialManifestDescription => GoogleFonts.roboto(
+  TextStyle get credentialManifestDescription => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialManifestTitle2 => GoogleFonts.roboto(
+  TextStyle get credentialManifestTitle2 => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get credentialSubtitle => GoogleFonts.roboto(
+  TextStyle get credentialSubtitle => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 14,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialStatus => GoogleFonts.roboto(
+  TextStyle get credentialStatus => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get beaconRequestPermission => GoogleFonts.roboto(
+  TextStyle get beaconRequestPermission => GoogleFonts.sora(
         color: const Color(0xff86809D),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get beaconSelectAccont => GoogleFonts.roboto(
+  TextStyle get beaconSelectAccont => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get beaconPermissionTitle => GoogleFonts.roboto(
+  TextStyle get beaconPermissionTitle => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get beaconPermissions => GoogleFonts.roboto(
+  TextStyle get beaconPermissions => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get beaconPayload => GoogleFonts.roboto(
+  TextStyle get beaconPayload => GoogleFonts.sora(
         color: const Color(0xffFFFFFF),
         fontSize: 16,
         fontWeight: FontWeight.w400,

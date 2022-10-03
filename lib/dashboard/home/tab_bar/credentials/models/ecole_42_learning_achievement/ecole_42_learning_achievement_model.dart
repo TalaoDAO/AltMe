@@ -1,6 +1,6 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/ecole_42_learning_achievement/has_credential_ecole_42.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/ecole_42_learning_achievement/has_credential_ecole_42.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'ecole_42_learning_achievement_model.g.dart';

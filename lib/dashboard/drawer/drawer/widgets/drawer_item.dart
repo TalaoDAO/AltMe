@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class DrawerItem extends StatelessWidget {
@@ -24,11 +24,28 @@ class DrawerItem extends StatelessWidget {
         onTap: onTap,
         child: Row(
           children: [
-            Image.asset(
-              icon,
+            Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(7)),
+                color: Colors.white,
+              ),
               height: 30,
               width: 30,
-              fit: BoxFit.cover,
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.iconBackgroundColor,
+                    BlendMode.srcATop,
+                  ),
+                  child: Image.asset(
+                    icon,
+                    // height: 16,
+                    // width: 16,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(

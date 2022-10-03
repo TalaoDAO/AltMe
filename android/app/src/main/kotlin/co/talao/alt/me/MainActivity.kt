@@ -1,4 +1,4 @@
-package co.altme.alt.me.altme
+package co.arago.wallet
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:altme/dashboard/dashboard.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 abstract class Recto extends StatelessWidget {

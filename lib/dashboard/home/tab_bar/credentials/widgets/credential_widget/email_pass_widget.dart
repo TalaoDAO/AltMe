@@ -1,6 +1,6 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/widgets/credential_widget/identity_credential_base_widget.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credential_widget/identity_credential_base_widget.dart';
 import 'package:flutter/material.dart';
 
 class EmailPassDisplayInList extends StatelessWidget {
@@ -70,11 +70,7 @@ class EmailPassRecto extends Recto {
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
-      expirationDate: credentialModel.expirationDate == null
-          ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+      expirationDate: '--',
     );
   }
 }

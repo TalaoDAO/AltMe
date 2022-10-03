@@ -1,4 +1,4 @@
-import 'package:altme/theme/theme.dart';
+import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -123,7 +123,7 @@ class ElevatedButtonText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.toUpperCase(),
-      style: GoogleFonts.nunito(
+      style: GoogleFonts.sora(
         color: textColor ?? Theme.of(context).colorScheme.onElevatedButton,
         fontSize: fontSize,
         fontWeight: FontWeight.w700,

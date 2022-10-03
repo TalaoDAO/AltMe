@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/widget/hero_workaround.dart';
+import 'package:arago_wallet/app/shared/widget/hero_workaround.dart';
 import 'package:flutter/material.dart';
 
 class TooltipText extends StatelessWidget {

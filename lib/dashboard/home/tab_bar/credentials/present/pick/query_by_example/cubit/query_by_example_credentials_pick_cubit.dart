@@ -1,5 +1,5 @@
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/query_by_example/model/credential_query.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/query_by_example/model/credential_query.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

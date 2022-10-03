@@ -1,6 +1,6 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/issuer_websites_page/widget/kyc_button.dart';
-import 'package:altme/l10n/l10n.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/issuer_websites_page/widget/kyc_button.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class IssuerWebsitesPage extends StatelessWidget {

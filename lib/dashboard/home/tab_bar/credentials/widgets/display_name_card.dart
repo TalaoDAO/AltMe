@@ -1,6 +1,6 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
-import 'package:altme/l10n/l10n.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class DisplayNameCard extends StatelessWidget {

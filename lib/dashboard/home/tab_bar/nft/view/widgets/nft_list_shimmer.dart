@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/nft/view/widgets/widgets.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/nft/view/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class NftListShimmer extends StatelessWidget {

@@ -31,17 +31,23 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.identityCard:
         return const Color(0xff2596be);
+      case CredentialSubjectType.aragoIdentityCard:
+        return const Color(0xff2596be);
       case CredentialSubjectType.voucher:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.loyaltyCard:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.over18:
         return const Color(0xffCAFFBF);
+      case CredentialSubjectType.aragoOver18:
+        return const Color(0xffCAFFBF);
       case CredentialSubjectType.professionalStudentCard:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.certificateOfEmployment:
         return const Color(0xFF9BF6FF);
       case CredentialSubjectType.emailPass:
+        return const Color(0xFFffD6A5);
+      case CredentialSubjectType.aragoEmailPass:
         return const Color(0xFFffD6A5);
       case CredentialSubjectType.ageRange:
         return const Color(0xFFffC6B5);
@@ -52,6 +58,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.professionalSkillAssessment:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.learningAchievement:
+        return const Color(0xFFFFADAD);
+      case CredentialSubjectType.aragoLearningAchievement:
         return const Color(0xFFFFADAD);
       case CredentialSubjectType.ecole42LearningAchievement:
         return const Color(0xFFffD6A5);
@@ -84,15 +92,21 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return Icons.perm_identity;
       case CredentialSubjectType.identityCard:
         return Icons.perm_identity;
+      case CredentialSubjectType.aragoIdentityCard:
+        return Icons.perm_identity;
       case CredentialSubjectType.loyaltyCard:
         return Icons.loyalty;
       case CredentialSubjectType.over18:
+        return Icons.accessible_rounded;
+      case CredentialSubjectType.aragoOver18:
         return Icons.accessible_rounded;
       case CredentialSubjectType.professionalStudentCard:
         return Icons.perm_identity;
       case CredentialSubjectType.certificateOfEmployment:
         return Icons.work;
       case CredentialSubjectType.emailPass:
+        return Icons.mail;
+      case CredentialSubjectType.aragoEmailPass:
         return Icons.mail;
       case CredentialSubjectType.ageRange:
         return Icons.boy;
@@ -103,6 +117,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.professionalSkillAssessment:
         return Icons.assessment_outlined;
       case CredentialSubjectType.learningAchievement:
+        return Icons.star_rate_outlined;
+      case CredentialSubjectType.aragoLearningAchievement:
         return Icons.star_rate_outlined;
       case CredentialSubjectType.ecole42LearningAchievement:
         return Icons.perm_identity;

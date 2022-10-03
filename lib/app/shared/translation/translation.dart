@@ -1,5 +1,5 @@
-import 'package:altme/app/shared/models/translation/translation.dart';
-import 'package:altme/l10n/l10n.dart';
+import 'package:arago_wallet/app/shared/models/translation/translation.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
 
 class GetTranslation {
   static String getTranslation(
@@ -11,7 +11,7 @@ class GetTranslation {
         translations.where((element) => element.language == l10n.localeName);
     if (translated.isEmpty) {
       final List<Translation> translationList =
-          translations.where((element) => element.language == 'en').toList();
+          translations.where((element) => element.language == 'fr').toList();
       if (translationList.isEmpty) {
         _translation = '';
       } else {

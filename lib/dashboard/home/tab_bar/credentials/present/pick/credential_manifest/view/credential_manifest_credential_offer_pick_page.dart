@@ -1,10 +1,10 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/credential.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
-import 'package:altme/scan/cubit/scan_cubit.dart';
-import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/wallet.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/credential.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/pin_code/pin_code.dart';
+import 'package:arago_wallet/scan/cubit/scan_cubit.dart';
+import 'package:arago_wallet/theme/theme.dart';
+import 'package:arago_wallet/wallet/wallet.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

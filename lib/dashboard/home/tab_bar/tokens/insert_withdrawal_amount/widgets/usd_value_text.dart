@@ -1,4 +1,4 @@
-import 'package:altme/app/app.dart';
+import 'package:arago_wallet/app/app.dart';
 import 'package:flutter/material.dart';
 
 class UsdValueText extends StatelessWidget {

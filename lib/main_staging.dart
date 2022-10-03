@@ -5,8 +5,8 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
-import 'package:altme/app/app.dart';
-import 'package:altme/bootstrap.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/bootstrap.dart';
 
 void main() {
   bootstrap(() => const App(flavorMode: FlavorMode.staging));

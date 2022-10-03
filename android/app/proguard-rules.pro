@@ -1,4 +1,4 @@
--keep class co.altme.alt.me.altme.** { *; }
+-keep class co.arago.wallet.** { *; }
 -keep class it.airgap.beaconsdk.** { *; }  
 -keep class com.sun.jna.** { *; }
 -keep class * implements com.sun.jna.** { *; }

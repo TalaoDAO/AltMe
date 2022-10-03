@@ -1,5 +1,5 @@
-import 'package:altme/app/shared/constants/sizes.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:arago_wallet/app/shared/constants/sizes.dart';
+import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CredentialContainer extends StatelessWidget {

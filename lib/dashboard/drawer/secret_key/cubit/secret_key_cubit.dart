@@ -1,4 +1,4 @@
-import 'package:altme/wallet/wallet.dart';
+import 'package:arago_wallet/wallet/wallet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SecretKeyCubit extends Cubit<String> {

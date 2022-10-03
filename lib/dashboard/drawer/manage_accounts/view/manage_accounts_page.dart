@@ -1,9 +1,9 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/manage_accounts/manage_accounts.dart';
-import 'package:altme/import_wallet/import_wallet.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:altme/wallet/model/model.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/drawer/manage_accounts/manage_accounts.dart';
+import 'package:arago_wallet/import_wallet/import_wallet.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/wallet/cubit/wallet_cubit.dart';
+import 'package:arago_wallet/wallet/model/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';

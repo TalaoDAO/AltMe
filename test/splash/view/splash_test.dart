@@ -1,6 +1,6 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/flavor/cubit/flavor_cubit.dart';
-import 'package:altme/splash/splash.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/flavor/cubit/flavor_cubit.dart';
+import 'package:arago_wallet/splash/splash.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

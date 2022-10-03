@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/query_by_example/model/example.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/query_by_example/model/example.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'credential_query.g.dart';

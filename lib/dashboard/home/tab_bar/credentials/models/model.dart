@@ -1,4 +1,8 @@
 export 'age_range/age_range_model.dart';
+export 'arago_email_pass/arago_email_pass_model.dart';
+export 'arago_identity_card/arago_identity_card_model.dart';
+export 'arago_learning_achievement/arago_learning_achievement_model.dart';
+export 'arago_over18/arago_over18_model.dart';
 export 'author/author.dart';
 export 'certificate_of_employment/certificate_of_employment_model.dart';
 export 'credential/credential.dart';

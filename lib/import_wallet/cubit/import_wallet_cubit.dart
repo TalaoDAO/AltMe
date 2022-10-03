@@ -1,7 +1,7 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/did.dart';
-import 'package:altme/wallet/wallet.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/did/did.dart';
+import 'package:arago_wallet/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';

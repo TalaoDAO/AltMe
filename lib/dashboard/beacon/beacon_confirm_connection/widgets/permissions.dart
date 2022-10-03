@@ -1,5 +1,5 @@
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class Permissions extends StatelessWidget {

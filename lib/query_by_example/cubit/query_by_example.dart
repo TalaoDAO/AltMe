@@ -1,4 +1,4 @@
-import 'package:altme/query_by_example/model/query.dart';
+import 'package:arago_wallet/query_by_example/model/query.dart';
 import 'package:bloc/bloc.dart';
 
 class QueryByExampleCubit extends Cubit<Query> {

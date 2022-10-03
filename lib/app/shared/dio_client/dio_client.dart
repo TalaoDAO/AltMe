@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:altme/app/app.dart';
+import 'package:arago_wallet/app/app.dart';
 import 'package:dio/dio.dart';
 //import 'package:flutter/foundation.dart';
 part 'logging.dart';

@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/enum/type/credential_subject_type/credential_subject_type.dart';
+import 'package:arago_wallet/app/shared/enum/type/credential_subject_type/credential_subject_type.dart';
 
 class DiscoverList {
   static final List<CredentialSubjectType> gamingCategories = [

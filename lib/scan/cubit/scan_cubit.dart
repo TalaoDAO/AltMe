@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
-import 'package:altme/wallet/wallet.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:arago_wallet/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';

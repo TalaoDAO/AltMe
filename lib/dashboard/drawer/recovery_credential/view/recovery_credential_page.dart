@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/recovery_credential/cubit/recovery_credential_cubit.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/drawer/recovery_credential/cubit/recovery_credential_cubit.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/theme/theme.dart';
+import 'package:arago_wallet/wallet/cubit/wallet_cubit.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';

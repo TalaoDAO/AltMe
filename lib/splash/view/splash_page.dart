@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/deep_link/deep_link.dart';
-import 'package:altme/splash/splash.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/deep_link/deep_link.dart';
+import 'package:arago_wallet/splash/splash.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;

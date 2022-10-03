@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:altme/app/app.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';

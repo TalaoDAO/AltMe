@@ -1,5 +1,5 @@
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/splash/splash.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,6 +1,6 @@
-import 'package:altme/app/shared/constants/sizes.dart';
-import 'package:altme/app/shared/widget/my_text.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:arago_wallet/app/shared/constants/sizes.dart';
+import 'package:arago_wallet/app/shared/widget/my_text.dart';
+import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends PreferredSize {

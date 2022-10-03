@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/flavor/flavor.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/flavor/flavor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -82,6 +82,14 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.certificateOfEmployment:
+        break;
+      case CredentialSubjectType.aragoEmailPass:
+        break;
+      case CredentialSubjectType.aragoIdentityCard:
+        break;
+      case CredentialSubjectType.aragoLearningAchievement:
+        break;
+      case CredentialSubjectType.aragoOver18:
         break;
     }
     return HomeCredential(

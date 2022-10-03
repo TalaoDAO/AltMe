@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';

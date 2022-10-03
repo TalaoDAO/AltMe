@@ -1,8 +1,8 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/wallet.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credential_widget/expansion_tile_title.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -164,10 +164,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     initiallyExpanded: true,
                     childrenPadding: EdgeInsets.zero,
                     tilePadding: const EdgeInsets.symmetric(horizontal: 8),
-                    title: Text(
-                      l10n.credentialDetailsActivity,
-                      style:
-                          Theme.of(context).textTheme.credentialManifestTitle2,
+                    title: ExpansionTileTitle(
+                      title: l10n.credentialDetailsActivity,
                     ),
                     children: <Widget>[
                       Padding(

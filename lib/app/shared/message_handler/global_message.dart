@@ -1,4 +1,4 @@
-import 'package:altme/l10n/l10n.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
 
 class GlobalMessage {
   GlobalMessage(this.l10n);

@@ -1,5 +1,4 @@
-import 'package:altme/app/shared/constants/sizes.dart';
-import 'package:altme/dashboard/dashboard.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

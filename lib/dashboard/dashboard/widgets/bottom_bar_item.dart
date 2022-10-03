@@ -1,4 +1,4 @@
-import 'package:altme/theme/theme.dart';
+import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class BottomBarItem extends StatelessWidget {
@@ -29,7 +29,7 @@ class BottomBarItem extends StatelessWidget {
             child: ImageIcon(
               AssetImage(icon),
               color: isSelected
-                  ? Theme.of(context).colorScheme.onPrimary
+                  ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).colorScheme.unSelectedLabel,
               size: 20,
             ),
@@ -40,7 +40,7 @@ class BottomBarItem extends StatelessWidget {
             overflow: TextOverflow.fade,
             style: Theme.of(context).textTheme.bottomBar.copyWith(
                   color: isSelected
-                      ? Theme.of(context).colorScheme.onPrimary
+                      ? Colors.white
                       : Theme.of(context).colorScheme.unSelectedLabel,
                 ),
           ),

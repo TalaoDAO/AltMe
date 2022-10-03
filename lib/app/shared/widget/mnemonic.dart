@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/widget/phrase_word.dart';
+import 'package:arago_wallet/app/shared/widget/phrase_word.dart';
 import 'package:flutter/material.dart';
 
 class MnemonicDisplay extends StatelessWidget {

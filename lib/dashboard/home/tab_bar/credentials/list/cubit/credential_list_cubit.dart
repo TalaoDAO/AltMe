@@ -1,7 +1,7 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/constants/discover_list.dart';
-import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/wallet/wallet.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/app/shared/constants/discover_list.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -99,6 +99,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.tezVoucher:
           break;
         case CredentialSubjectType.talaoCommunityCard:
+          break;
+        case CredentialSubjectType.aragoEmailPass:
+          break;
+        case CredentialSubjectType.aragoIdentityCard:
+          break;
+        case CredentialSubjectType.aragoLearningAchievement:
+          break;
+        case CredentialSubjectType.aragoOver18:
           break;
       }
       switch (credentialSubject.credentialCategory) {
@@ -287,6 +295,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.tezVoucher:
             break;
           case CredentialSubjectType.talaoCommunityCard:
+            break;
+          case CredentialSubjectType.aragoEmailPass:
+            break;
+          case CredentialSubjectType.aragoIdentityCard:
+            break;
+          case CredentialSubjectType.aragoLearningAchievement:
+            break;
+          case CredentialSubjectType.aragoOver18:
             break;
         }
 
@@ -540,6 +556,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.tezVoucher:
             break;
           case CredentialSubjectType.talaoCommunityCard:
+            break;
+          case CredentialSubjectType.aragoEmailPass:
+            break;
+          case CredentialSubjectType.aragoIdentityCard:
+            break;
+          case CredentialSubjectType.aragoLearningAchievement:
+            break;
+          case CredentialSubjectType.aragoOver18:
             break;
         }
 

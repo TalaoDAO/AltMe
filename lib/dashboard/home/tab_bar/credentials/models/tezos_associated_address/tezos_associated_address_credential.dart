@@ -1,4 +1,4 @@
-import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'tezos_associated_address_credential.g.dart';

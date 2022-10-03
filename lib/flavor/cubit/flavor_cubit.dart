@@ -1,4 +1,4 @@
-import 'package:altme/app/app.dart';
+import 'package:arago_wallet/app/app.dart';
 import 'package:bloc/bloc.dart';
 
 class FlavorCubit extends Cubit<FlavorMode> {

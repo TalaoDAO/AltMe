@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:altme/app/shared/constants/constants.dart';
-import 'package:altme/did/did.dart';
-import 'package:altme/wallet/wallet.dart';
+import 'package:arago_wallet/app/shared/constants/constants.dart';
+import 'package:arago_wallet/did/did.dart';
+import 'package:arago_wallet/wallet/wallet.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 Future<bool> isWalletCreated({

@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/widget/custom_app_bar.dart';
+import 'package:arago_wallet/app/shared/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class BasePage extends StatelessWidget {

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:altme/app/app.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/wallet/cubit/wallet_cubit.dart';
 
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';

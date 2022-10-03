@@ -55,7 +55,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "co.altme.alt.me.altme"
+        applicationId "co.arago.wallet"
         minSdkVersion 21
         multiDexEnabled true
         targetSdkVersion flutter.targetSdkVersion
@@ -92,17 +92,17 @@ android {
         production {
             dimension "default"
             applicationIdSuffix ""
-            manifestPlaceholders = [appName: "Altme"]
+            manifestPlaceholders = [appName: "arago"]
         }
         staging {
             dimension "default"
             applicationIdSuffix ".stg"
-            manifestPlaceholders = [appName: "[STG] Altme"]
+            manifestPlaceholders = [appName: "[STG] arago"]
         }        
         development {
             dimension "default"
             applicationIdSuffix ".dev"
-            manifestPlaceholders = [appName: "[DEV] Altme"]
+            manifestPlaceholders = [appName: "[DEV] arago"]
         }
     }
 

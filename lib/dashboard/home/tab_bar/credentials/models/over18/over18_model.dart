@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'over18_model.g.dart';

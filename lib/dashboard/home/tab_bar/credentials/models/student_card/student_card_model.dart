@@ -1,7 +1,7 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/author/author.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/professional_student_card/professional_student_card_recipient.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/author/author.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/professional_student_card/professional_student_card_recipient.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'student_card_model.g.dart';

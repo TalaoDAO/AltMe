@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'credential_subject_model.g.dart';
@@ -32,6 +32,8 @@ class CredentialSubjectModel {
         return IdentityPassModel.fromJson(json);
       case 'IdCard':
         return IdentityCardModel.fromJson(json);
+      case 'AragoIdCard':
+        return AragoIdentityCardModel.fromJson(json);
       case 'Voucher':
         return VoucherModel.fromJson(json);
       case 'TezVoucher_1':
@@ -42,6 +44,8 @@ class CredentialSubjectModel {
         return LoyaltyCardModel.fromJson(json);
       case 'Over18':
         return Over18Model.fromJson(json);
+      case 'AragoOver18':
+        return AragoOver18Model.fromJson(json);
       case 'ProfessionalStudentCard':
         return ProfessionalStudentCardModel.fromJson(json);
       case 'StudentCard':
@@ -50,6 +54,8 @@ class CredentialSubjectModel {
         return CertificateOfEmploymentModel.fromJson(json);
       case 'EmailPass':
         return EmailPassModel.fromJson(json);
+      case 'AragoEmailPass':
+        return AragoEmailPassModel.fromJson(json);
       case 'AgeRange':
         return AgeRangeModel.fromJson(json);
       case 'PhonePass':
@@ -60,6 +66,8 @@ class CredentialSubjectModel {
         return ProfessionalSkillAssessmentModel.fromJson(json);
       case 'LearningAchievement':
         return LearningAchievementModel.fromJson(json);
+      case 'AragoLearningAchievement':
+        return AragoLearningAchievementModel.fromJson(json);
       case 'TalaoCommunity':
         return TalaoCommunityCardModel.fromJson(json);
     }

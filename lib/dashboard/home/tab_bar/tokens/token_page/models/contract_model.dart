@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/constants/urls.dart';
+import 'package:arago_wallet/app/shared/constants/urls.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 

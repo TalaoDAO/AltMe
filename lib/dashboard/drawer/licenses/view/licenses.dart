@@ -1,5 +1,5 @@
-import 'package:altme/app/shared/widget/base/markdown_page.dart';
-import 'package:altme/l10n/l10n.dart';
+import 'package:arago_wallet/app/shared/widget/base/markdown_page.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class LicensesPage extends StatelessWidget {
@@ -14,7 +14,7 @@ class LicensesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final languagesList = ['fr', 'it', 'es', 'de'];
-    var language = 'en';
+    var language = 'fr';
     if (languagesList.contains(l10n.localeName)) {
       language = l10n.localeName;
     }

@@ -1,5 +1,5 @@
-import 'package:altme/app/app.dart';
-import 'package:altme/pin_code/pin_code.dart';
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/pin_code/pin_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
