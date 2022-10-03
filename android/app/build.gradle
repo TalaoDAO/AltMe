@@ -125,4 +125,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.github.RampNetwork:ramp-sdk-android:1.+'
 }

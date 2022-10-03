@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="co.altme.alt.me.altme">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,6 +22,7 @@
     </queries>
 
     <application
+        tools:replace="android:label"
         android:label="${appName}"
         android:icon="@mipmap/ic_launcher">
         <activity
