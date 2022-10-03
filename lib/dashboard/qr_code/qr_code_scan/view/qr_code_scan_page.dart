@@ -91,7 +91,9 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
                         if (!isScanned) {
                           isScanned = true;
                           final String code = qrcode.rawValue!;
-                          context.read<QRCodeScanCubit>().host(url: code);
+                          context
+                              .read<QRCodeScanCubit>()
+                              .process(scannedResponse: code);
                           scannerController.stop();
                         }
                       }

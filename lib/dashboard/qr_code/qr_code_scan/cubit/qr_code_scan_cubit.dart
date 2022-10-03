@@ -41,6 +41,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final JWTDecode jwtDecode;
   final Beacon beacon;
 
+  final log = getLogger('QRCodeScanCubit');
+
   @override
   Future<void> close() async {
     //cancel streams
@@ -48,6 +50,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> process({required String? scannedResponse}) async {
+    log.i('processing scanned qr code - $scannedResponse');
     emit(state.loading(isDeepLink: false));
     try {
       if (scannedResponse == null || scannedResponse.isEmpty) {
@@ -66,6 +69,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         await host(url: scannedResponse);
       }
     } on FormatException {
+      log.i('Format Exception');
       emit(
         state.error(
           messageHandler: ResponseMessage(
@@ -75,6 +79,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         ),
       );
     } catch (e) {
+      log.i('Error -$e');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
