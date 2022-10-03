@@ -1,4 +1,4 @@
-app_identifier("io.altme.wallet") # The bundle identifier of your app
+app_identifier("io.arago.wallet") # The bundle identifier of your app
 apple_id("googandads@gmail.com") # Your Apple email address
 
 itc_team_id("125176258") # App Store Connect Team ID
