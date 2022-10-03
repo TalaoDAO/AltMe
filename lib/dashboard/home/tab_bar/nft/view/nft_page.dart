@@ -1,10 +1,9 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/nft/view/widgets/widgets.dart';
+import 'package:altme/dashboard/home/tab_bar/nft/widgets/widgets.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,17 +22,7 @@ class _NftPageState extends State<NftPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocProvider<NftCubit>(
-      create: (context) => NftCubit(
-        client: DioClient(
-          context.read<ManageNetworkCubit>().state.network.tzktUrl,
-          Dio(),
-        ),
-        walletCubit: context.read<WalletCubit>(),
-        manageNetworkCubit: context.read<ManageNetworkCubit>(),
-      ),
-      child: const NftView(),
-    );
+    return const NftView();
   }
 }
 
@@ -48,54 +37,59 @@ class _NftViewState extends State<NftView> {
   int activeIndex = -1;
 
   Future<void> onRefresh() async {
-    await context.read<NftCubit>().onRefresh();
+    await context.read<NftCubit>().fetchFromZero();
+  }
+
+  void onItemClick(NftModel nftModel) {
+    Navigator.of(context).push<void>(NftDetailsPage.route(nftModel: nftModel));
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<WalletCubit, WalletState>(
-          listener: (context, state) {
-            if (activeIndex != state.currentCryptoIndex) {
-              onRefresh();
-            }
-            activeIndex = state.currentCryptoIndex;
-          },
-        ),
-        BlocListener<ManageNetworkCubit, ManageNetworkState>(
-          listener: (context, state) {
-            onRefresh();
-          },
-        ),
-      ],
-      child: BasePage(
-        scrollView: false,
-        padding: EdgeInsets.zero,
-        backgroundColor: Theme.of(context).colorScheme.transparent,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MyCollectionText(),
-            Expanded(
-              child: BlocConsumer<NftCubit, NftState>(
-                listener: (context, state) {
-                  if (state.status == AppStatus.loading) {
-                    LoadingView().show(context: context);
-                  } else {
-                    LoadingView().hide();
-                  }
+    return BasePage(
+      scrollView: false,
+      padding: EdgeInsets.zero,
+      backgroundColor: Theme.of(context).colorScheme.transparent,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const MyCollectionText(),
+          Expanded(
+            child: MultiBlocListener(
+              listeners: [
+                BlocListener<WalletCubit, WalletState>(
+                  listener: (context, state) {
+                    if (activeIndex != state.currentCryptoIndex) {
+                      onRefresh();
+                    }
+                    activeIndex = state.currentCryptoIndex;
+                  },
+                ),
+                BlocListener<ManageNetworkCubit, ManageNetworkState>(
+                  listener: (context, state) {
+                    onRefresh();
+                  },
+                ),
+                BlocListener<NftCubit, NftState>(
+                  listener: (context, state) {
+                    if (state.status == AppStatus.loading) {
+                      LoadingView().show(context: context);
+                    } else {
+                      LoadingView().hide();
+                    }
 
-                  if (state.message != null &&
-                      state.status != AppStatus.errorWhileFetching) {
-                    AlertMessage.showStateMessage(
-                      context: context,
-                      stateMessage: state.message!,
-                    );
-                  }
-                },
+                    if (state.message != null) {
+                      AlertMessage.showStateMessage(
+                        context: context,
+                        stateMessage: state.message!,
+                      );
+                    }
+                  },
+                ),
+              ],
+              child: BlocBuilder<NftCubit, NftState>(
                 builder: (_, state) {
                   String message = '';
                   if (state.message != null) {
@@ -116,6 +110,7 @@ class _NftViewState extends State<NftView> {
                     } else {
                       return NftList(
                         nftList: state.data,
+                        onItemClick: onItemClick,
                         onRefresh: onRefresh,
                         onScrollEnded: () =>
                             context.read<NftCubit>().fetchMoreTezosNfts(),
@@ -132,8 +127,8 @@ class _NftViewState extends State<NftView> {
                 },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

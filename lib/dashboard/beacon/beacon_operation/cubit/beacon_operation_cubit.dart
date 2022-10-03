@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/beacon/beacon.dart';
+import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
@@ -20,6 +22,8 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     required this.beaconCubit,
     required this.dioClient,
     required this.keyGenerator,
+    required this.nftCubit,
+    required this.tokensCubit,
   }) : super(const BeaconOperationState());
 
   final WalletCubit walletCubit;
@@ -27,6 +31,8 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
   final BeaconCubit beaconCubit;
   final DioClient dioClient;
   final KeyGenerator keyGenerator;
+  final NftCubit nftCubit;
+  final TokensCubit tokensCubit;
 
   final log = getLogger('BeaconOperationCubit');
 
@@ -36,7 +42,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
 
   Future<void> getXtzPrice() async {
     try {
-      log.i('fetching xtz price');
+      log.i('fetching xtz USDprice');
       final response =
           await dioClient.get(Urls.xtzPrice) as Map<String, dynamic>;
       final XtzData xtzData = XtzData.fromJson(response);
@@ -133,6 +139,8 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
             ),
           ),
         );
+        unawaited(nftCubit.fetchFromZero());
+        unawaited(tokensCubit.fetchFromZero());
       } else {
         throw ResponseMessage(
           ResponseString.RESPONSE_STRING_OPERATION_FAILED,
@@ -181,7 +189,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       id: beaconCubit.state.beaconRequest!.request!.id!,
       transactionHash: null,
     );
-    emit(state.copyWith(status: AppStatus.success));
+    emit(state.copyWith(status: AppStatus.goBack));
   }
 
   Future<OperationsList> getOperationList() async {

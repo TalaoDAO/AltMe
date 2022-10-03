@@ -21,6 +21,7 @@ class InfoDialog extends StatelessWidget {
   final Color? bgColor;
   final Color? textColor;
   final String icon;
+
   @override
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;

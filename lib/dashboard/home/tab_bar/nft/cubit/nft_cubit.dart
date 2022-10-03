@@ -23,12 +23,15 @@ class NftCubit extends Cubit<NftState> {
   final ManageNetworkCubit manageNetworkCubit;
 
   final int _limit = 10;
+  int _offsetOfLoadedData = -1;
 
   List<NftModel> data = [];
 
   final log = getLogger('NftCubit');
 
   Future<void> getTezosNftList() async {
+    if (state.offset == _offsetOfLoadedData) return;
+    _offsetOfLoadedData = state.offset;
     if (data.length < state.offset) return;
     try {
       log.i('starting funtion getTezosNftList()');
@@ -48,8 +51,9 @@ class NftCubit extends Cubit<NftState> {
         queryParameters: <String, dynamic>{
           'account': walletAddress,
           'balance.eq': 1,
+          'token.metadata.null': false,
           'select':
-              'token.tokenId as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance', // ignore: lines_longer_than_80_chars
+              'token.tokenId as tokenId,token.id as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri,token.metadata.description as description,token.standard as standard,token.metadata.symbol as symbol,token.contract.address as contractAddress', // ignore: lines_longer_than_80_chars
           'offset': state.offset,
           'limit': _limit,
         },
@@ -57,12 +61,6 @@ class NftCubit extends Cubit<NftState> {
       // TODO(all): check the balance variable of NFTModel
       // and get right value from api
       final List<NftModel> newData = response
-          // .where(
-          //   (dynamic json) => json['displayUri'] != null,
-          // )
-          // .where(
-          //   (dynamic json) => json['balance'] != '0',
-          // )
           .map((dynamic e) => NftModel.fromJson(e as Map<String, dynamic>))
           .toList();
 
@@ -73,16 +71,19 @@ class NftCubit extends Cubit<NftState> {
       }
       log.i('nfts - $data');
       emit(state.populate(data: data));
-    } catch (e) {
+    } catch (e, s) {
       if (isClosed) return;
-      log.e('failed to fetch nfts');
+      log.e('failed to fetch nfts, e: $e, s: $s');
       emit(
         state.copyWith(
           status: state.offset == 0
               ? AppStatus.errorWhileFetching
               : AppStatus.error,
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          message: StateMessage.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
           ),
           offset: state.offset == 0 ? 0 : state.offset - 1,
         ),
@@ -90,8 +91,9 @@ class NftCubit extends Cubit<NftState> {
     }
   }
 
-  Future<void> onRefresh() async {
+  Future<void> fetchFromZero() async {
     log.i('refreshing nft page');
+    _offsetOfLoadedData = -1;
     emit(state.copyWith(offset: 0));
     await getTezosNftList();
   }

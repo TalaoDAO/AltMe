@@ -17,11 +17,13 @@ class BeaconConfirmConnectionCubit extends Cubit<BeaconConfirmConnectionState> {
     required this.walletCubit,
     required this.beacon,
     required this.beaconCubit,
+    required this.beaconRepository,
   }) : super(const BeaconConfirmConnectionState());
 
   final WalletCubit walletCubit;
   final Beacon beacon;
   final BeaconCubit beaconCubit;
+  final BeaconRepository beaconRepository;
 
   final log = getLogger('BeaconConfirmConnectionCubit');
 
@@ -43,6 +45,11 @@ class BeaconConfirmConnectionCubit extends Cubit<BeaconConfirmConnectionState> {
 
       if (success) {
         log.i('Connected to beacon');
+        final savedPeerData = SavedPeerData(
+          peer: beaconCubit.state.beaconRequest!.peer!,
+          walletAddress: currentAccount.walletAddress,
+        );
+        await beaconRepository.insert(savedPeerData);
         emit(
           state.copyWith(
             appStatus: AppStatus.success,
@@ -80,6 +87,6 @@ class BeaconConfirmConnectionCubit extends Cubit<BeaconConfirmConnectionState> {
       publicKey: null,
       address: null,
     );
-    emit(state.copyWith(appStatus: AppStatus.success));
+    emit(state.copyWith(appStatus: AppStatus.goBack));
   }
 }

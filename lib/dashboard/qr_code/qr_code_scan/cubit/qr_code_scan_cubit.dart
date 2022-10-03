@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -30,7 +29,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.deepLinkCubit,
     required this.jwtDecode,
     required this.beacon,
-    required this.secureStorageProvider,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -42,7 +40,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final DeepLinkCubit deepLinkCubit;
   final JWTDecode jwtDecode;
   final Beacon beacon;
-  final SecureStorageProvider secureStorageProvider;
+
+  final log = getLogger('QRCodeScanCubit');
 
   @override
   Future<void> close() async {
@@ -51,6 +50,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> process({required String? scannedResponse}) async {
+    log.i('processing scanned qr code - $scannedResponse');
     emit(state.loading(isDeepLink: false));
     try {
       if (scannedResponse == null || scannedResponse.isEmpty) {
@@ -64,16 +64,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         await beacon.pair(pairingRequest: pairingRequest);
 
-        await secureStorageProvider.set(
-          SecureStorageKeys.pairingRequest,
-          pairingRequest,
-        );
-
         emit(state.copyWith(qrScanStatus: QrScanStatus.idle));
       } else {
         await host(url: scannedResponse);
       }
     } on FormatException {
+      log.i('Format Exception');
       emit(
         state.error(
           messageHandler: ResponseMessage(
@@ -83,6 +79,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         ),
       );
     } catch (e) {
+      log.i('Error -$e');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {

@@ -5,6 +5,7 @@ class Parameters {
     'AgeRange',
     'Gender',
     'IdCard',
-    'EmailPass'
+    'EmailPass',
+    'Nationality'
   ];
 }

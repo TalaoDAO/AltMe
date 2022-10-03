@@ -1,4 +1,5 @@
 export 'detail/credentials_detail.dart';
+export 'helper_functions/helper_functions.dart';
 export 'list/credentials_list.dart';
 export 'models/model.dart';
 export 'present/credential_present.dart';

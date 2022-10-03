@@ -6,6 +6,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class BeaconConfirmConnectionPage extends StatelessWidget {
   const BeaconConfirmConnectionPage({
@@ -26,6 +27,7 @@ class BeaconConfirmConnectionPage extends StatelessWidget {
         beacon: Beacon(),
         beaconCubit: context.read<BeaconCubit>(),
         walletCubit: context.read<WalletCubit>(),
+        beaconRepository: BeaconRepository(secure_storage.getSecureStorage),
       ),
       child: const BeaconConfirmConnectionView(),
     );
@@ -57,6 +59,19 @@ class BeaconConfirmConnectionView extends StatelessWidget {
         }
 
         if (state.status == AppStatus.success) {
+          Navigator.of(context).pop();
+          Navigator.of(context).push<void>(
+            BeaconConnectedDappsPage.route(
+              walletAddress: context
+                  .read<WalletCubit>()
+                  .state
+                  .currentAccount
+                  .walletAddress,
+            ),
+          );
+        }
+
+        if (state.status == AppStatus.goBack) {
           Navigator.of(context).pop();
         }
       },
@@ -114,12 +129,28 @@ class BeaconConfirmConnectionView extends StatelessWidget {
                 right: Sizes.spaceSmall,
                 bottom: Sizes.spaceSmall,
               ),
-              child: MyElevatedButton(
-                borderRadius: Sizes.normalRadius,
-                text: l10n.connect,
-                onPressed: () {
-                  context.read<BeaconConfirmConnectionCubit>().connect();
-                },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MyGradientButton(
+                    verticalSpacing: 15,
+                    borderRadius: Sizes.normalRadius,
+                    text: l10n.connect,
+                    onPressed: () {
+                      context.read<BeaconConfirmConnectionCubit>().connect();
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  MyOutlinedButton(
+                    borderRadius: Sizes.normalRadius,
+                    text: l10n.cancel,
+                    onPressed: () {
+                      context
+                          .read<BeaconConfirmConnectionCubit>()
+                          .rejectConnection();
+                    },
+                  ),
+                ],
               ),
             ),
           ),

@@ -228,6 +228,13 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE:
           return ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE
               .localise(context);
+
+        case ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP:
+          return ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP
+              .localise(context);
+        case ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION:
+          return ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION
+              .localise(context);
       }
     }
     return '';

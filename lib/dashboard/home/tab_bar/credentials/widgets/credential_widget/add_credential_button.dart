@@ -11,13 +11,13 @@ class AddCredentialButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BackgroundCard(
-      color: Theme.of(context).colorScheme.credentialBackground,
-      padding: const EdgeInsets.all(4),
-      child: GestureDetector(
-        onTap: () {
-          context.read<DashboardCubit>().onPageChanged(1);
-        },
+    return TransparentInkWell(
+      onTap: () {
+        context.read<DashboardCubit>().onPageChanged(1);
+      },
+      child: BackgroundCard(
+        color: Theme.of(context).colorScheme.credentialBackground,
+        padding: const EdgeInsets.all(4),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,

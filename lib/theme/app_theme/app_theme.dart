@@ -830,4 +830,16 @@ extension CustomTextTheme on TextTheme {
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
+
+  TextStyle get beaconWalletAddress => GoogleFonts.roboto(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xffFFFFFF),
+      );
+
+  TextStyle get dappName => GoogleFonts.roboto(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xffFFFFFF),
+      );
 }

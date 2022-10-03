@@ -99,7 +99,7 @@ class _InsertWithdrawalAmountViewState
                 onPressed: state.isValidWithdrawal
                     ? () {
                         Navigator.of(context).push<void>(
-                          ConfirmWithdrawalPage.route(
+                          ConfirmTokenTransactionPage.route(
                             selectedToken: state.selectedToken,
                             withdrawalAddress: widget.withdrawalAddress,
                             amount: state.amount,

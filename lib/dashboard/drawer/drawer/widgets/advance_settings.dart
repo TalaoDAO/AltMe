@@ -4,8 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class AdvanceSettings extends StatelessWidget {
-  const AdvanceSettings({Key? key}) : super(key: key);
+class AdvancedSettings extends StatelessWidget {
+  const AdvancedSettings({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +24,9 @@ class AdvanceSettings extends StatelessWidget {
             children: [
               DrawerItem(
                 icon: IconStrings.advanceSettings,
-                title: l10n.advanceSettings,
+                title: l10n.categories,
                 onTap: () => Navigator.of(context).push<void>(
-                  AdvanceSettingsPage.route(),
+                  AdvancedSettingsPage.route(),
                 ),
               ),
             ],
