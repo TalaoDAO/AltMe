@@ -33,7 +33,36 @@ Future<void> getMutipleCredentials(
     secureStorageProvider,
     preAuthorizedCode,
   );
-// Wait 5 minutes to let passbase verification time to happen
+// Wait 1 minute to let passbase verification time to happen
+  await multipleCredentialsTimer(
+    preAuthorizedCode,
+    client,
+    secureStorageProvider,
+    walletCubit,
+  );
+}
+
+Future<void> multipleCredentialsTimer(
+  String preAuthorizedCode,
+  DioClient client,
+  secure_storage.SecureStorageProvider secureStorageProvider,
+  WalletCubit walletCubit,
+) async {
+  Timer.periodic(
+      const Duration(
+        minutes: Parameters.multipleCredentialsProcessDelay,
+      ), (timer) async {
+    final bool result = await getCredentialsFromIssuer(
+      preAuthorizedCode,
+      client,
+      Parameters.credentialTypeList,
+      secureStorageProvider,
+      walletCubit,
+    );
+    if (result) {
+      timer.cancel();
+    }
+  });
   Future.delayed(
       const Duration(
         minutes: Parameters.multipleCredentialsProcessDelay,
@@ -48,7 +77,7 @@ Future<void> getMutipleCredentials(
   });
 }
 
-Future<void> getCredentialsFromIssuer(
+Future<bool> getCredentialsFromIssuer(
   String preAuthorizedCode,
   DioClient client,
   List<String> credentialTypeList,
@@ -91,9 +120,11 @@ Future<void> getCredentialsFromIssuer(
       );
       // insert the credential in the wallet
       await walletCubit.insertCredential(credentialModel);
+      unawaited(unregisterMultipleCredentialsProcess(secureStorageProvider));
+      return true;
     }
   }
-  unawaited(unregisterMultipleCredentialsProcess(secureStorageProvider));
+  return false;
 }
 
 Future<dynamic> getCredential(
