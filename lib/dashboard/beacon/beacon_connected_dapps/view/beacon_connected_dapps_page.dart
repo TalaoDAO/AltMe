@@ -99,7 +99,7 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
         }
         return BasePage(
           scrollView: false,
-          title: l10n.tezos,
+          title: l10n.connectedApps,
           titleLeading: const BackLeadingButton(),
           body: BackgroundCard(
             height: double.infinity,
@@ -131,49 +131,6 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
                             widget.walletAddress,
                             style:
                                 Theme.of(context).textTheme.beaconWalletAddress,
-                          ),
-                          const SizedBox(height: Sizes.spaceXLarge),
-                          if (state.xtzModel != null)
-                            TransparentInkWell(
-                              child: TokenItem(token: state.xtzModel!),
-                              onTap: () {
-                                // Navigator.of(context).push<void>(
-                                //   SendReceiveHomePage.route(
-                                //     selectedToken: state.xtzModel!,
-                                //    beaconWalletAddress: widget.walletAddress,
-                                //   ),
-                                // );
-                              },
-                            )
-                          else
-                            const TokenItem(
-                              token: TokenModel(
-                                id: -1,
-                                contractAddress: '',
-                                name: 'Tezos',
-                                symbol: 'XTZ',
-                                icon:
-                                    'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
-                                balance: '0',
-                                decimals: '6',
-                                standard: 'fa1.2',
-                                tokenUSDPrice: 0,
-                                balanceInUSD: 0,
-                              ),
-                            ),
-                          const SizedBox(height: Sizes.spaceNormal),
-                          Center(
-                            child: ShareButton(
-                              onTap: () {
-                                Navigator.of(context).push<void>(
-                                  ReceivePage.route(
-                                    accountAddress: widget.walletAddress,
-                                    item: 'XTZ or NFTs',
-                                    description: l10n.beaconShareMessage,
-                                  ),
-                                );
-                              },
-                            ),
                           ),
                           const SizedBox(height: Sizes.spaceXLarge),
                           Text(
