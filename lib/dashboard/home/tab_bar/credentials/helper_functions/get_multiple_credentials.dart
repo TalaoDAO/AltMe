@@ -33,7 +33,36 @@ Future<void> getMutipleCredentials(
     secureStorageProvider,
     preAuthorizedCode,
   );
-// Wait 5 minutes to let passbase verification time to happen
+// Wait 1 minute to let passbase verification time to happen
+  await multipleCredentialsTimer(
+    preAuthorizedCode,
+    client,
+    secureStorageProvider,
+    walletCubit,
+  );
+}
+
+Future<void> multipleCredentialsTimer(
+  String preAuthorizedCode,
+  DioClient client,
+  secure_storage.SecureStorageProvider secureStorageProvider,
+  WalletCubit walletCubit,
+) async {
+  Timer.periodic(
+      const Duration(
+        minutes: Parameters.multipleCredentialsProcessDelay,
+      ), (timer) async {
+    final bool result = await getCredentialsFromIssuer(
+      preAuthorizedCode,
+      client,
+      Parameters.credentialTypeList,
+      secureStorageProvider,
+      walletCubit,
+    );
+    if (result) {
+      timer.cancel();
+    }
+  });
   Future.delayed(
       const Duration(
         minutes: Parameters.multipleCredentialsProcessDelay,
@@ -48,7 +77,7 @@ Future<void> getMutipleCredentials(
   });
 }
 
-Future<void> getCredentialsFromIssuer(
+Future<bool> getCredentialsFromIssuer(
   String preAuthorizedCode,
   DioClient client,
   List<String> credentialTypeList,
@@ -66,34 +95,39 @@ Future<void> getCredentialsFromIssuer(
   final String accessToken = data['access_token'] as String;
   final String nonce = data['c_nonce'] as String;
 
-  for (final type in credentialTypeList) {
-    final dynamic credential = await getCredential(
-      accessToken,
-      nonce,
-      credentialEndPoint,
-      type,
-      client,
-      secureStorageProvider,
-    );
-
-    // prepare credential for insertion
-    if (credential != null) {
-      final Map<String, dynamic> newCredential =
-          Map<String, dynamic>.from(credential as Map<String, dynamic>);
-      newCredential['credentialPreview'] = credential;
-
-      final credentialModel = CredentialModel.copyWithData(
-        oldCredentialModel: CredentialModel.fromJson(
-          newCredential,
-        ),
-        newData: credential,
-        activities: [Activity(acquisitionAt: DateTime.now())],
+  try {
+    for (final type in credentialTypeList) {
+      final dynamic credential = await getCredential(
+        accessToken,
+        nonce,
+        credentialEndPoint,
+        type,
+        client,
+        secureStorageProvider,
       );
-      // insert the credential in the wallet
-      await walletCubit.insertCredential(credentialModel);
+
+      // prepare credential for insertion
+      if (credential != null) {
+        final Map<String, dynamic> newCredential =
+            Map<String, dynamic>.from(credential as Map<String, dynamic>);
+        newCredential['credentialPreview'] = credential;
+
+        final credentialModel = CredentialModel.copyWithData(
+          oldCredentialModel: CredentialModel.fromJson(
+            newCredential,
+          ),
+          newData: credential,
+          activities: [Activity(acquisitionAt: DateTime.now())],
+        );
+        // insert the credential in the wallet
+        await walletCubit.insertCredential(credentialModel);
+      }
     }
+    unawaited(unregisterMultipleCredentialsProcess(secureStorageProvider));
+    return true;
+  } catch (e) {
+    return false;
   }
-  unawaited(unregisterMultipleCredentialsProcess(secureStorageProvider));
 }
 
 Future<dynamic> getCredential(

@@ -47,10 +47,9 @@ class SplashCubit extends Cubit<SplashState> {
         );
         if (preAuthorizedCode != null) {
           unawaited(
-            getCredentialsFromIssuer(
+            multipleCredentialsTimer(
               preAuthorizedCode,
               client,
-              Parameters.credentialTypeList,
               secureStorageProvider,
               walletCubit,
             ),
