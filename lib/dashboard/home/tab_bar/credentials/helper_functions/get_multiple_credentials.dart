@@ -95,36 +95,39 @@ Future<bool> getCredentialsFromIssuer(
   final String accessToken = data['access_token'] as String;
   final String nonce = data['c_nonce'] as String;
 
-  for (final type in credentialTypeList) {
-    final dynamic credential = await getCredential(
-      accessToken,
-      nonce,
-      credentialEndPoint,
-      type,
-      client,
-      secureStorageProvider,
-    );
-
-    // prepare credential for insertion
-    if (credential != null) {
-      final Map<String, dynamic> newCredential =
-          Map<String, dynamic>.from(credential as Map<String, dynamic>);
-      newCredential['credentialPreview'] = credential;
-
-      final credentialModel = CredentialModel.copyWithData(
-        oldCredentialModel: CredentialModel.fromJson(
-          newCredential,
-        ),
-        newData: credential,
-        activities: [Activity(acquisitionAt: DateTime.now())],
+  try {
+    for (final type in credentialTypeList) {
+      final dynamic credential = await getCredential(
+        accessToken,
+        nonce,
+        credentialEndPoint,
+        type,
+        client,
+        secureStorageProvider,
       );
-      // insert the credential in the wallet
-      await walletCubit.insertCredential(credentialModel);
-      unawaited(unregisterMultipleCredentialsProcess(secureStorageProvider));
-      return true;
+
+      // prepare credential for insertion
+      if (credential != null) {
+        final Map<String, dynamic> newCredential =
+            Map<String, dynamic>.from(credential as Map<String, dynamic>);
+        newCredential['credentialPreview'] = credential;
+
+        final credentialModel = CredentialModel.copyWithData(
+          oldCredentialModel: CredentialModel.fromJson(
+            newCredential,
+          ),
+          newData: credential,
+          activities: [Activity(acquisitionAt: DateTime.now())],
+        );
+        // insert the credential in the wallet
+        await walletCubit.insertCredential(credentialModel);
+      }
     }
+    unawaited(unregisterMultipleCredentialsProcess(secureStorageProvider));
+    return true;
+  } catch (e) {
+    return false;
   }
-  return false;
 }
 
 Future<dynamic> getCredential(
