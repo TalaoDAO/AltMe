@@ -29,7 +29,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     try {
       emit(state.loading());
       final operations = await _getOperations(baseUrl);
-      await tokensCubit.getTokens();
+      await tokensCubit.fetchFromZero();
       late TokenModel selectedToken;
       try {
         selectedToken = tokensCubit.state.data.firstWhere(
