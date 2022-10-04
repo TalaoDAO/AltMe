@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -130,8 +131,16 @@ class _TabControllerViewState extends State<TabControllerView>
                       ? const NeverScrollableScrollPhysics()
                       : null,
                   children: [
+                    /// We display DiscoverPage if user has no wallet or if
+                    /// he has no credentials except proofOfOwnershipCredentials
                     if (context.read<HomeCubit>().state.homeStatus ==
-                        HomeStatus.hasNoWallet)
+                            HomeStatus.hasNoWallet ||
+                        context.read<WalletCubit>().state.credentials.length ==
+                            context
+                                .read<CredentialListCubit>()
+                                .state
+                                .proofOfOwnershipCredentials
+                                .length)
                       const DiscoverPage()
                     else
                       const CredentialsListPage(),
