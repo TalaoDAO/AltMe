@@ -450,7 +450,7 @@
   "credentialDetailsOrganisation": "Organisation",
   "credentialDetailsPresented": "Presented",
   "credentialDetailsOrganisationDetail": "Organisation Detail:",
-  "credentialDetailsInWalletSince": "In wallet since:",
+  "credentialDetailsInWalletSince": "In wallet since",
   "termsOfUseAndLicenses": "Terms of use and Licences",
   "licenses": "Licenses",
   "sendTo": "Send to",
