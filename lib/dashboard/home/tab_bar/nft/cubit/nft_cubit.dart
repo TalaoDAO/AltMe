@@ -52,6 +52,7 @@ class NftCubit extends Cubit<NftState> {
           'account': walletAddress,
           'balance.eq': 1,
           'token.metadata.null': false,
+          'sort.desc': 'firstLevel',
           'select':
               'token.tokenId as tokenId,token.id as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri,token.metadata.description as description,token.standard as standard,token.metadata.symbol as symbol,token.contract.address as contractAddress', // ignore: lines_longer_than_80_chars
           'offset': state.offset,
