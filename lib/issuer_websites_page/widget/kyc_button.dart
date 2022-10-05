@@ -25,8 +25,8 @@ class KYCButton extends StatelessWidget {
                 onPressed: () {},
                 text: '',
               ),
-              const Padding(
-                padding: EdgeInsets.all(5),
+              Padding(
+                padding: const EdgeInsets.all(5),
                 // child: PassbaseButton(
                 //   height: 100 * MediaQuery.of(context).size.aspectRatio,
                 //   onFinish: (identityAccessKey) {

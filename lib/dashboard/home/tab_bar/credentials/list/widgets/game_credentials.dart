@@ -6,14 +6,10 @@ import 'package:arago_wallet/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class GamingCredentials extends StatelessWidget {
-  const GamingCredentials({
-    Key? key,
-    required this.credentials,
-    this.isDiscover = false,
-  }) : super(key: key);
+  const GamingCredentials({Key? key, required this.credentials})
+      : super(key: key);
 
   final List<HomeCredential> credentials;
-  final bool isDiscover;
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +34,10 @@ class GamingCredentials extends StatelessWidget {
             mainAxisSpacing: 4,
             childAspectRatio: Sizes.homeCredentialRatio,
           ),
-          itemCount: credentials.length + (isDiscover ? 0 : 1),
-          itemBuilder: (_, index) {
-            return HomeCredentialItem(
-              homeCredential: credentials[index],
-            );
-          },
+          itemCount: credentials.length,
+          itemBuilder: (_, index) => HomeCredentialItem(
+            homeCredential: credentials[index],
+          ),
         ),
       ],
     );

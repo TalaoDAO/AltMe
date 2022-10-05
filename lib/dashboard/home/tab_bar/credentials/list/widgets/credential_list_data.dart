@@ -18,10 +18,30 @@ class CredentialListData extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.vertical,
         children: [
-          GamingCredentials(credentials: state.gamingCredentials),
-          CommunityCredentials(credentials: state.communityCredentials),
-          IdentityCredentials(credentials: state.identityCredentials),
-          OtherCredentials(credentials: state.othersCredentials),
+          if (state.gamingCredentials.isNotEmpty) ...[
+            GamingCredentials(credentials: state.gamingCredentials),
+            const SizedBox(height: 10),
+          ],
+          if (state.communityCredentials.isNotEmpty) ...[
+            CommunityCredentials(credentials: state.communityCredentials),
+            const SizedBox(height: 10),
+          ],
+          if (state.identityCredentials.isNotEmpty) ...[
+            IdentityCredentials(credentials: state.identityCredentials),
+            const SizedBox(height: 10),
+          ],
+          // ProofOfOwnershipCredentials is hidden. Later we will
+          // give user an option to show it
+          // if (state.proofOfOwnershipCredentials.isNotEmpty) ...[
+          //   ProofOfOwnershipCredentials(
+          //     credentials: state.proofOfOwnershipCredentials,
+          //   ),
+          //   const SizedBox(height: 10),
+          // ],
+          if (state.othersCredentials.isNotEmpty) ...[
+            OtherCredentials(credentials: state.othersCredentials),
+            const SizedBox(height: 10),
+          ],
         ],
       ),
     );

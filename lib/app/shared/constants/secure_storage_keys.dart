@@ -2,12 +2,6 @@ class SecureStorageKeys {
   static const String isFirstSelectedTokenContracts =
       'isFirstSelectedTokenContracts';
   static const String selectedContracts = 'selectedContracts';
-  static const String isIdentityEnabled = 'isIdentityEnabled';
-  static const String isCommunityEnabled = 'isCommunityEnabled';
-  static const String isOtherEnabled = 'isOtherEnabled';
-  static const String isGamingEnabled = 'isGamingEnabled';
-  static const String isPaymentEnabled = 'isPaymentEnabled';
-  static const String isSocialMediaEnabled = 'isSocialMediaEnabled';
   static const String fingerprintEnabled = 'fingerprintEnabled';
   static const String pinCode = 'pinCode';
   static const String data = 'data';

@@ -61,7 +61,9 @@ class TokenItem extends StatelessWidget {
                   isSecure
                       ? '****'
                       : (r'$' +
-                          token.balanceInUSD.toStringAsFixed(2).formatNumber()),
+                          token.balanceUSDPrice
+                              .toStringAsFixed(2)
+                              .formatNumber()),
                   style: Theme.of(context).textTheme.listTileSubtitle,
                 ),
               ),

@@ -21,7 +21,6 @@ import 'package:workmanager/workmanager.dart';
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     final log = getLogger('Workmanager');
-    log.i('starting background process');
     switch (task) {
       case 'getPassBaseStatusBackground':
         if (inputData!['did'] != null) {

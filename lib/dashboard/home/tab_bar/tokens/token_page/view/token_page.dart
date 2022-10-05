@@ -5,35 +5,35 @@ import 'package:arago_wallet/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TokensPage extends StatefulWidget {
-  const TokensPage({Key? key}) : super(key: key);
+class TokenPage extends StatefulWidget {
+  const TokenPage({Key? key}) : super(key: key);
 
   @override
-  State<TokensPage> createState() => _TokensPageState();
+  State<TokenPage> createState() => _TokenPageState();
 }
 
-class _TokensPageState extends State<TokensPage>
-    with AutomaticKeepAliveClientMixin<TokensPage> {
+class _TokenPageState extends State<TokenPage>
+    with AutomaticKeepAliveClientMixin<TokenPage> {
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return const TokensView();
+    return const TokenView();
   }
 }
 
-class TokensView extends StatefulWidget {
-  const TokensView({Key? key}) : super(key: key);
+class TokenView extends StatefulWidget {
+  const TokenView({Key? key}) : super(key: key);
 
   @override
-  _TokensViewState createState() => _TokensViewState();
+  _TokenViewState createState() => _TokenViewState();
 }
 
-class _TokensViewState extends State<TokensView> {
+class _TokenViewState extends State<TokenView> {
   int _offset = 0;
-  final _limit = 100;
+  final _limit = 15;
   int activeIndex = -1;
 
   Future<void> onRefresh() async {

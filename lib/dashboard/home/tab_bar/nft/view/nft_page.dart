@@ -30,7 +30,6 @@ class _NftPageState extends State<NftPage>
           Dio(),
         ),
         walletCubit: context.read<WalletCubit>(),
-        manageNetworkCubit: context.read<ManageNetworkCubit>(),
       ),
       child: const NftView(),
     );
@@ -45,10 +44,27 @@ class NftView extends StatefulWidget {
 }
 
 class _NftViewState extends State<NftView> {
+  int _offset = 0;
+  final _limit = 15;
   int activeIndex = -1;
 
   Future<void> onRefresh() async {
-    await context.read<NftCubit>().onRefresh();
+    _offset = 0;
+    await context.read<NftCubit>().getTezosNftList(
+          baseUrl: context.read<ManageNetworkCubit>().state.network.tzktUrl,
+          offset: _offset,
+        );
+  }
+
+  Future<void> onScrollEnded() async {
+    _offset += _limit;
+    LoadingView().show(context: context);
+    await context.read<NftCubit>().getTezosNftList(
+          baseUrl:
+              context.read<ProfileCubit>().state.model.tezosNetwork.tzktUrl,
+          offset: _offset,
+        );
+    LoadingView().hide();
   }
 
   @override
@@ -95,6 +111,10 @@ class _NftViewState extends State<NftView> {
                       stateMessage: state.message!,
                     );
                   }
+
+                  if (state.status == AppStatus.success) {
+                    //some action
+                  }
                 },
                 builder: (_, state) {
                   String message = '';
@@ -117,15 +137,14 @@ class _NftViewState extends State<NftView> {
                       return NftList(
                         nftList: state.data,
                         onRefresh: onRefresh,
-                        onScrollEnded: () =>
-                            context.read<NftCubit>().fetchMoreTezosNfts(),
+                        onScrollEnded: onScrollEnded,
                       );
                     }
                   } else if (state.status == AppStatus.errorWhileFetching) {
                     return ErrorView(message: message, onTap: onRefresh);
                   } else {
                     return NftList(
-                      nftList: state.data,
+                      nftList: const [],
                       onRefresh: onRefresh,
                     );
                   }

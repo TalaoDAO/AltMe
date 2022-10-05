@@ -8,10 +8,12 @@ class AllTokensState extends Equatable {
     this.contracts = const [],
     this.filteredContracts = const [],
     this.selectedContracts = const [],
+    this.xtzUsdValue,
   });
 
   final AppStatus status;
   final StateMessage? message;
+  final double? xtzUsdValue;
   final List<ContractModel> contracts;
   final List<ContractModel> filteredContracts;
   final List<ContractModel> selectedContracts;
@@ -22,11 +24,13 @@ class AllTokensState extends Equatable {
     List<ContractModel>? contracts,
     List<ContractModel>? filteredContracts,
     List<ContractModel>? selectedContracts,
+    double? xtzUsdValue,
   }) {
     return AllTokensState(
       status: status ?? this.status,
       message: message ?? this.message,
       contracts: contracts ?? this.contracts,
+      xtzUsdValue: xtzUsdValue ?? this.xtzUsdValue,
       filteredContracts: filteredContracts ?? this.filteredContracts,
       selectedContracts: selectedContracts ?? this.selectedContracts,
     );
@@ -45,5 +49,6 @@ class AllTokensState extends Equatable {
         contracts,
         selectedContracts,
         filteredContracts,
+        xtzUsdValue,
       ];
 }

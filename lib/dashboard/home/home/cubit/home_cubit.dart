@@ -28,22 +28,14 @@ class HomeCubit extends Cubit<HomeState> {
   final SecureStorageProvider secureStorageProvider;
 
   Future<void> emitHasWallet() async {
-    final log = getLogger('emitHasWallet');
-
     final String? passbaseStatusFromStorage = await secureStorageProvider.get(
       SecureStorageKeys.passBaseStatus,
     );
-    log.i('passbaseStatusFromStorage: $passbaseStatusFromStorage');
-
     if (passbaseStatusFromStorage != null) {
       final passBaseStatus = getPassBaseStatusFromString(
         passbaseStatusFromStorage,
       );
       if (passBaseStatus == PassBaseStatus.pending) {
-        log.i(
-          'Launch getPassBaseStatusBackground from emitHasWallet',
-        );
-
         getPassBaseStatusBackground();
       }
     }
@@ -110,11 +102,6 @@ class HomeCubit extends Cubit<HomeState> {
     }
 
     if (passBaseStatus == PassBaseStatus.pending) {
-      final log = getLogger('checkForPassBaseStatusThenLaunchUrl');
-      log.i(
-        'Launch getPassBaseStatusBackground from url check',
-      );
-
       getPassBaseStatusBackground();
     }
 
@@ -128,9 +115,9 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void startPassbaseVerification(WalletCubit walletCubit) {
-    // final log = getLogger('HomeCubit - startPassbaseVerification');
-    // final did = didCubit.state.did!;
-    // emit(state.loading());
+    final log = getLogger('HomeCubit - startPassbaseVerification');
+    final did = didCubit.state.did!;
+    emit(state.loading());
     // PassbaseSDK.startVerification(
     //   onFinish: (identityAccessKey) async {
     //     // IdentityAccessKey to run the process manually:

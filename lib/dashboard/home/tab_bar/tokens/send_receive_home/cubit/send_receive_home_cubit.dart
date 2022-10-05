@@ -39,7 +39,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
         );
       } catch (e, s) {
         selectedToken = state.selectedToken
-            .copyWith(balance: '0', tokenUSDPrice: 0, balanceInUSD: 0);
+            .copyWith(balance: '0', tokenUSDPrice: 0, balanceUSDPrice: 0);
         getLogger(runtimeType.toString())
             .e('did not found the token: e: $e, s: $s');
       }

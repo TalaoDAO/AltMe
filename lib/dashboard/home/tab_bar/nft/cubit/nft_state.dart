@@ -5,7 +5,6 @@ class NftState extends Equatable {
   const NftState({
     this.status = AppStatus.init,
     this.message,
-    this.offset = 0,
     this.data = const [],
   });
 
@@ -15,22 +14,23 @@ class NftState extends Equatable {
   final AppStatus status;
   final StateMessage? message;
   final List<NftModel> data;
-  final int offset;
 
   NftState fetching() {
+    return NftState(status: AppStatus.fetching, data: data);
+  }
+
+  NftState errorWhileFetching({
+    required MessageHandler messageHandler,
+  }) {
     return NftState(
-      status: AppStatus.fetching,
+      status: AppStatus.errorWhileFetching,
+      message: StateMessage.error(messageHandler: messageHandler),
       data: data,
-      offset: offset,
     );
   }
 
   NftState loading() {
-    return NftState(
-      status: AppStatus.loading,
-      data: data,
-      offset: offset,
-    );
+    return NftState(status: AppStatus.loading, data: data);
   }
 
   NftState error({
@@ -40,7 +40,6 @@ class NftState extends Equatable {
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       data: data,
-      offset: offset,
     );
   }
 
@@ -50,28 +49,21 @@ class NftState extends Equatable {
     return NftState(
       status: AppStatus.populate,
       data: data ?? this.data,
-      offset: offset,
     );
   }
 
-  NftState copyWith({
-    AppStatus? status,
-    MessageHandler? messageHandler,
-    List<NftModel>? data,
-    int? offset,
-  }) {
+  NftState success({MessageHandler? messageHandler, List<NftModel>? data}) {
     return NftState(
-      status: status ?? this.status,
+      status: AppStatus.success,
       data: data ?? this.data,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
-      offset: offset ?? this.offset,
     );
   }
 
   Map<String, dynamic> toJson() => _$NftStateToJson(this);
 
   @override
-  List<Object?> get props => [status, message, data, offset];
+  List<Object?> get props => [status, message, data];
 }

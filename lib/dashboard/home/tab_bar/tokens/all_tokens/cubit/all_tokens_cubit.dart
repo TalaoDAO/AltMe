@@ -37,6 +37,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
         state.copyWith(
           contracts: contracts,
           filteredContracts: contracts,
+          xtzUsdValue: result['xtzusdValue'] as double?,
           status: AppStatus.populate,
         ),
       );

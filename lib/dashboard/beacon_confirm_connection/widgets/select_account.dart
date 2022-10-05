@@ -1,0 +1,53 @@
+import 'package:arago_wallet/app/app.dart';
+import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/l10n/l10n.dart';
+import 'package:arago_wallet/theme/theme.dart';
+import 'package:arago_wallet/wallet/wallet.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class SelectAccount extends StatelessWidget {
+  const SelectAccount({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.selectAccountToGrantAccess,
+          style: Theme.of(context).textTheme.beaconSelectAccont,
+        ),
+        BlocBuilder<WalletCubit, WalletState>(
+          builder: (context, walletState) {
+            return ListView.separated(
+              itemCount: walletState.cryptoAccount.data.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, i) {
+                return SelectBoxAccountItem(
+                  cryptoAccountData: walletState.cryptoAccount.data[i],
+                  isSelected: walletState.currentCryptoIndex == i,
+                  listIndex: i,
+                  onPressed: () {
+                    context.read<WalletCubit>().setCurrentWalletAccount(i);
+                  },
+                );
+              },
+              separatorBuilder: (_, __) => Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.spaceSmall,
+                ),
+                child: Divider(
+                  height: 0.2,
+                  color: Theme.of(context).colorScheme.borderColor,
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
