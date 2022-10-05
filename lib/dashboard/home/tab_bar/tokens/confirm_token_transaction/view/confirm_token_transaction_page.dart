@@ -12,12 +12,14 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
     required this.selectedToken,
     required this.withdrawalAddress,
     required this.amount,
+    this.isNFT = false,
   }) : super(key: key);
 
   static Route route({
     required TokenModel selectedToken,
     required String withdrawalAddress,
     required double amount,
+    bool isNFT = false,
   }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/ConfirmTokenTransactionPage'),
@@ -25,6 +27,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
         selectedToken: selectedToken,
         withdrawalAddress: withdrawalAddress,
         amount: amount,
+        isNFT: isNFT,
       ),
     );
   }
@@ -32,6 +35,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
   final TokenModel selectedToken;
   final String withdrawalAddress;
   final double amount;
+  final bool isNFT;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +49,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
         selectedToken: selectedToken,
         withdrawalAddress: withdrawalAddress,
         amount: amount,
+        isNFT: isNFT,
       ),
     );
   }
@@ -56,11 +61,13 @@ class ConfirmWithdrawalView extends StatefulWidget {
     required this.selectedToken,
     required this.withdrawalAddress,
     required this.amount,
+    this.isNFT = false,
   }) : super(key: key);
 
   final TokenModel selectedToken;
   final String withdrawalAddress;
   final double amount;
+  final bool isNFT;
 
   @override
   State<ConfirmWithdrawalView> createState() => _ConfirmWithdrawalViewState();
@@ -71,7 +78,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
       TextEditingController(text: widget.withdrawalAddress);
 
   late final amountAndSymbol =
-      '''${widget.amount.toStringAsFixed(6).formatNumber()} ${widget.selectedToken.symbol}''';
+      '''${widget.isNFT ? widget.amount.toInt() : widget.amount.toStringAsFixed(6).formatNumber()} ${widget.selectedToken.symbol}''';
 
   @override
   void initState() {
