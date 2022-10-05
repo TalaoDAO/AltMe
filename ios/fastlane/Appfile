@@ -1,8 +1,8 @@
 app_identifier("io.arago.wallet") # The bundle identifier of your app
 apple_id("googandads@gmail.com") # Your Apple email address
 
-itc_team_id("125176258") # App Store Connect Team ID
-team_id("Z8P3N79J42") # Developer Portal Team ID
+itc_team_id("125518293") # App Store Connect Team ID
+team_id("BUG5TJ7NH7") # Developer Portal Team ID
 
 # For more information about the Appfile, see:
 #     https://docs.fastlane.tools/advanced/#appfile
