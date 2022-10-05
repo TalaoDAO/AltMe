@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +26,7 @@ class HomeCredentialWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          '''$title (${credentials.where((element) => !element.isDummy).toList().length})''',
+          title,
           style: Theme.of(context).textTheme.credentialCategoryTitle,
         ),
         const SizedBox(
