@@ -78,7 +78,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
       TextEditingController(text: widget.withdrawalAddress);
 
   late final amountAndSymbol =
-      '''${widget.isNFT ? widget.amount.toInt() : widget.amount.toStringAsFixed(6).formatNumber()} ${widget.selectedToken.symbol}''';
+      '''${widget.isNFT ? widget.amount.toInt() : widget.amount.toStringAsFixed(6).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} ${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
 
   @override
   void initState() {
