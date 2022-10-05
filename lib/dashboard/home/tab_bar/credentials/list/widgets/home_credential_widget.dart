@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -8,12 +9,14 @@ class HomeCredentialWidget extends StatelessWidget {
     Key? key,
     required this.credentials,
     required this.title,
+    required this.categorySubtitle,
     this.showAddOption = false,
     this.fromDiscover = false,
   }) : super(key: key);
 
   final List<HomeCredential> credentials;
   final String title;
+  final String categorySubtitle;
   final bool showAddOption;
   final bool fromDiscover;
 
@@ -26,6 +29,16 @@ class HomeCredentialWidget extends StatelessWidget {
         Text(
           '''$title (${credentials.where((element) => !element.isDummy).toList().length})''',
           style: Theme.of(context).textTheme.credentialCategoryTitle,
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        Flexible(
+          child: MyText(
+            categorySubtitle,
+            maxLines: 2,
+            style: Theme.of(context).textTheme.credentialCategorySubTitle,
+          ),
         ),
         const SizedBox(
           height: 8,

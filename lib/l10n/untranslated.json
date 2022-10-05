@@ -477,7 +477,16 @@
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
     "membershipRequiredListAlerMessage",
-    "beaconShareMessage"
+    "beaconShareMessage",
+    "gamingCredentialHomeSubtitle",
+    "gamingCredentialDiscoverSubtitle",
+    "identityCredentialHomeSubtitle",
+    "identityCredentialDiscoverSubtitle",
+    "paymentCredentialHomeSubtitle",
+    "communityCredentialHomeSubtitle",
+    "communityCredentialDiscoverSubtitle",
+    "otherCredentialHomeSubtitle",
+    "otherCredentialDiscoverSubtitle"
   ],
 
   "es": [
@@ -958,7 +967,16 @@
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
     "membershipRequiredListAlerMessage",
-    "beaconShareMessage"
+    "beaconShareMessage",
+    "gamingCredentialHomeSubtitle",
+    "gamingCredentialDiscoverSubtitle",
+    "identityCredentialHomeSubtitle",
+    "identityCredentialDiscoverSubtitle",
+    "paymentCredentialHomeSubtitle",
+    "communityCredentialHomeSubtitle",
+    "communityCredentialDiscoverSubtitle",
+    "otherCredentialHomeSubtitle",
+    "otherCredentialDiscoverSubtitle"
   ],
 
   "fr": [
@@ -1439,7 +1457,16 @@
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
     "membershipRequiredListAlerMessage",
-    "beaconShareMessage"
+    "beaconShareMessage",
+    "gamingCredentialHomeSubtitle",
+    "gamingCredentialDiscoverSubtitle",
+    "identityCredentialHomeSubtitle",
+    "identityCredentialDiscoverSubtitle",
+    "paymentCredentialHomeSubtitle",
+    "communityCredentialHomeSubtitle",
+    "communityCredentialDiscoverSubtitle",
+    "otherCredentialHomeSubtitle",
+    "otherCredentialDiscoverSubtitle"
   ],
 
   "it": [
@@ -1920,6 +1947,15 @@
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
     "membershipRequiredListAlerMessage",
-    "beaconShareMessage"
+    "beaconShareMessage",
+    "gamingCredentialHomeSubtitle",
+    "gamingCredentialDiscoverSubtitle",
+    "identityCredentialHomeSubtitle",
+    "identityCredentialDiscoverSubtitle",
+    "paymentCredentialHomeSubtitle",
+    "communityCredentialHomeSubtitle",
+    "communityCredentialDiscoverSubtitle",
+    "otherCredentialHomeSubtitle",
+    "otherCredentialDiscoverSubtitle"
   ]
 }

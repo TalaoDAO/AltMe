@@ -656,6 +656,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffEDEAF5),
       );
 
+  TextStyle get credentialCategorySubTitle => GoogleFonts.roboto(
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+        color: const Color(0xFF5F556F),
+      );
+
   TextStyle get credentialSurfaceText => GoogleFonts.roboto(
         fontSize: 10,
         fontWeight: FontWeight.w400,

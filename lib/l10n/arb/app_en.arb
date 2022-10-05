@@ -527,5 +527,14 @@
   "receiveNft": "Receive NFT",
   "sendOnlyNftToThisAddressDescription": "Only send Tezos NFT to this address. Sending NFT from other network may result in permanent loss.",
   "membershipRequiredListAlerMessage": "You need to get those credentials in your wallet to acquire membership card:",
-  "beaconShareMessage": "Only send Tezos(XTZ) and Tezos NFTs(FA2 Standard) to this address. Sending Tezos and NFTs from other networks may result in permanent loss"
+  "beaconShareMessage": "Only send Tezos(XTZ) and Tezos NFTs(FA2 Standard) to this address. Sending Tezos and NFTs from other networks may result in permanent loss",
+  "gamingCredentialHomeSubtitle": "Here are all your gaming cards. Use them to get exclusive advantages in games.",
+  "gamingCredentialDiscoverSubtitle": "Here are offers from Web 3 Games that might interest you.",
+  "identityCredentialHomeSubtitle": "Here are all your ID credentials. Use them when its required in Web 3.",
+  "identityCredentialDiscoverSubtitle": "Here are all the digital ID credentials you can add in your wallet.",
+  "paymentCredentialHomeSubtitle": "Here are all blockchain accounts you can use and manage in your wallet.",
+  "communityCredentialHomeSubtitle": "Here are your communities cards. Get special rewards by using them.",
+  "communityCredentialDiscoverSubtitle": "Get the best communities cards in Web 3 and benefit from special rewards.",
+  "otherCredentialHomeSubtitle": "Here are other type of credentials / cards you can use when needed.",
+  "otherCredentialDiscoverSubtitle": "Here are other type of cards you can add in your wallet."
 }
