@@ -21,61 +21,64 @@ class CredentialListData extends StatelessWidget {
       builder: (context, advanceSettingsState) {
         return RefreshIndicator(
           onRefresh: onRefresh,
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: [
-              if (advanceSettingsState.isGamingEnabled) ...[
-                /// Gaming Credentials
-                HomeCredentialWidget(
-                  title: l10n.gamingCards,
-                  credentials: state.gamingCredentials,
-                  showAddOption: true,
-                  categorySubtitle: l10n.gamingCredentialHomeSubtitle,
-                ),
-                const SizedBox(height: Sizes.spaceNormal),
+          child: Padding(
+            padding: const EdgeInsets.all(Sizes.spaceXSmall),
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: [
+                if (advanceSettingsState.isGamingEnabled) ...[
+                  /// Gaming Credentials
+                  HomeCredentialWidget(
+                    title: l10n.gamingCards,
+                    credentials: state.gamingCredentials,
+                    showAddOption: true,
+                    categorySubtitle: l10n.gamingCredentialHomeSubtitle,
+                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
+                ],
+                if (advanceSettingsState.isCommunityEnabled) ...[
+                  /// Community Credentials
+                  HomeCredentialWidget(
+                    title: l10n.communityCards,
+                    credentials: state.communityCredentials,
+                    showAddOption: true,
+                    categorySubtitle: l10n.communityCredentialHomeSubtitle,
+                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
+                ],
+                if (advanceSettingsState.isIdentityEnabled) ...[
+                  /// Identity Credentials
+                  HomeCredentialWidget(
+                    title: l10n.identityCards,
+                    credentials: state.identityCredentials,
+                    showAddOption: true,
+                    categorySubtitle: l10n.identityCredentialHomeSubtitle,
+                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
+                ],
+                // ProofOfOwnershipCredentials is hidden. Later we will
+                // give user an option to show it
+                if (advanceSettingsState.isPaymentEnabled) ...[
+                  /// ProofOfOwnership Credentials
+                  HomeCredentialWidget(
+                    title: l10n.proofOfOwnership,
+                    credentials: state.proofOfOwnershipCredentials,
+                    categorySubtitle: l10n.paymentCredentialHomeSubtitle,
+                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
+                ],
+                if (advanceSettingsState.isOtherEnabled) ...[
+                  /// Other Credentials
+                  HomeCredentialWidget(
+                    title: l10n.otherCards,
+                    credentials: state.othersCredentials,
+                    showAddOption: true,
+                    categorySubtitle: l10n.otherCredentialHomeSubtitle,
+                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
+                ],
               ],
-              if (advanceSettingsState.isCommunityEnabled) ...[
-                /// Community Credentials
-                HomeCredentialWidget(
-                  title: l10n.communityCards,
-                  credentials: state.communityCredentials,
-                  showAddOption: true,
-                  categorySubtitle: l10n.communityCredentialHomeSubtitle,
-                ),
-                const SizedBox(height: Sizes.spaceNormal),
-              ],
-              if (advanceSettingsState.isIdentityEnabled) ...[
-                /// Identity Credentials
-                HomeCredentialWidget(
-                  title: l10n.identityCards,
-                  credentials: state.identityCredentials,
-                  showAddOption: true,
-                  categorySubtitle: l10n.identityCredentialHomeSubtitle,
-                ),
-                const SizedBox(height: Sizes.spaceNormal),
-              ],
-              // ProofOfOwnershipCredentials is hidden. Later we will
-              // give user an option to show it
-              if (advanceSettingsState.isPaymentEnabled) ...[
-                /// ProofOfOwnership Credentials
-                HomeCredentialWidget(
-                  title: l10n.proofOfOwnership,
-                  credentials: state.proofOfOwnershipCredentials,
-                  categorySubtitle: l10n.paymentCredentialHomeSubtitle,
-                ),
-                const SizedBox(height: Sizes.spaceNormal),
-              ],
-              if (advanceSettingsState.isOtherEnabled) ...[
-                /// Other Credentials
-                HomeCredentialWidget(
-                  title: l10n.otherCards,
-                  credentials: state.othersCredentials,
-                  showAddOption: true,
-                  categorySubtitle: l10n.otherCredentialHomeSubtitle,
-                ),
-                const SizedBox(height: Sizes.spaceNormal),
-              ],
-            ],
+            ),
           ),
         );
       },
