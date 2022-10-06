@@ -486,7 +486,7 @@
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
-    "otherCredentialDiscoverSubtitle"
+    "otherCredentialDiscoverSubtitle",
     "showMore",
     "showLess"
   ],
@@ -1470,7 +1470,7 @@
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
-    "otherCredentialDiscoverSubtitle"
+    "otherCredentialDiscoverSubtitle",
     "showMore",
     "showLess"
   ],
@@ -1962,7 +1962,7 @@
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
-    "otherCredentialDiscoverSubtitle"
+    "otherCredentialDiscoverSubtitle",
     "showMore",
     "showLess"
   ]
