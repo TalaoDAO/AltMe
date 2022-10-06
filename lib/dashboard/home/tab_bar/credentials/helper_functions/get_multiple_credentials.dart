@@ -63,18 +63,6 @@ Future<void> multipleCredentialsTimer(
       timer.cancel();
     }
   });
-  Future.delayed(
-      const Duration(
-        minutes: Parameters.multipleCredentialsProcessDelay,
-      ), () async {
-    await getCredentialsFromIssuer(
-      preAuthorizedCode,
-      client,
-      Parameters.credentialTypeList,
-      secureStorageProvider,
-      walletCubit,
-    );
-  });
 }
 
 Future<bool> getCredentialsFromIssuer(
