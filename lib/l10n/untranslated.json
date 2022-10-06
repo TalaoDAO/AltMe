@@ -478,6 +478,15 @@
     "sendOnlyNftToThisAddressDescription",
     "membershipRequiredListAlerMessage",
     "beaconShareMessage",
+    "gamingCredentialHomeSubtitle",
+    "gamingCredentialDiscoverSubtitle",
+    "identityCredentialHomeSubtitle",
+    "identityCredentialDiscoverSubtitle",
+    "paymentCredentialHomeSubtitle",
+    "communityCredentialHomeSubtitle",
+    "communityCredentialDiscoverSubtitle",
+    "otherCredentialHomeSubtitle",
+    "otherCredentialDiscoverSubtitle"
     "showMore",
     "showLess"
   ],
@@ -961,6 +970,15 @@
     "sendOnlyNftToThisAddressDescription",
     "membershipRequiredListAlerMessage",
     "beaconShareMessage",
+    "gamingCredentialHomeSubtitle",
+    "gamingCredentialDiscoverSubtitle",
+    "identityCredentialHomeSubtitle",
+    "identityCredentialDiscoverSubtitle",
+    "paymentCredentialHomeSubtitle",
+    "communityCredentialHomeSubtitle",
+    "communityCredentialDiscoverSubtitle",
+    "otherCredentialHomeSubtitle",
+    "otherCredentialDiscoverSubtitle",
     "showMore",
     "showLess"
   ],
@@ -1444,6 +1462,15 @@
     "sendOnlyNftToThisAddressDescription",
     "membershipRequiredListAlerMessage",
     "beaconShareMessage",
+    "gamingCredentialHomeSubtitle",
+    "gamingCredentialDiscoverSubtitle",
+    "identityCredentialHomeSubtitle",
+    "identityCredentialDiscoverSubtitle",
+    "paymentCredentialHomeSubtitle",
+    "communityCredentialHomeSubtitle",
+    "communityCredentialDiscoverSubtitle",
+    "otherCredentialHomeSubtitle",
+    "otherCredentialDiscoverSubtitle"
     "showMore",
     "showLess"
   ],
@@ -1927,6 +1954,15 @@
     "sendOnlyNftToThisAddressDescription",
     "membershipRequiredListAlerMessage",
     "beaconShareMessage",
+    "gamingCredentialHomeSubtitle",
+    "gamingCredentialDiscoverSubtitle",
+    "identityCredentialHomeSubtitle",
+    "identityCredentialDiscoverSubtitle",
+    "paymentCredentialHomeSubtitle",
+    "communityCredentialHomeSubtitle",
+    "communityCredentialDiscoverSubtitle",
+    "otherCredentialHomeSubtitle",
+    "otherCredentialDiscoverSubtitle"
     "showMore",
     "showLess"
   ]
