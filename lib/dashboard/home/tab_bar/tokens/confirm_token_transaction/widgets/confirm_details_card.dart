@@ -12,6 +12,7 @@ class ConfirmDetailsCard extends StatelessWidget {
     required this.symbol,
     required this.networkFee,
     this.onEditButtonPressed,
+    this.isNFT = false,
   }) : super(key: key);
 
   final double amount;
@@ -19,6 +20,7 @@ class ConfirmDetailsCard extends StatelessWidget {
   final String symbol;
   final NetworkFeeModel networkFee;
   final VoidCallback? onEditButtonPressed;
+  final bool isNFT;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class ConfirmDetailsCard extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '${amount.toStringAsFixed(6).formatNumber()} $symbol',
+                '${isNFT ? amount.toInt() : amount.toStringAsFixed(6).formatNumber()} $symbol',
                 style: Theme.of(context).textTheme.caption,
               ),
             ],
@@ -79,7 +81,7 @@ class ConfirmDetailsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '''${grandTotal.toStringAsFixed(6).formatNumber()} $symbol''',
+                    '''${isNFT ? grandTotal.toInt() : grandTotal.toStringAsFixed(6).formatNumber()} $symbol''',
                     style: Theme.of(context).textTheme.caption,
                   ),
                   if (tokenUSDRate > 0)
