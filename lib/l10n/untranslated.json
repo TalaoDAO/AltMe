@@ -487,6 +487,8 @@
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
     "otherCredentialDiscoverSubtitle"
+    "showMore",
+    "showLess"
   ],
 
   "es": [
@@ -976,7 +978,9 @@
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
-    "otherCredentialDiscoverSubtitle"
+    "otherCredentialDiscoverSubtitle",
+    "showMore",
+    "showLess"
   ],
 
   "fr": [
@@ -1467,6 +1471,8 @@
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
     "otherCredentialDiscoverSubtitle"
+    "showMore",
+    "showLess"
   ],
 
   "it": [
@@ -1957,5 +1963,7 @@
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
     "otherCredentialDiscoverSubtitle"
+    "showMore",
+    "showLess"
   ]
 }

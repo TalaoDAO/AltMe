@@ -85,6 +85,10 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                       ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Divider(),
+                      ),
                       CheckboxItem(
                         value: state.agreeTerms,
                         text: l10n.agreeTermsAndConditionCheckBox,
