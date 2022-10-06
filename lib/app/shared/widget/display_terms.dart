@@ -1,9 +1,19 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+
+class DisplayTermsOfUseCubit extends Cubit<bool> {
+  DisplayTermsOfUseCubit() : super(false);
+
+  void setExpanded({required bool isExpanded}) {
+    emit(isExpanded);
+  }
+}
 
 class DisplayTermsofUse extends StatefulWidget {
   const DisplayTermsofUse({
@@ -20,84 +30,100 @@ class DisplayTermsofUse extends StatefulWidget {
 }
 
 class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
-  late String privacyPath;
-  late String termsPath;
-
   final log = getLogger('DisplayTermsofUse');
 
-  void setPath(String localeName) {
+  late final displayTermsOfUseCubit = DisplayTermsOfUseCubit();
+
+  Future<List<String>> getBodyData(String localeName) async {
     final languagesList = ['fr', 'it', 'es', 'de'];
     var language = 'en';
     if (languagesList.contains(localeName)) {
       language = localeName;
     }
-    privacyPath = 'assets/privacy/privacy_$language.md';
-    termsPath = 'assets/terms/mobile_cgu_$language.md';
+    final privacyPathPart1 = 'assets/privacy/privacy_${language}_1.md';
+    final privacyPathPart2 = 'assets/privacy/privacy_${language}_2.md';
+    final termsPath = 'assets/terms/mobile_cgu_$language.md';
+
+    final privacyDataPart1 = await _loadFile(privacyPathPart1);
+    final privacyDataPart2 = await _loadFile(privacyPathPart2);
+    final termsData = await _loadFile(termsPath);
+
+    return [privacyDataPart1, privacyDataPart2, termsData];
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    setPath(l10n.localeName);
-    return Column(
-      children: [
-        /// Privacry Policy
-        FutureBuilder<String>(
-          future: _loadFile(privacyPath),
-          builder: (context, snapshot) {
-            if (snapshot.data != null) {
-              return MarkdownBody(
-                physics: widget.physics,
-                shrinkWrap: widget.shrinkWrap,
-                data: snapshot.data!,
-              );
-            }
 
-            if (snapshot.error != null) {
-              log.e(
-                'something went wrong when loading $privacyPath',
-                snapshot.error,
-              );
-              return const SizedBox.shrink();
-            }
+    return BlocBuilder<DisplayTermsOfUseCubit, bool>(
+        bloc: displayTermsOfUseCubit,
+        builder: (context, isExpand) {
+          return FutureBuilder<List<String>>(
+            future: getBodyData(l10n.localeName),
+            builder: (context, snapshot) {
+              if (snapshot.data != null) {
+                return Theme(
+                  data: Theme.of(context)
+                      .copyWith(dividerColor: Colors.transparent),
+                  child: ExpansionTile(
+                    initiallyExpanded: false,
+                    childrenPadding: EdgeInsets.zero,
+                    onExpansionChanged: (isExpanded) {
+                      displayTermsOfUseCubit.setExpanded(
+                        isExpanded: isExpanded,
+                      );
+                    },
+                    tilePadding: const EdgeInsets.symmetric(horizontal: 8),
+                    trailing: const SizedBox.shrink(),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        MarkdownBody(
+                          physics: widget.physics,
+                          shrinkWrap: widget.shrinkWrap,
+                          data: snapshot.data![0],
+                        ),
+                        Text(
+                          isExpand ? l10n.showLess : l10n.showMore,
+                          style: Theme.of(context).textTheme.subtitle2,
+                        ),
+                      ],
+                    ),
+                    children: [
+                      /// Privacry Policy part 2
+                      MarkdownBody(
+                        physics: widget.physics,
+                        shrinkWrap: widget.shrinkWrap,
+                        data: snapshot.data![1],
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Divider(),
+                      ),
 
-            return const Spinner();
-          },
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Divider(),
-        ),
+                      /// Terms
+                      MarkdownBody(
+                        physics: widget.physics,
+                        shrinkWrap: widget.shrinkWrap,
+                        data: snapshot.data![2],
+                      ),
+                    ],
+                  ),
+                );
+              }
 
-        /// Terms
-        FutureBuilder<String>(
-          future: _loadFile(termsPath),
-          builder: (context, snapshot) {
-            if (snapshot.data != null) {
-              return MarkdownBody(
-                physics: widget.physics,
-                shrinkWrap: widget.shrinkWrap,
-                data: snapshot.data!,
-              );
-            }
+              if (snapshot.error != null) {
+                log.e(
+                  'something went wrong when loading privacy file',
+                  snapshot.error,
+                );
+                return const SizedBox.shrink();
+              }
 
-            if (snapshot.error != null) {
-              log.e(
-                'something went wrong when loading $termsPath',
-                snapshot.error,
-              );
-              return const SizedBox.shrink();
-            }
-
-            return const Spinner();
-          },
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Divider(),
-        ),
-      ],
-    );
+              return const Spinner();
+            },
+          );
+        });
   }
 
   Future<String> _loadFile(String path) async {
