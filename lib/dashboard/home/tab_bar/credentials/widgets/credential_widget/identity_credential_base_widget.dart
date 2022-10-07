@@ -36,17 +36,16 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
               id: 'provided-by',
               child: FractionallySizedBox(
                 widthFactor: 0.75,
-                heightFactor: 0.11,
+                heightFactor: 0.12,
                 child: MyRichText(
                   text: TextSpan(
                     text: '${l10n.providedBy} ',
-                    style: Theme.of(context).textTheme.identitiyBaseSmallText,
+                    style: Theme.of(context).textTheme.identitiyBaseLightText,
                     children: [
                       TextSpan(
                         text: issuerName,
-                        style: Theme.of(context)
-                            .textTheme
-                            .identitiyBaseMediumBoldText,
+                        style:
+                            Theme.of(context).textTheme.identitiyBaseBoldText,
                       ),
                     ],
                   ),
@@ -58,11 +57,10 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
                 id: 'value',
                 child: FractionallySizedBox(
                   widthFactor: 0.65,
-                  heightFactor: 0.11,
+                  heightFactor: 0.12,
                   child: MyText(
                     value!,
-                    style:
-                        Theme.of(context).textTheme.identitiyBaseMediumBoldText,
+                    style: Theme.of(context).textTheme.identitiyBaseBoldText,
                   ),
                 ),
               ),
@@ -74,7 +72,7 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.issuedOn,
-                    style: Theme.of(context).textTheme.identitiyBaseSmallText,
+                    style: Theme.of(context).textTheme.identitiyBaseLightText,
                   ),
                 ),
               ),
@@ -86,8 +84,7 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     issuanceDate!,
-                    style:
-                        Theme.of(context).textTheme.identitiyBaseMediumBoldText,
+                    style: Theme.of(context).textTheme.identitiyBaseBoldText,
                   ),
                 ),
               ),
@@ -99,7 +96,7 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.expirationDate,
-                    style: Theme.of(context).textTheme.identitiyBaseSmallText,
+                    style: Theme.of(context).textTheme.identitiyBaseLightText,
                   ),
                 ),
               ),
@@ -111,8 +108,7 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     expirationDate!,
-                    style:
-                        Theme.of(context).textTheme.identitiyBaseMediumBoldText,
+                    style: Theme.of(context).textTheme.identitiyBaseBoldText,
                   ),
                 ),
               ),

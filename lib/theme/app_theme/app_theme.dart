@@ -728,14 +728,14 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff71CBFF),
       );
 
-  TextStyle get identitiyBaseSmallText => GoogleFonts.roboto(
-        fontSize: 12,
+  TextStyle get identitiyBaseLightText => GoogleFonts.roboto(
+        fontSize: 16,
         fontWeight: FontWeight.w300,
         color: const Color(0xffFFFFFF),
       );
-  TextStyle get identitiyBaseMediumBoldText => GoogleFonts.roboto(
-        fontSize: 21,
-        fontWeight: FontWeight.w500,
+  TextStyle get identitiyBaseBoldText => GoogleFonts.roboto(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
         color: const Color(0xffFFFFFF),
       );
 

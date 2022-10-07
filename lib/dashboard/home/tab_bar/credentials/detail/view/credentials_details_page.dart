@@ -74,7 +74,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         false;
 
     if (confirm) {
-      await context.read<WalletCubit>().deleteById(widget.credentialModel);
+      final walletCubit = context.read<WalletCubit>();
+      await walletCubit.deleteById(widget.credentialModel);
+      await context.read<CredentialListCubit>().initialise(walletCubit);
     }
   }
 
