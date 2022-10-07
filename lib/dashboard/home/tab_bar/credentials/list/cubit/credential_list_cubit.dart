@@ -179,6 +179,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
   Future insertCredential(CredentialModel credential) async {
     emit(state.loading());
     final identityCategories = state.identityCategories;
+    final gamingCategories = state.gamingCategories;
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
@@ -208,6 +209,11 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
         switch (credentialSubjectType) {
           case CredentialSubjectType.tezotopiaMembership:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              gamingCategories,
+              CredentialSubjectType.tezotopiaMembership,
+            );
             break;
           case CredentialSubjectType.ageRange:
             _removeDummyIfCredentialExist(
@@ -285,8 +291,18 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.studentCard:
             break;
           case CredentialSubjectType.voucher:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              gamingCategories,
+              CredentialSubjectType.voucher,
+            );
             break;
           case CredentialSubjectType.tezVoucher:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              gamingCategories,
+              CredentialSubjectType.tezVoucher,
+            );
             break;
           case CredentialSubjectType.talaoCommunityCard:
             break;
@@ -295,6 +311,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         emit(
           state.populate(
             identityCredentials: _credentials,
+            gamingCategories: gamingCategories,
             identityCategories: identityCategories,
           ),
         );
