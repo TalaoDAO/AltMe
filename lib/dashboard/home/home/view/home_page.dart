@@ -2,26 +2,11 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    context.read<HomeCubit>().periodicCheckReward(
-          selectedWalletAddress:
-              context.read<WalletCubit>().state.currentAccount.walletAddress,
-        );
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +26,8 @@ class _HomePageState extends State<HomePage> {
           );
         }
 
+        if (homeState.status == AppStatus.success) {}
+
         if (homeState.status == AppStatus.gotTokenReward &&
             homeState.tokenReward != null) {
           showDialog<void>(
@@ -53,8 +40,6 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         }
-
-        if (homeState.status == AppStatus.success) {}
       },
       // TODO(all): Remove IosTabControllerPage when apple accept our NFT #664, https://github.com/TalaoDAO/AltMe/issues/664
       // Setting to hide gallery when on ios

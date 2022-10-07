@@ -142,7 +142,12 @@ class _TabControllerViewState extends State<TabControllerView>
                                     .read<CredentialListCubit>()
                                     .state
                                     .proofOfOwnershipCredentials
-                                    .length)
+                                    .length ||
+                            context
+                                .read<CredentialListCubit>()
+                                .state
+                                .proofOfOwnershipCredentials
+                                .isEmpty)
                           const DiscoverPage()
                         else
                           const CredentialsListPage(),
