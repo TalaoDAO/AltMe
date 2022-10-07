@@ -251,14 +251,21 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> periodicCheckReward({
     required String selectedWalletAddress,
   }) async {
-    await checkReward(selectedWalletAddress);
-    Timer.periodic(const Duration(minutes: 5), (timer) {
-      checkReward(selectedWalletAddress);
-    });
+    try {
+      await checkUNOReward(selectedWalletAddress);
+      await checkXTZReward(selectedWalletAddress);
+      Timer.periodic(const Duration(minutes: 5), (timer) async {
+        await checkUNOReward(selectedWalletAddress);
+        await checkUNOReward(selectedWalletAddress);
+      });
+    } catch (e, s) {
+      getLogger('HomeCubit')
+          .e('error in checking for reward , error: $e, stack: $s');
+    }
   }
 
-  Future<void> checkReward(String selectedWalletAddress) async {
-    getLogger('HomeCubit').i('check for reward');
+  Future<void> checkUNOReward(String selectedWalletAddress) async {
+    getLogger('HomeCubit').i('check for UNO reward');
     final response = await client.get(
       '${Urls.tzktMainnetUrl}/v1/tokens/transfers',
       queryParameters: <String, dynamic>{
@@ -280,7 +287,7 @@ class HomeCubit extends Cubit<HomeState> {
         .toList();
 
     final String? lastNotifiedRewardId = await secureStorageProvider.get(
-      SecureStorageKeys.lastNotifiedRewardId,
+      SecureStorageKeys.lastNotifiedUNORewardId,
     );
 
     final lastOperation = operations.first; //operations sorted by time in api
@@ -289,7 +296,7 @@ class HomeCubit extends Cubit<HomeState> {
     } else {
       // save the operation id to storage
       await secureStorageProvider.set(
-        SecureStorageKeys.lastNotifiedRewardId,
+        SecureStorageKeys.lastNotifiedUNORewardId,
         lastOperation.id.toString(),
       );
 
@@ -303,6 +310,62 @@ class HomeCubit extends Cubit<HomeState> {
             ),
             symbol: 'UNO',
             name: 'Unobtanium',
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> checkXTZReward(String selectedWalletAddress) async {
+    getLogger('HomeCubit').i('check for XTZ reward');
+
+    final result = await client.get(
+      '${Urls.tzktMainnetUrl}/v1/operations/transactions',
+      queryParameters: <String, dynamic>{
+        'sender': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
+        'target': selectedWalletAddress,
+        'amount.gt': 0,
+      },
+    ) as List<dynamic>;
+
+    if (result.isEmpty) {
+      return;
+    }
+
+    final operations = result
+        .map(
+          (dynamic e) => OperationModel.fromJson(e as Map<String, dynamic>),
+        )
+        .toList();
+    //sort for last transaction at first
+    operations.sort(
+      (a, b) => b.dateTime.compareTo(a.dateTime),
+    );
+
+    final String? lastNotifiedRewardId = await secureStorageProvider.get(
+      SecureStorageKeys.lastNotifiedXTZRewardId,
+    );
+
+    final lastOperation = operations.first; //operations sorted by time in api
+    if (lastOperation.id.toString() == lastNotifiedRewardId) {
+      return;
+    } else {
+      // save the operation id to storage
+      await secureStorageProvider.set(
+        SecureStorageKeys.lastNotifiedUNORewardId,
+        lastOperation.id.toString(),
+      );
+
+      emit(
+        state.copyWith(
+          status: AppStatus.gotTokenReward,
+          tokenReward: TokenReward(
+            amount: lastOperation.calcAmount(
+              decimal: 6, //XTZ
+              value: lastOperation.amount.toString(),
+            ),
+            symbol: 'XTZ',
+            name: 'Tezos',
           ),
         ),
       );
