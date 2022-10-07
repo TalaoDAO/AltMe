@@ -254,7 +254,7 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       await checkUNOReward(selectedWalletAddress);
       await checkXTZReward(selectedWalletAddress);
-      Timer.periodic(const Duration(minutes: 5), (timer) async {
+      Timer.periodic(const Duration(minutes: 1), (timer) async {
         await checkUNOReward(selectedWalletAddress);
         await checkUNOReward(selectedWalletAddress);
       });
