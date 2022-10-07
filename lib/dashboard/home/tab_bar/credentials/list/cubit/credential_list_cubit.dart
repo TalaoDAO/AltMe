@@ -37,13 +37,15 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       final CredentialSubjectModel credentialSubject =
           credential.credentialPreview.credentialSubjectModel;
 
-      /// remove over18 if exists
+      /// remove over18,tezotopiaMembership,ageRange,nationality,gender,
+      /// identityPass,identityCard,residentCard,voucher,tezVoucher if exists
 
       final credentialSubjectType = credential
           .credentialPreview.credentialSubjectModel.credentialSubjectType;
 
       switch (credentialSubjectType) {
         case CredentialSubjectType.tezotopiaMembership:
+          gamingCategories.remove(CredentialSubjectType.tezotopiaMembership);
           break;
         case CredentialSubjectType.ageRange:
           identityCategories.remove(CredentialSubjectType.ageRange);
@@ -93,8 +95,10 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.studentCard:
           break;
         case CredentialSubjectType.voucher:
+          gamingCategories.remove(CredentialSubjectType.voucher);
           break;
         case CredentialSubjectType.tezVoucher:
+          gamingCategories.remove(CredentialSubjectType.tezVoucher);
           break;
         case CredentialSubjectType.talaoCommunityCard:
           break;
