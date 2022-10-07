@@ -18,14 +18,14 @@ class TezosNetwork {
 
   factory TezosNetwork.mainNet() => const TezosNetwork(
         networkname: 'Mainnet',
-        tzktUrl: 'https://api.tzkt.io',
+        tzktUrl: Urls.tzktMainnetUrl,
         rpcNodeUrl: Urls.mainnetRPC,
         description: 'Tezos Main Network',
       );
 
   factory TezosNetwork.ghostnet() => const TezosNetwork(
         networkname: 'Ghostnet',
-        tzktUrl: 'https://api.ghostnet.tzkt.io',
+        tzktUrl: Urls.tzktGhostnetUrl,
         rpcNodeUrl: Urls.ghostnetRPC,
         description: 'Tezos Test Network',
       );

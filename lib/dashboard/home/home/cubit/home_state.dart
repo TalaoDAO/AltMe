@@ -8,6 +8,7 @@ class HomeState extends Equatable {
     this.homeStatus = HomeStatus.hasNoWallet,
     this.passBaseStatus,
     this.link,
+    this.tokenReward,
   });
 
   factory HomeState.fromJson(Map<String, dynamic> json) =>
@@ -18,12 +19,14 @@ class HomeState extends Equatable {
   final HomeStatus homeStatus;
   final PassBaseStatus? passBaseStatus;
   final String? link;
+  final TokenReward? tokenReward;
 
   HomeState loading() {
     return HomeState(
       status: AppStatus.loading,
       homeStatus: homeStatus,
       passBaseStatus: null,
+      tokenReward: null,
       link: link,
     );
   }
@@ -44,6 +47,7 @@ class HomeState extends Equatable {
     HomeStatus? homeStatus,
     PassBaseStatus? passBaseStatus,
     String? link,
+    TokenReward? tokenReward,
   }) {
     return HomeState(
       status: status,
@@ -53,6 +57,7 @@ class HomeState extends Equatable {
       homeStatus: homeStatus ?? this.homeStatus,
       passBaseStatus: passBaseStatus ?? this.passBaseStatus,
       link: link ?? this.link,
+      tokenReward: tokenReward ?? this.tokenReward,
     );
   }
 
@@ -65,5 +70,6 @@ class HomeState extends Equatable {
         homeStatus,
         passBaseStatus,
         link,
+        tokenReward,
       ];
 }
