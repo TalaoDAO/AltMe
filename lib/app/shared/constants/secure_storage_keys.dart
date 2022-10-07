@@ -2,6 +2,7 @@ class SecureStorageKeys {
   static const String isFirstSelectedTokenContracts =
       'isFirstSelectedTokenContracts';
   static const String selectedContracts = 'selectedContracts';
+  static const String lastNotifiedRewardId = 'lastNotifiedRewardTxId';
   static const String isIdentityEnabled = 'isIdentityEnabled';
   static const String isCommunityEnabled = 'isCommunityEnabled';
   static const String isOtherEnabled = 'isOtherEnabled';

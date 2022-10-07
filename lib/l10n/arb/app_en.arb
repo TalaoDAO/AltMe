@@ -538,5 +538,8 @@
   "otherCredentialHomeSubtitle": "Here are other type of credentials / cards you can use when needed.",
   "otherCredentialDiscoverSubtitle": "Here are other type of cards you can add in your wallet.",
   "showMore": "...Show more",
-  "showLess": "Show less..."
+  "showLess": "Show less...",
+  "youHaveReceivedARewardOf": "You have received a reward of",
+  "reward": "Reward",
+  "gotIt": "Got it"
 }

@@ -30,4 +30,8 @@ class Urls {
   static const tezToolBase = 'https://api.teztools.io';
 
   static const xtzPrice = 'https://api.teztools.io/v1/xtz-price';
+
+  //
+  static const tzktMainnetUrl = 'https://api.tzkt.io';
+  static const tzktGhostnetUrl = 'https://api.ghostnet.tzkt.io';
 }

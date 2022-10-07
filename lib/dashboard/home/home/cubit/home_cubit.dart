@@ -247,6 +247,67 @@ class HomeCubit extends Cubit<HomeState> {
       }
     });
   }
+
+  Future<void> periodicCheckReward({
+    required String selectedWalletAddress,
+  }) async {
+    await checkReward(selectedWalletAddress);
+    Timer.periodic(const Duration(minutes: 5), (timer) {
+      checkReward(selectedWalletAddress);
+    });
+  }
+
+  Future<void> checkReward(String selectedWalletAddress) async {
+    getLogger('HomeCubit').i('check for reward');
+    final response = await client.get(
+      '${Urls.tzktMainnetUrl}/v1/tokens/transfers',
+      queryParameters: <String, dynamic>{
+        'from': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
+        'to': selectedWalletAddress,
+        'token.contract.eq': 'KT1ErKVqEhG9jxXgUG2KGLW3bNM7zXHX8SDF', // UNO
+        'sort.desc': 'timestamp'
+      },
+    ) as List<dynamic>;
+
+    if (response.isEmpty) {
+      return;
+    }
+
+    final operations = response
+        .map(
+          (dynamic e) => OperationModel.fromFa2Json(e as Map<String, dynamic>),
+        )
+        .toList();
+
+    final String? lastNotifiedRewardId = await secureStorageProvider.get(
+      SecureStorageKeys.lastNotifiedRewardId,
+    );
+
+    final lastOperation = operations.first; //operations sorted by time in api
+    if (lastOperation.id.toString() == lastNotifiedRewardId) {
+      return;
+    } else {
+      // save the operation id to storage
+      await secureStorageProvider.set(
+        SecureStorageKeys.lastNotifiedRewardId,
+        lastOperation.id.toString(),
+      );
+
+      emit(
+        state.copyWith(
+          status: AppStatus.gotTokenReward,
+          tokenReward: TokenReward(
+            amount: lastOperation.calcAmount(
+              decimal: 9, //UNO
+              value: lastOperation.amount.toString(),
+            ),
+            symbol: 'UNO',
+            name: 'Unobtanium',
+          ),
+        ),
+      );
+    }
+  }
 }
 
 Future<PassBaseStatus> getPassBaseStatus(String did) async {

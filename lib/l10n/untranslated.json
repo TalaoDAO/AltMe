@@ -488,7 +488,10 @@
     "otherCredentialHomeSubtitle",
     "otherCredentialDiscoverSubtitle",
     "showMore",
-    "showLess"
+    "showLess",
+    "youHaveReceivedARewardOf",
+    "reward",
+    "gotIt"
   ],
 
   "es": [
@@ -980,7 +983,10 @@
     "otherCredentialHomeSubtitle",
     "otherCredentialDiscoverSubtitle",
     "showMore",
-    "showLess"
+    "showLess",
+    "youHaveReceivedARewardOf",
+    "reward",
+    "gotIt"
   ],
 
   "fr": [
@@ -1472,7 +1478,10 @@
     "otherCredentialHomeSubtitle",
     "otherCredentialDiscoverSubtitle",
     "showMore",
-    "showLess"
+    "showLess",
+    "youHaveReceivedARewardOf",
+    "reward",
+    "gotIt"
   ],
 
   "it": [
@@ -1964,6 +1973,9 @@
     "otherCredentialHomeSubtitle",
     "otherCredentialDiscoverSubtitle",
     "showMore",
-    "showLess"
+    "showLess",
+    "youHaveReceivedARewardOf",
+    "reward",
+    "gotIt"
   ]
 }
