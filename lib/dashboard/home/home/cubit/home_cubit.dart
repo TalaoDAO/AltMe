@@ -256,7 +256,7 @@ class HomeCubit extends Cubit<HomeState> {
       await checkXTZReward(selectedWalletAddress);
       Timer.periodic(const Duration(minutes: 1), (timer) async {
         await checkUNOReward(selectedWalletAddress);
-        await checkUNOReward(selectedWalletAddress);
+        await checkXTZReward(selectedWalletAddress);
       });
     } catch (e, s) {
       getLogger('HomeCubit')
@@ -342,6 +342,7 @@ class HomeCubit extends Cubit<HomeState> {
       (a, b) => b.dateTime.compareTo(a.dateTime),
     );
 
+
     final String? lastNotifiedRewardId = await secureStorageProvider.get(
       SecureStorageKeys.lastNotifiedXTZRewardId,
     );
@@ -352,7 +353,7 @@ class HomeCubit extends Cubit<HomeState> {
     } else {
       // save the operation id to storage
       await secureStorageProvider.set(
-        SecureStorageKeys.lastNotifiedUNORewardId,
+        SecureStorageKeys.lastNotifiedXTZRewardId,
         lastOperation.id.toString(),
       );
 
