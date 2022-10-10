@@ -450,11 +450,33 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
       case CredentialCategory.gamingCards:
+        final gamingCategories = state.gamingCategories;
         final _credentials = List.of(state.gamingCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
-        emit(state.populate(gamingCredentials: _credentials));
+
+        //check if type of credential is memberShip,tezVoucher or voucher then
+        //add it again to discover
+        final credentialSubjectType = credential
+            .credentialPreview.credentialSubjectModel.credentialSubjectType;
+        if (credentialSubjectType ==
+            CredentialSubjectType.tezotopiaMembership) {
+          gamingCategories.add(CredentialSubjectType.tezotopiaMembership);
+        }
+        if (credentialSubjectType == CredentialSubjectType.tezVoucher) {
+          gamingCategories.add(CredentialSubjectType.tezVoucher);
+        }
+        if (credentialSubjectType == CredentialSubjectType.voucher) {
+          gamingCategories.add(CredentialSubjectType.voucher);
+        }
+
+        emit(
+          state.populate(
+            gamingCredentials: _credentials,
+            gamingCategories: gamingCategories,
+          ),
+        );
         break;
 
       case CredentialCategory.communityCards:
