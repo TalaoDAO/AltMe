@@ -54,4 +54,16 @@ class CredentialManifest {
     }
     return PresentationDefinition.fromJson(json as Map<String, dynamic>);
   }
+
+  static CredentialManifest copyWith({
+    String? id,
+    List<OutputDescriptor>? outputDescriptors,
+    PresentationDefinition? presentationDefinition,
+  }) {
+    return CredentialManifest(
+      id,
+      outputDescriptors,
+      presentationDefinition,
+    );
+  }
 }

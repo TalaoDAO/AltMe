@@ -4,8 +4,11 @@ import 'dart:convert';
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/dashboard/home/tab_bar/tab_bar.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:json_path/json_path.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 /// At the end of PassBase Process the wallet get identityAccessKey which
@@ -65,6 +68,19 @@ Future<void> multipleCredentialsTimer(
   });
 }
 
+Future<CredentialManifest> getCredentialManifestFromAltMe(
+  DioClient client,
+) async {
+  final dynamic wellKnown = await client.get(
+    'https://issuer.talao.co/.well-known/openid-configuration',
+  );
+  final JsonPath credentialManifetPath = JsonPath(r'$..credential_manifest');
+  final credentialManifest = CredentialManifest.fromJson(
+    credentialManifetPath.read(wellKnown).first.value as Map<String, dynamic>,
+  );
+  return credentialManifest;
+}
+
 Future<bool> getCredentialsFromIssuer(
   String preAuthorizedCode,
   DioClient client,
@@ -99,6 +115,17 @@ Future<bool> getCredentialsFromIssuer(
         final Map<String, dynamic> newCredential =
             Map<String, dynamic>.from(credential as Map<String, dynamic>);
         newCredential['credentialPreview'] = credential;
+        final CredentialManifest credentialManifest =
+            await getCredentialManifestFromAltMe(client);
+        credentialManifest.outputDescriptors
+            ?.removeWhere((element) => element.id != type);
+        if (credentialManifest.outputDescriptors!.isNotEmpty) {
+          newCredential['credential_manifest'] = CredentialManifest(
+            credentialManifest.id,
+            credentialManifest.outputDescriptors,
+            credentialManifest.presentationDefinition,
+          ).toJson();
+        }
 
         final credentialModel = CredentialModel.copyWithData(
           oldCredentialModel: CredentialModel.fromJson(
