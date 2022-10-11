@@ -84,7 +84,7 @@ class SnackBarContent extends StatelessWidget {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.zero,
-              primary: Colors.transparent,
+              backgroundColor: Colors.transparent,
               shadowColor: Colors.transparent,
             ),
             onPressed: () {

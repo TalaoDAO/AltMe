@@ -37,8 +37,6 @@ class _SelectTokenBottomSheetView extends StatefulWidget {
 
 class _SelectTokenBottomSheetViewState
     extends State<_SelectTokenBottomSheetView> {
-  int _offset = 0;
-  final _limit = 15;
   int activeIndex = -1;
 
   Future<void> onRefresh() async {
