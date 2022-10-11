@@ -12,13 +12,6 @@ class NftListShimmer extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ShimmerWidget.rectangular(
-          height: 15,
-          width: 70,
-        ),
-        const SizedBox(
-          height: 8,
-        ),
         Expanded(
           child: GridView.builder(
             physics: const BouncingScrollPhysics(),
