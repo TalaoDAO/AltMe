@@ -52,13 +52,6 @@ class _NftListState extends State<NftList> {
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '${widget.nftList.length} ${l10n.items}',
-          style: Theme.of(context).textTheme.listSubtitle,
-        ),
-        const SizedBox(
-          height: Sizes.space2XSmall,
-        ),
         Center(
           child: InkWell(
             onTap: () {

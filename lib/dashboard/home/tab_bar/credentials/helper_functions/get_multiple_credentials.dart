@@ -4,8 +4,11 @@ import 'dart:convert';
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/dashboard/home/tab_bar/tab_bar.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:json_path/json_path.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 /// At the end of PassBase Process the wallet get identityAccessKey which
@@ -33,22 +36,52 @@ Future<void> getMutipleCredentials(
     secureStorageProvider,
     preAuthorizedCode,
   );
-// Wait 5 minutes to let passbase verification time to happen
-  Future.delayed(
+// Wait 1 minute to let passbase verification time to happen
+  await multipleCredentialsTimer(
+    preAuthorizedCode,
+    client,
+    secureStorageProvider,
+    walletCubit,
+  );
+}
+
+Future<void> multipleCredentialsTimer(
+  String preAuthorizedCode,
+  DioClient client,
+  secure_storage.SecureStorageProvider secureStorageProvider,
+  WalletCubit walletCubit,
+) async {
+  Timer.periodic(
       const Duration(
         minutes: Parameters.multipleCredentialsProcessDelay,
-      ), () async {
-    await getCredentialsFromIssuer(
+      ), (timer) async {
+    final bool result = await getCredentialsFromIssuer(
       preAuthorizedCode,
       client,
       Parameters.credentialTypeList,
       secureStorageProvider,
       walletCubit,
     );
+    if (result) {
+      timer.cancel();
+    }
   });
 }
 
-Future<void> getCredentialsFromIssuer(
+Future<CredentialManifest> getCredentialManifestFromAltMe(
+  DioClient client,
+) async {
+  final dynamic wellKnown = await client.get(
+    'https://issuer.talao.co/.well-known/openid-configuration',
+  );
+  final JsonPath credentialManifetPath = JsonPath(r'$..credential_manifest');
+  final credentialManifest = CredentialManifest.fromJson(
+    credentialManifetPath.read(wellKnown).first.value as Map<String, dynamic>,
+  );
+  return credentialManifest;
+}
+
+Future<bool> getCredentialsFromIssuer(
   String preAuthorizedCode,
   DioClient client,
   List<String> credentialTypeList,
@@ -66,34 +99,50 @@ Future<void> getCredentialsFromIssuer(
   final String accessToken = data['access_token'] as String;
   final String nonce = data['c_nonce'] as String;
 
-  for (final type in credentialTypeList) {
-    final dynamic credential = await getCredential(
-      accessToken,
-      nonce,
-      credentialEndPoint,
-      type,
-      client,
-      secureStorageProvider,
-    );
-
-    // prepare credential for insertion
-    if (credential != null) {
-      final Map<String, dynamic> newCredential =
-          Map<String, dynamic>.from(credential as Map<String, dynamic>);
-      newCredential['credentialPreview'] = credential;
-
-      final credentialModel = CredentialModel.copyWithData(
-        oldCredentialModel: CredentialModel.fromJson(
-          newCredential,
-        ),
-        newData: credential,
-        activities: [Activity(acquisitionAt: DateTime.now())],
+  try {
+    for (final type in credentialTypeList) {
+      final dynamic credential = await getCredential(
+        accessToken,
+        nonce,
+        credentialEndPoint,
+        type,
+        client,
+        secureStorageProvider,
       );
-      // insert the credential in the wallet
-      await walletCubit.insertCredential(credentialModel);
+
+      // prepare credential for insertion
+      if (credential != null) {
+        final Map<String, dynamic> newCredential =
+            Map<String, dynamic>.from(credential as Map<String, dynamic>);
+        newCredential['credentialPreview'] = credential;
+        final CredentialManifest credentialManifest =
+            await getCredentialManifestFromAltMe(client);
+        credentialManifest.outputDescriptors
+            ?.removeWhere((element) => element.id != type);
+        if (credentialManifest.outputDescriptors!.isNotEmpty) {
+          newCredential['credential_manifest'] = CredentialManifest(
+            credentialManifest.id,
+            credentialManifest.outputDescriptors,
+            credentialManifest.presentationDefinition,
+          ).toJson();
+        }
+
+        final credentialModel = CredentialModel.copyWithData(
+          oldCredentialModel: CredentialModel.fromJson(
+            newCredential,
+          ),
+          newData: credential,
+          activities: [Activity(acquisitionAt: DateTime.now())],
+        );
+        // insert the credential in the wallet
+        await walletCubit.insertCredential(credentialModel);
+      }
     }
+    unawaited(unregisterMultipleCredentialsProcess(secureStorageProvider));
+    return true;
+  } catch (e) {
+    return false;
   }
-  unawaited(unregisterMultipleCredentialsProcess(secureStorageProvider));
 }
 
 Future<dynamic> getCredential(

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class OnBoardingSecondPage extends StatelessWidget {
   const OnBoardingSecondPage({Key? key}) : super(key: key);
 
-  static Route route() => RightToLeftRoute<void>(
+  static Route route() => MaterialPageRoute<void>(
         builder: (context) => const OnBoardingSecondPage(),
         settings: const RouteSettings(name: '/onBoardingSecondPage'),
       );
@@ -45,14 +45,9 @@ class _OnBoardingSecondViewState extends State<OnBoardingSecondView> {
     return GestureDetector(
       onHorizontalDragUpdate: (drag) async {
         if (animate) {
-          if (drag.delta.dx > 2) {
-            Navigator.of(context).pop();
-            disableAnimation();
-          }
-
           if (drag.delta.dx < -2) {
             disableAnimation();
-            await Navigator.of(context).push<void>(OnBoardingThirdPage.route());
+            await Navigator.of(context).push<void>(OnBoardingFirstPage.route());
           }
         }
       },
@@ -62,7 +57,7 @@ class _OnBoardingSecondViewState extends State<OnBoardingSecondView> {
           title: l10n.onBoardingSecondTitle,
           subtitle: l10n.onBoardingSecondSubtitle,
           image: ImageStrings.onBoardingSecondImage,
-          index: 2,
+          index: 1,
         ),
       ),
     );

@@ -47,16 +47,20 @@ class SplashCubit extends Cubit<SplashState> {
         );
         if (preAuthorizedCode != null) {
           unawaited(
-            getCredentialsFromIssuer(
+            multipleCredentialsTimer(
               preAuthorizedCode,
               client,
-              Parameters.credentialTypeList,
               secureStorageProvider,
               walletCubit,
             ),
           );
         }
       }
+      unawaited(
+        homeCubit.periodicCheckReward(
+          selectedWalletAddress: walletCubit.state.currentAccount.walletAddress,
+        ),
+      );
     } else {
       homeCubit.emitHasNoWallet();
       emit(state.copyWith(status: SplashStatus.routeToOnboarding));

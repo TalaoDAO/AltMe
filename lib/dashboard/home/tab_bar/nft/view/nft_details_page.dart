@@ -107,6 +107,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                   selectedToken: widget.nftModel.getToken(),
                   withdrawalAddress: '',
                   amount: 1,
+                  isNFT: true,
                 ),
               );
             },

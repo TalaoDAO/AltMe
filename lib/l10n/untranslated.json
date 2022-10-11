@@ -477,7 +477,21 @@
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
     "membershipRequiredListAlerMessage",
-    "beaconShareMessage"
+    "beaconShareMessage",
+    "gamingCredentialHomeSubtitle",
+    "gamingCredentialDiscoverSubtitle",
+    "identityCredentialHomeSubtitle",
+    "identityCredentialDiscoverSubtitle",
+    "paymentCredentialHomeSubtitle",
+    "communityCredentialHomeSubtitle",
+    "communityCredentialDiscoverSubtitle",
+    "otherCredentialHomeSubtitle",
+    "otherCredentialDiscoverSubtitle",
+    "showMore",
+    "showLess",
+    "youHaveReceivedARewardOf",
+    "reward",
+    "gotIt"
   ],
 
   "es": [
@@ -958,7 +972,21 @@
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
     "membershipRequiredListAlerMessage",
-    "beaconShareMessage"
+    "beaconShareMessage",
+    "gamingCredentialHomeSubtitle",
+    "gamingCredentialDiscoverSubtitle",
+    "identityCredentialHomeSubtitle",
+    "identityCredentialDiscoverSubtitle",
+    "paymentCredentialHomeSubtitle",
+    "communityCredentialHomeSubtitle",
+    "communityCredentialDiscoverSubtitle",
+    "otherCredentialHomeSubtitle",
+    "otherCredentialDiscoverSubtitle",
+    "showMore",
+    "showLess",
+    "youHaveReceivedARewardOf",
+    "reward",
+    "gotIt"
   ],
 
   "fr": [
@@ -1439,7 +1467,21 @@
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
     "membershipRequiredListAlerMessage",
-    "beaconShareMessage"
+    "beaconShareMessage",
+    "gamingCredentialHomeSubtitle",
+    "gamingCredentialDiscoverSubtitle",
+    "identityCredentialHomeSubtitle",
+    "identityCredentialDiscoverSubtitle",
+    "paymentCredentialHomeSubtitle",
+    "communityCredentialHomeSubtitle",
+    "communityCredentialDiscoverSubtitle",
+    "otherCredentialHomeSubtitle",
+    "otherCredentialDiscoverSubtitle",
+    "showMore",
+    "showLess",
+    "youHaveReceivedARewardOf",
+    "reward",
+    "gotIt"
   ],
 
   "it": [
@@ -1920,6 +1962,20 @@
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
     "membershipRequiredListAlerMessage",
-    "beaconShareMessage"
+    "beaconShareMessage",
+    "gamingCredentialHomeSubtitle",
+    "gamingCredentialDiscoverSubtitle",
+    "identityCredentialHomeSubtitle",
+    "identityCredentialDiscoverSubtitle",
+    "paymentCredentialHomeSubtitle",
+    "communityCredentialHomeSubtitle",
+    "communityCredentialDiscoverSubtitle",
+    "otherCredentialHomeSubtitle",
+    "otherCredentialDiscoverSubtitle",
+    "showMore",
+    "showLess",
+    "youHaveReceivedARewardOf",
+    "reward",
+    "gotIt"
   ]
 }

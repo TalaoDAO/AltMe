@@ -8,12 +8,14 @@ class HomeCredentialWidget extends StatelessWidget {
     Key? key,
     required this.credentials,
     required this.title,
+    required this.categorySubtitle,
     this.showAddOption = false,
     this.fromDiscover = false,
   }) : super(key: key);
 
   final List<HomeCredential> credentials;
   final String title;
+  final String categorySubtitle;
   final bool showAddOption;
   final bool fromDiscover;
 
@@ -24,8 +26,18 @@ class HomeCredentialWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          '''$title (${credentials.where((element) => !element.isDummy).toList().length})''',
+          title,
           style: Theme.of(context).textTheme.credentialCategoryTitle,
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        Flexible(
+          child: MyText(
+            categorySubtitle,
+            maxLines: 2,
+            style: Theme.of(context).textTheme.credentialCategorySubTitle,
+          ),
         ),
         const SizedBox(
           height: 8,

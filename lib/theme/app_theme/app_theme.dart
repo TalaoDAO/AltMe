@@ -656,6 +656,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffEDEAF5),
       );
 
+  TextStyle get credentialCategorySubTitle => GoogleFonts.roboto(
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+        color: const Color(0xFF86809D),
+      );
+
   TextStyle get credentialSurfaceText => GoogleFonts.roboto(
         fontSize: 10,
         fontWeight: FontWeight.w400,
@@ -722,14 +728,14 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff71CBFF),
       );
 
-  TextStyle get identitiyBaseSmallText => GoogleFonts.roboto(
-        fontSize: 12,
+  TextStyle get identitiyBaseLightText => GoogleFonts.roboto(
+        fontSize: 16,
         fontWeight: FontWeight.w300,
         color: const Color(0xffFFFFFF),
       );
-  TextStyle get identitiyBaseMediumBoldText => GoogleFonts.roboto(
-        fontSize: 21,
-        fontWeight: FontWeight.w500,
+  TextStyle get identitiyBaseBoldText => GoogleFonts.roboto(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
         color: const Color(0xffFFFFFF),
       );
 

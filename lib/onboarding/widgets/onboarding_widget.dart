@@ -24,18 +24,27 @@ class OnBoardingWidget extends StatelessWidget {
     final l10n = context.l10n;
     return Column(
       children: [
-        const AltMeLogo(size: 80),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.onBoardingTitleStyle,
+        const Padding(
+          padding: EdgeInsets.all(8),
+          child: AltMeLogo(size: 80),
         ),
-        const SizedBox(height: 10),
-        Text(
-          subtitle,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.onBoardingSubTitleStyle,
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.onBoardingTitleStyle,
+          ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.onBoardingSubTitleStyle,
+          ),
+        ),
+        const Spacer(),
         Image.asset(
           image,
           fit: BoxFit.fitHeight,
@@ -56,17 +65,24 @@ class OnBoardingWidget extends StatelessWidget {
           },
         ),
         const SizedBox(height: 20),
-        GestureDetector(
-          child: Text(
-            l10n.learnMoreAboutAltme,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.learnMoreTextStyle,
-          ),
-          onTap: () async {
-            await LaunchUrl.launch(Urls.appContactWebsiteUrl);
-          },
-        ),
-        const SizedBox(height: 5),
+        if (isAndroid())
+          Column(
+            children: [
+              GestureDetector(
+                child: Text(
+                  l10n.learnMoreAboutAltme,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.learnMoreTextStyle,
+                ),
+                onTap: () async {
+                  await LaunchUrl.launch(Urls.appContactWebsiteUrl);
+                },
+              ),
+              const SizedBox(height: 5),
+            ],
+          )
+        else
+          const SizedBox.shrink(),
       ],
     );
   }

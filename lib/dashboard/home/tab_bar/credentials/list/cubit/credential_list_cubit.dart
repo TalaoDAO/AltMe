@@ -38,13 +38,15 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       final CredentialSubjectModel credentialSubject =
           credential.credentialPreview.credentialSubjectModel;
 
-      /// remove over18 if exists
+      /// remove over18,tezotopiaMembership,ageRange,nationality,gender,
+      /// identityPass,identityCard,residentCard,voucher,tezVoucher if exists
 
       final credentialSubjectType = credential
           .credentialPreview.credentialSubjectModel.credentialSubjectType;
 
       switch (credentialSubjectType) {
         case CredentialSubjectType.tezotopiaMembership:
+          gamingCategories.remove(CredentialSubjectType.tezotopiaMembership);
           break;
         case CredentialSubjectType.ageRange:
           identityCategories.remove(CredentialSubjectType.ageRange);
@@ -94,8 +96,10 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.studentCard:
           break;
         case CredentialSubjectType.voucher:
+          gamingCategories.remove(CredentialSubjectType.voucher);
           break;
         case CredentialSubjectType.tezVoucher:
+          gamingCategories.remove(CredentialSubjectType.tezVoucher);
           break;
         case CredentialSubjectType.talaoCommunityCard:
           break;
@@ -176,6 +180,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
   Future insertCredential(CredentialModel credential) async {
     emit(state.loading());
     final identityCategories = state.identityCategories;
+    final gamingCategories = state.gamingCategories;
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
@@ -205,6 +210,11 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
         switch (credentialSubjectType) {
           case CredentialSubjectType.tezotopiaMembership:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              gamingCategories,
+              CredentialSubjectType.tezotopiaMembership,
+            );
             break;
           case CredentialSubjectType.ageRange:
             _removeDummyIfCredentialExist(
@@ -282,8 +292,18 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.studentCard:
             break;
           case CredentialSubjectType.voucher:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              gamingCategories,
+              CredentialSubjectType.voucher,
+            );
             break;
           case CredentialSubjectType.tezVoucher:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              gamingCategories,
+              CredentialSubjectType.tezVoucher,
+            );
             break;
           case CredentialSubjectType.talaoCommunityCard:
             break;
@@ -292,6 +312,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         emit(
           state.populate(
             identityCredentials: _credentials,
+            gamingCategories: gamingCategories,
             identityCategories: identityCategories,
           ),
         );
@@ -430,11 +451,33 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
       case CredentialCategory.gamingCards:
+        final gamingCategories = state.gamingCategories;
         final _credentials = List.of(state.gamingCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
-        emit(state.populate(gamingCredentials: _credentials));
+
+        //check if type of credential is memberShip,tezVoucher or voucher then
+        //add it again to discover
+        final credentialSubjectType = credential
+            .credentialPreview.credentialSubjectModel.credentialSubjectType;
+        if (credentialSubjectType ==
+            CredentialSubjectType.tezotopiaMembership) {
+          gamingCategories.add(CredentialSubjectType.tezotopiaMembership);
+        }
+        if (credentialSubjectType == CredentialSubjectType.tezVoucher) {
+          gamingCategories.add(CredentialSubjectType.tezVoucher);
+        }
+        if (credentialSubjectType == CredentialSubjectType.voucher) {
+          gamingCategories.add(CredentialSubjectType.voucher);
+        }
+
+        emit(
+          state.populate(
+            gamingCredentials: _credentials,
+            gamingCategories: gamingCategories,
+          ),
+        );
         break;
 
       case CredentialCategory.communityCards:
@@ -458,6 +501,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         switch (credentialSubjectType) {
           case CredentialSubjectType.tezotopiaMembership:
+            identityCategories.add(CredentialSubjectType.tezotopiaMembership);
             break;
           case CredentialSubjectType.ageRange:
             // Note: Uncomment if we need to display dummies again.
@@ -535,8 +579,10 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.studentCard:
             break;
           case CredentialSubjectType.voucher:
+            identityCategories.add(CredentialSubjectType.voucher);
             break;
           case CredentialSubjectType.tezVoucher:
+            identityCategories.add(CredentialSubjectType.tezVoucher);
             break;
           case CredentialSubjectType.talaoCommunityCard:
             break;

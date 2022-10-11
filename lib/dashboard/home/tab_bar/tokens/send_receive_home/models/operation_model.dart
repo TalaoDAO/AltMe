@@ -85,7 +85,7 @@ class OperationModel extends Equatable {
   final OperationParameterModel? parameter;
 
   DateTime get dateTime {
-    return DateFormat('y-M-dThh:mm:ssZ').parse(timestamp);
+    return DateFormat('y-M-dTHH:mm:ssZ').parse(timestamp);
   }
 
   String get formatedDateTime {

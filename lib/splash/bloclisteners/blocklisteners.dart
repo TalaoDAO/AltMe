@@ -3,6 +3,7 @@ import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/first/onboarding_first.dart';
+import 'package:altme/onboarding/second/view/onboarding_second_page.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
@@ -26,7 +27,7 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
     }
 
     if (state.status == SplashStatus.routeToOnboarding) {
-      Navigator.of(context).push<void>(OnBoardingFirstPage.route());
+      Navigator.of(context).push<void>(OnBoardingSecondPage.route());
     }
   },
 );

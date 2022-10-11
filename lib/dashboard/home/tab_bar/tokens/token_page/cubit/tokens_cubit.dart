@@ -28,7 +28,7 @@ class TokensCubit extends Cubit<TokensState> {
   final AllTokensCubit allTokensCubit;
 
   List<TokenModel> data = [];
-  final int _limit = 50;
+  final int _limit = 100;
   int _offsetOfLoadedData = -1;
 
   void toggleIsSecure() {
