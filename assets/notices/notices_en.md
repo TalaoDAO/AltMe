@@ -1,4 +1,4 @@
-The Altme wallet in an open source project under Apache 2.0 licence
+The Arago wallet in an open source project under Apache 2.0 licence
 - https://github.com/TalaoDAO/AltMe
 
 Powered by TzKT API 

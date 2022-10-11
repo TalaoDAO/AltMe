@@ -7,10 +7,10 @@ Este documento se actualizó el martes 17 de septiembre de 2021
 ## Preámbulo
 
 
-Se puede acceder a la identidad digital profesional de Talao a través de una interfaz web desde un navegador y también requiere una aplicación para teléfonos inteligentes llamada billetera.
+Se puede acceder a la identidad digital profesional de Arago a través de una interfaz web desde un navegador y también requiere una aplicación para teléfonos inteligentes llamada billetera.
 
 
-Este documento tiene como objetivo presentar las condiciones bajo las cuales el usuario puede utilizar el servicio Talao Professional Digital Identity.
+Este documento tiene como objetivo presentar las condiciones bajo las cuales el usuario puede utilizar el servicio Arago Professional Digital Identity.
 
 
 ## Definiciones
@@ -19,28 +19,28 @@ Este documento tiene como objetivo presentar las condiciones bajo las cuales el 
 Atestados o atestaciones verificables: las atestaciones verificables son certificados digitales estandarizados que facilitan el intercambio de información en línea, de manera soberana y segura. El término "estandarización" indica que existe un método conforme para producir una atestación verificable (CV). Este método está siendo estandarizado actualmente por el Consorcio World Wide Web (https://www.w3.org/TR/vc-data-model/)
 
 
-Claves o claves criptográficas: par de claves públicas / privadas almacenadas en una billetera en un teléfono inteligente. Estas claves son del tipo ECDSA. Si se pierden, se pueden regenerar a partir de una sentencia aleatoria de 12 meses si el usuario ha conservado esta última. Un par de claves está asociado a una única identidad digital profesional. Talao y los socios desconocen estas claves. Si estas claves se pierden definitivamente, el acceso a la Identidad Digital Profesional es imposible.
+Claves o claves criptográficas: par de claves públicas / privadas almacenadas en una billetera en un teléfono inteligente. Estas claves son del tipo ECDSA. Si se pierden, se pueden regenerar a partir de una sentencia aleatoria de 12 meses si el usuario ha conservado esta última. Un par de claves está asociado a una única identidad digital profesional. Arago y los socios desconocen estas claves. Si estas claves se pierden definitivamente, el acceso a la Identidad Digital Profesional es imposible.
 
 
-Wallet: aplicación publicada por Talao, de código abierto, descargable en un smartphone desde las tiendas online Google Play Store y Apple App Store que permite al usuario guardar sus claves criptográficas compatibles con una blockchain tipo Tezos en su smartphone.
+Wallet: aplicación publicada por Arago, de código abierto, descargable en un smartphone desde las tiendas online Google Play Store y Apple App Store que permite al usuario guardar sus claves criptográficas compatibles con una blockchain tipo Tezos en su smartphone.
 
 
-Código o código secreto: se refiere al código alfanumérico y de un solo uso transmitido por Talao a través de SMS o correo electrónico como parte de su registro con el fin de validar el número de móvil del usuario.
+Código o código secreto: se refiere al código alfanumérico y de un solo uso transmitido por Arago a través de SMS o correo electrónico como parte de su registro con el fin de validar el número de móvil del usuario.
 
 
-Términos y Condiciones: se refiere a estas condiciones generales de uso de los servicios (incluyendo cualquier documento que se incluya expresamente por referencia en estas condiciones generales), las condiciones especiales que indique Talao así como sus posibles modificaciones.
+Términos y Condiciones: se refiere a estas condiciones generales de uso de los servicios (incluyendo cualquier documento que se incluya expresamente por referencia en estas condiciones generales), las condiciones especiales que indique Arago así como sus posibles modificaciones.
 
 
-Contrato: significa las Condiciones Generales (incluido cualquier documento que se incluya expresamente por referencia en estas condiciones generales) que complementan los Términos y Condiciones y cualquier condición especial indicada por Talao y cualquier enmienda a las condiciones generales especiales.
+Contrato: significa las Condiciones Generales (incluido cualquier documento que se incluya expresamente por referencia en estas condiciones generales) que complementan los Términos y Condiciones y cualquier condición especial indicada por Arago y cualquier enmienda a las condiciones generales especiales.
 
 
 Identificadores descentralizados o DID (Identificador descentralizado): un identificador digital que el usuario puede demostrar criptográficamente que está en su poder con una clave criptográfica. Estos identificadores han sido estandarizados por el W3C https://w3c.github.io/did-core/.
 
 
-Portafolio o espacio de trabajo: designa una cuenta de usuario abierta en el sitio de Talao. Este espacio se utiliza para guardar información profesional y certificados verificables emitidos por terceros (certificados profesionales, certificados de empleo, etc.). Un espacio de trabajo se convierte en una identidad digital después de que Talao haya realizado una verificación cara a cara de la identidad del usuario y haya emitido un certificado de identidad.
+Portafolio o espacio de trabajo: designa una cuenta de usuario abierta en el sitio de Arago. Este espacio se utiliza para guardar información profesional y certificados verificables emitidos por terceros (certificados profesionales, certificados de empleo, etc.). Un espacio de trabajo se convierte en una identidad digital después de que Arago haya realizado una verificación cara a cara de la identidad del usuario y haya emitido un certificado de identidad.
 
 
-Identificación: se refiere al procedimiento según el cual el usuario ingresa sus Identificadores para poder acceder al servicio de Identidad Digital Profesional o su cuenta en un sitio de Socio desde el botón de conexión de Identidad Digital Talao.
+Identificación: se refiere al procedimiento según el cual el usuario ingresa sus Identificadores para poder acceder al servicio de Identidad Digital Profesional o su cuenta en un sitio de Socio desde el botón de conexión de Identidad Digital Arago.
 
 
 Identidad Digital Profesional o Identidad Digital: se refiere al servicio que permite a un usuario conectarse desde su aplicación móvil a todos los servicios asociados.
@@ -49,7 +49,7 @@ Identidad Digital Profesional o Identidad Digital: se refiere al servicio que pe
 Registro: se refiere al procedimiento que permite a cualquier persona elegible ingresar sus datos personales para acceder a los servicios y obtener una Identidad Digital Profesional. 
 
 
-Escritorio: designa una computadora (PC, laptop, etc.) que permite la conexión al sitio https://altme.co. Esta computadora debe estar equipada con un sistema operativo como Windows, Linux, Mac y software de acceso a Internet como Chrome, Internet Explorer, Firefox, Brave.
+Escritorio: designa una computadora (PC, laptop, etc.) que permite la conexión al sitio https://arago.co. Esta computadora debe estar equipada con un sistema operativo como Windows, Linux, Mac y software de acceso a Internet como Chrome, Internet Explorer, Firefox, Brave.
  
 Contraseña: designa el código elegido por el usuario, exclusivo y confidencial, que, asociado al nombre de usuario, es necesario para que este último acceda a su espacio de trabajo en caso de que no disponga de su smartphone.
  
@@ -59,25 +59,25 @@ Nombre de usuario: se refiere al nombre propuesto por el sitio que permite al us
 Socio (s): se refiere a empresas en relación con el uso de la Identidad Digital Profesional. Ejemplo: el editor de un sitio web que permite al usuario identificarse a través de su identidad digital es un socio.
 
 
-Servicio: se refiere al servicio que permite a un usuario crear, modificar, renovar y eliminar una cartera configurada por Talao.
+Servicio: se refiere al servicio que permite a un usuario crear, modificar, renovar y eliminar una cartera configurada por Arago.
 
 
-Sitio: se refiere al sitio web seguro publicado por Talao (https://altme.co) que permite a un usuario acceder a su portafolio y a todo o parte del servicio de Identidad Digital Profesional de Talao.
+Sitio: se refiere al sitio web seguro publicado por Arago (https://arago.co) que permite a un usuario acceder a su portafolio y a todo o parte del servicio de Identidad Digital Profesional de Arago.
 
 
 Self Sovereign Identity (SSI Self Sovereign Identity): un modelo de identidad digital que le da al usuario control sobre sus datos.
 
 
-Usuario: se refiere a una persona que tiene la aplicación de teléfono inteligente Talao y un portafolio. El usuario es necesariamente un individuo, es decir, una persona física. Este usuario es titular de un smartphone capaz de instalar una aplicación móvil denominada wallet de las tiendas que lo ofrecen (App Store para titulares de un iPhone y Google Play para titulares de un smartphone Android).
+Usuario: se refiere a una persona que tiene la aplicación de teléfono inteligente Arago y un portafolio. El usuario es necesariamente un individuo, es decir, una persona física. Este usuario es titular de un smartphone capaz de instalar una aplicación móvil denominada wallet de las tiendas que lo ofrecen (App Store para titulares de un iPhone y Google Play para titulares de un smartphone Android).
 
 
 ## Propósito
 
 
-El propósito de estos Términos y Condiciones es definir la relación contractual entre Talao y el usuario en cuanto al acceso y uso del servicio de Identidad Digital Profesional que consiste en una aplicación web denominada portafolio en la dirección https://altme.co y un aplicación de teléfono inteligente llamada billetera disponible en las tiendas de Apple y Google.
+El propósito de estos Términos y Condiciones es definir la relación contractual entre Arago y el usuario en cuanto al acceso y uso del servicio de Identidad Digital Profesional que consiste en una aplicación web denominada portafolio en la dirección https://arago.co y un aplicación de teléfono inteligente llamada billetera disponible en las tiendas de Apple y Google.
 
 
-En cualquier momento, Talao se reserva el derecho de realizar cambios en el Servicio de identidad digital profesional y, por lo tanto, en estos Términos y condiciones. Cualquier modificación entra en vigor a partir de su publicación o, en su caso, en cualquier otra fecha que se indique. Talao se asegurará de que los usuarios estén al tanto de cualquier modificación de los Términos y condiciones, sin embargo, es responsabilidad del usuario, antes de cualquier uso del servicio de Identidad digital, consultar la última versión de los Términos y condiciones accesible en cualquier momento en https. sitio: https//altme.co.
+En cualquier momento, Arago se reserva el derecho de realizar cambios en el Servicio de identidad digital profesional y, por lo tanto, en estos Términos y condiciones. Cualquier modificación entra en vigor a partir de su publicación o, en su caso, en cualquier otra fecha que se indique. Arago se asegurará de que los usuarios estén al tanto de cualquier modificación de los Términos y condiciones, sin embargo, es responsabilidad del usuario, antes de cualquier uso del servicio de Identidad digital, consultar la última versión de los Términos y condiciones accesible en cualquier momento en https. sitio: https//arago.co.
 
 
 En caso de desacuerdo con las nuevas disposiciones, el usuario se compromete a dejar de utilizar el servicio y a eliminar su Identidad Digital.
@@ -86,49 +86,49 @@ En caso de desacuerdo con las nuevas disposiciones, el usuario se compromete a d
 ## Presentación del servicio
 
 
-de Identidad Digital Profesional La Identidad Digital Profesional es un servicio de Talao que le permite crear una identidad electrónica que se puede utilizar en línea a través de una aplicación móvil segura. Esta identidad digital profesional será utilizada por el usuario para simplificar y asegurar sus procedimientos en línea con socios, en particular en el campo de los recursos humanos (por ejemplo, acceder a un sitio de anuncios de contratación, acceder al sitio de recursos humanos de su empresa, proporcionar un certificado de empleador para alquilar bienes inmuebles o abrir una cuenta bancaria, etc.). 
+de Identidad Digital Profesional La Identidad Digital Profesional es un servicio de Arago que le permite crear una identidad electrónica que se puede utilizar en línea a través de una aplicación móvil segura. Esta identidad digital profesional será utilizada por el usuario para simplificar y asegurar sus procedimientos en línea con socios, en particular en el campo de los recursos humanos (por ejemplo, acceder a un sitio de anuncios de contratación, acceder al sitio de recursos humanos de su empresa, proporcionar un certificado de empleador para alquilar bienes inmuebles o abrir una cuenta bancaria, etc.). 
 
 
 El servicio se basa en 2 aplicaciones digitales: la cartera y la cartera. La billetera le permite generar su identificador, recopilar certificados de terceros, almacenarlos y transferirlos a otros terceros. La cartera permite a un usuario pedir a empresas de terceros que le emitan certificados, pero también mantener estos certificados en un servidor externo para posiblemente poder recuperarlos en caso de pérdida de su teléfono inteligente o exponerlos a una audiencia elegida. . La cartera es una especie de caja fuerte digital cuyos datos son accesibles bajo el control exclusivo del usuario.
 
 
-El servicio de Talao se basa en tecnología innovadora (Blockchain) y los conceptos de identidad soberana y certificaciones verificables. El servicio altme permite que un usuario tenga una Identidad Digital y certificados certificados por terceros sin tener que guardar sus datos personales en los servidores de un Proveedor de Identidad. Los datos se almacenan en la billetera del usuario (aplicación de teléfono inteligente) o posiblemente se cifran en una red descentralizada. El usuario solo conserva el acceso a su identidad con su teléfono inteligente o se guardan las claves criptográficas. Puede autorizar una aplicación de un socio (un proveedor de servicios) para acceder a él.
+El servicio de Arago se basa en tecnología innovadora (Blockchain) y los conceptos de identidad soberana y certificaciones verificables. El servicio arago permite que un usuario tenga una Identidad Digital y certificados certificados por terceros sin tener que guardar sus datos personales en los servidores de un Proveedor de Identidad. Los datos se almacenan en la billetera del usuario (aplicación de teléfono inteligente) o posiblemente se cifran en una red descentralizada. El usuario solo conserva el acceso a su identidad con su teléfono inteligente o se guardan las claves criptográficas. Puede autorizar una aplicación de un socio (un proveedor de servicios) para acceder a él.
 
 
-Como parte del servicio Talao Professional Digital Identity, el usuario se beneficia de diversas funcionalidades relacionadas con su carrera profesional. Algunas de estas funciones solo son accesibles a través de la billetera de su teléfono inteligente.
+Como parte del servicio Arago Professional Digital Identity, el usuario se beneficia de diversas funcionalidades relacionadas con su carrera profesional. Algunas de estas funciones solo son accesibles a través de la billetera de su teléfono inteligente.
 
 
 Al registrarse, el usuario debe completar el formulario de Registro disponible en el sitio (incluyendo, en particular, título, apellidos y nombres, dirección de correo electrónico y posiblemente su número de teléfono móvil).
 
 
-El usuario garantiza que la información que transmite es veraz, sincera y actualizada. Si esta información resultara ser falsa, incompleta u obsoleta, Talao se reserva el derecho de rechazar el Registro y / o interrumpir la prestación del servicio de acuerdo con lo estipulado en el artículo 14 "Rescisión". 
+El usuario garantiza que la información que transmite es veraz, sincera y actualizada. Si esta información resultara ser falsa, incompleta u obsoleta, Arago se reserva el derecho de rechazar el Registro y / o interrumpir la prestación del servicio de acuerdo con lo estipulado en el artículo 14 "Rescisión". 
 
 
 En caso de modificación de sus datos personales, el usuario se compromete a actualizarlos en su página de gestión del perfil de Identidad Digital Profesional.
 
 
-En todo caso, cualesquiera que sean los métodos de Registro del usuario, la información que le concierne será tratada de acuerdo con la carta de gestión de datos personales (Protección de datos) accesible directamente desde el sitio https: // altme. co.
+En todo caso, cualesquiera que sean los métodos de Registro del usuario, la información que le concierne será tratada de acuerdo con la carta de gestión de datos personales (Protección de datos) accesible directamente desde el sitio https: // arago. co.
 
 
-El usuario autoriza al servicio Talao Professional Digital Identity a transmitir a los sitios asociados, mediante procesamiento informático, la información necesaria para el reconocimiento y uso de su Identidad Digital en los sitios y servicios de dichos partners.
+El usuario autoriza al servicio Arago Professional Digital Identity a transmitir a los sitios asociados, mediante procesamiento informático, la información necesaria para el reconocimiento y uso de su Identidad Digital en los sitios y servicios de dichos partners.
 
 
 ### Creación de una identidad digital profesional
 
 
-El procedimiento de creación consta de 2 pasos para finalizar el procedimiento de registro. El primer paso es crear su identificación usando la billetera de su teléfono inteligente, el segundo es crear una cartera en el sitio de Talao asociado con su identificación.
+El procedimiento de creación consta de 2 pasos para finalizar el procedimiento de registro. El primer paso es crear su identificación usando la billetera de su teléfono inteligente, el segundo es crear una cartera en el sitio de Arago asociado con su identificación.
 
 
-* El usuario se conecta al sitio https://altme.co con su Escritorio o su teléfono inteligente y está invitado a descargar su billetera en su teléfono inteligente. Al iniciar su billetera, el usuario debe aceptar los Términos y condiciones (este documento) y luego generar o recuperar su identificador descentralizado (DID). En el caso de que el usuario decida generar un nuevo identificador, se le invita a copiar la sentencia de recuperación de 12 palabras de regeneración de su identificador en caso de pérdida de su teléfono inteligente
+* El usuario se conecta al sitio https://arago.co con su Escritorio o su teléfono inteligente y está invitado a descargar su billetera en su teléfono inteligente. Al iniciar su billetera, el usuario debe aceptar los Términos y condiciones (este documento) y luego generar o recuperar su identificador descentralizado (DID). En el caso de que el usuario decida generar un nuevo identificador, se le invita a copiar la sentencia de recuperación de 12 palabras de regeneración de su identificador en caso de pérdida de su teléfono inteligente
 
 
-* Verificación de la dirección de correo electrónico: Previo al Usuario Al registrarse en el Servicio Profesional de Identidad Digital, Talao verifica la dirección de correo electrónico del usuario enviando un correo electrónico que contiene un código secreto. Se invita al usuario a obtener un primer certificado que acredite su correo electrónico (“EmailPass”) conectándose a la dirección https://altme.co/emailpass y dando su correo electrónico y luego escaneando un código QR. Si el usuario no ha confirmado el código aleatorio, se invita al usuario a reiniciar el proceso para obtener este primer certificado. Se pueden proponer otros métodos para validar el correo electrónico del usuario.
+* Verificación de la dirección de correo electrónico: Previo al Usuario Al registrarse en el Servicio Profesional de Identidad Digital, Arago verifica la dirección de correo electrónico del usuario enviando un correo electrónico que contiene un código secreto. Se invita al usuario a obtener un primer certificado que acredite su correo electrónico (“EmailPass”) conectándose a la dirección https://arago.co/emailpass y dando su correo electrónico y luego escaneando un código QR. Si el usuario no ha confirmado el código aleatorio, se invita al usuario a reiniciar el proceso para obtener este primer certificado. Se pueden proponer otros métodos para validar el correo electrónico del usuario.
 
 
 * Una vez obtenido este certificado, el usuario puede crear su portafolio (“crear una cuenta”) escaneando el código QR que se muestra en su escritorio o haciendo clic en el enlace de su navegador en su teléfono inteligente. El sitio detecta si el identificador de su billetera es el de una carpeta ya existente, si este no es el caso, el sitio propone crear una nueva carpeta para este identificador pidiendo al usuario que indique su nombre y su nombre.
 
 
-* Verificación del identificador descentralizado (DID) de la billetera: luego de escanear el código QR se invita al usuario a aceptar el acceso de altme a su billetera y presentar su certificado de correo electrónico (Email Pass). Si no se reconoce la firma de esta atestación, se invita al usuario a iniciar el proceso nuevamente.
+* Verificación del identificador descentralizado (DID) de la billetera: luego de escanear el código QR se invita al usuario a aceptar el acceso de arago a su billetera y presentar su certificado de correo electrónico (Email Pass). Si no se reconoce la firma de esta atestación, se invita al usuario a iniciar el proceso nuevamente.
 
 
 * Creación y despliegue del portafolio: el sitio despliega el espacio de trabajo. El usuario recibe un nombre de usuario por correo electrónico para una posible conexión sin un teléfono inteligente. Por defecto, la contraseña será "identidad" y en este caso se enviará sistemáticamente un código aleatorio por correo electrónico como factor de autenticación secundario. Sin embargo, recomendamos que el usuario utilice la conexión por teléfono inteligente (código QR o enlace) que es más simple, rápida y segura.
@@ -146,7 +146,7 @@ La eliminación del identificador de billetera se puede llevar a cabo reiniciand
 ### Condiciones de
 
 
-registro El registro para el Servicio de Identidad Digital Profesional es gratuito y requiere la aceptación expresa de los Términos y Condiciones de Identidad Digital Profesional y los Términos y Condiciones del sitio https://altme.co independientemente del terminal utilizado (computadora, tableta, teléfono inteligente ...).
+registro El registro para el Servicio de Identidad Digital Profesional es gratuito y requiere la aceptación expresa de los Términos y Condiciones de Identidad Digital Profesional y los Términos y Condiciones del sitio https://arago.co independientemente del terminal utilizado (computadora, tableta, teléfono inteligente ...).
 
 
 Acceso al Servicio de Identidad Digital Profesional El acceso a Identidad Digital Profesional
@@ -161,13 +161,13 @@ Se recomienda encarecidamente al usuario que realice una copia en un documento e
 Se aconseja a los usuarios que guarden todo o parte de sus certificados en su cartera.
 
 
-Es importante precisar que ni Talao ni nadie tiene copia de las claves criptográficas que permiten el acceso al servicio de Identidad Digital Profesional y que si estas claves se pierden definitivamente, el acceso al servicio de Identidad Digital Profesional es imposible. En este caso, es responsabilidad del usuario ponerse en contacto con el servicio de atención al cliente de Talao.
+Es importante precisar que ni Arago ni nadie tiene copia de las claves criptográficas que permiten el acceso al servicio de Identidad Digital Profesional y que si estas claves se pierden definitivamente, el acceso al servicio de Identidad Digital Profesional es imposible. En este caso, es responsabilidad del usuario ponerse en contacto con el servicio de atención al cliente de Arago.
 
 
 ### Precio
 
 
-El servicio de identidad digital profesional es gratuito y el código de la aplicación es de código abierto y está disponible en el repositorio de Talao https://github.com/TalaoDAO.
+El servicio de identidad digital profesional es gratuito y el código de la aplicación es de código abierto y está disponible en el repositorio de Arago https://github.com/TalaoDAO.
 
 
 ## Uso del servicio
@@ -182,16 +182,16 @@ Solo se puede acceder al servicio de identidad digital profesional mediante el u
 Si el usuario tiene conocimiento de un uso no autorizado del servicio, se compromete a informar al servicio de atención al cliente, cuyos datos de contacto aparecen en los Términos y Condiciones, sin demora. En caso de pérdida de su contraseña, el usuario tiene la opción de hacer clic en el enlace “Contraseña olvidada”. El servicio de identidad digital profesional le enviará a su dirección de correo electrónico un enlace a una página de restablecimiento de contraseña.
 
 
-Talao recomienda que cada usuario tome todas las precauciones necesarias en términos de seguridad informática (uso de un antivirus, un firewall, etc.) y que tenga precaución y sentido común al utilizar el Servicio de Identidad Digital Profesional.
+Arago recomienda que cada usuario tome todas las precauciones necesarias en términos de seguridad informática (uso de un antivirus, un firewall, etc.) y que tenga precaución y sentido común al utilizar el Servicio de Identidad Digital Profesional.
 
 
-Talao se reserva el derecho a suspender el acceso al sitio y al servicio de Identidad Digital Profesional cuando considere que un evento susceptible de afectar su funcionamiento o integridad lo requiera o por motivos de mantenimiento, y esto, por el tiempo necesario para la intervención planificada. En su caso, tan pronto como tenga conocimiento de las fechas de las intervenciones programadas, Talao se compromete a notificar a los usuarios lo antes posible, en la página de inicio del sitio de Identidad Digital Profesional o mediante cualquier otro proceso a su conveniencia. Esta suspensión de ninguna manera puede comprometer la responsabilidad de Talao y no da derecho a ninguna compensación.
+Arago se reserva el derecho a suspender el acceso al sitio y al servicio de Identidad Digital Profesional cuando considere que un evento susceptible de afectar su funcionamiento o integridad lo requiera o por motivos de mantenimiento, y esto, por el tiempo necesario para la intervención planificada. En su caso, tan pronto como tenga conocimiento de las fechas de las intervenciones programadas, Arago se compromete a notificar a los usuarios lo antes posible, en la página de inicio del sitio de Identidad Digital Profesional o mediante cualquier otro proceso a su conveniencia. Esta suspensión de ninguna manera puede comprometer la responsabilidad de Arago y no da derecho a ninguna compensación.
 
 
 Cada usuario se compromete a no modificar, intentar modificar o dañar el Sitio de ninguna manera y a no utilizar ningún software o cualquier forma de programa informático destinado a alcanzar o poner a disposición contenido protegido. o no disponible gratuitamente. También está prohibido crear una obra o un sitio que se derive de todas las partes del Sitio.
 
 
-El usuario se compromete a informar a Talao sin dilación, por cualquier medio, de cualquier error, avería o irregularidad que advierta en el uso del sitio, tan pronto como tenga conocimiento de ello.
+El usuario se compromete a informar a Arago sin dilación, por cualquier medio, de cualquier error, avería o irregularidad que advierta en el uso del sitio, tan pronto como tenga conocimiento de ello.
 
 
 ### Operación del Servicio de Identidad Digital Profesional
@@ -215,7 +215,7 @@ El usuario también tiene la posibilidad de presentar información relativa a su
 ### Introducción de la información del CV 
 
 
-El usuario puede introducir información relativa a su formación (pestaña "Formación", su experiencia (pestaña "Experiencias") y sus habilidades (pestaña "Habilidades"). Toda esta información es declarativa y de responsabilidad. Esta información no está verificada por Talao.
+El usuario puede introducir información relativa a su formación (pestaña "Formación", su experiencia (pestaña "Experiencias") y sus habilidades (pestaña "Habilidades"). Toda esta información es declarativa y de responsabilidad. Esta información no está verificada por Arago.
 
 
 ### Solicitud y emisión de un certificado profesional 
@@ -239,7 +239,7 @@ El sitio enviará esta solicitud al Representante de la empresa que será invita
 Este certificado será accesible en la carpeta del usuario y posiblemente se agregará a su CV. El usuario puede si desea eliminar este certificado pero no podrá modificar el contenido que sigue siendo responsabilidad de la empresa.
 
 
-Talao no es responsable de la respuesta a una solicitud de certificado y el posible contenido de este certificado. 
+Arago no es responsable de la respuesta a una solicitud de certificado y el posible contenido de este certificado. 
 
 
 ### Modificación de los atributos de la Identidad Digital Profesional
@@ -248,7 +248,7 @@ Talao no es responsable de la respuesta a una solicitud de certificado y el posi
 Sujeto al cumplimiento de lo establecido en este Artículo, el usuario tiene la opción de modificar ciertos datos personales declarados durante su Registro y componer su Identidad Digital desde la pestaña `` editar''en su espacio de trabajo.
 
 
-* Para cualquier modificación de la dirección de correo electrónico, Talao envía un correo electrónico a la nueva dirección de correo electrónico declarada por el usuario. Este correo electrónico contiene un enlace de validación válido por un período de siete (7) días. El usuario debe hacer clic en el enlace para que surta efecto el cambio de dirección de correo electrónico. Durante este plazo de siete (7) días y, como mínimo, más allá, en ausencia de validación por parte del usuario, no se tiene en cuenta la solicitud de modificación de la dirección de correo electrónico. Cambio de contraseña.
+* Para cualquier modificación de la dirección de correo electrónico, Arago envía un correo electrónico a la nueva dirección de correo electrónico declarada por el usuario. Este correo electrónico contiene un enlace de validación válido por un período de siete (7) días. El usuario debe hacer clic en el enlace para que surta efecto el cambio de dirección de correo electrónico. Durante este plazo de siete (7) días y, como mínimo, más allá, en ausencia de validación por parte del usuario, no se tiene en cuenta la solicitud de modificación de la dirección de correo electrónico. Cambio de contraseña.
 * Un cambio de billetera requiere una renovación de la cartera.
 
 
@@ -270,32 +270,32 @@ Luego, se invita al usuario en su teléfono inteligente a firmar el acceso a su 
 Las condiciones aplicables para el acceso al suministro y uso de esta información y servicios, así como su precio y condiciones de pago en relación con las aplicaciones de los Socios, son las establecidas por los Socios según lo dispuesto por dichos Socios en línea o de cualquier otra forma.
 
 
-Talao no está relacionado con ninguna relación contractual que pueda establecerse entre el usuario y cualquier Socio, incluso si esta relación contractual se establece a través del Sitio. En ningún caso Talao interviene de forma alguna en las relaciones contractuales que puedan establecerse entre los usuarios por un lado y los Socios por otro.
+Arago no está relacionado con ninguna relación contractual que pueda establecerse entre el usuario y cualquier Socio, incluso si esta relación contractual se establece a través del Sitio. En ningún caso Arago interviene de forma alguna en las relaciones contractuales que puedan establecerse entre los usuarios por un lado y los Socios por otro.
 
 
-El usuario garantiza a Talao frente a cualquier acto lesivo que pudiera cometer hacia un socio, incluso en caso de incumplimiento de las obligaciones contractuales suscritas con un socio.
+El usuario garantiza a Arago frente a cualquier acto lesivo que pudiera cometer hacia un socio, incluso en caso de incumplimiento de las obligaciones contractuales suscritas con un socio.
 
 
 ## Derechos de propiedad intelectual
 
 
-El sitio y los servicios están protegidos por derechos de propiedad intelectual y / u otros derechos que Talao posee o que está autorizado a usar.
-El protocolo blockchain utilizado como soporte para la identidad digital profesional está disponible en código abierto https://github.com/TalaoDAO/altme-contracts.
+El sitio y los servicios están protegidos por derechos de propiedad intelectual y / u otros derechos que Arago posee o que está autorizado a usar.
+El protocolo blockchain utilizado como soporte para la identidad digital profesional está disponible en código abierto https://github.com/TalaoDAO/arago-contracts.
 
 
-Talao es y seguirá siendo el propietario de sus signos distintivos, a saber, marcas, nombres corporativos y de otro tipo, nombres comerciales, marcas y nombres de dominio. Queda terminantemente prohibida la reproducción, imitación o colocación, total o parcial, de las marcas y diseños pertenecientes a Talao sin su consentimiento previo por escrito.
+Arago es y seguirá siendo el propietario de sus signos distintivos, a saber, marcas, nombres corporativos y de otro tipo, nombres comerciales, marcas y nombres de dominio. Queda terminantemente prohibida la reproducción, imitación o colocación, total o parcial, de las marcas y diseños pertenecientes a Arago sin su consentimiento previo por escrito.
 
 
 Acceso y disponibilidad del sitio y del servicio de Identidad Digital Profesional
 
 
-Salvo en los casos de fuerza mayor aquí referidos, Talao se compromete, en el marco de una obligación de medios, a asegurar la disponibilidad y accesibilidad al sitio y al Servicio de Identidad. . Digital profesional, 24/24 horas y 7/7 días. No obstante, las operaciones de pruebas, control y / o mantenimiento así como las intervenciones necesarias en caso de avería, pueden ser realizadas por Talao en cualquier momento. Talao se esfuerza por prevenir, en la medida de lo posible, la ocurrencia de tal operación. Talao no se hace responsable de las consecuencias resultantes para cualquier usuario.
+Salvo en los casos de fuerza mayor aquí referidos, Arago se compromete, en el marco de una obligación de medios, a asegurar la disponibilidad y accesibilidad al sitio y al Servicio de Identidad. . Digital profesional, 24/24 horas y 7/7 días. No obstante, las operaciones de pruebas, control y / o mantenimiento así como las intervenciones necesarias en caso de avería, pueden ser realizadas por Arago en cualquier momento. Arago se esfuerza por prevenir, en la medida de lo posible, la ocurrencia de tal operación. Arago no se hace responsable de las consecuencias resultantes para cualquier usuario.
 
 
-El usuario reconoce que Talao no se hace responsable en modo alguno de las características funcionales y el rendimiento técnico de Internet. Asimismo, todos los usuarios siguen siendo responsables de sus acciones en Internet con respecto al uso de sus datos en redes abiertas.
+El usuario reconoce que Arago no se hace responsable en modo alguno de las características funcionales y el rendimiento técnico de Internet. Asimismo, todos los usuarios siguen siendo responsables de sus acciones en Internet con respecto al uso de sus datos en redes abiertas.
 
 
-El usuario se compromete a no obstaculizar el correcto funcionamiento del Sitio, la Aplicación y el Servicio de Identidad Digital Profesional, en particular mediante la transmisión de cualquier elemento que pueda contener un virus o que pueda dañar o afectar de otro modo el Sitio y / o la Aplicación y / o el Servicio Profesional de Identidad Digital y, más ampliamente, el sistema de información de Talao y / o sus contratistas.
+El usuario se compromete a no obstaculizar el correcto funcionamiento del Sitio, la Aplicación y el Servicio de Identidad Digital Profesional, en particular mediante la transmisión de cualquier elemento que pueda contener un virus o que pueda dañar o afectar de otro modo el Sitio y / o la Aplicación y / o el Servicio Profesional de Identidad Digital y, más ampliamente, el sistema de información de Arago y / o sus contratistas.
 
 
 En el caso de la utilización de la aplicación a través de teléfonos inteligentes o tabletas, el usuario se compromete a no modificar el sistema operativo del terminal de forma que pueda afectar a su seguridad.
@@ -307,16 +307,16 @@ Los costos y gastos de equipo necesarios para el uso del sitio y del Servicio Pr
 ## Responsabilidad
 
 
-Talao no garantiza la capacidad del sitio y / o el Servicio de identidad digital profesional para satisfacer las necesidades o expectativas específicas del usuario. Asimismo, Talao no puede garantizar la ausencia de errores u otros problemas operativos o de usuario durante el uso del sitio y / o el Servicio Profesional de Identidad Digital.
+Arago no garantiza la capacidad del sitio y / o el Servicio de identidad digital profesional para satisfacer las necesidades o expectativas específicas del usuario. Asimismo, Arago no puede garantizar la ausencia de errores u otros problemas operativos o de usuario durante el uso del sitio y / o el Servicio Profesional de Identidad Digital.
 
 
-Talao no ofrece ninguna garantía en cuanto a la capacidad del sitio y / o el Servicio de Identidad Digital Profesional para satisfacer las necesidades o expectativas específicas del usuario. Asimismo, Talao no puede garantizar la ausencia de errores u otros problemas operativos o de usuario durante el uso del sitio y / o el Servicio Profesional de Identidad Digital.
+Arago no ofrece ninguna garantía en cuanto a la capacidad del sitio y / o el Servicio de Identidad Digital Profesional para satisfacer las necesidades o expectativas específicas del usuario. Asimismo, Arago no puede garantizar la ausencia de errores u otros problemas operativos o de usuario durante el uso del sitio y / o el Servicio Profesional de Identidad Digital.
 
 
-Talao declina toda responsabilidad por el uso que haga el usuario del Servicio Profesional de Identidad Digital. En este sentido, Talao se reserva el derecho a suspender el Servicio de Identidad Digital de un usuario tras la recepción de una notificación o si efectivamente tiene conocimiento del carácter manifiestamente ilícito del uso que se hace de la Identidad Digital Profesional. En ningún caso Talao se hace responsable de este retiro.
+Arago declina toda responsabilidad por el uso que haga el usuario del Servicio Profesional de Identidad Digital. En este sentido, Arago se reserva el derecho a suspender el Servicio de Identidad Digital de un usuario tras la recepción de una notificación o si efectivamente tiene conocimiento del carácter manifiestamente ilícito del uso que se hace de la Identidad Digital Profesional. En ningún caso Arago se hace responsable de este retiro.
 
 
-Talao solo se hace responsable en caso de dolo o negligencia grave cometidos en el contexto de la prestación del servicio. En cualquier caso, Talao no se hace responsable de los daños indirectos como en particular: financieros, comerciales, pérdida de clientes, cualquier alteración comercial, lucro cesante, pérdida de imagen de marca, pérdida de datos y / o programas informáticos sufridos por el usuario que pudieran resultar del incumplimiento de estos Términos y Condiciones. Asimismo, Talao en ningún caso será responsable de los daños derivados, ni siquiera parcialmente, de un incumplimiento total o parcial de sus obligaciones por parte del usuario, así como de los daños indirectos aunque tenga conocimiento de la posibilidad de que se produzcan. daño.
+Arago solo se hace responsable en caso de dolo o negligencia grave cometidos en el contexto de la prestación del servicio. En cualquier caso, Arago no se hace responsable de los daños indirectos como en particular: financieros, comerciales, pérdida de clientes, cualquier alteración comercial, lucro cesante, pérdida de imagen de marca, pérdida de datos y / o programas informáticos sufridos por el usuario que pudieran resultar del incumplimiento de estos Términos y Condiciones. Asimismo, Arago en ningún caso será responsable de los daños derivados, ni siquiera parcialmente, de un incumplimiento total o parcial de sus obligaciones por parte del usuario, así como de los daños indirectos aunque tenga conocimiento de la posibilidad de que se produzcan. daño.
 
 
 
@@ -334,14 +334,14 @@ El usuario se compromete a:
 
 
 * no hacer un uso ilegal o ilícito del Servicio Profesional de Identidad Digital;
-* informar a Talao sin demora, por cualquier medio, de cualquier error, falla o irregularidad que advierta en el uso del Sitio y / o del Servicio Profesional de Identidad Digital, tan pronto como tenga conocimiento de ello;
-* en general, no utilizar el Servicio Profesional de Identidad Digital que pudiera causar daño a Talao;
+* informar a Arago sin demora, por cualquier medio, de cualquier error, falla o irregularidad que advierta en el uso del Sitio y / o del Servicio Profesional de Identidad Digital, tan pronto como tenga conocimiento de ello;
+* en general, no utilizar el Servicio Profesional de Identidad Digital que pudiera causar daño a Arago;
 * elija una contraseña y un código de seguridad de acuerdo con la política comunicada;
 * almacenar de forma segura los medios de identificación electrónicos basados ​​en la posesión;
 * No comunicar sus medios de identificación electrónica a un tercero.
 
 
-Como tal, Talao se reserva el derecho:
+Como tal, Arago se reserva el derecho:
 
 
 * a conservar, a efectos de prueba, todos los registros, rastros de conexión o datos de carácter personal o no personal que demuestren la responsabilidad ante el usuario de los comportamientos o acciones en cuestión, de acuerdo con la CGU;
@@ -349,32 +349,32 @@ Como tal, Talao se reserva el derecho:
 * para aplicar las estipulaciones del artículo "Terminación - Incumplimiento - Suspensión".
 
 
-Además, Talao asegura el seguimiento y trazabilidad del funcionamiento del servicio de Identidad Digital Profesional.
+Además, Arago asegura el seguimiento y trazabilidad del funcionamiento del servicio de Identidad Digital Profesional.
 
 
 ## Fuerza mayor
 
 
-Talao no se hace responsable de cualquier retraso en el cumplimiento de sus obligaciones o del incumplimiento de sus obligaciones resultante de estas Condiciones Generales de Uso cuando las circunstancias que lo motivaron se relacionen con fuerza mayor.
+Arago no se hace responsable de cualquier retraso en el cumplimiento de sus obligaciones o del incumplimiento de sus obligaciones resultante de estas Condiciones Generales de Uso cuando las circunstancias que lo motivaron se relacionen con fuerza mayor.
 
 
-Expresamente, se consideran casos de fuerza mayor o caso fortuito, además de los habitualmente retenidos por la jurisprudencia de los juzgados y tribunales franceses, los siguientes casos: bloqueo de comunicaciones electrónicas, fuera del control de Talao, y cualquier otro caso ajeno al control. de Talao impidiendo el normal cumplimiento de las obligaciones derivadas del Contrato.
+Expresamente, se consideran casos de fuerza mayor o caso fortuito, además de los habitualmente retenidos por la jurisprudencia de los juzgados y tribunales franceses, los siguientes casos: bloqueo de comunicaciones electrónicas, fuera del control de Arago, y cualquier otro caso ajeno al control. de Arago impidiendo el normal cumplimiento de las obligaciones derivadas del Contrato.
 
 
-Cualquier caso de fuerza mayor que afecte el cumplimiento de las obligaciones derivadas de estos TyC y en particular el acceso o uso del Servicio Profesional de Identidad Digital por parte del usuario suspenderá, desde su fecha de ocurrencia, la ejecución de estos TyC. A partir de esta fecha, y a pesar del caso de fuerza mayor, Talao se esforzará en la medida de lo posible:
+Cualquier caso de fuerza mayor que afecte el cumplimiento de las obligaciones derivadas de estos TyC y en particular el acceso o uso del Servicio Profesional de Identidad Digital por parte del usuario suspenderá, desde su fecha de ocurrencia, la ejecución de estos TyC. A partir de esta fecha, y a pesar del caso de fuerza mayor, Arago se esforzará en la medida de lo posible:
 
 
 * para informar al usuario de la existencia de este caso de fuerza mayor;
 * restaurar el acceso, incluso degradado, al Servicio Profesional de Identidad Digital;
 
 
-Queda expresamente acordado entre las Partes que la aplicación completamente excepcional de estos medios paliativos por parte de Talao durante la ocurrencia de un caso de fuerza mayor no puede dar lugar a ninguna responsabilidad o compensación por parte de Talao.
+Queda expresamente acordado entre las Partes que la aplicación completamente excepcional de estos medios paliativos por parte de Arago durante la ocurrencia de un caso de fuerza mayor no puede dar lugar a ninguna responsabilidad o compensación por parte de Arago.
 
 
 ## Protección de datos personales
 
 
-Las condiciones para el procesamiento de datos personales se establecen en la política de privacidad y protección de datos de Talao, accesible aquí https://altme.co/privacy /.
+Las condiciones para el procesamiento de datos personales se establecen en la política de privacidad y protección de datos de Arago, accesible aquí https://arago.co/privacy /.
 
 
 La retención de los datos del usuario por Identidad Digital Profesional
@@ -405,13 +405,13 @@ El servicio de identidad digital profesional permite a los usuarios recuperar su
 El usuario puede en cualquier momento dar de baja su Identidad Digital de su cartera. La rescisión es efectiva desde el día de la solicitud del usuario. 'usuario.
 
 
-### Rescisión por iniciativa de Talao
+### Rescisión por iniciativa de Arago
 
 
-Talao se reserva el derecho de interrumpir, temporal o permanentemente, todo o parte del servicio de la cartera por motivos relacionados con la seguridad del Servicio Profesional de Identidad Digital, la seguridad del usuario o una infracción o sospecha del incumplimiento por parte del usuario de alguna de sus obligaciones aquí referidas.
+Arago se reserva el derecho de interrumpir, temporal o permanentemente, todo o parte del servicio de la cartera por motivos relacionados con la seguridad del Servicio Profesional de Identidad Digital, la seguridad del usuario o una infracción o sospecha del incumplimiento por parte del usuario de alguna de sus obligaciones aquí referidas.
 
 
-Esta rescisión se hará de pleno derecho, sin perjuicio de los daños y perjuicios que pudiera reclamar Talao. Talao también se reserva el derecho a rescindir unilateralmente esta relación contractual resultante de los TyC en caso de que el usuario demuestre incumplimientos graves y / o reiterados de alguna de sus obligaciones aquí contenidas o en caso de que Talao detenga definitivamente el Servicio de Identidad Digital Profesional. . En este último caso, la rescisión se hará efectiva seis (6) meses después de la notificación del fin del Servicio Profesional de Identidad Digital.
+Esta rescisión se hará de pleno derecho, sin perjuicio de los daños y perjuicios que pudiera reclamar Arago. Arago también se reserva el derecho a rescindir unilateralmente esta relación contractual resultante de los TyC en caso de que el usuario demuestre incumplimientos graves y / o reiterados de alguna de sus obligaciones aquí contenidas o en caso de que Arago detenga definitivamente el Servicio de Identidad Digital Profesional. . En este último caso, la rescisión se hará efectiva seis (6) meses después de la notificación del fin del Servicio Profesional de Identidad Digital.
 
 
 ### Consecuencias vinculadas a la rescisión por parte del usuario
@@ -432,19 +432,19 @@ al cliente Se puede contactar al Servicio al cliente:
 ## Subcontratación
 
 
-Talao se reserva el derecho de que todos o parte de los servicios cubiertos por estas condiciones sean realizados por cualquier otra subcontratación empresa de su elección, siendo Talao el único responsable ante el usuario, a condición de que éste tome medidas contra sus subcontratistas.
+Arago se reserva el derecho de que todos o parte de los servicios cubiertos por estas condiciones sean realizados por cualquier otra subcontratación empresa de su elección, siendo Arago el único responsable ante el usuario, a condición de que éste tome medidas contra sus subcontratistas.
 
 
 ## Cesión
 
 
-Talao se reserva el derecho de ceder los TyC, y por tanto las relaciones contractuales, a cualquier tercero de su elección.
+Arago se reserva el derecho de ceder los TyC, y por tanto las relaciones contractuales, a cualquier tercero de su elección.
 
 
 ## Acuerdo de prueba
 
 
-Talao y el usuario acuerdan que en caso de disputa, lo siguiente es admisible como prueba ante los tribunales:
+Arago y el usuario acuerdan que en caso de disputa, lo siguiente es admisible como prueba ante los tribunales:
 
 
 * los medios de identificación (nombre de usuario, códigos secretos, etc.) utilizados en el contexto del sitio, la aplicación así como firmas y procedimientos de identificación;
@@ -461,7 +461,7 @@ Pueden aducirse pruebas de lo contrario.
 ### Sin renuncia
 
 
-El hecho de que el usuario y / o Talao no invoque un incumplimiento por parte de la parte incumplidora de cualquiera de las obligaciones derivadas de los TyC no puede interpretarse como una renuncia a la obligación en cuestión.
+El hecho de que el usuario y / o Arago no invoque un incumplimiento por parte de la parte incumplidora de cualquiera de las obligaciones derivadas de los TyC no puede interpretarse como una renuncia a la obligación en cuestión.
 
 
 ### Parcial
@@ -488,10 +488,10 @@ Luego, las quejas se procesan de acuerdo con los términos y condiciones de los 
 ### Solución de disputas - Tribunal competente y ley aplicable
 
 
-En ausencia de una solución amistosa, en caso de una disputa relacionada con la interpretación, formación o ejecución de las Condiciones Generales de Uso y falta de acuerdo amistoso o de una transacción, Talao y los usuarios dan competencia expresa y exclusiva a los tribunales competentes dentro de la jurisdicción de París, sin perjuicio de la pluralidad de imputados o acciones en sumario o recurso de garantía o medida cautelar.
+En ausencia de una solución amistosa, en caso de una disputa relacionada con la interpretación, formación o ejecución de las Condiciones Generales de Uso y falta de acuerdo amistoso o de una transacción, Arago y los usuarios dan competencia expresa y exclusiva a los tribunales competentes dentro de la jurisdicción de París, sin perjuicio de la pluralidad de imputados o acciones en sumario o recurso de garantía o medida cautelar.
 
 
-En caso de incumplimiento de este paso, que sigue siendo responsabilidad y responsabilidad del usuario, y pérdida del Contenido tras la rescisión por parte del usuario, Talao no se hace responsable en este sentido.
+En caso de incumplimiento de este paso, que sigue siendo responsabilidad y responsabilidad del usuario, y pérdida del Contenido tras la rescisión por parte del usuario, Arago no se hace responsable en este sentido.
 
 
-En caso de disputa relacionada con la interpretación, formación, vigencia o ejecución de las Condiciones Generales de Uso, Talao y los usuarios lo reconocen.
+En caso de disputa relacionada con la interpretación, formación, vigencia o ejecución de las Condiciones Generales de Uso, Arago y los usuarios lo reconocen.

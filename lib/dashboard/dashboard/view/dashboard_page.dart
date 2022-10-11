@@ -41,7 +41,16 @@ class _DashboardViewState extends State<DashboardView> {
       /// If there is a deepLink we give do as if it coming from QRCode
       context.read<QRCodeScanCubit>().deepLink();
       context.read<BeaconCubit>().startBeacon();
+      if (context.read<HomeCubit>().state.homeStatus ==
+          HomeStatus.hasNoWallet) {
+        showDialog<void>(
+          context: context,
+          builder: (_) => const WalletDialog(),
+        );
+        return;
+      }
     });
+
     super.initState();
   }
 
