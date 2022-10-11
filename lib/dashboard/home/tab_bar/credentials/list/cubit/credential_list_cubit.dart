@@ -79,6 +79,9 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.over18:
           identityCategories.remove(CredentialSubjectType.over18);
           break;
+        case CredentialSubjectType.over13:
+          identityCategories.remove(CredentialSubjectType.over13);
+          break;
         case CredentialSubjectType.phonePass:
           break;
         case CredentialSubjectType.professionalExperienceAssessment:
@@ -269,6 +272,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
               _credentials,
               identityCategories,
               CredentialSubjectType.over18,
+            );
+            break;
+          case CredentialSubjectType.over13:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              identityCategories,
+              CredentialSubjectType.over13,
             );
             break;
           case CredentialSubjectType.phonePass:
@@ -562,6 +572,15 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             //   ),
             // );
             identityCategories.add(CredentialSubjectType.over18);
+            break;
+          case CredentialSubjectType.over13:
+            // Note: Uncomment if we need to display dummies again.
+            // _credentials.add(
+            //   HomeCredential.isDummy(
+            //     CredentialSubjectType.over13,
+            //   ),
+            // );
+            identityCategories.add(CredentialSubjectType.over13);
             break;
           case CredentialSubjectType.phonePass:
             break;

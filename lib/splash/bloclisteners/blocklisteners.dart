@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/first/onboarding_first.dart';
 import 'package:altme/onboarding/second/view/onboarding_second_page.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/scan.dart';

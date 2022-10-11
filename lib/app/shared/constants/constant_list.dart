@@ -14,6 +14,7 @@ class DiscoverList {
     CredentialSubjectType.ageRange,
     CredentialSubjectType.nationality,
     CredentialSubjectType.over18,
+    CredentialSubjectType.over13,
     CredentialSubjectType.identityCard,
   ];
 }
