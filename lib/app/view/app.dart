@@ -13,6 +13,7 @@ import 'package:altme/did/did.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
+import 'package:altme/ramp/view/ramp_experiment.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
@@ -178,7 +179,7 @@ class MaterialAppDefinition extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const SplashPage(),
+      home: const RampFlutterApp(),
     );
   }
 }
