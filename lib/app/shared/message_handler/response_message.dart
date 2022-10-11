@@ -10,6 +10,37 @@ class ResponseMessage with MessageHandler {
   String getMessage(BuildContext context, MessageHandler messageHandler) {
     if (messageHandler is ResponseMessage) {
       switch (messageHandler.message) {
+        case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
+          return ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE:
+          return ResponseString.RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_FEE_TOO_LOW:
+          return ResponseString.RESPONSE_STRING_FEE_TOO_LOW.localise(context);
+
+        case ResponseString.RESPONSE_STRING_FEE_TOO_LOW_FOR_MEMPOOL:
+          return ResponseString.RESPONSE_STRING_FEE_TOO_LOW_FOR_MEMPOOL
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_TX_ROLLUP_BALANCE_TOO_LOW:
+          return ResponseString.RESPONSE_STRING_TX_ROLLUP_BALANCE_TOO_LOW
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_TX_ROLLUP_INVALID_ZERO_TRANSFER:
+          return ResponseString.RESPONSE_STRING_TX_ROLLUP_INVALID_ZERO_TRANSFER
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_TX_ROLLUP_UNKNOWN_ADDRESS:
+          return ResponseString.RESPONSE_STRING_TX_ROLLUP_UNKNOWN_ADDRESS
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_INACTIVE_CHAIN:
+          return ResponseString.RESPONSE_STRING_INACTIVE_CHAIN
+              .localise(context);
+
         case ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE:
           return ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE
               .localise(context);
