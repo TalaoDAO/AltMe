@@ -113,10 +113,8 @@ class ResponseMessage with MessageHandler {
           return ResponseString.RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_DID
               .localise(context);
 
-        case ResponseString
-            .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE:
-          return ResponseString
-              .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE
+        case ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED:
+          return ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED
               .localise(context);
 
         case ResponseString

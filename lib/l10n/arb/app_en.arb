@@ -246,7 +246,7 @@
   "somethingsWentWrongTryAgainLater": "Something went wrong, please try again later. ",
   "successfullyPresentedYourCredential": "Successfully presented your credential(s)!",
   "successfullyPresentedYourDID": "Successfully presented your DID!",
-  "thisQRCodeDoseNotContainAValidMessage": "This QRCode does not contain a valid message.",
+  "thisQRCodeIsNotSupported": "This QR code is not supported.",
   "thisUrlDoseNotContainAValidMessage": "This url does not contain a valid message.",
   "anErrorOccurredWhileConnectingToTheServer": "An error occurred while connecting to the server.",
   "failedToSaveMnemonicPleaseTryAgain": "Failed to save mnemonic, please try again",

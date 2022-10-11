@@ -50,7 +50,7 @@ class GlobalMessage {
   String get NETWORK_ERROR_NOT_FOUND => l10n.networkErrorNotFound;
 
   String get RESPONSE_STRING_FAILED_TO_LOAD_PROFILE => l10n.failedToLoadProfile;
-  
+
   String get RESPONSE_STRING_FAILED_TO_DO_OPERATION => l10n.failedToDoOperation;
 
   String get RESPONSE_STRING_FAILED_TO_SAVE_PROFILE => l10n.failedToSaveProfile;
@@ -109,8 +109,8 @@ class GlobalMessage {
   String get RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_DID =>
       l10n.successfullyPresentedYourDID;
 
-  String get RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE =>
-      l10n.thisQRCodeDoseNotContainAValidMessage;
+  String get RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED =>
+      l10n.thisQRCodeIsNotSupported;
 
   String get RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE =>
       l10n.thisUrlDoseNotContainAValidMessage;
