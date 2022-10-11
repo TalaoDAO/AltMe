@@ -102,6 +102,9 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
                 ResponseString.RESPONSE_STRING_TX_ROLLUP_UNKNOWN_ADDRESS;
           } else if (reason.contains('inactive_chain')) {
             responseString = ResponseString.RESPONSE_STRING_INACTIVE_CHAIN;
+          } else {
+            responseString = ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER;
           }
           emit(
             state.copyWith(
