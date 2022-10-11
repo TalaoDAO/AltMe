@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class OnBoardingFirstPage extends StatelessWidget {
   const OnBoardingFirstPage({Key? key}) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route route() => RightToLeftRoute<void>(
         builder: (context) => const OnBoardingFirstPage(),
         settings: const RouteSettings(name: '/onBoardingFirstPage'),
       );
@@ -44,10 +44,15 @@ class _OnBoardingFirstViewState extends State<OnBoardingFirstView> {
       child: GestureDetector(
         onHorizontalDragUpdate: (drag) async {
           if (animate) {
+            if (drag.delta.dx > 2) {
+              Navigator.of(context).pop();
+              disableAnimation();
+            }
+
             if (drag.delta.dx < -2) {
               disableAnimation();
               await Navigator.of(context)
-                  .push<void>(OnBoardingSecondPage.route());
+                  .push<void>(OnBoardingThirdPage.route());
             }
           }
         },
@@ -57,7 +62,7 @@ class _OnBoardingFirstViewState extends State<OnBoardingFirstView> {
             title: l10n.onBoardingFirstTitle,
             subtitle: l10n.onBoardingFirstSubtitle,
             image: ImageStrings.onBoardingFirstImage,
-            index: 1,
+            index: 2,
           ),
         ),
       ),

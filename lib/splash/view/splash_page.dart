@@ -140,9 +140,16 @@ class _SplashViewState extends State<SplashView> {
             children: const [
               Spacer(),
               AltMeLogo(),
-              TitleText(),
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: TitleText(),
+              ),
               SplashImage(),
-              SubTitle(),
+              Spacer(),
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: SubTitle(),
+              ),
               Spacer(),
               LoadingText(),
               SizedBox(height: 10),
