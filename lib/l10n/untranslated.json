@@ -491,7 +491,15 @@
     "showLess",
     "youHaveReceivedARewardOf",
     "reward",
-    "gotIt"
+    "gotIt",
+    "transactionErrorBalanceTooLow",
+    "transactionErrorCannotPayStorageFee",
+    "transactionErrorFeeTooLow",
+    "transactionErrorFeeTooLowForMempool",
+    "transactionErrorTxRollupBalanceTooLow",
+    "transactionErrorTxRollupInvalidZeroTransfer",
+    "transactionErrorTxRollupUnknownAddress",
+    "transactionErrorInactiveChain"
   ],
 
   "es": [
@@ -986,7 +994,15 @@
     "showLess",
     "youHaveReceivedARewardOf",
     "reward",
-    "gotIt"
+    "gotIt",
+    "transactionErrorBalanceTooLow",
+    "transactionErrorCannotPayStorageFee",
+    "transactionErrorFeeTooLow",
+    "transactionErrorFeeTooLowForMempool",
+    "transactionErrorTxRollupBalanceTooLow",
+    "transactionErrorTxRollupInvalidZeroTransfer",
+    "transactionErrorTxRollupUnknownAddress",
+    "transactionErrorInactiveChain"
   ],
 
   "fr": [
@@ -1481,7 +1497,15 @@
     "showLess",
     "youHaveReceivedARewardOf",
     "reward",
-    "gotIt"
+    "gotIt",
+    "transactionErrorBalanceTooLow",
+    "transactionErrorCannotPayStorageFee",
+    "transactionErrorFeeTooLow",
+    "transactionErrorFeeTooLowForMempool",
+    "transactionErrorTxRollupBalanceTooLow",
+    "transactionErrorTxRollupInvalidZeroTransfer",
+    "transactionErrorTxRollupUnknownAddress",
+    "transactionErrorInactiveChain"
   ],
 
   "it": [
@@ -1976,6 +2000,14 @@
     "showLess",
     "youHaveReceivedARewardOf",
     "reward",
-    "gotIt"
+    "gotIt",
+    "transactionErrorBalanceTooLow",
+    "transactionErrorCannotPayStorageFee",
+    "transactionErrorFeeTooLow",
+    "transactionErrorFeeTooLowForMempool",
+    "transactionErrorTxRollupBalanceTooLow",
+    "transactionErrorTxRollupInvalidZeroTransfer",
+    "transactionErrorTxRollupUnknownAddress",
+    "transactionErrorInactiveChain"
   ]
 }

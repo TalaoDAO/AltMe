@@ -4,6 +4,22 @@ extension ResponseStringX on ResponseString {
   String localise(BuildContext context) {
     final GlobalMessage globalMessage = GlobalMessage(context.l10n);
     switch (this) {
+      case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
+        return globalMessage.RESPONSE_STRING_BALANCE_TOO_LOW;
+      case ResponseString.RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE:
+        return globalMessage.RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE;
+      case ResponseString.RESPONSE_STRING_FEE_TOO_LOW:
+        return globalMessage.RESPONSE_STRING_FEE_TOO_LOW;
+      case ResponseString.RESPONSE_STRING_FEE_TOO_LOW_FOR_MEMPOOL:
+        return globalMessage.RESPONSE_STRING_FEE_TOO_LOW_FOR_MEMPOOL;
+      case ResponseString.RESPONSE_STRING_TX_ROLLUP_BALANCE_TOO_LOW:
+        return globalMessage.RESPONSE_STRING_TX_ROLLUP_BALANCE_TOO_LOW;
+      case ResponseString.RESPONSE_STRING_TX_ROLLUP_INVALID_ZERO_TRANSFER:
+        return globalMessage.RESPONSE_STRING_TX_ROLLUP_INVALID_ZERO_TRANSFER;
+      case ResponseString.RESPONSE_STRING_TX_ROLLUP_UNKNOWN_ADDRESS:
+        return globalMessage.RESPONSE_STRING_TX_ROLLUP_UNKNOWN_ADDRESS;
+      case ResponseString.RESPONSE_STRING_INACTIVE_CHAIN:
+        return globalMessage.RESPONSE_STRING_INACTIVE_CHAIN;
       case ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE:
         return globalMessage.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE;
       case ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION:

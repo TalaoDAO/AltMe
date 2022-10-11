@@ -5,6 +5,29 @@ class GlobalMessage {
 
   final AppLocalizations l10n;
 
+  String get RESPONSE_STRING_BALANCE_TOO_LOW =>
+      l10n.transactionErrorBalanceTooLow;
+
+  String get RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE =>
+      l10n.transactionErrorCannotPayStorageFee;
+
+  String get RESPONSE_STRING_FEE_TOO_LOW => l10n.transactionErrorFeeTooLow;
+
+  String get RESPONSE_STRING_FEE_TOO_LOW_FOR_MEMPOOL =>
+      l10n.transactionErrorFeeTooLowForMempool;
+
+  String get RESPONSE_STRING_TX_ROLLUP_BALANCE_TOO_LOW =>
+      l10n.transactionErrorTxRollupBalanceTooLow;
+
+  String get RESPONSE_STRING_TX_ROLLUP_INVALID_ZERO_TRANSFER =>
+      l10n.transactionErrorTxRollupInvalidZeroTransfer;
+
+  String get RESPONSE_STRING_TX_ROLLUP_UNKNOWN_ADDRESS =>
+      l10n.transactionErrorTxRollupUnknownAddress;
+
+  String get RESPONSE_STRING_INACTIVE_CHAIN =>
+      l10n.transactionErrorInactiveChain;
+
   String get NETWORK_ERROR_NOT_IMPLEMENTED => l10n.networkErrorNotImplemented;
 
   String get NETWORK_ERROR_REQUEST_CANCELLED =>
@@ -50,7 +73,7 @@ class GlobalMessage {
   String get NETWORK_ERROR_NOT_FOUND => l10n.networkErrorNotFound;
 
   String get RESPONSE_STRING_FAILED_TO_LOAD_PROFILE => l10n.failedToLoadProfile;
-  
+
   String get RESPONSE_STRING_FAILED_TO_DO_OPERATION => l10n.failedToDoOperation;
 
   String get RESPONSE_STRING_FAILED_TO_SAVE_PROFILE => l10n.failedToSaveProfile;
