@@ -23,7 +23,7 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
     }
 
     if (state.status == SplashStatus.routeToOnboarding) {
-      Navigator.of(context).push<void>(OnBoardingFirstPage.route());
+      Navigator.of(context).push<void>(DashboardPage.route());
     }
   },
 );
