@@ -51,6 +51,10 @@ class HomeCredential extends Equatable {
         image = ImageStrings.dummyOver18Card;
         link = Urls.over18Url;
         break;
+      case CredentialSubjectType.over13:
+        image = ImageStrings.dummyOver13Card;
+        link = Urls.over13Url;
+        break;
       case CredentialSubjectType.tezVoucher:
         image = ImageStrings.dummyTezotopiaVoucherCard;
         link = Urls.tezotopiaVoucherUrl;

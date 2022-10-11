@@ -18,6 +18,7 @@ enum CredentialSubjectType {
   learningAchievement,
   loyaltyCard,
   over18,
+  over13,
   phonePass,
   professionalExperienceAssessment,
   professionalSkillAssessment,
