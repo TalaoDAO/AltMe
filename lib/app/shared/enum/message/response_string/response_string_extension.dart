@@ -6,22 +6,31 @@ extension ResponseStringX on ResponseString {
     switch (this) {
       case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
         return globalMessage.RESPONSE_STRING_BALANCE_TOO_LOW;
+
       case ResponseString.RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE:
         return globalMessage.RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE;
+
       case ResponseString.RESPONSE_STRING_FEE_TOO_LOW:
         return globalMessage.RESPONSE_STRING_FEE_TOO_LOW;
+
       case ResponseString.RESPONSE_STRING_FEE_TOO_LOW_FOR_MEMPOOL:
         return globalMessage.RESPONSE_STRING_FEE_TOO_LOW_FOR_MEMPOOL;
+
       case ResponseString.RESPONSE_STRING_TX_ROLLUP_BALANCE_TOO_LOW:
         return globalMessage.RESPONSE_STRING_TX_ROLLUP_BALANCE_TOO_LOW;
+
       case ResponseString.RESPONSE_STRING_TX_ROLLUP_INVALID_ZERO_TRANSFER:
         return globalMessage.RESPONSE_STRING_TX_ROLLUP_INVALID_ZERO_TRANSFER;
+
       case ResponseString.RESPONSE_STRING_TX_ROLLUP_UNKNOWN_ADDRESS:
         return globalMessage.RESPONSE_STRING_TX_ROLLUP_UNKNOWN_ADDRESS;
+
       case ResponseString.RESPONSE_STRING_INACTIVE_CHAIN:
         return globalMessage.RESPONSE_STRING_INACTIVE_CHAIN;
+
       case ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE:
         return globalMessage.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE;
+
       case ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION:
         return globalMessage.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE;
 
@@ -192,6 +201,96 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP:
         return globalMessage.RESPONSE_STRING_DISCONNECTED_FROM_DAPP;
+
+      case ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_emailPassWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_emailPassExpirationDate:
+        return globalMessage.RESPONSE_STRING_emailPassExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_emailPassHowToGetIt:
+        return globalMessage.RESPONSE_STRING_emailPassHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_tezotopiaMembershipExpirationDate:
+        return globalMessage.RESPONSE_STRING_tezotopiaMembershipExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt:
+        return globalMessage.RESPONSE_STRING_tezotopiaMembershipHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_over18WhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_over18WhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_over18ExpirationDate:
+        return globalMessage.RESPONSE_STRING_over18ExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_over18HowToGetIt:
+        return globalMessage.RESPONSE_STRING_over18HowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_over13WhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_over13WhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_over13ExpirationDate:
+        return globalMessage.RESPONSE_STRING_over13ExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_over13HowToGetIt:
+        return globalMessage.RESPONSE_STRING_over13HowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_identityCardWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_identityCardWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_identityCardExpirationDate:
+        return globalMessage.RESPONSE_STRING_identityCardExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_identityCardHowToGetIt:
+        return globalMessage.RESPONSE_STRING_identityCardHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_phoneProofWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_phoneProofWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_phoneProofExpirationDate:
+        return globalMessage.RESPONSE_STRING_phoneProofExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_phoneProofHowToGetIt:
+        return globalMessage.RESPONSE_STRING_phoneProofHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_tezVoucherWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_tezVoucherWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_tezVoucherExpirationDate:
+        return globalMessage.RESPONSE_STRING_tezVoucherExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_tezVoucherHowToGetIt:
+        return globalMessage.RESPONSE_STRING_tezVoucherHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_genderWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_genderWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_genderExpirationDate:
+        return globalMessage.RESPONSE_STRING_genderExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_genderHowToGetIt:
+        return globalMessage.RESPONSE_STRING_genderHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_nationalityWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_nationalityWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_nationalityExpirationDate:
+        return globalMessage.RESPONSE_STRING_nationalityExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_nationalityHowToGetIt:
+        return globalMessage.RESPONSE_STRING_nationalityHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_ageRangeWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_ageRangeWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_ageRangeExpirationDate:
+        return globalMessage.RESPONSE_STRING_ageRangeExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_ageRangeHowToGetIt:
+        return globalMessage.RESPONSE_STRING_ageRangeHowToGetIt;
     }
   }
 }

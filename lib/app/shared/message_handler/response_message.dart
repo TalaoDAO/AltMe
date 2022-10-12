@@ -261,9 +261,149 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP:
           return ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP
               .localise(context);
+
         case ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION:
           return ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION
               .localise(context);
+
+        case ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_emailPassExpirationDate:
+          return ResponseString.RESPONSE_STRING_emailPassExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_emailPassHowToGetIt:
+          return ResponseString.RESPONSE_STRING_emailPassHowToGetIt.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard:
+          return ResponseString
+                  .RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_tezotopiaMembershipExpirationDate:
+          return ResponseString
+                  .RESPONSE_STRING_tezotopiaMembershipExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt:
+          return ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_over18WhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_over18WhyGetThisCard.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_over18ExpirationDate:
+          return ResponseString.RESPONSE_STRING_over18ExpirationDate.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_over18HowToGetIt:
+          return ResponseString.RESPONSE_STRING_over18HowToGetIt.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_over13WhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_over13WhyGetThisCard.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_over13ExpirationDate:
+          return ResponseString.RESPONSE_STRING_over13ExpirationDate.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_over13HowToGetIt:
+          return ResponseString.RESPONSE_STRING_over13HowToGetIt.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_identityCardWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_identityCardWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_identityCardExpirationDate:
+          return ResponseString.RESPONSE_STRING_identityCardExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_identityCardHowToGetIt:
+          return ResponseString.RESPONSE_STRING_identityCardHowToGetIt.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_phoneProofWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_phoneProofWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_phoneProofExpirationDate:
+          return ResponseString.RESPONSE_STRING_phoneProofExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_phoneProofHowToGetIt:
+          return ResponseString.RESPONSE_STRING_phoneProofHowToGetIt.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_tezVoucherWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_tezVoucherWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_tezVoucherExpirationDate:
+          return ResponseString.RESPONSE_STRING_tezVoucherExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_tezVoucherHowToGetIt:
+          return ResponseString.RESPONSE_STRING_tezVoucherHowToGetIt.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_genderWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_genderWhyGetThisCard.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_genderExpirationDate:
+          return ResponseString.RESPONSE_STRING_genderExpirationDate.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_genderHowToGetIt:
+          return ResponseString.RESPONSE_STRING_genderHowToGetIt.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_nationalityWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_nationalityWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_nationalityExpirationDate:
+          return ResponseString.RESPONSE_STRING_nationalityExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_nationalityHowToGetIt:
+          return ResponseString.RESPONSE_STRING_nationalityHowToGetIt.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_ageRangeWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_ageRangeWhyGetThisCard.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_ageRangeExpirationDate:
+          return ResponseString.RESPONSE_STRING_ageRangeExpirationDate.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_ageRangeHowToGetIt:
+          return ResponseString.RESPONSE_STRING_ageRangeHowToGetIt.localise(
+            context,
+          );
       }
     }
     return '';

@@ -89,6 +89,58 @@ class DummyCredentialItem extends StatelessWidget {
   final HomeCredential homeCredential;
   final bool fromDiscover;
 
+  Future<void> goAhead(BuildContext context) async {
+    final l10n = context.l10n;
+
+    final List<CredentialSubjectType> credentialSubjectTypeList =
+        List.of(DiscoverList.identityCategories);
+    credentialSubjectTypeList.remove(CredentialSubjectType.emailPass);
+    if (credentialSubjectTypeList.contains(
+      homeCredential.credentialSubjectType,
+    )) {
+      await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
+            link: homeCredential.link!,
+          );
+    } else {
+      /// check if  credential it is
+      /// [CredentialSubjectType.tezotopiaMembership]
+      if (homeCredential.credentialSubjectType ==
+          CredentialSubjectType.tezotopiaMembership) {
+        final CredentialsRepository repository =
+            CredentialsRepository(getSecureStorage);
+
+        final List<CredentialModel> allCredentials = await repository.findAll();
+
+        bool isPresentable = false;
+
+        for (final type in membershipRequiredList) {
+          for (final credential in allCredentials) {
+            if (type ==
+                credential.credentialPreview.credentialSubjectModel
+                    .credentialSubjectType) {
+              isPresentable = true;
+              break;
+            } else {
+              isPresentable = false;
+            }
+          }
+          if (!isPresentable) {
+            await showDialog<bool>(
+              context: context,
+              builder: (context) => InfoDialog(
+                title:
+                    '''${l10n.membershipRequiredListAlerMessage}\n\n 1. Nationality Proof\n 2. Age Range Proof''',
+                button: l10n.ok,
+              ),
+            );
+            return;
+          }
+        }
+      }
+      await LaunchUrl.launch(homeCredential.link!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -107,54 +159,16 @@ class DummyCredentialItem extends StatelessWidget {
             return;
           }
 
-          final List<CredentialSubjectType> credentialSubjectTypeList =
-              List.of(DiscoverList.identityCategories);
-          credentialSubjectTypeList.remove(CredentialSubjectType.emailPass);
-          if (credentialSubjectTypeList.contains(
-            homeCredential.credentialSubjectType,
-          )) {
-            await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
-                  link: homeCredential.link!,
-                );
-          } else {
-            /// check if  credential it is
-            /// [CredentialSubjectType.tezotopiaMembership]
-            if (homeCredential.credentialSubjectType ==
-                CredentialSubjectType.tezotopiaMembership) {
-              final CredentialsRepository repository =
-                  CredentialsRepository(getSecureStorage);
-
-              final List<CredentialModel> allCredentials =
-                  await repository.findAll();
-
-              bool isPresentable = false;
-
-              for (final type in membershipRequiredList) {
-                for (final credential in allCredentials) {
-                  if (type ==
-                      credential.credentialPreview.credentialSubjectModel
-                          .credentialSubjectType) {
-                    isPresentable = true;
-                    break;
-                  } else {
-                    isPresentable = false;
-                  }
-                }
-                if (!isPresentable) {
-                  await showDialog<bool>(
-                    context: context,
-                    builder: (context) => InfoDialog(
-                      title:
-                          '''${l10n.membershipRequiredListAlerMessage}\n\n 1. Nationality Proof\n 2. Age Range Proof''',
-                      button: l10n.ok,
-                    ),
-                  );
-                  return;
-                }
-              }
-            }
-            await LaunchUrl.launch(homeCredential.link!);
-          }
+          await Navigator.push<void>(
+            context,
+            DiscoverDetailsPage.route(
+              homeCredential: homeCredential,
+              onCallBack: () async {
+                Navigator.pop(context);
+                await goAhead(context);
+              },
+            ),
+          );
         },
         child: Column(
           children: [
@@ -180,7 +194,7 @@ class DummyCredentialItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      l10n.getThisCard,
+                      l10n.getIt,
                       style: Theme.of(context).textTheme.getCardsButton,
                     ),
                     const SizedBox(width: 8),
