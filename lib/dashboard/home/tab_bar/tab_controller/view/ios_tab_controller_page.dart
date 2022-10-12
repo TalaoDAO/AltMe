@@ -108,30 +108,34 @@ class _IosTabControllerViewState extends State<IosTabControllerView>
                 margin:
                     const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
                 //height: double.infinity,
-                child: BlocBuilder<WalletCubit, WalletState>(
-                  builder: (context, walletState) {
-                    return TabBarView(
-                      controller: _tabController,
-                      physics: context.read<HomeCubit>().state.homeStatus ==
-                              HomeStatus.hasNoWallet
-                          ? const NeverScrollableScrollPhysics()
-                          : null,
-                      children: [
-                        // Display DiscoverPage if user has no wallet or if he
-                        // has no credentials except proofOfOwnershipCredentials
-                        if (context.read<HomeCubit>().state.homeStatus ==
-                                HomeStatus.hasNoWallet ||
-                            walletState.credentials.length ==
-                                context
-                                    .read<CredentialListCubit>()
-                                    .state
-                                    .proofOfOwnershipCredentials
-                                    .length)
-                          const DiscoverPage()
-                        else
-                          const CredentialsListPage(),
-                        const TokensPage(),
-                      ],
+                child: BlocBuilder<CredentialListCubit, CredentialListState>(
+                  builder: (context, credentialListState) {
+                    return BlocBuilder<WalletCubit, WalletState>(
+                      builder: (context, walletState) {
+                        return TabBarView(
+                          controller: _tabController,
+                          physics: context.read<HomeCubit>().state.homeStatus ==
+                                  HomeStatus.hasNoWallet
+                              ? const NeverScrollableScrollPhysics()
+                              : null,
+                          children: [
+                            // Display DiscoverPage if user has no wallet or if
+                            // he has no credentials except
+                            // proofOfOwnershipCredentials
+                            if (context.read<HomeCubit>().state.homeStatus ==
+                                    HomeStatus.hasNoWallet ||
+                                walletState.credentials.length ==
+                                    credentialListState
+                                        .proofOfOwnershipCredentials.length ||
+                                credentialListState
+                                    .proofOfOwnershipCredentials.isEmpty)
+                              const DiscoverPage()
+                            else
+                              const CredentialsListPage(),
+                            const TokensPage(),
+                          ],
+                        );
+                      },
                     );
                   },
                 ),
