@@ -471,13 +471,16 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         final credentialSubjectType = credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
         if (credentialSubjectType ==
-            CredentialSubjectType.tezotopiaMembership) {
+                CredentialSubjectType.tezotopiaMembership &&
+            isAndroid()) {
           gamingCategories.add(CredentialSubjectType.tezotopiaMembership);
         }
-        if (credentialSubjectType == CredentialSubjectType.tezVoucher) {
+        if (credentialSubjectType == CredentialSubjectType.tezVoucher &&
+            isAndroid()) {
           gamingCategories.add(CredentialSubjectType.tezVoucher);
         }
-        if (credentialSubjectType == CredentialSubjectType.voucher) {
+        if (credentialSubjectType == CredentialSubjectType.voucher &&
+            isAndroid()) {
           gamingCategories.add(CredentialSubjectType.voucher);
         }
 
@@ -510,7 +513,9 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         switch (credentialSubjectType) {
           case CredentialSubjectType.tezotopiaMembership:
-            identityCategories.add(CredentialSubjectType.tezotopiaMembership);
+            if (isAndroid()) {
+              identityCategories.add(CredentialSubjectType.tezotopiaMembership);
+            }
             break;
           case CredentialSubjectType.ageRange:
             // Note: Uncomment if we need to display dummies again.
@@ -597,10 +602,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.studentCard:
             break;
           case CredentialSubjectType.voucher:
-            identityCategories.add(CredentialSubjectType.voucher);
             break;
           case CredentialSubjectType.tezVoucher:
-            identityCategories.add(CredentialSubjectType.tezVoucher);
             break;
           case CredentialSubjectType.talaoCommunityCard:
             break;
