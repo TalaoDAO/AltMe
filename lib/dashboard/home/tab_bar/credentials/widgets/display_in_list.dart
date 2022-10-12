@@ -71,6 +71,10 @@ class DisplayInList extends StatelessWidget {
         return Over18DisplayInList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.over13:
+        return Over13DisplayInList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.phonePass:
         return PhonePassDisplayInList(
           credentialModel: credentialModel,

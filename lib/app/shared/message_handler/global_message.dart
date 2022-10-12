@@ -5,6 +5,29 @@ class GlobalMessage {
 
   final AppLocalizations l10n;
 
+  String get RESPONSE_STRING_BALANCE_TOO_LOW =>
+      l10n.transactionErrorBalanceTooLow;
+
+  String get RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE =>
+      l10n.transactionErrorCannotPayStorageFee;
+
+  String get RESPONSE_STRING_FEE_TOO_LOW => l10n.transactionErrorFeeTooLow;
+
+  String get RESPONSE_STRING_FEE_TOO_LOW_FOR_MEMPOOL =>
+      l10n.transactionErrorFeeTooLowForMempool;
+
+  String get RESPONSE_STRING_TX_ROLLUP_BALANCE_TOO_LOW =>
+      l10n.transactionErrorTxRollupBalanceTooLow;
+
+  String get RESPONSE_STRING_TX_ROLLUP_INVALID_ZERO_TRANSFER =>
+      l10n.transactionErrorTxRollupInvalidZeroTransfer;
+
+  String get RESPONSE_STRING_TX_ROLLUP_UNKNOWN_ADDRESS =>
+      l10n.transactionErrorTxRollupUnknownAddress;
+
+  String get RESPONSE_STRING_INACTIVE_CHAIN =>
+      l10n.transactionErrorInactiveChain;
+
   String get NETWORK_ERROR_NOT_IMPLEMENTED => l10n.networkErrorNotImplemented;
 
   String get NETWORK_ERROR_REQUEST_CANCELLED =>
@@ -50,7 +73,7 @@ class GlobalMessage {
   String get NETWORK_ERROR_NOT_FOUND => l10n.networkErrorNotFound;
 
   String get RESPONSE_STRING_FAILED_TO_LOAD_PROFILE => l10n.failedToLoadProfile;
-  
+
   String get RESPONSE_STRING_FAILED_TO_DO_OPERATION => l10n.failedToDoOperation;
 
   String get RESPONSE_STRING_FAILED_TO_SAVE_PROFILE => l10n.failedToSaveProfile;
@@ -109,8 +132,8 @@ class GlobalMessage {
   String get RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_DID =>
       l10n.successfullyPresentedYourDID;
 
-  String get RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE =>
-      l10n.thisQRCodeDoseNotContainAValidMessage;
+  String get RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED =>
+      l10n.thisQRCodeIsNotSupported;
 
   String get RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE =>
       l10n.thisUrlDoseNotContainAValidMessage;
@@ -180,4 +203,52 @@ class GlobalMessage {
 
   String get RESPONSE_STRING_DISCONNECTED_FROM_DAPP =>
       l10n.succesfullyDisconnected;
+
+  String get RESPONSE_STRING_emailPassWhyGetThisCard =>
+      l10n.emailPassWhyGetThisCard;
+  String get RESPONSE_STRING_emailPassExpirationDate =>
+      l10n.emailPassExpirationDate;
+  String get RESPONSE_STRING_emailPassHowToGetIt => l10n.emailPassHowToGetIt;
+  String get RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard =>
+      l10n.tezotopiaMembershipWhyGetThisCard;
+  String get RESPONSE_STRING_tezotopiaMembershipExpirationDate =>
+      l10n.tezotopiaMembershipExpirationDate;
+  String get RESPONSE_STRING_tezotopiaMembershipHowToGetIt =>
+      l10n.tezotopiaMembershipHowToGetIt;
+  String get RESPONSE_STRING_over18WhyGetThisCard => l10n.over18WhyGetThisCard;
+  String get RESPONSE_STRING_over18ExpirationDate => l10n.over18ExpirationDate;
+  String get RESPONSE_STRING_over18HowToGetIt => l10n.over18HowToGetIt;
+  String get RESPONSE_STRING_over13WhyGetThisCard => l10n.over13WhyGetThisCard;
+  String get RESPONSE_STRING_over13ExpirationDate => l10n.over13ExpirationDate;
+  String get RESPONSE_STRING_over13HowToGetIt => l10n.over13HowToGetIt;
+  String get RESPONSE_STRING_identityCardWhyGetThisCard =>
+      l10n.identityCardWhyGetThisCard;
+  String get RESPONSE_STRING_identityCardExpirationDate =>
+      l10n.identityCardExpirationDate;
+  String get RESPONSE_STRING_identityCardHowToGetIt =>
+      l10n.identityCardHowToGetIt;
+  String get RESPONSE_STRING_phoneProofWhyGetThisCard =>
+      l10n.phoneProofWhyGetThisCard;
+  String get RESPONSE_STRING_phoneProofExpirationDate =>
+      l10n.phoneProofExpirationDate;
+  String get RESPONSE_STRING_phoneProofHowToGetIt => l10n.phoneProofHowToGetIt;
+  String get RESPONSE_STRING_tezVoucherWhyGetThisCard =>
+      l10n.tezVoucherWhyGetThisCard;
+  String get RESPONSE_STRING_tezVoucherExpirationDate =>
+      l10n.tezVoucherExpirationDate;
+  String get RESPONSE_STRING_tezVoucherHowToGetIt => l10n.tezVoucherHowToGetIt;
+  String get RESPONSE_STRING_genderWhyGetThisCard => l10n.genderWhyGetThisCard;
+  String get RESPONSE_STRING_genderExpirationDate => l10n.genderExpirationDate;
+  String get RESPONSE_STRING_genderHowToGetIt => l10n.genderHowToGetIt;
+  String get RESPONSE_STRING_nationalityWhyGetThisCard =>
+      l10n.nationalityWhyGetThisCard;
+  String get RESPONSE_STRING_nationalityExpirationDate =>
+      l10n.nationalityExpirationDate;
+  String get RESPONSE_STRING_nationalityHowToGetIt =>
+      l10n.nationalityHowToGetIt;
+  String get RESPONSE_STRING_ageRangeWhyGetThisCard =>
+      l10n.ageRangeWhyGetThisCard;
+  String get RESPONSE_STRING_ageRangeExpirationDate =>
+      l10n.ageRangeExpirationDate;
+  String get RESPONSE_STRING_ageRangeHowToGetIt => l10n.ageRangeHowToGetIt;
 }

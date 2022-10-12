@@ -106,7 +106,7 @@ ButtonStyle gradientStyleFrom({
   return ElevatedButton.styleFrom(
     elevation: elevation,
     padding: EdgeInsets.symmetric(vertical: verticalSpacing),
-    primary: Theme.of(context).colorScheme.transparent,
+    backgroundColor: Theme.of(context).colorScheme.transparent,
     shadowColor: Theme.of(context).colorScheme.transparent,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(borderRadius),

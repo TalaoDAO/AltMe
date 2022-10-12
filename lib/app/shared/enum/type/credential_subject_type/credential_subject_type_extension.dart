@@ -37,6 +37,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.over18:
         return const Color(0xffCAFFBF);
+      case CredentialSubjectType.over13:
+        return const Color(0xffCAFFBF);
       case CredentialSubjectType.professionalStudentCard:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.certificateOfEmployment:
@@ -87,6 +89,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.loyaltyCard:
         return Icons.loyalty;
       case CredentialSubjectType.over18:
+        return Icons.accessible_rounded;
+      case CredentialSubjectType.over13:
         return Icons.accessible_rounded;
       case CredentialSubjectType.professionalStudentCard:
         return Icons.perm_identity;

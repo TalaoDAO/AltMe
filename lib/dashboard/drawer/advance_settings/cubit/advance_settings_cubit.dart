@@ -41,7 +41,7 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
         'true';
     final isOtherEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isOtherEnabled) ??
-                false.toString()) ==
+                true.toString()) ==
             'true';
     final isPaymentEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isPaymentEnabled) ??

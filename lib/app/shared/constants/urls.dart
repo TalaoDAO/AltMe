@@ -12,11 +12,13 @@ class Urls {
   static const String nationalityUrl = 'https://issuer.talao.co/nationality';
   static const String genderUrl = 'https://issuer.talao.co/gender';
   static const String over18Url = 'https://issuer.talao.co/over18';
+  static const String over13Url = 'https://issuer.talao.co/over13';
+
   static const String tezotopiaVoucherUrl =
       'https://issuer.tezotopia.altme.io/issuer/voucher_mobile';
   static const String talaoCommunityCardUrl =
       'https://issuer.talao.co/talao_community';
-      
+
   static const String tezotopiaMembershipCardUrl =
       'https://issuer.tezotopia.altme.io/issuer/membershipcard_mobile';
   static const String identityCardUrl = 'http://issuer.talao.co/kyc';

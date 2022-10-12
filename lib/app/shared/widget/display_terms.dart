@@ -55,74 +55,75 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
     final l10n = context.l10n;
 
     return BlocBuilder<DisplayTermsOfUseCubit, bool>(
-        bloc: displayTermsOfUseCubit,
-        builder: (context, isExpand) {
-          return FutureBuilder<List<String>>(
-            future: getBodyData(l10n.localeName),
-            builder: (context, snapshot) {
-              if (snapshot.data != null) {
-                return Theme(
-                  data: Theme.of(context)
-                      .copyWith(dividerColor: Colors.transparent),
-                  child: ExpansionTile(
-                    initiallyExpanded: false,
-                    childrenPadding: EdgeInsets.zero,
-                    onExpansionChanged: (isExpanded) {
-                      displayTermsOfUseCubit.setExpanded(
-                        isExpanded: isExpanded,
-                      );
-                    },
-                    tilePadding: const EdgeInsets.symmetric(horizontal: 8),
-                    trailing: const SizedBox.shrink(),
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        MarkdownBody(
-                          physics: widget.physics,
-                          shrinkWrap: widget.shrinkWrap,
-                          data: snapshot.data![0],
-                        ),
-                        Text(
-                          isExpand ? l10n.showLess : l10n.showMore,
-                          style: Theme.of(context).textTheme.subtitle2,
-                        ),
-                      ],
-                    ),
+      bloc: displayTermsOfUseCubit,
+      builder: (context, isExpand) {
+        return FutureBuilder<List<String>>(
+          future: getBodyData(l10n.localeName),
+          builder: (context, snapshot) {
+            if (snapshot.data != null) {
+              return Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  initiallyExpanded: false,
+                  childrenPadding: EdgeInsets.zero,
+                  onExpansionChanged: (isExpanded) {
+                    displayTermsOfUseCubit.setExpanded(
+                      isExpanded: isExpanded,
+                    );
+                  },
+                  tilePadding: const EdgeInsets.symmetric(horizontal: 8),
+                  trailing: const SizedBox.shrink(),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      /// Privacry Policy part 2
                       MarkdownBody(
                         physics: widget.physics,
                         shrinkWrap: widget.shrinkWrap,
-                        data: snapshot.data![1],
+                        data: snapshot.data![0],
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Divider(),
-                      ),
-
-                      /// Terms
-                      MarkdownBody(
-                        physics: widget.physics,
-                        shrinkWrap: widget.shrinkWrap,
-                        data: snapshot.data![2],
+                      Text(
+                        isExpand ? l10n.showLess : l10n.showMore,
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
                     ],
                   ),
-                );
-              }
+                  children: [
+                    /// Privacry Policy part 2
+                    MarkdownBody(
+                      physics: widget.physics,
+                      shrinkWrap: widget.shrinkWrap,
+                      data: snapshot.data![1],
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Divider(),
+                    ),
 
-              if (snapshot.error != null) {
-                log.e(
-                  'something went wrong when loading privacy file',
-                  snapshot.error,
-                );
-                return const SizedBox.shrink();
-              }
+                    /// Terms
+                    MarkdownBody(
+                      physics: widget.physics,
+                      shrinkWrap: widget.shrinkWrap,
+                      data: snapshot.data![2],
+                    ),
+                  ],
+                ),
+              );
+            }
 
-              return const Spinner();
-            },
-          );
-        });
+            if (snapshot.error != null) {
+              log.e(
+                'something went wrong when loading privacy file',
+                snapshot.error,
+              );
+              return const SizedBox.shrink();
+            }
+
+            return const Spinner();
+          },
+        );
+      },
+    );
   }
 
   Future<String> _loadFile(String path) async {

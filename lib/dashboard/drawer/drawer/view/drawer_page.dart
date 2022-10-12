@@ -74,7 +74,6 @@ class DrawerView extends StatelessWidget {
                       const SizedBox(height: 15),
                       const NetworkAndRegistriesItems(),
                       const SizedBox(height: 15),
-                      // TODO(bibash): remove this
                       const OtherItems(),
                       const SizedBox(height: 15),
                       const TermsOfUseAndLicences(),

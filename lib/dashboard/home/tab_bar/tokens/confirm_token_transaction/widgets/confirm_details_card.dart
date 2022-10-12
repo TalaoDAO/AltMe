@@ -42,7 +42,7 @@ class ConfirmDetailsCard extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '${isNFT ? amount.toInt() : amount.toStringAsFixed(6).formatNumber()} $symbol',
+                '''${isNFT ? amount.toInt() : amount.toStringAsFixed(6).formatNumber()} $symbol''',
                 style: Theme.of(context).textTheme.caption,
               ),
             ],

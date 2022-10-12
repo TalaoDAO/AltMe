@@ -13,13 +13,16 @@ class CheckIssuer {
   final Uri uriToCheck;
 
   Future<Issuer> isIssuerInApprovedList() async {
+    final log = getLogger('isIssuerInApprovedList');
     var didToTest = '';
     didToTest = getIssuerDid(uriToCheck: uriToCheck);
     if (checkIssuerServerUrl == Urls.checkIssuerEbsiUrl &&
         !didToTest.startsWith('did:ebsi')) {
+      log.i('did:ebsi issuer');
       return Issuer.emptyIssuer(uriToCheck.host);
     }
     try {
+      log.i('fetching issuer data');
       final dynamic response =
           await client.get('$checkIssuerServerUrl/$didToTest');
       if (checkIssuerServerUrl == Urls.checkIssuerEbsiUrl) {
@@ -45,11 +48,7 @@ class CheckIssuer {
 
       return Issuer.emptyIssuer(uriToCheck.host);
     } catch (e) {
-      if (e is NetworkException) {
-        if (e.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
-          return Issuer.emptyIssuer(uriToCheck.toString());
-        }
-      }
+      log.e('error $e');
       rethrow;
     }
   }

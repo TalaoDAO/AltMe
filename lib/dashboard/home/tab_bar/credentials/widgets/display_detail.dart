@@ -74,6 +74,10 @@ class DisplayDetail extends StatelessWidget {
         return Over18DisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.over13:
+        return Over13DisplayDetail(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.phonePass:
         return PhonePassDisplayDetail(
           credentialModel: credentialModel,

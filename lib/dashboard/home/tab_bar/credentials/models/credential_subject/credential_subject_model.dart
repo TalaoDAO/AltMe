@@ -42,6 +42,8 @@ class CredentialSubjectModel {
         return LoyaltyCardModel.fromJson(json);
       case 'Over18':
         return Over18Model.fromJson(json);
+      case 'Over13':
+        return Over13Model.fromJson(json);
       case 'ProfessionalStudentCard':
         return ProfessionalStudentCardModel.fromJson(json);
       case 'StudentCard':

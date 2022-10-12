@@ -55,8 +55,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     try {
       if (scannedResponse == null || scannedResponse.isEmpty) {
         throw ResponseMessage(
-          ResponseString
-              .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
+          ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
         );
       } else if (scannedResponse.startsWith('tezos://')) {
         final String pairingRequest =
@@ -73,8 +72,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString
-                .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
+            ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
           ),
         ),
       );
@@ -100,8 +98,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     try {
       if (url == null || url.isEmpty) {
         throw ResponseMessage(
-          ResponseString
-              .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
+          ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
         );
       } else {
         final uri = Uri.parse(url);
@@ -111,8 +108,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       emit(
         state.error(
           messageHandler: ResponseMessage(
-            ResponseString
-                .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
+            ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
           ),
         ),
       );
@@ -145,7 +141,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           state.error(
             messageHandler: ResponseMessage(
               ResponseString
-                  .RESPONSE_STRING_THIS_QR_CODE_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
+                  .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
             ),
           ),
         );

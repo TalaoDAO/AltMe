@@ -77,12 +77,40 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
         );
       } else if (e is TezartNodeError) {
         final Map<String, String> json = e.metadata;
-        if (json['reason'] == 'contract.balance_too_low') {
+        log.e('metadata json: $json');
+        if (json['reason'] != null) {
+          final reason = json['reason']!;
+          late ResponseString responseString;
+          if (reason == 'contract.balance_too_low') {
+            responseString = ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW;
+          } else if (reason.contains('contract.cannot_pay_storage_fee')) {
+            responseString =
+                ResponseString.RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE;
+          } else if (reason.contains('prefilter.fees_too_low')) {
+            responseString = ResponseString.RESPONSE_STRING_FEE_TOO_LOW;
+          } else if (reason.contains('prefilter.fees_too_low_for_mempool')) {
+            responseString =
+                ResponseString.RESPONSE_STRING_FEE_TOO_LOW_FOR_MEMPOOL;
+          } else if (reason.contains('tx_rollup_balance_too_low')) {
+            responseString =
+                ResponseString.RESPONSE_STRING_TX_ROLLUP_BALANCE_TOO_LOW;
+          } else if (reason.contains('tx_rollup_invalid_zero_transfer')) {
+            responseString =
+                ResponseString.RESPONSE_STRING_TX_ROLLUP_INVALID_ZERO_TRANSFER;
+          } else if (reason.contains('tx_rollup_unknown_address')) {
+            responseString =
+                ResponseString.RESPONSE_STRING_TX_ROLLUP_UNKNOWN_ADDRESS;
+          } else if (reason.contains('inactive_chain')) {
+            responseString = ResponseString.RESPONSE_STRING_INACTIVE_CHAIN;
+          } else {
+            responseString = ResponseString
+                .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER;
+          }
           emit(
             state.copyWith(
               status: AppStatus.errorWhileFetching,
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
+                responseString,
               ),
             ),
           );
@@ -272,11 +300,12 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       );
 
       return operationList;
-    } catch (e) {
+    } catch (e, s) {
+      log.e('error : $e, s: $s');
       if (e is MessageHandler) {
         rethrow;
       } else if (e is TezartNodeError) {
-        log.e(e.metadata);
+        log.e('e: ${e.toString()} , metadata: ${e.metadata} , s: $s');
         rethrow;
       } else {
         throw ResponseMessage(

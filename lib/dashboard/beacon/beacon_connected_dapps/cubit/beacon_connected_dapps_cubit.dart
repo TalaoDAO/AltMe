@@ -100,8 +100,8 @@ class BeaconConnectedDappsCubit extends Cubit<BeaconConnectedDappsState> {
 
       final _peersListToShow = <P2PPeer>[];
 
-      // TODO(bibash): when sdk returns correct 'isPaired' data then show data
-      // accordingly
+      // TODO(all): when beacon sdk returns correct 'isPaired' data then show
+      // data accordingly
 
       //final _peersToRemove = <P2PPeer>[];
 

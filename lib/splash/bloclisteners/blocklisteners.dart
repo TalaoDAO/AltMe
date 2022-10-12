@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/first/onboarding_first.dart';
 import 'package:altme/onboarding/second/view/onboarding_second_page.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/scan.dart';
@@ -102,6 +101,8 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
 
 final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
   listener: (BuildContext context, QRCodeScanState state) async {
+    final log = getLogger('qrCodeBlocListener');
+
     final l10n = context.l10n;
 
     if (state.status == QrScanStatus.loading) {
@@ -111,11 +112,13 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
     }
 
     if (state.status == QrScanStatus.acceptHost) {
+      log.i('accept host');
       if (state.uri != null) {
         final profileCubit = context.read<ProfileCubit>();
         var approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
         final isIssuerVerificationSettingTrue =
             profileCubit.state.model.issuerVerificationUrl != '';
+        log.i('checking issuer - $isIssuerVerificationSettingTrue');
         if (isIssuerVerificationSettingTrue) {
           try {
             approvedIssuer = await CheckIssuer(
@@ -125,7 +128,20 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             ).isIssuerInApprovedList();
           } catch (e) {
             if (e is MessageHandler) {
-              await context.read<QRCodeScanCubit>().emitError(e);
+              if (e is NetworkException) {
+                if (e.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
+                  await context.read<QRCodeScanCubit>().emitError(
+                        ResponseMessage(
+                          ResponseString
+                              .RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
+                        ),
+                      );
+                } else {
+                  await context.read<QRCodeScanCubit>().emitError(e);
+                }
+              } else {
+                await context.read<QRCodeScanCubit>().emitError(e);
+              }
             } else {
               await context.read<QRCodeScanCubit>().emitError(
                     ResponseMessage(

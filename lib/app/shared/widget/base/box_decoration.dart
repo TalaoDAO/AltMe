@@ -112,11 +112,11 @@ class BaseBoxDecoration extends Decoration {
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       color,
       shapeColor,
       borderRadius,
-      hashList(boxShadow),
+      Object.hashAll(boxShadow!),
       gradient,
     );
   }
