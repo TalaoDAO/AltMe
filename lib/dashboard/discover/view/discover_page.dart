@@ -1,5 +1,7 @@
 import 'package:altme/app/shared/alert_message/alert_message.dart';
 import 'package:altme/app/shared/enum/status/app_status.dart';
+import 'package:altme/app/shared/enum/type/credential_subject_type/credential_subject_type.dart';
+import 'package:altme/app/shared/helper_functions/helper_functions.dart';
 import 'package:altme/app/shared/loading/loading_view.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/dashboard/home/tab_bar/tab_bar.dart';
@@ -53,6 +55,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
         builder: (context, state) {
           final CredentialListCubit credentialListCubit =
               context.read<CredentialListCubit>();
+
+          /// Hack for Apple => no gaming cards
+          final List<CredentialSubjectType> gamingcategories =
+              isAndroid() ? state.gamingCategories : [];
           return BackgroundCard(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: DiscoverCredentialList(
@@ -63,7 +69,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
               },
               state: state.populate(
                 gamingCredentials: credentialListCubit.dummyListFromCategory(
-                  state.gamingCategories,
+                  gamingcategories,
                 ),
                 communityCredentials: credentialListCubit.dummyListFromCategory(
                   state.communityCategories,
