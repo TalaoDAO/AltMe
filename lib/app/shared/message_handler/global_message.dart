@@ -203,4 +203,52 @@ class GlobalMessage {
 
   String get RESPONSE_STRING_DISCONNECTED_FROM_DAPP =>
       l10n.succesfullyDisconnected;
+
+  String get RESPONSE_STRING_emailPassWhyGetThisCard =>
+      l10n.emailPassWhyGetThisCard;
+  String get RESPONSE_STRING_emailPassExpirationDate =>
+      l10n.emailPassExpirationDate;
+  String get RESPONSE_STRING_emailPassHowToGetIt => l10n.emailPassHowToGetIt;
+  String get RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard =>
+      l10n.tezotopiaMembershipWhyGetThisCard;
+  String get RESPONSE_STRING_tezotopiaMembershipExpirationDate =>
+      l10n.tezotopiaMembershipExpirationDate;
+  String get RESPONSE_STRING_tezotopiaMembershipHowToGetIt =>
+      l10n.tezotopiaMembershipHowToGetIt;
+  String get RESPONSE_STRING_over18WhyGetThisCard => l10n.over18WhyGetThisCard;
+  String get RESPONSE_STRING_over18ExpirationDate => l10n.over18ExpirationDate;
+  String get RESPONSE_STRING_over18HowToGetIt => l10n.over18HowToGetIt;
+  String get RESPONSE_STRING_over13WhyGetThisCard => l10n.over13WhyGetThisCard;
+  String get RESPONSE_STRING_over13ExpirationDate => l10n.over13ExpirationDate;
+  String get RESPONSE_STRING_over13HowToGetIt => l10n.over13HowToGetIt;
+  String get RESPONSE_STRING_identityCardWhyGetThisCard =>
+      l10n.identityCardWhyGetThisCard;
+  String get RESPONSE_STRING_identityCardExpirationDate =>
+      l10n.identityCardExpirationDate;
+  String get RESPONSE_STRING_identityCardHowToGetIt =>
+      l10n.identityCardHowToGetIt;
+  String get RESPONSE_STRING_phoneProofWhyGetThisCard =>
+      l10n.phoneProofWhyGetThisCard;
+  String get RESPONSE_STRING_phoneProofExpirationDate =>
+      l10n.phoneProofExpirationDate;
+  String get RESPONSE_STRING_phoneProofHowToGetIt => l10n.phoneProofHowToGetIt;
+  String get RESPONSE_STRING_tezVoucherWhyGetThisCard =>
+      l10n.tezVoucherWhyGetThisCard;
+  String get RESPONSE_STRING_tezVoucherExpirationDate =>
+      l10n.tezVoucherExpirationDate;
+  String get RESPONSE_STRING_tezVoucherHowToGetIt => l10n.tezVoucherHowToGetIt;
+  String get RESPONSE_STRING_genderWhyGetThisCard => l10n.genderWhyGetThisCard;
+  String get RESPONSE_STRING_genderExpirationDate => l10n.genderExpirationDate;
+  String get RESPONSE_STRING_genderHowToGetIt => l10n.genderHowToGetIt;
+  String get RESPONSE_STRING_nationalityWhyGetThisCard =>
+      l10n.nationalityWhyGetThisCard;
+  String get RESPONSE_STRING_nationalityExpirationDate =>
+      l10n.nationalityExpirationDate;
+  String get RESPONSE_STRING_nationalityHowToGetIt =>
+      l10n.nationalityHowToGetIt;
+  String get RESPONSE_STRING_ageRangeWhyGetThisCard =>
+      l10n.ageRangeWhyGetThisCard;
+  String get RESPONSE_STRING_ageRangeExpirationDate =>
+      l10n.ageRangeExpirationDate;
+  String get RESPONSE_STRING_ageRangeHowToGetIt => l10n.ageRangeHowToGetIt;
 }
