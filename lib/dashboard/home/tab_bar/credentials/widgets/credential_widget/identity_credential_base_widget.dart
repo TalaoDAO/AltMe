@@ -60,7 +60,7 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
               LayoutId(
                 id: 'issued-on',
                 child: FractionallySizedBox(
-                  heightFactor: 0.11,
+                  heightFactor: 0.10,
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.issuedOn,
@@ -96,7 +96,7 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
               LayoutId(
                 id: 'expiration-date-value',
                 child: FractionallySizedBox(
-                  heightFactor: 0.11,
+                  heightFactor: 0.10,
                   widthFactor: 0.4,
                   child: MyText(
                     expirationDate!,
