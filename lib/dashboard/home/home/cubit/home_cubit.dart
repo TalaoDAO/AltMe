@@ -249,18 +249,24 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> periodicCheckReward({
-    required String selectedWalletAddress,
+    required List<String> walletAddresses,
   }) async {
+    if (walletAddresses.isEmpty) return;
     try {
-      await checkUNOReward(selectedWalletAddress);
-      await checkXTZReward(selectedWalletAddress);
+      await checkRewards(walletAddresses);
       Timer.periodic(const Duration(minutes: 1), (timer) async {
-        await checkUNOReward(selectedWalletAddress);
-        await checkXTZReward(selectedWalletAddress);
+        await checkRewards(walletAddresses);
       });
     } catch (e, s) {
       getLogger('HomeCubit')
           .e('error in checking for reward , error: $e, stack: $s');
+    }
+  }
+
+  Future<void> checkRewards(List<String> walletAddresses) async {
+    for (int i = 0; i < walletAddresses.length; i++) {
+      await checkUNOReward(walletAddresses[i]);
+      await checkXTZReward(walletAddresses[i]);
     }
   }
 
