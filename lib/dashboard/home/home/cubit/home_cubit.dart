@@ -314,6 +314,8 @@ class HomeCubit extends Cubit<HomeState> {
               decimal: 9, //UNO
               value: lastOperation.amount.toString(),
             ),
+            txId: lastOperation.hash,
+            counter: lastOperation.counter,
             account: walletAddress,
             origin:
                 'Tezotopia Membership Card', // TODO(all): dynamic text later
@@ -374,6 +376,8 @@ class HomeCubit extends Cubit<HomeState> {
               value: lastOperation.amount.toString(),
             ),
             account: walletAddress,
+            txId: lastOperation.hash,
+            counter: lastOperation.counter,
             origin:
                 'Tezotopia Membership Card', // TODO(all): dynamic text later
             symbol: 'XTZ',

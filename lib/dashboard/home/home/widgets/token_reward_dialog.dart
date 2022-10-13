@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class TokenRewardDialog extends StatelessWidget {
@@ -74,6 +75,11 @@ class TokenRewardDialog extends StatelessWidget {
                         Theme.of(context).textTheme.defaultDialogBody.copyWith(
                               decoration: TextDecoration.underline,
                             ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        LaunchUrl.launch(
+                            'https://tzkt.io/${tokenReward.txId}/${tokenReward.counter}');
+                      },
                   ),
                   TextSpan(
                     text: '\n\n${l10n.origin}: ${tokenReward.origin}',
