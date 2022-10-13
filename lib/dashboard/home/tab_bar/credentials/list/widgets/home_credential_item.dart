@@ -174,8 +174,31 @@ class DummyCredentialItem extends StatelessWidget {
           children: [
             Expanded(
               flex: 8,
-              child: CredentialContainer(
-                child: Image.asset(homeCredential.image!, fit: BoxFit.fill),
+              child: Stack(
+                children: [
+                  CredentialContainer(
+                    child: Image.asset(homeCredential.image!, fit: BoxFit.fill),
+                  ),
+                  if (homeCredential.dummyDescription != null)
+                    CustomMultiChildLayout(
+                      delegate:
+                          DummyCredentialItemDelegate(position: Offset.zero),
+                      children: [
+                        LayoutId(
+                          id: 'dummyDesc',
+                          child: FractionallySizedBox(
+                            widthFactor: 0.85,
+                            heightFactor: 0.36,
+                            child: MyText(
+                              homeCredential.dummyDescription!,
+                              maxLines: 3,
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
               ),
             ),
             const SizedBox(height: 5),
@@ -210,5 +233,27 @@ class DummyCredentialItem extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class DummyCredentialItemDelegate extends MultiChildLayoutDelegate {
+  DummyCredentialItemDelegate({this.position = Offset.zero});
+
+  final Offset position;
+
+  @override
+  void performLayout(Size size) {
+    if (hasChild('dummyDesc')) {
+      layoutChild('dummyDesc', BoxConstraints.loose(size));
+      positionChild(
+        'dummyDesc',
+        Offset(size.width * 0.06, size.height * 0.35),
+      );
+    }
+  }
+
+  @override
+  bool shouldRelayout(DummyCredentialItemDelegate oldDelegate) {
+    return oldDelegate.position != position;
   }
 }
