@@ -491,7 +491,6 @@
     "showMore",
     "showLess",
     "youHaveReceivedARewardOf",
-    "reward",
     "gotIt",
     "transactionErrorBalanceTooLow",
     "transactionErrorCannotPayStorageFee",
@@ -533,7 +532,11 @@
     "nationalityHowToGetIt",
     "ageRangeWhyGetThisCard",
     "ageRangeExpirationDate",
-    "ageRangeHowToGetIt"
+    "ageRangeHowToGetIt",
+    "rewardDialogTitle",
+    "rewardDialogDescPart1",
+    "rewardDialogDescPart2",
+    "origin"
   ],
 
   "es": [
@@ -1028,7 +1031,6 @@
     "showMore",
     "showLess",
     "youHaveReceivedARewardOf",
-    "reward",
     "gotIt",
     "transactionErrorBalanceTooLow",
     "transactionErrorCannotPayStorageFee",
@@ -1070,7 +1072,11 @@
     "nationalityHowToGetIt",
     "ageRangeWhyGetThisCard",
     "ageRangeExpirationDate",
-    "ageRangeHowToGetIt"
+    "ageRangeHowToGetIt",
+    "rewardDialogTitle",
+    "rewardDialogDescPart1",
+    "rewardDialogDescPart2",
+    "origin"
   ],
 
   "fr": [
@@ -1565,7 +1571,6 @@
     "showMore",
     "showLess",
     "youHaveReceivedARewardOf",
-    "reward",
     "gotIt",
     "transactionErrorBalanceTooLow",
     "transactionErrorCannotPayStorageFee",
@@ -1607,7 +1612,11 @@
     "nationalityHowToGetIt",
     "ageRangeWhyGetThisCard",
     "ageRangeExpirationDate",
-    "ageRangeHowToGetIt"
+    "ageRangeHowToGetIt",
+    "rewardDialogTitle",
+    "rewardDialogDescPart1",
+    "rewardDialogDescPart2",
+    "origin"
   ],
 
   "it": [
@@ -2102,7 +2111,6 @@
     "showMore",
     "showLess",
     "youHaveReceivedARewardOf",
-    "reward",
     "gotIt",
     "transactionErrorBalanceTooLow",
     "transactionErrorCannotPayStorageFee",
@@ -2144,6 +2152,10 @@
     "nationalityHowToGetIt",
     "ageRangeWhyGetThisCard",
     "ageRangeExpirationDate",
-    "ageRangeHowToGetIt"
+    "ageRangeHowToGetIt",
+    "rewardDialogTitle",
+    "rewardDialogDescPart1",
+    "rewardDialogDescPart2",
+    "origin"
   ]
 }

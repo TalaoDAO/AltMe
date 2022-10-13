@@ -9,6 +9,8 @@ class TokenReward extends Equatable {
     required this.amount,
     required this.symbol,
     required this.name,
+    required this.account,
+    required this.origin,
   });
 
   factory TokenReward.fromJson(Map<String, dynamic> json) =>
@@ -17,6 +19,8 @@ class TokenReward extends Equatable {
   final double amount;
   final String symbol;
   final String name;
+  final String account;
+  final String origin;
 
   Map<String, dynamic> toJson() => _$TokenRewardToJson(this);
 
@@ -25,5 +29,7 @@ class TokenReward extends Equatable {
         amount,
         symbol,
         name,
+        account,
+        origin,
       ];
 }

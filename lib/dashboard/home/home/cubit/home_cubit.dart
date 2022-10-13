@@ -264,13 +264,13 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<void> checkUNOReward(String selectedWalletAddress) async {
+  Future<void> checkUNOReward(String walletAddress) async {
     getLogger('HomeCubit').i('check for UNO reward');
     final response = await client.get(
       '${Urls.tzktMainnetUrl}/v1/tokens/transfers',
       queryParameters: <String, dynamic>{
         'from': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
-        'to': selectedWalletAddress,
+        'to': walletAddress,
         'token.contract.eq': 'KT1ErKVqEhG9jxXgUG2KGLW3bNM7zXHX8SDF', // UNO
         'sort.desc': 'timestamp'
       },
@@ -308,6 +308,9 @@ class HomeCubit extends Cubit<HomeState> {
               decimal: 9, //UNO
               value: lastOperation.amount.toString(),
             ),
+            account: walletAddress,
+            origin:
+                'Tezotopia Membership Card', // TODO(all): dynamic text later
             symbol: 'UNO',
             name: 'Unobtanium',
           ),
@@ -316,14 +319,14 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<void> checkXTZReward(String selectedWalletAddress) async {
+  Future<void> checkXTZReward(String walletAddress) async {
     getLogger('HomeCubit').i('check for XTZ reward');
 
     final result = await client.get(
       '${Urls.tzktMainnetUrl}/v1/operations/transactions',
       queryParameters: <String, dynamic>{
         'sender': 'tz1YtKsJMx5FqhULTDzNxs9r9QYHBGsmz58o', // tezotopia
-        'target': selectedWalletAddress,
+        'target': walletAddress,
         'amount.gt': 0,
       },
     ) as List<dynamic>;
@@ -341,7 +344,6 @@ class HomeCubit extends Cubit<HomeState> {
     operations.sort(
       (a, b) => b.dateTime.compareTo(a.dateTime),
     );
-
 
     final String? lastNotifiedRewardId = await secureStorageProvider.get(
       SecureStorageKeys.lastNotifiedXTZRewardId,
@@ -365,6 +367,9 @@ class HomeCubit extends Cubit<HomeState> {
               decimal: 6, //XTZ
               value: lastOperation.amount.toString(),
             ),
+            account: walletAddress,
+            origin:
+                'Tezotopia Membership Card', // TODO(all): dynamic text later
             symbol: 'XTZ',
             name: 'Tezos',
           ),
