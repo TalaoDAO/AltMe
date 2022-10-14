@@ -16,7 +16,7 @@ class AragoPassModel extends CredentialSubjectModel {
           id: id,
           type: type,
           issuedBy: issuedBy,
-          credentialSubjectType: CredentialSubjectType.talaoCommunityCard,
+          credentialSubjectType: CredentialSubjectType.aragoPass,
           credentialCategory: CredentialCategory.communityCards,
         );
 
