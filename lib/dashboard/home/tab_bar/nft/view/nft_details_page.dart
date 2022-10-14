@@ -62,6 +62,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 child: CachedImageFromNetwork(
                   widget.nftModel.displayUrl,
                   fit: BoxFit.fill,
+                  errorMessage: l10n.nftTooBigToLoad,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(Sizes.largeRadius),
                   ),
