@@ -860,4 +860,10 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
         color: const Color(0xffFFFFFF),
       );
+
+  TextStyle get nftLoadMessage => GoogleFonts.roboto(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xffFFFFFF),
+      );
 }

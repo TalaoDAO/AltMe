@@ -533,7 +533,8 @@
     "nationalityHowToGetIt",
     "ageRangeWhyGetThisCard",
     "ageRangeExpirationDate",
-    "ageRangeHowToGetIt"
+    "ageRangeHowToGetIt",
+    "nftTooBigToLoad"
   ],
 
   "es": [
@@ -1070,7 +1071,8 @@
     "nationalityHowToGetIt",
     "ageRangeWhyGetThisCard",
     "ageRangeExpirationDate",
-    "ageRangeHowToGetIt"
+    "ageRangeHowToGetIt",
+    "nftTooBigToLoad"
   ],
 
   "fr": [
@@ -1607,7 +1609,8 @@
     "nationalityHowToGetIt",
     "ageRangeWhyGetThisCard",
     "ageRangeExpirationDate",
-    "ageRangeHowToGetIt"
+    "ageRangeHowToGetIt",
+    "nftTooBigToLoad"
   ],
 
   "it": [
@@ -2144,6 +2147,7 @@
     "nationalityHowToGetIt",
     "ageRangeWhyGetThisCard",
     "ageRangeExpirationDate",
-    "ageRangeHowToGetIt"
+    "ageRangeHowToGetIt",
+    "nftTooBigToLoad"
   ]
 }
