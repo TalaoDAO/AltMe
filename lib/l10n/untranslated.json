@@ -543,7 +543,9 @@
     "nftTooBigToLoad",
     "seeTransaction",
     "nftListSubtitle",
-    "tokenListSubtitle"
+    "tokenListSubtitle",
+    "my",
+    "get"
   ],
 
   "es": [
@@ -1090,7 +1092,9 @@
     "nftTooBigToLoad",
     "seeTransaction",
     "nftListSubtitle",
-    "tokenListSubtitle"
+    "tokenListSubtitle",
+    "my",
+    "get"
   ],
 
   "fr": [
@@ -1637,7 +1641,9 @@
     "nftTooBigToLoad",
     "seeTransaction",
     "nftListSubtitle",
-    "tokenListSubtitle"
+    "tokenListSubtitle",
+    "my",
+    "get"
   ],
 
   "it": [
@@ -2184,6 +2190,8 @@
     "nftTooBigToLoad",
     "seeTransaction",
     "nftListSubtitle",
-    "tokenListSubtitle"
+    "tokenListSubtitle",
+    "my",
+    "get"
   ]
 }

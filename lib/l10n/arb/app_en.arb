@@ -593,5 +593,7 @@
   "nftTooBigToLoad": "NFT too big to Load",
   "seeTransaction": "See transaction",
   "nftListSubtitle": "Here are all NFTs and collectibles you have in your account.",
-  "tokenListSubtitle": "Here are all the tokens you have in your account and those you have choose to display."
+  "tokenListSubtitle": "Here are all the tokens you have in your account and those you have choose to display.",
+  "my": "My",
+  "get": "Get"
 }
