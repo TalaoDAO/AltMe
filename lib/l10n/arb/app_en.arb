@@ -590,5 +590,6 @@
   "rewardDialogDescPart1": "You just received",
   "rewardDialogDescPart2": "on your account",
   "origin": "Origin",
-  "nftTooBigToLoad": "NFT too big to Load"
+  "nftTooBigToLoad": "NFT too big to Load",
+  "seeTransaction": "See transaction"
 }
