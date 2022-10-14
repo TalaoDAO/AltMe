@@ -12,6 +12,7 @@ export 'loyalty_card_widget.dart';
 export 'nationality_widget.dart';
 export 'over13_widget.dart';
 export 'over18_widget.dart';
+export 'passport_footprint_widget.dart';
 export 'phone_pass_widget.dart';
 export 'professional_experience_assessment_widget.dart';
 export 'professional_skill_assessment_widget.dart';

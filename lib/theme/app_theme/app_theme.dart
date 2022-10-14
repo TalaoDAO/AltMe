@@ -627,7 +627,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get defaultDialogBody => GoogleFonts.nunito(
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF5F556F),
       );

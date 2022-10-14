@@ -323,6 +323,24 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
+        case ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_passportFootprintExpirationDate:
+          return ResponseString.RESPONSE_STRING_passportFootprintExpirationDate
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_passportFootprintHowToGetIt:
+          return ResponseString.RESPONSE_STRING_passportFootprintHowToGetIt
+              .localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_identityCardWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_identityCardWhyGetThisCard
               .localise(context);
