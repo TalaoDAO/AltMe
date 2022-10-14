@@ -265,9 +265,6 @@ class WalletCubit extends Cubit<WalletState> {
       state.copyWith(
         status: WalletStatus.update,
         credentials: credentials,
-        messageHandler: ResponseMessage(
-          ResponseString.RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE,
-        ),
       ),
     );
   }

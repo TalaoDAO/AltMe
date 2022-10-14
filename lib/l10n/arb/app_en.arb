@@ -243,7 +243,7 @@
   "credentialVerificationReturnWarning": "La vérification des informations d'identification a renvoyé des avertissements.",
   "failedToVerifyCredential": "Échec de la vérification des informations d'identification.",
   "somethingsWentWrongTryAgainLater": "Quelque chose c'est mal passé. Merci d'essayer plus tard.",
-  "successfullyPresentedYourCredential": "Présenté avec succès votre pass !",
+  "successfullyPresentedYourCredential": "Votre pass a été présenté avec succès",
   "successfullyPresentedYourDID": "Présenté avec succès votre DID !",
   "thisQRCodeDoseNotContainAValidMessage": "Ce QRCode ne contient pas de message valide.",
   "thisUrlDoseNotContainAValidMessage": "Cette URL ne contient pas de message valide.",
