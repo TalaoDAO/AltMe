@@ -56,6 +56,54 @@ class _NftViewState extends State<NftView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const MyCollectionText(),
+          const SizedBox(
+            height: Sizes.space2XSmall,
+          ),
+          MyText(
+            l10n.nftListSubtitle,
+            maxLines: 3,
+            style: Theme.of(context).textTheme.credentialCategorySubTitle,
+          ),
+          const SizedBox(
+            height: Sizes.spaceXSmall,
+          ),
+          Center(
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).push<void>(
+                ReceivePage.route(
+                  accountAddress: context
+                      .read<WalletCubit>()
+                      .state
+                      .currentAccount
+                      .walletAddress,
+                  item: l10n.nft,
+                  description: l10n.sendOnlyNftToThisAddressDescription,
+                ),
+              );
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  IconStrings.addSquare,
+                  width: Sizes.icon,
+                  height: Sizes.icon,
+                ),
+                const SizedBox(
+                  width: Sizes.spaceXSmall,
+                ),
+                Text(
+                  l10n.receiveNft,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: Sizes.spaceNormal,
+        ),
           Expanded(
             child: MultiBlocListener(
               listeners: [

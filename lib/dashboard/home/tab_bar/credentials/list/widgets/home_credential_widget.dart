@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -21,12 +22,13 @@ class HomeCredentialWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          title,
+          '${fromDiscover ? l10n.get : l10n.my} ${title.toLowerCase()}',
           style: Theme.of(context).textTheme.credentialCategoryTitle,
         ),
         const SizedBox(
@@ -35,7 +37,7 @@ class HomeCredentialWidget extends StatelessWidget {
         Flexible(
           child: MyText(
             categorySubtitle,
-            maxLines: 2,
+            maxLines: 3,
             style: Theme.of(context).textTheme.credentialCategorySubTitle,
           ),
         ),

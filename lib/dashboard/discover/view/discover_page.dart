@@ -60,7 +60,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
           final List<CredentialSubjectType> gamingcategories =
               isAndroid() ? state.gamingCategories : [];
           return BackgroundCard(
-            margin: const EdgeInsets.symmetric(horizontal: 10),
             child: DiscoverCredentialList(
               onRefresh: () async {
                 await context
