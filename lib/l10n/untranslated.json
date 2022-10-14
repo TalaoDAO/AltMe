@@ -541,7 +541,9 @@
     "rewardDialogDescPart2",
     "origin",
     "nftTooBigToLoad",
-    "seeTransaction"
+    "seeTransaction",
+    "nftListSubtitle",
+    "tokenListSubtitle"
   ],
 
   "es": [
@@ -1086,7 +1088,9 @@
     "rewardDialogDescPart2",
     "origin",
     "nftTooBigToLoad",
-    "seeTransaction"
+    "seeTransaction",
+    "nftListSubtitle",
+    "tokenListSubtitle"
   ],
 
   "fr": [
@@ -1631,7 +1635,9 @@
     "rewardDialogDescPart2",
     "origin",
     "nftTooBigToLoad",
-    "seeTransaction"
+    "seeTransaction",
+    "nftListSubtitle",
+    "tokenListSubtitle"
   ],
 
   "it": [
@@ -2176,6 +2182,8 @@
     "rewardDialogDescPart2",
     "origin",
     "nftTooBigToLoad",
-    "seeTransaction"
+    "seeTransaction",
+    "nftListSubtitle",
+    "tokenListSubtitle"
   ]
 }
