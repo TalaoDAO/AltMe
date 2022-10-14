@@ -12,6 +12,7 @@ class HomeCredential extends Equatable {
     this.link,
     this.image,
     required this.isDummy,
+    this.dummyDescription,
     required this.credentialSubjectType,
     this.websiteGameLink,
     this.whyGetThisCard,
@@ -38,6 +39,7 @@ class HomeCredential extends Equatable {
     ResponseString? whyGetThisCard;
     ResponseString? expirationDateDetails;
     ResponseString? howToGetIt;
+    ResponseString? dummyDesc;
 
     switch (credentialSubjectType) {
       case CredentialSubjectType.ageRange:
@@ -47,6 +49,7 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_ageRangeExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_ageRangeHowToGetIt;
+        dummyDesc = ResponseString.AGE_RANGE_PROOF_DUMMY;
         break;
 
       case CredentialSubjectType.nationality:
@@ -57,6 +60,7 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_nationalityExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_nationalityHowToGetIt;
+        dummyDesc = ResponseString.NATIONALITY_PROOF_DUMMY;
         break;
 
       case CredentialSubjectType.gender:
@@ -66,10 +70,12 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_genderExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_genderHowToGetIt;
+        dummyDesc = ResponseString.GENDER_PROOF_DUMMY;
         break;
 
       case CredentialSubjectType.emailPass:
         image = ImageStrings.dummyEmailPassCard;
+        dummyDesc = ResponseString.EMAIL_PROOF_DUMMY;
         link = Urls.emailPassUrl;
         whyGetThisCard = ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard;
         expirationDateDetails =
@@ -84,6 +90,7 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
+        dummyDesc = ResponseString.OVER_18_PROOF_DUMMY;
         break;
 
       case CredentialSubjectType.over13:
@@ -129,6 +136,7 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_identityCardExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_identityCardHowToGetIt;
+        dummyDesc = ResponseString.IDENTITY_PROOF_DUMMY;
         break;
 
       case CredentialSubjectType.tezotopiaMembership:
@@ -172,11 +180,14 @@ class HomeCredential extends Equatable {
           : ResponseMessage(expirationDateDetails),
       howToGetIt: howToGetIt == null ? null : ResponseMessage(howToGetIt),
       websiteGameLink: websiteGameLink,
+      dummyDescription: dummyDesc == null ? null : ResponseMessage(dummyDesc),
     );
   }
 
   final CredentialModel? credentialModel;
   final String? link;
+  @JsonKey(ignore: true)
+  final MessageHandler? dummyDescription;
   final String? image;
   final bool isDummy;
   final CredentialSubjectType credentialSubjectType;
@@ -201,5 +212,6 @@ class HomeCredential extends Equatable {
         whyGetThisCard,
         expirationDateDetails,
         howToGetIt,
+        dummyDescription,
       ];
 }

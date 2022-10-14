@@ -545,7 +545,14 @@
     "nftListSubtitle",
     "tokenListSubtitle",
     "my",
-    "get"
+    "get",
+    "emailProofDummy",
+    "ageProofDummy",
+    "genderProofDummy",
+    "ageRangeProofDummy",
+    "nationalityProofDummy",
+    "over18ProofDummy",
+    "identityProofDummy"
   ],
 
   "es": [
@@ -1094,7 +1101,14 @@
     "nftListSubtitle",
     "tokenListSubtitle",
     "my",
-    "get"
+    "get",
+    "emailProofDummy",
+    "ageProofDummy",
+    "genderProofDummy",
+    "ageRangeProofDummy",
+    "nationalityProofDummy",
+    "over18ProofDummy",
+    "identityProofDummy"
   ],
 
   "fr": [
@@ -1643,7 +1657,14 @@
     "nftListSubtitle",
     "tokenListSubtitle",
     "my",
-    "get"
+    "get",
+    "emailProofDummy",
+    "ageProofDummy",
+    "genderProofDummy",
+    "ageRangeProofDummy",
+    "nationalityProofDummy",
+    "over18ProofDummy",
+    "identityProofDummy"
   ],
 
   "it": [
@@ -2192,6 +2213,13 @@
     "nftListSubtitle",
     "tokenListSubtitle",
     "my",
-    "get"
+    "get",
+    "emailProofDummy",
+    "ageProofDummy",
+    "genderProofDummy",
+    "ageRangeProofDummy",
+    "nationalityProofDummy",
+    "over18ProofDummy",
+    "identityProofDummy"
   ]
 }

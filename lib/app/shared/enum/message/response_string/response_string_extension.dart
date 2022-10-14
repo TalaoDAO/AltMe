@@ -4,6 +4,24 @@ extension ResponseStringX on ResponseString {
   String localise(BuildContext context) {
     final GlobalMessage globalMessage = GlobalMessage(context.l10n);
     switch (this) {
+      case ResponseString.IDENTITY_PROOF_DUMMY:
+        return globalMessage.IDENTITY_PROOF_DUMMY;
+
+      case ResponseString.OVER_18_PROOF_DUMMY:
+        return globalMessage.OVER_18_PROOF_DUMMY;
+
+      case ResponseString.EMAIL_PROOF_DUMMY:
+        return globalMessage.EMAIL_PROOF_DUMMY;
+
+      case ResponseString.GENDER_PROOF_DUMMY:
+        return globalMessage.GENDER_PROOF_DUMMY;
+
+      case ResponseString.NATIONALITY_PROOF_DUMMY:
+        return globalMessage.NATIONALITY_PROOF_DUMMY;
+
+      case ResponseString.AGE_RANGE_PROOF_DUMMY:
+        return globalMessage.AGE_RANGE_PROOF_DUMMY;
+
       case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
         return globalMessage.RESPONSE_STRING_BALANCE_TOO_LOW;
 
