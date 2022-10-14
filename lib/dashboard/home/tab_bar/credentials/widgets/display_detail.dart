@@ -44,12 +44,6 @@ class DisplayDetail extends StatelessWidget {
         return CertificateOfEmploymentDisplayDetail(
           credentialModel: credentialModel,
         );
-      case CredentialSubjectType.defaultCredential:
-        return DefaultCredentialSubjectDisplayDetail(
-          credentialModel: credentialModel,
-          showBgDecoration: false,
-          fromCredentialOffer: fromCredentialOffer,
-        );
       case CredentialSubjectType.ecole42LearningAchievement:
         return Ecole42LearningAchievementDisplayDetail(
           credentialModel: credentialModel,
@@ -133,6 +127,13 @@ class DisplayDetail extends StatelessWidget {
       case CredentialSubjectType.aragoOver18:
         return AragoOver18DisplayDetail(
           credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.aragoPass:
+      case CredentialSubjectType.defaultCredential:
+        return DefaultCredentialSubjectDisplayDetail(
+          credentialModel: credentialModel,
+          showBgDecoration: false,
+          fromCredentialOffer: fromCredentialOffer,
         );
     }
   }

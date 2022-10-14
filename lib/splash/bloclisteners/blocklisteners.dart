@@ -1,7 +1,6 @@
 import 'package:arago_wallet/app/app.dart';
 import 'package:arago_wallet/dashboard/dashboard.dart';
 import 'package:arago_wallet/l10n/l10n.dart';
-import 'package:arago_wallet/onboarding/first/onboarding_first.dart';
 import 'package:arago_wallet/pin_code/pin_code.dart';
 import 'package:arago_wallet/scan/scan.dart';
 import 'package:arago_wallet/splash/splash.dart';
