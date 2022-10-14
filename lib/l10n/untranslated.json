@@ -552,7 +552,8 @@
     "ageRangeProofDummy",
     "nationalityProofDummy",
     "over18ProofDummy",
-    "identityProofDummy"
+    "identityProofDummy",
+    "seeMoreNFTInformationOn"
   ],
 
   "es": [
@@ -1108,7 +1109,8 @@
     "ageRangeProofDummy",
     "nationalityProofDummy",
     "over18ProofDummy",
-    "identityProofDummy"
+    "identityProofDummy",
+    "seeMoreNFTInformationOn"
   ],
 
   "fr": [
@@ -1664,7 +1666,8 @@
     "ageRangeProofDummy",
     "nationalityProofDummy",
     "over18ProofDummy",
-    "identityProofDummy"
+    "identityProofDummy",
+    "seeMoreNFTInformationOn"
   ],
 
   "it": [
@@ -2220,6 +2223,7 @@
     "ageRangeProofDummy",
     "nationalityProofDummy",
     "over18ProofDummy",
-    "identityProofDummy"
+    "identityProofDummy",
+    "seeMoreNFTInformationOn"
   ]
 }

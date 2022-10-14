@@ -38,4 +38,7 @@ class Urls {
   //
   static const tzktMainnetUrl = 'https://api.tzkt.io';
   static const tzktGhostnetUrl = 'https://api.ghostnet.tzkt.io';
+
+  static const objktUrl = 'https://objkt.com/';
+  static const raribleUrl = 'https://rarible.com/';
 }

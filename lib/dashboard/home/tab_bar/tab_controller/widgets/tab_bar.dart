@@ -55,9 +55,7 @@ class MyTab extends StatelessWidget {
               text,
               softWrap: false,
               style: Theme.of(context).textTheme.caption?.copyWith(
-                    color: isSelected
-                        ? null
-                        : Colors.grey[400],
+                    color: isSelected ? null : Colors.grey[400],
                   ),
               overflow: TextOverflow.fade,
             ),
