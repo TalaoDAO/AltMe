@@ -75,6 +75,10 @@ class DisplayInSelectionList extends StatelessWidget {
         return Over13DisplayInSelectionList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.passportFootprint:
+        return PassportFootprintDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.phonePass:
         return PhonePassDisplayInSelectionList(
           credentialModel: credentialModel,

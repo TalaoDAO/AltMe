@@ -13,6 +13,8 @@ class Urls {
   static const String genderUrl = 'https://issuer.talao.co/gender';
   static const String over18Url = 'https://issuer.talao.co/over18';
   static const String over13Url = 'https://issuer.talao.co/over13';
+  static const String passportFootprintUrl =
+      'https://issuer.talao.co/pass_number';
 
   static const String tezotopiaVoucherUrl =
       'https://issuer.tezotopia.altme.io/issuer/voucher_mobile';

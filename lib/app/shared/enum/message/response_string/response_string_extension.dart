@@ -238,6 +238,15 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_over13HowToGetIt:
         return globalMessage.RESPONSE_STRING_over13HowToGetIt;
 
+      case ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_passportFootprintWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_passportFootprintExpirationDate:
+        return globalMessage.RESPONSE_STRING_passportFootprintExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_passportFootprintHowToGetIt:
+        return globalMessage.RESPONSE_STRING_passportFootprintHowToGetIt;
+
       case ResponseString.RESPONSE_STRING_identityCardWhyGetThisCard:
         return globalMessage.RESPONSE_STRING_identityCardWhyGetThisCard;
 

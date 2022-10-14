@@ -75,6 +75,10 @@ class DisplayInList extends StatelessWidget {
         return Over13DisplayInList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.passportFootprint:
+        return PassportFootprintDisplayInList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.phonePass:
         return PhonePassDisplayInList(
           credentialModel: credentialModel,
