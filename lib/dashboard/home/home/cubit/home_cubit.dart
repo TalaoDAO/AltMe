@@ -297,13 +297,13 @@ class HomeCubit extends Cubit<HomeState> {
     );
 
     final lastOperation = operations.first; //operations sorted by time in api
-    if (lastOperation.id.toString() == lastNotifiedRewardId) {
+    if (lastOperation.id.toString()+walletAddress == lastNotifiedRewardId) {
       return;
     } else {
       // save the operation id to storage
       await secureStorageProvider.set(
         SecureStorageKeys.lastNotifiedUNORewardId,
-        lastOperation.id.toString(),
+        lastOperation.id.toString()+walletAddress,
       );
 
       emit(
@@ -358,13 +358,13 @@ class HomeCubit extends Cubit<HomeState> {
     );
 
     final lastOperation = operations.first; //operations sorted by time in api
-    if (lastOperation.id.toString() == lastNotifiedRewardId) {
+    if (lastOperation.id.toString()+walletAddress == lastNotifiedRewardId) {
       return;
     } else {
       // save the operation id to storage
       await secureStorageProvider.set(
         SecureStorageKeys.lastNotifiedXTZRewardId,
-        lastOperation.id.toString(),
+        lastOperation.id.toString()+walletAddress,
       );
 
       emit(
