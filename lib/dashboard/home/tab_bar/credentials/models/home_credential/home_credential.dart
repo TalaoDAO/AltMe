@@ -95,6 +95,16 @@ class HomeCredential extends Equatable {
         howToGetIt = ResponseString.RESPONSE_STRING_over13HowToGetIt;
         break;
 
+      case CredentialSubjectType.passportFootprint:
+        image = ImageStrings.dummyPassportFootprintCard;
+        link = Urls.passportFootprintUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_passportFootprintExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_passportFootprintHowToGetIt;
+        break;
+
       case CredentialSubjectType.tezVoucher:
         image = ImageStrings.dummyTezotopiaVoucherCard;
         link = Urls.tezotopiaVoucherUrl;

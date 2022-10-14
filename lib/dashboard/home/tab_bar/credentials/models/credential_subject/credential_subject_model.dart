@@ -44,6 +44,8 @@ class CredentialSubjectModel {
         return Over18Model.fromJson(json);
       case 'Over13':
         return Over13Model.fromJson(json);
+      case 'PassportNumber':
+        return PassportFootprintModel.fromJson(json);
       case 'ProfessionalStudentCard':
         return ProfessionalStudentCardModel.fromJson(json);
       case 'StudentCard':

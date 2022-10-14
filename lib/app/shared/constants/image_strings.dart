@@ -23,6 +23,7 @@ class ImageStrings {
   static const String loyaltyCard = '$imagePath/tezotopia_loyalty_card.jpeg';
   static const String over18 = '$imagePath/over18.png';
   static const String over13 = '$imagePath/over13.png';
+  static const String passportFootprint = '$imagePath/passport_footprint.png';
   static const String professionalStudentCardFront =
       '$imagePath/adecco_student_card_recto.png';
   static const String professionalStudentCardBack =
@@ -53,6 +54,8 @@ class ImageStrings {
   static const String dummyGenderCard = '$imagePath/dummy_gender_card.png';
   static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
   static const String dummyOver13Card = '$imagePath/dummy_over13_card.png';
+  static const String dummyPassportFootprintCard =
+      '$imagePath/dummy_passport_footprint_card.png';
   static const String dummyAgeRangeCard = '$imagePath/dummy_age_range_card.png';
   static const String dummyTezotopiaVoucherCard =
       '$imagePath/dummy_tezotopia_voucher_card.png';

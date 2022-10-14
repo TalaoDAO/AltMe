@@ -221,6 +221,12 @@ class GlobalMessage {
   String get RESPONSE_STRING_over13WhyGetThisCard => l10n.over13WhyGetThisCard;
   String get RESPONSE_STRING_over13ExpirationDate => l10n.over13ExpirationDate;
   String get RESPONSE_STRING_over13HowToGetIt => l10n.over13HowToGetIt;
+  String get RESPONSE_STRING_passportFootprintWhyGetThisCard =>
+      l10n.passportFootprintWhyGetThisCard;
+  String get RESPONSE_STRING_passportFootprintExpirationDate =>
+      l10n.passportFootprintExpirationDate;
+  String get RESPONSE_STRING_passportFootprintHowToGetIt =>
+      l10n.passportFootprintHowToGetIt;
   String get RESPONSE_STRING_identityCardWhyGetThisCard =>
       l10n.identityCardWhyGetThisCard;
   String get RESPONSE_STRING_identityCardExpirationDate =>
