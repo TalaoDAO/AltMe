@@ -58,7 +58,9 @@ class SplashCubit extends Cubit<SplashState> {
       }
       unawaited(
         homeCubit.periodicCheckReward(
-          selectedWalletAddress: walletCubit.state.currentAccount.walletAddress,
+          walletAddresses: walletCubit.state.cryptoAccount.data
+              .map((e) => e.walletAddress)
+              .toList(),
         ),
       );
     } else {

@@ -627,7 +627,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get defaultDialogBody => GoogleFonts.nunito(
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF5F556F),
       );
@@ -858,6 +858,12 @@ extension CustomTextTheme on TextTheme {
   TextStyle get dappName => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w400,
+        color: const Color(0xffFFFFFF),
+      );
+
+  TextStyle get nftLoadMessage => GoogleFonts.roboto(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
         color: const Color(0xffFFFFFF),
       );
 }

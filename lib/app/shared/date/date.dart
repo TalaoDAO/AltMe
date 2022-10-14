@@ -14,10 +14,10 @@ class UiDate {
     if (dateString == '') return '';
     late DateTime date;
     try {
-      date = DateFormat('y-M-d').parse(dateString);
+      date = DateFormat('y-M-d').parse(dateString, true).toLocal();
     } on FormatException catch (_) {
       try {
-        date = DateFormat('y-M-dThh:mm:ssZ').parse(dateString);
+        date = DateFormat('y-M-dThh:mm:ssZ').parse(dateString, true).toLocal();
       } catch (e) {
         return '';
       }
@@ -43,7 +43,8 @@ class UiDate {
 
   static String? formatTime(String formattedString) {
     try {
-      final DateTime dt = DateFormat('hh:mm:ss').parse(formattedString);
+      final DateTime dt =
+          DateFormat('hh:mm:ss').parse(formattedString, true).toLocal();
       return DateFormat.jm().format(dt);
     } on FormatException {
       return null;
@@ -55,7 +56,8 @@ class UiDate {
       return DateFormat("dd'th' MMM yyyy").format(
         DateFormat('y-M-dThh:mm:ssZ').parse(
           date,
-        ),
+          true,
+        ).toLocal(),
       );
     } catch (e, s) {
       getLogger('date').e('e: $e, s: $s');

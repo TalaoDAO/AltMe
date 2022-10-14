@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,7 @@ class _TokensViewState extends State<TokensView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return MultiBlocListener(
       listeners: [
         BlocListener<WalletCubit, WalletState>(
@@ -93,7 +95,15 @@ class _TokensViewState extends State<TokensView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const MyAssetsText(),
-            const SizedBox(height: Sizes.spaceSmall),
+            const SizedBox(
+              height: Sizes.space2XSmall,
+            ),
+            MyText(
+              l10n.tokenListSubtitle,
+              maxLines: 3,
+              style: Theme.of(context).textTheme.credentialCategorySubTitle,
+            ),
+            const SizedBox(height: Sizes.spaceXSmall),
             TotalWalletBalance(
               tokensCubit: context.read<TokensCubit>(),
             ),

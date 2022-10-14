@@ -4,6 +4,24 @@ extension ResponseStringX on ResponseString {
   String localise(BuildContext context) {
     final GlobalMessage globalMessage = GlobalMessage(context.l10n);
     switch (this) {
+      case ResponseString.IDENTITY_PROOF_DUMMY:
+        return globalMessage.IDENTITY_PROOF_DUMMY;
+
+      case ResponseString.OVER_18_PROOF_DUMMY:
+        return globalMessage.OVER_18_PROOF_DUMMY;
+
+      case ResponseString.EMAIL_PROOF_DUMMY:
+        return globalMessage.EMAIL_PROOF_DUMMY;
+
+      case ResponseString.GENDER_PROOF_DUMMY:
+        return globalMessage.GENDER_PROOF_DUMMY;
+
+      case ResponseString.NATIONALITY_PROOF_DUMMY:
+        return globalMessage.NATIONALITY_PROOF_DUMMY;
+
+      case ResponseString.AGE_RANGE_PROOF_DUMMY:
+        return globalMessage.AGE_RANGE_PROOF_DUMMY;
+
       case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
         return globalMessage.RESPONSE_STRING_BALANCE_TOO_LOW;
 
@@ -237,6 +255,15 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_over13HowToGetIt:
         return globalMessage.RESPONSE_STRING_over13HowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_passportFootprintWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_passportFootprintExpirationDate:
+        return globalMessage.RESPONSE_STRING_passportFootprintExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_passportFootprintHowToGetIt:
+        return globalMessage.RESPONSE_STRING_passportFootprintHowToGetIt;
 
       case ResponseString.RESPONSE_STRING_identityCardWhyGetThisCard:
         return globalMessage.RESPONSE_STRING_identityCardWhyGetThisCard;

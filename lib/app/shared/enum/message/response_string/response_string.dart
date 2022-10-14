@@ -5,6 +5,12 @@ import 'package:flutter/cupertino.dart';
 part 'response_string_extension.dart';
 
 enum ResponseString {
+  IDENTITY_PROOF_DUMMY,
+  OVER_18_PROOF_DUMMY,
+  EMAIL_PROOF_DUMMY,
+  GENDER_PROOF_DUMMY,
+  NATIONALITY_PROOF_DUMMY,
+  AGE_RANGE_PROOF_DUMMY,
   RESPONSE_STRING_BALANCE_TOO_LOW,
   RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE,
   RESPONSE_STRING_FEE_TOO_LOW,
@@ -73,6 +79,9 @@ enum ResponseString {
   RESPONSE_STRING_over13WhyGetThisCard,
   RESPONSE_STRING_over13ExpirationDate,
   RESPONSE_STRING_over13HowToGetIt,
+  RESPONSE_STRING_passportFootprintWhyGetThisCard,
+  RESPONSE_STRING_passportFootprintExpirationDate,
+  RESPONSE_STRING_passportFootprintHowToGetIt,
   RESPONSE_STRING_identityCardWhyGetThisCard,
   RESPONSE_STRING_identityCardExpirationDate,
   RESPONSE_STRING_identityCardHowToGetIt,

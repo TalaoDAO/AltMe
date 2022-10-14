@@ -5,6 +5,20 @@ class GlobalMessage {
 
   final AppLocalizations l10n;
 
+  String get IDENTITY_PROOF_DUMMY =>
+      l10n.identityProofDummy;
+  String get OVER_18_PROOF_DUMMY =>
+      l10n.over18ProofDummy;
+  String get EMAIL_PROOF_DUMMY =>
+      l10n.emailProofDummy;
+  String get GENDER_PROOF_DUMMY =>
+      l10n.genderProofDummy;
+  String get NATIONALITY_PROOF_DUMMY =>
+      l10n.nationalityProofDummy;
+  String get AGE_RANGE_PROOF_DUMMY =>
+      l10n.ageRangeProofDummy;
+
+      //
   String get RESPONSE_STRING_BALANCE_TOO_LOW =>
       l10n.transactionErrorBalanceTooLow;
 
@@ -221,6 +235,12 @@ class GlobalMessage {
   String get RESPONSE_STRING_over13WhyGetThisCard => l10n.over13WhyGetThisCard;
   String get RESPONSE_STRING_over13ExpirationDate => l10n.over13ExpirationDate;
   String get RESPONSE_STRING_over13HowToGetIt => l10n.over13HowToGetIt;
+  String get RESPONSE_STRING_passportFootprintWhyGetThisCard =>
+      l10n.passportFootprintWhyGetThisCard;
+  String get RESPONSE_STRING_passportFootprintExpirationDate =>
+      l10n.passportFootprintExpirationDate;
+  String get RESPONSE_STRING_passportFootprintHowToGetIt =>
+      l10n.passportFootprintHowToGetIt;
   String get RESPONSE_STRING_identityCardWhyGetThisCard =>
       l10n.identityCardWhyGetThisCard;
   String get RESPONSE_STRING_identityCardExpirationDate =>

@@ -78,6 +78,10 @@ class DisplayDetail extends StatelessWidget {
         return Over13DisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.passportFootprint:
+        return PassportFootprintDisplayDetail(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.phonePass:
         return PhonePassDisplayDetail(
           credentialModel: credentialModel,
