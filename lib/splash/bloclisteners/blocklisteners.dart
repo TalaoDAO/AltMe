@@ -1,7 +1,6 @@
 import 'package:arago_wallet/app/app.dart';
 import 'package:arago_wallet/dashboard/dashboard.dart';
 import 'package:arago_wallet/l10n/l10n.dart';
-import 'package:arago_wallet/onboarding/first/onboarding_first.dart';
 import 'package:arago_wallet/pin_code/pin_code.dart';
 import 'package:arago_wallet/scan/scan.dart';
 import 'package:arago_wallet/splash/splash.dart';
@@ -134,25 +133,25 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           }
         }
 
-        var acceptHost = true;
+        const acceptHost = true;
 
-        if (approvedIssuer.did.isEmpty) {
-          acceptHost = await showDialog<bool>(
-                context: context,
-                builder: (BuildContext context) {
-                  return ConfirmDialog(
-                    title: l10n.scanPromptHost,
-                    subtitle: (approvedIssuer.did.isEmpty)
-                        ? state.uri!.host
-                        : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''',
-                    yes: l10n.communicationHostAllow,
-                    no: l10n.communicationHostDeny,
-                    //lock: state.uri!.scheme == 'http',
-                  );
-                },
-              ) ??
-              false;
-        }
+        // if (approvedIssuer.did.isEmpty) {
+        //   acceptHost = await showDialog<bool>(
+        //         context: context,
+        //         builder: (BuildContext context) {
+        //           return ConfirmDialog(
+        //             title: l10n.scanPromptHost,
+        //             subtitle: (approvedIssuer.did.isEmpty)
+        //                 ? state.uri!.host
+        //                 : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''',
+        //             yes: l10n.communicationHostAllow,
+        //             no: l10n.communicationHostDeny,
+        //             //lock: state.uri!.scheme == 'http',
+        //           );
+        //         },
+        //       ) ??
+        //       false;
+        // }
 
         if (acceptHost) {
           await context.read<QRCodeScanCubit>().accept(

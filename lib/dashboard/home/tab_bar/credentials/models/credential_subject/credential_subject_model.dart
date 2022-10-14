@@ -1,5 +1,6 @@
 import 'package:arago_wallet/app/app.dart';
 import 'package:arago_wallet/dashboard/dashboard.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/models/arago_pass/arago_pass_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'credential_subject_model.g.dart';
@@ -70,6 +71,8 @@ class CredentialSubjectModel {
         return AragoLearningAchievementModel.fromJson(json);
       case 'TalaoCommunity':
         return TalaoCommunityCardModel.fromJson(json);
+      case 'AragoPass':
+        return AragoPassModel.fromJson(json);
     }
     return DefaultCredentialSubjectModel.fromJson(json);
   }

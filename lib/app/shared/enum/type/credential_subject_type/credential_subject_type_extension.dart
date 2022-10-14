@@ -69,6 +69,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xff7a29de);
       case CredentialSubjectType.talaoCommunityCard:
         return const Color(0xff4700D8);
+      case CredentialSubjectType.aragoPass:
+        return const Color(0xff4700D8);
       case CredentialSubjectType.defaultCredential:
         return Colors.white;
     }
@@ -132,6 +134,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return Icons.perm_identity;
       case CredentialSubjectType.defaultCredential:
         return Icons.fact_check_outlined;
+      case CredentialSubjectType.aragoPass:
+        return Icons.perm_identity;
     }
   }
 }

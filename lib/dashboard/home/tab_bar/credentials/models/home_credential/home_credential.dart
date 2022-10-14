@@ -91,6 +91,8 @@ class HomeCredential extends Equatable {
         break;
       case CredentialSubjectType.aragoOver18:
         break;
+      case CredentialSubjectType.aragoPass:
+        break;
     }
     return HomeCredential(
       isDummy: true,

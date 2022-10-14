@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 class UiDate {
   UiDate._();
 
-  static final outputFormat = DateFormat('yyyy-MM-dd');
+  static final outputFormat = DateFormat('dd/MM/yyyy');
 
   static String displayRegionalDate(
     AppLocalizations localizations,
@@ -14,10 +14,10 @@ class UiDate {
     if (dateString == '') return '';
     late DateTime date;
     try {
-      date = DateFormat('y-M-d').parse(dateString);
+      date = DateFormat('d/M/y').parse(dateString);
     } on FormatException catch (_) {
       try {
-        date = DateFormat('y-M-dThh:mm:ssZ').parse(dateString);
+        date = DateFormat('d-M-yThh:mm:ssZ').parse(dateString);
       } catch (e) {
         return '';
       }
@@ -52,8 +52,8 @@ class UiDate {
 
   static String formatDateForCredentialCard(String date) {
     try {
-      return DateFormat("dd'th' MMM yyyy").format(
-        DateFormat('y-M-dThh:mm:ssZ').parse(
+      return DateFormat('dd MMM yyyy').format(
+        DateFormat('d/M/yThh:mm:ssZ').parse(
           date,
         ),
       );

@@ -42,11 +42,6 @@ class DisplayInSelectionList extends StatelessWidget {
         return CertificateOfEmploymentDisplayInSelectionList(
           credentialModel: credentialModel,
         );
-      case CredentialSubjectType.defaultCredential:
-        return DefaultCredentialSubjectDisplayInSelectionList(
-          credentialModel: credentialModel,
-          showBgDecoration: false,
-        );
       case CredentialSubjectType.ecole42LearningAchievement:
         return Ecole42LearningAchievementDisplayInSelectionList(
           credentialModel: credentialModel,
@@ -130,6 +125,12 @@ class DisplayInSelectionList extends StatelessWidget {
       case CredentialSubjectType.aragoOver18:
         return AragoOver18DisplayInSelectionList(
           credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.aragoPass:
+      case CredentialSubjectType.defaultCredential:
+        return DefaultCredentialSubjectDisplayInSelectionList(
+          credentialModel: credentialModel,
+          showBgDecoration: false,
         );
     }
   }
