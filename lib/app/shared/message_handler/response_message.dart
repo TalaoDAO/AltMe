@@ -10,6 +10,24 @@ class ResponseMessage with MessageHandler {
   String getMessage(BuildContext context, MessageHandler messageHandler) {
     if (messageHandler is ResponseMessage) {
       switch (messageHandler.message) {
+        case ResponseString.IDENTITY_PROOF_DUMMY:
+          return ResponseString.IDENTITY_PROOF_DUMMY.localise(context);
+
+        case ResponseString.OVER_18_PROOF_DUMMY:
+          return ResponseString.OVER_18_PROOF_DUMMY.localise(context);
+
+        case ResponseString.EMAIL_PROOF_DUMMY:
+          return ResponseString.EMAIL_PROOF_DUMMY.localise(context);
+
+        case ResponseString.GENDER_PROOF_DUMMY:
+          return ResponseString.GENDER_PROOF_DUMMY.localise(context);
+
+        case ResponseString.NATIONALITY_PROOF_DUMMY:
+          return ResponseString.NATIONALITY_PROOF_DUMMY.localise(context);
+
+        case ResponseString.AGE_RANGE_PROOF_DUMMY:
+          return ResponseString.AGE_RANGE_PROOF_DUMMY.localise(context);
+
         case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
           return ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW
               .localise(context);

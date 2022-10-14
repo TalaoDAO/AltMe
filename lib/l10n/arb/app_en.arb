@@ -595,5 +595,12 @@
   "nftListSubtitle": "Here are all NFTs and collectibles you have in your account.",
   "tokenListSubtitle": "Here are all the tokens you have in your account and those you have choose to display.",
   "my": "My",
-  "get": "Get"
+  "get": "Get",
+  "emailProofDummy": "This card is useful to prove your email ownership to Web 3 Apps.",
+  "ageProofDummy": "This card is useful to prove your email ownership to Web 3 Apps.",
+  "genderProofDummy": "This card is useful to prove your gender (M/F) to Web 3 Apps.",
+  "ageRangeProofDummy": "This card is useful to prove your Age Range to Web 3 Apps.",
+  "nationalityProofDummy": "This card is useful to prove your Nationality to Web 3 Apps.",
+  "over18ProofDummy": "This card is used to prove that you are over 18 years old.",
+  "identityProofDummy": "This card is your digital identity card and can be used in Web 3 for KYC verification, etc."
 }

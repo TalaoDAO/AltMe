@@ -190,7 +190,10 @@ class DummyCredentialItem extends StatelessWidget {
                             widthFactor: 0.85,
                             heightFactor: 0.36,
                             child: MyText(
-                              homeCredential.dummyDescription!,
+                              homeCredential.dummyDescription!.getMessage(
+                                context,
+                                homeCredential.dummyDescription!,
+                              ),
                               maxLines: 3,
                               style: Theme.of(context).textTheme.caption,
                             ),

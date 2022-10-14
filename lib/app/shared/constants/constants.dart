@@ -7,5 +7,4 @@ export 'image_strings.dart';
 export 'parameters.dart';
 export 'secure_storage_keys.dart';
 export 'sizes.dart';
-export 'strings_const.dart';
 export 'urls.dart';
