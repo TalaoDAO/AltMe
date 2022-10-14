@@ -293,17 +293,17 @@ class HomeCubit extends Cubit<HomeState> {
         .toList();
 
     final String? lastNotifiedRewardId = await secureStorageProvider.get(
-      SecureStorageKeys.lastNotifiedUNORewardId,
+      SecureStorageKeys.lastNotifiedUNORewardId+walletAddress,
     );
 
     final lastOperation = operations.first; //operations sorted by time in api
-    if (lastOperation.id.toString()+walletAddress == lastNotifiedRewardId) {
+    if (lastOperation.id.toString() == lastNotifiedRewardId) {
       return;
     } else {
       // save the operation id to storage
       await secureStorageProvider.set(
-        SecureStorageKeys.lastNotifiedUNORewardId,
-        lastOperation.id.toString()+walletAddress,
+        SecureStorageKeys.lastNotifiedUNORewardId+walletAddress,
+        lastOperation.id.toString(),
       );
 
       emit(
@@ -354,17 +354,17 @@ class HomeCubit extends Cubit<HomeState> {
     );
 
     final String? lastNotifiedRewardId = await secureStorageProvider.get(
-      SecureStorageKeys.lastNotifiedXTZRewardId,
+      SecureStorageKeys.lastNotifiedXTZRewardId+walletAddress,
     );
 
     final lastOperation = operations.first; //operations sorted by time in api
-    if (lastOperation.id.toString()+walletAddress == lastNotifiedRewardId) {
+    if (lastOperation.id.toString() == lastNotifiedRewardId) {
       return;
     } else {
       // save the operation id to storage
       await secureStorageProvider.set(
-        SecureStorageKeys.lastNotifiedXTZRewardId,
-        lastOperation.id.toString()+walletAddress,
+        SecureStorageKeys.lastNotifiedXTZRewardId+walletAddress,
+        lastOperation.id.toString(),
       );
 
       emit(
