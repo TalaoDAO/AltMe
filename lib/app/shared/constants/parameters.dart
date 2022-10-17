@@ -3,7 +3,6 @@ class Parameters {
   static const List<String> credentialTypeList = [
     'Over18',
     'AgeRange',
-    'Gender',
     'IdCard',
     'EmailPass',
     'Nationality'
