@@ -78,6 +78,7 @@ class _ChangeNetworkBottomSheetPageState
                 const SizedBox(height: Sizes.spaceNormal),
                 Expanded(
                   child: Container(
+                    padding: const EdgeInsets.all(Sizes.space2XSmall),
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Theme.of(context)
@@ -92,15 +93,9 @@ class _ChangeNetworkBottomSheetPageState
                     child: ListView.separated(
                       itemCount: state.allNetworks.length,
                       itemBuilder: (context, i) {
-                        return NetworkItem(
-                          network: state.allNetworks[i],
-                          isSelected: state.network.networkname ==
-                              state.allNetworks[i].networkname,
-                          onPressed: () {
-                            context
-                                .read<ManageNetworkCubit>()
-                                .setNetwork(state.allNetworks[i]);
-                          },
+                        return TezosNetworkSelector(
+                          tezosNetwork: state.allNetworks[i],
+                          groupValue: state.network,
                         );
                       },
                       separatorBuilder: (_, __) => Padding(
