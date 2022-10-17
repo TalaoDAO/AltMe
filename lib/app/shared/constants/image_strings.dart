@@ -26,6 +26,7 @@ class ImageStrings {
   static const String loyaltyCard = '$imagePath/tezotopia_loyalty_card.jpeg';
   static const String over18 = '$imagePath/over18.png';
   static const String aragoOver18 = '$imagePath/arago_over18.png';
+  static const String aragoPass = '$imagePath/arago_pass.png';
   static const String professionalStudentCardFront =
       '$imagePath/adecco_student_card_recto.png';
   static const String professionalStudentCardBack =

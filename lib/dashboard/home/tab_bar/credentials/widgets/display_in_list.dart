@@ -4,6 +4,7 @@ import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credenti
 import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credential_widget/arago_identity_card_widget.dart';
 import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credential_widget/arago_learning_achievement_widget.dart';
 import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credential_widget/arago_over18_widget.dart';
+import 'package:arago_wallet/dashboard/home/tab_bar/credentials/widgets/credential_widget/arago_pass_widget.dart';
 import 'package:flutter/material.dart';
 
 class DisplayInList extends StatelessWidget {
@@ -127,6 +128,9 @@ class DisplayInList extends StatelessWidget {
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.aragoPass:
+        return AragoPassDisplayInList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.defaultCredential:
         return DefaultCredentialSubjectDisplayInList(
           credentialModel: credentialModel,
