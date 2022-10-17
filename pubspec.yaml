@@ -1,6 +1,6 @@
 name: arago_wallet
 description: Arago Flutter App 
-version: 0.0.5+5
+version: 0.0.6+6
 publish_to: none
 
 environment:
