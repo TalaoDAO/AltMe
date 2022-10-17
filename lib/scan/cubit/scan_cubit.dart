@@ -205,7 +205,7 @@ class ScanCubit extends Cubit<ScanState> {
   Future<void> verifiablePresentationRequest({
     required String url,
     required String keyId,
-    required List<CredentialModel> credentials,
+    required List<CredentialModel> credentialsToBePresented,
     required String challenge,
     required String domain,
     required Issuer issuer,
@@ -220,33 +220,36 @@ class ScanCubit extends Cubit<ScanState> {
       final verificationMethod =
           await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
 
-      final presentationId = 'urn:uuid:${const Uuid().v4()}';
-      final presentation = await didKitProvider.issuePresentation(
-        jsonEncode({
-          '@context': ['https://www.w3.org/2018/credentials/v1'],
-          'type': ['VerifiablePresentation'],
-          'id': presentationId,
-          'holder': did,
-          'verifiableCredential': credentials.length == 1
-              ? credentials.first.data
-              : credentials.map((c) => c.data).toList(),
-        }),
-        jsonEncode({
-          'verificationMethod': verificationMethod,
-          'proofPurpose': 'authentication',
-          'challenge': challenge,
-          'domain': domain,
-        }),
-        key,
-      );
-      log.i('Formdata $presentation');
-      await client.post(
-        url,
-        data: FormData.fromMap(<String, dynamic>{'presentation': presentation}),
-      );
+      for (final item in credentialsToBePresented) {
+        final presentationId = 'urn:uuid:${const Uuid().v4()}';
+        final presentation = await didKitProvider.issuePresentation(
+          jsonEncode({
+            '@context': ['https://www.w3.org/2018/credentials/v1'],
+            'type': ['VerifiablePresentation'],
+            'id': presentationId,
+            'holder': did,
+            'verifiableCredential': item.data,
+          }),
+          jsonEncode({
+            'verificationMethod': verificationMethod,
+            'proofPurpose': 'authentication',
+            'challenge': challenge,
+            'domain': domain,
+          }),
+          key,
+        );
+
+        log.i('Formdata $presentation');
+
+        await client.post(
+          url,
+          data:
+              FormData.fromMap(<String, dynamic>{'presentation': presentation}),
+        );
+      }
 
       await presentationActivity(
-        credentialModels: credentials,
+        credentialModels: credentialsToBePresented,
         issuer: issuer,
       );
 

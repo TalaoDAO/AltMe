@@ -22,10 +22,11 @@ class CredentialDetailsState extends Equatable {
     String? title,
   }) {
     return CredentialDetailsState(
-        status: status ?? this.status,
-        credentialStatus: credentialStatus ?? this.credentialStatus,
-        credentialDetailTabStatus:
-            credentialDetailTabStatus ?? this.credentialDetailTabStatus);
+      status: status ?? this.status,
+      credentialStatus: credentialStatus ?? this.credentialStatus,
+      credentialDetailTabStatus:
+          credentialDetailTabStatus ?? this.credentialDetailTabStatus,
+    );
   }
 
   Map<String, dynamic> toJson() => _$CredentialDetailsStateToJson(this);

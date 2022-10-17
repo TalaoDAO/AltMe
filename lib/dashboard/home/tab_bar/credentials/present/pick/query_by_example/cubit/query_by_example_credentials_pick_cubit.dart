@@ -17,6 +17,16 @@ class QueryByExampleCredentialPickCubit
   }) : super(
           const QueryByExampleCredentialPickState(filteredCredentialList: []),
         ) {
+    filterList(
+      credentialList: credentialList,
+      credentialQuery: credentialQuery,
+    );
+  }
+
+  void filterList({
+    required List<CredentialModel> credentialList,
+    required CredentialQuery? credentialQuery,
+  }) {
     final filteredCredentialList = List<CredentialModel>.from(credentialList);
     if (credentialQuery != null) {
       /// filter credential list if there are type restrictions
@@ -85,6 +95,8 @@ class QueryByExampleCredentialPickCubit
         });
       }
     }
+
+    emit(state.copyWith(filteredCredentialList: filteredCredentialList));
 
     emit(state.copyWith(filteredCredentialList: filteredCredentialList));
   }

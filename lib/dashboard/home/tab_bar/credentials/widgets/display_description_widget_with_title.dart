@@ -4,7 +4,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class DisplayDescriptionWidgetWithTitle extends StatelessWidget {
@@ -23,8 +22,6 @@ class DisplayDescriptionWidgetWithTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final object = displayMapping;
-
-    final l10n = context.l10n;
 
     final textTheme = Theme.of(context).textTheme;
     final titleTheme = titleColor == null
