@@ -21,6 +21,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   final WalletCubit walletCubit;
   final DIDKitProvider didKitProvider;
 
+  void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {
+    emit(state.copyWith(credentialDetailTabStatus: credentialDetailTabStatus));
+  }
+
   Future<void> verifyCredential(CredentialModel item) async {
     if (isEbsiIssuer(item)) return;
 

@@ -16,7 +16,6 @@ class AddCredentialButton extends StatelessWidget {
         context.read<DashboardCubit>().onPageChanged(1);
       },
       child: BackgroundCard(
-        color: Theme.of(context).colorScheme.credentialBackground,
         padding: const EdgeInsets.all(4),
         child: Column(
           mainAxisSize: MainAxisSize.min,

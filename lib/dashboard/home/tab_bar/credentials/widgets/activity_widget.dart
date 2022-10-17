@@ -69,7 +69,7 @@ class ActivityWidget extends StatelessWidget {
           ),
           const SizedBox(height: 5),
         ],
-        Divider(color: valueColor),
+        Divider(color: Theme.of(context).colorScheme.surfaceContainer),
       ],
     );
   }

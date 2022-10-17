@@ -603,5 +603,6 @@
   "nationalityProofDummy": "This card is useful to prove your Nationality to Web 3 Apps.",
   "over18ProofDummy": "This card is used to prove that you are over 18 years old.",
   "identityProofDummy": "This card is your digital identity card and can be used in Web 3 for KYC verification, etc.",
-  "seeMoreNFTInformationOn": "See more NFT information on"
+  "seeMoreNFTInformationOn": "See more NFT information on",
+  "credentialStatus": "Status"
 }

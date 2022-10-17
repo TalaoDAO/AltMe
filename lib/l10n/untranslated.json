@@ -553,7 +553,8 @@
     "nationalityProofDummy",
     "over18ProofDummy",
     "identityProofDummy",
-    "seeMoreNFTInformationOn"
+    "seeMoreNFTInformationOn",
+    "credentialStatus"
   ],
 
   "es": [
@@ -1110,7 +1111,8 @@
     "nationalityProofDummy",
     "over18ProofDummy",
     "identityProofDummy",
-    "seeMoreNFTInformationOn"
+    "seeMoreNFTInformationOn",
+    "credentialStatus"
   ],
 
   "fr": [
@@ -1667,7 +1669,8 @@
     "nationalityProofDummy",
     "over18ProofDummy",
     "identityProofDummy",
-    "seeMoreNFTInformationOn"
+    "seeMoreNFTInformationOn",
+    "credentialStatus"
   ],
 
   "it": [
@@ -2224,6 +2227,7 @@
     "nationalityProofDummy",
     "over18ProofDummy",
     "identityProofDummy",
-    "seeMoreNFTInformationOn"
+    "seeMoreNFTInformationOn",
+    "credentialStatus"
   ]
 }

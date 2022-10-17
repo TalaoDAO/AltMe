@@ -108,95 +108,134 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           //   onPressed: _edit,
           //   icon: const Icon(Icons.edit),
           // ),
-          navigation: widget.credentialModel.shareLink != ''
-              ? SafeArea(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 5,
-                    ),
-                    height: kBottomNavigationBarHeight,
-                    child: Tooltip(
-                      message: l10n.credentialDetailShare,
-                      child: MyElevatedButton.icon(
-                        icon: SvgPicture.asset(
-                          IconStrings.qrCode,
-                          width: 24,
-                          height: 24,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push<void>(
-                            QrCodeDisplayPage.route(
-                              widget.credentialModel.id,
-                              widget.credentialModel,
-                            ),
-                          );
-                        },
-                        text: l10n.credentialDetailShare,
+          navigation: SafeArea(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 5,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MyOutlinedButton(
+                    onPressed: delete,
+                    text: l10n.credentialDetailDeleteCard,
+                  ),
+                  if (widget.credentialModel.shareLink != '')
+                    MyOutlinedButton.icon(
+                      icon: SvgPicture.asset(
+                        IconStrings.qrCode,
+                        width: 24,
+                        height: 24,
+                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
-                    ),
-                  ),
-                )
-              : null,
-          body: BackgroundCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                DisplayDetail(
-                  credentialModel: widget.credentialModel,
-                  fromCredentialOffer: false,
-                ),
-                if (!isEbsiIssuer(widget.credentialModel)) ...[
-                  const SizedBox(height: 30),
-                  CredentialActiveStatus(
-                    credentialStatus: state.credentialStatus,
-                  ),
+                      onPressed: () {
+                        Navigator.of(context).push<void>(
+                          QrCodeDisplayPage.route(
+                            widget.credentialModel.id,
+                            widget.credentialModel,
+                          ),
+                        );
+                      },
+                      text: l10n.credentialDetailShare,
+                    )
+                  else
+                    Container(),
                 ],
-                if (outputDescriptors != null) ...[
-                  const SizedBox(height: 30),
-                  CredentialManifestDetails(
-                    outputDescriptor: outputDescriptors.first,
-                    credentialModel: widget.credentialModel,
-                  ),
-                ],
-                if (outputDescriptors == null) const SizedBox(height: 30),
-                ExpansionTileContainer(
-                  child: ExpansionTile(
-                    initiallyExpanded: true,
-                    childrenPadding: EdgeInsets.zero,
-                    tilePadding: const EdgeInsets.symmetric(horizontal: 8),
-                    title: Text(
-                      l10n.credentialDetailsActivity,
-                      style:
-                          Theme.of(context).textTheme.credentialManifestTitle2,
-                    ),
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: widget.credentialModel.activities.length,
-                          itemBuilder: (context, index) {
-                            return ActivityWidget(
-                              activity:
-                                  widget.credentialModel.activities[index],
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 40),
-                MyOutlinedButton(
-                  onPressed: delete,
-                  text: l10n.credentialDetailDeleteCard,
-                ),
-                const SizedBox(height: 10),
-              ],
+              ),
             ),
+          ),
+          scrollView: false,
+          body: Column(
+            children: [
+              Expanded(
+                child: BackgroundCard(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        DisplayDetail(
+                          credentialModel: widget.credentialModel,
+                          fromCredentialOffer: false,
+                        ),
+                        const SizedBox(height: 20),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CredentialDetailTabbar(
+                                    isSelected: state
+                                            .credentialDetailTabStatus ==
+                                        CredentialDetailTabStatus.informations,
+                                    title: l10n.credentialManifestInformations,
+                                    onTap: () => context
+                                        .read<CredentialDetailsCubit>()
+                                        .changeTabStatus(
+                                          CredentialDetailTabStatus
+                                              .informations,
+                                        ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: CredentialDetailTabbar(
+                                    isSelected:
+                                        state.credentialDetailTabStatus ==
+                                            CredentialDetailTabStatus.activity,
+                                    title: l10n.credentialDetailsActivity,
+                                    onTap: () => context
+                                        .read<CredentialDetailsCubit>()
+                                        .changeTabStatus(
+                                          CredentialDetailTabStatus.activity,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Divider(
+                              height: 0,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainer,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        if (state.credentialDetailTabStatus ==
+                            CredentialDetailTabStatus.informations) ...[
+                          if (!isEbsiIssuer(widget.credentialModel)) ...[
+                            const SizedBox(height: 10),
+                            CredentialActiveStatus(
+                              credentialStatus: state.credentialStatus,
+                            ),
+                          ],
+                          if (outputDescriptors != null) ...[
+                            const SizedBox(height: 10),
+                            CredentialManifestDetails(
+                              outputDescriptor: outputDescriptors.first,
+                              credentialModel: widget.credentialModel,
+                            ),
+                          ],
+                        ],
+                        if (state.credentialDetailTabStatus ==
+                            CredentialDetailTabStatus.activity) ...[
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: widget.credentialModel.activities.length,
+                            itemBuilder: (context, index) {
+                              return ActivityWidget(
+                                activity:
+                                    widget.credentialModel.activities[index],
+                              );
+                            },
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },
