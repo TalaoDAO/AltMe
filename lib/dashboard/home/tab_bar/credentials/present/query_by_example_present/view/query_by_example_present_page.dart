@@ -74,6 +74,8 @@ class _QueryByExamplePresentPageState extends State<QueryByExamplePresentPage> {
                     uri: widget.uri,
                     preview: widget.preview,
                     issuer: widget.issuer,
+                    credentialQueryIndex: 0,
+                    credentialsToBePresented: [],
                   ),
                 ),
                 text: l10n.credentialPresentConfirm,

@@ -315,6 +315,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             queryByExampleCubit.setQueryByExampleCubit(
               (data['query']).first as Map<String, dynamic>,
             );
+            log.i(data['query']);
             if (data['query'].first['type'] == 'DIDAuth') {
               log.i('DIDAuth');
               await scanCubit.askPermissionDIDAuthCHAPI(
