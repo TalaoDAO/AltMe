@@ -372,8 +372,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER, // ignore: lines_longer_than_80_chars
+              ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
             ),
           ),
         );

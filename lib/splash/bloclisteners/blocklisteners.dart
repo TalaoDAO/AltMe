@@ -129,20 +129,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           } catch (e) {
             if (e is MessageHandler) {
               await context.read<QRCodeScanCubit>().emitError(e);
-              // if (e is NetworkException) {
-              //   if (e.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
-              //     await context.read<QRCodeScanCubit>().emitError(
-              //           ResponseMessage(
-              //             ResponseString
-              //                 .RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
-              //           ),
-              //         );
-              //   } else {
-              //     await context.read<QRCodeScanCubit>().emitError(e);
-              //   }
-              // } else {
-              //   await context.read<QRCodeScanCubit>().emitError(e);
-              //}
             } else {
               await context.read<QRCodeScanCubit>().emitError(
                     ResponseMessage(
