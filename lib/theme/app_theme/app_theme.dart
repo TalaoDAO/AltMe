@@ -861,7 +861,7 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xffFFFFFF),
       );
 
-  TextStyle get nftLoadMessage => GoogleFonts.roboto(
+  TextStyle get cacheErrorMessage => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: const Color(0xffFFFFFF),
