@@ -4,23 +4,26 @@ extension ResponseStringX on ResponseString {
   String localise(BuildContext context) {
     final GlobalMessage globalMessage = GlobalMessage(context.l10n);
     switch (this) {
-      case ResponseString.IDENTITY_PROOF_DUMMY:
-        return globalMessage.IDENTITY_PROOF_DUMMY;
+      case ResponseString.RESPONSE_STRING_identityProofDummyDescription:
+        return globalMessage.RESPONSE_STRING_identityProofDummyDescription;
 
-      case ResponseString.OVER_18_PROOF_DUMMY:
-        return globalMessage.OVER_18_PROOF_DUMMY;
+      case ResponseString.RESPONSE_STRING_over18DummyDescription:
+        return globalMessage.RESPONSE_STRING_over18DummyDescription;
 
-      case ResponseString.EMAIL_PROOF_DUMMY:
-        return globalMessage.EMAIL_PROOF_DUMMY;
+      case ResponseString.RESPONSE_STRING_emailProofDummyDescription:
+        return globalMessage.RESPONSE_STRING_emailProofDummyDescription;
 
-      case ResponseString.GENDER_PROOF_DUMMY:
-        return globalMessage.GENDER_PROOF_DUMMY;
+      case ResponseString.RESPONSE_STRING_genderProofDummyDescription:
+        return globalMessage.RESPONSE_STRING_genderProofDummyDescription;
 
-      case ResponseString.NATIONALITY_PROOF_DUMMY:
-        return globalMessage.NATIONALITY_PROOF_DUMMY;
+      case ResponseString.RESPONSE_STRING_nationalityProofDummyDescription:
+        return globalMessage.RESPONSE_STRING_nationalityProofDummyDescription;
 
-      case ResponseString.AGE_RANGE_PROOF_DUMMY:
-        return globalMessage.AGE_RANGE_PROOF_DUMMY;
+      case ResponseString.RESPONSE_STRING_ageRangeProofDummyDescription:
+        return globalMessage.RESPONSE_STRING_ageRangeProofDummyDescription;
+
+      case ResponseString.RESPONSE_STRING_phoneProofDummyDescription:
+        return globalMessage.RESPONSE_STRING_phoneProofDummyDescription;
 
       case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
         return globalMessage.RESPONSE_STRING_BALANCE_TOO_LOW;
