@@ -95,13 +95,14 @@ class _TokensViewState extends State<TokensView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const MyAssetsText(),
-            const SizedBox(
-              height: Sizes.space2XSmall,
-            ),
-            MyText(
-              l10n.tokenListSubtitle,
-              maxLines: 3,
-              style: Theme.of(context).textTheme.credentialCategorySubTitle,
+            const SizedBox(height: Sizes.space2XSmall),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: MyText(
+                l10n.tokenListSubtitle,
+                maxLines: 3,
+                style: Theme.of(context).textTheme.credentialCategorySubTitle,
+              ),
             ),
             const SizedBox(height: Sizes.spaceXSmall),
             TotalWalletBalance(

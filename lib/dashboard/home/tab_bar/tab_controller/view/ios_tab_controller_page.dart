@@ -104,7 +104,7 @@ class _IosTabControllerViewState extends State<IosTabControllerView>
             const SizedBox(height: Sizes.spaceSmall),
             Expanded(
               child: BackgroundCard(
-                padding: const EdgeInsets.all(Sizes.space2XSmall),
+                padding: const EdgeInsets.all(Sizes.spaceSmall),
                 margin:
                     const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
                 //height: double.infinity,

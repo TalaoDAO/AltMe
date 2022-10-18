@@ -17,7 +17,7 @@ String generateDefaultAccountName(
 }
 
 bool isAndroid() {
-  return Platform.isAndroid;
+  return !Platform.isAndroid;
 }
 
 String getIssuerDid({required Uri uriToCheck}) {
