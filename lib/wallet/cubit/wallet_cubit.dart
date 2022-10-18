@@ -197,7 +197,7 @@ class WalletCubit extends Cubit<WalletState> {
         oldId: filteredCredentialList.first.id,
       );
       if (credential != null) {
-        await updateCredential(credential);
+        await updateCredential(credential: credential);
       }
     } else {
       final credential = await generateAssociatedWalletCredential(
@@ -253,7 +253,10 @@ class WalletCubit extends Cubit<WalletState> {
     });
   }
 
-  Future updateCredential(CredentialModel credential) async {
+  Future updateCredential({
+    required CredentialModel credential,
+    bool showMessage = true,
+  }) async {
     await repository.update(credential);
     final index =
         state.credentials.indexWhere((element) => element.id == credential.id);
@@ -266,9 +269,12 @@ class WalletCubit extends Cubit<WalletState> {
       state.copyWith(
         status: WalletStatus.update,
         credentials: credentials,
-        messageHandler: ResponseMessage(
-          ResponseString.RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE,
-        ),
+        messageHandler: showMessage
+            ? ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE,
+              )
+            : null,
       ),
     );
   }
