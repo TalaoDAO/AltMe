@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -305,6 +306,18 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future resetWallet() async {
+    /// reward operations id in all accounts
+    for (final cryptoAccountData in state.cryptoAccount.data) {
+      await secureStorageProvider.delete(
+        SecureStorageKeys.lastNotifiedXTZRewardId +
+            cryptoAccountData.walletAddress,
+      );
+      await secureStorageProvider.delete(
+        SecureStorageKeys.lastNotifiedUNORewardId +
+            cryptoAccountData.walletAddress,
+      );
+    }
+
     /// ssi
     await secureStorageProvider.delete(SecureStorageKeys.ssiMnemonic);
     await secureStorageProvider.delete(SecureStorageKeys.ssiKey);
