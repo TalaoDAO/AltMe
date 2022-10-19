@@ -8,9 +8,12 @@ class MyAssetsText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Text(
-      l10n.myAssets,
-      style: Theme.of(context).textTheme.infoTitle,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Text(
+        l10n.myAssets,
+        style: Theme.of(context).textTheme.infoTitle,
+      ),
     );
   }
 }

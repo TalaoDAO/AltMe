@@ -63,6 +63,9 @@ class ImageStrings {
       '$imagePath/dummy_talao_community_card.png';
   static const String dummyIdentityCard = '$imagePath/dummy_identity_card.png';
 
+  static const String dummyPhonePassCard =
+      '$imagePath/dummy_phone_pass_card.png';
+
   static const String onBoardingFirstImage =
       '$imagePath/onBoardingFirstImage.png';
   static const String onBoardingSecondImage =

@@ -181,6 +181,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
 
                                               await context
                                                   .read<ScanCubit>()
+                                                  // ignore: lines_longer_than_80_chars
                                                   .verifiablePresentationRequest(
                                                     url: uri.toString(),
                                                     keyId: SecureStorageKeys

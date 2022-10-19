@@ -49,7 +49,8 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_ageRangeExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_ageRangeHowToGetIt;
-        dummyDesc = ResponseString.AGE_RANGE_PROOF_DUMMY;
+        dummyDesc =
+            ResponseString.RESPONSE_STRING_ageRangeProofDummyDescription;
         break;
 
       case CredentialSubjectType.nationality:
@@ -60,7 +61,8 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_nationalityExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_nationalityHowToGetIt;
-        dummyDesc = ResponseString.NATIONALITY_PROOF_DUMMY;
+        dummyDesc =
+            ResponseString.RESPONSE_STRING_nationalityProofDummyDescription;
         break;
 
       case CredentialSubjectType.gender:
@@ -70,12 +72,12 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_genderExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_genderHowToGetIt;
-        dummyDesc = ResponseString.GENDER_PROOF_DUMMY;
+        dummyDesc = ResponseString.RESPONSE_STRING_genderProofDummyDescription;
         break;
 
       case CredentialSubjectType.emailPass:
         image = ImageStrings.dummyEmailPassCard;
-        dummyDesc = ResponseString.EMAIL_PROOF_DUMMY;
+        dummyDesc = ResponseString.RESPONSE_STRING_emailProofDummyDescription;
         link = Urls.emailPassUrl;
         whyGetThisCard = ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard;
         expirationDateDetails =
@@ -90,7 +92,7 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over18ExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_over18HowToGetIt;
-        dummyDesc = ResponseString.OVER_18_PROOF_DUMMY;
+        dummyDesc = ResponseString.RESPONSE_STRING_over18DummyDescription;
         break;
 
       case CredentialSubjectType.over13:
@@ -136,7 +138,8 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_identityCardExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_identityCardHowToGetIt;
-        dummyDesc = ResponseString.IDENTITY_PROOF_DUMMY;
+        dummyDesc =
+            ResponseString.RESPONSE_STRING_identityProofDummyDescription;
         break;
 
       case CredentialSubjectType.tezotopiaMembership:
@@ -150,6 +153,12 @@ class HomeCredential extends Equatable {
             ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt;
         break;
 
+      case CredentialSubjectType.phonePass:
+        image = ImageStrings.dummyPhonePassCard;
+        link = Urls.phonePassUrl;
+        dummyDesc = ResponseString.RESPONSE_STRING_phoneProofDummyDescription;
+        break;
+
       case CredentialSubjectType.voucher:
       case CredentialSubjectType.selfIssued:
       case CredentialSubjectType.defaultCredential:
@@ -160,7 +169,6 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.loyaltyCard:
       case CredentialSubjectType.identityPass:
       case CredentialSubjectType.ecole42LearningAchievement:
-      case CredentialSubjectType.phonePass:
       case CredentialSubjectType.studentCard:
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.learningAchievement:

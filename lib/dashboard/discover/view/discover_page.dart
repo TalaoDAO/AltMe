@@ -30,7 +30,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget build(BuildContext context) {
     return BasePage(
       scrollView: false,
-      padding: EdgeInsets.zero,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       backgroundColor: Theme.of(context).colorScheme.transparent,
       body: BlocConsumer<CredentialListCubit, CredentialListState>(
         listener: (context, state) {

@@ -220,6 +220,7 @@ class ScanCubit extends Cubit<ScanState> {
       final verificationMethod =
           await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
 
+      List<String> presentations = <String>[];
       for (final item in credentialsToBePresented) {
         final presentationId = 'urn:uuid:${const Uuid().v4()}';
         final presentation = await didKitProvider.issuePresentation(
@@ -239,14 +240,17 @@ class ScanCubit extends Cubit<ScanState> {
           key,
         );
 
-        log.i('Formdata $presentation');
-
-        await client.post(
-          url,
-          data:
-              FormData.fromMap(<String, dynamic>{'presentation': presentation}),
-        );
+        presentations = List.of(presentations)..add(presentation);
+        log.i('Formdata $presentations');
       }
+
+      final FormData formData = FormData.fromMap(<String, dynamic>{
+        'presentation': presentations.length > 1
+            ? jsonEncode(presentations)
+            : presentations,
+      });
+
+      await client.post(url, data: formData);
 
       await presentationActivity(
         credentialModels: credentialsToBePresented,
@@ -522,7 +526,10 @@ class ScanCubit extends Cubit<ScanState> {
       credentialModel.activities.add(activity);
 
       log.i('presentation activity added to the credential');
-      await walletCubit.updateCredential(credentialModel);
+      await walletCubit.updateCredential(
+        credential: credentialModel,
+        showMessage: false,
+      );
     }
   }
 }
