@@ -40,6 +40,7 @@ class CredentialDetailTabbar extends StatelessWidget {
             title,
             style: isSelected
                 ? textTheme.credentialManifestDescription
+                    .copyWith(fontWeight: FontWeight.bold)
                 : textTheme.credentialManifestDescription
                     .copyWith(color: colorScheme.onTertiary),
           ),

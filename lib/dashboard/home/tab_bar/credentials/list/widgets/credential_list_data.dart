@@ -22,7 +22,7 @@ class CredentialListData extends StatelessWidget {
         return RefreshIndicator(
           onRefresh: onRefresh,
           child: Padding(
-            padding: const EdgeInsets.all(Sizes.spaceXSmall),
+            padding: const EdgeInsets.all(Sizes.space2XSmall),
             child: ListView(
               scrollDirection: Axis.vertical,
               children: [

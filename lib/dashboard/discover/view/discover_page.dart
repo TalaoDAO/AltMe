@@ -59,26 +59,24 @@ class _DiscoverPageState extends State<DiscoverPage> {
           /// Hack for Apple => no gaming cards
           final List<CredentialSubjectType> gamingcategories =
               isAndroid() ? state.gamingCategories : [];
-          return BackgroundCard(
-            child: DiscoverCredentialList(
-              onRefresh: () async {
-                await context
-                    .read<CredentialListCubit>()
-                    .initialise(context.read<WalletCubit>());
-              },
-              state: state.populate(
-                gamingCredentials: credentialListCubit.dummyListFromCategory(
-                  gamingcategories,
-                ),
-                communityCredentials: credentialListCubit.dummyListFromCategory(
-                  state.communityCategories,
-                ),
-                identityCredentials: credentialListCubit.dummyListFromCategory(
-                  state.identityCategories,
-                ),
-                proofOfOwnershipCredentials: [],
-                othersCredentials: [],
+          return DiscoverCredentialList(
+            onRefresh: () async {
+              await context
+                  .read<CredentialListCubit>()
+                  .initialise(context.read<WalletCubit>());
+            },
+            state: state.populate(
+              gamingCredentials: credentialListCubit.dummyListFromCategory(
+                gamingcategories,
               ),
+              communityCredentials: credentialListCubit.dummyListFromCategory(
+                state.communityCategories,
+              ),
+              identityCredentials: credentialListCubit.dummyListFromCategory(
+                state.identityCategories,
+              ),
+              proofOfOwnershipCredentials: [],
+              othersCredentials: [],
             ),
           );
         },

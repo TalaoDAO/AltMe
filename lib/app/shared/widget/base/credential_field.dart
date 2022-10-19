@@ -52,34 +52,31 @@ class DisplayCredentialField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: padding,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (title != null)
-            Text(
-              '$title: ',
-              style: titleColor == null
-                  ? Theme.of(context).textTheme.credentialFieldTitle
-                  : Theme.of(context)
-                      .textTheme
-                      .credentialFieldTitle
-                      .copyWith(color: titleColor),
-            ),
-          Flexible(
-            child: Text(
-              value,
+      child: RichText(
+        textAlign: TextAlign.left,
+        text: TextSpan(
+          children: <InlineSpan>[
+            if (title != null)
+              TextSpan(
+                text: '$title: ',
+                style: titleColor == null
+                    ? Theme.of(context).textTheme.credentialFieldTitle
+                    : Theme.of(context)
+                        .textTheme
+                        .credentialFieldTitle
+                        .copyWith(color: titleColor),
+              ),
+            TextSpan(
+              text: value,
               style: valueColor == null
                   ? Theme.of(context).textTheme.credentialFieldDescription
                   : Theme.of(context)
                       .textTheme
                       .credentialFieldDescription
                       .copyWith(color: valueColor),
-              maxLines: 5,
-              overflow: TextOverflow.fade,
-              softWrap: true,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

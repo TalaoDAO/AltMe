@@ -13,33 +13,34 @@ class CredentialActiveStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return Column(
+    return Row(
       children: [
-        Center(
-          child: Row(
-            children: [
-              Text(
-                '${l10n.credentialStatus}: ',
+        RichText(
+          textAlign: TextAlign.left,
+          text: TextSpan(
+            children: <InlineSpan>[
+              TextSpan(
+                text: '${l10n.credentialStatus}: ',
                 style: Theme.of(context)
                     .textTheme
                     .credentialFieldTitle
                     .copyWith(color: Theme.of(context).colorScheme.titleColor),
               ),
-              Text(
-                credentialStatus.message(context),
+              TextSpan(
+                text: credentialStatus.message(context),
                 style: Theme.of(context)
                     .textTheme
                     .credentialFieldDescription
                     .copyWith(color: Theme.of(context).colorScheme.valueColor),
               ),
-              const SizedBox(width: 5),
-              Icon(
-                credentialStatus.icon,
-                size: 18,
-                color: credentialStatus.color(context),
-              ),
             ],
           ),
+        ),
+        const SizedBox(width: 5),
+        Icon(
+          credentialStatus.icon,
+          size: 18,
+          color: credentialStatus.color(context),
         ),
       ],
     );

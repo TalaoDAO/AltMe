@@ -37,7 +37,7 @@ class HomeCredentialWidget extends StatelessWidget {
         const SizedBox(height: 4),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: MyText(
+          child: Text(
             categorySubtitle,
             maxLines: 3,
             style: Theme.of(context).textTheme.credentialCategorySubTitle,
@@ -49,8 +49,8 @@ class HomeCredentialWidget extends StatelessWidget {
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 4,
-            mainAxisSpacing: 4,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
             childAspectRatio: Sizes.homeCredentialRatio,
           ),
           itemCount: credentials.length + (showAddOption ? 1 : 0),

@@ -37,7 +37,6 @@ class RealCredentialItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BackgroundCard(
-      color: Theme.of(context).colorScheme.credentialBackground,
       padding: const EdgeInsets.all(4),
       child: GestureDetector(
         onTap: () {
