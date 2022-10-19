@@ -35,7 +35,7 @@ class HomeCredentialWidget extends StatelessWidget {
           height: 4,
         ),
         Flexible(
-          child: MyText(
+          child: Text(
             categorySubtitle,
             maxLines: 3,
             style: Theme.of(context).textTheme.credentialCategorySubTitle,

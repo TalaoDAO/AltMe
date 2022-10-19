@@ -443,13 +443,14 @@ extension CustomTextTheme on TextTheme {
   TextStyle get discoverFieldTitle => GoogleFonts.roboto(
         color: const Color(0xffD1CCE3),
         fontSize: 14,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w600,
       );
 
   TextStyle get discoverFieldDescription => GoogleFonts.roboto(
         color: const Color(0xffFFFFFF),
         fontSize: 14,
-        fontWeight: FontWeight.w600,
+        height: 1.5,
+        fontWeight: FontWeight.w400,
       );
 
   TextStyle get learningAchievementTitle => GoogleFonts.roboto(
