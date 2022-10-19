@@ -19,6 +19,17 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
+        case ResponseString.RESPONSE_STRING_over13DummyDescription:
+          return ResponseString.RESPONSE_STRING_over13DummyDescription.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_passportFootprintDummyDescription:
+          return ResponseString
+              .RESPONSE_STRING_passportFootprintDummyDescription.localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_emailProofDummyDescription:
           return ResponseString.RESPONSE_STRING_emailProofDummyDescription
               .localise(context);

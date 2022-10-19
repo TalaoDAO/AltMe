@@ -102,6 +102,7 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_over13ExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_over13HowToGetIt;
+        dummyDesc = ResponseString.RESPONSE_STRING_over13DummyDescription;
         break;
 
       case CredentialSubjectType.passportFootprint:
@@ -112,6 +113,8 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_passportFootprintExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_passportFootprintHowToGetIt;
+        dummyDesc =
+            ResponseString.RESPONSE_STRING_passportFootprintDummyDescription;
         break;
 
       case CredentialSubjectType.tezVoucher:

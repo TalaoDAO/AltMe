@@ -10,6 +10,12 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_over18DummyDescription:
         return globalMessage.RESPONSE_STRING_over18DummyDescription;
 
+      case ResponseString.RESPONSE_STRING_over13DummyDescription:
+        return globalMessage.RESPONSE_STRING_over13DummyDescription;
+
+      case ResponseString.RESPONSE_STRING_passportFootprintDummyDescription:
+        return globalMessage.RESPONSE_STRING_passportFootprintDummyDescription;
+
       case ResponseString.RESPONSE_STRING_emailProofDummyDescription:
         return globalMessage.RESPONSE_STRING_emailProofDummyDescription;
 

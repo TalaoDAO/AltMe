@@ -11,6 +11,12 @@ class GlobalMessage {
   String get RESPONSE_STRING_over18DummyDescription =>
       l10n.over18ProofDummyDescription;
 
+  String get RESPONSE_STRING_over13DummyDescription =>
+      l10n.over13ProofDummyDescription;
+
+  String get RESPONSE_STRING_passportFootprintDummyDescription =>
+      l10n.passportFootprintDummyDescription;
+
   String get RESPONSE_STRING_emailProofDummyDescription =>
       l10n.emailProofDummyDescription;
 

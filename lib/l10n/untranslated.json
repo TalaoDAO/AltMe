@@ -552,8 +552,10 @@
     "ageRangeProofDummyDescription",
     "nationalityProofDummyDescription",
     "over18ProofDummyDescription",
+    "over13ProofDummyDescription",
     "identityProofDummyDescription",
     "phoneProofDummyDescription",
+    "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
     "credentialStatus"
   ],
@@ -1111,8 +1113,10 @@
     "ageRangeProofDummyDescription",
     "nationalityProofDummyDescription",
     "over18ProofDummyDescription",
+    "over13ProofDummyDescription",
     "identityProofDummyDescription",
     "phoneProofDummyDescription",
+    "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
     "credentialStatus"
   ],
@@ -1670,8 +1674,10 @@
     "ageRangeProofDummyDescription",
     "nationalityProofDummyDescription",
     "over18ProofDummyDescription",
+    "over13ProofDummyDescription",
     "identityProofDummyDescription",
     "phoneProofDummyDescription",
+    "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
     "credentialStatus"
   ],
@@ -2229,8 +2235,10 @@
     "ageRangeProofDummyDescription",
     "nationalityProofDummyDescription",
     "over18ProofDummyDescription",
+    "over13ProofDummyDescription",
     "identityProofDummyDescription",
     "phoneProofDummyDescription",
+    "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
     "credentialStatus"
   ]
