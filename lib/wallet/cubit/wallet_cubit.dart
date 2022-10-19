@@ -68,7 +68,7 @@ class WalletCubit extends Cubit<WalletState> {
     String? accountName,
     required String mnemonicOrKey,
     required bool isImported,
-    Function(CryptoAccount cryptoAccount)? onComplete,
+    Function(CryptoAccount cryptoAccount, int newIndex)? onComplete,
   }) async {
     int index = 0;
 
@@ -142,7 +142,11 @@ class WalletCubit extends Cubit<WalletState> {
       cryptoAccountString,
     );
 
-    onComplete?.call(cryptoAccount);
+    onComplete?.call(cryptoAccount, index + 1);
+    emitCryptoAccount(cryptoAccount);
+
+    /// set new account as current
+    await setCurrentWalletAccount(index + 1);
 
     final credential = await generateAssociatedWalletCredential(
       accountName: cryptoAccountData.name,
@@ -152,8 +156,6 @@ class WalletCubit extends Cubit<WalletState> {
     if (credential != null) {
       await insertCredential(credential);
     }
-
-    emitCryptoAccount(cryptoAccount);
   }
 
   Future<void> editCryptoAccountName({
