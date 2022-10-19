@@ -430,20 +430,21 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get credentialFieldTitle => GoogleFonts.roboto(
         color: const Color(0xff212121),
-        fontSize: 12,
-        fontWeight: FontWeight.w400,
+        fontSize: 14,
+        fontWeight: FontWeight.w800,
       );
 
   TextStyle get credentialFieldDescription => GoogleFonts.roboto(
         color: const Color(0xff212121),
-        fontSize: 13,
-        fontWeight: FontWeight.w600,
+        fontSize: 14,
+        height: 1.5,
+        fontWeight: FontWeight.w400,
       );
 
   TextStyle get discoverFieldTitle => GoogleFonts.roboto(
         color: const Color(0xffD1CCE3),
         fontSize: 14,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w800,
       );
 
   TextStyle get discoverFieldDescription => GoogleFonts.roboto(

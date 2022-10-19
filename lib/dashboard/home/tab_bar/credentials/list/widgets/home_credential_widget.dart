@@ -49,8 +49,8 @@ class HomeCredentialWidget extends StatelessWidget {
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 4,
-            mainAxisSpacing: 4,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
             childAspectRatio: Sizes.homeCredentialRatio,
           ),
           itemCount: credentials.length + (showAddOption ? 1 : 0),
