@@ -93,28 +93,28 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               const SizedBox(height: Sizes.spaceNormal),
-              Text(
-                l10n.seeMoreNFTInformationOn,
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              const SizedBox(height: Sizes.spaceSmall),
-              Row(
-                children: [
-                  NftUrlWidget(
-                    text: 'Objkt.com',
-                    onPressed: () async {
-                      await LaunchUrl.launch(Urls.objktUrl);
-                    },
-                  ),
-                  const SizedBox(width: 15),
-                  NftUrlWidget(
-                    text: 'Rarible.com',
-                    onPressed: () async {
-                      await LaunchUrl.launch(Urls.raribleUrl);
-                    },
-                  ),
-                ],
-              )
+              // Text(
+              //   l10n.seeMoreNFTInformationOn,
+              //   style: Theme.of(context).textTheme.bodyText1,
+              // ),
+              // const SizedBox(height: Sizes.spaceSmall),
+              // Row(
+              //   children: [
+              //     NftUrlWidget(
+              //       text: 'Objkt.com',
+              //       onPressed: () async {
+              //         await LaunchUrl.launch(Urls.objktUrl);
+              //       },
+              //     ),
+              //     const SizedBox(width: 15),
+              //     NftUrlWidget(
+              //       text: 'Rarible.com',
+              //       onPressed: () async {
+              //         await LaunchUrl.launch(Urls.raribleUrl);
+              //       },
+              //     ),
+              //   ],
+              // )
             ],
           ),
         ),
