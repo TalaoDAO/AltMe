@@ -137,8 +137,10 @@ class _SubmitEnterpriseUserViewState extends State<SubmitEnterpriseUserView> {
   Future<void> _pickRSAJsonFile(AppLocalizations localization) async {
     final storagePermission = await Permission.storage.request();
     if (storagePermission.isDenied) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(localization.storagePermissionDeniedMessage)),
+      AlertMessage.showStringMessage(
+        context: context,
+        message: localization.storagePermissionDeniedMessage,
+        messageType: MessageType.error,
       );
       return;
     }

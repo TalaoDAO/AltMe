@@ -64,8 +64,9 @@ class CachedImageFromNetwork extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(25),
                             child: Text(
-                              'NFT too big to load',
-                              style: Theme.of(context).textTheme.nftLoadMessage,
+                              errorMessage!,
+                              style:
+                                  Theme.of(context).textTheme.cacheErrorMessage,
                               textAlign: TextAlign.center,
                             ),
                           ),

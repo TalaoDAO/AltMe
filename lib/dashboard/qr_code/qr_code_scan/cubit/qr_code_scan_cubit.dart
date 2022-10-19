@@ -295,6 +295,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final dynamic response = await client.get(uri.toString());
       data = response is String ? jsonDecode(response) : response;
 
+      log.i('data - $data');
       switch (data['type']) {
         case 'CredentialOffer':
           log.i('Credential Offer');
@@ -315,6 +316,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             queryByExampleCubit.setQueryByExampleCubit(
               (data['query']).first as Map<String, dynamic>,
             );
+            log.i(data['query']);
             if (data['query'].first['type'] == 'DIDAuth') {
               log.i('DIDAuth');
               await scanCubit.askPermissionDIDAuthCHAPI(
@@ -326,6 +328,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 challenge: data['challenge'] as String,
                 domain: data['domain'] as String,
               );
+              emit(state.copyWith(qrScanStatus: QrScanStatus.idle));
             } else if (data['query'].first['type'] == 'QueryByExample') {
               log.i('QueryByExample');
               emit(
@@ -371,8 +374,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER, // ignore: lines_longer_than_80_chars
+              ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
             ),
           ),
         );

@@ -21,6 +21,7 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
     final object = displayMapping;
     if (object is LabeledDisplayMappingText) {
       return CredentialField(
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
         value: object.text,
         title: object.label,
         titleColor: titleColor,
@@ -36,6 +37,7 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
         for (final element in textList) {
           widgets.add(
             CredentialDynamicDetial(
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
               value: element,
               title: object.label,
               titleColor: titleColor,
@@ -55,6 +57,7 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
       final String? fallback = object.fallback;
       if (fallback != null) {
         return CredentialField(
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
           title: object.label,
           value: fallback,
           titleColor: titleColor,

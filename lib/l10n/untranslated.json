@@ -546,13 +546,18 @@
     "tokenListSubtitle",
     "my",
     "get",
-    "emailProofDummy",
-    "ageProofDummy",
-    "genderProofDummy",
-    "ageRangeProofDummy",
-    "nationalityProofDummy",
-    "over18ProofDummy",
-    "identityProofDummy"
+    "emailProofDummyDescription",
+    "ageProofDummyDescription",
+    "genderProofDummyDescription",
+    "ageRangeProofDummyDescription",
+    "nationalityProofDummyDescription",
+    "over18ProofDummyDescription",
+    "over13ProofDummyDescription",
+    "identityProofDummyDescription",
+    "phoneProofDummyDescription",
+    "passportFootprintDummyDescription",
+    "seeMoreNFTInformationOn",
+    "credentialStatus"
   ],
 
   "es": [
@@ -1102,13 +1107,18 @@
     "tokenListSubtitle",
     "my",
     "get",
-    "emailProofDummy",
-    "ageProofDummy",
-    "genderProofDummy",
-    "ageRangeProofDummy",
-    "nationalityProofDummy",
-    "over18ProofDummy",
-    "identityProofDummy"
+    "emailProofDummyDescription",
+    "ageProofDummyDescription",
+    "genderProofDummyDescription",
+    "ageRangeProofDummyDescription",
+    "nationalityProofDummyDescription",
+    "over18ProofDummyDescription",
+    "over13ProofDummyDescription",
+    "identityProofDummyDescription",
+    "phoneProofDummyDescription",
+    "passportFootprintDummyDescription",
+    "seeMoreNFTInformationOn",
+    "credentialStatus"
   ],
 
   "fr": [
@@ -1658,13 +1668,18 @@
     "tokenListSubtitle",
     "my",
     "get",
-    "emailProofDummy",
-    "ageProofDummy",
-    "genderProofDummy",
-    "ageRangeProofDummy",
-    "nationalityProofDummy",
-    "over18ProofDummy",
-    "identityProofDummy"
+    "emailProofDummyDescription",
+    "ageProofDummyDescription",
+    "genderProofDummyDescription",
+    "ageRangeProofDummyDescription",
+    "nationalityProofDummyDescription",
+    "over18ProofDummyDescription",
+    "over13ProofDummyDescription",
+    "identityProofDummyDescription",
+    "phoneProofDummyDescription",
+    "passportFootprintDummyDescription",
+    "seeMoreNFTInformationOn",
+    "credentialStatus"
   ],
 
   "it": [
@@ -2214,12 +2229,17 @@
     "tokenListSubtitle",
     "my",
     "get",
-    "emailProofDummy",
-    "ageProofDummy",
-    "genderProofDummy",
-    "ageRangeProofDummy",
-    "nationalityProofDummy",
-    "over18ProofDummy",
-    "identityProofDummy"
+    "emailProofDummyDescription",
+    "ageProofDummyDescription",
+    "genderProofDummyDescription",
+    "ageRangeProofDummyDescription",
+    "nationalityProofDummyDescription",
+    "over18ProofDummyDescription",
+    "over13ProofDummyDescription",
+    "identityProofDummyDescription",
+    "phoneProofDummyDescription",
+    "passportFootprintDummyDescription",
+    "seeMoreNFTInformationOn",
+    "credentialStatus"
   ]
 }

@@ -49,7 +49,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           gamingCategories.remove(CredentialSubjectType.tezotopiaMembership);
           break;
         case CredentialSubjectType.ageRange:
-          identityCategories.remove(CredentialSubjectType.ageRange);
           break;
         case CredentialSubjectType.nationality:
           identityCategories.remove(CredentialSubjectType.nationality);
@@ -223,11 +222,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             );
             break;
           case CredentialSubjectType.ageRange:
-            _removeDummyIfCredentialExist(
-              _credentials,
-              identityCategories,
-              CredentialSubjectType.ageRange,
-            );
             break;
           case CredentialSubjectType.nationality:
             _removeDummyIfCredentialExist(
@@ -535,7 +529,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             //     CredentialSubjectType.ageRange,
             //   ),
             // );
-            identityCategories.add(CredentialSubjectType.ageRange);
             break;
           case CredentialSubjectType.nationality:
             // Note: Uncomment if we need to display dummies again.

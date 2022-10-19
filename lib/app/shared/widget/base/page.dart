@@ -11,7 +11,7 @@ class BasePage extends StatelessWidget {
     this.titleLeading,
     this.titleTrailing,
     this.padding = const EdgeInsets.symmetric(
-      horizontal: 15,
+      horizontal: 10,
       vertical: 20,
     ),
     this.scrollView = true,

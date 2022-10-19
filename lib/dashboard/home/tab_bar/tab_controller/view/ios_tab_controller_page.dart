@@ -103,11 +103,8 @@ class _IosTabControllerViewState extends State<IosTabControllerView>
             ),
             const SizedBox(height: Sizes.spaceSmall),
             Expanded(
-              child: BackgroundCard(
-                padding: const EdgeInsets.all(Sizes.space2XSmall),
-                margin:
-                    const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-                //height: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
                 child: BlocBuilder<CredentialListCubit, CredentialListState>(
                   builder: (context, credentialListState) {
                     return BlocBuilder<WalletCubit, WalletState>(

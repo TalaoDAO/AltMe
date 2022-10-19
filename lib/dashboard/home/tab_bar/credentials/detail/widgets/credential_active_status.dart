@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -10,25 +11,36 @@ class CredentialActiveStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    final l10n = context.l10n;
+
+    return Row(
       children: [
-        Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                credentialStatus.icon,
-                color: credentialStatus.color(context),
+        RichText(
+          textAlign: TextAlign.left,
+          text: TextSpan(
+            children: <InlineSpan>[
+              TextSpan(
+                text: '${l10n.credentialStatus}: ',
+                style: Theme.of(context)
+                    .textTheme
+                    .credentialFieldTitle
+                    .copyWith(color: Theme.of(context).colorScheme.titleColor),
               ),
-              const SizedBox(width: 10),
-              Text(
-                credentialStatus.message(context),
-                style: Theme.of(context).textTheme.credentialStatus.apply(
-                      color: credentialStatus.color(context),
-                    ),
+              TextSpan(
+                text: credentialStatus.message(context),
+                style: Theme.of(context)
+                    .textTheme
+                    .credentialFieldDescription
+                    .copyWith(color: Theme.of(context).colorScheme.valueColor),
               ),
             ],
           ),
+        ),
+        const SizedBox(width: 5),
+        Icon(
+          credentialStatus.icon,
+          size: 18,
+          color: credentialStatus.color(context),
         ),
       ],
     );

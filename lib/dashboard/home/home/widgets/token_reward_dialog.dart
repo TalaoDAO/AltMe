@@ -78,7 +78,8 @@ class TokenRewardDialog extends StatelessWidget {
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         LaunchUrl.launch(
-                            'https://tzkt.io/${tokenReward.txId}/${tokenReward.counter}');
+                          'https://tzkt.io/${tokenReward.txId}/${tokenReward.counter}',
+                        );
                       },
                   ),
                   TextSpan(

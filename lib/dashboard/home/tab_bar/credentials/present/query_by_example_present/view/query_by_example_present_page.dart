@@ -68,14 +68,17 @@ class _QueryByExamplePresentPageState extends State<QueryByExamplePresentPage> {
               //             id: '', image: '', data: {'issuer': ''}))),
               const SizedBox(height: 24),
               MyGradientButton(
-                onPressed: () =>
-                    Navigator.of(context).pushReplacement<void, void>(
-                  QueryByExampleCredentialPickPage.route(
-                    uri: widget.uri,
-                    preview: widget.preview,
-                    issuer: widget.issuer,
-                  ),
-                ),
+                onPressed: () {
+                  Navigator.of(context).pushReplacement<void, void>(
+                    QueryByExampleCredentialPickPage.route(
+                      uri: widget.uri,
+                      preview: widget.preview,
+                      issuer: widget.issuer,
+                      credentialQueryIndex: 0,
+                      credentialsToBePresented: [],
+                    ),
+                  );
+                },
                 text: l10n.credentialPresentConfirm,
               ),
               const SizedBox(height: 8),

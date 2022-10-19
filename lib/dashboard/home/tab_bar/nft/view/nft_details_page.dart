@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/nft/widgets/widgets.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -83,9 +84,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 maxLines: 1,
                 minFontSize: 12,
               ),
-              const SizedBox(
-                height: Sizes.spaceNormal,
-              ),
+              const SizedBox(height: Sizes.spaceNormal),
               if (widget.nftModel.description?.contains('<p>') ?? false)
                 Html(data: widget.nftModel.description ?? '')
               else
@@ -93,6 +92,29 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                   widget.nftModel.description ?? '',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
+              const SizedBox(height: Sizes.spaceNormal),
+              // Text(
+              //   l10n.seeMoreNFTInformationOn,
+              //   style: Theme.of(context).textTheme.bodyText1,
+              // ),
+              // const SizedBox(height: Sizes.spaceSmall),
+              // Row(
+              //   children: [
+              //     NftUrlWidget(
+              //       text: 'Objkt.com',
+              //       onPressed: () async {
+              //         await LaunchUrl.launch(Urls.objktUrl);
+              //       },
+              //     ),
+              //     const SizedBox(width: 15),
+              //     NftUrlWidget(
+              //       text: 'Rarible.com',
+              //       onPressed: () async {
+              //         await LaunchUrl.launch(Urls.raribleUrl);
+              //       },
+              //     ),
+              //   ],
+              // )
             ],
           ),
         ),

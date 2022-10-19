@@ -48,11 +48,21 @@ class ManageNetworkPage extends StatelessWidget {
                   children: [
                     TezosNetworkSelector(
                       tezosNetwork: TezosNetwork.mainNet(),
-                      groupValue: groupValue,
+                      groupValue: state.network,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Sizes.spaceSmall,
+                        vertical: Sizes.spaceXSmall,
+                      ),
+                      child: Divider(
+                        height: 0.2,
+                        color: Theme.of(context).colorScheme.borderColor,
+                      ),
                     ),
                     TezosNetworkSelector(
                       tezosNetwork: TezosNetwork.ghostnet(),
-                      groupValue: groupValue,
+                      groupValue: state.network,
                     ),
                   ],
                 ),

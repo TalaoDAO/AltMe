@@ -41,18 +41,14 @@ class ConfirmDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ImageIcon(
-            AssetImage(icon),
-            size: 50,
-            color: color,
-          ),
-          const SizedBox(height: 24),
+          Image.asset(icon,width: 50,height: 50,color: color,),
           Text(
             title,
             style:
                 Theme.of(context).textTheme.dialogTitle.copyWith(color: text),
             textAlign: TextAlign.center,
           ),
+          const SizedBox(height: Sizes.spaceXSmall),
           if (subtitle != null)
             Text(
               subtitle!,

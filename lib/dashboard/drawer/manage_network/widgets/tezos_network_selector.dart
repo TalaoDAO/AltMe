@@ -19,23 +19,26 @@ class TezosNetworkSelector extends StatelessWidget {
     return BlocConsumer<ManageNetworkCubit, ManageNetworkState>(
       listener: (context, state) {},
       builder: (context, state) {
-        return ListTile(
+        return RadioListTile(
+          value: tezosNetwork,
+          groupValue: groupValue,
+          contentPadding: EdgeInsets.zero,
+          activeColor: Theme.of(context).colorScheme.onPrimary,
           dense: true,
           visualDensity: VisualDensity.compact,
           title: Text(
-            tezosNetwork.networkname,
+            tezosNetwork.title!,
             style: Theme.of(context).textTheme.radioOption,
           ),
-          trailing: Radio<TezosNetwork>(
-            value: tezosNetwork,
-            groupValue: groupValue,
-            activeColor: Theme.of(context).colorScheme.onPrimary,
-            onChanged: (TezosNetwork? value) async {
-              if (value != null) {
-                await context.read<ManageNetworkCubit>().setNetwork(value);
-              }
-            },
+          subtitle: Text(
+            tezosNetwork.subTitle!,
+            style: Theme.of(context).textTheme.caption2,
           ),
+          onChanged: (TezosNetwork? value) async {
+            if (value != null) {
+              await context.read<ManageNetworkCubit>().setNetwork(value);
+            }
+          },
         );
       },
     );

@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/scan/scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -35,15 +36,28 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocListener<QRCodeScanCubit, QRCodeScanState>(
-      listener: (context, state) async {
-        if (state.status == QrScanStatus.error ||
-            state.status == QrScanStatus.message) {
-          if (state.message != null) {
-            Navigator.of(context).pop();
-          }
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<QRCodeScanCubit, QRCodeScanState>(
+          listener: (context, state) async {
+            if (state.status == QrScanStatus.error ||
+                state.status == QrScanStatus.message) {
+              if (state.message != null) {
+                Navigator.of(context).pop();
+              }
+            }
+          },
+        ),
+        BlocListener<ScanCubit, ScanState>(
+          listener: (context, state) {
+            if (state.status == ScanStatus.loading) {
+              LoadingView().show(context: context);
+            } else {
+              LoadingView().hide();
+            }
+          },
+        ),
+      ],
       child: BasePage(
         padding: EdgeInsets.zero,
         title: l10n.scanTitle,

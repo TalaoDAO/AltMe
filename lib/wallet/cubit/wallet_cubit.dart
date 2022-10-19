@@ -68,7 +68,7 @@ class WalletCubit extends Cubit<WalletState> {
     String? accountName,
     required String mnemonicOrKey,
     required bool isImported,
-    Function(CryptoAccount cryptoAccount)? onComplete,
+    Function(CryptoAccount cryptoAccount, int newIndex)? onComplete,
   }) async {
     int index = 0;
 
@@ -142,7 +142,11 @@ class WalletCubit extends Cubit<WalletState> {
       cryptoAccountString,
     );
 
-    onComplete?.call(cryptoAccount);
+    onComplete?.call(cryptoAccount, index + 1);
+    emitCryptoAccount(cryptoAccount);
+
+    /// set new account as current
+    await setCurrentWalletAccount(index + 1);
 
     final credential = await generateAssociatedWalletCredential(
       accountName: cryptoAccountData.name,
@@ -152,8 +156,6 @@ class WalletCubit extends Cubit<WalletState> {
     if (credential != null) {
       await insertCredential(credential);
     }
-
-    emitCryptoAccount(cryptoAccount);
   }
 
   Future<void> editCryptoAccountName({
@@ -196,7 +198,7 @@ class WalletCubit extends Cubit<WalletState> {
         oldId: filteredCredentialList.first.id,
       );
       if (credential != null) {
-        await updateCredential(credential);
+        await updateCredential(credential: credential);
       }
     } else {
       final credential = await generateAssociatedWalletCredential(
@@ -252,7 +254,10 @@ class WalletCubit extends Cubit<WalletState> {
     });
   }
 
-  Future updateCredential(CredentialModel credential) async {
+  Future updateCredential({
+    required CredentialModel credential,
+    bool showMessage = true,
+  }) async {
     await repository.update(credential);
     final index =
         state.credentials.indexWhere((element) => element.id == credential.id);
@@ -265,9 +270,12 @@ class WalletCubit extends Cubit<WalletState> {
       state.copyWith(
         status: WalletStatus.update,
         credentials: credentials,
-        messageHandler: ResponseMessage(
-          ResponseString.RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE,
-        ),
+        messageHandler: showMessage
+            ? ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE,
+              )
+            : null,
       ),
     );
   }
@@ -305,6 +313,18 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future resetWallet() async {
+    /// reward operations id in all accounts
+    for (final cryptoAccountData in state.cryptoAccount.data) {
+      await secureStorageProvider.delete(
+        SecureStorageKeys.lastNotifiedXTZRewardId +
+            cryptoAccountData.walletAddress,
+      );
+      await secureStorageProvider.delete(
+        SecureStorageKeys.lastNotifiedUNORewardId +
+            cryptoAccountData.walletAddress,
+      );
+    }
+
     /// ssi
     await secureStorageProvider.delete(SecureStorageKeys.ssiMnemonic);
     await secureStorageProvider.delete(SecureStorageKeys.ssiKey);

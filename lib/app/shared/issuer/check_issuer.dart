@@ -49,6 +49,11 @@ class CheckIssuer {
       return Issuer.emptyIssuer(uriToCheck.host);
     } catch (e) {
       log.e('error $e');
+      if (e is NetworkException) {
+        if (e.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
+          return Issuer.emptyIssuer(uriToCheck.toString());
+        }
+      }
       rethrow;
     }
   }

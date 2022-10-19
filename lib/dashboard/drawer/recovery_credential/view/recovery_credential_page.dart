@@ -161,8 +161,10 @@ class _RecoveryCredentialViewState extends State<RecoveryCredentialView> {
     final localization = context.l10n;
     final storagePermission = await Permission.storage.request();
     if (storagePermission.isDenied) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(localization.storagePermissionDeniedMessage)),
+      AlertMessage.showStringMessage(
+        context: context,
+        message: localization.storagePermissionDeniedMessage,
+        messageType: MessageType.success,
       );
       return;
     }

@@ -1,12 +1,13 @@
 name: altme
 description: AltMe Flutter App 
-version: 1.2.12+80
+version: 1.2.14+82
 publish_to: none
 
 environment:
   sdk: ">=2.17.0 <3.3.3"
 
 dependencies:
+  another_flushbar: ^1.12.29
   auto_size_text: ^3.0.0 
   beacon_flutter:
     git:

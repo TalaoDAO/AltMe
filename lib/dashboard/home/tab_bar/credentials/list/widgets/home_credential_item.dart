@@ -37,7 +37,6 @@ class RealCredentialItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BackgroundCard(
-      color: Theme.of(context).colorScheme.credentialBackground,
       padding: const EdgeInsets.all(4),
       child: GestureDetector(
         onTap: () {
@@ -174,34 +173,31 @@ class DummyCredentialItem extends StatelessWidget {
           children: [
             Expanded(
               flex: 8,
-              child: Stack(
-                children: [
-                  CredentialContainer(
-                    child: Image.asset(homeCredential.image!, fit: BoxFit.fill),
-                  ),
-                  if (homeCredential.dummyDescription != null)
-                    CustomMultiChildLayout(
-                      delegate:
-                          DummyCredentialItemDelegate(position: Offset.zero),
-                      children: [
-                        LayoutId(
-                          id: 'dummyDesc',
-                          child: FractionallySizedBox(
-                            widthFactor: 0.85,
-                            heightFactor: 0.36,
-                            child: MyText(
-                              homeCredential.dummyDescription!.getMessage(
-                                context,
-                                homeCredential.dummyDescription!,
+              child: CredentialImage(
+                image: homeCredential.image!,
+                child: homeCredential.dummyDescription == null
+                    ? null
+                    : CustomMultiChildLayout(
+                        delegate:
+                            DummyCredentialItemDelegate(position: Offset.zero),
+                        children: [
+                          LayoutId(
+                            id: 'dummyDesc',
+                            child: FractionallySizedBox(
+                              widthFactor: 0.85,
+                              heightFactor: 0.36,
+                              child: MyText(
+                                homeCredential.dummyDescription!.getMessage(
+                                  context,
+                                  homeCredential.dummyDescription!,
+                                ),
+                                maxLines: 3,
+                                style: Theme.of(context).textTheme.caption,
                               ),
-                              maxLines: 3,
-                              style: Theme.of(context).textTheme.caption,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                ],
+                        ],
+                      ),
               ),
             ),
             const SizedBox(height: 5),

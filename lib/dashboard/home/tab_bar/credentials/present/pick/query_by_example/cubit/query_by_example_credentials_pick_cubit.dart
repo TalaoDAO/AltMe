@@ -17,6 +17,22 @@ class QueryByExampleCredentialPickCubit
   }) : super(
           const QueryByExampleCredentialPickState(filteredCredentialList: []),
         ) {
+    if (credentialQuery == null) {
+      /// Display your VP and VC case
+      emit(state.copyWith(filteredCredentialList: credentialList));
+    } else {
+      /// Query by Example case
+      filterList(
+        credentialList: credentialList,
+        credentialQuery: credentialQuery,
+      );
+    }
+  }
+
+  void filterList({
+    required List<CredentialModel> credentialList,
+    required CredentialQuery? credentialQuery,
+  }) {
     final filteredCredentialList = List<CredentialModel>.from(credentialList);
     if (credentialQuery != null) {
       /// filter credential list if there are type restrictions

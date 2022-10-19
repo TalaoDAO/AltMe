@@ -10,23 +10,45 @@ class ResponseMessage with MessageHandler {
   String getMessage(BuildContext context, MessageHandler messageHandler) {
     if (messageHandler is ResponseMessage) {
       switch (messageHandler.message) {
-        case ResponseString.IDENTITY_PROOF_DUMMY:
-          return ResponseString.IDENTITY_PROOF_DUMMY.localise(context);
+        case ResponseString.RESPONSE_STRING_identityProofDummyDescription:
+          return ResponseString.RESPONSE_STRING_identityProofDummyDescription
+              .localise(context);
 
-        case ResponseString.OVER_18_PROOF_DUMMY:
-          return ResponseString.OVER_18_PROOF_DUMMY.localise(context);
+        case ResponseString.RESPONSE_STRING_over18DummyDescription:
+          return ResponseString.RESPONSE_STRING_over18DummyDescription.localise(
+            context,
+          );
 
-        case ResponseString.EMAIL_PROOF_DUMMY:
-          return ResponseString.EMAIL_PROOF_DUMMY.localise(context);
+        case ResponseString.RESPONSE_STRING_over13DummyDescription:
+          return ResponseString.RESPONSE_STRING_over13DummyDescription.localise(
+            context,
+          );
 
-        case ResponseString.GENDER_PROOF_DUMMY:
-          return ResponseString.GENDER_PROOF_DUMMY.localise(context);
+        case ResponseString.RESPONSE_STRING_passportFootprintDummyDescription:
+          return ResponseString
+              .RESPONSE_STRING_passportFootprintDummyDescription.localise(
+            context,
+          );
 
-        case ResponseString.NATIONALITY_PROOF_DUMMY:
-          return ResponseString.NATIONALITY_PROOF_DUMMY.localise(context);
+        case ResponseString.RESPONSE_STRING_emailProofDummyDescription:
+          return ResponseString.RESPONSE_STRING_emailProofDummyDescription
+              .localise(context);
 
-        case ResponseString.AGE_RANGE_PROOF_DUMMY:
-          return ResponseString.AGE_RANGE_PROOF_DUMMY.localise(context);
+        case ResponseString.RESPONSE_STRING_genderProofDummyDescription:
+          return ResponseString.RESPONSE_STRING_genderProofDummyDescription
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_nationalityProofDummyDescription:
+          return ResponseString.RESPONSE_STRING_nationalityProofDummyDescription
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_ageRangeProofDummyDescription:
+          return ResponseString.RESPONSE_STRING_ageRangeProofDummyDescription
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_phoneProofDummyDescription:
+          return ResponseString.RESPONSE_STRING_phoneProofDummyDescription
+              .localise(context);
 
         case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
           return ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW

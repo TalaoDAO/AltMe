@@ -5,20 +5,33 @@ class GlobalMessage {
 
   final AppLocalizations l10n;
 
-  String get IDENTITY_PROOF_DUMMY =>
-      l10n.identityProofDummy;
-  String get OVER_18_PROOF_DUMMY =>
-      l10n.over18ProofDummy;
-  String get EMAIL_PROOF_DUMMY =>
-      l10n.emailProofDummy;
-  String get GENDER_PROOF_DUMMY =>
-      l10n.genderProofDummy;
-  String get NATIONALITY_PROOF_DUMMY =>
-      l10n.nationalityProofDummy;
-  String get AGE_RANGE_PROOF_DUMMY =>
-      l10n.ageRangeProofDummy;
+  String get RESPONSE_STRING_identityProofDummyDescription =>
+      l10n.identityProofDummyDescription;
 
-      //
+  String get RESPONSE_STRING_over18DummyDescription =>
+      l10n.over18ProofDummyDescription;
+
+  String get RESPONSE_STRING_over13DummyDescription =>
+      l10n.over13ProofDummyDescription;
+
+  String get RESPONSE_STRING_passportFootprintDummyDescription =>
+      l10n.passportFootprintDummyDescription;
+
+  String get RESPONSE_STRING_emailProofDummyDescription =>
+      l10n.emailProofDummyDescription;
+
+  String get RESPONSE_STRING_genderProofDummyDescription =>
+      l10n.genderProofDummyDescription;
+
+  String get RESPONSE_STRING_nationalityProofDummyDescription =>
+      l10n.nationalityProofDummyDescription;
+
+  String get RESPONSE_STRING_ageRangeProofDummyDescription =>
+      l10n.ageRangeProofDummyDescription;
+
+  String get RESPONSE_STRING_phoneProofDummyDescription =>
+      l10n.phoneProofDummyDescription;
+
   String get RESPONSE_STRING_BALANCE_TOO_LOW =>
       l10n.transactionErrorBalanceTooLow;
 

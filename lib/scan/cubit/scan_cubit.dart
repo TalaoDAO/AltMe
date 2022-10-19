@@ -205,7 +205,7 @@ class ScanCubit extends Cubit<ScanState> {
   Future<void> verifiablePresentationRequest({
     required String url,
     required String keyId,
-    required List<CredentialModel> credentials,
+    required List<CredentialModel> credentialsToBePresented,
     required String challenge,
     required String domain,
     required Issuer issuer,
@@ -227,9 +227,9 @@ class ScanCubit extends Cubit<ScanState> {
           'type': ['VerifiablePresentation'],
           'id': presentationId,
           'holder': did,
-          'verifiableCredential': credentials.length == 1
-              ? credentials.first.data
-              : credentials.map((c) => c.data).toList(),
+          'verifiableCredential': credentialsToBePresented.length == 1
+              ? credentialsToBePresented.first.data
+              : credentialsToBePresented.map((c) => c.data).toList(),
         }),
         jsonEncode({
           'verificationMethod': verificationMethod,
@@ -239,14 +239,17 @@ class ScanCubit extends Cubit<ScanState> {
         }),
         key,
       );
-      log.i('Formdata $presentation');
-      await client.post(
-        url,
-        data: FormData.fromMap(<String, dynamic>{'presentation': presentation}),
-      );
+
+      log.i('presentation $presentation');
+
+      final FormData formData = FormData.fromMap(<String, dynamic>{
+        'presentation': presentation,
+      });
+
+      await client.post(url, data: formData);
 
       await presentationActivity(
-        credentialModels: credentials,
+        credentialModels: credentialsToBePresented,
         issuer: issuer,
       );
 
@@ -519,7 +522,10 @@ class ScanCubit extends Cubit<ScanState> {
       credentialModel.activities.add(activity);
 
       log.i('presentation activity added to the credential');
-      await walletCubit.updateCredential(credentialModel);
+      await walletCubit.updateCredential(
+        credential: credentialModel,
+        showMessage: false,
+      );
     }
   }
 }

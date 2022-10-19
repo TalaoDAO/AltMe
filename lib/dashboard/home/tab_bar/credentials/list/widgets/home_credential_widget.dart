@@ -27,30 +27,30 @@ class HomeCredentialWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          '${fromDiscover ? l10n.get : l10n.my} ${title.toLowerCase()}',
-          style: Theme.of(context).textTheme.credentialCategoryTitle,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Text(
+            '${fromDiscover ? l10n.get : l10n.my} ${title.toLowerCase()}',
+            style: Theme.of(context).textTheme.credentialCategoryTitle,
+          ),
         ),
-        const SizedBox(
-          height: 4,
-        ),
-        Flexible(
-          child: MyText(
+        const SizedBox(height: 4),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Text(
             categorySubtitle,
             maxLines: 3,
             style: Theme.of(context).textTheme.credentialCategorySubTitle,
           ),
         ),
-        const SizedBox(
-          height: 8,
-        ),
+        const SizedBox(height: 8),
         GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 4,
-            mainAxisSpacing: 4,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
             childAspectRatio: Sizes.homeCredentialRatio,
           ),
           itemCount: credentials.length + (showAddOption ? 1 : 0),
