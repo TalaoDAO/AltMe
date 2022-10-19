@@ -295,6 +295,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final dynamic response = await client.get(uri.toString());
       data = response is String ? jsonDecode(response) : response;
 
+      log.i('data - $data');
       switch (data['type']) {
         case 'CredentialOffer':
           log.i('Credential Offer');

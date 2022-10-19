@@ -89,14 +89,19 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
     final l10n = context.l10n;
     final queryByExampleCubit = context.read<QueryByExampleCubit>().state;
     var reason = '';
-    if (queryByExampleCubit.credentialQuery[credentialQueryIndex].reason !=
-        null) {
-      final _reason =
-          queryByExampleCubit.credentialQuery[credentialQueryIndex].reason;
-      if (_reason != null) {
-        reason += '${GetTranslation.getTranslation(_reason, l10n)}\n';
+
+    if (queryByExampleCubit.credentialQuery.isNotEmpty) {
+      /// Query by Example case
+      if (queryByExampleCubit.credentialQuery[credentialQueryIndex].reason !=
+          null) {
+        final _reason =
+            queryByExampleCubit.credentialQuery[credentialQueryIndex].reason;
+        if (_reason != null) {
+          reason += '${GetTranslation.getTranslation(_reason, l10n)}\n';
+        }
       }
     }
+
     return BlocBuilder<WalletCubit, WalletState>(
       builder: (context, walletState) {
         return BlocBuilder<QueryByExampleCredentialPickCubit,
@@ -146,56 +151,65 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                               credentialsToBePresented,
                                             )..add(selectedCredential);
 
-                                            if (credentialQueryIndex + 1 !=
-                                                queryByExampleCubit
-                                                    .credentialQuery.length) {
-                                              await Navigator.of(context)
-                                                  .pushReplacement<void, void>(
-                                                QueryByExampleCredentialPickPage
-                                                    .route(
-                                                  uri: uri,
-                                                  preview: preview,
-                                                  issuer: issuer,
-                                                  credentialQueryIndex:
-                                                      credentialQueryIndex + 1,
-                                                  credentialsToBePresented:
-                                                      updatedCredentials,
-                                                ),
-                                              );
-                                            } else {
-                                              /// Authenticate
-                                              bool authenticated = false;
-                                              await Navigator.of(context)
-                                                  .push<void>(
-                                                PinCodePage.route(
-                                                  restrictToBack: false,
-                                                  isValidCallback: () {
-                                                    authenticated = true;
-                                                  },
-                                                ),
-                                              );
+                                            if (queryByExampleCubit
+                                                .credentialQuery.isNotEmpty) {
+                                              /// Query by Example case
 
-                                              if (!authenticated) {
-                                                return;
-                                              }
-
-                                              await context
-                                                  .read<ScanCubit>()
-                                                  // ignore: lines_longer_than_80_chars
-                                                  .verifiablePresentationRequest(
-                                                    url: uri.toString(),
-                                                    keyId: SecureStorageKeys
-                                                        .ssiKey,
+                                              if (credentialQueryIndex + 1 !=
+                                                  queryByExampleCubit
+                                                      .credentialQuery.length) {
+                                                await Navigator.of(context)
+                                                    .pushReplacement<void,
+                                                        void>(
+                                                  QueryByExampleCredentialPickPage
+                                                      .route(
+                                                    uri: uri,
+                                                    preview: preview,
+                                                    issuer: issuer,
+                                                    credentialQueryIndex:
+                                                        credentialQueryIndex +
+                                                            1,
                                                     credentialsToBePresented:
                                                         updatedCredentials,
-                                                    challenge:
-                                                        preview['challenge']
-                                                            as String,
-                                                    domain: preview['domain']
-                                                        as String,
-                                                    issuer: issuer,
-                                                  );
+                                                  ),
+                                                );
+
+                                                return;
+                                              }
                                             }
+
+                                            /// Authenticate
+                                            bool authenticated = false;
+                                            await Navigator.of(context)
+                                                .push<void>(
+                                              PinCodePage.route(
+                                                restrictToBack: false,
+                                                isValidCallback: () {
+                                                  authenticated = true;
+                                                },
+                                              ),
+                                            );
+
+                                            if (!authenticated) {
+                                              return;
+                                            }
+
+                                            await context
+                                                .read<ScanCubit>()
+                                                // ignore: lines_longer_than_80_chars
+                                                .verifiablePresentationRequest(
+                                                  url: uri.toString(),
+                                                  keyId:
+                                                      SecureStorageKeys.ssiKey,
+                                                  credentialsToBePresented:
+                                                      updatedCredentials,
+                                                  challenge:
+                                                      preview['challenge']
+                                                          as String,
+                                                  domain: preview['domain']
+                                                      as String,
+                                                  issuer: issuer,
+                                                );
                                           },
                                     text: l10n.credentialPickPresent,
                                   );

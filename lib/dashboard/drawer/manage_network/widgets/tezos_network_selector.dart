@@ -27,11 +27,11 @@ class TezosNetworkSelector extends StatelessWidget {
           dense: true,
           visualDensity: VisualDensity.compact,
           title: Text(
-            tezosNetwork.title,
+            tezosNetwork.title!,
             style: Theme.of(context).textTheme.radioOption,
           ),
           subtitle: Text(
-            tezosNetwork.subTitle,
+            tezosNetwork.subTitle!,
             style: Theme.of(context).textTheme.caption2,
           ),
           onChanged: (TezosNetwork? value) async {

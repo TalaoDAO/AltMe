@@ -29,7 +29,7 @@ class TezosNetworkSwitcherButton extends StatelessWidget {
             child: BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
               builder: (context, state) {
                 return Text(
-                  state.network.title,
+                  state.network.title!,
                   style: Theme.of(context).textTheme.caption?.copyWith(
                         decoration: TextDecoration.underline,
                       ),

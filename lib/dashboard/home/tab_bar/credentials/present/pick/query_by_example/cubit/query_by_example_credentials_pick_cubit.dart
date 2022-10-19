@@ -17,10 +17,16 @@ class QueryByExampleCredentialPickCubit
   }) : super(
           const QueryByExampleCredentialPickState(filteredCredentialList: []),
         ) {
-    filterList(
-      credentialList: credentialList,
-      credentialQuery: credentialQuery,
-    );
+    if (credentialQuery == null) {
+      /// Display your VP and VC case
+      emit(state.copyWith(filteredCredentialList: credentialList));
+    } else {
+      /// Query by Example case
+      filterList(
+        credentialList: credentialList,
+        credentialQuery: credentialQuery,
+      );
+    }
   }
 
   void filterList({
@@ -95,8 +101,6 @@ class QueryByExampleCredentialPickCubit
         });
       }
     }
-
-    emit(state.copyWith(filteredCredentialList: filteredCredentialList));
 
     emit(state.copyWith(filteredCredentialList: filteredCredentialList));
   }

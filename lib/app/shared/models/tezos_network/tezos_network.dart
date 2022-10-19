@@ -41,8 +41,8 @@ class TezosNetwork extends Equatable {
   final String tzktUrl;
   final String apiKey;
   final String rpcNodeUrl;
-  final String title;
-  final String subTitle;
+  final String? title;
+  final String? subTitle;
 
   Map<String, dynamic> toJson() => _$TezosNetworkToJson(this);
 
