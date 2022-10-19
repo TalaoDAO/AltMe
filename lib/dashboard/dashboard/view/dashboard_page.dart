@@ -177,24 +177,20 @@ class _DashboardViewState extends State<DashboardView> {
               scaffoldKey: scaffoldKey,
               padding: EdgeInsets.zero,
               drawer: const DrawerPage(),
-              titleLeading: state.selectedIndex == 0
-                  ? HomeTitleLeading(
-                      onPressed: () {
-                        if (context.read<HomeCubit>().state.homeStatus ==
-                            HomeStatus.hasNoWallet) {
-                          showDialog<void>(
-                            context: context,
-                            builder: (_) => const WalletDialog(),
-                          );
-                          return;
-                        }
-                        scaffoldKey.currentState!.openDrawer();
-                      },
-                    )
-                  : null,
-              titleTrailing: state.selectedIndex == 0
-                  ? const CryptoAccountSwitcherButton()
-                  : null,
+              titleLeading: HomeTitleLeading(
+                onPressed: () {
+                  if (context.read<HomeCubit>().state.homeStatus ==
+                      HomeStatus.hasNoWallet) {
+                    showDialog<void>(
+                      context: context,
+                      builder: (_) => const WalletDialog(),
+                    );
+                    return;
+                  }
+                  scaffoldKey.currentState!.openDrawer();
+                },
+              ),
+              titleTrailing: const CryptoAccountSwitcherButton(),
               body: Stack(
                 children: [
                   Column(
