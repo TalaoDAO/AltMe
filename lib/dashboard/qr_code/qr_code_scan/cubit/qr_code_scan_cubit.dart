@@ -328,6 +328,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 challenge: data['challenge'] as String,
                 domain: data['domain'] as String,
               );
+              emit(state.copyWith(qrScanStatus: QrScanStatus.idle));
             } else if (data['query'].first['type'] == 'QueryByExample') {
               log.i('QueryByExample');
               emit(
