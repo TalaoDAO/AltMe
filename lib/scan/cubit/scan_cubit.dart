@@ -220,34 +220,30 @@ class ScanCubit extends Cubit<ScanState> {
       final verificationMethod =
           await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
 
-      List<String> presentations = <String>[];
-      for (final item in credentialsToBePresented) {
-        final presentationId = 'urn:uuid:${const Uuid().v4()}';
-        final presentation = await didKitProvider.issuePresentation(
-          jsonEncode({
-            '@context': ['https://www.w3.org/2018/credentials/v1'],
-            'type': ['VerifiablePresentation'],
-            'id': presentationId,
-            'holder': did,
-            'verifiableCredential': item.data,
-          }),
-          jsonEncode({
-            'verificationMethod': verificationMethod,
-            'proofPurpose': 'authentication',
-            'challenge': challenge,
-            'domain': domain,
-          }),
-          key,
-        );
+      final presentationId = 'urn:uuid:${const Uuid().v4()}';
+      final presentation = await didKitProvider.issuePresentation(
+        jsonEncode({
+          '@context': ['https://www.w3.org/2018/credentials/v1'],
+          'type': ['VerifiablePresentation'],
+          'id': presentationId,
+          'holder': did,
+          'verifiableCredential': credentialsToBePresented.length == 1
+              ? credentialsToBePresented.first.data
+              : credentialsToBePresented.map((c) => c.data).toList(),
+        }),
+        jsonEncode({
+          'verificationMethod': verificationMethod,
+          'proofPurpose': 'authentication',
+          'challenge': challenge,
+          'domain': domain,
+        }),
+        key,
+      );
 
-        presentations = List.of(presentations)..add(presentation);
-        log.i('Formdata $presentations');
-      }
+      log.i('presentation $presentation');
 
       final FormData formData = FormData.fromMap(<String, dynamic>{
-        'presentation': presentations.length > 1
-            ? jsonEncode(presentations)
-            : presentations,
+        'presentation': presentation,
       });
 
       await client.post(url, data: formData);
