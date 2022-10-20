@@ -162,6 +162,8 @@ class _BeaconOperationViewState extends State<BeaconOperationView> {
                               from: beaconRequest.request!.sourceAddress!,
                               to: beaconRequest
                                   .operationDetails!.first.destination!,
+                              dAppName:
+                                  beaconRequest.request!.appMetadata!.name!,
                             ),
                             const SizedBox(height: Sizes.spaceNormal),
                             Image.asset(

@@ -8,10 +8,12 @@ class SenderReceiver extends StatelessWidget {
     Key? key,
     required this.from,
     required this.to,
+    required this.dAppName,
   }) : super(key: key);
 
   final String from;
   final String to;
+  final String dAppName;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class SenderReceiver extends StatelessWidget {
       children: [
         SenderReceiverCard(title: l10n.from, value: from),
         const SizedBox(height: Sizes.spaceSmall),
-        SenderReceiverCard(title: l10n.to, value: to),
+        SenderReceiverCard(title: '${l10n.to}\n$dAppName', value: to),
       ],
     );
   }
