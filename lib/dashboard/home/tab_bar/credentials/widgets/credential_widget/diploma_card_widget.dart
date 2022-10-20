@@ -61,7 +61,8 @@ class DiplomaCardRecto extends StatelessWidget {
       cardBackgroundImagePath: ImageStrings.diplomaCard,
       issuerName: credentialModel
           .credentialPreview.credentialSubjectModel.issuedBy?.name,
-      value: diplomaCardModel.familyName,
+      value: '${diplomaCardModel.givenName}'
+          ' ${diplomaCardModel.familyName}',
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
