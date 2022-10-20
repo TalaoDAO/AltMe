@@ -69,7 +69,8 @@ class AragoLearningAchievementRecto extends Recto {
           widthFactor: 0.7,
           alignment: Alignment.centerLeft,
           child: CustomMultiChildLayout(
-            delegate: LearningAchievementVersoDelegate(position: Offset.zero),
+            delegate:
+                AragoLearningAchievementVersoDelegate(position: Offset.zero),
             children: [
               LayoutId(
                 id: 'name',
