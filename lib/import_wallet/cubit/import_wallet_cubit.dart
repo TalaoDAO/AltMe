@@ -98,7 +98,6 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         mnemonicOrKey: mnemonicOrKey,
         isImported: !isFromOnboarding,
       );
-      await walletCubit.setCurrentWalletAccount(0);
 
       await homeCubit.emitHasWallet();
       emit(state.success());

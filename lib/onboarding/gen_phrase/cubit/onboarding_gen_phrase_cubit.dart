@@ -74,7 +74,6 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         mnemonicOrKey: mnemonicFormatted,
         isImported: false,
       );
-      await walletCubit.setCurrentWalletAccount(0);
 
       await homeCubit.emitHasWallet();
       emit(state.success());
