@@ -17,7 +17,7 @@ class AragoEmailPassModel extends CredentialSubjectModel {
           id: id,
           type: type,
           issuedBy: issuedBy,
-          credentialSubjectType: CredentialSubjectType.emailPass,
+          credentialSubjectType: CredentialSubjectType.aragoEmailPass,
           credentialCategory: CredentialCategory.identityCards,
         );
 

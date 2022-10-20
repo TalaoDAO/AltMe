@@ -14,7 +14,7 @@ class AragoOver18Model extends CredentialSubjectModel {
           id: id,
           type: type,
           issuedBy: issuedBy,
-          credentialSubjectType: CredentialSubjectType.over18,
+          credentialSubjectType: CredentialSubjectType.aragoOver18,
           credentialCategory: CredentialCategory.identityCards,
         );
 

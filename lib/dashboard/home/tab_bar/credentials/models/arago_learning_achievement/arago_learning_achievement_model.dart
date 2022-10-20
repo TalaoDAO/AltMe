@@ -20,7 +20,7 @@ class AragoLearningAchievementModel extends CredentialSubjectModel {
           id: id,
           type: type,
           issuedBy: issuedBy,
-          credentialSubjectType: CredentialSubjectType.learningAchievement,
+          credentialSubjectType: CredentialSubjectType.aragoLearningAchievement,
           credentialCategory: CredentialCategory.identityCards,
         );
 
