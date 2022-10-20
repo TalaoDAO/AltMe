@@ -161,6 +161,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                                 await Navigator.of(context)
                                                     .pushReplacement<void,
                                                         void>(
+                                                  // ignore: lines_longer_than_80_chars
                                                   QueryByExampleCredentialPickPage
                                                       .route(
                                                     uri: uri,

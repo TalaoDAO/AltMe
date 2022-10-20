@@ -8,6 +8,7 @@ export 'credential_model/credential_model.dart';
 export 'credential_status_field/credential_status_field.dart';
 export 'credential_subject/credential_subject_model.dart';
 export 'default_credential_subject/default_credential_subject_model.dart';
+export 'diploma_card/diploma_card_model.dart';
 export 'display/display.dart';
 export 'ecole_42_learning_achievement/ecole_42_learning_achievement_model.dart';
 export 'email_pass/email_pass_model.dart';

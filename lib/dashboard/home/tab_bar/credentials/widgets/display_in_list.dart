@@ -119,6 +119,8 @@ class DisplayInList extends StatelessWidget {
         return TalaoCommunityCardDisplayInList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.diplomaCard:
+        return DiplomaCardDisplayInList(credentialModel: credentialModel);
     }
   }
 }

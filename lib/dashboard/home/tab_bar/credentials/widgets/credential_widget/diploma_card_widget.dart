@@ -2,8 +2,8 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
-class IdentityCardDisplayInList extends StatelessWidget {
-  const IdentityCardDisplayInList({
+class DiplomaCardDisplayInList extends StatelessWidget {
+  const DiplomaCardDisplayInList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -12,12 +12,12 @@ class IdentityCardDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IdentityCardRecto(credentialModel: credentialModel);
+    return DiplomaCardRecto(credentialModel: credentialModel);
   }
 }
 
-class IdentityCardDisplayInSelectionList extends StatelessWidget {
-  const IdentityCardDisplayInSelectionList({
+class DiplomaCardDisplayInSelectionList extends StatelessWidget {
+  const DiplomaCardDisplayInSelectionList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -26,12 +26,12 @@ class IdentityCardDisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IdentityCardRecto(credentialModel: credentialModel);
+    return DiplomaCardRecto(credentialModel: credentialModel);
   }
 }
 
-class IdentityCardDisplayDetail extends StatelessWidget {
-  const IdentityCardDisplayDetail({
+class DiplomaCardDisplayDetail extends StatelessWidget {
+  const DiplomaCardDisplayDetail({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -40,12 +40,12 @@ class IdentityCardDisplayDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IdentityCardRecto(credentialModel: credentialModel);
+    return DiplomaCardRecto(credentialModel: credentialModel);
   }
 }
 
-class IdentityCardRecto extends StatelessWidget {
-  const IdentityCardRecto({
+class DiplomaCardRecto extends StatelessWidget {
+  const DiplomaCardRecto({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -54,15 +54,14 @@ class IdentityCardRecto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final identityCardModel = credentialModel
-        .credentialPreview.credentialSubjectModel as IdentityCardModel;
+    final diplomaCardModel = credentialModel
+        .credentialPreview.credentialSubjectModel as DiplomaCardModel;
 
     return CredentialBaseWidget(
-      cardBackgroundImagePath: ImageStrings.identityCard,
+      cardBackgroundImagePath: ImageStrings.diplomaCard,
       issuerName: credentialModel
           .credentialPreview.credentialSubjectModel.issuedBy?.name,
-      value: '${identityCardModel.givenName}'
-          ' ${identityCardModel.familyName}',
+      value: diplomaCardModel.familyName,
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),

@@ -66,6 +66,8 @@ class CredentialSubjectModel {
         return LearningAchievementModel.fromJson(json);
       case 'TalaoCommunity':
         return TalaoCommunityCardModel.fromJson(json);
+      case 'VerifiableDiploma':
+        return DiplomaCardModel.fromJson(json);
     }
     return DefaultCredentialSubjectModel.fromJson(json);
   }
