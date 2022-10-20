@@ -9,6 +9,7 @@ class SecureStorageKeys {
   static const String isOtherEnabled = 'isOtherEnabled';
   static const String isGamingEnabled = 'isGamingEnabled';
   static const String isPaymentEnabled = 'isPaymentEnabled';
+  static const String isPassEnabled = 'isPassEnabled';
   static const String isSocialMediaEnabled = 'isSocialMediaEnabled';
   static const String fingerprintEnabled = 'fingerprintEnabled';
   static const String pinCode = 'pinCode';

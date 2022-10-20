@@ -31,4 +31,9 @@ enum CredentialSubjectType {
   tezVoucher,
   talaoCommunityCard,
   diplomaCard,
+  aragoPass,
+  aragoEmailPass,
+  aragoIdentityCard,
+  aragoLearningAchievement,
+  aragoOver18,
 }

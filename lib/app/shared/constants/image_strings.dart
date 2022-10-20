@@ -45,6 +45,13 @@ class ImageStrings {
   static const String paymentAssetCard = '$imagePath/payment-asset-card.png';
   static const String diplomaCard = '$imagePath/diploma_card.png';
 
+  static const String aragoOver18 = '$imagePath/arago_over18.png';
+  static const String aragoPass = '$imagePath/arago_pass.png';
+  static const String aragoIdentityCard = '$imagePath/arago_identity_card.png';
+  static const String aragoEmailProof = '$imagePath/arago-email-proof.png';
+  static const String aragoLearningAchievementFront =
+      '$imagePath/arago-carte-diplome-recto.png';
+
   /// dummy
   static const String dummyEmailPassCard =
       '$imagePath/dummy_email_pass_card.png';
@@ -66,6 +73,13 @@ class ImageStrings {
 
   static const String dummyPhonePassCard =
       '$imagePath/dummy_phone_pass_card.png';
+
+  static const String dummyAragoOver18Card =
+      '$imagePath/dummy_arago_over18_card.png';
+  static const String dummyAragoIdentityCard =
+      '$imagePath/dummy_arago_identity_card.png';
+  static const String dummyAragoEmailPassCard =
+      '$imagePath/dummy_arago_email_pass_card.png';
 
   static const String onBoardingFirstImage =
       '$imagePath/onBoardingFirstImage.png';

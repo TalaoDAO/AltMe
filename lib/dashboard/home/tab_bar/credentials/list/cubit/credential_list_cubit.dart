@@ -21,6 +21,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     final gamingCredentials = <HomeCredential>[];
     final communityCredentials = <HomeCredential>[];
     final identityCredentials = <HomeCredential>[];
+    final passCredentials = <HomeCredential>[];
     final proofOfOwnershipsCredentials = <HomeCredential>[];
     final othersCredentials = <HomeCredential>[];
     final gamingCategories = state.gamingCategories;
@@ -110,7 +111,17 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           break;
         case CredentialSubjectType.talaoCommunityCard:
           break;
+        case CredentialSubjectType.aragoEmailPass:
+          break;
+        case CredentialSubjectType.aragoIdentityCard:
+          break;
+        case CredentialSubjectType.aragoLearningAchievement:
+          break;
+        case CredentialSubjectType.aragoOver18:
+          break;
+        case CredentialSubjectType.aragoPass:
       }
+
       switch (credentialSubject.credentialCategory) {
         case CredentialCategory.gamingCards:
 
@@ -128,23 +139,24 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
           /// adding real credentials
           identityCredentials.add(HomeCredential.isNotDummy(credential));
-
           break;
 
         case CredentialCategory.proofOfOwnershipCards:
 
-          /// adding real credentials except tezosAssociatedWallet
-          // if (credential.credentialPreview.credentialSubjectModel
-          //         .credentialSubjectType !=
-          //     CredentialSubjectType.tezosAssociatedWallet) {
-          //   othersCredentials.add(HomeCredential.isNotDummy(credential));
-          // }
-
+          /// adding real credentials
           proofOfOwnershipsCredentials
               .add(HomeCredential.isNotDummy(credential));
           break;
 
+        case CredentialCategory.passCards:
+
+          /// adding real credentials
+          passCredentials.add(HomeCredential.isNotDummy(credential));
+          break;
+
         case CredentialCategory.othersCards:
+
+          /// adding real credentials
           othersCredentials.add(HomeCredential.isNotDummy(credential));
           break;
       }
@@ -166,6 +178,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         communityCredentials: communityCredentials,
         identityCredentials: identityCredentials,
         proofOfOwnershipCredentials: proofOfOwnershipsCredentials,
+        passCredentials: passCredentials,
         othersCredentials: othersCredentials,
         gamingCategories: gamingCategories,
         communityCategories: communityCategories,
@@ -325,6 +338,16 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             break;
           case CredentialSubjectType.talaoCommunityCard:
             break;
+          case CredentialSubjectType.aragoEmailPass:
+            break;
+          case CredentialSubjectType.aragoIdentityCard:
+            break;
+          case CredentialSubjectType.aragoLearningAchievement:
+            break;
+          case CredentialSubjectType.aragoOver18:
+            break;
+          case CredentialSubjectType.aragoPass:
+            break;
         }
 
         emit(
@@ -342,6 +365,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         final _credentials = List.of(state.proofOfOwnershipCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
         emit(state.populate(proofOfOwnershipCredentials: _credentials));
+        break;
+
+      case CredentialCategory.passCards:
+
+        /// adding real credentials
+        final _credentials = List.of(state.passCredentials)
+          ..insert(0, HomeCredential.isNotDummy(credential));
+        emit(state.populate(passCredentials: _credentials));
         break;
 
       case CredentialCategory.othersCards:
@@ -441,6 +472,23 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           ..insert(index, HomeCredential.isNotDummy(credential));
 
         emit(state.populate(proofOfOwnershipCredentials: _credentials));
+        break;
+
+      case CredentialCategory.passCards:
+
+        ///finding index of updated credential
+        final index = state.passCredentials.indexWhere(
+          (element) => element.credentialModel?.id == credential.id,
+        );
+
+        ///create updated credential list
+        final _credentials = List.of(state.passCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          )
+          ..insert(index, HomeCredential.isNotDummy(credential));
+
+        emit(state.populate(passCredentials: _credentials));
         break;
 
       case CredentialCategory.othersCards:
@@ -626,6 +674,16 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             break;
           case CredentialSubjectType.talaoCommunityCard:
             break;
+          case CredentialSubjectType.aragoPass:
+            break;
+          case CredentialSubjectType.aragoEmailPass:
+            break;
+          case CredentialSubjectType.aragoIdentityCard:
+            break;
+          case CredentialSubjectType.aragoLearningAchievement:
+            break;
+          case CredentialSubjectType.aragoOver18:
+            break;
         }
 
         emit(
@@ -642,6 +700,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             (element) => element.credentialModel?.id == credential.id,
           );
         emit(state.populate(proofOfOwnershipCredentials: _credentials));
+        break;
+
+      case CredentialCategory.passCards:
+        final _credentials = List.of(state.passCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          );
+        emit(state.populate(passCredentials: _credentials));
         break;
 
       case CredentialCategory.othersCards:
@@ -661,6 +727,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         communityCredentials: [],
         identityCredentials: [],
         proofOfOwnershipCredentials: [],
+        passCredentials: [],
         othersCredentials: [],
         gamingCategories: List.from(DiscoverList.gamingCategories),
         communityCategories: List.from(DiscoverList.communityCategories),

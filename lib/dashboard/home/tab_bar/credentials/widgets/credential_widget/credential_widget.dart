@@ -1,5 +1,10 @@
 export 'add_credential_button.dart';
 export 'age_range_widget.dart';
+export 'arago_email_pass_widget.dart';
+export 'arago_identity_card_widget.dart';
+export 'arago_learning_achievement_widget.dart';
+export 'arago_over18_widget.dart';
+export 'arago_pass_widget.dart';
 export 'certificate_of_employment_widget.dart';
 export 'credential_base_widget.dart';
 export 'default_credential_subject_widget.dart';

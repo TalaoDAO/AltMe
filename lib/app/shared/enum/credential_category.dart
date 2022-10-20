@@ -3,5 +3,6 @@ enum CredentialCategory {
   identityCards,
   communityCards,
   proofOfOwnershipCards,
+  passCards,
   othersCards
 }
