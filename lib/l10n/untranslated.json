@@ -484,6 +484,7 @@
     "identityCredentialHomeSubtitle",
     "identityCredentialDiscoverSubtitle",
     "paymentCredentialHomeSubtitle",
+    "passCredentialHomeSubtitle",
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
@@ -557,7 +558,8 @@
     "phoneProofDummyDescription",
     "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
-    "credentialStatus"
+    "credentialStatus",
+    "pass"
   ],
 
   "es": [
@@ -1045,6 +1047,7 @@
     "identityCredentialHomeSubtitle",
     "identityCredentialDiscoverSubtitle",
     "paymentCredentialHomeSubtitle",
+    "passCredentialHomeSubtitle",
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
@@ -1118,7 +1121,8 @@
     "phoneProofDummyDescription",
     "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
-    "credentialStatus"
+    "credentialStatus",
+    "pass"
   ],
 
   "fr": [
@@ -1606,6 +1610,7 @@
     "identityCredentialHomeSubtitle",
     "identityCredentialDiscoverSubtitle",
     "paymentCredentialHomeSubtitle",
+    "passCredentialHomeSubtitle",
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
@@ -1679,7 +1684,8 @@
     "phoneProofDummyDescription",
     "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
-    "credentialStatus"
+    "credentialStatus",
+    "pass"
   ],
 
   "it": [
@@ -2167,6 +2173,7 @@
     "identityCredentialHomeSubtitle",
     "identityCredentialDiscoverSubtitle",
     "paymentCredentialHomeSubtitle",
+    "passCredentialHomeSubtitle",
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
@@ -2240,6 +2247,7 @@
     "phoneProofDummyDescription",
     "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
-    "credentialStatus"
+    "credentialStatus",
+    "pass"
   ]
 }

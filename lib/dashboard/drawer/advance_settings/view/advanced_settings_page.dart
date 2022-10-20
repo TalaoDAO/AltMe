@@ -69,6 +69,11 @@ class _AdvancedSettingsViewState extends State<AdvancedSettingsView> {
                   onPressed: advanceSEttingsCubit.toggleCommunityRadio,
                 ),
                 AdvanceSettingsRadioItem(
+                  title: l10n.pass,
+                  isSelected: state.isPassEnabled,
+                  onPressed: advanceSEttingsCubit.togglePassRadio,
+                ),
+                AdvanceSettingsRadioItem(
                   title: l10n.other,
                   isSelected: state.isOtherEnabled,
                   onPressed: advanceSEttingsCubit.toggleOtherRadio,

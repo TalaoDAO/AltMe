@@ -19,6 +19,7 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
             isSocialMediaEnabled: false,
             isCommunityEnabled: false,
             isOtherEnabled: false,
+            isPassEnabled: true,
           ),
         ) {
     initialise();
@@ -51,6 +52,10 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
                 .get(SecureStorageKeys.isSocialMediaEnabled) ??
             false.toString()) ==
         'true';
+    final isPassEnabled =
+        (await secureStorageProvider.get(SecureStorageKeys.isPassEnabled) ??
+                false.toString()) ==
+            'true';
     emit(
       AdvanceSettingsState(
         isGamingEnabled: isGamingEnabled,
@@ -59,6 +64,7 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
         isSocialMediaEnabled: isSocialMediaEnabled,
         isCommunityEnabled: isCommunityEnabled,
         isOtherEnabled: isOtherEnabled,
+        isPassEnabled: isPassEnabled,
       ),
     );
   }
@@ -100,6 +106,14 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
     secureStorageProvider.set(
       SecureStorageKeys.isCommunityEnabled,
       state.isCommunityEnabled.toString(),
+    );
+  }
+
+  void togglePassRadio() {
+    emit(state.copyWith(isPassEnabled: !state.isPassEnabled));
+    secureStorageProvider.set(
+      SecureStorageKeys.isPassEnabled,
+      state.isPassEnabled.toString(),
     );
   }
 

@@ -177,6 +177,11 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.diplomaCard:
+      case CredentialSubjectType.aragoEmailPass:
+      case CredentialSubjectType.aragoIdentityCard:
+      case CredentialSubjectType.aragoLearningAchievement:
+      case CredentialSubjectType.aragoOver18:
+      case CredentialSubjectType.aragoPass:
         break;
     }
 
