@@ -106,6 +106,9 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.tezVoucher:
           gamingCategories.remove(CredentialSubjectType.tezVoucher);
           break;
+        case CredentialSubjectType.diplomaCard:
+          gamingCategories.remove(CredentialSubjectType.tezVoucher);
+          break;
         case CredentialSubjectType.talaoCommunityCard:
           break;
       }
@@ -246,6 +249,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.ecole42LearningAchievement:
             break;
           case CredentialSubjectType.emailPass:
+            break;
+          case CredentialSubjectType.diplomaCard:
             break;
           case CredentialSubjectType.identityPass:
             _removeDummyIfCredentialExist(
@@ -557,6 +562,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.ecole42LearningAchievement:
             break;
           case CredentialSubjectType.emailPass:
+            break;
+          case CredentialSubjectType.diplomaCard:
             break;
           case CredentialSubjectType.identityPass:
             break;

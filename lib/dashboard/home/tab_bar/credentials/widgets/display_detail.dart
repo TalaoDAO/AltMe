@@ -122,6 +122,8 @@ class DisplayDetail extends StatelessWidget {
         return TalaoCommunityCardDisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.diplomaCard:
+        return DiplomaCardDisplayDetail(credentialModel: credentialModel);
     }
   }
 }

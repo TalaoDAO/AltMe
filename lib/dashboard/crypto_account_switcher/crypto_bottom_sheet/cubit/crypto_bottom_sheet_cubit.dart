@@ -46,8 +46,7 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
       accountName: accountName,
       isImported: false,
       mnemonicOrKey: ssiMnemonic!,
-      onComplete: (cryptoAccount, newIndex) async {
-        await setCurrentWalletAccount(newIndex);
+      onComplete: (cryptoAccount) async {
         emit(
           state.success(
             cryptoAccount: cryptoAccount,

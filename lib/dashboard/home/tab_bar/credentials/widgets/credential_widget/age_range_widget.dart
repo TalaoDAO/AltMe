@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/widgets/credential_widget/identity_credential_base_widget.dart';
 import 'package:flutter/material.dart';
 
 class AgeRangeDisplayInList extends StatelessWidget {
@@ -59,7 +58,7 @@ class AgeRangeRecto extends Recto {
     final ageRangeModel = credentialModel
         .credentialPreview.credentialSubjectModel as AgeRangeModel;
 
-    return IdentityCredentialBaseWidget(
+    return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.ageRangeProof,
       issuerName: credentialModel
           .credentialPreview.credentialSubjectModel.issuedBy?.name,

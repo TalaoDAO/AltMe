@@ -161,6 +161,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                                 await Navigator.of(context)
                                                     .pushReplacement<void,
                                                         void>(
+                                                  // ignore: lines_longer_than_80_chars
                                                   QueryByExampleCredentialPickPage
                                                       .route(
                                                     uri: uri,
@@ -222,12 +223,9 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                   body: Column(
                     children: <Widget>[
                       Text(
-                        l10n.selectYourTezosAssociatedWallet,
-                        style: Theme.of(context).textTheme.credentialSubtitle,
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        reason == '' ? l10n.credentialPickSelect : reason,
+                        reason.trim() == ''
+                            ? l10n.credentialPickSelect
+                            : reason,
                         style: Theme.of(context).textTheme.credentialSubtitle,
                       ),
                       const SizedBox(height: 12),

@@ -86,7 +86,6 @@ Future<bool> isWalletCreated({
       mnemonicOrKey: ssiMnemonic,
       isImported: false,
     );
-    await walletCubit.setCurrentWalletAccount(0);
   }
 
   await didCubit.load(

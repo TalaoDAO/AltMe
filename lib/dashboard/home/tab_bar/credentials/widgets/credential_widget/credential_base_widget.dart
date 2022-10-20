@@ -4,8 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class IdentityCredentialBaseWidget extends StatelessWidget {
-  const IdentityCredentialBaseWidget({
+class CredentialBaseWidget extends StatelessWidget {
+  const CredentialBaseWidget({
     Key? key,
     required this.cardBackgroundImagePath,
     this.aspectRatio = Sizes.credentialAspectRatio,
@@ -30,20 +30,20 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: aspectRatio,
         child: CustomMultiChildLayout(
-          delegate: IdentityCredentialBaseWidgetDelegate(position: Offset.zero),
+          delegate: CredentialBaseWidgetDelegate(position: Offset.zero),
           children: [
-            LayoutId(
-              id: 'provided-by',
-              child: FractionallySizedBox(
-                widthFactor: 0.75,
-                heightFactor: 0.11,
-                child: MyText(
+            if (issuerName != null && issuerName!.isNotEmpty)
+              LayoutId(
+                id: 'provided-by',
+                child: FractionallySizedBox(
+                  widthFactor: 0.75,
+                  heightFactor: 0.11,
+                  child: MyText(
                     '${l10n.providedBy} $issuerName',
                     style: Theme.of(context).textTheme.identitiyBaseLightText,
-                    
                   ),
+                ),
               ),
-            ),
             if (value != null)
               LayoutId(
                 id: 'value',
@@ -111,8 +111,8 @@ class IdentityCredentialBaseWidget extends StatelessWidget {
   }
 }
 
-class IdentityCredentialBaseWidgetDelegate extends MultiChildLayoutDelegate {
-  IdentityCredentialBaseWidgetDelegate({this.position = Offset.zero});
+class CredentialBaseWidgetDelegate extends MultiChildLayoutDelegate {
+  CredentialBaseWidgetDelegate({this.position = Offset.zero});
 
   final Offset position;
 
@@ -165,7 +165,7 @@ class IdentityCredentialBaseWidgetDelegate extends MultiChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(IdentityCredentialBaseWidgetDelegate oldDelegate) {
+  bool shouldRelayout(CredentialBaseWidgetDelegate oldDelegate) {
     return oldDelegate.position != position;
   }
 }

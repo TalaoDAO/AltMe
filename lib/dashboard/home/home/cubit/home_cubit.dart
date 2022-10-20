@@ -85,6 +85,7 @@ class HomeCubit extends Cubit<HomeState> {
     } else {
       passBaseStatus = PassBaseStatus.undone;
     }
+
     if (passBaseStatus != PassBaseStatus.approved) {
       try {
         final did = didCubit.state.did!;
@@ -306,7 +307,7 @@ class HomeCubit extends Cubit<HomeState> {
         .toList();
 
     final String? lastNotifiedRewardId = await secureStorageProvider.get(
-      SecureStorageKeys.lastNotifiedUNORewardId+walletAddress,
+      SecureStorageKeys.lastNotifiedUNORewardId + walletAddress,
     );
 
     final lastOperation = operations.first; //operations sorted by time in api
@@ -315,7 +316,7 @@ class HomeCubit extends Cubit<HomeState> {
     } else {
       // save the operation id to storage
       await secureStorageProvider.set(
-        SecureStorageKeys.lastNotifiedUNORewardId+walletAddress,
+        SecureStorageKeys.lastNotifiedUNORewardId + walletAddress,
         lastOperation.id.toString(),
       );
 
@@ -367,7 +368,7 @@ class HomeCubit extends Cubit<HomeState> {
     );
 
     final String? lastNotifiedRewardId = await secureStorageProvider.get(
-      SecureStorageKeys.lastNotifiedXTZRewardId+walletAddress,
+      SecureStorageKeys.lastNotifiedXTZRewardId + walletAddress,
     );
 
     final lastOperation = operations.first; //operations sorted by time in api
@@ -376,7 +377,7 @@ class HomeCubit extends Cubit<HomeState> {
     } else {
       // save the operation id to storage
       await secureStorageProvider.set(
-        SecureStorageKeys.lastNotifiedXTZRewardId+walletAddress,
+        SecureStorageKeys.lastNotifiedXTZRewardId + walletAddress,
         lastOperation.id.toString(),
       );
 

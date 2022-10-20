@@ -43,6 +43,7 @@ class ImageStrings {
       '$imagePath/talao_community_card.png';
   static const String identityCard = '$imagePath/identity_card.png';
   static const String paymentAssetCard = '$imagePath/payment-asset-card.png';
+  static const String diplomaCard = '$imagePath/diploma_card.png';
 
   /// dummy
   static const String dummyEmailPassCard =
