@@ -46,7 +46,7 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
       accountName: accountName,
       isImported: false,
       mnemonicOrKey: ssiMnemonic!,
-      onComplete: (cryptoAccount, newIndex) {
+      onComplete: (cryptoAccount) {
         emit(
           state.success(
             cryptoAccount: cryptoAccount,
