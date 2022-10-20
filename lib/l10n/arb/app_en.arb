@@ -84,7 +84,7 @@
   "credentialPickPresent": "Present",
   "credentialPickTitle": "Select credential(s)",
   "selectYourTezosAssociatedWallet": "Select your Tezos associated wallet",
-  "credentialPickSelect": "Choose only one credential from your wallet to present",
+  "credentialPickSelect": "Select your credential",
   "siopV2credentialPickSelect": "Choose only one credential from your wallet to present",
   "credentialPickAlertMessage": "Do you want to give an alias to this credential?",
   "credentialReceiveTitle": "Credential Offer",
