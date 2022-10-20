@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/widgets/credential_widget/identity_credential_base_widget.dart';
 import 'package:flutter/material.dart';
 
 class GenderDisplayInList extends StatelessWidget {
@@ -59,7 +58,7 @@ class GenderRecto extends Recto {
     final genderModel =
         credentialModel.credentialPreview.credentialSubjectModel as GenderModel;
 
-    return IdentityCredentialBaseWidget(
+    return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.genderProof,
       issuerName: credentialModel
           .credentialPreview.credentialSubjectModel.issuedBy?.name,

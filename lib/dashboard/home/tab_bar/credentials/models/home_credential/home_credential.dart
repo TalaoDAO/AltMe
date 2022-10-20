@@ -176,6 +176,7 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.certificateOfEmployment:
+      case CredentialSubjectType.diplomaCard:
         break;
     }
 
