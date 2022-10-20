@@ -142,11 +142,11 @@ class WalletCubit extends Cubit<WalletState> {
       cryptoAccountString,
     );
 
-    onComplete?.call(cryptoAccount, index + 1);
+    onComplete?.call(cryptoAccount, index);
     emitCryptoAccount(cryptoAccount);
 
     /// set new account as current
-    await setCurrentWalletAccount(index + 1);
+    await setCurrentWalletAccount(index);
 
     final credential = await generateAssociatedWalletCredential(
       accountName: cryptoAccountData.name,
