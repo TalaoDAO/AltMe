@@ -5,6 +5,7 @@ class BeaconSignPayloadState extends Equatable {
   const BeaconSignPayloadState({
     this.status = AppStatus.init,
     this.message,
+    this.payloadMessage,
   });
 
   factory BeaconSignPayloadState.fromJson(Map<String, dynamic> json) =>
@@ -12,9 +13,13 @@ class BeaconSignPayloadState extends Equatable {
 
   final AppStatus status;
   final StateMessage? message;
+  final String? payloadMessage;
 
   BeaconSignPayloadState loading() {
-    return const BeaconSignPayloadState(status: AppStatus.loading);
+    return BeaconSignPayloadState(
+      status: AppStatus.loading,
+      payloadMessage: payloadMessage,
+    );
   }
 
   BeaconSignPayloadState error({
@@ -23,24 +28,26 @@ class BeaconSignPayloadState extends Equatable {
     return BeaconSignPayloadState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
+      payloadMessage: payloadMessage,
     );
   }
 
   BeaconSignPayloadState copyWith({
     AppStatus appStatus = AppStatus.idle,
     MessageHandler? messageHandler,
-    int? selectedIndex,
+    String? payloadMessage,
   }) {
     return BeaconSignPayloadState(
       status: appStatus,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
+      payloadMessage: payloadMessage ?? this.payloadMessage,
     );
   }
 
   Map<String, dynamic> toJson() => _$BeaconSignPayloadStateToJson(this);
 
   @override
-  List<Object?> get props => [status, message];
+  List<Object?> get props => [status, message, payloadMessage];
 }

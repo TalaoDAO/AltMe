@@ -609,5 +609,6 @@
   "passportFootprintDummyDescription": "Get a Unique ID Number to share.",
   "seeMoreNFTInformationOn": "See more NFT information on",
   "credentialStatus": "Status",
-  "pass": "Pass"
+  "pass": "Pass",
+  "payloadFormatErrorMessage": "The format of paylod is incorrect."
 }

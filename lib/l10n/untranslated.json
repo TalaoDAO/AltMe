@@ -559,7 +559,8 @@
     "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
     "credentialStatus",
-    "pass"
+    "pass",
+    "payloadFormatErrorMessage"
   ],
 
   "es": [
@@ -1122,7 +1123,8 @@
     "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
     "credentialStatus",
-    "pass"
+    "pass",
+    "payloadFormatErrorMessage"
   ],
 
   "fr": [
@@ -1685,7 +1687,8 @@
     "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
     "credentialStatus",
-    "pass"
+    "pass",
+    "payloadFormatErrorMessage"
   ],
 
   "it": [
@@ -2248,6 +2251,7 @@
     "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
     "credentialStatus",
-    "pass"
+    "pass",
+    "payloadFormatErrorMessage"
   ]
 }

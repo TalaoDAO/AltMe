@@ -462,6 +462,12 @@ class ResponseMessage with MessageHandler {
           return ResponseString.RESPONSE_STRING_ageRangeHowToGetIt.localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_payloadFormatErrorMessage:
+          return ResponseString.RESPONSE_STRING_payloadFormatErrorMessage
+              .localise(
+            context,
+          );
       }
     }
     return '';

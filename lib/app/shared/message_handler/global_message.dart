@@ -284,4 +284,6 @@ class GlobalMessage {
   String get RESPONSE_STRING_ageRangeExpirationDate =>
       l10n.ageRangeExpirationDate;
   String get RESPONSE_STRING_ageRangeHowToGetIt => l10n.ageRangeHowToGetIt;
+  String get RESPONSE_STRING_payloadFormatErrorMessage =>
+      l10n.payloadFormatErrorMessage;
 }

@@ -8,6 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:web3dart/crypto.dart';
 
 part 'beacon_sign_payload_cubit.g.dart';
 part 'beacon_sign_payload_state.dart';
@@ -24,6 +25,34 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
   final BeaconCubit beaconCubit;
 
   final log = getLogger('BeaconSignPayloadCubit');
+
+  void decodeMessage() {
+    try {
+      log.i('decoding payload');
+      emit(state.loading());
+
+      final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
+
+      final message = hexToBytes(beaconRequest.request!.payload!);
+      final messageInUtf8 = utf8.decode(message, allowMalformed: true);
+
+      emit(
+        state.copyWith(
+          appStatus: AppStatus.idle,
+          payloadMessage: messageInUtf8,
+        ),
+      );
+    } catch (e) {
+      log.e('decoding failure , e: $e');
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_payloadFormatErrorMessage,
+          ),
+        ),
+      );
+    }
+  }
 
   Future<void> sign() async {
     try {

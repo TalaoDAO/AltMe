@@ -327,6 +327,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_ageRangeHowToGetIt:
         return globalMessage.RESPONSE_STRING_ageRangeHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_payloadFormatErrorMessage:
+        return globalMessage.RESPONSE_STRING_payloadFormatErrorMessage;
     }
   }
 }
