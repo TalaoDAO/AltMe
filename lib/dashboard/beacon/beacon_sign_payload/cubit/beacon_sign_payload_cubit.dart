@@ -8,6 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:web3dart/crypto.dart';
 
 part 'beacon_sign_payload_cubit.g.dart';
 part 'beacon_sign_payload_state.dart';
@@ -24,6 +25,45 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
   final BeaconCubit beaconCubit;
 
   final log = getLogger('BeaconSignPayloadCubit');
+
+  void decodeMessage() {
+    try {
+      log.i('decoding payload');
+      emit(state.loading());
+
+      final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
+
+      final String payload = beaconRequest.request!.payload!;
+
+      late String encodedPayload;
+
+      if (payload.startsWith('05') || payload.startsWith('03')) {
+        encodedPayload = beaconRequest.request!.payload!;
+      } else {
+        encodedPayload = stringToHexPrefixedWith05(payload: payload);
+      }
+
+      final bytes = hexToBytes(encodedPayload);
+      final String payloadMessage = utf8.decode(bytes, allowMalformed: true);
+
+      emit(
+        state.copyWith(
+          appStatus: AppStatus.idle,
+          payloadMessage: payloadMessage,
+          encodedPaylod: encodedPayload,
+        ),
+      );
+    } catch (e) {
+      log.e('decoding failure , e: $e');
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_payloadFormatErrorMessage,
+          ),
+        ),
+      );
+    }
+  }
 
   Future<void> sign() async {
     try {
@@ -51,7 +91,7 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
 
       final signature = Dartez.signPayload(
         signer: signer as SoftSigner,
-        payload: beaconCubit.state.beaconRequest!.request!.payload!,
+        payload: state.encodedPaylod!,
       );
 
       final Map response = await beacon.signPayloadResponse(

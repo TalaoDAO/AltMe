@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:altme/dashboard/home/home.dart';
+import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
 
 String generateDefaultAccountName(
@@ -48,4 +49,29 @@ KeyStoreModel getKeysFromSecretKey({required String secretKey}) {
     publicKey: sourceKeystore[1],
     publicKeyHash: sourceKeystore[2],
   );
+}
+
+String stringToHexPrefixedWith05({required String payload}) {
+  final String formattedInput = <String>[
+    'Tezos Signed Message:',
+    'altme.io',
+    DateTime.now().toString(),
+    payload,
+  ].join(' ');
+
+  final String bytes = char2Bytes(formattedInput);
+
+  const String prefix = '05';
+  const String stringIsHex = '0100';
+  final String bytesOfByteLength = char2Bytes(bytes.length.toString());
+
+  final payloadBytes = '$prefix$stringIsHex$bytesOfByteLength$bytes';
+
+  return payloadBytes;
+}
+
+String char2Bytes(String text) {
+  final List<int> encode = utf8.encode(text);
+  final String bytes = hex.encode(encode);
+  return bytes;
 }

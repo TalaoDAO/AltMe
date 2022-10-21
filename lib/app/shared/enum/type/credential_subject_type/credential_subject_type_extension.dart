@@ -67,6 +67,16 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xff4700D8);
       case CredentialSubjectType.diplomaCard:
         return const Color(0xff4700D8);
+      case CredentialSubjectType.aragoIdentityCard:
+        return const Color(0xff2596be);
+      case CredentialSubjectType.aragoOver18:
+        return const Color(0xffCAFFBF);
+      case CredentialSubjectType.aragoEmailPass:
+        return const Color(0xFFffD6A5);
+      case CredentialSubjectType.aragoLearningAchievement:
+        return const Color(0xFFFFADAD);
+      case CredentialSubjectType.aragoPass:
+        return const Color(0xff4700D8);
       case CredentialSubjectType.defaultCredential:
         return Colors.white;
     }
@@ -126,6 +136,16 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return Icons.gamepad;
       case CredentialSubjectType.talaoCommunityCard:
         return Icons.perm_identity;
+      case CredentialSubjectType.aragoPass:
+        return Icons.perm_identity;
+      case CredentialSubjectType.aragoIdentityCard:
+        return Icons.perm_identity;
+      case CredentialSubjectType.aragoLearningAchievement:
+        return Icons.star_rate_outlined;
+      case CredentialSubjectType.aragoEmailPass:
+        return Icons.mail;
+      case CredentialSubjectType.aragoOver18:
+        return Icons.accessible_rounded;
       case CredentialSubjectType.defaultCredential:
         return Icons.fact_check_outlined;
     }

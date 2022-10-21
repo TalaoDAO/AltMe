@@ -123,6 +123,26 @@ class DisplayInSelectionList extends StatelessWidget {
         return DiplomaCardDisplayInSelectionList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.aragoPass:
+        return AragoPassDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.aragoEmailPass:
+        return AragoEmailPassDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.aragoIdentityCard:
+        return AragoIdentityCardDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.aragoLearningAchievement:
+        return AragoLearningAchievementDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.aragoOver18:
+        return AragoOver18DisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
     }
   }
 }

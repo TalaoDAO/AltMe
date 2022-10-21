@@ -9,6 +9,7 @@ class CredentialListState extends Equatable {
     List<HomeCredential>? communityCredentials,
     List<HomeCredential>? identityCredentials,
     List<HomeCredential>? proofOfOwnershipCredentials,
+    List<HomeCredential>? passCredentials,
     List<HomeCredential>? othersCredentials,
     List<CredentialSubjectType>? gamingCategories,
     List<CredentialSubjectType>? communityCategories,
@@ -17,6 +18,7 @@ class CredentialListState extends Equatable {
         communityCredentials = communityCredentials ?? [],
         identityCredentials = identityCredentials ?? [],
         proofOfOwnershipCredentials = proofOfOwnershipCredentials ?? [],
+        passCredentials = passCredentials ?? [],
         othersCredentials = othersCredentials ?? [],
         gamingCategories =
             gamingCategories ?? List.from(DiscoverList.gamingCategories),
@@ -33,6 +35,7 @@ class CredentialListState extends Equatable {
   final List<HomeCredential> communityCredentials;
   final List<HomeCredential> identityCredentials;
   final List<HomeCredential> proofOfOwnershipCredentials;
+  final List<HomeCredential> passCredentials;
   final List<HomeCredential> othersCredentials;
   final List<CredentialSubjectType> gamingCategories;
   final List<CredentialSubjectType> communityCategories;
@@ -46,6 +49,7 @@ class CredentialListState extends Equatable {
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
       proofOfOwnershipCredentials: proofOfOwnershipCredentials,
+      passCredentials: passCredentials,
       othersCredentials: othersCredentials,
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
@@ -63,6 +67,7 @@ class CredentialListState extends Equatable {
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
       proofOfOwnershipCredentials: proofOfOwnershipCredentials,
+      passCredentials: passCredentials,
       othersCredentials: othersCredentials,
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
@@ -77,6 +82,7 @@ class CredentialListState extends Equatable {
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
       proofOfOwnershipCredentials: proofOfOwnershipCredentials,
+      passCredentials: passCredentials,
       othersCredentials: othersCredentials,
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
@@ -92,6 +98,7 @@ class CredentialListState extends Equatable {
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
       proofOfOwnershipCredentials: proofOfOwnershipCredentials,
+      passCredentials: passCredentials,
       othersCredentials: othersCredentials,
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
@@ -104,6 +111,7 @@ class CredentialListState extends Equatable {
     List<HomeCredential>? communityCredentials,
     List<HomeCredential>? identityCredentials,
     List<HomeCredential>? proofOfOwnershipCredentials,
+    List<HomeCredential>? passCredentials,
     List<HomeCredential>? othersCredentials,
     List<CredentialSubjectType>? gamingCategories,
     List<CredentialSubjectType>? communityCategories,
@@ -116,6 +124,7 @@ class CredentialListState extends Equatable {
       identityCredentials: identityCredentials ?? this.identityCredentials,
       proofOfOwnershipCredentials:
           proofOfOwnershipCredentials ?? this.proofOfOwnershipCredentials,
+      passCredentials: passCredentials ?? this.passCredentials,
       othersCredentials: othersCredentials ?? this.othersCredentials,
       gamingCategories: gamingCategories ?? this.gamingCategories,
       communityCategories: communityCategories ?? this.communityCategories,
@@ -136,6 +145,7 @@ class CredentialListState extends Equatable {
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
       proofOfOwnershipCredentials: proofOfOwnershipCredentials,
+      passCredentials: passCredentials,
       othersCredentials: othersCredentials,
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
@@ -152,6 +162,7 @@ class CredentialListState extends Equatable {
         communityCredentials,
         identityCredentials,
         proofOfOwnershipCredentials,
+        passCredentials,
         othersCredentials,
         message,
         gamingCategories,

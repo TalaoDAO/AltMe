@@ -103,4 +103,5 @@ enum ResponseString {
   RESPONSE_STRING_ageRangeWhyGetThisCard,
   RESPONSE_STRING_ageRangeExpirationDate,
   RESPONSE_STRING_ageRangeHowToGetIt,
+  RESPONSE_STRING_payloadFormatErrorMessage,
 }

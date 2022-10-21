@@ -534,10 +534,11 @@
   "identityCredentialHomeSubtitle": "Prove things about yourself while protecting your personal data.",
   "identityCredentialDiscoverSubtitle": "Prove things about yourself while protecting your personal data.",
   "paymentCredentialHomeSubtitle": "Use your blockchain accounts securely.",
+  "passCredentialHomeSubtitle": "",
   "communityCredentialHomeSubtitle": "Benefit from advantages offered by Communities you like.",
   "communityCredentialDiscoverSubtitle": "Get exclusive advantages offered by Communities you like.",
-  "otherCredentialHomeSubtitle": "Other types of cards in your wallet : Ticket, Pass...",
-  "otherCredentialDiscoverSubtitle": "Other types of cards you can add : Ticket, Pass...",
+  "otherCredentialHomeSubtitle": "Other types of cards in your wallet : Ticket",
+  "otherCredentialDiscoverSubtitle": "Other types of cards you can add : Ticket",
   "showMore": "...Show more",
   "showLess": "Show less...",
   "youHaveReceivedARewardOf": "You have received a reward of",
@@ -607,5 +608,7 @@
   "phoneProofDummyDescription": "Prove your phone number in Web 3.",
   "passportFootprintDummyDescription": "Get a Unique ID Number to share.",
   "seeMoreNFTInformationOn": "See more NFT information on",
-  "credentialStatus": "Status"
+  "credentialStatus": "Status",
+  "pass": "Pass",
+  "payloadFormatErrorMessage": "The format of paylod is incorrect."
 }

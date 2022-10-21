@@ -484,6 +484,7 @@
     "identityCredentialHomeSubtitle",
     "identityCredentialDiscoverSubtitle",
     "paymentCredentialHomeSubtitle",
+    "passCredentialHomeSubtitle",
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
@@ -557,7 +558,9 @@
     "phoneProofDummyDescription",
     "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
-    "credentialStatus"
+    "credentialStatus",
+    "pass",
+    "payloadFormatErrorMessage"
   ],
 
   "es": [
@@ -1045,6 +1048,7 @@
     "identityCredentialHomeSubtitle",
     "identityCredentialDiscoverSubtitle",
     "paymentCredentialHomeSubtitle",
+    "passCredentialHomeSubtitle",
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
@@ -1118,7 +1122,9 @@
     "phoneProofDummyDescription",
     "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
-    "credentialStatus"
+    "credentialStatus",
+    "pass",
+    "payloadFormatErrorMessage"
   ],
 
   "fr": [
@@ -1606,6 +1612,7 @@
     "identityCredentialHomeSubtitle",
     "identityCredentialDiscoverSubtitle",
     "paymentCredentialHomeSubtitle",
+    "passCredentialHomeSubtitle",
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
@@ -1679,7 +1686,9 @@
     "phoneProofDummyDescription",
     "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
-    "credentialStatus"
+    "credentialStatus",
+    "pass",
+    "payloadFormatErrorMessage"
   ],
 
   "it": [
@@ -2167,6 +2176,7 @@
     "identityCredentialHomeSubtitle",
     "identityCredentialDiscoverSubtitle",
     "paymentCredentialHomeSubtitle",
+    "passCredentialHomeSubtitle",
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
     "otherCredentialHomeSubtitle",
@@ -2240,6 +2250,8 @@
     "phoneProofDummyDescription",
     "passportFootprintDummyDescription",
     "seeMoreNFTInformationOn",
-    "credentialStatus"
+    "credentialStatus",
+    "pass",
+    "payloadFormatErrorMessage"
   ]
 }

@@ -68,6 +68,16 @@ class CredentialSubjectModel {
         return TalaoCommunityCardModel.fromJson(json);
       case 'VerifiableDiploma':
         return DiplomaCardModel.fromJson(json);
+      case 'AragoOver18':
+        return AragoOver18Model.fromJson(json);
+      case 'AragoPass':
+        return AragoPassModel.fromJson(json);
+      case 'AragoIdCard':
+        return AragoIdentityCardModel.fromJson(json);
+      case 'AragoEmailPass':
+        return AragoEmailPassModel.fromJson(json);
+      case 'AragoLearningAchievement':
+        return AragoLearningAchievementModel.fromJson(json);
     }
     return DefaultCredentialSubjectModel.fromJson(json);
   }
