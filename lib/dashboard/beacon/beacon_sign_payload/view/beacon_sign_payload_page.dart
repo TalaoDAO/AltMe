@@ -66,15 +66,9 @@ class _BeaconSignPayloadViewState extends State<BeaconSignPayloadView> {
         }
 
         if (state.message != null) {
-          final MessageHandler messageHandler = state.message!.messageHandler!;
-          final String message =
-              messageHandler.getMessage(context, messageHandler);
-          showDialog<bool>(
+          AlertMessage.showStateMessage(
             context: context,
-            builder: (context) => InfoDialog(
-              title: message,
-              button: l10n.ok,
-            ),
+            stateMessage: state.message!,
           );
         }
 
@@ -162,7 +156,7 @@ class _BeaconSignPayloadViewState extends State<BeaconSignPayloadView> {
                       verticalSpacing: 15,
                       borderRadius: Sizes.normalRadius,
                       text: l10n.sign,
-                      onPressed: state.payloadMessage == null
+                      onPressed: state.encodedPaylod == null
                           ? null
                           : () {
                               context.read<BeaconSignPayloadCubit>().sign();

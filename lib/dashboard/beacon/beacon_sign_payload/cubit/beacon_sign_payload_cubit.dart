@@ -33,13 +33,24 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
 
       final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
 
-      final message = hexToBytes(beaconRequest.request!.payload!);
-      final messageInUtf8 = utf8.decode(message, allowMalformed: true);
+      final String payload = beaconRequest.request!.payload!;
+
+      late String encodedPayload;
+
+      if (payload.startsWith('05') || payload.startsWith('03')) {
+        encodedPayload = beaconRequest.request!.payload!;
+      } else {
+        encodedPayload = stringToHexPrefixedWith05(payload: payload);
+      }
+
+      final bytes = hexToBytes(encodedPayload);
+      final String payloadMessage = utf8.decode(bytes, allowMalformed: true);
 
       emit(
         state.copyWith(
           appStatus: AppStatus.idle,
-          payloadMessage: messageInUtf8,
+          payloadMessage: payloadMessage,
+          encodedPaylod: encodedPayload,
         ),
       );
     } catch (e) {
@@ -80,7 +91,7 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
 
       final signature = Dartez.signPayload(
         signer: signer as SoftSigner,
-        payload: beaconCubit.state.beaconRequest!.request!.payload!,
+        payload: state.encodedPaylod!,
       );
 
       final Map response = await beacon.signPayloadResponse(
