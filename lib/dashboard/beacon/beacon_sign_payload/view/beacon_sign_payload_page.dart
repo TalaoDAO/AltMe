@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/scan/scan.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
@@ -24,10 +25,10 @@ class BeaconSignPayloadPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => BeaconSignPayloadCubit(
-        beacon: Beacon(),
-        beaconCubit: context.read<BeaconCubit>(),
-        walletCubit: context.read<WalletCubit>(),
-      ),
+          beacon: Beacon(),
+          beaconCubit: context.read<BeaconCubit>(),
+          walletCubit: context.read<WalletCubit>(),
+          qrCodeScanCubit: context.read<QRCodeScanCubit>()),
       child: const BeaconSignPayloadView(),
     );
   }
