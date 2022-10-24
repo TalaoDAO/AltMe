@@ -249,7 +249,8 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       }
 
       if (state.status == BeaconStatus.permission) {
-        Navigator.of(context).push<void>(BeaconConfirmConnectionPage.route());
+        Navigator.of(context)
+            .pushReplacement<void, void>(BeaconConfirmConnectionPage.route());
       }
 
       if (state.status == BeaconStatus.signPayload) {
