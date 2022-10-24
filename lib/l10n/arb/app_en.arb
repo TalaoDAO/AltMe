@@ -610,5 +610,6 @@
   "seeMoreNFTInformationOn": "See more NFT information on",
   "credentialStatus": "Status",
   "pass": "Pass",
-  "payloadFormatErrorMessage": "The format of paylod is incorrect."
+  "payloadFormatErrorMessage": "The format of paylod is incorrect.",
+  "thisFeatureIsNotSupportedMessage": "Sorry! This feature is not supported yet"
 }
