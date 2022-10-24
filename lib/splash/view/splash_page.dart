@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/splash/splash.dart';
@@ -58,6 +59,8 @@ class _SplashViewState extends State<SplashView> {
         (Uri? uri) {
           if (!mounted) return;
           log.i('got uri: $uri');
+          String beaconData = '';
+          bool isBeaconRequest = false;
           uri?.queryParameters.forEach((key, value) async {
             if (key == 'uri') {
               final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
@@ -68,7 +71,16 @@ class _SplashViewState extends State<SplashView> {
                 await context.read<QRCodeScanCubit>().deepLink();
               }
             }
+            if (key == 'type' && value == 'tzip10') {
+              isBeaconRequest = true;
+            }
+            if (key == 'data') {
+              beaconData = value;
+            }
           });
+          if (isBeaconRequest && beaconData != '') {
+            context.read<BeaconCubit>().peerFromDeepLink(beaconData);
+          }
         },
         onError: (Object err) {
           if (!mounted) return;
@@ -100,13 +112,24 @@ class _SplashViewState extends State<SplashView> {
           log.i('got initial uri: $uri');
           if (!mounted) return;
           log.i('got uri: $uri');
+          String beaconData = '';
+          bool isBeaconRequest = false;
           uri.queryParameters.forEach((key, value) {
             if (key == 'uri') {
               /// add uri to deepLink cubit
               final url = value.replaceAll(RegExp(r'^\"|\"$'), '');
               context.read<DeepLinkCubit>().addDeepLink(url);
             }
+            if (key == 'type' && value == 'tzip10') {
+              isBeaconRequest = true;
+            }
+            if (key == 'data') {
+              beaconData = value;
+            }
           });
+          if (isBeaconRequest && beaconData != '') {
+            context.read<BeaconCubit>().peerFromDeepLink(beaconData);
+          }
         }
         if (!mounted) return;
       } on services.PlatformException {
