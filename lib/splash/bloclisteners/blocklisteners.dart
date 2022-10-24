@@ -249,14 +249,33 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       }
 
       if (state.status == BeaconStatus.permission) {
-        Navigator.of(context).pushReplacement<void, void>(
-          BeaconConfirmConnectionPage.route(),
-        );
+        Navigator.of(context).push<void>(BeaconConfirmConnectionPage.route());
       }
+
       if (state.status == BeaconStatus.signPayload) {
         Navigator.of(context).push<void>(BeaconSignPayloadPage.route());
       }
+
       if (state.status == BeaconStatus.operation) {
+        if (beaconRequest.operationDetails != null &&
+            beaconRequest.operationDetails!.isEmpty) {
+          beacon.operationResponse(
+            id: beaconRequest.request!.id!,
+            transactionHash: null,
+          );
+          final MessageHandler messageHandler = ResponseMessage(
+            ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
+          );
+          final String message =
+              messageHandler.getMessage(context, messageHandler);
+
+          return AlertMessage.showStringMessage(
+            context: context,
+            message: message,
+            messageType: MessageType.info,
+          );
+        }
+
         Navigator.of(context).push<void>(BeaconOperationPage.route());
       }
     } catch (e) {

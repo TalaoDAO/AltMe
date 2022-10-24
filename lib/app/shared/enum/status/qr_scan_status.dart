@@ -6,4 +6,5 @@ enum QrScanStatus {
   message,
   error,
   success,
+  goBack,
 }

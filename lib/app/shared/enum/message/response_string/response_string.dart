@@ -104,4 +104,5 @@ enum ResponseString {
   RESPONSE_STRING_ageRangeExpirationDate,
   RESPONSE_STRING_ageRangeHowToGetIt,
   RESPONSE_STRING_payloadFormatErrorMessage,
+  RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
 }

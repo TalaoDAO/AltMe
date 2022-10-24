@@ -27,6 +27,7 @@ class BeaconSignPayloadPage extends StatelessWidget {
         beacon: Beacon(),
         beaconCubit: context.read<BeaconCubit>(),
         walletCubit: context.read<WalletCubit>(),
+        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
       ),
       child: const BeaconSignPayloadView(),
     );
