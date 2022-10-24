@@ -63,7 +63,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         await beacon.pair(pairingRequest: pairingRequest);
 
-        emit(state.copyWith(qrScanStatus: QrScanStatus.idle));
+        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else {
         await host(url: scannedResponse);
       }

@@ -46,6 +46,10 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
                 Navigator.of(context).pop();
               }
             }
+
+            if (state.status == QrScanStatus.goBack) {
+              Navigator.of(context).pop();
+            }
           },
         ),
         BlocListener<ScanCubit, ScanState>(
