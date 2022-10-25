@@ -26,6 +26,13 @@ class BeaconRightCubit extends Cubit<BeaconRightState> {
       log.i('Started disconnecting');
       emit(state.loading());
 
+      final isInternetAvailable = await isConnected();
+      if (!isInternetAvailable) {
+        throw NetworkException(
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
+      }
+
       final Map response =
           await beacon.removePeerUsingPublicKey(publicKey: publicKey);
 

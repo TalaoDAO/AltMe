@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
@@ -78,10 +79,12 @@ String char2Bytes(String text) {
 }
 
 Future<bool> isConnected() async {
+  final log = getLogger('Check Internet Connection');
   final connectivityResult = await Connectivity().checkConnectivity();
   if (connectivityResult == ConnectivityResult.mobile ||
       connectivityResult == ConnectivityResult.wifi) {
     return true;
   }
+  log.e('No Internet Connection');
   return false;
 }
