@@ -317,7 +317,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
         'secretKey: ${keystore.secretKey}'
         'publicKey: ${keystore.publicKey} '
         'amount: $amount '
-        'networkFee: ${state.selectedFee} '
+        'networkFee: ${state.selectedFee.fee} '
         'address: ${keystore.address} =>To address: '
         '${beaconRequest.operationDetails!.first.destination!}',
       );
