@@ -45,6 +45,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           .credentialPreview.credentialSubjectModel.credentialSubjectType;
 
       switch (credentialSubjectType) {
+        case CredentialSubjectType.bloometaPass:
+          break;
         case CredentialSubjectType.tezotopiaMembership:
           gamingCategories.remove(CredentialSubjectType.tezotopiaMembership);
           break;
@@ -235,6 +237,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
               gamingCategories,
               CredentialSubjectType.tezotopiaMembership,
             );
+            break;
+          case CredentialSubjectType.bloometaPass:
             break;
           case CredentialSubjectType.ageRange:
             break;
@@ -569,6 +573,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           );
 
         switch (credentialSubjectType) {
+          case CredentialSubjectType.bloometaPass:
           case CredentialSubjectType.tezotopiaMembership:
             if (isAndroid()) {
               identityCategories.add(CredentialSubjectType.tezotopiaMembership);

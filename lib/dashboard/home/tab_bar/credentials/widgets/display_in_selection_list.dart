@@ -14,6 +14,10 @@ class DisplayInSelectionList extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
+      case CredentialSubjectType.bloometaPass:
+        return BloometaPassDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.tezotopiaMembership:
         return TezotopiaMemberShipDisplayInSelectionList(
           credentialModel: credentialModel,

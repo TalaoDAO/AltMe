@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/bloometa/bloometa_pass_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'credential_subject_model.g.dart';
@@ -16,6 +17,8 @@ class CredentialSubjectModel {
 
   factory CredentialSubjectModel.fromJson(Map<String, dynamic> json) {
     switch (json['type']) {
+      case 'BloometaPass':
+        return BloometaPassModel.fromJson(json);
       case 'MembershipCard_1':
         return TezotopiaMembershipModel.fromJson(json);
       case 'Nationality':
