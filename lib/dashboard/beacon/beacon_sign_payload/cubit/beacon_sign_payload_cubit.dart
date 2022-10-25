@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/beacon/beacon.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
@@ -18,11 +20,13 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
     required this.walletCubit,
     required this.beacon,
     required this.beaconCubit,
+    required this.qrCodeScanCubit,
   }) : super(const BeaconSignPayloadState());
 
   final WalletCubit walletCubit;
   final Beacon beacon;
   final BeaconCubit beaconCubit;
+  final QRCodeScanCubit qrCodeScanCubit;
 
   final log = getLogger('BeaconSignPayloadCubit');
 
@@ -98,6 +102,12 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
         id: beaconCubit.state.beaconRequest!.request!.id!,
         signature: signature,
       );
+
+      if (state.payloadMessage!.contains('#')) {
+        final String url = state.payloadMessage!.split('#')[1];
+        final uri = Uri.parse(url);
+        await qrCodeScanCubit.verify(uri: uri);
+      }
 
       final bool success = json.decode(response['success'].toString()) as bool;
 

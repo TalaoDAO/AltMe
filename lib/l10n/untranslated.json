@@ -560,7 +560,9 @@
     "seeMoreNFTInformationOn",
     "credentialStatus",
     "pass",
-    "payloadFormatErrorMessage"
+    "payloadFormatErrorMessage",
+    "thisFeatureIsNotSupportedMessage",
+    "myWallet"
   ],
 
   "es": [
@@ -1124,7 +1126,9 @@
     "seeMoreNFTInformationOn",
     "credentialStatus",
     "pass",
-    "payloadFormatErrorMessage"
+    "payloadFormatErrorMessage",
+    "thisFeatureIsNotSupportedMessage",
+    "myWallet"
   ],
 
   "fr": [
@@ -1688,7 +1692,9 @@
     "seeMoreNFTInformationOn",
     "credentialStatus",
     "pass",
-    "payloadFormatErrorMessage"
+    "payloadFormatErrorMessage",
+    "thisFeatureIsNotSupportedMessage",
+    "myWallet"
   ],
 
   "it": [
@@ -2252,6 +2258,8 @@
     "seeMoreNFTInformationOn",
     "credentialStatus",
     "pass",
-    "payloadFormatErrorMessage"
+    "payloadFormatErrorMessage",
+    "thisFeatureIsNotSupportedMessage",
+    "myWallet"
   ]
 }

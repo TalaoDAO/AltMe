@@ -286,4 +286,6 @@ class GlobalMessage {
   String get RESPONSE_STRING_ageRangeHowToGetIt => l10n.ageRangeHowToGetIt;
   String get RESPONSE_STRING_payloadFormatErrorMessage =>
       l10n.payloadFormatErrorMessage;
+  String get RESPONSE_STRING_thisFeatureIsNotSupportedMessage =>
+      l10n.thisFeatureIsNotSupportedMessage;
 }

@@ -4,8 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class ConfirmDetailsCard extends StatelessWidget {
-  const ConfirmDetailsCard({
+class ConfirmTransactionDetailsCard extends StatelessWidget {
+  const ConfirmTransactionDetailsCard({
     Key? key,
     required this.amount,
     required this.tokenUSDRate,

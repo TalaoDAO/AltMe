@@ -330,6 +330,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_payloadFormatErrorMessage:
         return globalMessage.RESPONSE_STRING_payloadFormatErrorMessage;
+
+      case ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage:
+        return globalMessage.RESPONSE_STRING_thisFeatureIsNotSupportedMessage;
     }
   }
 }

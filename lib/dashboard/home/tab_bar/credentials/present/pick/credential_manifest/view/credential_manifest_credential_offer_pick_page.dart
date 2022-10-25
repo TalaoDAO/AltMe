@@ -113,6 +113,11 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                 body: Column(
                   children: <Widget>[
+                    Text(
+                      '${inputDescriptorIndex + 1}/${presentationDefinition.inputDescriptors.length}',
+                      style: Theme.of(context).textTheme.credentialSteps,
+                    ),
+                    const SizedBox(height: 10),
                     if (_purpose != null)
                       Padding(
                         padding: const EdgeInsets.all(8),

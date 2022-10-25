@@ -468,6 +468,12 @@ class ResponseMessage with MessageHandler {
               .localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage:
+          return ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage
+              .localise(
+            context,
+          );
       }
     }
     return '';

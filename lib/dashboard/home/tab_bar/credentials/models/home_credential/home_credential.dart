@@ -162,6 +162,7 @@ class HomeCredential extends Equatable {
         dummyDesc = ResponseString.RESPONSE_STRING_phoneProofDummyDescription;
         break;
 
+      case CredentialSubjectType.bloometaPass:
       case CredentialSubjectType.voucher:
       case CredentialSubjectType.selfIssued:
       case CredentialSubjectType.defaultCredential:

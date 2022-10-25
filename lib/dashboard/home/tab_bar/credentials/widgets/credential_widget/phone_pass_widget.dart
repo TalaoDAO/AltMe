@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class PhonePassDisplayInList extends StatelessWidget {
@@ -13,9 +12,8 @@ class PhonePassDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInList(
+    return PhonePassDisplayDetail(
       credentialModel: credentialModel,
-      descriptionMaxLine: 3,
     );
   }
 }
@@ -30,9 +28,8 @@ class PhonePassDisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInSelectionList(
+    return PhonePassDisplayDetail(
       credentialModel: credentialModel,
-      descriptionMaxLine: 3,
     );
   }
 }
@@ -45,29 +42,22 @@ class PhonePassDisplayDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     final phonePassModel = credentialModel
         .credentialPreview.credentialSubjectModel as PhonePassModel;
 
-    return CredentialBackground(
-      credentialModel: credentialModel,
-      child: Column(
-        children: [
-          CredentialField(
-            title: l10n.personalPhone,
-            value: phonePassModel.phone!,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: SizedBox(
-              height: 40,
-              child: DisplayIssuer(
-                issuer: phonePassModel.issuedBy!,
-              ),
-            ),
-          ),
-        ],
+    return CredentialBaseWidget(
+      cardBackgroundImagePath: ImageStrings.phoneProof,
+      issuerName: credentialModel
+          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+      value: phonePassModel.phone,
+      issuanceDate: UiDate.formatDateForCredentialCard(
+        credentialModel.credentialPreview.issuanceDate,
       ),
+      expirationDate: credentialModel.expirationDate == null
+          ? '--'
+          : UiDate.formatDateForCredentialCard(
+              credentialModel.expirationDate!,
+            ),
     );
   }
 }

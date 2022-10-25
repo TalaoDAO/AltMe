@@ -185,7 +185,7 @@ class DummyCredentialItem extends StatelessWidget {
                             id: 'dummyDesc',
                             child: FractionallySizedBox(
                               widthFactor: 0.85,
-                              heightFactor: 0.36,
+                              heightFactor: 0.42,
                               child: MyText(
                                 homeCredential.dummyDescription!.getMessage(
                                   context,

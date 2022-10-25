@@ -168,7 +168,7 @@ class _DashboardViewState extends State<DashboardView> {
             child: BasePage(
               scrollView: false,
               title: state.selectedIndex == 0
-                  ? ''
+                  ? l10n.myWallet
                   : state.selectedIndex == 1
                       ? l10n.discover
                       : state.selectedIndex == 2
