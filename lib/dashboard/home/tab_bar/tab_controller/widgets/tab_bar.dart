@@ -48,7 +48,7 @@ class MyTab extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset(icon, height: Sizes.icon2x),
+            Image.asset(icon, height: Sizes.icon),
             const SizedBox(
               width: Sizes.spaceXSmall,
             ),

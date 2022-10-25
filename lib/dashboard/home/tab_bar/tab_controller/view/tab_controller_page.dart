@@ -68,7 +68,8 @@ class _TabControllerViewState extends State<TabControllerView>
                 tabs: [
                   MyTab(
                     text: l10n.cards,
-                    icon: state == 0 ? IconStrings.cards : IconStrings.cardsBlur,
+                    icon:
+                        state == 0 ? IconStrings.cards : IconStrings.cardsBlur,
                     isSelected: state == 0,
                     onPressed: () {
                       if (context.read<HomeCubit>().state.homeStatus ==
@@ -85,7 +86,8 @@ class _TabControllerViewState extends State<TabControllerView>
                   ),
                   MyTab(
                     text: l10n.nfts,
-                    icon: state == 1 ? IconStrings.ghost : IconStrings.ghostBlur,
+                    icon:
+                        state == 1 ? IconStrings.ghost : IconStrings.ghostBlur,
                     isSelected: state == 1,
                     onPressed: () {
                       if (context.read<HomeCubit>().state.homeStatus ==
@@ -102,8 +104,9 @@ class _TabControllerViewState extends State<TabControllerView>
                   ),
                   MyTab(
                     text: l10n.tokens,
-                    icon:
-                        state == 2 ? IconStrings.health : IconStrings.healthBlur,
+                    icon: state == 2
+                        ? IconStrings.health
+                        : IconStrings.healthBlur,
                     isSelected: state == 2,
                     onPressed: () {
                       if (context.read<HomeCubit>().state.homeStatus ==
