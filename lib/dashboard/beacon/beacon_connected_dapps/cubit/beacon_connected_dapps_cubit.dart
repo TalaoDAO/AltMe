@@ -88,6 +88,14 @@ class BeaconConnectedDappsCubit extends Cubit<BeaconConnectedDappsState> {
       emit(state.loading());
 
       log.i('fetching connected peers from dApp');
+
+      final isInternetAvailable = await isConnected();
+      if (!isInternetAvailable) {
+        throw NetworkException(
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
+      }
+
       final peers = await beacon.getPeers();
       final Map<String, dynamic> requestJson =
           jsonDecode(jsonEncode(peers)) as Map<String, dynamic>;

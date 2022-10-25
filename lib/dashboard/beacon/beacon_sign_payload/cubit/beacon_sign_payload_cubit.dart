@@ -74,6 +74,13 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
       log.i('Started signing');
       emit(state.loading());
 
+      final isInternetAvailable = await isConnected();
+      if (!isInternetAvailable) {
+        throw NetworkException(
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
+      }
+
       final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
 
       final CryptoAccountData? currentAccount =

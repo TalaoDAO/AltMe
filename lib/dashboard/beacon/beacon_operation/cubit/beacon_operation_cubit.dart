@@ -167,6 +167,13 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       emit(state.loading());
       log.i('sendOperataion');
 
+      final isInternetAvailable = await isConnected();
+      if (!isInternetAvailable) {
+        throw NetworkException(
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
+      }
+
       final operationList = await getOperationList();
       await operationList.executeAndMonitor();
       log.i('after operationList.executeAndMonitor()');

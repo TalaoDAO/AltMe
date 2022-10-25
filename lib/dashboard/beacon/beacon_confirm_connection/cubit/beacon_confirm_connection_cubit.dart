@@ -31,6 +31,14 @@ class BeaconConfirmConnectionCubit extends Cubit<BeaconConfirmConnectionState> {
     try {
       emit(state.loading());
       log.i('Start connecting to beacon');
+
+      final isInternetAvailable = await isConnected();
+      if (!isInternetAvailable) {
+        throw NetworkException(
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
+      }
+
       final CryptoAccountData currentAccount = walletCubit.state.currentAccount;
       final KeyStoreModel sourceKeystore =
           getKeysFromSecretKey(secretKey: currentAccount.secretKey);
