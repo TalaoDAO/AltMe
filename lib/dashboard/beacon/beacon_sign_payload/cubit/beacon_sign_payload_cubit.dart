@@ -30,6 +30,9 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
 
   final log = getLogger('BeaconSignPayloadCubit');
 
+  late String encodedPayload;
+  SigningType signingType = SigningType.micheline;
+
   void decodeMessage() {
     try {
       log.i('decoding payload');
@@ -39,12 +42,15 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
 
       final String payload = beaconRequest.request!.payload!;
 
-      late String encodedPayload;
-
-      if (payload.startsWith('05') || payload.startsWith('03')) {
+      if (payload.startsWith('05')) {
         encodedPayload = beaconRequest.request!.payload!;
+        signingType = SigningType.micheline;
+      } else if (payload.startsWith('03')) {
+        encodedPayload = beaconRequest.request!.payload!;
+        signingType = SigningType.operation;
       } else {
         encodedPayload = stringToHexPrefixedWith05(payload: payload);
+        signingType = SigningType.raw;
       }
 
       final bytes = hexToBytes(encodedPayload);
@@ -54,7 +60,6 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
         state.copyWith(
           appStatus: AppStatus.idle,
           payloadMessage: payloadMessage,
-          encodedPaylod: encodedPayload,
         ),
       );
     } catch (e) {
@@ -102,12 +107,13 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
 
       final signature = Dartez.signPayload(
         signer: signer as SoftSigner,
-        payload: state.encodedPaylod!,
+        payload: encodedPayload,
       );
 
       final Map response = await beacon.signPayloadResponse(
         id: beaconCubit.state.beaconRequest!.request!.id!,
         signature: signature,
+        type: signingType,
       );
 
       if (state.payloadMessage!.contains('#')) {

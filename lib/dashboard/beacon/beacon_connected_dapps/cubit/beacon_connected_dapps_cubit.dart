@@ -97,6 +97,7 @@ class BeaconConnectedDappsCubit extends Cubit<BeaconConnectedDappsState> {
       }
 
       final peers = await beacon.getPeers();
+
       final Map<String, dynamic> requestJson =
           jsonDecode(jsonEncode(peers)) as Map<String, dynamic>;
       final ConnectedPeers connectedPeers =
