@@ -5,6 +5,7 @@ export 'arago_learning_achievement/arago_learning_achievement_model.dart';
 export 'arago_over18/arago_over18_model.dart';
 export 'arago_pass/arago_pass_model.dart';
 export 'author/author.dart';
+export 'bloometa/bloometa_pass_model.dart';
 export 'certificate_of_employment/certificate_of_employment_model.dart';
 export 'credential/credential.dart';
 export 'credential/evidence.dart';

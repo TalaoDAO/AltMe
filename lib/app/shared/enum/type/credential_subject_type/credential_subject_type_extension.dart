@@ -15,6 +15,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   Color defaultBackgroundColor() {
     switch (this) {
+      case CredentialSubjectType.bloometaPass:
+        return const Color(0xff14181D);
       case CredentialSubjectType.tezotopiaMembership:
         return const Color(0xff273496);
       case CredentialSubjectType.nationality:
@@ -84,6 +86,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   IconData iconData() {
     switch (this) {
+      case CredentialSubjectType.bloometaPass:
+        return Icons.games;
       case CredentialSubjectType.nationality:
         return Icons.supervised_user_circle_sharp;
       case CredentialSubjectType.tezotopiaMembership:

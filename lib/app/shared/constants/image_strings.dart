@@ -12,6 +12,7 @@ class ImageStrings {
       '$imagePath/carte-attestation-employeur-verso.png';
   static const String emailProof = '$imagePath/email-proof.png';
   static const String phoneProof = '$imagePath/phone-proof.png';
+  static const String bloometaPass = '$imagePath/bloometa-pass.png';
   static const String tezotopiaMemberShip =
       '$imagePath/tezotopia-membership.png';
   static const String genderProof = '$imagePath/gender-proof.png';
