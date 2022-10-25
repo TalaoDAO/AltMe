@@ -53,69 +53,73 @@ class _TabControllerViewState extends State<TabControllerView>
         return Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            TabBar(
-              controller: _tabController,
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-              indicatorPadding: EdgeInsets.zero,
-              labelPadding:
-                  const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
-              indicatorWeight: 0.0001,
-              indicatorColor: Colors.transparent,
-              indicatorSize: TabBarIndicatorSize.label,
-              tabs: [
-                MyTab(
-                  text: l10n.cards,
-                  icon: state == 0 ? IconStrings.cards : IconStrings.cardsBlur,
-                  isSelected: state == 0,
-                  onPressed: () {
-                    if (context.read<HomeCubit>().state.homeStatus ==
-                        HomeStatus.hasNoWallet) {
-                      showDialog<void>(
-                        context: context,
-                        builder: (_) => const WalletDialog(),
-                      );
-                      return;
-                    }
-                    _tabController.animateTo(0);
-                    context.read<TabControllerCubit>().setIndex(0);
-                  },
-                ),
-                MyTab(
-                  text: l10n.nfts,
-                  icon: state == 1 ? IconStrings.ghost : IconStrings.ghostBlur,
-                  isSelected: state == 1,
-                  onPressed: () {
-                    if (context.read<HomeCubit>().state.homeStatus ==
-                        HomeStatus.hasNoWallet) {
-                      showDialog<void>(
-                        context: context,
-                        builder: (_) => const WalletDialog(),
-                      );
-                      return;
-                    }
-                    _tabController.animateTo(1);
-                    context.read<TabControllerCubit>().setIndex(1);
-                  },
-                ),
-                MyTab(
-                  text: l10n.tokens,
-                  icon:
-                      state == 2 ? IconStrings.health : IconStrings.healthBlur,
-                  isSelected: state == 2,
-                  onPressed: () {
-                    if (context.read<HomeCubit>().state.homeStatus ==
-                        HomeStatus.hasNoWallet) {
-                      showDialog<void>(
-                        context: context,
-                        builder: (_) => const WalletDialog(),
-                      );
-                      return;
-                    }
-                    _tabController.animateTo(2);
-                    context.read<TabControllerCubit>().setIndex(2);
-                  },
-                ),
-              ],
+              child: TabBar(
+                controller: _tabController,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
+                indicatorPadding: EdgeInsets.zero,
+                labelPadding:
+                    const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
+                indicatorWeight: 0.0001,
+                indicatorColor: Colors.transparent,
+                indicatorSize: TabBarIndicatorSize.label,
+                tabs: [
+                  MyTab(
+                    text: l10n.cards,
+                    icon: state == 0 ? IconStrings.cards : IconStrings.cardsBlur,
+                    isSelected: state == 0,
+                    onPressed: () {
+                      if (context.read<HomeCubit>().state.homeStatus ==
+                          HomeStatus.hasNoWallet) {
+                        showDialog<void>(
+                          context: context,
+                          builder: (_) => const WalletDialog(),
+                        );
+                        return;
+                      }
+                      _tabController.animateTo(0);
+                      context.read<TabControllerCubit>().setIndex(0);
+                    },
+                  ),
+                  MyTab(
+                    text: l10n.nfts,
+                    icon: state == 1 ? IconStrings.ghost : IconStrings.ghostBlur,
+                    isSelected: state == 1,
+                    onPressed: () {
+                      if (context.read<HomeCubit>().state.homeStatus ==
+                          HomeStatus.hasNoWallet) {
+                        showDialog<void>(
+                          context: context,
+                          builder: (_) => const WalletDialog(),
+                        );
+                        return;
+                      }
+                      _tabController.animateTo(1);
+                      context.read<TabControllerCubit>().setIndex(1);
+                    },
+                  ),
+                  MyTab(
+                    text: l10n.tokens,
+                    icon:
+                        state == 2 ? IconStrings.health : IconStrings.healthBlur,
+                    isSelected: state == 2,
+                    onPressed: () {
+                      if (context.read<HomeCubit>().state.homeStatus ==
+                          HomeStatus.hasNoWallet) {
+                        showDialog<void>(
+                          context: context,
+                          builder: (_) => const WalletDialog(),
+                        );
+                        return;
+                      }
+                      _tabController.animateTo(2);
+                      context.read<TabControllerCubit>().setIndex(2);
+                    },
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: Sizes.spaceSmall),
             Expanded(
