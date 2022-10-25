@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:altme/dashboard/home/home.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
 
@@ -74,4 +75,13 @@ String char2Bytes(String text) {
   final List<int> encode = utf8.encode(text);
   final String bytes = hex.encode(encode);
   return bytes;
+}
+
+Future<bool> isConnected() async {
+  final connectivityResult = await Connectivity().checkConnectivity();
+  if (connectivityResult != ConnectivityResult.mobile ||
+      connectivityResult != ConnectivityResult.wifi) {
+    return true;
+  }
+  return false;
 }

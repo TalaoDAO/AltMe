@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:dio/dio.dart';
-//import 'package:flutter/foundation.dart';
 part 'logging.dart';
 
 const _defaultConnectTimeout = Duration.millisecondsPerMinute;
@@ -45,6 +44,13 @@ class DioClient {
     },
   }) async {
     try {
+      final isInternetAvailable = await isConnected();
+      if (!isInternetAvailable) {
+        throw NetworkException(
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
+      }
+
       final stopwatch = Stopwatch()..start();
       _dio.options.headers = headers;
       final response = await _dio.get<dynamic>(
@@ -82,6 +88,13 @@ class DioClient {
     },
   }) async {
     try {
+      final isInternetAvailable = await isConnected();
+      if (!isInternetAvailable) {
+        throw NetworkException(
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
+      }
+
       final stopwatch = Stopwatch()..start();
       _dio.options.headers = headers;
       final response = await _dio.post<dynamic>(

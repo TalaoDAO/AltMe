@@ -17,6 +17,7 @@ dependencies:
   bip39: ^1.0.6
   bloc: ^8.0.3
   cached_network_image: ^3.2.1
+  connectivity_plus: ^3.0.2
   credential_manifest:
     path: packages/credential_manifest
   cryptocurrency_keys:
