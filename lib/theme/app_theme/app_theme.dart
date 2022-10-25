@@ -868,4 +868,10 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
         color: const Color(0xffFFFFFF),
       );
+
+  TextStyle get credentialSteps => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+      );
 }

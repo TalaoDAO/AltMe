@@ -104,157 +104,150 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
 
     return BlocBuilder<WalletCubit, WalletState>(
       builder: (context, walletState) {
+        final credentialQueryList =
+            context.read<QueryByExampleCubit>().state.credentialQuery;
         return BlocBuilder<QueryByExampleCredentialPickCubit,
             QueryByExampleCredentialPickState>(
           builder: (context, queryState) {
-            return WillPopScope(
-              onWillPop: () async {
-                if (context.read<ScanCubit>().state.status ==
-                    ScanStatus.loading) {
-                  return false;
+            return BlocListener<ScanCubit, ScanState>(
+              listener: (BuildContext context, ScanState scanState) async {
+                if (scanState.status == ScanStatus.loading) {
+                  LoadingView().show(context: context);
+                } else {
+                  LoadingView().hide();
                 }
-                return true;
               },
-              child: BlocListener<ScanCubit, ScanState>(
-                listener: (BuildContext context, ScanState scanState) async {
-                  if (scanState.status == ScanStatus.loading) {
-                    LoadingView().show(context: context);
-                  } else {
-                    LoadingView().hide();
-                  }
-                },
-                child: BasePage(
-                  title: l10n.credentialPickTitle,
-                  titleTrailing: const WhiteCloseButton(),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 24,
-                    horizontal: 16,
-                  ),
-                  navigation: SafeArea(
-                    child: queryState.filteredCredentialList.isNotEmpty
-                        ? Container(
-                            padding: const EdgeInsets.all(16),
-                            child: Tooltip(
-                              message: l10n.credentialPickPresent,
-                              child: Builder(
-                                builder: (context) {
-                                  return MyGradientButton(
-                                    onPressed: queryState.selected == null
-                                        ? null
-                                        : () async {
-                                            final selectedCredential =
-                                                queryState
-                                                        .filteredCredentialList[
-                                                    queryState.selected!];
+              child: BasePage(
+                title: l10n.credentialPickTitle,
+                titleTrailing: const WhiteCloseButton(),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 24,
+                  horizontal: 16,
+                ),
+                navigation: SafeArea(
+                  child: queryState.filteredCredentialList.isNotEmpty
+                      ? Container(
+                          padding: const EdgeInsets.all(16),
+                          child: Tooltip(
+                            message: l10n.credentialPickPresent,
+                            child: Builder(
+                              builder: (context) {
+                                return MyGradientButton(
+                                  onPressed: queryState.selected == null
+                                      ? null
+                                      : () async {
+                                          final selectedCredential =
+                                              queryState.filteredCredentialList[
+                                                  queryState.selected!];
 
-                                            final updatedCredentials = List.of(
-                                              credentialsToBePresented,
-                                            )..add(selectedCredential);
+                                          final updatedCredentials = List.of(
+                                            credentialsToBePresented,
+                                          )..add(selectedCredential);
 
-                                            if (queryByExampleCubit
-                                                .credentialQuery.isNotEmpty) {
-                                              /// Query by Example case
+                                          if (queryByExampleCubit
+                                              .credentialQuery.isNotEmpty) {
+                                            /// Query by Example case
 
-                                              if (credentialQueryIndex + 1 !=
-                                                  queryByExampleCubit
-                                                      .credentialQuery.length) {
-                                                await Navigator.of(context)
-                                                    .pushReplacement<void,
-                                                        void>(
-                                                  // ignore: lines_longer_than_80_chars
-                                                  QueryByExampleCredentialPickPage
-                                                      .route(
-                                                    uri: uri,
-                                                    preview: preview,
-                                                    issuer: issuer,
-                                                    credentialQueryIndex:
-                                                        credentialQueryIndex +
-                                                            1,
-                                                    credentialsToBePresented:
-                                                        updatedCredentials,
-                                                  ),
-                                                );
-
-                                                return;
-                                              }
-                                            }
-
-                                            /// Authenticate
-                                            bool authenticated = false;
-                                            await Navigator.of(context)
-                                                .push<void>(
-                                              PinCodePage.route(
-                                                restrictToBack: false,
-                                                isValidCallback: () {
-                                                  authenticated = true;
-                                                },
-                                              ),
-                                            );
-
-                                            if (!authenticated) {
-                                              return;
-                                            }
-
-                                            await context
-                                                .read<ScanCubit>()
+                                            if (credentialQueryIndex + 1 !=
+                                                queryByExampleCubit
+                                                    .credentialQuery.length) {
+                                              await Navigator.of(context)
+                                                  .pushReplacement<void, void>(
                                                 // ignore: lines_longer_than_80_chars
-                                                .verifiablePresentationRequest(
-                                                  url: uri.toString(),
-                                                  keyId:
-                                                      SecureStorageKeys.ssiKey,
+                                                QueryByExampleCredentialPickPage
+                                                    .route(
+                                                  uri: uri,
+                                                  preview: preview,
+                                                  issuer: issuer,
+                                                  credentialQueryIndex:
+                                                      credentialQueryIndex + 1,
                                                   credentialsToBePresented:
                                                       updatedCredentials,
-                                                  challenge:
-                                                      preview['challenge']
-                                                          as String,
-                                                  domain: preview['domain']
-                                                      as String,
-                                                  issuer: issuer,
-                                                );
-                                          },
-                                    text: l10n.credentialPickPresent,
-                                  );
-                                },
-                              ),
+                                                ),
+                                              );
+
+                                              return;
+                                            }
+                                          }
+
+                                          /// Authenticate
+                                          bool authenticated = false;
+                                          await Navigator.of(context)
+                                              .push<void>(
+                                            PinCodePage.route(
+                                              restrictToBack: false,
+                                              isValidCallback: () {
+                                                authenticated = true;
+                                              },
+                                            ),
+                                          );
+
+                                          if (!authenticated) {
+                                            return;
+                                          }
+
+                                          await context
+                                              .read<ScanCubit>()
+                                              // ignore: lines_longer_than_80_chars
+                                              .verifiablePresentationRequest(
+                                                url: uri.toString(),
+                                                keyId: SecureStorageKeys.ssiKey,
+                                                credentialsToBePresented:
+                                                    updatedCredentials,
+                                                challenge: preview['challenge']
+                                                    as String,
+                                                domain:
+                                                    preview['domain'] as String,
+                                                issuer: issuer,
+                                              );
+                                        },
+                                  text: l10n.credentialPickPresent,
+                                );
+                              },
                             ),
-                          )
-                        : const SizedBox.shrink(),
-                  ),
-                  body: Column(
-                    children: <Widget>[
-                      Text(
-                        reason.trim() == ''
-                            ? l10n.credentialPickSelect
-                            : reason,
-                        style: Theme.of(context).textTheme.credentialSubtitle,
-                      ),
-                      const SizedBox(height: 12),
-                      ...List.generate(
-                        queryState.filteredCredentialList.length,
-                        (index) => CredentialsListPageItem(
-                          credentialModel:
-                              queryState.filteredCredentialList[index],
-                          selected: queryState.selected == index,
-                          onTap: () => context
-                              .read<QueryByExampleCredentialPickCubit>()
-                              .toggle(index),
-                        ),
-                      ),
-                      if (queryState.filteredCredentialList.isEmpty)
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Text(
-                            l10n.credentialSelectionListEmptyError,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         )
-                      else
-                        const SizedBox.shrink(),
+                      : const SizedBox.shrink(),
+                ),
+                body: Column(
+                  children: <Widget>[
+                    if (credentialQueryList.isNotEmpty) ...[
+                      Text(
+                        '${credentialQueryIndex + 1}/${queryByExampleCubit.credentialQuery.length}',
+                        style: Theme.of(context).textTheme.credentialSteps,
+                      ),
+                      const SizedBox(height: 10),
                     ],
-                  ),
+                    Text(
+                      reason.trim() == '' ? l10n.credentialPickSelect : reason,
+                      style: Theme.of(context).textTheme.credentialSubtitle,
+                    ),
+                    const SizedBox(height: 12),
+                    ...List.generate(
+                      queryState.filteredCredentialList.length,
+                      (index) => CredentialsListPageItem(
+                        credentialModel:
+                            queryState.filteredCredentialList[index],
+                        selected: queryState.selected == index,
+                        onTap: () => context
+                            .read<QueryByExampleCredentialPickCubit>()
+                            .toggle(index),
+                      ),
+                    ),
+                    if (queryState.filteredCredentialList.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Text(
+                          l10n.credentialSelectionListEmptyError,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    else
+                      const SizedBox.shrink(),
+                  ],
                 ),
               ),
             );
