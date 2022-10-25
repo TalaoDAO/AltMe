@@ -22,12 +22,13 @@ class MyTab extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         width: double.infinity,
+        alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(
           horizontal: Sizes.spaceXSmall,
           vertical: Sizes.spaceSmall,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Sizes.largeRadius),
+          borderRadius: BorderRadius.circular(Sizes.normalRadius),
           gradient: isSelected
               ? LinearGradient(
                   colors: [
@@ -43,18 +44,19 @@ class MyTab extends StatelessWidget {
               ? null
               : Theme.of(context).colorScheme.tabBarNotSelected,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Image.asset(icon, height: Sizes.icon2x),
+            Image.asset(icon, height: Sizes.icon),
+            const SizedBox(
+              width: Sizes.spaceXSmall,
             ),
-            Text(
+            MyText(
               text,
-              softWrap: false,
-              style: Theme.of(context).textTheme.caption?.copyWith(
+              maxLines: 1,
+              minFontSize: 12,
+              style: Theme.of(context).textTheme.title.copyWith(
                     color: isSelected ? null : Colors.grey[400],
                   ),
               overflow: TextOverflow.fade,

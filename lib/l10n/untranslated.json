@@ -561,7 +561,8 @@
     "credentialStatus",
     "pass",
     "payloadFormatErrorMessage",
-    "thisFeatureIsNotSupportedMessage"
+    "thisFeatureIsNotSupportedMessage",
+    "myWallet"
   ],
 
   "es": [
@@ -1126,7 +1127,8 @@
     "credentialStatus",
     "pass",
     "payloadFormatErrorMessage",
-    "thisFeatureIsNotSupportedMessage"
+    "thisFeatureIsNotSupportedMessage",
+    "myWallet"
   ],
 
   "fr": [
@@ -1691,7 +1693,8 @@
     "credentialStatus",
     "pass",
     "payloadFormatErrorMessage",
-    "thisFeatureIsNotSupportedMessage"
+    "thisFeatureIsNotSupportedMessage",
+    "myWallet"
   ],
 
   "it": [
@@ -2256,6 +2259,7 @@
     "credentialStatus",
     "pass",
     "payloadFormatErrorMessage",
-    "thisFeatureIsNotSupportedMessage"
+    "thisFeatureIsNotSupportedMessage",
+    "myWallet"
   ]
 }

@@ -291,7 +291,7 @@
   "splashSubtitle": "Manage all your digital assets in one app.",
   "splashLoading": "Loading...",
   "version": "Version",
-  "cards": "Credentials",
+  "cards": "Cards",
   "nfts": "NFT's",
   "tokens": "Tokens",
   "getCards": "Get Credentials",
@@ -611,5 +611,6 @@
   "credentialStatus": "Status",
   "pass": "Pass",
   "payloadFormatErrorMessage": "The format of paylod is incorrect.",
-  "thisFeatureIsNotSupportedMessage": "Sorry! This feature is not supported yet"
+  "thisFeatureIsNotSupportedMessage": "Sorry! This feature is not supported yet",
+  "myWallet": "My wallet"
 }
