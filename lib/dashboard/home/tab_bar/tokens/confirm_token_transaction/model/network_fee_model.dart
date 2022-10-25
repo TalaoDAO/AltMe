@@ -32,6 +32,20 @@ class NetworkFeeModel extends Equatable {
     ];
   }
 
+  NetworkFeeModel copyWith({
+    double? fee,
+    double? feeInUSD,
+    String? tokenSymbol,
+    NetworkSpeed? networkSpeed,
+  }) {
+    return NetworkFeeModel(
+      fee: fee ?? this.fee,
+      networkSpeed: networkSpeed ?? this.networkSpeed,
+      feeInUSD: feeInUSD ?? this.feeInUSD,
+      tokenSymbol: tokenSymbol ?? this.tokenSymbol,
+    );
+  }
+
   @override
   List<Object?> get props => [fee, feeInUSD, tokenSymbol, networkSpeed];
 }

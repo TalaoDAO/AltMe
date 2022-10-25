@@ -176,7 +176,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                       height: Sizes.icon3x,
                     ),
                   ),
-                  ConfirmDetailsCard(
+                  ConfirmTransactionDetailsCard(
                     amount: widget.amount,
                     symbol: widget.selectedToken.symbol,
                     tokenUSDRate: widget.selectedToken.tokenUSDPrice,

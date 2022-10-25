@@ -52,7 +52,7 @@ class SelectNetworkFeeItem extends StatelessWidget {
             height: Sizes.space2XSmall,
           ),
           MyText(
-            '''\$${networkFeeModel.feeInUSD == 0.0 ? '--.--' : networkFeeModel.feeInUSD.toString().formatNumber()}''',
+            '''\$${networkFeeModel.feeInUSD == 0.0 ? '--.--' : networkFeeModel.feeInUSD.toStringAsFixed(4).formatNumber()}''',
             style: Theme.of(context).textTheme.caption2,
           )
         ],

@@ -9,13 +9,16 @@ class SelectNetworkFeeBottomSheet extends StatelessWidget {
   const SelectNetworkFeeBottomSheet({
     Key? key,
     required this.selectedNetworkFee,
+    required this.networkFeeList,
   }) : super(key: key);
 
   final NetworkFeeModel selectedNetworkFee;
+  final List<NetworkFeeModel> networkFeeList;
 
   static Future<NetworkFeeModel?> show({
     required BuildContext context,
     required NetworkFeeModel selectedNetworkFee,
+    List<NetworkFeeModel>? networkFeeList,
   }) {
     return showModalBottomSheet<NetworkFeeModel?>(
       shape: const RoundedRectangleBorder(
@@ -27,6 +30,7 @@ class SelectNetworkFeeBottomSheet extends StatelessWidget {
       context: context,
       builder: (_) => SelectNetworkFeeBottomSheet(
         selectedNetworkFee: selectedNetworkFee,
+        networkFeeList: networkFeeList ?? NetworkFeeModel.networks(),
       ),
     );
   }
@@ -36,6 +40,7 @@ class SelectNetworkFeeBottomSheet extends StatelessWidget {
     return BlocProvider<SelectNetworkFeeCubit>(
       create: (_) => SelectNetworkFeeCubit(
         selectedNetworkFee: selectedNetworkFee,
+        networkFeeList: networkFeeList,
       ),
       child: const _SelectNetworkFeeBottomSheetView(),
     );
