@@ -52,9 +52,11 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
         encodedPayload = stringToHexPrefixedWith05(payload: payload);
         signingType = SigningType.raw;
       }
-
+      log.i('payload - $payload');
       final bytes = hexToBytes(encodedPayload);
+      log.i('bytes - $bytes');
       final String payloadMessage = utf8.decode(bytes, allowMalformed: true);
+      log.i('payloadMessage - $payloadMessage');
 
       emit(
         state.copyWith(
