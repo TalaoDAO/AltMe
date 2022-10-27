@@ -375,9 +375,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
         final String amount = operationDetail.amount ?? '0';
         final String? entrypoint = operationDetail.entrypoint;
 
-        final dynamic parameters = operationDetail.parameters != null
-            ? jsonDecode(jsonEncode(operationDetail.parameters))
-            : null;
+        final dynamic parameters = operationDetail.parameters;
 
         final operation = TransactionOperation(
           amount: int.parse(amount),
