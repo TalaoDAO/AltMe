@@ -131,7 +131,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get disabledTextColor => const Color(0xFF000000);
 
-  Color get darkGradientStartColor => const Color(0xff0A0421);
+  Color get darkGradientStartColor => const Color(0xff0A0F19);
 
   Color get darkGradientEndColor => const Color(0xff25095B);
 
@@ -273,7 +273,7 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get starterSubTitleStyle => GoogleFonts.roboto(
         color: const Color(0xFFD1CCE3),
-        fontSize: 16,
+        fontSize: 22,
         fontWeight: FontWeight.w400,
       );
 
