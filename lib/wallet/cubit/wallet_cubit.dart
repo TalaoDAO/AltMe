@@ -402,6 +402,10 @@ class WalletCubit extends Cubit<WalletState> {
       final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
       final issuanceDate = '${formatter.format(DateTime.now())}Z';
 
+      final credentialManifest = CredentialManifest.fromJson(
+        ConstantsJson.tezosAssociatedAddressCredentialManifestJson,
+      );
+
       final tezosAssociatedAddressModel = TezosAssociatedAddressModel(
         id: didSsi,
         accountName: accountName,
@@ -439,10 +443,10 @@ class WalletCubit extends Cubit<WalletState> {
                 .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
           );
         } else {
-          return _createCredential(vc, oldId);
+          return _createCredential(vc, oldId, credentialManifest);
         }
       } else {
-        return _createCredential(vc, oldId);
+        return _createCredential(vc, oldId, credentialManifest);
       }
     } catch (e, s) {
       getLogger(runtimeType.toString())
@@ -451,7 +455,11 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future<CredentialModel> _createCredential(String vc, String? oldId) async {
+  Future<CredentialModel> _createCredential(
+    String vc,
+    String? oldId,
+    CredentialManifest credentialManifest,
+  ) async {
     final jsonCredential = jsonDecode(vc) as Map<String, dynamic>;
     final id = oldId ?? 'urn:uuid:${const Uuid().v4()}';
     return CredentialModel(
@@ -461,6 +469,7 @@ class WalletCubit extends Cubit<WalletState> {
       display: Display.emptyDisplay()..toJson(),
       shareLink: '',
       credentialPreview: Credential.fromJson(jsonCredential),
+      credentialManifest: credentialManifest,
       activities: [Activity(acquisitionAt: DateTime.now())],
     );
   }

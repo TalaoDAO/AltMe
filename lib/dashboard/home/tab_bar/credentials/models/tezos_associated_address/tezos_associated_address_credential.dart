@@ -1,3 +1,4 @@
+import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
