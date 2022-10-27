@@ -42,9 +42,11 @@ class ProfileCubit extends Cubit<ProfileState> {
               '';
       final jobTitle =
           await secureStorageProvider.get(SecureStorageKeys.jobTitle) ?? '';
+          
+      // by default none is chosen (empty url means none)
       final issuerVerificationUrl = await secureStorageProvider
               .get(SecureStorageKeys.issuerVerificationUrlKey) ??
-          Urls.checkIssuerTalaoUrl;
+          '';
       final _tezosNetworkJson =
           await secureStorageProvider.get(SecureStorageKeys.tezosNetworkKey);
       final tezosNetwork = _tezosNetworkJson != null
