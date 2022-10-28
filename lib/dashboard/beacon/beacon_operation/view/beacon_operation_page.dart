@@ -171,40 +171,11 @@ class _BeaconOperationViewState extends State<BeaconOperationView> {
                               height: Sizes.icon3x,
                             ),
                             const SizedBox(height: Sizes.spaceNormal),
-                            ConfirmTransactionDetailsCard(
+                            FeeDetails(
                               amount: amount,
                               symbol: symbol,
                               tokenUSDRate: state.xtzUSDRate,
-                              networkFee: state.selectedFee,
-                              isNFT: false,
-                              onEditButtonPressed: () async {
-                                final NetworkFeeModel? networkFeeModel =
-                                    await SelectNetworkFeeBottomSheet.show(
-                                  context: context,
-                                  selectedNetworkFee: state.selectedFee,
-                                  networkFeeList: [
-                                    state.baseFee,
-                                    state.baseFee.copyWith(
-                                      networkSpeed: NetworkSpeed.average,
-                                      fee: state.baseFee.fee * 2,
-                                      feeInUSD: state.baseFee.feeInUSD * 2,
-                                    ),
-                                    state.baseFee.copyWith(
-                                      networkSpeed: NetworkSpeed.fast,
-                                      fee: state.baseFee.fee * 3,
-                                      feeInUSD: state.baseFee.feeInUSD * 3,
-                                    ),
-                                  ],
-                                );
-
-                                if (networkFeeModel != null) {
-                                  context
-                                      .read<BeaconOperationCubit>()
-                                      .setSelectedFee(
-                                        selectedFee: networkFeeModel,
-                                      );
-                                }
-                              },
+                              fee: state.totalFee ?? 0,
                             ),
                             const SizedBox(height: Sizes.spaceNormal),
                           ],
