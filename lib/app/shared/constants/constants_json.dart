@@ -38,7 +38,7 @@ abstract class ConstantsJson {
             {
               'path': [r'$.credentialSubject.issuedBy.name'],
               'schema': {'type': 'string'},
-              'fallback': 'Unknown',
+              'fallback': 'My Wallet',
               'label': 'Verified by'
             }
           ]
