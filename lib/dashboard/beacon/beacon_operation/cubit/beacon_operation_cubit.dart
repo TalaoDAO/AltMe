@@ -53,10 +53,6 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     }
   }
 
-  void setSelectedFee({required NetworkFeeModel selectedFee}) {
-    emit(state.copyWith(selectedFee: selectedFee));
-  }
-
   Future<void> getFees() async {
     try {
       emit(state.loading());
@@ -68,27 +64,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       final fee = operationList.operations
           .map((Operation e) => e.totalFee)
           .reduce((int value, int element) => value + element);
-
-      final calculatedFeeInXTZ = (fee == 0 ? 257 : fee) / 1e6;
-      if (state.xtzUSDRate == 0) {
-        await getXtzPrice();
-      }
-
-      emit(
-        state.copyWith(
-          status: AppStatus.idle,
-          selectedFee: NetworkFeeModel(
-            fee: calculatedFeeInXTZ,
-            feeInUSD: calculatedFeeInXTZ * state.xtzUSDRate,
-            networkSpeed: NetworkSpeed.slow,
-          ),
-          baseFee: NetworkFeeModel(
-            fee: calculatedFeeInXTZ,
-            feeInUSD: calculatedFeeInXTZ * state.xtzUSDRate,
-            networkSpeed: NetworkSpeed.slow,
-          ),
-        ),
-      );
+      emit(state.copyWith(status: AppStatus.idle, totalFee: fee));
     } catch (e) {
       log.e('cost estimation failure , e: $e');
       if (e is MessageHandler) {
@@ -324,7 +300,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
         'secretKey: ${keystore.secretKey}'
         'publicKey: ${keystore.publicKey} '
         'amount: $amount '
-        'networkFee: ${state.selectedFee} '
+        'networkFee: ${state.totalFee} '
         'address: ${keystore.address} =>To address: '
         '${beaconRequest.operationDetails!.first.destination!}',
       );
