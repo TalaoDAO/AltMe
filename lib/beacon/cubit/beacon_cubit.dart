@@ -24,7 +24,7 @@ class BeaconCubit extends Cubit<BeaconState> {
   }
 
   void peerFromDeepLink(String beaconData) {
-    beacon.addPeer(pairingRequest: beaconData);
+    beacon.pair(pairingRequest: beaconData);
   }
 
   void listenToBeacon() {

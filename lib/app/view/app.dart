@@ -18,6 +18,7 @@ import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -167,6 +168,9 @@ class MaterialAppDefinition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      useInheritedMediaQuery: true,
+      builder: DevicePreview.appBuilder,
+      locale: DevicePreview.locale(context),
       title: 'AltMe',
       darkTheme: AppTheme.darkThemeData,
       navigatorObservers: [MyRouteObserver()],
