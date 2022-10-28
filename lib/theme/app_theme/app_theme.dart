@@ -392,13 +392,13 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get pinCodeTitle => GoogleFonts.roboto(
+  TextStyle get pinCodeTitle => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
         fontSize: 20,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w700,
       );
 
-  TextStyle get pinCodeMessage => GoogleFonts.roboto(
+  TextStyle get pinCodeMessage => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
         fontSize: 14,
         fontWeight: FontWeight.w400,

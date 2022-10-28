@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,6 +68,7 @@ class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
         child: PinCodeWidget(
           title: l10n.enterNewPinCode,
           passwordEnteredCallback: _onPasscodeEntered,
+          header: const MStepper(step: 1,totalStep: 3,),
           deleteButton: Text(
             l10n.delete,
             style: Theme.of(context).textTheme.button,

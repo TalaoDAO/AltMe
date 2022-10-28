@@ -563,7 +563,8 @@
     "payloadFormatErrorMessage",
     "thisFeatureIsNotSupportedMessage",
     "myWallet",
-    "ethereumNetwork"
+    "ethereumNetwork",
+    "step"
   ],
 
   "es": [
@@ -1130,7 +1131,8 @@
     "payloadFormatErrorMessage",
     "thisFeatureIsNotSupportedMessage",
     "myWallet",
-    "ethereumNetwork"
+    "ethereumNetwork",
+    "step"
   ],
 
   "fr": [
@@ -1697,7 +1699,8 @@
     "payloadFormatErrorMessage",
     "thisFeatureIsNotSupportedMessage",
     "myWallet",
-    "ethereumNetwork"
+    "ethereumNetwork",
+    "step"
   ],
 
   "it": [
@@ -2264,6 +2267,7 @@
     "payloadFormatErrorMessage",
     "thisFeatureIsNotSupportedMessage",
     "myWallet",
-    "ethereumNetwork"
+    "ethereumNetwork",
+    "step"
   ]
 }
