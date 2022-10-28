@@ -1,5 +1,4 @@
 import 'package:altme/app/shared/constants/sizes.dart';
-import 'package:altme/app/shared/widget/my_text.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -20,48 +19,40 @@ class CustomAppBar extends PreferredSize {
   final Widget? trailing;
 
   @override
-  Widget build(BuildContext context) => Stack(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.bottomCenter,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).colorScheme.appBarUpperLayer,
-                  Theme.of(context).colorScheme.appBarLowerLayer,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            padding: const EdgeInsets.only(
-              top: 12,
-              bottom: 18,
-              left: 64,
-              right: 64,
-            ),
-            child: MyText(
-              title ?? '',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.appBar,
-            ),
-          ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.only(
-              top: 12,
-              bottom: 12,
-              left: 8,
-              right: 8,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                leading ?? const SizedBox(width: 16, height: 16),
-                trailing ?? const SizedBox(width: 16, height: 16),
+  Widget build(BuildContext context) => SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.appBarUpperLayer,
+                Theme.of(context).colorScheme.appBarLowerLayer,
               ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
           ),
-        ],
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  leading ?? const SizedBox(width: 16, height: 16),
+                  trailing ?? const SizedBox(width: 16, height: 16),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  title ?? '',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.appBar,
+                ),
+              ),
+            ],
+          ),
+        ),
       );
+
+  // @override
+  // Size get preferredSize => const Size(300, 70);
 }

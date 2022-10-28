@@ -26,7 +26,7 @@ abstract class Sizes {
   static const double normalRadius = 12;
   static const double largeRadius = 18;
 
-  static const double credentialAspectRatio = 584 / 317;
+  static const double credentialAspectRatio = 500 / 300;
 
   //Icon
   static const double iconXSmall = 12;
@@ -40,7 +40,7 @@ abstract class Sizes {
   static const double recoveryPhraseTextFieldHeight = 160;
 
   //TextField height
-  static const double appBarHeight = 70;
+  static const double appBarHeight = 89;
 
   //Button height
   static const double normalButton = 38;
