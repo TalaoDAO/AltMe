@@ -56,14 +56,17 @@ class StarterPage extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Navigator.of(context).pushAndRemoveUntil<void>(
+                Navigator.of(context).push<void>(
                   EnterNewPinCodePage.route(
-                    isValidCallback: () => context
-                        .read<HomeCubit>()
-                        .startPassbaseVerification(context.read<WalletCubit>()),
+                    isValidCallback: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushAndRemoveUntil<void>(
+                        ActiviateBiometricsPage.route(),
+                        (Route<dynamic> route) => route.isFirst,
+                      );
+                    },
                     restrictToBack: false,
                   ),
-                  (Route<dynamic> route) => route.isFirst,
                 );
               },
               child: Padding(
@@ -79,14 +82,17 @@ class StarterPage extends StatelessWidget {
             MyGradientButton(
               text: l10n.create_wallet,
               onPressed: () {
-                Navigator.of(context).pushAndRemoveUntil<void>(
+                Navigator.of(context).push<void>(
                   EnterNewPinCodePage.route(
-                    isValidCallback: () => context
-                        .read<HomeCubit>()
-                        .startPassbaseVerification(context.read<WalletCubit>()),
+                    isValidCallback: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushAndRemoveUntil<void>(
+                        OnBoardingSecondPage.route(),
+                        (Route<dynamic> route) => route.isFirst,
+                      );
+                    },
                     restrictToBack: false,
                   ),
-                  (Route<dynamic> route) => route.isFirst,
                 );
               },
             ),

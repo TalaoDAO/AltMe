@@ -1,3 +1,4 @@
+export 'activate_biometircs/activate_biometrics.dart';
 export 'first/onboarding_first.dart';
 export 'gen_phrase/onboarding_gen_phrase.dart';
 export 'second/onboarding_second.dart';

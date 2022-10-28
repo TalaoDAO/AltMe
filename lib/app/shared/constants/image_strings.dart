@@ -10,6 +10,7 @@ class ImageStrings {
       '$imagePath/carte-attestation-employeur-recto.png';
   static const String employmentCertificateBack =
       '$imagePath/carte-attestation-employeur-verso.png';
+  static const String biometrics = '$imagePath/biometrics.png';
   static const String emailProof = '$imagePath/email-proof.png';
   static const String phoneProof = '$imagePath/phone-proof.png';
   static const String bloometaPass = '$imagePath/bloometa-pass.png';

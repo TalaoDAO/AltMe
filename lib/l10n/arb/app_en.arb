@@ -614,5 +614,8 @@
   "thisFeatureIsNotSupportedMessage": "Sorry! This feature is not supported yet",
   "myWallet": "My wallet",
   "ethereumNetwork": "Ethereum Network",
-  "step": "Step"
+  "step": "Step",
+  "activateBiometricsTitle": "Activate Biometrics\nto add a securtiy layer",
+  "loginWithBiometricsOnBoarding": "Log in with biometrics",
+  "option": "Option"
 }

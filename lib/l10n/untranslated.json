@@ -564,7 +564,10 @@
     "thisFeatureIsNotSupportedMessage",
     "myWallet",
     "ethereumNetwork",
-    "step"
+    "step",
+    "activateBiometricsTitle",
+    "loginWithBiometricsOnBoarding",
+    "option"
   ],
 
   "es": [
@@ -1132,7 +1135,10 @@
     "thisFeatureIsNotSupportedMessage",
     "myWallet",
     "ethereumNetwork",
-    "step"
+    "step",
+    "activateBiometricsTitle",
+    "loginWithBiometricsOnBoarding",
+    "option"
   ],
 
   "fr": [
@@ -1700,7 +1706,10 @@
     "thisFeatureIsNotSupportedMessage",
     "myWallet",
     "ethereumNetwork",
-    "step"
+    "step",
+    "activateBiometricsTitle",
+    "loginWithBiometricsOnBoarding",
+    "option"
   ],
 
   "it": [
@@ -2268,6 +2277,9 @@
     "thisFeatureIsNotSupportedMessage",
     "myWallet",
     "ethereumNetwork",
-    "step"
+    "step",
+    "activateBiometricsTitle",
+    "loginWithBiometricsOnBoarding",
+    "option"
   ]
 }
