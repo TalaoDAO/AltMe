@@ -1,6 +1,6 @@
 name: altme
 description: AltMe Flutter App 
-version: 1.3.6+89
+version: 1.3.7+90
 publish_to: none
 
 environment:
@@ -11,7 +11,7 @@ dependencies:
   beacon_flutter:
     git:
       url: https://github.com/TalaoDAO/beacon.git
-      ref: 698f893b964f12babfaaed121479292b3496e2d4  
+      ref: 67e7024f7cadaf066a8dc51bf8240fd8b7970f19  
   # beacon_flutter:
   #   path: ../beacon
   bip39: ^1.0.6
