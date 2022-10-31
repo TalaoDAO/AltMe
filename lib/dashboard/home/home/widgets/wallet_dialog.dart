@@ -52,8 +52,9 @@ class WalletDialog extends StatelessWidget {
               fontSize: 18,
               borderRadius: 20,
               onPressed: () {
+                // TODO(Taleb): remember to update routing
                 Navigator.of(context).push<void>(
-                  OnBoardingTosPage.route(routeType: WalletRouteType.create),
+                  OnBoardingTosPage.route(),
                 );
               },
             ),
@@ -64,7 +65,8 @@ class WalletDialog extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.of(context).push<void>(
-                  OnBoardingTosPage.route(routeType: WalletRouteType.recover),
+                  // TODO(Taleb): remember to update routing
+                  OnBoardingTosPage.route(),
                 );
               },
             ),

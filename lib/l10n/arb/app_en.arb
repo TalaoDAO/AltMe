@@ -620,5 +620,7 @@
   "option": "Option",
   "start": "Start",
   "iAgreeToThe": "I agree to the ",
-  "termsAndConditions": "Terms and conditions"
+  "termsAndConditions": "Terms and conditions",
+  "walletReadyTitle": "Your wallet is ready !",
+  "walletReadySubtitle": "Let’s discover everything \nWeb 3 has to offer."
 }
