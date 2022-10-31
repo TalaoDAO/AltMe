@@ -1,13 +1,10 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StarterPage extends StatelessWidget {
   const StarterPage({super.key});
@@ -88,7 +85,7 @@ class StarterPage extends StatelessWidget {
                       isValidCallback: () {
                         Navigator.of(context).pop();
                         Navigator.of(context).pushAndRemoveUntil<void>(
-                          OnBoardingSecondPage.route(),
+                          ActiviateBiometricsPage.route(),
                           (Route<dynamic> route) => route.isFirst,
                         );
                       },

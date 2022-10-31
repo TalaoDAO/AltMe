@@ -1,22 +1,16 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/import_wallet/import_wallet.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/onboarding/tos/widgets/widgets.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingTosPage extends StatelessWidget {
-  const OnBoardingTosPage({Key? key, required this.routeType})
-      : super(key: key);
+  const OnBoardingTosPage({Key? key}) : super(key: key);
 
-  final WalletRouteType routeType;
-
-  static Route route({required WalletRouteType routeType}) =>
-      MaterialPageRoute<void>(
-        builder: (context) => OnBoardingTosPage(routeType: routeType),
+  static Route route() => MaterialPageRoute<void>(
+        builder: (context) => const OnBoardingTosPage(),
         settings: const RouteSettings(name: '/onBoardingTermsPage'),
       );
 
@@ -24,16 +18,13 @@ class OnBoardingTosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<OnBoardingTosCubit>(
       create: (_) => OnBoardingTosCubit(),
-      child: OnBoardingTosView(routeType: routeType),
+      child: const OnBoardingTosView(),
     );
   }
 }
 
 class OnBoardingTosView extends StatefulWidget {
-  const OnBoardingTosView({Key? key, required this.routeType})
-      : super(key: key);
-
-  final WalletRouteType routeType;
+  const OnBoardingTosView({Key? key}) : super(key: key);
 
   @override
   State<OnBoardingTosView> createState() => _OnBoardingTosViewState();
@@ -67,66 +58,70 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
     final l10n = context.l10n;
     return BlocBuilder<OnBoardingTosCubit, OnBoardingTosState>(
       builder: (context, state) {
-        return BasePage(
-          backgroundColor: Theme.of(context).colorScheme.background,
-          title: l10n.termsOfUse,
-          titleLeading: const BackLeadingButton(),
-          scrollView: false,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          body: SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              children: [
-                BackgroundCard(
-                  padding: EdgeInsets.zero,
-                  child: Column(
-                    children: [
-                      const DisplayTermsofUse(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Divider(),
-                      ),
-                      CheckboxItem(
-                        value: state.agreeTerms,
-                        text: l10n.agreeTermsAndConditionCheckBox,
-                        onChange: (value) {
-                          context
-                              .read<OnBoardingTosCubit>()
-                              .setAgreeTerms(agreeTerms: value);
-                        },
-                      ),
-                      CheckboxItem(
-                        value: state.readTerms,
-                        text: l10n.readTermsOfUseCheckBox,
-                        onChange: (value) {
-                          context
-                              .read<OnBoardingTosCubit>()
-                              .setReadTerms(readTerms: value);
-                        },
-                      ),
-                      const SizedBox(height: 15),
-                    ],
+        return WillPopScope(
+          onWillPop: () async {
+            return false;
+          },
+          child: BasePage(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            title: l10n.termsOfUse,
+            scrollView: false,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            body: SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: [
+                  BackgroundCard(
+                    padding: EdgeInsets.zero,
+                    child: Column(
+                      children: [
+                        const DisplayTermsofUse(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Divider(),
+                        ),
+                        CheckboxItem(
+                          value: state.agreeTerms,
+                          text: l10n.agreeTermsAndConditionCheckBox,
+                          onChange: (value) {
+                            context
+                                .read<OnBoardingTosCubit>()
+                                .setAgreeTerms(agreeTerms: value);
+                          },
+                        ),
+                        CheckboxItem(
+                          value: state.readTerms,
+                          text: l10n.readTermsOfUseCheckBox,
+                          onChange: (value) {
+                            context
+                                .read<OnBoardingTosCubit>()
+                                .setReadTerms(readTerms: value);
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 15),
-                MyGradientButton(
-                  text: l10n.onBoardingTosButton,
-                  onPressed: (state.agreeTerms && state.readTerms)
-                      ? () async => onAcceptancePressed(context)
-                      : null,
-                ),
-                const SizedBox(height: 10),
-              ],
+                  const SizedBox(height: 15),
+                  MyGradientButton(
+                    text: l10n.start,
+                    onPressed: (state.agreeTerms && state.readTerms)
+                        ? () async => onAcceptancePressed(context)
+                        : null,
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
             ),
+            floatingActionButton: state.scrollIsOver
+                ? null
+                : ScrollDownButton(
+                    onPressed: onScrollDownButtonPressed,
+                  ),
           ),
-          floatingActionButton: state.scrollIsOver
-              ? null
-              : ScrollDownButton(
-                  onPressed: onScrollDownButtonPressed,
-                ),
         );
       },
     );
@@ -140,31 +135,11 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
     );
   }
 
-  Future<void> onAcceptancePressed(BuildContext context) async {
-    late Route routeTo;
-    if (widget.routeType == WalletRouteType.create) {
-      routeTo = OnBoardingGenPhrasePage.route();
-    } else if (widget.routeType == WalletRouteType.recover) {
-      routeTo = ImportWalletPage.route(isFromOnboarding: true);
-    }
-
-    final pinCode = await getSecureStorage.get(SecureStorageKeys.pinCode);
-    if (pinCode?.isEmpty ?? true) {
-      await Navigator.of(context).push<void>(
-        EnterNewPinCodePage.route(
-          isValidCallback: () {
-            Navigator.of(context).pushReplacement<void, void>(routeTo);
-          },
-        ),
-      );
-    } else {
-      await Navigator.of(context).push<void>(
-        PinCodePage.route(
-          isValidCallback: () {
-            Navigator.of(context).pushReplacement<void, void>(routeTo);
-          },
-        ),
-      );
-    }
+  void onAcceptancePressed(BuildContext context) {
+    Navigator.pushAndRemoveUntil<void>(
+      context,
+      DashboardPage.route(),
+      (Route<dynamic> route) => route.isFirst,
+    );
   }
 }

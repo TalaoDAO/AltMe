@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/gen_phrase/cubit/onboarding_gen_phrase_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -59,10 +58,9 @@ class OnBoardingGenPhraseView extends StatelessWidget {
           );
         }
         if (state.status == AppStatus.success) {
-          /// Removes every stack except first route (splashPage)
           Navigator.pushAndRemoveUntil<void>(
             context,
-            DashboardPage.route(),
+            WalletReadyPage.route(),
             (Route<dynamic> route) => route.isFirst,
           );
         }
@@ -97,7 +95,8 @@ class OnBoardingGenPhraseView extends StatelessWidget {
                         height: Sizes.spaceNormal,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: Sizes.spaceNormal),
                         child: Text(
                           l10n.onboardingPleaseStoreMessage,
                           textAlign: TextAlign.center,
@@ -160,7 +159,9 @@ class OnBoardingGenPhraseView extends StatelessWidget {
                             .switchTick(),
                       ),
                     ),
-                    const SizedBox(width: Sizes.spaceXSmall,),
+                    const SizedBox(
+                      width: Sizes.spaceXSmall,
+                    ),
                     Expanded(
                       child: InkWell(
                         onTap: () {

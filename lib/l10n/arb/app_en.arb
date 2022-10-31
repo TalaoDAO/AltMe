@@ -617,5 +617,8 @@
   "step": "Step",
   "activateBiometricsTitle": "Activate Biometrics\nto add a securtiy layer",
   "loginWithBiometricsOnBoarding": "Log in with biometrics",
-  "option": "Option"
+  "option": "Option",
+  "start": "Start",
+  "iAgreeToThe": "I agree to the ",
+  "termsAndConditions": "Terms and conditions"
 }

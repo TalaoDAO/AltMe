@@ -567,7 +567,10 @@
     "step",
     "activateBiometricsTitle",
     "loginWithBiometricsOnBoarding",
-    "option"
+    "option",
+    "start",
+    "iAgreeToThe",
+    "termsAndConditions"
   ],
 
   "es": [
@@ -1138,7 +1141,10 @@
     "step",
     "activateBiometricsTitle",
     "loginWithBiometricsOnBoarding",
-    "option"
+    "option",
+    "start",
+    "iAgreeToThe",
+    "termsAndConditions"
   ],
 
   "fr": [
@@ -1709,7 +1715,10 @@
     "step",
     "activateBiometricsTitle",
     "loginWithBiometricsOnBoarding",
-    "option"
+    "option",
+    "start",
+    "iAgreeToThe",
+    "termsAndConditions"
   ],
 
   "it": [
@@ -2280,6 +2289,9 @@
     "step",
     "activateBiometricsTitle",
     "loginWithBiometricsOnBoarding",
-    "option"
+    "option",
+    "start",
+    "iAgreeToThe",
+    "termsAndConditions"
   ]
 }
