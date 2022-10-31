@@ -156,10 +156,7 @@ class _SplashViewState extends State<SplashView> {
         qrCodeBlocListener,
         beaconBlocListener,
       ],
-      child: BasePage(
-        scrollView: false,
-        padding: EdgeInsets.zero,
-        useSafeArea: false,
+      child: Scaffold(
         body: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(

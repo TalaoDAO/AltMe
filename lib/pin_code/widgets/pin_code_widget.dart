@@ -163,9 +163,12 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          const AltMeLogo(
-                                            size: Sizes.logoLarge,
-                                          ),
+                                          if (widget.header != null)
+                                            widget.header!
+                                          else
+                                            const AltMeLogo(
+                                              size: Sizes.logoLarge,
+                                            ),
                                           const SizedBox(
                                             height: Sizes.spaceNormal,
                                           ),

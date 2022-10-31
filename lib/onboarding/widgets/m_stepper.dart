@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,10 @@ class MStepper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final size = min(
+      MediaQuery.of(context).size.width,
+      MediaQuery.of(context).size.height,
+    );
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -23,7 +29,9 @@ class MStepper extends StatelessWidget {
           '${l10n.step} $step/$totalStep',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        const SizedBox(height: Sizes.spaceSmall,),
+        const SizedBox(
+          height: Sizes.spaceSmall,
+        ),
         Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -31,8 +39,7 @@ class MStepper extends StatelessWidget {
             totalStep,
             (index) => Step(
               isEnable: (index + 1) <= step,
-              width: ((MediaQuery.of(context).size.width / 2) / totalStep) -
-                  (totalStep * 4),
+              width: ((size / 2) / totalStep) - (totalStep * 4),
             ),
           ),
         )
