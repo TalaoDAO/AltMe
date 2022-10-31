@@ -39,11 +39,12 @@ class ActivateBiometricsView extends StatelessWidget {
       },
       child: BasePage(
         scrollView: false,
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
+        titleLeading: const BackLeadingButton(),
         body: BlocBuilder<BiometricsCubit, BiometricsState>(
           builder: (context, state) {
             return Column(
               children: [
-                const Spacer(),
                 const MStepper(
                   step: 2,
                   totalStep: 3,
@@ -52,7 +53,7 @@ class ActivateBiometricsView extends StatelessWidget {
                 Text(
                   l10n.activateBiometricsTitle,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.onBoardingTitleStyle,
+                  style: Theme.of(context).textTheme.headline5,
                 ),
                 const Spacer(),
                 Image.asset(
@@ -95,7 +96,7 @@ class ActivateBiometricsView extends StatelessWidget {
                         builder: (context) => ConfirmDialog(
                           title: l10n.biometricsNotSupported,
                           subtitle: l10n
-                              .yourDeviceDoseNotSupportBiometricsAuthentication, // ignore: lines_longer_than_80_chars
+                              .yourDeviceDoseNotSupportBiometricsAuthentication,
                           yes: l10n.ok,
                         ),
                       );
@@ -108,7 +109,8 @@ class ActivateBiometricsView extends StatelessWidget {
                 MyGradientButton(
                   text: l10n.next,
                   onPressed: () {
-                    // TODO(Taleb): navigagte to recovery phrase
+                    Navigator.of(context)
+                        .push<void>(OnBoardingGenPhrasePage.route());
                   },
                 ),
               ],

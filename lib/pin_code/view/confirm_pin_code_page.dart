@@ -78,6 +78,7 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
     return BasePage(
       backgroundColor: Theme.of(context).colorScheme.background,
       scrollView: false,
+      titleLeading: const BackLeadingButton(),
       body: PinCodeWidget(
         title: l10n.confirmYourPinCode,
         header: const MStepper(

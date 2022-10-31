@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/gen_phrase/cubit/onboarding_gen_phrase_cubit.dart';
+import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
@@ -68,9 +69,9 @@ class OnBoardingGenPhraseView extends StatelessWidget {
       },
       builder: (context, state) {
         return BasePage(
-          title: l10n.onbordingSeedPhrase,
           scrollView: false,
           useSafeArea: true,
+          padding: const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
           titleLeading: BackLeadingButton(
             onPressed: () {
               if (context.read<OnBoardingGenPhraseCubit>().state.status !=
@@ -79,110 +80,111 @@ class OnBoardingGenPhraseView extends StatelessWidget {
               }
             },
           ),
-          body: BackgroundCard(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Text(
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const MStepper(
+                        step: 3,
+                        totalStep: 3,
+                      ),
+                      const SizedBox(
+                        height: Sizes.spaceNormal,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
+                        child: Text(
                           l10n.onboardingPleaseStoreMessage,
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.message,
-                        ),
-                        const SizedBox(height: Sizes.spaceNormal),
-                        Text(
-                          l10n.onboardingAltmeMessage,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.subMessage,
-                        ),
-                        const SizedBox(height: Sizes.spaceNormal),
-                        MnemonicDisplay(mnemonic: state.mnemonic),
-                        const SizedBox(
-                          height: Sizes.spaceNormal,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Clipboard.setData(
-                              ClipboardData(
-                                text: state.mnemonic.join(' '),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            l10n.copyToClipboard,
-                            style: Theme.of(context).textTheme.copyToClipBoard,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                //const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: Sizes.spaceSmall,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      Container(
-                        height: Sizes.icon,
-                        width: Sizes.icon,
-                        margin: const EdgeInsets.symmetric(
-                          vertical: Sizes.space2XSmall,
-                          horizontal: Sizes.spaceXSmall,
-                        ),
-                        child: Checkbox(
-                          value: state.isTicked,
-                          fillColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primary,
-                          ),
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(6),
-                            ),
-                          ),
-                          onChanged: (newValue) => context
-                              .read<OnBoardingGenPhraseCubit>()
-                              .switchTick(),
+                          style: Theme.of(context).textTheme.headline5,
                         ),
                       ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            context
-                                .read<OnBoardingGenPhraseCubit>()
-                                .switchTick();
-                          },
-                          child: Text(
-                            l10n.onboardingWroteDownMessage,
-                            style: Theme.of(context)
-                                .textTheme
-                                .onBoardingCheckMessage,
-                          ),
+                      const SizedBox(height: Sizes.spaceNormal),
+                      MnemonicDisplay(mnemonic: state.mnemonic),
+                      const SizedBox(
+                        height: Sizes.spaceSmall,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Clipboard.setData(
+                            ClipboardData(
+                              text: state.mnemonic.join(' '),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          l10n.copyToClipboard,
+                          style: Theme.of(context).textTheme.copyToClipBoard,
                         ),
+                      ),
+                      const SizedBox(height: Sizes.spaceLarge),
+                      Text(
+                        l10n.onboardingAltmeMessage,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.genPhraseSubmessage,
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              //const Spacer(),
+              Padding(
+                padding: const EdgeInsets.all(
+                  Sizes.spaceLarge,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Transform.scale(
+                      scale: 1.5,
+                      child: Checkbox(
+                        value: state.isTicked,
+                        fillColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.primary,
+                        ),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(6),
+                          ),
+                        ),
+                        onChanged: (newValue) => context
+                            .read<OnBoardingGenPhraseCubit>()
+                            .switchTick(),
+                      ),
+                    ),
+                    const SizedBox(width: Sizes.spaceXSmall,),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          context.read<OnBoardingGenPhraseCubit>().switchTick();
+                        },
+                        child: Text(
+                          l10n.onboardingWroteDownMessage,
+                          style: Theme.of(context)
+                              .textTheme
+                              .onBoardingCheckMessage,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
           navigation: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
               child: MyGradientButton(
                 text: l10n.onBoardingGenPhraseButton,
-                verticalSpacing: 16,
+                verticalSpacing: 18,
                 onPressed: state.isTicked
                     ? () async {
                         await context

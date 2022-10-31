@@ -22,82 +22,84 @@ class StarterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BasePage(
-      scrollView: false,
-      padding: EdgeInsets.zero,
-      useSafeArea: false,
-      body: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Theme.of(context).colorScheme.darkGradientStartColor,
-              Theme.of(context).colorScheme.darkGradientEndColor,
-            ],
-            end: Alignment.topCenter,
-            begin: Alignment.bottomCenter,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.darkGradientStartColor,
+                Theme.of(context).colorScheme.darkGradientEndColor,
+              ],
+              end: Alignment.topCenter,
+              begin: Alignment.bottomCenter,
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            const Spacer(),
-            const Padding(
-              padding: EdgeInsets.all(Sizes.spaceLarge),
-              child: TitleText(),
-            ),
-            const SubTitle(),
-            const Spacer(
-              flex: 2,
-            ),
-            const SplashImage(),
-            const Spacer(
-              flex: 2,
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).push<void>(
-                  EnterNewPinCodePage.route(
-                    isValidCallback: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushAndRemoveUntil<void>(
-                        ActiviateBiometricsPage.route(),
-                        (Route<dynamic> route) => route.isFirst,
-                      );
-                    },
-                    restrictToBack: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const Spacer(),
+              const Padding(
+                padding: EdgeInsets.all(Sizes.spaceLarge),
+                child: TitleText(),
+              ),
+              const SubTitle(),
+              const Spacer(
+                flex: 2,
+              ),
+              const SplashImage(),
+              const Spacer(
+                flex: 2,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).push<void>(
+                    EnterNewPinCodePage.route(
+                      isValidCallback: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push<void>(
+                          ActiviateBiometricsPage.route(),
+                        );
+                      },
+                      restrictToBack: false,
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(Sizes.spaceLarge),
+                  child: GradientButtonText(
+                    text: l10n.import_wallet,
+                    onPressed: () {},
+                    fontSize: 18,
+                    upperCase: true,
                   ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(Sizes.spaceLarge),
-                child: GradientButtonText(
-                  text: l10n.import_wallet,
-                  onPressed: () {},
-                  fontSize: 18,
-                  upperCase: true,
                 ),
               ),
-            ),
-            MyGradientButton(
-              text: l10n.create_wallet,
-              onPressed: () {
-                Navigator.of(context).push<void>(
-                  EnterNewPinCodePage.route(
-                    isValidCallback: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushAndRemoveUntil<void>(
-                        OnBoardingSecondPage.route(),
-                        (Route<dynamic> route) => route.isFirst,
-                      );
-                    },
-                    restrictToBack: false,
-                  ),
-                );
-              },
-            ),
-            const Spacer(),
-          ],
+              MyGradientButton(
+                text: l10n.create_wallet,
+                onPressed: () {
+                  Navigator.of(context).push<void>(
+                    EnterNewPinCodePage.route(
+                      isValidCallback: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pushAndRemoveUntil<void>(
+                          OnBoardingSecondPage.route(),
+                          (Route<dynamic> route) => route.isFirst,
+                        );
+                      },
+                      restrictToBack: false,
+                    ),
+                  );
+                },
+              ),
+              const Spacer(),
+            ],
+          ),
         ),
       ),
     );

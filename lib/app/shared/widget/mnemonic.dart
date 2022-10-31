@@ -17,7 +17,7 @@ class MnemonicDisplay extends StatelessWidget {
         (i) {
           final j = 3 * i;
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -26,14 +26,14 @@ class MnemonicDisplay extends StatelessWidget {
                     word: mnemonic[j],
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 12),
                 Expanded(
                   child: PhraseWord(
                     order: j + 2,
                     word: mnemonic[j + 1],
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 12),
                 Expanded(
                   child: PhraseWord(
                     order: j + 3,

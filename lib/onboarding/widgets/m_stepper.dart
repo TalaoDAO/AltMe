@@ -21,7 +21,7 @@ class MStepper extends StatelessWidget {
       children: [
         Text(
           '${l10n.step} $step/$totalStep',
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: Sizes.spaceSmall,),
         Row(
@@ -53,9 +53,9 @@ class Step extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 4,
+      height: 5,
       width: width,
-      margin: const EdgeInsets.all(2),
+      margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: isEnable ? Colors.white : Colors.white.withOpacity(0.5),
         borderRadius: const BorderRadius.all(Radius.circular(3)),

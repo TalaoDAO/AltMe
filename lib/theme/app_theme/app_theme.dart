@@ -30,7 +30,7 @@ abstract class AppTheme {
   static Color darkOnSurface = const Color(0xffEDEAF5);
 
   /// A color that typically appears behind scrollable content.
-  static Color darkBackground = const Color(0xff0A0421);
+  static Color darkBackground = const Color(0xff0A0F19);
 
   /// A color that's clearly legible when drawn on background.
   static Color darkOnBackground = const Color(0xffFFFFFF);
@@ -741,6 +741,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
         color: const Color(0xff71CBFF),
       );
+  
+  TextStyle get genPhraseSubmessage => GoogleFonts.nunito(
+        fontSize: 18,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xff71CBFF),
+      );
 
   TextStyle get identitiyBaseLightText => GoogleFonts.roboto(
         fontSize: 16,
@@ -754,17 +760,16 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get copyToClipBoard => GoogleFonts.nunito(
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: FontWeight.w400,
         color: const Color(0xffDED6EA),
         decoration: TextDecoration.underline,
       );
 
   TextStyle get onBoardingCheckMessage => GoogleFonts.nunito(
-        fontSize: 15,
-        height: 1.5,
-        fontWeight: FontWeight.w600,
-        color: const Color(0xffFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+        color: const Color(0xFFFFFFFF),
       );
 
   TextStyle get messageTitle => GoogleFonts.roboto(

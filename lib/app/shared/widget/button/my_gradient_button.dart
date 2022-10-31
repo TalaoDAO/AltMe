@@ -6,7 +6,7 @@ class MyGradientButton extends StatelessWidget {
     Key? key,
     required this.text,
     this.icon,
-    this.borderRadius = 20,
+    this.borderRadius = 18,
     this.verticalSpacing = 20,
     this.elevation = 2,
     this.fontSize = 18,
