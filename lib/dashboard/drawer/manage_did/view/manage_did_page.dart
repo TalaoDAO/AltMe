@@ -93,23 +93,31 @@ class ManageDIDPage extends StatelessWidget {
               height: Sizes.spaceXLarge,
             ),
             RevealButton(
-              onTap: () {
-                DIDPrivateKeyDialog.show(
-                  context: context,
-                  onContinueClick: () {
-                    Navigator.of(context).push<void>(
-                      PinCodePage.route(
-                        restrictToBack: false,
-                        isValidCallback: () {
-                          Navigator.push<void>(
-                            context,
-                            DIDPrivateKeyPage.route(),
-                          );
-                        },
+              onTap: () async {
+                final confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => ConfirmDialog(
+                        title: l10n.warningDialogTitle,
+                        subtitle: l10n.didPrivateKeyDescriptionAlert,
+                        yes: l10n.showDialogYes,
+                        no: l10n.showDialogNo,
                       ),
-                    );
-                  },
-                );
+                    ) ??
+                    false;
+
+                if (confirm) {
+                  await Navigator.of(context).push<void>(
+                    PinCodePage.route(
+                      restrictToBack: false,
+                      isValidCallback: () {
+                        Navigator.push<void>(
+                          context,
+                          DIDPrivateKeyPage.route(),
+                        );
+                      },
+                    ),
+                  );
+                }
               },
             ),
           ],
