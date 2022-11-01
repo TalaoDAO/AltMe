@@ -55,6 +55,7 @@ class WalletDialog extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push<void>(
                   EnterNewPinCodePage.route(
+                    isFromOnboarding: true,
                     isValidCallback: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).pushAndRemoveUntil<void>(
@@ -77,6 +78,7 @@ class WalletDialog extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push<void>(
                   EnterNewPinCodePage.route(
+                    isFromOnboarding: true,
                     isValidCallback: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).pushAndRemoveUntil<void>(

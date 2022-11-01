@@ -57,6 +57,7 @@ class StarterPage extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push<void>(
                     EnterNewPinCodePage.route(
+                      isFromOnboarding: true,
                       isValidCallback: () {
                         Navigator.of(context).pop();
                         Navigator.of(context).push<void>(
@@ -84,6 +85,7 @@ class StarterPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push<void>(
                     EnterNewPinCodePage.route(
+                      isFromOnboarding: true,
                       isValidCallback: () {
                         Navigator.of(context).pop();
                         Navigator.of(context).push<void>(

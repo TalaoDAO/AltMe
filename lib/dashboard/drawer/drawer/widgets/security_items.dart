@@ -25,6 +25,7 @@ class SecurityItems extends StatelessWidget {
     Navigator.of(context).pop();
     await Navigator.of(context).push<void>(
       EnterNewPinCodePage.route(
+        isFromOnboarding: false,
         isValidCallback: () {
           Navigator.of(context).pop();
           AlertMessage.showStringMessage(
