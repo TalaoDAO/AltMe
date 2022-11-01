@@ -60,7 +60,9 @@ class StarterPage extends StatelessWidget {
                       isValidCallback: () {
                         Navigator.of(context).pop();
                         Navigator.of(context).push<void>(
-                          ActiviateBiometricsPage.route(),
+                          ActiviateBiometricsPage.route(
+                            routeType: WalletRouteType.recover,
+                          ),
                         );
                       },
                       restrictToBack: false,
@@ -84,9 +86,10 @@ class StarterPage extends StatelessWidget {
                     EnterNewPinCodePage.route(
                       isValidCallback: () {
                         Navigator.of(context).pop();
-                        Navigator.of(context).pushAndRemoveUntil<void>(
-                          ActiviateBiometricsPage.route(),
-                          (Route<dynamic> route) => route.isFirst,
+                        Navigator.of(context).push<void>(
+                          ActiviateBiometricsPage.route(
+                            routeType: WalletRouteType.create,
+                          ),
                         );
                       },
                       restrictToBack: false,

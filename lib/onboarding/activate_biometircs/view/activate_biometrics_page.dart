@@ -1,16 +1,24 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ActiviateBiometricsPage extends StatelessWidget {
-  const ActiviateBiometricsPage({Key? key}) : super(key: key);
+  const ActiviateBiometricsPage({
+    Key? key,
+    required this.routeType,
+  }) : super(key: key);
 
-  static Route route() => RightToLeftRoute<void>(
-        builder: (context) => const ActiviateBiometricsPage(),
+  final WalletRouteType routeType;
+
+  static Route route({required WalletRouteType routeType}) =>
+      RightToLeftRoute<void>(
+        builder: (context) => ActiviateBiometricsPage(
+          routeType: routeType,
+        ),
         settings: const RouteSettings(name: '/activiateBiometricsPage'),
       );
 
@@ -18,7 +26,10 @@ class ActiviateBiometricsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => BiometricsCubit(),
-      child: ActivateBiometricsView(localAuthApi: LocalAuthApi()),
+      child: ActivateBiometricsView(
+        localAuthApi: LocalAuthApi(),
+        routeType: routeType,
+      ),
     );
   }
 }
@@ -27,8 +38,10 @@ class ActivateBiometricsView extends StatelessWidget {
   const ActivateBiometricsView({
     Key? key,
     required this.localAuthApi,
+    required this.routeType,
   }) : super(key: key);
   final LocalAuthApi localAuthApi;
+  final WalletRouteType routeType;
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +122,16 @@ class ActivateBiometricsView extends StatelessWidget {
                 MyGradientButton(
                   text: l10n.next,
                   onPressed: () {
-                    Navigator.of(context)
-                        .push<void>(OnBoardingGenPhrasePage.route());
+                    if (routeType == WalletRouteType.create) {
+                      Navigator.of(context)
+                          .push<void>(OnBoardingGenPhrasePage.route());
+                    } else {
+                      Navigator.of(context).push<void>(
+                        ImportWalletPage.route(
+                          isFromOnboarding: true,
+                        ),
+                      );
+                    }
                   },
                 ),
               ],
