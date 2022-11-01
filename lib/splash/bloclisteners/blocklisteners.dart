@@ -143,7 +143,8 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
         var acceptHost = true;
 
-        if (approvedIssuer.did.isEmpty) {
+        if (approvedIssuer.did.isEmpty &&
+            profileCubit.state.model.issuerVerificationUrl.isNotEmpty) {
           acceptHost = await showDialog<bool>(
                 context: context,
                 builder: (BuildContext context) {

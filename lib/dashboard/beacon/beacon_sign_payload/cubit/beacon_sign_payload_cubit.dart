@@ -30,6 +30,9 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
 
   final log = getLogger('BeaconSignPayloadCubit');
 
+  late String encodedPayload;
+  SigningType signingType = SigningType.micheline;
+
   void decodeMessage() {
     try {
       log.i('decoding payload');
@@ -39,22 +42,26 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
 
       final String payload = beaconRequest.request!.payload!;
 
-      late String encodedPayload;
-
-      if (payload.startsWith('05') || payload.startsWith('03')) {
+      if (payload.startsWith('05')) {
         encodedPayload = beaconRequest.request!.payload!;
+        signingType = SigningType.micheline;
+      } else if (payload.startsWith('03')) {
+        encodedPayload = beaconRequest.request!.payload!;
+        signingType = SigningType.operation;
       } else {
         encodedPayload = stringToHexPrefixedWith05(payload: payload);
+        signingType = SigningType.raw;
       }
-
+      log.i('payload - $payload');
       final bytes = hexToBytes(encodedPayload);
+      log.i('bytes - $bytes');
       final String payloadMessage = utf8.decode(bytes, allowMalformed: true);
+      log.i('payloadMessage - $payloadMessage');
 
       emit(
         state.copyWith(
           appStatus: AppStatus.idle,
           payloadMessage: payloadMessage,
-          encodedPaylod: encodedPayload,
         ),
       );
     } catch (e) {
@@ -73,6 +80,13 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
     try {
       log.i('Started signing');
       emit(state.loading());
+
+      final isInternetAvailable = await isConnected();
+      if (!isInternetAvailable) {
+        throw NetworkException(
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
+      }
 
       final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
 
@@ -95,12 +109,13 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
 
       final signature = Dartez.signPayload(
         signer: signer as SoftSigner,
-        payload: state.encodedPaylod!,
+        payload: encodedPayload,
       );
 
       final Map response = await beacon.signPayloadResponse(
         id: beaconCubit.state.beaconRequest!.request!.id!,
         signature: signature,
+        type: signingType,
       );
 
       if (state.payloadMessage!.contains('#')) {

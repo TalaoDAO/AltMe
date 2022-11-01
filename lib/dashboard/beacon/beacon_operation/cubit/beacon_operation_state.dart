@@ -6,10 +6,7 @@ class BeaconOperationState extends Equatable {
     this.status = AppStatus.init,
     this.message,
     this.xtzUSDRate = 0,
-    this.selectedFee =
-        const NetworkFeeModel(fee: 257 / 1e6, networkSpeed: NetworkSpeed.slow),
-    this.baseFee =
-        const NetworkFeeModel(fee: 257 / 1e6, networkSpeed: NetworkSpeed.slow),
+    this.totalFee,
   });
 
   factory BeaconOperationState.fromJson(Map<String, dynamic> json) =>
@@ -18,13 +15,12 @@ class BeaconOperationState extends Equatable {
   final AppStatus status;
   final StateMessage? message;
   final double xtzUSDRate;
-  final NetworkFeeModel selectedFee;
-  final NetworkFeeModel baseFee;
+  final int? totalFee;
 
   BeaconOperationState loading() {
     return BeaconOperationState(
       status: AppStatus.loading,
-      selectedFee: selectedFee,
+      totalFee: totalFee,
       xtzUSDRate: xtzUSDRate,
     );
   }
@@ -36,15 +32,14 @@ class BeaconOperationState extends Equatable {
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       xtzUSDRate: xtzUSDRate,
-      selectedFee: selectedFee,
+      totalFee: totalFee,
     );
   }
 
   BeaconOperationState copyWith({
     AppStatus? status,
     MessageHandler? messageHandler,
-    NetworkFeeModel? selectedFee,
-    NetworkFeeModel? baseFee,
+    int? totalFee,
     int? selectedIndex,
     double? xtzUSDRate,
   }) {
@@ -53,8 +48,7 @@ class BeaconOperationState extends Equatable {
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
-      selectedFee: selectedFee ?? this.selectedFee,
-      baseFee: baseFee ?? this.baseFee,
+      totalFee: totalFee ?? this.totalFee,
       xtzUSDRate: xtzUSDRate ?? this.xtzUSDRate,
     );
   }
@@ -62,11 +56,5 @@ class BeaconOperationState extends Equatable {
   Map<String, dynamic> toJson() => _$BeaconOperationStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        status,
-        message,
-        selectedFee,
-        xtzUSDRate,
-        baseFee,
-      ];
+  List<Object?> get props => [status, message, totalFee, xtzUSDRate];
 }

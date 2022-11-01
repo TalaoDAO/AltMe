@@ -61,8 +61,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "698f893b964f12babfaaed121479292b3496e2d4"
-      resolved-ref: "698f893b964f12babfaaed121479292b3496e2d4"
+      ref: "67e7024f7cadaf066a8dc51bf8240fd8b7970f19"
+      resolved-ref: "67e7024f7cadaf066a8dc51bf8240fd8b7970f19"
       url: "https://github.com/TalaoDAO/beacon.git"
     source: git
     version: "1.0.4"
@@ -234,6 +234,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
+  connectivity_plus:
+    dependency: "direct main"
+    description:
+      name: connectivity_plus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.2"
+  connectivity_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: connectivity_plus_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.3"
   convert:
     dependency: transitive
     description:
@@ -837,6 +851,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  nm:
+    dependency: transitive
+    description:
+      name: nm
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.0"
   node_preamble:
     dependency: transitive
     description:

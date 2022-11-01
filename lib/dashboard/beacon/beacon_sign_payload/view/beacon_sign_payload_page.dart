@@ -157,7 +157,7 @@ class _BeaconSignPayloadViewState extends State<BeaconSignPayloadView> {
                       verticalSpacing: 15,
                       borderRadius: Sizes.normalRadius,
                       text: l10n.sign,
-                      onPressed: state.encodedPaylod == null
+                      onPressed: state.payloadMessage == null
                           ? null
                           : () {
                               context.read<BeaconSignPayloadCubit>().sign();

@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -94,16 +95,20 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         }
       },
       builder: (context, state) {
+        final List<Activity> activities =
+            List<Activity>.from(widget.credentialModel.activities);
+
+        final List<Activity> reversedList =
+            List<Activity>.from(activities.reversed);
+
+        if (activities.isNotEmpty) {
+          reversedList.insert(0, activities[0]);
+          reversedList.removeLast();
+        }
+
         return BasePage(
           title: l10n.cardDetails,
-          titleLeading: BackLeadingButton(
-            onPressed: () {
-              if (context.read<CredentialDetailsCubit>().state.status !=
-                  AppStatus.loading) {
-                Navigator.of(context).pop();
-              }
-            },
-          ),
+          titleLeading: const BackLeadingButton(),
           // titleTrailing: IconButton(
           //   onPressed: _edit,
           //   icon: const Icon(Icons.edit),
@@ -221,11 +226,11 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             CredentialDetailTabStatus.activity) ...[
                           ListView.builder(
                             shrinkWrap: true,
-                            itemCount: widget.credentialModel.activities.length,
+                            itemCount: reversedList.length,
+                            physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               return ActivityWidget(
-                                activity:
-                                    widget.credentialModel.activities[index],
+                                activity: reversedList[index],
                               );
                             },
                           ),
