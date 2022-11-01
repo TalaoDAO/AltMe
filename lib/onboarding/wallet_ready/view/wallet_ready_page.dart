@@ -97,7 +97,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(
-                        Sizes.spaceLarge,
+                        Sizes.spaceNormal,
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -105,7 +105,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           Transform.scale(
-                            scale: 1.5,
+                            scale: 1.3,
                             child: Checkbox(
                               value: state.isAgreeWithTerms,
                               fillColor: MaterialStateProperty.all(
@@ -123,9 +123,6 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                                   .toggleAgreement(),
                             ),
                           ),
-                          const SizedBox(
-                            width: Sizes.spaceXSmall,
-                          ),
                           Expanded(
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -142,25 +139,27 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                                         Theme.of(context).textTheme.titleMedium,
                                   ),
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.pushAndRemoveUntil<void>(
-                                      context,
-                                      OnBoardingTosPage.route(),
-                                      (Route<dynamic> route) => route.isFirst,
-                                    );
-                                  },
-                                  child: MyText(
-                                    l10n.termsAndConditions.toLowerCase(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
+                                Flexible(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pushAndRemoveUntil<void>(
+                                        context,
+                                        OnBoardingTosPage.route(),
+                                        (Route<dynamic> route) => route.isFirst,
+                                      );
+                                    },
+                                    child: MyText(
+                                      l10n.termsAndConditions.toLowerCase(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                    ),
                                   ),
                                 )
                               ],
@@ -171,7 +170,9 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: Sizes.spaceSmall),
+                        horizontal: Sizes.spaceSmall,
+                        vertical: Sizes.space2XSmall,
+                      ),
                       child: MyGradientButton(
                         text: l10n.start,
                         verticalSpacing: 18,

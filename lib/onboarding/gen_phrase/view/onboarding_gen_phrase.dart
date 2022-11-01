@@ -69,7 +69,7 @@ class OnBoardingGenPhraseView extends StatelessWidget {
         return BasePage(
           scrollView: false,
           useSafeArea: true,
-          padding: const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
+          padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
           titleLeading: BackLeadingButton(
             onPressed: () {
               if (context.read<OnBoardingGenPhraseCubit>().state.status !=
@@ -134,7 +134,7 @@ class OnBoardingGenPhraseView extends StatelessWidget {
               //const Spacer(),
               Padding(
                 padding: const EdgeInsets.all(
-                  Sizes.spaceLarge,
+                  Sizes.spaceNormal,
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -167,7 +167,7 @@ class OnBoardingGenPhraseView extends StatelessWidget {
                         onTap: () {
                           context.read<OnBoardingGenPhraseCubit>().switchTick();
                         },
-                        child: Text(
+                        child: MyText(
                           l10n.onboardingWroteDownMessage,
                           style: Theme.of(context)
                               .textTheme
@@ -182,7 +182,10 @@ class OnBoardingGenPhraseView extends StatelessWidget {
           ),
           navigation: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+              padding: const EdgeInsets.symmetric(
+                horizontal: Sizes.spaceSmall,
+                vertical: Sizes.spaceSmall,
+              ),
               child: MyGradientButton(
                 text: l10n.onBoardingGenPhraseButton,
                 verticalSpacing: 18,

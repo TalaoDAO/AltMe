@@ -105,7 +105,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                 subTitle: widget.subTitle,
                               ),
                               Container(
-                                margin: const EdgeInsets.only(top: 20),
+                                margin: const EdgeInsets.only(top: 16),
                                 height: 40,
                                 child: AnimatedBuilder(
                                   animation: animation,

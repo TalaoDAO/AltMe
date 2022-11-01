@@ -52,7 +52,9 @@ class ActivateBiometricsView extends StatelessWidget {
       },
       child: BasePage(
         scrollView: false,
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
+        padding: const EdgeInsets.symmetric(
+          horizontal: Sizes.spaceXSmall,
+        ),
         titleLeading: const BackLeadingButton(),
         body: BlocBuilder<BiometricsCubit, BiometricsState>(
           builder: (context, state) {
@@ -134,6 +136,7 @@ class ActivateBiometricsView extends StatelessWidget {
                     }
                   },
                 ),
+                const SizedBox(height: Sizes.spaceXSmall,)
               ],
             );
           },
