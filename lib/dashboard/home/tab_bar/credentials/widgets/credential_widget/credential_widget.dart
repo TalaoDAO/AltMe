@@ -12,6 +12,7 @@ export 'default_credential_subject_widget.dart';
 export 'diploma_card_widget.dart';
 export 'ecole_42_learning_achievement_widget.dart';
 export 'email_pass_widget.dart';
+export 'ethereum_associated_address_widget.dart';
 export 'gender_widget.dart';
 export 'identity_card_widget.dart';
 export 'identity_pass_widget.dart';

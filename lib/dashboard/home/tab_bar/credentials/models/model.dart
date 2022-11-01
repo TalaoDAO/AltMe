@@ -18,6 +18,7 @@ export 'diploma_card/diploma_card_model.dart';
 export 'display/display.dart';
 export 'ecole_42_learning_achievement/ecole_42_learning_achievement_model.dart';
 export 'email_pass/email_pass_model.dart';
+export 'ethereum_associated_address/ethereum_associated_address_model.dart';
 export 'gender/gender_model.dart';
 export 'home_credential/home_credential.dart';
 export 'identity_card/identity_card_model.dart';

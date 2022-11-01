@@ -147,6 +147,10 @@ class DisplayInSelectionList extends StatelessWidget {
         return AragoOver18DisplayInSelectionList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.ethereumAssociatedWallet:
+        return EthereumAssociatedAddressDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
     }
   }
 }

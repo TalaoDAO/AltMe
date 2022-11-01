@@ -612,5 +612,6 @@
   "pass": "Pass",
   "payloadFormatErrorMessage": "The format of paylod is incorrect.",
   "thisFeatureIsNotSupportedMessage": "Sorry! This feature is not supported yet",
-  "myWallet": "My wallet"
+  "myWallet": "My wallet",
+  "ethereumNetwork": "Ethereum Network"
 }
