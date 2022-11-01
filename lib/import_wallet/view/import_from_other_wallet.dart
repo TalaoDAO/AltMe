@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
@@ -109,11 +110,19 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
         }
         if (state.status == AppStatus.success) {
           /// Removes every stack except first route (splashPage)
-          Navigator.pushAndRemoveUntil<void>(
-            context,
-            DashboardPage.route(),
-            (Route<dynamic> route) => route.isFirst,
-          );
+          if (widget.isFromOnboard) {
+            Navigator.pushAndRemoveUntil<void>(
+              context,
+              WalletReadyPage.route(),
+              (Route<dynamic> route) => route.isFirst,
+            );
+          } else {
+            Navigator.pushAndRemoveUntil<void>(
+              context,
+              DashboardPage.route(),
+              (Route<dynamic> route) => route.isFirst,
+            );
+          }
         }
       },
       builder: (context, state) {

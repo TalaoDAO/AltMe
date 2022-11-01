@@ -563,7 +563,16 @@
     "payloadFormatErrorMessage",
     "thisFeatureIsNotSupportedMessage",
     "myWallet",
-    "ethereumNetwork"
+    "ethereumNetwork",
+    "step",
+    "activateBiometricsTitle",
+    "loginWithBiometricsOnBoarding",
+    "option",
+    "start",
+    "iAgreeToThe",
+    "termsAndConditions",
+    "walletReadyTitle",
+    "walletReadySubtitle"
   ],
 
   "es": [
@@ -1130,7 +1139,16 @@
     "payloadFormatErrorMessage",
     "thisFeatureIsNotSupportedMessage",
     "myWallet",
-    "ethereumNetwork"
+    "ethereumNetwork",
+    "step",
+    "activateBiometricsTitle",
+    "loginWithBiometricsOnBoarding",
+    "option",
+    "start",
+    "iAgreeToThe",
+    "termsAndConditions",
+    "walletReadyTitle",
+    "walletReadySubtitle"
   ],
 
   "fr": [
@@ -1697,7 +1715,16 @@
     "payloadFormatErrorMessage",
     "thisFeatureIsNotSupportedMessage",
     "myWallet",
-    "ethereumNetwork"
+    "ethereumNetwork",
+    "step",
+    "activateBiometricsTitle",
+    "loginWithBiometricsOnBoarding",
+    "option",
+    "start",
+    "iAgreeToThe",
+    "termsAndConditions",
+    "walletReadyTitle",
+    "walletReadySubtitle"
   ],
 
   "it": [
@@ -2264,6 +2291,15 @@
     "payloadFormatErrorMessage",
     "thisFeatureIsNotSupportedMessage",
     "myWallet",
-    "ethereumNetwork"
+    "ethereumNetwork",
+    "step",
+    "activateBiometricsTitle",
+    "loginWithBiometricsOnBoarding",
+    "option",
+    "start",
+    "iAgreeToThe",
+    "termsAndConditions",
+    "walletReadyTitle",
+    "walletReadySubtitle"
   ]
 }

@@ -20,6 +20,7 @@ class IconStrings {
   static const String scan = '$base/scan.png';
   static const String arrows = '$base/arrows.png';
   static const String fingerprint = '$base/fingerprint.png';
+  static const String fingerprint2 = '$base/fingerprint2.png';
   static const String key = '$base/key.png';
   static const String reset = '$base/reset.png';
   static const String restore = '$base/restore.png';

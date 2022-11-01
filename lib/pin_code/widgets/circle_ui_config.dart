@@ -7,7 +7,7 @@ class CircleUIConfig {
     this.borderWidth = 1.5,
     this.fillColor = const Color(0xFF6600FF),
     this.defaultColor = Colors.white,
-    this.circleSize = 18,
+    this.circleSize = 22,
   });
 
   final Color borderColor;
