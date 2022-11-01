@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/pin_code/pin_code.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,11 +22,15 @@ class PinCodeWidget extends StatefulWidget {
     this.bottomWidget,
     this.backgroundColor,
     this.cancelCallback,
+    this.subTitle,
+    this.header,
   })  : circleUIConfig = circleUIConfig ?? const CircleUIConfig(),
         keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig(),
         super(key: key);
 
+  final Widget? header;
   final String title;
+  final String? subTitle;
   final int passwordDigits;
   final PasswordEnteredCallback passwordEnteredCallback;
 
@@ -90,11 +95,17 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const AltMeLogo(size: Sizes.logoLarge),
+                              if (widget.header != null)
+                                widget.header!
+                              else
+                                const AltMeLogo(size: Sizes.logoLarge),
                               const SizedBox(height: Sizes.spaceNormal),
-                              PinCodeTitle(title: widget.title),
+                              PinCodeTitle(
+                                title: widget.title,
+                                subTitle: widget.subTitle,
+                              ),
                               Container(
-                                margin: const EdgeInsets.only(top: 20),
+                                margin: const EdgeInsets.only(top: 16),
                                 height: 40,
                                 child: AnimatedBuilder(
                                   animation: animation,
@@ -152,13 +163,19 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          const AltMeLogo(
-                                            size: Sizes.logoLarge,
-                                          ),
+                                          if (widget.header != null)
+                                            widget.header!
+                                          else
+                                            const AltMeLogo(
+                                              size: Sizes.logoLarge,
+                                            ),
                                           const SizedBox(
                                             height: Sizes.spaceNormal,
                                           ),
-                                          PinCodeTitle(title: widget.title),
+                                          PinCodeTitle(
+                                            title: widget.title,
+                                            subTitle: widget.subTitle,
+                                          ),
                                           Container(
                                             margin:
                                                 const EdgeInsets.only(top: 20),

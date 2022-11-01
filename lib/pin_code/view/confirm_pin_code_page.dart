@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,19 +13,23 @@ class ConfirmPinCodePage extends StatelessWidget {
     Key? key,
     required this.storedPassword,
     required this.isValidCallback,
+    required this.isFromOnboarding,
   }) : super(key: key);
 
   final String storedPassword;
   final VoidCallback isValidCallback;
+  final bool isFromOnboarding;
 
-  static Route route(
-    String storedPassword,
-    VoidCallback isValidCallback,
-  ) {
+  static Route route({
+    required String storedPassword,
+    required VoidCallback isValidCallback,
+    required bool isFromOnboarding,
+  }) {
     return MaterialPageRoute<void>(
       builder: (_) => ConfirmPinCodePage(
         storedPassword: storedPassword,
         isValidCallback: isValidCallback,
+        isFromOnboarding: isFromOnboarding,
       ),
       settings: const RouteSettings(name: '/confirmPinCodePage'),
     );
@@ -37,6 +42,7 @@ class ConfirmPinCodePage extends StatelessWidget {
       child: ConfirmPinCodeView(
         storedPassword: storedPassword,
         isValidCallback: isValidCallback,
+        isFromOnboarding: isFromOnboarding,
       ),
     );
   }
@@ -47,10 +53,12 @@ class ConfirmPinCodeView extends StatefulWidget {
     Key? key,
     required this.storedPassword,
     required this.isValidCallback,
+    required this.isFromOnboarding,
   }) : super(key: key);
 
   final String storedPassword;
   final VoidCallback isValidCallback;
+  final bool isFromOnboarding;
 
   @override
   State<StatefulWidget> createState() => _ConfirmPinCodeViewState();
@@ -77,8 +85,15 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
     return BasePage(
       backgroundColor: Theme.of(context).colorScheme.background,
       scrollView: false,
+      titleLeading: const BackLeadingButton(),
       body: PinCodeWidget(
         title: l10n.confirmYourPinCode,
+        header: widget.isFromOnboarding
+            ? const MStepper(
+                step: 1,
+                totalStep: 3,
+              )
+            : null,
         passwordEnteredCallback: _onPasscodeEntered,
         deleteButton: Text(
           l10n.delete,
