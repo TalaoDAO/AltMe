@@ -89,6 +89,8 @@ class BeaconConnectedDappsCubit extends Cubit<BeaconConnectedDappsState> {
       final List<SavedPeerData> savedPeerDatas =
           await beaconRepository.findAll();
 
+      log.i('savedPeerDatas - $savedPeerDatas');
+
       final _peersListToShow = <SavedPeerData>[];
 
       /// loop in saved permitted peer data
@@ -96,7 +98,6 @@ class BeaconConnectedDappsCubit extends Cubit<BeaconConnectedDappsState> {
         /// display data for selected walletAddress only
         if (walletAddress == savedPeerData.walletAddress) {
           _peersListToShow.add(savedPeerData);
-          break;
         }
       }
 
