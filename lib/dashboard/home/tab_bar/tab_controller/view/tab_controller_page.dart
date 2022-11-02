@@ -138,22 +138,10 @@ class _TabControllerViewState extends State<TabControllerView>
                                   HomeStatus.hasNoWallet
                               ? const NeverScrollableScrollPhysics()
                               : null,
-                          children: [
-                            // Display DiscoverPage if user has no wallet or if
-                            // he has no credentials except
-                            // proofOfOwnershipCredentials
-                            if (context.read<HomeCubit>().state.homeStatus ==
-                                    HomeStatus.hasNoWallet ||
-                                walletState.credentials.length ==
-                                    credentialListState
-                                        .proofOfOwnershipCredentials.length ||
-                                credentialListState
-                                    .proofOfOwnershipCredentials.isEmpty)
-                              const DiscoverPage()
-                            else
-                              const CredentialsListPage(),
-                            const NftPage(),
-                            const TokensPage(),
+                          children: const [
+                            CredentialsListPage(),
+                            NftPage(),
+                            TokensPage(),
                           ],
                         );
                       },
