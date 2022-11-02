@@ -1,4 +1,6 @@
 class Urls {
+  static const String aragoPassUrl =
+      'https://arago.altme.io/?callback=https://www.arago.app';
   static const String appContactWebsiteUrl = 'https://altme.io';
   static const String checkIssuerTalaoUrl =
       'https://talao.co/trusted-issuers-registry/v1/issuers';

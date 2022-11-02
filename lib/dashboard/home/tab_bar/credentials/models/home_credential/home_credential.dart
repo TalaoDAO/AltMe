@@ -92,6 +92,8 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.aragoOver18:
         break;
       case CredentialSubjectType.aragoPass:
+        image = ImageStrings.aragoPass;
+        link = Urls.aragoPassUrl;
         break;
     }
     return HomeCredential(
