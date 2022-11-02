@@ -192,7 +192,9 @@ class DummyCredentialItem extends StatelessWidget {
                                   homeCredential.dummyDescription!,
                                 ),
                                 maxLines: 3,
-                                style: Theme.of(context).textTheme.caption,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .discoverOverlayDescription,
                               ),
                             ),
                           ),

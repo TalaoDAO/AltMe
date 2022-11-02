@@ -741,7 +741,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
         color: const Color(0xff71CBFF),
       );
-  
+
   TextStyle get genPhraseSubmessage => GoogleFonts.nunito(
         fontSize: 18,
         fontWeight: FontWeight.w400,
@@ -877,6 +877,12 @@ extension CustomTextTheme on TextTheme {
   TextStyle get credentialSteps => GoogleFonts.roboto(
         color: const Color(0xffFFFFFF),
         fontSize: 18,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get discoverOverlayDescription => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 11,
         fontWeight: FontWeight.w600,
       );
 }
