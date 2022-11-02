@@ -64,6 +64,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         destination: state.withdrawalAddress,
         amount: amount,
         customFee: customFee,
+        publicKey: sourceKeystore.publicKey,
       );
       logger.i(
         'before execute: withdrawal from secretKey: ${sourceKeystore.secretKey}'
@@ -74,7 +75,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         '${state.withdrawalAddress}',
       );
       // ignore: unawaited_futures
-      operationsList.executeAndMonitor();
+      operationsList.executeAndMonitor(null);
       logger.i('after withdrawal execute');
       emit(state.success());
     } catch (e, s) {
