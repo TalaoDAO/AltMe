@@ -19,7 +19,7 @@ class AragoIdentityCardModel extends CredentialSubjectModel {
           id: id,
           type: type,
           issuedBy: issuedBy,
-          credentialSubjectType: CredentialSubjectType.identityCard,
+          credentialSubjectType: CredentialSubjectType.aragoIdentityCard,
           credentialCategory: CredentialCategory.identityCards,
         );
 

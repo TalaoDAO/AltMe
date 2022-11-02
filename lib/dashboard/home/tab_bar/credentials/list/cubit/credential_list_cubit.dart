@@ -107,6 +107,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.aragoOver18:
           break;
         case CredentialSubjectType.aragoPass:
+          identityCategories.remove(CredentialSubjectType.aragoPass);
           break;
       }
       switch (credentialSubject.credentialCategory) {
@@ -147,17 +148,16 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           break;
       }
     }
-/* Disable display of dummies when displaying credentials.
-// TODO(all)Uncomment if we need to display dummies again. 
+//  Disable display of dummies when displaying credentials.
+// TODO(all)Uncomment if we need to display dummies again.
     /// adding dummy gaming credentials
-    gamingCredentials.addAll(dummyListFromCategory(gamingCategories));
+    // gamingCredentials.addAll(dummyListFromCategory(gamingCategories));
 
     /// adding dummy community credentials
     communityCredentials.addAll(dummyListFromCategory(communityCategories));
 
     /// adding dummy identity credentials
-    identityCredentials.addAll(dummyListFromCategory(identityCategories));
-*/
+    // identityCredentials.addAll(dummyListFromCategory(identityCategories));
     emit(
       state.populate(
         gamingCredentials: gamingCredentials,
@@ -185,6 +185,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
   Future insertCredential(CredentialModel credential) async {
     emit(state.loading());
     final identityCategories = state.identityCategories;
+    final communityCategories = state.communityCategories;
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
@@ -201,6 +202,15 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         /// adding real credentials
         final _credentials = List.of(state.communityCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
+        final credentialSubjectType = credential
+            .credentialPreview.credentialSubjectModel.credentialSubjectType;
+        if (credentialSubjectType == CredentialSubjectType.aragoPass) {
+          _removeDummyIfCredentialExist(
+            _credentials,
+            communityCategories,
+            CredentialSubjectType.aragoPass,
+          );
+        }
         emit(state.populate(communityCredentials: _credentials));
         break;
 
@@ -461,6 +471,16 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
+        final credentialSubjectType = credential
+            .credentialPreview.credentialSubjectModel.credentialSubjectType;
+        if (credentialSubjectType == CredentialSubjectType.aragoPass) {
+          // TODO(all): Uncomment if we need to display dummies again.
+          _credentials.add(
+            HomeCredential.isDummy(
+              CredentialSubjectType.aragoPass,
+            ),
+          );
+        }
         emit(state.populate(communityCredentials: _credentials));
         break;
 

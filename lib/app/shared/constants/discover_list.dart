@@ -6,7 +6,7 @@ class DiscoverList {
     CredentialSubjectType.tezotopiaMembership,
   ];
   static final List<CredentialSubjectType> communityCategories = [
-    // CredentialSubjectType.talaoCommunityCard
+    CredentialSubjectType.aragoPass,
   ];
   static final List<CredentialSubjectType> identityCategories = [
     CredentialSubjectType.emailPass,
