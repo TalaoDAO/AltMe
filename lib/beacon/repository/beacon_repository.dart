@@ -69,11 +69,25 @@ class BeaconRepository {
     return true;
   }
 
-  Future<int> insert(SavedPeerData savedPeerData) async {
+  Future<int> insert(SavedPeerData peerData) async {
+    final List<SavedPeerData> savedPeerDatas = await findAll();
+
+    final SavedPeerData? matchedData = savedPeerDatas.firstWhereOrNull(
+      (SavedPeerData peer) =>
+          peer.walletAddress == peerData.walletAddress &&
+          peer.peer.name == peerData.peer.name,
+
+      /// Note: Assumption - name is always unique
+    );
+
+    if (matchedData != null) {
+      await deleteByPublicKey(matchedData.peer.publicKey);
+    }
+
     log.i('saving beaconData');
     await _secureStorageProvider.set(
-      '${SecureStorageKeys.beaconPeerKey}/${savedPeerData.peer.publicKey}',
-      json.encode(savedPeerData.toJson()),
+      '${SecureStorageKeys.beaconPeerKey}/${peerData.peer.publicKey}',
+      json.encode(peerData.toJson()),
     );
     return 1;
   }

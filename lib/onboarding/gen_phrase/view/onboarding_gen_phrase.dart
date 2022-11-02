@@ -96,7 +96,8 @@ class OnBoardingGenPhraseView extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: Sizes.spaceNormal),
+                          horizontal: Sizes.spaceNormal,
+                        ),
                         child: Text(
                           l10n.onboardingPleaseStoreMessage,
                           textAlign: TextAlign.center,

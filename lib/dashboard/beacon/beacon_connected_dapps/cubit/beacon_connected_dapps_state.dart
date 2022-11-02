@@ -6,7 +6,7 @@ class BeaconConnectedDappsState extends Equatable {
     this.status = AppStatus.init,
     this.message,
     this.xtzModel,
-    List<P2PPeer>? peers,
+    List<SavedPeerData>? peers,
   }) : peers = peers ?? [];
 
   factory BeaconConnectedDappsState.fromJson(Map<String, dynamic> json) =>
@@ -15,7 +15,7 @@ class BeaconConnectedDappsState extends Equatable {
   final AppStatus status;
   final StateMessage? message;
   final TokenModel? xtzModel;
-  final List<P2PPeer> peers;
+  final List<SavedPeerData> peers;
 
   BeaconConnectedDappsState loading() {
     return copyWith(status: AppStatus.loading);
@@ -31,7 +31,7 @@ class BeaconConnectedDappsState extends Equatable {
     AppStatus? status,
     MessageHandler? messageHandler,
     TokenModel? xtzModel,
-    List<P2PPeer>? peers,
+    List<SavedPeerData>? peers,
   }) {
     return BeaconConnectedDappsState(
       status: status ?? this.status,
