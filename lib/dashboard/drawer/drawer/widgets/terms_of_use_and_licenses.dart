@@ -27,15 +27,19 @@ class TermsOfUseAndLicences extends StatelessWidget {
               DrawerItem(
                 icon: IconStrings.terms,
                 title: l10n.termsOfUse,
-                onTap: () =>
-                    Navigator.of(context).push<void>(TermsPage.route()),
+                onTap: () async {
+                  await LaunchUrl.launch(
+                    'https://www.arago.app/mentions-legales',
+                  );
+                },
               ),
               const DrawerItemDivider(),
               DrawerItem(
                 icon: IconStrings.terms,
                 title: l10n.licenses,
-                onTap: () =>
-                    Navigator.of(context).push<void>(LicensesPage.route()),
+                onTap: () async {
+                  await LaunchUrl.launch('https://www.arago.app/');
+                },
               ),
             ],
           ),
