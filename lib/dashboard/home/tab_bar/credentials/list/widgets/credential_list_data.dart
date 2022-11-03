@@ -73,6 +73,7 @@ class CredentialListData extends StatelessWidget {
                     title: l10n.pass,
                     credentials: state.passCredentials,
                     categorySubtitle: l10n.passCredentialHomeSubtitle,
+                    showAddOption: true,
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
                 ],
