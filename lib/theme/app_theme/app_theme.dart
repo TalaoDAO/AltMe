@@ -558,7 +558,7 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get studentCardSchool => GoogleFonts.roboto(
         color: const Color(0xff9dc5ff),
-        fontSize: 18,
+        fontSize: 15,
         fontWeight: FontWeight.bold,
       );
 
