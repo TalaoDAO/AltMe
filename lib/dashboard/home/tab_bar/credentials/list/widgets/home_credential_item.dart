@@ -35,7 +35,6 @@ class RealCredentialItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BackgroundCard(
       padding: const EdgeInsets.all(4),
       child: GestureDetector(
@@ -44,34 +43,8 @@ class RealCredentialItem extends StatelessWidget {
             CredentialsDetailsPage.route(credentialModel),
           );
         },
-        child: Column(
-          children: [
-            Expanded(
-              flex: 8,
-              child: CredentialsListPageItem(
-                credentialModel: credentialModel,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Expanded(
-              flex: 2,
-              child: Row(
-                children: [
-                  Image.asset(
-                    IconStrings.checkCircleGreen,
-                    height: 15,
-                  ),
-                  const SizedBox(width: 2),
-                  Expanded(
-                    child: MyText(
-                      l10n.inMyWallet,
-                      style: Theme.of(context).textTheme.credentialSurfaceText,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
+        child: CredentialsListPageItem(
+          credentialModel: credentialModel,
         ),
       ),
     );
@@ -202,34 +175,6 @@ class DummyCredentialItem extends StatelessWidget {
                       ),
               ),
             ),
-            const SizedBox(height: 5),
-            Expanded(
-              flex: 2,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 5,
-                  horizontal: 15,
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      l10n.getIt,
-                      style: Theme.of(context).textTheme.getCardsButton,
-                    ),
-                    const SizedBox(width: 8),
-                    Image.asset(
-                      IconStrings.addCircle,
-                      height: 20,
-                    ),
-                  ],
-                ),
-              ),
-            )
           ],
         ),
       ),
