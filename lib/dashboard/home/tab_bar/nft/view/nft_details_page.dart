@@ -60,7 +60,8 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               AspectRatio(
                 aspectRatio: 1.2,
                 child: CachedImageFromNetwork(
-                  widget.nftModel.displayUrl,
+                  widget.nftModel.displayUrl ??
+                      (widget.nftModel.thumbnailUrl ?? ''),
                   fit: BoxFit.fill,
                   errorMessage: l10n.nftTooBigToLoad,
                   borderRadius: const BorderRadius.all(
