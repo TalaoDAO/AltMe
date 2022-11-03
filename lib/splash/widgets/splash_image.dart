@@ -9,7 +9,7 @@ class SplashImage extends StatelessWidget {
     return Image.asset(
       ImageStrings.splashImage,
       fit: BoxFit.fitWidth,
-      height: MediaQuery.of(context).size.longestSide / 2.5,
+      height: MediaQuery.of(context).size.longestSide / 2.2,
     );
   }
 }
