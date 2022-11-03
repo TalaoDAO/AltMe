@@ -40,15 +40,25 @@ class NftModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$NftModelToJson(this);
 
-  String? get displayUrl => displayUri?.replaceAll(
-        'ipfs://',
-        Urls.talaoIpfsGateway,
-      );
+  String? get displayUrl {
+    if (displayUri?.isEmpty ?? true) {
+      return null;
+    }
+    return displayUri?.replaceAll(
+      'ipfs://',
+      Urls.talaoIpfsGateway,
+    );
+  }
 
-  String? get thumbnailUrl => thumbnailUri?.replaceAll(
-        'ipfs://',
-        Urls.talaoIpfsGateway,
-      );
+  String? get thumbnailUrl {
+    if (thumbnailUri?.isEmpty ?? true) {
+      return null;
+    }
+    return thumbnailUri?.replaceAll(
+      'ipfs://',
+      Urls.talaoIpfsGateway,
+    );
+  }
 
   TokenModel getToken() {
     return TokenModel(
