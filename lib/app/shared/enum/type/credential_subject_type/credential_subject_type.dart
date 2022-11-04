@@ -10,6 +10,7 @@ enum CredentialSubjectType {
   nationality,
   gender,
   tezosAssociatedWallet,
+  ethereumAssociatedWallet,
   certificateOfEmployment,
   defaultCredential,
   ecole42LearningAchievement,

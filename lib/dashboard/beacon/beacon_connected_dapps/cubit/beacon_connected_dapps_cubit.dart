@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -87,60 +85,21 @@ class BeaconConnectedDappsCubit extends Cubit<BeaconConnectedDappsState> {
     try {
       emit(state.loading());
 
-      log.i('fetching connected peers from dApp');
-
-      final isInternetAvailable = await isConnected();
-      if (!isInternetAvailable) {
-        throw NetworkException(
-          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
-        );
-      }
-
-      final peers = await beacon.getPeers();
-
-      final Map<String, dynamic> requestJson =
-          jsonDecode(jsonEncode(peers)) as Map<String, dynamic>;
-      final ConnectedPeers connectedPeers =
-          ConnectedPeers.fromJson(requestJson);
-
       log.i('fetching saved peers');
       final List<SavedPeerData> savedPeerDatas =
           await beaconRepository.findAll();
 
-      final _peersListToShow = <P2PPeer>[];
+      log.i('savedPeerDatas - $savedPeerDatas');
 
-      // TODO(all): when beacon sdk returns correct 'isPaired' data then show
-      // data accordingly
-
-      //final _peersToRemove = <P2PPeer>[];
+      final _peersListToShow = <SavedPeerData>[];
 
       /// loop in saved permitted peer data
       for (final savedPeerData in savedPeerDatas) {
-        //bool _isPeerMatched = false;
-
-        /// loop in connected peers from dApp
-        for (final connectedPeer in connectedPeers.peer!) {
-          if (savedPeerData.peer.publicKey == connectedPeer.publicKey) {
-            //_isPeerMatched = true;
-
-            /// display data for selected walletAddress only
-            if (walletAddress == savedPeerData.walletAddress) {
-              _peersListToShow.add(savedPeerData.peer);
-              break;
-            }
-          }
+        /// display data for selected walletAddress only
+        if (walletAddress == savedPeerData.walletAddress) {
+          _peersListToShow.add(savedPeerData);
         }
-
-        // if (!_isPeerMatched) {
-        //   _peersToRemove.add(savedPeerData.peer);
-        // }
       }
-
-      /// Peer that are disconnected from dApp
-
-      // for (final peer in _peersToRemove) {
-      //   await beaconRepository.deleteByPublicKey(peer.publicKey);
-      // }
 
       emit(state.copyWith(status: AppStatus.idle, peers: _peersListToShow));
     } catch (e) {

@@ -61,11 +61,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "67e7024f7cadaf066a8dc51bf8240fd8b7970f19"
-      resolved-ref: "67e7024f7cadaf066a8dc51bf8240fd8b7970f19"
+      ref: ecc9bee16bd975cc6b63b12a15ba682a46c2c23f
+      resolved-ref: ecc9bee16bd975cc6b63b12a15ba682a46c2c23f
       url: "https://github.com/TalaoDAO/beacon.git"
     source: git
-    version: "1.0.4"
+    version: "1.0.6"
   bip32:
     dependency: transitive
     description:
@@ -234,6 +234,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
+  confetti:
+    dependency: "direct main"
+    description:
+      name: confetti
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.0"
   connectivity_plus:
     dependency: "direct main"
     description:
@@ -1441,8 +1448,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: "3a749ff828b55ce59cbc3675386cf16fae3fb96c"
+      ref: bd4b8db6e3a352590a6e556d31df8aef60db3465
+      resolved-ref: bd4b8db6e3a352590a6e556d31df8aef60db3465
       url: "https://github.com/autonomy-system/tezart.git"
     source: git
     version: "2.0.4"

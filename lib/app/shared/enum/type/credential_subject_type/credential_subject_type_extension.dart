@@ -79,6 +79,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xFFFFADAD);
       case CredentialSubjectType.aragoPass:
         return const Color(0xff4700D8);
+      case CredentialSubjectType.ethereumAssociatedWallet:
+        return const Color(0xff4700D8);
       case CredentialSubjectType.defaultCredential:
         return Colors.white;
     }
@@ -149,6 +151,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.aragoEmailPass:
         return Icons.mail;
       case CredentialSubjectType.aragoOver18:
+        return Icons.accessible_rounded;
+      case CredentialSubjectType.ethereumAssociatedWallet:
         return Icons.accessible_rounded;
       case CredentialSubjectType.defaultCredential:
         return Icons.fact_check_outlined;

@@ -15,7 +15,7 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
           const AdvanceSettingsState(
             isGamingEnabled: true,
             isIdentityEnabled: true,
-            isPaymentEnabled: false,
+            isPaymentEnabled: true,
             isSocialMediaEnabled: false,
             isCommunityEnabled: false,
             isOtherEnabled: false,
@@ -46,7 +46,7 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
             'true';
     final isPaymentEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isPaymentEnabled) ??
-                false.toString()) ==
+                true.toString()) ==
             'true';
     final isSocialMediaEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isSocialMediaEnabled) ??

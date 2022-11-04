@@ -67,32 +67,6 @@ class BloometaPassRecto extends Recto {
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate: BloometaPassDelegate(position: Offset.zero),
-          children: [
-            LayoutId(
-              id: 'bloometaValue',
-              child: FractionallySizedBox(
-                widthFactor: 0.8,
-                heightFactor: 0.20,
-                child: MyText(
-                  bloometaPassModel.offers?.benefit?.discount ?? '',
-                  style: Theme.of(context).textTheme.title,
-                ),
-              ),
-            ),
-            LayoutId(
-              id: 'bloometa',
-              child: FractionallySizedBox(
-                widthFactor: 0.4,
-                heightFactor: 0.14,
-                child: MyText(
-                  l10n.tezotopia,
-                  style: Theme.of(context).textTheme.subMessage.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                ),
-              ),
-            )
-          ],
         ),
       ),
     );

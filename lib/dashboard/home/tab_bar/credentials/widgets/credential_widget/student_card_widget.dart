@@ -85,7 +85,7 @@ class StudentCardRecto extends Recto {
             LayoutId(
               id: 'school',
               child: FractionallySizedBox(
-                widthFactor: 0.4,
+                widthFactor: 0.3,
                 alignment: Alignment.centerLeft,
                 child: MyText(
                   studentCardModel.issuedBy!.name,
@@ -96,13 +96,14 @@ class StudentCardRecto extends Recto {
             LayoutId(
               id: 'description',
               child: FractionallySizedBox(
-                widthFactor: 0.63,
+                widthFactor: 0.7,
                 heightFactor: 0.33,
                 alignment: Alignment.centerLeft,
                 child: DisplayDescriptionCard(
                   credentialModel: credentialModel,
                   style:
                       Theme.of(context).textTheme.credentialStudentCardTextCard,
+                  maxLines: 2,
                 ),
               ),
             ),

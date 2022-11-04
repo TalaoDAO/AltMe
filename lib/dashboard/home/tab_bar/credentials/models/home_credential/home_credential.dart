@@ -183,6 +183,7 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.aragoLearningAchievement:
       case CredentialSubjectType.aragoOver18:
       case CredentialSubjectType.aragoPass:
+      case CredentialSubjectType.ethereumAssociatedWallet:
         break;
     }
 

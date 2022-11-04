@@ -52,19 +52,14 @@ class DefaultSelectionDisplayDescriptor extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8),
-                        child: Row(
-                          children: [
-                            Text(
-                              credentialModel
-                                  .credentialPreview.evidence.first.id,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .credentialFieldDescription,
-                              maxLines: 5,
-                              overflow: TextOverflow.fade,
-                              softWrap: true,
-                            ),
-                          ],
+                        child: Text(
+                          credentialModel.credentialPreview.evidence.first.id,
+                          style: Theme.of(context)
+                              .textTheme
+                              .credentialFieldDescription,
+                          maxLines: 5,
+                          overflow: TextOverflow.fade,
+                          softWrap: true,
                         ),
                       ),
                     ),

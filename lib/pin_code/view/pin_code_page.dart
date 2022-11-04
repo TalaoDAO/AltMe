@@ -100,6 +100,7 @@ class _PinCodeViewState extends State<PinCodeView> {
         scrollView: false,
         body: PinCodeWidget(
           title: l10n.enterYourPinCode,
+          subTitle: l10n.pinCodeMessage,
           passwordEnteredCallback: _onPasscodeEntered,
           deleteButton: Text(
             l10n.delete,

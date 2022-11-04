@@ -28,6 +28,8 @@ class CredentialSubjectModel {
         return GenderModel.fromJson(json);
       case 'TezosAssociatedAddress':
         return TezosAssociatedAddressModel.fromJson(json);
+      case 'EthereumAssociatedAddress':
+        return EthereumAssociatedAddressModel.fromJson(json);
       case 'SelfIssued':
         return SelfIssuedModel.fromJson(json);
       case 'IdentityPass':

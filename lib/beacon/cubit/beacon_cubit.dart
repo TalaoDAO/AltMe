@@ -16,7 +16,7 @@ class BeaconCubit extends Cubit<BeaconState> {
 
   final log = getLogger('BeaconCubit');
   Future<void> startBeacon() async {
-    await beacon.startBeacon();
+    await beacon.startBeacon(walletName: 'Altme');
     if (state.isBeaconStarted) return;
     log.i('beacon started');
     emit(state.copyWith(isBeaconStarted: true));

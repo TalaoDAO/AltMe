@@ -24,15 +24,15 @@ class ManageNetworkPage extends StatelessWidget {
       body: BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
         bloc: context.read<ManageNetworkCubit>(),
         builder: (context, state) {
-          var groupValue = TezosNetwork.mainNet();
-          switch (state.network.networkname) {
-            case 'Mainnet':
-              groupValue = TezosNetwork.mainNet();
-              break;
-            case 'Ghostnet':
-              groupValue = TezosNetwork.ghostnet();
-              break;
-          }
+          // var groupValue = TezosNetwork.mainNet();
+          // switch (state.network.networkname) {
+          //   case 'Mainnet':
+          //     groupValue = TezosNetwork.mainNet();
+          //     break;
+          //   case 'Ghostnet':
+          //     groupValue = TezosNetwork.ghostnet();
+          //     break;
+          // }
           return BackgroundCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

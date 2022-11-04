@@ -151,7 +151,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       }
 
       final operationList = await getOperationList();
-      await operationList.executeAndMonitor();
+      await operationList.executeAndMonitor(null);
       log.i('after operationList.executeAndMonitor()');
 
       final transactionHash = operationList.result.id;
@@ -283,8 +283,11 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       final keystore =
           keyGenerator.getKeystore(secretKey: currentAccount.secretKey);
 
-      final operationList =
-          OperationsList(source: keystore, rpcInterface: client.rpcInterface);
+      final operationList = OperationsList(
+        source: keystore,
+        publicKey: keystore.publicKey,
+        rpcInterface: client.rpcInterface,
+      );
 
       final List<Operation> operations = getOperation();
       for (final element in operations) {

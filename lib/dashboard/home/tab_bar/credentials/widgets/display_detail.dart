@@ -150,6 +150,10 @@ class DisplayDetail extends StatelessWidget {
         return AragoOver18DisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.ethereumAssociatedWallet:
+        return EthereumAssociatedAddressDisplayDetail(
+          credentialModel: credentialModel,
+        );
     }
   }
 }

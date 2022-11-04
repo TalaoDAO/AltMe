@@ -13,6 +13,7 @@ class NftModel extends Equatable {
     this.id,
     this.name,
     this.displayUri,
+    this.thumbnailUri,
     this.balance,
     this.description,
     this.tokenId,
@@ -28,8 +29,8 @@ class NftModel extends Equatable {
   final String tokenId;
   @JsonKey(defaultValue: '')
   final String name;
-  @JsonKey(defaultValue: '')
-  final String displayUri;
+  final String? displayUri;
+  final String? thumbnailUri;
   final String balance;
   final String? description;
   final String? standard;
@@ -39,10 +40,25 @@ class NftModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$NftModelToJson(this);
 
-  String get displayUrl => displayUri.replaceAll(
-        'ipfs://',
-        Urls.talaoIpfsGateway,
-      );
+  String? get displayUrl {
+    if (displayUri?.isEmpty ?? true) {
+      return null;
+    }
+    return displayUri?.replaceAll(
+      'ipfs://',
+      Urls.talaoIpfsGateway,
+    );
+  }
+
+  String? get thumbnailUrl {
+    if (thumbnailUri?.isEmpty ?? true) {
+      return null;
+    }
+    return thumbnailUri?.replaceAll(
+      'ipfs://',
+      Urls.talaoIpfsGateway,
+    );
+  }
 
   TokenModel getToken() {
     return TokenModel(
@@ -62,6 +78,7 @@ class NftModel extends Equatable {
         id,
         name,
         displayUri,
+        thumbnailUri,
         balance,
         description,
       ];

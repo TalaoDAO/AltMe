@@ -5,6 +5,7 @@ import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/splash/splash.dart';
+import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
@@ -154,32 +155,40 @@ class _SplashViewState extends State<SplashView> {
         qrCodeBlocListener,
         beaconBlocListener,
       ],
-      child: BasePage(
-        scrollView: false,
-        padding: EdgeInsets.zero,
-        body: Center(
+      child: Scaffold(
+        body: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.darkGradientStartColor,
+                Theme.of(context).colorScheme.darkGradientEndColor,
+              ],
+              end: Alignment.topCenter,
+              begin: Alignment.bottomCenter,
+            ),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: const [
               Spacer(),
-              AltMeLogo(),
               Padding(
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(Sizes.spaceLarge),
                 child: TitleText(),
               ),
-              SplashImage(),
-              Spacer(),
-              Padding(
-                padding: EdgeInsets.all(8),
-                child: SubTitle(),
+              SubTitle(),
+              Spacer(
+                flex: 2,
               ),
-              Spacer(),
+              SplashImage(),
+              Spacer(
+                flex: 2,
+              ),
               LoadingText(),
               SizedBox(height: 10),
               LoadingProgress(),
               Spacer(),
-              VersionText(),
-              SizedBox(height: 10)
+              SizedBox(height: Sizes.spaceLarge,),
             ],
           ),
         ),

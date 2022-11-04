@@ -55,14 +55,15 @@ class _NftListState extends State<NftList> {
           childAspectRatio: Sizes.nftItemRatio,
         ),
         itemBuilder: (_, index) {
+          final model = widget.nftList[index];
           return NftItem(
-            assetUrl: widget.nftList[index].displayUrl,
+            assetUrl: model.displayUrl ?? (model.thumbnailUrl ?? ''),
             onClick: () {
-              widget.onItemClick?.call(widget.nftList[index]);
+              widget.onItemClick?.call(model);
             },
-            assetValue: widget.nftList[index].balance,
-            description: widget.nftList[index].name,
-            id: widget.nftList[index].tokenId,
+            assetValue: model.balance,
+            description: model.name,
+            id: model.tokenId,
           );
         },
         itemCount: widget.nftList.length,

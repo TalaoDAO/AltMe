@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -53,7 +54,19 @@ class WalletDialog extends StatelessWidget {
               borderRadius: 20,
               onPressed: () {
                 Navigator.of(context).push<void>(
-                  OnBoardingTosPage.route(routeType: WalletRouteType.create),
+                  EnterNewPinCodePage.route(
+                    isFromOnboarding: true,
+                    isValidCallback: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushAndRemoveUntil<void>(
+                        ActiviateBiometricsPage.route(
+                          routeType: WalletRouteType.create,
+                        ),
+                        (Route<dynamic> route) => route.isFirst,
+                      );
+                    },
+                    restrictToBack: false,
+                  ),
                 );
               },
             ),
@@ -64,7 +77,19 @@ class WalletDialog extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.of(context).push<void>(
-                  OnBoardingTosPage.route(routeType: WalletRouteType.recover),
+                  EnterNewPinCodePage.route(
+                    isFromOnboarding: true,
+                    isValidCallback: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushAndRemoveUntil<void>(
+                        ActiviateBiometricsPage.route(
+                          routeType: WalletRouteType.recover,
+                        ),
+                        (Route<dynamic> route) => route.isFirst,
+                      );
+                    },
+                    restrictToBack: false,
+                  ),
                 );
               },
             ),

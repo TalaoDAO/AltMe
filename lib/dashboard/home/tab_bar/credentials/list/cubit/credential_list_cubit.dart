@@ -61,6 +61,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           break;
         case CredentialSubjectType.tezosAssociatedWallet:
           break;
+        case CredentialSubjectType.ethereumAssociatedWallet:
+          break;
         case CredentialSubjectType.certificateOfEmployment:
           break;
         case CredentialSubjectType.defaultCredential:
@@ -258,6 +260,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             );
             break;
           case CredentialSubjectType.tezosAssociatedWallet:
+            break;
+          case CredentialSubjectType.ethereumAssociatedWallet:
             break;
           case CredentialSubjectType.certificateOfEmployment:
             break;
@@ -607,6 +611,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             identityCategories.add(CredentialSubjectType.gender);
             break;
           case CredentialSubjectType.tezosAssociatedWallet:
+            break;
+          case CredentialSubjectType.ethereumAssociatedWallet:
             break;
           case CredentialSubjectType.certificateOfEmployment:
             break;

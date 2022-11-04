@@ -160,7 +160,7 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
                                       children: [
                                         Expanded(
                                           child: Text(
-                                            state.peers[i].name,
+                                            state.peers[i].peer.name,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .dappName,
@@ -178,7 +178,7 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
                                   onTap: () async {
                                     await Navigator.of(context).push<void>(
                                       BeaconRightPage.route(
-                                        p2pPeer: state.peers[i],
+                                        p2pPeer: state.peers[i].peer,
                                       ),
                                     );
                                     await context
