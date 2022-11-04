@@ -14,7 +14,7 @@ class EthereumAssociatedAddressModel extends CredentialSubjectModel {
   }) : super(
           id: id,
           type: type,
-          credentialSubjectType: CredentialSubjectType.tezosAssociatedWallet,
+          credentialSubjectType: CredentialSubjectType.ethereumAssociatedWallet,
           credentialCategory: CredentialCategory.proofOfOwnershipCards,
         );
 
