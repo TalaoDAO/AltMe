@@ -119,24 +119,26 @@ class _NftDetailsViewState extends State<NftDetailsView> {
           ),
         ),
       ),
-      navigation: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(Sizes.spaceSmall),
-          child: MyGradientButton(
-            text: l10n.send,
-            onPressed: () {
-              Navigator.of(context).push<void>(
-                ConfirmTokenTransactionPage.route(
-                  selectedToken: widget.nftModel.getToken(),
-                  withdrawalAddress: '',
-                  amount: 1,
-                  isNFT: true,
+      navigation: isAndroid()
+          ? SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(Sizes.spaceSmall),
+                child: MyGradientButton(
+                  text: l10n.send,
+                  onPressed: () {
+                    Navigator.of(context).push<void>(
+                      ConfirmTokenTransactionPage.route(
+                        selectedToken: widget.nftModel.getToken(),
+                        withdrawalAddress: '',
+                        amount: 1,
+                        isNFT: true,
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ),
-      ),
+              ),
+            )
+          : null,
     );
   }
 }
