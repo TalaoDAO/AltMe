@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/camera/view/camera_page.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
@@ -74,9 +75,19 @@ class DummyCredentialItem extends StatelessWidget {
     if (credentialSubjectTypeList.contains(
       homeCredential.credentialSubjectType,
     )) {
-      await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
-            link: homeCredential.link!,
-          );
+      //here check for over18 and over13 to take photo for AI KYC
+      if (homeCredential.credentialSubjectType ==
+              CredentialSubjectType.over18 ||
+          homeCredential.credentialSubjectType ==
+              CredentialSubjectType.over13) {
+        getLogger('HomeCredentialItem')
+            .i('credential type: ${homeCredential.credentialSubjectType}');
+        await Navigator.push<void>(context, CameraPage.route());
+      } else {
+        await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
+              link: homeCredential.link!,
+            );
+      }
     } else {
       /// check if  credential it is
       /// [CredentialSubjectType.tezotopiaMembership]

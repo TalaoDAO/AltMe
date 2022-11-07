@@ -572,7 +572,8 @@
     "iAgreeToThe",
     "termsAndConditions",
     "walletReadyTitle",
-    "walletReadySubtitle"
+    "walletReadySubtitle",
+    "failedToInitCamera"
   ],
 
   "es": [
@@ -1148,7 +1149,8 @@
     "iAgreeToThe",
     "termsAndConditions",
     "walletReadyTitle",
-    "walletReadySubtitle"
+    "walletReadySubtitle",
+    "failedToInitCamera"
   ],
 
   "fr": [
@@ -1724,7 +1726,8 @@
     "iAgreeToThe",
     "termsAndConditions",
     "walletReadyTitle",
-    "walletReadySubtitle"
+    "walletReadySubtitle",
+    "failedToInitCamera"
   ],
 
   "it": [
@@ -2300,6 +2303,7 @@
     "iAgreeToThe",
     "termsAndConditions",
     "walletReadyTitle",
-    "walletReadySubtitle"
+    "walletReadySubtitle",
+    "failedToInitCamera"
   ]
 }
