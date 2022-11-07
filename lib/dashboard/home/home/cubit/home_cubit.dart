@@ -1,15 +1,19 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
+import 'package:crypto/crypto.dart';
+import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:web3dart/crypto.dart';
 import 'package:workmanager/workmanager.dart';
 
 part 'home_cubit.g.dart';
@@ -27,6 +31,62 @@ class HomeCubit extends Cubit<HomeState> {
   final SecureStorageProvider secureStorageProvider;
 
   final log = getLogger('HomeCubit');
+
+  Future<void> aiSelfiValidation({
+    required CredentialSubjectType credentialType,
+    required List<int> imageBytes,
+  }) async {
+    final logger = getLogger('HomeCubit - aiSelfiValidation');
+    emit(state.loading());
+    try {
+      final String url = credentialType == CredentialSubjectType.over13
+          ? Urls.over13aiValidationUrl
+          : Urls.over18aiValidationUrl;
+      final verificationMethod =
+          await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
+
+      final base64EncodedImage = base64Encode(imageBytes);
+
+      final challenge =
+          bytesToHex(sha256.convert(utf8.encode(base64EncodedImage)).bytes);
+
+      final options = <String, dynamic>{
+        'verificationMethod': verificationMethod,
+        'proofPurpose': 'authentication',
+        'challenge': challenge,
+        'domain': 'issuer.talao.co',
+      };
+
+      final key = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
+      final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
+
+      final DIDKitProvider didKitProvider = DIDKitProvider();
+      final String did_auth = await didKitProvider.didAuth(
+        did,
+        jsonEncode(options),
+        key,
+      );
+
+      final dynamic response = await client.post(
+        url,
+        headers: <String, dynamic>{
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-API-KEY': '5f691f41-b7ef-456e-b53d-7351b2798b4e'
+        },
+        data: <String, dynamic>{
+          'base64_encoded_string': base64EncodedImage,
+          'vp': did_auth,
+          'did': did,
+        },
+      );
+      emit(state.copyWith(status: AppStatus.success));
+      logger.i('response : $response');
+    } catch (e, s) {
+      emit(state.copyWith(status: AppStatus.error));
+      logger.e('error: $e , stack: $s');
+    }
+  }
 
   Future<void> emitHasWallet() async {
     final String? passbaseStatusFromStorage = await secureStorageProvider.get(

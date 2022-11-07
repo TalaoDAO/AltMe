@@ -13,10 +13,10 @@ class CameraPage extends StatelessWidget {
 
   final CameraConfig defaultconfig;
 
-  static Route route({
+  static Route<List<int>?> route({
     CameraConfig defaultconfig = const CameraConfig(),
   }) {
-    return MaterialPageRoute<void>(
+    return MaterialPageRoute<List<int>?>(
       settings: const RouteSettings(name: '/cameraPage'),
       builder: (_) => CameraPage(defaultconfig: defaultconfig),
     );

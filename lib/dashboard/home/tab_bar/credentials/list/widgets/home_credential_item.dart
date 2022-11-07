@@ -80,9 +80,16 @@ class DummyCredentialItem extends StatelessWidget {
               CredentialSubjectType.over18 ||
           homeCredential.credentialSubjectType ==
               CredentialSubjectType.over13) {
-        getLogger('HomeCredentialItem')
-            .i('credential type: ${homeCredential.credentialSubjectType}');
-        await Navigator.push<void>(context, CameraPage.route());
+        final imageBytes = await Navigator.push<List<int>?>(
+          context,
+          CameraPage.route(),
+        );
+        if (imageBytes != null) {
+          await context.read<HomeCubit>().aiSelfiValidation(
+                credentialType: homeCredential.credentialSubjectType,
+                imageBytes: imageBytes,
+              );
+        }
       } else {
         await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
               link: homeCredential.link!,
