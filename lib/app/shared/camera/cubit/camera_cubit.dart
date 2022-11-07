@@ -18,11 +18,14 @@ class CameraCubit extends Cubit<CameraState> {
   final logger = getLogger('CameraCubit');
   CameraController? cameraController;
 
-  Future<CameraController?> getCameraController() async {
+  Future<void> getCameraController() async {
     emit(state.copyWith(status: CameraStatus.initializing));
     final List<CameraDescription> cameras = await availableCameras();
 
-    if (cameras.isEmpty) return null;
+    if (cameras.isEmpty) {
+      emit(state.copyWith(status: CameraStatus.initializeFailed));
+      return;
+    }
 
     CameraDescription? _selectedCamera = cameras[0];
     try {
@@ -48,6 +51,22 @@ class CameraCubit extends Cubit<CameraState> {
       enableAudio: false,
     );
     await cameraController!.initialize();
+    emit(state.copyWith(status: CameraStatus.intialized));
+  }
+
+  Future<void> takePhoto() async {
+    try {
+      final xFile = await cameraController!.takePicture();
+      final imageBytes = (await xFile.readAsBytes()).toList();
+      emit(
+          state.copyWith(status: CameraStatus.imageCaptured, data: imageBytes));
+    } catch (e, s) {
+      emit(state.copyWith(status: CameraStatus.error));
+      logger.e('error : $e, stack: $s');
+    }
+  }
+
+  Future<void> deleteCapturedImage() async {
     emit(state.copyWith(status: CameraStatus.intialized));
   }
 }
