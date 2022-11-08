@@ -1,7 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class _BaseItem extends StatefulWidget {
@@ -85,43 +83,19 @@ class CredentialsListPageItem extends StatelessWidget {
 
   Widget displaySelectionElement(BuildContext context) {
     //final credential = Credential.fromJsonOrDummy(credentialModel.data);
-    final l10n = context.l10n;
     return CredentialSelectionPadding(
       child: Column(
         children: <Widget>[
           DisplayInSelectionList(credentialModel: credentialModel),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        IconStrings.checkCircleGreen,
-                        height: 20,
-                      ),
-                      const SizedBox(width: 2),
-                      Expanded(
-                        child: Text(
-                          l10n.inMyWallet,
-                          style: Theme.of(context)
-                              .textTheme
-                              .credentialSurfaceText
-                              .copyWith(fontSize: 14),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(
-                  selected! ? Icons.check_box : Icons.check_box_outline_blank,
-                  size: 25,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-              ],
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Icon(
+                selected! ? Icons.check_box : Icons.check_box_outline_blank,
+                size: 25,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
             ),
           ),
         ],

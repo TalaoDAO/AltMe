@@ -40,11 +40,10 @@ class StarterPage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
+              const SizedBox(height: Sizes.space2XLarge,),
               const Spacer(),
-              const Padding(
-                padding: EdgeInsets.all(Sizes.spaceLarge),
-                child: TitleText(),
-              ),
+              const TitleText(),
+              const SizedBox(height: Sizes.spaceNormal,),
               const SubTitle(),
               const Spacer(
                 flex: 2,

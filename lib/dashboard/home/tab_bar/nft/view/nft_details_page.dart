@@ -60,7 +60,8 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               AspectRatio(
                 aspectRatio: 1.2,
                 child: CachedImageFromNetwork(
-                  widget.nftModel.displayUrl,
+                  widget.nftModel.displayUrl ??
+                      (widget.nftModel.thumbnailUrl ?? ''),
                   fit: BoxFit.fill,
                   errorMessage: l10n.nftTooBigToLoad,
                   borderRadius: const BorderRadius.all(
@@ -118,24 +119,26 @@ class _NftDetailsViewState extends State<NftDetailsView> {
           ),
         ),
       ),
-      navigation: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(Sizes.spaceSmall),
-          child: MyGradientButton(
-            text: l10n.send,
-            onPressed: () {
-              Navigator.of(context).push<void>(
-                ConfirmTokenTransactionPage.route(
-                  selectedToken: widget.nftModel.getToken(),
-                  withdrawalAddress: '',
-                  amount: 1,
-                  isNFT: true,
+      navigation: isAndroid()
+          ? SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(Sizes.spaceSmall),
+                child: MyGradientButton(
+                  text: l10n.send,
+                  onPressed: () {
+                    Navigator.of(context).push<void>(
+                      ConfirmTokenTransactionPage.route(
+                        selectedToken: widget.nftModel.getToken(),
+                        withdrawalAddress: '',
+                        amount: 1,
+                        isNFT: true,
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ),
-      ),
+              ),
+            )
+          : null,
     );
   }
 }

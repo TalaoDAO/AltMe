@@ -188,6 +188,7 @@ class _SplashViewState extends State<SplashView> {
               SizedBox(height: 10),
               LoadingProgress(),
               Spacer(),
+              SizedBox(height: Sizes.spaceLarge,),
             ],
           ),
         ),

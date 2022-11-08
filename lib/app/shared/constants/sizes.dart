@@ -20,7 +20,7 @@ abstract class Sizes {
   static const double logoXLarge = 150;
   static const double logo2XLarge = 200;
 
-  static const double homeCredentialRatio = 1.2;
+  static const double homeCredentialRatio = 1.5;
 
   ///borderRadius
   static const double credentialBorderRadius = 15;

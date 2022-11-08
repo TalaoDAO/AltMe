@@ -265,16 +265,16 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get starterTitleStyle => GoogleFonts.roboto(
+  TextStyle get starterTitleStyle => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
-        fontSize: 32,
-        fontWeight: FontWeight.w600,
+        fontSize: 34,
+        fontWeight: FontWeight.w700,
       );
 
-  TextStyle get starterSubTitleStyle => GoogleFonts.roboto(
-        color: const Color(0xFFD1CCE3),
-        fontSize: 22,
-        fontWeight: FontWeight.w400,
+  TextStyle get starterSubTitleStyle => GoogleFonts.nunito(
+        color: const Color(0xFFEEEEEE),
+        fontSize: 26,
+        fontWeight: FontWeight.w600,
       );
 
   TextStyle get onBoardingTitleStyle => GoogleFonts.roboto(
