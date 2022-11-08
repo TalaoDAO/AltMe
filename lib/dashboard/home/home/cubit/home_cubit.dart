@@ -84,10 +84,20 @@ class HomeCubit extends Cubit<HomeState> {
         },
         data: data,
       );
-      emit(state.copyWith(status: AppStatus.success));
+      emit(
+        state.copyWith(
+          status: AppStatus.success,
+        ),
+      );
       logger.i('response : $response');
     } catch (e, s) {
-      emit(state.copyWith(status: AppStatus.error));
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        ),
+      );
       logger.e('error: $e , stack: $s');
       if (e is NetworkException) {
         logger.e('error message: ${e.message}');
