@@ -134,7 +134,7 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
               ),
             ),
           );
-          await qrCodeScanCubit.verify(uri: uri);
+          await qrCodeScanCubit.verify(uri: uri, isBeaconSSI: true);
         } else {
           emit(
             state.copyWith(
