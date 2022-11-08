@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
+import 'package:image/image.dart' as img;
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -57,9 +58,15 @@ class CameraCubit extends Cubit<CameraState> {
   Future<void> takePhoto() async {
     try {
       final xFile = await cameraController!.takePicture();
-      final imageBytes = (await xFile.readAsBytes()).toList();
+      final photoCaptured = (await xFile.readAsBytes()).toList();
+      final fixedImageBytes =
+          img.encodeJpg(img.flipHorizontal(img.decodeImage(photoCaptured)!));
       emit(
-          state.copyWith(status: CameraStatus.imageCaptured, data: imageBytes));
+        state.copyWith(
+          status: CameraStatus.imageCaptured,
+          data: fixedImageBytes,
+        ),
+      );
     } catch (e, s) {
       emit(state.copyWith(status: CameraStatus.error));
       logger.e('error : $e, stack: $s');

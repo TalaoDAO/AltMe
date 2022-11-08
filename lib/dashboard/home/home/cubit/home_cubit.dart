@@ -67,6 +67,14 @@ class HomeCubit extends Cubit<HomeState> {
         key,
       );
 
+      final data = <String, dynamic>{
+        'base64_encoded_string': base64EncodedImage,
+        'vp': did_auth,
+        'did': did,
+      };
+
+      logger.i('data did_auth: $did_auth');
+
       final dynamic response = await client.post(
         url,
         headers: <String, dynamic>{
@@ -74,17 +82,16 @@ class HomeCubit extends Cubit<HomeState> {
           'Content-Type': 'application/json',
           'X-API-KEY': '5f691f41-b7ef-456e-b53d-7351b2798b4e'
         },
-        data: <String, dynamic>{
-          'base64_encoded_string': base64EncodedImage,
-          'vp': did_auth,
-          'did': did,
-        },
+        data: data,
       );
       emit(state.copyWith(status: AppStatus.success));
       logger.i('response : $response');
     } catch (e, s) {
       emit(state.copyWith(status: AppStatus.error));
       logger.e('error: $e , stack: $s');
+      if (e is NetworkException) {
+        logger.e('error message: ${e.message}');
+      }
     }
   }
 
