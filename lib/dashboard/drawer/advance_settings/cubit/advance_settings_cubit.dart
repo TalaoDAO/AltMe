@@ -15,11 +15,11 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
           const AdvanceSettingsState(
             isGamingEnabled: true,
             isIdentityEnabled: true,
-            isPaymentEnabled: true,
+            isBlockchainAccountsEnabled: true,
             isSocialMediaEnabled: false,
             isCommunityEnabled: false,
             isOtherEnabled: false,
-            isPassEnabled: true,
+            isPassEnabled: false,
           ),
         ) {
     initialise();
@@ -44,10 +44,10 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
         (await secureStorageProvider.get(SecureStorageKeys.isOtherEnabled) ??
                 true.toString()) ==
             'true';
-    final isPaymentEnabled =
-        (await secureStorageProvider.get(SecureStorageKeys.isPaymentEnabled) ??
-                true.toString()) ==
-            'true';
+    final isBlockchainAccountsEnabled = (await secureStorageProvider
+                .get(SecureStorageKeys.isBlockchainAccountsEnabled) ??
+            true.toString()) ==
+        'true';
     final isSocialMediaEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isSocialMediaEnabled) ??
             false.toString()) ==
@@ -60,7 +60,7 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
       AdvanceSettingsState(
         isGamingEnabled: isGamingEnabled,
         isIdentityEnabled: isIdentityEnabled,
-        isPaymentEnabled: isPaymentEnabled,
+        isBlockchainAccountsEnabled: isBlockchainAccountsEnabled,
         isSocialMediaEnabled: isSocialMediaEnabled,
         isCommunityEnabled: isCommunityEnabled,
         isOtherEnabled: isOtherEnabled,
@@ -85,11 +85,12 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
     );
   }
 
-  void togglePaymentRadio() {
-    emit(state.copyWith(isPaymentEnabled: !state.isPaymentEnabled));
+  void toggleBlockchainAccountsRadio() {
+    emit(state.copyWith(
+        isBlockchainAccountsEnabled: !state.isBlockchainAccountsEnabled));
     secureStorageProvider.set(
-      SecureStorageKeys.isPaymentEnabled,
-      state.isPaymentEnabled.toString(),
+      SecureStorageKeys.isBlockchainAccountsEnabled,
+      state.isBlockchainAccountsEnabled.toString(),
     );
   }
 

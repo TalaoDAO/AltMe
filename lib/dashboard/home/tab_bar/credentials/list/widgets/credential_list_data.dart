@@ -58,12 +58,13 @@ class CredentialListData extends StatelessWidget {
                 ],
                 // ProofOfOwnershipCredentials is hidden. Later we will
                 // give user an option to show it
-                if (advanceSettingsState.isPaymentEnabled) ...[
+                if (advanceSettingsState.isBlockchainAccountsEnabled) ...[
                   /// ProofOfOwnership Credentials
                   HomeCredentialWidget(
-                    title: l10n.proofOfOwnership,
-                    credentials: state.proofOfOwnershipCredentials,
-                    categorySubtitle: l10n.paymentCredentialHomeSubtitle,
+                    title: l10n.blockChainAccounts,
+                    credentials: state.blockchainAccountsCredentials,
+                    categorySubtitle:
+                        l10n.blockchainAccountsCredentialHomeSubtitle,
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
                 ],
