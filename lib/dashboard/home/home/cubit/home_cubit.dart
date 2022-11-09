@@ -73,8 +73,6 @@ class HomeCubit extends Cubit<HomeState> {
         'did': did,
       };
 
-      logger.i('data did_auth: $did_auth');
-
       final dynamic response = await client.post(
         url,
         headers: <String, dynamic>{

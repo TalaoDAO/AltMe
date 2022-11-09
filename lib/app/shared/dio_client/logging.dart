@@ -15,7 +15,7 @@ class Logging extends Interceptor {
     ResponseInterceptorHandler handler,
   ) {
     log.i(
-      '''RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path} => ${jsonEncode(response.data)}''',
+      '''RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path} => data: ${jsonEncode(response.data)}''',
     );
     return super.onResponse(response, handler);
   }
@@ -23,7 +23,8 @@ class Logging extends Interceptor {
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
     log.e(
-      'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}',
+      'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path} '
+      'data: ${err.response?.data}',
     );
     return super.onError(err, handler);
   }
