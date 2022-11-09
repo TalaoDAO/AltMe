@@ -53,6 +53,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     log.i('processing scanned qr code - $scannedResponse');
     emit(state.loading(isDeepLink: false));
     try {
+      final isInternetAvailable = await isConnected();
+      if (!isInternetAvailable) {
+        throw NetworkException(
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
+      }
+
       if (scannedResponse == null || scannedResponse.isEmpty) {
         throw ResponseMessage(
           ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
@@ -96,6 +103,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> host({required String? url}) async {
     emit(state.loading(isDeepLink: false));
     try {
+      final isInternetAvailable = await isConnected();
+      if (!isInternetAvailable) {
+        throw NetworkException(
+          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
+      }
       if (url == null || url.isEmpty) {
         throw ResponseMessage(
           ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
