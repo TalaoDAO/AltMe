@@ -129,7 +129,7 @@ class _SplashViewState extends State<SplashView> {
             }
           });
           if (isBeaconRequest && beaconData != '') {
-            context.read<BeaconCubit>().peerFromDeepLink(beaconData);
+            unawaited(context.read<BeaconCubit>().peerFromDeepLink(beaconData));
           }
         }
         if (!mounted) return;
@@ -188,7 +188,9 @@ class _SplashViewState extends State<SplashView> {
               SizedBox(height: 10),
               LoadingProgress(),
               Spacer(),
-              SizedBox(height: Sizes.spaceLarge,),
+              SizedBox(
+                height: Sizes.spaceLarge,
+              ),
             ],
           ),
         ),

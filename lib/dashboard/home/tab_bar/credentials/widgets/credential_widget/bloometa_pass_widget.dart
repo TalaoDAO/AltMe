@@ -1,7 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class BloometaPassDisplayInList extends StatelessWidget {
@@ -57,9 +55,9 @@ class BloometaPassRecto extends Recto {
 
   @override
   Widget build(BuildContext context) {
-    final bloometaPassModel = credentialModel
-        .credentialPreview.credentialSubjectModel as BloometaPassModel;
-    final l10n = context.l10n;
+    // final bloometaPassModel = credentialModel
+    //     .credentialPreview.credentialSubjectModel as BloometaPassModel;
+    // final l10n = context.l10n;
 
     return CredentialImage(
       image: ImageStrings.bloometaPass,
