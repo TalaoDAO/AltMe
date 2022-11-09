@@ -93,6 +93,7 @@ class App extends StatelessWidget {
             keyGenerator: KeyGenerator(),
             didKitProvider: DIDKitProvider(),
             didCubit: context.read<DIDCubit>(),
+            advanceSettingsCubit: context.read<AdvanceSettingsCubit>(),
           ),
         ),
         BlocProvider<ScanCubit>(

@@ -30,6 +30,7 @@ class WalletCubit extends Cubit<WalletState> {
     required this.keyGenerator,
     required this.didCubit,
     required this.didKitProvider,
+    required this.advanceSettingsCubit,
   }) : super(WalletState());
 
   final CredentialsRepository repository;
@@ -40,6 +41,7 @@ class WalletCubit extends Cubit<WalletState> {
   final KeyGenerator keyGenerator;
   final DIDCubit didCubit;
   final DIDKitProvider didKitProvider;
+  final AdvanceSettingsCubit advanceSettingsCubit;
 
   Future initialize() async {
     final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
@@ -300,7 +302,54 @@ class WalletCubit extends Cubit<WalletState> {
   Future insertCredential(CredentialModel credential) async {
     await repository.insert(credential);
     final credentials = List.of(state.credentials)..add(credential);
+
+    final CredentialCategory credentialCategory =
+        credential.credentialPreview.credentialSubjectModel.credentialCategory;
+
+    if (credentialCategory == CredentialCategory.gamingCards &&
+        credentialListCubit.state.gamingCredentials.isEmpty) {
+      if (!advanceSettingsCubit.state.isGamingEnabled) {
+        advanceSettingsCubit.toggleGamingRadio();
+      }
+    }
+
+    if (credentialCategory == CredentialCategory.communityCards &&
+        credentialListCubit.state.communityCredentials.isEmpty) {
+      if (!advanceSettingsCubit.state.isCommunityEnabled) {
+        advanceSettingsCubit.toggleCommunityRadio();
+      }
+    }
+
+    if (credentialCategory == CredentialCategory.identityCards &&
+        credentialListCubit.state.identityCredentials.isEmpty) {
+      if (!advanceSettingsCubit.state.isIdentityEnabled) {
+        advanceSettingsCubit.toggleIdentityRadio();
+      }
+    }
+
+    if (credentialCategory == CredentialCategory.passCards &&
+        credentialListCubit.state.passCredentials.isEmpty) {
+      if (!advanceSettingsCubit.state.isPassEnabled) {
+        advanceSettingsCubit.togglePassRadio();
+      }
+    }
+
+    if (credentialCategory == CredentialCategory.blockchainAccountsCards &&
+        credentialListCubit.state.blockchainAccountsCredentials.isEmpty) {
+      if (!advanceSettingsCubit.state.isBlockchainAccountsEnabled) {
+        advanceSettingsCubit.toggleBlockchainAccountsRadio();
+      }
+    }
+
+    if (credentialCategory == CredentialCategory.othersCards &&
+        credentialListCubit.state.othersCredentials.isEmpty) {
+      if (!advanceSettingsCubit.state.isOtherEnabled) {
+        advanceSettingsCubit.toggleOtherRadio();
+      }
+    }
+
     await credentialListCubit.insertCredential(credential);
+
     emit(
       state.copyWith(
         status: WalletStatus.insert,

@@ -30,32 +30,33 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
   Future<void> initialise() async {
     final isGamingEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isGamingEnabled) ??
-                true.toString()) ==
+                'true') ==
             'true';
     final isIdentityEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isIdentityEnabled) ??
-                true.toString()) ==
+                'true') ==
             'true';
     final isCommunityEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isCommunityEnabled) ??
-            false.toString()) ==
+            'false') ==
         'true';
     final isOtherEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isOtherEnabled) ??
-                true.toString()) ==
+                'false') ==
             'true';
     final isBlockchainAccountsEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isBlockchainAccountsEnabled) ??
-            true.toString()) ==
+            'true') ==
         'true';
     final isSocialMediaEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isSocialMediaEnabled) ??
-            false.toString()) ==
+            'false') ==
         'true';
     final isPassEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isPassEnabled) ??
-                false.toString()) ==
+                'false') ==
             'true';
+
     emit(
       AdvanceSettingsState(
         isGamingEnabled: isGamingEnabled,
@@ -86,8 +87,11 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
   }
 
   void toggleBlockchainAccountsRadio() {
-    emit(state.copyWith(
-        isBlockchainAccountsEnabled: !state.isBlockchainAccountsEnabled));
+    emit(
+      state.copyWith(
+        isBlockchainAccountsEnabled: !state.isBlockchainAccountsEnabled,
+      ),
+    );
     secureStorageProvider.set(
       SecureStorageKeys.isBlockchainAccountsEnabled,
       state.isBlockchainAccountsEnabled.toString(),
@@ -119,6 +123,7 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
   }
 
   void toggleOtherRadio() {
+    getLogger('AdvanceSettingCubit').i("Why I am called");
     emit(state.copyWith(isOtherEnabled: !state.isOtherEnabled));
     secureStorageProvider.set(
       SecureStorageKeys.isOtherEnabled,
