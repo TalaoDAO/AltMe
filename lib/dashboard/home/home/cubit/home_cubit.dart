@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
@@ -92,23 +93,31 @@ class HomeCubit extends Cubit<HomeState> {
       logger.i('response : $response');
     } catch (e, s) {
       if (e is NetworkException) {
-        if (e.data?['error_description'] is Map<String, dynamic>) {
-          final message =
-              e.data['error_description']['error_message'] as String;
-          // handle error
-        } else if (e.data?['error_description'] is String) {
-          final message = e.data?['error_description'] as String;
-          //hanlde error
-        } else {
-          emit(
-            state.error(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-              ),
-            ),
-          );
+        String? message;
+        if (e.data != null) {
+          if (e.data['error_description'] is String) {
+            try {
+              final dynamic errorDescriptionJson =
+                  jsonDecode(e.data['error_description'] as String);
+              message = errorDescriptionJson['error_message'] as String;
+            } catch (_, __) {
+              message = e.data['error_description'] as String;
+            }
+          } else if (e.data['error_description'] is Map<String, dynamic>) {
+            message = e.data['error_description']['error_message'] as String;
+          }
         }
+
+        emit(
+          state.error(
+            messageHandler: message != null
+                ? RawMessage(message)
+                : ResponseMessage(
+                    ResponseString
+                        .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                  ),
+          ),
+        );
       } else {
         emit(
           state.error(
