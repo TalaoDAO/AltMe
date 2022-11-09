@@ -18,7 +18,7 @@ class EmailPassModel extends CredentialSubjectModel {
           type: type,
           issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.emailPass,
-          credentialCategory: CredentialCategory.passCards,
+          credentialCategory: CredentialCategory.identityCards,
         );
 
   factory EmailPassModel.fromJson(Map<String, dynamic> json) =>
