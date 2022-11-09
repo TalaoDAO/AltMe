@@ -82,6 +82,8 @@ class HomeCubit extends Cubit<HomeState> {
         },
         data: data,
       );
+      // 1. get credential
+      // 2. remove over13 or over18 from discover after get credential
       emit(
         state.copyWith(
           status: AppStatus.success,
@@ -89,17 +91,35 @@ class HomeCubit extends Cubit<HomeState> {
       );
       logger.i('response : $response');
     } catch (e, s) {
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          ),
-        ),
-      );
-      logger.e('error: $e , stack: $s');
       if (e is NetworkException) {
-        logger.e('error message: ${e.message}');
+        if (e.data?['error_description'] is Map<String, dynamic>) {
+          final message =
+              e.data['error_description']['error_message'] as String;
+          // handle error
+        } else if (e.data?['error_description'] is String) {
+          final message = e.data?['error_description'] as String;
+          //hanlde error
+        } else {
+          emit(
+            state.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          );
+        }
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
       }
+      logger.e('error: $e , stack: $s');
     }
   }
 
