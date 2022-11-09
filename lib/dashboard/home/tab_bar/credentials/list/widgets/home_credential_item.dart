@@ -66,7 +66,11 @@ class DummyCredentialItem extends StatelessWidget {
 
     final List<CredentialSubjectType> credentialSubjectTypeList =
         List.of(DiscoverList.identityCategories);
+
+    /// items to remove to bypass KYC
     credentialSubjectTypeList.remove(CredentialSubjectType.emailPass);
+    credentialSubjectTypeList.remove(CredentialSubjectType.phonePass);
+
     if (credentialSubjectTypeList.contains(
       homeCredential.credentialSubjectType,
     )) {
