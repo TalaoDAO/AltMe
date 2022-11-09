@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/camera/view/camera_page.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,16 +81,23 @@ class DummyCredentialItem extends StatelessWidget {
               CredentialSubjectType.over18 ||
           homeCredential.credentialSubjectType ==
               CredentialSubjectType.over13) {
-        final imageBytes = await Navigator.push<List<int>?>(
-          context,
-          CameraPage.route(),
-        );
-        if (imageBytes != null) {
-          await context.read<HomeCubit>().aiSelfiValidation(
-                credentialType: homeCredential.credentialSubjectType,
-                imageBytes: imageBytes,
+        await Navigator.of(context).push<void>(
+          PinCodePage.route(
+            restrictToBack: false,
+            isValidCallback: () async {
+              final imageBytes = await Navigator.push<List<int>?>(
+                context,
+                CameraPage.route(),
               );
-        }
+              if (imageBytes != null) {
+                await context.read<HomeCubit>().aiSelfiValidation(
+                      credentialType: homeCredential.credentialSubjectType,
+                      imageBytes: imageBytes,
+                    );
+              }
+            },
+          ),
+        );
       } else {
         await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
               link: homeCredential.link!,
