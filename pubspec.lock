@@ -448,20 +448,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  did_kit:
-    dependency: "direct main"
-    description:
-      path: "packages/did_kit"
-      relative: true
-    source: path
-    version: "1.0.0+1"
-  didkit:
-    dependency: transitive
-    description:
-      path: "../didkit/lib/flutter"
-      relative: true
-    source: path
-    version: "0.0.2"
   diff_match_patch:
     dependency: transitive
     description:

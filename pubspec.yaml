@@ -34,8 +34,8 @@ dependencies:
       ref: 1.0.0
   device_info_plus: ^8.0.0
   device_preview: ^1.1.0
-  did_kit:
-    path: packages/did_kit
+  # did_kit:
+  #   path: packages/did_kit
   dio: ^4.0.6
   dotted_border: ^2.0.0+2
   ed25519_hd_key: ^2.2.0

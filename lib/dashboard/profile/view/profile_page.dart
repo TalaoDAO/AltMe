@@ -4,7 +4,7 @@ import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:did_kit/did_kit.dart';
+//import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -21,7 +21,7 @@ class ProfilePage extends StatelessWidget {
           create: (_) => SelfIssuedCredentialCubit(
             walletCubit: context.read<WalletCubit>(),
             secureStorageProvider: getSecureStorage,
-            didKitProvider: DIDKitProvider(),
+            //didKitProvider: DIDKitProvider(),
             didCubit: context.read<DIDCubit>(),
           ),
         ),

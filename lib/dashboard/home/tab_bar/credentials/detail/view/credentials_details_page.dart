@@ -4,7 +4,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activit
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
-import 'package:did_kit/did_kit.dart';
+//import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,7 +30,7 @@ class CredentialsDetailsPage extends StatelessWidget {
     return BlocProvider<CredentialDetailsCubit>(
       create: (context) => CredentialDetailsCubit(
         walletCubit: context.read<WalletCubit>(),
-        didKitProvider: DIDKitProvider(),
+        //didKitProvider: DIDKitProvider(),
       ),
       child: CredentialsDetailsView(credentialModel: credentialModel),
     );

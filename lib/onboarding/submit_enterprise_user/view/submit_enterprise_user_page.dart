@@ -5,7 +5,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/submit_enterprise_user/cubit/submit_enterprise_user_cubit.dart';
 import 'package:altme/onboarding/submit_enterprise_user/view/widgets/pick_file_button.dart';
 import 'package:altme/onboarding/submit_enterprise_user/view/widgets/picked_file.dart';
-import 'package:did_kit/did_kit.dart';
+//import 'package:did_kit/did_kit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +26,7 @@ class SubmitEnterpriseUserPage extends StatelessWidget {
       create: (_) => SubmitEnterpriseUserCubit(
         secureStorageProvider: getSecureStorage,
         didCubit: context.read<DIDCubit>(),
-        didKitProvider: DIDKitProvider(),
+        //didKitProvider: DIDKitProvider(),
       ),
       child: const SubmitEnterpriseUserView(),
     );

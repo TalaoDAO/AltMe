@@ -5,7 +5,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
-import 'package:did_kit/did_kit.dart';
+//import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:jose/jose.dart';
@@ -21,13 +21,13 @@ class ScanCubit extends Cubit<ScanState> {
   ScanCubit({
     required this.client,
     required this.walletCubit,
-    required this.didKitProvider,
+    //required this.didKitProvider,
     required this.secureStorageProvider,
   }) : super(const ScanState());
 
   final DioClient client;
   final WalletCubit walletCubit;
-  final DIDKitProvider didKitProvider;
+  //final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
 
   Future<void> credentialOffer({
@@ -62,35 +62,35 @@ class ScanCubit extends Cubit<ScanState> {
           'domain': credentialModel.domain ?? '',
         };
 
-        final presentation = await didKitProvider.didAuth(
-          did,
-          jsonEncode(options),
-          key,
-        );
+        // final presentation = await didKitProvider.didAuth(
+        //   did,
+        //   jsonEncode(options),
+        //   key,
+        // );
 
-        presentations = List.of(presentations)..add(presentation);
+        // presentations = List.of(presentations)..add(presentation);
       } else {
-        for (final item in credentialsToBePresented) {
-          final presentationId = 'urn:uuid:${const Uuid().v4()}';
+        // for (final item in credentialsToBePresented) {
+        //   final presentationId = 'urn:uuid:${const Uuid().v4()}';
 
-          final presentation = await didKitProvider.issuePresentation(
-            jsonEncode({
-              '@context': ['https://www.w3.org/2018/credentials/v1'],
-              'type': ['VerifiablePresentation'],
-              'id': presentationId,
-              'holder': did,
-              'verifiableCredential': item.data,
-            }),
-            jsonEncode({
-              'verificationMethod': verificationMethod,
-              'proofPurpose': 'assertionMethod',
-              'challenge': credentialModel.challenge,
-              'domain': credentialModel.domain,
-            }),
-            key,
-          );
-          presentations = List.of(presentations)..add(presentation);
-        }
+        //   final presentation = await didKitProvider.issuePresentation(
+        //     jsonEncode({
+        //       '@context': ['https://www.w3.org/2018/credentials/v1'],
+        //       'type': ['VerifiablePresentation'],
+        //       'id': presentationId,
+        //       'holder': did,
+        //       'verifiableCredential': item.data,
+        //     }),
+        //     jsonEncode({
+        //       'verificationMethod': verificationMethod,
+        //       'proofPurpose': 'assertionMethod',
+        //       'challenge': credentialModel.challenge,
+        //       'domain': credentialModel.domain,
+        //     }),
+        //     key,
+        //   );
+        //   presentations = List.of(presentations)..add(presentation);
+        // }
       }
 
       FormData data;
@@ -127,40 +127,40 @@ class ScanCubit extends Cubit<ScanState> {
         final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
 
         await Future<void>.delayed(const Duration(milliseconds: 500));
-        final verification =
-            await didKitProvider.verifyCredential(vcStr, optStr);
+        // final verification =
+        //await didKitProvider.verifyCredential(vcStr, optStr);
 
         log.i('[wallet/credential-offer/verify/vc] $vcStr');
         log.i('[wallet/credential-offer/verify/options] $optStr');
-        log.i('[wallet/credential-offer/verify/result] $verification');
+        // log.i('[wallet/credential-offer/verify/result] $verification');
 
-        final jsonVerification =
-            jsonDecode(verification) as Map<String, dynamic>;
+        // final jsonVerification =
+        //     jsonDecode(verification) as Map<String, dynamic>;
 
-        if ((jsonVerification['warnings'] as List).isNotEmpty) {
-          log.w(
-            'credential verification return warnings',
-            jsonVerification['warnings'],
-          );
+        // if ((jsonVerification['warnings'] as List).isNotEmpty) {
+        //   log.w(
+        //     'credential verification return warnings',
+        //     jsonVerification['warnings'],
+        //   );
 
-          emit(
-            state.warning(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING,
-              ),
-            ),
-          );
-        }
+        //   emit(
+        //     state.warning(
+        //       messageHandler: ResponseMessage(
+        //         ResponseString
+        //             .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING,
+        //       ),
+        //     ),
+        //   );
+        // }
 
-        if ((jsonVerification['errors'] as List).isNotEmpty) {
-          log.w('failed to verify credential', jsonVerification['errors']);
-          if (jsonVerification['errors'][0] != 'No applicable proof') {
-            throw ResponseMessage(
-              ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
-            );
-          }
-        }
+        // if ((jsonVerification['errors'] as List).isNotEmpty) {
+        //   log.w('failed to verify credential', jsonVerification['errors']);
+        //   if (jsonVerification['errors'][0] != 'No applicable proof') {
+        //     throw ResponseMessage(
+        //       ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
+        //     );
+        //   }
+        // }
       }
 
       final List<Activity> activities =
@@ -246,37 +246,37 @@ class ScanCubit extends Cubit<ScanState> {
           await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
 
       final presentationId = 'urn:uuid:${const Uuid().v4()}';
-      final presentation = await didKitProvider.issuePresentation(
-        jsonEncode({
-          '@context': ['https://www.w3.org/2018/credentials/v1'],
-          'type': ['VerifiablePresentation'],
-          'id': presentationId,
-          'holder': did,
-          'verifiableCredential': credentialsToBePresented.length == 1
-              ? credentialsToBePresented.first.data
-              : credentialsToBePresented.map((c) => c.data).toList(),
-        }),
-        jsonEncode({
-          'verificationMethod': verificationMethod,
-          'proofPurpose': 'authentication',
-          'challenge': challenge,
-          'domain': domain,
-        }),
-        key,
-      );
+      // final presentation = await didKitProvider.issuePresentation(
+      //   jsonEncode({
+      //     '@context': ['https://www.w3.org/2018/credentials/v1'],
+      //     'type': ['VerifiablePresentation'],
+      //     'id': presentationId,
+      //     'holder': did,
+      //     'verifiableCredential': credentialsToBePresented.length == 1
+      //         ? credentialsToBePresented.first.data
+      //         : credentialsToBePresented.map((c) => c.data).toList(),
+      //   }),
+      //   jsonEncode({
+      //     'verificationMethod': verificationMethod,
+      //     'proofPurpose': 'authentication',
+      //     'challenge': challenge,
+      //     'domain': domain,
+      //   }),
+      //   key,
+      // );
 
-      log.i('presentation $presentation');
+      // log.i('presentation $presentation');
 
-      final FormData formData = FormData.fromMap(<String, dynamic>{
-        'presentation': presentation,
-      });
+      // final FormData formData = FormData.fromMap(<String, dynamic>{
+      //   'presentation': presentation,
+      // });
 
-      await client.post(url, data: formData);
+      // await client.post(url, data: formData);
 
-      await presentationActivity(
-        credentialModels: credentialsToBePresented,
-        issuer: issuer,
-      );
+      // await presentationActivity(
+      //   credentialModels: credentialsToBePresented,
+      //   issuer: issuer,
+      // );
 
       emit(
         state.copyWith(
@@ -325,41 +325,38 @@ class ScanCubit extends Cubit<ScanState> {
           await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
 
       if (did != null) {
-        final presentation = await didKitProvider.didAuth(
-          did,
-          jsonEncode({
-            'verificationMethod': verificationMethod,
-            'proofPurpose': 'authentication',
-            'challenge': challenge,
-            'domain': domain,
-          }),
-          key,
-        );
-        final dynamic credential = await client.post(
-          uri.toString(),
-          data: FormData.fromMap(<String, dynamic>{
-            'presentation': presentation,
-          }),
-        );
-        if (credential == 'ok') {
-          done(presentation);
+        // final presentation = await didKitProvider.didAuth(
+        //   did,
+        //   jsonEncode({
+        //     'verificationMethod': verificationMethod,
+        //     'proofPurpose': 'authentication',
+        //     'challenge': challenge,
+        //     'domain': domain,
+        //   }),
+        //   key,
+        // );
+        // final dynamic credential = await client.post(
+        //   uri.toString(),
+        //   data: FormData.fromMap(<String, dynamic>{
+        //     'presentation': presentation,
+        //   }),
+        // );
+        // if (credential == 'ok') {
+        //   done(presentation);
 
-          emit(
-            state.copyWith(
-              status: ScanStatus.success,
-              message: StateMessage.success(
-                messageHandler: ResponseMessage(
-                  ResponseString
-                      .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
-                ),
-              ),
-            ),
-          );
-        } else {
-          throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          );
-        }
+        //   emit(
+        //     state.success(
+        //       messageHandler: ResponseMessage(
+        //         ResponseString
+        //             .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+        //       ),
+        //     ),
+        //   );
+        // } else {
+        //   throw ResponseMessage(
+        //     ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        //   );
+        // }
       } else {
         throw Exception('DID is not set. It is required to present DIDAuth');
       }
@@ -490,18 +487,18 @@ class ScanCubit extends Cubit<ScanState> {
       'challenge': challenge
     });
     final presentationId = 'urn:uuid:${const Uuid().v4()}';
-    final vpToken = await didKitProvider.issuePresentation(
-      jsonEncode({
-        '@context': ['https://www.w3.org/2018/credentials/v1'],
-        'type': ['VerifiablePresentation'],
-        'id': presentationId,
-        'holder': did,
-        'verifiableCredential': credential.data,
-      }),
-      options,
-      ssiKey!,
-    );
-    return vpToken;
+    // final vpToken = await didKitProvider.issuePresentation(
+    //   jsonEncode({
+    //     '@context': ['https://www.w3.org/2018/credentials/v1'],
+    //     'type': ['VerifiablePresentation'],
+    //     'id': presentationId,
+    //     'holder': did,
+    //     'verifiableCredential': credential.data,
+    //   }),
+    //   options,
+    //   ssiKey!,
+    // );
+    return 'vpToken';
   }
 
   Future<String> createIdToken({required String nonce}) async {

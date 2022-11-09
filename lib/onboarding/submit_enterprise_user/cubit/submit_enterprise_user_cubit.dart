@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:altme/app/app.dart';
 import 'package:altme/did/did.dart';
 import 'package:bloc/bloc.dart';
-import 'package:did_kit/did_kit.dart';
+//import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -20,11 +20,11 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
   SubmitEnterpriseUserCubit({
     required this.didCubit,
     required this.secureStorageProvider,
-    required this.didKitProvider,
+    //required this.didKitProvider,
   }) : super(const SubmitEnterpriseUserState());
 
   final DIDCubit didCubit;
-  final DIDKitProvider didKitProvider;
+  //final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
 
   void setRSAFile(PlatformFile? rsaFile) {
@@ -45,62 +45,62 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
           ResponseString.RESPONSE_STRING_PLEASE_IMPORT_YOUR_RSA_KEY,
         );
       }
-      final resolvedDID = await didKitProvider.resolveDID(did, '{}');
-      final resolvedDIDJson = jsonDecode(resolvedDID) as Map<String, dynamic>;
+      //final resolvedDID = await didKitProvider.resolveDID(did, '{}');
+      //final resolvedDIDJson = jsonDecode(resolvedDID) as Map<String, dynamic>;
 
-      final error = resolvedDIDJson['didResolutionMetadata']['error']
-          as Map<String, dynamic>?;
-      if (error == null) {
-        //read RSA json file
-        if (state.rsaFile!.path == null) {
-          throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_PLEASE_IMPORT_YOUR_RSA_KEY,
-          );
-        }
-        if (did.trim().isEmpty) {
-          throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_PLEASE_ENTER_YOUR_DID_KEY,
-          );
-        }
-        final rsaJsonFile = File(state.rsaFile!.path!);
-        final rsaJsonString = await rsaJsonFile.readAsString();
-        final rsaKey = jsonDecode(rsaJsonString) as Map<String, dynamic>;
-        final isValidRSAKey = checkPublicRSAKey(rsaKey, resolvedDIDJson);
-        if (isValidRSAKey) {
-          await secureStorageProvider.set(
-            SecureStorageKeys.rsaKeyJson,
-            rsaJsonString,
-          );
-          await secureStorageProvider.set(
-            SecureStorageKeys.ssiKey,
-            rsaJsonString,
-          );
-          final verificationMethod = rsaKey['kid'] as String;
-          await didCubit.set(
-            did: did,
-            didMethod: AltMeStrings.enterpriseDIDMethod,
-            didMethodName: AltMeStrings.enterpriseDIDMethodName,
-            verificationMethod: verificationMethod,
-          );
+      // final error = resolvedDIDJson['didResolutionMetadata']['error']
+      //     as Map<String, dynamic>?;
+      // if (error == null) {
+      //   //read RSA json file
+      //   if (state.rsaFile!.path == null) {
+      //     throw ResponseMessage(
+      //       ResponseString.RESPONSE_STRING_PLEASE_IMPORT_YOUR_RSA_KEY,
+      //     );
+      //   }
+      //   if (did.trim().isEmpty) {
+      //     throw ResponseMessage(
+      //       ResponseString.RESPONSE_STRING_PLEASE_ENTER_YOUR_DID_KEY,
+      //     );
+      //   }
+      //   final rsaJsonFile = File(state.rsaFile!.path!);
+      //   final rsaJsonString = await rsaJsonFile.readAsString();
+      //   final rsaKey = jsonDecode(rsaJsonString) as Map<String, dynamic>;
+      //   final isValidRSAKey = checkPublicRSAKey(rsaKey, resolvedDIDJson);
+      //   if (isValidRSAKey) {
+      //     await secureStorageProvider.set(
+      //       SecureStorageKeys.rsaKeyJson,
+      //       rsaJsonString,
+      //     );
+      //     await secureStorageProvider.set(
+      //       SecureStorageKeys.ssiKey,
+      //       rsaJsonString,
+      //     );
+      //     final verificationMethod = rsaKey['kid'] as String;
+      //     await didCubit.set(
+      //       did: did,
+      //       didMethod: AltMeStrings.enterpriseDIDMethod,
+      //       didMethodName: AltMeStrings.enterpriseDIDMethodName,
+      //       verificationMethod: verificationMethod,
+      //     );
 
-          emit(
-            state.success(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY,
-              ),
-            ),
-          );
-        } else {
-          throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_RSA_NOT_MATCHED_WITH_DID_KEY,
-          );
-        }
-      } else {
-        throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_DID_KEY_NOT_RESOLVED,
-        );
-      }
+      //     emit(
+      //       state.success(
+      //         messageHandler: ResponseMessage(
+      //           ResponseString
+      //               .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY,
+      //         ),
+      //       ),
+      //     );
+      //   } else {
+      //     throw ResponseMessage(
+      //       ResponseString.RESPONSE_STRING_RSA_NOT_MATCHED_WITH_DID_KEY,
+      //     );
+      //   }
+      // } else {
+      //   throw ResponseMessage(
+      //     ResponseString.RESPONSE_STRING_DID_KEY_NOT_RESOLVED,
+      //   );
+      // }
       emit(state.success());
     } catch (e, s) {
       log.e('error in verifying RSA key :${e.toString()}, s: $s', e, s);

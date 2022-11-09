@@ -20,7 +20,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:device_preview/device_preview.dart';
-import 'package:did_kit/did_kit.dart';
+//import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,7 +80,7 @@ class App extends StatelessWidget {
         BlocProvider<DIDCubit>(
           create: (context) => DIDCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
-            didKitProvider: DIDKitProvider(),
+            //didKitProvider: DIDKitProvider(),
           ),
         ),
         BlocProvider<HomeCubit>(
@@ -102,7 +102,7 @@ class App extends StatelessWidget {
             homeCubit: context.read<HomeCubit>(),
             credentialListCubit: context.read<CredentialListCubit>(),
             keyGenerator: KeyGenerator(),
-            didKitProvider: DIDKitProvider(),
+            // didKitProvider: DIDKitProvider(),
             didCubit: context.read<DIDCubit>(),
             advanceSettingsCubit: context.read<AdvanceSettingsCubit>(),
           ),
@@ -111,7 +111,7 @@ class App extends StatelessWidget {
           create: (context) => ScanCubit(
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             walletCubit: context.read<WalletCubit>(),
-            didKitProvider: DIDKitProvider(),
+            //didKitProvider: DIDKitProvider(),
             secureStorageProvider: secure_storage.getSecureStorage,
           ),
         ),

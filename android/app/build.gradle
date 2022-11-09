@@ -101,8 +101,8 @@ android {
         }        
         development {
             dimension "default"
-            applicationIdSuffix ".dev"
-            manifestPlaceholders = [appName: "[DEV] Altme"]
+            applicationIdSuffix ""
+            manifestPlaceholders = [appName: "Altme"]
         }
     }
 

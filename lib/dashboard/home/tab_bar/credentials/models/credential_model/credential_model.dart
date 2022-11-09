@@ -4,7 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:did_kit/did_kit.dart';
+//import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
@@ -121,7 +121,7 @@ class CredentialModel extends Equatable {
     });
 
     final String? result = await Future.any([
-      DIDKitProvider().verifyCredential(vcStr, optStr),
+      //DIDKitProvider().verifyCredential(vcStr, optStr),
       Future.delayed(const Duration(seconds: 4))
     ]);
     if (result == null) return RevocationStatus.active;

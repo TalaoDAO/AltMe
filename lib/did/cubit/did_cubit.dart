@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:bloc/bloc.dart';
-import 'package:did_kit/did_kit.dart';
+//import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -12,12 +12,12 @@ part 'did_state.dart';
 
 class DIDCubit extends Cubit<DIDState> {
   DIDCubit({
-    required this.didKitProvider,
+    //required this.didKitProvider,
     required this.secureStorageProvider,
   }) : super(const DIDState());
 
   final SecureStorageProvider secureStorageProvider;
-  final DIDKitProvider didKitProvider;
+  //final DIDKitProvider didKitProvider;
 
   Future<void> set({
     required String did,

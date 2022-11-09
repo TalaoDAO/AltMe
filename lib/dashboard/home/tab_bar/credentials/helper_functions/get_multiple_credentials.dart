@@ -7,7 +7,6 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model
 import 'package:altme/dashboard/home/tab_bar/tab_bar.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:did_kit/did_kit.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_path/json_path.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
@@ -182,12 +181,12 @@ Future<dynamic> getCredential(
       'domain': 'issuer.talao.co',
     };
 
-    final DIDKitProvider didKitProvider = DIDKitProvider();
-    final String did_auth = await didKitProvider.didAuth(
-      did,
-      jsonEncode(options),
-      key,
-    );
+    // final DIDKitProvider didKitProvider = DIDKitProvider();
+    // final String did_auth = await didKitProvider.didAuth(
+    //   did,
+    //   jsonEncode(options),
+    //   key,
+    // );
     final dynamic response = await client.post(
       credentialEndPoint,
       headers: <String, dynamic>{
@@ -199,7 +198,7 @@ Future<dynamic> getCredential(
         'type': type,
         'format': 'ldp_vc',
         'did': did,
-        'proof': {'proof_type': 'ldp_vp', 'vp': did_auth}
+        //'proof': {'proof_type': 'ldp_vp', 'vp': did_auth}
       },
     );
     return jsonDecode(response['credential'] as String);
