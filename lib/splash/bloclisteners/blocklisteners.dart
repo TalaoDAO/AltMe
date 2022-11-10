@@ -46,7 +46,7 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
       /// Removes every stack except first route (splashPage)
       Navigator.pushAndRemoveUntil<void>(
         context,
-        DashboardPage.route(),
+        StarterPage.route(),
         (Route<dynamic> route) => route.isFirst,
       );
     }
