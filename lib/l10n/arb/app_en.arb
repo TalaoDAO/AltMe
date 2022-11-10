@@ -402,7 +402,7 @@
   "finishedVerificationTitle": "ID verification in\nprogress",
   "finishedVerificationDescription": "You will receive an email to confirm that your ID has been verified",
   "verificationPendingTitle": "Your ID verification\nis pending",
-  "verificationPendingDescription": "Your ID verification is pending. Please wait until your verification is finished.\nYou will receive an email when your ID has been verified.",
+  "verificationPendingDescription": "Usually it takes less than 5 min to get verified. You will receive an email when the verification is complete.",
   "verificationDeclinedTitle": "Your verification declined",
   "restartVerification": "Restart ID Verification",
   "verificationDeclinedDescription": "Your verification declined. Please restart your ID verification.",
