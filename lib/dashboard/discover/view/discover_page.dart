@@ -75,7 +75,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
               identityCredentials: credentialListCubit.dummyListFromCategory(
                 state.identityCategories,
               ),
-              proofOfOwnershipCredentials: [],
+              blockchainAccountsCredentials: [],
               othersCredentials: [],
             ),
           );

@@ -15,7 +15,7 @@ class EthereumAssociatedAddressModel extends CredentialSubjectModel {
           id: id,
           type: type,
           credentialSubjectType: CredentialSubjectType.ethereumAssociatedWallet,
-          credentialCategory: CredentialCategory.proofOfOwnershipCards,
+          credentialCategory: CredentialCategory.blockchainAccountsCards,
         );
 
   factory EthereumAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>

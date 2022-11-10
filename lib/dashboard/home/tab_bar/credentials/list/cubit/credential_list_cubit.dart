@@ -22,18 +22,17 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     final communityCredentials = <HomeCredential>[];
     final identityCredentials = <HomeCredential>[];
     final passCredentials = <HomeCredential>[];
-    final proofOfOwnershipsCredentials = <HomeCredential>[];
+    final blockchainAccountsCredentials = <HomeCredential>[];
     final othersCredentials = <HomeCredential>[];
     final gamingCategories = state.gamingCategories;
     final identityCategories = state.identityCategories;
     final communityCategories = state.communityCategories;
 
     /// tezVoucher and tezotopiaMembership is available only on Android platform
-    /// Currently attempt to get it on ios
-    // if (!isAndroid()) {
-    //   gamingCategories.remove(CredentialSubjectType.tezVoucher);
-    //   gamingCategories.remove(CredentialSubjectType.tezotopiaMembership);
-    // }
+    if (!isAndroid()) {
+      gamingCategories.remove(CredentialSubjectType.tezVoucher);
+      //gamingCategories.remove(CredentialSubjectType.tezotopiaMembership);
+    }
 
     for (final credential in walletCubit.state.credentials) {
       final CredentialSubjectModel credentialSubject =
@@ -146,10 +145,10 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           identityCredentials.add(HomeCredential.isNotDummy(credential));
           break;
 
-        case CredentialCategory.proofOfOwnershipCards:
+        case CredentialCategory.blockchainAccountsCards:
 
           /// adding real credentials
-          proofOfOwnershipsCredentials
+          blockchainAccountsCredentials
               .add(HomeCredential.isNotDummy(credential));
           break;
 
@@ -182,7 +181,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         gamingCredentials: gamingCredentials,
         communityCredentials: communityCredentials,
         identityCredentials: identityCredentials,
-        proofOfOwnershipCredentials: proofOfOwnershipsCredentials,
+        blockchainAccountsCredentials: blockchainAccountsCredentials,
         passCredentials: passCredentials,
         othersCredentials: othersCredentials,
         gamingCategories: gamingCategories,
@@ -368,12 +367,12 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         );
         break;
 
-      case CredentialCategory.proofOfOwnershipCards:
+      case CredentialCategory.blockchainAccountsCards:
 
         /// adding real credentials
-        final _credentials = List.of(state.proofOfOwnershipCredentials)
+        final _credentials = List.of(state.blockchainAccountsCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
-        emit(state.populate(proofOfOwnershipCredentials: _credentials));
+        emit(state.populate(blockchainAccountsCredentials: _credentials));
         break;
 
       case CredentialCategory.passCards:
@@ -466,21 +465,21 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         emit(state.populate(identityCredentials: _credentials));
         break;
 
-      case CredentialCategory.proofOfOwnershipCards:
+      case CredentialCategory.blockchainAccountsCards:
 
         ///finding index of updated credential
-        final index = state.proofOfOwnershipCredentials.indexWhere(
+        final index = state.blockchainAccountsCredentials.indexWhere(
           (element) => element.credentialModel?.id == credential.id,
         );
 
         ///create updated credential list
-        final _credentials = List.of(state.proofOfOwnershipCredentials)
+        final _credentials = List.of(state.blockchainAccountsCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           )
           ..insert(index, HomeCredential.isNotDummy(credential));
 
-        emit(state.populate(proofOfOwnershipCredentials: _credentials));
+        emit(state.populate(blockchainAccountsCredentials: _credentials));
         break;
 
       case CredentialCategory.passCards:
@@ -706,12 +705,12 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         );
         break;
 
-      case CredentialCategory.proofOfOwnershipCards:
-        final _credentials = List.of(state.proofOfOwnershipCredentials)
+      case CredentialCategory.blockchainAccountsCards:
+        final _credentials = List.of(state.blockchainAccountsCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
-        emit(state.populate(proofOfOwnershipCredentials: _credentials));
+        emit(state.populate(blockchainAccountsCredentials: _credentials));
         break;
 
       case CredentialCategory.passCards:
@@ -738,7 +737,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         gamingCredentials: [],
         communityCredentials: [],
         identityCredentials: [],
-        proofOfOwnershipCredentials: [],
+        blockchainAccountsCredentials: [],
         passCredentials: [],
         othersCredentials: [],
         gamingCategories: List.from(DiscoverList.gamingCategories),

@@ -66,7 +66,11 @@ class DummyCredentialItem extends StatelessWidget {
 
     final List<CredentialSubjectType> credentialSubjectTypeList =
         List.of(DiscoverList.identityCategories);
+
+    /// items to remove to bypass KYC
     credentialSubjectTypeList.remove(CredentialSubjectType.emailPass);
+    credentialSubjectTypeList.remove(CredentialSubjectType.phonePass);
+
     if (credentialSubjectTypeList.contains(
       homeCredential.credentialSubjectType,
     )) {
@@ -115,8 +119,6 @@ class DummyCredentialItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     return BackgroundCard(
       color: Theme.of(context).colorScheme.credentialBackground,
       padding: const EdgeInsets.all(4),

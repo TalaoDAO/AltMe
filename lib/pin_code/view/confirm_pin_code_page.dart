@@ -83,18 +83,19 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      backgroundColor: Theme.of(context).colorScheme.background,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: PinCodeWidget(
         title: l10n.confirmYourPinCode,
+        passwordEnteredCallback: _onPasscodeEntered,
         header: widget.isFromOnboarding
             ? const MStepper(
                 step: 1,
                 totalStep: 3,
               )
             : null,
-        passwordEnteredCallback: _onPasscodeEntered,
         deleteButton: Text(
           l10n.delete,
           style: Theme.of(context).textTheme.button,

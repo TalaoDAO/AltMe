@@ -15,11 +15,11 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
           const AdvanceSettingsState(
             isGamingEnabled: true,
             isIdentityEnabled: true,
-            isPaymentEnabled: true,
+            isBlockchainAccountsEnabled: true,
             isSocialMediaEnabled: false,
             isCommunityEnabled: false,
             isOtherEnabled: false,
-            isPassEnabled: true,
+            isPassEnabled: false,
           ),
         ) {
     initialise();
@@ -30,37 +30,38 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
   Future<void> initialise() async {
     final isGamingEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isGamingEnabled) ??
-                true.toString()) ==
+                'true') ==
             'true';
     final isIdentityEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isIdentityEnabled) ??
-                true.toString()) ==
+                'true') ==
             'true';
     final isCommunityEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isCommunityEnabled) ??
-            false.toString()) ==
+            'false') ==
         'true';
     final isOtherEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isOtherEnabled) ??
-                true.toString()) ==
+                'false') ==
             'true';
-    final isPaymentEnabled =
-        (await secureStorageProvider.get(SecureStorageKeys.isPaymentEnabled) ??
-                true.toString()) ==
-            'true';
+    final isBlockchainAccountsEnabled = (await secureStorageProvider
+                .get(SecureStorageKeys.isBlockchainAccountsEnabled) ??
+            'true') ==
+        'true';
     final isSocialMediaEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isSocialMediaEnabled) ??
-            false.toString()) ==
+            'false') ==
         'true';
     final isPassEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isPassEnabled) ??
-                false.toString()) ==
+                'false') ==
             'true';
+
     emit(
       AdvanceSettingsState(
         isGamingEnabled: isGamingEnabled,
         isIdentityEnabled: isIdentityEnabled,
-        isPaymentEnabled: isPaymentEnabled,
+        isBlockchainAccountsEnabled: isBlockchainAccountsEnabled,
         isSocialMediaEnabled: isSocialMediaEnabled,
         isCommunityEnabled: isCommunityEnabled,
         isOtherEnabled: isOtherEnabled,
@@ -85,11 +86,15 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
     );
   }
 
-  void togglePaymentRadio() {
-    emit(state.copyWith(isPaymentEnabled: !state.isPaymentEnabled));
+  void toggleBlockchainAccountsRadio() {
+    emit(
+      state.copyWith(
+        isBlockchainAccountsEnabled: !state.isBlockchainAccountsEnabled,
+      ),
+    );
     secureStorageProvider.set(
-      SecureStorageKeys.isPaymentEnabled,
-      state.isPaymentEnabled.toString(),
+      SecureStorageKeys.isBlockchainAccountsEnabled,
+      state.isBlockchainAccountsEnabled.toString(),
     );
   }
 
@@ -118,6 +123,7 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
   }
 
   void toggleOtherRadio() {
+    getLogger('AdvanceSettingCubit').i("Why I am called");
     emit(state.copyWith(isOtherEnabled: !state.isOtherEnabled));
     secureStorageProvider.set(
       SecureStorageKeys.isOtherEnabled,

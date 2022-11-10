@@ -129,7 +129,7 @@ class _SplashViewState extends State<SplashView> {
             }
           });
           if (isBeaconRequest && beaconData != '') {
-            context.read<BeaconCubit>().peerFromDeepLink(beaconData);
+            unawaited(context.read<BeaconCubit>().peerFromDeepLink(beaconData));
           }
         }
         if (!mounted) return;
@@ -168,28 +168,26 @@ class _SplashViewState extends State<SplashView> {
               begin: Alignment.bottomCenter,
             ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: const [
-              Spacer(),
-              Padding(
-                padding: EdgeInsets.all(Sizes.spaceLarge),
-                child: TitleText(),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: const [
+                  Spacer(flex: 5),
+                  TitleText(),
+                  Spacer(flex: 1),
+                  SubTitle(),
+                  Spacer(flex: 3),
+                  SplashImage(),
+                  Spacer(flex: 10),
+                  LoadingText(),
+                  SizedBox(height: 10),
+                  LoadingProgress(),
+                  Spacer(flex: 7),
+                ],
               ),
-              SubTitle(),
-              Spacer(
-                flex: 2,
-              ),
-              SplashImage(),
-              Spacer(
-                flex: 2,
-              ),
-              LoadingText(),
-              SizedBox(height: 10),
-              LoadingProgress(),
-              Spacer(),
-              SizedBox(height: Sizes.spaceLarge,),
-            ],
+            ),
           ),
         ),
       ),

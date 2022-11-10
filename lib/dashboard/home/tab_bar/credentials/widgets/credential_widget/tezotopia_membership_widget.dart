@@ -57,8 +57,8 @@ class TezotopiaMemberShipRecto extends Recto {
 
   @override
   Widget build(BuildContext context) {
-    final tezotopiaMembershipModel = credentialModel
-        .credentialPreview.credentialSubjectModel as TezotopiaMembershipModel;
+    // final tezotopiaMembershipModel = credentialModel
+    //     .credentialPreview.credentialSubjectModel as TezotopiaMembershipModel;
     final l10n = context.l10n;
 
     return CredentialImage(
@@ -75,7 +75,8 @@ class TezotopiaMemberShipRecto extends Recto {
                 heightFactor: 0.20,
                 child: MyText(
                   '${l10n.membership} '
-                  '${tezotopiaMembershipModel.offers?.benefit?.discount ?? ''}',
+                  //'${tezotopiaMembershipModel.offers?.benefit?.discount??''}',
+                  ,
                   style: Theme.of(context).textTheme.title,
                 ),
               ),

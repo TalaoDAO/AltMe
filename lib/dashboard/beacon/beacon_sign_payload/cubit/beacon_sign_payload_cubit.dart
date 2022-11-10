@@ -126,7 +126,15 @@ class BeaconSignPayloadCubit extends Cubit<BeaconSignPayloadState> {
         if (state.payloadMessage!.contains('#')) {
           final String url = state.payloadMessage!.split('#')[1];
           final uri = Uri.parse(url);
-          await qrCodeScanCubit.verify(uri: uri);
+          emit(
+            state.copyWith(
+              appStatus: AppStatus.success,
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+              ),
+            ),
+          );
+          await qrCodeScanCubit.verify(uri: uri, isBeaconSSI: true);
         } else {
           emit(
             state.copyWith(

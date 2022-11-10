@@ -2,7 +2,7 @@ enum CredentialCategory {
   gamingCards,
   identityCards,
   communityCards,
-  proofOfOwnershipCards,
+  blockchainAccountsCards,
   passCards,
   othersCards
 }

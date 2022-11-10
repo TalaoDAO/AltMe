@@ -29,7 +29,7 @@ class AdvancedSettingsView extends StatefulWidget {
 }
 
 class _AdvancedSettingsViewState extends State<AdvancedSettingsView> {
-  late final advanceSEttingsCubit = context.read<AdvanceSettingsCubit>();
+  late final advancedSettingsCubit = context.read<AdvanceSettingsCubit>();
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -51,32 +51,33 @@ class _AdvancedSettingsViewState extends State<AdvancedSettingsView> {
                 AdvanceSettingsRadioItem(
                   title: l10n.gaming,
                   isSelected: state.isGamingEnabled,
-                  onPressed: advanceSEttingsCubit.toggleGamingRadio,
+                  onPressed: advancedSettingsCubit.toggleGamingRadio,
                 ),
                 AdvanceSettingsRadioItem(
                   title: l10n.identity,
                   isSelected: state.isIdentityEnabled,
-                  onPressed: advanceSEttingsCubit.toggleIdentityRadio,
+                  onPressed: advancedSettingsCubit.toggleIdentityRadio,
                 ),
                 AdvanceSettingsRadioItem(
-                  title: l10n.payment,
-                  isSelected: state.isPaymentEnabled,
-                  onPressed: advanceSEttingsCubit.togglePaymentRadio,
+                  title: l10n.blockChainAccounts,
+                  isSelected: state.isBlockchainAccountsEnabled,
+                  onPressed:
+                      advancedSettingsCubit.toggleBlockchainAccountsRadio,
                 ),
                 AdvanceSettingsRadioItem(
                   title: l10n.community,
                   isSelected: state.isCommunityEnabled,
-                  onPressed: advanceSEttingsCubit.toggleCommunityRadio,
+                  onPressed: advancedSettingsCubit.toggleCommunityRadio,
                 ),
                 AdvanceSettingsRadioItem(
                   title: l10n.pass,
                   isSelected: state.isPassEnabled,
-                  onPressed: advanceSEttingsCubit.togglePassRadio,
+                  onPressed: advancedSettingsCubit.togglePassRadio,
                 ),
                 AdvanceSettingsRadioItem(
                   title: l10n.other,
                   isSelected: state.isOtherEnabled,
-                  onPressed: advanceSEttingsCubit.toggleOtherRadio,
+                  onPressed: advancedSettingsCubit.toggleOtherRadio,
                 ),
                 Opacity(
                   opacity: 0.5,

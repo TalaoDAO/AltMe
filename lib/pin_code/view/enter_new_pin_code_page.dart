@@ -73,26 +73,24 @@ class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
       titleLeading: const BackLeadingButton(),
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: SafeArea(
-        child: PinCodeWidget(
-          title: l10n.enterNewPinCode,
-          passwordEnteredCallback: _onPasscodeEntered,
-          header: widget.isFromOnboarding
-              ? const MStepper(
-                  step: 1,
-                  totalStep: 3,
-                )
-              : null,
-          deleteButton: Text(
-            l10n.delete,
-            style: Theme.of(context).textTheme.button,
-          ),
-          cancelButton: Text(
-            l10n.cancel,
-            style: Theme.of(context).textTheme.button,
-          ),
-          cancelCallback: _onPasscodeCancelled,
+      body: PinCodeWidget(
+        title: l10n.enterNewPinCode,
+        passwordEnteredCallback: _onPasscodeEntered,
+        header: widget.isFromOnboarding
+            ? const MStepper(
+                step: 1,
+                totalStep: 3,
+              )
+            : null,
+        deleteButton: Text(
+          l10n.delete,
+          style: Theme.of(context).textTheme.button,
         ),
+        cancelButton: Text(
+          l10n.cancel,
+          style: Theme.of(context).textTheme.button,
+        ),
+        cancelCallback: _onPasscodeCancelled,
       ),
     );
   }

@@ -26,6 +26,8 @@ class HomeCubit extends Cubit<HomeState> {
   final DIDCubit didCubit;
   final SecureStorageProvider secureStorageProvider;
 
+  final log = getLogger('HomeCubit');
+
   Future<void> emitHasWallet() async {
     final log = getLogger('emitHasWallet');
 
@@ -71,6 +73,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> checkForPassBaseStatusThenLaunchUrl({
     required String link,
   }) async {
+    log.i('Checking PassbaseStatus');
     emit(state.loading());
 
     late PassBaseStatus passBaseStatus;
@@ -117,6 +120,8 @@ class HomeCubit extends Cubit<HomeState> {
 
       getPassBaseStatusBackground();
     }
+
+    log.i(passBaseStatus);
 
     emit(
       state.copyWith(

@@ -5,7 +5,7 @@ class AdvanceSettingsState extends Equatable {
   const AdvanceSettingsState({
     required this.isGamingEnabled,
     required this.isIdentityEnabled,
-    required this.isPaymentEnabled,
+    required this.isBlockchainAccountsEnabled,
     required this.isPassEnabled,
     required this.isSocialMediaEnabled,
     required this.isCommunityEnabled,
@@ -17,7 +17,7 @@ class AdvanceSettingsState extends Equatable {
 
   final bool isGamingEnabled;
   final bool isIdentityEnabled;
-  final bool isPaymentEnabled;
+  final bool isBlockchainAccountsEnabled;
   final bool isPassEnabled;
   final bool isSocialMediaEnabled;
   final bool isCommunityEnabled;
@@ -28,7 +28,7 @@ class AdvanceSettingsState extends Equatable {
   AdvanceSettingsState copyWith({
     bool? isGamingEnabled,
     bool? isIdentityEnabled,
-    bool? isPaymentEnabled,
+    bool? isBlockchainAccountsEnabled,
     bool? isPassEnabled,
     bool? isSocialMediaEnabled,
     bool? isCommunityEnabled,
@@ -37,7 +37,8 @@ class AdvanceSettingsState extends Equatable {
     return AdvanceSettingsState(
       isGamingEnabled: isGamingEnabled ?? this.isGamingEnabled,
       isIdentityEnabled: isIdentityEnabled ?? this.isIdentityEnabled,
-      isPaymentEnabled: isPaymentEnabled ?? this.isPaymentEnabled,
+      isBlockchainAccountsEnabled:
+          isBlockchainAccountsEnabled ?? this.isBlockchainAccountsEnabled,
       isPassEnabled: isPassEnabled ?? this.isPassEnabled,
       isSocialMediaEnabled: isSocialMediaEnabled ?? this.isSocialMediaEnabled,
       isCommunityEnabled: isCommunityEnabled ?? this.isCommunityEnabled,
@@ -49,7 +50,7 @@ class AdvanceSettingsState extends Equatable {
   List<Object?> get props => [
         isGamingEnabled,
         isIdentityEnabled,
-        isPaymentEnabled,
+        isBlockchainAccountsEnabled,
         isPassEnabled,
         isSocialMediaEnabled,
         isCommunityEnabled,

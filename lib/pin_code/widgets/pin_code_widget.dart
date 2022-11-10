@@ -90,43 +90,40 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                 ? Stack(
                     children: [
                       Positioned(
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (widget.header != null)
-                                widget.header!
-                              else
-                                const AltMeLogo(size: Sizes.logoLarge),
-                              const SizedBox(height: Sizes.spaceNormal),
-                              PinCodeTitle(
-                                title: widget.title,
-                                subTitle: widget.subTitle,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            if (widget.header != null)
+                              widget.header!
+                            else
+                              const AltMeLogo(size: Sizes.logoLarge),
+                            const SizedBox(height: Sizes.spaceNormal),
+                            PinCodeTitle(
+                              title: widget.title,
+                              subTitle: widget.subTitle,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 16),
+                              height: 40,
+                              child: AnimatedBuilder(
+                                animation: animation,
+                                builder: (_, __) {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: _buildCircles(),
+                                  );
+                                },
                               ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 16),
-                                height: 40,
-                                child: AnimatedBuilder(
-                                  animation: animation,
-                                  builder: (_, __) {
-                                    return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: _buildCircles(),
-                                    );
-                                  },
-                                ),
-                              ),
-                              NumKeyboard(
-                                passwordEnteredCallback:
-                                    widget.passwordEnteredCallback,
-                                keyboardUIConfig: widget.keyboardUIConfig,
-                                passwordDigits: widget.passwordDigits,
-                                cancelCallback: widget.cancelCallback,
-                              ),
-                              widget.bottomWidget ?? Container()
-                            ],
-                          ),
+                            ),
+                            NumKeyboard(
+                              passwordEnteredCallback:
+                                  widget.passwordEnteredCallback,
+                              keyboardUIConfig: widget.keyboardUIConfig,
+                              passwordDigits: widget.passwordDigits,
+                              cancelCallback: widget.cancelCallback,
+                            ),
+                            widget.bottomWidget ?? Container()
+                          ],
                         ),
                       ),
                       Positioned(

@@ -23,8 +23,11 @@ class BeaconCubit extends Cubit<BeaconState> {
     Future.delayed(const Duration(seconds: 1), listenToBeacon);
   }
 
-  void peerFromDeepLink(String beaconData) {
-    beacon.pair(pairingRequest: beaconData);
+  Future<void> peerFromDeepLink(String beaconData) async {
+    final isInternetAvailable = await isConnected();
+    if (isInternetAvailable) {
+      await beacon.pair(pairingRequest: beaconData);
+    }
   }
 
   void listenToBeacon() {
