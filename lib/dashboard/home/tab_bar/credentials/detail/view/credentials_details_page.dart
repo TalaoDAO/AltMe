@@ -122,10 +122,13 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  MyOutlinedButton(
-                    onPressed: delete,
-                    text: l10n.credentialDetailDeleteCard,
-                  ),
+                  if (widget.credentialModel.credentialPreview
+                          .credentialSubjectModel.credentialCategory !=
+                      CredentialCategory.blockchainAccountsCards)
+                    MyOutlinedButton(
+                      onPressed: delete,
+                      text: l10n.credentialDetailDeleteCard,
+                    ),
                   if (widget.credentialModel.shareLink != '')
                     MyOutlinedButton.icon(
                       icon: SvgPicture.asset(
