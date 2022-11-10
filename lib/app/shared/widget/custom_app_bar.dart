@@ -19,44 +19,15 @@ class CustomAppBar extends PreferredSize {
   final Widget? trailing;
 
   @override
-  Widget build(BuildContext context) => Stack(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.bottomCenter,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
-            ),
-            padding: const EdgeInsets.only(
-              top: 12,
-              bottom: 18,
-              left: 64,
-              right: 64,
-            ),
-            child: MyText(
-              title ?? '',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.appBar,
-            ),
-          ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.only(
-              top: 12,
-              bottom: 12,
-              left: 8,
-              right: 8,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                leading ?? const SizedBox(width: 16, height: 16),
-                trailing ?? const SizedBox(width: 16, height: 16),
-              ],
-            ),
-          ),
-        ],
+  Widget build(BuildContext context) => AppBar(
+        centerTitle: true,
+        leading: leading,
+        actions: [if (trailing != null) trailing!],
+        backgroundColor: Theme.of(context).colorScheme.background,
+        title: MyText(
+          title ?? '',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.appBar,
+        ),
       );
-
-  // @override
-  // Size get preferredSize => const Size(300, 70);
 }
