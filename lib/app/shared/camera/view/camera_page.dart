@@ -49,6 +49,12 @@ class _CameraViewState extends State<CameraView> {
   }
 
   @override
+  void dispose() {
+    cameraCubit.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
