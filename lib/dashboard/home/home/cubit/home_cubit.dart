@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
@@ -83,11 +84,38 @@ class HomeCubit extends Cubit<HomeState> {
         },
         data: data,
       );
-      // 1. get credential
-      // 2. remove over13 or over18 from discover after get credential
+
+      final credential = jsonDecode(response as String) as Map<String, dynamic>;
+      final type =
+          credentialType == CredentialSubjectType.over13 ? 'Over13' : 'Over18';
+
+      final Map<String, dynamic> newCredential =
+          Map<String, dynamic>.from(credential);
+      newCredential['credentialPreview'] = credential;
+      final CredentialManifest credentialManifest =
+          await getCredentialManifestFromAltMe(client);
+      credentialManifest.outputDescriptors
+          ?.removeWhere((element) => element.id != type);
+      if (credentialManifest.outputDescriptors!.isNotEmpty) {
+        newCredential['credential_manifest'] = CredentialManifest(
+          credentialManifest.id,
+          credentialManifest.outputDescriptors,
+          credentialManifest.presentationDefinition,
+        ).toJson();
+      }
+
+      final credentialModel = CredentialModel.copyWithData(
+        oldCredentialModel: CredentialModel.fromJson(
+          newCredential,
+        ),
+        newData: credential,
+        activities: [Activity(acquisitionAt: DateTime.now())],
+      );
+
       emit(
         state.copyWith(
-          status: AppStatus.success,
+          status: AppStatus.insertCredential,
+          data: credentialModel,
         ),
       );
       logger.i('response : $response');
