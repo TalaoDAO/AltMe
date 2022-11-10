@@ -42,19 +42,16 @@ class CryptoAccountSwitcherButton extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    SizedBox(
-                      width: 200,
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          accountName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: MyText(
+                        accountName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
-                    const SizedBox(width: 5),
+                    const SizedBox(width: 3),
                     Image.asset(
                       IconStrings.arrowSquareDown,
                       width: Sizes.icon,
