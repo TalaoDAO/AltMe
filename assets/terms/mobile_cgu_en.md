@@ -47,11 +47,28 @@ Identity Card, Nationality proof and Unique ID number: the issuer is the company
 Over13 proof, Over18 proof and Age Range proof: the issuer is the company Web3 Digital Wallet which uses the services of the company Yoti (https://yoti.com) to estimate the user's age at using Artificial Intelligence and a photo of the user.
 
 
+# wallet creation
+
+User must either import or create a wallet in order to use Altme wallet. When user creates a wallet, he will be assigned a Recovery Phrase. User agrees to immediately notify us of any unauthorized use of his Recovery Phrase or private keys or any other breach of security of his wallet. Notwithstanding the foregoing, user acknowledges and agrees that he shall assume all risks related to the use of the services and he shall be solely responsible for maintaining the confidentiality and security of his Recovery Phrase and private keys. When he creates a wallet, he is strongly advised to take precautions in order to avoid loss of access to and/or control over his wallet. Suggested measures include, but are not limited to, the following: 
+
+* creating a strong unique password that you do not use for any other purpose (i.e. different to your phone password or any other passwords you use for websites, online services, etc.) and leveraging biometric authentication if available;
+* do not store the private key and Recovery Phrase in plain text online or in an unsecured physical location;
+* limiting access to his devices and his wallet;
+* taking all necessary precautions against malware on your devices and networks;
+* promptly notifying us if he discovers or otherwise suspects any security breaches related to his wallet.
+
+
+Notwithstanding anything to the contrary herein, Web3 Digital Wallet shall have no liability whatsoever in connection with activities that occur on user's wallet with or without user's authorization. 
+
 ## Present credentials
 
-The user uses the services of a verifier, which may be the web3 digital wallet company or third-party companies or organizations.
+Other parties (verifiers) can send identity requests to the user via an existing peer-to-peer connections.  The requested credentials are already filled out with existing identity credentials stored in the app. The user has the possibility to change this information manually (if other appropriate identity attributes available). Given the user actively consents to send the information, the selected identity credentials are sent to the requesting party. 
 
-The verifier solicits credentials from the user to give him access to his own services or provide him with an advantage in the use of his services. The user is solely responsible for the information he agrees to transfer to the verifier.
+The storage of the user's data by the other party must be regulated by the other participant, who is responsible for the legally compliant handling of the data. Web3 Digital Wallet has no responsibilities or obligations in this regard. The Altme wallet is only responsible for the exchange of information between participants. If the requested identity information is not stored on the app, the user will receive a corresponding error message. The missing identity information must first be provided to the user by another participant before the request can be answered.
+
+If the user does not want to answer the identity request, he can reject it. In this case no information will be sent to the requesting participant.
+
+If identity requests have been answered successfully, the user will see a successfull message.
 
 ## Digital Asset Transactions
 
@@ -60,7 +77,6 @@ In order for all proposed digital asset transactions to be completed, they must 
 * the transaction details you submit may not be completed, or may be substantially delayed, by the applicable blockchain networks;
 * we do not store, send, or receive Digital Assets;
 * any transfer that occurs in relation to any Digital Asset occurs on the relevant blockchain network and not on a network owned by us and therefore we do not guarantee the transfer of title or right in any aigital asset. 
-
 
 ## Buy digital assets with Supported Credit or Debit Cards
 
@@ -71,65 +87,21 @@ This service is limited to users over 18 years old. If you use Altme Wallet to p
 * Web3 Digital wallet is not responsible for any exchange rates offered by the relevant third party service provider(s);
 * Web3 Digital Wallet is not responsible for any fees charged by the relevant third party service provider(s) or your bank or credit card issuer(s). 
 
+## Price
 
-### Deletion
+The identification service is provided free of charge for the user.
 
-
-The user who wishes to delete his portfolio must access the “Delete the portfolio appearing in his workspace” tab. A window opens to ask the user to confirm their choice with their password. In case of confirmation, the user's portfolio is permanently deleted, but on the other hand they keep their username and certificates on their wallet.
-
-
-The deletion of the wallet identifier can be carried out by resetting the wallet or by uninstalling it from the smartphone. In this case its identifier is lost but possibly regenerable with the regeneration sentence. However, the certificates will be permanently lost.
-
-
-### Registration conditions
-
-
-Registration for the Professional Digital Identity Service is free and requires the express acceptance of the Professional Digital Identity Terms & Conditions and the Terms & Conditions of the https://altme.co site regardless of the terminal used (computer, tablet, smartphone …).
-
-
-Access to the Professional Digital Identity Service Access to the Professional Digital Identity
-
-
-Service is protected by cryptographic keys stored in the smartphone wallet. It is up to the user to protect access to his smartphone and to the wallet application in the event of theft or loss of the smartphone. 
-
-
-The user is strongly advised to make a copy on a paper document of the sentence which allows the regeneration of the cryptographic keys in the event of loss or theft of the smartphone or the deletion of the wallet. This paper document must be kept by the user in a secure place. The user is not recommended to keep a copy of the refresh phrase in the cloud.
-
-
-Users are advised to save all or part of their certificates in their portfolio.
-
-
-It is important to specify that neither Talao nor anyone has a copy of the cryptographic keys allowing access to the Professional Digital Identity service and that if these keys are permanently lost, access to the Professional Digital Identity service is impossible. In this case, it is the user's responsibility to contact Talao customer service.
-
-
-### Price
-
-
-The Professional Digital Identity service is free and the application code is open source available on the Talao repository https://github.com/TalaoDAO .
-
+However, the use of the crypto services of the Altme app may give rise to fees and charges on the part of the user, such as transaction fees, which must be borne by the user.
 
 ## Use of the service
 
+Services are limited to users over 18 years old. 
 
-The user acknowledges that the Professional Digital Identity service is a service for personal use only and that any use of said service is carried out under his full and entire responsibility.
-
-
-The Professional Digital Identity service is only accessible by using a wallet on a smartphone, however, limited access to workspace services is also possible with a password and a username. . 
+The user acknowledges that the Altme wallet services are services for personal use only and that any use of said service is carried out under his full and entire responsibility.
 
 
 If the user becomes aware of an unauthorized use of the service, he undertakes to inform customer service, whose contact details appear in the Terms & Conditions, without delay. In the event of loss of his password, the user has the option of clicking on the “Forgot password” link. The Professional Digital Identity service will then send him on his e-mail address a link to a password reset page.
 
-
-Talao recommends that each user take all the necessary precautions in terms of computer security (use of an anti-virus, a firewall, etc.) and to exercise caution and common sense when using the Service. of Professional Digital Identity.
-
-
-Talao reserves the right to suspend access to the site and to the Professional Digital Identity service when it considers that an event liable to affect its operation or integrity requires it or for maintenance reasons, and this, for the duration necessary for the planned intervention. Where applicable, as soon as it becomes aware of the dates of scheduled interventions, Talao undertakes to notify users as soon as possible, on the home page of the Professional Digital Identity site or by any other process at its convenience. This suspension can in no way engage the responsibility of Talao and does not entitle to any compensation.
-
-
-Each user undertakes not to modify, try to modify or harm the Site in any way whatsoever and not to use any software or any form of computer program intended to reach or make available protected content. or not freely available. It is also prohibited to create a work or a site deriving from all part of the Site.
-
-
-The user undertakes to inform Talao without delay, by any means, of any error, fault or irregularity that he notices in the use of the site, as soon as he becomes aware of it.
 
 
 ### Operation of the Professional Digital Identity Service
