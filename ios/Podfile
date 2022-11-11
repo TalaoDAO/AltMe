@@ -3,7 +3,8 @@ source 'https://github.com/passbase/cocoapods-specs.git'
 source 'https://github.com/passbase/microblink-cocoapods-specs.git'
 
 # Uncomment this line to define a global platform for your project
-platform :ios, '14.0'
+$iOSVersion = '14.0'
+platform :ios, $iOSVersion
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -39,11 +40,21 @@ target 'Runner' do
 end
 
 post_install do |installer|
+  # add these lines:
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings["EXCLUDED_ARCHS[sdk=*]"] = "armv7"
+    config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $iOSVersion
+  end
+  
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    
+    # add these lines:
     target.build_configurations.each do |config|
-      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+      if Gem::Version.new($iOSVersion) > Gem::Version.new(config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'])
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $iOSVersion
+      end
     end
+    
   end
 end
