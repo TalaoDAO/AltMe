@@ -1,4 +1,4 @@
-﻿# Terms & Conditions
+# Terms & Conditions
 
 
 This document was updated on Friday, November 21, 2022
@@ -12,26 +12,26 @@ The purpose of these Terms & Conditions is to define the contractual relationshi
 
 At any time, Web3 Digital Wallet reserves the right to make changes to service and therefore to these Terms & Conditions. Any modification comes into force as from their publication or, if necessary, on any other date which would be indicated. Web3 Digital Wallet will ensure that users are aware of any modification of the Terms & Conditions, however, it is up to the user before any use of the service to refer to the latest version of the Terms & Conditions accessible at any time on the https site: //altme.co.
 
-In the event of disagreement with the new provisions, the user undertakes to cease all use of the service and to delete his Digital Identity.
+In the event of disagreement with the new provisions, the user undertakes to cease all use of the service and to deleteuser'sDigital Identity.
 
 ## Presentation of the service
 
-Altme wallet is a non-custodial wallet software, for verifiable credentials and digital assets such as cryptocurrencies, virtual commodities and NFTs (“Digital Assets”), meaning you are solely in control of and responsible for your personal data,  digital assets and private keys, and accordingly you can authorize transactions from your wallet address. You expressly acknowledge and agree that as Altme Wallet is a non-custodial wallet software, you are solely responsible for your activity and any risk of loss at all times.
+Altme wallet is a non-custodial wallet software, for verifiable credentials and digital assets such as cryptocurrencies, virtual commodities and NFTs (“Digital Assets”), meaning user is solely in control of and responsible for user personal data,  digital assets and private keys, and accordingly user can authorize transactions from user's wallet address. User expressly acknowledges and agrees that as Altme Wallet is a non-custodial wallet software, user is solely responsible for user's activity and any risk of loss at all times.
 
-Altme wallet allows you to:
+Altme wallet allows user to:
 
-* generate your Decentralized Identifier (DID);
+* generate user's Decentralized Identifier (DID);
 * collect certificates (Verifiable Credenials)  from third parties (issuers). Example of certificates are : Proof of email, Proof of phone number, ID card, Nationality proof, Over 18 proof, Loyalty cards, tickets, etc;
 * store certificates;
 * transfer certificates to other third parties (verifiers);
 * secure online procedures with partners, in particular in the field of web3 applications (e.g. access a decnetralized crypto games, a NFT marketplace, Metaverse, Decentralized Finance application,...).
-* generate wallet addresses and associated private keys that you may use to send and receive digital assets;
+* generate wallet addresses and associated private keys that user may use to send and receive digital assets;
 * browse and access third party decentralized application(s) (“DApp(s)”) and third party decentralized exchanges (“DEX”) through the mobile application’s web browser;
 * swap/trade digital assets through DApp functionality made available by third party service provider(s);
 * view digital asset price information made available by third party service provider(s); 
-* andbroadcast Digital Asset Transaction data to various blockchains supported by Altme without requiring you to download or install the associated blockchain-based software to your local device.
+* andbroadcast Digital Asset Transaction data to various blockchains supported by Altme without requiring user to download or install the associated blockchain-based software to user's local device.
 
-Altme's service is built on the basis of innovative technology (Blockchain and Self Sovereign Identity). The altme service allows a user to have a Digital Identity and certificates certified by third parties without having to save their personal data on the servers of an Identity Provider. The data is stored in the user's wallet (smartphone application) or possibly encrypted on a decentralized network. The user alone retains access to his identity with his smartphone or cryptographic keys are kept. It can authorize an application of a partner (a service provider) to access it. 
+Altme's service is built on the basis of innovative technology (Blockchain and Self Sovereign Identity). The altme service allows a user to have a Digital Identity and certificates certified by third parties without having to save their personal data on the servers of an Identity Provider. The data is stored in the user's wallet (smartphone application) or possibly encrypted on a decentralized network. The user alone retains access to user's identity with user's smartphone or cryptographic keys are kept. It can authorize an application of a partner (a service provider) to access it. 
 
 
 ## Collect credentials
@@ -49,13 +49,13 @@ Over13 proof, Over18 proof and Age Range proof: the issuer is the company Web3 D
 
 # wallet creation
 
-User must either import or create a wallet in order to use Altme wallet. When user creates a wallet, he will be assigned a Recovery Phrase. User agrees to immediately notify us of any unauthorized use of his Recovery Phrase or private keys or any other breach of security of his wallet. Notwithstanding the foregoing, user acknowledges and agrees that he shall assume all risks related to the use of the services and he shall be solely responsible for maintaining the confidentiality and security of his Recovery Phrase and private keys. When he creates a wallet, he is strongly advised to take precautions in order to avoid loss of access to and/or control over his wallet. Suggested measures include, but are not limited to, the following: 
+User must either import or create a wallet in order to use Altme wallet. When user creates a wallet, he will be assigned a Recovery Phrase. User agrees to immediately notify us of any unauthorized use of user's Recovery Phrase or private keys or any other breach of security of user's wallet. Notwithstanding the foregoing, user acknowledges and agrees that he shall assume all risks related to the use of the services and he shall be solely responsible for maintaining the confidentiality and security of user's Recovery Phrase and private keys. When he creates a wallet, he is strongly advised to take precautions in order to avoid loss of access to and/or control over user's wallet. Suggested measures include, but are not limited to, the following: 
 
-* creating a strong unique password that you do not use for any other purpose (i.e. different to your phone password or any other passwords you use for websites, online services, etc.) and leveraging biometric authentication if available;
+* creating a strong unique password that user does not use for any other purpose (i.e. different to user's phone password or any other passwords he uses for websites, online services, etc.) and leveraging biometric authentication if available;
 * do not store the private key and Recovery Phrase in plain text online or in an unsecured physical location;
-* limiting access to his devices and his wallet;
-* taking all necessary precautions against malware on your devices and networks;
-* promptly notifying us if he discovers or otherwise suspects any security breaches related to his wallet.
+* limiting access to user's devices and user's wallet;
+* taking all necessary precautions against malware on user's devices and networks;
+* promptly notifying us if he discovers or otherwise suspects any security breaches related to user's wallet.
 
 
 Notwithstanding anything to the contrary herein, Web3 Digital Wallet shall have no liability whatsoever in connection with activities that occur on user's wallet with or without user's authorization. 
@@ -72,20 +72,20 @@ If identity requests have been answered successfully, the user will see a succes
 
 ## Digital Asset Transactions
 
-In order for all proposed digital asset transactions to be completed, they must be confirmed and recorded in the associated public blockchain. Such networks are decentralized, peer-to-peer networks supported by independent third parties, which we do not own, control, or operate. We have no control over the blockchain networks and, therefore, cannot and do not ensure that any transaction details that you submit via our Services will be confirmed and processed. By using Alltme allet, you acknowledge and agree that: 
-* we do not have the ability to cancel or otherwise modify your transaction;
-* the transaction details you submit may not be completed, or may be substantially delayed, by the applicable blockchain networks;
+In order for all proposed digital asset transactions to be completed, they must be confirmed and recorded in the associated public blockchain. Such networks are decentralized, peer-to-peer networks supported by independent third parties, which we do not own, control, or operate. We have no control over the blockchain networks and, therefore, cannot and do not ensure that any transaction details that user submits via Web3 Digital Wallet services will be confirmed and processed. By using Alltme allet, user acknowledges and agrees that: 
+* Web3 Digital Walletr does not have the ability to cancel or otherwise modify user's transaction;
+* the transaction details user submits may not be completed, or may be substantially delayed, by the applicable blockchain networks;
 * we do not store, send, or receive Digital Assets;
 * any transfer that occurs in relation to any Digital Asset occurs on the relevant blockchain network and not on a network owned by us and therefore we do not guarantee the transfer of title or right in any aigital asset. 
 
 ## Buy digital assets with Supported Credit or Debit Cards
 
-This service is limited to users over 18 years old. If you use Altme Wallet to purchase digital assets with your credit or debit card, a third party will convert your chosen amount into the applicable Digital Asset and credit it to your wallet. You acknowledge and agree that: 
-* Web3 Digital Wallet is not responsible for your use of such third party service and shall have no liability whatsoever in connection with your use of such service;
-* you will be subject to any terms and conditions imposed by the relevant third party service provider;
-* Web3 Digital Wallet has no ability to change, withdraw or cancel any conversion requests you place;
+This service is limited to users over 18 years old. If he uses Altme Wallet to purchase digital assets with user's credit or debit card, a third party will convert user's chosen amount into the applicable Digital Asset and credit it to user's wallet. he acknowledges and agrees that: 
+* Web3 Digital Wallet is not responsible for user's use of such third party service and shall have no liability whatsoever in connection with user's uses of such service;
+* user will be subject to any terms and conditions imposed by the relevant third party service provider;
+* Web3 Digital Wallet has no ability to change, withdraw or cancel any conversion requests user places;
 * Web3 Digital wallet is not responsible for any exchange rates offered by the relevant third party service provider(s);
-* Web3 Digital Wallet is not responsible for any fees charged by the relevant third party service provider(s) or your bank or credit card issuer(s). 
+* Web3 Digital Wallet is not responsible for any fees charged by the relevant third party service provider(s) or user's bank or credit card issuer(s). 
 
 ## Price
 
@@ -97,37 +97,34 @@ However, the use of the crypto services of the Altme app may give rise to fees a
 
 Services are limited to users over 18 years old. 
 
-The user acknowledges that the Altme wallet services are services for personal use only and that any use of said service is carried out under his full and entire responsibility.
-
-
-If the user becomes aware of an unauthorized use of the service, he undertakes to inform customer service, whose contact details appear in the Terms & Conditions, without delay. In the event of loss of his password, the user has the option of clicking on the “Forgot password” link. The Professional Digital Identity service will then send him on his e-mail address a link to a password reset page.
+The user acknowledges that the Altme wallet services are services for personal use only and that any use of said service is carried out under user's full and entire responsibility.
 
 
 
-### Operation of the Professional Digital Identity Service
+### Operation of the ervice
 
 
-After having created and verified his Professional Digital Identity, the user can access partner sites more easily and quickly with the same access method.
+After having created and verified user's identity, the user can access partner sites more easily and quickly with the same access method.
 
 
-The user acknowledges and accepts that his Digital Identity may be used by the sites and partner sites and, for this purpose, he undertakes to ensure that the attributes of his Identity remain accurate and up to date.
+The user acknowledges and accepts that user's Digital Identity may be used by the sites and partner sites and, for this purpose, he undertakes to ensure that the attributes of user's Identity remain accurate and up to date.
 
 
 ## Intellectual property rights
 
 
-The services are protected by intellectual property rights and / or other rights that Talao owns or of which it is authorized to use.
+The services are protected by intellectual property rights and / or other rights that Web3 Digital Wallet owns or of which it is authorized to use.
 
-Web3 Digital Wallet is and will remain the owner of its distinctive signs, namely brands, corporate and other names, trade names, brands and domain names. The reproduction, imitation or affixing, in whole or in part, of the trademarks and designs belonging to Talao is strictly prohibited without its prior written consent.
+Web3 Digital Wallet is and will remain the owner of its distinctive signs, namely brands, corporate and other names, trade names, brands and domain names. The reproduction, imitation or affixing, in whole or in part, of the trademarks and designs belonging to Web3 Digital Wallet is strictly prohibited without its prior written consent.
 
 
-Except in the cases of force majeure referred to herein, Web3 Digital Wallet undertakes, within the framework of an obligation of means, to ensure the availability and accessibility to the services, 24/24 hours and 7/7 days. Nevertheless, the operations of tests, control and / or maintenance as well as the interventions necessary in the event of breakdown, can be carried out by Talao at any time. Talao strives to prevent, as far as possible, the occurrence of such an operation. Talao cannot be held responsible for any resulting consequences for any user.
+Except in the cases of force majeure referred to herein, Web3 Digital Wallet undertakes, within the framework of an obligation of means, to ensure the availability and accessibility to the services, 24/24 hours and 7/7 days. Nevertheless, the operations of tests, control and / or maintenance as well as the interventions necessary in the event of breakdown, can be carried out by Web3 Digital Wallet at any time. Web3 Digital Wallet strives to prevent, as far as possible, the occurrence of such an operation. Web3 Digital Wallet cannot be held responsible for any resulting consequences for any user.
 
 
 The user acknowledges that Web3 Digital Wallet can in no way be held responsible for the functional characteristics and technical performance of the internet. Likewise, all users remain responsible for their actions on the internet regarding the use of their data on open networks.
 
 
-The user undertakes not to hinder the proper functioning of application, in particular by transmitting any element likely to contain a virus or likely to otherwise damage or affect the Site and / or the Application and / or the Professional Digital Identity Service and, more broadly, the information system of Talao and / or its co-contractors.
+The user undertakes not to hinder the proper functioning of application, in particular by transmitting any element likely to contain a virus or likely to otherwise damage or affect the service and, more broadly, the information system of Web3 Digital Wallet and / or its co-contractors.
 
 In the case of the use of the application through smartphones or tablets, the user undertakes not to modify the operating system of the terminal in a way that could affect its security.
 
@@ -136,7 +133,11 @@ The costs and expenses of equipment necessary for the use of the service, are an
 
 ## License to NFT Content
 
-User may be able to store non-fungible tokens (“NFTs”) on Altme wallet. User hereby represents and warrants that he owns all legal right, title in and interest to, including all intellectual property rights to the content associated with the NFT (“NFT Content”), or he is legally authorized by the owner of the intellectual property in the NFT Content to store the NFTs on Altme. He retains all rights to the NFT Content stored except for rights expressly granted herein. By using Altme wallet, he grants Web3 Digital Wallet a license to access, use, host, cache, store, copy, reproduce, transmit, display, publish, distribute, adapt and modify (for technical purposes, e.g., making sure content is viewable on smartphones as well as computers and other devices) the NFT Content in any and all media or distribution methods (now know or later developed) solely as required to be able to operate and provide services of Altme wallet. Web3 Digital Wallet does not monitor the NFTs and NFT Content storedon Altme wallet for any infringement of a third party’s intellectual property rights. Accordingly, Web3 Digital wallet assumes no liability for any action regarding any content provided by the user. User further acknowledge and agrees it is his sole responsibility to carry out all necessary due diligence for all his activities relating to NFTs, and you represent and warrant that you have not and are not relying on, and shall have no remedies, in respect of any statement or representation made by us in relation to any transfer or interaction otherwise with any NFTs. If you have a dispute in relation to the NFTs and/or NFT Content, YOU RELEASE US FROM CLAIMS, DEMANDS, AND DAMAGES OF EVERY KIND AND NATURE, KNOWN AND UNKNOWN, ARISING OUT OF OR IN ANY WAY CONNECTED WITH SUCH DISPUTES. IN ENTERING INTO THIS RELEASE YOU EXPRESSLY WAIVE ANY PROTECTIONS (WHETHER STATUTORY OR OTHERWISE) THAT WOULD OTHERWISE LIMIT THE COVERAGE OF THIS RELEASE TO INCLUDE THOSE CLAIMS WHICH YOU MAY KNOW OR SUSPECT TO EXIST IN YOUR FAVOR AT THE TIME OF AGREEING TO THIS RELEASE. 
+User may be able to store non-fungible tokens (“NFTs”) on Altme wallet. User hereby represents and warrants that he owns all legal right, title in and interest to, including all intellectual property rights to the content associated with the NFT (“NFT Content”), or he is legally authorized by the owner of the intellectual property in the NFT Content to store the NFTs on Altme. 
+
+User retains all rights to the NFT Content stored except for rights expressly granted herein. By using Altme wallet, user grants Web3 Digital Wallet a license to access, use, host, cache, store, copy, reproduce, transmit, display, publish, distribute, adapt and modify (for technical purposes, e.g., making sure content is viewable on smartphones as well as computers and other devices) the NFT Content in any and all media or distribution methods (now know or later developed) solely as required to be able to operate and provide services of Altme wallet. Web3 Digital Wallet does not monitor the NFTs and NFT Content storedon Altme wallet for any infringement of a third party’s intellectual property rights. 
+
+Accordingly, Web3 Digital wallet assumes no liability for any action regarding any content provided by the user. User further acknowledge and agrees it is user's sole responsibility to carry out all necessary due diligence for all user's activities relating to NFTs, and user represents and warrant that he has not and are not relying on, and shall have no remedies, in respect of any statement or representation made by Web3 Digital Wallet in relation to any transfer or interaction otherwise with any NFTs. If user has a dispute in relation to the NFTs and/or NFT Content, USER RELEASES WEB3 DIGITAL WALLET FROM CLAIMS, DEMANDS, AND DAMAGES OF EVERY KIND AND NATURE, KNOWN AND UNKNOWN, ARISING OUT OF OR IN ANY WAY CONNECTED WITH SUCH DISPUTES. IN ENTERING INTO THIS RELEASE USER EXPRESSLY WAIVES ANY PROTECTIONS (WHETHER STATUTORY OR OTHERWISE) THAT WOULD OTHERWISE LIMIT THE COVERAGE OF THIS RELEASE TO INCLUDE THOSE CLAIMS WHICH USER MAY KNOW OR SUSPECT TO EXIST IN USER FAVOR AT THE TIME OF AGREEING TO THIS RELEASE. 
 
 ## Liability
 
@@ -144,18 +145,18 @@ User may be able to store non-fungible tokens (“NFTs”) on Altme wallet. User
 Web3 Digital Wallet makes no warranty as to the ability of the service to meet the specific needs or expectations of the user. Likewise, Web3 Digital Wallet cannot guarantee the absence of errors or other operational or user problems during the use of the service.
 
 
-Web3 Digital Wallet declines all responsibility for the use made by the user of the service. In this regard, Web3 Digital Wallet reserves the right to suspend service for a user following receipt of a notification or if it is indeed aware of the manifestly illegal nature of the use made of the service. Under no circumstances can Web3 Digital Wallet be held liable for this withdrawal.
+Web3 Digital Wallet declines all responsibility for the use made by the user of the service. In tuser's regard, Web3 Digital Wallet reserves the right to suspend service for a user following receipt of a notification or if it is indeed aware of the manifestly illegal nature of the use made of the service. Under no circumstances can Web3 Digital Wallet be held liable for this withdrawal.
 
 
 ## User responsibility 
 
 
-The user is responsible for his use of the service.
+The user is responsible for user's use of the service.
 
 The user undertakes to:
 
-* not make illegal or illicit use of the Professional Digital Identity Service;
-* inform Web3 Digital Wallet without delay, by any means, of any error, fault or irregularity that it notices in the use of the Site and / or the Professional Digital Identity Service, as soon as it becomes aware of it;
+* not make illegal or illicit use of the service;
+* inform Web3 Digital Wallet without delay, by any means, of any error, fault or irregularity that it notices in the use of the service, as soon as it becomes aware of it;
 * in general, not to use the service that could cause harm to Web3 Digital Wallet;
 * choose a password in accordance with the communicated policy;
 * securely store possession-based electronic identification means;
@@ -168,7 +169,7 @@ As such, Web3 Digital Wallet reserves the right:
 * to apply the stipulations of the article "Termination - Default - Suspension".
 
 
-In addition, Web3 Digital Wallet ensures the monitoring and traceability of the functioning of the Professional Digital Identity service.
+In addition, Web3 Digital Wallet ensures the monitoring and traceability of the functioning of the service.
 
 
 ## Force majeure
@@ -177,15 +178,15 @@ In addition, Web3 Digital Wallet ensures the monitoring and traceability of the 
 Web3 Diital Wallet can not be held responsible for any delay in the performance of its obligations or for any non-performance of its obligations resulting from these General Conditions of Use when the circumstances giving rise to it relate to force majeure.
 
 
-Expressly, are considered as cases of force majeure or fortuitous event, in addition to those usually retained by the jurisprudence of the French courts and tribunals, the following cases: blocking of electronic communications, out of control of Talao, and any other case beyond the control. of Talao preventing the normal performance of the obligations arising from the Contract.
+Expressly, are considered as cases of force majeure or fortuitous event, in addition to those usually retained by the jurisprudence of the French courts and tribunals, the following cases: blocking of electronic communications, out of control of Web3 Digital Wallet, and any other case beyond the control. of Web3 Digital Wallet preventing the normal performance of the obligations arising from the Contract.
 
 
-Any case of force majeure affecting the performance of the obligations resulting from these T & Cs and in particular the access or use of the Professional Digital Identity Service by the user will suspend, from its date of occurrence, the execution of these T & Cs. From this date, and despite the case of force majeure, Web3 Digital Wallet will endeavor to the extent possible:
+Any case of force majeure affecting the performance of the obligations resulting from these T & Cs and in particular the access or use of the service by the user will suspend, from its date of occurrence, the execution of these T & Cs. From this date, and despite the case of force majeure, Web3 Digital Wallet will endeavor to the extent possible:
 
 * to inform the user of the existence of this case of force majeure;
-* to restore access, even degraded, to the Professional Digital Identity Service;
+* to restore access, even degraded, to the service;
 
-It is expressly agreed between the Parties that the completely exceptional implementation of these palliative means by Web3 Digital Wallet during the occurrence of a case of force majeure cannot give rise to any liability or compensation on the part of Talao.
+It is expressly agreed between the Parties that the completely exceptional implementation of these palliative means by Web3 Digital Wallet during the occurrence of a case of force majeure cannot give rise to any liability or compensation on the part of Web3 Digital Wallet.
 
 
 ## Personal data protection
@@ -201,13 +202,13 @@ The conditions for processing personal data are set out in Altme's privacy and d
 service Customer Service can be reached:
 
 
-* from the Professional Digital Identity contact form available by following this link: Contact us
+* from the service contact form available by following this link: Contact us
 
 
 ## Subcontracting
 
 
-Web3 Digital Wallet reserves the right to have all or part of the services covered by these conditions performed by any other subcontracting company of its choice, Talao remaining solely responsible towards the user, on condition for it to take action against its subcontractors.
+Web3 Digital Wallet reserves the right to have all or part of the services covered by these conditions performed by any other subcontracting company of its choice, Web3 Digital Wallet remaining solely responsible towards the user, on condition for it to take action against its subcontractors.
 
 
 
@@ -223,10 +224,10 @@ Complaints are then processed according to the terms and conditions of the T & C
 ### Settlement of disputes - Competent court and applicable law
 
 
-In the absence of an amicable settlement, in the event of a dispute relating to the interpretation, formation or execution of the General Conditions of Use and failure to reach an amicable agreement or to a transaction, Talao and the users give express and exclusive jurisdiction to the competent courts within the jurisdiction of Paris, notwithstanding the plurality of defendants or actions in summary or appeal in guarantee or protective measure.
+In the absence of an amicable settlement, in the event of a dispute relating to the interpretation, formation or execution of the General Conditions of Use and failure to reach an amicable agreement or to a transaction, Web3 Digital Wallet and the users give express and exclusive jurisdiction to the competent courts within the jurisdiction of Paris, notwithstanding the plurality of defendants or actions in summary or appeal in guarantee or protective measure.
 
 
-In the event of non-compliance with this step, which remains the responsibility and responsibility of the user, and loss of the Content following termination by the user, Talao cannot be held liable in this regard.
+In the event of non-compliance with this step, which remains the responsibility and responsibility of the user, and loss of the Content following termination by the user, Web3 Digital Wallet cannot be held liable in this regard.
 
 
 In the event of a dispute relating to the interpretation, formation, validity or execution of the General Conditions of Use, Web3 Digital Wallet and the users acknowledge
