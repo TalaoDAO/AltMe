@@ -53,7 +53,7 @@ Identity card, Proof of nationality and Unique identification number: the issuer
 
 Over13 proof, Over18 proof and Age Range proof: the issuer is the Web3 Digital Wallet company which uses the services of the Yoti company (https://yoti.com) to estimate the user's age using Artificial Intelligence and a photo of the user.
 
-## wallet creation
+## Wallet creation
 
 User must either import or create a wallet in order to use Altme wallet. When user creates a wallet, he will be assigned a Recovery Phrase. User agrees to immediately notify us of any unauthorized use of user's Recovery Phrase or private keys or any other breach of security of user's wallet. Notwithstanding the foregoing, user acknowledges and agrees that he shall assume all risks related to the use of the services and he shall be solely responsible for maintaining the confidentiality and security of user's Recovery Phrase and private keys. When he creates a wallet, he is strongly advised to take precautions in order to avoid loss of access to and/or control over user's wallet. Suggested measures include, but are not limited to, the following: 
 
@@ -75,7 +75,7 @@ If the user does not want to answer the identity request, he can reject it. In t
 
 If credentila requests have been answered successfully, the user will see a successfull message.
 
-## Digital Asset Transactions
+## Digital asset transactions
 
 In order for all proposed digital asset transactions to be completed, they must be confirmed and recorded in the associated public blockchain. Such networks are decentralized, peer-to-peer networks supported by independent third parties, which we do not own, control, or operate. We have no control over the blockchain networks and, therefore, cannot and do not ensure that any transaction details that user submits via Web3 Digital Wallet services will be confirmed and processed. By using Alltme allet, user acknowledges and agrees that: 
 
@@ -84,7 +84,7 @@ In order for all proposed digital asset transactions to be completed, they must 
 * we do not store, send, or receive Digital Assets;
 * any transfer that occurs in relation to any Digital Asset occurs on the relevant blockchain network and not on a network owned by us and therefore we do not guarantee the transfer of title or right in any aigital asset. 
 
-## Buy digital assets with Supported Credit or Debit Cards
+## Buy digital assets with credit or debit cards
 
 This service is limited to users over 18 years old. If he uses Altme Wallet to purchase digital assets with user's credit or debit card, a third party will convert user's chosen amount into the applicable Digital Asset and credit it to user's wallet. he acknowledges and agrees that : 
 
@@ -106,7 +106,7 @@ Services are limited to users over 18 years old.
 
 The user acknowledges that the Altme wallet services are services for personal use only and that any use of said service is carried out under user's full and entire responsibility.
 
-## Operation of the ervice
+## Operation of the service
 
 After having created and verified user's identity, the user can access partner sites more easily and quickly with the same access method.
 
@@ -128,7 +128,7 @@ In the case of the use of the application through smartphones or tablets, the us
 
 The costs and expenses of equipment necessary for the use of the service, are and remain the responsibility of the user.
 
-## License to NFT Content
+## License to NFT content
 
 User may be able to store non-fungible tokens (“NFTs”) on Altme wallet. User hereby represents and warrants that he owns all legal right, title in and interest to, including all intellectual property rights to the content associated with the NFT (“NFT Content”), or he is legally authorized by the owner of the intellectual property in the NFT Content to store the NFTs on Altme. 
 
