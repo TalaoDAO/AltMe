@@ -44,19 +44,33 @@ Phone proof: the issuer is the company Web3 Digital Wallet which verifies the va
 
 Identity Card, Nationality proof and Unique ID number: the issuer is the company Web3 Digital Wallet which uses the services of the third-party company Passbase (https://passbase.com) for the authentication of identity documents and facial recognition (3D liveness).
 
-
 Over13 proof, Over18 proof and Age Range proof: the issuer is the company Web3 Digital Wallet which uses the services of the company Yoti (https://yoti.com) to estimate the user's age at using Artificial Intelligence and a photo of the user.
 
-## Presenting credentials
 
-## Buy Digital Assets with Supported Credit or Debit Cards
+## Present credentials
 
-this service is limited to users over 18 years old. If you use Alltme Wallet to purchase Digital Assets with your credit or debit card, a third party will convert your chosen amount into the applicable Digital Asset and credit it to your wallet. You acknowledge and agree that: 
+The user uses the services of a verifier, which may be the web3 digital wallet company or third-party companies or organizations.
+
+The verifier solicits credentials from the user to give him access to his own services or provide him with an advantage in the use of his services. The user is solely responsible for the information he agrees to transfer to the verifier.
+
+## Digital Asset Transactions
+
+In order for all proposed digital asset transactions to be completed, they must be confirmed and recorded in the associated public blockchain. Such networks are decentralized, peer-to-peer networks supported by independent third parties, which we do not own, control, or operate. We have no control over the blockchain networks and, therefore, cannot and do not ensure that any transaction details that you submit via our Services will be confirmed and processed. By using Alltme allet, you acknowledge and agree that: 
+* we do not have the ability to cancel or otherwise modify your transaction;
+* the transaction details you submit may not be completed, or may be substantially delayed, by the applicable blockchain networks;
+* we do not store, send, or receive Digital Assets;
+* any transfer that occurs in relation to any Digital Asset occurs on the relevant blockchain network and not on a network owned by us and therefore we do not guarantee the transfer of title or right in any aigital asset. 
+
+
+## Buy digital assets with Supported Credit or Debit Cards
+
+This service is limited to users over 18 years old. If you use Altme Wallet to purchase digital assets with your credit or debit card, a third party will convert your chosen amount into the applicable Digital Asset and credit it to your wallet. You acknowledge and agree that: 
 * Web3 Digital Wallet is not responsible for your use of such third party service and shall have no liability whatsoever in connection with your use of such service;
 * you will be subject to any terms and conditions imposed by the relevant third party service provider;
 * Web3 Digital Wallet has no ability to change, withdraw or cancel any conversion requests you place;
 * Web3 Digital wallet is not responsible for any exchange rates offered by the relevant third party service provider(s);
 * Web3 Digital Wallet is not responsible for any fees charged by the relevant third party service provider(s) or your bank or credit card issuer(s). 
+
 
 ### Deletion
 
