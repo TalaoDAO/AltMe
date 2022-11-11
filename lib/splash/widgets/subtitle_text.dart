@@ -12,9 +12,9 @@ class SubTitle extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceLarge),
       child: SizedBox(
-        child: MyText(
+        child: Text(
           l10n.splashSubtitle,
-          maxLines: 2,
+          maxLines: 3,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.starterSubTitleStyle,
         ),
