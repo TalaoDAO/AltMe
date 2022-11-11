@@ -1,7 +1,7 @@
 ﻿# Terms & Conditions
 
 
-This document was updated on Tuesday, September 17, 2021
+This document was updated on Friday, November 21, 2022
 
 
 ## Preamble
