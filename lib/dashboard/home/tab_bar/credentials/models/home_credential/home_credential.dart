@@ -158,8 +158,13 @@ class HomeCredential extends Equatable {
 
       case CredentialSubjectType.phonePass:
         image = ImageStrings.dummyPhonePassCard;
-        link = Urls.phonePassUrl;
         dummyDesc = ResponseString.RESPONSE_STRING_phoneProofDummyDescription;
+        link = Urls.phonePassUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_phoneProofWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_phoneProofExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_phoneProofHowToGetIt;
         break;
 
       case CredentialSubjectType.bloometaPass:
