@@ -577,8 +577,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         final credentialSubjectType = credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
         if (credentialSubjectType ==
-                CredentialSubjectType.tezotopiaMembership &&
-            isAndroid()) {
+            CredentialSubjectType.tezotopiaMembership) {
           gamingCategories.add(CredentialSubjectType.tezotopiaMembership);
         }
         if (credentialSubjectType == CredentialSubjectType.tezVoucher &&
@@ -620,9 +619,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         switch (credentialSubjectType) {
           case CredentialSubjectType.bloometaPass:
           case CredentialSubjectType.tezotopiaMembership:
-            if (isAndroid()) {
-              identityCategories.add(CredentialSubjectType.tezotopiaMembership);
-            }
+            identityCategories.add(CredentialSubjectType.tezotopiaMembership);
             break;
           case CredentialSubjectType.ageRange:
             // Note: Uncomment if we need to display dummies again.
