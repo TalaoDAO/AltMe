@@ -81,7 +81,6 @@ class WalletCubit extends Cubit<WalletState> {
       if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
         index = int.parse(derivePathIndex) + 1;
       }
-
       await secureStorageProvider.set(
         SecureStorageKeys.derivePathIndex,
         index.toString(),
@@ -228,10 +227,7 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future deleteById({
-    required CredentialModel credential,
-    bool showMessage = true,
-  }) async {
+  Future deleteById(CredentialModel credential) async {
     emit(state.loading());
     await repository.deleteById(credential.id);
     final credentials = List.of(state.credentials)
@@ -241,12 +237,10 @@ class WalletCubit extends Cubit<WalletState> {
       state.copyWith(
         status: WalletStatus.delete,
         credentials: credentials,
-        messageHandler: showMessage
-            ? ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE,
-              )
-            : null,
+        messageHandler: ResponseMessage(
+          ResponseString
+              .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE,
+        ),
       ),
     );
   }
@@ -354,15 +348,7 @@ class WalletCubit extends Cubit<WalletState> {
       }
     }
 
-    await credentialListCubit.insertCredential(
-      credential: credential,
-      isCredentialDeleted: (CredentialModel credentialToBeDeleted) {
-        deleteById(
-          credential: credentialToBeDeleted,
-          showMessage: false,
-        );
-      },
-    );
+    await credentialListCubit.insertCredential(credential);
 
     emit(
       state.copyWith(
