@@ -4,15 +4,13 @@ This document was updated on Friday, November 21, 2022
 
 ## Purpose
 
-Altme Wallet is a mobile application for IOS and Android devices developed by Web3 Digital Wallet.
+Altme Wallet is a mobile application for IOS and Android devices developed by Web3 Digital Wallet available on Apple and Google stores.
 
-The purpose of this document is to present the conditions under which the user can take advantage of the mobile application and Altme services.
-
-The purpose of these General Conditions is to define the contractual relationship between Web3 Digital Wallet and the user concerning the access and use of the service consisting of applications called issuers or verifiers and a smartphone application called wallet available on the stores. Apple and Google.
+The purpose of these General Terms and Conditions is to define the contractual relationship between Web3 Digital Wallet and the user concerning access to and use of a crypto-asset management service and a decentralized identity service.
 
 At any time, Web3 Digital Wallet reserves the right to make changes to the service and therefore to these General Conditions.
 
-Any modification comes into force as of their publication or, where applicable, on any other date indicated. Web3 Digital Wallet will ensure that users are aware of any changes to the T&Cs, however, it is up to the user before using the service to refer to the latest version of the T&Cs accessible at any time on the site https site: https //altme.co.
+Any changes will become effective upon their publication or, where applicable, on any other date indicated. Web3 Digital Wallet will ensure that users are aware of any changes to the T&Cs, however, it is up to the user before using the service to refer to the latest version of the T&Cs accessible at any time on the https site: https // altme.co.
 
 ## Presentation of the service
 
