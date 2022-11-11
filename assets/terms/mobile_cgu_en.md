@@ -3,64 +3,12 @@
 
 This document was updated on Friday, November 21, 2022
 
-## Preamble
-
-
-Altme wallet is a mobile application for IOS and Android devices developed by the company Web3 Digital Wallet.
-
-This document aims to present the conditions under which the user can use the Altme mobile application and services.
-
-
-## Definitions
-
-
-Attestations or verifiable attestations: verifiable attestations are standardized digital certificates that facilitate the sharing of information online, in a sovereign and secure manner. The term “standardization” indicates that there is a conforming method to produce a verifiable attestation (CV). This method is currently being standardized by the World Wide Web Consortium (https://www.w3.org/TR/vc-data-model/)
-
-
-Cryptographic keys or keys: public / private key pair stored in a wallet on a smartphone. These keys are of the ECDSA type. If lost, they can be regenerated from a 12 month random sentence if the latter has been kept by the user. A pair of keys is associated with a single Professional Digital Identity. These keys are not known to Talao and the partners. If these keys are permanently lost, access to the Professional Digital Identity is impossible.
-
-
-Wallet: application published by Talao, open source, downloadable on a smartphone from the Google Play Store and Apple App Store online stores allowing the user to save his cryptographic keys compatible with a Tezos-type blockchain on his smartphone.
-
-
-Code or secret code: refers to the alphanumeric and one-time use code transmitted by Talao via SMS or email as part of its registration for the purpose of validating the user's mobile number.
-
-
-Terms & Conditions: refers to these general conditions of use of the services (including any document which is expressly included by reference in these general conditions), any special conditions indicated by Talao as well as their possible amendments.
-
-
-Contract: means the General Conditions (including any document which is expressly included by reference in these general conditions) which supplement the Terms & Conditions and any special conditions indicated by Talao and any amendments to the special general conditions.
-
-
-Decentralized Identifiers or DID (Decentralized Identifier): a digital identifier which the user can cryptographically prove that he is in his possession with a cryptographic key. These identifiers have been standardized by the W3C https://w3c.github.io/did-core/ .
-
-
-Identification: refers to the procedure according to which the user enters their Identifiers in order to access the Professional Digital Identity service or their account on a Partner site from the Talao Digital Identity connection button.
-
-
-Registration: refers to the procedure which allows any eligible person to enter their personal data in order to access the services and obtain a Professional Digital Identity. 
-
-
-Desktop: designates a computer (PC, laptop, etc.) which allows connection to the site https://altme.co. This computer must be equipped with an operating system such as Windows, Linux, Mac and internet access software such as Chrome, Internet Explorer, Firefox, Brave.
- 
-Password: designates the code chosen by the user, exclusive and confidential, which, associated with the user name, is necessary for the latter to access his workspace in the event that he does not have his smartphone.
-
-
-Partner (s): refers to companies in relation to the use of Professional Digital Identity. Example: The publisher of a website allowing the user to identify himself via his Digital Identity is a partner.
-
-Service: refers to the service which allows a user to request or present verifiable credentias.
-
-Site: refers to the secure website published by Web3 Digital Wallet (https://altme.co) allowing a user to access their portfolio and all or part of Talao's Professional Digital Identity service.
-
-Self Sovereign Identity (SSI Self Sovereign Identity): a digital identity model that gives the user control over their data.
-
-User: refers to a person who has the Altme smartphone application. The user is necessarily an individual, that is to say a natural person. This user is the holder of a smartphone capable of installing a mobile application called a wallet from the stores that offer it (App Store for holders of an iPhone and Google Play for holders of an Android smartphone).
-
-
 ## Purpose
 
-The purpose of these Terms & Conditions  is to define the contractual relationship between Web3 Digital Wallet and the user concerning access and use of the service consisting of a web application called issuers or verifiers and a smartphone application called wallet available on the Apple and Google stores.
+Altme wallet is a mobile application for IOS and Android devices developed by the company Web3 Digital Wallet.
+This document aims to present the conditions under which the user can use the Altme mobile application and services.
 
+The purpose of these Terms & Conditions  is to define the contractual relationship between Web3 Digital Wallet and the user concerning access and use of the service consisting of a web application called issuers or verifiers and a smartphone application called wallet available on the Apple and Google stores.
 
 At any time, Web3 Digital Wallet reserves the right to make changes to service and therefore to these Terms & Conditions. Any modification comes into force as from their publication or, if necessary, on any other date which would be indicated. Web3 Digital Wallet will ensure that users are aware of any modification of the Terms & Conditions, however, it is up to the user before any use of the service to refer to the latest version of the Terms & Conditions accessible at any time on the https site: //altme.co.
 
@@ -69,61 +17,36 @@ In the event of disagreement with the new provisions, the user undertakes to cea
 
 ## Presentation of the service
 
-Altme wallet is a non-custodial wallet software, for digital assets such as cryptocurrencies, virtual commodities and NFTs (“Digital Assets”), meaning you are solely in control of and responsible for your Digital Assets and private keys, and accordingly you can authorize transactions from your wallet address. You expressly acknowledge and agree that as Altme Wallet is a non-custodial wallet software, you are solely responsible for your activity and any risk of loss at all times.
+Altme wallet is a non-custodial wallet software, for verifiable credentials and digital assets such as cryptocurrencies, virtual commodities and NFTs (“Digital Assets”), meaning you are solely in control of and responsible for your personal data,  digital assets and private keys, and accordingly you can authorize transactions from your wallet address. You expressly acknowledge and agree that as Altme Wallet is a non-custodial wallet software, you are solely responsible for your activity and any risk of loss at all times.
 
 Altme wallet allows you to:
 
-* generate your Decentraliozed Identifier (DID);
+* generate your Decentralized Identifier (DID);
 * collect certificates (Verifiable Credenials)  from third parties (issuers). Example of certificates are : Proof of email, Proof of phone number, ID card, Nationality proof, Over 18 proof, Loyalty cards, tickets, etc;
-* store certificatesthem
+* store certificates;
 * transfer certificates to other third parties (verifiers);
 * secure online procedures with partners, in particular in the field of web3 applications (e.g. access a decnetralized crypto games, a NFT marketplace, Metaverse, Decentralized Finance application,...).
 * generate wallet addresses and associated private keys that you may use to send and receive digital assets;
 * browse and access third party decentralized application(s) (“DApp(s)”) and third party decentralized exchanges (“DEX”) through the mobile application’s web browser;
 * swap/trade digital assets through DApp functionality made available by third party service provider(s);
-* stake certain digital assets in a third party ‘proof of stake’ network through staking services (“Staking Service”);
 * view digital asset price information made available by third party service provider(s); 
-* andbroadcast Digital Asset Transaction data to various blockchains supported by Trust Wallet without requiring you to download or install the associated blockchain-based software to your local device.
+* andbroadcast Digital Asset Transaction data to various blockchains supported by Altme without requiring you to download or install the associated blockchain-based software to your local device.
+
+Altme's service is built on the basis of innovative technology (Blockchain and Self Sovereign Identity). The altme service allows a user to have a Digital Identity and certificates certified by third parties without having to save their personal data on the servers of an Identity Provider. The data is stored in the user's wallet (smartphone application) or possibly encrypted on a decentralized network. The user alone retains access to his identity with his smartphone or cryptographic keys are kept. It can authorize an application of a partner (a service provider) to access it. 
 
 
-Altme's service is built on the basis of innovative technology (Blockchain and Self Sovereign Identity). The altme service allows a user to have a Digital Identity and certificates certified by third parties without having to save their personal data on the servers of an Identity Provider. The data is stored in the user's wallet (smartphone application) or possibly encrypted on a decentralized network. The user alone retains access to his identity with his smartphone or cryptographic keys are kept. It can authorize an application of a partner (a service provider) to access it.
+## Requesting credentials
 
+## Presenting credentials
 
-When registering, the user must complete the Registration form available on the site (including, in particular, title, surnames and first names, e-mail address and possibly his mobile phone number.).
+## Buy Digital Assets with Supported Credit or Debit Cards
 
-
-The user guarantees that the information he transmits is accurate, sincere and up to date. If this information should prove to be false, incomplete or obsolete, Talao reserves the right to refuse the Registration and / or to interrupt the provision of the service in accordance with the stipulations of article 14 "Termination". 
-
-
-In case of modification of his personal details, the user undertakes to update them on his Professional Digital Identity profile management page.
-
-
-In any case, whatever the methods of Registration of the user, the information concerning him will be treated in accordance with the charter of management of personal data (Data protection) accessible directly from the site https: // altme. co.
-
-
-The user authorizes the Talao Professional Digital Identity service to transmit to partner sites, by computer processing, the information necessary for the recognition and use of his Digital Identity on the sites and services of said partners.
-
-
-### Creation of a Professional Digital Identity
-
-
-The creation procedure comprises 2 steps to finalize the registration procedure. The first step is to create your ID using your smartphone wallet, the second is to create a portfolio on the Talao site associated with your ID.
-
-
-* The user connects to the site https://altme.co with his Desktop or his smartphone and is invited to download his wallet on his smartphone. By starting his wallet, the user is required to accept the Terms & Conditions (this document) then generate or retrieve his decentralized identifier (DID). In the event that the user decides to generate a new identifier, he is invited to copy the 12-word recovery sentence of regeneration of his identifier in the event of loss of his smartphone
-
-
-* Verification of the e-mail address: Prior to the User registration for the Professional Digital Identity Service, Talao verifies the user's email address by sending an email containing a secret code. The user will be invited to obtain a first certificate proving his email (“EmailPass”) by connecting to the address https://altme.co/emailpass and giving his email then scanning a QR code. If the user has not confirmed the random code, the user is invited to restart the process to obtain this first certificate. Other methods of validating the user's email may be proposed.
-
-
-* Once this certificate has been obtained, the user can create his portfolio (“create an account”) by scanning the QR code displayed on his desktop or by clicking on the link in his browser on his smartphone. The site detects if the identifier of its wallet is that of an already existing portfolio if this is not the case the site proposes to create a new portfolio for this identifier by asking the user to indicate his name and his first name.
-
-
-* Verification of the decentralized identifier (DID) of the wallet: after scanning the QR code the user is invited to accept altme's access to his wallet and to present his email certificate (EmailPass). If the signature of this attestation is not recognized, the user is invited to start the process again.
-
-
-* Creation and deployment of the portfolio: the site deploys the workspace. The user receives a user name by email for a possible connection without a smartphone. By default the password will be “identity” and in this case a random code will be systematically sent by email as a secondary authentication factor. However, we recommend that the user use the connection by smartphone (QR code or link) which is simpler, faster and more secure.
-
+this service is limited to users over 18 years old. If you use Alltme Wallet to purchase Digital Assets with your credit or debit card, a third party will convert your chosen amount into the applicable Digital Asset and credit it to your wallet. You acknowledge and agree that: 
+* Web3 Digital Wallet is not responsible for your use of such third party service and shall have no liability whatsoever in connection with your use of such service;
+* you will be subject to any terms and conditions imposed by the relevant third party service provider;
+* Web3 Digital Wallet has no ability to change, withdraw or cancel any conversion requests you place;
+* Web3 Digital wallet is not responsible for any exchange rates offered by the relevant third party service provider(s);
+* Web3 Digital Wallet is not responsible for any fees charged by the relevant third party service provider(s) or your bank or credit card issuer(s). 
 
 ### Deletion
 
