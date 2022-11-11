@@ -44,7 +44,8 @@ Phone proof: the issuer is the company Web3 Digital Wallet which verifies the va
 
 Identity Card, Nationality proof and Unique ID number: the issuer is the company Web3 Digital Wallet which uses the services of the third-party company Passbase (https://passbase.com) for the authentication of identity documents and facial recognition (3D liveness).
 
-Over13 proof, Over18 proof and Age Range proof: the issuer is the company Web3 Digital Wallet which uses the services of the company Yoti (https://yoti.com) to estimate the age of the user at the using Artificial Intelligence and a photo of the user.
+
+Over13 proof, Over18 proof and Age Range proof: the issuer is the company Web3 Digital Wallet which uses the services of the company Yoti (https://yoti.com) to estimate the user's age at using Artificial Intelligence and a photo of the user.
 
 ## Presenting credentials
 
