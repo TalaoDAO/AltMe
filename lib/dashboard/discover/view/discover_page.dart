@@ -56,9 +56,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
           final CredentialListCubit credentialListCubit =
               context.read<CredentialListCubit>();
 
-          /// Hack for Apple => no gaming cards
-          final List<CredentialSubjectType> gamingcategories =
-              isAndroid() ? state.gamingCategories : [];
           return DiscoverCredentialList(
             onRefresh: () async {
               await context
@@ -67,7 +64,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
             },
             state: state.populate(
               gamingCredentials: credentialListCubit.dummyListFromCategory(
-                gamingcategories,
+                state.gamingCategories,
               ),
               communityCredentials: credentialListCubit.dummyListFromCategory(
                 state.communityCategories,
