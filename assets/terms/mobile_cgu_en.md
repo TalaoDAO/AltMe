@@ -113,219 +113,86 @@ After having created and verified his Professional Digital Identity, the user ca
 The user acknowledges and accepts that his Digital Identity may be used by the sites and partner sites and, for this purpose, he undertakes to ensure that the attributes of his Identity remain accurate and up to date.
 
 
-### Use of the portfolio
-
-
-The workspace allows the user to have verifiable professional certificates issued by third parties and concerning his professional career. For example, he may ask companies for which he has worked to issue certificates of professional experience. These signed digital certificates can then be used to prove skills or know-how to a third party.
-
-
-The user also has the possibility of presenting information concerning his professional career in the form of a CV with a link allowing him to post it on social networks, a personal website or to send it by email to a third party. .
-
-
-### Entering CV information 
-
-
-The user can enter information concerning his training (“Training” tab, his experience (“Experiences” tab), and his skills (“Skills” tab). All this information is declarative and of responsibility. This information is not verified by Talao.
-
-
-### Request and issue of a professional certificate 
-
-
-The user has the possibility of requesting a verifiable professional certificate from a company. This certificate may relate to a skill, training or work experience. This application is accessible through the "request a certificate" button. the user will be prompted to specify the type of application and the email address of a representative of the company.
-
-
-in the case of a request for a professional experience certificate the user will be asked to specify the nature of the assignment, its role, the start and end dates as well as the skills required implemented in this mission. This information will be communicated to the company. 
-
-
-The site will send this request to the company representative who will be invited to create for himself or his company his own Digital Identity then to draft and issue an electronically signed certificate. In the case of a professional experience certificate, the company will be invited to rate the user (from 0 to 5 stars) according to 4 questions:
-
-
-* How satisfied are you with the overall delivery?
-* How likely are you to recommend this talent to others?
-* How would you rate his / her ability to deliver to schedule?        
-* How would you rate his / her overall communication skills?
-
-
-This certificate will then be accessible in the user's portfolio and possibly added to their CV. The user can if he wishes to delete this certificate but he will not be able to modify the content which remains the responsibility of the company.
-
-
-Talao is not responsible for the response to a request for a certificate and the possible content of this certificate. 
-
-
-### Modification of the attributes of the Professional Digital Identity
-
-
-Subject to compliance with the provisions appearing in this Article, the user has the option of modifying certain personal information declared during his Registration and composing his Digital Identity from the "tab" edit ”in their workspace.
-
-
-* For any modification of the e-mail address Talao sends an e-mail to the new e-mail address declared by the user. This email contains a validation link valid for a period of seven (7) days. The user must click on the link in order for the change of Email Address to take effect. During this period of seven (7) days and, at the very least, beyond, in the absence of validation from the user, the request to modify the e-mail address is not taken into account. Change of Password.
-* A change of wallet requires a renewal of the portfolio.
-
-
-### Uses of the Digital Identity by the partner sites
-
-
-The Professional Digital Identity of the user makes it possible to link his Digital Identity to the Partner sites. The user wishing to use his Digital Identity must connect with his desktop or smartphone to the partner's site and choose the “Connect with Professional Digital Identity” option on the partner's site. He must also open the wallet of his smartphone by following the access modalities required for its use. Note that the user's Professional Digital Identity cannot be used for procedures requiring a digital identity with a so-called “high” level of guarantee within the meaning of eIDAS regulations.
-
-
-The user will then be invited to scan the displayed QR code with the wallet of his smartphone. A notification is sent to the user's smartphone asking for their consent to connect their wallet.
-
-
-The user is then invited on his desktop to verify the Digital Identity of the partner site. He can access it using the link displayed. If the user wishes, he can move on to the next phase (“Next” button) or he can reject the connection.
-
-
-The user is then invited on his smartphone to sign access to his Digital Identity (Identity Signature ”) then to sign the agreement for the transfer of his Digital Identity information to the partner site. It should be noted that this information is encrypted and that the site is not able to access it. This information will only be decrypted by the partner site.
-
-
-The conditions applicable to access to the supply and use of this information and services as well as their price and payment terms relating to Partner applications are those set by the Partners as provided by said Partners online or by any other way.
-
-
-Talao remains unrelated to any contractual relationship that could be entered into between the user and any Partner, including if this contractual relationship is entered into via the Site. Under no circumstances does Talao intervene in any way whatsoever in the contractual relations that may be established between users on the one hand and Partners on the other.
-
-
-The user guarantees Talao against any harmful act that he would commit towards a partner, including in the event of non-performance of contractual obligations subscribed to a partner.
-
-
 ## Intellectual property rights
 
 
-The site and the services are protected by intellectual property rights and / or other rights that Talao owns or of which it is authorized to use.
-The blockchain protocol used as a support for professional Digital Identity is made available in open source https://github.com/TalaoDAO/altme-contracts.
+The services are protected by intellectual property rights and / or other rights that Talao owns or of which it is authorized to use.
+
+Web3 Digital Wallet is and will remain the owner of its distinctive signs, namely brands, corporate and other names, trade names, brands and domain names. The reproduction, imitation or affixing, in whole or in part, of the trademarks and designs belonging to Talao is strictly prohibited without its prior written consent.
 
 
-Talao is and will remain the owner of its distinctive signs, namely brands, corporate and other names, trade names, brands and domain names. The reproduction, imitation or affixing, in whole or in part, of the trademarks and designs belonging to Talao is strictly prohibited without its prior written consent.
+Except in the cases of force majeure referred to herein, Web3 Digital Wallet undertakes, within the framework of an obligation of means, to ensure the availability and accessibility to the services, 24/24 hours and 7/7 days. Nevertheless, the operations of tests, control and / or maintenance as well as the interventions necessary in the event of breakdown, can be carried out by Talao at any time. Talao strives to prevent, as far as possible, the occurrence of such an operation. Talao cannot be held responsible for any resulting consequences for any user.
 
 
-Access and availability of the site and of the Professional Digital Identity service
+The user acknowledges that Web3 Digital Wallet can in no way be held responsible for the functional characteristics and technical performance of the internet. Likewise, all users remain responsible for their actions on the internet regarding the use of their data on open networks.
 
 
-Except in the cases of force majeure referred to herein, Talao undertakes, within the framework of an obligation of means, to ensure the availability and accessibility to the site and to the Identity Service. Professional digital, 24/24 hours and 7/7 days. Nevertheless, the operations of tests, control and / or maintenance as well as the interventions necessary in the event of breakdown, can be carried out by Talao at any time. Talao strives to prevent, as far as possible, the occurrence of such an operation. Talao cannot be held responsible for any resulting consequences for any user.
-
-
-The user acknowledges that Talao can in no way be held responsible for the functional characteristics and technical performance of the internet. Likewise, all users remain responsible for their actions on the internet regarding the use of their data on open networks.
-
-
-The user undertakes not to hinder the proper functioning of the Site, the Application and the Professional Digital Identity Service, in particular by transmitting any element likely to contain a virus or likely to otherwise damage or affect the Site and / or the Application and / or the Professional Digital Identity Service and, more broadly, the information system of Talao and / or its co-contractors.
-
+The user undertakes not to hinder the proper functioning of application, in particular by transmitting any element likely to contain a virus or likely to otherwise damage or affect the Site and / or the Application and / or the Professional Digital Identity Service and, more broadly, the information system of Talao and / or its co-contractors.
 
 In the case of the use of the application through smartphones or tablets, the user undertakes not to modify the operating system of the terminal in a way that could affect its security.
 
 
-The costs and expenses of equipment necessary for the use of the site and of the Professional Digital Identity Service, are and remain the responsibility of the user.
+The costs and expenses of equipment necessary for the use of the service, are and remain the responsibility of the user.
 
+## License to NFT Content
+
+User may be able to store non-fungible tokens (“NFTs”) on Altme wallet. User hereby represents and warrants that he owns all legal right, title in and interest to, including all intellectual property rights to the content associated with the NFT (“NFT Content”), or he is legally authorized by the owner of the intellectual property in the NFT Content to store the NFTs on Altme. He retains all rights to the NFT Content stored except for rights expressly granted herein. By using Altme wallet, he grants Web3 Digital Wallet a license to access, use, host, cache, store, copy, reproduce, transmit, display, publish, distribute, adapt and modify (for technical purposes, e.g., making sure content is viewable on smartphones as well as computers and other devices) the NFT Content in any and all media or distribution methods (now know or later developed) solely as required to be able to operate and provide services of Altme wallet. Web3 Digital Wallet does not monitor the NFTs and NFT Content storedon Altme wallet for any infringement of a third party’s intellectual property rights. Accordingly, Web3 Digital wallet assumes no liability for any action regarding any content provided by the user. You further acknowledge and agree it is your sole responsibility to carry out all necessary due diligence for all your activities relating to NFTs, and you represent and warrant that you have not and are not relying on, and shall have no remedies, in respect of any statement or representation made by us in relation to any transfer or interaction otherwise with any NFTs. If you have a dispute in relation to the NFTs and/or NFT Content, YOU RELEASE US FROM CLAIMS, DEMANDS, AND DAMAGES OF EVERY KIND AND NATURE, KNOWN AND UNKNOWN, ARISING OUT OF OR IN ANY WAY CONNECTED WITH SUCH DISPUTES. IN ENTERING INTO THIS RELEASE YOU EXPRESSLY WAIVE ANY PROTECTIONS (WHETHER STATUTORY OR OTHERWISE) THAT WOULD OTHERWISE LIMIT THE COVERAGE OF THIS RELEASE TO INCLUDE THOSE CLAIMS WHICH YOU MAY KNOW OR SUSPECT TO EXIST IN YOUR FAVOR AT THE TIME OF AGREEING TO THIS RELEASE. 
 
 ## Liability
 
 
-Talao makes no warranty as to the ability of the site and / or the Professional Digital Identity Service to meet the specific needs or expectations of the user. Likewise, Talao cannot guarantee the absence of errors or other operational or user problems during the use of the site and / or the Professional Digital Identity Service.
+Web3 Digital Wallet makes no warranty as to the ability of the service to meet the specific needs or expectations of the user. Likewise, Web3 Digital Wallet cannot guarantee the absence of errors or other operational or user problems during the use of the service.
 
 
-Talao makes no warranty as to the ability of the site and / or the Professional Digital Identity Service to meet the specific needs or expectations of the user. Likewise, Talao cannot guarantee the absence of errors or other operational or user problems during the use of the site and / or the Professional Digital Identity Service.
-
-
-Talao declines all responsibility for the use made by the user of the Professional Digital Identity Service. In this regard, Talao reserves the right to suspend the Digital Identity Service for a user following receipt of a notification or if it is indeed aware of the manifestly illegal nature of the use made of Professional Digital Identity. Under no circumstances can Talao be held liable for this withdrawal.
-
-
-Talao can only be held liable in the event of willful misconduct or gross negligence committed in the context of the provision of the Service.In any case, Talao is not liable for indirect damages such as in particular: financial, commercial, loss of customers, any commercial disturbance, loss of profit, loss of brand image, loss of data and / or computer programs suffered by the user which could result from the non-performance of these Terms & Conditions. In addition, Talao will in no case be liable for any damage resulting, even partially, from a total or partial non-performance of its obligations by the user, as well as any indirect damage even if it is aware of the possibility of such occurrence. damage.
+Web3 Digital Wallet declines all responsibility for the use made by the user of the service. In this regard, Web3 Digital Wallet reserves the right to suspend service for a user following receipt of a notification or if it is indeed aware of the manifestly illegal nature of the use made of the service. Under no circumstances can Web3 Digital Wallet be held liable for this withdrawal.
 
 
 ## User responsibility 
 
 
-The user is responsible for his use of the Service.
-
-
-He acknowledges that any use of the Site and / or of the Application and / or of the Professional Digital Identity Service is presumed to be made by him and will be imputed to him, at the expense of the user providing proof to the contrary.
-
+The user is responsible for his use of the service.
 
 The user undertakes to:
 
-
 * not make illegal or illicit use of the Professional Digital Identity Service;
-* inform Talao without delay, by any means, of any error, fault or irregularity that it notices in the use of the Site and / or the Professional Digital Identity Service, as soon as it becomes aware of it;
-* in general, not to use the Professional Digital Identity Service that could cause harm to Talao;
-* choose a password and a security code in accordance with the communicated policy;
+* inform Web3 Digital Wallet without delay, by any means, of any error, fault or irregularity that it notices in the use of the Site and / or the Professional Digital Identity Service, as soon as it becomes aware of it;
+* in general, not to use the service that could cause harm to Web3 Digital Wallet;
+* choose a password in accordance with the communicated policy;
 * securely store possession-based electronic identification means;
 * not to communicate its electronic identification means to a third party.
 
-
-As such, Talao reserves the right:
-
+As such, Web3 Digital Wallet reserves the right:
 
 * to keep, for the purposes of proof, all logs, connection traces or data of a personal or non-personal nature proving the accountability to the user of the behaviors or actions in question, in accordance with the CGU;
 * modify, reject and / or remove access to the Service in the event of non-compliance with the rules set out in these T & Cs;
 * to apply the stipulations of the article "Termination - Default - Suspension".
 
 
-In addition, Talao ensures the monitoring and traceability of the functioning of the Professional Digital Identity service.
+In addition, Web3 Digital Wallet ensures the monitoring and traceability of the functioning of the Professional Digital Identity service.
 
 
 ## Force majeure
 
 
-Talao can not be held responsible for any delay in the performance of its obligations or for any non-performance of its obligations resulting from these General Conditions of Use when the circumstances giving rise to it relate to force majeure.
+Web3 Diital Wallet can not be held responsible for any delay in the performance of its obligations or for any non-performance of its obligations resulting from these General Conditions of Use when the circumstances giving rise to it relate to force majeure.
 
 
 Expressly, are considered as cases of force majeure or fortuitous event, in addition to those usually retained by the jurisprudence of the French courts and tribunals, the following cases: blocking of electronic communications, out of control of Talao, and any other case beyond the control. of Talao preventing the normal performance of the obligations arising from the Contract.
 
 
-Any case of force majeure affecting the performance of the obligations resulting from these T & Cs and in particular the access or use of the Professional Digital Identity Service by the user will suspend, from its date of occurrence, the execution of these T & Cs. From this date, and despite the case of force majeure, Talao will endeavor to the extent possible:
-
+Any case of force majeure affecting the performance of the obligations resulting from these T & Cs and in particular the access or use of the Professional Digital Identity Service by the user will suspend, from its date of occurrence, the execution of these T & Cs. From this date, and despite the case of force majeure, Web3 Digital Wallet will endeavor to the extent possible:
 
 * to inform the user of the existence of this case of force majeure;
 * to restore access, even degraded, to the Professional Digital Identity Service;
 
-
-It is expressly agreed between the Parties that the completely exceptional implementation of these palliative means by Talao during the occurrence of a case of force majeure cannot give rise to any liability or compensation on the part of Talao.
+It is expressly agreed between the Parties that the completely exceptional implementation of these palliative means by Web3 Digital Wallet during the occurrence of a case of force majeure cannot give rise to any liability or compensation on the part of Talao.
 
 
 ## Personal data protection
 
 
-The conditions for processing personal data are set out in Talao's privacy and data protection policy, accessible here https://altme.co/privacy /.
+The conditions for processing personal data are set out in Altme's privacy and data protection policy, accessible here https://altme.co/privacy /.
 
-
-Retention of user data by Professional Digital Identity
-Documents are kept for the duration of the use of the Professional Digital Identity Service, the user being free to delete his Digital Identity whenever he wishes.
-
-
-The retention period for Service-related data and in particular traces of registration files and event logs and that of data relating to Professional Digital Identity (identifiers, identity data and technical data) is 3 months after termination. of the Professional Digital Identity service.
-
-
-### Access to user
-
-
-data Personal data specific to Professional Digital Identity will under no circumstances be sold or shared with third parties who are not involved in the processing associated with the Professional Digital Identity service and only in the purpose of rendering the Service.
-
-
-## Portability
-
-
-The Professional Digital Identity Service allows users to retrieve their data from their portfolio to their smartphone.
-
-
-## Termination - Breach - Suspension
-
-
-### Termination of the service at the initiative of the user
-
-
-The user can at any time terminate his Digital Identity from his portfolio. Termination is effective from the day of the request of the user. 'user.
-
-
-### Termination at the initiative of Talao
-
-
-Talao reserves the right to interrupt, temporarily or permanently, all or part of the portfolio service for reasons related to the security of the Professional Digital Identity Service, the security of the user or a breach or suspicion of breach by the user of one of his obligations referred to herein.
-
-
-This termination will be done as of right, without prejudice to any damages that Talao could claim. Talao also reserves the right to unilaterally terminate this contractual relationship resulting from the T & Cs in the event that the user shows serious and / or repeated breaches of one of his obligations contained herein or in the event that Talao permanently stops the Professional Digital Identity Service. In the latter case, the termination will be effective six (6) months after the notification of the end of the Professional Digital Identity Service.
-
-
-### Consequences linked to Termination by the user
-
-
-In the event of termination of his portfolio, the user will lose all the functionalities relating to the certificates kept in his portfolio.
 
 
 ## Customer
@@ -340,51 +207,11 @@ service Customer Service can be reached:
 ## Subcontracting
 
 
-Talao reserves the right to have all or part of the services covered by these conditions performed by any other subcontracting company of its choice, Talao remaining solely responsible towards the user, on condition for it to take action against its subcontractors.
+Web3 Digital Wallet reserves the right to have all or part of the services covered by these conditions performed by any other subcontracting company of its choice, Talao remaining solely responsible towards the user, on condition for it to take action against its subcontractors.
 
 
-## Assignment
 
-
-Talao reserves the right to assign the T & Cs, and therefore the contractual relations, to any third party of its choice.
-
-
-## Evidence agreement
-
-
-Talao and the user agree that in the event of a dispute, the following are admissible as evidence before the courts:
-
-
-* the means of Identification (Username, secret codes, etc.) used in the context of the Site, application as well as signatures and Identification procedures;
-* the electronic signatures used and the agreements concluded thanks to these signatures within the framework of the Site as well as the stipulations accepted between the parties;
-* connection data relating to actions carried out from the user's Professional Digital Identity Service;
-
-
-Evidence to the contrary can be adduced.
-
-
-## Miscellaneous provisions
-
-
-### No waiver
-
-
-The fact that the user and / or Talao does not invoke a breach by the defaulting party of any of the obligations resulting from the T & Cs cannot be interpreted as a waiver of the obligation in question.
-
-
-### Partial
-
-
-invalidity The invalidity of any clause of the T & Cs does not affect the validity of the other clauses; it continues in the absence of the canceled mechanism, unless the canceled clause makes the continuation of contractual relations impossible or unbalanced with respect to the initial agreements.
-
-
-### Notification
-
-
-Any notification required hereunder must be made to the other party in writing, by registered letter with acknowledgment of receipt, or by any other means the receipt of which can be proven, to the address indicated at the top of the present or at any other address that one of the parties may subsequently indicate to the other in writing in accordance with this article. This notification will be considered as received by a party on the date of the first working day following its first presentation to that party.
-
-
-### Complaints
+## Complaints
 
 
 All complaints must be addressed to customer service.
@@ -402,4 +229,4 @@ In the absence of an amicable settlement, in the event of a dispute relating to 
 In the event of non-compliance with this step, which remains the responsibility and responsibility of the user, and loss of the Content following termination by the user, Talao cannot be held liable in this regard.
 
 
-In the event of a dispute relating to the interpretation, formation, validity or execution of the General Conditions of Use, Talao and the users acknowledge
+In the event of a dispute relating to the interpretation, formation, validity or execution of the General Conditions of Use, Web3 Digital Wallet and the users acknowledge
