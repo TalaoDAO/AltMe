@@ -39,17 +39,6 @@ The user retains sole access to his data. User can possibly transfer them to a t
 
 This type of wallet is very exactly the on-line version of the wallet that we all have in our pocket which keeps both our means of payment and our personal information.
 
-## Collect credentials
-
-The user accesses the services of an issuer, which may be the company Web3 Digital Walletdu or third-party companies or organizations that may be unknown to Web3 Digital Wallet. The list of credentials available as of November 11, 2022 is:
-
-Email proof: the issuer is the company Web3 Digital Wallet which verifies the validity of the user's address by sending him a secret code by email.
-
-Telephone proof: the issuer is the company Web3 Digital Wallet which verifies the validity of the user's address by sending him a secret code by SMS.
-
-Identity card, Proof of nationality and Unique identification number: the issuer is the company Web3 Digital Wallet which uses the services of the third-party company Passbase (https://passbase.com) for the authentication of documents. identity and facial recognition (3D liveliness).
-
-Over13 proof, Over18 proof and Age Range proof: the issuer is the Web3 Digital Wallet company which uses the services of the Yoti company (https://yoti.com) to estimate the user's age using Artificial Intelligence and a photo of the user.
 
 ## Wallet creation
 
@@ -62,6 +51,19 @@ User must either import or create a wallet in order to use Altme wallet. When us
 * promptly notifying us if he discovers or otherwise suspects any security breaches related to user's wallet.
 
 Notwithstanding anything to the contrary herein, Web3 Digital Wallet shall have no liability whatsoever in connection with activities that occur on user's wallet with or without user's authorization. 
+
+## Collect credentials
+
+The user accesses the services of an issuer, which may be the company Web3 Digital Walletdu or third-party companies or organizations that may be unknown to Web3 Digital Wallet. The list of credentials available as of November 11, 2022 is:
+
+Email proof: the issuer is the company Web3 Digital Wallet which verifies the validity of the user's address by sending him a secret code by email.
+
+Telephone proof: the issuer is the company Web3 Digital Wallet which verifies the validity of the user's address by sending him a secret code by SMS.
+
+Identity card, Proof of nationality and Unique identification number: the issuer is the company Web3 Digital Wallet which uses the services of the third-party company Passbase (https://passbase.com) for the authentication of documents. identity and facial recognition (3D liveliness).
+
+Over13 proof, Over18 proof and Age Range proof: the issuer is the Web3 Digital Wallet company which uses the services of the Yoti company (https://yoti.com) to estimate the user's age using Artificial Intelligence and a photo of the user.
+
 
 ## Present credentials
 
@@ -132,7 +134,9 @@ User may be able to store non-fungible tokens (“NFTs”) on Altme wallet. User
 
 User retains all rights to the NFT Content stored except for rights expressly granted herein. By using Altme wallet, user grants Web3 Digital Wallet a license to access, use, host, cache, store, copy, reproduce, transmit, display, publish, distribute, adapt and modify (for technical purposes, e.g., making sure content is viewable on smartphones as well as computers and other devices) the NFT Content in any and all media or distribution methods (now know or later developed) solely as required to be able to operate and provide services of Altme wallet. Web3 Digital Wallet does not monitor the NFTs and NFT Content storedon Altme wallet for any infringement of a third party’s intellectual property rights. 
 
-Accordingly, Web3 Digital wallet assumes no liability for any action regarding any content provided by the user. User further acknowledge and agrees it is user's sole responsibility to carry out all necessary due diligence for all user's activities relating to NFTs, and user represents and warrant that he has not and are not relying on, and shall have no remedies, in respect of any statement or representation made by Web3 Digital Wallet in relation to any transfer or interaction otherwise with any NFTs. If user has a dispute in relation to the NFTs and/or NFT Content, USER RELEASES WEB3 DIGITAL WALLET FROM CLAIMS, DEMANDS, AND DAMAGES OF EVERY KIND AND NATURE, KNOWN AND UNKNOWN, ARISING OUT OF OR IN ANY WAY CONNECTED WITH SUCH DISPUTES. IN ENTERING INTO THIS RELEASE USER EXPRESSLY WAIVES ANY PROTECTIONS (WHETHER STATUTORY OR OTHERWISE) THAT WOULD OTHERWISE LIMIT THE COVERAGE OF THIS RELEASE TO INCLUDE THOSE CLAIMS WHICH USER MAY KNOW OR SUSPECT TO EXIST IN USER FAVOR AT THE TIME OF AGREEING TO THIS RELEASE. 
+Accordingly, Web3 Digital wallet assumes no liability for any action regarding any content provided by the user. User further acknowledge and agrees it is user's sole responsibility to carry out all necessary due diligence for all user's activities relating to NFTs, and user represents and warrant that he has not and are not relying on, and shall have no remedies, in respect of any statement or representation made by Web3 Digital Wallet in relation to any transfer or interaction otherwise with any NFTs.
+
+If user has a dispute in relation to the NFTs and/or NFT Content, USER RELEASES WEB3 DIGITAL WALLET FROM CLAIMS, DEMANDS, AND DAMAGES OF EVERY KIND AND NATURE, KNOWN AND UNKNOWN, ARISING OUT OF OR IN ANY WAY CONNECTED WITH SUCH DISPUTES. IN ENTERING INTO THIS RELEASE USER EXPRESSLY WAIVES ANY PROTECTIONS (WHETHER STATUTORY OR OTHERWISE) THAT WOULD OTHERWISE LIMIT THE COVERAGE OF THIS RELEASE TO INCLUDE THOSE CLAIMS WHICH USER MAY KNOW OR SUSPECT TO EXIST IN USER FAVOR AT THE TIME OF AGREEING TO THIS RELEASE. 
 
 ## Liability
 
@@ -154,7 +158,7 @@ The user undertakes to:
 As such, Web3 Digital Wallet reserves the right:
 
 * to keep, for the purposes of proof, all logs, connection traces or data of a personal or non-personal nature proving the accountability to the user of the behaviors or actions in question, in accordance with the CGU;
-* modify, reject and / or remove access to the Service in the event of non-compliance with the rules set out in these T & Cs;
+* modify, reject and / or remove access to the Service in the event of non-compliance with the rules set out in these Terms and Conditions;
 * to apply the stipulations of the article "Termination - Default - Suspension".
 
 In addition, Web3 Digital Wallet ensures the monitoring and traceability of the functioning of the service.
@@ -165,7 +169,7 @@ Web3 Diital Wallet can not be held responsible for any delay in the performance 
 
 Expressly, are considered as cases of force majeure or fortuitous event, in addition to those usually retained by the jurisprudence of the French courts and tribunals, the following cases: blocking of electronic communications, out of control of Web3 Digital Wallet, and any other case beyond the control. of Web3 Digital Wallet preventing the normal performance of the obligations arising from the Contract.
 
-Any case of force majeure affecting the performance of the obligations resulting from these T & Cs and in particular the access or use of the service by the user will suspend, from its date of occurrence, the execution of these T & Cs. From this date, and despite the case of force majeure, Web3 Digital Wallet will endeavor to the extent possible:
+Any case of force majeure affecting the performance of the obligations resulting from these Terms and Conditions and in particular the access or use of the service by the user will suspend, from its date of occurrence, the execution of these Terms and Conditions. From this date, and despite the case of force majeure, Web3 Digital Wallet will endeavor to the extent possible:
 
 * to inform the user of the existence of this case of force majeure;
 * to restore access, even degraded, to the service;
@@ -186,14 +190,10 @@ Web3 Digital Wallet reserves the right to have all or part of the services cover
 
 ## Complaints
 
-All complaints must be addressed to customer service.
-
-Complaints are then processed according to the terms and conditions of the Terms and Conditions.
+All complaints must be addressed to customer service. Complaints are then processed according to the terms and conditions of the Terms and Conditions.
 
 ## Settlement of disputes - Competent court and applicable law
 
 In the absence of an amicable settlement, in the event of a dispute relating to the interpretation, formation or execution of the General Conditions of Use and failure to reach an amicable agreement or to a transaction, Web3 Digital Wallet and the users give express and exclusive jurisdiction to the competent courts within the jurisdiction of Paris, notwithstanding the plurality of defendants or actions in summary or appeal in guarantee or protective measure.
 
 In the event of non-compliance with this step, which remains the responsibility and responsibility of the user, and loss of the Content following termination by the user, Web3 Digital Wallet cannot be held liable in this regard.
-
-In the event of a dispute relating to the interpretation, formation, validity or execution of the General Conditions of Use, Web3 Digital Wallet and the users acknowledge
