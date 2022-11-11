@@ -8,12 +8,11 @@ This document was updated on Friday, November 21, 2022
 Altme wallet is a mobile application for IOS and Android devices developed by the company Web3 Digital Wallet.
 This document aims to present the conditions under which the user can use the Altme mobile application and services.
 
-The purpose of these Terms & Conditions  is to define the contractual relationship between Web3 Digital Wallet and the user concerning access and use of the service consisting of a web application called issuers or verifiers and a smartphone application called wallet available on the Apple and Google stores.
+The purpose of these Terms & Conditions is to define the contractual relationship between Web3 Digital Wallet and the user concerning access and use of the service consisting of a web application called issuers or verifiers and a smartphone application called wallet available on the Apple and Google stores.
 
 At any time, Web3 Digital Wallet reserves the right to make changes to service and therefore to these Terms & Conditions. Any modification comes into force as from their publication or, if necessary, on any other date which would be indicated. Web3 Digital Wallet will ensure that users are aware of any modification of the Terms & Conditions, however, it is up to the user before any use of the service to refer to the latest version of the Terms & Conditions accessible at any time on the https site: //altme.co.
 
 In the event of disagreement with the new provisions, the user undertakes to cease all use of the service and to delete his Digital Identity.
-
 
 ## Presentation of the service
 
@@ -35,7 +34,17 @@ Altme wallet allows you to:
 Altme's service is built on the basis of innovative technology (Blockchain and Self Sovereign Identity). The altme service allows a user to have a Digital Identity and certificates certified by third parties without having to save their personal data on the servers of an Identity Provider. The data is stored in the user's wallet (smartphone application) or possibly encrypted on a decentralized network. The user alone retains access to his identity with his smartphone or cryptographic keys are kept. It can authorize an application of a partner (a service provider) to access it. 
 
 
-## Requesting credentials
+## Collect credentials
+
+The user uses the services of an issuer which may be the web3 digital wallet company or third party companies or organisations.
+
+Email proof: the issuer is the company Web3 Digital Wallet which verifies the validity of the user's address by sending him a secret code by email.
+
+Phone proof: the issuer is the company Web3 Digital Wallet which verifies the validity of the user's address by sending him a secret code by SMS.
+
+Identity Card, Nationality proof and Unique ID number: the issuer is the company Web3 Digital Wallet which uses the services of the third-party company Passbase (https://passbase.com) for the authentication of identity documents and facial recognition (3D liveness).
+
+Over13 proof, Over18 proof and Age Range proof: the issuer is the company Web3 Digital Wallet which uses the services of the company Yoti (https://yoti.com) to estimate the age of the user at the using Artificial Intelligence and a photo of the user.
 
 ## Presenting credentials
 
