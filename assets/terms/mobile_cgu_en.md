@@ -3,14 +3,12 @@
 
 This document was updated on Friday, November 21, 2022
 
-
 ## Preamble
 
 
-The Talao Professional Digital Identity is accessible through a web interface from a browser and also requires a smartphone application called wallet.
+Altme wallet is a mobile application for IOS and Android devices developed by the company Web3 Digital Wallet.
 
-
-This document aims to present the conditions under which the user can use the Talao Professional Digital Identity service.
+This document aims to present the conditions under which the user can use the Altme mobile application and services.
 
 
 ## Definitions
@@ -37,13 +35,7 @@ Contract: means the General Conditions (including any document which is expressl
 Decentralized Identifiers or DID (Decentralized Identifier): a digital identifier which the user can cryptographically prove that he is in his possession with a cryptographic key. These identifiers have been standardized by the W3C https://w3c.github.io/did-core/ .
 
 
-Portfolio or workspace: designates a user account opened on the Talao site. This space is used to save professional information and verifiable certificates issued by third parties (professional certificates, employment certificates, etc.). A workspace becomes a Digital Identity after Talao has performed a face-to-face verification of the user's identity and issued an identity certificate.
-
-
 Identification: refers to the procedure according to which the user enters their Identifiers in order to access the Professional Digital Identity service or their account on a Partner site from the Talao Digital Identity connection button.
-
-
-Professional Digital Identity or Digital Identity: refers to the service allowing a user to connect from his mobile application to all partner services.
 
 
 Registration: refers to the procedure which allows any eligible person to enter their personal data in order to access the services and obtain a Professional Digital Identity. 
@@ -52,50 +44,49 @@ Registration: refers to the procedure which allows any eligible person to enter 
 Desktop: designates a computer (PC, laptop, etc.) which allows connection to the site https://altme.co. This computer must be equipped with an operating system such as Windows, Linux, Mac and internet access software such as Chrome, Internet Explorer, Firefox, Brave.
  
 Password: designates the code chosen by the user, exclusive and confidential, which, associated with the user name, is necessary for the latter to access his workspace in the event that he does not have his smartphone.
- 
-Username: refers to the name proposed by the site allowing the user to access their portfolio on the site with a password. 
 
 
 Partner (s): refers to companies in relation to the use of Professional Digital Identity. Example: The publisher of a website allowing the user to identify himself via his Digital Identity is a partner.
 
+Service: refers to the service which allows a user to request or present verifiable credentias.
 
-Service: refers to the service which allows a user to create, modify, renew and delete a portfolio set up by Talao.
-
-
-Site: refers to the secure website published by Talao (https://altme.co) allowing a user to access their portfolio and all or part of Talao's Professional Digital Identity service.
-
+Site: refers to the secure website published by Web3 Digital Wallet (https://altme.co) allowing a user to access their portfolio and all or part of Talao's Professional Digital Identity service.
 
 Self Sovereign Identity (SSI Self Sovereign Identity): a digital identity model that gives the user control over their data.
 
-
-User: refers to a person who has the Talao smartphone application and a portfolio. The user is necessarily an individual, that is to say a natural person. This user is the holder of a smartphone capable of installing a mobile application called a wallet from the stores that offer it (App Store for holders of an iPhone and Google Play for holders of an Android smartphone).
+User: refers to a person who has the Altme smartphone application. The user is necessarily an individual, that is to say a natural person. This user is the holder of a smartphone capable of installing a mobile application called a wallet from the stores that offer it (App Store for holders of an iPhone and Google Play for holders of an Android smartphone).
 
 
 ## Purpose
 
+The purpose of these Terms & Conditions  is to define the contractual relationship between Web3 Digital Wallet and the user concerning access and use of the service consisting of a web application called issuers or verifiers and a smartphone application called wallet available on the Apple and Google stores.
 
-The purpose of these Terms & Conditions  is to define the contractual relationship between Talao and the user concerning access and use of the Professional Digital Identity service consisting of a web application called portfolio at the address https://altme.co and a smartphone application called wallet available on the Apple and Google stores.
 
-
-At any time, Talao reserves the right to make changes to the Professional Digital Identity Service and therefore to these Terms & Conditions. Any modification comes into force as from their publication or, if necessary, on any other date which would be indicated. Talao will ensure that users are aware of any modification of the Terms & Conditions, however, it is up to the user before any use of the Digital Identity service to refer to the latest version of the Terms & Conditions accessible at any time on the https site: //altme.co.
-
+At any time, Web3 Digital Wallet reserves the right to make changes to service and therefore to these Terms & Conditions. Any modification comes into force as from their publication or, if necessary, on any other date which would be indicated. Web3 Digital Wallet will ensure that users are aware of any modification of the Terms & Conditions, however, it is up to the user before any use of the service to refer to the latest version of the Terms & Conditions accessible at any time on the https site: //altme.co.
 
 In the event of disagreement with the new provisions, the user undertakes to cease all use of the service and to delete his Digital Identity.
 
 
-## Presentation of the Professional Digital Identity service
+## Presentation of the service
+
+Altme wallet is a non-custodial wallet software, for digital assets such as cryptocurrencies, virtual commodities and NFTs (“Digital Assets”), meaning you are solely in control of and responsible for your Digital Assets and private keys, and accordingly you can authorize transactions from your wallet address. You expressly acknowledge and agree that as Altme Wallet is a non-custodial wallet software, you are solely responsible for your activity and any risk of loss at all times.
+
+Altme wallet allows you to:
+
+* generate your Decentraliozed Identifier (DID);
+* collect certificates (Verifiable Credenials)  from third parties (issuers). Example of certificates are : Proof of email, Proof of phone number, ID card, Nationality proof, Over 18 proof, Loyalty cards, tickets, etc;
+* store certificatesthem
+* transfer certificates to other third parties (verifiers);
+* secure online procedures with partners, in particular in the field of web3 applications (e.g. access a decnetralized crypto games, a NFT marketplace, Metaverse, Decentralized Finance application,...).
+* generate wallet addresses and associated private keys that you may use to send and receive digital assets;
+* browse and access third party decentralized application(s) (“DApp(s)”) and third party decentralized exchanges (“DEX”) through the mobile application’s web browser;
+* swap/trade digital assets through DApp functionality made available by third party service provider(s);
+* stake certain digital assets in a third party ‘proof of stake’ network through staking services (“Staking Service”);
+* view digital asset price information made available by third party service provider(s); 
+* andbroadcast Digital Asset Transaction data to various blockchains supported by Trust Wallet without requiring you to download or install the associated blockchain-based software to your local device.
 
 
-The Profession Digital Identity is a service from Talao that allows you to create an electronic identity that can be used online via a secure mobile application. This Professional Digital Identity will be used by the user to simplify and secure his online procedures with partners, in particular in the field of human resources (e.g. access a recruitment announcement site, access his company's HR site, provide an employer certificate for renting real estate or opening a bank account, etc.). 
-
-
-The service is built on 2 digital applications: the portfolio and the wallet. The wallet allows you to generate your identifier, collect certificates from third parties, store them and transfer them to other third parties. The portfolio allows a user to ask third-party companies to issue him certificates but also to keep these certificates on an external server to possibly be able to recover them in the event of loss of his smartphone or to expose them to a chosen audience. . The portfolio is a kind of digital safe whose data is accessible under the exclusive control of the user.
-
-
-Talao's service is built on the basis of innovative technology (Blockchain) and the concepts of self-sovereign identity and verifiable attestations. The altme service allows a user to have a Digital Identity and certificates certified by third parties without having to save their personal data on the servers of an Identity Provider. The data is stored in the user's wallet (smartphone application) or possibly encrypted on a decentralized network. The user alone retains access to his identity with his smartphone or cryptographic keys are kept. It can authorize an application of a partner (a service provider) to access it.
-
-
-As part of the Talao Professional Digital Identity service, the user benefits from various functionalities relating to his professional career. Some of these features are only accessible through their smartphone wallet.
+Altme's service is built on the basis of innovative technology (Blockchain and Self Sovereign Identity). The altme service allows a user to have a Digital Identity and certificates certified by third parties without having to save their personal data on the servers of an Identity Provider. The data is stored in the user's wallet (smartphone application) or possibly encrypted on a decentralized network. The user alone retains access to his identity with his smartphone or cryptographic keys are kept. It can authorize an application of a partner (a service provider) to access it.
 
 
 When registering, the user must complete the Registration form available on the site (including, in particular, title, surnames and first names, e-mail address and possibly his mobile phone number.).
