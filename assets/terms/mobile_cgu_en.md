@@ -1,6 +1,5 @@
 # Terms & Conditions
 
-
 This document was updated on Friday, November 21, 2022
 
 ## Purpose
@@ -54,7 +53,7 @@ Identity card, Proof of nationality and Unique identification number: the issuer
 
 Over13 proof, Over18 proof and Age Range proof: the issuer is the Web3 Digital Wallet company which uses the services of the Yoti company (https://yoti.com) to estimate the user's age using Artificial Intelligence and a photo of the user.
 
-# wallet creation
+## wallet creation
 
 User must either import or create a wallet in order to use Altme wallet. When user creates a wallet, he will be assigned a Recovery Phrase. User agrees to immediately notify us of any unauthorized use of user's Recovery Phrase or private keys or any other breach of security of user's wallet. Notwithstanding the foregoing, user acknowledges and agrees that he shall assume all risks related to the use of the services and he shall be solely responsible for maintaining the confidentiality and security of user's Recovery Phrase and private keys. When he creates a wallet, he is strongly advised to take precautions in order to avoid loss of access to and/or control over user's wallet. Suggested measures include, but are not limited to, the following: 
 
@@ -107,7 +106,7 @@ Services are limited to users over 18 years old.
 
 The user acknowledges that the Altme wallet services are services for personal use only and that any use of said service is carried out under user's full and entire responsibility.
 
-### Operation of the ervice
+## Operation of the ervice
 
 After having created and verified user's identity, the user can access partner sites more easily and quickly with the same access method.
 
