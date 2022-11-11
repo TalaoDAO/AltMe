@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -56,7 +57,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final isInternetAvailable = await isConnected();
       if (!isInternetAvailable) {
         throw NetworkException(
-          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+          message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
         );
       }
 
@@ -106,7 +107,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final isInternetAvailable = await isConnected();
       if (!isInternetAvailable) {
         throw NetworkException(
-          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+          message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
         );
       }
       if (url == null || url.isEmpty) {
