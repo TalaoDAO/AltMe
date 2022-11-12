@@ -21,7 +21,7 @@ Web3 Digital Wallet provides a crypto and self sovereign identity wallet based o
 
 Traditional architectures to validate, certify, and manage personal data are based on centralized, top-down approaches that rely on third-party private operators. Unfortunately these solutions often lead to inappropriate use of personal data and hacks.
 
-Wezb3 Digital Wallet approaches this issue starting from a user perspective through a Self Sovereign Identity (SSI) focused on professional data. Web3 Digital Wallet allows Professional Identities for Talents, Companies and certificates issuers such as Schools or Training Centers. It is for everyone the opportunity to use a new technology to get tamper proof identity data while keeping the ownership of that data.
+Web3 Digital Wallet approaches this issue starting from a user perspective through Self Sovereign Identity concepts and tenologies.
 
 Identities with their credentials can be displayed, if needed, anywhere on digital platforms : social media, websites, Job Boards, etc. 
 
