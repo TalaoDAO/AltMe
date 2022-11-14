@@ -623,5 +623,13 @@
   "termsAndConditions": "Terms and conditions",
   "walletReadyTitle": "Your wallet is ready !",
   "walletReadySubtitle": "Let’s discover everything \nWeb 3 has to offer.",
-  "failedToInitCamera": "Camera initialization failed!"
+  "failedToInitCamera": "Camera initialization failed!",
+  "chooseMethodPageOver18Title": "Choose a method to get your Over 18 Proof",
+  "chooseMethodPageOver13Title": "Choose a method to get your Over 13 Proof",
+  "chooseMethodPageSubtitle": "Get verified by a document check \nor by taking a real-time photo of yourself.",
+  "idDocumentCheck": "ID document check",
+  "idDocumentCheckDescription": "Get verified by using an ID card or a passeport.",
+  "realTimePhoto": "Realt-time photo",
+  "realTimePhotoDescription": "Get verified by taking a real-time photo of yourself."
+
 }

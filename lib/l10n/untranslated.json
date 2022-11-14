@@ -573,7 +573,14 @@
     "termsAndConditions",
     "walletReadyTitle",
     "walletReadySubtitle",
-    "failedToInitCamera"
+    "failedToInitCamera",
+    "chooseMethodPageOver18Title",
+    "chooseMethodPageOver13Title",
+    "chooseMethodPageSubtitle",
+    "idDocumentCheck",
+    "idDocumentCheckDescription",
+    "realTimePhoto",
+    "realTimePhotoDescription"
   ],
 
   "es": [
@@ -1150,7 +1157,14 @@
     "termsAndConditions",
     "walletReadyTitle",
     "walletReadySubtitle",
-    "failedToInitCamera"
+    "failedToInitCamera",
+    "chooseMethodPageOver18Title",
+    "chooseMethodPageOver13Title",
+    "chooseMethodPageSubtitle",
+    "idDocumentCheck",
+    "idDocumentCheckDescription",
+    "realTimePhoto",
+    "realTimePhotoDescription"
   ],
 
   "fr": [
@@ -1727,7 +1741,14 @@
     "termsAndConditions",
     "walletReadyTitle",
     "walletReadySubtitle",
-    "failedToInitCamera"
+    "failedToInitCamera",
+    "chooseMethodPageOver18Title",
+    "chooseMethodPageOver13Title",
+    "chooseMethodPageSubtitle",
+    "idDocumentCheck",
+    "idDocumentCheckDescription",
+    "realTimePhoto",
+    "realTimePhotoDescription"
   ],
 
   "it": [
@@ -2304,6 +2325,13 @@
     "termsAndConditions",
     "walletReadyTitle",
     "walletReadySubtitle",
-    "failedToInitCamera"
+    "failedToInitCamera",
+    "chooseMethodPageOver18Title",
+    "chooseMethodPageOver13Title",
+    "chooseMethodPageSubtitle",
+    "idDocumentCheck",
+    "idDocumentCheckDescription",
+    "realTimePhoto",
+    "realTimePhotoDescription"
   ]
 }
