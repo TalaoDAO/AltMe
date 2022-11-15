@@ -4,6 +4,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'credential_list_cubit.g.dart';
 part 'credential_list_state.dart';
@@ -13,6 +14,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
   CredentialSubjectType identityCredentialCard =
       CredentialSubjectType.identityCard;
+
+  final log = getLogger('CredentialListCubit');
 
   Future<void> initialise(WalletCubit walletCubit) async {
     emit(state.fetching());
@@ -201,7 +204,10 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     return dummyCredentialsList;
   }
 
-  Future insertCredential(CredentialModel credential) async {
+  Future insertCredential({
+    required CredentialModel credential,
+    Function(CredentialModel credentialToBeDeleted)? isCredentialDeleted,
+  }) async {
     emit(state.loading());
     final identityCategories = state.identityCategories;
     final gamingCategories = state.gamingCategories;
@@ -227,7 +233,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       case CredentialCategory.identityCards:
 
         /// adding real credentials
-        final _credentials = List.of(state.identityCredentials)
+        var _credentials = List.of(state.identityCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
 
         final credentialSubjectType = credential
@@ -269,6 +275,41 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.ecole42LearningAchievement:
             break;
           case CredentialSubjectType.emailPass:
+
+            // if same email credential is present
+            final String? email = (credentialSubject as EmailPassModel).email;
+            log.i(email);
+
+            if (email != null) {
+              final CredentialsRepository repository =
+                  CredentialsRepository(getSecureStorage);
+
+              final List<CredentialModel> allCredentials =
+                  await repository.findAll();
+
+              for (final credential in allCredentials) {
+                final credentialSubjectModel =
+                    credential.credentialPreview.credentialSubjectModel;
+                if (credentialSubjectModel.credentialSubjectType ==
+                    CredentialSubjectType.emailPass) {
+                  if (email ==
+                      (credentialSubjectModel as EmailPassModel).email) {
+                    log.i('email is matching');
+                    log.i('remove credential from wallet cubit state');
+                    isCredentialDeleted?.call(credential);
+
+                    log.i('remove credential from credential cubit state');
+                    _credentials = List.of(state.identityCredentials)
+                      ..removeWhere(
+                        (element) =>
+                            element.credentialModel?.id == credential.id,
+                      );
+                    break;
+                  }
+                }
+              }
+            }
+
             break;
           case CredentialSubjectType.diplomaCard:
             break;
