@@ -201,7 +201,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     return dummyCredentialsList;
   }
 
-  Future insertCredential(CredentialModel credential) async {
+  Future insertCredential({required CredentialModel credential}) async {
     emit(state.loading());
     final identityCategories = state.identityCategories;
     final gamingCategories = state.gamingCategories;

@@ -40,7 +40,9 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
       );
     }
     if (state.status == WalletStatus.delete) {
-      Navigator.of(context).pop();
+      if (state.message != null) {
+        Navigator.of(context).pop();
+      }
     }
     if (state.status == WalletStatus.reset) {
       /// Removes every stack except first route (splashPage)

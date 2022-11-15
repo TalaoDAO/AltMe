@@ -81,6 +81,7 @@ class WalletCubit extends Cubit<WalletState> {
       if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
         index = int.parse(derivePathIndex) + 1;
       }
+
       await secureStorageProvider.set(
         SecureStorageKeys.derivePathIndex,
         index.toString(),
@@ -227,7 +228,10 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future deleteById(CredentialModel credential) async {
+  Future deleteById({
+    required CredentialModel credential,
+    bool showMessage = true,
+  }) async {
     emit(state.loading());
     await repository.deleteById(credential.id);
     final credentials = List.of(state.credentials)
@@ -237,10 +241,12 @@ class WalletCubit extends Cubit<WalletState> {
       state.copyWith(
         status: WalletStatus.delete,
         credentials: credentials,
-        messageHandler: ResponseMessage(
-          ResponseString
-              .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE,
-        ),
+        messageHandler: showMessage
+            ? ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE,
+              )
+            : null,
       ),
     );
   }
@@ -300,6 +306,37 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future insertCredential(CredentialModel credential) async {
+    /// Old EmailPass needs to be removed if currently adding new EmailPass
+    /// with same email address
+    if (credential
+            .credentialPreview.credentialSubjectModel.credentialSubjectType ==
+        CredentialSubjectType.emailPass) {
+      final String? email = (credential.credentialPreview.credentialSubjectModel
+              as EmailPassModel)
+          .email;
+
+      if (email != null) {
+        final List<CredentialModel> allCredentials = await repository.findAll();
+
+        for (final storedCredential in allCredentials) {
+          final credentialSubjectModel =
+              storedCredential.credentialPreview.credentialSubjectModel;
+          if (credentialSubjectModel.credentialSubjectType ==
+              CredentialSubjectType.emailPass) {
+            if (email == (credentialSubjectModel as EmailPassModel).email) {
+              await deleteById(
+                credential: storedCredential,
+                showMessage: false,
+              );
+              await credentialListCubit.deleteById(storedCredential);
+              break;
+            }
+          }
+        }
+      }
+    }
+    // if same email credential is present
+
     await repository.insert(credential);
     final credentials = List.of(state.credentials)..add(credential);
 
@@ -348,7 +385,9 @@ class WalletCubit extends Cubit<WalletState> {
       }
     }
 
-    await credentialListCubit.insertCredential(credential);
+    await credentialListCubit.insertCredential(
+      credential: credential,
+    );
 
     emit(
       state.copyWith(
