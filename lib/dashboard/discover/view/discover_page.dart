@@ -1,7 +1,5 @@
 import 'package:altme/app/shared/alert_message/alert_message.dart';
 import 'package:altme/app/shared/enum/status/app_status.dart';
-import 'package:altme/app/shared/enum/type/credential_subject_type/credential_subject_type.dart';
-import 'package:altme/app/shared/helper_functions/helper_functions.dart';
 import 'package:altme/app/shared/loading/loading_view.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/dashboard/home/tab_bar/tab_bar.dart';
