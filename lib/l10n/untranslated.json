@@ -580,7 +580,12 @@
     "idDocumentCheck",
     "idDocumentCheckDescription",
     "realTimePhoto",
-    "realTimePhotoDescription"
+    "realTimePhotoDescription",
+    "verifyYourAge",
+    "verifyYourAgeSubtitle",
+    "verifyYourAgeDescription",
+    "accept",
+    "decline"
   ],
 
   "es": [
@@ -1164,7 +1169,12 @@
     "idDocumentCheck",
     "idDocumentCheckDescription",
     "realTimePhoto",
-    "realTimePhotoDescription"
+    "realTimePhotoDescription",
+    "verifyYourAge",
+    "verifyYourAgeSubtitle",
+    "verifyYourAgeDescription",
+    "accept",
+    "decline"
   ],
 
   "fr": [
@@ -1748,7 +1758,12 @@
     "idDocumentCheck",
     "idDocumentCheckDescription",
     "realTimePhoto",
-    "realTimePhotoDescription"
+    "realTimePhotoDescription",
+    "verifyYourAge",
+    "verifyYourAgeSubtitle",
+    "verifyYourAgeDescription",
+    "accept",
+    "decline"
   ],
 
   "it": [
@@ -2332,6 +2347,11 @@
     "idDocumentCheck",
     "idDocumentCheckDescription",
     "realTimePhoto",
-    "realTimePhotoDescription"
+    "realTimePhotoDescription",
+    "verifyYourAge",
+    "verifyYourAgeSubtitle",
+    "verifyYourAgeDescription",
+    "accept",
+    "decline"
   ]
 }

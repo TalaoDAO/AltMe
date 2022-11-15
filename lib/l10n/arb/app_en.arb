@@ -630,6 +630,10 @@
   "idDocumentCheck": "ID document check",
   "idDocumentCheckDescription": "Get verified by using an ID card or a passeport.",
   "realTimePhoto": "Realt-time photo",
-  "realTimePhotoDescription": "Get verified by taking a real-time photo of yourself."
-
+  "realTimePhotoDescription": "Get verified by taking a real-time photo of yourself.",
+  "verifyYourAge": "Verify your age",
+  "verifyYourAgeSubtitle": "This age verification process is very easy and simple. All it requires is a real-time photo.",
+  "verifyYourAgeDescription": "By accepting, you agree that we use a picture to estimate your age. The estimation is done by our partner Yoti that uses your picture only for this purpose and immediately deletes it.\n\nFor more info, review our Privacy Policy.",
+  "accept": "Accept",
+  "decline": "Decline"
 }

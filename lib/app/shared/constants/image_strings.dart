@@ -96,4 +96,5 @@ class ImageStrings {
   static const String createWalletImage = '$imagePath/create_wallet_icon.png';
   static const String userCircleAdd = '$imagePath/user-circle-add.png';
   static const String userCircleAdded = '$imagePath/user-circle-added.png';
+  static const String verifyYourAge = '$imagePath/verify-your-age.png';
 }
