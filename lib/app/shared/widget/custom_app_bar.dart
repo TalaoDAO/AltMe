@@ -19,42 +19,38 @@ class CustomAppBar extends PreferredSize {
   final Widget? trailing;
 
   @override
-  Widget build(BuildContext context) => Stack(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.bottomCenter,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
+  Widget build(BuildContext context) => SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Flexible(
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    leading ?? const SizedBox(width: 16, height: 16),
+                    trailing ?? const SizedBox(width: 16, height: 16),
+                  ],
+                ),
+              ),
             ),
-            padding: const EdgeInsets.only(
-              top: 12,
-              bottom: 18,
-              left: 64,
-              right: 64,
+            Flexible(
+              child: Container(
+                alignment: Alignment.topCenter,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.background,
+                ),
+                child: MyText(
+                  title ?? '',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.appBar,
+                ),
+              ),
             ),
-            child: MyText(
-              title ?? '',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.appBar,
-            ),
-          ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.only(
-              top: 12,
-              bottom: 12,
-              left: 8,
-              right: 8,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                leading ?? const SizedBox(width: 16, height: 16),
-                trailing ?? const SizedBox(width: 16, height: 16),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       );
 
   // @override
