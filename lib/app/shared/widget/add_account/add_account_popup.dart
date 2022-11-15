@@ -103,11 +103,11 @@ class _AddAccountPopUpState extends State<AddAccountPopUp> {
             elevation: 10,
             onPressed: () => widget.onCreateAccount.call(controller.text),
           ),
-          const SizedBox(width: Sizes.spaceNormal),
+          const SizedBox(height: Sizes.spaceXSmall),
           MyOutlinedButton(
             text: l10n.import,
             verticalSpacing: Sizes.smallRadius,
-            fontSize: 12,
+            fontSize: 17,
             elevation: 0,
             borderColor: Colors.transparent,
             backgroundColor: Colors.transparent,
