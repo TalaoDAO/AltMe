@@ -55,6 +55,13 @@ class ManageAccountsItem extends StatelessWidget {
             horizontalTitleGap: 0,
             title: Row(
               children: [
+                Image.asset(
+                  cryptoAccountData.blockchainType == BlockchainType.tezos
+                      ? IconStrings.tezos
+                      : IconStrings.ethereum,
+                  width: Sizes.icon,
+                ),
+                const SizedBox(width: Sizes.spaceXSmall),
                 Flexible(
                   child: MyText(
                     accountName,

@@ -13,9 +13,8 @@ class AccountPrivateKeyPage extends StatelessWidget {
     required String privateKey,
   }) {
     return MaterialPageRoute<void>(
-      builder: (_) => AccountPrivateKeyPage(
-        privateKey: privateKey,
-      ),
+      builder: (_) => AccountPrivateKeyPage(privateKey: privateKey),
+      settings: const RouteSettings(name: '/AccountPrivateKeyPage'),
     );
   }
 

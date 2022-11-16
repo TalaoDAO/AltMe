@@ -131,6 +131,7 @@ class WalletCubit extends Cubit<WalletState> {
       walletAddress: cryptoWalletAddress,
       secretKey: cryptoSecretKey,
       isImported: isImported,
+      blockchainType: BlockchainType.tezos,
     );
 
     final cryptoAccounts = List.of(state.cryptoAccount.data)

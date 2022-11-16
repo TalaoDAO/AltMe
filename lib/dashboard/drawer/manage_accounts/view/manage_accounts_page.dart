@@ -20,6 +20,7 @@ class ManageAccountsPage extends StatefulWidget {
         ),
         child: const ManageAccountsPage(),
       ),
+      settings: const RouteSettings(name: '/ManageAccountsPage'),
     );
   }
 
