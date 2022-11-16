@@ -7,6 +7,7 @@
 
 import 'package:altme/app/app.dart';
 import 'package:altme/beacon/beacon.dart';
+import 'package:altme/blockchain/cubit/blockchain_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
@@ -41,6 +42,11 @@ class App extends StatelessWidget {
       providers: [
         BlocProvider<FlavorCubit>(
           create: (context) => FlavorCubit(flavorMode),
+        ),
+        BlocProvider<BlockchainCubit>(
+          create: (context) => BlockchainCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+          ),
         ),
         BlocProvider<BeaconCubit>(
           create: (context) => BeaconCubit(beacon: Beacon()),
@@ -124,6 +130,7 @@ class App extends StatelessWidget {
             homeCubit: context.read<HomeCubit>(),
             walletCubit: context.read<WalletCubit>(),
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
+            blockchainCubit: context.read<BlockchainCubit>(),
           ),
         ),
         BlocProvider(

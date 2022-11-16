@@ -1,0 +1,1 @@
+enum BlockchainType { ethereum, tezos }

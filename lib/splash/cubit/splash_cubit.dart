@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/blockchain/cubit/blockchain_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/splash/helper_function/is_wallet_created.dart';
@@ -21,6 +22,7 @@ class SplashCubit extends Cubit<SplashState> {
     required this.homeCubit,
     required this.walletCubit,
     required this.client,
+    required this.blockchainCubit,
   }) : super(const SplashState()) {
     _getAppVersion();
   }
@@ -30,12 +32,14 @@ class SplashCubit extends Cubit<SplashState> {
   final HomeCubit homeCubit;
   final WalletCubit walletCubit;
   final DioClient client;
+  final BlockchainCubit blockchainCubit;
 
   Future<void> initialiseApp() async {
     final bool hasWallet = await isWalletCreated(
       secureStorageProvider: secureStorageProvider,
       didCubit: didCubit,
       walletCubit: walletCubit,
+      blockchainCubit: blockchainCubit,
     );
 
     if (hasWallet) {

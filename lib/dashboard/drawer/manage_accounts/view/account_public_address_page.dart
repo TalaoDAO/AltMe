@@ -21,6 +21,7 @@ class AccountPublicAddressPage extends StatelessWidget {
         accountName: accountName,
         accountAddress: accountAddress,
       ),
+      settings: const RouteSettings(name: '/AccountPublicAddressPage'),
     );
   }
 

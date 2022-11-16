@@ -43,8 +43,7 @@ class WalletCubit extends Cubit<WalletState> {
   final DIDKitProvider didKitProvider;
   final AdvanceSettingsCubit advanceSettingsCubit;
 
-  Future initialize() async {
-    final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+  Future initialize({required String? ssiKey}) async {
     if (ssiKey != null) {
       if (ssiKey.isNotEmpty) {
         await loadAllCredentialsFromRepository();
@@ -55,7 +54,7 @@ class WalletCubit extends Cubit<WalletState> {
   Future<void> setCurrentWalletAccount(int index) async {
     emit(state.loading());
     await secureStorageProvider.set(
-      SecureStorageKeys.currentCryptoIndex,
+      SecureStorageKeys.currentTezosIndex,
       index.toString(),
     );
     emit(
@@ -133,6 +132,7 @@ class WalletCubit extends Cubit<WalletState> {
       walletAddress: cryptoWalletAddress,
       secretKey: cryptoSecretKey,
       isImported: isImported,
+      blockchainType: BlockchainType.tezos,
     );
 
     final cryptoAccounts = List.of(state.cryptoAccount.data)
@@ -426,7 +426,8 @@ class WalletCubit extends Cubit<WalletState> {
     /// crypto
     await secureStorageProvider.delete(SecureStorageKeys.cryptoAccount);
     await secureStorageProvider.delete(SecureStorageKeys.derivePathIndex);
-    await secureStorageProvider.delete(SecureStorageKeys.currentCryptoIndex);
+    await secureStorageProvider.delete(SecureStorageKeys.currentTezosIndex);
+    await secureStorageProvider.delete(SecureStorageKeys.currentEthereumIndex);
     await secureStorageProvider.delete(SecureStorageKeys.data);
 
     /// credentials
