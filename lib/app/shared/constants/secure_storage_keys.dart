@@ -49,4 +49,6 @@ class SecureStorageKeys {
   static const String preAuthorizedCode = 'preAuthorizedCode';
 
   static const String beaconPeerKey = 'beaconPeer';
+
+  static const String blockchainType = 'blockchainType';
 }

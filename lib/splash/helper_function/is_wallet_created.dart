@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:altme/app/logger/logger.dart';
 import 'package:altme/app/shared/constants/constants.dart';
+import 'package:altme/blockchain/cubit/blockchain_cubit.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -9,7 +11,11 @@ Future<bool> isWalletCreated({
   required SecureStorageProvider secureStorageProvider,
   required DIDCubit didCubit,
   required WalletCubit walletCubit,
+  required BlockchainCubit blockchainCubit,
 }) async {
+  final log = getLogger('IsWalletCreated');
+
+  log.i('did initialisation');
   final String? ssiMnemonic =
       await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
   if (ssiMnemonic == null || ssiMnemonic.isEmpty) {
@@ -59,34 +65,14 @@ Future<bool> isWalletCreated({
     }
   }
 
-  await walletCubit.initialize();
+  log.i('wallet initialisation');
+  await walletCubit.initialize(ssiKey: ssiKey);
 
-  final String? currentCryptoIndex =
-      await secureStorageProvider.get(SecureStorageKeys.currentCryptoIndex);
-  if (currentCryptoIndex != null && currentCryptoIndex.isNotEmpty) {
-    /// load active index
-    final activeIndex = int.parse(currentCryptoIndex);
-    await walletCubit.setCurrentWalletAccount(activeIndex);
-
-    final String? savedCryptoAccount =
-        await secureStorageProvider.get(SecureStorageKeys.cryptoAccount);
-
-    if (savedCryptoAccount != null && savedCryptoAccount.isNotEmpty) {
-      //load all the content of walletAddress
-      final cryptoAccountJson =
-          jsonDecode(savedCryptoAccount) as Map<String, dynamic>;
-      final CryptoAccount cryptoAccount =
-          CryptoAccount.fromJson(cryptoAccountJson);
-      walletCubit.emitCryptoAccount(cryptoAccount);
-    } else {
-      await walletCubit.setCurrentWalletAccount(0);
-    }
-  } else {
-    await walletCubit.createCryptoWallet(
-      mnemonicOrKey: ssiMnemonic,
-      isImported: false,
-    );
-  }
+  log.i('blockchain initialisation');
+  await blockchainCubit.initialize(
+    walletCubit: walletCubit,
+    ssiMnemonic: ssiMnemonic,
+  );
 
   await didCubit.load(
     did: did,
