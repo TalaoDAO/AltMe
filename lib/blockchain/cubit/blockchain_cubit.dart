@@ -64,7 +64,8 @@ class BlockchainCubit extends Cubit<BlockchainState> {
     log.i('tezos initialisation');
     // TODO(bibash): currentCryptoIndex => currentTezosIndex & currentEthIndex
     final String? currentCryptoIndex =
-        await secureStorageProvider.get(SecureStorageKeys.currentCryptoIndex);
+        await secureStorageProvider.get(SecureStorageKeys.currentTezosIndex);
+
     if (currentCryptoIndex != null && currentCryptoIndex.isNotEmpty) {
       /// load active index
       final activeIndex = int.parse(currentCryptoIndex);

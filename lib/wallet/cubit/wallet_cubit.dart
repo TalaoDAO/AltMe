@@ -54,7 +54,7 @@ class WalletCubit extends Cubit<WalletState> {
   Future<void> setCurrentWalletAccount(int index) async {
     emit(state.loading());
     await secureStorageProvider.set(
-      SecureStorageKeys.currentCryptoIndex,
+      SecureStorageKeys.currentTezosIndex,
       index.toString(),
     );
     emit(
@@ -386,7 +386,8 @@ class WalletCubit extends Cubit<WalletState> {
     /// crypto
     await secureStorageProvider.delete(SecureStorageKeys.cryptoAccount);
     await secureStorageProvider.delete(SecureStorageKeys.derivePathIndex);
-    await secureStorageProvider.delete(SecureStorageKeys.currentCryptoIndex);
+    await secureStorageProvider.delete(SecureStorageKeys.currentTezosIndex);
+    await secureStorageProvider.delete(SecureStorageKeys.currentEthereumIndex);
     await secureStorageProvider.delete(SecureStorageKeys.data);
 
     /// credentials
