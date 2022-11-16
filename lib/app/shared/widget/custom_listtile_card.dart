@@ -1,5 +1,6 @@
 import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/app/shared/widget/widget.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomListTileCard extends StatelessWidget {
@@ -20,16 +21,27 @@ class CustomListTileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      title: MyText(title),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(Sizes.normalRadius),
+        ),
+      ),
+      contentPadding: const EdgeInsets.all(Sizes.spaceNormal),
+      tileColor: Theme.of(context).colorScheme.surface,
+      title: MyText(
+        title,
+        style: Theme.of(context).textTheme.customListTileTitleStyle,
+      ),
       subtitle: Text(
         subTitle,
+        style: Theme.of(context).textTheme.customListTileSubTitleStyle,
       ),
-      trailing: Center(
-        child: Image.asset(
-          imageAssetPath,
-          width: Sizes.icon4x,
-          height: Sizes.icon4x,
-        ),
+      minVerticalPadding: 0,
+      trailing: Image.asset(
+        imageAssetPath,
+        width: Sizes.icon5x,
+        height: Sizes.icon5x,
+        fit: BoxFit.fitHeight,
       ),
     );
   }

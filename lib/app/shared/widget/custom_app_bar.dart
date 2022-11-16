@@ -6,6 +6,7 @@ class CustomAppBar extends PreferredSize {
   CustomAppBar({
     Key? key,
     this.title,
+    this.titleMargin = EdgeInsets.zero,
     this.leading,
     this.trailing,
   }) : super(
@@ -17,6 +18,7 @@ class CustomAppBar extends PreferredSize {
   final String? title;
   final Widget? leading;
   final Widget? trailing;
+  final EdgeInsets titleMargin;
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -36,16 +38,20 @@ class CustomAppBar extends PreferredSize {
                 ),
               ),
             ),
-            Flexible(
-              child: Container(
-                alignment: Alignment.topCenter,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background,
-                ),
-                child: MyText(
-                  title ?? '',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.appBar,
+            Padding(
+              padding: titleMargin,
+              child: Flexible(
+                child: Container(
+                  alignment: Alignment.topCenter,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.background,
+                  ),
+                  child: MyText(
+                    title ?? '',
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.appBar,
+                  ),
                 ),
               ),
             ),

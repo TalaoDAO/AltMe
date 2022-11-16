@@ -1,6 +1,8 @@
 import 'package:altme/app/shared/constants/image_strings.dart';
+import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class ChooseVerificationMethodPage extends StatelessWidget {
@@ -10,6 +12,12 @@ class ChooseVerificationMethodPage extends StatelessWidget {
   });
 
   final bool isOver18;
+
+  static Route route({required bool isOver18}) {
+    return MaterialPageRoute<void>(
+      builder: (_) => ChooseVerificationMethodPage(isOver18: isOver18),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +46,24 @@ class _ChooseVerificationMethodViewState
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
+      scrollView: false,
+      titleMargin: const EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
+      titleLeading: const BackLeadingButton(),
       title: widget.isOver18
           ? l10n.chooseMethodPageOver18Title
           : l10n.chooseMethodPageOver13Title,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
             l10n.chooseMethodPageSubtitle,
-            style: Theme.of(context).textTheme.subtitle1,
+            textAlign: TextAlign.center,
+            style: Theme.of(context)
+                .textTheme
+                .chooseVerificationMethodAgeRangeTitleStyle,
+          ),
+          const SizedBox(
+            height: Sizes.spaceLarge,
           ),
           CustomListTileCard(
             title: l10n.idDocumentCheck,
@@ -54,6 +72,9 @@ class _ChooseVerificationMethodViewState
             onTap: () {
               // TODO(Taleb): Navigate to Passbase verification
             },
+          ),
+          const SizedBox(
+            height: Sizes.spaceNormal,
           ),
           CustomListTileCard(
             title: l10n.realTimePhoto,

@@ -7,6 +7,7 @@ class BasePage extends StatelessWidget {
     this.scaffoldKey,
     this.backgroundColor,
     this.title,
+    this.titleMargin = EdgeInsets.zero,
     this.titleTag,
     this.titleLeading,
     this.titleTrailing,
@@ -26,6 +27,7 @@ class BasePage extends StatelessWidget {
 
   final GlobalKey<ScaffoldState>? scaffoldKey;
   final String? title;
+  final EdgeInsets titleMargin;
   final Widget body;
   final bool scrollView;
   final EdgeInsets padding;
@@ -53,6 +55,7 @@ class BasePage extends StatelessWidget {
           ? null
           : CustomAppBar(
               title: title,
+              titleMargin: titleMargin,
               leading: titleLeading,
               trailing: titleTrailing,
             ),
