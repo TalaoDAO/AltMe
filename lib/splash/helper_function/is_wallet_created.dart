@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:altme/app/logger/logger.dart';
 import 'package:altme/app/shared/constants/constants.dart';
 import 'package:altme/blockchain/cubit/blockchain_cubit.dart';

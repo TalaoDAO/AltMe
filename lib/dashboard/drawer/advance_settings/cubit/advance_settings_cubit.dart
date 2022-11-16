@@ -123,7 +123,7 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
   }
 
   void toggleOtherRadio() {
-    getLogger('AdvanceSettingCubit').i("Why I am called");
+    getLogger('AdvanceSettingCubit').i('Why I am called');
     emit(state.copyWith(isOtherEnabled: !state.isOtherEnabled));
     secureStorageProvider.set(
       SecureStorageKeys.isOtherEnabled,
