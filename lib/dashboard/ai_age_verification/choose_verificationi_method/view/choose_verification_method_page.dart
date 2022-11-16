@@ -79,7 +79,7 @@ class _ChooseVerificationMethodViewState
           CustomListTileCard(
             title: l10n.realTimePhoto,
             subTitle: l10n.realTimePhotoDescription,
-            imageAssetPath: ImageStrings.userCircleAdded,
+            imageAssetPath: ImageStrings.userCircleAdd,
             onTap: () {
               // TODO(Taleb): Navigate to AI age verification
             },
