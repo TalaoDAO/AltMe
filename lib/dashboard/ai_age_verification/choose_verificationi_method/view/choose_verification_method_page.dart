@@ -1,6 +1,7 @@
 import 'package:altme/app/shared/constants/image_strings.dart';
 import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/app/shared/widget/widget.dart';
+import 'package:altme/dashboard/ai_age_verification/verify_age/verify_age.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -58,9 +59,7 @@ class _ChooseVerificationMethodViewState
           Text(
             l10n.chooseMethodPageSubtitle,
             textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .chooseVerificationMethodAgeRangeTitleStyle,
+            style: Theme.of(context).textTheme.subtitle3,
           ),
           const SizedBox(
             height: Sizes.spaceLarge,
@@ -81,7 +80,9 @@ class _ChooseVerificationMethodViewState
             subTitle: l10n.realTimePhotoDescription,
             imageAssetPath: ImageStrings.userCircleAdd,
             onTap: () {
-              // TODO(Taleb): Navigate to AI age verification
+              Navigator.of(context).pushReplacement<void, void>(
+                VerifyAgePage.route(),
+              );
             },
           ),
         ],

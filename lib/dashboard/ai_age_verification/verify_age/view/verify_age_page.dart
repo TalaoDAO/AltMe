@@ -1,10 +1,20 @@
+import 'package:altme/app/shared/camera/view/camera_page.dart';
 import 'package:altme/app/shared/constants/image_strings.dart';
+import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class VerifyAgePage extends StatelessWidget {
   const VerifyAgePage({super.key});
+
+  static Route route() {
+    return MaterialPageRoute<void>(
+      builder: (_) => const VerifyAgePage(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +38,61 @@ class _VerifyAgeViewState extends State<VerifyAgeView> {
       scrollView: false,
       body: Column(
         children: [
-          Text(l10n.verifyYourAgeSubtitle),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Sizes.spaceSmall,
+            ),
+            child: Text(
+              l10n.verifyYourAgeSubtitle,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.subtitle3,
+            ),
+          ),
+          const Spacer(),
           Image.asset(
             ImageStrings.verifyYourAge,
+            height: MediaQuery.of(context).size.height * 0.23,
           ),
-          Text(l10n.verifyYourAgeDescription),
           const Spacer(),
-          MyGradientButton(text: l10n.accept),
-          MyGradientButton(text: l10n.decline),
+          Text(
+            l10n.verifyYourAgeDescription,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.subtitle3,
+          ),
+          const Spacer(),
+          MyElevatedButton(
+            text: l10n.accept,
+            verticalSpacing: 16,
+            borderRadius: Sizes.largeRadius,
+            onPressed: () async {
+              await Navigator.of(context).push<void>(
+                PinCodePage.route(
+                  isValidCallback: () {
+                    Navigator.pushReplacement(
+                      context,
+                      CameraPage.route(),
+                    );
+                  },
+                  restrictToBack: false,
+                ),
+              );
+            },
+          ),
+          const SizedBox(
+            height: Sizes.spaceNormal,
+          ),
+          MyElevatedButton(
+            text: l10n.decline,
+            verticalSpacing: 16,
+            backgroundColor: Theme.of(context).colorScheme.cardHighlighted,
+            borderRadius: Sizes.largeRadius,
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          const SizedBox(
+            height: Sizes.spaceSmall,
+          ),
         ],
       ),
     );

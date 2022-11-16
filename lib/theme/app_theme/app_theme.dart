@@ -271,12 +271,11 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get chooseVerificationMethodAgeRangeTitleStyle =>
-      GoogleFonts.nunito(
+  TextStyle get subtitle3 => GoogleFonts.nunito(
         color: const Color(0xFF86809D),
         fontSize: 16,
         fontWeight: FontWeight.w400,
-      );
+      ).copyWith(height: 1.4);
 
   TextStyle get customListTileTitleStyle => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
