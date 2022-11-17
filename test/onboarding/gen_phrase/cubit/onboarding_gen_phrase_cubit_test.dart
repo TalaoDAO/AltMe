@@ -18,7 +18,7 @@ Future<void> main() async {
     });
 
     test('address', () async {
-      final address = await keyGenerator.tz1AddressFromMnemonic(
+      final address = await keyGenerator.walletAddressFromMnemonic(
         mnemonic: mnemonic,
         accountType: AccountType.ssi,
       );
@@ -48,8 +48,10 @@ Future<void> main() async {
     });
 
     test('address', () async {
-      final address =
-          await keyGenerator.tz1AddressFromSecretKey(secretKey: secretKey);
+      final address = await keyGenerator.walletAddressFromSecretKey(
+        secretKey: secretKey,
+        accountType: AccountType.ssi,
+      );
       const expectedAddress = 'tz1NvqicaUW7v6sEbM4UYi3Wes7GHDft4kqY';
       expect(address, equals(expectedAddress));
     });

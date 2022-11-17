@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:bip39/bip39.dart' as bip39;
+import 'package:bip39/bip39.dart' as bip393;
+import 'package:dart_bip32_bip44/dart_bip32_bip44.dart';
+import 'package:dart_web3/dart_web3.dart';
 import 'package:ed25519_hd_key/ed25519_hd_key.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:pinenacl/ed25519.dart';
@@ -26,24 +28,35 @@ import 'package:tezart/tezart.dart';
 class KeyGenerator {
   static const Prefixes _seedPrefix = Prefixes.edsk2;
 
+  /// Note: private key is also known as a secret key
+  /// Ethereum ref - https://stackoverflow.com/questions/71406107/how-to-get-private-key-in-webdart
+
   Future<String> jwkFromMnemonic({
     required String mnemonic,
     required AccountType accountType,
     int derivePathIndex = 0,
   }) async {
     //notice photo opera keen climb agent soft parrot best joke field devote
-    final seed = bip39.mnemonicToSeed(mnemonic);
+    final seed = bip393.mnemonicToSeed(mnemonic);
 
     late KeyData child;
 
-    if (accountType == AccountType.ssi) {
-      child = await ED25519_HD_KEY.derivePath("m/44'/5467'/0'/0'", seed);
-    } else {
-      child = await ED25519_HD_KEY.derivePath(
-        "m/44'/1729'/$derivePathIndex'/0'",
-        seed,
-      );
+    switch (accountType) {
+      case AccountType.ssi:
+        child = await ED25519_HD_KEY.derivePath("m/44'/5467'/0'/0'", seed);
+        break;
+
+      case AccountType.tezos:
+        child = await ED25519_HD_KEY.derivePath(
+          "m/44'/1729'/$derivePathIndex'/0'",
+          seed,
+        );
+        break;
+
+      case AccountType.ethereum:
+        throw Exception();
     }
+
     final seedBytes = Uint8List.fromList(child.key);
 
     final key = jwkFromSeed(seedBytes);
@@ -72,47 +85,104 @@ class KeyGenerator {
     required AccountType accountType,
     int derivePathIndex = 0,
   }) async {
-    final key = await jwkFromMnemonic(
-      mnemonic: mnemonic,
-      accountType: accountType,
-      derivePathIndex: derivePathIndex,
-    );
+    switch (accountType) {
+      case AccountType.tezos:
+        final key = await jwkFromMnemonic(
+          mnemonic: mnemonic,
+          accountType: AccountType.tezos,
+          derivePathIndex: derivePathIndex,
+        );
 
-    // ignore: avoid_dynamic_calls
-    final d = jsonDecode(key)['d'] as String;
+        // ignore: avoid_dynamic_calls
+        final d = jsonDecode(key)['d'] as String;
 
-    final dBytes = base64Url.decode(d);
+        final dBytes = base64Url.decode(d);
 
-    final tezosSeed =
-        crypto.encodeWithPrefix(prefix: _seedPrefix, bytes: dBytes);
+        final tezosSeed =
+            crypto.encodeWithPrefix(prefix: _seedPrefix, bytes: dBytes);
 
-    final tezosSecretKey = crypto.seedToSecretKey(tezosSeed);
+        final tezosSecretKey = crypto.seedToSecretKey(tezosSeed);
 
-    return tezosSecretKey;
+        return tezosSecretKey;
+      case AccountType.ethereum:
+        final seedHex = bip393.mnemonicToSeedHex(mnemonic);
+
+        final chain = Chain.seed(seedHex);
+
+        final key = chain.forPath("m/44'/60'/0'/0/$derivePathIndex");
+
+        final keyHex = key.privateKeyHex();
+
+        return '0x${keyHex.substring(2, keyHex.length)}';
+
+      case AccountType.ssi:
+        throw Exception();
+    }
   }
 
-  Future<String> tz1AddressFromMnemonic({
+  Future<String> walletAddressFromMnemonic({
     required String mnemonic,
     required AccountType accountType,
     int derivePathIndex = 0,
   }) async {
-    final key = await jwkFromMnemonic(
-      mnemonic: mnemonic,
-      accountType: accountType,
-      derivePathIndex: derivePathIndex,
-    );
+    switch (accountType) {
+      case AccountType.tezos:
+        final key = await jwkFromMnemonic(
+          mnemonic: mnemonic,
+          accountType: AccountType.tezos,
+          derivePathIndex: derivePathIndex,
+        );
 
-    // ignore: avoid_dynamic_calls
-    final d = jsonDecode(key)['d'] as String;
+        // ignore: avoid_dynamic_calls
+        final d = jsonDecode(key)['d'] as String;
 
-    final dBytes = base64Url.decode(d);
+        final dBytes = base64Url.decode(d);
 
-    final tezosSeed =
-        crypto.encodeWithPrefix(prefix: _seedPrefix, bytes: dBytes);
+        final tezosSeed =
+            crypto.encodeWithPrefix(prefix: _seedPrefix, bytes: dBytes);
 
-    final tezosSecretKey = crypto.seedToSecretKey(tezosSeed);
+        final tezosSecretKey = crypto.seedToSecretKey(tezosSeed);
 
-    return tz1AddressFromSecretKey(secretKey: tezosSecretKey);
+        return walletAddressFromSecretKey(
+          secretKey: tezosSecretKey,
+          accountType: AccountType.tezos,
+        );
+
+      case AccountType.ethereum:
+        final seedHex = bip393.mnemonicToSeedHex(mnemonic);
+
+        final chain = Chain.seed(seedHex);
+
+        final key = chain.forPath("m/44'/60'/0'/0/$derivePathIndex");
+        final Credentials credentials =
+            EthPrivateKey.fromHex(key.privateKeyHex());
+
+        final walletAddress = await credentials.extractAddress();
+        return walletAddress.hex;
+
+      case AccountType.ssi:
+        throw Exception();
+    }
+  }
+
+  Future<String> walletAddressFromSecretKey({
+    required String secretKey,
+    required AccountType accountType,
+  }) async {
+    switch (accountType) {
+      case AccountType.tezos:
+        final keystore = Keystore.fromSecretKey(secretKey);
+
+        return keystore.address;
+
+      case AccountType.ethereum:
+        final ethPrivateKey = EthPrivateKey.fromHex(secretKey);
+        final walletAddress = await ethPrivateKey.extractAddress();
+        return walletAddress.hex;
+
+      case AccountType.ssi:
+        throw Exception();
+    }
   }
 
   Future<String> jwkFromSecretKey({required String secretKey}) async {
@@ -121,14 +191,7 @@ class KeyGenerator {
     );
 
     final jwk = jwkFromSeed(newSeedBytes);
-
     return jsonEncode(jwk);
-  }
-
-  Future<String> tz1AddressFromSecretKey({required String secretKey}) async {
-    final keystore = Keystore.fromSecretKey(secretKey);
-
-    return keystore.address;
   }
 
   Keystore getKeystore({required String secretKey}) {

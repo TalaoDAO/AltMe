@@ -87,38 +87,42 @@ class WalletCubit extends Cubit<WalletState> {
       );
     }
 
-    late String cryptoKey;
-    late String cryptoWalletAddress;
-    late String cryptoSecretKey;
+    late String tezosKey;
+    late String tezosWalletAddress;
+    late String tezosSecretKey;
 
     final isSecretKey = mnemonicOrKey.startsWith('edsk') ||
         mnemonicOrKey.startsWith('spsk') ||
-        mnemonicOrKey.startsWith('p2sk');
+        mnemonicOrKey.startsWith('p2sk') ||
+        mnemonicOrKey.startsWith('0x');
 
-    cryptoKey = isSecretKey
+    tezosKey = isSecretKey
         ? await keyGenerator.jwkFromSecretKey(
             secretKey: mnemonicOrKey,
           )
         : await keyGenerator.jwkFromMnemonic(
             mnemonic: mnemonicOrKey,
-            accountType: AccountType.crypto,
+            accountType: AccountType.tezos,
             derivePathIndex: index,
           );
 
-    cryptoSecretKey = isSecretKey
+    tezosSecretKey = isSecretKey
         ? mnemonicOrKey
         : await keyGenerator.secretKeyFromMnemonic(
             mnemonic: mnemonicOrKey,
-            accountType: AccountType.crypto,
+            accountType: AccountType.tezos,
             derivePathIndex: index,
           );
 
-    cryptoWalletAddress = isSecretKey
-        ? await keyGenerator.tz1AddressFromSecretKey(
-            secretKey: cryptoSecretKey,
+    tezosWalletAddress = isSecretKey
+        ? await keyGenerator.walletAddressFromSecretKey(
+            secretKey: tezosSecretKey,
+            accountType: AccountType.tezos,
           )
-        : cryptoWalletAddress = await keyGenerator.tz1AddressFromSecretKey(
-            secretKey: cryptoSecretKey,
+        : await keyGenerator.walletAddressFromMnemonic(
+            mnemonic: mnemonicOrKey,
+            accountType: AccountType.tezos,
+            derivePathIndex: index,
           );
 
     String name = 'My Account ${index + 1}';
@@ -126,11 +130,12 @@ class WalletCubit extends Cubit<WalletState> {
     if (accountName != null && accountName.isNotEmpty) {
       name = accountName;
     }
+
     final CryptoAccountData cryptoAccountData = CryptoAccountData(
       name: name,
-      key: cryptoKey,
-      walletAddress: cryptoWalletAddress,
-      secretKey: cryptoSecretKey,
+      key: tezosKey,
+      walletAddress: tezosWalletAddress,
+      secretKey: tezosSecretKey,
       isImported: isImported,
       blockchainType: BlockchainType.tezos,
     );
@@ -153,8 +158,8 @@ class WalletCubit extends Cubit<WalletState> {
 
     final credential = await generateAssociatedWalletCredential(
       accountName: cryptoAccountData.name,
-      walletAddress: cryptoWalletAddress,
-      cryptoKey: cryptoKey,
+      walletAddress: tezosWalletAddress,
+      cryptoKey: tezosKey,
     );
     if (credential != null) {
       await insertCredential(credential);
