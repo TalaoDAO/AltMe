@@ -1,6 +1,4 @@
-import 'package:altme/app/shared/constants/image_strings.dart';
-import 'package:altme/app/shared/constants/sizes.dart';
-import 'package:altme/app/shared/widget/widget.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/ai_age_verification/verify_age/verify_age.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
@@ -9,21 +7,23 @@ import 'package:flutter/material.dart';
 class ChooseVerificationMethodPage extends StatelessWidget {
   const ChooseVerificationMethodPage({
     super.key,
-    required this.isOver18,
+    required this.credentialSubjectType,
   });
 
-  final bool isOver18;
+  final CredentialSubjectType credentialSubjectType;
 
-  static Route route({required bool isOver18}) {
+  static Route route({required CredentialSubjectType credentialSubjectType}) {
     return MaterialPageRoute<void>(
-      builder: (_) => ChooseVerificationMethodPage(isOver18: isOver18),
+      builder: (_) => ChooseVerificationMethodPage(
+        credentialSubjectType: credentialSubjectType,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return ChooseVerificationMethodView(
-      isOver18: isOver18,
+      credentialSubjectType: credentialSubjectType,
     );
   }
 }
@@ -31,10 +31,10 @@ class ChooseVerificationMethodPage extends StatelessWidget {
 class ChooseVerificationMethodView extends StatefulWidget {
   const ChooseVerificationMethodView({
     super.key,
-    required this.isOver18,
+    required this.credentialSubjectType,
   });
 
-  final bool isOver18;
+  final CredentialSubjectType credentialSubjectType;
 
   @override
   State<ChooseVerificationMethodView> createState() =>
@@ -50,7 +50,7 @@ class _ChooseVerificationMethodViewState
       scrollView: false,
       titleMargin: const EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
       titleLeading: const BackLeadingButton(),
-      title: widget.isOver18
+      title: widget.credentialSubjectType == CredentialSubjectType.over18
           ? l10n.chooseMethodPageOver18Title
           : l10n.chooseMethodPageOver13Title,
       body: Column(
@@ -81,7 +81,9 @@ class _ChooseVerificationMethodViewState
             imageAssetPath: ImageStrings.userCircleAdd,
             onTap: () {
               Navigator.of(context).pushReplacement<void, void>(
-                VerifyAgePage.route(),
+                VerifyAgePage.route(
+                  credentialSubjectType: widget.credentialSubjectType,
+                ),
               );
             },
           ),

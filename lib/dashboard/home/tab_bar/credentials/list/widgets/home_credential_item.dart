@@ -1,8 +1,6 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/shared/camera/view/camera_page.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -84,8 +82,7 @@ class DummyCredentialItem extends StatelessWidget {
         await Navigator.push<void>(
           context,
           ChooseVerificationMethodPage.route(
-            isOver18: homeCredential.credentialSubjectType ==
-                CredentialSubjectType.over18,
+            credentialSubjectType: homeCredential.credentialSubjectType,
           ),
         );
       } else {

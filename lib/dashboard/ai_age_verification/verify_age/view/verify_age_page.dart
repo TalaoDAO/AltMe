@@ -1,6 +1,7 @@
 import 'package:altme/app/shared/camera/view/camera_page.dart';
 import 'package:altme/app/shared/constants/image_strings.dart';
 import 'package:altme/app/shared/constants/sizes.dart';
+import 'package:altme/app/shared/enum/enum.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
@@ -8,22 +9,38 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class VerifyAgePage extends StatelessWidget {
-  const VerifyAgePage({super.key});
+  const VerifyAgePage({
+    super.key,
+    required this.credentialSubjectType,
+  });
 
-  static Route route() {
+  final CredentialSubjectType credentialSubjectType;
+
+  static Route route({
+    required CredentialSubjectType credentialSubjectType,
+  }) {
     return MaterialPageRoute<void>(
-      builder: (_) => const VerifyAgePage(),
+      builder: (_) => VerifyAgePage(
+        credentialSubjectType: credentialSubjectType,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return const VerifyAgeView();
+    return VerifyAgeView(
+      credentialSubjectType: credentialSubjectType,
+    );
   }
 }
 
 class VerifyAgeView extends StatefulWidget {
-  const VerifyAgeView({super.key});
+  const VerifyAgeView({
+    super.key,
+    required this.credentialSubjectType,
+  });
+
+  final CredentialSubjectType credentialSubjectType;
 
   @override
   State<VerifyAgeView> createState() => _VerifyAgeViewState();
@@ -70,7 +87,9 @@ class _VerifyAgeViewState extends State<VerifyAgeView> {
                   isValidCallback: () {
                     Navigator.pushReplacement(
                       context,
-                      CameraPage.route(),
+                      CameraPage.route(
+                        credentialSubjectType: widget.credentialSubjectType,
+                      ),
                     );
                   },
                   restrictToBack: false,
