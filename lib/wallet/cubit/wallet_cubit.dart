@@ -74,15 +74,15 @@ class WalletCubit extends Cubit<WalletState> {
     int index = 0;
 
     if (!isImported) {
-      final String? derivePathIndex =
-          await secureStorageProvider.get(SecureStorageKeys.derivePathIndex);
+      final String? derivePathIndex = await secureStorageProvider
+          .get(SecureStorageKeys.tezosDerivePathIndex);
 
       if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
         index = int.parse(derivePathIndex) + 1;
       }
 
       await secureStorageProvider.set(
-        SecureStorageKeys.derivePathIndex,
+        SecureStorageKeys.tezosDerivePathIndex,
         index.toString(),
       );
     }
@@ -430,7 +430,9 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// crypto
     await secureStorageProvider.delete(SecureStorageKeys.cryptoAccount);
-    await secureStorageProvider.delete(SecureStorageKeys.derivePathIndex);
+    await secureStorageProvider.delete(SecureStorageKeys.tezosDerivePathIndex);
+    await secureStorageProvider
+        .delete(SecureStorageKeys.ethereumDerivePathIndex);
     await secureStorageProvider.delete(SecureStorageKeys.currentTezosIndex);
     await secureStorageProvider.delete(SecureStorageKeys.currentEthereumIndex);
     await secureStorageProvider.delete(SecureStorageKeys.data);

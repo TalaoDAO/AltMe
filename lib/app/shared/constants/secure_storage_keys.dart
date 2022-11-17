@@ -45,7 +45,9 @@ class SecureStorageKeys {
   static const String currentTezosIndex = 'currentTezosIndex';
   static const String currentEthereumIndex = 'currentEthereumIndex';
 
-  static const String derivePathIndex = 'derivePathIndex';
+  static const String tezosDerivePathIndex = 'tezosDerivePathIndex';
+  static const String ethereumDerivePathIndex = 'tezosDerivePathIndex';
+
   static const String passBaseStatus = 'passBaseStatus';
   static const String passBaseVerificationDate = 'passBaseVerificationDate';
   static const String preAuthorizedCode = 'preAuthorizedCode';
