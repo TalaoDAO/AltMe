@@ -21,6 +21,7 @@ class BasePage extends StatelessWidget {
     this.extendBelow,
     required this.body,
     this.useSafeArea = true,
+    this.titleAlignment = Alignment.bottomCenter,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
   }) : super(key: key);
@@ -39,6 +40,7 @@ class BasePage extends StatelessWidget {
   final Widget? drawer;
   final bool? extendBelow;
   final bool useSafeArea;
+  final Alignment titleAlignment;
   final Widget? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
 
@@ -57,6 +59,7 @@ class BasePage extends StatelessWidget {
               title: title,
               titleMargin: titleMargin,
               leading: titleLeading,
+              titleAlignment: titleAlignment,
               trailing: titleTrailing,
             ),
       bottomNavigationBar: navigation,

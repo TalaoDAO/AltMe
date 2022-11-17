@@ -585,7 +585,9 @@
     "verifyYourAgeSubtitle",
     "verifyYourAgeDescription",
     "accept",
-    "decline"
+    "decline",
+    "placeYourFaceInTheOval",
+    "cameraSubtitle"
   ],
 
   "es": [
@@ -1174,7 +1176,9 @@
     "verifyYourAgeSubtitle",
     "verifyYourAgeDescription",
     "accept",
-    "decline"
+    "decline",
+    "placeYourFaceInTheOval",
+    "cameraSubtitle"
   ],
 
   "fr": [
@@ -1763,7 +1767,9 @@
     "verifyYourAgeSubtitle",
     "verifyYourAgeDescription",
     "accept",
-    "decline"
+    "decline",
+    "placeYourFaceInTheOval",
+    "cameraSubtitle"
   ],
 
   "it": [
@@ -2352,6 +2358,8 @@
     "verifyYourAgeSubtitle",
     "verifyYourAgeDescription",
     "accept",
-    "decline"
+    "decline",
+    "placeYourFaceInTheOval",
+    "cameraSubtitle"
   ]
 }

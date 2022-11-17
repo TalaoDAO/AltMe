@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CameraPage extends StatelessWidget {
@@ -59,6 +62,10 @@ class _CameraViewState extends State<CameraView> {
     final l10n = context.l10n;
     return BasePage(
       scrollView: false,
+      titleLeading: const BackLeadingButton(),
+      title: l10n.placeYourFaceInTheOval,
+      titleAlignment: Alignment.topCenter,
+      titleMargin: EdgeInsets.zero,
       padding: EdgeInsets.zero,
       body: BlocConsumer<CameraCubit, CameraState>(
         builder: (_, state) {
@@ -123,11 +130,15 @@ class _CameraViewState extends State<CameraView> {
             return Stack(
               fit: StackFit.expand,
               children: [
-                Center(
-                  child: Transform.scale(
-                    scale: scale,
-                    child: CameraPreview(
-                      cameraCubit.cameraController!,
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  blendMode: BlendMode.srcIn,
+                  child: Center(
+                    child: Transform.scale(
+                      scale: scale,
+                      child: CameraPreview(
+                        cameraCubit.cameraController!,
+                      ),
                     ),
                   ),
                 ),
