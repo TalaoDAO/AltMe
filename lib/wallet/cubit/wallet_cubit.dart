@@ -69,7 +69,11 @@ class WalletCubit extends Cubit<WalletState> {
     String? accountName,
     required String mnemonicOrKey,
     required bool isImported,
-    Function(CryptoAccount cryptoAccount)? onComplete,
+    Function({
+      required CryptoAccount cryptoAccount,
+      required MessageHandler messageHandler,
+    })?
+        onComplete,
   }) async {
     int index = 0;
 
@@ -87,43 +91,63 @@ class WalletCubit extends Cubit<WalletState> {
       );
     }
 
+    final CryptoAccount cryptoAccount = await createTezosAccount(
+      mnemonicOrKey: mnemonicOrKey,
+      index: index,
+      isImported: isImported,
+    );
+    onComplete?.call(
+      cryptoAccount: cryptoAccount,
+      messageHandler: ResponseMessage(
+        ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+      ),
+    );
+  }
+
+  Future<CryptoAccount> createTezosAccount({
+    String? accountName,
+    required String mnemonicOrKey,
+    required bool isImported,
+    required int index,
+  }) async {
     late String tezosKey;
     late String tezosWalletAddress;
     late String tezosSecretKey;
 
     final isSecretKey = mnemonicOrKey.startsWith('edsk') ||
         mnemonicOrKey.startsWith('spsk') ||
-        mnemonicOrKey.startsWith('p2sk') ||
-        mnemonicOrKey.startsWith('0x');
+        mnemonicOrKey.startsWith('p2sk');
 
-    tezosKey = isSecretKey
-        ? await keyGenerator.jwkFromSecretKey(
-            secretKey: mnemonicOrKey,
-          )
-        : await keyGenerator.jwkFromMnemonic(
-            mnemonic: mnemonicOrKey,
-            accountType: AccountType.tezos,
-            derivePathIndex: index,
-          );
+    if (isSecretKey) {
+      tezosKey = await keyGenerator.jwkFromSecretKey(
+        secretKey: mnemonicOrKey,
+      );
 
-    tezosSecretKey = isSecretKey
-        ? mnemonicOrKey
-        : await keyGenerator.secretKeyFromMnemonic(
-            mnemonic: mnemonicOrKey,
-            accountType: AccountType.tezos,
-            derivePathIndex: index,
-          );
+      tezosSecretKey = mnemonicOrKey;
 
-    tezosWalletAddress = isSecretKey
-        ? await keyGenerator.walletAddressFromSecretKey(
-            secretKey: tezosSecretKey,
-            accountType: AccountType.tezos,
-          )
-        : await keyGenerator.walletAddressFromMnemonic(
-            mnemonic: mnemonicOrKey,
-            accountType: AccountType.tezos,
-            derivePathIndex: index,
-          );
+      tezosWalletAddress = await keyGenerator.walletAddressFromSecretKey(
+        secretKey: tezosSecretKey,
+        accountType: AccountType.tezos,
+      );
+    } else {
+      tezosKey = await keyGenerator.jwkFromMnemonic(
+        mnemonic: mnemonicOrKey,
+        accountType: AccountType.tezos,
+        derivePathIndex: index,
+      );
+
+      tezosSecretKey = await keyGenerator.secretKeyFromMnemonic(
+        mnemonic: mnemonicOrKey,
+        accountType: AccountType.tezos,
+        derivePathIndex: index,
+      );
+
+      tezosWalletAddress = await keyGenerator.walletAddressFromMnemonic(
+        mnemonic: mnemonicOrKey,
+        accountType: AccountType.tezos,
+        derivePathIndex: index,
+      );
+    }
 
     String name = 'My Account ${index + 1}';
 
@@ -145,12 +169,12 @@ class WalletCubit extends Cubit<WalletState> {
 
     final CryptoAccount cryptoAccount = CryptoAccount(data: cryptoAccounts);
     final String cryptoAccountString = jsonEncode(cryptoAccount);
+
     await secureStorageProvider.set(
       SecureStorageKeys.cryptoAccount,
       cryptoAccountString,
     );
 
-    onComplete?.call(cryptoAccount);
     emitCryptoAccount(cryptoAccount);
 
     /// set new account as current
@@ -164,6 +188,8 @@ class WalletCubit extends Cubit<WalletState> {
     if (credential != null) {
       await insertCredential(credential);
     }
+
+    return cryptoAccount;
   }
 
   Future<void> editCryptoAccountName({

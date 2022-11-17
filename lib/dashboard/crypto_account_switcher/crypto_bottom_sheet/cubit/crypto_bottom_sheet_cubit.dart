@@ -46,13 +46,14 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
       accountName: accountName,
       isImported: false,
       mnemonicOrKey: ssiMnemonic!,
-      onComplete: (cryptoAccount) async {
+      onComplete: ({
+        required CryptoAccount cryptoAccount,
+        required MessageHandler messageHandler,
+      }) async {
         emit(
           state.success(
             cryptoAccount: cryptoAccount,
-            messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
-            ),
+            messageHandler: messageHandler,
           ),
         );
       },
