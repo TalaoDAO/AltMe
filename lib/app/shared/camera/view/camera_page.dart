@@ -118,8 +118,22 @@ class _CameraViewState extends State<CameraView> {
                           Uint8List.fromList(state.data!),
                         );
                       } else {
-                        return CameraPreview(
-                          cameraCubit.cameraController!,
+                        return Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            CameraPreview(
+                              cameraCubit.cameraController!,
+                            ),
+                            BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                              blendMode: BlendMode.screen,
+                              child: Container(
+                                width: double.infinity,
+                                height: double.infinity,
+                                color: Colors.transparent,
+                              ),
+                            ),
+                          ],
                         );
                       }
                     },
