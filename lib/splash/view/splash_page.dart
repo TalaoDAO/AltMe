@@ -6,6 +6,8 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
+import 'package:dio/dio.dart';
+import 'package:ebsi/ebsi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
@@ -77,6 +79,18 @@ class _SplashViewState extends State<SplashView> {
             }
             if (key == 'data') {
               beaconData = value;
+            }
+            if (uri.scheme == 'openid') {
+              final Dio client = Dio();
+
+              final String credentialType =
+                  Ebsi(client: client).getCredentialRequest(uri.toString());
+              context.read<DeepLinkCubit>().addDeepLink(credentialType);
+              final ssiKey = await secure_storage.getSecureStorage
+                  .get(SecureStorageKeys.ssiKey);
+              if (ssiKey != null) {
+                await context.read<QRCodeScanCubit>().openidDeepLink();
+              }
             }
           });
           if (isBeaconRequest && beaconData != '') {
