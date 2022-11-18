@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/blockchain/blockchain.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
@@ -18,22 +17,17 @@ class MockHomeCubit extends MockCubit<HomeState> implements HomeCubit {}
 
 class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {}
 
-class MockBlockchainCubit extends MockCubit<BlockchainState>
-    implements BlockchainCubit {}
-
 void main() {
   late SecureStorageProvider mockSecureStorage;
   late DIDCubit didCubit;
   late HomeCubit homeCubit;
   late WalletCubit walletCubit;
-  late BlockchainCubit blockchainCubit;
 
   setUp(() {
     mockSecureStorage = MockSecureStorage();
     didCubit = MockDidCubit();
     homeCubit = MockHomeCubit();
     walletCubit = MockWalletCubit();
-    blockchainCubit = MockBlockchainCubit();
   });
 
   group('Splash Cubit', () {
@@ -45,7 +39,6 @@ void main() {
           homeCubit: homeCubit,
           walletCubit: walletCubit,
           client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-          blockchainCubit: blockchainCubit,
         ).state,
         SplashStatus.init,
       );
@@ -65,7 +58,6 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            blockchainCubit: blockchainCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -84,7 +76,6 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            blockchainCubit: blockchainCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -110,7 +101,6 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            blockchainCubit: blockchainCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -129,7 +119,6 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            blockchainCubit: blockchainCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -157,7 +146,6 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            blockchainCubit: blockchainCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -176,7 +164,6 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            blockchainCubit: blockchainCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -206,7 +193,6 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            blockchainCubit: blockchainCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -225,7 +211,6 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            blockchainCubit: blockchainCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -257,7 +242,6 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            blockchainCubit: blockchainCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -276,7 +260,6 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            blockchainCubit: blockchainCubit,
           );
           await splashCubit.initialiseApp();
 
@@ -302,7 +285,6 @@ void main() {
               homeCubit: homeCubit,
               walletCubit: walletCubit,
               client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-              blockchainCubit: blockchainCubit,
             );
             await splashCubit.initialiseApp();
 
@@ -321,7 +303,6 @@ void main() {
               homeCubit: homeCubit,
               walletCubit: walletCubit,
               client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-              blockchainCubit: blockchainCubit,
             );
             await splashCubit.initialiseApp();
 
@@ -340,7 +321,6 @@ void main() {
               homeCubit: homeCubit,
               walletCubit: walletCubit,
               client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-              blockchainCubit: blockchainCubit,
             );
             await splashCubit.initialiseApp();
 

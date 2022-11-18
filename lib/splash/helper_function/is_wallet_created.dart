@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:altme/app/logger/logger.dart';
 import 'package:altme/app/shared/constants/constants.dart';
-import 'package:altme/blockchain/cubit/blockchain_cubit.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -9,7 +10,6 @@ Future<bool> isWalletCreated({
   required SecureStorageProvider secureStorageProvider,
   required DIDCubit didCubit,
   required WalletCubit walletCubit,
-  required BlockchainCubit blockchainCubit,
 }) async {
   final log = getLogger('IsWalletCreated');
 
@@ -67,9 +67,10 @@ Future<bool> isWalletCreated({
   await walletCubit.initialize(ssiKey: ssiKey);
 
   log.i('blockchain initialisation');
-  await blockchainCubit.initialize(
+  await blockchainInitialize(
     walletCubit: walletCubit,
     ssiMnemonic: ssiMnemonic,
+    secureStorageProvider: secureStorageProvider,
   );
 
   await didCubit.load(
@@ -80,4 +81,39 @@ Future<bool> isWalletCreated({
   );
 
   return true;
+}
+
+Future<void> blockchainInitialize({
+  required WalletCubit walletCubit,
+  required String ssiMnemonic,
+  required SecureStorageProvider secureStorageProvider,
+}) async {
+  // TODO(bibash): currentCryptoIndex => currentTezosIndex & currentEthIndex
+  final String? currentCryptoIndex =
+      await secureStorageProvider.get(SecureStorageKeys.currentCryptoIndex);
+
+  if (currentCryptoIndex != null && currentCryptoIndex.isNotEmpty) {
+    /// load active index
+    final activeIndex = int.parse(currentCryptoIndex);
+    await walletCubit.setCurrentWalletAccount(activeIndex);
+
+    final String? savedCryptoAccount =
+        await secureStorageProvider.get(SecureStorageKeys.cryptoAccount);
+
+    if (savedCryptoAccount != null && savedCryptoAccount.isNotEmpty) {
+      //load all the content of walletAddress
+      final cryptoAccountJson =
+          jsonDecode(savedCryptoAccount) as Map<String, dynamic>;
+      final CryptoAccount cryptoAccount =
+          CryptoAccount.fromJson(cryptoAccountJson);
+      walletCubit.emitCryptoAccount(cryptoAccount);
+    } else {
+      await walletCubit.setCurrentWalletAccount(0);
+    }
+  } else {
+    await walletCubit.createCryptoWallet(
+      mnemonicOrKey: ssiMnemonic,
+      isImported: false,
+    );
+  }
 }

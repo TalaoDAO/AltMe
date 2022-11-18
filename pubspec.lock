@@ -50,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
+  base58check:
+    dependency: transitive
+    description:
+      name: base58check
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   base_codecs:
     dependency: transitive
     description:
@@ -304,6 +311,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.17.2"
+  dart_bip32_bip44:
+    dependency: transitive
+    description:
+      name: dart_bip32_bip44
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   dart_style:
     dependency: transitive
     description:
@@ -311,6 +325,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3"
+  dart_web3:
+    dependency: transitive
+    description:
+      name: dart_web3
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   dartez:
     dependency: "direct main"
     description:

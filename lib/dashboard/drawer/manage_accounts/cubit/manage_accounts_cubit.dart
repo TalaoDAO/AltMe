@@ -46,13 +46,14 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
       accountName: accountName,
       isImported: false,
       mnemonicOrKey: ssiMnemonic!,
-      onComplete: (cryptoAccount) {
+      onComplete: ({
+        required CryptoAccount cryptoAccount,
+        required MessageHandler messageHandler,
+      }) async {
         emit(
           state.success(
             cryptoAccount: cryptoAccount,
-            messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
-            ),
+            messageHandler: messageHandler,
           ),
         );
       },
@@ -62,11 +63,13 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
   Future<void> editCryptoAccount({
     required String newAccountName,
     required int index,
+    required BlockchainType blockchainType,
   }) async {
     emit(state.loading());
     await walletCubit.editCryptoAccountName(
       newAccountName: newAccountName,
       index: index,
+      blockchainType: blockchainType,
       onComplete: (cryptoAccount) {
         emit(state.success(cryptoAccount: cryptoAccount));
       },

@@ -12,8 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class ImportFromOtherWalletPage extends StatelessWidget {
-  const ImportFromOtherWalletPage({
+class ImportFromWalletPage extends StatelessWidget {
+  const ImportFromWalletPage({
     Key? key,
     required this.walletTypeModel,
     this.accountName,
@@ -26,12 +26,12 @@ class ImportFromOtherWalletPage extends StatelessWidget {
     String? accountName,
   }) =>
       MaterialPageRoute<void>(
-        builder: (context) => ImportFromOtherWalletPage(
+        builder: (context) => ImportFromWalletPage(
           walletTypeModel: walletTypeModel,
           accountName: accountName,
           isFromOnboard: isFromOnboard,
         ),
-        settings: const RouteSettings(name: '/onBoardingImportFromWalletPage'),
+        settings: const RouteSettings(name: '/ImportFromWalletPage'),
       );
 
   final WalletTypeModel walletTypeModel;
@@ -238,9 +238,7 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
                 onPressed: !state.isMnemonicOrKeyValid
                     ? null
                     : () async {
-                        await context
-                            .read<ImportWalletCubit>()
-                            .saveMnemonicOrKey(
+                        await context.read<ImportWalletCubit>().import(
                               isFromOnboarding: widget.isFromOnboard,
                               accountName: widget.accountName,
                               mnemonicOrKey: mnemonicController.text,

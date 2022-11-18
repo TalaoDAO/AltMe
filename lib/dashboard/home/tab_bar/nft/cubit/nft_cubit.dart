@@ -30,6 +30,13 @@ class NftCubit extends Cubit<NftState> {
   final log = getLogger('NftCubit');
 
   Future<void> getTezosNftList() async {
+    final activeIndex = walletCubit.state.currentCryptoIndex;
+    if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType ==
+        BlockchainType.ethereum) {
+      emit(state.copyWith(status: AppStatus.idle));
+      return;
+    }
+
     if (state.offset == _offsetOfLoadedData) return;
     _offsetOfLoadedData = state.offset;
     if (data.length < state.offset) return;
@@ -40,7 +47,8 @@ class NftCubit extends Cubit<NftState> {
       } else {
         emit(state.loading());
       }
-      final activeIndex = walletCubit.state.currentCryptoIndex;
+
+      //final activeIndex = walletCubit.state.currentCryptoIndex;
       final walletAddress =
           walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
 

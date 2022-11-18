@@ -62,6 +62,7 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
         await context.read<ManageAccountsCubit>().editCryptoAccount(
               newAccountName: newCryptoAccountName,
               index: index,
+              blockchainType: cryptoAccountData.blockchainType,
             );
       }
     }
