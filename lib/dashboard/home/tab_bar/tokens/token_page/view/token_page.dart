@@ -54,6 +54,7 @@ class _TokensViewState extends State<TokensView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
     return MultiBlocListener(
       listeners: [
         BlocListener<WalletCubit, WalletState>(
@@ -105,21 +106,44 @@ class _TokensViewState extends State<TokensView> {
               ),
             ),
             const SizedBox(height: Sizes.spaceXSmall),
-            TotalWalletBalance(
-              tokensCubit: context.read<TokensCubit>(),
-            ),
-            const SizedBox(
-              height: Sizes.spaceSmall,
-            ),
-            AddTokenButton(
-              onTap: () {
-                Navigator.of(context)
-                    .push<void>(
-                      AllTokensPage.route(),
-                    )
-                    .then(
-                      (value) => context.read<TokensCubit>().fetchFromZero(),
-                    );
+            BlocBuilder<TokensCubit, TokensState>(
+              builder: (context, state) {
+                final index =
+                    context.read<WalletCubit>().state.currentCryptoIndex;
+
+                final blockchain = context
+                    .read<WalletCubit>()
+                    .state
+                    .cryptoAccount
+                    .data[index]
+                    .blockchainType;
+
+                if (blockchain == BlockchainType.ethereum) {
+                  return Container();
+                }
+
+                return Column(
+                  children: [
+                    TotalWalletBalance(
+                      tokensCubit: context.read<TokensCubit>(),
+                    ),
+                    const SizedBox(
+                      height: Sizes.spaceSmall,
+                    ),
+                    AddTokenButton(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push<void>(
+                              AllTokensPage.route(),
+                            )
+                            .then(
+                              (value) =>
+                                  context.read<TokensCubit>().fetchFromZero(),
+                            );
+                      },
+                    ),
+                  ],
+                );
               },
             ),
             const SizedBox(
@@ -154,6 +178,22 @@ class _TokensViewState extends State<TokensView> {
                         state.message!.messageHandler!;
                     message =
                         messageHandler.getMessage(context, messageHandler);
+                  }
+
+                  final index =
+                      context.read<WalletCubit>().state.currentCryptoIndex;
+
+                  final blockchain = context
+                      .read<WalletCubit>()
+                      .state
+                      .cryptoAccount
+                      .data[index]
+                      .blockchainType;
+
+                  if (blockchain == BlockchainType.ethereum) {
+                    return Center(
+                      child: Text(l10n.thisFeatureIsNotSupportedMessage),
+                    );
                   }
 
                   if (state.status == AppStatus.fetching) {

@@ -269,14 +269,6 @@ class WalletCubit extends Cubit<WalletState> {
     await setCurrentWalletAccount(cryptoAccounts.length - 1);
     log.i('$blockchainType created');
 
-    switch (blockchainType) {
-      case BlockchainType.ethereum:
-        // TODO: Handle this case.
-        break;
-      case BlockchainType.tezos:
-        break;
-    }
-
     final credential = await generateAssociatedWalletCredential(
       accountName: cryptoAccountData.name,
       walletAddress: walletAddress,

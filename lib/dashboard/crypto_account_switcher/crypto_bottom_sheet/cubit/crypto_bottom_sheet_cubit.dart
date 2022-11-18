@@ -69,11 +69,12 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
   }) async {
     emit(state.loading());
     await walletCubit.editCryptoAccountName(
-        newAccountName: newAccountName,
-        blockchainType: blockchainType,
-        index: index,
-        onComplete: (cryptoAccount) {
-          emit(state.success(cryptoAccount: cryptoAccount));
-        });
+      newAccountName: newAccountName,
+      blockchainType: blockchainType,
+      index: index,
+      onComplete: (cryptoAccount) {
+        emit(state.success(cryptoAccount: cryptoAccount));
+      },
+    );
   }
 }
