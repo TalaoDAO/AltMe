@@ -114,22 +114,12 @@ class _CameraViewState extends State<CameraView> {
                   child: Builder(
                     builder: (context) {
                       if (state.status == CameraStatus.imageCaptured) {
-                        return Transform.scale(
-                          scale: scale,
-                          child: Image.memory(Uint8List.fromList(state.data!)),
+                        return Image.memory(
+                          Uint8List.fromList(state.data!),
                         );
                       } else {
-                        return BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          blendMode: BlendMode.srcIn,
-                          child: Center(
-                            child: Transform.scale(
-                              scale: scale,
-                              child: CameraPreview(
-                                cameraCubit.cameraController!,
-                              ),
-                            ),
-                          ),
+                        return CameraPreview(
+                          cameraCubit.cameraController!,
                         );
                       }
                     },

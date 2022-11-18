@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
 // import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
-// import 'package:image/image.dart' as img;
+import 'package:image/image.dart' as img;
 import 'package:json_annotation/json_annotation.dart';
 
 part 'camera_cubit.g.dart';
@@ -73,17 +73,17 @@ class CameraCubit extends Cubit<CameraState> {
 
   Future<void> takePhoto() async {
     try {
-      await cameraController!.stopImageStream();
+      //await cameraController!.stopImageStream();
       final xFile = await cameraController!.takePicture();
       final photoCaptured = (await xFile.readAsBytes()).toList();
-      // final fixedImageBytes =
-      //     img.encodeJpg(img.flipHorizontal(img.decodeImage(photoCaptured)!));
-      // emit(
-      //   state.copyWith(
-      //     status: CameraStatus.imageCaptured,
-      //     data: fixedImageBytes,
-      //   ),
-      // );
+      final fixedImageBytes =
+          img.encodeJpg(img.flipHorizontal(img.decodeImage(photoCaptured)!));
+      emit(
+        state.copyWith(
+          status: CameraStatus.imageCaptured,
+          data: fixedImageBytes,
+        ),
+      );
     } catch (e, s) {
       emit(state.copyWith(status: CameraStatus.error));
       logger.e('error : $e, stack: $s');
