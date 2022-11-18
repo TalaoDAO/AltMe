@@ -188,14 +188,21 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// Note: while importing derivePathIndex is always 0
 
-    late String tezosKey;
+    String? tezosKey;
     late String walletAddress;
     late String secretKey;
 
     if (isSecretKey) {
-      tezosKey = await keyGenerator.jwkFromSecretKey(
-        secretKey: mnemonicOrKey,
-      );
+      switch (blockchainType) {
+        case BlockchainType.ethereum:
+          // TODO: Handle this case.
+          break;
+        case BlockchainType.tezos:
+          tezosKey = await keyGenerator.jwkFromSecretKey(
+            secretKey: mnemonicOrKey,
+          );
+          break;
+      }
 
       secretKey = mnemonicOrKey;
 
@@ -204,11 +211,19 @@ class WalletCubit extends Cubit<WalletState> {
         accountType: accountType,
       );
     } else {
-      tezosKey = await keyGenerator.jwkFromMnemonic(
-        mnemonic: mnemonicOrKey,
-        accountType: accountType,
-        derivePathIndex: derivePathIndex,
-      );
+      switch (blockchainType) {
+        case BlockchainType.ethereum:
+          // TODO: Handle this case.
+
+          break;
+        case BlockchainType.tezos:
+          tezosKey = await keyGenerator.jwkFromMnemonic(
+            mnemonic: mnemonicOrKey,
+            accountType: accountType,
+            derivePathIndex: derivePathIndex,
+          );
+          break;
+      }
 
       secretKey = await keyGenerator.secretKeyFromMnemonic(
         mnemonic: mnemonicOrKey,
@@ -223,7 +238,20 @@ class WalletCubit extends Cubit<WalletState> {
       );
     }
 
-    String name = 'My Account ${state.cryptoAccount.data.length}';
+    /// tracking added accounts
+    final String noOfAddedAccounts = await secureStorageProvider.get(
+          SecureStorageKeys.cryptoAccounTrackingIndex,
+        ) ??
+        '0';
+
+    final int newCount = int.parse(noOfAddedAccounts) + 1;
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.cryptoAccounTrackingIndex,
+      newCount.toString(),
+    );
+
+    String name = 'My Account $newCount';
 
     if (accountName != null && accountName.isNotEmpty) {
       name = accountName;
@@ -237,7 +265,6 @@ class WalletCubit extends Cubit<WalletState> {
       isImported: isImported,
       blockchainType: blockchainType,
     );
-
     final cryptoAccounts = List.of(state.cryptoAccount.data)
       ..add(cryptoAccountData);
 
@@ -253,6 +280,7 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// set new account as current
     await setCurrentWalletAccount(cryptoAccounts.length - 1);
+    log.i('$blockchainType created');
 
     switch (blockchainType) {
       case BlockchainType.ethereum:
@@ -262,7 +290,7 @@ class WalletCubit extends Cubit<WalletState> {
         final credential = await generateAssociatedWalletCredential(
           accountName: cryptoAccountData.name,
           walletAddress: walletAddress,
-          cryptoKey: tezosKey,
+          cryptoKey: tezosKey!,
           didCubit: didCubit,
           didKitProvider: didKitProvider,
         );
