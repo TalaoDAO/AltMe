@@ -53,7 +53,9 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
         emit(
           state.success(
             cryptoAccount: cryptoAccount,
-            messageHandler: messageHandler,
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+            ),
           ),
         );
       },

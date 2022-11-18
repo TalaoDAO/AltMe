@@ -21,7 +21,7 @@ class CryptoAccountData extends Equatable {
       _$CryptoAccountDataFromJson(json);
 
   String name;
-  final String key;
+  final String? key;
   final String secretKey;
   final String walletAddress;
   final bool isImported;

@@ -135,7 +135,7 @@ Future<bool> getCredentialsFromIssuer(
           activities: [Activity(acquisitionAt: DateTime.now())],
         );
         // insert the credential in the wallet
-        await walletCubit.insertCredential(credentialModel);
+        await walletCubit.insertCredential(credential: credentialModel);
       }
     }
     unawaited(unregisterMultipleCredentialsProcess(secureStorageProvider));

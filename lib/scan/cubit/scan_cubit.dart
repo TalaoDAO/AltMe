@@ -168,7 +168,7 @@ class ScanCubit extends Cubit<ScanState> {
             ..add(Activity(acquisitionAt: DateTime.now()));
 
       await walletCubit.insertCredential(
-        CredentialModel.copyWithData(
+        credential: CredentialModel.copyWithData(
           oldCredentialModel: credentialModel,
           newData: jsonCredential as Map<String, dynamic>,
           activities: activities,

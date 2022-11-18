@@ -43,6 +43,8 @@ class WalletCubit extends Cubit<WalletState> {
   final DIDKitProvider didKitProvider;
   final AdvanceSettingsCubit advanceSettingsCubit;
 
+  final log = getLogger('WalletCubit');
+
   Future initialize({required String? ssiKey}) async {
     if (ssiKey != null) {
       if (ssiKey.isNotEmpty) {
@@ -75,9 +77,79 @@ class WalletCubit extends Cubit<WalletState> {
     })?
         onComplete,
   }) async {
-    int index = 0;
+    final isSecretKey = mnemonicOrKey.startsWith('edsk') ||
+        mnemonicOrKey.startsWith('spsk') ||
+        mnemonicOrKey.startsWith('p2sk') ||
+        mnemonicOrKey.startsWith('0x');
 
-    if (!isImported) {
+    if (isSecretKey) {
+      final isTezosSecretKey = mnemonicOrKey.startsWith('edsk') ||
+          mnemonicOrKey.startsWith('spsk') ||
+          mnemonicOrKey.startsWith('p2sk');
+      if (isTezosSecretKey) {
+        log.i('creating both tezos account');
+        final CryptoAccount cryptoAccount = await createTezosAccount(
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+        );
+
+        onComplete?.call(
+          cryptoAccount: cryptoAccount,
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+          ),
+        );
+      } else {
+        log.i('creating ethereum account');
+        final CryptoAccount cryptoAccount = await createTezosAccount(
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+        );
+
+        onComplete?.call(
+          cryptoAccount: cryptoAccount,
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+          ),
+        );
+      }
+    } else {
+      log.i('creating both tezos and ethereum account');
+      await createTezosAccount(
+        mnemonicOrKey: mnemonicOrKey,
+        isImported: isImported,
+        isSecretKey: isSecretKey,
+      );
+
+      final CryptoAccount updatedCryptoAccount = await createEthereumAccount(
+        mnemonicOrKey: mnemonicOrKey,
+        isImported: isImported,
+        isSecretKey: isSecretKey,
+      );
+
+      onComplete?.call(
+        cryptoAccount: updatedCryptoAccount,
+        messageHandler: ResponseMessage(
+          ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+        ),
+      );
+    }
+  }
+
+  Future<CryptoAccount> createTezosAccount({
+    String? accountName,
+    required String mnemonicOrKey,
+    required bool isImported,
+    required bool isSecretKey,
+  }) async {
+    int index = 0;
+    final bool isCreated = !isImported;
+
+    log.i('isImported - $isImported');
+    if (isCreated) {
+      /// Note: while adding derivePathIndex is always increased
       final String? derivePathIndex = await secureStorageProvider
           .get(SecureStorageKeys.tezosDerivePathIndex);
 
@@ -89,34 +161,14 @@ class WalletCubit extends Cubit<WalletState> {
         SecureStorageKeys.tezosDerivePathIndex,
         index.toString(),
       );
+      log.i('tezosDerivePathIndex - $index');
     }
 
-    final CryptoAccount cryptoAccount = await createTezosAccount(
-      mnemonicOrKey: mnemonicOrKey,
-      index: index,
-      isImported: isImported,
-    );
-    onComplete?.call(
-      cryptoAccount: cryptoAccount,
-      messageHandler: ResponseMessage(
-        ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
-      ),
-    );
-  }
+    /// Note: while importing derivePathIndex is always 0
 
-  Future<CryptoAccount> createTezosAccount({
-    String? accountName,
-    required String mnemonicOrKey,
-    required bool isImported,
-    required int index,
-  }) async {
     late String tezosKey;
     late String tezosWalletAddress;
     late String tezosSecretKey;
-
-    final isSecretKey = mnemonicOrKey.startsWith('edsk') ||
-        mnemonicOrKey.startsWith('spsk') ||
-        mnemonicOrKey.startsWith('p2sk');
 
     if (isSecretKey) {
       tezosKey = await keyGenerator.jwkFromSecretKey(
@@ -186,8 +238,116 @@ class WalletCubit extends Cubit<WalletState> {
       cryptoKey: tezosKey,
     );
     if (credential != null) {
-      await insertCredential(credential);
+      await insertCredential(
+        credential: credential,
+        showMessage: index != 0,
+      );
     }
+
+    return cryptoAccount;
+  }
+
+  Future<CryptoAccount> createEthereumAccount({
+    String? accountName,
+    required String mnemonicOrKey,
+    required bool isImported,
+    required bool isSecretKey,
+  }) async {
+    int index = 0;
+    final bool isCreated = !isImported;
+
+    log.i('isImported - $isImported');
+    if (isCreated) {
+      /// Note: while adding derivePathIndex is always increased
+      final String? derivePathIndex = await secureStorageProvider
+          .get(SecureStorageKeys.ethereumDerivePathIndex);
+
+      if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
+        index = int.parse(derivePathIndex) + 1;
+      }
+      await secureStorageProvider.set(
+        SecureStorageKeys.ethereumDerivePathIndex,
+        index.toString(),
+      );
+      log.i('ethereumDerivePathIndex - $index');
+    }
+
+    //late String tezosKey;
+    late String ethereumWalletAddress;
+    late String ethereumSecretKey;
+
+    if (isSecretKey) {
+      // tezosKey = await keyGenerator.jwkFromSecretKey(
+      //   secretKey: mnemonicOrKey,
+      // );
+
+      ethereumSecretKey = mnemonicOrKey;
+
+      ethereumWalletAddress = await keyGenerator.walletAddressFromSecretKey(
+        secretKey: ethereumSecretKey,
+        accountType: AccountType.ethereum,
+      );
+    } else {
+      // tezosKey = await keyGenerator.jwkFromMnemonic(
+      //   mnemonic: mnemonicOrKey,
+      //   accountType: AccountType.tezos,
+      //   derivePathIndex: index,
+      // );
+
+      ethereumSecretKey = await keyGenerator.secretKeyFromMnemonic(
+        mnemonic: mnemonicOrKey,
+        accountType: AccountType.ethereum,
+        derivePathIndex: index,
+      );
+
+      ethereumWalletAddress = await keyGenerator.walletAddressFromMnemonic(
+        mnemonic: mnemonicOrKey,
+        accountType: AccountType.ethereum,
+        derivePathIndex: index,
+      );
+    }
+
+    String name = 'My Account ${index + 1}';
+
+    if (accountName != null && accountName.isNotEmpty) {
+      name = accountName;
+    }
+
+    final CryptoAccountData cryptoAccountData = CryptoAccountData(
+      name: name,
+      key: null,
+      walletAddress: ethereumWalletAddress,
+      secretKey: ethereumSecretKey,
+      isImported: isImported,
+      blockchainType: BlockchainType.ethereum,
+    );
+
+    final cryptoAccounts = List.of(state.cryptoAccount.data)
+      ..add(cryptoAccountData);
+
+    final CryptoAccount cryptoAccount = CryptoAccount(data: cryptoAccounts);
+    final String cryptoAccountString = jsonEncode(cryptoAccount);
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.cryptoAccount,
+      cryptoAccountString,
+    );
+
+    emitCryptoAccount(cryptoAccount);
+
+    /// set new account as current
+    await setCurrentWalletAccount(cryptoAccounts.length - 1);
+
+    // TODO(bibash): generate AssociatedEthereumWallet
+
+    // final credential = await generateAssociatedWalletCredential(
+    //   accountName: cryptoAccountData.name,
+    //   walletAddress: tezosWalletAddress,
+    //   cryptoKey: tezosKey,
+    // );
+    // if (credential != null) {
+    //   await insertCredential(credential);
+    // }
 
     return cryptoAccount;
   }
@@ -228,7 +388,7 @@ class WalletCubit extends Cubit<WalletState> {
       final credential = await generateAssociatedWalletCredential(
         accountName: cryptoAccountData.name,
         walletAddress: cryptoAccountData.walletAddress,
-        cryptoKey: cryptoAccountData.key,
+        cryptoKey: cryptoAccountData.key!,
         oldId: filteredCredentialList.first.id,
       );
       if (credential != null) {
@@ -238,10 +398,10 @@ class WalletCubit extends Cubit<WalletState> {
       final credential = await generateAssociatedWalletCredential(
         accountName: cryptoAccountData.name,
         walletAddress: cryptoAccountData.walletAddress,
-        cryptoKey: cryptoAccountData.key,
+        cryptoKey: cryptoAccountData.key!,
       );
       if (credential != null) {
-        await insertCredential(credential);
+        await insertCredential(credential: credential);
       }
     }
 
@@ -336,7 +496,10 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future insertCredential(CredentialModel credential) async {
+  Future insertCredential({
+    required CredentialModel credential,
+    bool showMessage = true,
+  }) async {
     /// Old EmailPass needs to be removed if currently adding new EmailPass
     /// with same email address
     if (credential
@@ -366,8 +529,8 @@ class WalletCubit extends Cubit<WalletState> {
         }
       }
     }
-    // if same email credential is present
 
+    /// if same email credential is present
     await repository.insert(credential);
     final credentials = List.of(state.credentials)..add(credential);
 
@@ -424,9 +587,11 @@ class WalletCubit extends Cubit<WalletState> {
       state.copyWith(
         status: WalletStatus.insert,
         credentials: credentials,
-        messageHandler: ResponseMessage(
-          ResponseString.RESPONSE_STRING_CREDENTIAL_ADDED_MESSAGE,
-        ),
+        messageHandler: showMessage
+            ? ResponseMessage(
+                ResponseString.RESPONSE_STRING_CREDENTIAL_ADDED_MESSAGE,
+              )
+            : null,
       ),
     );
   }
