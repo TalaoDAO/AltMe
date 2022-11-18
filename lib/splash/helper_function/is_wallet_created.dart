@@ -90,7 +90,7 @@ Future<void> blockchainInitialize({
 }) async {
   // TODO(bibash): currentCryptoIndex => currentTezosIndex & currentEthIndex
   final String? currentCryptoIndex =
-      await secureStorageProvider.get(SecureStorageKeys.currentTezosIndex);
+      await secureStorageProvider.get(SecureStorageKeys.currentCryptoIndex);
 
   if (currentCryptoIndex != null && currentCryptoIndex.isNotEmpty) {
     /// load active index

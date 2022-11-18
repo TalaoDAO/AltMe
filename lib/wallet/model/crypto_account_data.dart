@@ -10,7 +10,6 @@ part 'crypto_account_data.g.dart';
 class CryptoAccountData extends Equatable {
   CryptoAccountData({
     required this.name,
-    required this.key,
     required this.secretKey,
     required this.walletAddress,
     this.isImported = false,
@@ -21,7 +20,6 @@ class CryptoAccountData extends Equatable {
       _$CryptoAccountDataFromJson(json);
 
   String name;
-  final String? key;
   final String secretKey;
   final String walletAddress;
   final bool isImported;
@@ -31,5 +29,5 @@ class CryptoAccountData extends Equatable {
 
   @override
   List<Object?> get props =>
-      [name, key, secretKey, walletAddress, isImported, blockchainType];
+      [name, secretKey, walletAddress, isImported, blockchainType];
 }

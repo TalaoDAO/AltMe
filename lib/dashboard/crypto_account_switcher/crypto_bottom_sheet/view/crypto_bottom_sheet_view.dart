@@ -64,6 +64,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
         await context.read<CryptoBottomSheetCubit>().editCryptoAccount(
               newAccountName: newCryptoAccountName,
               index: index,
+              blockchainType: cryptoAccountData.blockchainType,
             );
       }
     }

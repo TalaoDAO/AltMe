@@ -43,8 +43,7 @@ class SecureStorageKeys {
 
   static const String cryptoAccount = 'cryptoAccount';
   static const String cryptoAccounTrackingIndex = 'cryptoAccounTrackingIndex';
-  static const String currentTezosIndex = 'currentTezosIndex';
-  static const String currentEthereumIndex = 'currentEthereumIndex';
+  static const String currentCryptoIndex = 'currentCryptoIndex';
 
   static const String tezosDerivePathIndex = 'tezosDerivePathIndex';
   static const String ethereumDerivePathIndex = 'ethereumDerivePathIndex';

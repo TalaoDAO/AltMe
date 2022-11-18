@@ -63,11 +63,13 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
   Future<void> editCryptoAccount({
     required String newAccountName,
     required int index,
+    required BlockchainType blockchainType,
   }) async {
     emit(state.loading());
     await walletCubit.editCryptoAccountName(
       newAccountName: newAccountName,
       index: index,
+      blockchainType: blockchainType,
       onComplete: (cryptoAccount) {
         emit(state.success(cryptoAccount: cryptoAccount));
       },

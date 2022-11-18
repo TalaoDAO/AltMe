@@ -58,7 +58,7 @@ class WalletCubit extends Cubit<WalletState> {
   Future<void> setCurrentWalletAccount(int index) async {
     emit(state.loading());
     await secureStorageProvider.set(
-      SecureStorageKeys.currentTezosIndex,
+      SecureStorageKeys.currentCryptoIndex,
       index.toString(),
     );
     emit(
@@ -79,6 +79,12 @@ class WalletCubit extends Cubit<WalletState> {
     })?
         onComplete,
   }) async {
+    /// tracking added accounts
+    final String totalAccountsYet = await secureStorageProvider.get(
+          SecureStorageKeys.cryptoAccounTrackingIndex,
+        ) ??
+        '0';
+
     final isSecretKey = mnemonicOrKey.startsWith('edsk') ||
         mnemonicOrKey.startsWith('spsk') ||
         mnemonicOrKey.startsWith('p2sk') ||
@@ -95,6 +101,8 @@ class WalletCubit extends Cubit<WalletState> {
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.tezos,
+          totalAccountsYet: int.parse(totalAccountsYet),
+          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
         );
 
         onComplete?.call(
@@ -110,6 +118,8 @@ class WalletCubit extends Cubit<WalletState> {
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.ethereum,
+          totalAccountsYet: int.parse(totalAccountsYet),
+          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
         );
         onComplete?.call(
           cryptoAccount: cryptoAccount,
@@ -125,6 +135,8 @@ class WalletCubit extends Cubit<WalletState> {
         isImported: isImported,
         isSecretKey: isSecretKey,
         blockchainType: BlockchainType.tezos,
+        totalAccountsYet: int.parse(totalAccountsYet),
+        showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
       );
 
       final CryptoAccount updatedCryptoAccount =
@@ -133,6 +145,8 @@ class WalletCubit extends Cubit<WalletState> {
         isImported: isImported,
         isSecretKey: isSecretKey,
         blockchainType: BlockchainType.ethereum,
+        totalAccountsYet: int.parse(totalAccountsYet) + 1,
+        showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
       );
 
       onComplete?.call(
@@ -150,6 +164,8 @@ class WalletCubit extends Cubit<WalletState> {
     required bool isImported,
     required bool isSecretKey,
     required BlockchainType blockchainType,
+    required int totalAccountsYet,
+    required bool showCredentialAddMessage,
   }) async {
     late AccountType accountType;
 
@@ -188,22 +204,10 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// Note: while importing derivePathIndex is always 0
 
-    String? tezosKey;
     late String walletAddress;
     late String secretKey;
 
     if (isSecretKey) {
-      switch (blockchainType) {
-        case BlockchainType.ethereum:
-          // TODO: Handle this case.
-          break;
-        case BlockchainType.tezos:
-          tezosKey = await keyGenerator.jwkFromSecretKey(
-            secretKey: mnemonicOrKey,
-          );
-          break;
-      }
-
       secretKey = mnemonicOrKey;
 
       walletAddress = await keyGenerator.walletAddressFromSecretKey(
@@ -211,20 +215,6 @@ class WalletCubit extends Cubit<WalletState> {
         accountType: accountType,
       );
     } else {
-      switch (blockchainType) {
-        case BlockchainType.ethereum:
-          // TODO: Handle this case.
-
-          break;
-        case BlockchainType.tezos:
-          tezosKey = await keyGenerator.jwkFromMnemonic(
-            mnemonic: mnemonicOrKey,
-            accountType: accountType,
-            derivePathIndex: derivePathIndex,
-          );
-          break;
-      }
-
       secretKey = await keyGenerator.secretKeyFromMnemonic(
         mnemonic: mnemonicOrKey,
         accountType: accountType,
@@ -238,13 +228,7 @@ class WalletCubit extends Cubit<WalletState> {
       );
     }
 
-    /// tracking added accounts
-    final String noOfAddedAccounts = await secureStorageProvider.get(
-          SecureStorageKeys.cryptoAccounTrackingIndex,
-        ) ??
-        '0';
-
-    final int newCount = int.parse(noOfAddedAccounts) + 1;
+    final int newCount = totalAccountsYet + 1;
 
     await secureStorageProvider.set(
       SecureStorageKeys.cryptoAccounTrackingIndex,
@@ -257,9 +241,12 @@ class WalletCubit extends Cubit<WalletState> {
       name = accountName;
     }
 
+    final ssiKey = await secureStorageProvider.get(
+      SecureStorageKeys.ssiKey,
+    );
+
     final CryptoAccountData cryptoAccountData = CryptoAccountData(
       name: name,
-      key: tezosKey,
       walletAddress: walletAddress,
       secretKey: secretKey,
       isImported: isImported,
@@ -287,21 +274,23 @@ class WalletCubit extends Cubit<WalletState> {
         // TODO: Handle this case.
         break;
       case BlockchainType.tezos:
-        final credential = await generateAssociatedWalletCredential(
-          accountName: cryptoAccountData.name,
-          walletAddress: walletAddress,
-          cryptoKey: tezosKey!,
-          didCubit: didCubit,
-          didKitProvider: didKitProvider,
-        );
-
-        if (credential != null) {
-          await insertCredential(
-            credential: credential,
-            showMessage: derivePathIndex != 0,
-          );
-        }
         break;
+    }
+
+    final credential = await generateAssociatedWalletCredential(
+      accountName: cryptoAccountData.name,
+      walletAddress: walletAddress,
+      ssiKey: ssiKey!,
+      didCubit: didCubit,
+      didKitProvider: didKitProvider,
+      blockchainType: blockchainType,
+    );
+
+    if (credential != null) {
+      await insertCredential(
+        credential: credential,
+        showMessage: showCredentialAddMessage,
+      );
     }
 
     return cryptoAccount;
@@ -311,6 +300,7 @@ class WalletCubit extends Cubit<WalletState> {
     required String newAccountName,
     required int index,
     Function(CryptoAccount cryptoAccount)? onComplete,
+    required BlockchainType blockchainType,
   }) async {
     final CryptoAccountData cryptoAccountData = state.cryptoAccount.data[index];
     cryptoAccountData.name = newAccountName;
@@ -338,15 +328,20 @@ class WalletCubit extends Cubit<WalletState> {
       oldCredentialList,
     );
 
+    final ssiKey = await secureStorageProvider.get(
+      SecureStorageKeys.ssiKey,
+    );
+
     /// update or create AssociatedAddres credential with new name
     if (filteredCredentialList.isNotEmpty) {
       final credential = await generateAssociatedWalletCredential(
         accountName: cryptoAccountData.name,
         walletAddress: cryptoAccountData.walletAddress,
-        cryptoKey: cryptoAccountData.key!,
+        ssiKey: ssiKey!,
         oldId: filteredCredentialList.first.id,
         didCubit: didCubit,
         didKitProvider: didKitProvider,
+        blockchainType: blockchainType,
       );
       if (credential != null) {
         await updateCredential(credential: credential);
@@ -355,9 +350,10 @@ class WalletCubit extends Cubit<WalletState> {
       final credential = await generateAssociatedWalletCredential(
         accountName: cryptoAccountData.name,
         walletAddress: cryptoAccountData.walletAddress,
-        cryptoKey: cryptoAccountData.key!,
+        ssiKey: ssiKey!,
         didCubit: didCubit,
         didKitProvider: didKitProvider,
+        blockchainType: blockchainType,
       );
       if (credential != null) {
         await insertCredential(credential: credential);
@@ -580,11 +576,12 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// crypto
     await secureStorageProvider.delete(SecureStorageKeys.cryptoAccount);
+    await secureStorageProvider
+        .delete(SecureStorageKeys.cryptoAccounTrackingIndex);
     await secureStorageProvider.delete(SecureStorageKeys.tezosDerivePathIndex);
     await secureStorageProvider
         .delete(SecureStorageKeys.ethereumDerivePathIndex);
-    await secureStorageProvider.delete(SecureStorageKeys.currentTezosIndex);
-    await secureStorageProvider.delete(SecureStorageKeys.currentEthereumIndex);
+    await secureStorageProvider.delete(SecureStorageKeys.currentCryptoIndex);
     await secureStorageProvider.delete(SecureStorageKeys.data);
 
     /// credentials
