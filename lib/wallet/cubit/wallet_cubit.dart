@@ -89,7 +89,7 @@ class WalletCubit extends Cubit<WalletState> {
           mnemonicOrKey.startsWith('spsk') ||
           mnemonicOrKey.startsWith('p2sk');
       if (isTezosSecretKey) {
-        log.i('creating both tezos account');
+        log.i('creating tezos account');
         final CryptoAccount cryptoAccount = await createTezosAccount(
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
@@ -104,7 +104,7 @@ class WalletCubit extends Cubit<WalletState> {
         );
       } else {
         log.i('creating ethereum account');
-        final CryptoAccount cryptoAccount = await createTezosAccount(
+        final CryptoAccount cryptoAccount = await createEthereumAccount(
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
