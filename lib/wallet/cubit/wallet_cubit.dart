@@ -90,10 +90,11 @@ class WalletCubit extends Cubit<WalletState> {
           mnemonicOrKey.startsWith('p2sk');
       if (isTezosSecretKey) {
         log.i('creating tezos account');
-        final CryptoAccount cryptoAccount = await createTezosAccount(
+        final CryptoAccount cryptoAccount = await createTezosOrEthereumAccount(
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.tezos,
         );
 
         onComplete?.call(
@@ -104,12 +105,12 @@ class WalletCubit extends Cubit<WalletState> {
         );
       } else {
         log.i('creating ethereum account');
-        final CryptoAccount cryptoAccount = await createEthereumAccount(
+        final CryptoAccount cryptoAccount = await createTezosOrEthereumAccount(
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.ethereum,
         );
-
         onComplete?.call(
           cryptoAccount: cryptoAccount,
           messageHandler: ResponseMessage(
@@ -119,16 +120,19 @@ class WalletCubit extends Cubit<WalletState> {
       }
     } else {
       log.i('creating both tezos and ethereum account');
-      await createTezosAccount(
+      await createTezosOrEthereumAccount(
         mnemonicOrKey: mnemonicOrKey,
         isImported: isImported,
         isSecretKey: isSecretKey,
+        blockchainType: BlockchainType.tezos,
       );
 
-      final CryptoAccount updatedCryptoAccount = await createEthereumAccount(
+      final CryptoAccount updatedCryptoAccount =
+          await createTezosOrEthereumAccount(
         mnemonicOrKey: mnemonicOrKey,
         isImported: isImported,
         isSecretKey: isSecretKey,
+        blockchainType: BlockchainType.ethereum,
       );
 
       onComplete?.call(
@@ -140,70 +144,86 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future<CryptoAccount> createTezosAccount({
+  Future<CryptoAccount> createTezosOrEthereumAccount({
     String? accountName,
     required String mnemonicOrKey,
     required bool isImported,
     required bool isSecretKey,
+    required BlockchainType blockchainType,
   }) async {
-    int index = 0;
+    late AccountType accountType;
+
+    switch (blockchainType) {
+      case BlockchainType.ethereum:
+        accountType = AccountType.ethereum;
+        break;
+      case BlockchainType.tezos:
+        accountType = AccountType.tezos;
+        break;
+    }
+
+    int derivePathIndex = 0;
     final bool isCreated = !isImported;
 
     log.i('isImported - $isImported');
     if (isCreated) {
       /// Note: while adding derivePathIndex is always increased
-      final String? derivePathIndex = await secureStorageProvider
-          .get(SecureStorageKeys.tezosDerivePathIndex);
+      final String? savedDerivePathIndex = await secureStorageProvider.get(
+        blockchainType == BlockchainType.tezos
+            ? SecureStorageKeys.tezosDerivePathIndex
+            : SecureStorageKeys.ethereumDerivePathIndex,
+      );
 
-      if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
-        index = int.parse(derivePathIndex) + 1;
+      if (savedDerivePathIndex != null && savedDerivePathIndex.isNotEmpty) {
+        derivePathIndex = int.parse(savedDerivePathIndex) + 1;
       }
 
       await secureStorageProvider.set(
         SecureStorageKeys.tezosDerivePathIndex,
-        index.toString(),
+        derivePathIndex.toString(),
       );
-      log.i('tezosDerivePathIndex - $index');
     }
+
+    log.i('derivePathIndex - $derivePathIndex');
 
     /// Note: while importing derivePathIndex is always 0
 
     late String tezosKey;
-    late String tezosWalletAddress;
-    late String tezosSecretKey;
+    late String walletAddress;
+    late String secretKey;
 
     if (isSecretKey) {
       tezosKey = await keyGenerator.jwkFromSecretKey(
         secretKey: mnemonicOrKey,
       );
 
-      tezosSecretKey = mnemonicOrKey;
+      secretKey = mnemonicOrKey;
 
-      tezosWalletAddress = await keyGenerator.walletAddressFromSecretKey(
-        secretKey: tezosSecretKey,
-        accountType: AccountType.tezos,
+      walletAddress = await keyGenerator.walletAddressFromSecretKey(
+        secretKey: secretKey,
+        accountType: accountType,
       );
     } else {
       tezosKey = await keyGenerator.jwkFromMnemonic(
         mnemonic: mnemonicOrKey,
-        accountType: AccountType.tezos,
-        derivePathIndex: index,
+        accountType: accountType,
+        derivePathIndex: derivePathIndex,
       );
 
-      tezosSecretKey = await keyGenerator.secretKeyFromMnemonic(
+      secretKey = await keyGenerator.secretKeyFromMnemonic(
         mnemonic: mnemonicOrKey,
-        accountType: AccountType.tezos,
-        derivePathIndex: index,
+        accountType: accountType,
+        derivePathIndex: derivePathIndex,
       );
 
-      tezosWalletAddress = await keyGenerator.walletAddressFromMnemonic(
+      walletAddress = await keyGenerator.walletAddressFromMnemonic(
         mnemonic: mnemonicOrKey,
-        accountType: AccountType.tezos,
-        derivePathIndex: index,
+        accountType: accountType,
+        derivePathIndex: derivePathIndex,
       );
     }
 
-    String name = 'My Account ${index + 1}';
+    String name = 'My Account ${state.cryptoAccount.data.length}';
 
     if (accountName != null && accountName.isNotEmpty) {
       name = accountName;
@@ -212,10 +232,10 @@ class WalletCubit extends Cubit<WalletState> {
     final CryptoAccountData cryptoAccountData = CryptoAccountData(
       name: name,
       key: tezosKey,
-      walletAddress: tezosWalletAddress,
-      secretKey: tezosSecretKey,
+      walletAddress: walletAddress,
+      secretKey: secretKey,
       isImported: isImported,
-      blockchainType: BlockchainType.tezos,
+      blockchainType: blockchainType,
     );
 
     final cryptoAccounts = List.of(state.cryptoAccount.data)
@@ -234,124 +254,27 @@ class WalletCubit extends Cubit<WalletState> {
     /// set new account as current
     await setCurrentWalletAccount(cryptoAccounts.length - 1);
 
-    final credential = await generateAssociatedWalletCredential(
-      accountName: cryptoAccountData.name,
-      walletAddress: tezosWalletAddress,
-      cryptoKey: tezosKey,
-      didCubit: didCubit,
-      didKitProvider: didKitProvider,
-    );
-    if (credential != null) {
-      await insertCredential(
-        credential: credential,
-        showMessage: index != 0,
-      );
+    switch (blockchainType) {
+      case BlockchainType.ethereum:
+        // TODO: Handle this case.
+        break;
+      case BlockchainType.tezos:
+        final credential = await generateAssociatedWalletCredential(
+          accountName: cryptoAccountData.name,
+          walletAddress: walletAddress,
+          cryptoKey: tezosKey,
+          didCubit: didCubit,
+          didKitProvider: didKitProvider,
+        );
+
+        if (credential != null) {
+          await insertCredential(
+            credential: credential,
+            showMessage: derivePathIndex != 0,
+          );
+        }
+        break;
     }
-
-    return cryptoAccount;
-  }
-
-  Future<CryptoAccount> createEthereumAccount({
-    String? accountName,
-    required String mnemonicOrKey,
-    required bool isImported,
-    required bool isSecretKey,
-  }) async {
-    int index = 0;
-    final bool isCreated = !isImported;
-
-    log.i('isImported - $isImported');
-    if (isCreated) {
-      /// Note: while adding derivePathIndex is always increased
-      final String? derivePathIndex = await secureStorageProvider
-          .get(SecureStorageKeys.ethereumDerivePathIndex);
-
-      if (derivePathIndex != null && derivePathIndex.isNotEmpty) {
-        index = int.parse(derivePathIndex) + 1;
-      }
-      await secureStorageProvider.set(
-        SecureStorageKeys.ethereumDerivePathIndex,
-        index.toString(),
-      );
-      log.i('ethereumDerivePathIndex - $index');
-    }
-
-    //late String tezosKey;
-    late String ethereumWalletAddress;
-    late String ethereumSecretKey;
-
-    if (isSecretKey) {
-      // tezosKey = await keyGenerator.jwkFromSecretKey(
-      //   secretKey: mnemonicOrKey,
-      // );
-
-      ethereumSecretKey = mnemonicOrKey;
-
-      ethereumWalletAddress = await keyGenerator.walletAddressFromSecretKey(
-        secretKey: ethereumSecretKey,
-        accountType: AccountType.ethereum,
-      );
-    } else {
-      // tezosKey = await keyGenerator.jwkFromMnemonic(
-      //   mnemonic: mnemonicOrKey,
-      //   accountType: AccountType.tezos,
-      //   derivePathIndex: index,
-      // );
-
-      ethereumSecretKey = await keyGenerator.secretKeyFromMnemonic(
-        mnemonic: mnemonicOrKey,
-        accountType: AccountType.ethereum,
-        derivePathIndex: index,
-      );
-
-      ethereumWalletAddress = await keyGenerator.walletAddressFromMnemonic(
-        mnemonic: mnemonicOrKey,
-        accountType: AccountType.ethereum,
-        derivePathIndex: index,
-      );
-    }
-
-    String name = 'My Account ${index + 1}';
-
-    if (accountName != null && accountName.isNotEmpty) {
-      name = accountName;
-    }
-
-    final CryptoAccountData cryptoAccountData = CryptoAccountData(
-      name: name,
-      key: null,
-      walletAddress: ethereumWalletAddress,
-      secretKey: ethereumSecretKey,
-      isImported: isImported,
-      blockchainType: BlockchainType.ethereum,
-    );
-
-    final cryptoAccounts = List.of(state.cryptoAccount.data)
-      ..add(cryptoAccountData);
-
-    final CryptoAccount cryptoAccount = CryptoAccount(data: cryptoAccounts);
-    final String cryptoAccountString = jsonEncode(cryptoAccount);
-
-    await secureStorageProvider.set(
-      SecureStorageKeys.cryptoAccount,
-      cryptoAccountString,
-    );
-
-    emitCryptoAccount(cryptoAccount);
-
-    /// set new account as current
-    await setCurrentWalletAccount(cryptoAccounts.length - 1);
-
-    // TODO(bibash): generate AssociatedEthereumWallet
-
-    // final credential = await generateAssociatedWalletCredential(
-    //   accountName: cryptoAccountData.name,
-    //   walletAddress: tezosWalletAddress,
-    //   cryptoKey: tezosKey,
-    // );
-    // if (credential != null) {
-    //   await insertCredential(credential);
-    // }
 
     return cryptoAccount;
   }
