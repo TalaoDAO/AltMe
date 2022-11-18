@@ -310,6 +310,7 @@ class WalletCubit extends Cubit<WalletState> {
 
     final CryptoAccount cryptoAccount = CryptoAccount(data: cryptoAccounts);
     final String cryptoAccountString = jsonEncode(cryptoAccount.toJson());
+
     await secureStorageProvider.set(
       SecureStorageKeys.cryptoAccount,
       cryptoAccountString,
@@ -317,9 +318,21 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// get id of current AssociatedAddres credential of this account
     final oldCredentialList = List<CredentialModel>.from(state.credentials);
+
+    late Filter filter;
+
+    switch (blockchainType) {
+      case BlockchainType.ethereum:
+        filter = Filter('String', 'EthereumAssociatedAddress');
+        break;
+      case BlockchainType.tezos:
+        filter = Filter('String', 'TezosAssociatedAddress');
+        break;
+    }
+
     final filteredCredentialList = getCredentialsFromFilterList(
       [
-        Field([r'$..type'], Filter('String', 'TezosAssociatedAddress')),
+        Field([r'$..type'], filter),
         Field(
           [r'$..associatedAddress'],
           Filter('String', cryptoAccountData.walletAddress),
@@ -328,9 +341,7 @@ class WalletCubit extends Cubit<WalletState> {
       oldCredentialList,
     );
 
-    final ssiKey = await secureStorageProvider.get(
-      SecureStorageKeys.ssiKey,
-    );
+    final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
 
     /// update or create AssociatedAddres credential with new name
     if (filteredCredentialList.isNotEmpty) {
