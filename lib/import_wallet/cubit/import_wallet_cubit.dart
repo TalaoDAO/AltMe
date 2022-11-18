@@ -99,6 +99,18 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         accountName: accountName,
         mnemonicOrKey: mnemonicOrKey,
         isImported: !isFromOnboarding,
+        onComplete: ({
+          required CryptoAccount cryptoAccount,
+          required MessageHandler messageHandler,
+        }) async {
+          emit(
+            state.success(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+              ),
+            ),
+          );
+        },
       );
 
       await homeCubit.emitHasWallet();
