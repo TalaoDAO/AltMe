@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -111,8 +109,8 @@ class _CameraViewState extends State<CameraView> {
                   height: Sizes.spaceNormal,
                 ),
                 Expanded(
-                  child: Builder(
-                    builder: (context) {
+                  child: LayoutBuilder(
+                    builder: (context, BoxConstraints constraints) {
                       if (state.status == CameraStatus.imageCaptured) {
                         return Image.memory(
                           Uint8List.fromList(state.data!),
@@ -123,15 +121,6 @@ class _CameraViewState extends State<CameraView> {
                           children: [
                             CameraPreview(
                               cameraCubit.cameraController!,
-                            ),
-                            BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                              blendMode: BlendMode.screen,
-                              child: Container(
-                                width: double.infinity,
-                                height: double.infinity,
-                                color: Colors.transparent,
-                              ),
                             ),
                           ],
                         );
