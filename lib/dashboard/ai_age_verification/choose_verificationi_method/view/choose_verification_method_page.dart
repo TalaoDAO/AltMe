@@ -1,8 +1,11 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/ai_age_verification/verify_age/verify_age.dart';
+import 'package:altme/dashboard/home/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChooseVerificationMethodPage extends StatelessWidget {
   const ChooseVerificationMethodPage({
@@ -69,7 +72,10 @@ class _ChooseVerificationMethodViewState
             subTitle: l10n.idDocumentCheckDescription,
             imageAssetPath: ImageStrings.userCircleAdded,
             onTap: () {
-              // TODO(Taleb): Navigate to Passbase verification
+              Navigator.pop(context);
+              context.read<HomeCubit>().startPassbaseVerification(
+                    context.read<WalletCubit>(),
+                  );
             },
           ),
           const SizedBox(
