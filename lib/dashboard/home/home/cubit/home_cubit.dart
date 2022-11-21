@@ -7,6 +7,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -397,12 +398,15 @@ class HomeCubit extends Cubit<HomeState> {
 
 Future<PassBaseStatus> getPassBaseStatus(String did) async {
   try {
+    await dotenv.load();
+    final PASSBASE_CHECK_DID_AUTH_TOKEN =
+        dotenv.get('PASSBASE_CHECK_DID_AUTH_TOKEN');
     final client = DioClient(Urls.issuerBaseUrl, Dio());
     final dynamic response = await client.get(
       '/passbase/check/$did',
       headers: <String, dynamic>{
         'Accept': 'application/json',
-        'Authorization': 'Bearer mytoken',
+        'Authorization': PASSBASE_CHECK_DID_AUTH_TOKEN,
       },
     );
     final PassBaseStatus passBaseStatus = getPassBaseStatusFromString(
