@@ -15,6 +15,7 @@ import 'package:dio/dio.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:jose/jose.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
@@ -152,6 +153,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           Dio(),
         );
         final uri = Uri.parse(scannedResponse);
+        final String issuer = uri.queryParameters['issuer']!;
         final String credentialTypeRequest =
             uri.queryParameters['credential_type']!;
         final dynamic response = await client.get(credentialTypeRequest);
@@ -159,14 +161,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             ? jsonDecode(response) as Map<String, dynamic>
             : response as Map<String, dynamic>;
         // final String issuer = uri.queryParameters['issuer']!;
-        const String ngrok = 'https://1253-77-140-52-235.ngrok.io';
+        const String ngrok = 'https://app.altme.io/app/donwload';
         Future<Map<String, dynamic>> authorization_request(String ngrok,
             String conformance, String credentialTypeRequest) async {
           final headers = {
             'Conformance': conformance,
             'Content-Type': 'application/json'
           };
-          const url =
+          const url =v2
               'https://api.conformance.intebsi.xyz/conformance/v2/issuer-mock/authorize';
           final Map<String, dynamic> request = {
             'scope': 'openid',
@@ -181,7 +183,21 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             ],
             'redirect_uri': ngrok + '/callback',
             'state': '1234'
-          } as Map<String, dynamic>;
+          } as Map<String, dynamic>;es.getProperty('flutter.versionCode')es.getProperty('flutter.versionCode')
++def flutterVersionCode = localProperties
++def flutterVersionCode = localProperties
+
+          FlutterAppAuth appAuth = FlutterAppAuth();
+          final AuthorizationTokenResponse? result =
+              await appAuth.authorizeAndExchangeCode(
+            AuthorizationTokenRequest(
+              '$ngrok/callback',
+              '$ngrok/callback',
+              issuer: issuer,
+              scopes: ['openid', 'profile', 'email', 'offline_access', 'api'],
+            ),
+          );
+
           final dynamic resp =
               await client.get(url, headers: headers, queryParameters: request);
           return resp as Map<String, dynamic>;
