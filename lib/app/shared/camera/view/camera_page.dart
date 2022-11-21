@@ -95,9 +95,6 @@ class _CameraViewState extends State<CameraView> {
               ),
             );
           } else {
-            final scale = 1 /
-                (cameraCubit.cameraController!.value.aspectRatio *
-                    MediaQuery.of(context).size.aspectRatio);
             return Column(
               children: [
                 Text(
