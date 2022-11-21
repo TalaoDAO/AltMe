@@ -141,11 +141,14 @@ class HomeCubit extends Cubit<HomeState> {
         /// Do not remove: Following POST tell backend the relation between DID
         /// and passbase token.
         try {
+          await dotenv.load();
+          final PASSBASE_WEBHOOK_AUTH_TOKEN =
+              dotenv.get('PASSBASE_WEBHOOK_AUTH_TOKEN');
           final dynamic response = await client.post(
             '/wallet/webhook',
             headers: <String, dynamic>{
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer mytoken',
+              'Authorization': PASSBASE_WEBHOOK_AUTH_TOKEN,
             },
             data: <String, dynamic>{
               'identityAccessKey': identityAccessKey,
