@@ -145,7 +145,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
 
       final isInternetAvailable = await isConnected();
       if (!isInternetAvailable) {
-        throw NetworkException(
+        throw NetworkException(message:
           NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
         );
       }

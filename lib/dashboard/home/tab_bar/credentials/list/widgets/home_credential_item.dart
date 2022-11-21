@@ -74,9 +74,22 @@ class DummyCredentialItem extends StatelessWidget {
     if (credentialSubjectTypeList.contains(
       homeCredential.credentialSubjectType,
     )) {
-      await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
-            link: homeCredential.link!,
-          );
+      //here check for over18 and over13 to take photo for AI KYC
+      if (homeCredential.credentialSubjectType ==
+              CredentialSubjectType.over18 ||
+          homeCredential.credentialSubjectType ==
+              CredentialSubjectType.over13) {
+        await Navigator.push<void>(
+          context,
+          ChooseVerificationMethodPage.route(
+            credentialSubjectType: homeCredential.credentialSubjectType,
+          ),
+        );
+      } else {
+        await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
+              link: homeCredential.link!,
+            );
+      }
     } else {
       /// check if  credential it is
       /// [CredentialSubjectType.tezotopiaMembership]

@@ -6,8 +6,10 @@ class CustomAppBar extends PreferredSize {
   CustomAppBar({
     Key? key,
     this.title,
+    this.titleMargin = EdgeInsets.zero,
     this.leading,
     this.trailing,
+    this.titleAlignment = Alignment.bottomCenter,
   }) : super(
           key: key,
           child: Container(),
@@ -17,39 +19,43 @@ class CustomAppBar extends PreferredSize {
   final String? title;
   final Widget? leading;
   final Widget? trailing;
+  final EdgeInsets titleMargin;
+  final Alignment titleAlignment;
 
   @override
   Widget build(BuildContext context) => SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Flexible(
-              child: Container(
-                alignment: Alignment.bottomCenter,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    leading ?? const SizedBox(width: 16, height: 16),
-                    trailing ?? const SizedBox(width: 16, height: 16),
-                  ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (leading != null) leading!,
+                  if (trailing != null) trailing!,
+                ],
+              ),
+              Container(
+                alignment: titleAlignment,
+                padding: titleMargin.copyWith(
+                  top: titleMargin.top+10,
+                  left: titleMargin.left + 28,
+                  right: titleMargin.right + 28,
+                  bottom: titleMargin.bottom + 6,
+                ),
+                child: Flexible(
+                  child: MyText(
+                    title ?? '',
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.appBar,
+                  ),
                 ),
               ),
-            ),
-            Flexible(
-              child: Container(
-                alignment: Alignment.topCenter,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background,
-                ),
-                child: MyText(
-                  title ?? '',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.appBar,
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
 

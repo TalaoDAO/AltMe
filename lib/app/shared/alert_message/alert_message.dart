@@ -11,7 +11,7 @@ class AlertMessage {
     final String message = messageHandler.getMessage(context, messageHandler);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration: const Duration(milliseconds: 700),
+        duration: const Duration(milliseconds: 800),
         content: SnackBarContent(
           message: message,
           iconPath: stateMessage.type!.iconPath,
@@ -28,7 +28,7 @@ class AlertMessage {
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration: const Duration(milliseconds: 700),
+        duration: const Duration(milliseconds: 800),
         content: SnackBarContent(
           message: message,
           iconPath: messageType.iconPath,
