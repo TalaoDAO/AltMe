@@ -8,6 +8,7 @@ import 'package:altme/dashboard/home/tab_bar/tab_bar.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_path/json_path.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
@@ -212,12 +213,14 @@ Future<dynamic> getAccessTokenAndNonce(
   DioClient client,
 ) async {
   try {
+    await dotenv.load();
+    final TALAO_ISSUER_API_KEY = dotenv.get('TALAO_ISSUER_API_KEY');
     final dynamic accessTokenAndNonce = await client.post(
       'https://issuer.talao.co/token',
       headers: <String, dynamic>{
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'Bearer mytoken',
-        'X-API-KEY': '99999-99999-99999',
+        'X-API-KEY': TALAO_ISSUER_API_KEY,
       },
       data: <String, dynamic>{
         'pre-authorized_code': preAuthorizedCode,

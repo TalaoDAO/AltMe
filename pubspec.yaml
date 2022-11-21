@@ -39,6 +39,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
+  flutter_dotenv: ^5.0.2
   flutter_html: ^3.0.0-alpha.5
   flutter_local_notifications: ^9.7.0
   flutter_localizations:
@@ -97,6 +98,7 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
+    - .env
     - google_fonts/
     - assets/
     - assets/splash/
