@@ -26,7 +26,9 @@ class HomePage extends StatelessWidget {
 
         if (homeState.status == AppStatus.insertCredential) {
           final credentialModel = homeState.data as CredentialModel;
-          context.read<WalletCubit>().insertCredential(credentialModel);
+          context
+              .read<WalletCubit>()
+              .insertCredential(credential: credentialModel, showMessage: true);
         }
 
         if (homeState.status == AppStatus.success) {}
