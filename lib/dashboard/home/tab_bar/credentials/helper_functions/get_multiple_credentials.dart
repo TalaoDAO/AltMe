@@ -214,12 +214,11 @@ Future<dynamic> getAccessTokenAndNonce(
 ) async {
   try {
     await dotenv.load();
-    final TALAO_ISSUER_API_KEY = dotenv.get('TALAO_ISSUER_API_KEY');
+    final String TALAO_ISSUER_API_KEY = dotenv.get('TALAO_ISSUER_API_KEY');
     final dynamic accessTokenAndNonce = await client.post(
       'https://issuer.talao.co/token',
       headers: <String, dynamic>{
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Bearer mytoken',
         'X-API-KEY': TALAO_ISSUER_API_KEY,
       },
       data: <String, dynamic>{
