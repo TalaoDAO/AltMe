@@ -637,5 +637,35 @@
   "accept": "Accept",
   "decline": "Decline",
   "placeYourFaceInTheOval": "Place your face in the oval",
-  "cameraSubtitle": "You have 5 seconds to take your photo.\nMake sure there’s enough light before starting."
+  "cameraSubtitle": "You have 5 seconds to take your photo.\nMake sure there’s enough light before starting.",
+
+  "todoImportant": "TODO(all): update the text of below keys",
+  
+  "bunnyPassWhyGetThisCard": "This Membership card will give you 25% cash backs on ALL Tezotopia Game transactions when you buy a Drops on the marketplace or mint an NFT on starbase.",
+  "bunnyPassExpirationDate": "This card will remain active and reusable for 1 YEAR.",
+  "bunnyPassHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Altme’s KYC check.",
+  
+  "dogamiPassWhyGetThisCard": "This Membership card will give you 25% cash backs on ALL Tezotopia Game transactions when you buy a Drops on the marketplace or mint an NFT on starbase.",
+  "dogamiPassExpirationDate": "This card will remain active and reusable for 1 YEAR.",
+  "dogamiPassHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Altme’s KYC check.",
+  
+  "matterlightPassWhyGetThisCard": "This Membership card will give you 25% cash backs on ALL Tezotopia Game transactions when you buy a Drops on the marketplace or mint an NFT on starbase.",
+  "matterlightPassExpirationDate": "This card will remain active and reusable for 1 YEAR.",
+  "matterlightPassHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Altme’s KYC check.",
+  
+  "pigsPassWhyGetThisCard": "This Membership card will give you 25% cash backs on ALL Tezotopia Game transactions when you buy a Drops on the marketplace or mint an NFT on starbase.",
+  "pigsPassExpirationDate": "This card will remain active and reusable for 1 YEAR.",
+  "pigsPassHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Altme’s KYC check.",
+  
+  "trooperzPassWhyGetThisCard": "This Membership card will give you 25% cash backs on ALL Tezotopia Game transactions when you buy a Drops on the marketplace or mint an NFT on starbase.",
+  "trooperzPassExpirationDate": "This card will remain active and reusable for 1 YEAR.",
+  "trooperzPassHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Altme’s KYC check.",
+  
+  "tzlandPassWhyGetThisCard": "This Membership card will give you 25% cash backs on ALL Tezotopia Game transactions when you buy a Drops on the marketplace or mint an NFT on starbase.",
+  "tzlandPassExpirationDate": "This card will remain active and reusable for 1 YEAR.",
+  "tzlandPassHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Altme’s KYC check.",
+  
+  "tezoniaPassWhyGetThisCard": "This Membership card will give you 25% cash backs on ALL Tezotopia Game transactions when you buy a Drops on the marketplace or mint an NFT on starbase.",
+  "tezoniaPassExpirationDate": "This card will remain active and reusable for 1 YEAR.",
+  "tezoniaPassHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Altme’s KYC check."
 }

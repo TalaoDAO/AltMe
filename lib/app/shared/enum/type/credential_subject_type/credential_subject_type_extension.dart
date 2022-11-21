@@ -19,6 +19,20 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xff14181D);
       case CredentialSubjectType.tezotopiaMembership:
         return const Color(0xff273496);
+      case CredentialSubjectType.tezoniaPass:
+        return const Color(0xff273496);
+      case CredentialSubjectType.tzlandPass:
+        return const Color(0xff273496);
+      case CredentialSubjectType.troopezPass:
+        return const Color(0xff273496);
+      case CredentialSubjectType.pigsPass:
+        return const Color(0xff273496);
+      case CredentialSubjectType.matterlightPass:
+        return const Color(0xff273496);
+      case CredentialSubjectType.dogamiPass:
+        return const Color(0xff273496);
+      case CredentialSubjectType.bunnyPass:
+        return const Color(0xff273496);
       case CredentialSubjectType.nationality:
         return const Color(0xff273496);
       case CredentialSubjectType.gender:
@@ -94,6 +108,20 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return Icons.supervised_user_circle_sharp;
       case CredentialSubjectType.tezotopiaMembership:
         return Icons.supervised_user_circle_sharp;
+      case CredentialSubjectType.tezoniaPass:
+        return Icons.games_outlined;
+      case CredentialSubjectType.tzlandPass:
+        return Icons.games_outlined;
+      case CredentialSubjectType.troopezPass:
+        return Icons.games_outlined;
+      case CredentialSubjectType.pigsPass:
+        return Icons.games_outlined;
+      case CredentialSubjectType.matterlightPass:
+        return Icons.games_outlined;
+      case CredentialSubjectType.dogamiPass:
+        return Icons.games_outlined;
+      case CredentialSubjectType.bunnyPass:
+        return Icons.games_outlined;
       case CredentialSubjectType.gender:
         return Icons.supervised_user_circle_rounded;
       case CredentialSubjectType.tezosAssociatedWallet:

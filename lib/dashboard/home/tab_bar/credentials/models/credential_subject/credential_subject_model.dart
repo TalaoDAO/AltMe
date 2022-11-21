@@ -20,6 +20,20 @@ class CredentialSubjectModel {
         return BloometaPassModel.fromJson(json);
       case 'MembershipCard_1':
         return TezotopiaMembershipModel.fromJson(json);
+      case 'DogamiPass':
+        return DogamiPassModel.fromJson(json);
+      case 'TroopezPass':
+        return TroopezPassModel.fromJson(json);
+      case 'TezoniaPass':
+        return TezoniaPassModel.fromJson(json);
+      case 'BunnyPass':
+        return BunnyPassModel.fromJson(json);
+      case 'PigsPass':
+        return PigsPassModel.fromJson(json);
+      case 'TzlandPass':
+        return TzlandPassModel.fromJson(json);
+      case 'MatterlightPass':
+        return MatterlightPassModel.fromJson(json);
       case 'Nationality':
         return NationalityModel.fromJson(json);
       case 'ResidentCard':
