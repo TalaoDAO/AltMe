@@ -280,7 +280,7 @@ class HomeCubit extends Cubit<HomeState> {
             '/wallet/webhook',
             headers: <String, dynamic>{
               'Content-Type': 'application/json',
-              'Authorization': PASSBASE_WEBHOOK_AUTH_TOKEN,
+              'Authorization': 'Bearer $PASSBASE_WEBHOOK_AUTH_TOKEN',
             },
             data: <String, dynamic>{
               'identityAccessKey': identityAccessKey,
