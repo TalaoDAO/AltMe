@@ -541,7 +541,7 @@ Future<PassBaseStatus> getPassBaseStatus(String did) async {
       '/passbase/check/$did',
       headers: <String, dynamic>{
         'Accept': 'application/json',
-        'Authorization': PASSBASE_CHECK_DID_AUTH_TOKEN,
+        'Authorization':'Bearer $PASSBASE_CHECK_DID_AUTH_TOKEN',
       },
     );
     final PassBaseStatus passBaseStatus = getPassBaseStatusFromString(
