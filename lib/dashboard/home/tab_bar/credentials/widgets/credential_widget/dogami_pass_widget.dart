@@ -60,9 +60,9 @@ class DogamiPassView extends Recto {
 
     return const CredentialImage(
       image: ImageStrings.dogamiPass,
-      // child: AspectRatio(
-      //   aspectRatio: Sizes.credentialAspectRatio,
-      // ),
+      child: AspectRatio(
+        aspectRatio: Sizes.credentialAspectRatio,
+      ),
     );
   }
 }

@@ -60,9 +60,9 @@ class TezoniaPassView extends Recto {
 
     return const CredentialImage(
       image: ImageStrings.tezoniaPass,
-      // child: AspectRatio(
-      //   aspectRatio: Sizes.credentialAspectRatio,
-      // ),
+      child: AspectRatio(
+        aspectRatio: Sizes.credentialAspectRatio,
+      ),
     );
   }
 }

@@ -60,9 +60,9 @@ class TrooperzPassView extends Recto {
 
     return const CredentialImage(
       image: ImageStrings.trooperzPass,
-      // child: AspectRatio(
-      //   aspectRatio: Sizes.credentialAspectRatio,
-      // ),
+      child: AspectRatio(
+        aspectRatio: Sizes.credentialAspectRatio,
+      ),
     );
   }
 }

@@ -60,9 +60,9 @@ class MatterlightPassView extends Recto {
 
     return const CredentialImage(
       image: ImageStrings.matterlightPass,
-      // child: AspectRatio(
-      //   aspectRatio: Sizes.credentialAspectRatio,
-      // ),
+      child: AspectRatio(
+        aspectRatio: Sizes.credentialAspectRatio,
+      ),
     );
   }
 }

@@ -60,9 +60,9 @@ class TzlandPassView extends Recto {
 
     return const CredentialImage(
       image: ImageStrings.tzlandPass,
-      // child: AspectRatio(
-      //   aspectRatio: Sizes.credentialAspectRatio,
-      // ),
+      child: AspectRatio(
+        aspectRatio: Sizes.credentialAspectRatio,
+      ),
     );
   }
 }

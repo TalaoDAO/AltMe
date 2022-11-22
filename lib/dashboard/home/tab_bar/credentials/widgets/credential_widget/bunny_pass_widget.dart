@@ -60,9 +60,9 @@ class BunnyPassView extends Recto {
 
     return const CredentialImage(
       image: ImageStrings.bunnyPass,
-      // child: AspectRatio(
-      //   aspectRatio: Sizes.credentialAspectRatio,
-      // ),
+      child: AspectRatio(
+        aspectRatio: Sizes.credentialAspectRatio,
+      ),
     );
   }
 }

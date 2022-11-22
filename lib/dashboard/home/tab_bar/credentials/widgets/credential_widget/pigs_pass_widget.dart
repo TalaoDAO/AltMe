@@ -60,9 +60,9 @@ class PigsPassView extends Recto {
 
     return const CredentialImage(
       image: ImageStrings.pigsPass,
-      // child: AspectRatio(
-      //   aspectRatio: Sizes.credentialAspectRatio,
-      // ),
+      child: AspectRatio(
+        aspectRatio: Sizes.credentialAspectRatio,
+      ),
     );
   }
 }
