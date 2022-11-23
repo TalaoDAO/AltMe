@@ -397,6 +397,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.3"
+  desk360flutter:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "1.0.0"
+      resolved-ref: e1cf387c7069fe97a9257b6d381a90afa0d5259b
+      url: "https://github.com/Teknasyon-Teknoloji/desk360-flutter-sdk.git"
+    source: git
+    version: "0.1.0"
   device_frame:
     dependency: transitive
     description:
@@ -460,6 +469,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.3"
+  event_bus:
+    dependency: transitive
+    description:
+      name: event_bus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   fake_async:
     dependency: transitive
     description:
