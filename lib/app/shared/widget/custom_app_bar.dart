@@ -24,9 +24,8 @@ class CustomAppBar extends PreferredSize {
 
   @override
   Widget build(BuildContext context) => SafeArea(
-        child: Container(
+        child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          color: Colors.transparent,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
@@ -41,18 +40,16 @@ class CustomAppBar extends PreferredSize {
               Container(
                 alignment: titleAlignment,
                 padding: titleMargin.copyWith(
-                  top: titleMargin.top+10,
+                  top: titleMargin.top + 10,
                   left: titleMargin.left + 28,
                   right: titleMargin.right + 28,
                   bottom: titleMargin.bottom + 6,
                 ),
-                child: Flexible(
-                  child: MyText(
-                    title ?? '',
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.appBar,
-                  ),
+                child: Text(
+                  title ?? '',
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.appBar,
                 ),
               ),
             ],
