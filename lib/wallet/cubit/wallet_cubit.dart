@@ -195,7 +195,9 @@ class WalletCubit extends Cubit<WalletState> {
       }
 
       await secureStorageProvider.set(
-        SecureStorageKeys.tezosDerivePathIndex,
+        blockchainType == BlockchainType.tezos
+            ? SecureStorageKeys.tezosDerivePathIndex
+            : SecureStorageKeys.ethereumDerivePathIndex,
         derivePathIndex.toString(),
       );
     }
