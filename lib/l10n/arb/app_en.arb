@@ -611,7 +611,7 @@
   "credentialStatus": "Status",
   "pass": "Pass",
   "payloadFormatErrorMessage": "The format of paylod is incorrect.",
-  "thisFeatureIsNotSupportedMessage": "Sorry! This feature is not supported yet",
+  "thisFeatureIsNotSupportedMessage": "This feature is not supported yet",
   "myWallet": "My wallet",
   "ethereumNetwork": "Ethereum Network",
   "step": "Step",
