@@ -70,7 +70,7 @@ Web3 Digital Wallet does not retain personal data that is used to issue your ide
 
 In the case of identity credentials produced with the help of Passbase (ID Card, Nationality proof, Age Range, Over18, Over13...), Web3 Digital Wallet keeps Passbase's KYC file number. As indicated in the conditions of use of the company Passbase, the latter keeps a copy of your personal information which has been communicated to it.
 
-In the case of identity credentials produced with the help of the Yoti company (Age Range, Over18, Over13), Web3 Digital Wallet does not keep a copy of the transmitted photo. As indicated in the conditions of use of the Yoti company, this one does not keep a copy of the transmitted photo
+In the case of identity credentials produced with the help of the Yoti company (Age Range, Over18, Over13), Web3 Digital Wallet does not keep a copy of the transmitted photo. Yoti only uses your photo to estimate your age and then deletes the photo immediately. Yoti does not create any face template or other biometric map. Yoti does not use your photo for any other purpose.
 
 In the case of other credentials (Membership Card, Coupons, Gamer Card, etc.), Web3 Digital Wallet does not keep a copy of the information transmitted or the credential issued.
 
@@ -123,6 +123,8 @@ Personal data protection - Your data on Altme.
 ## What personal data collected about me ?
 
 When you request credentials, you provide us with personal information that includes your given name, family name, your decentralized identifier(DID), email , phone number, blockchain address, social network login. Those data are stored in your smartphone.
+
+We collect a photo for the purpose of age estimation and that you do that under the lawful processing ground of consent. 
 
 ## When ?
 
