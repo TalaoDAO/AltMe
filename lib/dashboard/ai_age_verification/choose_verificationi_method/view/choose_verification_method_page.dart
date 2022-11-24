@@ -68,29 +68,30 @@ class _ChooseVerificationMethodViewState
             height: Sizes.spaceLarge,
           ),
           CustomListTileCard(
-            title: l10n.idDocumentCheck,
-            subTitle: l10n.idDocumentCheckDescription,
-            imageAssetPath: ImageStrings.userCircleAdded,
-            onTap: () {
-              Navigator.pop(context);
-              context.read<HomeCubit>().startPassbaseVerification(
-                    context.read<WalletCubit>(),
-                  );
-            },
-          ),
-          const SizedBox(
-            height: Sizes.spaceNormal,
-          ),
-          CustomListTileCard(
             title: l10n.realTimePhoto,
             subTitle: l10n.realTimePhotoDescription,
-            imageAssetPath: ImageStrings.userCircleAdd,
+            imageAssetPath: ImageStrings.userCircleAdded,
             onTap: () {
               Navigator.of(context).pushReplacement<void, void>(
                 VerifyAgePage.route(
                   credentialSubjectType: widget.credentialSubjectType,
                 ),
               );
+            },
+            recommended: true,
+          ),
+          const SizedBox(
+            height: Sizes.spaceNormal,
+          ),
+          CustomListTileCard(
+            title: l10n.idDocumentCheck,
+            subTitle: l10n.idDocumentCheckDescription,
+            imageAssetPath: ImageStrings.userCircleAdd,
+            onTap: () {
+              Navigator.pop(context);
+              context.read<HomeCubit>().startPassbaseVerification(
+                    context.read<WalletCubit>(),
+                  );
             },
           ),
         ],
