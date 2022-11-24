@@ -127,15 +127,13 @@ class _CameraViewState extends State<CameraView> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(Sizes.spaceNormal),
-                  child: Flexible(
-                    child: MyGradientButton(
-                      borderRadius: Sizes.smallRadius,
-                      verticalSpacing: 16,
-                      text: l10n.start,
-                      onPressed: state.status != CameraStatus.loading
-                          ? cameraCubit.takePhoto
-                          : null,
-                    ),
+                  child: MyGradientButton(
+                    borderRadius: Sizes.smallRadius,
+                    verticalSpacing: 16,
+                    text: l10n.start,
+                    onPressed: state.status != CameraStatus.loading
+                        ? cameraCubit.takePhoto
+                        : null,
                   ),
                 ),
               ],
