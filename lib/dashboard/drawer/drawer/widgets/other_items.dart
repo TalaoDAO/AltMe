@@ -150,50 +150,50 @@ class OtherItems extends StatelessWidget {
                   );
                 },
               ),
-              const DrawerItemDivider(),
-              DrawerItem(
-                icon: IconStrings.wallet,
-                title: 'Customer Support',
-                trailing: Icon(
-                  Icons.chevron_right,
-                  size: 24,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-                onTap: () {
-                  // #Issue - https://github.com/Teknasyon-Teknoloji/desk360-flutter-sdk/issues/3
-                  const String appId = '3q3OKU4saj8LB5fyGOmcF1AJZi3a9Y3r';
-                  if (!isAndroid()) {
-                    Desk360flutter.start(
-                      properties: {
-                        'appID': appId,
-                        'deviceID': '345679',
-                        'languageCode': 'en',
-                        'environment': Environment.PRODUCTION.value,
-                        'countryCode': 'fr',
-                        'bypassCreateTicketIntro': true,
-                      },
-                    );
-                    Desk360flutter.show(animated: true);
-                  } else {
-                    //var androidDeviceInfo = await deviceInfo.androidInfo;
-                    //var deviceId = androidDeviceInfo.androidId;
-                    Desk360flutter.initialize(
-                      <String, dynamic>{
-                        'appID': appId,
-                        'appVersion': '1.0.0',
-                        'languageCode': 'en',
-                        'environment': Environment.PRODUCTION.value,
-                        'platform': platforms.Platform.GOOGLE.value,
-                        'countryCode': 'fr',
-                        'name': 'Altme-App'
-                      },
-                      '',
-                      '34567', //deviceId,
-                    );
-                    Desk360flutter.start();
-                  }
-                },
-              ),
+              // const DrawerItemDivider(),
+              // DrawerItem(
+              //   icon: IconStrings.wallet,
+              //   title: 'Customer Support',
+              //   trailing: Icon(
+              //     Icons.chevron_right,
+              //     size: 24,
+              //     color: Theme.of(context).colorScheme.onPrimary,
+              //   ),
+              //   onTap: () {
+              //     // #Issue - https://github.com/Teknasyon-Teknoloji/desk360-flutter-sdk/issues/3
+              //     const String appId = '3q3OKU4saj8LB5fyGOmcF1AJZi3a9Y3r';
+              //     if (!isAndroid()) {
+              //       Desk360flutter.start(
+              //         properties: {
+              //           'appID': appId,
+              //           'deviceID': '345679',
+              //           'languageCode': 'en',
+              //           'environment': Environment.PRODUCTION.value,
+              //           'countryCode': 'fr',
+              //           'bypassCreateTicketIntro': true,
+              //         },
+              //       );
+              //       Desk360flutter.show(animated: true);
+              //     } else {
+              //       //var androidDeviceInfo = await deviceInfo.androidInfo;
+              //       //var deviceId = androidDeviceInfo.androidId;
+              //       Desk360flutter.initialize(
+              //         <String, dynamic>{
+              //           'appID': appId,
+              //           'appVersion': '1.0.0',
+              //           'languageCode': 'en',
+              //           'environment': Environment.PRODUCTION.value,
+              //           'platform': platforms.Platform.GOOGLE.value,
+              //           'countryCode': 'fr',
+              //           'name': 'Altme-App'
+              //         },
+              //         '',
+              //         '34567', //deviceId,
+              //       );
+              //       Desk360flutter.start();
+              //     }
+              //   },
+              // ),
             ],
           ),
         ),
