@@ -9,6 +9,7 @@ class CustomListTileCard extends StatelessWidget {
     required this.title,
     required this.subTitle,
     required this.imageAssetPath,
+    this.recommended = false,
     this.onTap,
   });
 
@@ -16,6 +17,7 @@ class CustomListTileCard extends StatelessWidget {
   final String subTitle;
   final String imageAssetPath;
   final VoidCallback? onTap;
+  final bool recommended;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +30,24 @@ class CustomListTileCard extends StatelessWidget {
       ),
       contentPadding: const EdgeInsets.all(Sizes.spaceNormal),
       tileColor: Theme.of(context).colorScheme.surface,
-      title: MyText(
-        title,
-        style: Theme.of(context).textTheme.customListTileTitleStyle,
+      title: Row(
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.customListTileTitleStyle,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          if (recommended)
+            const Icon(
+              Icons.thumb_up,
+              // size: 38,
+              color: Colors.white,
+            )
+          else
+            const SizedBox.shrink(),
+        ],
       ),
       subtitle: Text(
         subTitle,

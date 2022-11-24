@@ -41,8 +41,8 @@ class CustomAppBar extends PreferredSize {
                 alignment: titleAlignment,
                 padding: titleMargin.copyWith(
                   top: titleMargin.top + 10,
-                  left: titleMargin.left + 28,
-                  right: titleMargin.right + 28,
+                  left: titleMargin.left + 38,
+                  right: titleMargin.right + 38,
                   bottom: titleMargin.bottom + 6,
                 ),
                 child: Text(
