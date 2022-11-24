@@ -17,6 +17,7 @@ class DIDPrivateKeyPage extends StatefulWidget {
             DIDPrivateKeyCubit(secureStorageProvider: getSecureStorage),
         child: const DIDPrivateKeyPage(),
       ),
+      settings: const RouteSettings(name: '/DIDPrivateKeyPage'),
     );
   }
 

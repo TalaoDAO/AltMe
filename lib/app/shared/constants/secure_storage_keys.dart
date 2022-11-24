@@ -42,8 +42,12 @@ class SecureStorageKeys {
   static const String ssiKey = 'ssi/key';
 
   static const String cryptoAccount = 'cryptoAccount';
+  static const String cryptoAccounTrackingIndex = 'cryptoAccounTrackingIndex';
   static const String currentCryptoIndex = 'currentCryptoIndex';
-  static const String derivePathIndex = 'derivePathIndex';
+
+  static const String tezosDerivePathIndex = 'tezosDerivePathIndex';
+  static const String ethereumDerivePathIndex = 'ethereumDerivePathIndex';
+
   static const String passBaseStatus = 'passBaseStatus';
   static const String passBaseVerificationDate = 'passBaseVerificationDate';
   static const String preAuthorizedCode = 'preAuthorizedCode';

@@ -271,6 +271,24 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w700,
       );
 
+  TextStyle get subtitle3 => GoogleFonts.nunito(
+        color: const Color(0xFF86809D),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      ).copyWith(height: 1.4);
+
+  TextStyle get customListTileTitleStyle => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+      );
+
+  TextStyle get customListTileSubTitleStyle => GoogleFonts.nunito(
+        color: const Color(0xFF86809D),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get starterSubTitleStyle => GoogleFonts.nunito(
         color: const Color(0xFFEEEEEE),
         fontSize: 26,

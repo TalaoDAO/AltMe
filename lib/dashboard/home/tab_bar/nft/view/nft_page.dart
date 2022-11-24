@@ -47,6 +47,7 @@ class _NftViewState extends State<NftView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
     return BasePage(
       scrollView: false,
       padding: EdgeInsets.zero,
@@ -123,7 +124,8 @@ class _NftViewState extends State<NftView> {
                       LoadingView().hide();
                     }
 
-                    if (state.message != null) {
+                    if (state.message != null &&
+                        state.status != AppStatus.errorWhileFetching) {
                       AlertMessage.showStateMessage(
                         context: context,
                         stateMessage: state.message!,
@@ -140,6 +142,22 @@ class _NftViewState extends State<NftView> {
                         state.message!.messageHandler!;
                     message =
                         messageHandler.getMessage(context, messageHandler);
+                  }
+
+                  final index =
+                      context.read<WalletCubit>().state.currentCryptoIndex;
+
+                  final blockchain = context
+                      .read<WalletCubit>()
+                      .state
+                      .cryptoAccount
+                      .data[index]
+                      .blockchainType;
+
+                  if (blockchain == BlockchainType.ethereum) {
+                    return Center(
+                      child: Text(l10n.thisFeatureIsNotSupportedMessage),
+                    );
                   }
 
                   if (state.status == AppStatus.fetching) {

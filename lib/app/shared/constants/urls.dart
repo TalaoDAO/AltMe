@@ -41,4 +41,8 @@ class Urls {
 
   static const objktUrl = 'https://objkt.com/';
   static const raribleUrl = 'https://rarible.com/';
+
+  //
+  static const over13aiValidationUrl = 'https://issuer.talao.co/ai/over13';
+  static const over18aiValidationUrl = 'https://issuer.talao.co/ai/over18';
 }

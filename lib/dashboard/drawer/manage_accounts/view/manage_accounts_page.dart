@@ -20,6 +20,7 @@ class ManageAccountsPage extends StatefulWidget {
         ),
         child: const ManageAccountsPage(),
       ),
+      settings: const RouteSettings(name: '/ManageAccountsPage'),
     );
   }
 
@@ -61,6 +62,7 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
         await context.read<ManageAccountsCubit>().editCryptoAccount(
               newAccountName: newCryptoAccountName,
               index: index,
+              blockchainType: cryptoAccountData.blockchainType,
             );
       }
     }

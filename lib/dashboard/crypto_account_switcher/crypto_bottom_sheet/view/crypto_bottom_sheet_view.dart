@@ -64,6 +64,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
         await context.read<CryptoBottomSheetCubit>().editCryptoAccount(
               newAccountName: newCryptoAccountName,
               index: index,
+              blockchainType: cryptoAccountData.blockchainType,
             );
       }
     }
@@ -133,15 +134,9 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
         }
 
         if (state.message != null) {
-          final MessageHandler messageHandler = state.message!.messageHandler!;
-          final String message =
-              messageHandler.getMessage(context, messageHandler);
-          showDialog<bool>(
+          AlertMessage.showStateMessage(
             context: context,
-            builder: (context) => InfoDialog(
-              title: message,
-              button: l10n.ok,
-            ),
+            stateMessage: state.message!,
           );
         }
       },

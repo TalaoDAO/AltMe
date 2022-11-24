@@ -47,7 +47,7 @@ class DioClient {
       final isInternetAvailable = await isConnected();
       if (!isInternetAvailable) {
         throw NetworkException(
-          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+          message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
         );
       }
 
@@ -68,7 +68,7 @@ class DioClient {
       );
     } catch (e) {
       if (e is DioError) {
-        throw NetworkException.getDioException(e);
+        throw NetworkException.getDioException(error: e);
       } else {
         rethrow;
       }
@@ -91,7 +91,7 @@ class DioClient {
       final isInternetAvailable = await isConnected();
       if (!isInternetAvailable) {
         throw NetworkException(
-          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+          message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
         );
       }
 
@@ -114,7 +114,7 @@ class DioClient {
       );
     } catch (e) {
       if (e is DioError) {
-        throw NetworkException.getDioException(e);
+        throw NetworkException.getDioException(error: e);
       } else {
         rethrow;
       }

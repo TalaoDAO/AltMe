@@ -45,23 +45,25 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
     );
   }
 
-  Future<void> saveMnemonicOrKey({
+  Future<void> import({
     required String mnemonicOrKey,
     required bool isFromOnboarding,
     String? accountName,
   }) async {
-    final log = getLogger('ImportWalletCubit - saveMnemonicOrKey');
+    final log = getLogger('ImportWalletCubit - import');
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
+      log.e('isFromOnboarding: $isFromOnboarding');
       if (isFromOnboarding) {
         /// ssi creation
 
         late String mnemonic;
         final isSecretKey = mnemonicOrKey.startsWith('edsk') ||
             mnemonicOrKey.startsWith('spsk') ||
-            mnemonicOrKey.startsWith('p2sk');
+            mnemonicOrKey.startsWith('p2sk') ||
+            mnemonicOrKey.startsWith('0x');
 
         if (isSecretKey) {
           mnemonic = bip39.generateMnemonic();
@@ -97,6 +99,18 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         accountName: accountName,
         mnemonicOrKey: mnemonicOrKey,
         isImported: !isFromOnboarding,
+        onComplete: ({
+          required CryptoAccount cryptoAccount,
+          required MessageHandler messageHandler,
+        }) async {
+          emit(
+            state.success(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+              ),
+            ),
+          );
+        },
       );
 
       await homeCubit.emitHasWallet();

@@ -43,12 +43,19 @@ class CryptoAccountItem extends StatelessWidget {
       ),
       title: Row(
         children: [
+          Image.asset(
+            cryptoAccountData.blockchainType == BlockchainType.tezos
+                ? IconStrings.tezos
+                : IconStrings.ethereum,
+            width: Sizes.icon,
+          ),
+          const SizedBox(width: Sizes.spaceXSmall),
           Flexible(
             child: MyText(
               cryptoAccountData.name.trim().isEmpty
                   ? l10n.unknown
                   : cryptoAccountData.name,
-                  maxLength: 30,
+              maxLength: 30,
               maxLines: 1,
               minFontSize: 14,
               overflow: TextOverflow.ellipsis,

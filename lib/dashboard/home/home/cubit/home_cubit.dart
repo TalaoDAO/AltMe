@@ -1,15 +1,22 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
+import 'package:credential_manifest/credential_manifest.dart';
+import 'package:crypto/crypto.dart';
+import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:web3dart/crypto.dart';
 import 'package:workmanager/workmanager.dart';
 
 part 'home_cubit.g.dart';
@@ -27,6 +34,132 @@ class HomeCubit extends Cubit<HomeState> {
   final SecureStorageProvider secureStorageProvider;
 
   final log = getLogger('HomeCubit');
+
+  Future<void> aiSelfiValidation({
+    required CredentialSubjectType credentialType,
+    required List<int> imageBytes,
+  }) async {
+    final logger = getLogger('HomeCubit - aiSelfiValidation');
+    emit(state.loading());
+    try {
+      final String url = credentialType == CredentialSubjectType.over13
+          ? Urls.over13aiValidationUrl
+          : Urls.over18aiValidationUrl;
+      final verificationMethod =
+          await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
+
+      final base64EncodedImage = base64Encode(imageBytes);
+
+      final challenge =
+          bytesToHex(sha256.convert(utf8.encode(base64EncodedImage)).bytes);
+
+      final options = <String, dynamic>{
+        'verificationMethod': verificationMethod,
+        'proofPurpose': 'authentication',
+        'challenge': challenge,
+        'domain': 'issuer.talao.co',
+      };
+
+      final key = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
+      final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
+
+      final DIDKitProvider didKitProvider = DIDKitProvider();
+      final String did_auth = await didKitProvider.didAuth(
+        did,
+        jsonEncode(options),
+        key,
+      );
+
+      final data = <String, dynamic>{
+        'base64_encoded_string': base64EncodedImage,
+        'vp': did_auth,
+        'did': did,
+      };
+
+      final dynamic response = await client.post(
+        url,
+        headers: <String, dynamic>{
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-API-KEY': '5f691f41-b7ef-456e-b53d-7351b2798b4e'
+        },
+        data: data,
+      );
+
+      final credential = jsonDecode(response as String) as Map<String, dynamic>;
+      final type =
+          credentialType == CredentialSubjectType.over13 ? 'Over13' : 'Over18';
+
+      final Map<String, dynamic> newCredential =
+          Map<String, dynamic>.from(credential);
+      newCredential['credentialPreview'] = credential;
+      final CredentialManifest credentialManifest =
+          await getCredentialManifestFromAltMe(client);
+      credentialManifest.outputDescriptors
+          ?.removeWhere((element) => element.id != type);
+      if (credentialManifest.outputDescriptors!.isNotEmpty) {
+        newCredential['credential_manifest'] = CredentialManifest(
+          credentialManifest.id,
+          credentialManifest.outputDescriptors,
+          credentialManifest.presentationDefinition,
+        ).toJson();
+      }
+
+      final credentialModel = CredentialModel.copyWithData(
+        oldCredentialModel: CredentialModel.fromJson(
+          newCredential,
+        ),
+        newData: credential,
+        activities: [Activity(acquisitionAt: DateTime.now())],
+      );
+
+      emit(
+        state.copyWith(
+          status: AppStatus.insertCredential,
+          data: credentialModel,
+        ),
+      );
+      logger.i('response : $response');
+    } catch (e, s) {
+      if (e is NetworkException) {
+        String? message;
+        if (e.data != null) {
+          if (e.data['error_description'] is String) {
+            try {
+              final dynamic errorDescriptionJson =
+                  jsonDecode(e.data['error_description'] as String);
+              message = errorDescriptionJson['error_message'] as String;
+            } catch (_, __) {
+              message = e.data['error_description'] as String;
+            }
+          } else if (e.data['error_description'] is Map<String, dynamic>) {
+            message = e.data['error_description']['error_message'] as String;
+          }
+        }
+
+        emit(
+          state.error(
+            messageHandler: message != null
+                ? RawMessage(message)
+                : ResponseMessage(
+                    ResponseString
+                        .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                  ),
+          ),
+        );
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
+      }
+      logger.e('error: $e , stack: $s');
+    }
+  }
 
   Future<void> emitHasWallet() async {
     final log = getLogger('emitHasWallet');
@@ -153,11 +286,14 @@ class HomeCubit extends Cubit<HomeState> {
         /// Do not remove: Following POST tell backend the relation between DID
         /// and passbase token.
         try {
+          await dotenv.load();
+          final PASSBASE_WEBHOOK_AUTH_TOKEN =
+              dotenv.get('PASSBASE_WEBHOOK_AUTH_TOKEN');
           final dynamic response = await client.post(
             '/wallet/webhook',
             headers: <String, dynamic>{
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer mytoken',
+              'Authorization': 'Bearer $PASSBASE_WEBHOOK_AUTH_TOKEN',
             },
             data: <String, dynamic>{
               'identityAccessKey': identityAccessKey,
@@ -410,12 +546,15 @@ class HomeCubit extends Cubit<HomeState> {
 
 Future<PassBaseStatus> getPassBaseStatus(String did) async {
   try {
+    await dotenv.load();
+    final PASSBASE_CHECK_DID_AUTH_TOKEN =
+        dotenv.get('PASSBASE_CHECK_DID_AUTH_TOKEN');
     final client = DioClient(Urls.issuerBaseUrl, Dio());
     final dynamic response = await client.get(
       '/passbase/check/$did',
       headers: <String, dynamic>{
         'Accept': 'application/json',
-        'Authorization': 'Bearer mytoken',
+        'Authorization':'Bearer $PASSBASE_CHECK_DID_AUTH_TOKEN',
       },
     );
     final PassBaseStatus passBaseStatus = getPassBaseStatusFromString(

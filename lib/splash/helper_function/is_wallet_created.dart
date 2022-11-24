@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:altme/app/logger/logger.dart';
 import 'package:altme/app/shared/constants/constants.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -10,6 +11,9 @@ Future<bool> isWalletCreated({
   required DIDCubit didCubit,
   required WalletCubit walletCubit,
 }) async {
+  final log = getLogger('IsWalletCreated');
+
+  log.i('did initialisation');
   final String? ssiMnemonic =
       await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
   if (ssiMnemonic == null || ssiMnemonic.isEmpty) {
@@ -59,10 +63,35 @@ Future<bool> isWalletCreated({
     }
   }
 
-  await walletCubit.initialize();
+  log.i('wallet initialisation');
+  await walletCubit.initialize(ssiKey: ssiKey);
 
+  log.i('blockchain initialisation');
+  await blockchainInitialize(
+    walletCubit: walletCubit,
+    ssiMnemonic: ssiMnemonic,
+    secureStorageProvider: secureStorageProvider,
+  );
+
+  await didCubit.load(
+    did: did,
+    didMethod: didMethod,
+    didMethodName: didMethodName,
+    verificationMethod: verificationMethod,
+  );
+
+  return true;
+}
+
+Future<void> blockchainInitialize({
+  required WalletCubit walletCubit,
+  required String ssiMnemonic,
+  required SecureStorageProvider secureStorageProvider,
+}) async {
+  // TODO(bibash): currentCryptoIndex => currentTezosIndex & currentEthIndex
   final String? currentCryptoIndex =
       await secureStorageProvider.get(SecureStorageKeys.currentCryptoIndex);
+
   if (currentCryptoIndex != null && currentCryptoIndex.isNotEmpty) {
     /// load active index
     final activeIndex = int.parse(currentCryptoIndex);
@@ -87,13 +116,4 @@ Future<bool> isWalletCreated({
       isImported: false,
     );
   }
-
-  await didCubit.load(
-    did: did,
-    didMethod: didMethod,
-    didMethodName: didMethodName,
-    verificationMethod: verificationMethod,
-  );
-
-  return true;
 }

@@ -127,6 +127,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   await Dartez().init();
 
+  //desk360-flutter-sdk initialisation
+
   await runZonedGuarded(
     () async {
       await BlocOverrides.runZoned(

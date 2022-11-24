@@ -572,7 +572,22 @@
     "iAgreeToThe",
     "termsAndConditions",
     "walletReadyTitle",
-    "walletReadySubtitle"
+    "walletReadySubtitle",
+    "failedToInitCamera",
+    "chooseMethodPageOver18Title",
+    "chooseMethodPageOver13Title",
+    "chooseMethodPageSubtitle",
+    "idDocumentCheck",
+    "idDocumentCheckDescription",
+    "realTimePhoto",
+    "realTimePhotoDescription",
+    "verifyYourAge",
+    "verifyYourAgeSubtitle",
+    "verifyYourAgeDescription",
+    "accept",
+    "decline",
+    "placeYourFaceInTheOval",
+    "cameraSubtitle"
   ],
 
   "es": [
@@ -1148,7 +1163,22 @@
     "iAgreeToThe",
     "termsAndConditions",
     "walletReadyTitle",
-    "walletReadySubtitle"
+    "walletReadySubtitle",
+    "failedToInitCamera",
+    "chooseMethodPageOver18Title",
+    "chooseMethodPageOver13Title",
+    "chooseMethodPageSubtitle",
+    "idDocumentCheck",
+    "idDocumentCheckDescription",
+    "realTimePhoto",
+    "realTimePhotoDescription",
+    "verifyYourAge",
+    "verifyYourAgeSubtitle",
+    "verifyYourAgeDescription",
+    "accept",
+    "decline",
+    "placeYourFaceInTheOval",
+    "cameraSubtitle"
   ],
 
   "fr": [
@@ -1724,7 +1754,22 @@
     "iAgreeToThe",
     "termsAndConditions",
     "walletReadyTitle",
-    "walletReadySubtitle"
+    "walletReadySubtitle",
+    "failedToInitCamera",
+    "chooseMethodPageOver18Title",
+    "chooseMethodPageOver13Title",
+    "chooseMethodPageSubtitle",
+    "idDocumentCheck",
+    "idDocumentCheckDescription",
+    "realTimePhoto",
+    "realTimePhotoDescription",
+    "verifyYourAge",
+    "verifyYourAgeSubtitle",
+    "verifyYourAgeDescription",
+    "accept",
+    "decline",
+    "placeYourFaceInTheOval",
+    "cameraSubtitle"
   ],
 
   "it": [
@@ -2300,6 +2345,21 @@
     "iAgreeToThe",
     "termsAndConditions",
     "walletReadyTitle",
-    "walletReadySubtitle"
+    "walletReadySubtitle",
+    "failedToInitCamera",
+    "chooseMethodPageOver18Title",
+    "chooseMethodPageOver13Title",
+    "chooseMethodPageSubtitle",
+    "idDocumentCheck",
+    "idDocumentCheckDescription",
+    "realTimePhoto",
+    "realTimePhotoDescription",
+    "verifyYourAge",
+    "verifyYourAgeSubtitle",
+    "verifyYourAgeDescription",
+    "accept",
+    "decline",
+    "placeYourFaceInTheOval",
+    "cameraSubtitle"
   ]
 }

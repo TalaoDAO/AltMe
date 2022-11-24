@@ -48,6 +48,13 @@ class TokensCubit extends Cubit<TokensState> {
   }
 
   Future<void> getTokens() async {
+    final activeIndex = walletCubit.state.currentCryptoIndex;
+    if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType ==
+        BlockchainType.ethereum) {
+      emit(state.copyWith(status: AppStatus.idle));
+      return;
+    }
+
     if (state.offset == _offsetOfLoadedData) return;
     _offsetOfLoadedData = state.offset;
     if (data.length < state.offset) return;
@@ -56,9 +63,11 @@ class TokensCubit extends Cubit<TokensState> {
         emit(state.fetching());
       }
 
-      final activeIndex = walletCubit.state.currentCryptoIndex;
+      //final activeIndex = walletCubit.state.currentCryptoIndex;
       if (walletCubit.state.cryptoAccount.data.isEmpty) {
-        await walletCubit.initialize();
+        final String? ssiKey =
+            await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+        await walletCubit.initialize(ssiKey: ssiKey);
         if (walletCubit.state.cryptoAccount.data.isEmpty) {
           emit(state.populate(data: []));
           return;

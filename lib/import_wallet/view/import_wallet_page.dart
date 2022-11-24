@@ -204,7 +204,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                   WalletTypeList(
                     onItemTap: (wallet) {
                       Navigator.of(context).push<void>(
-                        ImportFromOtherWalletPage.route(
+                        ImportFromWalletPage.route(
                           walletTypeModel: wallet,
                           accountName: widget.accountName,
                           isFromOnboard: widget.isFromOnboarding,
@@ -240,9 +240,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                       onPressed: !state.isMnemonicOrKeyValid
                           ? null
                           : () async {
-                              await context
-                                  .read<ImportWalletCubit>()
-                                  .saveMnemonicOrKey(
+                              await context.read<ImportWalletCubit>().import(
                                     mnemonicOrKey: mnemonicController.text,
                                     accountName: widget.accountName,
                                     isFromOnboarding: widget.isFromOnboarding,

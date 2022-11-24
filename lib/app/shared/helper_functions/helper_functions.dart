@@ -40,7 +40,8 @@ bool isEbsiIssuer(CredentialModel credentialModel) {
 bool isValidPrivateKey(String value) {
   return value.startsWith('edsk') ||
       value.startsWith('spsk') ||
-      value.startsWith('p2sk');
+      value.startsWith('p2sk') ||
+      value.startsWith('0x');
 }
 
 KeyStoreModel getKeysFromSecretKey({required String secretKey}) {
