@@ -40,10 +40,14 @@ class StarterPage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              const SizedBox(height: Sizes.space2XLarge,),
+              const SizedBox(
+                height: Sizes.space2XLarge,
+              ),
               const Spacer(),
               const TitleText(),
-              const SizedBox(height: Sizes.spaceNormal,),
+              const SizedBox(
+                height: Sizes.spaceNormal,
+              ),
               const SubTitle(),
               const Spacer(
                 flex: 2,
@@ -58,7 +62,6 @@ class StarterPage extends StatelessWidget {
                     EnterNewPinCodePage.route(
                       isFromOnboarding: true,
                       isValidCallback: () {
-                        Navigator.of(context).pop();
                         Navigator.of(context).push<void>(
                           ActiviateBiometricsPage.route(
                             routeType: WalletRouteType.recover,
@@ -86,7 +89,6 @@ class StarterPage extends StatelessWidget {
                     EnterNewPinCodePage.route(
                       isFromOnboarding: true,
                       isValidCallback: () {
-                        Navigator.of(context).pop();
                         Navigator.of(context).push<void>(
                           ActiviateBiometricsPage.route(
                             routeType: WalletRouteType.create,
