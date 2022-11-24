@@ -7,7 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectAccount extends StatelessWidget {
-  const SelectAccount({Key? key}) : super(key: key);
+  const SelectAccount({
+    Key? key,
+    required this.blockchainType,
+  }) : super(key: key);
+
+  final BlockchainType blockchainType;
 
   @override
   Widget build(BuildContext context) {
@@ -31,19 +36,19 @@ class SelectAccount extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, i) {
-                final accountItemRealIndex =
-                    walletState.cryptoAccount.data.indexOf(tezosAccounts[i]);
-                return SelectBoxAccountItem(
-                  cryptoAccountData: tezosAccounts[i],
-                  isSelected:
-                      walletState.currentCryptoIndex == accountItemRealIndex,
-                  listIndex: i,
-                  onPressed: () {
-                    context
-                        .read<WalletCubit>()
-                        .setCurrentWalletAccount(accountItemRealIndex);
-                  },
-                );
+                final cryptoAccountData = walletState.cryptoAccount.data[i];
+                return cryptoAccountData.blockchainType == blockchainType
+                    ? SelectBoxAccountItem(
+                        cryptoAccountData: cryptoAccountData,
+                        isSelected: walletState.currentCryptoIndex == i,
+                        listIndex: i,
+                        onPressed: () {
+                          context
+                              .read<WalletCubit>()
+                              .setCurrentWalletAccount(i);
+                        },
+                      )
+                    : Container();
               },
               separatorBuilder: (_, __) => Padding(
                 padding: const EdgeInsets.symmetric(

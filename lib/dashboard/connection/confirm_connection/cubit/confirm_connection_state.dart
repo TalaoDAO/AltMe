@@ -1,37 +1,37 @@
-part of 'beacon_confirm_connection_cubit.dart';
+part of 'confirm_connection_cubit.dart';
 
 @JsonSerializable()
-class BeaconConfirmConnectionState extends Equatable {
-  const BeaconConfirmConnectionState({
+class ConfirmConnectionState extends Equatable {
+  const ConfirmConnectionState({
     this.status = AppStatus.init,
     this.message,
   });
 
-  factory BeaconConfirmConnectionState.fromJson(Map<String, dynamic> json) =>
-      _$BeaconConfirmConnectionStateFromJson(json);
+  factory ConfirmConnectionState.fromJson(Map<String, dynamic> json) =>
+      _$ConfirmConnectionStateFromJson(json);
 
   final AppStatus status;
   final StateMessage? message;
 
-  BeaconConfirmConnectionState loading() {
-    return const BeaconConfirmConnectionState(status: AppStatus.loading);
+  ConfirmConnectionState loading() {
+    return const ConfirmConnectionState(status: AppStatus.loading);
   }
 
-  BeaconConfirmConnectionState error({
+  ConfirmConnectionState error({
     required MessageHandler messageHandler,
   }) {
-    return BeaconConfirmConnectionState(
+    return ConfirmConnectionState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
     );
   }
 
-  BeaconConfirmConnectionState copyWith({
+  ConfirmConnectionState copyWith({
     AppStatus appStatus = AppStatus.idle,
     MessageHandler? messageHandler,
     int? selectedIndex,
   }) {
-    return BeaconConfirmConnectionState(
+    return ConfirmConnectionState(
       status: appStatus,
       message: messageHandler == null
           ? null
@@ -39,7 +39,7 @@ class BeaconConfirmConnectionState extends Equatable {
     );
   }
 
-  Map<String, dynamic> toJson() => _$BeaconConfirmConnectionStateToJson(this);
+  Map<String, dynamic> toJson() => _$ConfirmConnectionStateToJson(this);
 
   @override
   List<Object?> get props => [status, message];

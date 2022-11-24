@@ -3,47 +3,56 @@ import 'package:altme/beacon/beacon.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:altme/wallet_connect/wallet_connect.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
-class BeaconConfirmConnectionPage extends StatelessWidget {
-  const BeaconConfirmConnectionPage({
+class ConfirmConnectionPage extends StatelessWidget {
+  const ConfirmConnectionPage({
     Key? key,
+    required this.connectionBridgeType,
   }) : super(key: key);
 
-  static Route route() {
+  final ConnectionBridgeType connectionBridgeType;
+
+  static Route route({required ConnectionBridgeType connectionBridgeType}) {
     return MaterialPageRoute<void>(
-      builder: (_) => const BeaconConfirmConnectionPage(),
-      settings: const RouteSettings(name: '/beaconConfirmConnectionPage'),
+      builder: (_) => ConfirmConnectionPage(
+        connectionBridgeType: connectionBridgeType,
+      ),
+      settings: const RouteSettings(name: '/ConfirmConnectionPage'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => BeaconConfirmConnectionCubit(
+      create: (_) => ConfirmConnectionCubit(
         beacon: Beacon(),
         beaconCubit: context.read<BeaconCubit>(),
         walletCubit: context.read<WalletCubit>(),
         beaconRepository: BeaconRepository(secure_storage.getSecureStorage),
+        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
-      child: const BeaconConfirmConnectionView(),
+      child: ConfirmConnectionView(connectionBridgeType: connectionBridgeType),
     );
   }
 }
 
-class BeaconConfirmConnectionView extends StatelessWidget {
-  const BeaconConfirmConnectionView({
+class ConfirmConnectionView extends StatelessWidget {
+  const ConfirmConnectionView({
     Key? key,
+    required this.connectionBridgeType,
   }) : super(key: key);
+
+  final ConnectionBridgeType connectionBridgeType;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocListener<BeaconConfirmConnectionCubit,
-        BeaconConfirmConnectionState>(
+    return BlocListener<ConfirmConnectionCubit, ConfirmConnectionState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -68,7 +77,9 @@ class BeaconConfirmConnectionView extends StatelessWidget {
       },
       child: WillPopScope(
         onWillPop: () async {
-          context.read<BeaconConfirmConnectionCubit>().rejectConnection();
+          context.read<ConfirmConnectionCubit>().rejectConnection(
+                connectionBridgeType: connectionBridgeType,
+              );
           return true;
         },
         child: BasePage(
@@ -76,7 +87,9 @@ class BeaconConfirmConnectionView extends StatelessWidget {
           title: l10n.connection,
           titleLeading: BackLeadingButton(
             onPressed: () =>
-                context.read<BeaconConfirmConnectionCubit>().rejectConnection(),
+                context.read<ConfirmConnectionCubit>().rejectConnection(
+                      connectionBridgeType: connectionBridgeType,
+                    ),
           ),
           body: BackgroundCard(
             height: double.infinity,
@@ -91,20 +104,31 @@ class BeaconConfirmConnectionView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Text(
-                      context
-                          .read<BeaconCubit>()
-                          .state
-                          .beaconRequest!
-                          .request!
-                          .appMetadata!
-                          .name!,
+                      connectionBridgeType == ConnectionBridgeType.beacon
+                          ? context
+                              .read<BeaconCubit>()
+                              .state
+                              .beaconRequest!
+                              .request!
+                              .appMetadata!
+                              .name!
+                          : context
+                              .read<WalletConnectCubit>()
+                              .state
+                              .dAppPeerMeta!
+                              .name,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: Sizes.spaceXLarge),
                     const Permissions(),
                     const SizedBox(height: Sizes.spaceXLarge),
-                    const SelectAccount(),
+                    SelectAccount(
+                      blockchainType:
+                          connectionBridgeType == ConnectionBridgeType.beacon
+                              ? BlockchainType.tezos
+                              : BlockchainType.ethereum,
+                    ),
                     const SizedBox(
                       height: Sizes.spaceNormal,
                     ),
@@ -128,7 +152,9 @@ class BeaconConfirmConnectionView extends StatelessWidget {
                     borderRadius: Sizes.normalRadius,
                     text: l10n.connect,
                     onPressed: () {
-                      context.read<BeaconConfirmConnectionCubit>().connect();
+                      context.read<ConfirmConnectionCubit>().connect(
+                            connectionBridgeType: connectionBridgeType,
+                          );
                     },
                   ),
                   const SizedBox(height: 8),
@@ -136,9 +162,9 @@ class BeaconConfirmConnectionView extends StatelessWidget {
                     borderRadius: Sizes.normalRadius,
                     text: l10n.cancel,
                     onPressed: () {
-                      context
-                          .read<BeaconConfirmConnectionCubit>()
-                          .rejectConnection();
+                      context.read<ConfirmConnectionCubit>().rejectConnection(
+                            connectionBridgeType: connectionBridgeType,
+                          );
                     },
                   ),
                 ],
