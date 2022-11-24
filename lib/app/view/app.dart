@@ -17,6 +17,7 @@ import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:altme/wallet_connect/wallet_connect.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:did_kit/did_kit.dart';
@@ -44,6 +45,9 @@ class App extends StatelessWidget {
         ),
         BlocProvider<BeaconCubit>(
           create: (context) => BeaconCubit(beacon: Beacon()),
+        ),
+        BlocProvider<WalletConnectCubit>(
+          create: (context) => WalletConnectCubit(),
         ),
         BlocProvider<DeepLinkCubit>(create: (context) => DeepLinkCubit()),
         BlocProvider<QueryByExampleCubit>(
@@ -115,6 +119,7 @@ class App extends StatelessWidget {
             profileCubit: context.read<ProfileCubit>(),
             walletCubit: context.read<WalletCubit>(),
             beacon: Beacon(),
+            walletConnectCubit: context.read<WalletConnectCubit>(),
           ),
         ),
         BlocProvider(

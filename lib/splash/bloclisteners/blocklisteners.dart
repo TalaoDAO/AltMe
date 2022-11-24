@@ -7,6 +7,7 @@ import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:altme/wallet_connect/wallet_connect.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -265,7 +266,11 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       }
 
       if (state.status == BeaconStatus.permission) {
-        Navigator.of(context).push<void>(BeaconConfirmConnectionPage.route());
+        Navigator.of(context).push<void>(
+          ConfirmConnectionPage.route(
+            connectionBridgeType: ConnectionBridgeType.beacon,
+          ),
+        );
       }
 
       if (state.status == BeaconStatus.signPayload) {
@@ -293,6 +298,24 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
         }
 
         Navigator.of(context).push<void>(BeaconOperationPage.route());
+      }
+    } catch (e) {
+      log.e(e);
+    }
+  },
+);
+
+final walletConnectBlocListener =
+    BlocListener<WalletConnectCubit, WalletConnectState>(
+  listener: (BuildContext context, WalletConnectState state) {
+    final log = getLogger('walletConnectStateBlocListener');
+    try {
+      if (state.status == WalletConnectStatus.permission) {
+        Navigator.of(context).push<void>(
+          ConfirmConnectionPage.route(
+            connectionBridgeType: ConnectionBridgeType.walletconnect,
+          ),
+        );
       }
     } catch (e) {
       log.e(e);
