@@ -11,7 +11,7 @@ class TitleText extends StatelessWidget {
     return SizedBox(
       child: Text(
         l10n.splashTitle,
-        maxLines: 3,
+        maxLines: 4,
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.starterTitleStyle,
       ),
