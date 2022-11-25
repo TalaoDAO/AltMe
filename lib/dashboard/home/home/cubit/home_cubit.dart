@@ -76,12 +76,15 @@ class HomeCubit extends Cubit<HomeState> {
         'did': did,
       };
 
+      await dotenv.load();
+      final OVER13_AI_API_KEY = dotenv.get('OVER13_AI_API_KEY');
+
       final dynamic response = await client.post(
         url,
         headers: <String, dynamic>{
           'accept': 'application/json',
           'Content-Type': 'application/json',
-          'X-API-KEY': '5f691f41-b7ef-456e-b53d-7351b2798b4e'
+          'X-API-KEY': OVER13_AI_API_KEY
         },
         data: data,
       );
@@ -541,7 +544,7 @@ Future<PassBaseStatus> getPassBaseStatus(String did) async {
       '/passbase/check/$did',
       headers: <String, dynamic>{
         'Accept': 'application/json',
-        'Authorization':'Bearer $PASSBASE_CHECK_DID_AUTH_TOKEN',
+        'Authorization': 'Bearer $PASSBASE_CHECK_DID_AUTH_TOKEN',
       },
     );
     final PassBaseStatus passBaseStatus = getPassBaseStatusFromString(
