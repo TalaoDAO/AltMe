@@ -101,6 +101,7 @@ class StarterPage extends StatelessWidget {
                 },
               ),
               const Spacer(),
+              const SizedBox(height: Sizes.spaceSmall,),
             ],
           ),
         ),
