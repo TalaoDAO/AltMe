@@ -144,7 +144,7 @@ class CameraCubit extends Cubit<CameraState> {
   // }
 
   Future<void> dispose() async {
-    await cameraController?.stopImageStream();
+   // await cameraController?.stopImageStream();
     await cameraController?.dispose();
     // await _faceDetector?.close();
   }
