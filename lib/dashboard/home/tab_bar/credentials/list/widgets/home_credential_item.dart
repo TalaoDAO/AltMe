@@ -155,6 +155,10 @@ class DummyCredentialItem extends StatelessWidget {
             return;
           }
 
+          if (homeCredential.credentialSubjectType.isDisabled()) {
+            return;
+          }
+
           await Navigator.push<void>(
             context,
             DiscoverDetailsPage.route(
@@ -170,33 +174,38 @@ class DummyCredentialItem extends StatelessWidget {
           children: [
             Expanded(
               flex: 8,
-              child: CredentialImage(
-                image: homeCredential.image!,
-                child: homeCredential.dummyDescription == null
-                    ? null
-                    : CustomMultiChildLayout(
-                        delegate:
-                            DummyCredentialItemDelegate(position: Offset.zero),
-                        children: [
-                          LayoutId(
-                            id: 'dummyDesc',
-                            child: FractionallySizedBox(
-                              widthFactor: 0.85,
-                              heightFactor: 0.42,
-                              child: MyText(
-                                homeCredential.dummyDescription!.getMessage(
-                                  context,
-                                  homeCredential.dummyDescription!,
+              child: Opacity(
+                opacity:
+                    homeCredential.credentialSubjectType.isDisabled() ? 0.5 : 1,
+                child: CredentialImage(
+                  image: homeCredential.image!,
+                  child: homeCredential.dummyDescription == null
+                      ? null
+                      : CustomMultiChildLayout(
+                          delegate: DummyCredentialItemDelegate(
+                            position: Offset.zero,
+                          ),
+                          children: [
+                            LayoutId(
+                              id: 'dummyDesc',
+                              child: FractionallySizedBox(
+                                widthFactor: 0.85,
+                                heightFactor: 0.42,
+                                child: MyText(
+                                  homeCredential.dummyDescription!.getMessage(
+                                    context,
+                                    homeCredential.dummyDescription!,
+                                  ),
+                                  maxLines: 3,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .discoverOverlayDescription,
                                 ),
-                                maxLines: 3,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .discoverOverlayDescription,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                ),
               ),
             ),
           ],

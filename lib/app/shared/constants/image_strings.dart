@@ -37,19 +37,19 @@ class ImageStrings {
   static const String voucherFront = '$imagePath/carte-coupon-recto.png';
   static const String voucherBack = '$imagePath/carte-coupon-verso.png';
   static const String tezotopiaVoucher = '$imagePath/tezotopia_voucher.png';
-  static const String bunnyPassDummy = '$imagePath/bunny-pass-dummy.png';
+  static const String bunnyPassDummy = '$imagePath/bunny-pass-dummy-soon.png';
   static const String bunnyPass = '$imagePath/bunny-pass.png';
-  static const String dogamiPassDummy = '$imagePath/dogami-pass-dummy.png';
+  static const String dogamiPassDummy = '$imagePath/dogami-pass-dummy-soon.png';
   static const String dogamiPass = '$imagePath/dogami-pass.png';
-  static const String matterlightPassDummy = '$imagePath/matterlight-pass-dummy.png';
+  static const String matterlightPassDummy = '$imagePath/matterlight-pass-dummy-soon.png';
   static const String matterlightPass = '$imagePath/matterlight-pass.png';
-  static const String pigsPassDummy = '$imagePath/pigs-pass-dummy.png';
+  static const String pigsPassDummy = '$imagePath/pigs-pass-dummy-soon.png';
   static const String pigsPass = '$imagePath/pigs-pass.png';
-  static const String trooperzPassDummy = '$imagePath/trooperz-pass-dummy.png';
+  static const String trooperzPassDummy = '$imagePath/trooperz-pass-dummy-soon.png';
   static const String trooperzPass = '$imagePath/trooperz-pass.png';
-  static const String tzlandPassDummy = '$imagePath/tzland-pass-dummy.png';
+  static const String tzlandPassDummy = '$imagePath/tzland-pass-dummy-soon.png';
   static const String tzlandPass = '$imagePath/tzland-pass.png';
-  static const String tezoniaPassDummy = '$imagePath/tezonia-pass-dummy.png';
+  static const String tezoniaPassDummy = '$imagePath/tezonia-pass-dummy-soon.png';
   static const String tezoniaPass = '$imagePath/tezonia-pass.png';
   static const String ecole42LearningAchievement =
       '$imagePath/certificate-42.png';
