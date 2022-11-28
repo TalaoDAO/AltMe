@@ -105,7 +105,7 @@ class HomeCubit extends Cubit<HomeState> {
   }) async {
     final logger = getLogger('HomeCubit - AISelfiValidation');
     try {
-      emit(state.loading());
+      emit(state.copyWith(status: AppStatus.loading));
       final dynamic response = await client.post(
         url,
         headers: <String, dynamic>{

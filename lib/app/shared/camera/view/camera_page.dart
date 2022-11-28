@@ -120,10 +120,12 @@ class _CameraViewState extends State<CameraView> {
         },
         listener: (_, state) async {
           if (state.status == CameraStatus.imageCaptured) {
+            LoadingView().show(context: context);
             await context.read<HomeCubit>().aiSelfiValidation(
                   credentialType: widget.credentialSubjectType,
                   imageBytes: state.data!,
                 );
+            LoadingView().hide();
             Navigator.of(context).pop();
           }
         },
