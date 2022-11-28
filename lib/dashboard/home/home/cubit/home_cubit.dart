@@ -39,60 +39,83 @@ class HomeCubit extends Cubit<HomeState> {
     required CredentialSubjectType credentialType,
     required List<int> imageBytes,
   }) async {
-    // TODO(Taleb): launch url to get Over18,Over13,AgeRange Credentials
-    final logger = getLogger('HomeCubit - aiSelfiValidation');
+    // launch url to get Over18,Over13,AgeRange Credentials
     emit(state.loading());
+    final verificationMethod =
+        await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
+
+    final base64EncodedImage = base64Encode(imageBytes);
+
+    final challenge =
+        bytesToHex(sha256.convert(utf8.encode(base64EncodedImage)).bytes);
+
+    final options = <String, dynamic>{
+      'verificationMethod': verificationMethod,
+      'proofPurpose': 'authentication',
+      'challenge': challenge,
+      'domain': 'issuer.talao.co',
+    };
+
+    final key = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
+    final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
+
+    final DIDKitProvider didKitProvider = DIDKitProvider();
+    final String did_auth = await didKitProvider.didAuth(
+      did,
+      jsonEncode(options),
+      key,
+    );
+
+    final data = <String, dynamic>{
+      'base64_encoded_string': base64EncodedImage,
+      'vp': did_auth,
+      'did': did,
+    };
+
+    await dotenv.load();
+    final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');
+
+    await _getCredentialByAI(
+      url: Urls.over13AIValidationUrl,
+      apiKey: YOTI_AI_API_KEY,
+      data: data,
+      credentialType: 'Over13',
+    );
+
+    await _getCredentialByAI(
+      url: Urls.over18AIValidationUrl,
+      apiKey: YOTI_AI_API_KEY,
+      data: data,
+      credentialType: 'Over18',
+    );
+
+    await _getCredentialByAI(
+      url: Urls.ageRangeAIValidationUrl,
+      apiKey: YOTI_AI_API_KEY,
+      data: data,
+      credentialType: 'AgeRange',
+    );
+  }
+
+  Future<void> _getCredentialByAI({
+    required String url,
+    required String apiKey,
+    required Map<String, dynamic> data,
+    required String credentialType,
+  }) async {
+    final logger = getLogger('HomeCubit - AISelfiValidation');
     try {
-      final String url = credentialType == CredentialSubjectType.over13
-          ? Urls.over13aiValidationUrl
-          : Urls.over18aiValidationUrl;
-      final verificationMethod =
-          await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
-
-      final base64EncodedImage = base64Encode(imageBytes);
-
-      final challenge =
-          bytesToHex(sha256.convert(utf8.encode(base64EncodedImage)).bytes);
-
-      final options = <String, dynamic>{
-        'verificationMethod': verificationMethod,
-        'proofPurpose': 'authentication',
-        'challenge': challenge,
-        'domain': 'issuer.talao.co',
-      };
-
-      final key = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
-      final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
-
-      final DIDKitProvider didKitProvider = DIDKitProvider();
-      final String did_auth = await didKitProvider.didAuth(
-        did,
-        jsonEncode(options),
-        key,
-      );
-
-      final data = <String, dynamic>{
-        'base64_encoded_string': base64EncodedImage,
-        'vp': did_auth,
-        'did': did,
-      };
-
-      await dotenv.load();
-      final OVER13_AI_API_KEY = dotenv.get('OVER13_AI_API_KEY');
-
       final dynamic response = await client.post(
         url,
         headers: <String, dynamic>{
           'accept': 'application/json',
           'Content-Type': 'application/json',
-          'X-API-KEY': OVER13_AI_API_KEY
+          'X-API-KEY': apiKey,
         },
         data: data,
       );
 
       final credential = jsonDecode(response as String) as Map<String, dynamic>;
-      final type =
-          credentialType == CredentialSubjectType.over13 ? 'Over13' : 'Over18';
 
       final Map<String, dynamic> newCredential =
           Map<String, dynamic>.from(credential);
@@ -100,7 +123,7 @@ class HomeCubit extends Cubit<HomeState> {
       final CredentialManifest credentialManifest =
           await getCredentialManifestFromAltMe(client);
       credentialManifest.outputDescriptors
-          ?.removeWhere((element) => element.id != type);
+          ?.removeWhere((element) => element.id != credentialType);
       if (credentialManifest.outputDescriptors!.isNotEmpty) {
         newCredential['credential_manifest'] = CredentialManifest(
           credentialManifest.id,
@@ -227,6 +250,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<PassBaseStatus> checkPassbaseStatus() async {
+    emit(state.loading());
     late PassBaseStatus passBaseStatus;
 
     /// check if status is already approved in DB
@@ -248,7 +272,7 @@ class HomeCubit extends Cubit<HomeState> {
         passBaseStatus.name,
       );
     }
-
+    emit(state.copyWith(status: AppStatus.populate));
     return passBaseStatus;
   }
 

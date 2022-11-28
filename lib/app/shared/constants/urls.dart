@@ -43,6 +43,7 @@ class Urls {
   static const raribleUrl = 'https://rarible.com/';
 
   //
-  static const over13aiValidationUrl = 'https://issuer.talao.co/ai/over13';
-  static const over18aiValidationUrl = 'https://issuer.talao.co/ai/over18';
+  static const over13AIValidationUrl = 'https://issuer.talao.co/ai/over13';
+  static const over18AIValidationUrl = 'https://issuer.talao.co/ai/over18';
+  static const ageRangeAIValidationUrl = 'https://issuer.talao.co/ai/agerange';
 }
