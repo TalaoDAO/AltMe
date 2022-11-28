@@ -43,7 +43,7 @@ void callbackDispatcher() {
             if (oldPassBaseStatus != PassBaseStatus.approved) {
               try {
                 final PassBaseStatus newPassBaseStatus =
-                    await getPassBaseStatus(did);
+                    await getPassBaseStatusFromAPI(did);
                 log.i('passbase isolate newPassBaseStatus: $newPassBaseStatus');
 
                 switch (newPassBaseStatus) {

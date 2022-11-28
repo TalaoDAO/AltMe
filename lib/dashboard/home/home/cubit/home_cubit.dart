@@ -39,6 +39,7 @@ class HomeCubit extends Cubit<HomeState> {
     required CredentialSubjectType credentialType,
     required List<int> imageBytes,
   }) async {
+    // TODO(Taleb): launch url to get Over18,Over13,AgeRange Credentials
     final logger = getLogger('HomeCubit - aiSelfiValidation');
     emit(state.loading());
     try {
@@ -204,37 +205,7 @@ class HomeCubit extends Cubit<HomeState> {
     log.i('Checking PassbaseStatus');
     emit(state.loading());
 
-    late PassBaseStatus passBaseStatus;
-
-    /// check if status is already approved in DB
-    final String? passbaseStatusFromStorage = await secureStorageProvider.get(
-      SecureStorageKeys.passBaseStatus,
-    );
-
-    if (passbaseStatusFromStorage != null) {
-      passBaseStatus = getPassBaseStatusFromString(passbaseStatusFromStorage);
-    } else {
-      passBaseStatus = PassBaseStatus.undone;
-    }
-
-    if (passBaseStatus != PassBaseStatus.approved) {
-      try {
-        final did = didCubit.state.did!;
-        passBaseStatus = await getPassBaseStatus(did);
-        await secureStorageProvider.set(
-          SecureStorageKeys.passBaseStatus,
-          passBaseStatus.name,
-        );
-      } catch (e) {
-        emit(
-          state.copyWith(
-            status: AppStatus.populate,
-            passBaseStatus: PassBaseStatus.declined,
-            link: link,
-          ),
-        );
-      }
-    }
+    final passBaseStatus = await checkPassbaseStatus();
 
     if (passBaseStatus == PassBaseStatus.approved) {
       await launchUrl(link: link);
@@ -253,6 +224,32 @@ class HomeCubit extends Cubit<HomeState> {
         link: link,
       ),
     );
+  }
+
+  Future<PassBaseStatus> checkPassbaseStatus() async {
+    late PassBaseStatus passBaseStatus;
+
+    /// check if status is already approved in DB
+    final String? passbaseStatusFromStorage = await secureStorageProvider.get(
+      SecureStorageKeys.passBaseStatus,
+    );
+
+    if (passbaseStatusFromStorage != null) {
+      passBaseStatus = getPassBaseStatusFromString(passbaseStatusFromStorage);
+    } else {
+      passBaseStatus = PassBaseStatus.undone;
+    }
+
+    if (passBaseStatus != PassBaseStatus.approved) {
+      final did = didCubit.state.did!;
+      passBaseStatus = await getPassBaseStatusFromAPI(did);
+      await secureStorageProvider.set(
+        SecureStorageKeys.passBaseStatus,
+        passBaseStatus.name,
+      );
+    }
+
+    return passBaseStatus;
   }
 
   void startPassbaseVerification(WalletCubit walletCubit) {
@@ -534,7 +531,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 }
 
-Future<PassBaseStatus> getPassBaseStatus(String did) async {
+Future<PassBaseStatus> getPassBaseStatusFromAPI(String did) async {
   try {
     await dotenv.load();
     final PASSBASE_CHECK_DID_AUTH_TOKEN =

@@ -78,12 +78,22 @@ class DummyCredentialItem extends StatelessWidget {
       if (homeCredential.credentialSubjectType ==
               CredentialSubjectType.over18 ||
           homeCredential.credentialSubjectType ==
-              CredentialSubjectType.over13) {
-        await Navigator.of(context).push<void>(
-          VerifyAgePage.route(
-            credentialSubjectType: homeCredential.credentialSubjectType,
-          ),
-        );
+              CredentialSubjectType.over13 ||
+          homeCredential.credentialSubjectType ==
+              CredentialSubjectType.ageRange) {
+        final passbaseStatus =
+            await context.read<HomeCubit>().checkPassbaseStatus();
+        if (passbaseStatus != PassBaseStatus.approved) {
+          // start verification by Yoti AI
+          await Navigator.of(context).push<void>(
+            VerifyAgePage.route(
+              credentialSubjectType: homeCredential.credentialSubjectType,
+            ),
+          );
+        } else {
+          // get credential from launching the url
+          await context.read<HomeCubit>().launchUrl(link: homeCredential.link);
+        }
       } else {
         await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
               link: homeCredential.link!,
