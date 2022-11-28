@@ -95,72 +95,28 @@ class _CameraViewState extends State<CameraView> {
               ),
             );
           } else {
-            return LayoutBuilder(
-              builder: (context, BoxConstraints constraints) {
-                final camera = cameraCubit.cameraController?.value;
-                // fetch screen size
-                final size = constraints.biggest;
-
-                // calculate scale depending on screen and camera ratios
-                // this is actually size.aspectRatio / (1 / camera.aspectRatio)
-                // because camera preview size is received as landscape
-                // but we're calculating for portrait orientation
-                var scale = size.aspectRatio * camera!.aspectRatio;
-
-                // to prevent scaling down, invert the value
-                if (scale < 1) scale = 1 / scale;
-                return Column(
-                  children: [
-                    Text(
-                      l10n.cameraSubtitle,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.subtitle3,
-                    ),
-                    const SizedBox(
-                      height: Sizes.spaceNormal,
-                    ),
-                    Expanded(
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          if (state.status == CameraStatus.imageCaptured)
-                            Transform.scale(
-                              scale: scale,
-                              child: Image.memory(
-                                Uint8List.fromList(state.data!),
-                              ),
-                            )
-                          else
-                            Transform.scale(
-                              scale: scale,
-                              child: CameraPreview(
-                                cameraCubit.cameraController!,
-                              ),
-                            ),
-                          Transform.scale(
-                            scale: scale,
-                            child: Image.asset(
-                              ImageStrings.cameraFaceDetection,
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(Sizes.spaceNormal),
-                      child: MyGradientButton(
-                        borderRadius: Sizes.smallRadius,
-                        verticalSpacing: 16,
-                        text: l10n.start,
-                        onPressed: state.status != CameraStatus.loading
-                            ? cameraCubit.takePhoto
-                            : null,
-                      ),
-                    ),
-                  ],
-                );
-              },
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                if (state.status == CameraStatus.imageCaptured)
+                  Image.memory(
+                    Uint8List.fromList(state.data!),
+                  )
+                else
+                  CameraPreview(
+                    cameraCubit.cameraController!,
+                  ),
+                Container(
+                  width: cameraCubit.cameraController!.value.previewSize!.width,
+                  height:
+                      cameraCubit.cameraController!.value.previewSize!.height,
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Image.asset(
+                    ImageStrings.cameraFaceDetection,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
             );
           }
         },
@@ -175,6 +131,21 @@ class _CameraViewState extends State<CameraView> {
             Navigator.of(context).pop();
           }
         },
+      ),
+      navigation: Padding(
+        padding: const EdgeInsets.all(Sizes.spaceNormal),
+        child: BlocBuilder<CameraCubit, CameraState>(
+          builder: (context, state) {
+            return MyGradientButton(
+              borderRadius: Sizes.smallRadius,
+              verticalSpacing: 16,
+              text: l10n.start,
+              onPressed: state.status != CameraStatus.loading
+                  ? cameraCubit.takePhoto
+                  : null,
+            );
+          },
+        ),
       ),
     );
   }
