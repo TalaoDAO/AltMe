@@ -5,6 +5,13 @@ part 'credential_subject_type_extension.dart';
 
 enum CredentialSubjectType {
   bloometaPass,
+  tezoniaPass,
+  tzlandPass,
+  troopezPass,
+  pigsPass,
+  matterlightPass,
+  dogamiPass,
+  bunnyPass,
   tezotopiaMembership,
   ageRange,
   nationality,

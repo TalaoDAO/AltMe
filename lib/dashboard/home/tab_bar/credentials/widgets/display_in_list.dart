@@ -22,6 +22,34 @@ class DisplayInList extends StatelessWidget {
         return TezotopiaMemberShipDisplayInList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.bunnyPass:
+        return BunnyPassDisplayInList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.dogamiPass:
+        return DogamiPassDisplayInList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.matterlightPass:
+        return MatterlightPassDisplayInList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.pigsPass:
+        return PigsPassDisplayInList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.troopezPass:
+        return TrooperzPassDisplayInList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.tzlandPass:
+        return TzlandPassDisplayInList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.tezoniaPass:
+        return TezoniaPassDisplayInList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.ageRange:
         return AgeRangeDisplayInList(
           credentialModel: credentialModel,

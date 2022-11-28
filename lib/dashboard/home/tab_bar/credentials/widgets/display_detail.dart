@@ -24,6 +24,34 @@ class DisplayDetail extends StatelessWidget {
         return TezotopiaMemberShipDisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.tezoniaPass:
+        return TezoniaPassDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.tzlandPass:
+        return TzlandPassDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.troopezPass:
+        return TrooperzPassDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.pigsPass:
+        return PigsPassDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.matterlightPass:
+        return MatterlightPassDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.dogamiPass:
+        return DogamiPassDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.bunnyPass:
+        return BunnyPassDisplayDetail(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.ageRange:
         return AgeRangeDisplayDetail(
           credentialModel: credentialModel,
