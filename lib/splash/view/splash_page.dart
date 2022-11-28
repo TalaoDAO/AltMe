@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:uni_links/uni_links.dart';
 
@@ -136,19 +137,22 @@ class _SplashViewState extends State<SplashView> {
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.max,
-            children: const [
-              Spacer(),
-              AltMeLogo(),
-              TitleText(),
-              SplashImage(),
-              SubTitle(),
-              Spacer(),
-              LoadingText(),
-              SizedBox(height: 10),
-              LoadingProgress(),
-              Spacer(),
-              VersionText(),
-              SizedBox(height: 10)
+            children: [
+              const Spacer(),
+              SvgPicture.asset(
+                ImageStrings.aragoLogo,
+                width: 180,
+              ),
+              const Spacer(),
+              const TitleText(),
+              const SplashImage(),
+              const Spacer(),
+              const LoadingText(),
+              const SizedBox(height: 10),
+              const LoadingProgress(),
+              const Spacer(),
+              const VersionText(),
+              const SizedBox(height: 10)
             ],
           ),
         ),

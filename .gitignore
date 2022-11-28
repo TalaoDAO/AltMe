@@ -131,3 +131,4 @@ app.*.map.json
 #build_runner
 *.g.dart
 *.freezed.dart
+/.env
