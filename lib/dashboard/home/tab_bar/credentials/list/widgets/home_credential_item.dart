@@ -79,9 +79,8 @@ class DummyCredentialItem extends StatelessWidget {
               CredentialSubjectType.over18 ||
           homeCredential.credentialSubjectType ==
               CredentialSubjectType.over13) {
-        await Navigator.push<void>(
-          context,
-          ChooseVerificationMethodPage.route(
+        await Navigator.of(context).push<void>(
+          VerifyAgePage.route(
             credentialSubjectType: homeCredential.credentialSubjectType,
           ),
         );
