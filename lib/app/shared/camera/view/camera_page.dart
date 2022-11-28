@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -106,11 +105,10 @@ class _CameraViewState extends State<CameraView> {
                   CameraPreview(
                     cameraCubit.cameraController!,
                   ),
-                Container(
+                SizedBox(
                   width: cameraCubit.cameraController!.value.previewSize!.width,
                   height:
                       cameraCubit.cameraController!.value.previewSize!.height,
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Image.asset(
                     ImageStrings.cameraFaceDetection,
                     fit: BoxFit.cover,
@@ -122,12 +120,10 @@ class _CameraViewState extends State<CameraView> {
         },
         listener: (_, state) async {
           if (state.status == CameraStatus.imageCaptured) {
-            LoadingView().show(context: context);
             await context.read<HomeCubit>().aiSelfiValidation(
                   credentialType: widget.credentialSubjectType,
                   imageBytes: state.data!,
                 );
-            LoadingView().hide();
             Navigator.of(context).pop();
           }
         },
