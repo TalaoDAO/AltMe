@@ -15,7 +15,7 @@ class CameraState extends Equatable {
     this.status = CameraStatus.initializing,
     this.data,
     this.acquiredCredentialsQuantity = 0,
-    this.ageEstimation = '',
+    this.ageEstimate = '',
   });
 
   factory CameraState.fromJson(Map<String, dynamic> json) =>
@@ -24,7 +24,7 @@ class CameraState extends Equatable {
   final CameraStatus status;
   final List<int>? data;
   final int acquiredCredentialsQuantity;
-  final String ageEstimation;
+  final String ageEstimate;
 
   Map<String, dynamic> toJson() => _$CameraStateToJson(this);
 
@@ -33,14 +33,14 @@ class CameraState extends Equatable {
     List<int>? data,
     CameraController? cameraController,
     int? acquiredCredentialsQuantity,
-    String? ageEstimation,
+    String? ageEstimate,
   }) {
     return CameraState(
       status: status ?? this.status,
       data: data ?? this.data,
       acquiredCredentialsQuantity:
           acquiredCredentialsQuantity ?? this.acquiredCredentialsQuantity,
-      ageEstimation: ageEstimation ?? this.ageEstimation,
+      ageEstimate: ageEstimate ?? this.ageEstimate,
     );
   }
 
@@ -49,6 +49,6 @@ class CameraState extends Equatable {
         status,
         data,
         acquiredCredentialsQuantity,
-        ageEstimation,
+        ageEstimate,
       ];
 }

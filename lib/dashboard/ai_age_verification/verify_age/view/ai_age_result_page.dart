@@ -72,7 +72,7 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
                       height: Sizes.spaceNormal,
                     ),
                     Text(
-                      'Your AI age estimation is ${state.acquiredCredentialsQuantity} years',
+                      'Your AI age estimation is ${state.ageEstimate} years',
                       style: Theme.of(context).textTheme.headline4,
                     ),
                     const SizedBox(

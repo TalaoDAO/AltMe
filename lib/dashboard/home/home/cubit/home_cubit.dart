@@ -77,14 +77,14 @@ class HomeCubit extends Cubit<HomeState> {
     await dotenv.load();
     final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');
 
-    // await _getCredentialByAI(
-    //   url: Urls.over13AIValidationUrl,
-    //   apiKey: YOTI_AI_API_KEY,
-    //   data: data,
-    //   credentialType: 'Over13',
-    //   walletCubit: walletCubit,
-    //   cameraCubit: cameraCubit,
-    // );
+    await _getCredentialByAI(
+      url: Urls.over13AIValidationUrl,
+      apiKey: YOTI_AI_API_KEY,
+      data: data,
+      credentialType: 'Over13',
+      walletCubit: walletCubit,
+      cameraCubit: cameraCubit,
+    );
 
     await _getCredentialByAI(
       url: Urls.over18AIValidationUrl,
@@ -159,17 +159,22 @@ class HomeCubit extends Cubit<HomeState> {
         newData: credential,
         activities: [Activity(acquisitionAt: DateTime.now())],
       );
-
-      await walletCubit.insertCredential(
-        credential: credentialModel,
-        showMessage: true,
-      );
-      await cameraCubit.incrementAcquiredCredentialsQuantity();
-      emit(
-        state.copyWith(
-          status: AppStatus.success,
-        ),
-      );
+      if (credentialType != 'AgeEstimate') {
+        await walletCubit.insertCredential(
+          credential: credentialModel,
+          showMessage: true,
+        );
+        await cameraCubit.incrementAcquiredCredentialsQuantity();
+        emit(
+          state.copyWith(
+            status: AppStatus.success,
+          ),
+        );
+      } else {
+        print(credentialModel);
+        await cameraCubit.updateAgeEstimate(
+            credentialModel.data['credentialSubject']['ageEstimate'] as String);
+      }
       logger.i('response : $response');
     } catch (e, s) {
       if (e is NetworkException) {

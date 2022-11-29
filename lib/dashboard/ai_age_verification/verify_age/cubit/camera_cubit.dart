@@ -90,4 +90,13 @@ class CameraCubit extends Cubit<CameraState> {
       ),
     );
   }
+
+  Future<void> updateAgeEstimate(String ageEstimate) async {
+    emit(
+      state.copyWith(
+        ageEstimate: ageEstimate,
+        status: CameraStatus.loading,
+      ),
+    );
+  }
 }
