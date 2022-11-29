@@ -147,7 +147,9 @@ class HomeCubit extends Cubit<HomeState> {
       );
 
       await walletCubit.insertCredential(
-          credential: credentialModel, showMessage: true);
+        credential: credentialModel,
+        showMessage: true,
+      );
       emit(
         state.copyWith(
           status: AppStatus.success,

@@ -9,7 +9,7 @@ class DiscoverList {
     CredentialSubjectType.troopezPass,
     CredentialSubjectType.pigsPass,
     CredentialSubjectType.matterlightPass,
-    CredentialSubjectType.dogamiPass,
+    // CredentialSubjectType.dogamiPass,
     CredentialSubjectType.bunnyPass,
   ];
   static final List<CredentialSubjectType> communityCategories = [

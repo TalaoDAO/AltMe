@@ -182,8 +182,9 @@ class DummyCredentialItem extends StatelessWidget {
             Expanded(
               flex: 8,
               child: Opacity(
-                opacity:
-                    homeCredential.credentialSubjectType.isDisabled() ? 0.5 : 1,
+                opacity: homeCredential.credentialSubjectType.isDisabled()
+                    ? 0.75
+                    : 1,
                 child: CredentialImage(
                   image: homeCredential.image!,
                   child: homeCredential.dummyDescription == null
