@@ -124,17 +124,17 @@ class DummyCredentialItem extends StatelessWidget {
               isPresentable = false;
             }
           }
-          // if (!isPresentable) {
-          //   await showDialog<bool>(
-          //     context: context,
-          //     builder: (context) => InfoDialog(
-          //       title:
-          //           '''${l10n.membershipRequiredListAlerMessage}\n\n 1. Nationality Proof\n 2. Age Range Proof''',
-          //       button: l10n.ok,
-          //     ),
-          //   );
-          //   return;
-          // }
+          if (!isPresentable) {
+            await showDialog<bool>(
+              context: context,
+              builder: (context) => InfoDialog(
+                title:
+                    '''${l10n.membershipRequiredListAlerMessage}\n\n 1. Nationality Proof\n 2. Age Range Proof''',
+                button: l10n.ok,
+              ),
+            );
+            return;
+          }
         }
         context
             .read<DeepLinkCubit>()
