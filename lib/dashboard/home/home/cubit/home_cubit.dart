@@ -77,14 +77,14 @@ class HomeCubit extends Cubit<HomeState> {
     await dotenv.load();
     final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');
 
-    await _getCredentialByAI(
-      url: Urls.over13AIValidationUrl,
-      apiKey: YOTI_AI_API_KEY,
-      data: data,
-      credentialType: 'Over13',
-      walletCubit: walletCubit,
-      cameraCubit: cameraCubit,
-    );
+    // await _getCredentialByAI(
+    //   url: Urls.over13AIValidationUrl,
+    //   apiKey: YOTI_AI_API_KEY,
+    //   data: data,
+    //   credentialType: 'Over13',
+    //   walletCubit: walletCubit,
+    //   cameraCubit: cameraCubit,
+    // );
 
     await _getCredentialByAI(
       url: Urls.over18AIValidationUrl,
@@ -100,6 +100,15 @@ class HomeCubit extends Cubit<HomeState> {
       apiKey: YOTI_AI_API_KEY,
       data: data,
       credentialType: 'AgeRange',
+      walletCubit: walletCubit,
+      cameraCubit: cameraCubit,
+    );
+
+    await _getCredentialByAI(
+      url: 'https://issuer.talao.co/ai/ageestimate',
+      apiKey: YOTI_AI_API_KEY,
+      data: data,
+      credentialType: 'AgeEstimate',
       walletCubit: walletCubit,
       cameraCubit: cameraCubit,
     );
@@ -155,7 +164,7 @@ class HomeCubit extends Cubit<HomeState> {
         credential: credentialModel,
         showMessage: true,
       );
-      unawaited(cameraCubit.incrementAcquiredCredentialsQuantity());
+      await cameraCubit.incrementAcquiredCredentialsQuantity();
       emit(
         state.copyWith(
           status: AppStatus.success,

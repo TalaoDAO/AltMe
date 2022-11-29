@@ -6,18 +6,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AiAgeResultPage extends StatelessWidget {
-  const AiAgeResultPage({super.key});
+  const AiAgeResultPage({super.key, required this.blocContext});
 
-  static Route route() {
+  final BuildContext blocContext;
+
+  static Route route(BuildContext context) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/AiAgeResultPage'),
-      builder: (_) => const AiAgeResultPage(),
+      builder: (_) => AiAgeResultPage(blocContext: context),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return const AiAgeResultView();
+    return BlocProvider<CameraCubit>(
+      create: (context) => BlocProvider.of<CameraCubit>(blocContext),
+      child: const AiAgeResultView(),
+    );
   }
 }
 
@@ -33,6 +38,7 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
 
   @override
   void initState() {
+    confettiController.play();
     super.initState();
   }
 
@@ -66,14 +72,14 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
                       height: Sizes.spaceNormal,
                     ),
                     Text(
-                      l10n.walletReadyTitle,
+                      'Your AI age estimation is ${state.acquiredCredentialsQuantity} years',
                       style: Theme.of(context).textTheme.headline4,
                     ),
                     const SizedBox(
                       height: Sizes.spaceNormal,
                     ),
                     Text(
-                      l10n.walletReadySubtitle,
+                      'You got ${state.acquiredCredentialsQuantity} credentials',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
                             fontWeight: FontWeight.normal,
@@ -87,43 +93,39 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
                 ),
               ),
               navigation: SafeArea(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Sizes.spaceSmall,
-                        vertical: Sizes.space2XSmall,
-                      ),
-                      child: MyGradientButton(
-                        text: l10n.start,
-                        verticalSpacing: 18,
-                        onPressed: state.acquiredCredentialsQuantity > 0
-                            ? () {
-                                Navigator.pushAndRemoveUntil<void>(
-                                  context,
-                                  DashboardPage.route(),
-                                  (Route<dynamic> route) => route.isFirst,
-                                );
-                              }
-                            : null,
-                      ),
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.spaceSmall,
+                    vertical: Sizes.space2XSmall,
+                  ),
+                  child: MyGradientButton(
+                    text: l10n.ok,
+                    verticalSpacing: 18,
+                    onPressed: state.acquiredCredentialsQuantity > 0
+                        ? () {
+                            Navigator.pushAndRemoveUntil<void>(
+                              context,
+                              DashboardPage.route(),
+                              (Route<dynamic> route) => route.isFirst,
+                            );
+                          }
+                        : null,
+                  ),
                 ),
               ),
             ),
-            if (state.acquiredCredentialsQuantity > 0)
-              ConfettiWidget(
-                confettiController: confettiController,
-                shouldLoop: true,
-                minBlastForce: 2,
-                maxBlastForce: 8,
-                emissionFrequency: 0.02,
-                blastDirectionality: BlastDirectionality.explosive,
-                numberOfParticles: 10,
-              )
-            else
-              const SizedBox.shrink(),
+            // if (state.acquiredCredentialsQuantity > 0)
+            //   ConfettiWidget(
+            //     confettiController: confettiController,
+            //     shouldLoop: true,
+            //     minBlastForce: 2,
+            //     maxBlastForce: 8,
+            //     emissionFrequency: 0.02,
+            //     blastDirectionality: BlastDirectionality.explosive,
+            //     numberOfParticles: 10,
+            //   )
+            // else
+            //   const SizedBox.shrink(),
           ],
         );
       },

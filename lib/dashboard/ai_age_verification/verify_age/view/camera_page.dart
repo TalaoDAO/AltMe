@@ -130,7 +130,10 @@ class _CameraViewState extends State<CameraView> {
                   cameraCubit: context.read<CameraCubit>(),
                 );
             LoadingView().hide();
-            Navigator.of(context).pop();
+            await Navigator.push<void>(
+              context,
+              AiAgeResultPage.route(context),
+            );
           }
         },
       ),

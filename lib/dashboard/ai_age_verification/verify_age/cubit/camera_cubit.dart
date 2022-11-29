@@ -86,6 +86,7 @@ class CameraCubit extends Cubit<CameraState> {
     emit(
       state.copyWith(
         acquiredCredentialsQuantity: state.acquiredCredentialsQuantity + 1,
+        status: CameraStatus.loading,
       ),
     );
   }
