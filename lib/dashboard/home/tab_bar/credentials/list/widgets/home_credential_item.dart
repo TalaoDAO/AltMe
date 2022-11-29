@@ -1,10 +1,12 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/deep_link/cubit/deep_link.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:uuid/uuid.dart';
 
 class HomeCredentialItem extends StatelessWidget {
   const HomeCredentialItem({
@@ -122,20 +124,25 @@ class DummyCredentialItem extends StatelessWidget {
               isPresentable = false;
             }
           }
-          if (!isPresentable) {
-            await showDialog<bool>(
-              context: context,
-              builder: (context) => InfoDialog(
-                title:
-                    '''${l10n.membershipRequiredListAlerMessage}\n\n 1. Nationality Proof\n 2. Age Range Proof''',
-                button: l10n.ok,
-              ),
-            );
-            return;
-          }
+          // if (!isPresentable) {
+          //   await showDialog<bool>(
+          //     context: context,
+          //     builder: (context) => InfoDialog(
+          //       title:
+          //           '''${l10n.membershipRequiredListAlerMessage}\n\n 1. Nationality Proof\n 2. Age Range Proof''',
+          //       button: l10n.ok,
+          //     ),
+          //   );
+          //   return;
+          // }
         }
+        context
+            .read<DeepLinkCubit>()
+            .addDeepLink('${homeCredential.link!}${const Uuid().v4()}');
+        await context.read<QRCodeScanCubit>().deepLink();
+      } else {
+        await LaunchUrl.launch(homeCredential.link!);
       }
-      await LaunchUrl.launch(homeCredential.link!);
     }
   }
 
