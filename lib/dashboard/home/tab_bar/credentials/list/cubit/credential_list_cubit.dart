@@ -47,6 +47,20 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       switch (credentialSubjectType) {
         case CredentialSubjectType.bloometaPass:
           break;
+        case CredentialSubjectType.dogamiPass:
+          break;
+        case CredentialSubjectType.bunnyPass:
+          break;
+        case CredentialSubjectType.troopezPass:
+          break;
+        case CredentialSubjectType.tzlandPass:
+          break;
+        case CredentialSubjectType.matterlightPass:
+          break;
+        case CredentialSubjectType.pigsPass:
+          break;
+        case CredentialSubjectType.tezoniaPass:
+          break;
         case CredentialSubjectType.tezotopiaMembership:
           gamingCategories.remove(CredentialSubjectType.tezotopiaMembership);
           break;
@@ -597,6 +611,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         switch (credentialSubjectType) {
           case CredentialSubjectType.bloometaPass:
+          case CredentialSubjectType.dogamiPass:
+          case CredentialSubjectType.troopezPass:
+          case CredentialSubjectType.tzlandPass:
+          case CredentialSubjectType.bunnyPass:
+          case CredentialSubjectType.pigsPass:
+          case CredentialSubjectType.tezoniaPass:
+          case CredentialSubjectType.matterlightPass:
           case CredentialSubjectType.tezotopiaMembership:
             identityCategories.add(CredentialSubjectType.tezotopiaMembership);
             break;
