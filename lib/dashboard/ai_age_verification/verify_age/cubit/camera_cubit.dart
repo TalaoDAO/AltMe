@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/ai_age_verification/verify_age/models/camera_config.dart';
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
@@ -79,5 +80,13 @@ class CameraCubit extends Cubit<CameraState> {
 
   Future<void> dispose() async {
     await cameraController?.dispose();
+  }
+
+  Future<void> incrementAcquiredCredentialsQuantity() async {
+    emit(
+      state.copyWith(
+        acquiredCredentialsQuantity: state.acquiredCredentialsQuantity + 1,
+      ),
+    );
   }
 }

@@ -14,6 +14,7 @@ class CameraState extends Equatable {
   const CameraState({
     this.status = CameraStatus.initializing,
     this.data,
+    this.acquiredCredentialsQuantity = 0,
   });
 
   factory CameraState.fromJson(Map<String, dynamic> json) =>
@@ -21,6 +22,7 @@ class CameraState extends Equatable {
 
   final CameraStatus status;
   final List<int>? data;
+  final int acquiredCredentialsQuantity;
 
   Map<String, dynamic> toJson() => _$CameraStateToJson(this);
 
@@ -28,10 +30,13 @@ class CameraState extends Equatable {
     CameraStatus? status,
     List<int>? data,
     CameraController? cameraController,
+    int? acquiredCredentialsQuantity,
   }) {
     return CameraState(
       status: status ?? this.status,
       data: data ?? this.data,
+      acquiredCredentialsQuantity:
+          acquiredCredentialsQuantity ?? this.acquiredCredentialsQuantity,
     );
   }
 
@@ -39,5 +44,6 @@ class CameraState extends Equatable {
   List<Object?> get props => [
         status,
         data,
+        acquiredCredentialsQuantity,
       ];
 }

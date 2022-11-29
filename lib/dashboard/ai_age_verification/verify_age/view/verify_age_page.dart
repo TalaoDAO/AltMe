@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/camera/view/camera_page.dart';
+import 'package:altme/dashboard/ai_age_verification/verify_age/view/camera_page.dart';
 import 'package:altme/app/shared/constants/image_strings.dart';
 import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/app/shared/enum/enum.dart';

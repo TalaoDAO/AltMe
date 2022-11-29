@@ -39,6 +39,7 @@ class HomeCubit extends Cubit<HomeState> {
     required CredentialSubjectType credentialType,
     required List<int> imageBytes,
     required WalletCubit walletCubit,
+    required CameraCubit cameraCubit,
   }) async {
     // launch url to get Over18,Over13,AgeRange Credentials
     emit(state.loading());
@@ -82,6 +83,7 @@ class HomeCubit extends Cubit<HomeState> {
       data: data,
       credentialType: 'Over13',
       walletCubit: walletCubit,
+      cameraCubit: cameraCubit,
     );
 
     await _getCredentialByAI(
@@ -90,6 +92,7 @@ class HomeCubit extends Cubit<HomeState> {
       data: data,
       credentialType: 'Over18',
       walletCubit: walletCubit,
+      cameraCubit: cameraCubit,
     );
 
     await _getCredentialByAI(
@@ -98,6 +101,7 @@ class HomeCubit extends Cubit<HomeState> {
       data: data,
       credentialType: 'AgeRange',
       walletCubit: walletCubit,
+      cameraCubit: cameraCubit,
     );
   }
 
@@ -107,6 +111,7 @@ class HomeCubit extends Cubit<HomeState> {
     required Map<String, dynamic> data,
     required String credentialType,
     required WalletCubit walletCubit,
+    required CameraCubit cameraCubit,
   }) async {
     final logger = getLogger('HomeCubit - AISelfiValidation');
     try {
@@ -150,6 +155,7 @@ class HomeCubit extends Cubit<HomeState> {
         credential: credentialModel,
         showMessage: true,
       );
+      unawaited(cameraCubit.incrementAcquiredCredentialsQuantity());
       emit(
         state.copyWith(
           status: AppStatus.success,

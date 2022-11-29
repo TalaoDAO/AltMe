@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/ai_age_verification/verify_age/verify_age.dart';
 import 'package:altme/dashboard/home/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -126,6 +127,7 @@ class _CameraViewState extends State<CameraView> {
                   credentialType: widget.credentialSubjectType,
                   imageBytes: state.data!,
                   walletCubit: context.read<WalletCubit>(),
+                  cameraCubit: context.read<CameraCubit>(),
                 );
             LoadingView().hide();
             Navigator.of(context).pop();
