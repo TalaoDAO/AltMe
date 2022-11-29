@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -124,6 +125,7 @@ class _CameraViewState extends State<CameraView> {
             await context.read<HomeCubit>().aiSelfiValidation(
                   credentialType: widget.credentialSubjectType,
                   imageBytes: state.data!,
+                  walletCubit: context.read<WalletCubit>(),
                 );
             LoadingView().hide();
             Navigator.of(context).pop();

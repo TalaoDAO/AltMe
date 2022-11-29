@@ -38,6 +38,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> aiSelfiValidation({
     required CredentialSubjectType credentialType,
     required List<int> imageBytes,
+    required WalletCubit walletCubit,
   }) async {
     // launch url to get Over18,Over13,AgeRange Credentials
     emit(state.loading());
@@ -80,6 +81,7 @@ class HomeCubit extends Cubit<HomeState> {
       apiKey: YOTI_AI_API_KEY,
       data: data,
       credentialType: 'Over13',
+      walletCubit: walletCubit,
     );
 
     await _getCredentialByAI(
@@ -87,6 +89,7 @@ class HomeCubit extends Cubit<HomeState> {
       apiKey: YOTI_AI_API_KEY,
       data: data,
       credentialType: 'Over18',
+      walletCubit: walletCubit,
     );
 
     await _getCredentialByAI(
@@ -94,6 +97,7 @@ class HomeCubit extends Cubit<HomeState> {
       apiKey: YOTI_AI_API_KEY,
       data: data,
       credentialType: 'AgeRange',
+      walletCubit: walletCubit,
     );
   }
 
@@ -102,6 +106,7 @@ class HomeCubit extends Cubit<HomeState> {
     required String apiKey,
     required Map<String, dynamic> data,
     required String credentialType,
+    required WalletCubit walletCubit,
   }) async {
     final logger = getLogger('HomeCubit - AISelfiValidation');
     try {
@@ -141,10 +146,11 @@ class HomeCubit extends Cubit<HomeState> {
         activities: [Activity(acquisitionAt: DateTime.now())],
       );
 
+      await walletCubit.insertCredential(
+          credential: credentialModel, showMessage: true);
       emit(
         state.copyWith(
-          status: AppStatus.insertCredential,
-          data: credentialModel,
+          status: AppStatus.success,
         ),
       );
       logger.i('response : $response');
