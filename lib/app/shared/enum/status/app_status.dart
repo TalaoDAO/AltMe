@@ -1,6 +1,5 @@
 enum AppStatus {
   init,
-  insertCredential,
   fetching,
   loading,
   populate,

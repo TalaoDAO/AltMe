@@ -22,7 +22,8 @@ class Urls {
       'https://issuer.talao.co/talao_community';
 
   static const String tezotopiaMembershipCardUrl =
-      'https://issuer.tezotopia.altme.io/issuer/membershipcard_mobile';
+      'https://issuer.talao.co/tezotopia/membershipcard/';
+
   static const String identityCardUrl = 'http://issuer.talao.co/kyc';
   static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
 
@@ -42,7 +43,18 @@ class Urls {
   static const objktUrl = 'https://objkt.com/';
   static const raribleUrl = 'https://rarible.com/';
 
+  // TODO(all) remember to update all below urls
+  static const String bunnyPassCardUrl = 'https://issuer.tezotopia.altme.io';
+  static const String dogamiPassCardUrl = 'https://issuer.tezotopia.altme.io';
+  static const String matterlightPassCardUrl =
+      'https://issuer.tezotopia.altme.io';
+  static const String pigsPassCardUrl = 'https://issuer.tezotopia.altme.io';
+  static const String trooperzPassCardUrl = 'https://issuer.tezotopia.altme.io';
+  static const String tzlandPassCardUrl = 'https://issuer.tezotopia.altme.io';
+  static const String tezoniaPassCardUrl = 'https://issuer.tezotopia.altme.io';
+
   //
-  static const over13aiValidationUrl = 'https://issuer.talao.co/ai/over13';
-  static const over18aiValidationUrl = 'https://issuer.talao.co/ai/over18';
+  static const over13AIValidationUrl = 'https://issuer.talao.co/ai/over13';
+  static const over18AIValidationUrl = 'https://issuer.talao.co/ai/over18';
+  static const ageRangeAIValidationUrl = 'https://issuer.talao.co/ai/agerange';
 }

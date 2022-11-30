@@ -38,87 +38,189 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> aiSelfiValidation({
     required CredentialSubjectType credentialType,
     required List<int> imageBytes,
+    required WalletCubit walletCubit,
+    required CameraCubit cameraCubit,
   }) async {
-    final logger = getLogger('HomeCubit - aiSelfiValidation');
+    // launch url to get Over18,Over13,AgeRange Credentials
     emit(state.loading());
+    final verificationMethod =
+        await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
+
+    final base64EncodedImage = base64Encode(imageBytes);
+
+    final challenge =
+        bytesToHex(sha256.convert(utf8.encode(base64EncodedImage)).bytes);
+
+    final options = <String, dynamic>{
+      'verificationMethod': verificationMethod,
+      'proofPurpose': 'authentication',
+      'challenge': challenge,
+      'domain': 'issuer.talao.co',
+    };
+
+    final key = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
+    final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
+
+    final DIDKitProvider didKitProvider = DIDKitProvider();
+    final String did_auth = await didKitProvider.didAuth(
+      did,
+      jsonEncode(options),
+      key,
+    );
+
+    final data = <String, dynamic>{
+      'base64_encoded_string': base64EncodedImage,
+      'vp': did_auth,
+      'did': did,
+    };
+
+    await dotenv.load();
+    final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');
+
     try {
-      final String url = credentialType == CredentialSubjectType.over13
-          ? Urls.over13aiValidationUrl
-          : Urls.over18aiValidationUrl;
-      final verificationMethod =
-          await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
-
-      final base64EncodedImage = base64Encode(imageBytes);
-
-      final challenge =
-          bytesToHex(sha256.convert(utf8.encode(base64EncodedImage)).bytes);
-
-      final options = <String, dynamic>{
-        'verificationMethod': verificationMethod,
-        'proofPurpose': 'authentication',
-        'challenge': challenge,
-        'domain': 'issuer.talao.co',
-      };
-
-      final key = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
-      final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
-
-      final DIDKitProvider didKitProvider = DIDKitProvider();
-      final String did_auth = await didKitProvider.didAuth(
-        did,
-        jsonEncode(options),
-        key,
+      await _getCredentialByAI(
+        url: Urls.over13AIValidationUrl,
+        apiKey: YOTI_AI_API_KEY,
+        data: data,
+        credentialType: 'Over13',
+        walletCubit: walletCubit,
+        cameraCubit: cameraCubit,
       );
 
-      final data = <String, dynamic>{
-        'base64_encoded_string': base64EncodedImage,
-        'vp': did_auth,
-        'did': did,
-      };
+      await _getCredentialByAI(
+        url: Urls.over18AIValidationUrl,
+        apiKey: YOTI_AI_API_KEY,
+        data: data,
+        credentialType: 'Over18',
+        walletCubit: walletCubit,
+        cameraCubit: cameraCubit,
+      );
 
-      final dynamic response = await client.post(
+      await _getCredentialByAI(
+        url: Urls.ageRangeAIValidationUrl,
+        apiKey: YOTI_AI_API_KEY,
+        data: data,
+        credentialType: 'AgeRange',
+        walletCubit: walletCubit,
+        cameraCubit: cameraCubit,
+      );
+
+      await _getCredentialByAI(
+        url: 'https://issuer.talao.co/ai/ageestimate',
+        apiKey: YOTI_AI_API_KEY,
+        data: data,
+        credentialType: 'AgeEstimate',
+        walletCubit: walletCubit,
+        cameraCubit: cameraCubit,
+      );
+    } catch (e) {
+      final logger = getLogger('HomeCubit - AISelfiValidation');
+      logger.e('error: $e');
+    }
+  }
+
+  Future<void> _getCredentialByAI({
+    required String url,
+    required String apiKey,
+    required Map<String, dynamic> data,
+    required String credentialType,
+    required WalletCubit walletCubit,
+    required CameraCubit cameraCubit,
+  }) async {
+    final logger = getLogger('HomeCubit - AISelfiValidation');
+    dynamic response;
+    try {
+      emit(state.copyWith(status: AppStatus.loading));
+      response = await client.post(
         url,
         headers: <String, dynamic>{
           'accept': 'application/json',
           'Content-Type': 'application/json',
-          'X-API-KEY': '5f691f41-b7ef-456e-b53d-7351b2798b4e'
+          'X-API-KEY': apiKey,
         },
         data: data,
       );
+    } catch (e, s) {
+      if (e is NetworkException) {
+        String? message;
+        if (e.data != null) {
+          if (e.data['error_description'] is String) {
+            try {
+              final dynamic errorDescriptionJson =
+                  jsonDecode(e.data['error_description'] as String);
+              message = errorDescriptionJson['error_message'] as String;
+            } catch (_, __) {
+              message = e.data['error_description'] as String;
+            }
+          } else if (e.data['error_description'] is Map<String, dynamic>) {
+            message = e.data['error_description']['error_message'] as String;
+          }
+        }
 
-      final credential = jsonDecode(response as String) as Map<String, dynamic>;
-      final type =
-          credentialType == CredentialSubjectType.over13 ? 'Over13' : 'Over18';
-
-      final Map<String, dynamic> newCredential =
-          Map<String, dynamic>.from(credential);
-      newCredential['credentialPreview'] = credential;
-      final CredentialManifest credentialManifest =
-          await getCredentialManifestFromAltMe(client);
-      credentialManifest.outputDescriptors
-          ?.removeWhere((element) => element.id != type);
-      if (credentialManifest.outputDescriptors!.isNotEmpty) {
-        newCredential['credential_manifest'] = CredentialManifest(
-          credentialManifest.id,
-          credentialManifest.outputDescriptors,
-          credentialManifest.presentationDefinition,
-        ).toJson();
+        emit(
+          state.error(
+            messageHandler: message != null
+                ? RawMessage(message)
+                : ResponseMessage(
+                    ResponseString
+                        .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                  ),
+          ),
+        );
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
       }
+    }
+    try {
+      if (response != null) {
+        final credential =
+            jsonDecode(response as String) as Map<String, dynamic>;
 
-      final credentialModel = CredentialModel.copyWithData(
-        oldCredentialModel: CredentialModel.fromJson(
-          newCredential,
-        ),
-        newData: credential,
-        activities: [Activity(acquisitionAt: DateTime.now())],
-      );
+        final Map<String, dynamic> newCredential =
+            Map<String, dynamic>.from(credential);
+        newCredential['credentialPreview'] = credential;
+        final CredentialManifest credentialManifest =
+            await getCredentialManifestFromAltMe(client);
+        credentialManifest.outputDescriptors
+            ?.removeWhere((element) => element.id != credentialType);
+        if (credentialManifest.outputDescriptors!.isNotEmpty) {
+          newCredential['credential_manifest'] = CredentialManifest(
+            credentialManifest.id,
+            credentialManifest.outputDescriptors,
+            credentialManifest.presentationDefinition,
+          ).toJson();
+        }
 
-      emit(
-        state.copyWith(
-          status: AppStatus.insertCredential,
-          data: credentialModel,
-        ),
-      );
+        final credentialModel = CredentialModel.copyWithData(
+          oldCredentialModel: CredentialModel.fromJson(
+            newCredential,
+          ),
+          newData: credential,
+          activities: [Activity(acquisitionAt: DateTime.now())],
+        );
+        if (credentialType != 'AgeEstimate') {
+          await walletCubit.insertCredential(
+            credential: credentialModel,
+            showMessage: true,
+          );
+          await cameraCubit.incrementAcquiredCredentialsQuantity();
+          emit(
+            state.copyWith(
+              status: AppStatus.success,
+            ),
+          );
+        } else {
+          await cameraCubit.updateAgeEstimate(credentialModel
+              .data['credentialSubject']['ageEstimate'] as String);
+        }
+      }
       logger.i('response : $response');
     } catch (e, s) {
       if (e is NetworkException) {
@@ -209,37 +311,7 @@ class HomeCubit extends Cubit<HomeState> {
     log.i('Checking PassbaseStatus');
     emit(state.loading());
 
-    late PassBaseStatus passBaseStatus;
-
-    /// check if status is already approved in DB
-    final String? passbaseStatusFromStorage = await secureStorageProvider.get(
-      SecureStorageKeys.passBaseStatus,
-    );
-
-    if (passbaseStatusFromStorage != null) {
-      passBaseStatus = getPassBaseStatusFromString(passbaseStatusFromStorage);
-    } else {
-      passBaseStatus = PassBaseStatus.undone;
-    }
-
-    if (passBaseStatus != PassBaseStatus.approved) {
-      try {
-        final did = didCubit.state.did!;
-        passBaseStatus = await getPassBaseStatus(did);
-        await secureStorageProvider.set(
-          SecureStorageKeys.passBaseStatus,
-          passBaseStatus.name,
-        );
-      } catch (e) {
-        emit(
-          state.copyWith(
-            status: AppStatus.populate,
-            passBaseStatus: PassBaseStatus.declined,
-            link: link,
-          ),
-        );
-      }
-    }
+    final passBaseStatus = await checkPassbaseStatus();
 
     if (passBaseStatus == PassBaseStatus.approved) {
       await launchUrl(link: link);
@@ -263,6 +335,33 @@ class HomeCubit extends Cubit<HomeState> {
         link: link,
       ),
     );
+  }
+
+  Future<PassBaseStatus> checkPassbaseStatus() async {
+    emit(state.loading());
+    late PassBaseStatus passBaseStatus;
+
+    /// check if status is already approved in DB
+    final String? passbaseStatusFromStorage = await secureStorageProvider.get(
+      SecureStorageKeys.passBaseStatus,
+    );
+
+    if (passbaseStatusFromStorage != null) {
+      passBaseStatus = getPassBaseStatusFromString(passbaseStatusFromStorage);
+    } else {
+      passBaseStatus = PassBaseStatus.undone;
+    }
+
+    if (passBaseStatus != PassBaseStatus.approved) {
+      final did = didCubit.state.did!;
+      passBaseStatus = await getPassBaseStatusFromAPI(did);
+      await secureStorageProvider.set(
+        SecureStorageKeys.passBaseStatus,
+        passBaseStatus.name,
+      );
+    }
+    emit(state.copyWith(status: AppStatus.populate));
+    return passBaseStatus;
   }
 
   void startPassbaseVerification(WalletCubit walletCubit) {
@@ -544,7 +643,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 }
 
-Future<PassBaseStatus> getPassBaseStatus(String did) async {
+Future<PassBaseStatus> getPassBaseStatusFromAPI(String did) async {
   try {
     await dotenv.load();
     final PASSBASE_CHECK_DID_AUTH_TOKEN =
@@ -554,7 +653,7 @@ Future<PassBaseStatus> getPassBaseStatus(String did) async {
       '/passbase/check/$did',
       headers: <String, dynamic>{
         'Accept': 'application/json',
-        'Authorization':'Bearer $PASSBASE_CHECK_DID_AUTH_TOKEN',
+        'Authorization': 'Bearer $PASSBASE_CHECK_DID_AUTH_TOKEN',
       },
     );
     final PassBaseStatus passBaseStatus = getPassBaseStatusFromString(

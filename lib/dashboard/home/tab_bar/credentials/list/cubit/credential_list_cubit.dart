@@ -362,6 +362,20 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             break;
           case CredentialSubjectType.aragoPass:
             break;
+          case CredentialSubjectType.tezoniaPass:
+            break;
+          case CredentialSubjectType.tzlandPass:
+            break;
+          case CredentialSubjectType.troopezPass:
+            break;
+          case CredentialSubjectType.pigsPass:
+            break;
+          case CredentialSubjectType.matterlightPass:
+            break;
+          case CredentialSubjectType.dogamiPass:
+            break;
+          case CredentialSubjectType.bunnyPass:
+            break;
         }
 
         emit(

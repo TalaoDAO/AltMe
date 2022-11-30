@@ -5,6 +5,13 @@ part 'credential_subject_type_extension.dart';
 
 enum CredentialSubjectType {
   bloometaPass,
+  tezoniaPass,
+  tzlandPass,
+  troopezPass,
+  pigsPass,
+  matterlightPass,
+  dogamiPass,
+  bunnyPass,
   tezotopiaMembership,
   ageRange,
   nationality,
@@ -38,4 +45,26 @@ enum CredentialSubjectType {
   aragoIdentityCard,
   aragoLearningAchievement,
   aragoOver18,
+}
+
+extension CredentialSubjectTypeX on CredentialSubjectType {
+  bool isDisabled() {
+    if (this == CredentialSubjectType.dogamiPass) {
+      return true;
+    } else if (this == CredentialSubjectType.pigsPass) {
+      return true;
+    } else if (this == CredentialSubjectType.bunnyPass) {
+      return true;
+    } else if (this == CredentialSubjectType.troopezPass) {
+      return true;
+    } else if (this == CredentialSubjectType.tzlandPass) {
+      return true;
+    } else if (this == CredentialSubjectType.matterlightPass) {
+      return true;
+    } else if (this == CredentialSubjectType.tezoniaPass) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

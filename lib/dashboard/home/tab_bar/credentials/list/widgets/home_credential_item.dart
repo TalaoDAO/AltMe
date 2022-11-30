@@ -1,10 +1,12 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/deep_link/cubit/deep_link.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:uuid/uuid.dart';
 
 class HomeCredentialItem extends StatelessWidget {
   const HomeCredentialItem({
@@ -78,13 +80,22 @@ class DummyCredentialItem extends StatelessWidget {
       if (homeCredential.credentialSubjectType ==
               CredentialSubjectType.over18 ||
           homeCredential.credentialSubjectType ==
-              CredentialSubjectType.over13) {
-        await Navigator.push<void>(
-          context,
-          ChooseVerificationMethodPage.route(
-            credentialSubjectType: homeCredential.credentialSubjectType,
-          ),
-        );
+              CredentialSubjectType.over13 ||
+          homeCredential.credentialSubjectType ==
+              CredentialSubjectType.ageRange) {
+        final passbaseStatus =
+            await context.read<HomeCubit>().checkPassbaseStatus();
+        if (passbaseStatus != PassBaseStatus.approved) {
+          // start verification by Yoti AI
+          await Navigator.of(context).push<void>(
+            VerifyAgePage.route(
+              credentialSubjectType: homeCredential.credentialSubjectType,
+            ),
+          );
+        } else {
+          // get credential from launching the url
+          await context.read<HomeCubit>().launchUrl(link: homeCredential.link);
+        }
       } else {
         await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
               link: homeCredential.link!,
@@ -118,15 +129,19 @@ class DummyCredentialItem extends StatelessWidget {
               context: context,
               builder: (context) => InfoDialog(
                 title:
-                    '''${l10n.membershipRequiredListAlerMessage}\n\n 1. Nationality Proof\n 2. Age Range Proof''',
+                    '''${l10n.membershipRequiredListAlerMessage}\n\nOver 13 Proof''',
                 button: l10n.ok,
               ),
             );
             return;
           }
         }
+        context.read<DeepLinkCubit>().addDeepLink(
+            '${homeCredential.link!}${const Uuid().v4()}?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du');
+        await context.read<QRCodeScanCubit>().deepLink();
+      } else {
+        await LaunchUrl.launch(homeCredential.link!);
       }
-      await LaunchUrl.launch(homeCredential.link!);
     }
   }
 
@@ -146,6 +161,10 @@ class DummyCredentialItem extends StatelessWidget {
             return;
           }
 
+          if (homeCredential.credentialSubjectType.isDisabled()) {
+            return;
+          }
+
           await Navigator.push<void>(
             context,
             DiscoverDetailsPage.route(
@@ -161,33 +180,39 @@ class DummyCredentialItem extends StatelessWidget {
           children: [
             Expanded(
               flex: 8,
-              child: CredentialImage(
-                image: homeCredential.image!,
-                child: homeCredential.dummyDescription == null
-                    ? null
-                    : CustomMultiChildLayout(
-                        delegate:
-                            DummyCredentialItemDelegate(position: Offset.zero),
-                        children: [
-                          LayoutId(
-                            id: 'dummyDesc',
-                            child: FractionallySizedBox(
-                              widthFactor: 0.85,
-                              heightFactor: 0.42,
-                              child: MyText(
-                                homeCredential.dummyDescription!.getMessage(
-                                  context,
-                                  homeCredential.dummyDescription!,
+              child: Opacity(
+                opacity: homeCredential.credentialSubjectType.isDisabled()
+                    ? 0.75
+                    : 1,
+                child: CredentialImage(
+                  image: homeCredential.image!,
+                  child: homeCredential.dummyDescription == null
+                      ? null
+                      : CustomMultiChildLayout(
+                          delegate: DummyCredentialItemDelegate(
+                            position: Offset.zero,
+                          ),
+                          children: [
+                            LayoutId(
+                              id: 'dummyDesc',
+                              child: FractionallySizedBox(
+                                widthFactor: 0.85,
+                                heightFactor: 0.42,
+                                child: MyText(
+                                  homeCredential.dummyDescription!.getMessage(
+                                    context,
+                                    homeCredential.dummyDescription!,
+                                  ),
+                                  maxLines: 3,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .discoverOverlayDescription,
                                 ),
-                                maxLines: 3,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .discoverOverlayDescription,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                ),
               ),
             ),
           ],

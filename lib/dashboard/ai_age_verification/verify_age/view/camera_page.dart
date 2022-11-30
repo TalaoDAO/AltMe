@@ -1,7 +1,8 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/ai_age_verification/verify_age/verify_age.dart';
 import 'package:altme/dashboard/home/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -95,45 +96,24 @@ class _CameraViewState extends State<CameraView> {
               ),
             );
           } else {
-            return Column(
+            return Stack(
+              alignment: Alignment.center,
               children: [
-                Text(
-                  l10n.cameraSubtitle,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.subtitle3,
-                ),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
-                Expanded(
-                  child: LayoutBuilder(
-                    builder: (context, BoxConstraints constraints) {
-                      if (state.status == CameraStatus.imageCaptured) {
-                        return Image.memory(
-                          Uint8List.fromList(state.data!),
-                        );
-                      } else {
-                        return Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            CameraPreview(
-                              cameraCubit.cameraController!,
-                            ),
-                          ],
-                        );
-                      }
-                    },
+                if (state.status == CameraStatus.imageCaptured)
+                  Image.memory(
+                    Uint8List.fromList(state.data!),
+                  )
+                else
+                  CameraPreview(
+                    cameraCubit.cameraController!,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(Sizes.spaceNormal),
-                  child: MyGradientButton(
-                    borderRadius: Sizes.smallRadius,
-                    verticalSpacing: 16,
-                    text: l10n.start,
-                    onPressed: state.status != CameraStatus.loading
-                        ? cameraCubit.takePhoto
-                        : null,
+                SizedBox(
+                  width: cameraCubit.cameraController!.value.previewSize!.width,
+                  height:
+                      cameraCubit.cameraController!.value.previewSize!.height,
+                  child: Image.asset(
+                    ImageStrings.cameraFaceDetection,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ],
@@ -146,11 +126,31 @@ class _CameraViewState extends State<CameraView> {
             await context.read<HomeCubit>().aiSelfiValidation(
                   credentialType: widget.credentialSubjectType,
                   imageBytes: state.data!,
+                  walletCubit: context.read<WalletCubit>(),
+                  cameraCubit: context.read<CameraCubit>(),
                 );
             LoadingView().hide();
-            Navigator.of(context).pop();
+            await Navigator.push<void>(
+              context,
+              AiAgeResultPage.route(context),
+            );
           }
         },
+      ),
+      navigation: Padding(
+        padding: const EdgeInsets.all(Sizes.spaceNormal),
+        child: BlocBuilder<CameraCubit, CameraState>(
+          builder: (context, state) {
+            return MyGradientButton(
+              borderRadius: Sizes.smallRadius,
+              verticalSpacing: 16,
+              text: 'take a picture',
+              onPressed: state.status != CameraStatus.loading
+                  ? cameraCubit.takePhoto
+                  : null,
+            );
+          },
+        ),
       ),
     );
   }

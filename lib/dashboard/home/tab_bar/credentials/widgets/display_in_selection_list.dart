@@ -22,6 +22,34 @@ class DisplayInSelectionList extends StatelessWidget {
         return TezotopiaMemberShipDisplayInSelectionList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.tezoniaPass:
+        return TezoniaPassDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.tzlandPass:
+        return TzlandPassDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.troopezPass:
+        return TrooperzPassDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.pigsPass:
+        return PigsPassDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.matterlightPass:
+        return MatterlightPassDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.dogamiPass:
+        return DogamiPassDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.bunnyPass:
+        return BunnyPassDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.ageRange:
         return AgeRangeDisplayInSelectionList(
           credentialModel: credentialModel,

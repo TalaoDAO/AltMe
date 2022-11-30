@@ -156,6 +156,74 @@ class HomeCredential extends Equatable {
             ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt;
         break;
 
+      case CredentialSubjectType.bunnyPass:
+        image = ImageStrings.bunnyPassDummy;
+        link = Urls.bunnyPassCardUrl;
+        whyGetThisCard = ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_bunnyPassExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_bunnyPassHowToGetIt;
+        break;
+
+      case CredentialSubjectType.dogamiPass:
+        image = ImageStrings.dogamiPassDummy;
+        link = Urls.dogamiPassCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_dogamiPassWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_dogamiPassExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_dogamiPassHowToGetIt;
+        break;
+
+      case CredentialSubjectType.matterlightPass:
+        image = ImageStrings.matterlightPassDummy;
+        link = Urls.matterlightPassCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_matterlightPassWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_matterlightPassExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_matterlightPassHowToGetIt;
+        break;
+
+      case CredentialSubjectType.pigsPass:
+        image = ImageStrings.pigsPassDummy;
+        link = Urls.pigsPassCardUrl;
+        whyGetThisCard = ResponseString.RESPONSE_STRING_pigsPassWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_pigsPassExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_pigsPassHowToGetIt;
+        break;
+
+      case CredentialSubjectType.troopezPass:
+        image = ImageStrings.trooperzPassDummy;
+        link = Urls.trooperzPassCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_trooperzPassWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_trooperzPassExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt;
+        break;
+
+      case CredentialSubjectType.tzlandPass:
+        image = ImageStrings.tzlandPassDummy;
+        link = Urls.tzlandPassCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_tzlandPassWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_tzlandPassExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_tzlandPassHowToGetIt;
+        break;
+
+      case CredentialSubjectType.tezoniaPass:
+        image = ImageStrings.tezoniaPassDummy;
+        link = Urls.tezoniaPassCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_tezoniaPassWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_tezoniaPassExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_tezoniaPassHowToGetIt;
+        break;
+
       case CredentialSubjectType.phonePass:
         image = ImageStrings.dummyPhonePassCard;
         dummyDesc = ResponseString.RESPONSE_STRING_phoneProofDummyDescription;
