@@ -7,6 +7,8 @@ import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
@@ -283,6 +285,19 @@ class WalletCubit extends Cubit<WalletState> {
     if (credential != null) {
       await insertCredential(
         credential: credential,
+        showMessage: showCredentialAddMessage,
+      );
+    }
+
+    final deviceInfoCredential = await generateDeviceInfoCredential(
+      ssiKey: ssiKey,
+      didKitProvider: didKitProvider,
+      didCubit: didCubit,
+    );
+
+    if (deviceInfoCredential != null) {
+      await insertCredential(
+        credential: deviceInfoCredential,
         showMessage: showCredentialAddMessage,
       );
     }
