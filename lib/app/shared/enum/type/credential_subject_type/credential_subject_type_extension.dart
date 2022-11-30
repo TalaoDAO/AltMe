@@ -15,6 +15,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   Color defaultBackgroundColor() {
     switch (this) {
+      case CredentialSubjectType.deviceInfo:
+        return const Color(0xff14181D);
       case CredentialSubjectType.bloometaPass:
         return const Color(0xff14181D);
       case CredentialSubjectType.tezotopiaMembership:
@@ -102,6 +104,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   IconData iconData() {
     switch (this) {
+      case CredentialSubjectType.deviceInfo:
+        return Icons.phone_android_rounded;
       case CredentialSubjectType.bloometaPass:
         return Icons.games;
       case CredentialSubjectType.nationality:

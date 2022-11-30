@@ -14,6 +14,10 @@ class DisplayInList extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
+      case CredentialSubjectType.deviceInfo:
+        return DeviceInfoDisplayInList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.bloometaPass:
         return BloometaPassDisplayInList(
           credentialModel: credentialModel,

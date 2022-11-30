@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class DisplayDetail extends StatelessWidget {
   const DisplayDetail({
@@ -16,6 +17,10 @@ class DisplayDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
+      case CredentialSubjectType.deviceInfo:
+        return DeviceInfoDisplayDetail(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.bloometaPass:
         return BloometaPassDisplayDetail(
           credentialModel: credentialModel,

@@ -42,6 +42,7 @@ class HomeCredential extends Equatable {
     ResponseString? dummyDesc;
 
     switch (credentialSubjectType) {
+      case CredentialSubjectType.deviceInfo:
       case CredentialSubjectType.ageRange:
         image = ImageStrings.dummyAgeRangeCard;
         link = Urls.ageRangeUrl;

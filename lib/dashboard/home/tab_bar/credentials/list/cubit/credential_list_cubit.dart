@@ -45,6 +45,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           .credentialPreview.credentialSubjectModel.credentialSubjectType;
 
       switch (credentialSubjectType) {
+        case CredentialSubjectType.deviceInfo:
+          break;
         case CredentialSubjectType.bloometaPass:
           break;
         case CredentialSubjectType.dogamiPass:
@@ -248,6 +250,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         final credentialSubjectType = credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
         switch (credentialSubjectType) {
+          case CredentialSubjectType.deviceInfo:
+            break;
           case CredentialSubjectType.tezotopiaMembership:
             _removeDummyIfCredentialExist(
               _credentials,
@@ -610,6 +614,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           );
 
         switch (credentialSubjectType) {
+          case CredentialSubjectType.deviceInfo:
           case CredentialSubjectType.bloometaPass:
           case CredentialSubjectType.dogamiPass:
           case CredentialSubjectType.troopezPass:
