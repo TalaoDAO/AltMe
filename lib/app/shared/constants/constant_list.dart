@@ -29,6 +29,5 @@ class DiscoverList {
 }
 
 final List<CredentialSubjectType> membershipRequiredList = [
-  CredentialSubjectType.ageRange,
-  CredentialSubjectType.nationality,
+  CredentialSubjectType.over13,
 ];

@@ -129,16 +129,15 @@ class DummyCredentialItem extends StatelessWidget {
               context: context,
               builder: (context) => InfoDialog(
                 title:
-                    '''${l10n.membershipRequiredListAlerMessage}\n\nAge Range Proof''',
+                    '''${l10n.membershipRequiredListAlerMessage}\n\nOver 13 Proof''',
                 button: l10n.ok,
               ),
             );
             return;
           }
         }
-        context
-            .read<DeepLinkCubit>()
-            .addDeepLink('${homeCredential.link!}${const Uuid().v4()}');
+        context.read<DeepLinkCubit>().addDeepLink(
+            '${homeCredential.link!}${const Uuid().v4()}?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du');
         await context.read<QRCodeScanCubit>().deepLink();
       } else {
         await LaunchUrl.launch(homeCredential.link!);
