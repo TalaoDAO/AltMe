@@ -191,12 +191,11 @@ class DummyCredentialItem extends StatelessWidget {
                               child: FractionallySizedBox(
                                 widthFactor: 0.85,
                                 heightFactor: 0.42,
-                                child: MyText(
+                                child: Text(
                                   homeCredential.dummyDescription!.getMessage(
                                     context,
                                     homeCredential.dummyDescription!,
                                   ),
-                                  maxLines: 3,
                                   style: Theme.of(context)
                                       .textTheme
                                       .discoverOverlayDescription,
