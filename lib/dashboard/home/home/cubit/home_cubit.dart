@@ -421,14 +421,17 @@ class HomeCubit extends Cubit<HomeState> {
     });
   }
 
-  Future<void> periodicCheckReward({
+  Future<void> periodicCheckRewardOnTezosBlockchain({
     required List<String> walletAddresses,
   }) async {
     if (walletAddresses.isEmpty) return;
     try {
-      await checkRewards(walletAddresses);
+      final tezosWalletAddresses =
+          walletAddresses.where((e) => e.startsWith('tz')).toList();
+      if (tezosWalletAddresses.isEmpty) return;
+      await checkRewards(tezosWalletAddresses);
       Timer.periodic(const Duration(minutes: 1), (timer) async {
-        await checkRewards(walletAddresses);
+        await checkRewards(tezosWalletAddresses);
       });
     } catch (e, s) {
       getLogger('HomeCubit')
