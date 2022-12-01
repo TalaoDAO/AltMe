@@ -183,7 +183,7 @@ Future<CredentialModel?> generateDeviceInfoCredential({
       identifier = iosDeviceInfo.identifierForVendor ?? '';
     }
 
-    final ethereumAssociatedAddressModel = DeviceInfoModel(
+    final deviceInfoModel = DeviceInfoModel(
       id: didSsi,
       systemName: systemName,
       device: device,
@@ -196,8 +196,10 @@ Future<CredentialModel?> generateDeviceInfoCredential({
       id: id,
       issuer: did,
       issuanceDate: issuanceDate,
-      credentialSubjectModel: ethereumAssociatedAddressModel,
+      credentialSubjectModel: deviceInfoModel,
     );
+
+    log.i('deviceInfoCredential: ${deviceInfoCredential.toJson()}');
 
     final vc = await didKitProvider.issueCredential(
       jsonEncode(deviceInfoCredential.toJson()),

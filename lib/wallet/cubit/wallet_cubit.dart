@@ -289,16 +289,26 @@ class WalletCubit extends Cubit<WalletState> {
       );
     }
 
-    final deviceInfoCredential = await generateDeviceInfoCredential(
-      ssiKey: ssiKey,
-      didKitProvider: didKitProvider,
-      didCubit: didCubit,
-    );
+    final hasDeviceInfoCredential = await secureStorageProvider
+            .get(SecureStorageKeys.hasDeviceInfoCredential) ??
+        'false';
 
-    if (deviceInfoCredential != null) {
-      await insertCredential(
-        credential: deviceInfoCredential,
-        showMessage: showCredentialAddMessage,
+    if (hasDeviceInfoCredential == 'false') {
+      final deviceInfoCredential = await generateDeviceInfoCredential(
+        ssiKey: ssiKey,
+        didKitProvider: didKitProvider,
+        didCubit: didCubit,
+      );
+
+      if (deviceInfoCredential != null) {
+        await insertCredential(
+          credential: deviceInfoCredential,
+          showMessage: showCredentialAddMessage,
+        );
+      }
+      await secureStorageProvider.set(
+        SecureStorageKeys.hasDeviceInfoCredential,
+        true.toString(),
       );
     }
 
