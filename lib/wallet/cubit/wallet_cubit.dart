@@ -624,4 +624,20 @@ class WalletCubit extends Cubit<WalletState> {
     homeCubit.emitHasNoWallet();
     emit(state.copyWith(status: WalletStatus.init, credentials: credentials));
   }
+
+  Future<List<CredentialModel>> credentialListFromCredentialSubjectType(
+    CredentialSubjectType credentialSubjectType,
+  ) async {
+    if (state.credentials.isEmpty) return [];
+    final List<CredentialModel> resultList = [];
+    for (final credential in state.credentials) {
+      final credentialSubjectModel =
+          credential.credentialPreview.credentialSubjectModel;
+      if (credentialSubjectModel.credentialSubjectType ==
+          credentialSubjectType) {
+        resultList.add(credential);
+      }
+    }
+    return resultList;
+  }
 }

@@ -9,7 +9,7 @@ class DiscoverList {
     CredentialSubjectType.troopezPass,
     CredentialSubjectType.pigsPass,
     CredentialSubjectType.matterlightPass,
-    CredentialSubjectType.dogamiPass,
+    // CredentialSubjectType.dogamiPass,
     CredentialSubjectType.bunnyPass,
   ];
   static final List<CredentialSubjectType> communityCategories = [
@@ -29,6 +29,5 @@ class DiscoverList {
 }
 
 final List<CredentialSubjectType> membershipRequiredList = [
-  CredentialSubjectType.ageRange,
-  CredentialSubjectType.nationality,
+  CredentialSubjectType.over13,
 ];
