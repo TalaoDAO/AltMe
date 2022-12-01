@@ -54,7 +54,6 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BlocBuilder<CameraCubit, CameraState>(
       builder: (context, state) {
         return Stack(
