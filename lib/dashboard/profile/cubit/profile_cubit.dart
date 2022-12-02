@@ -95,7 +95,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     await secureStorageProvider.delete(SecureStorageKeys.jobTitle);
     await secureStorageProvider.delete(SecureStorageKeys.companyWebsite);
     await secureStorageProvider.delete(SecureStorageKeys.companyName);
-    await secureStorageProvider.delete(SecureStorageKeys.hasDeviceInfoCredential);
     await secureStorageProvider
         .delete(SecureStorageKeys.issuerVerificationUrlKey);
     await secureStorageProvider.delete(SecureStorageKeys.tezosNetworkKey);
