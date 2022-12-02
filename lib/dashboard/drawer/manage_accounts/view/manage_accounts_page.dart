@@ -146,7 +146,8 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
       },
       builder: (context, state) {
         return BasePage(
-          title: l10n.manageAccounts,
+          title: l10n.blockChainAccounts,
+          titleAlignment: Alignment.topCenter,
           scrollView: false,
           titleLeading: const BackLeadingButton(),
           body: BackgroundCard(

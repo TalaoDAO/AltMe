@@ -398,10 +398,10 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get drawerItem => GoogleFonts.roboto(
+  TextStyle get drawerItem => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
       );
 
   TextStyle get drawerCategoryTitle => GoogleFonts.nunito(
