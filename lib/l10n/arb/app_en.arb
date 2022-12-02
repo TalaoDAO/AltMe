@@ -667,5 +667,17 @@
   
   "tezoniaPassWhyGetThisCard": "This Membership card will give you 25% cash backs on ALL Tezotopia Game transactions when you buy a Drops on the marketplace or mint an NFT on starbase.",
   "tezoniaPassExpirationDate": "This card will remain active and reusable for 1 YEAR.",
-  "tezoniaPassHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Altme’s KYC check."
+  "tezoniaPassHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Altme’s KYC check.",
+  "walletSecurity": "Wallet Security",
+  "walletSecurityDescription": "Protect your wallet with Pin Code and Biometrics Authentication",
+  "blockchainSettings": "Blockchain Settings",
+  "blockchainSettingsDescription": "Manage accounts, Recovery Phrase, Connected dApps and Networks",
+  "ssi": "Self-Sovereign Identity (DID)",
+  "ssiDescription": "Manage your Decentralized ID and backup or restore your credentials",
+  "helpCenter": "Help Center",
+  "helpCenterDescription": "Contact us and get support if you need assistance on using Altme",
+  "aboutAltme": "About Altme",
+  "aboutAltmeDescription": "Read about Altme terms of use, confidentiality and licenses",
+  "resetWallet": "Reset Wallet",
+  "resetWalletDescription": "Erase all data stored on your phone and reset Altme wallet."
 }

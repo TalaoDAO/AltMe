@@ -609,7 +609,19 @@
     "tzlandPassHowToGetIt",
     "tezoniaPassWhyGetThisCard",
     "tezoniaPassExpirationDate",
-    "tezoniaPassHowToGetIt"
+    "tezoniaPassHowToGetIt",
+    "walletSecurity",
+    "walletSecurityDescription",
+    "blockchainSettings",
+    "blockchainSettingsDescription",
+    "ssi",
+    "ssiDescription",
+    "helpCenter",
+    "helpCenterDescription",
+    "aboutAltme",
+    "aboutAltmeDescription",
+    "resetWallet",
+    "resetWalletDescription"
   ],
 
   "es": [
@@ -1222,7 +1234,19 @@
     "tzlandPassHowToGetIt",
     "tezoniaPassWhyGetThisCard",
     "tezoniaPassExpirationDate",
-    "tezoniaPassHowToGetIt"
+    "tezoniaPassHowToGetIt",
+    "walletSecurity",
+    "walletSecurityDescription",
+    "blockchainSettings",
+    "blockchainSettingsDescription",
+    "ssi",
+    "ssiDescription",
+    "helpCenter",
+    "helpCenterDescription",
+    "aboutAltme",
+    "aboutAltmeDescription",
+    "resetWallet",
+    "resetWalletDescription"
   ],
 
   "fr": [
@@ -1835,7 +1859,19 @@
     "tzlandPassHowToGetIt",
     "tezoniaPassWhyGetThisCard",
     "tezoniaPassExpirationDate",
-    "tezoniaPassHowToGetIt"
+    "tezoniaPassHowToGetIt",
+    "walletSecurity",
+    "walletSecurityDescription",
+    "blockchainSettings",
+    "blockchainSettingsDescription",
+    "ssi",
+    "ssiDescription",
+    "helpCenter",
+    "helpCenterDescription",
+    "aboutAltme",
+    "aboutAltmeDescription",
+    "resetWallet",
+    "resetWalletDescription"
   ],
 
   "it": [
@@ -2448,6 +2484,18 @@
     "tzlandPassHowToGetIt",
     "tezoniaPassWhyGetThisCard",
     "tezoniaPassExpirationDate",
-    "tezoniaPassHowToGetIt"
+    "tezoniaPassHowToGetIt",
+    "walletSecurity",
+    "walletSecurityDescription",
+    "blockchainSettings",
+    "blockchainSettingsDescription",
+    "ssi",
+    "ssiDescription",
+    "helpCenter",
+    "helpCenterDescription",
+    "aboutAltme",
+    "aboutAltmeDescription",
+    "resetWallet",
+    "resetWalletDescription"
   ]
 }

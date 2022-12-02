@@ -404,6 +404,18 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
       );
 
+  TextStyle get drawerCategoryTitle => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+      );
+  
+  TextStyle get drawerCategorySubTitle => GoogleFonts.nunito(
+        color: const Color(0xFFD1CCE3),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get biometricMessage => GoogleFonts.roboto(
         color: const Color(0xFFB1ADC3),
         fontSize: 12,

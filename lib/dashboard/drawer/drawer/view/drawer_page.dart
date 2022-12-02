@@ -47,6 +47,7 @@ class DrawerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Drawer(
@@ -65,24 +66,56 @@ class DrawerView extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       const Center(child: AltMeLogo(size: 90)),
-                      // const DidKey(),
-                      SecurityItems(
-                        localAuthApi: localAuthApi,
-                        drawerState: state,
+                      const SizedBox(
+                        height: Sizes.spaceSmall,
                       ),
-                      const SizedBox(height: 15),
-                      const WalletItems(),
-                      const SizedBox(height: 15),
-                      const NetworkAndRegistriesItems(),
-                      const SizedBox(height: 15),
-                      const OtherItems(),
-                      const SizedBox(height: 15),
-                      const TermsOfUseAndLicences(),
-                      const SizedBox(height: 15),
-                      const AdvancedSettings(),
-                      const SizedBox(height: 15),
-                      const DrawerAppVersion(),
-                      const SizedBox(height: 15),
+                      const AppVersionDrawer(),
+                      const SizedBox(
+                        height: Sizes.spaceLarge,
+                      ),
+                      // const DidKey(),
+                      DrawerCategoryItem(
+                        title: l10n.walletSecurity,
+                        subTitle: l10n.walletSecurityDescription,
+                        onClick: () {
+
+                        },
+                      ),
+                      const SizedBox(
+                        height: Sizes.spaceSmall,
+                      ),
+                      DrawerCategoryItem(
+                        title: l10n.blockchainSettings,
+                        subTitle: l10n.blockchainSettingsDescription,
+                      ),
+                      const SizedBox(
+                        height: Sizes.spaceSmall,
+                      ),
+                      DrawerCategoryItem(
+                        title: l10n.ssi,
+                        subTitle: l10n.ssiDescription,
+                      ),
+                      const SizedBox(
+                        height: Sizes.spaceSmall,
+                      ),
+                      DrawerCategoryItem(
+                        title: l10n.helpCenter,
+                        subTitle: l10n.helpCenterDescription,
+                      ),
+                      const SizedBox(
+                        height: Sizes.spaceSmall,
+                      ),
+                      DrawerCategoryItem(
+                        title: l10n.aboutAltme,
+                        subTitle: l10n.aboutAltmeDescription,
+                      ),
+                      const SizedBox(
+                        height: Sizes.spaceSmall,
+                      ),
+                      DrawerCategoryItem(
+                        title: l10n.resetWallet,
+                        subTitle: l10n.resetWalletDescription,
+                      ),
                     ],
                   ),
                 );
