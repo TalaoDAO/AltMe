@@ -6,6 +6,8 @@ class AltMeStrings {
   static const String databaseFilename = 'wallet.db';
   static const String appContactWebsiteName = 'altme.io';
   static const String appContactMail = 'contact@altme.io';
+  static const String appSupportMail = 'support@altme.io';
+  static const String appOfficialWebsite = 'www.altme.io';
   static const String ivVector = 'Altme';
   static const String additionalAuthenticatedData = 'Credible';
   static const String passBasePublishableApiKey =

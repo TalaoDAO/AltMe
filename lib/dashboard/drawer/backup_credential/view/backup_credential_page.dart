@@ -48,6 +48,7 @@ class BackupCredentialView extends StatelessWidget {
       },
       child: BasePage(
         title: l10n.backupCredential,
+        titleAlignment: Alignment.topCenter,
         titleLeading: BackLeadingButton(
           onPressed: () {
             if (context.read<BackupCredentialCubit>().state.status !=

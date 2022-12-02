@@ -100,6 +100,7 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
         return BasePage(
           scrollView: false,
           title: l10n.connectedApps,
+          titleAlignment: Alignment.topCenter,
           titleLeading: const BackLeadingButton(),
           body: BackgroundCard(
             height: double.infinity,
