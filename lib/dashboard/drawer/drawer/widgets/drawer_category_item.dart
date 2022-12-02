@@ -16,37 +16,49 @@ class DrawerCategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return InkWell(
       onTap: onClick,
-      tileColor: Theme.of(context).colorScheme.drawerSurface,
-      selectedTileColor: Theme.of(context).colorScheme.primary,
-      contentPadding: const EdgeInsets.symmetric(
-        vertical: 0,
-        horizontal: Sizes.spaceSmall,
-      ),
-      minVerticalPadding: Sizes.spaceSmall,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(
-            Sizes.normalRadius,
+      child: Container(
+        padding: const EdgeInsets.all(Sizes.spaceSmall),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.drawerSurface,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(
+              Sizes.normalRadius,
+            ),
           ),
         ),
-      ),
-      title: Text(
-        title,
-        style: Theme.of(context).textTheme.drawerCategoryTitle,
-      ),
-      subtitle: Text(
-        subTitle,
-        style: Theme.of(context).textTheme.drawerCategorySubTitle,
-      ),
-      trailing: Container(
-        width: Sizes.icon3x,
-        alignment: Alignment.center,
-        child: Icon(
-          Icons.chevron_right,
-          size: Sizes.icon2x,
-          color: Theme.of(context).colorScheme.unSelectedLabel,
+        child: Row(
+          children: [
+            Flexible(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.drawerCategoryTitle,
+                  ),
+                  const SizedBox(
+                    height: Sizes.space2XSmall,
+                  ),
+                  Text(
+                    subTitle,
+                    style: Theme.of(context).textTheme.drawerCategorySubTitle,
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: Sizes.icon3x,
+              alignment: Alignment.center,
+              child: Icon(
+                Icons.chevron_right,
+                size: Sizes.icon2x,
+                color: Theme.of(context).colorScheme.unSelectedLabel,
+              ),
+            ),
+          ],
         ),
       ),
     );
