@@ -10,6 +10,7 @@ export 'bunny_pass_widget.dart';
 export 'certificate_of_employment_widget.dart';
 export 'credential_base_widget.dart';
 export 'default_credential_subject_widget.dart';
+export 'device_info_widget.dart';
 export 'diploma_card_widget.dart';
 export 'dogami_pass_widget.dart';
 export 'ecole_42_learning_achievement_widget.dart';

@@ -126,7 +126,14 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           .credentialSubjectModel.credentialCategory !=
                       CredentialCategory.blockchainAccountsCards)
                     MyOutlinedButton(
-                      onPressed: delete,
+                      onPressed: widget
+                                  .credentialModel
+                                  .credentialPreview
+                                  .credentialSubjectModel
+                                  .credentialSubjectType ==
+                              CredentialSubjectType.deviceInfo
+                          ? null
+                          : delete,
                       text: l10n.credentialDetailDeleteCard,
                     ),
                   if (widget.credentialModel.shareLink != '')

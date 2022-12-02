@@ -15,6 +15,8 @@ export 'credential_model/credential_model.dart';
 export 'credential_status_field/credential_status_field.dart';
 export 'credential_subject/credential_subject_model.dart';
 export 'default_credential_subject/default_credential_subject_model.dart';
+export 'device_info/device_info_credential.dart';
+export 'device_info/device_info_model.dart';
 export 'diploma_card/diploma_card_model.dart';
 export 'display/display.dart';
 export 'dogami_pass/dogami_pass_model.dart';

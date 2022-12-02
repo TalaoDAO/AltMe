@@ -16,6 +16,7 @@ enum CredentialSubjectType {
   ageRange,
   nationality,
   gender,
+  deviceInfo,
   tezosAssociatedWallet,
   ethereumAssociatedWallet,
   certificateOfEmployment,

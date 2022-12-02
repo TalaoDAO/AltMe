@@ -609,7 +609,8 @@
     "tzlandPassHowToGetIt",
     "tezoniaPassWhyGetThisCard",
     "tezoniaPassExpirationDate",
-    "tezoniaPassHowToGetIt"
+    "tezoniaPassHowToGetIt",
+    "deviceInfo"
   ],
 
   "es": [
@@ -1222,7 +1223,8 @@
     "tzlandPassHowToGetIt",
     "tezoniaPassWhyGetThisCard",
     "tezoniaPassExpirationDate",
-    "tezoniaPassHowToGetIt"
+    "tezoniaPassHowToGetIt",
+    "deviceInfo"
   ],
 
   "fr": [
@@ -1835,7 +1837,8 @@
     "tzlandPassHowToGetIt",
     "tezoniaPassWhyGetThisCard",
     "tezoniaPassExpirationDate",
-    "tezoniaPassHowToGetIt"
+    "tezoniaPassHowToGetIt",
+    "deviceInfo"
   ],
 
   "it": [
@@ -2448,6 +2451,7 @@
     "tzlandPassHowToGetIt",
     "tezoniaPassWhyGetThisCard",
     "tezoniaPassExpirationDate",
-    "tezoniaPassHowToGetIt"
+    "tezoniaPassHowToGetIt",
+    "deviceInfo"
   ]
 }
