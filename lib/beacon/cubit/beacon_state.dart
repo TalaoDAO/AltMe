@@ -40,12 +40,13 @@ class BeaconState extends Equatable {
     );
   }
 
-  BeaconState copyWith(
-      {BeaconStatus status = BeaconStatus.idle,
-      MessageHandler? messageHandler,
-      BeaconRequest? beaconRequest,
-      bool? isBeaconStarted,
-      DateTime? lastBeaconRequestTime}) {
+  BeaconState copyWith({
+    BeaconStatus status = BeaconStatus.idle,
+    MessageHandler? messageHandler,
+    BeaconRequest? beaconRequest,
+    bool? isBeaconStarted,
+    DateTime? lastBeaconRequestTime,
+  }) {
     return BeaconState(
       status: status,
       message: messageHandler == null

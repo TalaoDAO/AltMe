@@ -183,6 +183,10 @@ class DisplayInSelectionList extends StatelessWidget {
         return EthereumAssociatedAddressDisplayInSelectionList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.pcdsAgentCertificate:
+        return PcdsAgentCertificateDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
     }
   }
 }

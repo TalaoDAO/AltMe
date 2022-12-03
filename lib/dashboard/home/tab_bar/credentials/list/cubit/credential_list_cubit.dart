@@ -141,6 +141,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.aragoOver18:
           break;
         case CredentialSubjectType.aragoPass:
+        case CredentialSubjectType.pcdsAgentCertificate:
+          break;
       }
 
       switch (credentialSubject.credentialCategory) {
@@ -393,6 +395,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.dogamiPass:
             break;
           case CredentialSubjectType.bunnyPass:
+            break;
+          case CredentialSubjectType.pcdsAgentCertificate:
             break;
         }
 
@@ -738,6 +742,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.aragoLearningAchievement:
             break;
           case CredentialSubjectType.aragoOver18:
+            break;
+          case CredentialSubjectType.pcdsAgentCertificate:
             break;
         }
 

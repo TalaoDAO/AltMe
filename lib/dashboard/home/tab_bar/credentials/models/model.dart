@@ -35,6 +35,7 @@ export 'nationality/nationality_model.dart';
 export 'over13/over13_model.dart';
 export 'over18/over18_model.dart';
 export 'passport_footprint/passport_footprint_model.dart';
+export 'pcds_agent_certificate/pcds_agent_certificate_model.dart';
 export 'phone_pass/phone_pass_model.dart';
 export 'pigs_pass/pigs_pass_model.dart';
 export 'professional_experience_assessment/professional_experience_assessment_model.dart';

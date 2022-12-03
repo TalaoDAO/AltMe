@@ -26,6 +26,7 @@ export 'nationality_widget.dart';
 export 'over13_widget.dart';
 export 'over18_widget.dart';
 export 'passport_footprint_widget.dart';
+export 'pcds_agent_certificate_widget.dart';
 export 'phone_pass_widget.dart';
 export 'pigs_pass_widget.dart';
 export 'professional_experience_assessment_widget.dart';

@@ -98,6 +98,8 @@ class CredentialSubjectModel {
         return AragoEmailPassModel.fromJson(json);
       case 'AragoLearningAchievement':
         return AragoLearningAchievementModel.fromJson(json);
+      case 'PCDSAgentCertificate':
+        return PcdsAgentCertificateModel.fromJson(json);
     }
     return DefaultCredentialSubjectModel.fromJson(json);
   }

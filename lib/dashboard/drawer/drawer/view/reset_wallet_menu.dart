@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +22,6 @@ class ResetWalletView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return Drawer(
       backgroundColor: Theme.of(context).colorScheme.drawerBackground,
       child: SafeArea(
@@ -40,7 +38,9 @@ class ResetWalletView extends StatelessWidget {
                 const Center(
                   child: AltMeLogo(size: 90),
                 ),
-                const SizedBox(height: Sizes.spaceSmall,),
+                const SizedBox(
+                  height: Sizes.spaceSmall,
+                ),
               ],
             ),
           ),

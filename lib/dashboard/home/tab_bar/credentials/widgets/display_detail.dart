@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class DisplayDetail extends StatelessWidget {
   const DisplayDetail({
@@ -185,6 +184,10 @@ class DisplayDetail extends StatelessWidget {
         );
       case CredentialSubjectType.ethereumAssociatedWallet:
         return EthereumAssociatedAddressDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.pcdsAgentCertificate:
+        return PcdsAgentCertificateDisplayDetail(
           credentialModel: credentialModel,
         );
     }

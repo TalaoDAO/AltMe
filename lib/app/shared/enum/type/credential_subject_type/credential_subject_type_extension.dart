@@ -99,6 +99,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xff4700D8);
       case CredentialSubjectType.defaultCredential:
         return Colors.white;
+      case CredentialSubjectType.pcdsAgentCertificate:
+        return Colors.white;
     }
   }
 
@@ -187,6 +189,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.ethereumAssociatedWallet:
         return Icons.accessible_rounded;
       case CredentialSubjectType.defaultCredential:
+        return Icons.fact_check_outlined;
+      case CredentialSubjectType.pcdsAgentCertificate:
         return Icons.fact_check_outlined;
     }
   }

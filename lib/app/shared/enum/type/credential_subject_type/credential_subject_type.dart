@@ -46,6 +46,7 @@ enum CredentialSubjectType {
   aragoIdentityCard,
   aragoLearningAchievement,
   aragoOver18,
+  pcdsAgentCertificate,
 }
 
 extension CredentialSubjectTypeX on CredentialSubjectType {
