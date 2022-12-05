@@ -1,3 +1,4 @@
+export 'cubit/reset_wallet_cubit.dart';
 export 'cubit/wallet_security_cubit.dart';
 export 'view/about_altme_menu.dart';
 export 'view/blockchain_settings_menu.dart';

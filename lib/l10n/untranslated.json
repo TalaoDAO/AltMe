@@ -631,7 +631,12 @@
     "blockchainNetwork",
     "contactUs",
     "officialWebsite",
-    "yourAltmeAppVersion"
+    "yourAltmeAppVersion",
+    "resetWalletTitle",
+    "resetWalletSubtitle",
+    "resetWalletSubtitle2",
+    "resetWalletCheckBox1",
+    "resetWalletCheckBox2"
   ],
 
   "es": [
@@ -1266,7 +1271,12 @@
     "blockchainNetwork",
     "contactUs",
     "officialWebsite",
-    "yourAltmeAppVersion"
+    "yourAltmeAppVersion",
+    "resetWalletTitle",
+    "resetWalletSubtitle",
+    "resetWalletSubtitle2",
+    "resetWalletCheckBox1",
+    "resetWalletCheckBox2"
   ],
 
   "fr": [
@@ -1901,7 +1911,12 @@
     "blockchainNetwork",
     "contactUs",
     "officialWebsite",
-    "yourAltmeAppVersion"
+    "yourAltmeAppVersion",
+    "resetWalletTitle",
+    "resetWalletSubtitle",
+    "resetWalletSubtitle2",
+    "resetWalletCheckBox1",
+    "resetWalletCheckBox2"
   ],
 
   "it": [
@@ -2536,6 +2551,11 @@
     "blockchainNetwork",
     "contactUs",
     "officialWebsite",
-    "yourAltmeAppVersion"
+    "yourAltmeAppVersion",
+    "resetWalletTitle",
+    "resetWalletSubtitle",
+    "resetWalletSubtitle2",
+    "resetWalletCheckBox1",
+    "resetWalletCheckBox2"
   ]
 }

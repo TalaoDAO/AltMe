@@ -1,12 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class DrawerPage extends StatelessWidget {
   const DrawerPage({Key? key}) : super(key: key);
@@ -103,37 +99,9 @@ class DrawerView extends StatelessWidget {
                 DrawerCategoryItem(
                   title: l10n.resetWallet,
                   subTitle: l10n.resetWalletDescription,
-                  onClick: () async {
-                    final confirm = await showDialog<bool>(
-                          context: context,
-                          builder: (_) => ConfirmDialog(
-                            title: l10n.resetWalletConfirmationText,
-                            yes: l10n.delete,
-                            no: l10n.showDialogNo,
-                            dialogColor: Theme.of(context).colorScheme.error,
-                            // icon: IconStrings.trash,
-                          ),
-                        ) ??
-                        false;
-                    if (confirm) {
-                      final pinCode =
-                          await getSecureStorage.get(SecureStorageKeys.pinCode);
-                      if (pinCode?.isEmpty ?? true) {
-                        await context.read<WalletCubit>().resetWallet();
-                      } else {
-                        await Navigator.of(context).push<void>(
-                          PinCodePage.route(
-                            isValidCallback: () =>
-                                context.read<WalletCubit>().resetWallet(),
-                            restrictToBack: false,
-                          ),
-                        );
-                      }
-                    }
+                  onClick: () {
+                    Navigator.of(context).push<void>(ResetWalletMenu.route());
                   },
-                  // onClick: () {
-                  //   Navigator.of(context).push<void>(ResetWalletMenu.route());
-                  // },
                 ),
               ],
             ),

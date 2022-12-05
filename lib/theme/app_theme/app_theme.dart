@@ -410,6 +410,22 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w800,
       );
   
+  TextStyle get resetWalletTitle => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+      );
+  TextStyle get resetWalletSubtitle => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      );
+  TextStyle get resetWalletSubtitle2 => GoogleFonts.nunito(
+        color: const Color(0xFF00A1FF),
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      );
+  
   TextStyle get drawerCategorySubTitle => GoogleFonts.nunito(
         color: const Color(0xFFD1CCE3),
         fontSize: 16,
