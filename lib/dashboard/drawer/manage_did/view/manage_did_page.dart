@@ -20,7 +20,8 @@ class ManageDIDPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.decentralizedID,
+      title: l10n.manageDecentralizedID,
+      titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
       body: BackgroundCard(

@@ -7,6 +7,7 @@ class BeaconState extends Equatable {
     this.isBeaconStarted = false,
     this.beaconRequest,
     this.message,
+    this.lastBeaconRequestTime,
   });
 
   factory BeaconState.fromJson(Map<String, dynamic> json) =>
@@ -16,6 +17,7 @@ class BeaconState extends Equatable {
   final StateMessage? message;
   final BeaconRequest? beaconRequest;
   final bool isBeaconStarted;
+  final DateTime? lastBeaconRequestTime;
 
   Map<String, dynamic> toJson() => _$BeaconStateToJson(this);
 
@@ -43,6 +45,7 @@ class BeaconState extends Equatable {
     MessageHandler? messageHandler,
     BeaconRequest? beaconRequest,
     bool? isBeaconStarted,
+    DateTime? lastBeaconRequestTime,
   }) {
     return BeaconState(
       status: status,
@@ -51,9 +54,12 @@ class BeaconState extends Equatable {
           : StateMessage.success(messageHandler: messageHandler),
       beaconRequest: beaconRequest ?? this.beaconRequest,
       isBeaconStarted: isBeaconStarted ?? this.isBeaconStarted,
+      lastBeaconRequestTime:
+          lastBeaconRequestTime ?? this.lastBeaconRequestTime,
     );
   }
 
   @override
-  List<Object?> get props => [status, message, beaconRequest, isBeaconStarted];
+  List<Object?> get props =>
+      [status, message, beaconRequest, isBeaconStarted, lastBeaconRequestTime];
 }

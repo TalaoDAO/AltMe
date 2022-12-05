@@ -42,6 +42,7 @@ class HomeCredential extends Equatable {
     ResponseString? dummyDesc;
 
     switch (credentialSubjectType) {
+      case CredentialSubjectType.deviceInfo:
       case CredentialSubjectType.ageRange:
         image = ImageStrings.dummyAgeRangeCard;
         link = Urls.ageRangeUrl;
@@ -257,6 +258,7 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.aragoOver18:
       case CredentialSubjectType.aragoPass:
       case CredentialSubjectType.ethereumAssociatedWallet:
+      case CredentialSubjectType.pcdsAgentCertificate:
         break;
     }
 

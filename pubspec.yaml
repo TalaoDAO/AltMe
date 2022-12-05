@@ -1,6 +1,6 @@
 name: altme
 description: AltMe Flutter App 
-version: 1.5.1+108
+version: 1.6.0+115
 publish_to: none
 
 environment:
@@ -32,7 +32,7 @@ dependencies:
     git:
       url: https://github.com/Teknasyon-Teknoloji/desk360-flutter-sdk.git
       ref: 1.0.0
-  #device_info_plus: ^8.0.0
+  device_info_plus: ^8.0.0
   device_preview: ^1.1.0
   did_kit:
     path: packages/did_kit
@@ -89,6 +89,10 @@ dependencies:
   uuid: ^3.0.5
   web3dart: ^2.3.3
   workmanager: ^0.5.0
+
+dependency_overrides:
+# Because flutter_sodium 0.2.0 depends on ffi ^1.0.0 and no versions of flutter_sodium match >0.2.0 <0.3.0, flutter_sodium ^0.2.0 requires ffi ^1.0.0
+  ffi: ^2.0.1
 
 dev_dependencies:
   bloc_test: ^9.0.3

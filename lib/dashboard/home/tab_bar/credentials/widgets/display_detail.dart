@@ -16,6 +16,10 @@ class DisplayDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
+      case CredentialSubjectType.deviceInfo:
+        return DeviceInfoDisplayDetail(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.bloometaPass:
         return BloometaPassDisplayDetail(
           credentialModel: credentialModel,
@@ -180,6 +184,10 @@ class DisplayDetail extends StatelessWidget {
         );
       case CredentialSubjectType.ethereumAssociatedWallet:
         return EthereumAssociatedAddressDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.pcdsAgentCertificate:
+        return PcdsAgentCertificateDisplayDetail(
           credentialModel: credentialModel,
         );
     }

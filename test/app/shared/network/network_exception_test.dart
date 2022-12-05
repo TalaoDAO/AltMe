@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
@@ -288,7 +290,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED);
+          message: NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -303,7 +306,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_REQUEST_CANCELLED)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_REQUEST_CANCELLED);
+          message: NetworkError.NETWORK_ERROR_REQUEST_CANCELLED,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -318,7 +322,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR);
+          message: NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -333,7 +338,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE);
+          message: NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -348,7 +354,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED);
+          message: NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -378,7 +385,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST);
+          message: NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -393,7 +401,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR);
+          message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -408,7 +417,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT);
+          message: NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -423,7 +433,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION);
+          message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -468,7 +479,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS);
+          message: NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -483,7 +495,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE);
+          message: NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -498,7 +511,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT);
+          message: NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -513,7 +527,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS);
+          message: NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
@@ -528,7 +543,8 @@ void main() {
           'NetworkException(message: NetworkError.NETWORK_ERROR_UNAUTHENTICATED)',
           (tester) async {
         final MessageHandler messageHandler = NetworkException(
-            message: NetworkError.NETWORK_ERROR_UNAUTHENTICATED);
+          message: NetworkError.NETWORK_ERROR_UNAUTHENTICATED,
+        );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);

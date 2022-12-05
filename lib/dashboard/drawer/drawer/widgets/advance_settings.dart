@@ -23,7 +23,6 @@ class AdvancedSettings extends StatelessWidget {
           child: Column(
             children: [
               DrawerItem(
-                icon: IconStrings.advanceSettings,
                 title: l10n.categories,
                 onTap: () => Navigator.of(context).push<void>(
                   AdvancedSettingsPage.route(),

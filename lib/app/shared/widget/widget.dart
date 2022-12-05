@@ -1,6 +1,7 @@
 export 'add_account/add_account.dart';
 export 'altme_logo.dart';
 export 'app_version.dart';
+export 'app_version_drawer.dart';
 export 'back_leading_button.dart';
 export 'base/base.dart';
 export 'button/button.dart';

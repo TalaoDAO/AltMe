@@ -7,6 +7,7 @@ import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
@@ -285,6 +286,24 @@ class WalletCubit extends Cubit<WalletState> {
         credential: credential,
         showMessage: showCredentialAddMessage,
       );
+    }
+
+    if ((await credentialListFromCredentialSubjectType(
+      CredentialSubjectType.deviceInfo,
+    ))
+        .isEmpty) {
+      final deviceInfoCredential = await generateDeviceInfoCredential(
+        ssiKey: ssiKey,
+        didKitProvider: didKitProvider,
+        didCubit: didCubit,
+      );
+
+      if (deviceInfoCredential != null) {
+        await insertCredential(
+          credential: deviceInfoCredential,
+          showMessage: showCredentialAddMessage,
+        );
+      }
     }
 
     return cryptoAccount;
@@ -623,5 +642,21 @@ class WalletCubit extends Cubit<WalletState> {
     }
     homeCubit.emitHasNoWallet();
     emit(state.copyWith(status: WalletStatus.init, credentials: credentials));
+  }
+
+  Future<List<CredentialModel>> credentialListFromCredentialSubjectType(
+    CredentialSubjectType credentialSubjectType,
+  ) async {
+    if (state.credentials.isEmpty) return [];
+    final List<CredentialModel> resultList = [];
+    for (final credential in state.credentials) {
+      final credentialSubjectModel =
+          credential.credentialPreview.credentialSubjectModel;
+      if (credentialSubjectModel.credentialSubjectType ==
+          credentialSubjectType) {
+        resultList.add(credential);
+      }
+    }
+    return resultList;
   }
 }

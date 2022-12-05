@@ -14,6 +14,10 @@ class DisplayInSelectionList extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
+      case CredentialSubjectType.deviceInfo:
+        return DeviceInfoDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.bloometaPass:
         return BloometaPassDisplayInSelectionList(
           credentialModel: credentialModel,
@@ -177,6 +181,10 @@ class DisplayInSelectionList extends StatelessWidget {
         );
       case CredentialSubjectType.ethereumAssociatedWallet:
         return EthereumAssociatedAddressDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.pcdsAgentCertificate:
+        return PcdsAgentCertificateDisplayInSelectionList(
           credentialModel: credentialModel,
         );
     }

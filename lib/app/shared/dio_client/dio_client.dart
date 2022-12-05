@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 part 'logging.dart';
 
 const _defaultConnectTimeout = Duration.millisecondsPerMinute;
@@ -52,7 +53,7 @@ class DioClient {
       }
 
       final stopwatch = Stopwatch()..start();
-      _dio.options.headers = headers;
+      await getSpecificHeader(uri, headers);
       final response = await _dio.get<dynamic>(
         uri,
         queryParameters: queryParameters,
@@ -72,6 +73,24 @@ class DioClient {
       } else {
         rethrow;
       }
+    }
+  }
+
+  Future<void> getSpecificHeader(
+    String uri,
+    Map<String, dynamic> headers,
+  ) async {
+    if (uri.contains(Urls.tezotopiaMembershipCardUrl)) {
+      await dotenv.load();
+      final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');
+
+      _dio.options.headers = <String, dynamic>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'accept': 'application/json',
+        'X-API-KEY': YOTI_AI_API_KEY,
+      };
+    } else {
+      _dio.options.headers = headers;
     }
   }
 
@@ -96,7 +115,7 @@ class DioClient {
       }
 
       final stopwatch = Stopwatch()..start();
-      _dio.options.headers = headers;
+      await getSpecificHeader(uri, headers);
       final response = await _dio.post<dynamic>(
         uri,
         data: data,

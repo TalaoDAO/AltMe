@@ -15,6 +15,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   Color defaultBackgroundColor() {
     switch (this) {
+      case CredentialSubjectType.deviceInfo:
+        return const Color(0xff14181D);
       case CredentialSubjectType.bloometaPass:
         return const Color(0xff14181D);
       case CredentialSubjectType.tezotopiaMembership:
@@ -97,11 +99,15 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xff4700D8);
       case CredentialSubjectType.defaultCredential:
         return Colors.white;
+      case CredentialSubjectType.pcdsAgentCertificate:
+        return Colors.white;
     }
   }
 
   IconData iconData() {
     switch (this) {
+      case CredentialSubjectType.deviceInfo:
+        return Icons.phone_android_rounded;
       case CredentialSubjectType.bloometaPass:
         return Icons.games;
       case CredentialSubjectType.nationality:
@@ -183,6 +189,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.ethereumAssociatedWallet:
         return Icons.accessible_rounded;
       case CredentialSubjectType.defaultCredential:
+        return Icons.fact_check_outlined;
+      case CredentialSubjectType.pcdsAgentCertificate:
         return Icons.fact_check_outlined;
     }
   }

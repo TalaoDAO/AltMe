@@ -16,6 +16,8 @@ class CredentialSubjectModel {
 
   factory CredentialSubjectModel.fromJson(Map<String, dynamic> json) {
     switch (json['type']) {
+      case 'DeviceInfo':
+        return DeviceInfoModel.fromJson(json);
       case 'BloometaPass':
         return BloometaPassModel.fromJson(json);
       case 'MembershipCard_1':
@@ -96,6 +98,8 @@ class CredentialSubjectModel {
         return AragoEmailPassModel.fromJson(json);
       case 'AragoLearningAchievement':
         return AragoLearningAchievementModel.fromJson(json);
+      case 'PCDSAgentCertificate':
+        return PcdsAgentCertificateModel.fromJson(json);
     }
     return DefaultCredentialSubjectModel.fromJson(json);
   }
