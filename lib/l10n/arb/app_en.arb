@@ -686,5 +686,10 @@
   "resetWalletSubtitle": "This action will erase your data. Please, make sure you have saved your Recovery Phrase and credentials backup file before deleting.",
   "resetWalletSubtitle2": "Altme is self-custodial so we are not able to recover your funds or credentials for you.",
   "resetWalletCheckBox1" : "I wrote down my Recovery Phrase",
-  "resetWalletCheckBox2" : "I saved my backup credentials file"
+  "resetWalletCheckBox2" : "I saved my backup credentials file",
+  "email": "Email",
+  "fillingThisFieldIsMandatory": "Filling this field is mandatory.",
+  "yourMessage": "Your message",
+  "message": "Message",
+  "subject": "Subject"
 }

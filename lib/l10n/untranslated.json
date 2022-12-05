@@ -636,7 +636,12 @@
     "resetWalletSubtitle",
     "resetWalletSubtitle2",
     "resetWalletCheckBox1",
-    "resetWalletCheckBox2"
+    "resetWalletCheckBox2",
+    "email",
+    "fillingThisFieldIsMandatory",
+    "yourMessage",
+    "message",
+    "subject"
   ],
 
   "es": [
@@ -1276,7 +1281,12 @@
     "resetWalletSubtitle",
     "resetWalletSubtitle2",
     "resetWalletCheckBox1",
-    "resetWalletCheckBox2"
+    "resetWalletCheckBox2",
+    "email",
+    "fillingThisFieldIsMandatory",
+    "yourMessage",
+    "message",
+    "subject"
   ],
 
   "fr": [
@@ -1916,7 +1926,12 @@
     "resetWalletSubtitle",
     "resetWalletSubtitle2",
     "resetWalletCheckBox1",
-    "resetWalletCheckBox2"
+    "resetWalletCheckBox2",
+    "email",
+    "fillingThisFieldIsMandatory",
+    "yourMessage",
+    "message",
+    "subject"
   ],
 
   "it": [
@@ -2556,6 +2571,11 @@
     "resetWalletSubtitle",
     "resetWalletSubtitle2",
     "resetWalletCheckBox1",
-    "resetWalletCheckBox2"
+    "resetWalletCheckBox2",
+    "email",
+    "fillingThisFieldIsMandatory",
+    "yourMessage",
+    "message",
+    "subject"
   ]
 }

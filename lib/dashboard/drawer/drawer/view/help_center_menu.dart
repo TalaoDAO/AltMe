@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/drawer/drawer.dart';
+import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +47,14 @@ class HelpCenterView extends StatelessWidget {
                 ),
                 DrawerItem(
                   title: '${l10n.contactUs} : ${AltMeStrings.appSupportMail}',
+                  onTap: () {
+                    Navigator.of(context).push<void>(ContactUsPage.route());
+                  },
                 ),
                 DrawerItem(
                   onTap: () {
-                    launchUrl(Uri.parse('https://${AltMeStrings.appOfficialWebsite}'));
+                    launchUrl(Uri.parse(
+                        'https://${AltMeStrings.appOfficialWebsite}'));
                   },
                   title: '${l10n.officialWebsite} :',
                   trailing: Expanded(
