@@ -22,7 +22,7 @@ class ContactUsView extends StatefulWidget {
   State<ContactUsView> createState() => _ContactUsViewState();
 }
 
-class _ContactUsViewState extends State<ContactUsView> {
+class _ContactUsViewState extends State<ContactUsView> with MEmailValidator {
   late final formKey = GlobalKey<FormState>();
 
   @override
@@ -53,6 +53,8 @@ class _ContactUsViewState extends State<ContactUsView> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return l10n.fillingThisFieldIsMandatory;
+                } else if (!validateEmail(value)) {
+                  return l10n.enterAValidEmail;
                 } else {
                   return null;
                 }

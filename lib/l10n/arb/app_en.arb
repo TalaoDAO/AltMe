@@ -691,5 +691,6 @@
   "fillingThisFieldIsMandatory": "Filling this field is mandatory.",
   "yourMessage": "Your message",
   "message": "Message",
-  "subject": "Subject"
+  "subject": "Subject",
+  "enterAValidEmail": "Enter a valid email."
 }

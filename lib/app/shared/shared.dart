@@ -11,6 +11,7 @@ export 'loading/loading.dart';
 export 'local_auth/local_auth_api.dart';
 export 'local_notification/local_notification.dart';
 export 'message_handler/message_handler.dart';
+export 'mixins/m_email_validator.dart';
 export 'models/model.dart';
 export 'text_field_helper/text_field_helper.dart';
 export 'translation/translation.dart';
