@@ -167,27 +167,23 @@ Future<CredentialModel?> generateDeviceInfoCredential({
     late String device;
     late String systemName;
     late String systemVersion;
-    late String identifier;
 
     if (isAndroid()) {
       final androidDeviceInfo = await DeviceInfoPlugin().androidInfo;
       device = androidDeviceInfo.model;
       systemName = 'android';
       systemVersion = androidDeviceInfo.version.codename;
-      identifier = androidDeviceInfo.id;
     } else {
       final iosDeviceInfo = await DeviceInfoPlugin().iosInfo;
       device = iosDeviceInfo.name ?? '';
       systemName = 'iOS';
       systemVersion = iosDeviceInfo.systemVersion ?? '';
-      identifier = iosDeviceInfo.identifierForVendor ?? '';
     }
 
     final deviceInfoModel = DeviceInfoModel(
       id: didSsi,
       systemName: systemName,
       device: device,
-      identifier: identifier,
       systemVersion: systemVersion,
       type: 'DeviceInfo',
     );
