@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class ContactUsPage extends StatelessWidget {
   const ContactUsPage({super.key});
@@ -22,8 +23,10 @@ class ContactUsView extends StatefulWidget {
   State<ContactUsView> createState() => _ContactUsViewState();
 }
 
-class _ContactUsViewState extends State<ContactUsView> with MEmailValidator {
+class _ContactUsViewState extends State<ContactUsView> {
   late final formKey = GlobalKey<FormState>();
+  String subject = '';
+  String message = '';
 
   @override
   Widget build(BuildContext context) {
@@ -40,40 +43,6 @@ class _ContactUsViewState extends State<ContactUsView> with MEmailValidator {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${l10n.email} :',
-              style: Theme.of(context).textTheme.subtitle2,
-            ),
-            const SizedBox(
-              height: Sizes.spaceXSmall,
-            ),
-            TextFormField(
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.emailAddress,
-              style: Theme.of(context).textTheme.subtitle2,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return l10n.fillingThisFieldIsMandatory;
-                } else if (!validateEmail(value)) {
-                  return l10n.enterAValidEmail;
-                } else {
-                  return null;
-                }
-              },
-              decoration: InputDecoration(
-                hintText: '${l10n.email} :',
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(
-                      Sizes.smallRadius,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: Sizes.spaceLarge,
-            ),
-            Text(
               '${l10n.subject} :',
               style: Theme.of(context).textTheme.subtitle2,
             ),
@@ -84,6 +53,9 @@ class _ContactUsViewState extends State<ContactUsView> with MEmailValidator {
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.emailAddress,
               style: Theme.of(context).textTheme.subtitle2,
+              onSaved: (value) {
+                subject = value ?? '';
+              },
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return l10n.fillingThisFieldIsMandatory;
@@ -117,6 +89,9 @@ class _ContactUsViewState extends State<ContactUsView> with MEmailValidator {
               keyboardType: TextInputType.emailAddress,
               maxLines: 6,
               style: Theme.of(context).textTheme.subtitle2,
+              onSaved: (value) {
+                message = value ?? '';
+              },
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return l10n.fillingThisFieldIsMandatory;
@@ -142,8 +117,24 @@ class _ContactUsViewState extends State<ContactUsView> with MEmailValidator {
         padding: const EdgeInsets.all(Sizes.spaceSmall),
         child: MyElevatedButton(
           text: l10n.send,
-          onPressed: () {
-            formKey.currentState?.validate();
+          onPressed: () async {
+            if (formKey.currentState?.validate() ?? false) {
+              formKey.currentState?.save();
+              final email = Email(
+                body: message,
+                subject: subject,
+                recipients: [AltMeStrings.appSupportMail],
+              );
+              try {
+                await FlutterEmailSender.send(email);
+              } catch (_) {
+                AlertMessage.showStringMessage(
+                  context: context,
+                  message: l10n.failedToSendEmail,
+                  messageType: MessageType.error,
+                );
+              }
+            }
           },
         ),
       ),

@@ -692,5 +692,6 @@
   "yourMessage": "Your message",
   "message": "Message",
   "subject": "Subject",
-  "enterAValidEmail": "Enter a valid email."
+  "enterAValidEmail": "Enter a valid email.",
+  "failedToSendEmail": "Failed to send email."
 }

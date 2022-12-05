@@ -642,7 +642,8 @@
     "yourMessage",
     "message",
     "subject",
-    "enterAValidEmail"
+    "enterAValidEmail",
+    "failedToSendEmail"
   ],
 
   "es": [
@@ -1288,7 +1289,8 @@
     "yourMessage",
     "message",
     "subject",
-    "enterAValidEmail"
+    "enterAValidEmail",
+    "failedToSendEmail"
   ],
 
   "fr": [
@@ -1934,7 +1936,8 @@
     "yourMessage",
     "message",
     "subject",
-    "enterAValidEmail"
+    "enterAValidEmail",
+    "failedToSendEmail"
   ],
 
   "it": [
@@ -2580,6 +2583,7 @@
     "yourMessage",
     "message",
     "subject",
-    "enterAValidEmail"
+    "enterAValidEmail",
+    "failedToSendEmail"
   ]
 }
