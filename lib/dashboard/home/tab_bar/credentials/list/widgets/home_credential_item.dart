@@ -180,38 +180,33 @@ class DummyCredentialItem extends StatelessWidget {
           children: [
             Expanded(
               flex: 8,
-              child: Opacity(
-                opacity: homeCredential.credentialSubjectType.isDisabled()
-                    ? 0.75
-                    : 1,
-                child: CredentialImage(
-                  image: homeCredential.image!,
-                  child: homeCredential.dummyDescription == null
-                      ? null
-                      : CustomMultiChildLayout(
-                          delegate: DummyCredentialItemDelegate(
-                            position: Offset.zero,
-                          ),
-                          children: [
-                            LayoutId(
-                              id: 'dummyDesc',
-                              child: FractionallySizedBox(
-                                widthFactor: 0.85,
-                                heightFactor: 0.42,
-                                child: Text(
-                                  homeCredential.dummyDescription!.getMessage(
-                                    context,
-                                    homeCredential.dummyDescription!,
-                                  ),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .discoverOverlayDescription,
+              child: CredentialImage(
+                image: homeCredential.image!,
+                child: homeCredential.dummyDescription == null
+                    ? null
+                    : CustomMultiChildLayout(
+                        delegate: DummyCredentialItemDelegate(
+                          position: Offset.zero,
+                        ),
+                        children: [
+                          LayoutId(
+                            id: 'dummyDesc',
+                            child: FractionallySizedBox(
+                              widthFactor: 0.85,
+                              heightFactor: 0.42,
+                              child: Text(
+                                homeCredential.dummyDescription!.getMessage(
+                                  context,
+                                  homeCredential.dummyDescription!,
                                 ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .discoverOverlayDescription,
                               ),
                             ),
-                          ],
-                        ),
-                ),
+                          ),
+                        ],
+                      ),
               ),
             ),
           ],
