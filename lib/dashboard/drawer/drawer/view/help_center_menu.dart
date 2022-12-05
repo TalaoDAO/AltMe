@@ -3,6 +3,7 @@ import 'package:altme/dashboard/drawer/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HelpCenterMenu extends StatelessWidget {
   const HelpCenterMenu({super.key});
@@ -48,8 +49,20 @@ class HelpCenterView extends StatelessWidget {
                   title: '${l10n.contactUs} : ${AltMeStrings.appSupportMail}',
                 ),
                 DrawerItem(
-                  title:
-                      '${l10n.officialWebsite} : ${AltMeStrings.appOfficialWebsite}',
+                  onTap: () {
+                    launchUrl(Uri.parse('https://${AltMeStrings.appOfficialWebsite}'));
+                  },
+                  title: '${l10n.officialWebsite} :',
+                  trailing: Expanded(
+                    flex: 2,
+                    child: Text(
+                      AltMeStrings.appOfficialWebsite,
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                            decoration: TextDecoration.underline,
+                          ),
+                    ),
+                  ),
                 ),
               ],
             ),
