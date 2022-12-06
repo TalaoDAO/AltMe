@@ -99,6 +99,7 @@ class WalletCubit extends Cubit<WalletState> {
       if (isTezosSecretKey) {
         log.i('creating tezos account');
         final CryptoAccount cryptoAccount = await createTezosOrEthereumAccount(
+          accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
@@ -116,6 +117,7 @@ class WalletCubit extends Cubit<WalletState> {
       } else {
         log.i('creating ethereum account');
         final CryptoAccount cryptoAccount = await createTezosOrEthereumAccount(
+          accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
@@ -135,6 +137,7 @@ class WalletCubit extends Cubit<WalletState> {
       late CryptoAccount updatedCryptoAccount;
       if (blockchainType == BlockchainType.tezos) {
         updatedCryptoAccount = await createTezosOrEthereumAccount(
+          accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
@@ -144,6 +147,7 @@ class WalletCubit extends Cubit<WalletState> {
         );
       } else {
         updatedCryptoAccount = await createTezosOrEthereumAccount(
+          accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
