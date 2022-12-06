@@ -36,7 +36,8 @@ class CredentialListData extends StatelessWidget {
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
                 ],
-                if (advanceSettingsState.isCommunityEnabled) ...[
+                if (advanceSettingsState.isCommunityEnabled &&
+                    state.communityCredentials.isNotEmpty) ...[
                   /// Community Credentials
                   HomeCredentialWidget(
                     title: l10n.communityCards,
@@ -67,7 +68,8 @@ class CredentialListData extends StatelessWidget {
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
                 ],
-                if (advanceSettingsState.isPassEnabled) ...[
+                if (advanceSettingsState.isPassEnabled &&
+                    state.passCredentials.isNotEmpty) ...[
                   /// Pass Credentials
                   HomeCredentialWidget(
                     title: l10n.pass,
@@ -77,7 +79,8 @@ class CredentialListData extends StatelessWidget {
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
                 ],
-                if (advanceSettingsState.isOtherEnabled) ...[
+                if (advanceSettingsState.isOtherEnabled &&
+                    state.othersCredentials.isNotEmpty) ...[
                   /// Other Credentials
                   HomeCredentialWidget(
                     title: l10n.otherCards,

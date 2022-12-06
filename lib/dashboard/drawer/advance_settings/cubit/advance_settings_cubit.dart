@@ -16,10 +16,10 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
             isGamingEnabled: true,
             isIdentityEnabled: true,
             isBlockchainAccountsEnabled: true,
-            isSocialMediaEnabled: false,
-            isCommunityEnabled: false,
-            isOtherEnabled: false,
-            isPassEnabled: false,
+            isSocialMediaEnabled: true,
+            isCommunityEnabled: true,
+            isOtherEnabled: true,
+            isPassEnabled: true,
           ),
         ) {
     initialise();
@@ -38,11 +38,11 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
             'true';
     final isCommunityEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isCommunityEnabled) ??
-            'false') ==
+            'true') ==
         'true';
     final isOtherEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isOtherEnabled) ??
-                'false') ==
+                'true') ==
             'true';
     final isBlockchainAccountsEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isBlockchainAccountsEnabled) ??
@@ -50,11 +50,11 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
         'true';
     final isSocialMediaEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isSocialMediaEnabled) ??
-            'false') ==
+            'true') ==
         'true';
     final isPassEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isPassEnabled) ??
-                'false') ==
+                'true') ==
             'true';
 
     emit(
@@ -68,6 +68,43 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
         isPassEnabled: isPassEnabled,
       ),
     );
+  }
+
+  Future<void> setState(AdvanceSettingsState newState) async {
+    await secureStorageProvider.set(
+      SecureStorageKeys.isGamingEnabled,
+      newState.isGamingEnabled.toString(),
+    );
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.isIdentityEnabled,
+      newState.isIdentityEnabled.toString(),
+    );
+    await secureStorageProvider.set(
+      SecureStorageKeys.isBlockchainAccountsEnabled,
+      newState.isBlockchainAccountsEnabled.toString(),
+    );
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.isSocialMediaEnabled,
+      newState.isSocialMediaEnabled.toString(),
+    );
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.isCommunityEnabled,
+      newState.isCommunityEnabled.toString(),
+    );
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.isPassEnabled,
+      newState.isPassEnabled.toString(),
+    );
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.isOtherEnabled,
+      newState.isOtherEnabled.toString(),
+    );
+    emit(newState);
   }
 
   void toggleGamingRadio() {
