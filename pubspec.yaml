@@ -46,7 +46,6 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.0.1
   flutter_dotenv: ^5.0.2
-  flutter_email_sender: ^5.2.0
   flutter_html: ^3.0.0-alpha.5
   flutter_local_notifications: ^9.7.0
   flutter_localizations:
