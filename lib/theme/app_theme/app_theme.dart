@@ -47,7 +47,7 @@ abstract class AppTheme {
 
   static Color dividerColor = const Color(0xFF605A71);
 
-  static Color highlightColor = const Color(0xFF3C324C);
+  static Color highlightColor = const Color(0xFF36334E);
 
   static ThemeData get darkThemeData => ThemeData(
         brightness: Brightness.dark,

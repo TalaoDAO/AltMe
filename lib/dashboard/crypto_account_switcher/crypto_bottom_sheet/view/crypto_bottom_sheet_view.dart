@@ -73,10 +73,10 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
 
   void onAddAccountPressed() {
     Navigator.of(context).push<void>(ChooseAddAccountMethodPage.route());
-    // final l10n = context.l10n;
-    // final List<CryptoAccountData> cryptoAccount =
-    //     context.read<CryptoBottomSheetCubit>().state.cryptoAccount.data;
-    // final accountNameList = cryptoAccount.map((e) => e.name).toList();
+    final l10n = context.l10n;
+    final List<CryptoAccountData> cryptoAccount =
+        context.read<CryptoBottomSheetCubit>().state.cryptoAccount.data;
+    final accountNameList = cryptoAccount.map((e) => e.name).toList();
 
     // await showDialog<void>(
     //   context: context,

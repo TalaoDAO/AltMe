@@ -1,7 +1,7 @@
-import 'package:altme/app/shared/constants/icon_strings.dart';
 import 'package:altme/app/shared/constants/image_strings.dart';
 import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/app/shared/widget/widget.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -45,8 +45,13 @@ class ChooseAddAccountMethodView extends StatelessWidget {
             title: l10n.createAccount,
             subTitle: l10n.createAccountDescription,
             imageAssetPath: ImageStrings.createAccountMethod,
+            onTap: () {
+              Navigator.of(context).push<void>(CreateAccountStep1Page.route());
+            },
           ),
-          const SizedBox(height: Sizes.spaceLarge,),
+          const SizedBox(
+            height: Sizes.spaceLarge,
+          ),
           CustomListTileCard(
             title: l10n.importAccount,
             subTitle: l10n.importAccountDescription,

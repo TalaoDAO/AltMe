@@ -74,6 +74,7 @@ class WalletCubit extends Cubit<WalletState> {
     String? accountName,
     required String mnemonicOrKey,
     required bool isImported,
+    required BlockchainType blockchainType,
     Function({
       required CryptoAccount cryptoAccount,
       required MessageHandler messageHandler,
@@ -131,25 +132,26 @@ class WalletCubit extends Cubit<WalletState> {
       }
     } else {
       log.i('creating both tezos and ethereum account');
-      await createTezosOrEthereumAccount(
-        mnemonicOrKey: mnemonicOrKey,
-        isImported: isImported,
-        isSecretKey: isSecretKey,
-        blockchainType: BlockchainType.tezos,
-        totalAccountsYet: int.parse(totalAccountsYet),
-        showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
-      );
-
-      final CryptoAccount updatedCryptoAccount =
-          await createTezosOrEthereumAccount(
-        mnemonicOrKey: mnemonicOrKey,
-        isImported: isImported,
-        isSecretKey: isSecretKey,
-        blockchainType: BlockchainType.ethereum,
-        totalAccountsYet: int.parse(totalAccountsYet) + 1,
-        showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
-      );
-
+      late CryptoAccount updatedCryptoAccount;
+      if (blockchainType == BlockchainType.tezos) {
+        updatedCryptoAccount = await createTezosOrEthereumAccount(
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.tezos,
+          totalAccountsYet: int.parse(totalAccountsYet),
+          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+        );
+      } else {
+        updatedCryptoAccount = await createTezosOrEthereumAccount(
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.ethereum,
+          totalAccountsYet: int.parse(totalAccountsYet),
+          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+        );
+      }
       onComplete?.call(
         cryptoAccount: updatedCryptoAccount,
         messageHandler: ResponseMessage(

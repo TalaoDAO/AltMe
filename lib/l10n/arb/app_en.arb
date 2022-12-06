@@ -685,8 +685,8 @@
   "resetWalletTitle": "Are you sure you want to reset your wallet ?",
   "resetWalletSubtitle": "This action will erase your data. Please, make sure you have saved your Recovery Phrase and credentials backup file before deleting.",
   "resetWalletSubtitle2": "Altme is self-custodial so we are not able to recover your funds or credentials for you.",
-  "resetWalletCheckBox1" : "I wrote down my Recovery Phrase",
-  "resetWalletCheckBox2" : "I saved my backup credentials file",
+  "resetWalletCheckBox1": "I wrote down my Recovery Phrase",
+  "resetWalletCheckBox2": "I saved my backup credentials file",
   "email": "Email",
   "fillingThisFieldIsMandatory": "Filling this field is mandatory.",
   "yourMessage": "Your message",
@@ -697,5 +697,15 @@
   "selectAMethodToAddAccount": "Select a method to add account",
   "createAccount": "Create account",
   "createAccountDescription": "Create an account protected by your Recovery Phrase",
-  "importAccountDescription": "Import an account from an existing wallet"
+  "importAccountDescription": "Import an account from an existing wallet",
+  "chooseABlockchainForAccountCreation": "Choose the blockchain on which you want to create a new account.",
+  "tezosAccount": "Tezos account",
+  "tezosAccountDescription": "Create a new Tezos blockchain address",
+  "ethereumAccount": "Ethereum account",
+  "ethereumAccountDescription": "Create a new Ethereum blockchain address",
+  "setAccountNameDescription": "Do you want to give a name to this new account ? Useful if you have several.",
+  "letsGo": "Let's go !",
+  "congratulations": "Congratulations !",
+  "tezosAccountCreationCongratulations": "Your new Tezos account has been successfully created.",
+  "ethereumAccountCreationCongratulations": "Your new Ethereum account has been successfully created."
 }

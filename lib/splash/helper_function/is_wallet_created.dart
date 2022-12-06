@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/logger/logger.dart';
 import 'package:altme/app/shared/constants/constants.dart';
+import 'package:altme/app/shared/enum/enum.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -114,6 +115,8 @@ Future<void> blockchainInitialize({
     await walletCubit.createCryptoWallet(
       mnemonicOrKey: ssiMnemonic,
       isImported: false,
+      // TODO(all): update blockchainType depends of selected type
+      blockchainType: BlockchainType.tezos,
     );
   }
 }

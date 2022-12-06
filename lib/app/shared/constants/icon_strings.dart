@@ -72,5 +72,7 @@ class IconStrings {
   static const String send = '$base/send.png';
   static const String receive = '$base/receive.png';
   static const String ethereum = '$base/ethereum.png';
+  static const String ethereumAccount = '$base/ethereum-account.png';
   static const String tezos = '$base/tezos.png';
+  static const String tezosAccount = '$base/tezos-account.png';
 }

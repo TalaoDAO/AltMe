@@ -647,7 +647,17 @@
     "selectAMethodToAddAccount",
     "createAccount",
     "createAccountDescription",
-    "importAccountDescription"
+    "importAccountDescription",
+    "chooseABlockchainForAccountCreation",
+    "tezosAccount",
+    "tezosAccountDescription",
+    "ethereumAccount",
+    "ethereumAccountDescription",
+    "setAccountNameDescription",
+    "letsGo",
+    "congratulations",
+    "tezosAccountCreationCongratulations",
+    "ethereumAccountCreationCongratulations"
   ],
 
   "es": [
@@ -1298,7 +1308,17 @@
     "selectAMethodToAddAccount",
     "createAccount",
     "createAccountDescription",
-    "importAccountDescription"
+    "importAccountDescription",
+    "chooseABlockchainForAccountCreation",
+    "tezosAccount",
+    "tezosAccountDescription",
+    "ethereumAccount",
+    "ethereumAccountDescription",
+    "setAccountNameDescription",
+    "letsGo",
+    "congratulations",
+    "tezosAccountCreationCongratulations",
+    "ethereumAccountCreationCongratulations"
   ],
 
   "fr": [
@@ -1949,7 +1969,17 @@
     "selectAMethodToAddAccount",
     "createAccount",
     "createAccountDescription",
-    "importAccountDescription"
+    "importAccountDescription",
+    "chooseABlockchainForAccountCreation",
+    "tezosAccount",
+    "tezosAccountDescription",
+    "ethereumAccount",
+    "ethereumAccountDescription",
+    "setAccountNameDescription",
+    "letsGo",
+    "congratulations",
+    "tezosAccountCreationCongratulations",
+    "ethereumAccountCreationCongratulations"
   ],
 
   "it": [
@@ -2600,6 +2630,16 @@
     "selectAMethodToAddAccount",
     "createAccount",
     "createAccountDescription",
-    "importAccountDescription"
+    "importAccountDescription",
+    "chooseABlockchainForAccountCreation",
+    "tezosAccount",
+    "tezosAccountDescription",
+    "ethereumAccount",
+    "ethereumAccountDescription",
+    "setAccountNameDescription",
+    "letsGo",
+    "congratulations",
+    "tezosAccountCreationCongratulations",
+    "ethereumAccountCreationCongratulations"
   ]
 }
