@@ -10,6 +10,8 @@ class WalletConnectState extends Equatable {
     this.walletPeerMeta,
     this.dAppPeerMeta,
     this.wcClient,
+    this.signId,
+    this.signMessage,
   });
 
   factory WalletConnectState.fromJson(Map<String, dynamic> json) =>
@@ -25,6 +27,9 @@ class WalletConnectState extends Equatable {
   final WCPeerMeta? dAppPeerMeta;
   @JsonKey(ignore: true)
   final WCClient? wcClient;
+  final int? signId;
+  @JsonKey(ignore: true)
+  final WCEthereumSignMessage? signMessage;
 
   Map<String, dynamic> toJson() => _$WalletConnectStateToJson(this);
 
@@ -36,6 +41,8 @@ class WalletConnectState extends Equatable {
       walletPeerMeta: walletPeerMeta,
       dAppPeerMeta: dAppPeerMeta,
       wcClient: wcClient,
+      signId: signId,
+      signMessage: signMessage,
     );
   }
 
@@ -50,6 +57,8 @@ class WalletConnectState extends Equatable {
       walletPeerMeta: walletPeerMeta,
       dAppPeerMeta: dAppPeerMeta,
       wcClient: wcClient,
+      signId: signId,
+      signMessage: signMessage,
     );
   }
 
@@ -61,6 +70,8 @@ class WalletConnectState extends Equatable {
     WCPeerMeta? walletPeerMeta,
     WCPeerMeta? dAppPeerMeta,
     WCClient? wcClient,
+    int? signId,
+    WCEthereumSignMessage? signMessage,
   }) {
     return WalletConnectState(
       status: status,
@@ -73,6 +84,8 @@ class WalletConnectState extends Equatable {
       dAppPeerMeta: dAppPeerMeta ?? this.dAppPeerMeta,
       sessionId: sessionId ?? this.sessionId,
       wcClient: wcClient ?? this.wcClient,
+      signId: signId,
+      signMessage: signMessage,
     );
   }
 
@@ -85,5 +98,7 @@ class WalletConnectState extends Equatable {
         walletPeerMeta,
         dAppPeerMeta,
         wcClient,
+        signId,
+        signMessage,
       ];
 }

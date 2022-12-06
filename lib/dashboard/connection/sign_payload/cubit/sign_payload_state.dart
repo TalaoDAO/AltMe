@@ -1,43 +1,43 @@
-part of 'beacon_sign_payload_cubit.dart';
+part of 'sign_payload_cubit.dart';
 
 @JsonSerializable()
-class BeaconSignPayloadState extends Equatable {
-  const BeaconSignPayloadState({
+class SignPayloadState extends Equatable {
+  const SignPayloadState({
     this.status = AppStatus.init,
     this.message,
     this.payloadMessage,
   });
 
-  factory BeaconSignPayloadState.fromJson(Map<String, dynamic> json) =>
-      _$BeaconSignPayloadStateFromJson(json);
+  factory SignPayloadState.fromJson(Map<String, dynamic> json) =>
+      _$SignPayloadStateFromJson(json);
 
   final AppStatus status;
   final StateMessage? message;
   final String? payloadMessage;
 
-  BeaconSignPayloadState loading() {
-    return BeaconSignPayloadState(
+  SignPayloadState loading() {
+    return SignPayloadState(
       status: AppStatus.loading,
       payloadMessage: payloadMessage,
     );
   }
 
-  BeaconSignPayloadState error({
+  SignPayloadState error({
     required MessageHandler messageHandler,
   }) {
-    return BeaconSignPayloadState(
+    return SignPayloadState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       payloadMessage: payloadMessage,
     );
   }
 
-  BeaconSignPayloadState copyWith({
+  SignPayloadState copyWith({
     AppStatus appStatus = AppStatus.idle,
     MessageHandler? messageHandler,
     String? payloadMessage,
   }) {
-    return BeaconSignPayloadState(
+    return SignPayloadState(
       status: appStatus,
       message: messageHandler == null
           ? null
@@ -46,7 +46,7 @@ class BeaconSignPayloadState extends Equatable {
     );
   }
 
-  Map<String, dynamic> toJson() => _$BeaconSignPayloadStateToJson(this);
+  Map<String, dynamic> toJson() => _$SignPayloadStateToJson(this);
 
   @override
   List<Object?> get props => [
