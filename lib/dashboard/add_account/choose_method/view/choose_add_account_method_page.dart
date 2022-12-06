@@ -11,7 +11,9 @@ class ChooseAddAccountMethodPage extends StatelessWidget {
 
   static Route route() {
     return MaterialPageRoute<void>(
-        builder: (_) => const ChooseAddAccountMethodPage());
+      settings: const RouteSettings(name: '/chooseAddAccountMethodPage'),
+      builder: (_) => const ChooseAddAccountMethodPage(),
+    );
   }
 
   @override
@@ -56,6 +58,11 @@ class ChooseAddAccountMethodView extends StatelessWidget {
             title: l10n.importAccount,
             subTitle: l10n.importAccountDescription,
             imageAssetPath: ImageStrings.importAccountMethod,
+            onTap: () {
+              Navigator.of(context).push<void>(
+                ImportAccountStep1Page.route(),
+              );
+            },
           ),
         ],
       ),

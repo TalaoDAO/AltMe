@@ -1,54 +1,46 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/widgets/m_stepper.dart';
+import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
 
-class CreateAccountStep2Page extends StatelessWidget {
-  const CreateAccountStep2Page({
+class ImportAccountStep3Page extends StatelessWidget {
+  const ImportAccountStep3Page({
     super.key,
-    required this.accountType,
+    required this.importAccountCubit,
   });
 
-  final AccountType accountType;
+  final ImportAccountCubit importAccountCubit;
 
-  static Route route({required AccountType accountType}) {
+  static Route route({required ImportAccountCubit importAccountCubit}) {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: '/createAccountStep2Page'),
-      builder: (_) => CreateAccountStep2Page(accountType: accountType),
+      settings: const RouteSettings(name: '/importAccountStep3Page'),
+      builder: (_) => ImportAccountStep3Page(
+        importAccountCubit: importAccountCubit,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => CreateAccountCubit(
-        walletCubit: context.read<WalletCubit>(),
-      ),
-      child: CreateAccountStep2View(
-        accountType: accountType,
-      ),
+    return BlocProvider.value(
+      value: importAccountCubit,
+      child: const ImportAccountStep3View(),
     );
   }
 }
 
-class CreateAccountStep2View extends StatefulWidget {
-  const CreateAccountStep2View({
-    super.key,
-    required this.accountType,
-  });
-
-  final AccountType accountType;
+class ImportAccountStep3View extends StatefulWidget {
+  const ImportAccountStep3View({super.key});
 
   @override
-  State<CreateAccountStep2View> createState() => _CreateAccountStep2ViewState();
+  State<ImportAccountStep3View> createState() => _ImportAccountStep3ViewState();
 }
 
-class _CreateAccountStep2ViewState extends State<CreateAccountStep2View> {
+class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
   late final TextEditingController accountNameTextController;
   late final List<String> accountNameList;
 
@@ -69,20 +61,12 @@ class _CreateAccountStep2ViewState extends State<CreateAccountStep2View> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocListener<CreateAccountCubit, CreateAccountState>(
+    return BlocListener<ImportAccountCubit, ImportAccountState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
           LoadingView().hide();
-        }
-
-        if (state.status == AppStatus.success) {
-          Navigator.of(context).pushReplacement<void, void>(
-            CongratulationsAccountCreationPage.route(
-              accountType: widget.accountType,
-            ),
-          );
         }
 
         if (state.message != null) {
@@ -91,23 +75,29 @@ class _CreateAccountStep2ViewState extends State<CreateAccountStep2View> {
             stateMessage: state.message!,
           );
         }
+        if (state.status == AppStatus.success) {
+          Navigator.pushReplacement<void, void>(
+            context,
+            CongratulationsAccountImportPage.route(),
+          );
+        }
       },
       child: BasePage(
-        title: l10n.createAccount,
+        title: l10n.importAccount,
         titleAlignment: Alignment.topCenter,
+        titleLeading: const BackLeadingButton(),
         padding: const EdgeInsets.only(
           top: 0,
           left: Sizes.spaceSmall,
           right: Sizes.spaceSmall,
           bottom: Sizes.spaceSmall,
         ),
-        titleLeading: const BackLeadingButton(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const MStepper(
-              totalStep: 2,
-              step: 2,
+              totalStep: 3,
+              step: 3,
             ),
             const SizedBox(
               height: Sizes.spaceNormal,
@@ -135,26 +125,19 @@ class _CreateAccountStep2ViewState extends State<CreateAccountStep2View> {
         ),
         navigation: Padding(
           padding: const EdgeInsets.all(Sizes.spaceSmall),
-          child: MyElevatedButton(
-            text: l10n.next,
-            onPressed: () {
-              final accountName = accountNameTextController.text;
-              if (accountName.trim().isEmpty ||
-                  accountNameList.contains(accountName)) {
-                AlertMessage.showStringMessage(
-                  context: context,
-                  message: l10n.sameAccountNameError,
-                  messageType: MessageType.error,
-                );
-                return;
-              } else {
-                context.read<CreateAccountCubit>().createCryptoAccount(
-                      accountName: accountName,
-                      blockChaintype: widget.accountType == AccountType.tezos
-                          ? BlockchainType.tezos
-                          : BlockchainType.ethereum,
-                    );
-              }
+          child: BlocBuilder<ImportAccountCubit, ImportAccountState>(
+            builder: (context, state) {
+              return MyElevatedButton(
+                text: l10n.next,
+                onPressed: !state.isMnemonicOrKeyValid
+                    ? null
+                    : () async {
+                        await context.read<ImportAccountCubit>().import(
+                              isFromOnboarding: false,
+                              accountName: accountNameTextController.text,
+                            );
+                      },
+              );
             },
           ),
         ),

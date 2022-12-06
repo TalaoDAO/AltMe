@@ -707,5 +707,6 @@
   "letsGo": "Let's go !",
   "congratulations": "Congratulations !",
   "tezosAccountCreationCongratulations": "Your new Tezos account has been successfully created.",
-  "ethereumAccountCreationCongratulations": "Your new Ethereum account has been successfully created."
+  "ethereumAccountCreationCongratulations": "Your new Ethereum account has been successfully created.",
+  "accountImportCongratulations": "Your account has been successfully imported."
 }

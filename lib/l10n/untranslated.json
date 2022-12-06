@@ -657,7 +657,8 @@
     "letsGo",
     "congratulations",
     "tezosAccountCreationCongratulations",
-    "ethereumAccountCreationCongratulations"
+    "ethereumAccountCreationCongratulations",
+    "accountImportCongratulations"
   ],
 
   "es": [
@@ -1318,7 +1319,8 @@
     "letsGo",
     "congratulations",
     "tezosAccountCreationCongratulations",
-    "ethereumAccountCreationCongratulations"
+    "ethereumAccountCreationCongratulations",
+    "accountImportCongratulations"
   ],
 
   "fr": [
@@ -1979,7 +1981,8 @@
     "letsGo",
     "congratulations",
     "tezosAccountCreationCongratulations",
-    "ethereumAccountCreationCongratulations"
+    "ethereumAccountCreationCongratulations",
+    "accountImportCongratulations"
   ],
 
   "it": [
@@ -2640,6 +2643,7 @@
     "letsGo",
     "congratulations",
     "tezosAccountCreationCongratulations",
-    "ethereumAccountCreationCongratulations"
+    "ethereumAccountCreationCongratulations",
+    "accountImportCongratulations"
   ]
 }

@@ -1,0 +1,62 @@
+import 'package:altme/app/shared/constants/sizes.dart';
+import 'package:altme/theme/theme.dart';
+import 'package:flutter/material.dart';
+
+class AccountItem extends StatelessWidget {
+  const AccountItem({
+    super.key,
+    this.onTap,
+    required this.title,
+    required this.iconPath,
+  });
+
+  final VoidCallback? onTap;
+  final String title;
+  final String iconPath;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: Sizes.spaceSmall),
+        padding: const EdgeInsets.symmetric(
+          horizontal: Sizes.spaceNormal,
+          vertical: Sizes.spaceSmall,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.cardHighlighted,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(
+              Sizes.smallRadius,
+            ),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: Theme.of(context).textTheme.title,
+            ),
+            Container(
+              width: Sizes.icon3x,
+              height: Sizes.icon3x,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Image.asset(
+                iconPath,
+                width: Sizes.icon2x,
+                fit: BoxFit.scaleDown,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
