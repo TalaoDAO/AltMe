@@ -29,7 +29,7 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
       Navigator.of(context).push<void>(StarterPage.route());
     }
 
-    // just for next build -> 116 and then we should remove for build -> 117
+    // just for next build -> 117 and then we should remove for build -> 118
     context.read<AdvanceSettingsCubit>().setState(
           const AdvanceSettingsState(
             isGamingEnabled: true,
