@@ -274,7 +274,11 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       }
 
       if (state.status == BeaconStatus.signPayload) {
-        Navigator.of(context).push<void>(BeaconSignPayloadPage.route());
+        Navigator.of(context).push<void>(
+          SignPayloadPage.route(
+            connectionBridgeType: ConnectionBridgeType.beacon,
+          ),
+        );
       }
 
       if (state.status == BeaconStatus.operation) {
@@ -313,6 +317,14 @@ final walletConnectBlocListener =
       if (state.status == WalletConnectStatus.permission) {
         Navigator.of(context).push<void>(
           ConfirmConnectionPage.route(
+            connectionBridgeType: ConnectionBridgeType.walletconnect,
+          ),
+        );
+      }
+
+      if (state.status == WalletConnectStatus.signPayload) {
+        Navigator.of(context).push<void>(
+          SignPayloadPage.route(
             connectionBridgeType: ConnectionBridgeType.walletconnect,
           ),
         );

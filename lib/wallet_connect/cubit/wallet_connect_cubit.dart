@@ -39,6 +39,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     final String? topic = sessionTopic;
     if (topic == null) return null;
 
+    log.i('yaaa');
     return WCClient(
       onConnect: () {
         log.i('connected');
@@ -49,7 +50,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       onFailure: (dynamic error) {
         log.e('Failed to connect: $error');
       },
-      onSessionRequest: (id, dAppPeerMeta) {
+      onSessionRequest: (int id, WCPeerMeta dAppPeerMeta) {
         log.i('onSessionRequest');
         log.i('id: $id');
         log.i('dAppPeerMeta: $dAppPeerMeta');
@@ -61,10 +62,17 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           ),
         );
       },
-      onEthSign: (id, message) {
+      onEthSign: (int id, WCEthereumSignMessage message) {
         log.i('onEthSign');
         log.i('id: $id');
         log.i('message: $message');
+        emit(
+          state.copyWith(
+            signId: id,
+            status: WalletConnectStatus.signPayload,
+            signMessage: message,
+          ),
+        );
       },
       onEthSendTransaction: (id, tx) {
         log.i('onEthSendTransaction');

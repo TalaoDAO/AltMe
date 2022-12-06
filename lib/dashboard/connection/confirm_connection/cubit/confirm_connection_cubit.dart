@@ -42,7 +42,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
       final isInternetAvailable = await isConnected();
       if (!isInternetAvailable) {
         throw NetworkException(
-          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+          message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
         );
       }
 
@@ -73,15 +73,6 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
               walletAddress: currentAccount.walletAddress,
             );
             await beaconRepository.insert(savedPeerData);
-            emit(
-              state.copyWith(
-                appStatus: AppStatus.success,
-                messageHandler: ResponseMessage(
-                  ResponseString
-                      .RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON,
-                ),
-              ),
-            );
           } else {
             throw ResponseMessage(
               ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON,
@@ -99,6 +90,14 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           );
           break;
       }
+      emit(
+        state.copyWith(
+          appStatus: AppStatus.success,
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON,
+          ),
+        ),
+      );
     } catch (e) {
       log.e('error connecting to $connectionBridgeType , e: $e');
       if (e is MessageHandler) {

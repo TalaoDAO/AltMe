@@ -4,61 +4,77 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:altme/wallet_connect/wallet_connect.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wallet_connect/wallet_connect.dart';
 
-class BeaconSignPayloadPage extends StatelessWidget {
-  const BeaconSignPayloadPage({
+class SignPayloadPage extends StatelessWidget {
+  const SignPayloadPage({
     Key? key,
+    required this.connectionBridgeType,
   }) : super(key: key);
 
-  static Route route() {
+  final ConnectionBridgeType connectionBridgeType;
+
+  static Route route({required ConnectionBridgeType connectionBridgeType}) {
     return MaterialPageRoute<void>(
-      builder: (_) => const BeaconSignPayloadPage(),
-      settings: const RouteSettings(name: '/BeaconSignPayloadPage'),
+      builder: (_) => SignPayloadPage(
+        connectionBridgeType: connectionBridgeType,
+      ),
+      settings: const RouteSettings(name: '/SignPayloadPage'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => BeaconSignPayloadCubit(
+      create: (_) => SignPayloadCubit(
         beacon: Beacon(),
         beaconCubit: context.read<BeaconCubit>(),
         walletCubit: context.read<WalletCubit>(),
         qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
-      child: const BeaconSignPayloadView(),
+      child: SignPayloadView(connectionBridgeType: connectionBridgeType),
     );
   }
 }
 
-class BeaconSignPayloadView extends StatefulWidget {
-  const BeaconSignPayloadView({
+class SignPayloadView extends StatefulWidget {
+  const SignPayloadView({
     Key? key,
+    required this.connectionBridgeType,
   }) : super(key: key);
 
+  final ConnectionBridgeType connectionBridgeType;
+
   @override
-  State<BeaconSignPayloadView> createState() => _BeaconSignPayloadViewState();
+  State<SignPayloadView> createState() => _SignPayloadViewState();
 }
 
-class _BeaconSignPayloadViewState extends State<BeaconSignPayloadView> {
+class _SignPayloadViewState extends State<SignPayloadView> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => context.read<BeaconSignPayloadCubit>().decodeMessage(),
+      (_) => context.read<SignPayloadCubit>().decodeMessage(
+            connectionBridgeType: widget.connectionBridgeType,
+          ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final BeaconRequest beaconRequest =
-        context.read<BeaconCubit>().state.beaconRequest!;
+    final BeaconRequest? beaconRequest =
+        context.read<BeaconCubit>().state.beaconRequest;
+
+    final WCPeerMeta? dAppPeerMeta =
+        context.read<WalletConnectCubit>().state.dAppPeerMeta;
 
     final l10n = context.l10n;
-    return BlocConsumer<BeaconSignPayloadCubit, BeaconSignPayloadState>(
+    return BlocConsumer<SignPayloadCubit, SignPayloadState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -84,15 +100,18 @@ class _BeaconSignPayloadViewState extends State<BeaconSignPayloadView> {
       builder: (context, state) {
         return WillPopScope(
           onWillPop: () async {
-            context.read<BeaconSignPayloadCubit>().rejectSigning();
+            context.read<SignPayloadCubit>().rejectSigning(
+                  connectionBridgeType: widget.connectionBridgeType,
+                );
             return true;
           },
           child: BasePage(
             scrollView: false,
             title: l10n.confirm_sign,
             titleLeading: BackLeadingButton(
-              onPressed: () =>
-                  context.read<BeaconSignPayloadCubit>().rejectSigning(),
+              onPressed: () => context.read<SignPayloadCubit>().rejectSigning(
+                    connectionBridgeType: widget.connectionBridgeType,
+                  ),
             ),
             body: BackgroundCard(
               height: double.infinity,
@@ -107,7 +126,10 @@ class _BeaconSignPayloadViewState extends State<BeaconSignPayloadView> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(
-                        beaconRequest.request!.appMetadata!.name!,
+                        widget.connectionBridgeType ==
+                                ConnectionBridgeType.beacon
+                            ? beaconRequest!.request!.appMetadata!.name!
+                            : dAppPeerMeta!.name,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
@@ -120,12 +142,15 @@ class _BeaconSignPayloadViewState extends State<BeaconSignPayloadView> {
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: Sizes.spaceXSmall),
-                      MyText(
-                        beaconRequest.request!.sourceAddress!,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.beaconPayload,
-                      ),
-                      const SizedBox(height: Sizes.spaceXLarge),
+                      if (widget.connectionBridgeType ==
+                          ConnectionBridgeType.beacon) ...[
+                        MyText(
+                          beaconRequest!.request!.sourceAddress!,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.beaconPayload,
+                        ),
+                        const SizedBox(height: Sizes.spaceXLarge),
+                      ],
                       Text(
                         l10n.payload_to_sign,
                         textAlign: TextAlign.center,
@@ -160,7 +185,10 @@ class _BeaconSignPayloadViewState extends State<BeaconSignPayloadView> {
                       onPressed: state.payloadMessage == null
                           ? null
                           : () {
-                              context.read<BeaconSignPayloadCubit>().sign();
+                              context.read<SignPayloadCubit>().sign(
+                                    connectionBridgeType:
+                                        widget.connectionBridgeType,
+                                  );
                             },
                     ),
                     const SizedBox(height: 8),
@@ -168,7 +196,9 @@ class _BeaconSignPayloadViewState extends State<BeaconSignPayloadView> {
                       borderRadius: Sizes.normalRadius,
                       text: l10n.cancel,
                       onPressed: () {
-                        context.read<BeaconSignPayloadCubit>().rejectSigning();
+                        context.read<SignPayloadCubit>().rejectSigning(
+                              connectionBridgeType: widget.connectionBridgeType,
+                            );
                       },
                     ),
                   ],
