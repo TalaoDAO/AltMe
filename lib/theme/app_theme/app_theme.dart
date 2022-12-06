@@ -30,7 +30,7 @@ abstract class AppTheme {
   static Color darkOnSurface = const Color(0xffEDEAF5);
 
   /// A color that typically appears behind scrollable content.
-  static Color darkBackground = const Color(0xff0A0F19);
+  static Color darkBackground = const Color(0xff0B0514);
 
   /// A color that's clearly legible when drawn on background.
   static Color darkOnBackground = const Color(0xffFFFFFF);
@@ -157,7 +157,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get selectedBottomBar => surface;
 
-  Color get drawerBackground => const Color(0xff0B0E19);
+  Color get drawerBackground => const Color(0xff0B0514);
 
   Color get borderColor => const Color(0xFFDDCEF4);
 
@@ -367,6 +367,12 @@ extension CustomTextTheme on TextTheme {
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
+  
+  TextStyle get caption3 => GoogleFonts.nunito(
+        color: const Color(0xFF86809D),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
 
   TextStyle get listTileTitle => GoogleFonts.roboto(
         color: const Color(0xFFFFFFFF),
@@ -409,7 +415,7 @@ extension CustomTextTheme on TextTheme {
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
-  
+
   TextStyle get resetWalletTitle => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
         fontSize: 16,
@@ -425,7 +431,7 @@ extension CustomTextTheme on TextTheme {
         fontSize: 16,
         fontWeight: FontWeight.w500,
       );
-  
+
   TextStyle get drawerCategorySubTitle => GoogleFonts.nunito(
         color: const Color(0xFFD1CCE3),
         fontSize: 16,

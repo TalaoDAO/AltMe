@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/add_account/add_account.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -70,56 +71,57 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
     }
   }
 
-  Future<void> onAddAccountPressed() async {
-    final l10n = context.l10n;
-    final List<CryptoAccountData> cryptoAccount =
-        context.read<CryptoBottomSheetCubit>().state.cryptoAccount.data;
-    final accountNameList = cryptoAccount.map((e) => e.name).toList();
+  void onAddAccountPressed() {
+    Navigator.of(context).push<void>(ChooseAddAccountMethodPage.route());
+    // final l10n = context.l10n;
+    // final List<CryptoAccountData> cryptoAccount =
+    //     context.read<CryptoBottomSheetCubit>().state.cryptoAccount.data;
+    // final accountNameList = cryptoAccount.map((e) => e.name).toList();
 
-    await showDialog<void>(
-      context: context,
-      builder: (_) => AddAccountPopUp(
-        defaultAccountName: generateDefaultAccountName(
-          accountNameList.length,
-          accountNameList,
-        ),
-        onCreateAccount: (String accountName) {
-          if (accountName.trim().isEmpty ||
-              accountNameList.contains(accountName)) {
-            AlertMessage.showStringMessage(
-              context: context,
-              message: l10n.sameAccountNameError,
-              messageType: MessageType.error,
-            );
-            return;
-          } else {
-            Navigator.pop(context);
-            context.read<CryptoBottomSheetCubit>().addCryptoAccount(
-                  accountName: accountName,
-                );
-          }
-        },
-        onImportAccount: (String accountName) {
-          if (accountName.trim().isEmpty ||
-              accountNameList.contains(accountName)) {
-            AlertMessage.showStringMessage(
-              context: context,
-              message: l10n.sameAccountNameError,
-              messageType: MessageType.error,
-            );
-            return;
-          } else {
-            Navigator.of(context).pop();
-            Navigator.of(context).push<void>(
-              ImportWalletPage.route(
-                accountName: accountName,
-                isFromOnboarding: false,
-              ),
-            );
-          }
-        },
-      ),
-    );
+    // await showDialog<void>(
+    //   context: context,
+    //   builder: (_) => AddAccountPopUp(
+    //     defaultAccountName: generateDefaultAccountName(
+    //       accountNameList.length,
+    //       accountNameList,
+    //     ),
+    //     onCreateAccount: (String accountName) {
+    //       if (accountName.trim().isEmpty ||
+    //           accountNameList.contains(accountName)) {
+    //         AlertMessage.showStringMessage(
+    //           context: context,
+    //           message: l10n.sameAccountNameError,
+    //           messageType: MessageType.error,
+    //         );
+    //         return;
+    //       } else {
+    //         Navigator.pop(context);
+    //         context.read<CryptoBottomSheetCubit>().addCryptoAccount(
+    //               accountName: accountName,
+    //             );
+    //       }
+    //     },
+    //     onImportAccount: (String accountName) {
+    //       if (accountName.trim().isEmpty ||
+    //           accountNameList.contains(accountName)) {
+    //         AlertMessage.showStringMessage(
+    //           context: context,
+    //           message: l10n.sameAccountNameError,
+    //           messageType: MessageType.error,
+    //         );
+    //         return;
+    //       } else {
+    //         Navigator.of(context).pop();
+    //         Navigator.of(context).push<void>(
+    //           ImportWalletPage.route(
+    //             accountName: accountName,
+    //             isFromOnboarding: false,
+    //           ),
+    //         );
+    //       }
+    //     },
+    //   ),
+    // );
   }
 
   @override

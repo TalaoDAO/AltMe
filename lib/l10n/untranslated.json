@@ -643,7 +643,11 @@
     "message",
     "subject",
     "enterAValidEmail",
-    "failedToSendEmail"
+    "failedToSendEmail",
+    "selectAMethodToAddAccount",
+    "createAccount",
+    "createAccountDescription",
+    "importAccountDescription"
   ],
 
   "es": [
@@ -1290,7 +1294,11 @@
     "message",
     "subject",
     "enterAValidEmail",
-    "failedToSendEmail"
+    "failedToSendEmail",
+    "selectAMethodToAddAccount",
+    "createAccount",
+    "createAccountDescription",
+    "importAccountDescription"
   ],
 
   "fr": [
@@ -1937,7 +1945,11 @@
     "message",
     "subject",
     "enterAValidEmail",
-    "failedToSendEmail"
+    "failedToSendEmail",
+    "selectAMethodToAddAccount",
+    "createAccount",
+    "createAccountDescription",
+    "importAccountDescription"
   ],
 
   "it": [
@@ -2584,6 +2596,10 @@
     "message",
     "subject",
     "enterAValidEmail",
-    "failedToSendEmail"
+    "failedToSendEmail",
+    "selectAMethodToAddAccount",
+    "createAccount",
+    "createAccountDescription",
+    "importAccountDescription"
   ]
 }

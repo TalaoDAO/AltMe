@@ -693,5 +693,9 @@
   "message": "Message",
   "subject": "Subject",
   "enterAValidEmail": "Enter a valid email.",
-  "failedToSendEmail": "Failed to send email."
+  "failedToSendEmail": "Failed to send email.",
+  "selectAMethodToAddAccount": "Select a method to add account",
+  "createAccount": "Create account",
+  "createAccountDescription": "Create an account protected by your Recovery Phrase",
+  "importAccountDescription": "Import an account from an existing wallet"
 }
