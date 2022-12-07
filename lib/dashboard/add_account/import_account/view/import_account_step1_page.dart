@@ -6,6 +6,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:key_generator/key_generator.dart';
 
 class ImportAccountStep1Page extends StatelessWidget {
   const ImportAccountStep1Page({super.key});
@@ -43,7 +44,7 @@ class ImportAccountStep1View extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const MStepper(
-            totalStep: 3,
+            totalStep: 4,
             step: 1,
           ),
           const SizedBox(
@@ -57,39 +58,26 @@ class ImportAccountStep1View extends StatelessWidget {
           const SizedBox(
             height: Sizes.spaceNormal,
           ),
-          AccountItem(
-            title: l10n.templeWallet,
-            iconPath: IconStrings.templeWallet,
+          CustomListTileCard(
+            title: l10n.tezosAccount,
+            subTitle: l10n.tezosAccountDescription,
+            imageAssetPath: IconStrings.tezosAccount,
             onTap: () {
               Navigator.of(context).push<void>(
-                ImportAccountStep2Page.route(),
+                ImportAccountStep2Page.route(accountType: AccountType.tezos),
               );
             },
           ),
-          AccountItem(
-            title: l10n.kukaiWallet,
-            iconPath: IconStrings.kukaiWallet,
-            onTap: () {
-              Navigator.of(context).push<void>(
-                ImportAccountStep2Page.route(),
-              );
-            },
+          const SizedBox(
+            height: Sizes.spaceNormal,
           ),
-          AccountItem(
-            title: l10n.metaMaskWallet,
-            iconPath: IconStrings.metaMaskWallet,
+          CustomListTileCard(
+            title: l10n.ethereumAccount,
+            subTitle: l10n.ethereumAccountDescription,
+            imageAssetPath: IconStrings.ethereumAccount,
             onTap: () {
               Navigator.of(context).push<void>(
-                ImportAccountStep2Page.route(),
-              );
-            },
-          ),
-          AccountItem(
-            title: l10n.other,
-            iconPath: IconStrings.add,
-            onTap: () {
-              Navigator.of(context).push<void>(
-                ImportAccountStep2Page.route(),
+                ImportAccountStep2Page.route(accountType: AccountType.ethereum),
               );
             },
           ),

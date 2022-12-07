@@ -46,8 +46,15 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
     );
   }
 
+  void setAccountType(AccountType accountType) {
+    emit(
+      state.populating(
+        accountType: accountType,
+      ),
+    );
+  }
+
   Future<void> import({
-    required bool isFromOnboarding,
     String? accountName,
   }) async {
     final log = getLogger('ImportAccountCubit - import');
@@ -55,52 +62,25 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
-      log.e('isFromOnboarding: $isFromOnboarding');
-      if (isFromOnboarding) {
-        /// ssi creation
-
-        late String mnemonic;
-        final isSecretKey = state.mnemonicOrKey.startsWith('edsk') ||
-            state.mnemonicOrKey.startsWith('spsk') ||
-            state.mnemonicOrKey.startsWith('p2sk') ||
-            state.mnemonicOrKey.startsWith('0x');
-
-        if (isSecretKey) {
-          mnemonic = bip39.generateMnemonic();
-        } else {
-          mnemonic = state.mnemonicOrKey;
-        }
-
-        await secureStorageProvider.set(
-          SecureStorageKeys.ssiMnemonic,
-          mnemonic,
-        );
-        final ssiKey = await keyGenerator.jwkFromMnemonic(
-          mnemonic: mnemonic,
-          accountType: AccountType.ssi,
-        );
-        await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
-
-        const didMethod = AltMeStrings.defaultDIDMethod;
-        final did = didKitProvider.keyToDID(didMethod, ssiKey);
-        final verificationMethod =
-            await didKitProvider.keyToVerificationMethod(didMethod, ssiKey);
-
-        await didCubit.set(
-          did: did,
-          didMethod: didMethod,
-          didMethodName: AltMeStrings.defaultDIDMethodName,
-          verificationMethod: verificationMethod,
-        );
+      /// crypto wallet
+      late BlockchainType blockchainType;
+      switch (state.accountType) {
+        case AccountType.ssi:
+          blockchainType = BlockchainType.tezos;
+          break;
+        case AccountType.tezos:
+          blockchainType = BlockchainType.tezos;
+          break;
+        case AccountType.ethereum:
+          blockchainType = BlockchainType.ethereum;
+          break;
       }
 
-      /// crypto wallet
       await walletCubit.createCryptoWallet(
         accountName: accountName,
         mnemonicOrKey: state.mnemonicOrKey,
-        isImported: !isFromOnboarding,
-        // TODO(all): dynamic the blockchain type depends on selected type
-        blockchainType: BlockchainType.tezos,
+        isImported: false,
+        blockchainType: blockchainType,
         onComplete: ({
           required CryptoAccount cryptoAccount,
           required MessageHandler messageHandler,

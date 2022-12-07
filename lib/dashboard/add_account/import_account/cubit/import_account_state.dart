@@ -8,6 +8,7 @@ class ImportAccountState extends Equatable {
     this.isTextFieldEdited = false,
     this.isMnemonicOrKeyValid = false,
     this.mnemonicOrKey = '',
+    this.accountType = AccountType.tezos,
   });
 
   factory ImportAccountState.fromJson(Map<String, dynamic> json) =>
@@ -18,6 +19,7 @@ class ImportAccountState extends Equatable {
   final bool isTextFieldEdited;
   final bool isMnemonicOrKeyValid;
   final String mnemonicOrKey;
+  final AccountType accountType;
 
   ImportAccountState loading() {
     return ImportAccountState(
@@ -25,6 +27,7 @@ class ImportAccountState extends Equatable {
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
       mnemonicOrKey: mnemonicOrKey,
+      accountType: accountType,
     );
   }
 
@@ -33,12 +36,14 @@ class ImportAccountState extends Equatable {
     bool? isMnemonicOrKeyValid,
     int? recoveredCredentialLength,
     String? mnemonicOrKey,
+    AccountType? accountType,
   }) {
     return ImportAccountState(
       status: AppStatus.populate,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid ?? this.isMnemonicOrKeyValid,
       mnemonicOrKey: mnemonicOrKey ?? this.mnemonicOrKey,
+      accountType: accountType ?? this.accountType,
     );
   }
 
@@ -49,6 +54,7 @@ class ImportAccountState extends Equatable {
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
       mnemonicOrKey: mnemonicOrKey,
+      accountType: accountType,
     );
   }
 
@@ -63,6 +69,7 @@ class ImportAccountState extends Equatable {
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
       mnemonicOrKey: '',
+      accountType: accountType,
     );
   }
 
@@ -75,5 +82,6 @@ class ImportAccountState extends Equatable {
         isTextFieldEdited,
         message,
         mnemonicOrKey,
+        accountType,
       ];
 }
