@@ -38,6 +38,7 @@ abstract class Sizes {
   static const double icon3x = 38;
   static const double icon4x = 54;
   static const double icon5x = 64;
+  static const double icon6x = 90;
 
   //TextField height
   static const double recoveryPhraseTextFieldHeight = 160;

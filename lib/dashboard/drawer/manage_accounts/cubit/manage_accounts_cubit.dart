@@ -36,30 +36,6 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
     emit(state.success(currentCryptoIndex: index));
   }
 
-  Future<void> addCryptoAccount({String? accountName}) async {
-    emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
-    final String? ssiMnemonic =
-        await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-
-    await walletCubit.createCryptoWallet(
-      accountName: accountName,
-      isImported: false,
-      mnemonicOrKey: ssiMnemonic!,
-      onComplete: ({
-        required CryptoAccount cryptoAccount,
-        required MessageHandler messageHandler,
-      }) async {
-        emit(
-          state.success(
-            cryptoAccount: cryptoAccount,
-            messageHandler: messageHandler,
-          ),
-        );
-      },
-    );
-  }
-
   Future<void> editCryptoAccount({
     required String newAccountName,
     required int index,

@@ -36,6 +36,7 @@ class RecoveryKeyView extends StatelessWidget {
 
     return BasePage(
       title: l10n.recoveryKeyTitle,
+      titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       scrollView: false,
       body: BlocBuilder<RecoveryKeyCubit, RecoveryKeyState>(

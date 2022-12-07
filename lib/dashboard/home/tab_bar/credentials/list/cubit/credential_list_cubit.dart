@@ -45,7 +45,23 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           .credentialPreview.credentialSubjectModel.credentialSubjectType;
 
       switch (credentialSubjectType) {
+        case CredentialSubjectType.deviceInfo:
+          break;
         case CredentialSubjectType.bloometaPass:
+          break;
+        case CredentialSubjectType.dogamiPass:
+          break;
+        case CredentialSubjectType.bunnyPass:
+          break;
+        case CredentialSubjectType.troopezPass:
+          break;
+        case CredentialSubjectType.tzlandPass:
+          break;
+        case CredentialSubjectType.matterlightPass:
+          break;
+        case CredentialSubjectType.pigsPass:
+          break;
+        case CredentialSubjectType.tezoniaPass:
           break;
         case CredentialSubjectType.tezotopiaMembership:
           gamingCategories.remove(CredentialSubjectType.tezotopiaMembership);
@@ -125,6 +141,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.aragoOver18:
           break;
         case CredentialSubjectType.aragoPass:
+        case CredentialSubjectType.pcdsAgentCertificate:
+          break;
       }
 
       switch (credentialSubject.credentialCategory) {
@@ -234,6 +252,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         final credentialSubjectType = credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
         switch (credentialSubjectType) {
+          case CredentialSubjectType.deviceInfo:
+            break;
           case CredentialSubjectType.tezotopiaMembership:
             _removeDummyIfCredentialExist(
               _credentials,
@@ -375,6 +395,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.dogamiPass:
             break;
           case CredentialSubjectType.bunnyPass:
+            break;
+          case CredentialSubjectType.pcdsAgentCertificate:
             break;
         }
 
@@ -596,7 +618,15 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           );
 
         switch (credentialSubjectType) {
+          case CredentialSubjectType.deviceInfo:
           case CredentialSubjectType.bloometaPass:
+          case CredentialSubjectType.dogamiPass:
+          case CredentialSubjectType.troopezPass:
+          case CredentialSubjectType.tzlandPass:
+          case CredentialSubjectType.bunnyPass:
+          case CredentialSubjectType.pigsPass:
+          case CredentialSubjectType.tezoniaPass:
+          case CredentialSubjectType.matterlightPass:
           case CredentialSubjectType.tezotopiaMembership:
             identityCategories.add(CredentialSubjectType.tezotopiaMembership);
             break;
@@ -712,6 +742,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.aragoLearningAchievement:
             break;
           case CredentialSubjectType.aragoOver18:
+            break;
+          case CredentialSubjectType.pcdsAgentCertificate:
             break;
         }
 

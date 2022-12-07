@@ -93,7 +93,7 @@ class DescriptionText extends StatelessWidget {
       child: RichText(
         softWrap: true,
         overflow: TextOverflow.ellipsis,
-        maxLines: 3,
+        maxLines: 200,
         textAlign: TextAlign.left,
         text: TextSpan(
           children: <InlineSpan>[

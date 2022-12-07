@@ -17,6 +17,7 @@ class MarkdownPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BasePage(
       title: title,
+      titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       scrollView: false,
       padding: const EdgeInsets.symmetric(

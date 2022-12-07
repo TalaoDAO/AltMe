@@ -4,11 +4,11 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-part 'drawer_cubit.g.dart';
-part 'drawer_state.dart';
+part 'wallet_security_cubit.g.dart';
+part 'wallet_security_state.dart';
 
-class DrawerCubit extends Cubit<DrawerState> {
-  DrawerCubit() : super(const DrawerState()) {
+class WalletSecurityCubit extends Cubit<WalletSecurityState> {
+  WalletSecurityCubit() : super(const WalletSecurityState()) {
     init();
   }
 

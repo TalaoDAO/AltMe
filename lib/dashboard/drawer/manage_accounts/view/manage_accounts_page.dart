@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/manage_accounts/manage_accounts.dart';
-import 'package:altme/import_wallet/import_wallet.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:altme/wallet/model/model.dart';
@@ -68,56 +67,8 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
     }
   }
 
-  Future<void> onAddAccountPressed() async {
-    final l10n = context.l10n;
-    final List<CryptoAccountData> cryptoAccount =
-        context.read<ManageAccountsCubit>().state.cryptoAccount.data;
-    final accountNameList = cryptoAccount.map((e) => e.name).toList();
-
-    await showDialog<void>(
-      context: context,
-      builder: (_) => AddAccountPopUp(
-        defaultAccountName: generateDefaultAccountName(
-          accountNameList.length,
-          accountNameList,
-        ),
-        onCreateAccount: (String accountName) {
-          if (accountName.trim().isEmpty ||
-              accountNameList.contains(accountName)) {
-            AlertMessage.showStringMessage(
-              context: context,
-              message: l10n.sameAccountNameError,
-              messageType: MessageType.error,
-            );
-            return;
-          } else {
-            Navigator.pop(context);
-            context.read<ManageAccountsCubit>().addCryptoAccount(
-                  accountName: accountName,
-                );
-          }
-        },
-        onImportAccount: (String accountName) {
-          if (accountName.trim().isEmpty ||
-              accountNameList.contains(accountName)) {
-            AlertMessage.showStringMessage(
-              context: context,
-              message: l10n.sameAccountNameError,
-              messageType: MessageType.error,
-            );
-            return;
-          } else {
-            Navigator.of(context).pop();
-            Navigator.of(context).push<void>(
-              ImportWalletPage.route(
-                accountName: accountName,
-                isFromOnboarding: false,
-              ),
-            );
-          }
-        },
-      ),
-    );
+  void onAddAccountPressed() {
+    Navigator.of(context).push<void>(ChooseAddAccountMethodPage.route());
   }
 
   @override
@@ -146,7 +97,8 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
       },
       builder: (context, state) {
         return BasePage(
-          title: l10n.manageAccounts,
+          title: l10n.blockChainAccounts,
+          titleAlignment: Alignment.topCenter,
           scrollView: false,
           titleLeading: const BackLeadingButton(),
           body: BackgroundCard(

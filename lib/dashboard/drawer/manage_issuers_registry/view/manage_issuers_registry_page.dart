@@ -19,6 +19,7 @@ class ManageIssuersRegistryPage extends StatelessWidget {
 
     return BasePage(
       title: l10n.issuerRegistry,
+      titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       scrollView: true,
       body: BlocConsumer<ProfileCubit, ProfileState>(

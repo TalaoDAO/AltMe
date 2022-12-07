@@ -43,7 +43,7 @@ class Urls {
   static const objktUrl = 'https://objkt.com/';
   static const raribleUrl = 'https://rarible.com/';
 
-  // TODO(all) remember to update all below urls
+  // TODO(all): remember to update all below urls.
   static const String bunnyPassCardUrl = 'https://issuer.tezotopia.altme.io';
   static const String dogamiPassCardUrl = 'https://issuer.tezotopia.altme.io';
   static const String matterlightPassCardUrl =

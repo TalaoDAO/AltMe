@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
@@ -38,71 +39,72 @@ class BackupCredentialView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (context.read<BackupCredentialCubit>().state.status ==
-            AppStatus.loading) {
-          return false;
-        }
-        return true;
-      },
-      child: BasePage(
-        title: l10n.backupCredential,
-        titleLeading: BackLeadingButton(
-          onPressed: () {
-            if (context.read<BackupCredentialCubit>().state.status !=
-                AppStatus.loading) {
-              Navigator.of(context).pop();
-            }
-          },
-        ),
-        body: BlocConsumer<BackupCredentialCubit, BackupCredentialState>(
-          listener: (context, state) async {
-            if (state.status == AppStatus.loading) {
-              LoadingView().show(context: context);
-            } else {
-              LoadingView().hide();
-            }
+    return BasePage(
+      title: l10n.backupCredential,
+      titleAlignment: Alignment.topCenter,
+      titleLeading: const BackLeadingButton(),
+      padding: const EdgeInsets.only(
+        top: 0,
+        bottom: Sizes.spaceSmall,
+        left: Sizes.spaceSmall,
+        right: Sizes.spaceSmall,
+      ),
+      body: BlocConsumer<BackupCredentialCubit, BackupCredentialState>(
+        listener: (context, state) async {
+          if (state.status == AppStatus.loading) {
+            LoadingView().show(context: context);
+          } else {
+            LoadingView().hide();
+          }
 
-            if (state.message != null) {
-              AlertMessage.showStateMessage(
-                context: context,
-                stateMessage: state.message!,
-              );
-            }
-          },
+          if (state.message != null) {
+            AlertMessage.showStateMessage(
+              context: context,
+              stateMessage: state.message!,
+            );
+          }
+        },
+        builder: (context, state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  const MStepper(
+                    totalStep: 2,
+                    step: 1,
+                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
+                  Text(
+                    l10n.backupCredentialPhraseExplanation,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.messageTitle,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 32),
+              if (state.mnemonic != null)
+                MnemonicDisplay(mnemonic: state.mnemonic!),
+            ],
+          );
+        },
+      ),
+      navigation: Padding(
+        padding: const EdgeInsets.all(Sizes.spaceSmall),
+        child: BlocBuilder<BackupCredentialCubit, BackupCredentialState>(
           builder: (context, state) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      l10n.backupCredentialPhrase,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.messageTitle,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      l10n.backupCredentialPhraseExplanation,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.messageSubtitle,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32),
-                if (state.mnemonic != null)
-                  MnemonicDisplay(mnemonic: state.mnemonic!),
-                const SizedBox(height: 32),
-                MyGradientButton(
-                  onPressed: () async {
-                    await context
-                        .read<BackupCredentialCubit>()
-                        .encryptAndDownloadFile();
-                  },
-                  text: l10n.backupCredentialButtonTitle,
-                )
-              ],
+            return MyGradientButton(
+              onPressed: state.mnemonic == null
+                  ? null
+                  : () {
+                      Navigator.of(context).push<void>(
+                        SaveBackupCredentialPage.route(
+                          backupCredentialCubit:
+                              context.read<BackupCredentialCubit>(),
+                        ),
+                      );
+                    },
+              text: l10n.next,
             );
           },
         ),

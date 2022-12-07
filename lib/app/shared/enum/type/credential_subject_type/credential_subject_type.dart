@@ -16,6 +16,7 @@ enum CredentialSubjectType {
   ageRange,
   nationality,
   gender,
+  deviceInfo,
   tezosAssociatedWallet,
   ethereumAssociatedWallet,
   certificateOfEmployment,
@@ -45,6 +46,7 @@ enum CredentialSubjectType {
   aragoIdentityCard,
   aragoLearningAchievement,
   aragoOver18,
+  pcdsAgentCertificate,
 }
 
 extension CredentialSubjectTypeX on CredentialSubjectType {

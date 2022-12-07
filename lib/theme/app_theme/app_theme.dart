@@ -30,7 +30,7 @@ abstract class AppTheme {
   static Color darkOnSurface = const Color(0xffEDEAF5);
 
   /// A color that typically appears behind scrollable content.
-  static Color darkBackground = const Color(0xff0A0F19);
+  static Color darkBackground = const Color(0xff0B0514);
 
   /// A color that's clearly legible when drawn on background.
   static Color darkOnBackground = const Color(0xffFFFFFF);
@@ -47,7 +47,7 @@ abstract class AppTheme {
 
   static Color dividerColor = const Color(0xFF605A71);
 
-  static Color highlightColor = const Color(0xFF3C324C);
+  static Color highlightColor = const Color(0xFF36334E);
 
   static ThemeData get darkThemeData => ThemeData(
         brightness: Brightness.dark,
@@ -157,15 +157,15 @@ extension CustomColorScheme on ColorScheme {
 
   Color get selectedBottomBar => surface;
 
-  Color get drawerBackground => const Color(0xff0B0E19);
+  Color get drawerBackground => const Color(0xff0B0514);
 
   Color get borderColor => const Color(0xFFDDCEF4);
 
-  Color get markDownH1 => const Color(0xFFDBD8D8);
+  Color get markDownH1 => const Color(0xFFFFFFFF);
 
-  Color get markDownH2 => const Color(0xFFDBD8D8);
+  Color get markDownH2 => const Color(0xFFFFFFFF);
 
-  Color get markDownP => const Color(0xFFADACAC);
+  Color get markDownP => const Color(0xFFD1CCE3);
 
   Color get markDownA => const Color(0xff517bff);
 
@@ -368,6 +368,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
+  TextStyle get caption3 => GoogleFonts.nunito(
+        color: const Color(0xFF86809D),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get listTileTitle => GoogleFonts.roboto(
         color: const Color(0xFFFFFFFF),
         fontSize: 14,
@@ -398,10 +404,38 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get drawerItem => GoogleFonts.roboto(
+  TextStyle get drawerItem => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+      );
+
+  TextStyle get drawerCategoryTitle => GoogleFonts.nunito(
         color: const Color(0xFFFFFFFF),
         fontSize: 18,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w800,
+      );
+
+  TextStyle get resetWalletTitle => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+      );
+  TextStyle get resetWalletSubtitle => GoogleFonts.nunito(
+        color: const Color(0xFFFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      );
+  TextStyle get subtitle4 => GoogleFonts.nunito(
+        color: const Color(0xFF00A1FF),
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      );
+
+  TextStyle get drawerCategorySubTitle => GoogleFonts.nunito(
+        color: const Color(0xFFD1CCE3),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
       );
 
   TextStyle get biometricMessage => GoogleFonts.roboto(
@@ -851,6 +885,12 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get beaconSelectAccont => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+      );
+
+  TextStyle get uploadFileTitle => GoogleFonts.roboto(
         color: const Color(0xffFFFFFF),
         fontSize: 18,
         fontWeight: FontWeight.w800,
