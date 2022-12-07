@@ -28,12 +28,11 @@ class WalletSecurityView extends StatelessWidget {
   final localAuthApi = LocalAuthApi();
 
   //method for set new pin code
-  Future<void> setNewPinCode(
+  void setNewPinCode(
     BuildContext context,
     AppLocalizations l10n,
-  ) async {
-    Navigator.of(context).pop();
-    await Navigator.of(context).push<void>(
+  ) {
+    Navigator.of(context).push<void>(
       EnterNewPinCodePage.route(
         isFromOnboarding: false,
         isValidCallback: () {
@@ -67,14 +66,16 @@ class WalletSecurityView extends StatelessWidget {
                 const Center(
                   child: AltMeLogo(size: 90),
                 ),
-                const SizedBox(height: Sizes.spaceSmall,),
+                const SizedBox(
+                  height: Sizes.spaceSmall,
+                ),
                 DrawerItem(
                   title: l10n.changePinCode,
                   onTap: () async {
                     final pinCode =
                         await getSecureStorage.get(SecureStorageKeys.pinCode);
                     if (pinCode?.isEmpty ?? true) {
-                      await setNewPinCode(context, l10n);
+                      setNewPinCode(context, l10n);
                     } else {
                       await Navigator.of(context).push<void>(
                         PinCodePage.route(
