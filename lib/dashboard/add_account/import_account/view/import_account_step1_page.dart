@@ -76,6 +76,15 @@ class ImportAccountStep1View extends StatelessWidget {
             },
           ),
           AccountItem(
+            title: l10n.metaMaskWallet,
+            iconPath: IconStrings.metaMaskWallet,
+            onTap: () {
+              Navigator.of(context).push<void>(
+                ImportAccountStep2Page.route(),
+              );
+            },
+          ),
+          AccountItem(
             title: l10n.other,
             iconPath: IconStrings.add,
             onTap: () {

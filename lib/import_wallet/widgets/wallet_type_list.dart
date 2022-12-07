@@ -38,12 +38,12 @@ class WalletTypeList extends StatelessWidget {
         type: ImportWalletTypes.temple,
         imagePath: IconStrings.templeWallet,
       ),
-      // WalletTypeModel(
-      //   name: l10n.metaMaskWallet,
-      //   walletName: l10n.metaMask,
-      //   type: ImportWalletTypes.metamask,
-      //   imagePath: IconStrings.metaMaskWallet,
-      // ),
+      WalletTypeModel(
+        title: l10n.metaMaskWallet,
+        walletName: l10n.metaMask,
+        type: ImportWalletTypes.metamask,
+        imagePath: IconStrings.metaMaskWallet,
+      ),
       WalletTypeModel(
         title: l10n.kukaiWallet,
         walletName: l10n.kukai,
