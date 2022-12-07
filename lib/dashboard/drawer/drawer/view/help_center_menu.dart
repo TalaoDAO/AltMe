@@ -3,7 +3,6 @@ import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HelpCenterMenu extends StatelessWidget {
   const HelpCenterMenu({super.key});
@@ -53,10 +52,8 @@ class HelpCenterView extends StatelessWidget {
                 ),
                 DrawerItem(
                   onTap: () {
-                    launchUrl(
-                      Uri.parse(
-                        'https://${AltMeStrings.appContactWebsiteName}',
-                      ),
+                    LaunchUrl.launch(
+                      'https://${AltMeStrings.appContactWebsiteName}',
                     );
                   },
                   title: '${l10n.officialWebsite} :',
