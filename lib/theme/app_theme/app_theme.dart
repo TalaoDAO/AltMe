@@ -161,11 +161,11 @@ extension CustomColorScheme on ColorScheme {
 
   Color get borderColor => const Color(0xFFDDCEF4);
 
-  Color get markDownH1 => const Color(0xFFDBD8D8);
+  Color get markDownH1 => const Color(0xFFFFFFFF);
 
-  Color get markDownH2 => const Color(0xFFDBD8D8);
+  Color get markDownH2 => const Color(0xFFFFFFFF);
 
-  Color get markDownP => const Color(0xFFADACAC);
+  Color get markDownP => const Color(0xFFD1CCE3);
 
   Color get markDownA => const Color(0xff517bff);
 
@@ -367,7 +367,7 @@ extension CustomTextTheme on TextTheme {
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
-  
+
   TextStyle get caption3 => GoogleFonts.nunito(
         color: const Color(0xFF86809D),
         fontSize: 16,
