@@ -890,6 +890,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w800,
       );
 
+  TextStyle get uploadFileTitle => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+      );
+
   TextStyle get beaconPermissionTitle => GoogleFonts.roboto(
         color: const Color(0xffFFFFFF),
         fontSize: 18,

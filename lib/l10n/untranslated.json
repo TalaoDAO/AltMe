@@ -660,7 +660,12 @@
     "ethereumAccountCreationCongratulations",
     "accountImportCongratulations",
     "saveBackupCredentialTitle",
-    "saveBackupCredentialSubtitle"
+    "saveBackupCredentialSubtitle",
+    "restoreCredentialStep1Title",
+    "restorePhraseTextFieldHint",
+    "restoreCredentialStep2Title",
+    "loadFile",
+    "uploadFile"
   ],
 
   "es": [
@@ -1324,7 +1329,12 @@
     "ethereumAccountCreationCongratulations",
     "accountImportCongratulations",
     "saveBackupCredentialTitle",
-    "saveBackupCredentialSubtitle"
+    "saveBackupCredentialSubtitle",
+    "restoreCredentialStep1Title",
+    "restorePhraseTextFieldHint",
+    "restoreCredentialStep2Title",
+    "loadFile",
+    "uploadFile"
   ],
 
   "fr": [
@@ -1988,7 +1998,12 @@
     "ethereumAccountCreationCongratulations",
     "accountImportCongratulations",
     "saveBackupCredentialTitle",
-    "saveBackupCredentialSubtitle"
+    "saveBackupCredentialSubtitle",
+    "restoreCredentialStep1Title",
+    "restorePhraseTextFieldHint",
+    "restoreCredentialStep2Title",
+    "loadFile",
+    "uploadFile"
   ],
 
   "it": [
@@ -2652,6 +2667,11 @@
     "ethereumAccountCreationCongratulations",
     "accountImportCongratulations",
     "saveBackupCredentialTitle",
-    "saveBackupCredentialSubtitle"
+    "saveBackupCredentialSubtitle",
+    "restoreCredentialStep1Title",
+    "restorePhraseTextFieldHint",
+    "restoreCredentialStep2Title",
+    "loadFile",
+    "uploadFile"
   ]
 }

@@ -710,5 +710,10 @@
   "ethereumAccountCreationCongratulations": "Your new Ethereum account has been successfully created.",
   "accountImportCongratulations": "Your account has been successfully imported.",
   "saveBackupCredentialTitle": "Download the backup file.\nKeep it in a safe place.",
-  "saveBackupCredentialSubtitle": "To recover all your credentials you will need the Recovery Phrase AND this backup file."
+  "saveBackupCredentialSubtitle": "To recover all your credentials you will need the Recovery Phrase AND this backup file.",
+  "restoreCredentialStep1Title": "Step 1 : Enter your 12 Recovery Phrase words",
+  "restorePhraseTextFieldHint": "Enter your Recovery Phrase (or mnemonic phrase) here...",
+  "restoreCredentialStep2Title": "Step 2 : Upload your credentials backup file",
+  "loadFile": "Load file",
+  "uploadFile": "Upload file"
 }

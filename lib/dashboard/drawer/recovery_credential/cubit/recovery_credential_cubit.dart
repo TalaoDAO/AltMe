@@ -7,7 +7,6 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -28,15 +27,21 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
       state.populating(
         isTextFieldEdited: value.isNotEmpty,
         isMnemonicValid: bip39.validateMnemonic(value) && value.isNotEmpty,
+        mnemonic: value,
       ),
     );
   }
 
-  Future<void> recoverWallet(String mnemonic, FilePickerResult result) async {
+  void setFilePath({String? filePath}) {
+    emit(state.copyWith(backupFilePath: filePath));
+  }
+
+  Future<void> recoverWallet() async {
+    if (state.mnemonic == null || state.backupFilePath == null) return;
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
-      final file = File(result.files.single.path!);
+      final file = File(state.backupFilePath!);
       final text = await file.readAsString();
       final json = jsonDecode(text) as Map<String, dynamic>;
       if (!json.containsKey('cipherText') ||
@@ -52,7 +57,8 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
         cipherText: json['cipherText'] as String,
         authenticationTag: json['authenticationTag'] as String,
       );
-      final decryptedText = await cryptoKeys.decrypt(mnemonic, encryption);
+      final decryptedText =
+          await cryptoKeys.decrypt(state.mnemonic!, encryption);
       final decryptedJson = jsonDecode(decryptedText) as Map<String, dynamic>;
       if (!decryptedJson.containsKey('date') ||
           !decryptedJson.containsKey('credentials') ||
