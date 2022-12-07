@@ -33,6 +33,7 @@ class AccountPublicAddressPage extends StatelessWidget {
     final l10n = context.l10n;
     return BasePage(
       title: l10n.publicAddress,
+      titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
       body: BackgroundCard(
