@@ -72,8 +72,6 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
       /// crypto wallet
       await walletCubit.createCryptoWallet(
         mnemonicOrKey: mnemonicFormatted,
-        // TODO(all): update the BlockchainType depends on selected type
-        blockchainType: BlockchainType.tezos,
         isImported: false,
       );
 

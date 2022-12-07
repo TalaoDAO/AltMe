@@ -74,7 +74,7 @@ class WalletCubit extends Cubit<WalletState> {
     String? accountName,
     required String mnemonicOrKey,
     required bool isImported,
-    required BlockchainType blockchainType,
+    BlockchainType? blockchainType,
     Function({
       required CryptoAccount cryptoAccount,
       required MessageHandler messageHandler,
@@ -133,7 +133,6 @@ class WalletCubit extends Cubit<WalletState> {
         );
       }
     } else {
-      log.i('creating both tezos and ethereum account');
       late CryptoAccount updatedCryptoAccount;
       if (blockchainType == BlockchainType.tezos) {
         updatedCryptoAccount = await createTezosOrEthereumAccount(
@@ -145,7 +144,7 @@ class WalletCubit extends Cubit<WalletState> {
           totalAccountsYet: int.parse(totalAccountsYet),
           showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
         );
-      } else {
+      } else if (blockchainType == BlockchainType.ethereum) {
         updatedCryptoAccount = await createTezosOrEthereumAccount(
           accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
@@ -153,6 +152,26 @@ class WalletCubit extends Cubit<WalletState> {
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.ethereum,
           totalAccountsYet: int.parse(totalAccountsYet),
+          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+        );
+      } else {
+        log.i('creating both tezos and ethereum account');
+        await createTezosOrEthereumAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.tezos,
+          totalAccountsYet: int.parse(totalAccountsYet),
+          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+        );
+        updatedCryptoAccount = await createTezosOrEthereumAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.ethereum,
+          totalAccountsYet: int.parse(totalAccountsYet)+1,
           showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
         );
       }
