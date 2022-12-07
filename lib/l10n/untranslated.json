@@ -658,7 +658,9 @@
     "congratulations",
     "tezosAccountCreationCongratulations",
     "ethereumAccountCreationCongratulations",
-    "accountImportCongratulations"
+    "accountImportCongratulations",
+    "saveBackupCredentialTitle",
+    "saveBackupCredentialSubtitle"
   ],
 
   "es": [
@@ -1320,7 +1322,9 @@
     "congratulations",
     "tezosAccountCreationCongratulations",
     "ethereumAccountCreationCongratulations",
-    "accountImportCongratulations"
+    "accountImportCongratulations",
+    "saveBackupCredentialTitle",
+    "saveBackupCredentialSubtitle"
   ],
 
   "fr": [
@@ -1982,7 +1986,9 @@
     "congratulations",
     "tezosAccountCreationCongratulations",
     "ethereumAccountCreationCongratulations",
-    "accountImportCongratulations"
+    "accountImportCongratulations",
+    "saveBackupCredentialTitle",
+    "saveBackupCredentialSubtitle"
   ],
 
   "it": [
@@ -2644,6 +2650,8 @@
     "congratulations",
     "tezosAccountCreationCongratulations",
     "ethereumAccountCreationCongratulations",
-    "accountImportCongratulations"
+    "accountImportCongratulations",
+    "saveBackupCredentialTitle",
+    "saveBackupCredentialSubtitle"
   ]
 }

@@ -426,7 +426,7 @@ extension CustomTextTheme on TextTheme {
         fontSize: 16,
         fontWeight: FontWeight.w500,
       );
-  TextStyle get resetWalletSubtitle2 => GoogleFonts.nunito(
+  TextStyle get subtitle4 => GoogleFonts.nunito(
         color: const Color(0xFF00A1FF),
         fontSize: 16,
         fontWeight: FontWeight.w500,

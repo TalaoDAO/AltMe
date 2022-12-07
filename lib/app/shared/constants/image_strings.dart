@@ -122,4 +122,6 @@ class ImageStrings {
   static const String verifyYourAge = '$imagePath/verify-your-age.png';
   static const String createAccountMethod = '$imagePath/create-account-method.png';
   static const String importAccountMethod = '$imagePath/import-account-method.png';
+  
+  static const String receiveSqure = '$imagePath/receive-square.png';
 }

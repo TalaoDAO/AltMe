@@ -197,7 +197,7 @@
   "restoreCredential": "Restore credentials",
   "backupCredential": "Backup credentials",
   "backupCredentialPhrase": "Write these words, download the backup file and keep them in a safe place",
-  "backupCredentialPhraseExplanation": "You need the words in the correct order and the backup file to recover your certificates, if you lose access to this wallet.",
+  "backupCredentialPhraseExplanation": "To backup your credentials write down your Recovery Phrase and keep it in a safe place.",
   "backupCredentialButtonTitle": "Save The File",
   "backupCredentialEmptyError": "You do not have any credential in your wallet.",
   "backupCredentialPermissionDeniedMessage": "You need permission to download this file.",
@@ -708,5 +708,7 @@
   "congratulations": "Congratulations !",
   "tezosAccountCreationCongratulations": "Your new Tezos account has been successfully created.",
   "ethereumAccountCreationCongratulations": "Your new Ethereum account has been successfully created.",
-  "accountImportCongratulations": "Your account has been successfully imported."
+  "accountImportCongratulations": "Your account has been successfully imported.",
+  "saveBackupCredentialTitle": "Download the backup file.\nKeep it in a safe place.",
+  "saveBackupCredentialSubtitle": "To recover all your credentials you will need the Recovery Phrase AND this backup file."
 }

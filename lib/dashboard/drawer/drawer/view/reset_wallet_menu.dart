@@ -65,7 +65,7 @@ class ResetWalletView extends StatelessWidget {
               Text(
                 l10n.resetWalletSubtitle2,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.resetWalletSubtitle2,
+                style: Theme.of(context).textTheme.subtitle4,
               ),
               const Spacer(),
               CheckboxItem(
