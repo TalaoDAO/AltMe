@@ -137,7 +137,9 @@ class DummyCredentialItem extends StatelessWidget {
           }
         }
         context.read<DeepLinkCubit>().addDeepLink(
-            '${homeCredential.link!}${const Uuid().v4()}?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du');
+              // ignore: lines_longer_than_80_chars
+              '${homeCredential.link!}${const Uuid().v4()}?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du',
+            );
         await context.read<QRCodeScanCubit>().deepLink();
       } else {
         await LaunchUrl.launch(homeCredential.link!);

@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 abstract class ConstantsJson {
   static const deviceInfoCredentialManifestJson = <String, dynamic>{
     'id': 'DeviceInfo',

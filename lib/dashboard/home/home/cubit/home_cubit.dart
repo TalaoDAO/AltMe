@@ -158,7 +158,7 @@ class HomeCubit extends Cubit<HomeState> {
           },
           data: data,
         );
-      } catch (e, s) {
+      } catch (e) {
         if (e is NetworkException) {
           String? message;
           if (e.data != null) {
@@ -235,8 +235,10 @@ class HomeCubit extends Cubit<HomeState> {
               ),
             );
           } else {
-            await cameraCubit.updateAgeEstimate(credentialModel
-                .data['credentialSubject']['ageEstimate'] as String);
+            await cameraCubit.updateAgeEstimate(
+              credentialModel.data['credentialSubject']['ageEstimate']
+                  as String,
+            );
           }
         }
         logger.i('response : $response');

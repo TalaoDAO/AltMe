@@ -1,7 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/add_account/add_account.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -73,10 +71,9 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
 
   void onAddAccountPressed() {
     Navigator.of(context).push<void>(ChooseAddAccountMethodPage.route());
-    final l10n = context.l10n;
-    final List<CryptoAccountData> cryptoAccount =
-        context.read<CryptoBottomSheetCubit>().state.cryptoAccount.data;
-    final accountNameList = cryptoAccount.map((e) => e.name).toList();
+    // final List<CryptoAccountData> cryptoAccount =
+    //     context.read<CryptoBottomSheetCubit>().state.cryptoAccount.data;
+    // final accountNameList = cryptoAccount.map((e) => e.name).toList();
 
     // await showDialog<void>(
     //   context: context,

@@ -32,7 +32,7 @@ class DrawerItem extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: MyText(
+              child: Text(
                 title,
                 style: Theme.of(context).textTheme.drawerItem,
               ),

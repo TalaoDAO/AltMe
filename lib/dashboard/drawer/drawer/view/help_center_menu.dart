@@ -61,7 +61,7 @@ class HelpCenterView extends StatelessWidget {
                   },
                   title: '${l10n.officialWebsite} :',
                   trailing: Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: Text(
                       AltMeStrings.appContactWebsiteName,
                       textAlign: TextAlign.left,
