@@ -66,6 +66,7 @@ class _RecoveryCredentialViewState extends State<RecoveryCredentialView> {
       },
       child: BasePage(
         title: l10n.restoreCredential,
+        titleAlignment: Alignment.topCenter,
         titleLeading: BackLeadingButton(
           onPressed: () {
             if (context.read<RecoveryCredentialCubit>().state.status !=
