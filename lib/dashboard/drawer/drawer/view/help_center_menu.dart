@@ -53,14 +53,17 @@ class HelpCenterView extends StatelessWidget {
                 ),
                 DrawerItem(
                   onTap: () {
-                    launchUrl(Uri.parse(
-                        'https://${AltMeStrings.appOfficialWebsite}'));
+                    launchUrl(
+                      Uri.parse(
+                        'https://${AltMeStrings.appContactWebsiteName}',
+                      ),
+                    );
                   },
                   title: '${l10n.officialWebsite} :',
                   trailing: Expanded(
                     flex: 2,
                     child: Text(
-                      AltMeStrings.appOfficialWebsite,
+                      AltMeStrings.appContactWebsiteName,
                       textAlign: TextAlign.left,
                       style: Theme.of(context).textTheme.subtitle2?.copyWith(
                             decoration: TextDecoration.underline,
