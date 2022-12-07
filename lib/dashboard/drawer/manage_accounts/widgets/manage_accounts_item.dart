@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/drawer/manage_accounts/view/account_private_key_page.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/model/model.dart';
 import 'package:flutter/material.dart';
@@ -123,8 +124,15 @@ class ManageAccountsItem extends StatelessWidget {
 
                   if (confirm) {
                     await Navigator.of(context).push<void>(
-                      AccountPrivateKeyPage.route(
-                        privateKey: cryptoAccountData.secretKey,
+                      PinCodePage.route(
+                        restrictToBack: false,
+                        isValidCallback: () {
+                          Navigator.of(context).push<void>(
+                            AccountPrivateKeyPage.route(
+                              privateKey: cryptoAccountData.secretKey,
+                            ),
+                          );
+                        },
                       ),
                     );
                   }
