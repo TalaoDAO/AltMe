@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ContactUsPage extends StatelessWidget {
   const ContactUsPage({super.key});
@@ -121,9 +120,8 @@ class _ContactUsViewState extends State<ContactUsView> {
             if (formKey.currentState?.validate() ?? false) {
               formKey.currentState?.save();
               try {
-                await launchUrl(
-                  Uri.parse(
-                      'mailto:${AltMeStrings.appSupportMail}?subject=$subject&body=$message'),
+                await LaunchUrl.launch(
+                  '''mailto:${AltMeStrings.appSupportMail}?subject=$subject&body=$message''',
                 );
                 Navigator.pop(context);
               } catch (_) {
