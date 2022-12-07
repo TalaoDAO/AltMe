@@ -16,22 +16,22 @@ class AccountItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: Sizes.spaceSmall),
-        padding: const EdgeInsets.symmetric(
-          horizontal: Sizes.spaceNormal,
-          vertical: Sizes.spaceSmall,
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.cardHighlighted,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(
-              Sizes.smallRadius,
-            ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: Sizes.spaceSmall),
+      padding: const EdgeInsets.symmetric(
+        horizontal: Sizes.spaceNormal,
+        vertical: Sizes.spaceSmall,
+      ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.cardHighlighted,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(
+            Sizes.smallRadius,
           ),
         ),
+      ),
+      child: InkWell(
+        onTap: onTap,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
