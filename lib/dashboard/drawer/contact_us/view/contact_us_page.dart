@@ -85,7 +85,7 @@ class _ContactUsViewState extends State<ContactUsView> {
             ),
             TextFormField(
               textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.emailAddress,
+              keyboardType: TextInputType.text,
               maxLines: 6,
               style: Theme.of(context).textTheme.subtitle2,
               onSaved: (value) {
