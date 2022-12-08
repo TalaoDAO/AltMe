@@ -52,5 +52,5 @@ class SecureStorageKeys {
   static const String passBaseVerificationDate = 'passBaseVerificationDate';
   static const String preAuthorizedCode = 'preAuthorizedCode';
 
-  static const String beaconPeerKey = 'beaconPeer';
+  static const String savedDaaps = 'savedDaaps';
 }

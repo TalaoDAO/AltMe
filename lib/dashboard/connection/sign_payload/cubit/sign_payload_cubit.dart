@@ -2,10 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
-import 'package:altme/wallet_connect/wallet_connect.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
@@ -70,7 +69,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
       }
 
       final bytes = hexToBytes(encodedPayload);
-      log.i('bytes - $bytes');
       final String payloadMessage = utf8.decode(bytes, allowMalformed: true);
       log.i('payloadMessage - $payloadMessage');
 

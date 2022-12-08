@@ -6,7 +6,7 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
@@ -17,7 +17,6 @@ import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
-import 'package:altme/wallet_connect/wallet_connect.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:did_kit/did_kit.dart';

@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
@@ -7,45 +7,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
-class BeaconRightPage extends StatelessWidget {
-  const BeaconRightPage({
+class RightsPage extends StatelessWidget {
+  const RightsPage({
     Key? key,
-    required this.p2pPeer,
+    required this.savedDappData,
   }) : super(key: key);
 
-  final P2PPeer p2pPeer;
+  final SavedDappData savedDappData;
 
-  static Route route({required P2PPeer p2pPeer}) {
+  static Route route({required SavedDappData savedDappData}) {
     return MaterialPageRoute<void>(
-      builder: (_) => BeaconRightPage(p2pPeer: p2pPeer),
-      settings: const RouteSettings(name: '/BeaconRightPage'),
+      builder: (_) => RightsPage(savedDappData: savedDappData),
+      settings: const RouteSettings(name: '/RightsPage'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => BeaconRightCubit(
+      create: (_) => RightsCubit(
         beacon: Beacon(),
-        beaconRepository: BeaconRepository(secure_storage.getSecureStorage),
+        connectedDappRepository:
+            ConnectedDappRepository(secure_storage.getSecureStorage),
       ),
-      child: BeaconRightView(p2pPeer: p2pPeer),
+      child: RightsView(savedDappData: savedDappData),
     );
   }
 }
 
-class BeaconRightView extends StatelessWidget {
-  const BeaconRightView({
+class RightsView extends StatelessWidget {
+  const RightsView({
     Key? key,
-    required this.p2pPeer,
+    required this.savedDappData,
   }) : super(key: key);
 
-  final P2PPeer p2pPeer;
+  final SavedDappData savedDappData;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocListener<BeaconRightCubit, BeaconRightState>(
+    return BlocListener<RightsCubit, RightsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -81,7 +82,9 @@ class BeaconRightView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
-                    p2pPeer.name,
+                    savedDappData.peer != null
+                        ? savedDappData.peer!.name
+                        : savedDappData.wcSessionStore!.remotePeerMeta.name,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
@@ -107,13 +110,14 @@ class BeaconRightView extends StatelessWidget {
                 BeCarefulDialog.show(
                   context: context,
                   title: l10n.revokeAllRights,
-                  subtitle: '${l10n.revokeSubtitleMessage} on ${p2pPeer.name}?',
+                  subtitle:
+                      '''${l10n.revokeSubtitleMessage} on ${savedDappData.peer != null ? savedDappData.peer!.name : savedDappData.wcSessionStore!.remotePeerMeta.name}?''',
                   no: l10n.cancel,
                   yes: l10n.revokeAll,
                   onContinueClick: () {
                     context
-                        .read<BeaconRightCubit>()
-                        .disconnect(publicKey: p2pPeer.publicKey);
+                        .read<RightsCubit>()
+                        .disconnect(savedDappData: savedDappData);
                   },
                 );
               },

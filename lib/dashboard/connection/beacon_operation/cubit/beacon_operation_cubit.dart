@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
@@ -145,8 +145,8 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
 
       final isInternetAvailable = await isConnected();
       if (!isInternetAvailable) {
-        throw NetworkException(message:
-          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+        throw NetworkException(
+          message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
         );
       }
 

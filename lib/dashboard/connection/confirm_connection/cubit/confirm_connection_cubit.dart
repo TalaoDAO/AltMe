@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/wallet/wallet.dart';
-import 'package:altme/wallet_connect/wallet_connect.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
@@ -19,14 +18,14 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
     required this.walletCubit,
     required this.beacon,
     required this.beaconCubit,
-    required this.beaconRepository,
+    required this.connectedDappRepository,
     required this.walletConnectCubit,
   }) : super(const ConfirmConnectionState());
 
   final WalletCubit walletCubit;
   final Beacon beacon;
   final BeaconCubit beaconCubit;
-  final BeaconRepository beaconRepository;
+  final ConnectedDappRepository connectedDappRepository;
   final WalletConnectCubit walletConnectCubit;
 
   final log = getLogger('ConfirmConnectionCubit');
@@ -68,11 +67,12 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
 
           if (success) {
             log.i('Connected to beacon');
-            final savedPeerData = SavedPeerData(
-              peer: beaconCubit.state.beaconRequest!.peer!,
+            final savedPeerData = SavedDappData(
+              peer: beaconCubit.state.beaconRequest!.peer,
               walletAddress: currentAccount.walletAddress,
+              blockchainType: BlockchainType.tezos,
             );
-            await beaconRepository.insert(savedPeerData);
+            await connectedDappRepository.insert(savedPeerData);
           } else {
             throw ResponseMessage(
               ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON,
@@ -88,6 +88,16 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
             accounts: walletAddresses,
             chainId: walletConnectState.wcClient!.chainId,
           );
+
+          log.i('Connected to walletconnect');
+          final savedDappData = SavedDappData(
+            walletAddress: currentAccount.walletAddress,
+            blockchainType: BlockchainType.ethereum,
+            wcSessionStore: walletConnectState.wcClient!.sessionStore,
+          );
+          log.i(savedDappData);
+          log.i(savedDappData.toJson());
+          await connectedDappRepository.insert(savedDappData);
           break;
       }
       emit(
