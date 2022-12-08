@@ -6,6 +6,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:altme/wallet/model/crypto_account.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';
@@ -523,22 +524,33 @@ class HomeCubit extends Cubit<HomeState> {
     });
   }
 
-  Future<void> periodicCheckRewardOnTezosBlockchain({
-    required List<String> walletAddresses,
-  }) async {
-    if (walletAddresses.isEmpty) return;
-    try {
-      final tezosWalletAddresses =
-          walletAddresses.where((e) => e.startsWith('tz')).toList();
-      if (tezosWalletAddresses.isEmpty) return;
-      await checkRewards(tezosWalletAddresses);
-      Timer.periodic(const Duration(minutes: 1), (timer) async {
+  Future<void> periodicCheckRewardOnTezosBlockchain() async {
+    Timer.periodic(const Duration(minutes: 1), (timer) async {
+      List<String> walletAddresses = [];
+      final String? savedCryptoAccount =
+          await secureStorageProvider.get(SecureStorageKeys.cryptoAccount);
+
+      if (savedCryptoAccount != null && savedCryptoAccount.isNotEmpty) {
+        //load all the content of walletAddress
+        final cryptoAccountJson =
+            jsonDecode(savedCryptoAccount) as Map<String, dynamic>;
+        final CryptoAccount cryptoAccount =
+            CryptoAccount.fromJson(cryptoAccountJson);
+
+        walletAddresses =
+            cryptoAccount.data.map((e) => e.walletAddress).toList();
+      }
+      if (walletAddresses.isEmpty) return;
+      try {
+        final tezosWalletAddresses =
+            walletAddresses.where((e) => e.startsWith('tz')).toList();
+        if (tezosWalletAddresses.isEmpty) return;
         await checkRewards(tezosWalletAddresses);
-      });
-    } catch (e, s) {
-      getLogger('HomeCubit')
-          .e('error in checking for reward , error: $e, stack: $s');
-    }
+      } catch (e, s) {
+        getLogger('HomeCubit')
+            .e('error in checking for reward , error: $e, stack: $s');
+      }
+    });
   }
 
   Future<void> checkRewards(List<String> walletAddresses) async {
