@@ -158,7 +158,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                           children: [
                             BaseTextField(
                               height: Sizes.recoveryPhraseTextFieldHeight,
-                              hint: l10n.importWalletHintText,
+                              hint: l10n.importWalletHintText(54),
                               fillColor: Colors.transparent,
                               hintStyle: Theme.of(context)
                                   .textTheme

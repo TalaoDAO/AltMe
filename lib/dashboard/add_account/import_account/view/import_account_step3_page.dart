@@ -110,7 +110,9 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
                 children: [
                   BaseTextField(
                     height: Sizes.recoveryPhraseTextFieldHeight,
-                    hint: l10n.importWalletHintText,
+                    hint: l10n.importWalletHintText(
+                      state.accountType == AccountType.tezos ? 54 : 64,
+                    ),
                     fillColor: Colors.transparent,
                     hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
                     maxLines: 10,

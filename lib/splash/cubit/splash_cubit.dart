@@ -57,11 +57,7 @@ class SplashCubit extends Cubit<SplashState> {
         }
       }
       unawaited(
-        homeCubit.periodicCheckRewardOnTezosBlockchain(
-          walletAddresses: walletCubit.state.cryptoAccount.data
-              .map((e) => e.walletAddress)
-              .toList(),
-        ),
+        homeCubit.periodicCheckRewardOnTezosBlockchain(),
       );
     } else {
       homeCubit.emitHasNoWallet();
