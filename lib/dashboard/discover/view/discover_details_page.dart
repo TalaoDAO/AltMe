@@ -97,48 +97,68 @@ class DiscoverDetailsView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (homeCredential.websiteGameLink != null)
-                      DiscoverDynamicDetial(
-                        title: l10n.websiteGame,
-                        value: homeCredential.websiteGameLink!,
-                        format: AltMeStrings.uri,
-                      ),
-                    if (homeCredential.whyGetThisCard != null)
-                      DiscoverDynamicDetial(
-                        title: l10n.whyGetThisCard,
-                        value: homeCredential.whyGetThisCard!.getMessage(
-                          context,
-                          homeCredential.whyGetThisCard!,
-                        ),
-                      ),
-                    if (homeCredential.expirationDateDetails != null)
-                      DiscoverDynamicDetial(
-                        title: l10n.expirationDate,
-                        value: homeCredential.expirationDateDetails!.getMessage(
-                          context,
-                          homeCredential.expirationDateDetails!,
-                        ),
-                      ),
-                    if (homeCredential.howToGetIt != null)
-                      DiscoverDynamicDetial(
-                        title: l10n.howToGetIt,
-                        value: homeCredential.howToGetIt!.getMessage(
-                          context,
-                          homeCredential.howToGetIt!,
-                        ),
-                      ),
+                    _buildDetailsFields(context, l10n),
                   ],
                 ),
               ),
             ),
-            MyGradientButton(
-              onPressed: onCallBack,
-              text: l10n.getThisCard,
-            ),
-            const SizedBox(height: 10),
           ],
         ),
       ),
+      navigation: Padding(
+        padding: const EdgeInsets.all(
+          Sizes.spaceSmall,
+        ),
+        child: MyGradientButton(
+          onPressed: homeCredential.credentialSubjectType.isDisabled()
+              ? null
+              : onCallBack,
+          text: l10n.getThisCard,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailsFields(BuildContext context, AppLocalizations l10n) {
+    if (homeCredential.credentialSubjectType.isDisabled()) {
+      return DiscoverDynamicDetial(
+        title: l10n.credentialManifestDescription,
+        value: l10n.soonCardDescription,
+      );
+    }
+    return Column(
+      children: [
+        if (homeCredential.websiteGameLink != null)
+          DiscoverDynamicDetial(
+            title: l10n.websiteGame,
+            value: homeCredential.websiteGameLink!,
+            format: AltMeStrings.uri,
+          ),
+        if (homeCredential.whyGetThisCard != null)
+          DiscoverDynamicDetial(
+            title: l10n.whyGetThisCard,
+            value: homeCredential.whyGetThisCard!.getMessage(
+              context,
+              homeCredential.whyGetThisCard!,
+            ),
+          ),
+        if (homeCredential.expirationDateDetails != null)
+          DiscoverDynamicDetial(
+            title: l10n.expirationDate,
+            value: homeCredential.expirationDateDetails!.getMessage(
+              context,
+              homeCredential.expirationDateDetails!,
+            ),
+          ),
+        if (homeCredential.howToGetIt != null)
+          DiscoverDynamicDetial(
+            title: l10n.howToGetIt,
+            value: homeCredential.howToGetIt!.getMessage(
+              context,
+              homeCredential.howToGetIt!,
+            ),
+          ),
+      ],
     );
   }
 }

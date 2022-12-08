@@ -163,10 +163,6 @@ class DummyCredentialItem extends StatelessWidget {
             return;
           }
 
-          if (homeCredential.credentialSubjectType.isDisabled()) {
-            return;
-          }
-
           await Navigator.push<void>(
             context,
             DiscoverDetailsPage.route(
