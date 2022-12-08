@@ -181,7 +181,7 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
                     children: [
                       BaseTextField(
                         height: Sizes.recoveryPhraseTextFieldHeight,
-                        hint: l10n.importWalletHintText,
+                        hint: l10n.importWalletHintText(54),
                         fillColor: Colors.transparent,
                         hintStyle:
                             Theme.of(context).textTheme.hintTextFieldStyle,

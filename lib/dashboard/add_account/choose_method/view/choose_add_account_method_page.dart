@@ -1,7 +1,6 @@
 import 'package:altme/app/shared/constants/image_strings.dart';
 import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/app/shared/widget/widget.dart';
-import 'package:altme/dashboard/add_account/import_account/view/import_account_step1_page.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
