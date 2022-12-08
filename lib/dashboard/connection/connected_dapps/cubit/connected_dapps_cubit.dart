@@ -1,28 +1,28 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'beacon_connected_dapps_cubit.g.dart';
-part 'beacon_connected_dapps_state.dart';
+part 'connected_dapps_cubit.g.dart';
+part 'connected_dapps_state.dart';
 
-class BeaconConnectedDappsCubit extends Cubit<BeaconConnectedDappsState> {
-  BeaconConnectedDappsCubit({
+class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
+  ConnectedDappsCubit({
     required this.beacon,
     required this.networkCubit,
     required this.client,
-    required this.beaconRepository,
-  }) : super(BeaconConnectedDappsState());
+    required this.connectedDappRepository,
+  }) : super(ConnectedDappsState());
 
   final Beacon beacon;
   final ManageNetworkCubit networkCubit;
   final DioClient client;
-  final BeaconRepository beaconRepository;
+  final ConnectedDappRepository connectedDappRepository;
 
-  final log = getLogger('BeaconConnectedDappsCubit');
+  final log = getLogger('ConnectedDappsCubit');
 
   Future<void> init(String walletAddress) async {
     await getXtzData(walletAddress);
@@ -86,12 +86,12 @@ class BeaconConnectedDappsCubit extends Cubit<BeaconConnectedDappsState> {
       emit(state.loading());
 
       log.i('fetching saved peers');
-      final List<SavedPeerData> savedPeerDatas =
-          await beaconRepository.findAll();
+      final List<SavedDappData> savedPeerDatas =
+          await connectedDappRepository.findAll();
 
       log.i('savedPeerDatas - $savedPeerDatas');
 
-      final _peersListToShow = <SavedPeerData>[];
+      final _peersListToShow = <SavedDappData>[];
 
       /// loop in saved permitted peer data
       for (final savedPeerData in savedPeerDatas) {
@@ -101,7 +101,9 @@ class BeaconConnectedDappsCubit extends Cubit<BeaconConnectedDappsState> {
         }
       }
 
-      emit(state.copyWith(status: AppStatus.idle, peers: _peersListToShow));
+      emit(
+        state.copyWith(status: AppStatus.idle, savedDapps: _peersListToShow),
+      );
     } catch (e) {
       log.e('getPeers failure , e: $e');
       if (e is MessageHandler) {

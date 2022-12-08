@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
-class BeaconConnectedDappsPage extends StatelessWidget {
-  const BeaconConnectedDappsPage({
+class ConnectedDappsPage extends StatelessWidget {
+  const ConnectedDappsPage({
     Key? key,
     required this.walletAddress,
   }) : super(key: key);
@@ -19,32 +19,32 @@ class BeaconConnectedDappsPage extends StatelessWidget {
 
   static Route route({required String walletAddress}) {
     return MaterialPageRoute<void>(
-      builder: (_) => BeaconConnectedDappsPage(walletAddress: walletAddress),
-      settings: const RouteSettings(name: '/BeaconConnectedDappsPage'),
+      builder: (_) => ConnectedDappsPage(walletAddress: walletAddress),
+      settings: const RouteSettings(name: '/ConnectedDappsPage'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => BeaconConnectedDappsCubit(
+      create: (_) => ConnectedDappsCubit(
         beacon: Beacon(),
         networkCubit: context.read<ManageNetworkCubit>(),
         client: DioClient(
           context.read<ManageNetworkCubit>().state.network.tzktUrl,
           Dio(),
         ),
-        beaconRepository: BeaconRepository(
+        connectedDappRepository: ConnectedDappRepository(
           secure_storage.getSecureStorage,
         ),
       ),
-      child: BeaconConnectedDappsView(walletAddress: walletAddress),
+      child: ConnectedDappsView(walletAddress: walletAddress),
     );
   }
 }
 
-class BeaconConnectedDappsView extends StatefulWidget {
-  const BeaconConnectedDappsView({
+class ConnectedDappsView extends StatefulWidget {
+  const ConnectedDappsView({
     Key? key,
     required this.walletAddress,
   }) : super(key: key);
@@ -52,19 +52,16 @@ class BeaconConnectedDappsView extends StatefulWidget {
   final String walletAddress;
 
   @override
-  State<BeaconConnectedDappsView> createState() =>
-      _BeaconConnectedDappsViewState();
+  State<ConnectedDappsView> createState() => _ConnectedDappsViewState();
 }
 
-class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
+class _ConnectedDappsViewState extends State<ConnectedDappsView> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        await context
-            .read<BeaconConnectedDappsCubit>()
-            .init(widget.walletAddress);
+        await context.read<ConnectedDappsCubit>().init(widget.walletAddress);
       },
     );
   }
@@ -72,7 +69,7 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocConsumer<BeaconConnectedDappsCubit, BeaconConnectedDappsState>(
+    return BlocConsumer<ConnectedDappsCubit, ConnectedDappsState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -111,7 +108,7 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
                     message: message,
                     onTap: () {
                       context
-                          .read<BeaconConnectedDappsCubit>()
+                          .read<ConnectedDappsCubit>()
                           .init(widget.walletAddress);
                     },
                   )
@@ -139,7 +136,7 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           const SizedBox(height: Sizes.spaceNormal),
-                          if (state.peers.isEmpty)
+                          if (state.savedDapps.isEmpty)
                             Center(
                               child: Text(
                                 l10n.noDappConnected,
@@ -148,10 +145,12 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
                             )
                           else
                             ListView.separated(
-                              itemCount: state.peers.length,
+                              itemCount: state.savedDapps.length,
                               shrinkWrap: true,
                               physics: const ScrollPhysics(),
                               itemBuilder: (context, i) {
+                                final SavedDappData savedDappData =
+                                    state.savedDapps[i];
                                 return TransparentInkWell(
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -161,7 +160,11 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
                                       children: [
                                         Expanded(
                                           child: Text(
-                                            state.peers[i].peer.name,
+                                            savedDappData.blockchainType ==
+                                                    BlockchainType.tezos
+                                                ? savedDappData.peer!.name
+                                                : savedDappData.wcSessionStore!
+                                                    .remotePeerMeta.name,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .dappName,
@@ -178,12 +181,12 @@ class _BeaconConnectedDappsViewState extends State<BeaconConnectedDappsView> {
                                   ),
                                   onTap: () async {
                                     await Navigator.of(context).push<void>(
-                                      BeaconRightPage.route(
-                                        p2pPeer: state.peers[i].peer,
+                                      RightsPage.route(
+                                        savedDappData: state.savedDapps[i],
                                       ),
                                     );
                                     await context
-                                        .read<BeaconConnectedDappsCubit>()
+                                        .read<ConnectedDappsCubit>()
                                         .getPeers(widget.walletAddress);
                                   },
                                 );

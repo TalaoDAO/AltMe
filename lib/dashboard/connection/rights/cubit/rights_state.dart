@@ -1,37 +1,37 @@
-part of 'beacon_right_cubit.dart';
+part of 'rights_cubit.dart';
 
 @JsonSerializable()
-class BeaconRightState extends Equatable {
-  const BeaconRightState({
+class RightsState extends Equatable {
+  const RightsState({
     this.status = AppStatus.init,
     this.message,
   });
 
-  factory BeaconRightState.fromJson(Map<String, dynamic> json) =>
-      _$BeaconRightStateFromJson(json);
+  factory RightsState.fromJson(Map<String, dynamic> json) =>
+      _$RightsStateFromJson(json);
 
   final AppStatus status;
   final StateMessage? message;
 
-  BeaconRightState loading() {
-    return const BeaconRightState(status: AppStatus.loading);
+  RightsState loading() {
+    return const RightsState(status: AppStatus.loading);
   }
 
-  BeaconRightState error({
+  RightsState error({
     required MessageHandler messageHandler,
   }) {
-    return BeaconRightState(
+    return RightsState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
     );
   }
 
-  BeaconRightState copyWith({
+  RightsState copyWith({
     AppStatus appStatus = AppStatus.idle,
     MessageHandler? messageHandler,
     int? selectedIndex,
   }) {
-    return BeaconRightState(
+    return RightsState(
       status: appStatus,
       message: messageHandler == null
           ? null
@@ -39,7 +39,7 @@ class BeaconRightState extends Equatable {
     );
   }
 
-  Map<String, dynamic> toJson() => _$BeaconRightStateToJson(this);
+  Map<String, dynamic> toJson() => _$RightsStateToJson(this);
 
   @override
   List<Object?> get props => [status, message];

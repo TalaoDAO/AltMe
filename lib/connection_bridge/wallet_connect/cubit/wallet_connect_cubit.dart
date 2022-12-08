@@ -24,12 +24,12 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('walletPeerMeta: $walletPeerMeta');
 
     final WCClient? wcClient = createWCClient(session.topic);
+    log.i('wcClient: $wcClient');
     if (wcClient == null) return;
     wcClient.connectNewSession(session: session, peerMeta: walletPeerMeta);
     emit(
       state.copyWith(
         status: WalletConnectStatus.idle,
-        walletPeerMeta: walletPeerMeta,
         wcClient: wcClient,
       ),
     );
@@ -39,7 +39,6 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     final String? topic = sessionTopic;
     if (topic == null) return null;
 
-    log.i('yaaa');
     return WCClient(
       onConnect: () {
         log.i('connected');
@@ -58,11 +57,11 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           state.copyWith(
             sessionId: id,
             status: WalletConnectStatus.permission,
-            dAppPeerMeta: dAppPeerMeta,
           ),
         );
       },
       onEthSign: (int id, WCEthereumSignMessage message) {
+        //TODO(bibash): verify with current account
         log.i('onEthSign');
         log.i('id: $id');
         log.i('message: $message');

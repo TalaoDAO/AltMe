@@ -1,9 +1,8 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:altme/wallet_connect/wallet_connect.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +32,8 @@ class ConfirmConnectionPage extends StatelessWidget {
         beacon: Beacon(),
         beaconCubit: context.read<BeaconCubit>(),
         walletCubit: context.read<WalletCubit>(),
-        beaconRepository: BeaconRepository(secure_storage.getSecureStorage),
+        connectedDappRepository:
+            ConnectedDappRepository(secure_storage.getSecureStorage),
         walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: ConfirmConnectionView(connectionBridgeType: connectionBridgeType),
@@ -115,7 +115,8 @@ class ConfirmConnectionView extends StatelessWidget {
                           : context
                               .read<WalletConnectCubit>()
                               .state
-                              .dAppPeerMeta!
+                              .wcClient!
+                              .remotePeerMeta!
                               .name,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
