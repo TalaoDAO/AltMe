@@ -16,12 +16,13 @@ void main() {
       expect(appState.log, isNotNull);
     });
 
+    /// we disabled display of privacy asset in phone language for now
     testWidgets('path of privacy policy matches with device language',
         (tester) async {
       await tester.pumpApp(const DisplayTermsofUse());
       final dynamic appState = tester.state(find.byType(DisplayTermsofUse));
       appState.setPath('it');
-      expect(appState.path, 'assets/privacy/privacy_it.md');
+      expect(appState.path, 'assets/privacy/privacy_en.md');
     });
 
     testWidgets('returns english privacy policy for empty string',
