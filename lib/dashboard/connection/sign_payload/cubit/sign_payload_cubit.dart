@@ -243,9 +243,9 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         break;
       case ConnectionBridgeType.walletconnect:
         log.i('walletconnect Signing rejected');
-        final walletConnectState = walletConnectCubit.state;
-        walletConnectState.wcClient!
-            .rejectRequest(id: walletConnectState.signId!);
+        // final walletConnectState = walletConnectCubit.state;
+        // walletConnectState.wcClient!
+        //     .rejectRequest(id: walletConnectState.signId!);
         break;
     }
     emit(state.copyWith(appStatus: AppStatus.goBack));

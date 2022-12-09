@@ -46,7 +46,10 @@ class App extends StatelessWidget {
           create: (context) => BeaconCubit(beacon: Beacon()),
         ),
         BlocProvider<WalletConnectCubit>(
-          create: (context) => WalletConnectCubit(),
+          create: (context) => WalletConnectCubit(
+            connectedDappRepository:
+                ConnectedDappRepository(secure_storage.getSecureStorage),
+          ),
         ),
         BlocProvider<DeepLinkCubit>(create: (context) => DeepLinkCubit()),
         BlocProvider<QueryByExampleCubit>(

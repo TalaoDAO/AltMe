@@ -14,10 +14,12 @@ class RightsCubit extends Cubit<RightsState> {
   RightsCubit({
     required this.beacon,
     required this.connectedDappRepository,
+    required this.walletConnectCubit,
   }) : super(const RightsState());
 
   final Beacon beacon;
   final ConnectedDappRepository connectedDappRepository;
+  final WalletConnectCubit walletConnectCubit;
 
   final log = getLogger('RightsCubit');
 
@@ -35,8 +37,20 @@ class RightsCubit extends Cubit<RightsState> {
 
       switch (savedDappData.blockchainType) {
         case BlockchainType.ethereum:
-          //savedDappData.wcClient!.disconnect();
-          // TODO(bibash): disconnect
+          final walletConnectState = walletConnectCubit.state;
+          log.i(walletConnectState.wcClients);
+          final wcClient = walletConnectState.wcClients.lastWhereOrNull(
+            (element) =>
+                element.remotePeerMeta ==
+                savedDappData.wcSessionStore!.remotePeerMeta,
+          );
+          if (wcClient != null) {
+            log.i(
+                '''disconnected - ${savedDappData.wcSessionStore!.remotePeerMeta}''');
+            wcClient.disconnect();
+            //remove from collection
+          }
+
           await connectedDappRepository.delete(savedDappData);
           emit(
             state.copyWith(

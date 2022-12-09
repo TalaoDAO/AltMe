@@ -646,6 +646,9 @@ class WalletCubit extends Cubit<WalletState> {
     await profileCubit.resetProfile();
     await secureStorageProvider.delete(SecureStorageKeys.pinCode);
 
+    //save dapps
+    await secureStorageProvider.delete(SecureStorageKeys.savedDaaps);
+
     /// clear app states
     homeCubit.emitHasNoWallet();
     await credentialListCubit.clearHomeCredentials();

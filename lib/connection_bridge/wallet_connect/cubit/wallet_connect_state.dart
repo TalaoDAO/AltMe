@@ -2,15 +2,16 @@ part of 'wallet_connect_cubit.dart';
 
 @JsonSerializable()
 class WalletConnectState extends Equatable {
-  const WalletConnectState({
+  WalletConnectState({
     this.status = WalletConnectStatus.init,
     this.isWalletConnectStarted = false,
     this.message,
     this.sessionId,
-    this.wcClient,
+    List<WCClient>? wcClients,
+    this.currentDAppPeerMeta,
     this.signId,
     this.signMessage,
-  });
+  }) : wcClients = wcClients ?? [];
 
   factory WalletConnectState.fromJson(Map<String, dynamic> json) =>
       _$WalletConnectStateFromJson(json);
@@ -19,8 +20,9 @@ class WalletConnectState extends Equatable {
   final StateMessage? message;
   final bool isWalletConnectStarted;
   final int? sessionId;
+  final WCPeerMeta? currentDAppPeerMeta;
   @JsonKey(ignore: true)
-  final WCClient? wcClient;
+  final List<WCClient> wcClients;
   final int? signId;
   @JsonKey(ignore: true)
   final WCEthereumSignMessage? signMessage;
@@ -32,7 +34,8 @@ class WalletConnectState extends Equatable {
       status: WalletConnectStatus.loading,
       isWalletConnectStarted: isWalletConnectStarted,
       sessionId: sessionId,
-      wcClient: wcClient,
+      wcClients: wcClients,
+      currentDAppPeerMeta: currentDAppPeerMeta,
       signId: signId,
       signMessage: signMessage,
     );
@@ -45,8 +48,9 @@ class WalletConnectState extends Equatable {
       status: WalletConnectStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       isWalletConnectStarted: isWalletConnectStarted,
+      currentDAppPeerMeta: currentDAppPeerMeta,
       sessionId: sessionId,
-      wcClient: wcClient,
+      wcClients: wcClients,
       signId: signId,
       signMessage: signMessage,
     );
@@ -57,7 +61,8 @@ class WalletConnectState extends Equatable {
     MessageHandler? messageHandler,
     bool? isWalletConnectStarted,
     int? sessionId,
-    WCClient? wcClient,
+    WCPeerMeta? currentDAppPeerMeta,
+    List<WCClient>? wcClients,
     int? signId,
     WCEthereumSignMessage? signMessage,
   }) {
@@ -68,8 +73,9 @@ class WalletConnectState extends Equatable {
           : StateMessage.success(messageHandler: messageHandler),
       isWalletConnectStarted:
           isWalletConnectStarted ?? this.isWalletConnectStarted,
+      currentDAppPeerMeta: currentDAppPeerMeta ?? this.currentDAppPeerMeta,
       sessionId: sessionId ?? this.sessionId,
-      wcClient: wcClient ?? this.wcClient,
+      wcClients: wcClients ?? this.wcClients,
       signId: signId ?? this.signId,
       signMessage: signMessage ?? this.signMessage,
     );
@@ -81,7 +87,8 @@ class WalletConnectState extends Equatable {
         message,
         isWalletConnectStarted,
         sessionId,
-        wcClient,
+        currentDAppPeerMeta,
+        wcClients,
         signId,
         signMessage,
       ];

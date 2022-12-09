@@ -322,11 +322,11 @@ final walletConnectBlocListener =
       }
 
       if (state.status == WalletConnectStatus.signPayload) {
-        Navigator.of(context).push<void>(
-          SignPayloadPage.route(
-            connectionBridgeType: ConnectionBridgeType.walletconnect,
-          ),
-        );
+        // Navigator.of(context).push<void>(
+        //   SignPayloadPage.route(
+        //     connectionBridgeType: ConnectionBridgeType.walletconnect,
+        //   ),
+        // );
       }
     } catch (e) {
       log.e(e);

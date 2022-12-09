@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -8,11 +11,46 @@ part 'wallet_connect_cubit.g.dart';
 part 'wallet_connect_state.dart';
 
 class WalletConnectCubit extends Cubit<WalletConnectState> {
-  WalletConnectCubit() : super(const WalletConnectState());
+  WalletConnectCubit({
+    required this.connectedDappRepository,
+  }) : super(WalletConnectState()) {
+    initialise();
+  }
+
+  final ConnectedDappRepository connectedDappRepository;
 
   final log = getLogger('WalletConnectCubit');
 
-  void connect(String walletConnectUri) {
+  Future<void> initialise() async {
+    try {
+      log.i('initialise');
+      final List<SavedDappData> savedDapps =
+          await connectedDappRepository.findAll();
+      final ethereumConnectedDapps = List.of(savedDapps).where(
+        (element) => element.blockchainType == BlockchainType.ethereum,
+      );
+      for (final element in ethereumConnectedDapps) {
+        final sessionStore = element.wcSessionStore;
+        log.i('sessionStore - $sessionStore');
+
+        final WCClient? wcClient =
+            createWCClient(element.wcSessionStore!.session.topic);
+
+        await wcClient!.connectFromSessionStore(sessionStore!);
+        final wcClients = List.of(state.wcClients)..add(wcClient);
+        emit(
+          state.copyWith(
+            status: WalletConnectStatus.idle,
+            wcClients: wcClients,
+          ),
+        );
+      }
+    } catch (e) {
+      log.e(e);
+    }
+  }
+
+  Future<void> connect(String walletConnectUri) async {
     log.i('walletConnectUri - $walletConnectUri');
     final WCSession session = WCSession.from(walletConnectUri);
     final WCPeerMeta walletPeerMeta = WCPeerMeta(
@@ -26,25 +64,28 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     final WCClient? wcClient = createWCClient(session.topic);
     log.i('wcClient: $wcClient');
     if (wcClient == null) return;
-    wcClient.connectNewSession(session: session, peerMeta: walletPeerMeta);
+
+    await wcClient.connectNewSession(
+      session: session,
+      peerMeta: walletPeerMeta,
+    );
+
+    final wcClients = List.of(state.wcClients)..add(wcClient);
     emit(
       state.copyWith(
         status: WalletConnectStatus.idle,
-        wcClient: wcClient,
+        wcClients: wcClients,
       ),
     );
   }
 
-  WCClient? createWCClient(String? sessionTopic) {
-    final String? topic = sessionTopic;
-    if (topic == null) return null;
-
+  WCClient? createWCClient(String sessionkTopic) {
     return WCClient(
       onConnect: () {
         log.i('connected');
       },
       onDisconnect: (code, reason) {
-        log.i('onDisconnect');
+        log.i('onDisconnect - code: $code reason:  $reason');
       },
       onFailure: (dynamic error) {
         log.e('Failed to connect: $error');
@@ -57,6 +98,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           state.copyWith(
             sessionId: id,
             status: WalletConnectStatus.permission,
+            currentDAppPeerMeta: dAppPeerMeta,
           ),
         );
       },
