@@ -115,8 +115,7 @@ class ConfirmConnectionView extends StatelessWidget {
                           : context
                               .read<WalletConnectCubit>()
                               .state
-                              .wcClient!
-                              .remotePeerMeta!
+                              .currentDAppPeerMeta!
                               .name,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,

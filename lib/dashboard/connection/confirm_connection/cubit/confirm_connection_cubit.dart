@@ -7,6 +7,7 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wallet_connect/wallet_connect.dart';
 
@@ -30,8 +31,6 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
 
   final log = getLogger('ConfirmConnectionCubit');
 
-  final List<WCClient> wcClients = List.empty(growable: true);
-
   Future<void> connect({
     required ConnectionBridgeType connectionBridgeType,
   }) async {
@@ -49,7 +48,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
 
       switch (connectionBridgeType) {
 
-        //TODO(bibash) check if tezos or ethereum
+        // TODO(bibash): check if tezos or ethereum
 
         case ConnectionBridgeType.beacon:
           final KeyStoreModel sourceKeystore =
@@ -80,22 +79,45 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           }
           break;
         case ConnectionBridgeType.walletconnect:
-          final walletConnectState = walletConnectCubit.state;
-
           final List<String> walletAddresses = [currentAccount.walletAddress];
 
-          walletConnectState.wcClient!.approveSession(
+          final walletConnectState = walletConnectCubit.state;
+          final wcClient = walletConnectState.wcClients.lastWhereOrNull(
+            (element) =>
+                element.remotePeerMeta ==
+                walletConnectCubit.state.currentDAppPeerMeta,
+          );
+          if (wcClient == null) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
+
+          await dotenv.load();
+          final int WEB3_MAINNET_CHAIN_ID =
+              int.parse(dotenv.get('WEB3_MAINNET_CHAIN_ID'));
+
+          wcClient.approveSession(
             accounts: walletAddresses,
-            chainId: walletConnectState.wcClient!.chainId,
+            chainId: WEB3_MAINNET_CHAIN_ID,
           );
 
           log.i('Connected to walletconnect');
+
           final savedDappData = SavedDappData(
             walletAddress: currentAccount.walletAddress,
             blockchainType: BlockchainType.ethereum,
-            wcSessionStore: walletConnectState.wcClient!.sessionStore,
+            wcSessionStore: WCSessionStore(
+              session: wcClient.session!,
+              peerMeta: wcClient.peerMeta!,
+              peerId: wcClient.peerId!,
+              remotePeerId: wcClient.remotePeerId!,
+              remotePeerMeta: wcClient.remotePeerMeta!,
+              chainId: WEB3_MAINNET_CHAIN_ID,
+            ),
           );
-          log.i(savedDappData);
+
           log.i(savedDappData.toJson());
           await connectedDappRepository.insert(savedDappData);
           break;
@@ -140,8 +162,14 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
       case ConnectionBridgeType.walletconnect:
         log.i('walletconnect  connection rejected');
         final walletConnectState = walletConnectCubit.state;
-        walletConnectState.wcClient!
-            .rejectRequest(id: walletConnectState.sessionId!);
+
+        final wcClient = walletConnectState.wcClients.lastWhereOrNull(
+          (element) =>
+              element.remotePeerMeta == walletConnectState.currentDAppPeerMeta,
+        );
+        if (wcClient != null) {
+          wcClient.rejectRequest(id: walletConnectState.sessionId!);
+        }
         break;
     }
     emit(state.copyWith(appStatus: AppStatus.goBack));

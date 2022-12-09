@@ -4,7 +4,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:wallet_connect/wallet_connect.dart';
 
 class ConnectedDappRepository {
   ConnectedDappRepository(SecureStorageProvider secureStorageProvider)
@@ -64,8 +63,6 @@ class ConnectedDappRepository {
   }
 
   Future<bool> delete(SavedDappData savedDappData) async {
-    log.i('deleteing dapp data');
-
     late String id;
     switch (savedDappData.blockchainType) {
       case BlockchainType.ethereum:
@@ -75,7 +72,7 @@ class ConnectedDappRepository {
         id = savedDappData.peer!.publicKey;
         break;
     }
-
+    log.i('deleteing dapp data - ${SecureStorageKeys.savedDaaps}/$id');
     await _secureStorageProvider.delete('${SecureStorageKeys.savedDaaps}/$id');
     return true;
   }
@@ -115,18 +112,18 @@ class ConnectedDappRepository {
     }
 
     await _secureStorageProvider.set(
-      '${SecureStorageKeys.savedDaaps}/$id}',
+      '${SecureStorageKeys.savedDaaps}/$id',
       json.encode(savedDappData.toJson()),
     );
     return 1;
   }
 
-  Future<int> update(SavedDappData savedPeerData) async {
-    log.i('updating data');
-    await _secureStorageProvider.set(
-      '${SecureStorageKeys.savedDaaps}/${savedPeerData.peer!.publicKey}',
-      json.encode(savedPeerData.toJson()),
-    );
-    return 1;
-  }
+  // Future<int> update(SavedDappData savedPeerData) async {
+  //   log.i('updating data');
+  //   await _secureStorageProvider.set(
+  //     '${SecureStorageKeys.savedDaaps}/${savedPeerData.peer!.publicKey}',
+  //     json.encode(savedPeerData.toJson()),
+  //   );
+  //   return 1;
+  // }
 }

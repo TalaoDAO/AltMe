@@ -69,8 +69,8 @@ class _SignPayloadViewState extends State<SignPayloadView> {
     final BeaconRequest? beaconRequest =
         context.read<BeaconCubit>().state.beaconRequest;
 
-    final WCClient? wcClient =
-        context.read<WalletConnectCubit>().state.wcClient;
+    // final WCClient? wcClient =
+    //     context.read<WalletConnectCubit>().state.wcClient;
 
     final l10n = context.l10n;
     return BlocConsumer<SignPayloadCubit, SignPayloadState>(
@@ -128,7 +128,7 @@ class _SignPayloadViewState extends State<SignPayloadView> {
                         widget.connectionBridgeType ==
                                 ConnectionBridgeType.beacon
                             ? beaconRequest!.request!.appMetadata!.name!
-                            : wcClient!.remotePeerMeta!.name,
+                            : '',
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),

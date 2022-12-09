@@ -29,6 +29,7 @@ class RightsPage extends StatelessWidget {
         beacon: Beacon(),
         connectedDappRepository:
             ConnectedDappRepository(secure_storage.getSecureStorage),
+        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: RightsView(savedDappData: savedDappData),
     );

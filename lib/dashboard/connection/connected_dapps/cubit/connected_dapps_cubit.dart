@@ -86,18 +86,18 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
       emit(state.loading());
 
       log.i('fetching saved peers');
-      final List<SavedDappData> savedPeerDatas =
+      final List<SavedDappData> savedDapps =
           await connectedDappRepository.findAll();
 
-      log.i('savedPeerDatas - $savedPeerDatas');
+      log.i('savedPeerDatas - $savedDapps');
 
       final _peersListToShow = <SavedDappData>[];
 
       /// loop in saved permitted peer data
-      for (final savedPeerData in savedPeerDatas) {
+      for (final savedData in savedDapps) {
         /// display data for selected walletAddress only
-        if (walletAddress == savedPeerData.walletAddress) {
-          _peersListToShow.add(savedPeerData);
+        if (walletAddress == savedData.walletAddress) {
+          _peersListToShow.add(savedData);
         }
       }
 
