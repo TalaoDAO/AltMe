@@ -29,23 +29,26 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       final ethereumConnectedDapps = List.of(savedDapps).where(
         (element) => element.blockchainType == BlockchainType.ethereum,
       );
+
+      final List<WCClient> wcClients = List.empty(growable: true);
       for (final element in ethereumConnectedDapps) {
         final sessionStore = element.wcSessionStore;
         log.i('sessionStore - $sessionStore');
 
-        final WCClient? wcClient =
-            createWCClient(element.wcSessionStore!.session.topic);
+        final WCClient? wcClient = createWCClient(
+          element.wcSessionStore!.session.topic,
+          element.wcSessionStore!.remotePeerMeta,
+        );
 
         await wcClient!.connectFromSessionStore(sessionStore!);
-        final wcClients = List.of(state.wcClients)..add(wcClient);
-        emit(
-          state.copyWith(
-            status: WalletConnectStatus.idle,
-            wcClients: wcClients,
-            currentDAppPeerMeta: wcClient.remotePeerMeta,
-          ),
-        );
+        wcClients.add(wcClient);
       }
+      emit(
+        state.copyWith(
+          status: WalletConnectStatus.idle,
+          wcClients: wcClients,
+        ),
+      );
     } catch (e) {
       log.e(e);
     }
@@ -62,7 +65,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     );
     log.i('walletPeerMeta: $walletPeerMeta');
 
-    final WCClient? wcClient = createWCClient(session.topic);
+    final WCClient? wcClient = createWCClient(session.topic, null);
     log.i('wcClient: $wcClient');
     if (wcClient == null) return;
 
@@ -80,7 +83,10 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     );
   }
 
-  WCClient? createWCClient(String sessionkTopic) {
+  WCClient? createWCClient(
+    String sessionkTopic,
+    WCPeerMeta? currentDAppPeerMeta,
+  ) {
     return WCClient(
       onConnect: () {
         log.i('connected');
@@ -104,7 +110,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         );
       },
       onEthSign: (int id, WCEthereumSignMessage message) {
-        //T ODO(bibash): verify with current account
+        // TODO(bibash): verify with current account
         log.i('onEthSign');
         log.i('id: $id');
         log.i('message: $message');
@@ -114,6 +120,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
             signId: id,
             status: WalletConnectStatus.signPayload,
             signMessage: message,
+            currentDAppPeerMeta: currentDAppPeerMeta,
           ),
         );
       },
