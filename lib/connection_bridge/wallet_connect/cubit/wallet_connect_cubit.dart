@@ -42,6 +42,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
           state.copyWith(
             status: WalletConnectStatus.idle,
             wcClients: wcClients,
+            currentDAppPeerMeta: wcClient.remotePeerMeta,
           ),
         );
       }
@@ -103,10 +104,11 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         );
       },
       onEthSign: (int id, WCEthereumSignMessage message) {
-        //TODO(bibash): verify with current account
+        //T ODO(bibash): verify with current account
         log.i('onEthSign');
         log.i('id: $id');
         log.i('message: $message');
+
         emit(
           state.copyWith(
             signId: id,

@@ -46,7 +46,8 @@ class RightsCubit extends Cubit<RightsState> {
           );
           if (wcClient != null) {
             log.i(
-                '''disconnected - ${savedDappData.wcSessionStore!.remotePeerMeta}''');
+              '''disconnected - ${savedDappData.wcSessionStore!.remotePeerMeta}''',
+            );
             wcClient.disconnect();
             //remove from collection
           }

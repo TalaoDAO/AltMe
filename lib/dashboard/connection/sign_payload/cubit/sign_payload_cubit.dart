@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -9,8 +10,10 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 
 part 'sign_payload_cubit.g.dart';
 part 'sign_payload_state.dart';
@@ -22,6 +25,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
     required this.beaconCubit,
     required this.qrCodeScanCubit,
     required this.walletConnectCubit,
+    required this.connectedDappRepository,
   }) : super(const SignPayloadState());
 
   final WalletCubit walletCubit;
@@ -29,6 +33,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   final BeaconCubit beaconCubit;
   final QRCodeScanCubit qrCodeScanCubit;
   final WalletConnectCubit walletConnectCubit;
+  final ConnectedDappRepository connectedDappRepository;
 
   final log = getLogger('SignPayloadCubit');
 
@@ -172,36 +177,77 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           }
           break;
         case ConnectionBridgeType.walletconnect:
-          // final CryptoAccountData? currentAccount =
-          //     walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-          //   (element) =>
-          //       element.walletAddress == beaconRequest.request!.sourceAddress!,
-          // );
+          final walletConnectState = walletConnectCubit.state;
+          final wcClient = walletConnectState.wcClients.lastWhereOrNull(
+            (element) =>
+                element.remotePeerMeta ==
+                walletConnectCubit.state.currentDAppPeerMeta,
+          );
 
-          // if (currentAccount == null) {
-          // TODO(bibash): account data not available error message may be
-          //   throw ResponseMessage(
-          //     ResponseString
-          //         .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-          //   );
-          // }
+          log.i('wcClient -$wcClient');
+          if (wcClient == null) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
 
-          // final walletConnectState = walletConnectCubit.state;
+          final List<SavedDappData> savedDapps =
+              await connectedDappRepository.findAll();
 
-          // final dynamic signer = await Dartez.createSigner(
-          //   Dartez.writeKeyWithHint(currentAccount.secretKey, 'edsk'),
-          // );
+          final SavedDappData? dappData = savedDapps.firstWhereOrNull(
+            (element) =>
+                element.wcSessionStore!.session.key ==
+                wcClient.sessionStore.session.key,
+          );
 
-          // final signature = Dartez.signPayload(
-          //   signer: signer as SoftSigner,
-          //   payload: encodedPayload,
-          // );
+          log.i('dappData -$dappData');
+          if (dappData == null) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
 
-          // dynamic data = walletConnectState.wcClient!.approveRequest(
-          //   id: walletConnectState.signId!,
-          //   result: signature,
-          // );
-          // log.i('data -$data');
+          final CryptoAccountData? currentAccount =
+              walletCubit.state.cryptoAccount.data.firstWhereOrNull(
+            (element) => element.walletAddress == dappData.walletAddress,
+          );
+
+          log.i('currentAccount -$currentAccount');
+          if (currentAccount == null) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
+
+          final Credentials credentials =
+              EthPrivateKey.fromHex(currentAccount.secretKey);
+
+          await dotenv.load();
+          final int WEB3_MAINNET_CHAIN_ID =
+              int.parse(dotenv.get('WEB3_MAINNET_CHAIN_ID'));
+
+          final MsgSignature msgSignature = await credentials.signToSignature(
+            hexToBytes(encodedPayload),
+            chainId: WEB3_MAINNET_CHAIN_ID,
+          );
+
+          final String r = msgSignature.r.toRadixString(16);
+          log.i('r -$r');
+          final String s = msgSignature.s.toRadixString(16);
+          log.i('s -$s');
+          final String v = (msgSignature.v + 27).toRadixString(16);
+          log.i('v -$v');
+
+          final signature = '0x$r$s$v';
+          log.i('signature -$signature');
+
+          wcClient.approveRequest<String>(
+            id: walletConnectState.signId!,
+            result: signature,
+          );
 
           emit(
             state.copyWith(
@@ -243,9 +289,15 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         break;
       case ConnectionBridgeType.walletconnect:
         log.i('walletconnect Signing rejected');
-        // final walletConnectState = walletConnectCubit.state;
-        // walletConnectState.wcClient!
-        //     .rejectRequest(id: walletConnectState.signId!);
+        final walletConnectState = walletConnectCubit.state;
+
+        final wcClient = walletConnectState.wcClients.lastWhereOrNull(
+          (element) =>
+              element.remotePeerMeta == walletConnectState.currentDAppPeerMeta,
+        );
+        if (wcClient != null) {
+          wcClient.rejectRequest(id: walletConnectState.signId!);
+        }
         break;
     }
     emit(state.copyWith(appStatus: AppStatus.goBack));
