@@ -200,6 +200,9 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                   )
                 else
                   const SizedBox(height: Sizes.space2XLarge),
+                const SizedBox(
+                  height: Sizes.spaceSmall,
+                ),
                 Text(
                   l10n.importEasilyFrom,
                   style: Theme.of(context).textTheme.titleMedium,
