@@ -112,7 +112,8 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       onEthSign: (int id, WCEthereumSignMessage message) {
         log.i('onEthSign');
         log.i('id: $id');
-        log.i('message: $message');
+        log.i('message: ${message.raw}');
+        log.i('type: ${message.type}');
 
         emit(
           state.copyWith(
