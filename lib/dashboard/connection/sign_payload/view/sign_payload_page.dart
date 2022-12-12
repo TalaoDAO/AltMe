@@ -7,7 +7,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wallet_connect/wallet_connect.dart';
+import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class SignPayloadPage extends StatelessWidget {
   const SignPayloadPage({
@@ -35,6 +35,9 @@ class SignPayloadPage extends StatelessWidget {
         walletCubit: context.read<WalletCubit>(),
         qrCodeScanCubit: context.read<QRCodeScanCubit>(),
         walletConnectCubit: context.read<WalletConnectCubit>(),
+        connectedDappRepository: ConnectedDappRepository(
+          secure_storage.getSecureStorage,
+        ),
       ),
       child: SignPayloadView(connectionBridgeType: connectionBridgeType),
     );
@@ -68,9 +71,6 @@ class _SignPayloadViewState extends State<SignPayloadView> {
   Widget build(BuildContext context) {
     final BeaconRequest? beaconRequest =
         context.read<BeaconCubit>().state.beaconRequest;
-
-    // final WCClient? wcClient =
-    //     context.read<WalletConnectCubit>().state.wcClient;
 
     final l10n = context.l10n;
     return BlocConsumer<SignPayloadCubit, SignPayloadState>(
@@ -128,7 +128,11 @@ class _SignPayloadViewState extends State<SignPayloadView> {
                         widget.connectionBridgeType ==
                                 ConnectionBridgeType.beacon
                             ? beaconRequest!.request!.appMetadata!.name!
-                            : '',
+                            : context
+                                .read<WalletConnectCubit>()
+                                .state
+                                .currentDAppPeerMeta!
+                                .name,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),

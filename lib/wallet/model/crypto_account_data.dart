@@ -3,7 +3,6 @@
 import 'package:altme/app/shared/enum/enum.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallet_connect/wallet_connect.dart';
 
 part 'crypto_account_data.g.dart';
 
@@ -15,7 +14,6 @@ class CryptoAccountData extends Equatable {
     required this.walletAddress,
     this.isImported = false,
     this.blockchainType = BlockchainType.tezos,
-    this.wcClient,
   });
 
   factory CryptoAccountData.fromJson(Map<String, dynamic> json) =>
@@ -27,11 +25,9 @@ class CryptoAccountData extends Equatable {
   final bool isImported;
   final BlockchainType blockchainType;
   @JsonKey(ignore: true)
-  final WCClient? wcClient;
-
   Map<String, dynamic> toJson() => _$CryptoAccountDataToJson(this);
 
   @override
   List<Object?> get props =>
-      [name, secretKey, walletAddress, isImported, blockchainType, wcClient];
+      [name, secretKey, walletAddress, isImported, blockchainType];
 }
