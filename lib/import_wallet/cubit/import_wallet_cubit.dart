@@ -99,8 +99,6 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         accountName: accountName,
         mnemonicOrKey: mnemonicOrKey,
         isImported: !isFromOnboarding,
-        // TODO(all): dynamic the blockchain type depends on selected type
-        blockchainType: BlockchainType.tezos,
         onComplete: ({
           required CryptoAccount cryptoAccount,
           required MessageHandler messageHandler,
