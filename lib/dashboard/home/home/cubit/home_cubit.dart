@@ -490,7 +490,9 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> periodicCheckPassBaseStatus() async {
-    Timer.periodic(const Duration(minutes: 1), (timer) async {
+    // We check passbase status during five minutes
+    var timerCounter = 24;
+    Timer.periodic(const Duration(seconds: 20), (timer) async {
       final String? passbaseStatusFromStorage = await secureStorageProvider.get(
         SecureStorageKeys.passBaseStatus,
       );
@@ -506,7 +508,12 @@ class HomeCubit extends Cubit<HomeState> {
               passBaseStatus: PassBaseStatus.approved,
             ),
           );
+          timer.cancel();
         }
+      }
+      timerCounter--;
+      if (timerCounter == 0) {
+        timer.cancel();
       }
     });
   }
