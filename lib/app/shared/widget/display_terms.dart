@@ -34,14 +34,17 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
   late final displayTermsOfUseCubit = DisplayTermsOfUseCubit();
 
   Future<List<String>> getBodyData(String localeName) async {
-    final languagesList = ['fr', 'it', 'es', 'de'];
-    var language = 'en';
-    if (languagesList.contains(localeName)) {
-      language = localeName;
-    }
-    final privacyPathPart1 = 'assets/privacy/privacy_${language}_1.md';
-    final privacyPathPart2 = 'assets/privacy/privacy_${language}_2.md';
-    final termsPath = 'assets/terms/mobile_cgu_$language.md';
+    const String language = 'en';
+
+    /// we disable display of privacy asset in phone language for now
+    // final languagesList = ['fr', 'it', 'es', 'de'];
+    // if (languagesList.contains(localeName)) {
+    //   language = localeName;
+    // }
+
+    const privacyPathPart1 = 'assets/privacy/privacy_${language}_1.md';
+    const privacyPathPart2 = 'assets/privacy/privacy_${language}_2.md';
+    const termsPath = 'assets/terms/mobile_cgu_$language.md';
 
     final privacyDataPart1 = await _loadFile(privacyPathPart1);
     final privacyDataPart2 = await _loadFile(privacyPathPart2);
