@@ -110,7 +110,6 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         );
       },
       onEthSign: (int id, WCEthereumSignMessage message) {
-        // TODO(bibash): verify with current account
         log.i('onEthSign');
         log.i('id: $id');
         log.i('message: $message');
