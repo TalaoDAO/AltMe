@@ -53,6 +53,12 @@ class BaseTextField extends StatelessWidget {
         cursorColor: Theme.of(context).colorScheme.primary,
         keyboardType: type,
         maxLines: maxLines,
+        toolbarOptions: const ToolbarOptions(
+          paste: true,
+          cut: true,
+          selectAll: true,
+          copy: true,
+        ),
         textCapitalization: textCapitalization,
         style: Theme.of(context).textTheme.normal,
         validator: validator,
