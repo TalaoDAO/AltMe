@@ -79,7 +79,7 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
       await walletCubit.createCryptoWallet(
         accountName: accountName,
         mnemonicOrKey: state.mnemonicOrKey,
-        isImported: false,
+        isImported: true,
         blockchainType: blockchainType,
         onComplete: ({
           required CryptoAccount cryptoAccount,
