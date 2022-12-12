@@ -10,7 +10,6 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
@@ -222,31 +221,34 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             );
           }
 
+          const _messagePrefix = '\u0019Ethereum Signed Message:\n';
+
+          final payloadBytes = hexToBytes(encodedPayload);
+
+          final prefix = _messagePrefix + payloadBytes.length.toString();
+          final prefixBytes = ascii.encode(prefix);
+
+          final concatPayload = Uint8List.fromList(prefixBytes + payloadBytes);
+
           final Credentials credentials =
               EthPrivateKey.fromHex(currentAccount.secretKey);
 
-          await dotenv.load();
-          final int WEB3_MAINNET_CHAIN_ID =
-              int.parse(dotenv.get('WEB3_MAINNET_CHAIN_ID'));
+          final MsgSignature signature =
+              await credentials.signToSignature(concatPayload);
 
-          final MsgSignature msgSignature = await credentials.signToSignature(
-            hexToBytes(encodedPayload),
-            chainId: WEB3_MAINNET_CHAIN_ID,
-          );
-
-          final String r = msgSignature.r.toRadixString(16);
+          final String r = signature.r.toRadixString(16);
           log.i('r -$r');
-          final String s = msgSignature.s.toRadixString(16);
+          final String s = signature.s.toRadixString(16);
           log.i('s -$s');
-          final String v = (msgSignature.v + 27).toRadixString(16);
+          final String v = signature.v.toRadixString(16);
           log.i('v -$v');
 
-          final signature = '0x$r$s$v';
-          log.i('signature -$signature');
+          final signedDataAsHex = '0x$r$s$v';
+          log.i('signedDataAsHex -$signedDataAsHex');
 
           wcClient.approveRequest<String>(
             id: walletConnectState.signId!,
-            result: signature,
+            result: signedDataAsHex,
           );
 
           emit(
