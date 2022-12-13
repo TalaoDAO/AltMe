@@ -96,9 +96,9 @@ double formatEthAmount({
   EtherUnit fromUnit = EtherUnit.wei,
   EtherUnit toUnit = EtherUnit.ether,
 }) {
-  if (amount == BigInt.zero) return 0.0;
+  if (amount == BigInt.zero) return 0;
 
-  String ethAmount = EtherAmount.fromUnitAndValue(fromUnit, amount)
+  final String ethAmount = EtherAmount.fromUnitAndValue(fromUnit, amount)
       .getValueInUnit(toUnit)
       .toStringAsFixed(6)
       .characters
