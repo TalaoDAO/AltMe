@@ -15,15 +15,13 @@ class FeeDetails extends StatelessWidget {
   final double amount;
   final double tokenUSDRate;
   final String symbol;
-  final int fee;
+  final double fee;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final formattedFee = fee / 1e6;
-
-    final double grandTotal = amount + formattedFee;
+    final double grandTotal = amount + fee;
     return BackgroundCard(
       color: Theme.of(context).colorScheme.cardBackground,
       child: Column(
@@ -38,7 +36,7 @@ class FeeDetails extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '${amount.toStringAsFixed(6).formatNumber()} $symbol',
+                '${amount.toStringAsFixed(6).formatNumber()}  $symbol',
                 style: Theme.of(context).textTheme.caption,
               ),
             ],
@@ -52,7 +50,7 @@ class FeeDetails extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '''${formattedFee.toStringAsFixed(6).formatNumber()} $symbol''',
+                '${fee.toStringAsFixed(6).formatNumber()} $symbol',
                 style: Theme.of(context).textTheme.caption,
               ),
             ],

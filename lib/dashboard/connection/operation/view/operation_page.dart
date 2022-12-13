@@ -9,22 +9,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 
-class BeaconOperationPage extends StatelessWidget {
-  const BeaconOperationPage({
+class OperationPage extends StatelessWidget {
+  const OperationPage({
     Key? key,
+    required this.connectionBridgeType,
   }) : super(key: key);
 
-  static Route route() {
+  final ConnectionBridgeType connectionBridgeType;
+
+  static Route route({required ConnectionBridgeType connectionBridgeType}) {
     return MaterialPageRoute<void>(
-      builder: (_) => const BeaconOperationPage(),
-      settings: const RouteSettings(name: '/BeaconOperationPage'),
+      builder: (_) => OperationPage(
+        connectionBridgeType: connectionBridgeType,
+      ),
+      settings: const RouteSettings(name: '/OperationPage'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => BeaconOperationCubit(
+      create: (_) => OperationCubit(
         beacon: Beacon(),
         beaconCubit: context.read<BeaconCubit>(),
         walletCubit: context.read<WalletCubit>(),
@@ -32,29 +37,37 @@ class BeaconOperationPage extends StatelessWidget {
         keyGenerator: KeyGenerator(),
         nftCubit: context.read<NftCubit>(),
         tokensCubit: context.read<TokensCubit>(),
+        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
-      child: const BeaconOperationView(),
+      child: OperationView(connectionBridgeType: connectionBridgeType),
     );
   }
 }
 
-class BeaconOperationView extends StatefulWidget {
-  const BeaconOperationView({
+class OperationView extends StatefulWidget {
+  const OperationView({
     Key? key,
+    required this.connectionBridgeType,
   }) : super(key: key);
 
+  final ConnectionBridgeType connectionBridgeType;
+
   @override
-  State<BeaconOperationView> createState() => _BeaconOperationViewState();
+  State<OperationView> createState() => _OperationViewState();
 }
 
-class _BeaconOperationViewState extends State<BeaconOperationView> {
+class _OperationViewState extends State<OperationView> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
-        await context.read<BeaconOperationCubit>().getXtzPrice();
-        await context.read<BeaconOperationCubit>().getFees();
+        await context
+            .read<OperationCubit>()
+            .getUsdPrice(widget.connectionBridgeType);
+        await context
+            .read<OperationCubit>()
+            .getPrices(widget.connectionBridgeType);
       },
     );
   }
@@ -63,15 +76,35 @@ class _BeaconOperationViewState extends State<BeaconOperationView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final BeaconRequest beaconRequest =
-        context.read<BeaconCubit>().state.beaconRequest!;
+    final BeaconRequest? beaconRequest =
+        context.read<BeaconCubit>().state.beaconRequest;
 
-    final amount =
-        int.parse(beaconRequest.operationDetails!.first.amount!) / 1e6;
+    final WalletConnectState walletConnectState =
+        context.read<WalletConnectCubit>().state;
 
-    const symbol = 'XTZ';
+    late String dAppName;
+    late String sender;
+    late String reciever;
 
-    return BlocConsumer<BeaconOperationCubit, BeaconOperationState>(
+    late String symbol;
+
+    switch (widget.connectionBridgeType) {
+      case ConnectionBridgeType.beacon:
+        dAppName = beaconRequest!.request!.appMetadata!.name!;
+        symbol = 'XTZ';
+        sender = beaconRequest.request!.sourceAddress!;
+        reciever = beaconRequest.operationDetails!.first.destination!;
+        break;
+
+      case ConnectionBridgeType.walletconnect:
+        dAppName = walletConnectState.currentDAppPeerMeta!.name;
+        symbol = 'ETH';
+        sender = walletConnectState.transaction!.from;
+        reciever = walletConnectState.transaction!.to ?? '';
+        break;
+    }
+
+    return BlocConsumer<OperationCubit, OperationState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -105,15 +138,18 @@ class _BeaconOperationViewState extends State<BeaconOperationView> {
 
         return WillPopScope(
           onWillPop: () async {
-            context.read<BeaconOperationCubit>().rejectOperation();
+            context.read<OperationCubit>().rejectOperation(
+                  connectionBridgeType: widget.connectionBridgeType,
+                );
             return true;
           },
           child: BasePage(
             scrollView: false,
             title: l10n.confirm,
             titleLeading: BackLeadingButton(
-              onPressed: () =>
-                  context.read<BeaconOperationCubit>().rejectOperation(),
+              onPressed: () => context.read<OperationCubit>().rejectOperation(
+                    connectionBridgeType: widget.connectionBridgeType,
+                  ),
             ),
             body: BackgroundCard(
               height: double.infinity,
@@ -123,7 +159,9 @@ class _BeaconOperationViewState extends State<BeaconOperationView> {
                   ? ErrorView(
                       message: message,
                       onTap: () {
-                        context.read<BeaconOperationCubit>().getFees();
+                        context
+                            .read<OperationCubit>()
+                            .getPrices(widget.connectionBridgeType);
                       },
                     )
                   : SingleChildScrollView(
@@ -135,13 +173,13 @@ class _BeaconOperationViewState extends State<BeaconOperationView> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Text(
-                              beaconRequest.request!.appMetadata!.name!,
+                              dAppName,
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                             const SizedBox(height: Sizes.spaceSmall),
                             MyText(
-                              '''${amount.toStringAsFixed(6).formatNumber()} $symbol''',
+                              '''${state.amount.toStringAsFixed(6).formatNumber()} $symbol''',
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
@@ -159,11 +197,9 @@ class _BeaconOperationViewState extends State<BeaconOperationView> {
                             ),
                             const SizedBox(height: Sizes.spaceSmall),
                             SenderReceiver(
-                              from: beaconRequest.request!.sourceAddress!,
-                              to: beaconRequest
-                                  .operationDetails!.first.destination!,
-                              dAppName:
-                                  beaconRequest.request!.appMetadata!.name!,
+                              from: sender,
+                              to: reciever,
+                              dAppName: dAppName,
                             ),
                             const SizedBox(height: Sizes.spaceNormal),
                             Image.asset(
@@ -172,10 +208,10 @@ class _BeaconOperationViewState extends State<BeaconOperationView> {
                             ),
                             const SizedBox(height: Sizes.spaceNormal),
                             FeeDetails(
-                              amount: amount,
+                              amount: state.amount,
                               symbol: symbol,
-                              tokenUSDRate: state.xtzUSDRate,
-                              fee: state.totalFee ?? 0,
+                              tokenUSDRate: state.usdRate,
+                              fee: state.fee,
                             ),
                             const SizedBox(height: Sizes.spaceNormal),
                           ],
@@ -201,8 +237,8 @@ class _BeaconOperationViewState extends State<BeaconOperationView> {
                           ? null
                           : () {
                               context
-                                  .read<BeaconOperationCubit>()
-                                  .sendOperataion();
+                                  .read<OperationCubit>()
+                                  .sendOperataion(widget.connectionBridgeType);
                             },
                     ),
                     const SizedBox(height: 8),
@@ -210,7 +246,9 @@ class _BeaconOperationViewState extends State<BeaconOperationView> {
                       borderRadius: Sizes.normalRadius,
                       text: l10n.cancel,
                       onPressed: () {
-                        context.read<BeaconOperationCubit>().rejectOperation();
+                        context.read<OperationCubit>().rejectOperation(
+                              connectionBridgeType: widget.connectionBridgeType,
+                            );
                       },
                     ),
                   ],

@@ -138,10 +138,19 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
             break;
         }
       },
-      onEthSendTransaction: (id, tx) {
+      onEthSendTransaction: (int id, WCEthereumTransaction transaction) {
         log.i('onEthSendTransaction');
         log.i('id: $id');
-        log.i('tx: $tx');
+        log.i('tx: $transaction');
+        emit(
+          state.copyWith(
+            signId: id,
+            status: WalletConnectStatus.operation,
+            transactionId: id,
+            transaction: transaction,
+            currentDAppPeerMeta: currentDAppPeerMeta,
+          ),
+        );
       },
       onEthSignTransaction: (id, tx) {
         log.i('onEthSignTransaction');

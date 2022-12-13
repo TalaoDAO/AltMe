@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-extension NumberFormatter on String {
+extension StringExtension on String {
   String formatNumber() {
     if (isEmpty || length < 3) return this;
     final formatter = NumberFormat('#,###');
@@ -25,4 +26,12 @@ extension NumberFormatter on String {
       return this;
     }
   }
+
+  bool isValidEmail() {
+    return RegExp(
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
+    ).hasMatch(this);
+  }
+
+  Characters get characters => Characters(this);
 }
