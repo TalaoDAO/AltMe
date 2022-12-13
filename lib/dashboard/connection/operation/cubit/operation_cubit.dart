@@ -94,12 +94,13 @@ class OperationCubit extends Cubit<OperationState> {
           );
           amount = formatEthAmount(amount: ethAmount.getInWei);
 
-          fee = await estimateEthereumFee(
+          final feeData = await estimateEthereumFee(
             sender: EthereumAddress.fromHex(transaction.from),
-            to: EthereumAddress.fromHex(transaction.to!),
+            reciever: EthereumAddress.fromHex(transaction.to!),
             amount: ethAmount,
             data: transaction.data,
           );
+          fee = formatEthAmount(amount: feeData);
           break;
       }
 
@@ -207,6 +208,7 @@ class OperationCubit extends Cubit<OperationState> {
           log.i('after operationList.executeAndMonitor()');
 
           final transactionHash = operationList.result.id;
+          log.i('transactionHash - $transactionHash');
 
           final Map response = await beacon.operationResponse(
             id: beaconCubit.state.beaconRequest!.request!.id!,
@@ -216,7 +218,56 @@ class OperationCubit extends Cubit<OperationState> {
           success = json.decode(response['success'].toString()) as bool;
           break;
         case ConnectionBridgeType.walletconnect:
-          success = false;
+          final walletConnectState = walletConnectCubit.state;
+          final wcClient = walletConnectState.wcClients.lastWhereOrNull(
+            (element) =>
+                element.remotePeerMeta ==
+                walletConnectCubit.state.currentDAppPeerMeta,
+          );
+
+          log.i('wcClient -$wcClient');
+          if (wcClient == null) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
+
+          final CryptoAccountData? currentAccount =
+              walletCubit.state.cryptoAccount.data.firstWhereOrNull(
+            (element) =>
+                element.walletAddress == walletConnectState.transaction!.from,
+          );
+
+          log.i('currentAccount -$currentAccount');
+          if (currentAccount == null) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
+
+          final WCEthereumTransaction transaction =
+              walletConnectCubit.state.transaction!;
+          final EtherAmount ethAmount = EtherAmount.fromUnitAndValue(
+            EtherUnit.wei,
+            transaction.value ?? 0,
+          );
+
+          final String transactionHash = await sendEthereumTransaction(
+            privateKey: currentAccount.secretKey,
+            sender: EthereumAddress.fromHex(transaction.from),
+            reciever: EthereumAddress.fromHex(transaction.to!),
+            amount: ethAmount,
+          );
+          log.i('transactionHash - $transactionHash');
+
+          wcClient.approveRequest<String>(
+            id: walletConnectState.transactionId!,
+            result: transactionHash,
+          );
+
+          success = true;
           break;
       }
 
@@ -451,9 +502,9 @@ class OperationCubit extends Cubit<OperationState> {
     return operations;
   }
 
-  Future<double> estimateEthereumFee({
+  Future<BigInt> estimateEthereumFee({
     required EthereumAddress sender,
-    required EthereumAddress to,
+    required EthereumAddress reciever,
     required EtherAmount amount,
     String? data,
   }) async {
@@ -465,14 +516,60 @@ class OperationCubit extends Cubit<OperationState> {
     try {
       final BigInt gas = await web3Client.estimateGas(
         sender: sender,
-        to: to,
+        to: reciever,
         value: amount,
         gasPrice: gasPrice,
         data: data != null ? hexToBytes(data) : null,
       );
-      return formatEthAmount(amount: gas * gasPrice.getInWei);
+      return gas * gasPrice.getInWei;
     } catch (err) {
-      return formatEthAmount(amount: BigInt.from(21000) * gasPrice.getInWei);
+      return BigInt.from(21000) * gasPrice.getInWei;
     }
+  }
+
+  Future<String> sendEthereumTransaction({
+    required String privateKey,
+    required EthereumAddress sender,
+    required EthereumAddress reciever,
+    required EtherAmount amount,
+    BigInt? gas,
+    String? data,
+  }) async {
+    await dotenv.load();
+    final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
+    final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
+    final int nonce = await web3Client.getTransactionCount(sender);
+    final EtherAmount gasPrice = await web3Client.getGasPrice();
+
+    BigInt? gasLimit = gas != null ? gas ~/ gasPrice.getInWei : null;
+    gasLimit ??= (await estimateEthereumFee(
+          sender: sender,
+          reciever: reciever,
+          amount: amount,
+          data: data,
+        )) ~/
+        gasPrice.getInWei;
+
+    final chainId = int.parse(dotenv.get('WEB3_MAINNET_CHAIN_ID'));
+
+    final Credentials credentials = EthPrivateKey.fromHex(privateKey);
+
+    final transaction = Transaction(
+      from: sender,
+      to: reciever,
+      gasPrice: gasPrice,
+      value: amount,
+      data: data != null ? hexToBytes(data) : null,
+      nonce: nonce,
+      maxGas: gasLimit.toInt(),
+    );
+
+    final String transacationHash = await web3Client.sendTransaction(
+      credentials,
+      transaction,
+      chainId: chainId,
+    );
+
+    return transacationHash;
   }
 }
