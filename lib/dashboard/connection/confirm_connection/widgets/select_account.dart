@@ -26,13 +26,8 @@ class SelectAccount extends StatelessWidget {
         ),
         BlocBuilder<WalletCubit, WalletState>(
           builder: (context, walletState) {
-            final tezosAccounts = walletState.cryptoAccount.data
-                .where(
-                  (element) => element.blockchainType == BlockchainType.tezos,
-                )
-                .toList();
             return ListView.separated(
-              itemCount: tezosAccounts.length,
+              itemCount: walletState.cryptoAccount.data.length,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, i) {
