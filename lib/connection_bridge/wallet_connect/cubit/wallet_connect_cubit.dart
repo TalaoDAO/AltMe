@@ -113,16 +113,30 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         log.i('onEthSign');
         log.i('id: $id');
         log.i('message: ${message.raw}');
+        log.i('data: ${message.data}');
         log.i('type: ${message.type}');
 
-        emit(
-          state.copyWith(
-            signId: id,
-            status: WalletConnectStatus.signPayload,
-            signMessage: message,
-            currentDAppPeerMeta: currentDAppPeerMeta,
-          ),
-        );
+        switch (message.type) {
+          case WCSignType.MESSAGE:
+          case WCSignType.TYPED_MESSAGE:
+            final wcClient = state.wcClients.lastWhereOrNull(
+              (element) => element.remotePeerMeta == currentDAppPeerMeta,
+            );
+            if (wcClient != null) {
+              wcClient.rejectRequest(id: id);
+            }
+            break;
+          case WCSignType.PERSONAL_MESSAGE:
+            emit(
+              state.copyWith(
+                signId: id,
+                status: WalletConnectStatus.signPayload,
+                signMessage: message,
+                currentDAppPeerMeta: currentDAppPeerMeta,
+              ),
+            );
+            break;
+        }
       },
       onEthSendTransaction: (id, tx) {
         log.i('onEthSendTransaction');
