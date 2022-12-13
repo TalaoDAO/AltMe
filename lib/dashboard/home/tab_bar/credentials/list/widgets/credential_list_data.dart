@@ -79,6 +79,16 @@ class CredentialListData extends StatelessWidget {
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
                 ],
+                if (state.myProfessionalCredentials.isNotEmpty) ...[
+                  /// My Professional Credentials
+                  HomeCredentialWidget(
+                    title: l10n.myProfessionalrCards,
+                    credentials: state.myProfessionalCredentials,
+                    showAddOption: true,
+                    categorySubtitle: l10n.myProfessionalrCardsSubtitle,
+                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
+                ],
                 if (advanceSettingsState.isOtherEnabled &&
                     state.othersCredentials.isNotEmpty) ...[
                   /// Other Credentials

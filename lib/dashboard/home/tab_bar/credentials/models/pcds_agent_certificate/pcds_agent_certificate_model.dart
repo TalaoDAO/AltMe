@@ -16,7 +16,7 @@ class PcdsAgentCertificateModel extends CredentialSubjectModel {
           type: type,
           issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.pcdsAgentCertificate,
-          credentialCategory: CredentialCategory.othersCards,
+          credentialCategory: CredentialCategory.myProfessionalCards,
         );
 
   factory PcdsAgentCertificateModel.fromJson(Map<String, dynamic> json) =>

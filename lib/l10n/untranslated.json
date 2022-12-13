@@ -669,7 +669,9 @@
     "uploadFile",
     "creators",
     "publishers",
-    "createDate"
+    "createDate",
+    "myProfessionalrCards",
+    "myProfessionalrCardsSubtitle"
   ],
 
   "es": [
@@ -1342,7 +1344,9 @@
     "uploadFile",
     "creators",
     "publishers",
-    "createDate"
+    "createDate",
+    "myProfessionalrCards",
+    "myProfessionalrCardsSubtitle"
   ],
 
   "fr": [
@@ -2015,7 +2019,9 @@
     "uploadFile",
     "creators",
     "publishers",
-    "createDate"
+    "createDate",
+    "myProfessionalrCards",
+    "myProfessionalrCardsSubtitle"
   ],
 
   "it": [
@@ -2688,6 +2694,8 @@
     "uploadFile",
     "creators",
     "publishers",
-    "createDate"
+    "createDate",
+    "myProfessionalrCards",
+    "myProfessionalrCardsSubtitle"
   ]
 }

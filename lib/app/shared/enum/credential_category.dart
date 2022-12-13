@@ -4,5 +4,6 @@ enum CredentialCategory {
   communityCards,
   blockchainAccountsCards,
   passCards,
-  othersCards
+  othersCards,
+  myProfessionalCards,
 }

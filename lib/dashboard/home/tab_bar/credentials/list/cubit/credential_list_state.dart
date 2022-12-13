@@ -5,22 +5,17 @@ class CredentialListState extends Equatable {
   CredentialListState({
     this.status = AppStatus.init,
     this.message,
-    List<HomeCredential>? gamingCredentials,
-    List<HomeCredential>? communityCredentials,
-    List<HomeCredential>? identityCredentials,
-    List<HomeCredential>? blockchainAccountsCredentials,
-    List<HomeCredential>? passCredentials,
-    List<HomeCredential>? othersCredentials,
+    this.gamingCredentials = const [],
+    this.communityCredentials = const [],
+    this.identityCredentials = const [],
+    this.blockchainAccountsCredentials = const [],
+    this.passCredentials = const [],
+    this.othersCredentials = const [],
+    this.myProfessionalCredentials = const [],
     List<CredentialSubjectType>? gamingCategories,
     List<CredentialSubjectType>? communityCategories,
     List<CredentialSubjectType>? identityCategories,
-  })  : gamingCredentials = gamingCredentials ?? [],
-        communityCredentials = communityCredentials ?? [],
-        identityCredentials = identityCredentials ?? [],
-        blockchainAccountsCredentials = blockchainAccountsCredentials ?? [],
-        passCredentials = passCredentials ?? [],
-        othersCredentials = othersCredentials ?? [],
-        gamingCategories =
+  })  : gamingCategories =
             gamingCategories ?? List.from(DiscoverList.gamingCategories),
         communityCategories =
             communityCategories ?? List.from(DiscoverList.communityCategories),
@@ -37,6 +32,7 @@ class CredentialListState extends Equatable {
   final List<HomeCredential> blockchainAccountsCredentials;
   final List<HomeCredential> passCredentials;
   final List<HomeCredential> othersCredentials;
+  final List<HomeCredential> myProfessionalCredentials;
   final List<CredentialSubjectType> gamingCategories;
   final List<CredentialSubjectType> communityCategories;
   final List<CredentialSubjectType> identityCategories;
@@ -51,6 +47,7 @@ class CredentialListState extends Equatable {
       blockchainAccountsCredentials: blockchainAccountsCredentials,
       passCredentials: passCredentials,
       othersCredentials: othersCredentials,
+      myProfessionalCredentials: myProfessionalCredentials,
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
       identityCategories: identityCategories,
@@ -69,6 +66,7 @@ class CredentialListState extends Equatable {
       blockchainAccountsCredentials: blockchainAccountsCredentials,
       passCredentials: passCredentials,
       othersCredentials: othersCredentials,
+      myProfessionalCredentials: myProfessionalCredentials,
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
       identityCategories: identityCategories,
@@ -84,6 +82,7 @@ class CredentialListState extends Equatable {
       blockchainAccountsCredentials: blockchainAccountsCredentials,
       passCredentials: passCredentials,
       othersCredentials: othersCredentials,
+      myProfessionalCredentials: myProfessionalCredentials,
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
       identityCategories: identityCategories,
@@ -100,6 +99,7 @@ class CredentialListState extends Equatable {
       blockchainAccountsCredentials: blockchainAccountsCredentials,
       passCredentials: passCredentials,
       othersCredentials: othersCredentials,
+      myProfessionalCredentials: myProfessionalCredentials,
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
       identityCategories: identityCategories,
@@ -113,6 +113,7 @@ class CredentialListState extends Equatable {
     List<HomeCredential>? blockchainAccountsCredentials,
     List<HomeCredential>? passCredentials,
     List<HomeCredential>? othersCredentials,
+    List<HomeCredential>? myProfessionalCredentials,
     List<CredentialSubjectType>? gamingCategories,
     List<CredentialSubjectType>? communityCategories,
     List<CredentialSubjectType>? identityCategories,
@@ -126,6 +127,8 @@ class CredentialListState extends Equatable {
           blockchainAccountsCredentials ?? this.blockchainAccountsCredentials,
       passCredentials: passCredentials ?? this.passCredentials,
       othersCredentials: othersCredentials ?? this.othersCredentials,
+      myProfessionalCredentials:
+          myProfessionalCredentials ?? this.myProfessionalCredentials,
       gamingCategories: gamingCategories ?? this.gamingCategories,
       communityCategories: communityCategories ?? this.communityCategories,
       identityCategories: identityCategories ?? this.identityCategories,
@@ -147,6 +150,7 @@ class CredentialListState extends Equatable {
       blockchainAccountsCredentials: blockchainAccountsCredentials,
       passCredentials: passCredentials,
       othersCredentials: othersCredentials,
+      myProfessionalCredentials: myProfessionalCredentials,
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
       identityCategories: identityCategories,
@@ -168,5 +172,6 @@ class CredentialListState extends Equatable {
         gamingCategories,
         communityCategories,
         identityCategories,
+        myProfessionalCredentials,
       ];
 }
