@@ -9,18 +9,23 @@ part 'nft_model.g.dart';
 @JsonSerializable()
 @immutable
 class NftModel extends Equatable {
-  const NftModel(
-    this.id,
-    this.name,
+  const NftModel({
+    required this.id,
+    required this.name,
     this.displayUri,
     this.thumbnailUri,
-    this.balance,
+    required this.balance,
     this.description,
-    this.tokenId,
+    required this.tokenId,
     this.symbol,
-    this.contractAddress,
+    required this.contractAddress,
     this.standard,
-  );
+    this.identifier,
+    this.creators,
+    this.publishers,
+    this.date,
+    this.isTransferable,
+  });
 
   factory NftModel.fromJson(Map<String, dynamic> json) =>
       _$NftModelFromJson(json);
@@ -37,6 +42,11 @@ class NftModel extends Equatable {
   final int id;
   final String? symbol;
   final String contractAddress;
+  final String? identifier;
+  final List<String>? creators;
+  final List<String>? publishers;
+  final String? date;
+  final bool? isTransferable;
 
   Map<String, dynamic> toJson() => _$NftModelToJson(this);
 
@@ -81,5 +91,10 @@ class NftModel extends Equatable {
         thumbnailUri,
         balance,
         description,
+        identifier,
+        publishers,
+        creators,
+        date,
+        isTransferable,
       ];
 }

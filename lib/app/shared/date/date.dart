@@ -54,14 +54,35 @@ class UiDate {
   static String formatDateForCredentialCard(String date) {
     try {
       return DateFormat("dd'th' MMM yyyy").format(
-        DateFormat('y-M-dThh:mm:ssZ').parse(
-          date,
-          true,
-        ).toLocal(),
+        DateFormat('y-M-dThh:mm:ssZ')
+            .parse(
+              date,
+              true,
+            )
+            .toLocal(),
       );
     } catch (e, s) {
       getLogger('date').e('e: $e, s: $s');
       return '';
+    }
+  }
+
+  static String? normalFormat(String? date) {
+    try {
+      if (date?.isEmpty ?? true) {
+        return null;
+      }
+      return DateFormat('dd-MM-yyyy HH:mm').format(
+        DateFormat('y-M-dThh:mm:ssZ')
+            .parse(
+              date!,
+              true,
+            )
+            .toLocal(),
+      );
+    } catch (e, s) {
+      getLogger('date').e('e: $e, s: $s');
+      return null;
     }
   }
 }

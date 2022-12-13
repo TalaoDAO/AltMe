@@ -666,7 +666,10 @@
     "restorePhraseTextFieldHint",
     "restoreCredentialStep2Title",
     "loadFile",
-    "uploadFile"
+    "uploadFile",
+    "creators",
+    "publishers",
+    "createDate"
   ],
 
   "es": [
@@ -1336,7 +1339,10 @@
     "restorePhraseTextFieldHint",
     "restoreCredentialStep2Title",
     "loadFile",
-    "uploadFile"
+    "uploadFile",
+    "creators",
+    "publishers",
+    "createDate"
   ],
 
   "fr": [
@@ -2006,7 +2012,10 @@
     "restorePhraseTextFieldHint",
     "restoreCredentialStep2Title",
     "loadFile",
-    "uploadFile"
+    "uploadFile",
+    "creators",
+    "publishers",
+    "createDate"
   ],
 
   "it": [
@@ -2676,6 +2685,9 @@
     "restorePhraseTextFieldHint",
     "restoreCredentialStep2Title",
     "loadFile",
-    "uploadFile"
+    "uploadFile",
+    "creators",
+    "publishers",
+    "createDate"
   ]
 }

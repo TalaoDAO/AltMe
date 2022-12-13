@@ -147,7 +147,7 @@
   "address": "Address",
   "maritalStatus": "Marital Status",
   "nationality": "Nationality",
-  "identifier": "identifier",
+  "identifier": "Identifier",
   "issuer": "Issued by",
   "workFor": "Work for",
   "startDate": "Since",
@@ -723,5 +723,8 @@
   "restorePhraseTextFieldHint": "Enter your Recovery Phrase (or mnemonic phrase) here...",
   "restoreCredentialStep2Title": "Step 2 : Upload your credentials backup file",
   "loadFile": "Load file",
-  "uploadFile": "Upload file"
+  "uploadFile": "Upload file",
+  "creators": "Creators",
+  "publishers": "Publishers",
+  "createDate": "Create date"
 }
