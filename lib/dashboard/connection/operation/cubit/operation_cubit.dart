@@ -8,9 +8,13 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:tezart/tezart.dart';
+import 'package:wallet_connect/wallet_connect.dart';
+import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 part 'operation_cubit.g.dart';
@@ -82,14 +86,25 @@ class OperationCubit extends Cubit<OperationState> {
               1e6;
           break;
         case ConnectionBridgeType.walletconnect:
+          final WCEthereumTransaction transaction =
+              walletConnectCubit.state.transaction!;
           final EtherAmount ethAmount = EtherAmount.fromUnitAndValue(
             EtherUnit.wei,
-            walletConnectCubit.state.transaction!.value ?? 0,
+            transaction.value ?? 0,
           );
           amount = formatEthAmount(amount: ethAmount.getInWei);
-          fee = 0;
+
+          fee = await estimateEthereumFee(
+            sender: EthereumAddress.fromHex(transaction.from),
+            to: EthereumAddress.fromHex(transaction.to!),
+            amount: ethAmount,
+            data: transaction.data,
+          );
           break;
       }
+
+      log.i('amount - $amount');
+      log.i('fee - $fee');
 
       emit(
         state.copyWith(
@@ -434,5 +449,30 @@ class OperationCubit extends Cubit<OperationState> {
 
     log.i('operations - $operations');
     return operations;
+  }
+
+  Future<double> estimateEthereumFee({
+    required EthereumAddress sender,
+    required EthereumAddress to,
+    required EtherAmount amount,
+    String? data,
+  }) async {
+    await dotenv.load();
+    final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
+    final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
+    final gasPrice = await web3Client.getGasPrice();
+
+    try {
+      final BigInt gas = await web3Client.estimateGas(
+        sender: sender,
+        to: to,
+        value: amount,
+        gasPrice: gasPrice,
+        data: data != null ? hexToBytes(data) : null,
+      );
+      return formatEthAmount(amount: gas * gasPrice.getInWei);
+    } catch (err) {
+      return formatEthAmount(amount: BigInt.from(21000) * gasPrice.getInWei);
+    }
   }
 }
