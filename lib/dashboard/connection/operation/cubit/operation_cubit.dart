@@ -11,12 +11,13 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:tezart/tezart.dart';
+import 'package:web3dart/web3dart.dart';
 
-part 'beacon_operation_cubit.g.dart';
-part 'beacon_operation_state.dart';
+part 'operation_cubit.g.dart';
+part 'operation_state.dart';
 
-class BeaconOperationCubit extends Cubit<BeaconOperationState> {
-  BeaconOperationCubit({
+class OperationCubit extends Cubit<OperationState> {
+  OperationCubit({
     required this.walletCubit,
     required this.beacon,
     required this.beaconCubit,
@@ -24,7 +25,8 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     required this.keyGenerator,
     required this.nftCubit,
     required this.tokensCubit,
-  }) : super(const BeaconOperationState());
+    required this.walletConnectCubit,
+  }) : super(const OperationState());
 
   final WalletCubit walletCubit;
   final Beacon beacon;
@@ -33,38 +35,69 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
   final KeyGenerator keyGenerator;
   final NftCubit nftCubit;
   final TokensCubit tokensCubit;
+  final WalletConnectCubit walletConnectCubit;
 
-  final log = getLogger('BeaconOperationCubit');
+  final log = getLogger('OperationCubit');
 
-  Future<void> initial() async {
-    await getFees();
-  }
-
-  Future<void> getXtzPrice() async {
+  Future<void> getUsdPrice(ConnectionBridgeType connectionBridgeType) async {
     try {
-      log.i('fetching xtz USDprice');
-      final response =
-          await dioClient.get(Urls.xtzPrice) as Map<String, dynamic>;
-      final XtzData xtzData = XtzData.fromJson(response);
-      log.i('response - ${xtzData.toJson()}');
-      emit(state.copyWith(xtzUSDRate: xtzData.price));
+      switch (connectionBridgeType) {
+        case ConnectionBridgeType.beacon:
+          log.i('fetching xtz USDprice');
+          final response =
+              await dioClient.get(Urls.xtzPrice) as Map<String, dynamic>;
+          final XtzData xtzData = XtzData.fromJson(response);
+          log.i('response - ${xtzData.toJson()}');
+          emit(state.copyWith(usdRate: xtzData.price));
+          break;
+        case ConnectionBridgeType.walletconnect:
+          break;
+      }
     } catch (e) {
       log.e(e);
     }
   }
 
-  Future<void> getFees() async {
+  Future<void> getPrices(ConnectionBridgeType connectionBridgeType) async {
     try {
       emit(state.loading());
       log.i('estimateOperationFee');
 
-      final operationList = await getOperationList();
-      await operationList.estimate();
-      log.i('after operationList.estimate()');
-      final fee = operationList.operations
-          .map((Operation e) => e.totalFee)
-          .reduce((int value, int element) => value + element);
-      emit(state.copyWith(status: AppStatus.idle, totalFee: fee));
+      late double amount;
+      late double fee;
+
+      switch (connectionBridgeType) {
+        case ConnectionBridgeType.beacon:
+          final operationList = await getBeaonOperationList();
+          await operationList.estimate();
+          log.i('after operationList.estimate()');
+          amount = int.parse(
+                beaconCubit
+                    .state.beaconRequest!.operationDetails!.first.amount!,
+              ) /
+              1e6;
+          fee = operationList.operations
+                  .map((Operation e) => e.totalFee)
+                  .reduce((int value, int element) => value + element) /
+              1e6;
+          break;
+        case ConnectionBridgeType.walletconnect:
+          final EtherAmount ethAmount = EtherAmount.fromUnitAndValue(
+            EtherUnit.wei,
+            walletConnectCubit.state.transaction!.value ?? 0,
+          );
+          amount = formatEthAmount(amount: ethAmount.getInWei);
+          fee = 0;
+          break;
+      }
+
+      emit(
+        state.copyWith(
+          status: AppStatus.idle,
+          amount: amount,
+          fee: fee,
+        ),
+      );
     } catch (e) {
       log.e('cost estimation failure , e: $e');
       if (e is MessageHandler) {
@@ -138,7 +171,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     }
   }
 
-  Future<void> sendOperataion() async {
+  Future<void> sendOperataion(ConnectionBridgeType connectionBridgeType) async {
     try {
       emit(state.loading());
       log.i('sendOperataion');
@@ -150,18 +183,27 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
         );
       }
 
-      final operationList = await getOperationList();
-      await operationList.executeAndMonitor(null);
-      log.i('after operationList.executeAndMonitor()');
+      late bool success;
 
-      final transactionHash = operationList.result.id;
+      switch (connectionBridgeType) {
+        case ConnectionBridgeType.beacon:
+          final operationList = await getBeaonOperationList();
+          await operationList.executeAndMonitor(null);
+          log.i('after operationList.executeAndMonitor()');
 
-      final Map response = await beacon.operationResponse(
-        id: beaconCubit.state.beaconRequest!.request!.id!,
-        transactionHash: transactionHash,
-      );
+          final transactionHash = operationList.result.id;
 
-      final bool success = json.decode(response['success'].toString()) as bool;
+          final Map response = await beacon.operationResponse(
+            id: beaconCubit.state.beaconRequest!.request!.id!,
+            transactionHash: transactionHash,
+          );
+
+          success = json.decode(response['success'].toString()) as bool;
+          break;
+        case ConnectionBridgeType.walletconnect:
+          success = false;
+          break;
+      }
 
       if (success) {
         log.i('operation success');
@@ -217,16 +259,35 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     }
   }
 
-  void rejectOperation() {
-    log.i('beacon connection rejected');
-    beacon.operationResponse(
-      id: beaconCubit.state.beaconRequest!.request!.id!,
-      transactionHash: null,
-    );
+  void rejectOperation({
+    required ConnectionBridgeType connectionBridgeType,
+  }) {
+    switch (connectionBridgeType) {
+      case ConnectionBridgeType.beacon:
+        log.i('beacon connection rejected');
+        beacon.operationResponse(
+          id: beaconCubit.state.beaconRequest!.request!.id!,
+          transactionHash: null,
+        );
+        break;
+      case ConnectionBridgeType.walletconnect:
+        log.i('walletconnect  connection rejected');
+        final walletConnectState = walletConnectCubit.state;
+
+        final wcClient = walletConnectState.wcClients.lastWhereOrNull(
+          (element) =>
+              element.remotePeerMeta == walletConnectState.currentDAppPeerMeta,
+        );
+        if (wcClient != null) {
+          wcClient.rejectRequest(id: walletConnectState.transactionId!);
+        }
+        break;
+    }
+
     emit(state.copyWith(status: AppStatus.goBack));
   }
 
-  Future<OperationsList> getOperationList() async {
+  Future<OperationsList> getBeaonOperationList() async {
     try {
       log.i('getOperationList');
 
@@ -261,8 +322,6 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
         );
       }
 
-      final amount = int.parse(beaconRequest.operationDetails!.first.amount!);
-
       // TezartErro handles low balande
       // log.i('checking xtz');
       // final int balance = await dioClient.get(
@@ -289,7 +348,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
         rpcInterface: client.rpcInterface,
       );
 
-      final List<Operation> operations = getOperation();
+      final List<Operation> operations = getBeaonOperation();
       for (final element in operations) {
         operationList.appendOperation(element);
       }
@@ -302,8 +361,8 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
       log.i(
         'secretKey: ${keystore.secretKey}'
         'publicKey: ${keystore.publicKey} '
-        'amount: $amount '
-        'networkFee: ${state.totalFee} '
+        'amount: ${state.amount} '
+        'networkFee: ${state.fee} '
         'address: ${keystore.address} =>To address: '
         '${beaconRequest.operationDetails!.first.destination!}',
       );
@@ -324,7 +383,7 @@ class BeaconOperationCubit extends Cubit<BeaconOperationState> {
     }
   }
 
-  List<Operation> getOperation() {
+  List<Operation> getBeaonOperation() {
     final List<Operation> operations = [];
 
     final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;

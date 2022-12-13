@@ -7,5 +7,4 @@ enum WalletConnectStatus {
   permission,
   signPayload,
   operation,
-  broadcast,
 }
