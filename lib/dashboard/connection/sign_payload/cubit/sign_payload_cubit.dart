@@ -11,6 +11,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:wallet_connect/wallet_connect.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -221,35 +222,51 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             );
           }
 
-          const _messagePrefix = '\u0019Ethereum Signed Message:\n';
+          log.i('type -${walletConnectCubit.state.signMessage!.type}}');
 
-          final payloadBytes = hexToBytes(encodedPayload);
+          switch (walletConnectCubit.state.signMessage!.type) {
 
-          final prefix = _messagePrefix + payloadBytes.length.toString();
-          final prefixBytes = ascii.encode(prefix);
+            /// rejected in wallet_connect_cubit
+            case WCSignType.MESSAGE:
+              break;
 
-          final concatPayload = Uint8List.fromList(prefixBytes + payloadBytes);
+            /// rejected in wallet_connect_cubit
+            case WCSignType.TYPED_MESSAGE:
+              break;
 
-          final Credentials credentials =
-              EthPrivateKey.fromHex(currentAccount.secretKey);
+            case WCSignType.PERSONAL_MESSAGE:
+              const _messagePrefix = '\u0019Ethereum Signed Message:\n';
 
-          final MsgSignature signature =
-              await credentials.signToSignature(concatPayload);
+              final payloadBytes = hexToBytes(encodedPayload);
 
-          final String r = signature.r.toRadixString(16);
-          log.i('r -$r');
-          final String s = signature.s.toRadixString(16);
-          log.i('s -$s');
-          final String v = signature.v.toRadixString(16);
-          log.i('v -$v');
+              final prefix = _messagePrefix + payloadBytes.length.toString();
+              final prefixBytes = ascii.encode(prefix);
 
-          final signedDataAsHex = '0x$r$s$v';
-          log.i('signedDataAsHex -$signedDataAsHex');
+              final concatPayload =
+                  Uint8List.fromList(prefixBytes + payloadBytes);
 
-          wcClient.approveRequest<String>(
-            id: walletConnectState.signId!,
-            result: signedDataAsHex,
-          );
+              final Credentials credentials =
+                  EthPrivateKey.fromHex(currentAccount.secretKey);
+
+              final MsgSignature signature =
+                  await credentials.signToSignature(concatPayload);
+
+              final String r = signature.r.toRadixString(16);
+              log.i('r -$r');
+              final String s = signature.s.toRadixString(16);
+              log.i('s -$s');
+              final String v = signature.v.toRadixString(16);
+              log.i('v -$v');
+
+              final signedDataAsHex = '0x$r$s$v';
+              log.i('signedDataAsHex -$signedDataAsHex');
+
+              wcClient.approveRequest<String>(
+                id: walletConnectState.signId!,
+                result: signedDataAsHex,
+              );
+              break;
+          }
 
           emit(
             state.copyWith(
