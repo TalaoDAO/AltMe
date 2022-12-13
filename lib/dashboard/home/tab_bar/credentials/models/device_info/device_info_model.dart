@@ -10,7 +10,6 @@ class DeviceInfoModel extends CredentialSubjectModel {
     this.systemName,
     this.device,
     this.systemVersion,
-    this.identifier,
     String? id,
     String? type,
   }) : super(
@@ -31,9 +30,6 @@ class DeviceInfoModel extends CredentialSubjectModel {
 
   @JsonKey(defaultValue: '')
   final String? systemVersion;
-
-  @JsonKey(defaultValue: '')
-  final String? identifier;
 
   @override
   Map<String, dynamic> toJson() => _$DeviceInfoModelToJson(this);

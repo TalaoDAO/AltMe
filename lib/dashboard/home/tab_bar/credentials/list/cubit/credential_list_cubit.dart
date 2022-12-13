@@ -24,6 +24,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     final passCredentials = <HomeCredential>[];
     final blockchainAccountsCredentials = <HomeCredential>[];
     final othersCredentials = <HomeCredential>[];
+    final myProfessionalCredentials = <HomeCredential>[];
     final gamingCategories = state.gamingCategories;
     final identityCategories = state.identityCategories;
     final communityCategories = state.communityCategories;
@@ -146,6 +147,11 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       }
 
       switch (credentialSubject.credentialCategory) {
+        case CredentialCategory.myProfessionalCards:
+
+          /// adding real credentials
+          myProfessionalCredentials.add(HomeCredential.isNotDummy(credential));
+          break;
         case CredentialCategory.gamingCards:
 
           /// adding real credentials
@@ -203,6 +209,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         blockchainAccountsCredentials: blockchainAccountsCredentials,
         passCredentials: passCredentials,
         othersCredentials: othersCredentials,
+        myProfessionalCredentials: myProfessionalCredentials,
         gamingCategories: gamingCategories,
         communityCategories: communityCategories,
         identityCategories: identityCategories,
@@ -227,6 +234,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
+      case CredentialCategory.myProfessionalCards:
+
+        /// adding real credentials
+        final _credentials = List.of(state.myProfessionalCredentials)
+          ..insert(0, HomeCredential.isNotDummy(credential));
+        emit(state.populate(myProfessionalCredentials: _credentials));
+        break;
       case CredentialCategory.gamingCards:
 
         /// adding real credentials
@@ -598,6 +612,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         );
         break;
 
+      case CredentialCategory.myProfessionalCards:
+        final _credentials = List.of(state.myProfessionalCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          );
+        emit(state.populate(myProfessionalCredentials: _credentials));
+        break;
       case CredentialCategory.communityCards:
         final _credentials = List.of(state.communityCredentials)
           ..removeWhere(
@@ -790,6 +811,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         blockchainAccountsCredentials: [],
         passCredentials: [],
         othersCredentials: [],
+        myProfessionalCredentials: [],
         gamingCategories: List.from(DiscoverList.gamingCategories),
         communityCategories: List.from(DiscoverList.communityCategories),
         identityCategories: List.from(DiscoverList.identityCategories),

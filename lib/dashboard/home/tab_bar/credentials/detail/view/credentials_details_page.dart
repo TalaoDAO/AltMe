@@ -108,6 +108,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
         return BasePage(
           title: l10n.cardDetails,
+          titleAlignment: Alignment.topCenter,
           titleLeading: const BackLeadingButton(),
           // titleTrailing: IconButton(
           //   onPressed: _edit,

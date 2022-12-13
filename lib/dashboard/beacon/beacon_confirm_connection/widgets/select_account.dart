@@ -21,17 +21,27 @@ class SelectAccount extends StatelessWidget {
         ),
         BlocBuilder<WalletCubit, WalletState>(
           builder: (context, walletState) {
+            final tezosAccounts = walletState.cryptoAccount.data
+                .where(
+                  (element) => element.blockchainType == BlockchainType.tezos,
+                )
+                .toList();
             return ListView.separated(
-              itemCount: walletState.cryptoAccount.data.length,
+              itemCount: tezosAccounts.length,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, i) {
+                final accountItemRealIndex =
+                    walletState.cryptoAccount.data.indexOf(tezosAccounts[i]);
                 return SelectBoxAccountItem(
-                  cryptoAccountData: walletState.cryptoAccount.data[i],
-                  isSelected: walletState.currentCryptoIndex == i,
+                  cryptoAccountData: tezosAccounts[i],
+                  isSelected:
+                      walletState.currentCryptoIndex == accountItemRealIndex,
                   listIndex: i,
                   onPressed: () {
-                    context.read<WalletCubit>().setCurrentWalletAccount(i);
+                    context
+                        .read<WalletCubit>()
+                        .setCurrentWalletAccount(accountItemRealIndex);
                   },
                 );
               },

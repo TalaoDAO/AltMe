@@ -25,6 +25,7 @@ class AccountPrivateKeyPage extends StatelessWidget {
     final l10n = context.l10n;
     return BasePage(
       title: l10n.privateKey,
+      titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
       body: BackgroundCard(

@@ -2,7 +2,6 @@ import 'package:altme/app/shared/enum/type/credential_subject_type/credential_su
 
 class DiscoverList {
   static final List<CredentialSubjectType> gamingCategories = [
-    CredentialSubjectType.tezVoucher,
     CredentialSubjectType.tezotopiaMembership,
     CredentialSubjectType.tezoniaPass,
     CredentialSubjectType.tzlandPass,

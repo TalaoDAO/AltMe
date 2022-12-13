@@ -8,6 +8,8 @@ class RecoveryCredentialState extends Equatable {
     this.isTextFieldEdited = false,
     this.isMnemonicValid = false,
     this.recoveredCredentialLength,
+    this.mnemonic,
+    this.backupFilePath,
   });
 
   factory RecoveryCredentialState.fromJson(Map<String, dynamic> json) =>
@@ -18,9 +20,11 @@ class RecoveryCredentialState extends Equatable {
   final bool isTextFieldEdited;
   final bool isMnemonicValid;
   final int? recoveredCredentialLength;
+  final String? mnemonic;
+  final String? backupFilePath;
 
   RecoveryCredentialState loading() {
-    return RecoveryCredentialState(
+    return copyWith(
       status: AppStatus.loading,
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicValid: isMnemonicValid,
@@ -29,7 +33,7 @@ class RecoveryCredentialState extends Equatable {
   }
 
   RecoveryCredentialState error({required MessageHandler messageHandler}) {
-    return RecoveryCredentialState(
+    return copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       isTextFieldEdited: isTextFieldEdited,
@@ -42,11 +46,13 @@ class RecoveryCredentialState extends Equatable {
     bool? isTextFieldEdited,
     bool? isMnemonicValid,
     int? recoveredCredentialLength,
+    String? mnemonic,
   }) {
-    return RecoveryCredentialState(
+    return copyWith(
       status: AppStatus.populate,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
       isMnemonicValid: isMnemonicValid ?? this.isMnemonicValid,
+      mnemonic: mnemonic,
     );
   }
 
@@ -54,7 +60,7 @@ class RecoveryCredentialState extends Equatable {
     MessageHandler? messageHandler,
     int? recoveredCredentialLength,
   }) {
-    return RecoveryCredentialState(
+    return copyWith(
       status: AppStatus.success,
       message: messageHandler == null
           ? null
@@ -66,6 +72,27 @@ class RecoveryCredentialState extends Equatable {
     );
   }
 
+  RecoveryCredentialState copyWith({
+    AppStatus? status,
+    StateMessage? message,
+    bool? isTextFieldEdited,
+    bool? isMnemonicValid,
+    int? recoveredCredentialLength,
+    String? mnemonic,
+    String? backupFilePath,
+  }) {
+    return RecoveryCredentialState(
+      status: status ?? this.status,
+      isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
+      isMnemonicValid: isMnemonicValid ?? this.isMnemonicValid,
+      message: message ?? this.message,
+      recoveredCredentialLength:
+          recoveredCredentialLength ?? this.recoveredCredentialLength,
+      mnemonic: mnemonic ?? this.mnemonic,
+      backupFilePath: backupFilePath ?? this.backupFilePath,
+    );
+  }
+
   Map<String, dynamic> toJson() => _$RecoveryCredentialStateToJson(this);
 
   @override
@@ -74,6 +101,8 @@ class RecoveryCredentialState extends Equatable {
         isMnemonicValid,
         isTextFieldEdited,
         message,
-        recoveredCredentialLength
+        recoveredCredentialLength,
+        mnemonic,
+        backupFilePath,
       ];
 }

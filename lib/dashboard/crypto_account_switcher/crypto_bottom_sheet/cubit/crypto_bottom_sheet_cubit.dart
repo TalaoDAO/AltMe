@@ -36,32 +36,6 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
     emit(state.success(currentCryptoIndex: index));
   }
 
-  Future<void> addCryptoAccount({String? accountName}) async {
-    emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
-    final String? ssiMnemonic =
-        await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-
-    await walletCubit.createCryptoWallet(
-      accountName: accountName,
-      isImported: false,
-      mnemonicOrKey: ssiMnemonic!,
-      onComplete: ({
-        required CryptoAccount cryptoAccount,
-        required MessageHandler messageHandler,
-      }) async {
-        emit(
-          state.success(
-            cryptoAccount: cryptoAccount,
-            messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   Future<void> editCryptoAccount({
     required String newAccountName,
     required int index,

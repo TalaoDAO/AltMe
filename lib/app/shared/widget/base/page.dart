@@ -62,7 +62,9 @@ class BasePage extends StatelessWidget {
               titleAlignment: titleAlignment,
               trailing: titleTrailing,
             ),
-      bottomNavigationBar: navigation,
+      bottomNavigationBar: navigation != null
+          ? (useSafeArea ? SafeArea(child: navigation!) : navigation)
+          : null,
       drawer: drawer,
       body: scrollView
           ? SingleChildScrollView(

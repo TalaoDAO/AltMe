@@ -10,6 +10,7 @@ class SSIMenu extends StatelessWidget {
 
   static Route route() {
     return MaterialPageRoute<void>(
+      settings: const RouteSettings(name: '/ssiMenu'),
       builder: (_) => const SSIMenu(),
     );
   }
@@ -73,7 +74,7 @@ class SSIView extends StatelessWidget {
                           builder: (context) => ConfirmDialog(
                             title: l10n.warningDialogTitle,
                             subtitle:
-                                l10n.recoveryCredentialWarningDialogSubtitle,
+                                l10n.restorationCredentialWarningDialogSubtitle,
                             yes: l10n.showDialogYes,
                             no: l10n.showDialogNo,
                           ),
@@ -81,8 +82,15 @@ class SSIView extends StatelessWidget {
                         false;
 
                     if (confirm) {
-                      await Navigator.of(context)
-                          .push<void>(RecoveryCredentialPage.route());
+                      await Navigator.of(context).push<void>(
+                        PinCodePage.route(
+                          restrictToBack: false,
+                          isValidCallback: () {
+                            Navigator.of(context)
+                                .push<void>(RecoveryCredentialPage.route());
+                          },
+                        ),
+                      );
                     }
                   },
                 ),

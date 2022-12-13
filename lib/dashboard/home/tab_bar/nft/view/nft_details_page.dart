@@ -47,6 +47,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
     final l10n = context.l10n;
     return BasePage(
       title: l10n.nftDetails,
+      titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       scrollView: false,
       body: BackgroundCard(
@@ -92,7 +93,76 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                   widget.nftModel.description ?? '',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-              const SizedBox(height: Sizes.spaceNormal),
+              if (widget.nftModel.identifier != null)
+                const SizedBox(height: Sizes.spaceNormal),
+              if (widget.nftModel.identifier != null)
+                Row(
+                  children: [
+                    Text(
+                      '${l10n.identifier} : ',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Text(
+                      widget.nftModel.identifier ?? '?',
+                      style: Theme.of(context).textTheme.caption3,
+                    )
+                  ],
+                ),
+              if (widget.nftModel.creators != null)
+                const SizedBox(
+                  height: Sizes.spaceXSmall,
+                ),
+              if (widget.nftModel.creators != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${l10n.creators} : ',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Flexible(
+                      child: Text(
+                        widget.nftModel.creators?.join(', ') ?? '?',
+                        style: Theme.of(context).textTheme.caption3,
+                      ),
+                    ),
+                  ],
+                ),
+              if (widget.nftModel.publishers != null)
+                const SizedBox(
+                  height: Sizes.spaceXSmall,
+                ),
+              if (widget.nftModel.publishers != null)
+                Row(
+                  children: [
+                    Text(
+                      '${l10n.publishers} : ',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Text(
+                      widget.nftModel.publishers?.join(', ') ?? '?',
+                      style: Theme.of(context).textTheme.caption3,
+                    )
+                  ],
+                ),
+              if (widget.nftModel.date != null)
+                const SizedBox(
+                  height: Sizes.spaceXSmall,
+                ),
+              if (widget.nftModel.date != null)
+                Row(
+                  children: [
+                    Text(
+                      '${l10n.createDate} : ',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Text(
+                      UiDate.normalFormat(widget.nftModel.date) ?? '?',
+                      style: Theme.of(context).textTheme.caption3,
+                    ),
+                  ],
+                ),
               // Text(
               //   l10n.seeMoreNFTInformationOn,
               //   style: Theme.of(context).textTheme.bodyText1,
@@ -124,16 +194,18 @@ class _NftDetailsViewState extends State<NftDetailsView> {
           padding: const EdgeInsets.all(Sizes.spaceSmall),
           child: MyGradientButton(
             text: l10n.send,
-            onPressed: () {
-              Navigator.of(context).push<void>(
-                ConfirmTokenTransactionPage.route(
-                  selectedToken: widget.nftModel.getToken(),
-                  withdrawalAddress: '',
-                  amount: 1,
-                  isNFT: true,
-                ),
-              );
-            },
+            onPressed: widget.nftModel.isTransferable == false
+                ? null
+                : () {
+                    Navigator.of(context).push<void>(
+                      ConfirmTokenTransactionPage.route(
+                        selectedToken: widget.nftModel.getToken(),
+                        withdrawalAddress: '',
+                        amount: 1,
+                        isNFT: true,
+                      ),
+                    );
+                  },
           ),
         ),
       ),

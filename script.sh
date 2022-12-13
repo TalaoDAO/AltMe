@@ -50,6 +50,7 @@ then
   echo "pod install"
   cd ios
   pod install
+  pod update
   cd ..
   echo "deploy ios"
   echo "Make sure you are in right branch"

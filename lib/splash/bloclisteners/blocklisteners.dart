@@ -28,6 +28,19 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
     if (state.status == SplashStatus.routeToOnboarding) {
       Navigator.of(context).push<void>(StarterPage.route());
     }
+
+    // just for next build -> 117 and then we should remove for build -> 118
+    context.read<AdvanceSettingsCubit>().setState(
+          const AdvanceSettingsState(
+            isGamingEnabled: true,
+            isIdentityEnabled: true,
+            isBlockchainAccountsEnabled: true,
+            isPassEnabled: true,
+            isSocialMediaEnabled: true,
+            isCommunityEnabled: true,
+            isOtherEnabled: true,
+          ),
+        );
   },
 );
 

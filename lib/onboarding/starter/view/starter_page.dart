@@ -62,7 +62,7 @@ class StarterPage extends StatelessWidget {
                     EnterNewPinCodePage.route(
                       isFromOnboarding: true,
                       isValidCallback: () {
-                        Navigator.of(context).push<void>(
+                        Navigator.of(context).pushReplacement<void,void>(
                           ActiviateBiometricsPage.route(
                             routeType: WalletRouteType.recover,
                           ),
@@ -89,7 +89,7 @@ class StarterPage extends StatelessWidget {
                     EnterNewPinCodePage.route(
                       isFromOnboarding: true,
                       isValidCallback: () {
-                        Navigator.of(context).push<void>(
+                        Navigator.of(context).pushReplacement<void,void>(
                           ActiviateBiometricsPage.route(
                             routeType: WalletRouteType.create,
                           ),

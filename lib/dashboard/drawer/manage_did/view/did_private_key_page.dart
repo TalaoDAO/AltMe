@@ -38,6 +38,7 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage> {
     return BasePage(
       scrollView: false,
       title: l10n.decentralizedIDKey,
+      titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       body: BackgroundCard(
         width: double.infinity,
