@@ -175,7 +175,7 @@ Future<CredentialModel?> generateDeviceInfoCredential({
       systemVersion = androidDeviceInfo.version.codename;
     } else {
       final iosDeviceInfo = await DeviceInfoPlugin().iosInfo;
-      device = iosDeviceInfo.name ?? '';
+      device = iosDeviceInfo.utsname.machine ?? '';
       systemName = 'iOS';
       systemVersion = iosDeviceInfo.systemVersion ?? '';
     }
