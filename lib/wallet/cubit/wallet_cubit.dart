@@ -665,7 +665,6 @@ class WalletCubit extends Cubit<WalletState> {
     for (final credential in credentials) {
       await repository.insert(credential);
     }
-    homeCubit.emitHasNoWallet();
     emit(state.copyWith(status: WalletStatus.init, credentials: credentials));
   }
 
