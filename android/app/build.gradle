@@ -92,7 +92,7 @@ android {
         production {
             dimension "default"
             applicationIdSuffix ""
-            manifestPlaceholders = [appName: "Altme"]
+            manifestPlaceholders = [appName: "Talao"]
         }
         staging {
             dimension "default"
