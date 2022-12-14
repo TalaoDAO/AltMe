@@ -671,7 +671,11 @@
     "publishers",
     "createDate",
     "myProfessionalrCards",
-    "myProfessionalrCardsSubtitle"
+    "myProfessionalrCardsSubtitle",
+    "guardaWallet",
+    "exodusWallet",
+    "trustWallet",
+    "myetherwallet"
   ],
 
   "es": [
@@ -1346,7 +1350,11 @@
     "publishers",
     "createDate",
     "myProfessionalrCards",
-    "myProfessionalrCardsSubtitle"
+    "myProfessionalrCardsSubtitle",
+    "guardaWallet",
+    "exodusWallet",
+    "trustWallet",
+    "myetherwallet"
   ],
 
   "fr": [
@@ -2021,7 +2029,11 @@
     "publishers",
     "createDate",
     "myProfessionalrCards",
-    "myProfessionalrCardsSubtitle"
+    "myProfessionalrCardsSubtitle",
+    "guardaWallet",
+    "exodusWallet",
+    "trustWallet",
+    "myetherwallet"
   ],
 
   "it": [
@@ -2696,6 +2708,10 @@
     "publishers",
     "createDate",
     "myProfessionalrCards",
-    "myProfessionalrCardsSubtitle"
+    "myProfessionalrCardsSubtitle",
+    "guardaWallet",
+    "exodusWallet",
+    "trustWallet",
+    "myetherwallet"
   ]
 }

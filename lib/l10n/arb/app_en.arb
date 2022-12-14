@@ -728,5 +728,9 @@
   "publishers": "Publishers",
   "createDate": "Create date",
   "myProfessionalrCards": "professional cards",
-  "myProfessionalrCardsSubtitle": "Use your professional cards securely."
+  "myProfessionalrCardsSubtitle": "Use your professional cards securely.",
+  "guardaWallet": "Guarda Wallet",
+  "exodusWallet": "Exodus Wallet",
+  "trustWallet": "Trust Wallet",
+  "myetherwallet": "MyEther Wallet"
 }

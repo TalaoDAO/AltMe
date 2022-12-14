@@ -62,30 +62,62 @@ class ImportAccountStep2View extends StatelessWidget {
           const SizedBox(
             height: Sizes.spaceNormal,
           ),
-          if (accountType == AccountType.tezos)
-            Column(
-              children: [
-                AccountItem(
-                  title: l10n.templeWallet,
-                  iconPath: IconStrings.templeWallet,
-                  onTap: () {
-                    Navigator.of(context).push<void>(
-                      ImportAccountStep3Page.route(accountType: accountType),
-                    );
-                  },
-                ),
-                AccountItem(
-                  title: l10n.kukaiWallet,
-                  iconPath: IconStrings.kukaiWallet,
-                  onTap: () {
-                    Navigator.of(context).push<void>(
-                      ImportAccountStep3Page.route(accountType: accountType),
-                    );
-                  },
-                ),
-              ],
-            )
-          else
+          if (accountType == AccountType.tezos) ...[
+            AccountItem(
+              title: l10n.templeWallet,
+              iconPath: IconStrings.templeWallet,
+              onTap: () {
+                Navigator.of(context).push<void>(
+                  ImportAccountStep3Page.route(accountType: accountType),
+                );
+              },
+            ),
+            AccountItem(
+              title: l10n.kukaiWallet,
+              iconPath: IconStrings.kukaiWallet,
+              onTap: () {
+                Navigator.of(context).push<void>(
+                  ImportAccountStep3Page.route(accountType: accountType),
+                );
+              },
+            ),
+          ] else ...[
+            AccountItem(
+              title: l10n.guardaWallet,
+              iconPath: IconStrings.guardaWallet,
+              onTap: () {
+                Navigator.of(context).push<void>(
+                  ImportAccountStep3Page.route(accountType: accountType),
+                );
+              },
+            ),
+            AccountItem(
+              title: l10n.exodusWallet,
+              iconPath: IconStrings.exodusWallet,
+              onTap: () {
+                Navigator.of(context).push<void>(
+                  ImportAccountStep3Page.route(accountType: accountType),
+                );
+              },
+            ),
+            AccountItem(
+              title: l10n.trustWallet,
+              iconPath: IconStrings.trustWallet,
+              onTap: () {
+                Navigator.of(context).push<void>(
+                  ImportAccountStep3Page.route(accountType: accountType),
+                );
+              },
+            ),
+            AccountItem(
+              title: l10n.myetherwallet,
+              iconPath: IconStrings.myetherwallet,
+              onTap: () {
+                Navigator.of(context).push<void>(
+                  ImportAccountStep3Page.route(accountType: accountType),
+                );
+              },
+            ),
             AccountItem(
               title: l10n.metaMaskWallet,
               iconPath: IconStrings.metaMaskWallet,
@@ -95,6 +127,7 @@ class ImportAccountStep2View extends StatelessWidget {
                 );
               },
             ),
+          ],
           AccountItem(
             title: l10n.other,
             iconPath: IconStrings.add,

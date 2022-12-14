@@ -47,6 +47,10 @@ class IconStrings {
   static const String addSquare = '$base/add-square.png';
   static const String templeWallet = '$base/temple-wallet.png';
   static const String metaMaskWallet = '$base/metamask-wallet.png';
+  static const String guardaWallet = '$base/guarda-logo.png';
+  static const String exodusWallet = '$base/exodus-Logo.jpg';
+  static const String trustWallet = '$base/trust-wallet-logo.jpg';
+  static const String myetherwallet = '$base/mew-logo.png';
   static const String kukaiWallet = '$base/kukai-wallet.png';
   static const String add = '$base/add.png';
   static const String lockCircle = '$base/lock-circle.png';

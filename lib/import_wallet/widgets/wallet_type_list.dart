@@ -35,25 +35,49 @@ class WalletTypeList extends StatelessWidget {
       WalletTypeModel(
         title: l10n.templeWallet,
         walletName: l10n.temple,
-        type: ImportWalletTypes.temple,
+        type: ImportWalletTypes.Tezos,
         imagePath: IconStrings.templeWallet,
-      ),
-      WalletTypeModel(
-        title: l10n.metaMaskWallet,
-        walletName: l10n.metaMask,
-        type: ImportWalletTypes.metamask,
-        imagePath: IconStrings.metaMaskWallet,
       ),
       WalletTypeModel(
         title: l10n.kukaiWallet,
         walletName: l10n.kukai,
-        type: ImportWalletTypes.kukai,
+        type: ImportWalletTypes.Tezos,
         imagePath: IconStrings.kukaiWallet,
+      ),
+      WalletTypeModel(
+        title: l10n.metaMaskWallet,
+        walletName: l10n.metaMask,
+        type: ImportWalletTypes.Ethereum,
+        imagePath: IconStrings.metaMaskWallet,
+      ),
+      WalletTypeModel(
+        title: l10n.trustWallet,
+        walletName: l10n.trustWallet,
+        type: ImportWalletTypes.Ethereum,
+        imagePath: IconStrings.trustWallet,
+      ),
+      WalletTypeModel(
+        title: l10n.myetherwallet,
+        walletName: l10n.myetherwallet,
+        type: ImportWalletTypes.Ethereum,
+        imagePath: IconStrings.myetherwallet,
+      ),
+      WalletTypeModel(
+        title: l10n.exodusWallet,
+        walletName: l10n.exodusWallet,
+        type: ImportWalletTypes.Ethereum,
+        imagePath: IconStrings.exodusWallet,
+      ),
+      WalletTypeModel(
+        title: l10n.guardaWallet,
+        walletName: l10n.guardaWallet,
+        type: ImportWalletTypes.Ethereum,
+        imagePath: IconStrings.guardaWallet,
       ),
       WalletTypeModel(
         title: l10n.otherWalletApp,
         walletName: l10n.other,
-        type: ImportWalletTypes.other,
+        type: ImportWalletTypes.None,
         imagePath: IconStrings.add,
       ),
     ];
