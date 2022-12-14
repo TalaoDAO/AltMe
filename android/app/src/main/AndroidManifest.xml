@@ -21,7 +21,7 @@
     </queries>
 
     <application
-        android:label="${appName}"
+        android:label="Talao Wallet"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name="io.flutter.embedding.android.FlutterFragmentActivity"
