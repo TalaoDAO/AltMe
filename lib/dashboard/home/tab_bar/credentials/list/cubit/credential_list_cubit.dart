@@ -470,6 +470,21 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
+      case CredentialCategory.myProfessionalCards:
+      ///finding index of updated credential
+        final index = state.myProfessionalCredentials.indexWhere(
+          (element) => element.credentialModel?.id == credential.id,
+        );
+
+        ///create updated credential list
+        final _credentials = List.of(state.myProfessionalCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          )
+          ..insert(index, HomeCredential.isNotDummy(credential));
+
+        emit(state.populate(myProfessionalCredentials: _credentials));
+        break;
       case CredentialCategory.gamingCards:
 
         ///finding index of updated credential
