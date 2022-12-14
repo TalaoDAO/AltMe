@@ -7,4 +7,6 @@ enum IssuerVerificationRegistry {
   Talao,
   @JsonValue('ebsi')
   EBSI,
+  @JsonValue('compellio')
+  Compellio,
 }

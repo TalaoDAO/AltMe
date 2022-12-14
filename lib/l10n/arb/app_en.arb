@@ -164,7 +164,7 @@
   "credential": "Credential",
   "issuanceDate": "Issuance date",
   "appContactWebsite": "Website",
-  "issuerVerificationSetting": "Verify identity of Issuer/Verifier",
+  "chooseIssuerRegistryDescription": "An issuer or verifier registry is an online storage holding information about trusted issuers and verifiers. Depending on the ecosystem this information is stored on chain or on servers.",
   "confimrDIDAuth": "Do you want to log in to the site ?",
   "evidenceLabel": "Evidence",
   "networkErrorBadRequest": "Bad request",
