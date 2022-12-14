@@ -392,7 +392,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = Z8P3N79J42;
+				DEVELOPMENT_TEAM = FH3A3ZJ2YU;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = Altme;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -400,7 +400,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.altme.wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = co.talao.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -531,7 +531,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = Z8P3N79J42;
+				DEVELOPMENT_TEAM = FH3A3ZJ2YU;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = Altme;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -539,7 +539,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.altme.wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = co.talao.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -559,7 +559,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = Z8P3N79J42;
+				DEVELOPMENT_TEAM = FH3A3ZJ2YU;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = Altme;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -567,7 +567,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.altme.wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = co.talao.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
