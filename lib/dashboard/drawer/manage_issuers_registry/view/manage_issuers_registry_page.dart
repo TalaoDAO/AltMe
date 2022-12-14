@@ -33,13 +33,16 @@ class ManageIssuersRegistryPage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          var groupValue = IssuerVerificationRegistry.Talao;
+          var groupValue = IssuerVerificationRegistry.None;
           switch (state.model.issuerVerificationUrl) {
             case '':
               groupValue = IssuerVerificationRegistry.None;
               break;
             case Urls.checkIssuerEbsiUrl:
               groupValue = IssuerVerificationRegistry.EBSI;
+              break;
+            case Urls.checkIssuerTalaoUrl:
+              groupValue = IssuerVerificationRegistry.Talao;
               break;
           }
           const fakeGroupValue = 'titi';
