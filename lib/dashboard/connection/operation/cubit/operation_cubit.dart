@@ -259,8 +259,8 @@ class OperationCubit extends Cubit<OperationState> {
             sender: EthereumAddress.fromHex(transaction.from),
             reciever: EthereumAddress.fromHex(transaction.to!),
             amount: ethAmount,
+            data: transaction.data,
           );
-          log.i('transactionHash - $transactionHash');
 
           wcClient.approveRequest<String>(
             id: walletConnectState.transactionId!,
@@ -508,10 +508,17 @@ class OperationCubit extends Cubit<OperationState> {
     required EtherAmount amount,
     String? data,
   }) async {
+    log.i('estimateEthereumFee');
     await dotenv.load();
     final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
     final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
     final gasPrice = await web3Client.getGasPrice();
+
+    log.i('from: ${sender.hex}');
+    log.i('to: ${reciever.hex}');
+    log.i('gasPrice: ${gasPrice.getInWei}');
+    log.i('value: ${amount.getInWei}');
+    log.i('data: $data');
 
     try {
       final BigInt gas = await web3Client.estimateGas(
@@ -521,9 +528,16 @@ class OperationCubit extends Cubit<OperationState> {
         gasPrice: gasPrice,
         data: data != null ? hexToBytes(data) : null,
       );
-      return gas * gasPrice.getInWei;
-    } catch (err) {
-      return BigInt.from(21000) * gasPrice.getInWei;
+      log.i('gas - $gas');
+
+      final fee = gas * gasPrice.getInWei;
+      log.i('gas * gasPrice.getInWei = $fee');
+      return fee;
+    } catch (e) {
+      log.e(e.toString());
+      final fee = BigInt.from(21000) * gasPrice.getInWei;
+      log.i('2100 * gasPrice.getInWei = $fee');
+      return fee;
     }
   }
 
@@ -535,6 +549,7 @@ class OperationCubit extends Cubit<OperationState> {
     BigInt? gas,
     String? data,
   }) async {
+    log.i('sendEthereumTransaction');
     await dotenv.load();
     final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
     final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
@@ -564,12 +579,17 @@ class OperationCubit extends Cubit<OperationState> {
       maxGas: gasLimit.toInt(),
     );
 
-    final String transacationHash = await web3Client.sendTransaction(
+    log.i('nonce: $nonce');
+    log.i('maxGas: ${gasLimit.toInt()}');
+    log.i('chainId: $chainId');
+
+    final transactionHash = await web3Client.sendTransaction(
       credentials,
       transaction,
       chainId: chainId,
     );
 
-    return transacationHash;
+    log.i('transactionHash - $transactionHash');
+    return transactionHash;
   }
 }

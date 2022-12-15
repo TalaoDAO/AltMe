@@ -24,7 +24,6 @@ class CryptoAccountData extends Equatable {
   final String walletAddress;
   final bool isImported;
   final BlockchainType blockchainType;
-  @JsonKey(ignore: true)
   Map<String, dynamic> toJson() => _$CryptoAccountDataToJson(this);
 
   @override
