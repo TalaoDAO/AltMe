@@ -76,7 +76,7 @@ class FeeDetails extends StatelessWidget {
                     Text(
                       r'$' +
                           (grandTotal * tokenUSDRate)
-                              .toStringAsFixed(2)
+                              .toStringAsFixed(6)
                               .formatNumber(),
                       style: Theme.of(context).textTheme.caption2,
                     ),

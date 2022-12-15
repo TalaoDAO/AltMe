@@ -55,6 +55,7 @@ class OperationCubit extends Cubit<OperationState> {
           emit(state.copyWith(usdRate: xtzData.price));
           break;
         case ConnectionBridgeType.walletconnect:
+          // TODO(bibash): find dollar equivalent of ethereum
           break;
       }
     } catch (e) {
