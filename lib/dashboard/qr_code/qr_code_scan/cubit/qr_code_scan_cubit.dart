@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
@@ -28,6 +30,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.deepLinkCubit,
     required this.jwtDecode,
     required this.beacon,
+    required this.walletConnectCubit,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -39,6 +42,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final DeepLinkCubit deepLinkCubit;
   final JWTDecode jwtDecode;
   final Beacon beacon;
+  final WalletConnectCubit walletConnectCubit;
 
   final log = getLogger('QRCodeScanCubit');
 
@@ -68,6 +72,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             Uri.parse(scannedResponse).queryParameters['data'].toString();
 
         await beacon.pair(pairingRequest: pairingRequest);
+
+        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+      } else if (scannedResponse.startsWith('wc:')) {
+        // final String pairingRequest =
+        //     Uri.parse(scannedResponse).queryParameters['data'].toString();
+
+        //await beacon.pair(pairingRequest: pairingRequest);
+        await walletConnectCubit.connect(scannedResponse);
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else {

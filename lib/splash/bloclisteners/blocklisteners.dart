@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -265,11 +265,23 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       }
 
       if (state.status == BeaconStatus.permission) {
-        Navigator.of(context).push<void>(BeaconConfirmConnectionPage.route());
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).push<void>(
+            ConfirmConnectionPage.route(
+              connectionBridgeType: ConnectionBridgeType.beacon,
+            ),
+          );
+        });
       }
 
       if (state.status == BeaconStatus.signPayload) {
-        Navigator.of(context).push<void>(BeaconSignPayloadPage.route());
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).push<void>(
+            SignPayloadPage.route(
+              connectionBridgeType: ConnectionBridgeType.beacon,
+            ),
+          );
+        });
       }
 
       if (state.status == BeaconStatus.operation) {
@@ -291,8 +303,53 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
             messageType: MessageType.info,
           );
         }
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).push<void>(
+            OperationPage.route(
+              connectionBridgeType: ConnectionBridgeType.beacon,
+            ),
+          );
+        });
+      }
+    } catch (e) {
+      log.e(e);
+    }
+  },
+);
 
-        Navigator.of(context).push<void>(BeaconOperationPage.route());
+final walletConnectBlocListener =
+    BlocListener<WalletConnectCubit, WalletConnectState>(
+  listener: (BuildContext context, WalletConnectState state) {
+    final log = getLogger('walletConnectStateBlocListener');
+    try {
+      if (state.status == WalletConnectStatus.permission) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).push<void>(
+            ConfirmConnectionPage.route(
+              connectionBridgeType: ConnectionBridgeType.walletconnect,
+            ),
+          );
+        });
+      }
+
+      if (state.status == WalletConnectStatus.signPayload) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).push<void>(
+            SignPayloadPage.route(
+              connectionBridgeType: ConnectionBridgeType.walletconnect,
+            ),
+          );
+        });
+      }
+
+      if (state.status == WalletConnectStatus.operation) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).push<void>(
+            OperationPage.route(
+              connectionBridgeType: ConnectionBridgeType.walletconnect,
+            ),
+          );
+        });
       }
     } catch (e) {
       log.e(e);

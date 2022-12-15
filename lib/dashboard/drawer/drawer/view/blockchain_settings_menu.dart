@@ -111,7 +111,7 @@ class BlockchainSettingsView extends StatelessWidget {
                   title: l10n.manageConnectedApps,
                   onTap: () {
                     Navigator.of(context).push<void>(
-                      BeaconConnectedDappsPage.route(
+                      ConnectedDappsPage.route(
                         walletAddress: context
                             .read<WalletCubit>()
                             .state

@@ -5,6 +5,7 @@ import 'package:altme/dashboard/home/home.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
+import 'package:web3dart/web3dart.dart';
 
 String generateDefaultAccountName(
   int accountIndex,
@@ -88,4 +89,21 @@ Future<bool> isConnected() async {
   }
   log.e('No Internet Connection');
   return false;
+}
+
+double formatEthAmount({
+  required BigInt amount,
+  EtherUnit fromUnit = EtherUnit.wei,
+  EtherUnit toUnit = EtherUnit.ether,
+}) {
+  if (amount == BigInt.zero) return 0;
+
+  final String ethAmount = EtherAmount.fromUnitAndValue(fromUnit, amount)
+      .getValueInUnit(toUnit)
+      .toStringAsFixed(6)
+      .characters
+      .take(7)
+      .toString();
+
+  return double.parse(ethAmount);
 }

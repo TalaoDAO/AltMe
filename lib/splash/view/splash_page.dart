@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/splash/splash.dart';
@@ -154,6 +154,7 @@ class _SplashViewState extends State<SplashView> {
         scanBlocListener,
         qrCodeBlocListener,
         beaconBlocListener,
+        walletConnectBlocListener,
       ],
       child: Scaffold(
         body: Container(
