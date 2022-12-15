@@ -556,14 +556,13 @@ class OperationCubit extends Cubit<OperationState> {
     final int nonce = await web3Client.getTransactionCount(sender);
     final EtherAmount gasPrice = await web3Client.getGasPrice();
 
-    BigInt? gasLimit = gas != null ? gas ~/ gasPrice.getInWei : null;
-    gasLimit ??= (await estimateEthereumFee(
-          sender: sender,
-          reciever: reciever,
-          amount: amount,
-          data: data,
-        )) ~/
-        gasPrice.getInWei;
+    final maxGas = await web3Client.estimateGas(
+      sender: sender,
+      to: reciever,
+      gasPrice: gasPrice,
+      value: amount,
+      data: data != null ? hexToBytes(data) : null,
+    );
 
     final chainId = int.parse(dotenv.get('WEB3_MAINNET_CHAIN_ID'));
 
@@ -576,11 +575,11 @@ class OperationCubit extends Cubit<OperationState> {
       value: amount,
       data: data != null ? hexToBytes(data) : null,
       nonce: nonce,
-      maxGas: gasLimit.toInt(),
+      maxGas: maxGas.toInt(),
     );
 
     log.i('nonce: $nonce');
-    log.i('maxGas: ${gasLimit.toInt()}');
+    log.i('maxGas: ${maxGas.toInt()}');
     log.i('chainId: $chainId');
 
     final transactionHash = await web3Client.sendTransaction(
