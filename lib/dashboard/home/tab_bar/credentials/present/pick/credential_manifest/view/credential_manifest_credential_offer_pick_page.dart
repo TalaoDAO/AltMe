@@ -171,73 +171,37 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                             message: l10n.credentialPickPresent,
                             child: Builder(
                               builder: (context) {
-                                return MyGradientButton(
-                                  onPressed: credentialManifestState
-                                          .selected.isEmpty
-                                      ? null
-                                      : () async {
-                                          final selectedCredentials =
-                                              credentialManifestState.selected
-                                                  .map(
-                                                    (selectedIndex) =>
-                                                        credentialManifestState
-                                                                .filteredCredentialList[
-                                                            selectedIndex],
-                                                  )
-                                                  .toList();
-
-                                          final updatedCredentials = List.of(
-                                            credentialsToBePresented,
-                                          )..addAll(selectedCredentials);
-
-                                          if (inputDescriptorIndex + 1 !=
-                                              presentationDefinition
-                                                  .inputDescriptors.length) {
-                                            await Navigator.of(context)
-                                                .pushReplacement<void, void>(
-                                              CredentialManifestOfferPickPage
-                                                  .route(
-                                                uri: uri,
-                                                credential: credential,
-                                                issuer: issuer,
-                                                inputDescriptorIndex:
-                                                    inputDescriptorIndex + 1,
-                                                credentialsToBePresented:
-                                                    updatedCredentials,
-                                              ),
-                                            );
-                                          } else {
-                                            /// Authenticate
-                                            bool authenticated = false;
-                                            await Navigator.of(context)
-                                                .push<void>(
-                                              PinCodePage.route(
-                                                restrictToBack: false,
-                                                isValidCallback: () {
-                                                  authenticated = true;
-                                                },
-                                              ),
-                                            );
-
-                                            if (!authenticated) {
-                                              return;
-                                            }
-
-                                            await context
-                                                .read<ScanCubit>()
-                                                .credentialOffer(
-                                                  uri: uri,
-                                                  credentialModel: credential,
-                                                  keyId:
-                                                      SecureStorageKeys.ssiKey,
-                                                  credentialsToBePresented:
-                                                      updatedCredentials,
-                                                  issuer: issuer,
-                                                );
-                                          }
-                                        },
-                                  text: l10n.credentialPickPresent,
-                                );
+                                final inputDescriptor = credential
+                                    .credentialManifest
+                                    ?.presentationDefinition
+                                    ?.inputDescriptors[inputDescriptorIndex];
+                                //no sure if I'm correct to take first field
+                                //to check optional
+                                final isOptional = inputDescriptor
+                                        ?.constraints?.fields?.first.optional ??
+                                    false;
+                                if (isOptional) {
+                                  return MyGradientButton(
+                                    onPressed: () => present(
+                                      context,
+                                      credentialManifestState,
+                                      presentationDefinition,
+                                    ),
+                                    text: l10n.skip,
+                                  );
+                                } else {
+                                  return MyGradientButton(
+                                    onPressed:
+                                        credentialManifestState.selected.isEmpty
+                                            ? null
+                                            : () => present(
+                                                  context,
+                                                  credentialManifestState,
+                                                  presentationDefinition,
+                                                ),
+                                    text: l10n.credentialPickPresent,
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -250,5 +214,58 @@ class CredentialManifestOfferPickView extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> present(
+    BuildContext context,
+    CredentialManifestPickState credentialManifestState,
+    PresentationDefinition presentationDefinition,
+  ) async {
+    final selectedCredentials = credentialManifestState.selected
+        .map(
+          (selectedIndex) =>
+              credentialManifestState.filteredCredentialList[selectedIndex],
+        )
+        .toList();
+
+    final updatedCredentials = List.of(
+      credentialsToBePresented,
+    )..addAll(selectedCredentials);
+
+    if (inputDescriptorIndex + 1 !=
+        presentationDefinition.inputDescriptors.length) {
+      await Navigator.of(context).pushReplacement<void, void>(
+        CredentialManifestOfferPickPage.route(
+          uri: uri,
+          credential: credential,
+          issuer: issuer,
+          inputDescriptorIndex: inputDescriptorIndex + 1,
+          credentialsToBePresented: updatedCredentials,
+        ),
+      );
+    } else {
+      /// Authenticate
+      bool authenticated = false;
+      await Navigator.of(context).push<void>(
+        PinCodePage.route(
+          restrictToBack: false,
+          isValidCallback: () {
+            authenticated = true;
+          },
+        ),
+      );
+
+      if (!authenticated) {
+        return;
+      }
+
+      await context.read<ScanCubit>().credentialOffer(
+            uri: uri,
+            credentialModel: credential,
+            keyId: SecureStorageKeys.ssiKey,
+            credentialsToBePresented: updatedCredentials,
+            issuer: issuer,
+          );
+    }
   }
 }

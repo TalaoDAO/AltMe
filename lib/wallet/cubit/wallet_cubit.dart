@@ -171,7 +171,7 @@ class WalletCubit extends Cubit<WalletState> {
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.ethereum,
-          totalAccountsYet: int.parse(totalAccountsYet)+1,
+          totalAccountsYet: int.parse(totalAccountsYet) + 1,
           showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
         );
       }
@@ -370,10 +370,10 @@ class WalletCubit extends Cubit<WalletState> {
 
     final filteredCredentialList = getCredentialsFromFilterList(
       [
-        Field([r'$..type'], filter),
+        Field(path: [r'$..type'], filter: filter),
         Field(
-          [r'$..associatedAddress'],
-          Filter('String', cryptoAccountData.walletAddress),
+          path: [r'$..associatedAddress'],
+          filter: Filter('String', cryptoAccountData.walletAddress),
         ),
       ],
       oldCredentialList,
