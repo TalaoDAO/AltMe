@@ -265,19 +265,23 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       }
 
       if (state.status == BeaconStatus.permission) {
-        Navigator.of(context).push<void>(
-          ConfirmConnectionPage.route(
-            connectionBridgeType: ConnectionBridgeType.beacon,
-          ),
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).push<void>(
+            ConfirmConnectionPage.route(
+              connectionBridgeType: ConnectionBridgeType.beacon,
+            ),
+          );
+        });
       }
 
       if (state.status == BeaconStatus.signPayload) {
-        Navigator.of(context).push<void>(
-          SignPayloadPage.route(
-            connectionBridgeType: ConnectionBridgeType.beacon,
-          ),
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).push<void>(
+            SignPayloadPage.route(
+              connectionBridgeType: ConnectionBridgeType.beacon,
+            ),
+          );
+        });
       }
 
       if (state.status == BeaconStatus.operation) {
@@ -299,12 +303,13 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
             messageType: MessageType.info,
           );
         }
-
-        Navigator.of(context).push<void>(
-          OperationPage.route(
-            connectionBridgeType: ConnectionBridgeType.beacon,
-          ),
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).push<void>(
+            OperationPage.route(
+              connectionBridgeType: ConnectionBridgeType.beacon,
+            ),
+          );
+        });
       }
     } catch (e) {
       log.e(e);
@@ -318,27 +323,33 @@ final walletConnectBlocListener =
     final log = getLogger('walletConnectStateBlocListener');
     try {
       if (state.status == WalletConnectStatus.permission) {
-        Navigator.of(context).push<void>(
-          ConfirmConnectionPage.route(
-            connectionBridgeType: ConnectionBridgeType.walletconnect,
-          ),
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).push<void>(
+            ConfirmConnectionPage.route(
+              connectionBridgeType: ConnectionBridgeType.walletconnect,
+            ),
+          );
+        });
       }
 
       if (state.status == WalletConnectStatus.signPayload) {
-        Navigator.of(context).push<void>(
-          SignPayloadPage.route(
-            connectionBridgeType: ConnectionBridgeType.walletconnect,
-          ),
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).push<void>(
+            SignPayloadPage.route(
+              connectionBridgeType: ConnectionBridgeType.walletconnect,
+            ),
+          );
+        });
       }
 
       if (state.status == WalletConnectStatus.operation) {
-        Navigator.of(context).push<void>(
-          OperationPage.route(
-            connectionBridgeType: ConnectionBridgeType.walletconnect,
-          ),
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).push<void>(
+            OperationPage.route(
+              connectionBridgeType: ConnectionBridgeType.walletconnect,
+            ),
+          );
+        });
       }
     } catch (e) {
       log.e(e);

@@ -26,27 +26,9 @@ class BeaconCubit extends Cubit<BeaconState> {
 
   Future<void> peerFromDeepLink(String beaconData) async {
     final isInternetAvailable = await isConnected();
-    if (isInternetAvailable && isBeaconRequestAllowed()) {
+    if (isInternetAvailable) {
       await beacon.pair(pairingRequest: beaconData);
     }
-  }
-
-  bool isBeaconRequestAllowed() {
-    final DateTime currentTime = DateTime.now();
-    final lastBeaconRequestTime = state.lastBeaconRequestTime;
-    bool isBeaconRequestAllowed = true;
-    if (lastBeaconRequestTime != null) {
-      final difference = currentTime.difference(lastBeaconRequestTime);
-      if (difference < const Duration(seconds: 1)) {
-        isBeaconRequestAllowed = false;
-      }
-    }
-    emit(
-      state.copyWith(
-        lastBeaconRequestTime: DateTime.now(),
-      ),
-    );
-    return isBeaconRequestAllowed;
   }
 
   void listenToBeacon() {
@@ -71,34 +53,31 @@ class BeaconCubit extends Cubit<BeaconState> {
               );
               break;
             case RequestType.signPayload:
-              if (isBeaconRequestAllowed()) {
-                emit(
-                  state.copyWith(
-                    status: BeaconStatus.signPayload,
-                    beaconRequest: beaconRequest,
-                  ),
-                );
-              }
+              emit(
+                state.copyWith(
+                  status: BeaconStatus.signPayload,
+                  beaconRequest: beaconRequest,
+                ),
+              );
+
               break;
             case RequestType.operation:
-              if (isBeaconRequestAllowed()) {
-                emit(
-                  state.copyWith(
-                    status: BeaconStatus.operation,
-                    beaconRequest: beaconRequest,
-                  ),
-                );
-              }
+              emit(
+                state.copyWith(
+                  status: BeaconStatus.operation,
+                  beaconRequest: beaconRequest,
+                ),
+              );
+
               break;
             case RequestType.broadcast:
-              if (isBeaconRequestAllowed()) {
-                emit(
-                  state.copyWith(
-                    status: BeaconStatus.broadcast,
-                    beaconRequest: beaconRequest,
-                  ),
-                );
-              }
+              emit(
+                state.copyWith(
+                  status: BeaconStatus.broadcast,
+                  beaconRequest: beaconRequest,
+                ),
+              );
+
               break;
             // ignore: no_default_cases
             default:
