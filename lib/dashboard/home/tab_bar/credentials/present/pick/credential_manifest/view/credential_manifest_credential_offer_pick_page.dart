@@ -108,6 +108,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
               },
               child: BasePage(
                 title: l10n.credentialPickTitle,
+                titleAlignment: Alignment.topCenter,
                 titleTrailing: const WhiteCloseButton(),
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
@@ -147,14 +148,17 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                     const SizedBox(height: 12),
                     ...List.generate(
                       credentialManifestState.filteredCredentialList.length,
-                      (index) => CredentialsListPageItem(
-                        credentialModel: credentialManifestState
-                            .filteredCredentialList[index],
-                        selected: credentialManifestState.selected == index,
-                        onTap: () => context
-                            .read<CredentialManifestPickCubit>()
-                            .toggle(index),
-                      ),
+                      (index) {
+                        return CredentialsListPageItem(
+                          credentialModel: credentialManifestState
+                              .filteredCredentialList[index],
+                          selected:
+                              credentialManifestState.selected.contains(index),
+                          onTap: () => context
+                              .read<CredentialManifestPickCubit>()
+                              .toggle(index),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -168,19 +172,23 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                             child: Builder(
                               builder: (context) {
                                 return MyGradientButton(
-                                  onPressed: credentialManifestState.selected ==
-                                          null
+                                  onPressed: credentialManifestState
+                                          .selected.isEmpty
                                       ? null
                                       : () async {
-                                          final selectedCredential =
-                                              credentialManifestState
-                                                      .filteredCredentialList[
-                                                  credentialManifestState
-                                                      .selected!];
+                                          final selectedCredentials =
+                                              credentialManifestState.selected
+                                                  .map(
+                                                    (selectedIndex) =>
+                                                        credentialManifestState
+                                                                .filteredCredentialList[
+                                                            selectedIndex],
+                                                  )
+                                                  .toList();
 
                                           final updatedCredentials = List.of(
                                             credentialsToBePresented,
-                                          )..add(selectedCredential);
+                                          )..addAll(selectedCredentials);
 
                                           if (inputDescriptorIndex + 1 !=
                                               presentationDefinition
