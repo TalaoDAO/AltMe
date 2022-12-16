@@ -266,37 +266,37 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_bunnyPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_bunnyPassHowToGetIt;
-      
+
       case ResponseString.RESPONSE_STRING_dogamiPassExpirationDate:
         return globalMessage.RESPONSE_STRING_dogamiPassExpirationDate;
 
       case ResponseString.RESPONSE_STRING_dogamiPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_dogamiPassHowToGetIt;
-      
+
       case ResponseString.RESPONSE_STRING_matterlightPassExpirationDate:
         return globalMessage.RESPONSE_STRING_matterlightPassExpirationDate;
 
       case ResponseString.RESPONSE_STRING_matterlightPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_matterlightPassHowToGetIt;
-      
+
       case ResponseString.RESPONSE_STRING_pigsPassExpirationDate:
         return globalMessage.RESPONSE_STRING_pigsPassExpirationDate;
 
       case ResponseString.RESPONSE_STRING_pigsPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_pigsPassHowToGetIt;
-      
+
       case ResponseString.RESPONSE_STRING_trooperzPassExpirationDate:
         return globalMessage.RESPONSE_STRING_trooperzPassExpirationDate;
 
       case ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_trooperzPassHowToGetIt;
-      
+
       case ResponseString.RESPONSE_STRING_tzlandPassExpirationDate:
         return globalMessage.RESPONSE_STRING_tzlandPassExpirationDate;
 
       case ResponseString.RESPONSE_STRING_tzlandPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_tzlandPassHowToGetIt;
-      
+
       case ResponseString.RESPONSE_STRING_tezoniaPassExpirationDate:
         return globalMessage.RESPONSE_STRING_tezoniaPassExpirationDate;
 
@@ -389,6 +389,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage:
         return globalMessage.RESPONSE_STRING_thisFeatureIsNotSupportedMessage;
+
+      case ResponseString.RESPONSE_STRING_credentialRequiredMessage:
+        return globalMessage.RESPONSE_STRING_credentialRequiredMessage;
     }
   }
 }

@@ -7,18 +7,43 @@ class AlertMessage {
     required BuildContext context,
     required StateMessage stateMessage,
   }) {
-    final MessageHandler messageHandler = stateMessage.messageHandler!;
-    final String message = messageHandler.getMessage(context, messageHandler);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(milliseconds: 800),
-        content: SnackBarContent(
-          message: message,
-          iconPath: stateMessage.type!.iconPath,
+    final MessageHandler? messageHandler = stateMessage.messageHandler;
+    final String? stringMessage = stateMessage.stringMessage;
+    String message = '';
+
+    if (messageHandler != null) {
+      message = messageHandler.getMessage(context, messageHandler);
+    }
+
+    if (stringMessage != null) {
+      if (message.isNotEmpty) {
+        message = '$message $stringMessage';
+      } else {
+        message = stringMessage;
+      }
+    }
+
+    if (stateMessage.showDialog) {
+      showDialog<bool>(
+        context: context,
+        builder: (context) => InfoDialog(
+          title: message,
+          button: context.l10n.ok,
+          //icon: stateMessage.type.iconPath,
         ),
-        backgroundColor: Colors.transparent,
-      ),
-    );
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: const Duration(milliseconds: 800),
+          content: SnackBarContent(
+            message: message,
+            iconPath: stateMessage.type.iconPath,
+          ),
+          backgroundColor: Colors.transparent,
+        ),
+      );
+    }
   }
 
   static void showStringMessage({

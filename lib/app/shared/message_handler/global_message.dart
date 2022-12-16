@@ -236,62 +236,58 @@ class GlobalMessage {
   String get RESPONSE_STRING_emailPassExpirationDate =>
       l10n.emailPassExpirationDate;
   String get RESPONSE_STRING_emailPassHowToGetIt => l10n.emailPassHowToGetIt;
-  
+
   String get RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard =>
       l10n.tezotopiaMembershipWhyGetThisCard;
   String get RESPONSE_STRING_tezotopiaMembershipExpirationDate =>
       l10n.tezotopiaMembershipExpirationDate;
   String get RESPONSE_STRING_tezotopiaMembershipHowToGetIt =>
       l10n.tezotopiaMembershipHowToGetIt;
-  
+
   String get RESPONSE_STRING_tezoniaPassWhyGetThisCard =>
       l10n.tezoniaPassWhyGetThisCard;
   String get RESPONSE_STRING_tezoniaPassExpirationDate =>
       l10n.tezoniaPassExpirationDate;
   String get RESPONSE_STRING_tezoniaPassHowToGetIt =>
       l10n.tezoniaPassHowToGetIt;
-  
+
   String get RESPONSE_STRING_tzlandPassWhyGetThisCard =>
       l10n.tzlandPassWhyGetThisCard;
   String get RESPONSE_STRING_tzlandPassExpirationDate =>
       l10n.tzlandPassExpirationDate;
-  String get RESPONSE_STRING_tzlandPassHowToGetIt =>
-      l10n.tzlandPassHowToGetIt;
-  
+  String get RESPONSE_STRING_tzlandPassHowToGetIt => l10n.tzlandPassHowToGetIt;
+
   String get RESPONSE_STRING_trooperzPassWhyGetThisCard =>
       l10n.trooperzPassWhyGetThisCard;
   String get RESPONSE_STRING_trooperzPassExpirationDate =>
       l10n.trooperzPassExpirationDate;
   String get RESPONSE_STRING_trooperzPassHowToGetIt =>
       l10n.trooperzPassHowToGetIt;
-  
+
   String get RESPONSE_STRING_pigsPassWhyGetThisCard =>
       l10n.pigsPassWhyGetThisCard;
   String get RESPONSE_STRING_pigsPassExpirationDate =>
       l10n.pigsPassExpirationDate;
-  String get RESPONSE_STRING_pigsPassHowToGetIt =>
-      l10n.pigsPassHowToGetIt;
-  
+  String get RESPONSE_STRING_pigsPassHowToGetIt => l10n.pigsPassHowToGetIt;
+
   String get RESPONSE_STRING_matterlightPassWhyGetThisCard =>
       l10n.matterlightPassWhyGetThisCard;
   String get RESPONSE_STRING_matterlightPassExpirationDate =>
       l10n.matterlightPassExpirationDate;
   String get RESPONSE_STRING_matterlightPassHowToGetIt =>
       l10n.matterlightPassHowToGetIt;
-  
+
   String get RESPONSE_STRING_dogamiPassWhyGetThisCard =>
       l10n.dogamiPassWhyGetThisCard;
   String get RESPONSE_STRING_dogamiPassExpirationDate =>
       l10n.dogamiPassExpirationDate;
-  String get RESPONSE_STRING_dogamiPassHowToGetIt =>
-      l10n.dogamiPassHowToGetIt;
+  String get RESPONSE_STRING_dogamiPassHowToGetIt => l10n.dogamiPassHowToGetIt;
 
   String get RESPONSE_STRING_bunnyPassWhyGetThisCard =>
       l10n.bunnyPassWhyGetThisCard;
   String get RESPONSE_STRING_bunnyPassExpirationDate =>
       l10n.bunnyPassExpirationDate;
-  String get RESPONSE_STRING_bunnyPassHowToGetIt =>
-      l10n.bunnyPassHowToGetIt;
+  String get RESPONSE_STRING_bunnyPassHowToGetIt => l10n.bunnyPassHowToGetIt;
   String get RESPONSE_STRING_over18WhyGetThisCard => l10n.over18WhyGetThisCard;
   String get RESPONSE_STRING_over18ExpirationDate => l10n.over18ExpirationDate;
   String get RESPONSE_STRING_over18HowToGetIt => l10n.over18HowToGetIt;
@@ -338,4 +334,6 @@ class GlobalMessage {
       l10n.payloadFormatErrorMessage;
   String get RESPONSE_STRING_thisFeatureIsNotSupportedMessage =>
       l10n.thisFeatureIsNotSupportedMessage;
+  String get RESPONSE_STRING_credentialRequiredMessage =>
+      l10n.credentialRequiredMessage;
 }

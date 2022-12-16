@@ -303,13 +303,13 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
             messageType: MessageType.info,
           );
         }
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.of(context).push<void>(
-            OperationPage.route(
-              connectionBridgeType: ConnectionBridgeType.beacon,
-            ),
-          );
-        });
+        //WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).push<void>(
+          OperationPage.route(
+            connectionBridgeType: ConnectionBridgeType.beacon,
+          ),
+        );
+        //});
       }
     } catch (e) {
       log.e(e);

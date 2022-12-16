@@ -10,11 +10,13 @@ import 'package:altme/scan/scan.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -235,8 +237,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           );
         }
 
-        final openIdCredential = getCredential(sIOPV2Param.claims!);
-        final openIdIssuer = getIssuer(sIOPV2Param.claims!);
+        final openIdCredential = getCredentialName(sIOPV2Param.claims!);
+        final openIdIssuer = getIssuersName(sIOPV2Param.claims!);
 
         ///check if credential and issuer both are not present
         if (openIdCredential == '' && openIdIssuer == '') {
@@ -324,6 +326,67 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       data = response is String ? jsonDecode(response) : response;
 
       log.i('data - $data');
+
+      final credentialManifest = CredentialManifest.fromJson(
+        data['credential_manifest'] as Map<String, dynamic>,
+      );
+
+      final PresentationDefinition? presentationDefinition =
+          credentialManifest.presentationDefinition;
+      if (presentationDefinition != null &&
+          presentationDefinition.inputDescriptors.isNotEmpty) {
+        for (final descriptor in presentationDefinition.inputDescriptors) {
+          /// using JsonPath to find credential Name
+          final dynamic json = jsonDecode(jsonEncode(descriptor.constraints));
+          final dynamic credentialField =
+              JsonPath(r'$..fields').read(json).first.value.toList().first;
+
+          final credentialName = credentialField['filter']['pattern'] as String;
+
+          /// converting string to CredentialSubjectModel
+          final Map<String, dynamic> credentialNameJson = <String, dynamic>{
+            'type': credentialName
+          };
+          final CredentialSubjectModel credentialSubjectModel =
+              CredentialSubjectModel.fromJson(credentialNameJson);
+
+          /// fetching all the credentials
+          final CredentialsRepository repository =
+              CredentialsRepository(getSecureStorage);
+
+          final List<CredentialModel> allCredentials =
+              await repository.findAll();
+
+          bool isPresentable = false;
+
+          for (final credential in allCredentials) {
+            if (credentialSubjectModel.credentialSubjectType ==
+                credential.credentialPreview.credentialSubjectModel
+                    .credentialSubjectType) {
+              isPresentable = true;
+              break;
+            } else {
+              isPresentable = false;
+            }
+          }
+          if (!isPresentable) {
+            emit(
+              state.copyWith(
+                qrScanStatus: QrScanStatus.idle,
+                message: StateMessage.info(
+                  stringMessage: '$credentialName.',
+                  messageHandler: ResponseMessage(
+                    ResponseString.RESPONSE_STRING_credentialRequiredMessage,
+                  ),
+                  showDialog: true,
+                ),
+              ),
+            );
+            return;
+          }
+        }
+      }
+
       switch (data['type']) {
         case 'CredentialOffer':
           log.i('Credential Offer');
@@ -492,35 +555,5 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       log.e('An error occurred while decoding.', e);
     }
     return data;
-  }
-
-  String getCredential(String claims) {
-    final dynamic claimsJson = jsonDecode(claims);
-    final fieldsPath = JsonPath(r'$..fields');
-    final dynamic credentialField = fieldsPath
-        .read(claimsJson)
-        .first
-        .value
-        .where(
-          (dynamic e) => e['path'].toString() == r'[$.credentialSubject.type]',
-        )
-        .toList()
-        .first;
-    return credentialField['filter']['pattern'] as String;
-  }
-
-  String getIssuer(String claims) {
-    final dynamic claimsJson = jsonDecode(claims);
-    final fieldsPath = JsonPath(r'$..fields');
-    final dynamic issuerField = fieldsPath
-        .read(claimsJson)
-        .first
-        .value
-        .where(
-          (dynamic e) => e['path'].toString() == r'[$.issuer]',
-        )
-        .toList()
-        .first;
-    return issuerField['filter']['pattern'] as String;
   }
 }
