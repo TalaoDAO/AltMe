@@ -57,10 +57,11 @@ class ManageDIDPage extends StatelessWidget {
                           text: context.read<DIDCubit>().state.did ?? '...',
                         ),
                       );
-                      AlertMessage.showStringMessage(
+                      AlertMessage.showStateMessage(
                         context: context,
-                        message: l10n.copyDIDKeyToClipboard,
-                        messageType: MessageType.success,
+                        stateMessage: StateMessage.success(
+                          stringMessage: l10n.copyDIDKeyToClipboard,
+                        ),
                       );
                     },
                   ),

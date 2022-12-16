@@ -51,10 +51,11 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
         newCryptoAccountName != cryptoAccountData.name &&
         newCryptoAccountName.isNotEmpty) {
       if (accountNameList.contains(newCryptoAccountName)) {
-        AlertMessage.showStringMessage(
+        AlertMessage.showStateMessage(
           context: context,
-          message: l10n.sameAccountNameError,
-          messageType: MessageType.error,
+          stateMessage: StateMessage.error(
+            stringMessage: l10n.sameAccountNameError,
+          ),
         );
         return;
       } else {

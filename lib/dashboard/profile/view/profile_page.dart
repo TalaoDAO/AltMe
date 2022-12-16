@@ -275,13 +275,12 @@ class _PersonalPageState extends State<ProfileView> {
                           AppStatus.loading) return;
 
                       await _updateProfile();
-
-                      AlertMessage.showStringMessage(
+                      AlertMessage.showStateMessage(
                         context: context,
-                        message: l10n.succesfullyUpdated,
-                        messageType: MessageType.success,
+                        stateMessage: StateMessage.success(
+                          stringMessage: l10n.succesfullyUpdated,
+                        ),
                       );
-
                       Navigator.of(context).pop();
                     },
                   ),
@@ -303,13 +302,12 @@ class _PersonalPageState extends State<ProfileView> {
                             selfIssuedCredentialDataModel:
                                 _getSelfIssuedCredential(),
                           );
-
-                      AlertMessage.showStringMessage(
+                      AlertMessage.showStateMessage(
                         context: context,
-                        message: l10n.succesfullyUpdated,
-                        messageType: MessageType.success,
+                        stateMessage: StateMessage.success(
+                          stringMessage: l10n.succesfullyUpdated,
+                        ),
                       );
-
                       Navigator.of(context).pop();
                     },
                   ),

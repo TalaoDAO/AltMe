@@ -28,9 +28,9 @@ class IssuerVerificationRegistrySelector extends StatelessWidget {
             onTap: !isEnable
                 ? null
                 : () {
-                    context
-                        .read<ProfileCubit>()
-                        .updateIssuerVerificationUrl(issuerVerificationRegistry);
+                    context.read<ProfileCubit>().updateIssuerVerificationUrl(
+                          issuerVerificationRegistry,
+                        );
                   },
             title: Text(
               issuerVerificationRegistry.name,

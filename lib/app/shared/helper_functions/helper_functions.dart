@@ -5,6 +5,7 @@ import 'package:altme/dashboard/home/home.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
+import 'package:json_path/json_path.dart';
 import 'package:web3dart/web3dart.dart';
 
 String generateDefaultAccountName(
@@ -106,4 +107,34 @@ double formatEthAmount({
       .toString();
 
   return double.parse(ethAmount);
+}
+
+String getCredentialName(String constraints) {
+  final dynamic constraintsJson = jsonDecode(constraints);
+  final fieldsPath = JsonPath(r'$..fields');
+  final dynamic credentialField = fieldsPath
+      .read(constraintsJson)
+      .first
+      .value
+      .where(
+        (dynamic e) => e['path'].toString() == r'[$.credentialSubject.type]',
+      )
+      .toList()
+      .first;
+  return credentialField['filter']['pattern'] as String;
+}
+
+String getIssuersName(String constraints) {
+  final dynamic constraintsJson = jsonDecode(constraints);
+  final fieldsPath = JsonPath(r'$..fields');
+  final dynamic issuerField = fieldsPath
+      .read(constraintsJson)
+      .first
+      .value
+      .where(
+        (dynamic e) => e['path'].toString() == r'[$.issuer]',
+      )
+      .toList()
+      .first;
+  return issuerField['filter']['pattern'] as String;
 }
