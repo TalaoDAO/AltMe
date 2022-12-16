@@ -45,23 +45,6 @@ class AlertMessage {
       );
     }
   }
-
-  static void showStringMessage({
-    required BuildContext context,
-    required String message,
-    required MessageType messageType,
-  }) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(milliseconds: 800),
-        content: SnackBarContent(
-          message: message,
-          iconPath: messageType.iconPath,
-        ),
-        backgroundColor: Colors.transparent,
-      ),
-    );
-  }
 }
 
 class SnackBarContent extends StatelessWidget {

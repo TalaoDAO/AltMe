@@ -233,16 +233,14 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
 
         // if network type does not match
         if (incomingNetworkType != currentNetworkType) {
-          final MessageHandler messageHandler = ResponseMessage(
-            ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE,
-          );
-          final String message =
-              messageHandler.getMessage(context, messageHandler);
-
-          AlertMessage.showStringMessage(
+          AlertMessage.showStateMessage(
             context: context,
-            message: '$message $incomingNetworkType.',
-            messageType: MessageType.error,
+            stateMessage: StateMessage.error(
+              stringMessage: '$incomingNetworkType.',
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE,
+              ),
+            ),
           );
 
           final requestId = beaconRequest.request!.id!;
@@ -291,16 +289,14 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
             id: beaconRequest.request!.id!,
             transactionHash: null,
           );
-          final MessageHandler messageHandler = ResponseMessage(
-            ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
-          );
-          final String message =
-              messageHandler.getMessage(context, messageHandler);
 
-          return AlertMessage.showStringMessage(
+          return AlertMessage.showStateMessage(
             context: context,
-            message: message,
-            messageType: MessageType.info,
+            stateMessage: StateMessage.info(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
+              ),
+            ),
           );
         }
         //WidgetsBinding.instance.addPostFrameCallback((_) {

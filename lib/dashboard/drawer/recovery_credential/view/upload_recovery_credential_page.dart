@@ -92,12 +92,13 @@ class _UploadRecoveryCredentialViewState
             if (state.status == AppStatus.success &&
                 state.recoveredCredentialLength != null) {
               final credentialLength = state.recoveredCredentialLength;
-              AlertMessage.showStringMessage(
+              AlertMessage.showStateMessage(
                 context: context,
-                message: l10n.recoveryCredentialSuccessMessage(
-                  '''$credentialLength ${credentialLength! > 1 ? '${l10n.credential}s' : l10n.credential}''',
+                stateMessage: StateMessage.success(
+                  stringMessage: l10n.recoveryCredentialSuccessMessage(
+                    '''$credentialLength ${credentialLength! > 1 ? '${l10n.credential}s' : l10n.credential}''',
+                  ),
                 ),
-                messageType: MessageType.success,
               );
               await Future<void>.delayed(const Duration(milliseconds: 800));
               Navigator.of(context).pop();
@@ -164,13 +165,14 @@ class _UploadRecoveryCredentialViewState
   }
 
   Future<void> _pickRecoveryFile() async {
-    final localization = context.l10n;
+    final l10n = context.l10n;
     final storagePermission = await Permission.storage.request();
     if (storagePermission.isDenied) {
-      AlertMessage.showStringMessage(
+      AlertMessage.showStateMessage(
         context: context,
-        message: localization.storagePermissionDeniedMessage,
-        messageType: MessageType.success,
+        stateMessage: StateMessage.success(
+          stringMessage: l10n.storagePermissionDeniedMessage,
+        ),
       );
       return;
     }
