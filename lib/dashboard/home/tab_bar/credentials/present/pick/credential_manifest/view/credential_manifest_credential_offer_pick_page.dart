@@ -171,23 +171,36 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                             message: l10n.credentialPickPresent,
                             child: Builder(
                               builder: (context) {
-                                final inputDescriptor = credential
-                                    .credentialManifest
-                                    ?.presentationDefinition
-                                    ?.inputDescriptors[inputDescriptorIndex];
+                                final inputDescriptor = presentationDefinition
+                                    .inputDescriptors[inputDescriptorIndex];
                                 //no sure if I'm correct to take first field
                                 //to check optional
                                 final isOptional = inputDescriptor
-                                        ?.constraints?.fields?.first.optional ??
+                                        .constraints?.fields?.first.optional ??
                                     false;
+
+                                final bool isOngoingStep =
+                                    inputDescriptorIndex + 1 !=
+                                        presentationDefinition
+                                            .inputDescriptors.length;
+
                                 if (isOptional) {
                                   return MyGradientButton(
                                     onPressed: () => present(
-                                      context,
-                                      credentialManifestState,
-                                      presentationDefinition,
+                                      context: context,
+                                      credentialManifestState:
+                                          credentialManifestState,
+                                      presentationDefinition:
+                                          presentationDefinition,
+                                      skip: credentialManifestState
+                                          .selected.isEmpty,
                                     ),
-                                    text: l10n.skip,
+                                    text:
+                                        credentialManifestState.selected.isEmpty
+                                            ? l10n.skip
+                                            : isOngoingStep
+                                                ? l10n.next
+                                                : l10n.credentialPickPresent,
                                   );
                                 } else {
                                   return MyGradientButton(
@@ -195,9 +208,12 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                         credentialManifestState.selected.isEmpty
                                             ? null
                                             : () => present(
-                                                  context,
-                                                  credentialManifestState,
-                                                  presentationDefinition,
+                                                  context: context,
+                                                  credentialManifestState:
+                                                      credentialManifestState,
+                                                  presentationDefinition:
+                                                      presentationDefinition,
+                                                  skip: false,
                                                 ),
                                     text: l10n.credentialPickPresent,
                                   );
@@ -216,21 +232,32 @@ class CredentialManifestOfferPickView extends StatelessWidget {
     );
   }
 
-  Future<void> present(
-    BuildContext context,
-    CredentialManifestPickState credentialManifestState,
-    PresentationDefinition presentationDefinition,
-  ) async {
-    final selectedCredentials = credentialManifestState.selected
-        .map(
-          (selectedIndex) =>
-              credentialManifestState.filteredCredentialList[selectedIndex],
-        )
-        .toList();
+  Future<void> present({
+    required BuildContext context,
+    required CredentialManifestPickState credentialManifestState,
+    required PresentationDefinition presentationDefinition,
+    required bool skip,
+  }) async {
+    late List<CredentialModel> updatedCredentials;
+    if (skip) {
+      updatedCredentials = List.of(
+        credentialsToBePresented,
+      );
+    } else {
+      final selectedCredentials = credentialManifestState.selected
+          .map(
+            (selectedIndex) =>
+                credentialManifestState.filteredCredentialList[selectedIndex],
+          )
+          .toList();
 
-    final updatedCredentials = List.of(
-      credentialsToBePresented,
-    )..addAll(selectedCredentials);
+      updatedCredentials = List.of(
+        credentialsToBePresented,
+      )..addAll(selectedCredentials);
+    }
+
+    getLogger('present')
+        .i('credential to presented - ${updatedCredentials.length}');
 
     if (inputDescriptorIndex + 1 !=
         presentationDefinition.inputDescriptors.length) {
