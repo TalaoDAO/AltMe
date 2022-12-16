@@ -246,6 +246,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
           final requestId = beaconRequest.request!.id!;
 
           if (state.status == BeaconStatus.permission) {
+            context.read<BeaconCubit>().idle();
             beacon.permissionResponse(
               id: requestId,
               publicKey: null,
@@ -263,6 +264,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       }
 
       if (state.status == BeaconStatus.permission) {
+        context.read<BeaconCubit>().idle();
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.of(context).push<void>(
             ConfirmConnectionPage.route(
@@ -273,6 +275,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       }
 
       if (state.status == BeaconStatus.signPayload) {
+        context.read<BeaconCubit>().idle();
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.of(context).push<void>(
             SignPayloadPage.route(
@@ -283,6 +286,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       }
 
       if (state.status == BeaconStatus.operation) {
+        context.read<BeaconCubit>().idle();
         if (beaconRequest.operationDetails != null &&
             beaconRequest.operationDetails!.isEmpty) {
           beacon.operationResponse(
