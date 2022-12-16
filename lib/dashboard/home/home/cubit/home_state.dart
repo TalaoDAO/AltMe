@@ -33,19 +33,9 @@ class HomeState extends Equatable {
     );
   }
 
-  HomeState error({required MessageHandler messageHandler}) {
-    return HomeState(
-      status: AppStatus.error,
-      message: StateMessage.error(messageHandler: messageHandler),
-      homeStatus: homeStatus,
-      passBaseStatus: passBaseStatus,
-      link: link,
-    );
-  }
-
   HomeState copyWith({
     required AppStatus status,
-    MessageHandler? messageHandler,
+    StateMessage? message,
     HomeStatus? homeStatus,
     PassBaseStatus? passBaseStatus,
     String? link,
@@ -54,9 +44,7 @@ class HomeState extends Equatable {
   }) {
     return HomeState(
       status: status,
-      message: messageHandler == null
-          ? null
-          : StateMessage.success(messageHandler: messageHandler),
+      message: message,
       homeStatus: homeStatus ?? this.homeStatus,
       passBaseStatus: passBaseStatus ?? this.passBaseStatus,
       link: link ?? this.link,
