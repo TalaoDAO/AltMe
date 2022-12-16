@@ -31,6 +31,10 @@ class BeaconCubit extends Cubit<BeaconState> {
     }
   }
 
+  void idle() {
+    emit(state.copyWith());
+  }
+
   void listenToBeacon() {
     try {
       log.i('listening to beacon');
