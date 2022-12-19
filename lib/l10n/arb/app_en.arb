@@ -732,5 +732,6 @@
   "guardaWallet": "Guarda Wallet",
   "exodusWallet": "Exodus Wallet",
   "trustWallet": "Trust Wallet",
-  "myetherwallet": "MyEther Wallet"
+  "myetherwallet": "MyEther Wallet",
+  "skip": "Skip"
 }

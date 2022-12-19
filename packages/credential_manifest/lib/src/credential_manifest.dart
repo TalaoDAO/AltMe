@@ -41,19 +41,18 @@ class CredentialManifest {
   /// A PresentationDefinition which is a list of presentations
   @JsonKey(
     name: 'presentation_definition',
-    fromJson: presentationDefinitionFromJson,
   )
   final PresentationDefinition? presentationDefinition;
 
   /// Create json object from instance
   Map<String, dynamic> toJson() => _$CredentialManifestToJson(this);
 
-  static PresentationDefinition? presentationDefinitionFromJson(dynamic json) {
-    if (json == null || json['input_descriptors'] == null) {
-      return null;
-    }
-    return PresentationDefinition.fromJson(json as Map<String, dynamic>);
-  }
+  // static PresentationDefinition? presentationDefinitionFromJson(dynamic json) {
+  //   if (json == null || json['input_descriptors'] == null) {
+  //     return null;
+  //   }
+  //   return PresentationDefinition.fromJson(json as Map<String, dynamic>);
+  // }
 
   static CredentialManifest copyWith({
     String? id,

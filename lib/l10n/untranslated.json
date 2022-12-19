@@ -675,7 +675,8 @@
     "guardaWallet",
     "exodusWallet",
     "trustWallet",
-    "myetherwallet"
+    "myetherwallet",
+    "skip"
   ],
 
   "es": [
@@ -1354,7 +1355,8 @@
     "guardaWallet",
     "exodusWallet",
     "trustWallet",
-    "myetherwallet"
+    "myetherwallet",
+    "skip"
   ],
 
   "fr": [
@@ -2033,7 +2035,8 @@
     "guardaWallet",
     "exodusWallet",
     "trustWallet",
-    "myetherwallet"
+    "myetherwallet",
+    "skip"
   ],
 
   "it": [
@@ -2712,6 +2715,7 @@
     "guardaWallet",
     "exodusWallet",
     "trustWallet",
-    "myetherwallet"
+    "myetherwallet",
+    "skip"
   ]
 }
