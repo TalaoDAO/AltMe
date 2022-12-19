@@ -75,10 +75,11 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage> {
                           text: context.read<DIDPrivateKeyCubit>().state,
                         ),
                       );
-                      AlertMessage.showStringMessage(
+                      AlertMessage.showStateMessage(
                         context: context,
-                        message: l10n.copySecretKeyToClipboard,
-                        messageType: MessageType.success,
+                        stateMessage: StateMessage.success(
+                          stringMessage: l10n.copySecretKeyToClipboard,
+                        ),
                       );
                     },
                   ),

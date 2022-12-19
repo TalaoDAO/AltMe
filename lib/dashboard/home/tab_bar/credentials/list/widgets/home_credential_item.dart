@@ -1,11 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/deep_link/cubit/deep_link.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 class HomeCredentialItem extends StatelessWidget {
@@ -64,8 +61,6 @@ class DummyCredentialItem extends StatelessWidget {
   final bool fromDiscover;
 
   Future<void> goAhead(BuildContext context) async {
-    final l10n = context.l10n;
-
     final List<CredentialSubjectType> credentialSubjectTypeList =
         List.of(DiscoverList.identityCategories);
 
@@ -106,41 +101,11 @@ class DummyCredentialItem extends StatelessWidget {
       /// [CredentialSubjectType.tezotopiaMembership]
       if (homeCredential.credentialSubjectType ==
           CredentialSubjectType.tezotopiaMembership) {
-        final CredentialsRepository repository =
-            CredentialsRepository(getSecureStorage);
-
-        final List<CredentialModel> allCredentials = await repository.findAll();
-
-        bool isPresentable = false;
-
-        for (final type in membershipRequiredList) {
-          for (final credential in allCredentials) {
-            if (type ==
-                credential.credentialPreview.credentialSubjectModel
-                    .credentialSubjectType) {
-              isPresentable = true;
-              break;
-            } else {
-              isPresentable = false;
-            }
-          }
-          if (!isPresentable) {
-            await showDialog<bool>(
-              context: context,
-              builder: (context) => InfoDialog(
-                title:
-                    '''${l10n.membershipRequiredListAlerMessage}\n\nOver 13 Proof''',
-                button: l10n.ok,
-              ),
-            );
-            return;
-          }
-        }
-        context.read<DeepLinkCubit>().addDeepLink(
-              // ignore: lines_longer_than_80_chars
-              '${homeCredential.link!}${const Uuid().v4()}?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du',
-            );
-        await context.read<QRCodeScanCubit>().deepLink();
+        final uuid = const Uuid().v4();
+        final uri = Uri.parse(
+          '''${homeCredential.link!}$uuid?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du''',
+        );
+        await context.read<QRCodeScanCubit>().verify(uri: uri);
       } else {
         await LaunchUrl.launch(homeCredential.link!);
       }

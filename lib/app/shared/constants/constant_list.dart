@@ -26,7 +26,3 @@ class DiscoverList {
     CredentialSubjectType.phonePass,
   ];
 }
-
-final List<CredentialSubjectType> membershipRequiredList = [
-  CredentialSubjectType.over13,
-];

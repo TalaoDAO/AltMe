@@ -45,7 +45,7 @@ class ManageIssuersRegistryPage extends StatelessWidget {
               groupValue = IssuerVerificationRegistry.Talao;
               break;
           }
-          const fakeGroupValue = 'titi';
+          //const fakeGroupValue = 'titi';
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -50,9 +51,11 @@ class PermissionText extends StatelessWidget {
             size: 20,
           ),
           const SizedBox(width: 5),
-          Text(
-            text,
-            style: Theme.of(context).textTheme.beaconPermissions,
+          Expanded(
+            child: MyText(
+              text,
+              style: Theme.of(context).textTheme.beaconPermissions,
+            ),
           ),
         ],
       ),

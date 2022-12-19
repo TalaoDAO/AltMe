@@ -103,10 +103,11 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
         }
 
         if (state.message != null) {
-          AlertMessage.showStringMessage(
+          AlertMessage.showStateMessage(
             context: context,
-            message: l10n.withdrawalFailedMessage,
-            messageType: MessageType.error,
+            stateMessage: StateMessage.error(
+              stringMessage: l10n.withdrawalFailedMessage,
+            ),
           );
           // TODO(Taleb): update to this later
           // AlertMessage.showStateMessage(

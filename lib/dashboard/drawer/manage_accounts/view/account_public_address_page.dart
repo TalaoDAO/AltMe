@@ -94,10 +94,11 @@ class AccountPublicAddressPage extends StatelessWidget {
                             text: accountAddress,
                           ),
                         );
-                        AlertMessage.showStringMessage(
+                        AlertMessage.showStateMessage(
                           context: context,
-                          message: l10n.copiedToClipboard,
-                          messageType: MessageType.success,
+                          stateMessage: StateMessage.success(
+                            stringMessage: l10n.copiedToClipboard,
+                          ),
                         );
                       },
                     ),

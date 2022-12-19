@@ -141,12 +141,12 @@ class _CreateAccountStep2ViewState extends State<CreateAccountStep2View> {
               final accountName = accountNameTextController.text;
               if (accountName.trim().isEmpty ||
                   accountNameList.contains(accountName)) {
-                AlertMessage.showStringMessage(
+                return AlertMessage.showStateMessage(
                   context: context,
-                  message: l10n.sameAccountNameError,
-                  messageType: MessageType.error,
+                  stateMessage: StateMessage.error(
+                    stringMessage: l10n.sameAccountNameError,
+                  ),
                 );
-                return;
               } else {
                 context.read<CreateAccountCubit>().createCryptoAccount(
                       accountName: accountName,

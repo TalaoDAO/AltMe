@@ -175,7 +175,7 @@ class _SplashViewState extends State<SplashView> {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: const [
-                  Spacer(flex: 5),
+                  Spacer(flex: 1),
                   TitleText(),
                   Spacer(flex: 1),
                   SubTitle(),
