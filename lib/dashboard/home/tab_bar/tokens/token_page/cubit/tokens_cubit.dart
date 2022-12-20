@@ -76,7 +76,7 @@ class TokensCubit extends Cubit<TokensState> {
       final walletAddress =
           walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
 
-      final baseUrl = networkCubit.state.network.tzktUrl;
+      final baseUrl = networkCubit.state.network.apiUrl;
 
       final List<dynamic> tokensBalancesJsonArray = await client.get(
         '$baseUrl/v1/tokens/balances',
@@ -224,7 +224,7 @@ class TokensCubit extends Cubit<TokensState> {
   Future<TokenModel> _getXtzBalance(
     String walletAddress,
   ) async {
-    final baseUrl = networkCubit.state.network.tzktUrl;
+    final baseUrl = networkCubit.state.network.apiUrl;
     final int balance =
         await client.get('$baseUrl/v1/accounts/$walletAddress/balance') as int;
 

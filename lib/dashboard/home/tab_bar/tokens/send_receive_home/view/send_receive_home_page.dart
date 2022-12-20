@@ -30,7 +30,7 @@ class SendReceiveHomePage extends StatefulWidget {
 
 class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
   late final dioClient = DioClient(
-    context.read<ManageNetworkCubit>().state.network.tzktUrl,
+    context.read<ManageNetworkCubit>().state.network.apiUrl,
     Dio(),
   );
 
@@ -87,7 +87,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                         .read<ManageNetworkCubit>()
                         .state
                         .network
-                        .tzktUrl,
+                        .apiUrl,
                   );
             },
           ),
@@ -96,7 +96,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
             listener: (_, manageNetworkState) {
               context
                   .read<SendReceiveHomeCubit>()
-                  .init(baseUrl: manageNetworkState.network.tzktUrl);
+                  .init(baseUrl: manageNetworkState.network.apiUrl);
             },
           ),
           BlocListener<SendReceiveHomeCubit, SendReceiveHomeState>(
@@ -258,7 +258,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                                   .read<ManageNetworkCubit>()
                                   .state
                                   .network
-                                  .tzktUrl,
+                                  .apiUrl,
                             );
                       },
                       operations: state.operations,
