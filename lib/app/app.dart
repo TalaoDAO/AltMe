@@ -6,7 +6,5 @@
 // https://opensource.org/licenses/MIT.
 
 export 'logger/logger.dart';
-export 'observer/router_observer.dart';
-export 'router/router.dart';
 export 'shared/shared.dart';
 export 'view/app.dart';

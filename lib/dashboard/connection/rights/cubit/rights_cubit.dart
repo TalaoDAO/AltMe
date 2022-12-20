@@ -24,6 +24,7 @@ class RightsCubit extends Cubit<RightsState> {
   final log = getLogger('RightsCubit');
 
   Future<void> disconnect({required SavedDappData savedDappData}) async {
+    if (isClosed) return;
     try {
       log.i('Started disconnecting');
       emit(state.loading());

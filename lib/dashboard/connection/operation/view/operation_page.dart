@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/route/route.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dio/dio.dart';
@@ -22,7 +23,7 @@ class OperationPage extends StatelessWidget {
       builder: (_) => OperationPage(
         connectionBridgeType: connectionBridgeType,
       ),
-      settings: const RouteSettings(name: '/OperationPage'),
+      settings: const RouteSettings(name: OPERATION_PAGE),
     );
   }
 
@@ -65,9 +66,6 @@ class _OperationViewState extends State<OperationView> {
         await context
             .read<OperationCubit>()
             .getUsdPrice(widget.connectionBridgeType);
-        await context
-            .read<OperationCubit>()
-            .getPrices(widget.connectionBridgeType);
       },
     );
   }
@@ -161,7 +159,7 @@ class _OperationViewState extends State<OperationView> {
                       onTap: () {
                         context
                             .read<OperationCubit>()
-                            .getPrices(widget.connectionBridgeType);
+                            .getOtherPrices(widget.connectionBridgeType);
                       },
                     )
                   : SingleChildScrollView(

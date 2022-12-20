@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/route/route.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
@@ -22,7 +23,7 @@ class SignPayloadPage extends StatelessWidget {
       builder: (_) => SignPayloadPage(
         connectionBridgeType: connectionBridgeType,
       ),
-      settings: const RouteSettings(name: '/SignPayloadPage'),
+      settings: const RouteSettings(name: SIGN_PAYLOAD_PAGE),
     );
   }
 

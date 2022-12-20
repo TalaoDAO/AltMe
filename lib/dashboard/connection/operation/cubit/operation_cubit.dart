@@ -44,6 +44,7 @@ class OperationCubit extends Cubit<OperationState> {
   final log = getLogger('OperationCubit');
 
   Future<void> getUsdPrice(ConnectionBridgeType connectionBridgeType) async {
+    if (isClosed) return;
     try {
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
@@ -58,12 +59,14 @@ class OperationCubit extends Cubit<OperationState> {
           // TODO(bibash): find dollar equivalent of ethereum
           break;
       }
+      await getOtherPrices(connectionBridgeType);
     } catch (e) {
       log.e(e);
     }
   }
 
-  Future<void> getPrices(ConnectionBridgeType connectionBridgeType) async {
+  Future<void> getOtherPrices(ConnectionBridgeType connectionBridgeType) async {
+    if (isClosed) return;
     try {
       emit(state.loading());
       log.i('estimateOperationFee');
@@ -189,6 +192,7 @@ class OperationCubit extends Cubit<OperationState> {
   }
 
   Future<void> sendOperataion(ConnectionBridgeType connectionBridgeType) async {
+    if (isClosed) return;
     try {
       emit(state.loading());
       log.i('sendOperataion');
@@ -326,9 +330,8 @@ class OperationCubit extends Cubit<OperationState> {
     }
   }
 
-  void rejectOperation({
-    required ConnectionBridgeType connectionBridgeType,
-  }) {
+  void rejectOperation({required ConnectionBridgeType connectionBridgeType}) {
+    if (isClosed) return;
     switch (connectionBridgeType) {
       case ConnectionBridgeType.beacon:
         log.i('beacon connection rejected');

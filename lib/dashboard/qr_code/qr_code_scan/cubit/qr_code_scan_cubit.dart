@@ -175,8 +175,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     emit(state.error(messageHandler: messageHandler));
   }
 
-  Future<void> verify(
-      {required Uri? uri, bool isConnectionBridgeSSI = false}) async {
+  Future<void> verify({
+    required Uri? uri,
+    bool isConnectionBridgeSSI = false,
+  }) async {
     if (isConnectionBridgeSSI) {
       emit(state.loading(isDeepLink: isConnectionBridgeSSI));
     } else {
