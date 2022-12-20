@@ -35,7 +35,7 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
       log.i('fetching xtzData');
       emit(state.loading());
 
-      final baseUrl = networkCubit.state.network.tzktUrl;
+      final baseUrl = networkCubit.state.network.apiUrl;
 
       log.i('fetching balance');
       final int balance = await client
