@@ -1,26 +1,32 @@
-import 'package:altme/app/shared/constants/urls.dart';
-import 'package:equatable/equatable.dart';
+import 'package:altme/app/app.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'tezos_network.g.dart';
 
 @JsonSerializable()
-class TezosNetwork extends Equatable {
+class TezosNetwork extends BlockchainNetwork {
   const TezosNetwork({
-    required this.networkname,
-    required this.tzktUrl,
-    required this.rpcNodeUrl,
-    required this.title,
-    required this.subTitle,
-    this.apiKey = '',
-  });
+    required String networkname,
+    required String apiUrl,
+    required String rpcNodeUrl,
+    required String title,
+    required String subTitle,
+    String apiKey = '',
+  }) : super(
+          networkname: networkname,
+          apiUrl: apiUrl,
+          rpcNodeUrl: rpcNodeUrl,
+          title: title,
+          subTitle: subTitle,
+          apiKey: apiKey,
+        );
 
   factory TezosNetwork.fromJson(Map<String, dynamic> json) =>
       _$TezosNetworkFromJson(json);
 
   factory TezosNetwork.mainNet() => const TezosNetwork(
         networkname: 'Mainnet',
-        tzktUrl: Urls.tzktMainnetUrl,
+        apiUrl: Urls.tzktMainnetUrl,
         rpcNodeUrl: Urls.mainnetRPC,
         title: 'Tezos Mainnet',
         subTitle:
@@ -30,36 +36,12 @@ class TezosNetwork extends Equatable {
 
   factory TezosNetwork.ghostnet() => const TezosNetwork(
         networkname: 'Ghostnet',
-        tzktUrl: Urls.tzktGhostnetUrl,
+        apiUrl: Urls.tzktGhostnetUrl,
         rpcNodeUrl: Urls.ghostnetRPC,
         title: 'Tezos Ghostnet',
         subTitle: 'This network is used to test protocol upgrades'
             ' (do not use it unless you are a developer).',
       );
 
-  final String networkname;
-  final String tzktUrl;
-  final String apiKey;
-  final String rpcNodeUrl;
-  final String? title;
-  final String? subTitle;
-
   Map<String, dynamic> toJson() => _$TezosNetworkToJson(this);
-
-  @override
-  List<Object?> get props => [
-        networkname,
-        tzktUrl,
-        apiKey,
-        rpcNodeUrl,
-        title,
-        subTitle,
-      ];
-
-  @override
-  String toString() {
-    return 'TezosNetwork{networkName: $networkname,tzktUrl: $tzktUrl, '
-        'rpcNodeUrl: $rpcNodeUrl, apiKey: $apiKey ,title:$title '
-        ',subTitle:$subTitle}';
-  }
 }
