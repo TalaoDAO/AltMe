@@ -83,6 +83,9 @@ class GlobalMessage {
 
   String get NETWORK_ERROR_CONFLICT => l10n.networkErrorConflict;
 
+  String get NETWORK_ERROR_PRECONDITION_FAILED =>
+      l10n.networkErrorPreconditionFailed;
+
   String get NETWORK_ERROR_SEND_TIMEOUT => l10n.networkErrorSendTimeout;
 
   String get NETWORK_ERROR_UNABLE_TO_PROCESS =>
@@ -244,6 +247,13 @@ class GlobalMessage {
   String get RESPONSE_STRING_tezotopiaMembershipHowToGetIt =>
       l10n.tezotopiaMembershipHowToGetIt;
 
+  String get RESPONSE_STRING_chainbornMembershipWhyGetThisCard =>
+      l10n.chainbornMembershipWhyGetThisCard;
+  String get RESPONSE_STRING_chainbornMembershipExpirationDate =>
+      l10n.chainbornMembershipExpirationDate;
+  String get RESPONSE_STRING_chainbornMembershipHowToGetIt =>
+      l10n.chainbornMembershipHowToGetIt;
+
   String get RESPONSE_STRING_tezoniaPassWhyGetThisCard =>
       l10n.tezoniaPassWhyGetThisCard;
   String get RESPONSE_STRING_tezoniaPassExpirationDate =>
@@ -334,6 +344,6 @@ class GlobalMessage {
       l10n.payloadFormatErrorMessage;
   String get RESPONSE_STRING_thisFeatureIsNotSupportedMessage =>
       l10n.thisFeatureIsNotSupportedMessage;
-  String get RESPONSE_STRING_credentialRequiredMessage =>
-      l10n.credentialRequiredMessage;
+  String get RESPONSE_STRING_userNotFitErrorMessage =>
+      l10n.userNotFitErrorMessage;
 }

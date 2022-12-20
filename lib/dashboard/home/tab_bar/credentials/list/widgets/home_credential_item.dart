@@ -97,11 +97,16 @@ class DummyCredentialItem extends StatelessWidget {
             );
       }
     } else {
-      /// check if  credential it is
-      /// [CredentialSubjectType.tezotopiaMembership]
-      if (homeCredential.credentialSubjectType ==
-          CredentialSubjectType.tezotopiaMembership) {
-        final uuid = const Uuid().v4();
+      final credentialSubjectType = homeCredential.credentialSubjectType;
+      final uuid = const Uuid().v4();
+
+      if (credentialSubjectType == CredentialSubjectType.tezotopiaMembership) {
+        final uri = Uri.parse(
+          '''${homeCredential.link!}$uuid?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du''',
+        );
+        await context.read<QRCodeScanCubit>().verify(uri: uri);
+      } else if (credentialSubjectType ==
+          CredentialSubjectType.chainbornMembership) {
         final uri = Uri.parse(
           '''${homeCredential.link!}$uuid?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du''',
         );

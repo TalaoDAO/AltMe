@@ -13,6 +13,7 @@ enum CredentialSubjectType {
   dogamiPass,
   bunnyPass,
   tezotopiaMembership,
+  chainbornMembership,
   ageRange,
   nationality,
   gender,

@@ -333,6 +333,20 @@ class ResponseMessage with MessageHandler {
           return ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt
               .localise(context);
 
+        case ResponseString.RESPONSE_STRING_chainbornMembershipWhyGetThisCard:
+          return ResponseString
+                  .RESPONSE_STRING_chainbornMembershipWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_chainbornMembershipExpirationDate:
+          return ResponseString
+                  .RESPONSE_STRING_chainbornMembershipExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt:
+          return ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt
+              .localise(context);
+
         case ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard
               .localise(context);
@@ -567,9 +581,8 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
-        case ResponseString.RESPONSE_STRING_credentialRequiredMessage:
-          return ResponseString.RESPONSE_STRING_credentialRequiredMessage
-              .localise(
+        case ResponseString.RESPONSE_STRING_userNotFitErrorMessage:
+          return ResponseString.RESPONSE_STRING_userNotFitErrorMessage.localise(
             context,
           );
       }

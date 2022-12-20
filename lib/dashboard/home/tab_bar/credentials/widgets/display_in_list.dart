@@ -26,6 +26,10 @@ class DisplayInList extends StatelessWidget {
         return TezotopiaMemberShipDisplayInList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.chainbornMembership:
+        return ChainbornMemberShipDisplayInList(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.bunnyPass:
         return BunnyPassDisplayInList(
           credentialModel: credentialModel,

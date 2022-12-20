@@ -76,6 +76,9 @@ enum ResponseString {
   RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard,
   RESPONSE_STRING_tezotopiaMembershipExpirationDate,
   RESPONSE_STRING_tezotopiaMembershipHowToGetIt,
+  RESPONSE_STRING_chainbornMembershipWhyGetThisCard,
+  RESPONSE_STRING_chainbornMembershipExpirationDate,
+  RESPONSE_STRING_chainbornMembershipHowToGetIt,
   RESPONSE_STRING_tezoniaPassWhyGetThisCard,
   RESPONSE_STRING_tezoniaPassExpirationDate,
   RESPONSE_STRING_tezoniaPassHowToGetIt,
@@ -126,5 +129,5 @@ enum ResponseString {
   RESPONSE_STRING_ageRangeHowToGetIt,
   RESPONSE_STRING_payloadFormatErrorMessage,
   RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
-  RESPONSE_STRING_credentialRequiredMessage,
+  RESPONSE_STRING_userNotFitErrorMessage,
 }

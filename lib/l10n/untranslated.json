@@ -126,6 +126,7 @@
     "evidenceLabel",
     "networkErrorBadRequest",
     "networkErrorConflict",
+    "networkErrorPreconditionFailed",
     "networkErrorCreated",
     "networkErrorGatewayTimeout",
     "networkErrorInternalServerError",
@@ -481,7 +482,6 @@
     "nft",
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
-    "credentialRequiredMessage",
     "beaconShareMessage",
     "gamingCredentialHomeSubtitle",
     "gamingCredentialDiscoverSubtitle",
@@ -513,6 +513,9 @@
     "emailPassHowToGetIt",
     "tezotopiaMembershipWhyGetThisCard",
     "tezotopiaMembershipExpirationDate",
+    "chainbornMembershipHowToGetIt",
+    "chainbornMembershipWhyGetThisCard",
+    "chainbornMembershipExpirationDate",
     "tezotopiaMembershipHowToGetIt",
     "over18WhyGetThisCard",
     "over18ExpirationDate",
@@ -676,7 +679,8 @@
     "exodusWallet",
     "trustWallet",
     "myetherwallet",
-    "skip"
+    "skip",
+    "userNotFitErrorMessage"
   ],
 
   "es": [
@@ -806,6 +810,7 @@
     "evidenceLabel",
     "networkErrorBadRequest",
     "networkErrorConflict",
+    "networkErrorPreconditionFailed",
     "networkErrorCreated",
     "networkErrorGatewayTimeout",
     "networkErrorInternalServerError",
@@ -1161,7 +1166,6 @@
     "nft",
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
-    "credentialRequiredMessage",
     "beaconShareMessage",
     "gamingCredentialHomeSubtitle",
     "gamingCredentialDiscoverSubtitle",
@@ -1193,6 +1197,9 @@
     "emailPassHowToGetIt",
     "tezotopiaMembershipWhyGetThisCard",
     "tezotopiaMembershipExpirationDate",
+    "chainbornMembershipHowToGetIt",
+    "chainbornMembershipWhyGetThisCard",
+    "chainbornMembershipExpirationDate",
     "tezotopiaMembershipHowToGetIt",
     "over18WhyGetThisCard",
     "over18ExpirationDate",
@@ -1356,7 +1363,8 @@
     "exodusWallet",
     "trustWallet",
     "myetherwallet",
-    "skip"
+    "skip",
+    "userNotFitErrorMessage"
   ],
 
   "fr": [
@@ -1486,6 +1494,7 @@
     "evidenceLabel",
     "networkErrorBadRequest",
     "networkErrorConflict",
+    "networkErrorPreconditionFailed",
     "networkErrorCreated",
     "networkErrorGatewayTimeout",
     "networkErrorInternalServerError",
@@ -1841,7 +1850,6 @@
     "nft",
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
-    "credentialRequiredMessage",
     "beaconShareMessage",
     "gamingCredentialHomeSubtitle",
     "gamingCredentialDiscoverSubtitle",
@@ -1873,6 +1881,9 @@
     "emailPassHowToGetIt",
     "tezotopiaMembershipWhyGetThisCard",
     "tezotopiaMembershipExpirationDate",
+    "chainbornMembershipHowToGetIt",
+    "chainbornMembershipWhyGetThisCard",
+    "chainbornMembershipExpirationDate",
     "tezotopiaMembershipHowToGetIt",
     "over18WhyGetThisCard",
     "over18ExpirationDate",
@@ -2036,7 +2047,8 @@
     "exodusWallet",
     "trustWallet",
     "myetherwallet",
-    "skip"
+    "skip",
+    "userNotFitErrorMessage"
   ],
 
   "it": [
@@ -2166,6 +2178,7 @@
     "evidenceLabel",
     "networkErrorBadRequest",
     "networkErrorConflict",
+    "networkErrorPreconditionFailed",
     "networkErrorCreated",
     "networkErrorGatewayTimeout",
     "networkErrorInternalServerError",
@@ -2521,7 +2534,6 @@
     "nft",
     "receiveNft",
     "sendOnlyNftToThisAddressDescription",
-    "credentialRequiredMessage",
     "beaconShareMessage",
     "gamingCredentialHomeSubtitle",
     "gamingCredentialDiscoverSubtitle",
@@ -2553,6 +2565,9 @@
     "emailPassHowToGetIt",
     "tezotopiaMembershipWhyGetThisCard",
     "tezotopiaMembershipExpirationDate",
+    "chainbornMembershipHowToGetIt",
+    "chainbornMembershipWhyGetThisCard",
+    "chainbornMembershipExpirationDate",
     "tezotopiaMembershipHowToGetIt",
     "over18WhyGetThisCard",
     "over18ExpirationDate",
@@ -2716,6 +2731,7 @@
     "exodusWallet",
     "trustWallet",
     "myetherwallet",
-    "skip"
+    "skip",
+    "userNotFitErrorMessage"
   ]
 }

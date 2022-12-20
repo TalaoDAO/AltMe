@@ -11,6 +11,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -373,10 +374,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               state.copyWith(
                 qrScanStatus: QrScanStatus.idle,
                 message: StateMessage.info(
-                  stringMessage: '$credentialName.',
-                  messageHandler: ResponseMessage(
-                    ResponseString.RESPONSE_STRING_credentialRequiredMessage,
-                  ),
+                  stringMessage: descriptor.purpose,
                   showDialog: true,
                 ),
               ),
@@ -457,14 +455,33 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
     } catch (e) {
       log.e('An error occurred while connecting to the server.', e);
-
-      if (e is MessageHandler) {
+      if (e is ResponseMessage) {
         emit(state.error(messageHandler: e));
+      } else if (e is NetworkException) {
+        if (e.message == NetworkError.NETWORK_ERROR_PRECONDITION_FAILED) {
+          emit(
+            state.error(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_userNotFitErrorMessage,
+              ),
+            ),
+          );
+        } else {
+          emit(
+            state.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          );
+        }
       } else {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
         );

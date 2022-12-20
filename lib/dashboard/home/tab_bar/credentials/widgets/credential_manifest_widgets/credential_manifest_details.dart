@@ -26,6 +26,7 @@ class CredentialManifestDetails extends StatelessWidget {
           titleColor: titleColor,
           valueColor: valueColor,
         ),
+        const SizedBox(height: 10),
         DisplayPropertiesWidget(
           properties: outputDescriptor.display?.properties,
           credentialModel: credentialModel,

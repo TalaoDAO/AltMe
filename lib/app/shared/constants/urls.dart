@@ -24,6 +24,9 @@ class Urls {
   static const String tezotopiaMembershipCardUrl =
       'https://issuer.talao.co/tezotopia/membershipcard/';
 
+  static const String chainbornMembershipCardUrl =
+      'https://issuer.talao.co/chainborn/membershipcard/';
+
   static const String identityCardUrl = 'http://issuer.talao.co/kyc';
   static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
 
