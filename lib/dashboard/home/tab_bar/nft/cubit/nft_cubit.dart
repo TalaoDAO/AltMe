@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/nft/cubit/nft_cubit_dao.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -9,7 +10,7 @@ part 'nft_cubit.g.dart';
 
 part 'nft_state.dart';
 
-class NftCubit extends Cubit<NftState> {
+class NftCubit extends Cubit<NftState> with NFTCubitDao {
   NftCubit({
     required this.client,
     required this.walletCubit,
@@ -52,26 +53,12 @@ class NftCubit extends Cubit<NftState> {
       final walletAddress =
           walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
 
-      final baseUrl = manageNetworkCubit.state.network.tzktUrl;
-
-      final List<dynamic> response = await client.get(
-        '$baseUrl/v1/tokens/balances',
-        queryParameters: <String, dynamic>{
-          'account': walletAddress,
-          'balance.eq': 1,
-          'token.metadata.null': false,
-          'sort.desc': 'firstLevel',
-          'select':
-              'token.tokenId as tokenId,token.id as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri,token.metadata.description as description,token.standard as standard,token.metadata.symbol as symbol,token.contract.address as contractAddress,token.metadata.identifier as identifier,token.metadata.creators as creators,token.metadata.publishers as publishers,token.metadata.date as date,token.metadata.is_transferable as isTransferable', // ignore: lines_longer_than_80_chars
-          'offset': state.offset,
-          'limit': _limit,
-        },
-      ) as List<dynamic>;
-      // TODO(all): check the balance variable of NFTModel
-      // and get right value from api
-      final List<NftModel> newData = response
-          .map((dynamic e) => NftModel.fromJson(e as Map<String, dynamic>))
-          .toList();
+      final List<NftModel> newData = await getTezosNFTs(
+        offset: state.offset,
+        limit: _limit,
+        walletAddress: walletAddress,
+        network: manageNetworkCubit.state.network,
+      );
 
       if (state.offset == 0) {
         data = newData;
@@ -112,5 +99,43 @@ class NftCubit extends Cubit<NftState> {
     final offset = state.offset + _limit;
     emit(state.copyWith(offset: offset));
     await getTezosNftList();
+  }
+
+  @override
+  Future<List<NftModel>> getEthereumNFTs({
+    required int offset,
+    required int limit,
+    required String walletAddress,
+  }) {
+    // TODO: implement getEthereumNFTs
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<NftModel>> getTezosNFTs({
+    required int offset,
+    required int limit,
+    required String walletAddress,
+    required TezosNetwork network,
+  }) async {
+    final List<dynamic> response = await client.get(
+      '${network.tzktUrl}/v1/tokens/balances',
+      queryParameters: <String, dynamic>{
+        'account': walletAddress,
+        'balance.eq': 1,
+        'token.metadata.null': false,
+        'sort.desc': 'firstLevel',
+        'select':
+            'token.tokenId as tokenId,token.id as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri,token.metadata.description as description,token.standard as standard,token.metadata.symbol as symbol,token.contract.address as contractAddress,token.metadata.identifier as identifier,token.metadata.creators as creators,token.metadata.publishers as publishers,token.metadata.date as date,token.metadata.is_transferable as isTransferable', // ignore: lines_longer_than_80_chars
+        'offset': offset,
+        'limit': limit,
+      },
+    ) as List<dynamic>;
+    // TODO(all): check the balance variable of NFTModel
+    // and get right value from api
+    final List<NftModel> data = response
+        .map((dynamic e) => NftModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+    return data;
   }
 }
