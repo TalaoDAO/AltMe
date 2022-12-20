@@ -43,6 +43,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   void decodeMessage({
     required ConnectionBridgeType connectionBridgeType,
   }) {
+    if (isClosed) return;
     try {
       emit(state.loading());
 
@@ -98,6 +99,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   Future<void> sign({
     required ConnectionBridgeType connectionBridgeType,
   }) async {
+    if (isClosed) return;
     try {
       log.i('Started signing');
       emit(state.loading());
@@ -298,6 +300,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   void rejectSigning({
     required ConnectionBridgeType connectionBridgeType,
   }) {
+    if (isClosed) return;
     switch (connectionBridgeType) {
       case ConnectionBridgeType.beacon:
         log.i('beacon Signing rejected');

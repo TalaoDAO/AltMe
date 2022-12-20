@@ -34,6 +34,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
   Future<void> connect({
     required ConnectionBridgeType connectionBridgeType,
   }) async {
+    if (isClosed) return;
     try {
       emit(state.loading());
 
@@ -150,6 +151,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
   void rejectConnection({
     required ConnectionBridgeType connectionBridgeType,
   }) {
+    if (isClosed) return;
     switch (connectionBridgeType) {
       case ConnectionBridgeType.beacon:
         log.i('beacon connection rejected');
