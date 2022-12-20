@@ -43,6 +43,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   void decodeMessage({
     required ConnectionBridgeType connectionBridgeType,
   }) {
+    if (isClosed) return;
     try {
       emit(state.loading());
 
@@ -98,6 +99,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   Future<void> sign({
     required ConnectionBridgeType connectionBridgeType,
   }) async {
+    if (isClosed) return;
     try {
       log.i('Started signing');
       emit(state.loading());
@@ -108,6 +110,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
         );
       }
+
+      bool success = false;
 
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
@@ -142,39 +146,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             type: signingType,
           );
 
-          final bool success =
-              json.decode(response['success'].toString()) as bool;
+          success = json.decode(response['success'].toString()) as bool;
 
-          if (success) {
-            log.i('Signing success');
-
-            if (state.payloadMessage!.contains('#')) {
-              final String url = state.payloadMessage!.split('#')[1];
-              final uri = Uri.parse(url);
-              emit(
-                state.copyWith(
-                  appStatus: AppStatus.success,
-                  messageHandler: ResponseMessage(
-                    ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
-                  ),
-                ),
-              );
-              await qrCodeScanCubit.verify(uri: uri, isBeaconSSI: true);
-            } else {
-              emit(
-                state.copyWith(
-                  appStatus: AppStatus.success,
-                  messageHandler: ResponseMessage(
-                    ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
-                  ),
-                ),
-              );
-            }
-          } else {
-            throw ResponseMessage(
-              ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD,
-            );
-          }
           break;
         case ConnectionBridgeType.walletconnect:
           final walletConnectState = walletConnectCubit.state;
@@ -265,9 +238,17 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
                 id: walletConnectState.signId!,
                 result: signedDataAsHex,
               );
+              success = true;
               break;
           }
+          break;
+      }
 
+      if (success) {
+        if (state.payloadMessage != null &&
+            state.payloadMessage!.contains('#')) {
+          final String url = state.payloadMessage!.split('#')[1];
+          final uri = Uri.parse(url);
           emit(
             state.copyWith(
               appStatus: AppStatus.success,
@@ -276,7 +257,21 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
               ),
             ),
           );
-          break;
+          await qrCodeScanCubit.verify(uri: uri, isConnectionBridgeSSI: true);
+        } else {
+          emit(
+            state.copyWith(
+              appStatus: AppStatus.success,
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+              ),
+            ),
+          );
+        }
+      } else {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD,
+        );
       }
     } catch (e) {
       log.e('Signing failure , e: $e');
@@ -298,6 +293,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   void rejectSigning({
     required ConnectionBridgeType connectionBridgeType,
   }) {
+    if (isClosed) return;
     switch (connectionBridgeType) {
       case ConnectionBridgeType.beacon:
         log.i('beacon Signing rejected');
