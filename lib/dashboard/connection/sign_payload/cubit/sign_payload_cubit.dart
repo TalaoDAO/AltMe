@@ -111,6 +111,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         );
       }
 
+      bool success = false;
+
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
           final BeaconRequest beaconRequest = beaconCubit.state.beaconRequest!;
@@ -144,39 +146,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             type: signingType,
           );
 
-          final bool success =
-              json.decode(response['success'].toString()) as bool;
+          success = json.decode(response['success'].toString()) as bool;
 
-          if (success) {
-            log.i('Signing success');
-
-            if (state.payloadMessage!.contains('#')) {
-              final String url = state.payloadMessage!.split('#')[1];
-              final uri = Uri.parse(url);
-              emit(
-                state.copyWith(
-                  appStatus: AppStatus.success,
-                  messageHandler: ResponseMessage(
-                    ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
-                  ),
-                ),
-              );
-              await qrCodeScanCubit.verify(uri: uri, isBeaconSSI: true);
-            } else {
-              emit(
-                state.copyWith(
-                  appStatus: AppStatus.success,
-                  messageHandler: ResponseMessage(
-                    ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
-                  ),
-                ),
-              );
-            }
-          } else {
-            throw ResponseMessage(
-              ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD,
-            );
-          }
           break;
         case ConnectionBridgeType.walletconnect:
           final walletConnectState = walletConnectCubit.state;
@@ -267,9 +238,17 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
                 id: walletConnectState.signId!,
                 result: signedDataAsHex,
               );
+              success = true;
               break;
           }
+          break;
+      }
 
+      if (success) {
+        if (state.payloadMessage != null &&
+            state.payloadMessage!.contains('#')) {
+          final String url = state.payloadMessage!.split('#')[1];
+          final uri = Uri.parse(url);
           emit(
             state.copyWith(
               appStatus: AppStatus.success,
@@ -278,7 +257,21 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
               ),
             ),
           );
-          break;
+          await qrCodeScanCubit.verify(uri: uri, isConnectionBridgeSSI: true);
+        } else {
+          emit(
+            state.copyWith(
+              appStatus: AppStatus.success,
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
+              ),
+            ),
+          );
+        }
+      } else {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD,
+        );
       }
     } catch (e) {
       log.e('Signing failure , e: $e');

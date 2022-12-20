@@ -330,9 +330,7 @@ class OperationCubit extends Cubit<OperationState> {
     }
   }
 
-  void rejectOperation({
-    required ConnectionBridgeType connectionBridgeType,
-  }) {
+  void rejectOperation({required ConnectionBridgeType connectionBridgeType}) {
     if (isClosed) return;
     switch (connectionBridgeType) {
       case ConnectionBridgeType.beacon:
