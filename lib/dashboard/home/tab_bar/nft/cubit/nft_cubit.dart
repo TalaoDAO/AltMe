@@ -119,7 +119,7 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
     required TezosNetwork network,
   }) async {
     final List<dynamic> response = await client.get(
-      '${network.tzktUrl}/v1/tokens/balances',
+      '${network.apiUrl}/v1/tokens/balances',
       queryParameters: <String, dynamic>{
         'account': walletAddress,
         'balance.eq': 1,
