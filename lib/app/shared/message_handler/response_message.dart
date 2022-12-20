@@ -580,6 +580,11 @@ class ResponseMessage with MessageHandler {
               .localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_userNotFitErrorMessage:
+          return ResponseString.RESPONSE_STRING_userNotFitErrorMessage.localise(
+            context,
+          );
       }
     }
     return '';

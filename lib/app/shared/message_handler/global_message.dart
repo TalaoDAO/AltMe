@@ -344,4 +344,6 @@ class GlobalMessage {
       l10n.payloadFormatErrorMessage;
   String get RESPONSE_STRING_thisFeatureIsNotSupportedMessage =>
       l10n.thisFeatureIsNotSupportedMessage;
+  String get RESPONSE_STRING_userNotFitErrorMessage =>
+      l10n.userNotFitErrorMessage;
 }

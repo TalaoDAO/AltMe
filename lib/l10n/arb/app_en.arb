@@ -736,5 +736,6 @@
   "exodusWallet": "Exodus Wallet",
   "trustWallet": "Trust Wallet",
   "myetherwallet": "MyEther Wallet",
-  "skip": "Skip"
+  "skip": "Skip",
+  "userNotFitErrorMessage": "You are unable to get this card because some conditions are not fulfilled."
 }

@@ -194,6 +194,9 @@ class NetworkException with MessageHandler {
           return NetworkError.NETWORK_ERROR_UNAUTHENTICATED.localise(context);
         case NetworkError.NETWORK_ERROR_NOT_FOUND:
           return NetworkError.NETWORK_ERROR_NOT_FOUND.localise(context);
+        case NetworkError.NETWORK_ERROR_PRECONDITION_FAILED:
+          return NetworkError.NETWORK_ERROR_PRECONDITION_FAILED
+              .localise(context);
       }
     }
     return '';

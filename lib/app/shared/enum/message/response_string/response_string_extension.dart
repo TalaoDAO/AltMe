@@ -405,6 +405,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage:
         return globalMessage.RESPONSE_STRING_thisFeatureIsNotSupportedMessage;
+
+      case ResponseString.RESPONSE_STRING_userNotFitErrorMessage:
+        return globalMessage.RESPONSE_STRING_userNotFitErrorMessage;
     }
   }
 }
