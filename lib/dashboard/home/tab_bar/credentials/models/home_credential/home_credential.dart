@@ -157,6 +157,17 @@ class HomeCredential extends Equatable {
             ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt;
         break;
 
+      case CredentialSubjectType.chainbornMembership:
+        image = ImageStrings.chainbornMemberShipDummy;
+        link = Urls.chainbornMembershipCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_chainbornMembershipWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_chainbornMembershipExpirationDate;
+        howToGetIt =
+            ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt;
+        break;
+
       case CredentialSubjectType.bunnyPass:
         image = ImageStrings.bunnyPassDummy;
         link = Urls.bunnyPassCardUrl;

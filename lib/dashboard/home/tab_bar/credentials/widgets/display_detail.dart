@@ -28,6 +28,10 @@ class DisplayDetail extends StatelessWidget {
         return TezotopiaMemberShipDisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.chainbornMembership:
+        return ChainbornMemberShipDisplayDetail(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.tezoniaPass:
         return TezoniaPassDisplayDetail(
           credentialModel: credentialModel,

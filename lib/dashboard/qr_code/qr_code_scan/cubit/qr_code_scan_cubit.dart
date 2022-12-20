@@ -373,10 +373,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               state.copyWith(
                 qrScanStatus: QrScanStatus.idle,
                 message: StateMessage.info(
-                  stringMessage: '$credentialName.',
-                  messageHandler: ResponseMessage(
-                    ResponseString.RESPONSE_STRING_credentialRequiredMessage,
-                  ),
+                  stringMessage: descriptor.purpose,
                   showDialog: true,
                 ),
               ),

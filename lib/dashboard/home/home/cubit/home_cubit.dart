@@ -195,7 +195,7 @@ class HomeCubit extends Cubit<HomeState> {
                     ? null
                     : ResponseMessage(
                         ResponseString
-                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
                       ),
               ),
             ),
@@ -285,7 +285,7 @@ class HomeCubit extends Cubit<HomeState> {
                     ? null
                     : ResponseMessage(
                         ResponseString
-                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
                       ),
               ),
             ),

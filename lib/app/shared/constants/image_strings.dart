@@ -20,6 +20,8 @@ class ImageStrings {
   static const String bloometaPass = '$imagePath/bloometa-pass.png';
   static const String tezotopiaMemberShip =
       '$imagePath/tezotopia-membership.png';
+  static const String chainbornMemberShip =
+      '$imagePath/chainborn-membership.png';
   static const String genderProof = '$imagePath/gender-proof.png';
   static const String ageRangeProof = '$imagePath/age_range.png';
   static const String nationalityProof = '$imagePath/nationality-proof.png';
@@ -87,6 +89,8 @@ class ImageStrings {
       '$imagePath/dummy_nationality_card.png';
   static const String tezotopiaMemberShipDummy =
       '$imagePath/tezotopia-membership-dummy.png';
+  static const String chainbornMemberShipDummy =
+      '$imagePath/chainborn-membership-dummy.png';
   static const String dummyGenderCard = '$imagePath/dummy_gender_card.png';
   static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
   static const String dummyOver13Card = '$imagePath/dummy_over13_card.png';
@@ -120,8 +124,10 @@ class ImageStrings {
   static const String userCircleAdd = '$imagePath/user-circle-add.png';
   static const String userCircleAdded = '$imagePath/user-circle-added.png';
   static const String verifyYourAge = '$imagePath/verify-your-age.png';
-  static const String createAccountMethod = '$imagePath/create-account-method.png';
-  static const String importAccountMethod = '$imagePath/import-account-method.png';
-  
+  static const String createAccountMethod =
+      '$imagePath/create-account-method.png';
+  static const String importAccountMethod =
+      '$imagePath/import-account-method.png';
+
   static const String receiveSqure = '$imagePath/receive-square.png';
 }

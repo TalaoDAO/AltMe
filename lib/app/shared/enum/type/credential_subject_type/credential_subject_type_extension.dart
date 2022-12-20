@@ -21,6 +21,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xff14181D);
       case CredentialSubjectType.tezotopiaMembership:
         return const Color(0xff273496);
+      case CredentialSubjectType.chainbornMembership:
+        return const Color(0xff273496);
       case CredentialSubjectType.tezoniaPass:
         return const Color(0xff273496);
       case CredentialSubjectType.tzlandPass:
@@ -113,6 +115,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.nationality:
         return Icons.supervised_user_circle_sharp;
       case CredentialSubjectType.tezotopiaMembership:
+        return Icons.supervised_user_circle_sharp;
+      case CredentialSubjectType.chainbornMembership:
         return Icons.supervised_user_circle_sharp;
       case CredentialSubjectType.tezoniaPass:
         return Icons.games_outlined;

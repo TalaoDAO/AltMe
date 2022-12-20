@@ -10,7 +10,7 @@ class NetworkException with MessageHandler {
   final NetworkError message;
   final dynamic data;
 
-  static NetworkException handleResponse(int? statusCode,DioError? error) {
+  static NetworkException handleResponse(int? statusCode, DioError? error) {
     switch (statusCode) {
       // case 200: //No Error
       // case 201: //No Error
@@ -42,6 +42,11 @@ class NetworkException with MessageHandler {
       case 409:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_CONFLICT,
+          data: error?.response?.data,
+        );
+      case 412:
+        return NetworkException(
+          message: NetworkError.NETWORK_ERROR_PRECONDITION_FAILED,
           data: error?.response?.data,
         );
       case 429:

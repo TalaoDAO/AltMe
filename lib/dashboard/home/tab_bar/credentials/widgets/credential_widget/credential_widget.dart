@@ -8,6 +8,7 @@ export 'arago_pass_widget.dart';
 export 'bloometa_pass_widget.dart';
 export 'bunny_pass_widget.dart';
 export 'certificate_of_employment_widget.dart';
+export 'chainborn_membership_widget.dart';
 export 'credential_base_widget.dart';
 export 'default_credential_subject_widget.dart';
 export 'device_info_widget.dart';
