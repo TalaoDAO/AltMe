@@ -30,6 +30,7 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
   }
 
   Future<void> getXtzData(String walletAddress) async {
+    if (isClosed) return;
     try {
       log.i('fetching xtzData');
       emit(state.loading());
@@ -82,6 +83,7 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
   }
 
   Future<void> getPeers(String walletAddress) async {
+    if (isClosed) return;
     try {
       emit(state.loading());
 

@@ -66,9 +66,6 @@ class _OperationViewState extends State<OperationView> {
         await context
             .read<OperationCubit>()
             .getUsdPrice(widget.connectionBridgeType);
-        await context
-            .read<OperationCubit>()
-            .getPrices(widget.connectionBridgeType);
       },
     );
   }
@@ -162,7 +159,7 @@ class _OperationViewState extends State<OperationView> {
                       onTap: () {
                         context
                             .read<OperationCubit>()
-                            .getPrices(widget.connectionBridgeType);
+                            .getOtherPrices(widget.connectionBridgeType);
                       },
                     )
                   : SingleChildScrollView(
