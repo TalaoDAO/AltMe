@@ -1,5 +1,6 @@
-import 'package:altme/app/app.dart';
+import 'package:altme/route/route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Ignoring this part which is already tested in Flutter framework.
 /// If we add some real functionality here in the future, the new function
@@ -7,7 +8,10 @@ import 'package:flutter/material.dart';
 
 // coverage:ignore-start
 class MyRouteObserver extends RouteObserver<PageRoute<dynamic>> {
-  final log = getLogger('Navigation');
+  MyRouteObserver(this.context) : super();
+
+  final BuildContext context;
+
   @override
   void didPush(Route<dynamic>? route, Route<dynamic>? previousRoute) {
     super.didPush(route!, previousRoute);
@@ -30,7 +34,7 @@ class MyRouteObserver extends RouteObserver<PageRoute<dynamic>> {
 
   void sendScreenView(PageRoute<dynamic> route) {
     final String? routeName = route.settings.name;
-    log.i('Screen -> $routeName'); // track screen of user
+    context.read<RouteCubit>().setCurrentScreen(routeName);
   }
 }
 // coverage:ignore-end
