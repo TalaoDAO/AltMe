@@ -11,7 +11,6 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -372,10 +371,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           if (!isPresentable) {
             emit(
               state.copyWith(
-                qrScanStatus: QrScanStatus.idle,
-                message: StateMessage.info(
-                  stringMessage: descriptor.purpose,
-                  showDialog: true,
+                qrScanStatus: QrScanStatus.success,
+                route: MissingCredentialsPage.route(
+                  credentialManifest: credentialManifest,
                 ),
               ),
             );

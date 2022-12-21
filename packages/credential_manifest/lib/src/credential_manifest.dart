@@ -1,3 +1,4 @@
+import 'package:credential_manifest/src/models/issued_by.dart';
 import 'package:credential_manifest/src/models/output_descriptor.dart';
 import 'package:credential_manifest/src/models/presentation_definition.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -22,6 +23,7 @@ class CredentialManifest {
   /// Initialyze [id] and [outputDescriptors]
   CredentialManifest(
     this.id,
+    this.issuedBy,
     this.outputDescriptors,
     this.presentationDefinition,
   );
@@ -32,6 +34,10 @@ class CredentialManifest {
 
   ///
   final String? id;
+
+  ///issuer of the credential manifest
+  @JsonKey(name: 'issuer')
+  final IssuedBy? issuedBy;
 
   /// An array of OutputDescriptor which are objects used to describe the Claims
   /// an Issuer is offering to a Holder.
@@ -59,9 +65,11 @@ class CredentialManifest {
     String? id,
     List<OutputDescriptor>? outputDescriptors,
     PresentationDefinition? presentationDefinition,
+    IssuedBy? issuedBy,
   }) {
     return CredentialManifest(
       id,
+      issuedBy,
       outputDescriptors,
       presentationDefinition,
     );

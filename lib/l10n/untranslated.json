@@ -271,6 +271,7 @@
     "inMyWallet",
     "details",
     "getIt",
+    "getItNow",
     "getThisCard",
     "drawerBiometrics",
     "drawerTalaoCommunityCard",
@@ -680,7 +681,9 @@
     "trustWallet",
     "myetherwallet",
     "skip",
-    "userNotFitErrorMessage"
+    "userNotFitErrorMessage",
+    "youAreMissing",
+    "credentialsRequestedBy"
   ],
 
   "es": [
@@ -955,6 +958,7 @@
     "inMyWallet",
     "details",
     "getIt",
+    "getItNow",
     "getThisCard",
     "drawerBiometrics",
     "drawerTalaoCommunityCard",
@@ -1364,7 +1368,9 @@
     "trustWallet",
     "myetherwallet",
     "skip",
-    "userNotFitErrorMessage"
+    "userNotFitErrorMessage",
+    "youAreMissing",
+    "credentialsRequestedBy"
   ],
 
   "fr": [
@@ -1639,6 +1645,7 @@
     "inMyWallet",
     "details",
     "getIt",
+    "getItNow",
     "getThisCard",
     "drawerBiometrics",
     "drawerTalaoCommunityCard",
@@ -2048,7 +2055,9 @@
     "trustWallet",
     "myetherwallet",
     "skip",
-    "userNotFitErrorMessage"
+    "userNotFitErrorMessage",
+    "youAreMissing",
+    "credentialsRequestedBy"
   ],
 
   "it": [
@@ -2323,6 +2332,7 @@
     "inMyWallet",
     "details",
     "getIt",
+    "getItNow",
     "getThisCard",
     "drawerBiometrics",
     "drawerTalaoCommunityCard",
@@ -2732,6 +2742,8 @@
     "trustWallet",
     "myetherwallet",
     "skip",
-    "userNotFitErrorMessage"
+    "userNotFitErrorMessage",
+    "youAreMissing",
+    "credentialsRequestedBy"
   ]
 }

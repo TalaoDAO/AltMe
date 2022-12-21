@@ -8,6 +8,7 @@ void main() {
       expect(
         CredentialManifest(
           'idOfCredentialManifest',
+          null,
           [],
           null,
         ),

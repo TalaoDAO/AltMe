@@ -229,6 +229,7 @@ class HomeCubit extends Cubit<HomeState> {
           if (credentialManifest.outputDescriptors!.isNotEmpty) {
             newCredential['credential_manifest'] = CredentialManifest(
               credentialManifest.id,
+              credentialManifest.issuedBy,
               credentialManifest.outputDescriptors,
               credentialManifest.presentationDefinition,
             ).toJson();

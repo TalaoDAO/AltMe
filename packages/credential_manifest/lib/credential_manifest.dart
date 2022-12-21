@@ -13,6 +13,7 @@ export 'src/models/field.dart';
 export 'src/models/filter.dart';
 export 'src/models/image_object.dart';
 export 'src/models/input_descriptor.dart';
+export 'src/models/issued_by.dart';
 export 'src/models/labeled_display_mapping_path.dart';
 export 'src/models/labeled_display_mapping_text.dart';
 export 'src/models/output_descriptor.dart';

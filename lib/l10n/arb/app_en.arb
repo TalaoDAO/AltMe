@@ -321,6 +321,7 @@
   "inMyWallet": "In my wallet",
   "details": "Details",
   "getIt": "Get it",
+  "getItNow": "Get it Now",
   "getThisCard": "Get This Card",
   "drawerBiometrics": "Biometrics authentication",
   "drawerTalaoCommunityCard": "Talao Community Card",
@@ -737,5 +738,7 @@
   "trustWallet": "Trust Wallet",
   "myetherwallet": "MyEther Wallet",
   "skip": "Skip",
-  "userNotFitErrorMessage": "You are unable to get this card because some conditions are not fulfilled."
+  "userNotFitErrorMessage": "You are unable to get this card because some conditions are not fulfilled.",
+  "youAreMissing": "You are missing",
+  "credentialsRequestedBy": "credentials requested by"
 }
