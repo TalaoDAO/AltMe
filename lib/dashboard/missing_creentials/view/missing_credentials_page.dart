@@ -115,19 +115,21 @@ class MissingCredentialsView extends StatelessWidget {
               const SizedBox(height: 10),
               MyGradientButton(
                 onPressed: () async {
-                  await Navigator.push<void>(
-                    context,
-                    DiscoverDetailsPage.route(
-                      homeCredential: state.dummyCredentials[0],
-                      onCallBack: () {
-                        discoverCredential(
-                          homeCredential: state.dummyCredentials[0],
-                          context: context,
-                        );
-                        Navigator.pop(context);
-                      },
-                    ),
-                  );
+                  for (final credentials in state.dummyCredentials) {
+                    await Navigator.push<void>(
+                      context,
+                      DiscoverDetailsPage.route(
+                        homeCredential: credentials,
+                        onCallBack: () async {
+                          await discoverCredential(
+                            homeCredential: credentials,
+                            context: context,
+                          );
+                          Navigator.pop(context);
+                        },
+                      ),
+                    );
+                  }
                   Navigator.pop(context);
                 },
                 text: l10n.getItNow,

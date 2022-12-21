@@ -80,12 +80,12 @@ class DummyCredentialItem extends StatelessWidget {
             context,
             DiscoverDetailsPage.route(
               homeCredential: homeCredential,
-              onCallBack: () {
-                Navigator.pop(context);
-                discoverCredential(
+              onCallBack: () async {
+                await discoverCredential(
                   homeCredential: homeCredential,
                   context: context,
                 );
+                Navigator.pop(context);
               },
             ),
           );
