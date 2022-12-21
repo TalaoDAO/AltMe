@@ -63,18 +63,8 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
 
     try {
       /// crypto wallet
-      late BlockchainType blockchainType;
-      switch (state.accountType) {
-        case AccountType.ssi:
-          blockchainType = BlockchainType.tezos;
-          break;
-        case AccountType.tezos:
-          blockchainType = BlockchainType.tezos;
-          break;
-        case AccountType.ethereum:
-          blockchainType = BlockchainType.ethereum;
-          break;
-      }
+      final BlockchainType blockchainType =
+          getBlockchainType(state.accountType);
 
       await walletCubit.createCryptoWallet(
         accountName: accountName,

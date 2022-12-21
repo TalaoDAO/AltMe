@@ -1,1 +1,1 @@
-enum ImportWalletTypes { Tezos, Ethereum,None }
+enum ImportWalletTypes { Tezos, Ethereum, None }

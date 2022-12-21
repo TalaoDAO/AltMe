@@ -14,7 +14,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   try {
     const didMethod = AltMeStrings.defaultDIDMethod;
     final didSsi = didCubit.state.did!;
-    final did = didKitProvider.keyToDID(didMethod, ssiKey);
+    final issuer = didKitProvider.keyToDID(didMethod, ssiKey);
 
     final verificationMethod =
         await didKitProvider.keyToVerificationMethod(didMethod, ssiKey);
@@ -23,69 +23,82 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       'proofPurpose': 'assertionMethod',
       'verificationMethod': verificationMethod
     };
+
     final verifyOptions = {'proofPurpose': 'assertionMethod'};
     final id = 'urn:uuid:${const Uuid().v4()}';
     final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
     final issuanceDate = '${formatter.format(DateTime.now())}Z';
 
-    late CredentialManifest credentialManifest;
-    late String vc;
+    late dynamic associatedAddressCredential;
 
     switch (blockchainType) {
-      case BlockchainType.ethereum:
-        credentialManifest = CredentialManifest.fromJson(
-          ConstantsJson.ethereumAssociatedAddressCredentialManifestJson,
-        );
-
-        final ethereumAssociatedAddressModel = EthereumAssociatedAddressModel(
-          id: didSsi,
-          accountName: accountName,
-          associatedAddress: walletAddress,
-          type: 'EthereumAssociatedAddress',
-        );
-
-        final ethereumAssociatedAddressCredential =
-            EthereumAssociatedAddressCredential(
+      case BlockchainType.tezos:
+        associatedAddressCredential = TezosAssociatedAddressCredential(
           id: id,
-          issuer: did,
+          issuer: issuer,
           issuanceDate: issuanceDate,
-          credentialSubjectModel: ethereumAssociatedAddressModel,
-        );
-
-        vc = await didKitProvider.issueCredential(
-          jsonEncode(ethereumAssociatedAddressCredential.toJson()),
-          jsonEncode(options),
-          ssiKey,
+          credentialSubjectModel: TezosAssociatedAddressModel(
+            id: didSsi,
+            accountName: accountName,
+            associatedAddress: walletAddress,
+          ),
         );
         break;
-      case BlockchainType.tezos:
-        credentialManifest = CredentialManifest.fromJson(
-          ConstantsJson.tezosAssociatedAddressCredentialManifestJson,
-        );
-
-        final tezosAssociatedAddressModel = TezosAssociatedAddressModel(
-          id: didSsi,
-          accountName: accountName,
-          associatedAddress: walletAddress,
-          type: 'TezosAssociatedAddress',
-        );
-
-        final tezosAssociatedAddressCredential =
-            TezosAssociatedAddressCredential(
+      case BlockchainType.ethereum:
+        associatedAddressCredential = EthereumAssociatedAddressCredential(
           id: id,
-          issuer: did,
+          issuer: issuer,
           issuanceDate: issuanceDate,
-          credentialSubjectModel: tezosAssociatedAddressModel,
+          credentialSubjectModel: EthereumAssociatedAddressModel(
+            id: didSsi,
+            accountName: accountName,
+            associatedAddress: walletAddress,
+          ),
         );
-
-        vc = await didKitProvider.issueCredential(
-          jsonEncode(tezosAssociatedAddressCredential.toJson()),
-          jsonEncode(options),
-          ssiKey,
+        break;
+      case BlockchainType.fantom:
+        associatedAddressCredential = FantomAssociatedAddressCredential(
+          id: id,
+          issuer: issuer,
+          issuanceDate: issuanceDate,
+          credentialSubjectModel: FantomAssociatedAddressModel(
+            id: didSsi,
+            accountName: accountName,
+            associatedAddress: walletAddress,
+          ),
         );
-
+        break;
+      case BlockchainType.polygon:
+        associatedAddressCredential = PolygonAssociatedAddressCredential(
+          id: id,
+          issuer: issuer,
+          issuanceDate: issuanceDate,
+          credentialSubjectModel: PolygonAssociatedAddressModel(
+            id: didSsi,
+            accountName: accountName,
+            associatedAddress: walletAddress,
+          ),
+        );
+        break;
+      case BlockchainType.binance:
+        associatedAddressCredential = BinanceAssociatedAddressCredential(
+          id: id,
+          issuer: issuer,
+          issuanceDate: issuanceDate,
+          credentialSubjectModel: BinanceAssociatedAddressModel(
+            id: didSsi,
+            accountName: accountName,
+            associatedAddress: walletAddress,
+          ),
+        );
         break;
     }
+
+    final String vc = await didKitProvider.issueCredential(
+      jsonEncode(associatedAddressCredential.toJson()),
+      jsonEncode(options),
+      ssiKey,
+    );
 
     final result =
         await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions));
@@ -97,6 +110,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         jsonVerification['warnings'],
       );
     }
+
+    final credentialManifest = blockchainType.credentialManifest;
 
     if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
       log.e('failed to verify credential, ${jsonVerification['errors']}');

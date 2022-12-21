@@ -22,10 +22,10 @@ class DisplayIssuer extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 2),
-        if (issuer.logo.isNotEmpty)
+        if (issuer.logo!.isNotEmpty)
           Expanded(
             child: CachedImageFromNetwork(
-              issuer.logo,
+              issuer.logo!,
               fit: BoxFit.cover,
             ),
           )

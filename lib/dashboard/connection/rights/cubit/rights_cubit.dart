@@ -89,6 +89,10 @@ class RightsCubit extends Cubit<RightsState> {
             );
           }
           break;
+        case BlockchainType.fantom:
+        case BlockchainType.polygon:
+        case BlockchainType.binance:
+          throw Exception();
       }
     } catch (e) {
       log.e('disconnect failure , e: $e');

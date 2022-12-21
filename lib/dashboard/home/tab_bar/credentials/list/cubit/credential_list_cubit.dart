@@ -96,6 +96,9 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.loyaltyCard:
         case CredentialSubjectType.selfIssued:
         case CredentialSubjectType.studentCard:
+        case CredentialSubjectType.fantomAssociatedWallet:
+        case CredentialSubjectType.polygonAssociatedWallet:
+        case CredentialSubjectType.binanceAssociatedWallet:
           break;
       }
 
@@ -277,6 +280,9 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.dogamiPass:
           case CredentialSubjectType.bunnyPass:
           case CredentialSubjectType.pcdsAgentCertificate:
+          case CredentialSubjectType.fantomAssociatedWallet:
+          case CredentialSubjectType.polygonAssociatedWallet:
+          case CredentialSubjectType.binanceAssociatedWallet:
             break;
         }
 
@@ -573,6 +579,9 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.matterlightPass:
           case CredentialSubjectType.tezotopiaMembership:
           case CredentialSubjectType.chainbornMembership:
+          case CredentialSubjectType.fantomAssociatedWallet:
+          case CredentialSubjectType.polygonAssociatedWallet:
+          case CredentialSubjectType.binanceAssociatedWallet:
             break;
         }
 

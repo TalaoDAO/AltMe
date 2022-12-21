@@ -4,8 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class TezosAssociatedAddressDisplayInList extends StatelessWidget {
-  const TezosAssociatedAddressDisplayInList({
+class BinanceAssociatedAddressDisplayInList extends StatelessWidget {
+  const BinanceAssociatedAddressDisplayInList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -14,14 +14,14 @@ class TezosAssociatedAddressDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(
+    return BinanceAssociatedAddressRecto(
       credentialModel: credentialModel,
     );
   }
 }
 
-class TezosAssociatedAddressDisplayInSelectionList extends StatelessWidget {
-  const TezosAssociatedAddressDisplayInSelectionList({
+class BinanceAssociatedAddressDisplayInSelectionList extends StatelessWidget {
+  const BinanceAssociatedAddressDisplayInSelectionList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -30,14 +30,14 @@ class TezosAssociatedAddressDisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(
+    return BinanceAssociatedAddressRecto(
       credentialModel: credentialModel,
     );
   }
 }
 
-class TezosAssociatedAddressDisplayDetail extends StatelessWidget {
-  const TezosAssociatedAddressDisplayDetail({
+class BinanceAssociatedAddressDisplayDetail extends StatelessWidget {
+  const BinanceAssociatedAddressDisplayDetail({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -46,14 +46,14 @@ class TezosAssociatedAddressDisplayDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(
+    return BinanceAssociatedAddressRecto(
       credentialModel: credentialModel,
     );
   }
 }
 
-class TezosAssociatedAddressRecto extends Recto {
-  const TezosAssociatedAddressRecto({
+class BinanceAssociatedAddressRecto extends Recto {
+  const BinanceAssociatedAddressRecto({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -63,14 +63,15 @@ class TezosAssociatedAddressRecto extends Recto {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final tezosAssociatedAddress = credentialModel.credentialPreview
-        .credentialSubjectModel as TezosAssociatedAddressModel;
+    final binanceAssociatedAddress = credentialModel.credentialPreview
+        .credentialSubjectModel as BinanceAssociatedAddressModel;
     return CredentialImage(
-      image: ImageStrings.paymentTezosCard,
+      image: ImageStrings.paymentBinanceCard,
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
-          delegate: TezosAssociatedAddressRectoDelegate(position: Offset.zero),
+          delegate:
+              BinanceAssociatedAddressRectoDelegate(position: Offset.zero),
           children: [
             LayoutId(
               id: 'name',
@@ -78,7 +79,7 @@ class TezosAssociatedAddressRecto extends Recto {
                 widthFactor: 0.8,
                 heightFactor: 0.14,
                 child: MyText(
-                  l10n.tezosNetwork,
+                  l10n.binanceNetwork,
                   style: Theme.of(context).textTheme.subMessage.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -91,7 +92,7 @@ class TezosAssociatedAddressRecto extends Recto {
                 widthFactor: 0.8,
                 heightFactor: 0.16,
                 child: MyText(
-                  tezosAssociatedAddress.accountName!,
+                  binanceAssociatedAddress.accountName!,
                   style: Theme.of(context).textTheme.title,
                 ),
               ),
@@ -102,9 +103,9 @@ class TezosAssociatedAddressRecto extends Recto {
                 widthFactor: 0.88,
                 heightFactor: 0.26,
                 child: MyText(
-                  tezosAssociatedAddress.associatedAddress?.isEmpty == true
+                  binanceAssociatedAddress.associatedAddress?.isEmpty == true
                       ? ''
-                      : tezosAssociatedAddress.associatedAddress.toString(),
+                      : binanceAssociatedAddress.associatedAddress.toString(),
                   style: Theme.of(context).textTheme.subMessage.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -120,8 +121,8 @@ class TezosAssociatedAddressRecto extends Recto {
   }
 }
 
-class TezosAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
-  TezosAssociatedAddressRectoDelegate({this.position = Offset.zero});
+class BinanceAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
+  BinanceAssociatedAddressRectoDelegate({this.position = Offset.zero});
 
   final Offset position;
 
@@ -153,7 +154,7 @@ class TezosAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(TezosAssociatedAddressRectoDelegate oldDelegate) {
+  bool shouldRelayout(BinanceAssociatedAddressRectoDelegate oldDelegate) {
     return oldDelegate.position != position;
   }
 }

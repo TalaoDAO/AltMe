@@ -4,8 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class TezosAssociatedAddressDisplayInList extends StatelessWidget {
-  const TezosAssociatedAddressDisplayInList({
+class PolygonAssociatedAddressDisplayInList extends StatelessWidget {
+  const PolygonAssociatedAddressDisplayInList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -14,14 +14,14 @@ class TezosAssociatedAddressDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(
+    return PolygonAssociatedAddressRecto(
       credentialModel: credentialModel,
     );
   }
 }
 
-class TezosAssociatedAddressDisplayInSelectionList extends StatelessWidget {
-  const TezosAssociatedAddressDisplayInSelectionList({
+class PolygonAssociatedAddressDisplayInSelectionList extends StatelessWidget {
+  const PolygonAssociatedAddressDisplayInSelectionList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -30,14 +30,14 @@ class TezosAssociatedAddressDisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(
+    return PolygonAssociatedAddressRecto(
       credentialModel: credentialModel,
     );
   }
 }
 
-class TezosAssociatedAddressDisplayDetail extends StatelessWidget {
-  const TezosAssociatedAddressDisplayDetail({
+class PolygonAssociatedAddressDisplayDetail extends StatelessWidget {
+  const PolygonAssociatedAddressDisplayDetail({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -46,14 +46,14 @@ class TezosAssociatedAddressDisplayDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(
+    return PolygonAssociatedAddressRecto(
       credentialModel: credentialModel,
     );
   }
 }
 
-class TezosAssociatedAddressRecto extends Recto {
-  const TezosAssociatedAddressRecto({
+class PolygonAssociatedAddressRecto extends Recto {
+  const PolygonAssociatedAddressRecto({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -63,14 +63,15 @@ class TezosAssociatedAddressRecto extends Recto {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final tezosAssociatedAddress = credentialModel.credentialPreview
-        .credentialSubjectModel as TezosAssociatedAddressModel;
+    final polygonAssociatedAddress = credentialModel.credentialPreview
+        .credentialSubjectModel as PolygonAssociatedAddressModel;
     return CredentialImage(
-      image: ImageStrings.paymentTezosCard,
+      image: ImageStrings.paymentPolygonCard,
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
-          delegate: TezosAssociatedAddressRectoDelegate(position: Offset.zero),
+          delegate:
+              PolygonAssociatedAddressRectoDelegate(position: Offset.zero),
           children: [
             LayoutId(
               id: 'name',
@@ -78,7 +79,7 @@ class TezosAssociatedAddressRecto extends Recto {
                 widthFactor: 0.8,
                 heightFactor: 0.14,
                 child: MyText(
-                  l10n.tezosNetwork,
+                  l10n.polygonNetwork,
                   style: Theme.of(context).textTheme.subMessage.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -91,7 +92,7 @@ class TezosAssociatedAddressRecto extends Recto {
                 widthFactor: 0.8,
                 heightFactor: 0.16,
                 child: MyText(
-                  tezosAssociatedAddress.accountName!,
+                  polygonAssociatedAddress.accountName!,
                   style: Theme.of(context).textTheme.title,
                 ),
               ),
@@ -102,9 +103,9 @@ class TezosAssociatedAddressRecto extends Recto {
                 widthFactor: 0.88,
                 heightFactor: 0.26,
                 child: MyText(
-                  tezosAssociatedAddress.associatedAddress?.isEmpty == true
+                  polygonAssociatedAddress.associatedAddress?.isEmpty == true
                       ? ''
-                      : tezosAssociatedAddress.associatedAddress.toString(),
+                      : polygonAssociatedAddress.associatedAddress.toString(),
                   style: Theme.of(context).textTheme.subMessage.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -120,8 +121,8 @@ class TezosAssociatedAddressRecto extends Recto {
   }
 }
 
-class TezosAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
-  TezosAssociatedAddressRectoDelegate({this.position = Offset.zero});
+class PolygonAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
+  PolygonAssociatedAddressRectoDelegate({this.position = Offset.zero});
 
   final Offset position;
 
@@ -153,7 +154,7 @@ class TezosAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(TezosAssociatedAddressRectoDelegate oldDelegate) {
+  bool shouldRelayout(PolygonAssociatedAddressRectoDelegate oldDelegate) {
     return oldDelegate.position != position;
   }
 }

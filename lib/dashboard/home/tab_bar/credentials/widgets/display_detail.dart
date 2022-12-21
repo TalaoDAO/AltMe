@@ -194,6 +194,18 @@ class DisplayDetail extends StatelessWidget {
         return PcdsAgentCertificateDisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.fantomAssociatedWallet:
+        return FantomAssociatedAddressDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.polygonAssociatedWallet:
+        return PolygonAssociatedAddressDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.binanceAssociatedWallet:
+        return BinanceAssociatedAddressDisplayDetail(
+          credentialModel: credentialModel,
+        );
     }
   }
 }

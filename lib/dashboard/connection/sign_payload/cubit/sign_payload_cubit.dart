@@ -188,6 +188,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           );
 
           log.i('currentAccount -$currentAccount');
+          // ignore: invariant_booleans
           if (currentAccount == null) {
             throw ResponseMessage(
               ResponseString

@@ -87,90 +87,88 @@ class WalletCubit extends Cubit<WalletState> {
         ) ??
         '0';
 
-    final isSecretKey = mnemonicOrKey.startsWith('edsk') ||
-        mnemonicOrKey.startsWith('spsk') ||
-        mnemonicOrKey.startsWith('p2sk') ||
-        mnemonicOrKey.startsWith('0x');
+    final isSecretKey = isValidPrivateKey(mnemonicOrKey);
 
     if (isSecretKey) {
       final isTezosSecretKey = mnemonicOrKey.startsWith('edsk') ||
           mnemonicOrKey.startsWith('spsk') ||
           mnemonicOrKey.startsWith('p2sk');
-      if (isTezosSecretKey) {
-        log.i('creating tezos account');
-        final CryptoAccount cryptoAccount = await createTezosOrEthereumAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.tezos,
-          totalAccountsYet: int.parse(totalAccountsYet),
-          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
-        );
 
-        onComplete?.call(
-          cryptoAccount: cryptoAccount,
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
-          ),
-        );
-      } else {
-        log.i('creating ethereum account');
-        final CryptoAccount cryptoAccount = await createTezosOrEthereumAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.ethereum,
-          totalAccountsYet: int.parse(totalAccountsYet),
-          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
-        );
-        onComplete?.call(
-          cryptoAccount: cryptoAccount,
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
-          ),
-        );
-      }
+      log.i('creating ${isTezosSecretKey ? 'tezos' : 'ethereum'} account');
+
+      final CryptoAccount cryptoAccount = await createBlockchainAccount(
+        accountName: accountName,
+        mnemonicOrKey: mnemonicOrKey,
+        isImported: isImported,
+        isSecretKey: isSecretKey,
+        blockchainType:
+            isTezosSecretKey ? BlockchainType.tezos : BlockchainType.ethereum,
+        totalAccountsYet: int.parse(totalAccountsYet),
+        showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+      );
+
+      onComplete?.call(
+        cryptoAccount: cryptoAccount,
+        messageHandler: ResponseMessage(
+          ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+        ),
+      );
     } else {
       late CryptoAccount updatedCryptoAccount;
-      if (blockchainType == BlockchainType.tezos) {
-        updatedCryptoAccount = await createTezosOrEthereumAccount(
+      if (blockchainType != null) {
+        updatedCryptoAccount = await createBlockchainAccount(
           accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.tezos,
-          totalAccountsYet: int.parse(totalAccountsYet),
-          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
-        );
-      } else if (blockchainType == BlockchainType.ethereum) {
-        updatedCryptoAccount = await createTezosOrEthereumAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.ethereum,
+          blockchainType: blockchainType,
           totalAccountsYet: int.parse(totalAccountsYet),
           showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
         );
       } else {
-        log.i('creating both tezos and ethereum account');
-        await createTezosOrEthereumAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.tezos,
-          totalAccountsYet: int.parse(totalAccountsYet),
-          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
-        );
-        updatedCryptoAccount = await createTezosOrEthereumAccount(
+        log.i('creating both all blockchain accounts');
+        await createBlockchainAccount(
           accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.ethereum,
+          totalAccountsYet: int.parse(totalAccountsYet),
+          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+        );
+        await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.fantom,
+          totalAccountsYet: int.parse(totalAccountsYet),
+          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+        );
+        await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.polygon,
+          totalAccountsYet: int.parse(totalAccountsYet),
+          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+        );
+        await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.binance,
+          totalAccountsYet: int.parse(totalAccountsYet),
+          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+        );
+        updatedCryptoAccount = await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.tezos,
           totalAccountsYet: int.parse(totalAccountsYet) + 1,
           showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
         );
@@ -184,7 +182,7 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future<CryptoAccount> createTezosOrEthereumAccount({
+  Future<CryptoAccount> createBlockchainAccount({
     String? accountName,
     required String mnemonicOrKey,
     required bool isImported,
@@ -193,16 +191,7 @@ class WalletCubit extends Cubit<WalletState> {
     required int totalAccountsYet,
     required bool showCredentialAddMessage,
   }) async {
-    late AccountType accountType;
-
-    switch (blockchainType) {
-      case BlockchainType.ethereum:
-        accountType = AccountType.ethereum;
-        break;
-      case BlockchainType.tezos:
-        accountType = AccountType.tezos;
-        break;
-    }
+    final AccountType accountType = blockchainType.accountType;
 
     int derivePathIndex = 0;
     final bool isCreated = !isImported;
@@ -210,20 +199,15 @@ class WalletCubit extends Cubit<WalletState> {
     log.i('isImported - $isImported');
     if (isCreated) {
       /// Note: while adding derivePathIndex is always increased
-      final String? savedDerivePathIndex = await secureStorageProvider.get(
-        blockchainType == BlockchainType.tezos
-            ? SecureStorageKeys.tezosDerivePathIndex
-            : SecureStorageKeys.ethereumDerivePathIndex,
-      );
+      final String? savedDerivePathIndex =
+          await secureStorageProvider.get(blockchainType.derivePathIndexKey);
 
       if (savedDerivePathIndex != null && savedDerivePathIndex.isNotEmpty) {
         derivePathIndex = int.parse(savedDerivePathIndex) + 1;
       }
 
       await secureStorageProvider.set(
-        blockchainType == BlockchainType.tezos
-            ? SecureStorageKeys.tezosDerivePathIndex
-            : SecureStorageKeys.ethereumDerivePathIndex,
+        blockchainType.derivePathIndexKey,
         derivePathIndex.toString(),
       );
     }
@@ -357,20 +341,9 @@ class WalletCubit extends Cubit<WalletState> {
     /// get id of current AssociatedAddres credential of this account
     final oldCredentialList = List<CredentialModel>.from(state.credentials);
 
-    late Filter filter;
-
-    switch (blockchainType) {
-      case BlockchainType.ethereum:
-        filter = Filter('String', 'EthereumAssociatedAddress');
-        break;
-      case BlockchainType.tezos:
-        filter = Filter('String', 'TezosAssociatedAddress');
-        break;
-    }
-
     final filteredCredentialList = getCredentialsFromFilterList(
       [
-        Field(path: [r'$..type'], filter: filter),
+        Field(path: [r'$..type'], filter: blockchainType.filter),
         Field(
           path: [r'$..associatedAddress'],
           filter: Filter('String', cryptoAccountData.walletAddress),
@@ -630,6 +603,11 @@ class WalletCubit extends Cubit<WalletState> {
     await secureStorageProvider.delete(SecureStorageKeys.tezosDerivePathIndex);
     await secureStorageProvider
         .delete(SecureStorageKeys.ethereumDerivePathIndex);
+    await secureStorageProvider.delete(SecureStorageKeys.fantomDerivePathIndex);
+    await secureStorageProvider
+        .delete(SecureStorageKeys.polygonDerivePathIndex);
+    await secureStorageProvider
+        .delete(SecureStorageKeys.binanceDerivePathIndex);
     await secureStorageProvider.delete(SecureStorageKeys.currentCryptoIndex);
     await secureStorageProvider.delete(SecureStorageKeys.data);
 

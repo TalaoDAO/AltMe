@@ -14,7 +14,7 @@ class Author extends Equatable {
   @JsonKey(defaultValue: '')
   final String name;
   @JsonKey(defaultValue: '')
-  final String logo;
+  final String? logo;
 
   Map<String, dynamic> toJson() => _$AuthorToJson(this);
 

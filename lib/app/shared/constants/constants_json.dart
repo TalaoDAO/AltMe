@@ -65,7 +65,7 @@ abstract class ConstantsJson {
 
   static const tezosAssociatedAddressCredentialManifestJson = <String, dynamic>{
     'id': 'TezosAssociatedAddress',
-    'issuer': {'id': '', 'name': 'Altme issuer sandbox'},
+    'issuer': {'id': '', 'name': 'Altme'},
     'output_descriptors': [
       {
         'id': '',
@@ -115,7 +115,7 @@ abstract class ConstantsJson {
   static const ethereumAssociatedAddressCredentialManifestJson =
       <String, dynamic>{
     'id': 'EthereumAssociatedAddress',
-    'issuer': {'id': '', 'name': 'Altme issuer sandbox'},
+    'issuer': {'id': '', 'name': 'Altme'},
     'output_descriptors': [
       {
         'id': '',
@@ -124,7 +124,157 @@ abstract class ConstantsJson {
           'title': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'Tezos address'
+            'fallback': 'Ethereum address'
+          },
+          'subtitle': {
+            'path': <dynamic>[],
+            'schema': {'type': 'string'},
+            'fallback': ''
+          },
+          'description': {
+            'path': <dynamic>[],
+            'schema': {'type': 'string'},
+            'fallback': 'This is the proof that you own this crypto address'
+          },
+          'properties': [
+            {
+              'path': [r'$.expirationDate'],
+              'schema': {'type': 'string', 'format': 'date'},
+              'fallback': 'None',
+              'label': 'Expires'
+            },
+            {
+              'path': [r'$.credentialSubject.associatedAddress'],
+              'schema': {'type': 'string'},
+              'fallback': 'Unknown',
+              'label': 'Address'
+            },
+            {
+              'path': [r'$.credentialSubject.issuedBy.name'],
+              'schema': {'type': 'string'},
+              'fallback': 'My Wallet',
+              'label': 'Verified by'
+            }
+          ]
+        }
+      }
+    ],
+    'presentation_definition': <String, dynamic>{}
+  };
+
+  static const fantomAssociatedAddressCredentialManifestJson =
+      <String, dynamic>{
+    'id': 'FantomAssociatedAddress',
+    'issuer': {'id': '', 'name': 'Altme'},
+    'output_descriptors': [
+      {
+        'id': '',
+        'schema': 'FantomAssociatedAddress',
+        'display': {
+          'title': {
+            'path': <dynamic>[],
+            'schema': {'type': 'string'},
+            'fallback': 'Fantom address'
+          },
+          'subtitle': {
+            'path': <dynamic>[],
+            'schema': {'type': 'string'},
+            'fallback': ''
+          },
+          'description': {
+            'path': <dynamic>[],
+            'schema': {'type': 'string'},
+            'fallback': 'This is the proof that you own this crypto address'
+          },
+          'properties': [
+            {
+              'path': [r'$.expirationDate'],
+              'schema': {'type': 'string', 'format': 'date'},
+              'fallback': 'None',
+              'label': 'Expires'
+            },
+            {
+              'path': [r'$.credentialSubject.associatedAddress'],
+              'schema': {'type': 'string'},
+              'fallback': 'Unknown',
+              'label': 'Address'
+            },
+            {
+              'path': [r'$.credentialSubject.issuedBy.name'],
+              'schema': {'type': 'string'},
+              'fallback': 'My Wallet',
+              'label': 'Verified by'
+            }
+          ]
+        }
+      }
+    ],
+    'presentation_definition': <String, dynamic>{}
+  };
+
+  static const polygonAssociatedAddressCredentialManifestJson =
+      <String, dynamic>{
+    'id': 'PolygonAssociatedAddress',
+    'issuer': {'id': '', 'name': 'Altme'},
+    'output_descriptors': [
+      {
+        'id': '',
+        'schema': 'PolygonAssociatedAddress',
+        'display': {
+          'title': {
+            'path': <dynamic>[],
+            'schema': {'type': 'string'},
+            'fallback': 'Polygon address'
+          },
+          'subtitle': {
+            'path': <dynamic>[],
+            'schema': {'type': 'string'},
+            'fallback': ''
+          },
+          'description': {
+            'path': <dynamic>[],
+            'schema': {'type': 'string'},
+            'fallback': 'This is the proof that you own this crypto address'
+          },
+          'properties': [
+            {
+              'path': [r'$.expirationDate'],
+              'schema': {'type': 'string', 'format': 'date'},
+              'fallback': 'None',
+              'label': 'Expires'
+            },
+            {
+              'path': [r'$.credentialSubject.associatedAddress'],
+              'schema': {'type': 'string'},
+              'fallback': 'Unknown',
+              'label': 'Address'
+            },
+            {
+              'path': [r'$.credentialSubject.issuedBy.name'],
+              'schema': {'type': 'string'},
+              'fallback': 'My Wallet',
+              'label': 'Verified by'
+            }
+          ]
+        }
+      }
+    ],
+    'presentation_definition': <String, dynamic>{}
+  };
+
+  static const binanceAssociatedAddressCredentialManifestJson =
+      <String, dynamic>{
+    'id': 'BinanceAssociatedAddress',
+    'issuer': {'id': '', 'name': 'Altme'},
+    'output_descriptors': [
+      {
+        'id': '',
+        'schema': 'BinanceAssociatedAddress',
+        'display': {
+          'title': {
+            'path': <dynamic>[],
+            'schema': {'type': 'string'},
+            'fallback': 'Binance address'
           },
           'subtitle': {
             'path': <dynamic>[],

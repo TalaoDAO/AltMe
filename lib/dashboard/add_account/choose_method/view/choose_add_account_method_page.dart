@@ -40,9 +40,7 @@ class ChooseAddAccountMethodView extends StatelessWidget {
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.caption3,
           ),
-          const SizedBox(
-            height: Sizes.spaceXLarge,
-          ),
+          const SizedBox(height: Sizes.spaceXLarge),
           CustomListTileCard(
             title: l10n.createAccount,
             subTitle: l10n.createAccountDescription,
@@ -51,17 +49,13 @@ class ChooseAddAccountMethodView extends StatelessWidget {
               Navigator.of(context).push<void>(CreateAccountStep1Page.route());
             },
           ),
-          const SizedBox(
-            height: Sizes.spaceLarge,
-          ),
+          const SizedBox(height: Sizes.spaceLarge),
           CustomListTileCard(
             title: l10n.importAccount,
             subTitle: l10n.importAccountDescription,
             imageAssetPath: ImageStrings.importAccountMethod,
             onTap: () {
-              Navigator.of(context).push<void>(
-                ImportAccountStep1Page.route(),
-              );
+              Navigator.of(context).push<void>(ImportAccountStep1Page.route());
             },
           ),
         ],

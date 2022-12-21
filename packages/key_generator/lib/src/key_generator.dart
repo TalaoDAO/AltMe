@@ -54,6 +54,9 @@ class KeyGenerator {
         break;
 
       case AccountType.ethereum:
+      case AccountType.fantom:
+      case AccountType.polygon:
+      case AccountType.binance:
         throw Exception();
     }
 
@@ -105,6 +108,9 @@ class KeyGenerator {
 
         return tezosSecretKey;
       case AccountType.ethereum:
+      case AccountType.fantom:
+      case AccountType.polygon:
+      case AccountType.binance:
         final seedHex = bip393.mnemonicToSeedHex(mnemonic);
 
         final chain = Chain.seed(seedHex);
@@ -149,6 +155,9 @@ class KeyGenerator {
         );
 
       case AccountType.ethereum:
+      case AccountType.fantom:
+      case AccountType.polygon:
+      case AccountType.binance:
         final seedHex = bip393.mnemonicToSeedHex(mnemonic);
 
         final chain = Chain.seed(seedHex);
@@ -176,6 +185,9 @@ class KeyGenerator {
         return keystore.address;
 
       case AccountType.ethereum:
+      case AccountType.fantom:
+      case AccountType.polygon:
+      case AccountType.binance:
         final ethPrivateKey = EthPrivateKey.fromHex(secretKey);
         final walletAddress = await ethPrivateKey.extractAddress();
         return walletAddress.hex;

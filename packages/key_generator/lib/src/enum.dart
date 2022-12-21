@@ -1,1 +1,1 @@
-enum AccountType { ssi, tezos, ethereum }
+enum AccountType { ssi, tezos, ethereum, fantom, polygon, binance }

@@ -115,7 +115,6 @@ Future<void> blockchainInitialize({
     await walletCubit.createCryptoWallet(
       mnemonicOrKey: ssiMnemonic,
       isImported: false,
-      // TODO(all): update blockchainType depends of selected type
       blockchainType: BlockchainType.tezos,
     );
   }

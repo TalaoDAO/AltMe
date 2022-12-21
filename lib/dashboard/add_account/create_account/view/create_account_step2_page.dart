@@ -150,9 +150,7 @@ class _CreateAccountStep2ViewState extends State<CreateAccountStep2View> {
               } else {
                 context.read<CreateAccountCubit>().createCryptoAccount(
                       accountName: accountName,
-                      blockChaintype: widget.accountType == AccountType.tezos
-                          ? BlockchainType.tezos
-                          : BlockchainType.ethereum,
+                      blockChaintype: getBlockchainType(widget.accountType),
                     );
               }
             },

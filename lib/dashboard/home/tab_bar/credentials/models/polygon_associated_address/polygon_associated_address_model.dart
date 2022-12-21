@@ -2,24 +2,24 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'tezos_associated_address_model.g.dart';
+part 'polygon_associated_address_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class TezosAssociatedAddressModel extends CredentialSubjectModel {
-  TezosAssociatedAddressModel({
+class PolygonAssociatedAddressModel extends CredentialSubjectModel {
+  PolygonAssociatedAddressModel({
     this.associatedAddress,
     this.accountName,
     required String id,
   }) : super(
           id: id,
-          type: 'TezosAssociatedAddress',
-          credentialSubjectType: CredentialSubjectType.tezosAssociatedWallet,
+          type: 'PolygonAssociatedAddress',
+          credentialSubjectType: CredentialSubjectType.polygonAssociatedWallet,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
           issuedBy: const Author('My Wallet', null),
         );
 
-  factory TezosAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>
-      _$TezosAssociatedAddressModelFromJson(json);
+  factory PolygonAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>
+      _$PolygonAssociatedAddressModelFromJson(json);
 
   @JsonKey(defaultValue: '')
   final String? associatedAddress;
@@ -28,5 +28,5 @@ class TezosAssociatedAddressModel extends CredentialSubjectModel {
   final String? accountName;
 
   @override
-  Map<String, dynamic> toJson() => _$TezosAssociatedAddressModelToJson(this);
+  Map<String, dynamic> toJson() => _$PolygonAssociatedAddressModelToJson(this);
 }

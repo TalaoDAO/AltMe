@@ -1,12 +1,11 @@
 import 'package:altme/dashboard/home/home.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'ethereum_associated_address_credential.g.dart';
+part 'fantom_associated_address_credential.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class EthereumAssociatedAddressCredential {
-  EthereumAssociatedAddressCredential({
+class FantomAssociatedAddressCredential {
+  FantomAssociatedAddressCredential({
     required this.id,
     required this.issuer,
     required this.issuanceDate,
@@ -15,10 +14,10 @@ class EthereumAssociatedAddressCredential {
     this.type = _type,
   });
 
-  factory EthereumAssociatedAddressCredential.fromJson(
+  factory FantomAssociatedAddressCredential.fromJson(
     Map<String, dynamic> json,
   ) =>
-      _$EthereumAssociatedAddressCredentialFromJson(json);
+      _$FantomAssociatedAddressCredentialFromJson(json);
 
   @JsonKey(name: '@context', defaultValue: _context)
   final List<dynamic> context;
@@ -31,18 +30,18 @@ class EthereumAssociatedAddressCredential {
   final String issuanceDate;
 
   Map<String, dynamic> toJson() =>
-      _$EthereumAssociatedAddressCredentialToJson(this);
+      _$FantomAssociatedAddressCredentialToJson(this);
 
   static const List<String> _type = [
     'VerifiableCredential',
-    'EthereumAssociatedAddress'
+    'FantomAssociatedAddress'
   ];
 
   static const List<dynamic> _context = <dynamic>[
     'https://www.w3.org/2018/credentials/v1',
     {
-      'EthereumAssociatedAddress': {
-        '@id': 'https://github.com/TalaoDAO/context#ethereumassociatedaddress',
+      'FantomAssociatedAddress': {
+        '@id': 'https://github.com/TalaoDAO/context#fantomassociatedaddress',
         '@context': {
           '@version': 1.1,
           '@protected': true,
@@ -50,16 +49,14 @@ class EthereumAssociatedAddressCredential {
           'type': '@type',
           'schema': 'https://schema.org/',
           'accountName': 'schema:identifier',
-          'associatedAddress':
-              'https://github.com/TalaoDAO/context#associatedaddress',
+          'associatedAddress': 'schema:account',
           'issuedBy': {
             '@id': 'schema:issuedBy',
             '@context': {
               '@version': 1.1,
               '@protected': true,
               'schema': 'https://schema.org/',
-              'name': 'schema:legalName',
-              'logo': {'@id': 'schema:logo', '@type': '@id'}
+              'name': 'schema:legalName'
             }
           }
         }

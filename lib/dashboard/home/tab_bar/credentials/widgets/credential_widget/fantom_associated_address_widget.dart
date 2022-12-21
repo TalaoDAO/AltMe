@@ -4,8 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class TezosAssociatedAddressDisplayInList extends StatelessWidget {
-  const TezosAssociatedAddressDisplayInList({
+class FantomAssociatedAddressDisplayInList extends StatelessWidget {
+  const FantomAssociatedAddressDisplayInList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -14,14 +14,14 @@ class TezosAssociatedAddressDisplayInList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(
+    return FantomAssociatedAddressRecto(
       credentialModel: credentialModel,
     );
   }
 }
 
-class TezosAssociatedAddressDisplayInSelectionList extends StatelessWidget {
-  const TezosAssociatedAddressDisplayInSelectionList({
+class FantomAssociatedAddressDisplayInSelectionList extends StatelessWidget {
+  const FantomAssociatedAddressDisplayInSelectionList({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -30,14 +30,14 @@ class TezosAssociatedAddressDisplayInSelectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(
+    return FantomAssociatedAddressRecto(
       credentialModel: credentialModel,
     );
   }
 }
 
-class TezosAssociatedAddressDisplayDetail extends StatelessWidget {
-  const TezosAssociatedAddressDisplayDetail({
+class FantomAssociatedAddressDisplayDetail extends StatelessWidget {
+  const FantomAssociatedAddressDisplayDetail({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -46,14 +46,14 @@ class TezosAssociatedAddressDisplayDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(
+    return FantomAssociatedAddressRecto(
       credentialModel: credentialModel,
     );
   }
 }
 
-class TezosAssociatedAddressRecto extends Recto {
-  const TezosAssociatedAddressRecto({
+class FantomAssociatedAddressRecto extends Recto {
+  const FantomAssociatedAddressRecto({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -63,14 +63,14 @@ class TezosAssociatedAddressRecto extends Recto {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final tezosAssociatedAddress = credentialModel.credentialPreview
-        .credentialSubjectModel as TezosAssociatedAddressModel;
+    final fantomAssociatedAddress = credentialModel.credentialPreview
+        .credentialSubjectModel as FantomAssociatedAddressModel;
     return CredentialImage(
-      image: ImageStrings.paymentTezosCard,
+      image: ImageStrings.paymentFantomCard,
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
-          delegate: TezosAssociatedAddressRectoDelegate(position: Offset.zero),
+          delegate: FantomAssociatedAddressRectoDelegate(position: Offset.zero),
           children: [
             LayoutId(
               id: 'name',
@@ -78,7 +78,7 @@ class TezosAssociatedAddressRecto extends Recto {
                 widthFactor: 0.8,
                 heightFactor: 0.14,
                 child: MyText(
-                  l10n.tezosNetwork,
+                  l10n.fantomNetwork,
                   style: Theme.of(context).textTheme.subMessage.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -91,7 +91,7 @@ class TezosAssociatedAddressRecto extends Recto {
                 widthFactor: 0.8,
                 heightFactor: 0.16,
                 child: MyText(
-                  tezosAssociatedAddress.accountName!,
+                  fantomAssociatedAddress.accountName!,
                   style: Theme.of(context).textTheme.title,
                 ),
               ),
@@ -102,9 +102,9 @@ class TezosAssociatedAddressRecto extends Recto {
                 widthFactor: 0.88,
                 heightFactor: 0.26,
                 child: MyText(
-                  tezosAssociatedAddress.associatedAddress?.isEmpty == true
+                  fantomAssociatedAddress.associatedAddress?.isEmpty == true
                       ? ''
-                      : tezosAssociatedAddress.associatedAddress.toString(),
+                      : fantomAssociatedAddress.associatedAddress.toString(),
                   style: Theme.of(context).textTheme.subMessage.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
@@ -120,8 +120,8 @@ class TezosAssociatedAddressRecto extends Recto {
   }
 }
 
-class TezosAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
-  TezosAssociatedAddressRectoDelegate({this.position = Offset.zero});
+class FantomAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
+  FantomAssociatedAddressRectoDelegate({this.position = Offset.zero});
 
   final Offset position;
 
@@ -153,7 +153,7 @@ class TezosAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(TezosAssociatedAddressRectoDelegate oldDelegate) {
+  bool shouldRelayout(FantomAssociatedAddressRectoDelegate oldDelegate) {
     return oldDelegate.position != position;
   }
 }
