@@ -11,9 +11,9 @@ class NftDetailsPage extends StatelessWidget {
     required this.nftModel,
   }) : super(key: key);
 
-  final NftModel nftModel;
+  final TezosNftModel nftModel;
 
-  static Route route({required NftModel nftModel}) {
+  static Route route({required TezosNftModel nftModel}) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/nftDetailsPage'),
       builder: (_) => NftDetailsPage(
@@ -36,7 +36,7 @@ class NftDetailsView extends StatefulWidget {
     required this.nftModel,
   }) : super(key: key);
 
-  final NftModel nftModel;
+  final TezosNftModel nftModel;
 
   @override
   State<NftDetailsView> createState() => _NftDetailsViewState();

@@ -40,7 +40,7 @@ class _NftViewState extends State<NftView> {
     await context.read<NftCubit>().fetchFromZero();
   }
 
-  void onItemClick(NftModel nftModel) {
+  void onItemClick(TezosNftModel nftModel) {
     Navigator.of(context).push<void>(NftDetailsPage.route(nftModel: nftModel));
   }
 
