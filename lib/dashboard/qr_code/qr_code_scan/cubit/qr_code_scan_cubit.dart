@@ -164,7 +164,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           state.error(
             messageHandler: ResponseMessage(
               ResponseString
-                  .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
+                  .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
             ),
           ),
         );
@@ -304,7 +304,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           state.error(
             messageHandler: ResponseMessage(
               ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
         );
@@ -460,9 +460,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       } else if (e is NetworkException) {
         if (e.message == NetworkError.NETWORK_ERROR_PRECONDITION_FAILED) {
           emit(
-            state.error(
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_userNotFitErrorMessage,
+            state.copyWith(
+              qrScanStatus: QrScanStatus.error,
+              message: StateMessage.error(
+                messageHandler: ResponseMessage(
+                  ResponseString.RESPONSE_STRING_userNotFitErrorMessage,
+                ),
+                showDialog: true,
               ),
             ),
           );
