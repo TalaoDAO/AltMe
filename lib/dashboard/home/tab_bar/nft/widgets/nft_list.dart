@@ -14,10 +14,10 @@ class NftList extends StatefulWidget {
     this.onItemClick,
   }) : super(key: key);
 
-  final List<NftModel> nftList;
+  final List<TezosNftModel> nftList;
   final RefreshCallback onRefresh;
   final OnScrollEnded? onScrollEnded;
-  final Function(NftModel)? onItemClick;
+  final Function(TezosNftModel)? onItemClick;
 
   @override
   State<NftList> createState() => _NftListState();

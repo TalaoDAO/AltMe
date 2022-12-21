@@ -16,7 +16,7 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
     required this.walletCubit,
     required this.manageNetworkCubit,
   }) : super(const NftState()) {
-    getTezosNftList();
+    getNftList();
   }
 
   final DioClient client;
@@ -30,7 +30,7 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
 
   final log = getLogger('NftCubit');
 
-  Future<void> getTezosNftList() async {
+  Future<void> getNftList() async {
     final activeIndex = walletCubit.state.currentCryptoIndex;
     if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType !=
         BlockchainType.tezos) {
@@ -66,7 +66,8 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
         data.addAll(newData);
       }
       log.i('nfts - $data');
-      emit(state.populate(data: data));
+      // TODO(Taleb): update the NFTModel
+      emit(state.populate(data: data as List<TezosNftModel>));
     } catch (e, s) {
       if (isClosed) return;
       log.e('failed to fetch nfts, e: $e, s: $s');
@@ -91,14 +92,14 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
     log.i('refreshing nft page');
     _offsetOfLoadedData = -1;
     emit(state.copyWith(offset: 0));
-    await getTezosNftList();
+    await getNftList();
   }
 
   Future<void> fetchMoreTezosNfts() async {
     log.i('fetching more nfts');
     final offset = state.offset + _limit;
     emit(state.copyWith(offset: offset));
-    await getTezosNftList();
+    await getNftList();
   }
 
   @override
@@ -133,8 +134,8 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
     ) as List<dynamic>;
     // TODO(all): check the balance variable of NFTModel
     // and get right value from api
-    final List<NftModel> data = response
-        .map((dynamic e) => NftModel.fromJson(e as Map<String, dynamic>))
+    final List<TezosNftModel> data = response
+        .map((dynamic e) => TezosNftModel.fromJson(e as Map<String, dynamic>))
         .toList();
     return data;
   }
