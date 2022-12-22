@@ -1,1 +1,1 @@
-export 'tezos_network_selector.dart';
+export 'network_selector.dart';

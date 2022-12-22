@@ -66,6 +66,14 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
         (Route<dynamic> route) => route.isFirst,
       );
     }
+    if (state.status == WalletStatus.populate) {
+      final blockchainType = state.currentAccount.blockchainType;
+      context.read<ManageNetworkCubit>().setNetwork(
+            blockchainType == BlockchainType.tezos
+                ? TezosNetwork.mainNet()
+                : EthereumNetwork.mainNet(),
+          );
+    }
   },
 );
 

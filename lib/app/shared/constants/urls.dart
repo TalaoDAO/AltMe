@@ -39,9 +39,12 @@ class Urls {
 
   static const xtzPrice = 'https://api.teztools.io/v1/xtz-price';
 
-  //
+  // TZKT
   static const tzktMainnetUrl = 'https://api.tzkt.io';
   static const tzktGhostnetUrl = 'https://api.ghostnet.tzkt.io';
+
+  //INFURA
+  static const infuraNftBaseUrl = 'https://nft.api.infura.io';
 
   static const objktUrl = 'https://objkt.com/';
   static const raribleUrl = 'https://rarible.com/';
