@@ -1,6 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-abstract class BlockchainNetwork extends Equatable {
+part 'blockchain_network.g.dart';
+
+@JsonSerializable()
+class BlockchainNetwork extends Equatable {
   const BlockchainNetwork({
     required this.networkname,
     required this.apiUrl,
@@ -9,6 +13,11 @@ abstract class BlockchainNetwork extends Equatable {
     required this.subTitle,
     this.apiKey = '',
   });
+
+  factory BlockchainNetwork.fromJson(Map<String, dynamic> json) =>
+      _$BlockchainNetworkFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BlockchainNetworkToJson(this);
 
   final String networkname;
   final String apiUrl;

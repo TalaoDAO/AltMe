@@ -14,7 +14,7 @@ class NftState extends Equatable {
 
   final AppStatus status;
   final StateMessage? message;
-  final List<TezosNftModel> data;
+  final List<NftModel> data;
   final int offset;
 
   NftState fetching() {
@@ -45,7 +45,7 @@ class NftState extends Equatable {
   }
 
   NftState populate({
-    List<TezosNftModel>? data,
+    List<NftModel>? data,
   }) {
     return NftState(
       status: AppStatus.populate,
@@ -58,7 +58,7 @@ class NftState extends Equatable {
   NftState copyWith({
     AppStatus? status,
     MessageHandler? messageHandler,
-    List<TezosNftModel>? data,
+    List<NftModel>? data,
     int? offset,
     StateMessage? message,
   }) {
