@@ -51,6 +51,8 @@ class TezosAssociatedAddressCredential {
           'schema': 'https://schema.org/',
           'accountName': 'schema:identifier',
           'associatedAddress': 'schema:account',
+          'cryptoWalletSignature': 'schema:identifier',
+          'cryptoWalletPayload': 'schema:identifier',
           'issuedBy': {
             '@id': 'schema:issuedBy',
             '@context': {

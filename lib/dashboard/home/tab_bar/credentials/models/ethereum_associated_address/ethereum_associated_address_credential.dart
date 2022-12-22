@@ -52,6 +52,8 @@ class EthereumAssociatedAddressCredential {
           'accountName': 'schema:identifier',
           'associatedAddress':
               'https://github.com/TalaoDAO/context#associatedaddress',
+          'cryptoWalletSignature': 'schema:identifier',
+          'cryptoWalletPayload': 'schema:identifier',
           'issuedBy': {
             '@id': 'schema:issuedBy',
             '@context': {
