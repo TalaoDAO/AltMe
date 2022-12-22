@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/nft/cubit/nft_cubit_dao.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'nft_cubit.g.dart';
@@ -32,11 +36,6 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
 
   Future<void> getNftList() async {
     final activeIndex = walletCubit.state.currentCryptoIndex;
-    if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType !=
-        BlockchainType.tezos) {
-      emit(state.copyWith(status: AppStatus.idle));
-      return;
-    }
 
     if (state.offset == _offsetOfLoadedData) return;
     _offsetOfLoadedData = state.offset;
@@ -53,12 +52,24 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
       final walletAddress =
           walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
 
-      final List<NftModel> newData = await getTezosNFTs(
-        offset: state.offset,
-        limit: _limit,
-        walletAddress: walletAddress,
-        network: manageNetworkCubit.state.network,
-      );
+      late List<NftModel> newData;
+
+      if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType ==
+          BlockchainType.ethereum) {
+        newData = await getEthereumNFTs(
+          offset: state.offset,
+          limit: _limit,
+          walletAddress: walletAddress,
+          network: manageNetworkCubit.state.network as EthereumNetwork,
+        );
+      } else {
+        newData = await getTezosNFTs(
+          offset: state.offset,
+          limit: _limit,
+          walletAddress: walletAddress,
+          network: manageNetworkCubit.state.network as TezosNetwork,
+        );
+      }
 
       if (state.offset == 0) {
         data = newData;
@@ -66,8 +77,7 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
         data.addAll(newData);
       }
       log.i('nfts - $data');
-      // TODO(Taleb): update the NFTModel
-      emit(state.populate(data: data as List<TezosNftModel>));
+      emit(state.populate(data: data));
     } catch (e, s) {
       if (isClosed) return;
       log.e('failed to fetch nfts, e: $e, s: $s');
@@ -107,9 +117,38 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
     required int offset,
     required int limit,
     required String walletAddress,
-  }) {
-    // TODO: implement getEthereumNFTs
-    throw UnimplementedError();
+    required EthereumNetwork network,
+  }) async {
+    await dotenv.load();
+    final username = dotenv.get('INFURA_API_KEY');
+    final password = dotenv.get('INFURA_API_KEY_SECRET');
+    final basicAuth =
+        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+
+    final dynamic responseString = await client.get(
+      '${network.apiUrl}/networks/1/accounts/$walletAddress/assets/nfts',
+      headers: <String, String>{
+        'Authorization': basicAuth,
+      },
+    );
+
+    final dynamic response = jsonDecode(responseString as String);
+
+    final nftsJson = response['assets'] as List<dynamic>;
+    return List<EthereumNftModel>.from(
+      nftsJson.map<EthereumNftModel>((dynamic e) {
+        return EthereumNftModel(
+          name: e['metadata']['name'] as String,
+          description: e['metadata']['description'] as String?,
+          tokenId: e['tokenId'] as String,
+          contractAddress: e['contract'] as String,
+          balance: e['supply'] as String,
+          type: e['type'] as String,
+          image: e['metadata']['image'] as String?,
+          animationUrl: e['metadata']['animation_url'] as String?,
+        );
+      }),
+    ).toList();
   }
 
   @override
@@ -132,8 +171,6 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
         'limit': limit,
       },
     ) as List<dynamic>;
-    // TODO(all): check the balance variable of NFTModel
-    // and get right value from api
     final List<TezosNftModel> data = response
         .map((dynamic e) => TezosNftModel.fromJson(e as Map<String, dynamic>))
         .toList();

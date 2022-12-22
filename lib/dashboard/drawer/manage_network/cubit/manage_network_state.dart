@@ -9,14 +9,24 @@ class ManageNetworkState extends Equatable {
   factory ManageNetworkState.fromJson(Map<String, dynamic> json) =>
       _$ManageNetworkStateFromJson(json);
 
-  final TezosNetwork network;
-  List<TezosNetwork> get allNetworks => [
+  final BlockchainNetwork network;
+  List<BlockchainNetwork> get allNetworks => [
+        TezosNetwork.mainNet(),
+        TezosNetwork.ghostnet(),
+        EthereumNetwork.mainNet(),
+      ];
+
+  List<TezosNetwork> get tezosNetworks => [
         TezosNetwork.mainNet(),
         TezosNetwork.ghostnet(),
       ];
 
+  List<EthereumNetwork> get ethereumNetworks => [
+        EthereumNetwork.mainNet(),
+      ];
+
   ManageNetworkState copyWith({
-    TezosNetwork? network,
+    BlockchainNetwork? network,
   }) {
     return ManageNetworkState(
       network: network ?? this.network,

@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/models/blockchain_network/tezos_network.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
 
 mixin NFTCubitDao {
@@ -13,5 +13,6 @@ mixin NFTCubitDao {
     required int offset,
     required int limit,
     required String walletAddress,
+    required EthereumNetwork network,
   });
 }

@@ -1,4 +1,3 @@
-import 'package:altme/app/shared/constants/urls.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -9,65 +8,44 @@ part 'tezos_nft_model.g.dart';
 @immutable
 class TezosNftModel extends NftModel {
   const TezosNftModel({
+    required String name,
+    String? displayUri,
+    String? thumbnailUri,
+    String? description,
+    required String tokenId,
+    required String contractAddress,
+    required String balance,
+    bool isTransferable = true,
     required this.id,
-    required this.name,
-    this.displayUri,
-    this.thumbnailUri,
-    required this.balance,
-    this.description,
-    required this.tokenId,
     this.symbol,
-    required this.contractAddress,
     this.standard,
     this.identifier,
     this.creators,
     this.publishers,
     this.date,
-    this.isTransferable,
-  }) : super();
+  }) : super(
+          name: name,
+          displayUri: displayUri,
+          description: description,
+          thumbnailUri: thumbnailUri,
+          tokenId: tokenId,
+          contractAddress: contractAddress,
+          balance: balance,
+          isTransferable: isTransferable,
+        );
 
   factory TezosNftModel.fromJson(Map<String, dynamic> json) =>
       _$TezosNftModelFromJson(json);
 
-  @JsonKey(defaultValue: '0')
-  final String tokenId;
-  @JsonKey(defaultValue: '')
-  final String name;
-  final String? displayUri;
-  final String? thumbnailUri;
-  final String balance;
-  final String? description;
   final String? standard;
   final int id;
   final String? symbol;
-  final String contractAddress;
   final String? identifier;
   final List<String>? creators;
   final List<String>? publishers;
   final String? date;
-  final bool? isTransferable;
 
   Map<String, dynamic> toJson() => _$TezosNftModelToJson(this);
-
-  String? get displayUrl {
-    if (displayUri?.isEmpty ?? true) {
-      return null;
-    }
-    return displayUri?.replaceAll(
-      'ipfs://',
-      Urls.talaoIpfsGateway,
-    );
-  }
-
-  String? get thumbnailUrl {
-    if (thumbnailUri?.isEmpty ?? true) {
-      return null;
-    }
-    return thumbnailUri?.replaceAll(
-      'ipfs://',
-      Urls.talaoIpfsGateway,
-    );
-  }
 
   TokenModel getToken() {
     return TokenModel(
@@ -85,6 +63,7 @@ class TezosNftModel extends NftModel {
   @override
   List<Object?> get props => [
         id,
+        tokenId,
         name,
         displayUri,
         thumbnailUri,

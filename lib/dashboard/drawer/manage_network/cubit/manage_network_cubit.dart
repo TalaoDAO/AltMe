@@ -19,21 +19,21 @@ class ManageNetworkCubit extends Cubit<ManageNetworkState> {
   final SecureStorageProvider secureStorageProvider;
 
   Future<void> _load() async {
-    final _tezosNetworkJson =
-        await secureStorageProvider.get(SecureStorageKeys.tezosNetworkKey);
-    final tezosNetwork = _tezosNetworkJson != null
-        ? TezosNetwork.fromJson(
-            json.decode(_tezosNetworkJson) as Map<String, dynamic>,
+    final _blockchainNetworkJson =
+        await secureStorageProvider.get(SecureStorageKeys.blockchainNetworkKey);
+    final blockchainNetwork = _blockchainNetworkJson != null
+        ? BlockchainNetwork.fromJson(
+            json.decode(_blockchainNetworkJson) as Map<String, dynamic>,
           )
         : TezosNetwork.mainNet();
-    emit(state.copyWith(network: tezosNetwork));
+    emit(state.copyWith(network: blockchainNetwork));
   }
 
-  Future<void> setNetwork(TezosNetwork tezosNetwork) async {
+  Future<void> setNetwork(BlockchainNetwork network) async {
     await secureStorageProvider.set(
-      SecureStorageKeys.tezosNetworkKey,
-      jsonEncode(tezosNetwork.toJson()),
+      SecureStorageKeys.blockchainNetworkKey,
+      jsonEncode(network.toJson()),
     );
-    emit(state.copyWith(network: tezosNetwork));
+    emit(state.copyWith(network: network));
   }
 }
