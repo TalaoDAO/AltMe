@@ -134,8 +134,11 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       jwkKey,
     );
 
+    log.i('didKitProvider.issueCredential - $vc');
+
     final result =
         await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions));
+    log.i('didKitProvider.verifyCredential - $result');
     final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
 
     if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {

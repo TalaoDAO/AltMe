@@ -25,6 +25,10 @@ import 'package:tezart/tezart.dart';
 //   'alg': 'ES256K' // or 'alg': "ES256K-R" for did:tz
 // };
 
+/// tezos supports 3 types of keys (secp256k, ed25519, P-256)
+/// solana supports only ed25519
+/// ethereum and EVM blockchains supports only ES256K
+
 class KeyGenerator {
   static const Prefixes _seedPrefix = Prefixes.edsk2;
 
