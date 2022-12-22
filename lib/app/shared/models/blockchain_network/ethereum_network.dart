@@ -21,6 +21,17 @@ class EthereumNetwork extends BlockchainNetwork {
           apiKey: apiKey,
         );
 
+        factory EthereumNetwork.mainNet() => const EthereumNetwork(
+        networkname: 'Mainnet',
+        // TODO(Taleb): update url later
+        apiUrl: Urls.infuraNftBaseUrl,
+        rpcNodeUrl: '',
+        title: 'Ethereum Mainnet',
+        subTitle:
+            'This network is the official Ethereum blockchain running Network.'
+            ' You should use this network by default.',
+      );
+
   factory EthereumNetwork.fromJson(Map<String, dynamic> json) =>
       _$EthereumNetworkFromJson(json);
 

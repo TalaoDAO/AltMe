@@ -42,13 +42,13 @@ class ProfileCubit extends Cubit<ProfileState> {
               '';
       final jobTitle =
           await secureStorageProvider.get(SecureStorageKeys.jobTitle) ?? '';
-          
+
       // by default none is chosen (empty url means none)
       final issuerVerificationUrl = await secureStorageProvider
               .get(SecureStorageKeys.issuerVerificationUrlKey) ??
           '';
-      final _tezosNetworkJson =
-          await secureStorageProvider.get(SecureStorageKeys.tezosNetworkKey);
+      final _tezosNetworkJson = await secureStorageProvider
+          .get(SecureStorageKeys.blockchainNetworkKey);
       final tezosNetwork = _tezosNetworkJson != null
           ? TezosNetwork.fromJson(
               json.decode(_tezosNetworkJson) as Map<String, dynamic>,
@@ -97,7 +97,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     await secureStorageProvider.delete(SecureStorageKeys.companyName);
     await secureStorageProvider
         .delete(SecureStorageKeys.issuerVerificationUrlKey);
-    await secureStorageProvider.delete(SecureStorageKeys.tezosNetworkKey);
+    await secureStorageProvider.delete(SecureStorageKeys.blockchainNetworkKey);
     await secureStorageProvider.delete(SecureStorageKeys.isEnterpriseUser);
     emit(state.success(model: ProfileModel.empty()));
   }

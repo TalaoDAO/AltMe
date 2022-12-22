@@ -40,7 +40,7 @@ class _NftViewState extends State<NftView> {
     await context.read<NftCubit>().fetchFromZero();
   }
 
-  void onItemClick(TezosNftModel nftModel) {
+  void onItemClick(NftModel nftModel) {
     Navigator.of(context).push<void>(NftDetailsPage.route(nftModel: nftModel));
   }
 
@@ -142,22 +142,6 @@ class _NftViewState extends State<NftView> {
                         state.message!.messageHandler!;
                     message =
                         messageHandler.getMessage(context, messageHandler);
-                  }
-
-                  final index =
-                      context.read<WalletCubit>().state.currentCryptoIndex;
-
-                  final blockchain = context
-                      .read<WalletCubit>()
-                      .state
-                      .cryptoAccount
-                      .data[index]
-                      .blockchainType;
-
-                  if (blockchain != BlockchainType.tezos) {
-                    return Center(
-                      child: Text(l10n.thisFeatureIsNotSupportedMessage),
-                    );
                   }
 
                   if (state.status == AppStatus.fetching) {
