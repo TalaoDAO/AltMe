@@ -76,7 +76,7 @@ class ImageStrings {
   static const String paymentPolygonCard =
       '$imagePath/payment-polygon-card.png';
   static const String paymentBinanceCard =
-      '$imagePath/payment-binance-cardd.png';
+      '$imagePath/payment-binance-card.png';
 
   static const String diplomaCard = '$imagePath/diploma_card.png';
 

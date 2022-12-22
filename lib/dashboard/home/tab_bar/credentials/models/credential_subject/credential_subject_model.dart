@@ -48,6 +48,12 @@ class CredentialSubjectModel {
         return TezosAssociatedAddressModel.fromJson(json);
       case 'EthereumAssociatedAddress':
         return EthereumAssociatedAddressModel.fromJson(json);
+      case 'FantomAssociatedAddress':
+        return FantomAssociatedAddressModel.fromJson(json);
+      case 'PolygonAssociatedAddress':
+        return PolygonAssociatedAddressModel.fromJson(json);
+      case 'BinanceAssociatedAddress':
+        return BinanceAssociatedAddressModel.fromJson(json);
       case 'SelfIssued':
         return SelfIssuedModel.fromJson(json);
       case 'IdentityPass':
