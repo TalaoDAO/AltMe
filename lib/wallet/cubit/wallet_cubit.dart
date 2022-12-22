@@ -87,6 +87,9 @@ class WalletCubit extends Cubit<WalletState> {
         ) ??
         '0';
 
+    final int accountsCount = int.parse(totalAccountsYet);
+    late CryptoAccount updatedCryptoAccount;
+
     final isSecretKey = isValidPrivateKey(mnemonicOrKey);
 
     if (isSecretKey) {
@@ -94,36 +97,68 @@ class WalletCubit extends Cubit<WalletState> {
           mnemonicOrKey.startsWith('spsk') ||
           mnemonicOrKey.startsWith('p2sk');
 
-      log.i('creating ${isTezosSecretKey ? 'tezos' : 'ethereum'} account');
+      // TODO(bibash): handle case if blochain is not null
+      if (blockchainType != null) {}
 
-      final CryptoAccount cryptoAccount = await createBlockchainAccount(
-        accountName: accountName,
-        mnemonicOrKey: mnemonicOrKey,
-        isImported: isImported,
-        isSecretKey: isSecretKey,
-        blockchainType:
-            isTezosSecretKey ? BlockchainType.tezos : BlockchainType.ethereum,
-        totalAccountsYet: int.parse(totalAccountsYet),
-        showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+      log.i(
+        'creating ${isTezosSecretKey ? 'tezos' : 'ethereum based'} account',
       );
 
-      onComplete?.call(
-        cryptoAccount: cryptoAccount,
-        messageHandler: ResponseMessage(
-          ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
-        ),
-      );
+      if (isTezosSecretKey) {
+        /// creating tezos account
+        updatedCryptoAccount = await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.tezos,
+          totalAccountsYet: accountsCount,
+        );
+      } else {
+        /// creating all ethereum based accounts
+        await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.fantom,
+          totalAccountsYet: accountsCount,
+        );
+        await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.polygon,
+          totalAccountsYet: accountsCount + 1,
+        );
+        await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.binance,
+          totalAccountsYet: accountsCount + 2,
+        );
+        updatedCryptoAccount = await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.ethereum,
+          totalAccountsYet: accountsCount + 3,
+        );
+      }
     } else {
-      late CryptoAccount updatedCryptoAccount;
       if (blockchainType != null) {
+        log.i('creating both $blockchainType accounts');
         updatedCryptoAccount = await createBlockchainAccount(
           accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: blockchainType,
-          totalAccountsYet: int.parse(totalAccountsYet),
-          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+          totalAccountsYet: accountsCount,
         );
       } else {
         log.i('creating both all blockchain accounts');
@@ -133,8 +168,7 @@ class WalletCubit extends Cubit<WalletState> {
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.ethereum,
-          totalAccountsYet: int.parse(totalAccountsYet),
-          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+          totalAccountsYet: accountsCount,
         );
         await createBlockchainAccount(
           accountName: accountName,
@@ -142,8 +176,7 @@ class WalletCubit extends Cubit<WalletState> {
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.fantom,
-          totalAccountsYet: int.parse(totalAccountsYet),
-          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+          totalAccountsYet: accountsCount + 1,
         );
         await createBlockchainAccount(
           accountName: accountName,
@@ -151,8 +184,7 @@ class WalletCubit extends Cubit<WalletState> {
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.polygon,
-          totalAccountsYet: int.parse(totalAccountsYet),
-          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+          totalAccountsYet: accountsCount + 2,
         );
         await createBlockchainAccount(
           accountName: accountName,
@@ -160,8 +192,7 @@ class WalletCubit extends Cubit<WalletState> {
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.binance,
-          totalAccountsYet: int.parse(totalAccountsYet),
-          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+          totalAccountsYet: accountsCount + 3,
         );
         updatedCryptoAccount = await createBlockchainAccount(
           accountName: accountName,
@@ -169,17 +200,16 @@ class WalletCubit extends Cubit<WalletState> {
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.tezos,
-          totalAccountsYet: int.parse(totalAccountsYet) + 1,
-          showCredentialAddMessage: int.parse(totalAccountsYet) != 0,
+          totalAccountsYet: accountsCount + 4,
         );
       }
-      onComplete?.call(
-        cryptoAccount: updatedCryptoAccount,
-        messageHandler: ResponseMessage(
-          ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
-        ),
-      );
     }
+    onComplete?.call(
+      cryptoAccount: updatedCryptoAccount,
+      messageHandler: ResponseMessage(
+        ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+      ),
+    );
   }
 
   Future<CryptoAccount> createBlockchainAccount({
@@ -189,7 +219,6 @@ class WalletCubit extends Cubit<WalletState> {
     required bool isSecretKey,
     required BlockchainType blockchainType,
     required int totalAccountsYet,
-    required bool showCredentialAddMessage,
   }) async {
     final AccountType accountType = blockchainType.accountType;
 
@@ -253,9 +282,7 @@ class WalletCubit extends Cubit<WalletState> {
       name = accountName;
     }
 
-    final ssiKey = await secureStorageProvider.get(
-      SecureStorageKeys.ssiKey,
-    );
+    final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
 
     final CryptoAccountData cryptoAccountData = CryptoAccountData(
       name: name,
@@ -293,10 +320,11 @@ class WalletCubit extends Cubit<WalletState> {
     if (credential != null) {
       await insertCredential(
         credential: credential,
-        showMessage: showCredentialAddMessage,
+        showMessage: false,
       );
     }
 
+    // TODO(all): this should be in different place
     if ((await credentialListFromCredentialSubjectType(
       CredentialSubjectType.deviceInfo,
     ))
@@ -310,7 +338,7 @@ class WalletCubit extends Cubit<WalletState> {
       if (deviceInfoCredential != null) {
         await insertCredential(
           credential: deviceInfoCredential,
-          showMessage: showCredentialAddMessage,
+          showMessage: false,
         );
       }
     }

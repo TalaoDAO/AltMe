@@ -11,6 +11,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   required BlockchainType blockchainType,
 }) async {
   final log = getLogger('WalletCubit - generateAssociatedWalletCredential');
+  log.i(blockchainType);
   try {
     const didMethod = AltMeStrings.defaultDIDMethod;
     final didSsi = didCubit.state.did!;

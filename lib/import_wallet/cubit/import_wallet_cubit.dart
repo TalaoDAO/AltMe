@@ -55,7 +55,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
-      log.e('isFromOnboarding: $isFromOnboarding');
+      log.i('isFromOnboarding: $isFromOnboarding');
       if (isFromOnboarding) {
         /// ssi creation
 
@@ -94,11 +94,12 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         );
       }
 
-      /// crypto wallet
+      /// crypto wallet with unknown blockchain type
       await walletCubit.createCryptoWallet(
         accountName: accountName,
         mnemonicOrKey: mnemonicOrKey,
         isImported: !isFromOnboarding,
+        blockchainType: null,
         onComplete: ({
           required CryptoAccount cryptoAccount,
           required MessageHandler messageHandler,
