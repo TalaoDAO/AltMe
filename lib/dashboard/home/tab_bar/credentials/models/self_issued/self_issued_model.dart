@@ -20,7 +20,7 @@ class SelfIssuedModel extends CredentialSubjectModel {
   }) : super(
           id: id,
           type: type,
-          issuedBy: const Author('', ''),
+          issuedBy: const Author(''),
           credentialSubjectType: CredentialSubjectType.selfIssued,
           credentialCategory: CredentialCategory.othersCards,
         );

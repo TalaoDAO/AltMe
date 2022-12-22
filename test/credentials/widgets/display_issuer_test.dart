@@ -8,11 +8,10 @@ void main() {
     late Author issuerWithLogo;
     late Author issuerWithoutLogo;
     const authorName = 'Taleb';
-    const authorLogo = 'https://www.toto.fr';
 
     setUp(() {
-      issuerWithLogo = const Author(authorName, authorLogo);
-      issuerWithoutLogo = const Author(authorName, '');
+      issuerWithLogo = const Author(authorName);
+      issuerWithoutLogo = const Author(authorName);
     });
 
     testWidgets('find issuer name', (WidgetTester tester) async {

@@ -21,16 +21,6 @@ class DisplayIssuer extends StatelessWidget {
             style: Theme.of(context).textTheme.credentialIssuer,
           ),
         ),
-        const SizedBox(width: 2),
-        if (issuer.logo!.isNotEmpty)
-          Expanded(
-            child: CachedImageFromNetwork(
-              issuer.logo!,
-              fit: BoxFit.cover,
-            ),
-          )
-        else
-          const SizedBox.shrink()
       ],
     );
   }

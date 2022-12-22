@@ -117,7 +117,7 @@ class CredentialSubjectModel {
 
   static Author fromJsonAuthor(dynamic json) {
     if (json == null || json == '') {
-      return const Author('', '');
+      return const Author('');
     }
     return Author.fromJson(json as Map<String, dynamic>);
   }

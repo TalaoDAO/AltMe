@@ -10,12 +10,14 @@ class PolygonAssociatedAddressModel extends CredentialSubjectModel {
     this.associatedAddress,
     this.accountName,
     required String id,
+    required String type,
+    required Author issuedBy,
   }) : super(
           id: id,
-          type: 'PolygonAssociatedAddress',
+          type: type,
           credentialSubjectType: CredentialSubjectType.polygonAssociatedWallet,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
-          issuedBy: const Author('My Wallet', null),
+          issuedBy: issuedBy,
         );
 
   factory PolygonAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>

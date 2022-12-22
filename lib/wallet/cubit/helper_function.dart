@@ -42,6 +42,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             id: didSsi,
             accountName: accountName,
             associatedAddress: walletAddress,
+            type: 'TezosAssociatedAddress',
+            issuedBy: const Author('My wallet'),
           ),
         );
         break;
@@ -54,6 +56,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             id: didSsi,
             accountName: accountName,
             associatedAddress: walletAddress,
+            type: 'EthereumAssociatedAddress',
+            issuedBy: const Author('My wallet'),
           ),
         );
         break;
@@ -66,6 +70,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             id: didSsi,
             accountName: accountName,
             associatedAddress: walletAddress,
+            type: 'FantomAssociatedAddress',
+            issuedBy: const Author('My wallet'),
           ),
         );
         break;
@@ -78,6 +84,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             id: didSsi,
             accountName: accountName,
             associatedAddress: walletAddress,
+            type: 'PolygonAssociatedAddress',
+            issuedBy: const Author('My wallet'),
           ),
         );
         break;
@@ -90,11 +98,14 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
             id: didSsi,
             accountName: accountName,
             associatedAddress: walletAddress,
+            type: 'BinanceAssociatedAddress',
+            issuedBy: const Author('My wallet'),
           ),
         );
         break;
     }
 
+    log.i(jsonEncode(associatedAddressCredential.toJson()));
     final String vc = await didKitProvider.issueCredential(
       jsonEncode(associatedAddressCredential.toJson()),
       jsonEncode(options),
