@@ -459,31 +459,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
     } catch (e) {
       log.e('An error occurred while connecting to the server.', e);
-      if (e is ResponseMessage) {
+      if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
-      } else if (e is NetworkException) {
-        if (e.message == NetworkError.NETWORK_ERROR_PRECONDITION_FAILED) {
-          emit(
-            state.copyWith(
-              qrScanStatus: QrScanStatus.error,
-              message: StateMessage.error(
-                messageHandler: ResponseMessage(
-                  ResponseString.RESPONSE_STRING_userNotFitErrorMessage,
-                ),
-                showDialog: true,
-              ),
-            ),
-          );
-        } else {
-          emit(
-            state.error(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-              ),
-            ),
-          );
-        }
       } else {
         emit(
           state.error(

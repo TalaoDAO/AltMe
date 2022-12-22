@@ -66,12 +66,13 @@ class ScanState extends Equatable {
     );
   }
 
-  ScanState success({MessageHandler? messageHandler}) {
+  ScanState copyWith({
+    required ScanStatus status,
+    StateMessage? message,
+  }) {
     return ScanState(
-      status: ScanStatus.success,
-      message: messageHandler == null
-          ? null
-          : StateMessage.success(messageHandler: messageHandler),
+      status: status,
+      message: message,
     );
   }
 

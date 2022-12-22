@@ -73,13 +73,6 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
   listener: (BuildContext context, ScanState state) async {
     final l10n = context.l10n;
 
-    if (state.message != null) {
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: state.message!,
-      );
-    }
-
     if (state.status == ScanStatus.askPermissionDidAuth) {
       final scanCubit = context.read<ScanCubit>();
       final state = scanCubit.state;
@@ -111,6 +104,13 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
     }
     if (state.status == ScanStatus.error) {
       Navigator.of(context).pop();
+    }
+
+    if (state.message != null) {
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: state.message!,
+      );
     }
   },
 );
