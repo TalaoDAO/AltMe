@@ -215,7 +215,9 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                                       presentationDefinition,
                                                   skip: false,
                                                 ),
-                                    text: l10n.credentialPickPresent,
+                                    text: isOngoingStep
+                                        ? l10n.next
+                                        : l10n.credentialPickPresent,
                                   );
                                 }
                               },
