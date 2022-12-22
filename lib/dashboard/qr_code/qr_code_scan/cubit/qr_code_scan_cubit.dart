@@ -325,59 +325,61 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       data = response is String ? jsonDecode(response) : response;
 
       log.i('data - $data');
+      if (data['credential_manifest'] != null) {
+        final CredentialManifest credentialManifest =
+            CredentialManifest.fromJson(
+          data['credential_manifest'] as Map<String, dynamic>,
+        );
+        final PresentationDefinition? presentationDefinition =
+            credentialManifest.presentationDefinition;
+        if (presentationDefinition != null &&
+            presentationDefinition.inputDescriptors.isNotEmpty) {
+          for (final descriptor in presentationDefinition.inputDescriptors) {
+            /// using JsonPath to find credential Name
+            final dynamic json = jsonDecode(jsonEncode(descriptor.constraints));
+            final dynamic credentialField =
+                JsonPath(r'$..fields').read(json).first.value.toList().first;
 
-      final credentialManifest = CredentialManifest.fromJson(
-        data['credential_manifest'] as Map<String, dynamic>,
-      );
+            final credentialName =
+                credentialField['filter']['pattern'] as String;
 
-      final PresentationDefinition? presentationDefinition =
-          credentialManifest.presentationDefinition;
-      if (presentationDefinition != null &&
-          presentationDefinition.inputDescriptors.isNotEmpty) {
-        for (final descriptor in presentationDefinition.inputDescriptors) {
-          /// using JsonPath to find credential Name
-          final dynamic json = jsonDecode(jsonEncode(descriptor.constraints));
-          final dynamic credentialField =
-              JsonPath(r'$..fields').read(json).first.value.toList().first;
+            /// converting string to CredentialSubjectModel
+            final Map<String, dynamic> credentialNameJson = <String, dynamic>{
+              'type': credentialName
+            };
+            final CredentialSubjectModel credentialSubjectModel =
+                CredentialSubjectModel.fromJson(credentialNameJson);
 
-          final credentialName = credentialField['filter']['pattern'] as String;
+            /// fetching all the credentials
+            final CredentialsRepository repository =
+                CredentialsRepository(getSecureStorage);
 
-          /// converting string to CredentialSubjectModel
-          final Map<String, dynamic> credentialNameJson = <String, dynamic>{
-            'type': credentialName
-          };
-          final CredentialSubjectModel credentialSubjectModel =
-              CredentialSubjectModel.fromJson(credentialNameJson);
+            final List<CredentialModel> allCredentials =
+                await repository.findAll();
 
-          /// fetching all the credentials
-          final CredentialsRepository repository =
-              CredentialsRepository(getSecureStorage);
+            bool isPresentable = false;
 
-          final List<CredentialModel> allCredentials =
-              await repository.findAll();
-
-          bool isPresentable = false;
-
-          for (final credential in allCredentials) {
-            if (credentialSubjectModel.credentialSubjectType ==
-                credential.credentialPreview.credentialSubjectModel
-                    .credentialSubjectType) {
-              isPresentable = true;
-              break;
-            } else {
-              isPresentable = false;
+            for (final credential in allCredentials) {
+              if (credentialSubjectModel.credentialSubjectType ==
+                  credential.credentialPreview.credentialSubjectModel
+                      .credentialSubjectType) {
+                isPresentable = true;
+                break;
+              } else {
+                isPresentable = false;
+              }
             }
-          }
-          if (!isPresentable) {
-            emit(
-              state.copyWith(
-                qrScanStatus: QrScanStatus.success,
-                route: MissingCredentialsPage.route(
-                  credentialManifest: credentialManifest,
+            if (!isPresentable) {
+              emit(
+                state.copyWith(
+                  qrScanStatus: QrScanStatus.success,
+                  route: MissingCredentialsPage.route(
+                    credentialManifest: credentialManifest,
+                  ),
                 ),
-              ),
-            );
-            return;
+              );
+              return;
+            }
           }
         }
       }
