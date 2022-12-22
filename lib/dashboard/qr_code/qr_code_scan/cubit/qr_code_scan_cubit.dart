@@ -340,6 +340,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             final dynamic credentialField =
                 JsonPath(r'$..fields').read(json).first.value.toList().first;
 
+            if (credentialField['filter'] == null) {
+              continue;
+            }
+
             final credentialName =
                 credentialField['filter']['pattern'] as String;
 
