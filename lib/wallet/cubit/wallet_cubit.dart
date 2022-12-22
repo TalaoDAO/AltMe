@@ -309,12 +309,11 @@ class WalletCubit extends Cubit<WalletState> {
     log.i('$blockchainType created');
 
     final credential = await generateAssociatedWalletCredential(
-      accountName: cryptoAccountData.name,
-      walletAddress: walletAddress,
-      ssiKey: ssiKey!,
+      cryptoAccountData: cryptoAccountData,
       didCubit: didCubit,
       didKitProvider: didKitProvider,
       blockchainType: blockchainType,
+      keyGenerator: keyGenerator,
     );
 
     if (credential != null) {
@@ -330,7 +329,7 @@ class WalletCubit extends Cubit<WalletState> {
     ))
         .isEmpty) {
       final deviceInfoCredential = await generateDeviceInfoCredential(
-        ssiKey: ssiKey,
+        ssiKey: ssiKey!,
         didKitProvider: didKitProvider,
         didCubit: didCubit,
       );
@@ -385,25 +384,23 @@ class WalletCubit extends Cubit<WalletState> {
     /// update or create AssociatedAddres credential with new name
     if (filteredCredentialList.isNotEmpty) {
       final credential = await generateAssociatedWalletCredential(
-        accountName: cryptoAccountData.name,
-        walletAddress: cryptoAccountData.walletAddress,
-        ssiKey: ssiKey!,
+        cryptoAccountData: cryptoAccountData,
         oldId: filteredCredentialList.first.id,
         didCubit: didCubit,
         didKitProvider: didKitProvider,
         blockchainType: blockchainType,
+        keyGenerator: keyGenerator,
       );
       if (credential != null) {
         await updateCredential(credential: credential);
       }
     } else {
       final credential = await generateAssociatedWalletCredential(
-        accountName: cryptoAccountData.name,
-        walletAddress: cryptoAccountData.walletAddress,
-        ssiKey: ssiKey!,
+        cryptoAccountData: cryptoAccountData,
         didCubit: didCubit,
         didKitProvider: didKitProvider,
         blockchainType: blockchainType,
+        keyGenerator: keyGenerator,
       );
       if (credential != null) {
         await insertCredential(credential: credential);

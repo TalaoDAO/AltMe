@@ -2,23 +2,45 @@ part of 'wallet_cubit.dart';
 
 ///helper function to generate Tezos/Ethereum AssociatedAddressCredential
 Future<CredentialModel?> generateAssociatedWalletCredential({
-  required String accountName,
-  required String walletAddress,
-  required String ssiKey,
+  required CryptoAccountData cryptoAccountData,
   required DIDKitProvider didKitProvider,
   required DIDCubit didCubit,
   String? oldId,
   required BlockchainType blockchainType,
+  required KeyGenerator keyGenerator,
 }) async {
   final log = getLogger('WalletCubit - generateAssociatedWalletCredential');
   log.i(blockchainType);
   try {
-    const didMethod = AltMeStrings.defaultDIDMethod;
-    final didSsi = didCubit.state.did!;
-    final issuer = didKitProvider.keyToDID(didMethod, ssiKey);
+    const didMethod = AltMeStrings.cryptoDIDMethod;
 
-    final verificationMethod =
-        await didKitProvider.keyToVerificationMethod(didMethod, ssiKey);
+    late String jwkKey;
+
+    switch (blockchainType) {
+      case BlockchainType.tezos:
+        jwkKey = await keyGenerator.jwkFromSecretKey(
+          secretKey: cryptoAccountData.secretKey,
+        );
+        break;
+      case BlockchainType.ethereum:
+      case BlockchainType.fantom:
+      case BlockchainType.polygon:
+      case BlockchainType.binance:
+        throw Exception();
+    }
+
+    final issuer = didKitProvider.keyToDID(didMethod, jwkKey);
+    log.i('didMethod - $didMethod');
+    log.i('jwkKey - $jwkKey');
+    log.i('didKitProvider.keyToDID - $issuer');
+
+    // final verificationMethod =
+    //     await didKitProvider.keyToVerificationMethod(didMethod, jwkKey);
+
+    final verificationMethod = '$issuer#blockchainAccountId';
+    log.i('didKitProvider.keyToVerificationMethod - $verificationMethod');
+
+    final didSsi = didCubit.state.did!;
 
     final options = {
       'proofPurpose': 'assertionMethod',
@@ -40,8 +62,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: TezosAssociatedAddressModel(
             id: didSsi,
-            accountName: accountName,
-            associatedAddress: walletAddress,
+            accountName: cryptoAccountData.name,
+            associatedAddress: cryptoAccountData.walletAddress,
             type: 'TezosAssociatedAddress',
             issuedBy: const Author('My wallet'),
           ),
@@ -54,8 +76,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: EthereumAssociatedAddressModel(
             id: didSsi,
-            accountName: accountName,
-            associatedAddress: walletAddress,
+            accountName: cryptoAccountData.name,
+            associatedAddress: cryptoAccountData.walletAddress,
             type: 'EthereumAssociatedAddress',
             issuedBy: const Author('My wallet'),
           ),
@@ -68,8 +90,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: FantomAssociatedAddressModel(
             id: didSsi,
-            accountName: accountName,
-            associatedAddress: walletAddress,
+            accountName: cryptoAccountData.name,
+            associatedAddress: cryptoAccountData.walletAddress,
             type: 'FantomAssociatedAddress',
             issuedBy: const Author('My wallet'),
           ),
@@ -82,8 +104,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: PolygonAssociatedAddressModel(
             id: didSsi,
-            accountName: accountName,
-            associatedAddress: walletAddress,
+            accountName: cryptoAccountData.name,
+            associatedAddress: cryptoAccountData.walletAddress,
             type: 'PolygonAssociatedAddress',
             issuedBy: const Author('My wallet'),
           ),
@@ -96,8 +118,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           issuanceDate: issuanceDate,
           credentialSubjectModel: BinanceAssociatedAddressModel(
             id: didSsi,
-            accountName: accountName,
-            associatedAddress: walletAddress,
+            accountName: cryptoAccountData.name,
+            associatedAddress: cryptoAccountData.walletAddress,
             type: 'BinanceAssociatedAddress',
             issuedBy: const Author('My wallet'),
           ),
@@ -109,7 +131,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     final String vc = await didKitProvider.issueCredential(
       jsonEncode(associatedAddressCredential.toJson()),
       jsonEncode(options),
-      ssiKey,
+      jwkKey,
     );
 
     final result =

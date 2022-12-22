@@ -1,5 +1,6 @@
 class AltMeStrings {
   static const String defaultDIDMethod = 'key';
+  static const String cryptoDIDMethod = 'pkh:tz';
   static const String defaultDIDMethodName = 'Tezos';
   static const String enterpriseDIDMethod = 'web';
   static const String enterpriseDIDMethodName = 'Web';
