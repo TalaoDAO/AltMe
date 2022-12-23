@@ -105,4 +105,17 @@ extension BlockchainTypeX on BlockchainType {
         return Filter('String', 'BinanceAssociatedAddress');
     }
   }
+
+  ConnectionBridgeType get connectionBridge {
+    switch (this) {
+      case BlockchainType.tezos:
+        return ConnectionBridgeType.beacon;
+
+      case BlockchainType.ethereum:
+      case BlockchainType.fantom:
+      case BlockchainType.polygon:
+      case BlockchainType.binance:
+        return ConnectionBridgeType.walletconnect;
+    }
+  }
 }
