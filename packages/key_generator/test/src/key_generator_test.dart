@@ -10,8 +10,11 @@ void main() {
 
   const derivePathIndex = 1;
 
-  const tezosKey =
+  const tezosJwkKey =
       '''{"kty":"OKP","crv":"Ed25519","d":"R3EkC6pstGOD4ack_kd-FKfNb3nQGU6_WFfQx19FTz4=","x":"SrGkTJUiF4Jjd7m-fyQCOSNjjMKB9toKQaLg2oXofsU="}''';
+
+  const evmJwkKey =
+      '''{"kty":"EC","crv":"secp256k1","d":"pFSZCkWwGwxcsVi42VIPCTxXg0uMiSXdSzCX4zNbkrc","x":"UO1qM_wAAi8vT8pNCLw9tYApeTFPkvChYKZrKFIH5Zc","y":"DXtMteFVlUw2KBJ7y34i2tatqqpL9gjWW5Bh7XQer6M","alg":"ES256K-R"}''';
 
   const tezosSecretKey =
       '''edskRmMt7hoSTXrtPMm1YSXFH8YNzeYCwxQaYy7oKn6bRiGnHXAJiuytciwz1asgUHwLJgCo4qhXpKxSsdGd6tW8ukYHAP4sxu''';
@@ -37,10 +40,11 @@ void main() {
     });
 
     group('ssi', () {
+      const accountType = AccountType.ssi;
       test('key from mnemonics for ssi', () async {
         final key = await keyGenerator.jwkFromMnemonic(
           mnemonic: mnemonics,
-          accountType: AccountType.ssi,
+          accountType: accountType,
         );
         expect(key, ssiKey);
       });
@@ -49,7 +53,7 @@ void main() {
         expect(
           () => keyGenerator.walletAddressFromMnemonic(
             mnemonic: mnemonics,
-            accountType: AccountType.ssi,
+            accountType: accountType,
             derivePathIndex: derivePathIndex,
           ),
           throwsA(isA<Exception>()),
@@ -60,7 +64,7 @@ void main() {
         expect(
           () => keyGenerator.walletAddressFromSecretKey(
             secretKey: ethereumSecretKey,
-            accountType: AccountType.ssi,
+            accountType: accountType,
           ),
           throwsA(isA<Exception>()),
         );
@@ -70,7 +74,7 @@ void main() {
         expect(
           () => keyGenerator.secretKeyFromMnemonic(
             mnemonic: mnemonics,
-            accountType: AccountType.ssi,
+            accountType: accountType,
             derivePathIndex: derivePathIndex,
           ),
           throwsA(isA<Exception>()),
@@ -79,19 +83,20 @@ void main() {
     });
 
     group('tezos', () {
+      const accountType = AccountType.tezos;
       test('key from mnemonics for tezos', () async {
         final key = await keyGenerator.jwkFromMnemonic(
           mnemonic: mnemonics,
-          accountType: AccountType.tezos,
+          accountType: accountType,
           derivePathIndex: derivePathIndex,
         );
-        expect(key, tezosKey);
+        expect(key, tezosJwkKey);
       });
 
       test('secretKey from mnemonics for tezos ', () async {
         final secretKey = await keyGenerator.secretKeyFromMnemonic(
           mnemonic: mnemonics,
-          accountType: AccountType.tezos,
+          accountType: accountType,
           derivePathIndex: derivePathIndex,
         );
         expect(secretKey, tezosSecretKey);
@@ -100,7 +105,7 @@ void main() {
       test('tz1 wallet address from mnemonics for tezos', () async {
         final walletAddress = await keyGenerator.walletAddressFromMnemonic(
           mnemonic: mnemonics,
-          accountType: AccountType.tezos,
+          accountType: accountType,
           derivePathIndex: derivePathIndex,
         );
         expect(walletAddress, tezosWalletAddress);
@@ -109,27 +114,26 @@ void main() {
       test('tz1 wallet address from secret key for tezos', () async {
         final walletAddress = await keyGenerator.walletAddressFromSecretKey(
           secretKey: tezosSecretKey,
-          accountType: AccountType.tezos,
+          accountType: accountType,
         );
         expect(walletAddress, tezosWalletAddress);
       });
     });
 
     group('ethereum', () {
+      const accountType = AccountType.ethereum;
       test('throw Exception for secretKey from ethereum', () async {
-        expect(
-          () => keyGenerator.jwkFromMnemonic(
-            mnemonic: mnemonics,
-            accountType: AccountType.ethereum,
-            derivePathIndex: derivePathIndex,
-          ),
-          throwsA(isA<Exception>()),
+        final key = await keyGenerator.jwkFromMnemonic(
+          mnemonic: mnemonics,
+          accountType: accountType,
+          derivePathIndex: derivePathIndex,
         );
+        expect(key, evmJwkKey);
       });
       test('0x wallet address from mnemonics for ethereum', () async {
         final walletAddress = await keyGenerator.walletAddressFromMnemonic(
           mnemonic: mnemonics,
-          accountType: AccountType.ethereum,
+          accountType: accountType,
           derivePathIndex: derivePathIndex,
         );
         expect(walletAddress, ethereumWalletAddress);
@@ -138,7 +142,7 @@ void main() {
       test('secretKey from mnemonics for ethereum ', () async {
         final secretKey = await keyGenerator.secretKeyFromMnemonic(
           mnemonic: mnemonics,
-          accountType: AccountType.ethereum,
+          accountType: accountType,
           derivePathIndex: derivePathIndex,
         );
         expect(secretKey, ethereumSecretKey);
@@ -147,7 +151,7 @@ void main() {
       test('0x wallet address from secret key for ethereum', () async {
         final walletAddress = await keyGenerator.walletAddressFromSecretKey(
           secretKey: ethereumSecretKey,
-          accountType: AccountType.ethereum,
+          accountType: accountType,
         );
         expect(walletAddress, ethereumWalletAddress);
       });
