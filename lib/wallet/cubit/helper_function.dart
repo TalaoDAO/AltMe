@@ -12,7 +12,19 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   final log = getLogger('WalletCubit - generateAssociatedWalletCredential');
   log.i(blockchainType);
   try {
-    const didMethod = AltMeStrings.cryptoDIDMethod;
+    late String didMethod;
+
+    switch (blockchainType) {
+      case BlockchainType.tezos:
+        didMethod = AltMeStrings.cryptoTezosDIDMethod;
+        break;
+      case BlockchainType.ethereum:
+      case BlockchainType.fantom:
+      case BlockchainType.polygon:
+      case BlockchainType.binance:
+        didMethod = AltMeStrings.cryptoEVMDIDMethod;
+        break;
+    }
 
     final String jwkKey = await keyGenerator.jwkFromSecretKey(
       secretKey: cryptoAccountData.secretKey,
@@ -26,9 +38,22 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
 
     // final verificationMethod =
     //     await didKitProvider.keyToVerificationMethod(didMethod, jwkKey);
+    //log.i('didKitProvider.keyToVerificationMethod - $verificationMethod');
 
-    final verificationMethod = '$issuer#blockchainAccountId';
-    log.i('didKitProvider.keyToVerificationMethod - $verificationMethod');
+    late String verificationMethod;
+
+    switch (blockchainType) {
+      case BlockchainType.tezos:
+        verificationMethod = '$issuer#blockchainAccountId';
+        break;
+      case BlockchainType.ethereum:
+      case BlockchainType.fantom:
+      case BlockchainType.polygon:
+      case BlockchainType.binance:
+        verificationMethod = '$issuer#Recovery2020';
+        break;
+    }
+    log.i('hardcoded verificationMethod - $verificationMethod');
 
     final didSsi = didCubit.state.did!;
 
