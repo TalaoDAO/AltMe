@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
 import 'package:dart_bip32_bip44/dart_bip32_bip44.dart';
+import 'package:dart_web3/crypto.dart';
 import 'package:dart_web3/dart_web3.dart';
 import 'package:ed25519_hd_key/ed25519_hd_key.dart';
 import 'package:hex/hex.dart';
@@ -38,14 +39,14 @@ class KeyGenerator {
     //notice photo opera keen climb agent soft parrot best joke field devote
     final seed = bip393.mnemonicToSeed(mnemonic);
 
-    late dynamic key;
+    late Uint8List seedBytes;
 
     switch (accountType) {
       case AccountType.ssi:
         final child =
             await ED25519_HD_KEY.derivePath("m/44'/5467'/0'/0'", seed);
-        final seedBytes = Uint8List.fromList(child.key);
-        key = jwkFromSeedForTezosAndSSI(seedBytes);
+        seedBytes = Uint8List.fromList(child.key);
+
         break;
 
       case AccountType.tezos:
@@ -53,8 +54,8 @@ class KeyGenerator {
           "m/44'/1729'/$derivePathIndex'/0'",
           seed,
         );
-        final seedBytes = Uint8List.fromList(child.key);
-        key = jwkFromSeedForTezosAndSSI(seedBytes);
+        seedBytes = Uint8List.fromList(child.key);
+
         break;
 
       case AccountType.ethereum:
@@ -67,7 +68,39 @@ class KeyGenerator {
           "m/44'/60'/0'/0/$derivePathIndex",
         ); //Instance of 'BIP32'
         final Iterable<int> iterable = child.privateKey!;
-        final epk = HEX.encode(List.from(iterable));
+        seedBytes = Uint8List.fromList(List.from(iterable));
+    }
+
+    final key = jwkFromSeed(
+      seedBytes: seedBytes,
+      accountType: accountType,
+    );
+    return jsonEncode(key);
+  }
+
+  Map<String, String> jwkFromSeed({
+    required Uint8List seedBytes,
+    required AccountType accountType,
+  }) {
+    switch (accountType) {
+      case AccountType.ssi:
+      case AccountType.tezos:
+        final mypk = crypto.publicKeyBytesFromSeedBytes(seedBytes);
+
+        final sk = base64Url.encode(seedBytes);
+        final pk = base64Url.encode(mypk);
+        final jwk = {
+          'kty': 'OKP',
+          'crv': 'Ed25519',
+          'd': sk,
+          'x': pk,
+        };
+        return jwk;
+      case AccountType.ethereum:
+      case AccountType.fantom:
+      case AccountType.polygon:
+      case AccountType.binance:
+        final epk = HEX.encode(seedBytes);
         final pk = PrivateKey.fromHex(epk); //Instance of 'PrivateKey'
         final pub = pk.publicKey.toHex().substring(2);
         final ad = HEX.decode(epk);
@@ -86,7 +119,7 @@ class KeyGenerator {
         // alg "ES256K-R" for did:ethr
         // and did:tz2 "EcdsaSecp256k1RecoverySignature2020"
         // use alg "ES256K" for did:key
-        key = {
+        final jwk = {
           'kty': 'EC',
           'crv': 'secp256k1',
           'd': d,
@@ -94,24 +127,8 @@ class KeyGenerator {
           'y': y,
           'alg': 'ES256K-R' // or 'alg': "ES256K" for did:key
         };
-        return jsonEncode(key);
+        return jwk;
     }
-
-    return jsonEncode(key);
-  }
-
-  Map<String, String> jwkFromSeedForTezosAndSSI(Uint8List seedBytes) {
-    final mypk = crypto.publicKeyBytesFromSeedBytes(seedBytes);
-
-    final sk = base64Url.encode(seedBytes);
-    final pk = base64Url.encode(mypk);
-    final jwk = {
-      'kty': 'OKP',
-      'crv': 'Ed25519',
-      'd': sk,
-      'x': pk,
-    };
-    return jwk;
   }
 
   Future<String> secretKeyFromMnemonic({
@@ -197,6 +214,7 @@ class KeyGenerator {
             EthPrivateKey.fromHex(key.privateKeyHex());
 
         final walletAddress = await credentials.extractAddress();
+
         return walletAddress.hex;
 
       case AccountType.ssi:
@@ -227,12 +245,28 @@ class KeyGenerator {
     }
   }
 
-  Future<String> jwkFromSecretKey({required String secretKey}) async {
-    final newSeedBytes = Uint8List.fromList(
-      crypto.decodeWithoutPrefix(secretKey).take(32).toList(),
+  Future<String> jwkFromSecretKey({
+    required String secretKey,
+    required AccountType accountType,
+  }) async {
+    late Uint8List seedBytes;
+    switch (accountType) {
+      case AccountType.tezos:
+        seedBytes = Uint8List.fromList(
+          crypto.decodeWithoutPrefix(secretKey).take(32).toList(),
+        );
+        break;
+      case AccountType.ethereum:
+      case AccountType.fantom:
+      case AccountType.polygon:
+      case AccountType.binance:
+      case AccountType.ssi:
+        seedBytes = Uint8List.fromList(hexToBytes(secretKey));
+    }
+    final jwk = jwkFromSeed(
+      seedBytes: seedBytes,
+      accountType: accountType,
     );
-
-    final jwk = jwkFromSeedForTezosAndSSI(newSeedBytes);
     return jsonEncode(jwk);
   }
 

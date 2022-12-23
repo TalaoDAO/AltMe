@@ -14,20 +14,10 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   try {
     const didMethod = AltMeStrings.cryptoDIDMethod;
 
-    late String jwkKey;
-
-    switch (blockchainType) {
-      case BlockchainType.tezos:
-        jwkKey = await keyGenerator.jwkFromSecretKey(
-          secretKey: cryptoAccountData.secretKey,
-        );
-        break;
-      case BlockchainType.ethereum:
-      case BlockchainType.fantom:
-      case BlockchainType.polygon:
-      case BlockchainType.binance:
-        throw Exception();
-    }
+    final String jwkKey = await keyGenerator.jwkFromSecretKey(
+      secretKey: cryptoAccountData.secretKey,
+      accountType: blockchainType.accountType,
+    );
 
     final issuer = didKitProvider.keyToDID(didMethod, jwkKey);
     log.i('didMethod - $didMethod');

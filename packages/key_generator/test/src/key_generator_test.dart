@@ -49,6 +49,16 @@ void main() {
         expect(key, ssiKey);
       });
 
+      test('key from secretKey for ssi', () async {
+        expect(
+          () => keyGenerator.jwkFromSecretKey(
+            secretKey: '',
+            accountType: accountType,
+          ),
+          throwsA(isA<Exception>()),
+        );
+      });
+
       test('throw Exception for wallet address from mnemonics', () async {
         expect(
           () => keyGenerator.walletAddressFromMnemonic(
@@ -93,6 +103,14 @@ void main() {
         expect(key, tezosJwkKey);
       });
 
+      test('key from secretKey for tezos', () async {
+        final key = await keyGenerator.jwkFromSecretKey(
+          secretKey: tezosSecretKey,
+          accountType: accountType,
+        );
+        expect(key, tezosJwkKey);
+      });
+
       test('secretKey from mnemonics for tezos ', () async {
         final secretKey = await keyGenerator.secretKeyFromMnemonic(
           mnemonic: mnemonics,
@@ -130,6 +148,15 @@ void main() {
         );
         expect(key, evmJwkKey);
       });
+
+      test('key from secretKey for ethereum', () async {
+        final key = await keyGenerator.jwkFromSecretKey(
+          secretKey: ethereumSecretKey,
+          accountType: accountType,
+        );
+        expect(key, evmJwkKey);
+      });
+
       test('0x wallet address from mnemonics for ethereum', () async {
         final walletAddress = await keyGenerator.walletAddressFromMnemonic(
           mnemonic: mnemonics,
