@@ -44,9 +44,7 @@ class CryptoAccountItem extends StatelessWidget {
       title: Row(
         children: [
           Image.asset(
-            cryptoAccountData.blockchainType == BlockchainType.tezos
-                ? IconStrings.tezos
-                : IconStrings.ethereum,
+            cryptoAccountData.blockchainType.icon,
             width: Sizes.icon,
           ),
           const SizedBox(width: Sizes.spaceXSmall),

@@ -40,7 +40,7 @@ class Credential {
       [
         Proof.dummy(),
       ],
-      DefaultCredentialSubjectModel('dummy', 'dummy', const Author('', '')),
+      DefaultCredentialSubjectModel('dummy', 'dummy', const Author('')),
       [Translation('en', '')],
       [Translation('en', '')],
       CredentialStatusField.emptyCredentialStatusField(),

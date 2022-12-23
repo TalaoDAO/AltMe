@@ -148,14 +148,23 @@ class ConfirmConnectionView extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  MyGradientButton(
-                    verticalSpacing: 15,
-                    borderRadius: Sizes.normalRadius,
-                    text: l10n.connect,
-                    onPressed: () {
-                      context.read<ConfirmConnectionCubit>().connect(
-                            connectionBridgeType: connectionBridgeType,
-                          );
+                  BlocBuilder<WalletCubit, WalletState>(
+                    builder: (context, walletState) {
+                      return MyGradientButton(
+                        verticalSpacing: 15,
+                        borderRadius: Sizes.normalRadius,
+                        text: l10n.connect,
+                        onPressed: walletState.currentAccount.blockchainType
+                                    .connectionBridge !=
+                                connectionBridgeType
+                            ? null
+                            : () {
+                                context.read<ConfirmConnectionCubit>().connect(
+                                      connectionBridgeType:
+                                          connectionBridgeType,
+                                    );
+                              },
+                      );
                     },
                   ),
                   const SizedBox(height: 8),

@@ -63,7 +63,7 @@ class EthereumAssociatedAddressRecto extends Recto {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final EthereumAssociatedAddress = credentialModel.credentialPreview
+    final ethereumAssociatedAddress = credentialModel.credentialPreview
         .credentialSubjectModel as EthereumAssociatedAddressModel;
     return CredentialImage(
       image: ImageStrings.paymentEthereumCard,
@@ -92,7 +92,7 @@ class EthereumAssociatedAddressRecto extends Recto {
                 widthFactor: 0.8,
                 heightFactor: 0.16,
                 child: MyText(
-                  EthereumAssociatedAddress.accountName!,
+                  ethereumAssociatedAddress.accountName!,
                   style: Theme.of(context).textTheme.title,
                 ),
               ),
@@ -103,9 +103,9 @@ class EthereumAssociatedAddressRecto extends Recto {
                 widthFactor: 0.88,
                 heightFactor: 0.26,
                 child: MyText(
-                  EthereumAssociatedAddress.associatedAddress?.isEmpty == true
+                  ethereumAssociatedAddress.associatedAddress?.isEmpty == true
                       ? ''
-                      : EthereumAssociatedAddress.associatedAddress.toString(),
+                      : ethereumAssociatedAddress.associatedAddress.toString(),
                   style: Theme.of(context).textTheme.subMessage.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),

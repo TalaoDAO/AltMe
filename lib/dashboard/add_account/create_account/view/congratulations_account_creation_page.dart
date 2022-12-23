@@ -64,6 +64,28 @@ class _CongratulationsAccountCreationViewState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    String message = '';
+    switch (widget.accountType) {
+      case AccountType.ssi:
+        throw Exception();
+      case AccountType.tezos:
+        message = l10n.tezosAccountCreationCongratulations;
+        break;
+      case AccountType.ethereum:
+        message = l10n.ethereumAccountCreationCongratulations;
+        break;
+      case AccountType.fantom:
+        message = l10n.fantomAccountCreationCongratulations;
+        break;
+      case AccountType.polygon:
+        message = l10n.polygonAccountCreationCongratulations;
+        break;
+      case AccountType.binance:
+        message = l10n.binanceAccountCreationCongratulations;
+        break;
+    }
+
     return Stack(
       alignment: Alignment.topCenter,
       children: [
@@ -89,9 +111,7 @@ class _CongratulationsAccountCreationViewState
                   height: Sizes.spaceNormal,
                 ),
                 Text(
-                  widget.accountType == AccountType.tezos
-                      ? l10n.tezosAccountCreationCongratulations
-                      : l10n.ethereumAccountCreationCongratulations,
+                  message,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                         fontWeight: FontWeight.normal,

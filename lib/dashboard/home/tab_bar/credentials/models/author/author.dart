@@ -7,17 +7,15 @@ part 'author.g.dart';
 @JsonSerializable()
 @immutable
 class Author extends Equatable {
-  const Author(this.name, this.logo);
+  const Author(this.name);
 
   factory Author.fromJson(Map<String, dynamic> json) => _$AuthorFromJson(json);
 
   @JsonKey(defaultValue: '')
   final String name;
-  @JsonKey(defaultValue: '')
-  final String logo;
 
   Map<String, dynamic> toJson() => _$AuthorToJson(this);
 
   @override
-  List<Object?> get props => [name, logo];
+  List<Object?> get props => [name];
 }

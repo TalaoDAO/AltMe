@@ -66,7 +66,7 @@ class TezosAssociatedAddressRecto extends Recto {
     final tezosAssociatedAddress = credentialModel.credentialPreview
         .credentialSubjectModel as TezosAssociatedAddressModel;
     return CredentialImage(
-      image: ImageStrings.paymentAssetCard,
+      image: ImageStrings.paymentTezosCard,
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(

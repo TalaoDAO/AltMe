@@ -48,6 +48,12 @@ class CredentialSubjectModel {
         return TezosAssociatedAddressModel.fromJson(json);
       case 'EthereumAssociatedAddress':
         return EthereumAssociatedAddressModel.fromJson(json);
+      case 'FantomAssociatedAddress':
+        return FantomAssociatedAddressModel.fromJson(json);
+      case 'PolygonAssociatedAddress':
+        return PolygonAssociatedAddressModel.fromJson(json);
+      case 'BinanceAssociatedAddress':
+        return BinanceAssociatedAddressModel.fromJson(json);
       case 'SelfIssued':
         return SelfIssuedModel.fromJson(json);
       case 'IdentityPass':
@@ -117,7 +123,7 @@ class CredentialSubjectModel {
 
   static Author fromJsonAuthor(dynamic json) {
     if (json == null || json == '') {
-      return const Author('', '');
+      return const Author('');
     }
     return Author.fromJson(json as Map<String, dynamic>);
   }

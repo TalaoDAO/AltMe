@@ -4,9 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Author model work properly', () {
     test('initialize Author with default constructor', () {
-      const author = Author('Taleb', 'logo');
+      const author = Author('Taleb');
       expect(author.name, 'Taleb');
-      expect(author.logo, 'logo');
     });
 
     test('initialize Author fromJson constructor', () {
@@ -16,7 +15,6 @@ void main() {
       };
       final author = Author.fromJson(authorJson);
       expect(author.name, 'Taleb');
-      expect(author.logo, 'logo');
     });
 
     test('Author toJson worked correct', () {

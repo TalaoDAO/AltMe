@@ -6,6 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
 import 'package:json_path/json_path.dart';
+import 'package:key_generator/key_generator.dart';
 import 'package:web3dart/web3dart.dart';
 
 String generateDefaultAccountName(
@@ -137,4 +138,21 @@ String getIssuersName(String constraints) {
       .toList()
       .first;
   return issuerField['filter']['pattern'] as String;
+}
+
+BlockchainType getBlockchainType(AccountType accountType) {
+  switch (accountType) {
+    case AccountType.ssi:
+      throw Exception();
+    case AccountType.tezos:
+      return BlockchainType.tezos;
+    case AccountType.ethereum:
+      return BlockchainType.ethereum;
+    case AccountType.fantom:
+      return BlockchainType.fantom;
+    case AccountType.polygon:
+      return BlockchainType.polygon;
+    case AccountType.binance:
+      return BlockchainType.binance;
+  }
 }

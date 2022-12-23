@@ -76,7 +76,11 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
         }
       }
     }
-    emit(state.copyWith(
-        status: AppStatus.idle, dummyCredentials: homeCredentials));
+    emit(
+      state.copyWith(
+        status: AppStatus.idle,
+        dummyCredentials: homeCredentials,
+      ),
+    );
   }
 }

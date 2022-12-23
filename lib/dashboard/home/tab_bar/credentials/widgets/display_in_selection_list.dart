@@ -191,6 +191,18 @@ class DisplayInSelectionList extends StatelessWidget {
         return PcdsAgentCertificateDisplayInSelectionList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.fantomAssociatedWallet:
+        return FantomAssociatedAddressDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.polygonAssociatedWallet:
+        return PolygonAssociatedAddressDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.binanceAssociatedWallet:
+        return BinanceAssociatedAddressDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
     }
   }
 }

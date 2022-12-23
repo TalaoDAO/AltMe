@@ -71,6 +71,10 @@ class ConnectedDappRepository {
       case BlockchainType.tezos:
         id = savedDappData.peer!.publicKey;
         break;
+      case BlockchainType.fantom:
+      case BlockchainType.polygon:
+      case BlockchainType.binance:
+        throw Exception();
     }
     log.i('deleteing dapp data - ${SecureStorageKeys.savedDaaps}/$id');
     await _secureStorageProvider.delete('${SecureStorageKeys.savedDaaps}/$id');
@@ -90,6 +94,10 @@ class ConnectedDappRepository {
           case BlockchainType.tezos:
             return savedData.walletAddress == savedDappData.walletAddress &&
                 savedData.peer!.name == savedDappData.peer!.name;
+          case BlockchainType.fantom:
+          case BlockchainType.polygon:
+          case BlockchainType.binance:
+            throw Exception();
         }
       },
 
@@ -109,6 +117,10 @@ class ConnectedDappRepository {
       case BlockchainType.tezos:
         id = savedDappData.peer!.publicKey;
         break;
+      case BlockchainType.fantom:
+      case BlockchainType.polygon:
+      case BlockchainType.binance:
+        throw Exception();
     }
 
     await _secureStorageProvider.set(

@@ -105,7 +105,7 @@ class CameraCubit extends Cubit<CameraState> {
   //   try {
   //     _faceDetector!.processImage(inputImage).then((faces) {
   //       logger.i('facesLenght: ${faces.length}');
-  //       //TODO(Taleb): here enable and disable capture button if face detected
+  //       -TODO(Taleb): here enable and disable capture button if face detected
   //     });
   //   } catch (e, s) {
   //     logger.e('error: $e, stack: $s');

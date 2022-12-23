@@ -48,9 +48,7 @@ class CryptoAccountSwitcherButton extends StatelessWidget {
                     children: [
                       if (blockchainType != null) ...[
                         Image.asset(
-                          blockchainType == BlockchainType.tezos
-                              ? IconStrings.tezos
-                              : IconStrings.ethereum,
+                          blockchainType.icon,
                           width: Sizes.icon,
                         ),
                         const SizedBox(width: 5),
