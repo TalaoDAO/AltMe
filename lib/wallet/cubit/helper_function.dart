@@ -36,6 +36,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     log.i('jwkKey - $jwkKey');
     log.i('didKitProvider.keyToDID - $issuer');
 
+    //Issue: https://github.com/spruceid/didkit/issues/329
     // final verificationMethod =
     //     await didKitProvider.keyToVerificationMethod(didMethod, jwkKey);
     //log.i('didKitProvider.keyToVerificationMethod - $verificationMethod');
