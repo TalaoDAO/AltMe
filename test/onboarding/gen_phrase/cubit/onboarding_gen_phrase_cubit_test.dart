@@ -41,7 +41,10 @@ Future<void> main() async {
         '''edskRrmNgPfAAvbZyzTptfvTju9X7ooLR5VVN9u8sXA42hXdMBd8CgrhykP7sZQf8hWLCYuqfEoWUFzL6Us3aKtMD9NsELGkuP''';
 
     test('jwk', () async {
-      final jwk = await keyGenerator.jwkFromSecretKey(secretKey: secretKey);
+      final jwk = await keyGenerator.jwkFromSecretKey(
+        secretKey: secretKey,
+        accountType: AccountType.tezos,
+      );
       const expectedJwk =
           '''{"kty":"OKP","crv":"Ed25519","d":"cMGD8eAmjDn6MqvJoscsaPoyAMrjG41xbLDfE-uQkYw=","x":"-PeGBkVyMz2-yketwH2lbQqiflneee3jmaTafMCsURE="}''';
       expect(jwk, equals(expectedJwk));
