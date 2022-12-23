@@ -31,8 +31,8 @@ class NftCubit extends Cubit<NftState> {
 
   Future<void> getTezosNftList() async {
     final activeIndex = walletCubit.state.currentCryptoIndex;
-    if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType ==
-        BlockchainType.ethereum) {
+    if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType !=
+        BlockchainType.tezos) {
       emit(state.copyWith(status: AppStatus.idle));
       return;
     }
