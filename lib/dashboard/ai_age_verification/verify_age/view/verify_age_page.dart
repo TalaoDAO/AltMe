@@ -85,7 +85,7 @@ class _VerifyAgeViewState extends State<VerifyAgeView> {
               await Navigator.of(context).push<void>(
                 PinCodePage.route(
                   isValidCallback: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       CameraPage.route(
                         credentialSubjectType: widget.credentialSubjectType,
