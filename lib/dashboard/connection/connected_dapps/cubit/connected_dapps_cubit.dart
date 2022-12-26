@@ -50,7 +50,6 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
       final xtzUSDPrice = xtzData.price!;
 
       final token = TokenModel(
-        id: -1,
         contractAddress: '',
         name: 'Tezos',
         symbol: 'XTZ',

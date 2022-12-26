@@ -33,7 +33,6 @@ class EthereumNftModel extends NftModel {
 
   Map<String, dynamic> toJson() => _$EthereumNftModelToJson(this);
 
-  @override
   TokenModel getToken() {
     return TokenModel(
       contractAddress: contractAddress,
@@ -43,7 +42,6 @@ class EthereumNftModel extends NftModel {
       standard: type,
       decimals: '0',
       tokenId: tokenId,
-      id: -1,
     );
   }
 
