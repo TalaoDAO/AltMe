@@ -408,6 +408,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_userNotFitErrorMessage:
         return globalMessage.RESPONSE_STRING_userNotFitErrorMessage;
+
+      case ResponseString.RESPONSE_STRING_transactionIsLikelyToFail:
+        return globalMessage.RESPONSE_STRING_transactionIsLikelyToFail;
     }
   }
 }

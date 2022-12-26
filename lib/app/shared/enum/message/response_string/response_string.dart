@@ -130,4 +130,5 @@ enum ResponseString {
   RESPONSE_STRING_payloadFormatErrorMessage,
   RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
   RESPONSE_STRING_userNotFitErrorMessage,
+  RESPONSE_STRING_transactionIsLikelyToFail,
 }
