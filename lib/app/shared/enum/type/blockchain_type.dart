@@ -118,4 +118,16 @@ extension BlockchainTypeX on BlockchainType {
         return ConnectionBridgeType.walletconnect;
     }
   }
+
+  bool get isdisabled {
+    switch (this) {
+      case BlockchainType.tezos:
+      case BlockchainType.ethereum:
+        return false;
+      case BlockchainType.fantom:
+      case BlockchainType.polygon:
+      case BlockchainType.binance:
+        return true;
+    }
+  }
 }
