@@ -5,7 +5,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/nft/cubit/nft_cubit_dao.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -36,6 +35,11 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
 
   Future<void> getNftList() async {
     final activeIndex = walletCubit.state.currentCryptoIndex;
+    if (walletCubit
+        .state.cryptoAccount.data[activeIndex].blockchainType.isdisabled) {
+      emit(state.copyWith(status: AppStatus.idle));
+      return;
+    }
 
     if (state.offset == _offsetOfLoadedData) return;
     _offsetOfLoadedData = state.offset;
