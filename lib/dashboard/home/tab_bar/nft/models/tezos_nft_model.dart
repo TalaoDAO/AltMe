@@ -45,6 +45,7 @@ class TezosNftModel extends NftModel {
   final List<String>? publishers;
   final String? date;
 
+  @override
   Map<String, dynamic> toJson() => _$TezosNftModelToJson(this);
 
   TokenModel getToken() {
@@ -56,7 +57,6 @@ class TezosNftModel extends NftModel {
       standard: standard ?? 'fa2',
       decimals: '0',
       tokenId: tokenId,
-      id: id,
     );
   }
 
