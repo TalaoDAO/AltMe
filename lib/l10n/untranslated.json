@@ -695,7 +695,8 @@
     "skip",
     "userNotFitErrorMessage",
     "youAreMissing",
-    "credentialsRequestedBy"
+    "credentialsRequestedBy",
+    "transactionIsLikelyToFail"
   ],
 
   "es": [
@@ -1394,7 +1395,8 @@
     "skip",
     "userNotFitErrorMessage",
     "youAreMissing",
-    "credentialsRequestedBy"
+    "credentialsRequestedBy",
+    "transactionIsLikelyToFail"
   ],
 
   "fr": [
@@ -2093,7 +2095,8 @@
     "skip",
     "userNotFitErrorMessage",
     "youAreMissing",
-    "credentialsRequestedBy"
+    "credentialsRequestedBy",
+    "transactionIsLikelyToFail"
   ],
 
   "it": [
@@ -2792,6 +2795,7 @@
     "skip",
     "userNotFitErrorMessage",
     "youAreMissing",
-    "credentialsRequestedBy"
+    "credentialsRequestedBy",
+    "transactionIsLikelyToFail"
   ]
 }

@@ -752,5 +752,6 @@
   "skip": "Skip",
   "userNotFitErrorMessage": "You are unable to get this card because some conditions are not fulfilled.",
   "youAreMissing": "You are missing",
-  "credentialsRequestedBy": "credentials requested by"
+  "credentialsRequestedBy": "credentials requested by",
+  "transactionIsLikelyToFail": "Transaction is likely to fail."
 }

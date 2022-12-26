@@ -76,7 +76,8 @@ class OperationCubit extends Cubit<OperationState> {
 
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
-          final operationList = await getBeaonOperationList();
+          final operationList =
+              await getBeaonOperationList(preCheckBalance: true);
           await operationList.estimate();
           log.i('after operationList.estimate()');
           amount = int.parse(
@@ -124,7 +125,7 @@ class OperationCubit extends Cubit<OperationState> {
         emit(
           state.copyWith(
             status: AppStatus.errorWhileFetching,
-            messageHandler: e,
+            message: StateMessage.error(messageHandler: e),
           ),
         );
       } else if (e is TezartNodeError) {
@@ -158,11 +159,12 @@ class OperationCubit extends Cubit<OperationState> {
             responseString = ResponseString
                 .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER;
           }
+
           emit(
             state.copyWith(
               status: AppStatus.errorWhileFetching,
-              messageHandler: ResponseMessage(
-                responseString,
+              message: StateMessage.error(
+                messageHandler: ResponseMessage(responseString),
               ),
             ),
           );
@@ -170,9 +172,11 @@ class OperationCubit extends Cubit<OperationState> {
           emit(
             state.copyWith(
               status: AppStatus.errorWhileFetching,
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              message: StateMessage.error(
+                messageHandler: ResponseMessage(
+                  ResponseString
+                      .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                ),
               ),
             ),
           );
@@ -181,9 +185,10 @@ class OperationCubit extends Cubit<OperationState> {
         emit(
           state.copyWith(
             status: AppStatus.errorWhileFetching,
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_OPERATION_COMPLETED,
+              ),
             ),
           ),
         );
@@ -208,7 +213,8 @@ class OperationCubit extends Cubit<OperationState> {
 
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
-          final operationList = await getBeaonOperationList();
+          final operationList =
+              await getBeaonOperationList(preCheckBalance: false);
           await operationList.executeAndMonitor(null);
           log.i('after operationList.executeAndMonitor()');
 
@@ -281,8 +287,10 @@ class OperationCubit extends Cubit<OperationState> {
         emit(
           state.copyWith(
             status: AppStatus.success,
-            messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_OPERATION_COMPLETED,
+            message: StateMessage.success(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_OPERATION_COMPLETED,
+              ),
             ),
           ),
         );
@@ -357,7 +365,9 @@ class OperationCubit extends Cubit<OperationState> {
     emit(state.copyWith(status: AppStatus.goBack));
   }
 
-  Future<OperationsList> getBeaonOperationList() async {
+  Future<OperationsList> getBeaonOperationList({
+    required bool preCheckBalance,
+  }) async {
     try {
       log.i('getOperationList');
 
@@ -375,38 +385,60 @@ class OperationCubit extends Cubit<OperationState> {
         );
       }
 
-      /// check xtz balance
-      //late String baseUrl;
+      late String baseUrl;
       late String rpcNodeUrl;
 
-      if (beaconRequest.request!.network!.type! == NetworkType.mainnet) {
-        //baseUrl = TezosNetwork.mainNet().tzktUrl;
-        rpcNodeUrl = TezosNetwork.mainNet().rpcNodeUrl;
-      } else if (beaconRequest.request!.network!.type! ==
-          NetworkType.ghostnet) {
-        //baseUrl = TezosNetwork.ghostnet().tzktUrl;
-        rpcNodeUrl = TezosNetwork.ghostnet().rpcNodeUrl;
-      } else {
-        throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-        );
+      switch (beaconRequest.request!.network!.type!) {
+        case NetworkType.mainnet:
+          baseUrl = TezosNetwork.mainNet().tzktUrl;
+          rpcNodeUrl = TezosNetwork.mainNet().rpcNodeUrl;
+          break;
+        case NetworkType.ghostnet:
+          baseUrl = TezosNetwork.ghostnet().tzktUrl;
+          rpcNodeUrl = TezosNetwork.ghostnet().rpcNodeUrl;
+          break;
+        case NetworkType.mondaynet:
+        case NetworkType.delphinet:
+        case NetworkType.edonet:
+        case NetworkType.florencenet:
+        case NetworkType.granadanet:
+        case NetworkType.hangzhounet:
+        case NetworkType.ithacanet:
+        case NetworkType.jakartanet:
+        case NetworkType.kathmandunet:
+        case NetworkType.custom:
+          throw ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          );
       }
 
-      // TezartErro handles low balande
-      // log.i('checking xtz');
-      // final int balance = await dioClient.get(
-      //   '$baseUrl/v1/accounts/${beaconRequest.request!.sourceAddress!}/balance',
-      // ) as int;
-      // log.i('total xtz - $balance');
-      // final formattedBalance = int.parse(
-      //   balance.toStringAsFixed(6).replaceAll('.', '').replaceAll(',', ''),
-      // );
+      // TezartError also handles low balance
 
-      // if ((amount + state.totalFee!) > formattedBalance) {
-      //   throw ResponseMessage(
-      //     ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
-      //   );
-      // }
+      if (preCheckBalance) {
+        /// check xtz balance
+        log.i('checking xtz');
+        final int balance = await dioClient.get(
+          '$baseUrl/v1/accounts/${beaconRequest.request!.sourceAddress!}/balance',
+        ) as int;
+        log.i('total xtz - $balance');
+        final formattedBalance = int.parse(
+          balance.toStringAsFixed(6).replaceAll('.', '').replaceAll(',', ''),
+        );
+
+        final amount = int.parse(beaconRequest.operationDetails!.first.amount!);
+
+        if (amount >= formattedBalance) {
+          emit(
+            state.copyWith(
+              message: StateMessage.error(
+                messageHandler: ResponseMessage(
+                  ResponseString.RESPONSE_STRING_transactionIsLikelyToFail,
+                ),
+              ),
+            ),
+          );
+        }
+      }
 
       final client = TezartClient(rpcNodeUrl);
       final keystore =

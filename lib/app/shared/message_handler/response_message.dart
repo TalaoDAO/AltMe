@@ -585,6 +585,12 @@ class ResponseMessage with MessageHandler {
           return ResponseString.RESPONSE_STRING_userNotFitErrorMessage.localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_transactionIsLikelyToFail:
+          return ResponseString.RESPONSE_STRING_transactionIsLikelyToFail
+              .localise(
+            context,
+          );
       }
     }
     return '';

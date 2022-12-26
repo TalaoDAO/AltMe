@@ -346,4 +346,6 @@ class GlobalMessage {
       l10n.thisFeatureIsNotSupportedMessage;
   String get RESPONSE_STRING_userNotFitErrorMessage =>
       l10n.userNotFitErrorMessage;
+  String get RESPONSE_STRING_transactionIsLikelyToFail =>
+      l10n.transactionIsLikelyToFail;
 }

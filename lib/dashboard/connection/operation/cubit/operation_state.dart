@@ -42,7 +42,7 @@ class OperationState extends Equatable {
 
   OperationState copyWith({
     AppStatus? status,
-    MessageHandler? messageHandler,
+    StateMessage? message,
     double? amount,
     double? fee,
     double? usdRate,
@@ -50,9 +50,7 @@ class OperationState extends Equatable {
   }) {
     return OperationState(
       status: status ?? this.status,
-      message: messageHandler == null
-          ? null
-          : StateMessage.success(messageHandler: messageHandler),
+      message: message,
       amount: amount ?? this.usdRate,
       fee: fee ?? this.usdRate,
       usdRate: usdRate ?? this.usdRate,
