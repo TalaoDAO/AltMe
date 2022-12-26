@@ -38,6 +38,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         final WCClient? wcClient = createWCClient(element.wcSessionStore);
 
         await wcClient!.connectFromSessionStore(sessionStore!);
+        log.i('wcClient: $wcClient');
         wcClients.add(wcClient);
       }
       emit(

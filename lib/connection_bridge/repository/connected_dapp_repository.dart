@@ -49,7 +49,7 @@ class ConnectedDappRepository {
   }
 
   Future<int> deleteAll() async {
-    log.i('deleting all beaconData');
+    log.i('deleting all connected dapps');
     final data = await _secureStorageProvider.getAllValues();
     data.removeWhere(
       (key, value) => !key.startsWith('${SecureStorageKeys.savedDaaps}/'),

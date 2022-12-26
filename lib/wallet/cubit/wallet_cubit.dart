@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/did/did.dart';
@@ -25,7 +26,8 @@ part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {
   WalletCubit({
-    required this.repository,
+    required this.credentialsRepository,
+    required this.connectedDappRepository,
     required this.secureStorageProvider,
     required this.profileCubit,
     required this.homeCubit,
@@ -36,7 +38,8 @@ class WalletCubit extends Cubit<WalletState> {
     required this.advanceSettingsCubit,
   }) : super(WalletState());
 
-  final CredentialsRepository repository;
+  final CredentialsRepository credentialsRepository;
+  final ConnectedDappRepository connectedDappRepository;
   final SecureStorageProvider secureStorageProvider;
   final ProfileCubit profileCubit;
   final HomeCubit homeCubit;
@@ -426,7 +429,7 @@ class WalletCubit extends Cubit<WalletState> {
     bool showMessage = true,
   }) async {
     emit(state.loading());
-    await repository.deleteById(credential.id);
+    await credentialsRepository.deleteById(credential.id);
     final credentials = List.of(state.credentials)
       ..removeWhere((element) => element.id == credential.id);
     await credentialListCubit.deleteById(credential);
@@ -445,7 +448,7 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future loadAllCredentialsFromRepository() async {
-    await repository.findAll(/* filters */).then((values) {
+    await credentialsRepository.findAll(/* filters */).then((values) {
       emit(
         state.copyWith(
           status: WalletStatus.populate,
@@ -459,7 +462,7 @@ class WalletCubit extends Cubit<WalletState> {
     required CredentialModel credential,
     bool showMessage = true,
   }) async {
-    await repository.update(credential);
+    await credentialsRepository.update(credential);
     final index =
         state.credentials.indexWhere((element) => element.id == credential.id);
 
@@ -482,7 +485,7 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future handleUnknownRevocationStatus(CredentialModel credential) async {
-    await repository.update(credential);
+    await credentialsRepository.update(credential);
     final index =
         state.credentials.indexWhere((element) => element.id == credential.id);
     if (index != -1) {
@@ -512,7 +515,8 @@ class WalletCubit extends Cubit<WalletState> {
           .email;
 
       if (email != null) {
-        final List<CredentialModel> allCredentials = await repository.findAll();
+        final List<CredentialModel> allCredentials =
+            await credentialsRepository.findAll();
 
         for (final storedCredential in allCredentials) {
           final credentialSubjectModel =
@@ -533,7 +537,7 @@ class WalletCubit extends Cubit<WalletState> {
     }
 
     /// if same email credential is present
-    await repository.insert(credential);
+    await credentialsRepository.insert(credential);
     final credentials = List.of(state.credentials)..add(credential);
 
     final CredentialCategory credentialCategory =
@@ -637,7 +641,7 @@ class WalletCubit extends Cubit<WalletState> {
     await secureStorageProvider.delete(SecureStorageKeys.data);
 
     /// credentials
-    await repository.deleteAll();
+    await credentialsRepository.deleteAll();
 
     /// passBase
     await secureStorageProvider.delete(SecureStorageKeys.passBaseStatus);
@@ -650,7 +654,7 @@ class WalletCubit extends Cubit<WalletState> {
     await secureStorageProvider.delete(SecureStorageKeys.pinCode);
 
     //save dapps
-    await secureStorageProvider.delete(SecureStorageKeys.savedDaaps);
+    await connectedDappRepository.deleteAll();
 
     /// clear app states
     homeCubit.emitHasNoWallet();
@@ -667,9 +671,9 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future<void> recoverWallet(List<CredentialModel> credentials) async {
-    await repository.deleteAll();
+    await credentialsRepository.deleteAll();
     for (final credential in credentials) {
-      await repository.insert(credential);
+      await credentialsRepository.insert(credential);
     }
     emit(state.copyWith(status: WalletStatus.init, credentials: credentials));
   }
