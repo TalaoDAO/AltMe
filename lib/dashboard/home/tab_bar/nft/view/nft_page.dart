@@ -144,6 +144,22 @@ class _NftViewState extends State<NftView> {
                         messageHandler.getMessage(context, messageHandler);
                   }
 
+                  final index =
+                      context.read<WalletCubit>().state.currentCryptoIndex;
+
+                  final blockchain = context
+                      .read<WalletCubit>()
+                      .state
+                      .cryptoAccount
+                      .data[index]
+                      .blockchainType;
+
+                  if (blockchain.isdisabled) {
+                    return Center(
+                      child: Text(l10n.thisFeatureIsNotSupportedMessage),
+                    );
+                  }
+
                   if (state.status == AppStatus.fetching) {
                     return const NftListShimmer();
                   } else if (state.status == AppStatus.populate) {
