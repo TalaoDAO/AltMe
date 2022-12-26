@@ -392,11 +392,11 @@ class OperationCubit extends Cubit<OperationState> {
 
       switch (beaconRequest.request!.network!.type!) {
         case NetworkType.mainnet:
-          baseUrl = TezosNetwork.mainNet().tzktUrl;
+          baseUrl = TezosNetwork.mainNet().apiUrl;
           rpcNodeUrl = TezosNetwork.mainNet().rpcNodeUrl;
           break;
         case NetworkType.ghostnet:
-          baseUrl = TezosNetwork.ghostnet().tzktUrl;
+          baseUrl = TezosNetwork.ghostnet().apiUrl;
           rpcNodeUrl = TezosNetwork.ghostnet().rpcNodeUrl;
           break;
         case NetworkType.mondaynet:
