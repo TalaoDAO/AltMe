@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/nft/cubit/nft_cubit_dao.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -13,7 +12,7 @@ part 'nft_cubit.g.dart';
 
 part 'nft_state.dart';
 
-class NftCubit extends Cubit<NftState> with NFTCubitDao {
+class NftCubit extends Cubit<NftState> {
   NftCubit({
     required this.client,
     required this.walletCubit,
@@ -116,7 +115,6 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
     await getNftList();
   }
 
-  @override
   Future<List<NftModel>> getEthereumNFTs({
     required int offset,
     required int limit,
@@ -155,7 +153,6 @@ class NftCubit extends Cubit<NftState> with NFTCubitDao {
     ).toList();
   }
 
-  @override
   Future<List<NftModel>> getTezosNFTs({
     required int offset,
     required int limit,
