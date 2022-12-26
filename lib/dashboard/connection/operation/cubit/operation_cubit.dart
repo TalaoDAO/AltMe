@@ -56,7 +56,12 @@ class OperationCubit extends Cubit<OperationState> {
           emit(state.copyWith(usdRate: xtzData.price));
           break;
         case ConnectionBridgeType.walletconnect:
-          // TODO(bibash): find dollar equivalent of ethereum
+          log.i('fetching eth USDprice');
+          final response =
+              await dioClient.get(Urls.ethPrice) as Map<String, dynamic>;
+          log.i('response - $response');
+          final double usdRate = response['USD'] as double;
+          emit(state.copyWith(usdRate: usdRate));
           break;
       }
       await getOtherPrices(connectionBridgeType);
@@ -174,8 +179,7 @@ class OperationCubit extends Cubit<OperationState> {
               status: AppStatus.errorWhileFetching,
               message: StateMessage.error(
                 messageHandler: ResponseMessage(
-                  ResponseString
-                      .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                  ResponseString.RESPONSE_STRING_OPERATION_FAILED,
                 ),
               ),
             ),
@@ -319,8 +323,7 @@ class OperationCubit extends Cubit<OperationState> {
           emit(
             state.error(
               messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                ResponseString.RESPONSE_STRING_OPERATION_FAILED,
               ),
             ),
           );
@@ -329,8 +332,7 @@ class OperationCubit extends Cubit<OperationState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ResponseString.RESPONSE_STRING_OPERATION_FAILED,
             ),
           ),
         );
@@ -479,7 +481,7 @@ class OperationCubit extends Cubit<OperationState> {
         rethrow;
       } else {
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ResponseString.RESPONSE_STRING_OPERATION_FAILED,
         );
       }
     }
