@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -79,7 +80,14 @@ class TokensCubit extends Cubit<TokensState> {
           limit: _limit,
           offset: state.offset,
         );
-      } else {}
+      } else {
+        await getTokensOnEthereum(
+          walletAddress: walletAddress,
+          ethereumNetwork: networkCubit.state.network as EthereumNetwork,
+          limit: _limit,
+          offset: state.offset,
+        );
+      }
     } catch (e, s) {
       getLogger(runtimeType.toString()).e('error in get tokens e: $e , s:$s');
       data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
@@ -100,7 +108,51 @@ class TokensCubit extends Cubit<TokensState> {
     required EthereumNetwork ethereumNetwork,
     required int limit,
     required int offset,
-  }) async {}
+  }) async {
+    if (offset > 0) {
+      //because at this time pagination not supported for Ethereum tokens
+      return;
+    }
+    await dotenv.load();
+    final moralisApiKey = dotenv.get('MORALIS_API_KEY');
+
+    final List<dynamic> tokensBalancesJsonArray = await client.get(
+      '${Urls.moralisBaseUrl}/$walletAddress/erc20',
+      headers: <String, dynamic>{
+        'X-API-KEY': moralisApiKey,
+      },
+    ) as List<dynamic>;
+    List<TokenModel> newData = [];
+    if (tokensBalancesJsonArray.isNotEmpty) {
+      newData = tokensBalancesJsonArray
+          .map(
+            (dynamic json) => TokenModel(
+              contractAddress: json['token_address'] as String,
+              name: (json['name'] as String?) ?? '',
+              symbol: (json['symbol'] as String?) ?? '',
+              balance: (json['balance'] as String?) ?? '',
+              decimals: ((json['decimals'] as int?) ?? 0).toString(),
+              thumbnailUri: json['thumbnail'] as String?,
+              icon: json['logo'] as String?,
+            ),
+          )
+          .toList();
+    }
+
+    if (offset == 0) {
+      // TODO(Taleb): get ethereum balance
+      data = newData;
+    } else {
+      data.addAll(newData);
+    }
+
+    emit(
+      state.copyWith(
+        status: AppStatus.success,
+        data: data,
+      ),
+    );
+  }
 
   Future<void> getTokensOnTezos({
     required String walletAddress,

@@ -180,22 +180,6 @@ class _TokensViewState extends State<TokensView> {
                         messageHandler.getMessage(context, messageHandler);
                   }
 
-                  final index =
-                      context.read<WalletCubit>().state.currentCryptoIndex;
-
-                  final blockchain = context
-                      .read<WalletCubit>()
-                      .state
-                      .cryptoAccount
-                      .data[index]
-                      .blockchainType;
-
-                  if (blockchain != BlockchainType.tezos) {
-                    return Center(
-                      child: Text(l10n.thisFeatureIsNotSupportedMessage),
-                    );
-                  }
-
                   if (state.status == AppStatus.fetching) {
                     return const TokenListShimmer();
                   } else if (state.status == AppStatus.populate ||
