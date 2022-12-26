@@ -56,6 +56,9 @@ class Urls {
   //INFURA
   static const infuraNftBaseUrl = 'https://nft.api.infura.io';
 
+  //Moralis
+  static const moralisBaseUrl = 'https://deep-index.moralis.io/api/v2';
+
   static const objktUrl = 'https://objkt.com/';
   static const raribleUrl = 'https://rarible.com/';
 
