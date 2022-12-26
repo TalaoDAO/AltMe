@@ -79,9 +79,7 @@ class TokensCubit extends Cubit<TokensState> {
           limit: _limit,
           offset: state.offset,
         );
-      } else {
-        
-      }
+      } else {}
     } catch (e, s) {
       getLogger(runtimeType.toString()).e('error in get tokens e: $e , s:$s');
       data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
@@ -96,6 +94,13 @@ class TokensCubit extends Cubit<TokensState> {
       );
     }
   }
+
+  Future<void> getTokensOnEthereum({
+    required String walletAddress,
+    required EthereumNetwork ethereumNetwork,
+    required int limit,
+    required int offset,
+  }) async {}
 
   Future<void> getTokensOnTezos({
     required String walletAddress,
@@ -112,7 +117,7 @@ class TokensCubit extends Cubit<TokensState> {
         'token.metadata.decimals.ne': '0',
         'token.metadata.artifactUri.null': true,
         'select':
-            '''token.contract.address as contractAddress,token.id as id,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals,token.standard as standard''',
+            '''token.contract.address as contractAddress,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals,token.standard as standard''',
         'offset': offset,
         'limit': limit,
       },
@@ -169,7 +174,6 @@ class TokensCubit extends Cubit<TokensState> {
                 balance: '0',
                 icon: e.thumbnailUri,
                 decimals: e.decimals.toString(),
-                id: -2,
                 standard: e.type,
               ),
             ),
@@ -240,7 +244,6 @@ class TokensCubit extends Cubit<TokensState> {
         await client.get('$baseUrl/v1/accounts/$walletAddress/balance') as int;
 
     final token = TokenModel(
-      id: -1,
       contractAddress: '',
       name: 'Tezos',
       symbol: 'XTZ',
