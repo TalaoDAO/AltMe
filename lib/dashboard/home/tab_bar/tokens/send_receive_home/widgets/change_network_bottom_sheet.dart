@@ -41,6 +41,11 @@ class _ChangeNetworkBottomSheetPageState
     final l10n = context.l10n;
     return BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
       builder: (context, state) {
+        final isTezos =
+            context.read<WalletCubit>().state.currentAccount.blockchainType ==
+                BlockchainType.tezos;
+        final allNetworks =
+            isTezos ? state.tezosNetworks : state.ethereumNetworks;
         return Container(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
@@ -92,17 +97,8 @@ class _ChangeNetworkBottomSheetPageState
                       ),
                     ),
                     child: ListView.separated(
-                      itemCount: state.allNetworks.length,
+                      itemCount: allNetworks.length,
                       itemBuilder: (context, i) {
-                        final isTezos = context
-                                .read<WalletCubit>()
-                                .state
-                                .currentAccount
-                                .blockchainType ==
-                            BlockchainType.tezos;
-                        final allNetworks = isTezos
-                            ? state.tezosNetworks
-                            : state.ethereumNetworks;
                         return NetworkSelector(
                           network: allNetworks[i],
                           groupValue: state.network,
