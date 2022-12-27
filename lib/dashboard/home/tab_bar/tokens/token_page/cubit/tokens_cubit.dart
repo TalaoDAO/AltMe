@@ -140,7 +140,10 @@ class TokensCubit extends Cubit<TokensState> {
     }
 
     if (offset == 0) {
-      // TODO(Taleb): get ethereum balance
+      final ethereumToken = await _getEthBalance(walletAddress);
+      if (ethereumToken != null) {
+        newData.insert(0, ethereumToken);
+      }
       data = newData;
     } else {
       data.addAll(newData);
@@ -285,6 +288,34 @@ class TokensCubit extends Cubit<TokensState> {
           totalBalanceInUSD: totalBalanceInUSD,
         ),
       );
+    }
+  }
+
+  Future<TokenModel?> _getEthBalance(
+    String walletAddress,
+  ) async {
+    try {
+      await dotenv.load();
+      final moralisApiKey = dotenv.get('MORALIS_API_KEY');
+      final response = await client.get(
+        '${Urls.moralisBaseUrl}/0x7cD6232194d40081021359383a19c6e4D5a8bB01/balance',
+        headers: <String, dynamic>{
+          'X-API-KEY': moralisApiKey,
+        },
+      ) as Map<String, dynamic>;
+
+      return TokenModel(
+        contractAddress: '',
+        name: 'Ethereum',
+        symbol: 'ETH',
+        icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
+        balance: response['balance'] as String,
+        decimals: '18',
+        standard: 'ERC20',
+      );
+    } catch (e, s) {
+      getLogger(toString()).e('error: $e, stack: $s');
+      return null;
     }
   }
 
