@@ -11,6 +11,7 @@ class NftModel extends Equatable {
   const NftModel({
     required this.tokenId,
     required this.name,
+    this.symbol,
     required this.contractAddress,
     required this.balance,
     this.description,
@@ -24,6 +25,7 @@ class NftModel extends Equatable {
 
   @JsonKey(defaultValue: '')
   final String name;
+  final String? symbol;
   @JsonKey(defaultValue: '0')
   final String tokenId;
   final String? description;
@@ -58,6 +60,7 @@ class NftModel extends Equatable {
   @override
   List<Object?> get props => [
         name,
+        symbol,
         tokenId,
         description,
         displayUri,
