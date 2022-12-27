@@ -151,10 +151,10 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           break;
         case ConnectionBridgeType.walletconnect:
           final walletConnectState = walletConnectCubit.state;
-          final wcClient = walletConnectState.wcClients.lastWhereOrNull(
+          final wcClient = walletConnectState.wcClients.firstWhereOrNull(
             (element) =>
-                element.remotePeerMeta ==
-                walletConnectCubit.state.currentDAppPeerMeta,
+                element.remotePeerId ==
+                walletConnectCubit.state.currentDappPeerId,
           );
 
           log.i('wcClient -$wcClient');
@@ -307,10 +307,12 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
         log.i('walletconnect Signing rejected');
         final walletConnectState = walletConnectCubit.state;
 
-        final wcClient = walletConnectState.wcClients.lastWhereOrNull(
+        final wcClient = walletConnectState.wcClients.firstWhereOrNull(
           (element) =>
-              element.remotePeerMeta == walletConnectState.currentDAppPeerMeta,
+              element.remotePeerId ==
+              walletConnectCubit.state.currentDappPeerId,
         );
+
         if (wcClient != null) {
           wcClient.rejectRequest(id: walletConnectState.signId!);
         }

@@ -87,7 +87,11 @@ dependencies:
   uni_links: ^0.5.1
   url_launcher: ^6.0.17
   uuid: ^3.0.5
-  wallet_connect: ^1.0.4
+  #wallet_connect: ^1.0.4
+  wallet_connect:
+    git:
+      url: https://github.com/bibash28/wallet-connect-dart.git
+      ref: d0c1666f28aeefb5549efcad31af114dcf2fceb0
   web3dart: ^2.3.3
   workmanager: ^0.5.0
 

@@ -33,12 +33,11 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       final List<WCClient> wcClients = List.empty(growable: true);
       for (final element in ethereumConnectedDapps) {
         final sessionStore = element.wcSessionStore;
-        log.i('sessionStore - $sessionStore');
 
         final WCClient? wcClient = createWCClient(element.wcSessionStore);
 
         await wcClient!.connectFromSessionStore(sessionStore!);
-        log.i('wcClient: $wcClient');
+        log.i('sessionStore: ${wcClient.sessionStore.toJson()}');
         wcClients.add(wcClient);
       }
       emit(
@@ -83,6 +82,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
   WCClient? createWCClient(WCSessionStore? sessionStore) {
     WCPeerMeta? currentPeerMeta = sessionStore?.remotePeerMeta;
+    String? currentPeerId = sessionStore?.remotePeerId;
     return WCClient(
       onConnect: () {
         log.i('connected');
@@ -93,15 +93,20 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       onFailure: (dynamic error) {
         log.e('Failed to connect: $error');
       },
-      onSessionRequest: (int id, WCPeerMeta dAppPeerMeta) {
+      onSessionRequest: (int id, String dAppPeerId, WCPeerMeta dAppPeerMeta) {
         log.i('onSessionRequest');
         log.i('id: $id');
-        log.i('dAppPeerMeta: $dAppPeerMeta');
+
+        currentPeerId = dAppPeerId;
         currentPeerMeta = dAppPeerMeta;
+
+        log.i('dAppPeerId: $currentPeerId');
+        log.i('currentDAppPeerMeta: ${currentPeerMeta.toString()}');
         emit(
           state.copyWith(
             sessionId: id,
             status: WalletConnectStatus.permission,
+            currentDappPeerId: dAppPeerId,
             currentDAppPeerMeta: currentPeerMeta,
           ),
         );
@@ -112,13 +117,14 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         log.i('message: ${message.raw}');
         log.i('data: ${message.data}');
         log.i('type: ${message.type}');
+        log.i('dAppPeerId: $currentPeerId');
         log.i('currentDAppPeerMeta: ${currentPeerMeta.toString()}');
 
         switch (message.type) {
           case WCSignType.MESSAGE:
           case WCSignType.TYPED_MESSAGE:
-            final wcClient = state.wcClients.lastWhereOrNull(
-              (element) => element.remotePeerMeta == currentPeerMeta,
+            final wcClient = state.wcClients.firstWhereOrNull(
+              (element) => element.remotePeerId == currentPeerId,
             );
             if (wcClient != null) {
               wcClient.rejectRequest(id: id);
@@ -130,6 +136,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
                 signId: id,
                 status: WalletConnectStatus.signPayload,
                 signMessage: message,
+                currentDappPeerId: currentPeerId,
                 currentDAppPeerMeta: currentPeerMeta,
               ),
             );
@@ -140,6 +147,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         log.i('onEthSendTransaction');
         log.i('id: $id');
         log.i('tx: $transaction');
+        log.i('dAppPeerId: $currentPeerId');
         log.i('currentDAppPeerMeta: ${currentPeerMeta.toString()}');
         emit(
           state.copyWith(
@@ -147,6 +155,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
             status: WalletConnectStatus.operation,
             transactionId: id,
             transaction: transaction,
+            currentDappPeerId: currentPeerId,
             currentDAppPeerMeta: currentPeerMeta,
           ),
         );

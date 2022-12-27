@@ -39,11 +39,10 @@ class RightsCubit extends Cubit<RightsState> {
       switch (savedDappData.blockchainType) {
         case BlockchainType.ethereum:
           final walletConnectState = walletConnectCubit.state;
-          log.i(walletConnectState.wcClients);
-          final wcClient = walletConnectState.wcClients.lastWhereOrNull(
+          final wcClient = walletConnectState.wcClients.firstWhereOrNull(
             (element) =>
-                element.remotePeerMeta ==
-                savedDappData.wcSessionStore!.remotePeerMeta,
+                element.remotePeerId ==
+                walletConnectCubit.state.currentDappPeerId,
           );
           if (wcClient != null) {
             log.i(
