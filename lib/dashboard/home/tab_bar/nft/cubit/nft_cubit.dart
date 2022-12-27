@@ -122,32 +122,41 @@ class NftCubit extends Cubit<NftState> {
     required EthereumNetwork network,
   }) async {
     await dotenv.load();
-    final username = dotenv.get('INFURA_API_KEY');
-    final password = dotenv.get('INFURA_API_KEY_SECRET');
-    final basicAuth =
-        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+    final moralisApiKey = dotenv.get('MORALIS_API_KEY');
 
-    final dynamic responseString = await client.get(
-      '${network.apiUrl}/networks/1/accounts/$walletAddress/assets/nfts',
-      headers: <String, String>{
-        'Authorization': basicAuth,
+    //If you want to see example nft data you should hardcode 
+    // this wallet address in API call ->
+    // 0xd8da6bf26964af9d7eed9e03e53415d37aa96045
+
+    final Map<String, dynamic> response = await client.get(
+      '${Urls.moralisBaseUrl}/$walletAddress/nft',
+      queryParameters: <String, dynamic>{
+        'chain': 'eth',
+        'format': 'decimal',
+        'normalizeMetadata': true,
       },
-    );
+      headers: <String, String>{
+        'X-API-KEY': moralisApiKey,
+      },
+    ) as Map<String, dynamic>;
 
-    final dynamic response = jsonDecode(responseString as String);
+    final result = response['result'] as List<dynamic>;
+    if (result.isEmpty) {
+      return [];
+    }
 
-    final nftsJson = response['assets'] as List<dynamic>;
     return List<EthereumNftModel>.from(
-      nftsJson.map<EthereumNftModel>((dynamic e) {
+      result.map<EthereumNftModel>((dynamic e) {
         return EthereumNftModel(
-          name: e['metadata']['name'] as String,
-          description: e['metadata']['description'] as String?,
-          tokenId: e['tokenId'] as String,
-          contractAddress: e['contract'] as String,
-          balance: e['supply'] as String,
-          type: e['type'] as String,
-          image: e['metadata']['image'] as String?,
-          animationUrl: e['metadata']['animation_url'] as String?,
+          name: e['name'] as String,
+          symbol: e['symbol'] as String?,
+          description: e['normalized_metadata']['description'] as String?,
+          tokenId: e['token_id'] as String,
+          contractAddress: e['token_address'] as String,
+          balance: e['amount'] as String,
+          type: e['contract_type'] as String,
+          image: e['normalized_metadata']['image'] as String?,
+          animationUrl: e['normalized_metadata']['animation_url'] as String?,
         );
       }),
     ).toList();
