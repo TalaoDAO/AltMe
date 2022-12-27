@@ -83,11 +83,8 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                 prev.currentCryptoIndex != next.currentCryptoIndex,
             listener: (_, walletState) {
               context.read<SendReceiveHomeCubit>().init(
-                    baseUrl: context
-                        .read<ManageNetworkCubit>()
-                        .state
-                        .network
-                        .apiUrl,
+                    baseUrl:
+                        context.read<ManageNetworkCubit>().state.network.apiUrl,
                   );
             },
           ),
@@ -147,7 +144,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                       l10n.myTokens,
                       style: Theme.of(context).textTheme.headline5,
                     ),
-                    TezosNetworkSwitcherButton(
+                    NetworkSwitcherButton(
                       onTap: () {
                         ChangeNetworkBottomSheetView.show(context: context);
                       },
