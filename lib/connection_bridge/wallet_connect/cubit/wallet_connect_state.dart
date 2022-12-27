@@ -8,6 +8,7 @@ class WalletConnectState extends Equatable {
     this.message,
     this.sessionId,
     List<WCClient>? wcClients,
+    this.currentDappPeerId,
     this.currentDAppPeerMeta,
     this.signId,
     this.signMessage,
@@ -22,6 +23,7 @@ class WalletConnectState extends Equatable {
   final StateMessage? message;
   final bool isWalletConnectStarted;
   final int? sessionId;
+  final String? currentDappPeerId;
   final WCPeerMeta? currentDAppPeerMeta;
   @JsonKey(ignore: true)
   final List<WCClient> wcClients;
@@ -40,6 +42,7 @@ class WalletConnectState extends Equatable {
       isWalletConnectStarted: isWalletConnectStarted,
       sessionId: sessionId,
       wcClients: wcClients,
+      currentDappPeerId: currentDappPeerId,
       currentDAppPeerMeta: currentDAppPeerMeta,
       signId: signId,
       signMessage: signMessage,
@@ -55,6 +58,7 @@ class WalletConnectState extends Equatable {
       status: WalletConnectStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       isWalletConnectStarted: isWalletConnectStarted,
+      currentDappPeerId: currentDappPeerId,
       currentDAppPeerMeta: currentDAppPeerMeta,
       sessionId: sessionId,
       wcClients: wcClients,
@@ -70,6 +74,7 @@ class WalletConnectState extends Equatable {
     MessageHandler? messageHandler,
     bool? isWalletConnectStarted,
     int? sessionId,
+    String? currentDappPeerId,
     WCPeerMeta? currentDAppPeerMeta,
     List<WCClient>? wcClients,
     int? signId,
@@ -85,6 +90,7 @@ class WalletConnectState extends Equatable {
       isWalletConnectStarted:
           isWalletConnectStarted ?? this.isWalletConnectStarted,
       currentDAppPeerMeta: currentDAppPeerMeta ?? this.currentDAppPeerMeta,
+      currentDappPeerId: currentDappPeerId ?? this.currentDappPeerId,
       sessionId: sessionId ?? this.sessionId,
       wcClients: wcClients ?? this.wcClients,
       signId: signId ?? this.signId,
@@ -100,6 +106,7 @@ class WalletConnectState extends Equatable {
         message,
         isWalletConnectStarted,
         sessionId,
+        currentDappPeerId,
         currentDAppPeerMeta,
         wcClients,
         signId,

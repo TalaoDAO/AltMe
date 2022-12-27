@@ -83,10 +83,10 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           final List<String> walletAddresses = [currentAccount.walletAddress];
 
           final walletConnectState = walletConnectCubit.state;
-          final wcClient = walletConnectState.wcClients.lastWhereOrNull(
+          final wcClient = walletConnectState.wcClients.firstWhereOrNull(
             (element) =>
-                element.remotePeerMeta ==
-                walletConnectCubit.state.currentDAppPeerMeta,
+                element.remotePeerId ==
+                walletConnectCubit.state.currentDappPeerId,
           );
           if (wcClient == null) {
             throw ResponseMessage(
@@ -165,10 +165,12 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
         log.i('walletconnect  connection rejected');
         final walletConnectState = walletConnectCubit.state;
 
-        final wcClient = walletConnectState.wcClients.lastWhereOrNull(
+        final wcClient = walletConnectState.wcClients.firstWhereOrNull(
           (element) =>
-              element.remotePeerMeta == walletConnectState.currentDAppPeerMeta,
+              element.remotePeerId ==
+              walletConnectCubit.state.currentDappPeerId,
         );
+
         if (wcClient != null) {
           wcClient.rejectRequest(id: walletConnectState.sessionId!);
         }
