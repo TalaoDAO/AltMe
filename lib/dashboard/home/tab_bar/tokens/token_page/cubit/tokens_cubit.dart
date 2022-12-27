@@ -298,7 +298,7 @@ class TokensCubit extends Cubit<TokensState> {
       await dotenv.load();
       final moralisApiKey = dotenv.get('MORALIS_API_KEY');
       final response = await client.get(
-        '${Urls.moralisBaseUrl}/0x7cD6232194d40081021359383a19c6e4D5a8bB01/balance',
+        '${Urls.moralisBaseUrl}/$walletAddress/balance',
         headers: <String, dynamic>{
           'X-API-KEY': moralisApiKey,
         },
