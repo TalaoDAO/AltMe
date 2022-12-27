@@ -91,7 +91,7 @@ dependencies:
   wallet_connect:
     git:
       url: https://github.com/bibash28/wallet-connect-dart.git
-      ref: d0c1666f28aeefb5549efcad31af114dcf2fceb0
+      ref: fba9b209ee2b61b62ddd643f07f6a7f64426d7b2
   web3dart: ^2.3.3
   workmanager: ^0.5.0
 
