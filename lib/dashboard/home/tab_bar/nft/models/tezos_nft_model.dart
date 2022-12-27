@@ -17,7 +17,7 @@ class TezosNftModel extends NftModel {
     required String balance,
     bool isTransferable = true,
     required this.id,
-    this.symbol,
+    String? symbol,
     this.standard,
     this.identifier,
     this.creators,
@@ -25,6 +25,7 @@ class TezosNftModel extends NftModel {
     this.date,
   }) : super(
           name: name,
+          symbol: symbol,
           displayUri: displayUri,
           description: description,
           thumbnailUri: thumbnailUri,
@@ -39,7 +40,6 @@ class TezosNftModel extends NftModel {
 
   final String? standard;
   final int id;
-  final String? symbol;
   final String? identifier;
   final List<String>? creators;
   final List<String>? publishers;
@@ -65,6 +65,7 @@ class TezosNftModel extends NftModel {
         id,
         tokenId,
         name,
+        symbol,
         displayUri,
         thumbnailUri,
         balance,

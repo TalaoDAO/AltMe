@@ -12,12 +12,14 @@ class EthereumNftModel extends NftModel {
     required String tokenId,
     required String contractAddress,
     required String balance,
+    String? symbol,
     String? animationUrl,
     String? image,
     String? description,
     required this.type,
   }) : super(
           name: name,
+          symbol: symbol,
           displayUri: animationUrl,
           description: description,
           thumbnailUri: image,
@@ -31,13 +33,14 @@ class EthereumNftModel extends NftModel {
 
   final String type;
 
+  @override
   Map<String, dynamic> toJson() => _$EthereumNftModelToJson(this);
 
   TokenModel getToken() {
     return TokenModel(
       contractAddress: contractAddress,
       name: name,
-      symbol: name,
+      symbol: symbol ?? name,
       balance: balance,
       standard: type,
       decimals: '0',
@@ -48,6 +51,7 @@ class EthereumNftModel extends NftModel {
   @override
   List<Object?> get props => [
         name,
+        symbol,
         tokenId,
         displayUri,
         thumbnailUri,
