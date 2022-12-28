@@ -3,8 +3,10 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
+import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tezart/tezart.dart';
+import 'package:web3dart/web3dart.dart';
 
 part 'confirm_token_transaction_cubit.g.dart';
 
@@ -90,6 +92,48 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     }
   }
 
+  Future<void> _withdrawEthereum({
+    required double tokenAmount,
+    required String selectedAccountSecretKey,
+  }) async {
+    try {
+      emit(state.loading());
+      final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
+
+      final rpcNodeUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+
+      final amount = int.parse(
+        tokenAmount.toStringAsFixed(18).replaceAll(',', '').replaceAll('.', ''),
+      );
+
+      final httpClient = Client();
+      final ethClient = Web3Client(rpcNodeUrl, httpClient);
+
+      final credentials = EthPrivateKey.fromHex(sourceKeystore.address);
+
+      await ethClient.sendTransaction(
+        credentials,
+        Transaction(
+          to: EthereumAddress.fromHex(sourceKeystore.address),
+          gasPrice: EtherAmount.inWei(BigInt.one),
+          maxGas: 100000,
+          value: EtherAmount.fromUnitAndValue(EtherUnit.wei, amount),
+        ),
+      );
+      logger.i('after withdrawal execute');
+      emit(state.success());
+    } catch (e, s) {
+      logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        ),
+      );
+    }
+  }
+
   Future<void> sendContractInvocationOperation({
     required double tokenAmount,
     required String selectedAccountSecretKey,
@@ -98,6 +142,12 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     try {
       if (token.symbol == 'XTZ') {
         await _withdrawTezos(
+          tokenAmount: tokenAmount,
+          selectedAccountSecretKey: selectedAccountSecretKey,
+        );
+        return;
+      } else if (token.symbol == 'ETH') {
+        await _withdrawEthereum(
           tokenAmount: tokenAmount,
           selectedAccountSecretKey: selectedAccountSecretKey,
         );
