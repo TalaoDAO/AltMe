@@ -326,6 +326,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       log.i('data - $data');
       if (data['credential_manifest'] != null) {
+        log.i('credential_manifest is not null');
         final CredentialManifest credentialManifest =
             CredentialManifest.fromJson(
           data['credential_manifest'] as Map<String, dynamic>,
@@ -347,12 +348,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             final credentialName =
                 credentialField['filter']['pattern'] as String;
 
-            /// converting string to CredentialSubjectModel
-            final Map<String, dynamic> credentialNameJson = <String, dynamic>{
-              'type': credentialName
-            };
-            final CredentialSubjectModel credentialSubjectModel =
-                CredentialSubjectModel.fromJson(credentialNameJson);
+            late CredentialSubjectType credentialSubjectType;
+
+            for (final element in CredentialSubjectType.values) {
+              if (credentialName == element.name) {
+                credentialSubjectType = element;
+                break;
+              }
+            }
 
             /// fetching all the credentials
             final CredentialsRepository repository =
@@ -364,7 +367,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             bool isPresentable = false;
 
             for (final credential in allCredentials) {
-              if (credentialSubjectModel.credentialSubjectType ==
+              if (credentialSubjectType ==
                   credential.credentialPreview.credentialSubjectModel
                       .credentialSubjectType) {
                 isPresentable = true;
@@ -458,7 +461,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           );
       }
     } catch (e) {
-      log.e('An error occurred while connecting to the server.', e);
+      log.e(
+        'An error occurred while connecting to the server. ${e.toString()}',
+      );
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
