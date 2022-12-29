@@ -116,7 +116,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       await ethClient.sendTransaction(
         credentials,
         Transaction(
-          to: EthereumAddress.fromHex(sourceKeystore.address),
+          to: EthereumAddress.fromHex(state.withdrawalAddress),
           gasPrice: EtherAmount.inWei(BigInt.one),
           maxGas: 100000,
           value: EtherAmount.fromUnitAndValue(EtherUnit.wei, amount),
