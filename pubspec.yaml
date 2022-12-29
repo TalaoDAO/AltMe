@@ -119,6 +119,7 @@ flutter:
     - .env
     - google_fonts/
     - assets/
+    - assets/abi/
     - assets/splash/
     - assets/icon/
     - assets/image/
