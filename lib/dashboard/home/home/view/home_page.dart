@@ -33,7 +33,9 @@ class HomePage extends StatelessWidget {
           );
         }
       },
-      child: const TabControllerPage(),
+      child: Parameters.hasCryptoCallToAction
+          ? const TabControllerPage()
+          : const CredentialsListPage(),
     );
   }
 }
