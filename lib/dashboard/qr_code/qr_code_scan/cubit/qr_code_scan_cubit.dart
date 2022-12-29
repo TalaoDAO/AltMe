@@ -115,6 +115,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           "redirect_uri": redirectUri,
           "state": "1234"
         };
+        String code = '210901fc2fc063e9a30a';
 
         try {
           final Uri authorizationUri = Uri(
@@ -123,7 +124,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             queryParameters: my_request,
             host: 'api-conformance.ebsi.eu',
           );
-          LaunchUrl.launch(authorizeUrl);
           final dynamic authorizationResponse = await client.get(authorizeUrl,
               headers: headers, queryParameters: my_request);
           print('got authorization');
@@ -131,29 +131,59 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           /// we should receive something through deepLink ?
 
         } catch (e) {
+          if (e is NetworkException) {
+            if (e.data != null) {
+              if (e.data['detail'] != null) {
+                final String error = e.data['detail'] as String;
+                final codeSplit = error.split('code=');
+                code = codeSplit[1];
+              }
+            }
+          }
           print('Lokks like wa can get code from here');
         }
-        final code = '210901fc2fc063e9a30a';
 
         /// getting token
-        final tokenHeaders = {
+        final tokenHeaders = <String, dynamic>{
           'Conformance': conformance,
           'Content-Type': 'application/x-www-form-urlencoded'
         };
         final String tokenUrl =
             "https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/token";
 
-        final tokenData = {
+        final tokenData = <String, dynamic>{
           "code": code,
           "grant_type": "authorization_code",
           "redirect_uri": redirectUri
         };
-        final dynamic tokenResponse =
-            await client.post(tokenUrl, headers: headers, data: tokenData);
+        String accessToken = '';
+        String cNonce = '';
+        try {
+          final dynamic tokenResponse = await client.post(
+            tokenUrl,
+            headers: tokenHeaders,
+            data: tokenData,
+          );
+          accessToken = tokenResponse["access_token"] as String;
+          cNonce = tokenResponse["c_nonce"] as String;
+        } catch (e) {
+          print('what the !!');
+        }
 
         /// preparation before getting credential
-        final String accessToken = tokenResponse["access_token"] as String;
-        final String cNonce = tokenResponse["c_nonce"] as String;
+        final String credentialUrl =
+            'https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/credential';
+        final credentialHeaders = <String, dynamic>{
+          'Conformance': conformance,
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken'
+        };
+
+        final credentialData = <String, dynamic>{
+          "type": credential_type,
+          "format": "jwt_vc",
+          "proof": {"proof_type": "jwt", "jwt": 'proof'}
+        };
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else {
