@@ -97,12 +97,12 @@ android {
         staging {
             dimension "default"
             applicationIdSuffix ".stg"
-            manifestPlaceholders = [appName: "[STG] Altme"]
+            manifestPlaceholders = [appName: "[STG] Talao"]
         }        
         development {
             dimension "default"
             applicationIdSuffix ".dev"
-            manifestPlaceholders = [appName: "[DEV] Altme"]
+            manifestPlaceholders = [appName: "[DEV] Talao"]
         }
     }
 

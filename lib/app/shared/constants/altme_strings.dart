@@ -9,7 +9,7 @@ class AltMeStrings {
   static const String appContactWebsiteName = 'www.altme.io';
   static const String appContactMail = 'contact@altme.io';
   static const String appSupportMail = 'support@altme.io';
-  static const String ivVector = 'Altme';
+  static const String ivVector = 'Talao';
   static const String additionalAuthenticatedData = 'Credible';
   static const String passBasePublishableApiKey =
       'Ww3TIde3B8nh5M3EZ57tkzIbMyAVwzh9YzW8FcwADKgpQ76UfT5bqox2dvdNTDVo';

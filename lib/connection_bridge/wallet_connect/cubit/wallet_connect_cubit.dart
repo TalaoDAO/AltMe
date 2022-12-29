@@ -55,9 +55,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('walletConnectUri - $walletConnectUri');
     final WCSession session = WCSession.from(walletConnectUri);
     final WCPeerMeta walletPeerMeta = WCPeerMeta(
-      name: 'Altme',
+      name: 'Talao',
       url: 'https://altme.io',
-      description: 'Altme Wallet',
+      description: 'Talao Wallet',
       icons: [],
     );
     log.i('walletPeerMeta: $walletPeerMeta');

@@ -95,7 +95,7 @@ BEGIN
             VALUE "InternalName", "altme" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 co.talao.wallet. All rights reserved." "\0"
             VALUE "OriginalFilename", "altme.exe" "\0"
-            VALUE "ProductName", "Altme" "\0"
+            VALUE "ProductName", "Talao" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

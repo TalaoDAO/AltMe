@@ -113,12 +113,12 @@ However, Web3 Digital Wallet will obtain the necessary consents required under t
 
 Web3 Digital Wallet has appointed an official of privacy which oversees compliance with this privacy protection policy and applicable laws for the protection of personal information.
 
-The contact information for the Web3 Digital Wallet protection of privacy are : mailto:contact@altme.io
+The contact information for the Web3 Digital Wallet protection of privacy are : mailto:contact@Talao.io
 
 
 # Appendix 1
 
-Personal data protection - Your data on Altme.
+Personal data protection - Your data on Talao.
 
 ## What personal data collected about me ?
 

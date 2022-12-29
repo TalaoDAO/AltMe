@@ -4,19 +4,19 @@ This document was updated on Friday, November 21, 2022
 
 ## Purpose
 
-Altme Wallet is a mobile application for IOS and Android devices developed by Web3 Digital Wallet available on Apple and Google stores.
+Talao Wallet is a mobile application for IOS and Android devices developed by Web3 Digital Wallet available on Apple and Google stores.
 
 The purpose of these General Terms and Conditions is to define the contractual relationship between Web3 Digital Wallet and the user concerning access to and use of a crypto-asset management service and a decentralized identity service.
 
 At any time, Web3 Digital Wallet reserves the right to make changes to the service and therefore to these General Conditions.
 
-Any changes will become effective upon their publication or, where applicable, on any other date indicated. Web3 Digital Wallet will ensure that users are aware of any changes to the T&Cs, however, it is up to the user before using the service to refer to the latest version of the T&Cs accessible at any time on the https site: https // altme.co.
+Any changes will become effective upon their publication or, where applicable, on any other date indicated. Web3 Digital Wallet will ensure that users are aware of any changes to the T&Cs, however, it is up to the user before using the service to refer to the latest version of the T&Cs accessible at any time on the https site: https // Talao.co.
 
 ## Presentation of the service
 
-Altme wallet is a non-custodial wallet software, for verifiable credentials and digital assets such as cryptocurrencies, virtual commodities and NFTs (“Digital Assets”), meaning user is solely in control of and responsible for user personal data,  digital assets and private keys, and accordingly user can authorize transactions from user's wallet address. User expressly acknowledges and agrees that as Altme Wallet is a non-custodial wallet software, user is solely responsible for user's activity and any risk of loss at all times.
+Talao wallet is a non-custodial wallet software, for verifiable credentials and digital assets such as cryptocurrencies, virtual commodities and NFTs (“Digital Assets”), meaning user is solely in control of and responsible for user personal data,  digital assets and private keys, and accordingly user can authorize transactions from user's wallet address. User expressly acknowledges and agrees that as Talao Wallet is a non-custodial wallet software, user is solely responsible for user's activity and any risk of loss at all times.
 
-Altme wallet allows user to:
+Talao wallet allows user to:
 
 * generate user's Decentralized Identifier (DID);
 * collect certificates (Verifiable Credenials)  from third parties (issuers). Example of certificates are : Proof of email, Proof of phone number, ID card, Nationality proof, Over 18 proof, Loyalty cards, tickets, etc;
@@ -27,9 +27,9 @@ Altme wallet allows user to:
 * browse and access third party decentralized application(s) (“DApp(s)”) and third party decentralized exchanges (“DEX”) through the mobile application’s web browser;
 * swap/trade digital assets through DApp functionality made available by third party service provider(s);
 * view digital asset price information made available by third party service provider(s); 
-* andbroadcast Digital Asset Transaction data to various blockchains supported by Altme without requiring user to download or install the associated blockchain-based software to user's local device.
+* andbroadcast Digital Asset Transaction data to various blockchains supported by Talao without requiring user to download or install the associated blockchain-based software to user's local device.
 
-Altme's service is built on the basis of innovative technologies (Blockchain and Self Sovereign Identity).
+Talao's service is built on the basis of innovative technologies (Blockchain and Self Sovereign Identity).
 
 It allows a user to have their digital identity in their smartphone without having to register their data on the servers of an identity provider.
 
@@ -42,7 +42,7 @@ This type of wallet is very exactly the on-line version of the wallet that we al
 
 ## Wallet creation
 
-User must either import or create a wallet in order to use Altme wallet. When user creates a wallet, he will be assigned a Recovery Phrase. User agrees to immediately notify us of any unauthorized use of user's Recovery Phrase or private keys or any other breach of security of user's wallet. Notwithstanding the foregoing, user acknowledges and agrees that he shall assume all risks related to the use of the services and he shall be solely responsible for maintaining the confidentiality and security of user's Recovery Phrase and private keys. When he creates a wallet, he is strongly advised to take precautions in order to avoid loss of access to and/or control over user's wallet. Suggested measures include, but are not limited to, the following: 
+User must either import or create a wallet in order to use Talao wallet. When user creates a wallet, he will be assigned a Recovery Phrase. User agrees to immediately notify us of any unauthorized use of user's Recovery Phrase or private keys or any other breach of security of user's wallet. Notwithstanding the foregoing, user acknowledges and agrees that he shall assume all risks related to the use of the services and he shall be solely responsible for maintaining the confidentiality and security of user's Recovery Phrase and private keys. When he creates a wallet, he is strongly advised to take precautions in order to avoid loss of access to and/or control over user's wallet. Suggested measures include, but are not limited to, the following: 
 
 * creating a strong unique password that user does not use for any other purpose (i.e. different to user's phone password or any other passwords he uses for websites, online services, etc.) and leveraging biometric authentication if available;
 * do not store the private key and Recovery Phrase in plain text online or in an unsecured physical location;
@@ -69,7 +69,7 @@ Over13 proof, Over18 proof and Age Range proof: the issuer is the Web3 Digital W
 
 Other parties (verifiers) can send identity requests to the user via an existing peer-to-peer connections.  The requested credentials are already filled out with existing identity credentials stored in the app. The user has the possibility to change this information manually (if other appropriate identity attributes available). Given the user actively consents to send the information, the selected identity credentials are sent to the requesting party. 
 
-The storage of the user's data by the other party must be regulated by the other participant, who is responsible for the legally compliant handling of the data. Web3 Digital Wallet has no responsibilities or obligations in this regard. The Altme wallet is only responsible for the exchange of information between participants. If the requested identity information is not stored on the app, the user will receive a corresponding error message. The missing identity information must first be provided to the user by another participant before the request can be answered.
+The storage of the user's data by the other party must be regulated by the other participant, who is responsible for the legally compliant handling of the data. Web3 Digital Wallet has no responsibilities or obligations in this regard. The Talao wallet is only responsible for the exchange of information between participants. If the requested identity information is not stored on the app, the user will receive a corresponding error message. The missing identity information must first be provided to the user by another participant before the request can be answered.
 
 If the user does not want to answer the identity request, he can reject it. In this case no information will be sent to the requesting party.
 
@@ -86,7 +86,7 @@ In order for all proposed digital asset transactions to be completed, they must 
 
 ## Buy digital assets with credit or debit cards
 
-This service is limited to users over 18 years old. If he uses Altme Wallet to purchase digital assets with user's credit or debit card, a third party will convert user's chosen amount into the applicable Digital Asset and credit it to user's wallet. he acknowledges and agrees that : 
+This service is limited to users over 18 years old. If he uses Talao Wallet to purchase digital assets with user's credit or debit card, a third party will convert user's chosen amount into the applicable Digital Asset and credit it to user's wallet. he acknowledges and agrees that : 
 
 * Web3 Digital Wallet is not responsible for user's use of such third party service and shall have no liability whatsoever in connection with user's uses of such service;
 * user will be subject to any terms and conditions imposed by the relevant third party service provider;
@@ -98,13 +98,13 @@ This service is limited to users over 18 years old. If he uses Altme Wallet to p
 
 The identification service is provided free of charge for the user.
 
-However, the use of the crypto services of the Altme app may give rise to fees and charges on the part of the user, such as transaction fees, which must be borne by the user.
+However, the use of the crypto services of the Talao app may give rise to fees and charges on the part of the user, such as transaction fees, which must be borne by the user.
 
 ## Use of the service
 
 Services are limited to users over 18 years old. 
 
-The user acknowledges that the Altme wallet services are services for personal use only and that any use of said service is carried out under user's full and entire responsibility.
+The user acknowledges that the Talao wallet services are services for personal use only and that any use of said service is carried out under user's full and entire responsibility.
 
 ## Operation of the service
 
@@ -130,9 +130,9 @@ The costs and expenses of equipment necessary for the use of the service, are an
 
 ## License to NFT content
 
-User may be able to store non-fungible tokens (“NFTs”) on Altme wallet. User hereby represents and warrants that he owns all legal right, title in and interest to, including all intellectual property rights to the content associated with the NFT (“NFT Content”), or he is legally authorized by the owner of the intellectual property in the NFT Content to store the NFTs on Altme. 
+User may be able to store non-fungible tokens (“NFTs”) on Talao wallet. User hereby represents and warrants that he owns all legal right, title in and interest to, including all intellectual property rights to the content associated with the NFT (“NFT Content”), or he is legally authorized by the owner of the intellectual property in the NFT Content to store the NFTs on Talao. 
 
-User retains all rights to the NFT Content stored except for rights expressly granted herein. By using Altme wallet, user grants Web3 Digital Wallet a license to access, use, host, cache, store, copy, reproduce, transmit, display, publish, distribute, adapt and modify (for technical purposes, e.g., making sure content is viewable on smartphones as well as computers and other devices) the NFT Content in any and all media or distribution methods (now know or later developed) solely as required to be able to operate and provide services of Altme wallet. Web3 Digital Wallet does not monitor the NFTs and NFT Content storedon Altme wallet for any infringement of a third party’s intellectual property rights. 
+User retains all rights to the NFT Content stored except for rights expressly granted herein. By using Talao wallet, user grants Web3 Digital Wallet a license to access, use, host, cache, store, copy, reproduce, transmit, display, publish, distribute, adapt and modify (for technical purposes, e.g., making sure content is viewable on smartphones as well as computers and other devices) the NFT Content in any and all media or distribution methods (now know or later developed) solely as required to be able to operate and provide services of Talao wallet. Web3 Digital Wallet does not monitor the NFTs and NFT Content storedon Talao wallet for any infringement of a third party’s intellectual property rights. 
 
 Accordingly, Web3 Digital wallet assumes no liability for any action regarding any content provided by the user. User further acknowledge and agrees it is user's sole responsibility to carry out all necessary due diligence for all user's activities relating to NFTs, and user represents and warrant that he has not and are not relying on, and shall have no remedies, in respect of any statement or representation made by Web3 Digital Wallet in relation to any transfer or interaction otherwise with any NFTs.
 
@@ -178,11 +178,11 @@ It is expressly agreed between the Parties that the completely exceptional imple
 
 ## Personal data protection
 
-The conditions for processing personal data are set out in Altme's privacy and data protection policy, accessible here https://altme.co/privacy.
+The conditions for processing personal data are set out in Talao's privacy and data protection policy, accessible here https://Talao.co/privacy.
 
 ## Customer
 
-Customer Service can be reached by following this link: mailto:contact@altme.io
+Customer Service can be reached by following this link: mailto:contact@Talao.io
 
 ## Subcontracting
 

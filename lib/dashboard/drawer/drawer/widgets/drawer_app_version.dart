@@ -11,7 +11,7 @@ class DrawerAppVersion extends StatelessWidget {
     return BlocBuilder<SplashCubit, SplashState>(
       builder: (context, state) {
         return Text(
-          'Altme: V${state.versionNumber} (${state.buildNumber})',
+          'Talao: V${state.versionNumber} (${state.buildNumber})',
           style: Theme.of(context).textTheme.drawerMenu,
         );
       },
