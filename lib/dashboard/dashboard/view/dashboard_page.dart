@@ -190,7 +190,9 @@ class _DashboardViewState extends State<DashboardView> {
                   scaffoldKey.currentState!.openDrawer();
                 },
               ),
-              titleTrailing: const CryptoAccountSwitcherButton(),
+              titleTrailing: Parameters.hasCryptoCallToAction
+                  ? const CryptoAccountSwitcherButton()
+                  : const SizedBox.shrink(),
               body: Stack(
                 children: [
                   Column(

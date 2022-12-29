@@ -52,17 +52,24 @@ class DrawerView extends StatelessWidget {
                         .push<void>(WalletSecurityMenu.route());
                   },
                 ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
-                DrawerCategoryItem(
-                  title: l10n.blockchainSettings,
-                  subTitle: l10n.blockchainSettingsDescription,
-                  onClick: () {
-                    Navigator.of(context)
-                        .push<void>(BlockchainSettingsMenu.route());
-                  },
-                ),
+                if (Parameters.hasCryptoCallToAction)
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: Sizes.spaceSmall,
+                      ),
+                      DrawerCategoryItem(
+                        title: l10n.blockchainSettings,
+                        subTitle: l10n.blockchainSettingsDescription,
+                        onClick: () {
+                          Navigator.of(context)
+                              .push<void>(BlockchainSettingsMenu.route());
+                        },
+                      ),
+                    ],
+                  )
+                else
+                  const SizedBox.shrink(),
                 const SizedBox(
                   height: Sizes.spaceSmall,
                 ),
