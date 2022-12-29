@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -8,11 +9,16 @@ import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:base_codecs/base_codecs.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
+import 'package:ebsi/ebsi.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:jose/jose.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -78,6 +84,76 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith('wc:')) {
         await walletConnectCubit.connect(scannedResponse);
+
+        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+      } else if (scannedResponse.startsWith('openid://initiate_issuance?')) {
+        // convert String from QR code into Uri
+        final uri = Uri.parse(scannedResponse);
+        final String conformance = uri.queryParameters['conformance']!;
+        final credential_type = uri.queryParameters['credential_type']!;
+        final issuer = uri.queryParameters['issuer']!;
+        final redirectUri = "app.altme.io/app/download/callback";
+        // final redirectUri = 'app.altme.io';
+        final headers = {
+          'Conformance': conformance,
+          'Content-Type': 'application/json'
+        };
+        const authorizeUrl =
+            "https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/authorize";
+
+        final my_request = <String, dynamic>{
+          "scope": "openid",
+          "client_id": redirectUri,
+          "response_type": "code",
+          "authorization_details": jsonEncode([
+            {
+              "type": "openid_credential",
+              "credential_type": credential_type,
+              "format": "jwt_vc"
+            }
+          ]),
+          "redirect_uri": redirectUri,
+          "state": "1234"
+        };
+
+        try {
+          final Uri authorizationUri = Uri(
+            scheme: 'https',
+            path: '/conformance/v2/issuer-mock/authorize',
+            queryParameters: my_request,
+            host: 'api-conformance.ebsi.eu',
+          );
+          LaunchUrl.launch(authorizeUrl);
+          final dynamic authorizationResponse = await client.get(authorizeUrl,
+              headers: headers, queryParameters: my_request);
+          print('got authorization');
+          // Should get code from authorization response or this callback system
+          /// we should receive something through deepLink ?
+
+        } catch (e) {
+          print('Lokks like wa can get code from here');
+        }
+        final code = '210901fc2fc063e9a30a';
+
+        /// getting token
+        final tokenHeaders = {
+          'Conformance': conformance,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        };
+        final String tokenUrl =
+            "https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/token";
+
+        final tokenData = {
+          "code": code,
+          "grant_type": "authorization_code",
+          "redirect_uri": redirectUri
+        };
+        final dynamic tokenResponse =
+            await client.post(tokenUrl, headers: headers, data: tokenData);
+
+        /// preparation before getting credential
+        final String accessToken = tokenResponse["access_token"] as String;
+        final String cNonce = tokenResponse["c_nonce"] as String;
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else {
@@ -158,6 +234,29 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       try {
         final uri = Uri.parse(deepLinkUrl);
         await verify(uri: uri);
+      } on FormatException {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> openidDeepLink() async {
+    emit(state.loading(isDeepLink: true));
+    final deepLinkUrl = deepLinkCubit.state;
+    if (deepLinkUrl != '') {
+      deepLinkCubit.resetDeepLink();
+      try {
+        final Dio client = Dio();
+        final credentialType =
+            Ebsi(client: client).getCredentialType(deepLinkUrl);
+        print(credentialType);
       } on FormatException {
         emit(
           state.error(
@@ -453,6 +552,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               ),
             );
           }
+          break;
+        case 'object':
+          log.i('object');
+          emit(
+            state.copyWith(
+              qrScanStatus: QrScanStatus.success,
+              route: CredentialsReceivePage.route(
+                uri: uri,
+                preview: data as Map<String, dynamic>,
+                issuer: issuer,
+              ),
+            ),
+          );
           break;
 
         default:
