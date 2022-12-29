@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import 'package:altme/app/app.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
@@ -8,11 +10,13 @@ import 'package:altme/scan/scan.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -28,6 +32,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.deepLinkCubit,
     required this.jwtDecode,
     required this.beacon,
+    required this.walletConnectCubit,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -39,6 +44,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final DeepLinkCubit deepLinkCubit;
   final JWTDecode jwtDecode;
   final Beacon beacon;
+  final WalletConnectCubit walletConnectCubit;
 
   final log = getLogger('QRCodeScanCubit');
 
@@ -68,6 +74,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             Uri.parse(scannedResponse).queryParameters['data'].toString();
 
         await beacon.pair(pairingRequest: pairingRequest);
+
+        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+      } else if (scannedResponse.startsWith('wc:')) {
+        await walletConnectCubit.connect(scannedResponse);
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else {
@@ -153,7 +163,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           state.error(
             messageHandler: ResponseMessage(
               ResponseString
-                  .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE, // ignore: lines_longer_than_80_chars
+                  .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
             ),
           ),
         );
@@ -165,9 +175,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     emit(state.error(messageHandler: messageHandler));
   }
 
-  Future<void> verify({required Uri? uri, bool isBeaconSSI = false}) async {
-    if (isBeaconSSI) {
-      emit(state.loading(isDeepLink: isBeaconSSI));
+  Future<void> verify({
+    required Uri? uri,
+    bool isConnectionBridgeSSI = false,
+  }) async {
+    if (isConnectionBridgeSSI) {
+      emit(state.loading(isDeepLink: isConnectionBridgeSSI));
     } else {
       emit(state.loading());
     }
@@ -223,8 +236,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           );
         }
 
-        final openIdCredential = getCredential(sIOPV2Param.claims!);
-        final openIdIssuer = getIssuer(sIOPV2Param.claims!);
+        final openIdCredential = getCredentialName(sIOPV2Param.claims!);
+        final openIdIssuer = getIssuersName(sIOPV2Param.claims!);
 
         ///check if credential and issuer both are not present
         if (openIdCredential == '' && openIdIssuer == '') {
@@ -290,7 +303,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           state.error(
             messageHandler: ResponseMessage(
               ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
         );
@@ -312,6 +325,72 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       data = response is String ? jsonDecode(response) : response;
 
       log.i('data - $data');
+      if (data['credential_manifest'] != null) {
+        log.i('credential_manifest is not null');
+        final CredentialManifest credentialManifest =
+            CredentialManifest.fromJson(
+          data['credential_manifest'] as Map<String, dynamic>,
+        );
+        final PresentationDefinition? presentationDefinition =
+            credentialManifest.presentationDefinition;
+        if (presentationDefinition != null &&
+            presentationDefinition.inputDescriptors.isNotEmpty) {
+          for (final descriptor in presentationDefinition.inputDescriptors) {
+            /// using JsonPath to find credential Name
+            final dynamic json = jsonDecode(jsonEncode(descriptor.constraints));
+            final dynamic credentialField =
+                JsonPath(r'$..fields').read(json).first.value.toList().first;
+
+            if (credentialField['filter'] == null) {
+              continue;
+            }
+
+            final credentialName =
+                credentialField['filter']['pattern'] as String;
+
+            late CredentialSubjectType credentialSubjectType;
+
+            for (final element in CredentialSubjectType.values) {
+              if (credentialName == element.name) {
+                credentialSubjectType = element;
+                break;
+              }
+            }
+
+            /// fetching all the credentials
+            final CredentialsRepository repository =
+                CredentialsRepository(getSecureStorage);
+
+            final List<CredentialModel> allCredentials =
+                await repository.findAll();
+
+            bool isPresentable = false;
+
+            for (final credential in allCredentials) {
+              if (credentialSubjectType ==
+                  credential.credentialPreview.credentialSubjectModel
+                      .credentialSubjectType) {
+                isPresentable = true;
+                break;
+              } else {
+                isPresentable = false;
+              }
+            }
+            if (!isPresentable) {
+              emit(
+                state.copyWith(
+                  qrScanStatus: QrScanStatus.success,
+                  route: MissingCredentialsPage.route(
+                    credentialManifest: credentialManifest,
+                  ),
+                ),
+              );
+              return;
+            }
+          }
+        }
+      }
+
       switch (data['type']) {
         case 'CredentialOffer':
           log.i('Credential Offer');
@@ -382,15 +461,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           );
       }
     } catch (e) {
-      log.e('An error occurred while connecting to the server.', e);
-
+      log.e(
+        'An error occurred while connecting to the server. ${e.toString()}',
+      );
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
         );
@@ -480,35 +561,5 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       log.e('An error occurred while decoding.', e);
     }
     return data;
-  }
-
-  String getCredential(String claims) {
-    final dynamic claimsJson = jsonDecode(claims);
-    final fieldsPath = JsonPath(r'$..fields');
-    final dynamic credentialField = fieldsPath
-        .read(claimsJson)
-        .first
-        .value
-        .where(
-          (dynamic e) => e['path'].toString() == r'[$.credentialSubject.type]',
-        )
-        .toList()
-        .first;
-    return credentialField['filter']['pattern'] as String;
-  }
-
-  String getIssuer(String claims) {
-    final dynamic claimsJson = jsonDecode(claims);
-    final fieldsPath = JsonPath(r'$..fields');
-    final dynamic issuerField = fieldsPath
-        .read(claimsJson)
-        .first
-        .value
-        .where(
-          (dynamic e) => e['path'].toString() == r'[$.issuer]',
-        )
-        .toList()
-        .first;
-    return issuerField['filter']['pattern'] as String;
   }
 }

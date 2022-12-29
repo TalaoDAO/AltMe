@@ -75,8 +75,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: b4673771e82d41399ee5b87e0b5f1dea0d778830
-      resolved-ref: b4673771e82d41399ee5b87e0b5f1dea0d778830
+      ref: "5afc170ff4f05c590508fed1c70e7e533021865f"
+      resolved-ref: "5afc170ff4f05c590508fed1c70e7e533021865f"
       url: "https://github.com/TalaoDAO/beacon.git"
     source: git
     version: "1.0.8"
@@ -353,6 +353,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0+1"
+  cryptography:
+    dependency: transitive
+    description:
+      name: cryptography
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5"
   csslib:
     dependency: transitive
     description:
@@ -740,7 +747,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.4"
+    version: "0.13.5"
   http_mock_adapter:
     dependency: "direct dev"
     description:
@@ -1700,6 +1707,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.3.0"
+  wallet_connect:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: fba9b209ee2b61b62ddd643f07f6a7f64426d7b2
+      resolved-ref: fba9b209ee2b61b62ddd643f07f6a7f64426d7b2
+      url: "https://github.com/bibash28/wallet-connect-dart.git"
+    source: git
+    version: "1.0.4"
   watcher:
     dependency: transitive
     description:

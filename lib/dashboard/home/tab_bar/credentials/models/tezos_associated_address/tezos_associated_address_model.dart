@@ -9,13 +9,15 @@ class TezosAssociatedAddressModel extends CredentialSubjectModel {
   TezosAssociatedAddressModel({
     this.associatedAddress,
     this.accountName,
-    String? id,
-    String? type,
+    required String id,
+    required String type,
+    required Author issuedBy,
   }) : super(
           id: id,
           type: type,
           credentialSubjectType: CredentialSubjectType.tezosAssociatedWallet,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
+          issuedBy: issuedBy,
         );
 
   factory TezosAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>

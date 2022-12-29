@@ -240,20 +240,6 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard:
         return globalMessage.RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard;
-      case ResponseString.RESPONSE_STRING_tezoniaPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_tezoniaPassWhyGetThisCard;
-      case ResponseString.RESPONSE_STRING_tzlandPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_tzlandPassWhyGetThisCard;
-      case ResponseString.RESPONSE_STRING_trooperzPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_trooperzPassWhyGetThisCard;
-      case ResponseString.RESPONSE_STRING_pigsPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_pigsPassWhyGetThisCard;
-      case ResponseString.RESPONSE_STRING_matterlightPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_matterlightPassWhyGetThisCard;
-      case ResponseString.RESPONSE_STRING_dogamiPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_dogamiPassWhyGetThisCard;
-      case ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_bunnyPassWhyGetThisCard;
 
       case ResponseString.RESPONSE_STRING_tezotopiaMembershipExpirationDate:
         return globalMessage.RESPONSE_STRING_tezotopiaMembershipExpirationDate;
@@ -261,42 +247,81 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt:
         return globalMessage.RESPONSE_STRING_tezotopiaMembershipHowToGetIt;
 
+      case ResponseString.RESPONSE_STRING_chainbornMembershipWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_chainbornMembershipWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_chainbornMembershipExpirationDate:
+        return globalMessage.RESPONSE_STRING_chainbornMembershipExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt:
+        return globalMessage.RESPONSE_STRING_chainbornMembershipHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_twitterWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_twitterWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_twitterExpirationDate:
+        return globalMessage.RESPONSE_STRING_twitterExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_twitterHowToGetIt:
+        return globalMessage.RESPONSE_STRING_twitterHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_tezoniaPassWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_tezoniaPassWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_tzlandPassWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_tzlandPassWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_trooperzPassWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_trooperzPassWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_pigsPassWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_pigsPassWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_matterlightPassWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_matterlightPassWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_dogamiPassWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_dogamiPassWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_bunnyPassWhyGetThisCard;
+
       case ResponseString.RESPONSE_STRING_bunnyPassExpirationDate:
         return globalMessage.RESPONSE_STRING_bunnyPassExpirationDate;
 
       case ResponseString.RESPONSE_STRING_bunnyPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_bunnyPassHowToGetIt;
-      
+
       case ResponseString.RESPONSE_STRING_dogamiPassExpirationDate:
         return globalMessage.RESPONSE_STRING_dogamiPassExpirationDate;
 
       case ResponseString.RESPONSE_STRING_dogamiPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_dogamiPassHowToGetIt;
-      
+
       case ResponseString.RESPONSE_STRING_matterlightPassExpirationDate:
         return globalMessage.RESPONSE_STRING_matterlightPassExpirationDate;
 
       case ResponseString.RESPONSE_STRING_matterlightPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_matterlightPassHowToGetIt;
-      
+
       case ResponseString.RESPONSE_STRING_pigsPassExpirationDate:
         return globalMessage.RESPONSE_STRING_pigsPassExpirationDate;
 
       case ResponseString.RESPONSE_STRING_pigsPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_pigsPassHowToGetIt;
-      
+
       case ResponseString.RESPONSE_STRING_trooperzPassExpirationDate:
         return globalMessage.RESPONSE_STRING_trooperzPassExpirationDate;
 
       case ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_trooperzPassHowToGetIt;
-      
+
       case ResponseString.RESPONSE_STRING_tzlandPassExpirationDate:
         return globalMessage.RESPONSE_STRING_tzlandPassExpirationDate;
 
       case ResponseString.RESPONSE_STRING_tzlandPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_tzlandPassHowToGetIt;
-      
+
       case ResponseString.RESPONSE_STRING_tezoniaPassExpirationDate:
         return globalMessage.RESPONSE_STRING_tezoniaPassExpirationDate;
 
@@ -389,6 +414,12 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage:
         return globalMessage.RESPONSE_STRING_thisFeatureIsNotSupportedMessage;
+
+      case ResponseString.RESPONSE_STRING_userNotFitErrorMessage:
+        return globalMessage.RESPONSE_STRING_userNotFitErrorMessage;
+
+      case ResponseString.RESPONSE_STRING_transactionIsLikelyToFail:
+        return globalMessage.RESPONSE_STRING_transactionIsLikelyToFail;
     }
   }
 }

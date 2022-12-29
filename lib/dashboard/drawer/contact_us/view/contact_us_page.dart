@@ -125,10 +125,11 @@ class _ContactUsViewState extends State<ContactUsView> {
                 );
                 Navigator.pop(context);
               } catch (_) {
-                AlertMessage.showStringMessage(
+                AlertMessage.showStateMessage(
                   context: context,
-                  message: l10n.failedToSendEmail,
-                  messageType: MessageType.error,
+                  stateMessage: StateMessage.error(
+                    stringMessage: l10n.failedToSendEmail,
+                  ),
                 );
               }
             }

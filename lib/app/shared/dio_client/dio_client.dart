@@ -80,7 +80,9 @@ class DioClient {
     String uri,
     Map<String, dynamic> headers,
   ) async {
-    if (uri.contains(Urls.tezotopiaMembershipCardUrl)) {
+    if (uri.contains(Urls.tezotopiaMembershipCardUrl) ||
+        uri.contains(Urls.chainbornMembershipCardUrl) ||
+        uri.contains(Urls.twitterCardUrl)) {
       await dotenv.load();
       final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');
 

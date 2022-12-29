@@ -3,7 +3,6 @@ enum QrScanStatus {
   idle,
   loading,
   acceptHost,
-  message,
   error,
   success,
   goBack,

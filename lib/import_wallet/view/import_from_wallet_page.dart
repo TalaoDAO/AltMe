@@ -180,7 +180,12 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
                   children: [
                     BaseTextField(
                       height: Sizes.recoveryPhraseTextFieldHeight,
-                      hint: l10n.importWalletHintText(54),
+                      hint: l10n.importWalletHintText(
+                        widget.walletTypeModel.type ==
+                                ImportWalletTypes.Ethereum
+                            ? 64
+                            : 54,
+                      ),
                       fillColor: Colors.transparent,
                       hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
                       maxLines: 10,

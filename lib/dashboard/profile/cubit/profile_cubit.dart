@@ -168,6 +168,9 @@ class ProfileCubit extends Cubit<ProfileState> {
   ) async {
     var _issuerVerificationUrl = Urls.checkIssuerTalaoUrl;
     switch (registry) {
+      case IssuerVerificationRegistry.Compellio:
+        _issuerVerificationUrl = '';
+        break;
       case IssuerVerificationRegistry.EBSI:
         _issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
         break;

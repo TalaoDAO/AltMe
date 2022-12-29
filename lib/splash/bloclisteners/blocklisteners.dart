@@ -1,9 +1,10 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
+import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -72,13 +73,6 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
   listener: (BuildContext context, ScanState state) async {
     final l10n = context.l10n;
 
-    if (state.message != null) {
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: state.message!,
-      );
-    }
-
     if (state.status == ScanStatus.askPermissionDidAuth) {
       final scanCubit = context.read<ScanCubit>();
       final state = scanCubit.state;
@@ -110,6 +104,13 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
     }
     if (state.status == ScanStatus.error) {
       Navigator.of(context).pop();
+    }
+
+    if (state.message != null) {
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: state.message!,
+      );
     }
   },
 );
@@ -221,6 +222,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       if (beaconRequest == null) return;
 
       final Beacon beacon = Beacon();
+      final String currenRouteName = context.read<RouteCubit>().state ?? '';
 
       //signPayload is not network sensitive
       if (state.status != BeaconStatus.signPayload) {
@@ -233,16 +235,14 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
 
         // if network type does not match
         if (incomingNetworkType != currentNetworkType) {
-          final MessageHandler messageHandler = ResponseMessage(
-            ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE,
-          );
-          final String message =
-              messageHandler.getMessage(context, messageHandler);
-
-          AlertMessage.showStringMessage(
+          AlertMessage.showStateMessage(
             context: context,
-            message: '$message $incomingNetworkType.',
-            messageType: MessageType.error,
+            stateMessage: StateMessage.error(
+              stringMessage: '$incomingNetworkType.',
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE,
+              ),
+            ),
           );
 
           final requestId = beaconRequest.request!.id!;
@@ -253,7 +253,9 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
               publicKey: null,
               address: null,
             );
-            Navigator.pop(context);
+            if (currenRouteName == CONFIRM_CONNECTION_PAGE) {
+              Navigator.pop(context);
+            }
           }
 
           if (state.status == BeaconStatus.operation) {
@@ -265,11 +267,23 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       }
 
       if (state.status == BeaconStatus.permission) {
-        Navigator.of(context).push<void>(BeaconConfirmConnectionPage.route());
+        sensibleRoute(
+          context: context,
+          route: ConfirmConnectionPage.route(
+            connectionBridgeType: ConnectionBridgeType.beacon,
+          ),
+          isSameRoute: currenRouteName == CONFIRM_CONNECTION_PAGE,
+        );
       }
 
       if (state.status == BeaconStatus.signPayload) {
-        Navigator.of(context).push<void>(BeaconSignPayloadPage.route());
+        sensibleRoute(
+          context: context,
+          route: SignPayloadPage.route(
+            connectionBridgeType: ConnectionBridgeType.beacon,
+          ),
+          isSameRoute: currenRouteName == SIGN_PAYLOAD_PAGE,
+        );
       }
 
       if (state.status == BeaconStatus.operation) {
@@ -279,20 +293,58 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
             id: beaconRequest.request!.id!,
             transactionHash: null,
           );
-          final MessageHandler messageHandler = ResponseMessage(
-            ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
-          );
-          final String message =
-              messageHandler.getMessage(context, messageHandler);
 
-          return AlertMessage.showStringMessage(
+          return AlertMessage.showStateMessage(
             context: context,
-            message: message,
-            messageType: MessageType.info,
+            stateMessage: StateMessage.info(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
+              ),
+            ),
           );
         }
 
-        Navigator.of(context).push<void>(BeaconOperationPage.route());
+        sensibleRoute(
+          context: context,
+          route: OperationPage.route(
+            connectionBridgeType: ConnectionBridgeType.beacon,
+          ),
+          isSameRoute: currenRouteName == OPERATION_PAGE,
+        );
+      }
+    } catch (e) {
+      log.e(e);
+    }
+  },
+);
+
+final walletConnectBlocListener =
+    BlocListener<WalletConnectCubit, WalletConnectState>(
+  listener: (BuildContext context, WalletConnectState state) {
+    final log = getLogger('walletConnectStateBlocListener');
+    try {
+      if (state.status == WalletConnectStatus.permission) {
+        Navigator.of(context).push<void>(
+          ConfirmConnectionPage.route(
+            connectionBridgeType: ConnectionBridgeType.walletconnect,
+          ),
+        );
+      }
+
+      if (state.status == WalletConnectStatus.signPayload) {
+        Navigator.of(context).push<void>(
+          SignPayloadPage.route(
+            connectionBridgeType: ConnectionBridgeType.walletconnect,
+          ),
+        );
+      }
+
+      if (state.status == WalletConnectStatus.operation) {
+        Navigator.of(context).push<void>(
+          OperationPage.route(
+            connectionBridgeType: ConnectionBridgeType.walletconnect,
+          ),
+        );
       }
     } catch (e) {
       log.e(e);

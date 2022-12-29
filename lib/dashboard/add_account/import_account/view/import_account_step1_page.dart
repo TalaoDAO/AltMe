@@ -43,41 +43,65 @@ class ImportAccountStep1View extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const MStepper(
-            totalStep: 4,
-            step: 1,
-          ),
-          const SizedBox(
-            height: Sizes.spaceNormal,
-          ),
+          const MStepper(totalStep: 4, step: 1),
+          const SizedBox(height: Sizes.spaceNormal),
           Text(
             l10n.importEasilyFrom,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.caption3,
           ),
-          const SizedBox(
-            height: Sizes.spaceNormal,
-          ),
+          const SizedBox(height: Sizes.spaceNormal),
           CustomListTileCard(
             title: l10n.tezosAccount,
             subTitle: l10n.tezosAccountDescription,
-            imageAssetPath: IconStrings.tezosAccount,
+            imageAssetPath: IconStrings.tezos,
             onTap: () {
               Navigator.of(context).push<void>(
                 ImportAccountStep2Page.route(accountType: AccountType.tezos),
               );
             },
           ),
-          const SizedBox(
-            height: Sizes.spaceNormal,
-          ),
+          const SizedBox(height: Sizes.spaceNormal),
           CustomListTileCard(
             title: l10n.ethereumAccount,
             subTitle: l10n.ethereumAccountDescription,
-            imageAssetPath: IconStrings.ethereumAccount,
+            imageAssetPath: IconStrings.ethereum,
             onTap: () {
               Navigator.of(context).push<void>(
                 ImportAccountStep2Page.route(accountType: AccountType.ethereum),
+              );
+            },
+          ),
+          const SizedBox(height: Sizes.spaceNormal),
+          CustomListTileCard(
+            title: l10n.fantomAccount,
+            subTitle: l10n.fantomAccountDescription,
+            imageAssetPath: IconStrings.fantom,
+            onTap: () {
+              Navigator.of(context).push<void>(
+                ImportAccountStep2Page.route(accountType: AccountType.fantom),
+              );
+            },
+          ),
+          const SizedBox(height: Sizes.spaceNormal),
+          CustomListTileCard(
+            title: l10n.polygonAccount,
+            subTitle: l10n.polygonAccountDescription,
+            imageAssetPath: IconStrings.polygon,
+            onTap: () {
+              Navigator.of(context).push<void>(
+                ImportAccountStep2Page.route(accountType: AccountType.polygon),
+              );
+            },
+          ),
+          const SizedBox(height: Sizes.spaceNormal),
+          CustomListTileCard(
+            title: l10n.binanceAccount,
+            subTitle: l10n.binanceAccountDescription,
+            imageAssetPath: IconStrings.binance,
+            onTap: () {
+              Navigator.of(context).push<void>(
+                ImportAccountStep2Page.route(accountType: AccountType.binance),
               );
             },
           ),

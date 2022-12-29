@@ -157,6 +157,26 @@ class HomeCredential extends Equatable {
             ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt;
         break;
 
+      case CredentialSubjectType.chainbornMembership:
+        image = ImageStrings.chainbornMemberShipDummy;
+        link = Urls.chainbornMembershipCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_chainbornMembershipWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_chainbornMembershipExpirationDate;
+        howToGetIt =
+            ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt;
+        break;
+
+      case CredentialSubjectType.twitterCard:
+        image = ImageStrings.twitterCardDummy;
+        link = Urls.twitterCardUrl;
+        whyGetThisCard = ResponseString.RESPONSE_STRING_twitterWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_twitterExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_twitterHowToGetIt;
+        break;
+
       case CredentialSubjectType.bunnyPass:
         image = ImageStrings.bunnyPassDummy;
         link = Urls.bunnyPassCardUrl;
@@ -259,6 +279,9 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.aragoPass:
       case CredentialSubjectType.ethereumAssociatedWallet:
       case CredentialSubjectType.pcdsAgentCertificate:
+      case CredentialSubjectType.fantomAssociatedWallet:
+      case CredentialSubjectType.polygonAssociatedWallet:
+      case CredentialSubjectType.binanceAssociatedWallet:
         break;
     }
 

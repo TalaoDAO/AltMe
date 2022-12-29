@@ -9,13 +9,15 @@ class EthereumAssociatedAddressModel extends CredentialSubjectModel {
   EthereumAssociatedAddressModel({
     this.associatedAddress,
     this.accountName,
-    String? id,
-    String? type,
+    required String id,
+    required String type,
+    required Author issuedBy,
   }) : super(
           id: id,
           type: type,
           credentialSubjectType: CredentialSubjectType.ethereumAssociatedWallet,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
+          issuedBy: issuedBy,
         );
 
   factory EthereumAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>

@@ -10,14 +10,12 @@ class SubTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceLarge),
-      child: SizedBox(
-        child: Text(
-          l10n.splashSubtitle,
-          maxLines: 3,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.starterSubTitleStyle,
-        ),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: MyText(
+        l10n.splashSubtitle,
+        maxLines: 2,
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.starterSubTitleStyle,
       ),
     );
   }

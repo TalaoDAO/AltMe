@@ -18,7 +18,7 @@ class ManageIssuersRegistryPage extends StatelessWidget {
     final l10n = context.l10n;
 
     return BasePage(
-      title: l10n.issuerRegistry,
+      title: l10n.chooseIssuersRegistry,
       titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       scrollView: true,
@@ -33,7 +33,7 @@ class ManageIssuersRegistryPage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          var groupValue = IssuerVerificationRegistry.Talao;
+          var groupValue = IssuerVerificationRegistry.None;
           switch (state.model.issuerVerificationUrl) {
             case '':
               groupValue = IssuerVerificationRegistry.None;
@@ -41,15 +41,19 @@ class ManageIssuersRegistryPage extends StatelessWidget {
             case Urls.checkIssuerEbsiUrl:
               groupValue = IssuerVerificationRegistry.EBSI;
               break;
+            case Urls.checkIssuerTalaoUrl:
+              groupValue = IssuerVerificationRegistry.Talao;
+              break;
           }
-          const fakeGroupValue = 'titi';
+          //const fakeGroupValue = 'titi';
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
                 child: Text(
-                  l10n.issuerVerificationSetting,
-                  style: Theme.of(context).textTheme.radioTitle,
+                  l10n.chooseIssuerRegistryDescription,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.caption3,
                 ),
               ),
               const SizedBox(height: 15),
@@ -60,29 +64,51 @@ class ManageIssuersRegistryPage extends StatelessWidget {
                         IssuerVerificationRegistry.Talao,
                     groupValue: groupValue,
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.spaceSmall,
+                    ),
+                    child: Divider(
+                      color: Theme.of(context).colorScheme.borderColor,
+                    ),
+                  ),
                   IssuerVerificationRegistrySelector(
                     issuerVerificationRegistry: IssuerVerificationRegistry.EBSI,
                     groupValue: groupValue,
                   ),
-                  ListTile(
-                    dense: true,
-                    visualDensity: VisualDensity.compact,
-                    title: Text(
-                      'Compellio',
-                      style: Theme.of(context)
-                          .textTheme
-                          .radioOption
-                          .copyWith(color: Colors.grey),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.spaceSmall,
                     ),
-                    trailing: const Radio<String>(
-                      value: 'useless',
-                      groupValue: fakeGroupValue,
-                      onChanged: null,
+                    child: Divider(
+                      color: Theme.of(context).colorScheme.borderColor,
+                    ),
+                  ),
+                  IssuerVerificationRegistrySelector(
+                    issuerVerificationRegistry:
+                        IssuerVerificationRegistry.Compellio,
+                    isEnable: false,
+                    groupValue: groupValue,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.spaceSmall,
+                    ),
+                    child: Divider(
+                      color: Theme.of(context).colorScheme.borderColor,
                     ),
                   ),
                   IssuerVerificationRegistrySelector(
                     issuerVerificationRegistry: IssuerVerificationRegistry.None,
                     groupValue: groupValue,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.spaceSmall,
+                    ),
+                    child: Divider(
+                      color: Theme.of(context).colorScheme.borderColor,
+                    ),
                   ),
                 ],
               ),

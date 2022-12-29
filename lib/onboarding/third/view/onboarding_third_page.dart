@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
+import 'package:altme/route/route.dart';
 import 'package:flutter/material.dart';
 
 class OnBoardingThirdPage extends StatelessWidget {

@@ -1,6 +1,7 @@
 import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AccountItem extends StatelessWidget {
   const AccountItem({
@@ -48,11 +49,17 @@ class AccountItem extends StatelessWidget {
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
-              child: Image.asset(
-                iconPath,
-                width: Sizes.icon2x,
-                fit: BoxFit.scaleDown,
-              ),
+              child: iconPath.endsWith('.svg')
+                  ? SvgPicture.asset(
+                      iconPath,
+                      width: Sizes.icon2x,
+                      height: Sizes.icon2x,
+                    )
+                  : Image.asset(
+                      iconPath,
+                      width: Sizes.icon2x,
+                      fit: BoxFit.scaleDown,
+                    ),
             ),
           ],
         ),

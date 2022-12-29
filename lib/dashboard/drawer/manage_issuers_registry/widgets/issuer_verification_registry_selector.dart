@@ -9,33 +9,44 @@ class IssuerVerificationRegistrySelector extends StatelessWidget {
     Key? key,
     required this.issuerVerificationRegistry,
     required this.groupValue,
+    this.isEnable = true,
   }) : super(key: key);
 
   final IssuerVerificationRegistry issuerVerificationRegistry;
   final IssuerVerificationRegistry groupValue;
+  final bool isEnable;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileCubit, ProfileState>(
       listener: (context, state) {},
       builder: (context, state) {
-        return ListTile(
-          dense: true,
-          visualDensity: VisualDensity.compact,
-          title: Text(
-            issuerVerificationRegistry.name,
-            style: Theme.of(context).textTheme.radioOption,
-          ),
-          trailing: Radio<IssuerVerificationRegistry>(
-            value: issuerVerificationRegistry,
-            groupValue: groupValue,
-            activeColor: Theme.of(context).colorScheme.onPrimary,
-            onChanged: (IssuerVerificationRegistry? value) async {
-              if (value != null) {
-                await context
-                    .read<ProfileCubit>()
-                    .updateIssuerVerificationUrl(value);
-              }
-            },
+        return Opacity(
+          opacity: isEnable ? 1 : 0.5,
+          child: ListTile(
+            dense: true,
+            visualDensity: VisualDensity.compact,
+            onTap: !isEnable
+                ? null
+                : () {
+                    context.read<ProfileCubit>().updateIssuerVerificationUrl(
+                          issuerVerificationRegistry,
+                        );
+                  },
+            title: Text(
+              issuerVerificationRegistry.name,
+              style: Theme.of(context).textTheme.radioOption,
+            ),
+            trailing: issuerVerificationRegistry == groupValue
+                ? Icon(
+                    Icons.check_circle,
+                    size: Sizes.icon2x,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  )
+                : Icon(
+                    Icons.circle_outlined,
+                    size: Sizes.icon2x,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
           ),
         );
       },

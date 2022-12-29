@@ -22,7 +22,8 @@ List<CredentialModel> getCredentialsFromFilterList(
             /// I remove credential not
             searchList.removeWhere(
               (element) {
-                if (element == field.filter?.pattern) {
+                if (element == field.filter?.pattern ||
+                    field.filter?.pattern == null) {
                   return false;
                 }
                 return true;

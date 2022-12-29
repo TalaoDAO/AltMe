@@ -32,7 +32,7 @@ class ProfileModel extends Equatable {
         companyName: '',
         companyWebsite: '',
         jobTitle: '',
-        issuerVerificationUrl: Urls.checkIssuerTalaoUrl,
+        issuerVerificationUrl: '',
         isEnterprise: false,
         tezosNetwork: TezosNetwork.mainNet(),
       );

@@ -154,7 +154,7 @@ class _NftViewState extends State<NftView> {
                       .data[index]
                       .blockchainType;
 
-                  if (blockchain == BlockchainType.ethereum) {
+                  if (blockchain != BlockchainType.tezos) {
                     return Center(
                       child: Text(l10n.thisFeatureIsNotSupportedMessage),
                     );

@@ -332,104 +332,124 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt:
           return ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt
               .localise(context);
-        
-        case ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard:
+
+        case ResponseString.RESPONSE_STRING_chainbornMembershipWhyGetThisCard:
           return ResponseString
-                  .RESPONSE_STRING_bunnyPassWhyGetThisCard
+                  .RESPONSE_STRING_chainbornMembershipWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_chainbornMembershipExpirationDate:
+          return ResponseString
+                  .RESPONSE_STRING_chainbornMembershipExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt:
+          return ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_twitterWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_twitterWhyGetThisCard.localise(
+              context);
+
+        case ResponseString.RESPONSE_STRING_twitterExpirationDate:
+          return ResponseString.RESPONSE_STRING_twitterExpirationDate.localise(
+              context);
+
+        case ResponseString.RESPONSE_STRING_twitterHowToGetIt:
+          return ResponseString.RESPONSE_STRING_twitterHowToGetIt.localise(
+              context);
+
+        case ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_bunnyPassExpirationDate:
-          return ResponseString
-                  .RESPONSE_STRING_bunnyPassExpirationDate
+          return ResponseString.RESPONSE_STRING_bunnyPassExpirationDate
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_bunnyPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_bunnyPassHowToGetIt
-              .localise(context);
-        
+          return ResponseString.RESPONSE_STRING_bunnyPassHowToGetIt.localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_dogamiPassWhyGetThisCard:
-          return ResponseString
-                  .RESPONSE_STRING_dogamiPassWhyGetThisCard
+          return ResponseString.RESPONSE_STRING_dogamiPassWhyGetThisCard
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_dogamiPassExpirationDate:
-          return ResponseString
-                  .RESPONSE_STRING_dogamiPassExpirationDate
+          return ResponseString.RESPONSE_STRING_dogamiPassExpirationDate
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_dogamiPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_dogamiPassHowToGetIt
-              .localise(context);
-        
+          return ResponseString.RESPONSE_STRING_dogamiPassHowToGetIt.localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_matterlightPassWhyGetThisCard:
-          return ResponseString
-                  .RESPONSE_STRING_matterlightPassWhyGetThisCard
+          return ResponseString.RESPONSE_STRING_matterlightPassWhyGetThisCard
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_matterlightPassExpirationDate:
-          return ResponseString
-                  .RESPONSE_STRING_matterlightPassExpirationDate
+          return ResponseString.RESPONSE_STRING_matterlightPassExpirationDate
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_matterlightPassHowToGetIt:
           return ResponseString.RESPONSE_STRING_matterlightPassHowToGetIt
               .localise(context);
-        
+
         case ResponseString.RESPONSE_STRING_pigsPassWhyGetThisCard:
-          return ResponseString
-                  .RESPONSE_STRING_pigsPassWhyGetThisCard
-              .localise(context);
+          return ResponseString.RESPONSE_STRING_pigsPassWhyGetThisCard.localise(
+            context,
+          );
 
         case ResponseString.RESPONSE_STRING_pigsPassExpirationDate:
-          return ResponseString
-                  .RESPONSE_STRING_pigsPassExpirationDate
-              .localise(context);
+          return ResponseString.RESPONSE_STRING_pigsPassExpirationDate.localise(
+            context,
+          );
 
         case ResponseString.RESPONSE_STRING_pigsPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_pigsPassHowToGetIt
-              .localise(context);
-        
+          return ResponseString.RESPONSE_STRING_pigsPassHowToGetIt.localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_trooperzPassWhyGetThisCard:
-          return ResponseString
-                  .RESPONSE_STRING_trooperzPassWhyGetThisCard
+          return ResponseString.RESPONSE_STRING_trooperzPassWhyGetThisCard
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_trooperzPassExpirationDate:
-          return ResponseString
-                  .RESPONSE_STRING_trooperzPassExpirationDate
+          return ResponseString.RESPONSE_STRING_trooperzPassExpirationDate
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt
-              .localise(context);
-        
+          return ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt.localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_tzlandPassWhyGetThisCard:
-          return ResponseString
-                  .RESPONSE_STRING_tzlandPassWhyGetThisCard
+          return ResponseString.RESPONSE_STRING_tzlandPassWhyGetThisCard
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_tzlandPassExpirationDate:
-          return ResponseString
-                  .RESPONSE_STRING_tzlandPassExpirationDate
+          return ResponseString.RESPONSE_STRING_tzlandPassExpirationDate
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_tzlandPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_tzlandPassHowToGetIt
-              .localise(context);
-        
+          return ResponseString.RESPONSE_STRING_tzlandPassHowToGetIt.localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_tezoniaPassWhyGetThisCard:
-          return ResponseString
-                  .RESPONSE_STRING_tezoniaPassWhyGetThisCard
+          return ResponseString.RESPONSE_STRING_tezoniaPassWhyGetThisCard
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_tezoniaPassExpirationDate:
-          return ResponseString
-                  .RESPONSE_STRING_tezoniaPassExpirationDate
+          return ResponseString.RESPONSE_STRING_tezoniaPassExpirationDate
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_tezoniaPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_tezoniaPassHowToGetIt
-              .localise(context);
+          return ResponseString.RESPONSE_STRING_tezoniaPassHowToGetIt.localise(
+            context,
+          );
 
         case ResponseString.RESPONSE_STRING_over18WhyGetThisCard:
           return ResponseString.RESPONSE_STRING_over18WhyGetThisCard.localise(
@@ -569,6 +589,17 @@ class ResponseMessage with MessageHandler {
 
         case ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage:
           return ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_userNotFitErrorMessage:
+          return ResponseString.RESPONSE_STRING_userNotFitErrorMessage.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_transactionIsLikelyToFail:
+          return ResponseString.RESPONSE_STRING_transactionIsLikelyToFail
               .localise(
             context,
           );

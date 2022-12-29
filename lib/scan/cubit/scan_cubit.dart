@@ -182,13 +182,38 @@ class ScanCubit extends Cubit<ScanState> {
         );
       }
 
-      emit(state.success());
+      emit(state.copyWith(status: ScanStatus.success));
     } catch (e) {
       log.e('something went wrong - $e');
-      if (e is MessageHandler) {
-        emit(
-          state.error(messageHandler: e),
-        );
+      if (e is ResponseMessage) {
+        emit(state.error(messageHandler: e));
+      } else if (e is NetworkException) {
+        log.e('NetworkException - $e');
+        if (e.message == NetworkError.NETWORK_ERROR_PRECONDITION_FAILED) {
+          emit(
+            state.copyWith(
+              status: ScanStatus.error,
+              message: StateMessage.error(
+                messageHandler: e.data != null
+                    ? null
+                    : ResponseMessage(
+                        ResponseString.RESPONSE_STRING_userNotFitErrorMessage,
+                      ),
+                stringMessage: e.data?.toString(),
+                showDialog: true,
+              ),
+            ),
+          );
+        } else {
+          emit(
+            state.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          );
+        }
       } else {
         emit(
           state.error(
@@ -254,10 +279,13 @@ class ScanCubit extends Cubit<ScanState> {
       );
 
       emit(
-        state.success(
-          messageHandler: ResponseMessage(
-            ResponseString
-                .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+        state.copyWith(
+          status: ScanStatus.success,
+          message: StateMessage.success(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+            ),
           ),
         ),
       );
@@ -317,10 +345,13 @@ class ScanCubit extends Cubit<ScanState> {
           done(presentation);
 
           emit(
-            state.success(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+            state.copyWith(
+              status: ScanStatus.success,
+              message: StateMessage.success(
+                messageHandler: ResponseMessage(
+                  ResponseString
+                      .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+                ),
               ),
             ),
           );
@@ -393,10 +424,13 @@ class ScanCubit extends Cubit<ScanState> {
           issuer: issuer,
         );
         emit(
-          state.success(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+          state.copyWith(
+            status: ScanStatus.success,
+            message: StateMessage.success(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+              ),
             ),
           ),
         );

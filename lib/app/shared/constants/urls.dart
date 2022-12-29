@@ -8,13 +8,18 @@ class Urls {
   static const String issuerBaseUrl = 'https://issuer.talao.co';
   static const String phonePassUrl = 'https://issuer.talao.co/phonepass';
   static const String emailPassUrl = 'https://issuer.talao.co/emailpass';
-  static const String ageRangeUrl = 'https://issuer.talao.co/agerange';
-  static const String nationalityUrl = 'https://issuer.talao.co/nationality';
-  static const String genderUrl = 'https://issuer.talao.co/gender';
-  static const String over18Url = 'https://issuer.talao.co/over18';
-  static const String over13Url = 'https://issuer.talao.co/over13';
+  static const String ageRangeUrl =
+      'https://issuer.talao.co/passbase/endpoint/agerange/';
+  static const String nationalityUrl =
+      'https://issuer.talao.co/passbase/endpoint/nationality/';
+  static const String genderUrl =
+      'https://issuer.talao.co/passbase/endpoint/gender/';
+  static const String over18Url =
+      'https://issuer.talao.co/passbase/endpoint/over18/';
+  static const String over13Url =
+      'https://issuer.talao.co/passbase/endpoint/over13/';
   static const String passportFootprintUrl =
-      'https://issuer.talao.co/pass_number';
+      'https://issuer.talao.co/passbase/endpoint/passportnumber/';
 
   static const String tezotopiaVoucherUrl =
       'https://issuer.tezotopia.altme.io/issuer/voucher_mobile';
@@ -24,7 +29,13 @@ class Urls {
   static const String tezotopiaMembershipCardUrl =
       'https://issuer.talao.co/tezotopia/membershipcard/';
 
-  static const String identityCardUrl = 'http://issuer.talao.co/kyc';
+  static const String chainbornMembershipCardUrl =
+      'https://issuer.talao.co/chainborn/membershipcard/';
+
+  static const String twitterCardUrl = 'https://issuer.talao.co/twitter/';
+
+  static const String identityCardUrl =
+      'http://issuer.talao.co/passbase/endpoint/kyc/';
   static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
 
   /// main tezos rpc
@@ -35,6 +46,8 @@ class Urls {
   static const tezToolBase = 'https://api.teztools.io';
 
   static const xtzPrice = 'https://api.teztools.io/v1/xtz-price';
+  static const ethPrice =
+      'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD';
 
   //
   static const tzktMainnetUrl = 'https://api.tzkt.io';

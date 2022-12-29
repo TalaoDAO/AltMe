@@ -134,13 +134,14 @@ class _SubmitEnterpriseUserViewState extends State<SubmitEnterpriseUserView> {
     );
   }
 
-  Future<void> _pickRSAJsonFile(AppLocalizations localization) async {
+  Future<void> _pickRSAJsonFile(AppLocalizations l10n) async {
     final storagePermission = await Permission.storage.request();
     if (storagePermission.isDenied) {
-      AlertMessage.showStringMessage(
+      AlertMessage.showStateMessage(
         context: context,
-        message: localization.storagePermissionDeniedMessage,
-        messageType: MessageType.error,
+        stateMessage: StateMessage.success(
+          stringMessage: l10n.storagePermissionDeniedMessage,
+        ),
       );
       return;
     }
@@ -152,7 +153,7 @@ class _SubmitEnterpriseUserViewState extends State<SubmitEnterpriseUserView> {
 
     if (storagePermission.isGranted || storagePermission.isLimited) {
       final pickedFiles = await FilePicker.platform.pickFiles(
-        dialogTitle: localization.pleaseSelectRSAKeyFileWithJsonExtension,
+        dialogTitle: l10n.pleaseSelectRSAKeyFileWithJsonExtension,
         type: FileType.custom,
         allowMultiple: false,
         allowedExtensions: ['json', 'txt'],

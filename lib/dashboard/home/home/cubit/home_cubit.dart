@@ -175,23 +175,40 @@ class HomeCubit extends Cubit<HomeState> {
               message = e.data['error_description']['error_message'] as String;
             }
           }
-
           emit(
-            state.error(
-              messageHandler: message != null
-                  ? RawMessage(message)
-                  : ResponseMessage(
-                      ResponseString
-                          .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                    ),
+            state.copyWith(
+              status: AppStatus.error,
+              message: StateMessage(
+                messageHandler: ResponseMessage(
+                  ResponseString
+                      .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                ),
+              ),
+            ),
+          );
+          emit(
+            state.copyWith(
+              status: AppStatus.error,
+              message: StateMessage(
+                stringMessage: message,
+                messageHandler: message == null
+                    ? null
+                    : ResponseMessage(
+                        ResponseString
+                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+                      ),
+              ),
             ),
           );
         } else {
           emit(
-            state.error(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            state.copyWith(
+              status: AppStatus.error,
+              message: StateMessage(
+                messageHandler: ResponseMessage(
+                  ResponseString
+                      .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                ),
               ),
             ),
           );
@@ -212,6 +229,7 @@ class HomeCubit extends Cubit<HomeState> {
           if (credentialManifest.outputDescriptors!.isNotEmpty) {
             newCredential['credential_manifest'] = CredentialManifest(
               credentialManifest.id,
+              credentialManifest.issuedBy,
               credentialManifest.outputDescriptors,
               credentialManifest.presentationDefinition,
             ).toJson();
@@ -259,23 +277,29 @@ class HomeCubit extends Cubit<HomeState> {
               message = e.data['error_description']['error_message'] as String;
             }
           }
-
           emit(
-            state.error(
-              messageHandler: message != null
-                  ? RawMessage(message)
-                  : ResponseMessage(
-                      ResponseString
-                          .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                    ),
+            state.copyWith(
+              status: AppStatus.error,
+              message: StateMessage(
+                stringMessage: message,
+                messageHandler: message == null
+                    ? null
+                    : ResponseMessage(
+                        ResponseString
+                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+                      ),
+              ),
             ),
           );
         } else {
           emit(
-            state.error(
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            state.copyWith(
+              status: AppStatus.error,
+              message: StateMessage(
+                messageHandler: ResponseMessage(
+                  ResponseString
+                      .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                ),
               ),
             ),
           );
@@ -321,6 +345,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> checkForPassBaseStatusThenLaunchUrl({
     required String link,
+    required Function() onPassBaseApproved,
   }) async {
     log.i('Checking PassbaseStatus');
     emit(state.loading());
@@ -328,7 +353,7 @@ class HomeCubit extends Cubit<HomeState> {
     final passBaseStatus = await checkPassbaseStatus();
 
     if (passBaseStatus == PassBaseStatus.approved) {
-      await launchUrl(link: link);
+      onPassBaseApproved.call();
     }
 
     if (passBaseStatus == PassBaseStatus.pending) {

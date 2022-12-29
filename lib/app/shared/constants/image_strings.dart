@@ -20,6 +20,9 @@ class ImageStrings {
   static const String bloometaPass = '$imagePath/bloometa-pass.png';
   static const String tezotopiaMemberShip =
       '$imagePath/tezotopia-membership.png';
+  static const String chainbornMemberShip =
+      '$imagePath/chainborn-membership.png';
+  static const String twitterCard = '$imagePath/twitter-card.png';
   static const String genderProof = '$imagePath/gender-proof.png';
   static const String ageRangeProof = '$imagePath/age_range.png';
   static const String nationalityProof = '$imagePath/nationality-proof.png';
@@ -66,9 +69,16 @@ class ImageStrings {
   static const String talaoCommunityCard =
       '$imagePath/talao_community_card.png';
   static const String identityCard = '$imagePath/identity_card.png';
-  static const String paymentAssetCard = '$imagePath/payment-asset-card.png';
+
+  static const String paymentTezosCard = '$imagePath/payment-tezos-card.png';
   static const String paymentEthereumCard =
       '$imagePath/payment-ethereum-card.png';
+  static const String paymentFantomCard = '$imagePath/payment-fantom-card.png';
+  static const String paymentPolygonCard =
+      '$imagePath/payment-polygon-card.png';
+  static const String paymentBinanceCard =
+      '$imagePath/payment-binance-card.png';
+
   static const String diplomaCard = '$imagePath/diploma_card.png';
 
   static const String aragoOver18 = '$imagePath/arago_over18.png';
@@ -87,6 +97,9 @@ class ImageStrings {
       '$imagePath/dummy_nationality_card.png';
   static const String tezotopiaMemberShipDummy =
       '$imagePath/tezotopia-membership-dummy.png';
+  static const String chainbornMemberShipDummy =
+      '$imagePath/chainborn-membership-dummy.png';
+  static const String twitterCardDummy = '$imagePath/twitter-card-dummy.png';
   static const String dummyGenderCard = '$imagePath/dummy_gender_card.png';
   static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
   static const String dummyOver13Card = '$imagePath/dummy_over13_card.png';
@@ -120,8 +133,10 @@ class ImageStrings {
   static const String userCircleAdd = '$imagePath/user-circle-add.png';
   static const String userCircleAdded = '$imagePath/user-circle-added.png';
   static const String verifyYourAge = '$imagePath/verify-your-age.png';
-  static const String createAccountMethod = '$imagePath/create-account-method.png';
-  static const String importAccountMethod = '$imagePath/import-account-method.png';
-  
+  static const String createAccountMethod =
+      '$imagePath/create-account-method.png';
+  static const String importAccountMethod =
+      '$imagePath/import-account-method.png';
+
   static const String receiveSqure = '$imagePath/receive-square.png';
 }

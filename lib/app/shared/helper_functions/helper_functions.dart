@@ -5,6 +5,9 @@ import 'package:altme/dashboard/home/home.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
+import 'package:json_path/json_path.dart';
+import 'package:key_generator/key_generator.dart';
+import 'package:web3dart/web3dart.dart';
 
 String generateDefaultAccountName(
   int accountIndex,
@@ -88,4 +91,68 @@ Future<bool> isConnected() async {
   }
   log.e('No Internet Connection');
   return false;
+}
+
+double formatEthAmount({
+  required BigInt amount,
+  EtherUnit fromUnit = EtherUnit.wei,
+  EtherUnit toUnit = EtherUnit.ether,
+}) {
+  if (amount == BigInt.zero) return 0;
+
+  final String ethAmount = EtherAmount.fromUnitAndValue(fromUnit, amount)
+      .getValueInUnit(toUnit)
+      .toStringAsFixed(6)
+      .characters
+      .take(7)
+      .toString();
+
+  return double.parse(ethAmount);
+}
+
+String getCredentialName(String constraints) {
+  final dynamic constraintsJson = jsonDecode(constraints);
+  final fieldsPath = JsonPath(r'$..fields');
+  final dynamic credentialField = fieldsPath
+      .read(constraintsJson)
+      .first
+      .value
+      .where(
+        (dynamic e) => e['path'].toString() == r'[$.credentialSubject.type]',
+      )
+      .toList()
+      .first;
+  return credentialField['filter']['pattern'] as String;
+}
+
+String getIssuersName(String constraints) {
+  final dynamic constraintsJson = jsonDecode(constraints);
+  final fieldsPath = JsonPath(r'$..fields');
+  final dynamic issuerField = fieldsPath
+      .read(constraintsJson)
+      .first
+      .value
+      .where(
+        (dynamic e) => e['path'].toString() == r'[$.issuer]',
+      )
+      .toList()
+      .first;
+  return issuerField['filter']['pattern'] as String;
+}
+
+BlockchainType getBlockchainType(AccountType accountType) {
+  switch (accountType) {
+    case AccountType.ssi:
+      throw Exception();
+    case AccountType.tezos:
+      return BlockchainType.tezos;
+    case AccountType.ethereum:
+      return BlockchainType.ethereum;
+    case AccountType.fantom:
+      return BlockchainType.fantom;
+    case AccountType.polygon:
+      return BlockchainType.polygon;
+    case AccountType.binance:
+      return BlockchainType.binance;
+  }
 }

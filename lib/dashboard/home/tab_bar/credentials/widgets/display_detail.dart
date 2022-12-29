@@ -28,6 +28,10 @@ class DisplayDetail extends StatelessWidget {
         return TezotopiaMemberShipDisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.chainbornMembership:
+        return ChainbornMemberShipDisplayDetail(
+          credentialModel: credentialModel,
+        );
       case CredentialSubjectType.tezoniaPass:
         return TezoniaPassDisplayDetail(
           credentialModel: credentialModel,
@@ -188,6 +192,22 @@ class DisplayDetail extends StatelessWidget {
         );
       case CredentialSubjectType.pcdsAgentCertificate:
         return PcdsAgentCertificateDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.fantomAssociatedWallet:
+        return FantomAssociatedAddressDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.polygonAssociatedWallet:
+        return PolygonAssociatedAddressDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.binanceAssociatedWallet:
+        return BinanceAssociatedAddressDisplayDetail(
+          credentialModel: credentialModel,
+        );
+      case CredentialSubjectType.twitterCard:
+        return TwitterCardDisplayDetail(
           credentialModel: credentialModel,
         );
     }

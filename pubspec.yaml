@@ -1,6 +1,6 @@
 name: altme
 description: AltMe Flutter App 
-version: 1.6.10+125
+version: 1.7.6+128
 publish_to: none
 
 environment:
@@ -11,8 +11,8 @@ dependencies:
   beacon_flutter:
     git:
       url: https://github.com/TalaoDAO/beacon.git
-      ref: b4673771e82d41399ee5b87e0b5f1dea0d778830  
-  # beacon_flutter:f
+      ref: 5afc170ff4f05c590508fed1c70e7e533021865f  
+  # beacon_flutter:
   #   path: ../beacon
   bip39: ^1.0.6
   bloc: ^8.0.3
@@ -87,6 +87,11 @@ dependencies:
   uni_links: ^0.5.1
   url_launcher: ^6.0.17
   uuid: ^3.0.5
+  #wallet_connect: ^1.0.4
+  wallet_connect:
+    git:
+      url: https://github.com/bibash28/wallet-connect-dart.git
+      ref: fba9b209ee2b61b62ddd643f07f6a7f64426d7b2
   web3dart: ^2.3.3
   workmanager: ^0.5.0
 

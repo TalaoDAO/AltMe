@@ -41,8 +41,31 @@ class EthereumAssociatedAddressCredential {
   static const List<dynamic> _context = <dynamic>[
     'https://www.w3.org/2018/credentials/v1',
     {
-      'accountName': 'https://schema.org/identifier',
-      'associatedAddress': 'https://schema.org/account'
+      'EthereumAssociatedAddress': {
+        '@id': 'https://github.com/TalaoDAO/context#ethereumassociatedaddress',
+        '@context': {
+          '@version': 1.1,
+          '@protected': true,
+          'id': '@id',
+          'type': '@type',
+          'schema': 'https://schema.org/',
+          'accountName': 'schema:identifier',
+          'associatedAddress':
+              'https://github.com/TalaoDAO/context#associatedaddress',
+          'cryptoWalletSignature': 'schema:identifier',
+          'cryptoWalletPayload': 'schema:identifier',
+          'issuedBy': {
+            '@id': 'schema:issuedBy',
+            '@context': {
+              '@version': 1.1,
+              '@protected': true,
+              'schema': 'https://schema.org/',
+              'name': 'schema:legalName',
+              'logo': {'@id': 'schema:logo', '@type': '@id'}
+            }
+          }
+        }
+      }
     }
   ];
 }

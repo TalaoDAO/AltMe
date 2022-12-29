@@ -37,6 +37,22 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
   }
 
   void toggle(int index) {
-    emit(state.copyWith(selected: index));
+    if (state.selected.contains(index)) {
+      emit(
+        state.copyWith(
+          selected: List<int>.from(state.selected)
+            ..removeWhere((element) => element == index),
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          selected: [
+            ...state.selected,
+            ...[index]
+          ],
+        ),
+      );
+    }
   }
 }

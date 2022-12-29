@@ -6,13 +6,14 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:altme/app/app.dart';
-import 'package:altme/beacon/beacon.dart';
+import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
+import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
@@ -42,8 +43,15 @@ class App extends StatelessWidget {
         BlocProvider<FlavorCubit>(
           create: (context) => FlavorCubit(flavorMode),
         ),
+        BlocProvider<RouteCubit>(create: (context) => RouteCubit()),
         BlocProvider<BeaconCubit>(
           create: (context) => BeaconCubit(beacon: Beacon()),
+        ),
+        BlocProvider<WalletConnectCubit>(
+          create: (context) => WalletConnectCubit(
+            connectedDappRepository:
+                ConnectedDappRepository(secure_storage.getSecureStorage),
+          ),
         ),
         BlocProvider<DeepLinkCubit>(create: (context) => DeepLinkCubit()),
         BlocProvider<QueryByExampleCubit>(
@@ -85,7 +93,10 @@ class App extends StatelessWidget {
         BlocProvider<WalletCubit>(
           lazy: false,
           create: (context) => WalletCubit(
-            repository: CredentialsRepository(secure_storage.getSecureStorage),
+            credentialsRepository:
+                CredentialsRepository(secure_storage.getSecureStorage),
+            connectedDappRepository:
+                ConnectedDappRepository(secure_storage.getSecureStorage),
             secureStorageProvider: secure_storage.getSecureStorage,
             profileCubit: context.read<ProfileCubit>(),
             homeCubit: context.read<HomeCubit>(),
@@ -115,6 +126,7 @@ class App extends StatelessWidget {
             profileCubit: context.read<ProfileCubit>(),
             walletCubit: context.read<WalletCubit>(),
             beacon: Beacon(),
+            walletConnectCubit: context.read<WalletConnectCubit>(),
           ),
         ),
         BlocProvider(
@@ -174,7 +186,7 @@ class MaterialAppDefinition extends StatelessWidget {
       locale: DevicePreview.locale(context),
       title: 'AltMe',
       darkTheme: AppTheme.darkThemeData,
-      navigatorObservers: [MyRouteObserver()],
+      navigatorObservers: [MyRouteObserver(context)],
       themeMode: ThemeMode.dark,
       localizationsDelegates: const [
         AppLocalizations.delegate,

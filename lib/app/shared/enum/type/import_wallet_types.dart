@@ -1,1 +1,1 @@
-enum ImportWalletTypes { temple, metamask, kukai, other }
+enum ImportWalletTypes { Tezos, Ethereum, None }

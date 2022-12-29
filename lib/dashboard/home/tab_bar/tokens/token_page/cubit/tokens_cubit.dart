@@ -49,8 +49,8 @@ class TokensCubit extends Cubit<TokensState> {
 
   Future<void> getTokens() async {
     final activeIndex = walletCubit.state.currentCryptoIndex;
-    if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType ==
-        BlockchainType.ethereum) {
+    if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType !=
+        BlockchainType.tezos) {
       emit(state.copyWith(status: AppStatus.idle));
       return;
     }

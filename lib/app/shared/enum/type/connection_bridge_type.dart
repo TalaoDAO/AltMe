@@ -1,0 +1,1 @@
+enum ConnectionBridgeType { beacon, walletconnect }

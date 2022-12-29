@@ -53,12 +53,12 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
         newCryptoAccountName != cryptoAccountData.name &&
         newCryptoAccountName.isNotEmpty) {
       if (accountNameList.contains(newCryptoAccountName)) {
-        AlertMessage.showStringMessage(
+        return AlertMessage.showStateMessage(
           context: context,
-          message: l10n.sameAccountNameError,
-          messageType: MessageType.error,
+          stateMessage: StateMessage.error(
+            stringMessage: l10n.sameAccountNameError,
+          ),
         );
-        return;
       } else {
         await context.read<CryptoBottomSheetCubit>().editCryptoAccount(
               newAccountName: newCryptoAccountName,

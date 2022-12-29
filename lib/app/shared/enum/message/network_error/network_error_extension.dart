@@ -40,6 +40,8 @@ extension NetworkErrorX on NetworkError {
         return globalMessage.NETWORK_ERROR_UNAUTHENTICATED;
       case NetworkError.NETWORK_ERROR_NOT_FOUND:
         return globalMessage.NETWORK_ERROR_NOT_FOUND;
+      case NetworkError.NETWORK_ERROR_PRECONDITION_FAILED:
+        return globalMessage.NETWORK_ERROR_PRECONDITION_FAILED;
     }
   }
 }

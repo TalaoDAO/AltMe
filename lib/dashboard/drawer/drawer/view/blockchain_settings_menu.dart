@@ -37,10 +37,11 @@ class BlockchainSettingsView extends StatelessWidget {
         isFromOnboarding: false,
         isValidCallback: () {
           Navigator.of(context).pop();
-          AlertMessage.showStringMessage(
+          AlertMessage.showStateMessage(
             context: context,
-            message: l10n.yourPinCodeChangedSuccessfully,
-            messageType: MessageType.success,
+            stateMessage: StateMessage.success(
+              stringMessage: l10n.yourPinCodeChangedSuccessfully,
+            ),
           );
         },
       ),
@@ -111,7 +112,7 @@ class BlockchainSettingsView extends StatelessWidget {
                   title: l10n.manageConnectedApps,
                   onTap: () {
                     Navigator.of(context).push<void>(
-                      BeaconConnectedDappsPage.route(
+                      ConnectedDappsPage.route(
                         walletAddress: context
                             .read<WalletCubit>()
                             .state
