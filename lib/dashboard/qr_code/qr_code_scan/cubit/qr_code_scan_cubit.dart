@@ -78,207 +78,76 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       }
-      if (scannedResponse.startsWith('openid://')) {
-        // EBSI
-        final String conformance = '5d7e7d6f-2969-427e-b8ef-7a8616d40e71';
+      if (scannedResponse.startsWith('openid://initiate_issuance?')) {
+        // convert String from QR code into Uri
+        final uri = Uri.parse(scannedResponse);
+        final String conformance = uri.queryParameters['conformance']!;
+        final credential_type = uri.queryParameters['credential_type']!;
+        final issuer = uri.queryParameters['issuer']!;
+        final redirectUri = "app.altme.io/app/download/callback";
+        // final redirectUri = 'app.altme.io';
+        final headers = {
+          'Conformance': conformance,
+          'Content-Type': 'application/json'
+        };
+        const authorizeUrl =
+            "https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/authorize";
 
-// wallet key
-        final KEY_DICT = {
-          'crv': 'secp256k1',
-          'd': 'lbuGEjEsYQ205boyekj8qdCwB2Uv7L2FwHUNleJj_Z0',
-          'kty': 'EC',
-          'x': 'AARiMrLNsRka9wMEoSgMnM7BwPug4x9IqLDwHVU-1A4',
-          'y': 'vKMstC3TEN3rVW32COQX002btnU70v6P73PMGcUoZQs',
-          'alg': 'ES256'
+        final my_request = <String, dynamic>{
+          "scope": "openid",
+          "client_id": redirectUri,
+          "response_type": "code",
+          "authorization_details": jsonEncode([
+            {
+              "type": "openid_credential",
+              "credential_type": credential_type,
+              "format": "jwt_vc"
+            }
+          ]),
+          "redirect_uri": redirectUri,
+          "state": "1234"
         };
 
-// pour calculer did:ebsi
-        String thumbprint_ebsi(String jwk) {
-          ///    https://www.rfc-editor.org/rfc/rfc7638.html
-
-          final Map<String, dynamic> jwk2 =
-              jsonDecode(jwk) as Map<String, dynamic>;
-          final int x = jwk2['x'] as int;
-          final int y = jwk2['y'] as int;
-          final Map<String, dynamic> JWK = {
-            'crv': 'P-256',
-            'kty': 'EC',
-            'x': x,
-            'y': y,
-          } as Map<String, dynamic>;
-          final dynamic claims = JsonWebTokenClaims.fromJson(JWK);
-// create a builder, decoding the JWT in a JWS, so using a
-          // JsonWebSignatureBuilder
-          final builder = JsonWebSignatureBuilder();
-
-          // set the content
-          builder.jsonContent = claims.toJson();
-
-          // add a key to sign, can only add one for JWT
-          // builder.addRecipient(
-          //   JsonWebKey.fromJson(jsonDecode(ssiKey!) as Map<String, dynamic>),
-          //   algorithm: 'RS256',
-          // );
-
-          // build the jws
-          final jws = builder.build();
-
-          // output the compact serialization
-
-          return jws.toCompactSerialization();
-        }
-
-        /// pour calculer did:ebsi (Natural Person)
-        String didEbsi(String jwk) {
-          // https://ec.europa.eu/digital-building-blocks/wikis/display/EBSIDOC/EBSI+DID+Method
-
-          final Map<String, dynamic> jwk2 =
-              jsonDecode(jwk) as Map<String, dynamic>;
-          final String address = base58BitcoinEncode(
-              Uint8List.fromList(utf8.encode(thumbprint_ebsi(jwk))));
-          return 'did:ebsi:z$address';
-// from py code:
-          // return  'did:ebsi:z' + Base58BitcoinEncode(b'\x02' + bytes.fromhex(thumbprint_ebsi(jwk))).decode();
-        }
-
-        /// calcul did:ebsi
-// final String did = didEbsi(KEY_DICT);
-        final String did =
-            'did:ebsi:zeGEwSVjZDxc5aDmBsRSvYtwvdSSmQw2k9A39vm4PwyAt';
-
-// qrcode du test copliance
-
-        final DioClient client = DioClient(
-          Urls.tezToolBase,
-          Dio(),
-        );
-        final uri = Uri.parse(scannedResponse);
-        final String issuer = uri.queryParameters['issuer']!;
-        final String credentialTypeRequest =
-            uri.queryParameters['credential_type']!;
-        final dynamic response = await client.get(credentialTypeRequest);
-        final Map<String, dynamic> credentialType = response is String
-            ? jsonDecode(response) as Map<String, dynamic>
-            : response as Map<String, dynamic>;
-        // final String issuer = uri.queryParameters['issuer']!;
-        const String ngrok = 'https://app.altme.io/app/donwload';
-        Future<Map<String, dynamic>> authorization_request(String ngrok,
-            String conformance, String credentialTypeRequest) async {
-          final headers = {
-            'Conformance': conformance,
-            'Content-Type': 'application/json'
-          };
-          const url =v2
-              'https://api.conformance.intebsi.xyz/conformance/v2/issuer-mock/authorize';
-          final Map<String, dynamic> request = {
-            'scope': 'openid',
-            'client_id': '$ngrok/callback',
-            'response_type': 'code',
-            'authorization_details': [
-              {
-                'type': 'openid_credential',
-                'credential_type': credentialTypeRequest,
-                'format': 'jwt_vc'
-              }
-            ],
-            'redirect_uri': ngrok + '/callback',
-            'state': '1234'
-          } as Map<String, dynamic>;es.getProperty('flutter.versionCode')es.getProperty('flutter.versionCode')
-+def flutterVersionCode = localProperties
-+def flutterVersionCode = localProperties
-
-          FlutterAppAuth appAuth = FlutterAppAuth();
-          final AuthorizationTokenResponse? result =
-              await appAuth.authorizeAndExchangeCode(
-            AuthorizationTokenRequest(
-              '$ngrok/callback',
-              '$ngrok/callback',
-              issuer: issuer,
-              scopes: ['openid', 'profile', 'email', 'offline_access', 'api'],
-            ),
+        try {
+          final Uri authorizationUri = Uri(
+            scheme: 'https',
+            path: '/conformance/v2/issuer-mock/authorize',
+            queryParameters: my_request,
+            host: 'api-conformance.ebsi.eu',
           );
+          LaunchUrl.launch(authorizeUrl);
+          final dynamic authorizationResponse = await client.get(authorizeUrl,
+              headers: headers, queryParameters: my_request);
+          print('got authorization');
+          // Should get code from authorization response or this callback system
+          /// we should receive something through deepLink ?
 
-          final dynamic resp =
-              await client.get(url, headers: headers, queryParameters: request);
-          return resp as Map<String, dynamic>;
+        } catch (e) {
+          print('Lokks like wa can get code from here');
         }
+        final code = '210901fc2fc063e9a30a';
 
-        Future<String> tokenRequest(String code, String ngrok) async {
-          final headers = {
-            'Conformance': conformance,
-            'Content-Type': 'application/x-www-form-urlencoded'
-          };
-          final url =
-              'https://api.conformance.intebsi.xyz/conformance/v2/issuer-mock/token';
-          final data = {
-            'code': code,
-            'grant_type': 'authorization_code',
-            'redirect_uri': '$ngrok/callback'
-          };
-          final dynamic resp =
-              await client.post(url, headers: headers, data: data);
-          return resp as String;
-        }
-// def build_proof(nonce) :
-//     verifier_key = jwk.JWK(**KEY_DICT)
-//     header = {
-//         'typ' :'JWT',
-//         'alg': 'ES256K',
-//         'jwk' : {'crv':'secp256k1',
-//                 'kty':'EC',
-//                 'x':'AARiMrLNsRka9wMEoSgMnM7BwPug4x9IqLDwHVU-1A4',
-//                 'y':'vKMstC3TEN3rVW32COQX002btnU70v6P73PMGcUoZQs'
-//                 }
-//     }
-//     payload = {
-//         'iss' : did,
-//         'nonce' : nonce,
-//         'iat': datetime.timestamp(datetime.now()),
-//         'aud' : issuer
-//     }
-//     token = jwt.JWT(header=header,claims=payload, algs=['ES256K'])
-//     token.make_signed_token(verifier_key)
-//     return token.serialize()
-// def credential_request(access_token, proof ) :
-//     headers = {
-//         'Conformance' : conformance,
-//         'Content-Type': 'application/json',
-//         'Authorization': 'Bearer ' + access_token
-//         }
-//     url = 'https://api.conformance.intebsi.xyz/conformance/v2/issuer-mock/credential'
-//     data = { 'type' : credential_type,
-//             'format' : 'jwt_vc',
-//             'proof' : {
-//                 'proof_type': 'jwt',
-//                 'jwt': proof
-//             }
-//     }
-//     resp = requests.post(url, headers=headers, data = json.dumps(data))
-//     if resp.status_code == 200 :
-//         return resp.json()
-//     else :
-//         return None
-// # authorization request
+        /// getting token
+        final tokenHeaders = {
+          'Conformance': conformance,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        };
+        final String tokenUrl =
+            "https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/token";
 
-        final auth = await authorization_request(
-            ngrok, conformance, credentialTypeRequest);
-        print(auth);
-// @app.route('/callback' , methods=['GET', 'POST'])
-// def callback() :
-//     print('callback received')
-//     // # code received
-//     code = request.args['code']
-//     // # access token request
-//     result = tokenRequest(code, ngrok )
-//     access_token = result['access_token']
-//     c_nonce = result['c_nonce']
-//     // # build proof of kety ownership
-//     proof = build_proof(c_nonce)
-//     // # credetial request
-//     result = credential_request(access_token, proof )
-//     print('credential = ', result)
-//     return jsonify('ok')
+        final tokenData = {
+          "code": code,
+          "grant_type": "authorization_code",
+          "redirect_uri": redirectUri
+        };
+        final dynamic tokenResponse =
+            await client.post(tokenUrl, headers: headers, data: tokenData);
 
+        /// preparation before getting credential
+        final String accessToken = tokenResponse["access_token"] as String;
+        final String cNonce = tokenResponse["c_nonce"] as String;
+
+        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else {
         await host(url: scannedResponse);
       }
