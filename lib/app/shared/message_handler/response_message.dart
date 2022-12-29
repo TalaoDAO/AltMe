@@ -347,6 +347,18 @@ class ResponseMessage with MessageHandler {
           return ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt
               .localise(context);
 
+        case ResponseString.RESPONSE_STRING_twitterWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_twitterWhyGetThisCard.localise(
+              context);
+
+        case ResponseString.RESPONSE_STRING_twitterExpirationDate:
+          return ResponseString.RESPONSE_STRING_twitterExpirationDate.localise(
+              context);
+
+        case ResponseString.RESPONSE_STRING_twitterHowToGetIt:
+          return ResponseString.RESPONSE_STRING_twitterHowToGetIt.localise(
+              context);
+
         case ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard
               .localise(context);

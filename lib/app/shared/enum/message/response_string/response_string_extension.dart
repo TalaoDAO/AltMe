@@ -256,6 +256,15 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt:
         return globalMessage.RESPONSE_STRING_chainbornMembershipHowToGetIt;
 
+      case ResponseString.RESPONSE_STRING_twitterWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_twitterWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_twitterExpirationDate:
+        return globalMessage.RESPONSE_STRING_twitterExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_twitterHowToGetIt:
+        return globalMessage.RESPONSE_STRING_twitterHowToGetIt;
+
       case ResponseString.RESPONSE_STRING_tezoniaPassWhyGetThisCard:
         return globalMessage.RESPONSE_STRING_tezoniaPassWhyGetThisCard;
 

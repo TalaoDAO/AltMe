@@ -254,6 +254,12 @@ class GlobalMessage {
   String get RESPONSE_STRING_chainbornMembershipHowToGetIt =>
       l10n.chainbornMembershipHowToGetIt;
 
+  String get RESPONSE_STRING_twitterWhyGetThisCard =>
+      l10n.twitterWhyGetThisCard;
+  String get RESPONSE_STRING_twitterExpirationDate =>
+      l10n.twitterExpirationDate;
+  String get RESPONSE_STRING_twitterHowToGetIt => l10n.twitterHowToGetIt;
+
   String get RESPONSE_STRING_tezoniaPassWhyGetThisCard =>
       l10n.tezoniaPassWhyGetThisCard;
   String get RESPONSE_STRING_tezoniaPassExpirationDate =>

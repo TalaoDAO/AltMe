@@ -168,6 +168,15 @@ class HomeCredential extends Equatable {
             ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt;
         break;
 
+      case CredentialSubjectType.twitterCard:
+        image = ImageStrings.twitterCardDummy;
+        link = Urls.twitterCardUrl;
+        whyGetThisCard = ResponseString.RESPONSE_STRING_twitterWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_twitterExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_twitterHowToGetIt;
+        break;
+
       case CredentialSubjectType.bunnyPass:
         image = ImageStrings.bunnyPassDummy;
         link = Urls.bunnyPassCardUrl;

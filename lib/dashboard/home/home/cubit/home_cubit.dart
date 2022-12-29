@@ -345,6 +345,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> checkForPassBaseStatusThenLaunchUrl({
     required String link,
+    required Function() onPassBaseApproved,
   }) async {
     log.i('Checking PassbaseStatus');
     emit(state.loading());
@@ -352,7 +353,7 @@ class HomeCubit extends Cubit<HomeState> {
     final passBaseStatus = await checkPassbaseStatus();
 
     if (passBaseStatus == PassBaseStatus.approved) {
-      await launchUrl(link: link);
+      onPassBaseApproved.call();
     }
 
     if (passBaseStatus == PassBaseStatus.pending) {

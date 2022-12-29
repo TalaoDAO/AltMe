@@ -63,6 +63,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.over13:
         case CredentialSubjectType.passportFootprint:
         case CredentialSubjectType.residentCard:
+        case CredentialSubjectType.twitterCard:
           identityCategories.remove(credentialSubjectType);
           break;
 
@@ -242,6 +243,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.passportFootprint:
           case CredentialSubjectType.residentCard:
           case CredentialSubjectType.gender:
+          case CredentialSubjectType.twitterCard:
             _removeDummyIfCredentialExist(
               _credentials,
               identityCategories,
@@ -538,6 +540,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.over18:
           case CredentialSubjectType.over13:
           case CredentialSubjectType.passportFootprint:
+          case CredentialSubjectType.twitterCard:
             // // Note: Uncomment if we need to display dummies again.
             // _credentials.add(HomeCredential.isDummy(credentialSubjectType));
             identityCategories.add(credentialSubjectType);

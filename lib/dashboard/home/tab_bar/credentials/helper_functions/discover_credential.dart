@@ -15,9 +15,9 @@ Future<void> discoverCredential({
   credentialSubjectTypeList.remove(CredentialSubjectType.emailPass);
   credentialSubjectTypeList.remove(CredentialSubjectType.phonePass);
 
-  if (credentialSubjectTypeList.contains(
-    homeCredential.credentialSubjectType,
-  )) {
+  if (credentialSubjectTypeList
+      .contains(homeCredential.credentialSubjectType)) {
+    getLogger('discoverCredential').i(homeCredential.credentialSubjectType);
     //here check for over18 and over13 to take photo for AI KYC
     if (homeCredential.credentialSubjectType == CredentialSubjectType.over18 ||
         homeCredential.credentialSubjectType == CredentialSubjectType.over13 ||
@@ -33,31 +33,45 @@ Future<void> discoverCredential({
           ),
         );
       } else {
-        // get credential from launching the url
-        await context.read<HomeCubit>().launchUrl(link: homeCredential.link);
+        await launchUrlAfterDiscovery(
+          homeCredential: homeCredential,
+          context: context,
+        );
       }
     } else {
       await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
             link: homeCredential.link!,
+            onPassBaseApproved: () async {
+              await launchUrlAfterDiscovery(
+                homeCredential: homeCredential,
+                context: context,
+              );
+            },
           );
     }
   } else {
-    final credentialSubjectType = homeCredential.credentialSubjectType;
-    final uuid = const Uuid().v4();
+    await launchUrlAfterDiscovery(
+      homeCredential: homeCredential,
+      context: context,
+    );
+  }
+}
 
-    if (credentialSubjectType == CredentialSubjectType.tezotopiaMembership) {
-      final uri = Uri.parse(
-        '''${homeCredential.link!}$uuid?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du''',
-      );
-      await context.read<QRCodeScanCubit>().verify(uri: uri);
-    } else if (credentialSubjectType ==
-        CredentialSubjectType.chainbornMembership) {
-      final uri = Uri.parse(
-        '''${homeCredential.link!}$uuid?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du''',
-      );
-      await context.read<QRCodeScanCubit>().verify(uri: uri);
-    } else {
-      await LaunchUrl.launch(homeCredential.link!);
-    }
+Future<void> launchUrlAfterDiscovery({
+  required HomeCredential homeCredential,
+  required BuildContext context,
+}) async {
+  final credentialSubjectType = homeCredential.credentialSubjectType;
+
+  if (credentialSubjectType == CredentialSubjectType.tezotopiaMembership ||
+      credentialSubjectType == CredentialSubjectType.chainbornMembership ||
+      credentialSubjectType == CredentialSubjectType.twitterCard) {
+    final uuid = const Uuid().v4();
+    final uri = Uri.parse(
+      '''${homeCredential.link!}$uuid?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du''',
+    );
+    await context.read<QRCodeScanCubit>().verify(uri: uri);
+  } else {
+    await LaunchUrl.launch(homeCredential.link!);
   }
 }
