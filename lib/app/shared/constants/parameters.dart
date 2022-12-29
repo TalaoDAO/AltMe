@@ -9,13 +9,13 @@ class Parameters {
     'EmailPass',
     'Nationality'
   ];
-  static const bool hasCryptoCallToAction = true;
+  static const bool hasCryptoCallToAction = false;
 
   static const AdvanceSettingsState defaultAdvanceSettingsState =
       AdvanceSettingsState(
     isGamingEnabled: true,
     isIdentityEnabled: true,
-    isBlockchainAccountsEnabled: true,
+    isBlockchainAccountsEnabled: false,
     isSocialMediaEnabled: true,
     isCommunityEnabled: true,
     isOtherEnabled: true,

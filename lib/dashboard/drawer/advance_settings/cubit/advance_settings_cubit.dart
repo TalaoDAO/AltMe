@@ -36,7 +36,7 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
             'true';
     final isBlockchainAccountsEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isBlockchainAccountsEnabled) ??
-            'true') ==
+            'false') ==
         'true';
     final isSocialMediaEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isSocialMediaEnabled) ??
