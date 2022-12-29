@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
@@ -139,15 +141,35 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     required String selectedAccountSecretKey,
     required TokenModel token,
   }) async {
-    try {
-      if (token.symbol == 'XTZ') {
-        await _withdrawTezos(
+    if (manageNetworkCubit.state.network is TezosNetwork) {
+      await _sendContractInvocationOperationTezos(
+        tokenAmount: tokenAmount,
+        selectedAccountSecretKey: selectedAccountSecretKey,
+        token: token,
+      );
+    } else if (manageNetworkCubit.state.network is EthereumNetwork) {
+      if (token.symbol == 'ETH') {
+        await _withdrawEthereum(
           tokenAmount: tokenAmount,
           selectedAccountSecretKey: selectedAccountSecretKey,
         );
         return;
-      } else if (token.symbol == 'ETH') {
-        await _withdrawEthereum(
+      } else {
+        throw Exception('Not Implemented !');
+      }
+    } else {
+      throw Exception('Not Implemented !');
+    }
+  }
+
+  Future<void> _sendContractInvocationOperationTezos({
+    required double tokenAmount,
+    required String selectedAccountSecretKey,
+    required TokenModel token,
+  }) async {
+    try {
+      if (token.symbol == 'XTZ') {
+        await _withdrawTezos(
           tokenAmount: tokenAmount,
           selectedAccountSecretKey: selectedAccountSecretKey,
         );
