@@ -19,10 +19,7 @@ Future<void> discoverCredential({
       .contains(homeCredential.credentialSubjectType)) {
     getLogger('discoverCredential').i(homeCredential.credentialSubjectType);
     //here check for over18 and over13 to take photo for AI KYC
-    if (homeCredential.credentialSubjectType == CredentialSubjectType.over18 ||
-        homeCredential.credentialSubjectType == CredentialSubjectType.over13 ||
-        homeCredential.credentialSubjectType ==
-            CredentialSubjectType.ageRange) {
+    if (homeCredential.credentialSubjectType.checkForAIKYC) {
       final passbaseStatus =
           await context.read<HomeCubit>().checkPassbaseStatus();
       if (passbaseStatus != PassBaseStatus.approved) {
@@ -61,11 +58,7 @@ Future<void> launchUrlAfterDiscovery({
   required HomeCredential homeCredential,
   required BuildContext context,
 }) async {
-  final credentialSubjectType = homeCredential.credentialSubjectType;
-
-  if (credentialSubjectType == CredentialSubjectType.tezotopiaMembership ||
-      credentialSubjectType == CredentialSubjectType.chainbornMembership ||
-      credentialSubjectType == CredentialSubjectType.twitterCard) {
+  if (homeCredential.credentialSubjectType.byPassDeepLink) {
     final uuid = const Uuid().v4();
     final uri = Uri.parse(
       '''${homeCredential.link!}$uuid?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du''',

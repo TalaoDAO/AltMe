@@ -210,23 +210,16 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
   }
 
   bool isDisabled() {
-    if (this == CredentialSubjectType.dogamiPass) {
+    if (this == CredentialSubjectType.dogamiPass ||
+        this == CredentialSubjectType.pigsPass ||
+        this == CredentialSubjectType.bunnyPass ||
+        this == CredentialSubjectType.troopezPass ||
+        this == CredentialSubjectType.tzlandPass ||
+        this == CredentialSubjectType.matterlightPass ||
+        this == CredentialSubjectType.tezoniaPass) {
       return true;
-    } else if (this == CredentialSubjectType.pigsPass) {
-      return true;
-    } else if (this == CredentialSubjectType.bunnyPass) {
-      return true;
-    } else if (this == CredentialSubjectType.troopezPass) {
-      return true;
-    } else if (this == CredentialSubjectType.tzlandPass) {
-      return true;
-    } else if (this == CredentialSubjectType.matterlightPass) {
-      return true;
-    } else if (this == CredentialSubjectType.tezoniaPass) {
-      return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   String get name {
@@ -429,5 +422,30 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.pcdsAgentCertificate:
         return PcdsAgentCertificateModel.fromJson(json);
     }
+  }
+
+  bool get checkForAIKYC {
+    if (this == CredentialSubjectType.over18 ||
+        this == CredentialSubjectType.over13 ||
+        this == CredentialSubjectType.ageRange) {
+      return true;
+    }
+    return false;
+  }
+
+  bool get byPassDeepLink {
+    if (this == CredentialSubjectType.tezotopiaMembership ||
+        this == CredentialSubjectType.chainbornMembership ||
+        this == CredentialSubjectType.twitterCard ||
+        this == CredentialSubjectType.over13 ||
+        this == CredentialSubjectType.over18 ||
+        this == CredentialSubjectType.identityCard ||
+        this == CredentialSubjectType.ageRange ||
+        this == CredentialSubjectType.nationality ||
+        this == CredentialSubjectType.gender ||
+        this == CredentialSubjectType.passportFootprint) {
+      return true;
+    }
+    return false;
   }
 }
