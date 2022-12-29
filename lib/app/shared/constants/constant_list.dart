@@ -25,5 +25,6 @@ class DiscoverList {
     CredentialSubjectType.passportFootprint,
     CredentialSubjectType.identityCard,
     CredentialSubjectType.phonePass,
+    CredentialSubjectType.twitterCard,
   ];
 }

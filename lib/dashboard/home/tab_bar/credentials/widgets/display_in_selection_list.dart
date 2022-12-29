@@ -203,6 +203,10 @@ class DisplayInSelectionList extends StatelessWidget {
         return BinanceAssociatedAddressDisplayInSelectionList(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.twitterCard:
+        return TwitterCardDisplayInSelectionList(
+          credentialModel: credentialModel,
+        );
     }
   }
 }

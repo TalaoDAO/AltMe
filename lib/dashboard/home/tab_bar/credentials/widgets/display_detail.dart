@@ -206,6 +206,10 @@ class DisplayDetail extends StatelessWidget {
         return BinanceAssociatedAddressDisplayDetail(
           credentialModel: credentialModel,
         );
+      case CredentialSubjectType.twitterCard:
+        return TwitterCardDisplayDetail(
+          credentialModel: credentialModel,
+        );
     }
   }
 }

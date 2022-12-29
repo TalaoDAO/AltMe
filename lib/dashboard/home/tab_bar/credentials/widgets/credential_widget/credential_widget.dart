@@ -45,5 +45,6 @@ export 'tezos_associated_address_widget.dart';
 export 'tezotopia_membership_widget.dart';
 export 'tezotopia_voucher_widget.dart';
 export 'trooperz_pass_widget.dart';
+export 'twitter_card_widget.dart';
 export 'tzland_pass_widget.dart';
 export 'voucher_widget.dart';

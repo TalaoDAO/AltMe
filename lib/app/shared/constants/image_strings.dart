@@ -22,6 +22,7 @@ class ImageStrings {
       '$imagePath/tezotopia-membership.png';
   static const String chainbornMemberShip =
       '$imagePath/chainborn-membership.png';
+  static const String twitterCard = '$imagePath/twitter-card.png';
   static const String genderProof = '$imagePath/gender-proof.png';
   static const String ageRangeProof = '$imagePath/age_range.png';
   static const String nationalityProof = '$imagePath/nationality-proof.png';
@@ -98,6 +99,7 @@ class ImageStrings {
       '$imagePath/tezotopia-membership-dummy.png';
   static const String chainbornMemberShipDummy =
       '$imagePath/chainborn-membership-dummy.png';
+  static const String twitterCardDummy = '$imagePath/twitter-card-dummy.png';
   static const String dummyGenderCard = '$imagePath/dummy_gender_card.png';
   static const String dummyOver18Card = '$imagePath/dummy_over18_card.png';
   static const String dummyOver13Card = '$imagePath/dummy_over13_card.png';
