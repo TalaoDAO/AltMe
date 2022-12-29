@@ -25,6 +25,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:invert_colors/invert_colors.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
@@ -180,22 +181,24 @@ class MaterialAppDefinition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      useInheritedMediaQuery: true,
-      builder: DevicePreview.appBuilder,
-      locale: DevicePreview.locale(context),
-      title: 'AltMe',
-      darkTheme: AppTheme.darkThemeData,
-      navigatorObservers: [MyRouteObserver(context)],
-      themeMode: ThemeMode.dark,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: const SplashPage(),
+    return InvertColors(
+      child: MaterialApp(
+        useInheritedMediaQuery: true,
+        builder: DevicePreview.appBuilder,
+        locale: DevicePreview.locale(context),
+        title: 'AltMe',
+        darkTheme: AppTheme.darkThemeData,
+        navigatorObservers: [MyRouteObserver(context)],
+        themeMode: ThemeMode.dark,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const SplashPage(),
+      ),
     );
   }
 }
