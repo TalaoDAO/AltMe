@@ -20,7 +20,7 @@ export 'email_pass_widget.dart';
 export 'ethereum_associated_address_widget.dart';
 export 'fantom_associated_address_widget.dart';
 export 'gender_widget.dart';
-export 'identity_card_widget.dart';
+export 'verifiable_identity_card_widget.dart';
 export 'identity_pass_widget.dart';
 export 'learning_achievement_widget.dart';
 export 'loyalty_card_widget.dart';

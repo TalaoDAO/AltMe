@@ -28,7 +28,7 @@ enum CredentialSubjectType {
   ecole42LearningAchievement,
   emailPass,
   identityPass,
-  identityCard,
+  verifiableIdCard,
   learningAchievement,
   loyaltyCard,
   over18,

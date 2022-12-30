@@ -23,7 +23,7 @@ class DiscoverList {
     CredentialSubjectType.over18,
     CredentialSubjectType.over13,
     CredentialSubjectType.passportFootprint,
-    CredentialSubjectType.identityCard,
+    CredentialSubjectType.verifiableIdCard,
     CredentialSubjectType.phonePass,
     CredentialSubjectType.twitterCard,
   ];
