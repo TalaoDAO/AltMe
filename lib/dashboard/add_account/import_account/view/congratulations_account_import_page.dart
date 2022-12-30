@@ -38,7 +38,8 @@ class _CongratulationsAccountImportViewState
 
   @override
   void initState() {
-    Future.microtask(confettiController.play);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => confettiController.play());
     super.initState();
   }
 
