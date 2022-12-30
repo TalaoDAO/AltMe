@@ -273,7 +273,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.identityPass:
         return 'IdentityPass';
       case CredentialSubjectType.identityCard:
-        return 'IdCard';
+        return 'VerifiableId';
       case CredentialSubjectType.learningAchievement:
         return 'LearningAchievement';
       case CredentialSubjectType.loyaltyCard:

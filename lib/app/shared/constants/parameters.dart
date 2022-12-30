@@ -1,13 +1,14 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 
 class Parameters {
   static const int multipleCredentialsProcessDelay = 1;
-  static const List<String> credentialTypeList = [
-    'Over18',
-    'AgeRange',
-    'IdCard',
-    'EmailPass',
-    'Nationality'
+  static List<String> credentialTypeList = [
+    CredentialSubjectType.over18.name,
+    CredentialSubjectType.ageRange.name,
+    CredentialSubjectType.identityCard.name,
+    CredentialSubjectType.emailPass.name,
+    CredentialSubjectType.nationality.name,
   ];
   static const bool hasCryptoCallToAction = true;
 
