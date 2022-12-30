@@ -490,7 +490,14 @@
   "send": "Send",
   "receive": "Receive",
   "recentTransactions": "Recent transactions",
-  "sendOnlyXtzToThisAddressDescription": "Only send XTZ to this address. Sending other tokens may result in permanent loss.",
+  "sendOnlyToThisAddressDescription": "Only send {symbol} to this address. Sending other tokens may result in permanent loss.",
+  "@sendOnlyToThisAddressDescription": {
+    "description": "symbol name when showing address in receive page",
+    "type": "text",
+    "placeholders": {
+      "symbol": {}
+    }
+  },
   "addTokens": "Add tokens",
   "providedBy": "Provided by",
   "issuedOn": "Issued on",
@@ -539,7 +546,7 @@
   "failedToDoOperation": "Failed to do operation",
   "nft": "NFT",
   "receiveNft": "Receive NFT",
-  "sendOnlyNftToThisAddressDescription": "Only send Tezos NFT to this address. Sending NFT from other network may result in permanent loss.", 
+  "sendOnlyNftToThisAddressDescription": "Only send Tezos NFT to this address. Sending NFT from other network may result in permanent loss.",
   "beaconShareMessage": "Only send Tezos(XTZ) and Tezos NFTs(FA2 Standard) to this address. Sending Tezos and NFTs from other networks may result in permanent loss",
   "gamingCredentialHomeSubtitle": "Benefit from exclusive advantages offered by Web3 Games.",
   "gamingCredentialDiscoverSubtitle": "Benefit from exclusive advantages offered by Web3 Games.",
