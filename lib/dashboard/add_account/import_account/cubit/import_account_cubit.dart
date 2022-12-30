@@ -71,6 +71,7 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
         mnemonicOrKey: state.mnemonicOrKey,
         isImported: true,
         blockchainType: blockchainType,
+        isFromOnboarding: false,
         onComplete: ({
           required CryptoAccount cryptoAccount,
           required MessageHandler messageHandler,

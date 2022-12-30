@@ -73,6 +73,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
       await walletCubit.createCryptoWallet(
         mnemonicOrKey: mnemonicFormatted,
         isImported: false,
+        isFromOnboarding: true,
       );
 
       await homeCubit.emitHasWallet();

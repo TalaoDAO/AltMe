@@ -106,6 +106,13 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.removeLast();
         }
 
+        final bool disAllowDelete = widget.credentialModel.credentialPreview
+                    .credentialSubjectModel.credentialSubjectType ==
+                CredentialSubjectType.deviceInfo ||
+            widget.credentialModel.credentialPreview.credentialSubjectModel
+                    .credentialCategory !=
+                CredentialCategory.blockchainAccountsCards;
+
         return BasePage(
           title: l10n.cardDetails,
           titleAlignment: Alignment.topCenter,
@@ -123,20 +130,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (widget.credentialModel.credentialPreview
-                          .credentialSubjectModel.credentialCategory !=
-                      CredentialCategory.blockchainAccountsCards)
-                    MyOutlinedButton(
-                      onPressed: widget
-                                  .credentialModel
-                                  .credentialPreview
-                                  .credentialSubjectModel
-                                  .credentialSubjectType ==
-                              CredentialSubjectType.deviceInfo
-                          ? null
-                          : delete,
-                      text: l10n.credentialDetailDeleteCard,
-                    ),
+                  MyOutlinedButton(
+                    onPressed: disAllowDelete ? null : delete,
+                    text: l10n.credentialDetailDeleteCard,
+                  ),
                   if (widget.credentialModel.shareLink != '')
                     MyOutlinedButton.icon(
                       icon: SvgPicture.asset(

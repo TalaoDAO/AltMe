@@ -99,6 +99,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         accountName: accountName,
         mnemonicOrKey: mnemonicOrKey,
         isImported: !isFromOnboarding,
+        isFromOnboarding: isFromOnboarding,
         blockchainType: null,
         onComplete: ({
           required CryptoAccount cryptoAccount,

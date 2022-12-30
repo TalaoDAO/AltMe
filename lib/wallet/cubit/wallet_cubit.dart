@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
@@ -54,7 +55,43 @@ class WalletCubit extends Cubit<WalletState> {
   Future initialize({required String? ssiKey}) async {
     if (ssiKey != null) {
       if (ssiKey.isNotEmpty) {
-        await loadAllCredentialsFromRepository();
+        unawaited(loadAllCredentials(ssiKey: ssiKey));
+      }
+    }
+  }
+
+  Future loadAllCredentials({required String ssiKey}) async {
+    final log = getLogger('loadAllCredentials');
+    final savedCredentials = await credentialsRepository.findAll(/* filters */);
+    emit(
+      state.copyWith(
+        status: WalletStatus.populate,
+        credentials: savedCredentials,
+      ),
+    );
+    log.i('credentials loaded from repository - ${savedCredentials.length}');
+    await addRequiredCredentials(ssiKey: ssiKey);
+  }
+
+  Future addRequiredCredentials({required String ssiKey}) async {
+    final log = getLogger('addRequiredCredentials');
+
+    /// device info card
+    final deviceInfoCards = await credentialListFromCredentialSubjectType(
+      CredentialSubjectType.deviceInfo,
+    );
+    if (deviceInfoCards.isEmpty) {
+      final deviceInfoCredential = await generateDeviceInfoCredential(
+        ssiKey: ssiKey,
+        didKitProvider: didKitProvider,
+        didCubit: didCubit,
+      );
+      if (deviceInfoCredential != null) {
+        log.i('CredentialSubjectType.deviceInfo added');
+        await insertCredential(
+          credential: deviceInfoCredential,
+          showMessage: false,
+        );
       }
     }
   }
@@ -77,6 +114,7 @@ class WalletCubit extends Cubit<WalletState> {
     String? accountName,
     required String mnemonicOrKey,
     required bool isImported,
+    required bool isFromOnboarding,
     BlockchainType? blockchainType,
     Function({
       required CryptoAccount cryptoAccount,
@@ -84,6 +122,14 @@ class WalletCubit extends Cubit<WalletState> {
     })?
         onComplete,
   }) async {
+    if (isFromOnboarding) {
+      final String? ssiKey =
+          await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+      if (ssiKey != null) {
+        await addRequiredCredentials(ssiKey: ssiKey);
+      }
+    }
+
     /// tracking added accounts
     final String totalAccountsYet = await secureStorageProvider.get(
           SecureStorageKeys.cryptoAccounTrackingIndex,
@@ -285,8 +331,6 @@ class WalletCubit extends Cubit<WalletState> {
       name = accountName;
     }
 
-    final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
-
     final CryptoAccountData cryptoAccountData = CryptoAccountData(
       name: name,
       walletAddress: walletAddress,
@@ -326,25 +370,6 @@ class WalletCubit extends Cubit<WalletState> {
       );
     }
 
-    // TODO(all): this should be in different place
-    if ((await credentialListFromCredentialSubjectType(
-      CredentialSubjectType.deviceInfo,
-    ))
-        .isEmpty) {
-      final deviceInfoCredential = await generateDeviceInfoCredential(
-        ssiKey: ssiKey!,
-        didKitProvider: didKitProvider,
-        didCubit: didCubit,
-      );
-
-      if (deviceInfoCredential != null) {
-        await insertCredential(
-          credential: deviceInfoCredential,
-          showMessage: false,
-        );
-      }
-    }
-
     return cryptoAccount;
   }
 
@@ -381,8 +406,6 @@ class WalletCubit extends Cubit<WalletState> {
       ],
       oldCredentialList,
     );
-
-    final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
 
     /// update or create AssociatedAddres credential with new name
     if (filteredCredentialList.isNotEmpty) {
@@ -445,17 +468,6 @@ class WalletCubit extends Cubit<WalletState> {
             : null,
       ),
     );
-  }
-
-  Future loadAllCredentialsFromRepository() async {
-    await credentialsRepository.findAll(/* filters */).then((values) {
-      emit(
-        state.copyWith(
-          status: WalletStatus.populate,
-          credentials: values,
-        ),
-      );
-    });
   }
 
   Future updateCredential({
