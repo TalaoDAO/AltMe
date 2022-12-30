@@ -118,6 +118,9 @@ class TokensCubit extends Cubit<TokensState> {
 
     final List<dynamic> tokensBalancesJsonArray = await client.get(
       '${Urls.moralisBaseUrl}/$walletAddress/erc20',
+      queryParameters: <String, dynamic>{
+        'chain': ethereumNetwork.chain,
+      },
       headers: <String, dynamic>{
         'X-API-KEY': moralisApiKey,
       },
@@ -140,7 +143,10 @@ class TokensCubit extends Cubit<TokensState> {
     }
 
     if (offset == 0) {
-      final ethereumToken = await _getEthBalance(walletAddress);
+      final ethereumToken = await _getEthBalance(
+        walletAddress,
+        ethereumNetwork.chain,
+      );
       if (ethereumToken != null) {
         newData.insert(0, ethereumToken);
       }
@@ -293,12 +299,16 @@ class TokensCubit extends Cubit<TokensState> {
 
   Future<TokenModel?> _getEthBalance(
     String walletAddress,
+    String chain,
   ) async {
     try {
       await dotenv.load();
       final moralisApiKey = dotenv.get('MORALIS_API_KEY');
       final response = await client.get(
         '${Urls.moralisBaseUrl}/$walletAddress/balance',
+        queryParameters: <String, dynamic>{
+          'chain': chain,
+        },
         headers: <String, dynamic>{
           'X-API-KEY': moralisApiKey,
         },

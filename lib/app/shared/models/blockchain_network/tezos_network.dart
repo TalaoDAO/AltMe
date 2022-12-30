@@ -43,5 +43,6 @@ class TezosNetwork extends BlockchainNetwork {
             ' (do not use it unless you are a developer).',
       );
 
+  @override
   Map<String, dynamic> toJson() => _$TezosNetworkToJson(this);
 }

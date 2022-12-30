@@ -23,6 +23,7 @@ class ManageNetworkState extends Equatable {
 
   List<EthereumNetwork> get ethereumNetworks => [
         EthereumNetwork.mainNet(),
+        EthereumNetwork.testNet(),
       ];
 
   ManageNetworkState copyWith({

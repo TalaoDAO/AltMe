@@ -53,9 +53,6 @@ class Urls {
   static const tzktMainnetUrl = 'https://api.tzkt.io';
   static const tzktGhostnetUrl = 'https://api.ghostnet.tzkt.io';
 
-  //INFURA
-  static const infuraNftBaseUrl = 'https://nft.api.infura.io';
-
   //Moralis
   static const moralisBaseUrl = 'https://deep-index.moralis.io/api/v2';
 
