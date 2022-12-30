@@ -11,17 +11,7 @@ part 'advance_settings_state.dart';
 class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
   AdvanceSettingsCubit({
     required this.secureStorageProvider,
-  }) : super(
-          const AdvanceSettingsState(
-            isGamingEnabled: true,
-            isIdentityEnabled: true,
-            isBlockchainAccountsEnabled: true,
-            isSocialMediaEnabled: true,
-            isCommunityEnabled: true,
-            isOtherEnabled: true,
-            isPassEnabled: true,
-          ),
-        ) {
+  }) : super(Parameters.defaultAdvanceSettingsState) {
     initialise();
   }
 

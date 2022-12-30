@@ -1,4 +1,4 @@
-import 'package:altme/app/shared/enum/type/credential_subject_type/credential_subject_type.dart';
+import 'package:altme/app/app.dart';
 
 class DiscoverList {
   static final List<CredentialSubjectType> gamingCategories = [
@@ -23,7 +23,7 @@ class DiscoverList {
     CredentialSubjectType.over18,
     CredentialSubjectType.over13,
     CredentialSubjectType.passportFootprint,
-    CredentialSubjectType.identityCard,
+    CredentialSubjectType.verifiableIdCard,
     CredentialSubjectType.phonePass,
     CredentialSubjectType.twitterCard,
   ];

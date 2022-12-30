@@ -32,15 +32,7 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
 
     // just for next build -> 117 and then we should remove for build -> 118
     context.read<AdvanceSettingsCubit>().setState(
-          const AdvanceSettingsState(
-            isGamingEnabled: true,
-            isIdentityEnabled: true,
-            isBlockchainAccountsEnabled: true,
-            isPassEnabled: true,
-            isSocialMediaEnabled: true,
-            isCommunityEnabled: true,
-            isOtherEnabled: true,
-          ),
+          Parameters.defaultAdvanceSettingsState,
         );
   },
 );

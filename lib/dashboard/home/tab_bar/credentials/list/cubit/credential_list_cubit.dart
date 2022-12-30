@@ -11,9 +11,6 @@ part 'credential_list_state.dart';
 class CredentialListCubit extends Cubit<CredentialListState> {
   CredentialListCubit() : super(CredentialListState());
 
-  CredentialSubjectType identityCredentialCard =
-      CredentialSubjectType.identityCard;
-
   Future<void> initialise(WalletCubit walletCubit) async {
     emit(state.fetching());
 
@@ -58,7 +55,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.nationality:
         case CredentialSubjectType.gender:
         case CredentialSubjectType.identityPass:
-        case CredentialSubjectType.identityCard:
+        case CredentialSubjectType.verifiableIdCard:
         case CredentialSubjectType.over18:
         case CredentialSubjectType.over13:
         case CredentialSubjectType.passportFootprint:
@@ -237,7 +234,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.ageRange:
           case CredentialSubjectType.nationality:
           case CredentialSubjectType.identityPass:
-          case CredentialSubjectType.identityCard:
+          case CredentialSubjectType.verifiableIdCard:
           case CredentialSubjectType.over18:
           case CredentialSubjectType.over13:
           case CredentialSubjectType.passportFootprint:
@@ -536,7 +533,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.ageRange:
           case CredentialSubjectType.nationality:
           case CredentialSubjectType.gender:
-          case CredentialSubjectType.identityCard:
+          case CredentialSubjectType.verifiableIdCard:
           case CredentialSubjectType.over18:
           case CredentialSubjectType.over13:
           case CredentialSubjectType.passportFootprint:

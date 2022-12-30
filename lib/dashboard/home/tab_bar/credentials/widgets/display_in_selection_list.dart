@@ -95,8 +95,8 @@ class DisplayInSelectionList extends StatelessWidget {
         return IdentityPassDisplayInSelectionList(
           credentialModel: credentialModel,
         );
-      case CredentialSubjectType.identityCard:
-        return IdentityCardDisplayInSelectionList(
+      case CredentialSubjectType.verifiableIdCard:
+        return VerifiableIdCardDisplayInSelectionList(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.learningAchievement:

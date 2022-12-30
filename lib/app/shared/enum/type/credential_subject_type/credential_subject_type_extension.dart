@@ -51,7 +51,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xffEFF0F6);
       case CredentialSubjectType.identityPass:
         return const Color(0xffCAFFBF);
-      case CredentialSubjectType.identityCard:
+      case CredentialSubjectType.verifiableIdCard:
         return const Color(0xff2596be);
       case CredentialSubjectType.voucher:
         return const Color(0xffCAFFBF);
@@ -149,7 +149,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return Icons.perm_identity;
       case CredentialSubjectType.identityPass:
         return Icons.perm_identity;
-      case CredentialSubjectType.identityCard:
+      case CredentialSubjectType.verifiableIdCard:
         return Icons.perm_identity;
       case CredentialSubjectType.loyaltyCard:
         return Icons.loyalty;
@@ -210,23 +210,16 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
   }
 
   bool isDisabled() {
-    if (this == CredentialSubjectType.dogamiPass) {
+    if (this == CredentialSubjectType.dogamiPass ||
+        this == CredentialSubjectType.pigsPass ||
+        this == CredentialSubjectType.bunnyPass ||
+        this == CredentialSubjectType.troopezPass ||
+        this == CredentialSubjectType.tzlandPass ||
+        this == CredentialSubjectType.matterlightPass ||
+        this == CredentialSubjectType.tezoniaPass) {
       return true;
-    } else if (this == CredentialSubjectType.pigsPass) {
-      return true;
-    } else if (this == CredentialSubjectType.bunnyPass) {
-      return true;
-    } else if (this == CredentialSubjectType.troopezPass) {
-      return true;
-    } else if (this == CredentialSubjectType.tzlandPass) {
-      return true;
-    } else if (this == CredentialSubjectType.matterlightPass) {
-      return true;
-    } else if (this == CredentialSubjectType.tezoniaPass) {
-      return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   String get name {
@@ -279,8 +272,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'EmailPass';
       case CredentialSubjectType.identityPass:
         return 'IdentityPass';
-      case CredentialSubjectType.identityCard:
-        return 'IdCard';
+      case CredentialSubjectType.verifiableIdCard:
+        return 'VerifiableId';
       case CredentialSubjectType.learningAchievement:
         return 'LearningAchievement';
       case CredentialSubjectType.loyaltyCard:
@@ -382,8 +375,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return EmailPassModel.fromJson(json);
       case CredentialSubjectType.identityPass:
         return IdentityPassModel.fromJson(json);
-      case CredentialSubjectType.identityCard:
-        return IdentityCardModel.fromJson(json);
+      case CredentialSubjectType.verifiableIdCard:
+        return VerifiableIdCardModel.fromJson(json);
       case CredentialSubjectType.learningAchievement:
         return LearningAchievementModel.fromJson(json);
       case CredentialSubjectType.loyaltyCard:
@@ -429,5 +422,30 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.pcdsAgentCertificate:
         return PcdsAgentCertificateModel.fromJson(json);
     }
+  }
+
+  bool get checkForAIKYC {
+    if (this == CredentialSubjectType.over18 ||
+        this == CredentialSubjectType.over13 ||
+        this == CredentialSubjectType.ageRange) {
+      return true;
+    }
+    return false;
+  }
+
+  bool get byPassDeepLink {
+    if (this == CredentialSubjectType.tezotopiaMembership ||
+        this == CredentialSubjectType.chainbornMembership ||
+        this == CredentialSubjectType.twitterCard ||
+        this == CredentialSubjectType.over13 ||
+        this == CredentialSubjectType.over18 ||
+        this == CredentialSubjectType.verifiableIdCard ||
+        this == CredentialSubjectType.ageRange ||
+        this == CredentialSubjectType.nationality ||
+        this == CredentialSubjectType.gender ||
+        this == CredentialSubjectType.passportFootprint) {
+      return true;
+    }
+    return false;
   }
 }

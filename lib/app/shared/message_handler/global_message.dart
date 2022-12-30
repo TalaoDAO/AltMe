@@ -316,12 +316,12 @@ class GlobalMessage {
       l10n.passportFootprintExpirationDate;
   String get RESPONSE_STRING_passportFootprintHowToGetIt =>
       l10n.passportFootprintHowToGetIt;
-  String get RESPONSE_STRING_identityCardWhyGetThisCard =>
-      l10n.identityCardWhyGetThisCard;
-  String get RESPONSE_STRING_identityCardExpirationDate =>
-      l10n.identityCardExpirationDate;
-  String get RESPONSE_STRING_identityCardHowToGetIt =>
-      l10n.identityCardHowToGetIt;
+  String get RESPONSE_STRING_verifiableIdCardWhyGetThisCard =>
+      l10n.verifiableIdCardWhyGetThisCard;
+  String get RESPONSE_STRING_verifiableIdCardExpirationDate =>
+      l10n.verifiableIdCardExpirationDate;
+  String get RESPONSE_STRING_verifiableIdCardHowToGetIt =>
+      l10n.verifiableIdCardHowToGetIt;
   String get RESPONSE_STRING_phoneProofWhyGetThisCard =>
       l10n.phoneProofWhyGetThisCard;
   String get RESPONSE_STRING_phoneProofExpirationDate =>

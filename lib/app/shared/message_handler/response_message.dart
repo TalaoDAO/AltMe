@@ -499,16 +499,17 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
-        case ResponseString.RESPONSE_STRING_identityCardWhyGetThisCard:
-          return ResponseString.RESPONSE_STRING_identityCardWhyGetThisCard
+        case ResponseString.RESPONSE_STRING_verifiableIdCardWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_verifiableIdCardWhyGetThisCard
               .localise(context);
 
-        case ResponseString.RESPONSE_STRING_identityCardExpirationDate:
-          return ResponseString.RESPONSE_STRING_identityCardExpirationDate
+        case ResponseString.RESPONSE_STRING_verifiableIdCardExpirationDate:
+          return ResponseString.RESPONSE_STRING_verifiableIdCardExpirationDate
               .localise(context);
 
-        case ResponseString.RESPONSE_STRING_identityCardHowToGetIt:
-          return ResponseString.RESPONSE_STRING_identityCardHowToGetIt.localise(
+        case ResponseString.RESPONSE_STRING_verifiableIdCardHowToGetIt:
+          return ResponseString.RESPONSE_STRING_verifiableIdCardHowToGetIt
+              .localise(
             context,
           );
 

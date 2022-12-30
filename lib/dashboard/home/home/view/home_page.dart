@@ -33,9 +33,9 @@ class HomePage extends StatelessWidget {
           );
         }
       },
-      // TODO(all): Remove IosTabControllerPage when apple accept our NFT #664, https://github.com/TalaoDAO/AltMe/issues/664
-      // Setting to hide gallery when on ios
-      child: const TabControllerPage(),
+      child: Parameters.hasCryptoCallToAction
+          ? const TabControllerPage()
+          : const CredentialsListPage(),
     );
   }
 }
