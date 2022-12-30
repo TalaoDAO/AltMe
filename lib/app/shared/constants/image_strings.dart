@@ -68,7 +68,7 @@ class ImageStrings {
       '$imagePath/associated-wallet-verso.png';
   static const String talaoCommunityCard =
       '$imagePath/talao_community_card.png';
-  static const String identityCard = '$imagePath/identity_card.png';
+  static const String verifiableIdCard = '$imagePath/verifiable_id_card.png';
 
   static const String paymentTezosCard = '$imagePath/payment-tezos-card.png';
   static const String paymentEthereumCard =
@@ -110,7 +110,8 @@ class ImageStrings {
       '$imagePath/dummy_tezotopia_voucher_card.png';
   static const String dummyTalaoCommunityCardCard =
       '$imagePath/dummy_talao_community_card.png';
-  static const String dummyIdentityCard = '$imagePath/dummy_identity_card.png';
+  static const String dummyVerifiableIdCard =
+      '$imagePath/dummy_verifiable_id_card.png';
 
   static const String dummyPhonePassCard =
       '$imagePath/dummy_phone_pass_card.png';

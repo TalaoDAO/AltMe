@@ -134,14 +134,14 @@ class HomeCredential extends Equatable {
         link = Urls.talaoCommunityCardUrl;
         break;
 
-      case CredentialSubjectType.identityCard:
-        image = ImageStrings.dummyIdentityCard;
+      case CredentialSubjectType.verifiableIdCard:
+        image = ImageStrings.dummyVerifiableIdCard;
         link = Urls.identityCardUrl;
         whyGetThisCard =
-            ResponseString.RESPONSE_STRING_identityCardWhyGetThisCard;
+            ResponseString.RESPONSE_STRING_verifiableIdCardWhyGetThisCard;
         expirationDateDetails =
-            ResponseString.RESPONSE_STRING_identityCardExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_identityCardHowToGetIt;
+            ResponseString.RESPONSE_STRING_verifiableIdCardExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_verifiableIdCardHowToGetIt;
         dummyDesc =
             ResponseString.RESPONSE_STRING_identityProofDummyDescription;
         break;

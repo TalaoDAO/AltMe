@@ -2,11 +2,11 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'identity_card_model.g.dart';
+part 'verifiable_identity_card_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class IdentityCardModel extends CredentialSubjectModel {
-  IdentityCardModel({
+class VerifiableIdCardModel extends CredentialSubjectModel {
+  VerifiableIdCardModel({
     this.familyName,
     this.givenName,
     this.bithPlace,
@@ -19,12 +19,12 @@ class IdentityCardModel extends CredentialSubjectModel {
           id: id,
           type: type,
           issuedBy: issuedBy,
-          credentialSubjectType: CredentialSubjectType.identityCard,
+          credentialSubjectType: CredentialSubjectType.verifiableIdCard,
           credentialCategory: CredentialCategory.identityCards,
         );
 
-  factory IdentityCardModel.fromJson(Map<String, dynamic> json) =>
-      _$IdentityCardModelFromJson(json);
+  factory VerifiableIdCardModel.fromJson(Map<String, dynamic> json) =>
+      _$VerifiableIdCardModelFromJson(json);
 
   @JsonKey(defaultValue: '')
   String? familyName;
@@ -38,5 +38,5 @@ class IdentityCardModel extends CredentialSubjectModel {
   String? addressCountry;
 
   @override
-  Map<String, dynamic> toJson() => _$IdentityCardModelToJson(this);
+  Map<String, dynamic> toJson() => _$VerifiableIdCardModelToJson(this);
 }

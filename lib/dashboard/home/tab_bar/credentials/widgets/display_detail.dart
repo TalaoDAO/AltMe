@@ -98,8 +98,8 @@ class DisplayDetail extends StatelessWidget {
         return IdentityPassDisplayDetail(
           credentialModel: credentialModel,
         );
-      case CredentialSubjectType.identityCard:
-        return IdentityCardDisplayDetail(
+      case CredentialSubjectType.verifiableIdCard:
+        return VerifiableIdCardDisplayDetail(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.learningAchievement:

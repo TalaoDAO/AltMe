@@ -95,8 +95,8 @@ class DisplayInList extends StatelessWidget {
         return IdentityPassDisplayInList(
           credentialModel: credentialModel,
         );
-      case CredentialSubjectType.identityCard:
-        return IdentityCardDisplayInList(
+      case CredentialSubjectType.verifiableIdCard:
+        return VerifiableIdCardDisplayInList(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.learningAchievement:

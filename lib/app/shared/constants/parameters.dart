@@ -3,10 +3,11 @@ import 'package:altme/dashboard/dashboard.dart';
 
 class Parameters {
   static const int multipleCredentialsProcessDelay = 1;
+
   static List<String> credentialTypeList = [
     CredentialSubjectType.over18.name,
     CredentialSubjectType.ageRange.name,
-    CredentialSubjectType.identityCard.name,
+    CredentialSubjectType.verifiableIdCard.name,
     CredentialSubjectType.emailPass.name,
     CredentialSubjectType.nationality.name,
   ];
