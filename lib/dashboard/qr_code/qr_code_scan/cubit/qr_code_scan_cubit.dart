@@ -289,9 +289,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         /// build id token
         final payload = {
-          'iat': DateTime.now().millisecondsSinceEpoch,
+          'iat': DateTime.now().microsecondsSinceEpoch,
           'aud': audience,
-          'exp': DateTime.now().millisecondsSinceEpoch + 1000,
+          'exp': DateTime.now().microsecondsSinceEpoch + 1000,
           'sub': did,
           'iss': 'https://self-issued.me/v2',
           'nonce': nonce,
@@ -333,7 +333,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final verifierIdJwt = jws.toCompactSerialization();
 
         /// build vp token
-        final iat = DateTime.now().millisecondsSinceEpoch;
+        final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
         final vpTokenPayload = {
           'iat': iat,
           'jti': 'http://example.org/presentations/talao/01',
@@ -351,7 +351,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           },
           'nonce': nonce
         };
-        final vpVerifierClaims = new JsonWebTokenClaims.fromJson(payload);
+        final vpVerifierClaims =
+            new JsonWebTokenClaims.fromJson(vpTokenPayload);
 // create a builder, decoding the JWT in a JWS, so using a
         // JsonWebSignatureBuilder
         final vpBuilder = new JsonWebSignatureBuilder();
@@ -379,7 +380,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           'Content-Type': 'application/x-www-form-urlencoded',
         };
 
-        final responseData = "id_token=$verifierIdJwt&vp_token=$verifierVpJwt";
+        final responseData = <String, dynamic>{
+          'id_token': verifierIdJwt,
+          'vp_token': verifierVpJwt
+        };
         final dynamic verifierResponse = await client.post(redirectUri!,
             headers: responseHeaders, data: responseData);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
