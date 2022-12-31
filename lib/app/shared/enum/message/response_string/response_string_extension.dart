@@ -355,14 +355,14 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_passportFootprintHowToGetIt:
         return globalMessage.RESPONSE_STRING_passportFootprintHowToGetIt;
 
-      case ResponseString.RESPONSE_STRING_identityCardWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_identityCardWhyGetThisCard;
+      case ResponseString.RESPONSE_STRING_verifiableIdCardWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_verifiableIdCardWhyGetThisCard;
 
-      case ResponseString.RESPONSE_STRING_identityCardExpirationDate:
-        return globalMessage.RESPONSE_STRING_identityCardExpirationDate;
+      case ResponseString.RESPONSE_STRING_verifiableIdCardExpirationDate:
+        return globalMessage.RESPONSE_STRING_verifiableIdCardExpirationDate;
 
-      case ResponseString.RESPONSE_STRING_identityCardHowToGetIt:
-        return globalMessage.RESPONSE_STRING_identityCardHowToGetIt;
+      case ResponseString.RESPONSE_STRING_verifiableIdCardHowToGetIt:
+        return globalMessage.RESPONSE_STRING_verifiableIdCardHowToGetIt;
 
       case ResponseString.RESPONSE_STRING_phoneProofWhyGetThisCard:
         return globalMessage.RESPONSE_STRING_phoneProofWhyGetThisCard;

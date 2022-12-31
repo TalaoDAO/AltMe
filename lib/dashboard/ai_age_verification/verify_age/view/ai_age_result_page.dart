@@ -41,7 +41,8 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
 
   @override
   void initState() {
-    confettiController.play();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => confettiController.play());
     super.initState();
   }
 

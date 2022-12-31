@@ -64,6 +64,13 @@ Future<bool> isWalletCreated({
     }
   }
 
+  await didCubit.load(
+    did: did,
+    didMethod: didMethod,
+    didMethodName: didMethodName,
+    verificationMethod: verificationMethod,
+  );
+
   log.i('wallet initialisation');
   await walletCubit.initialize(ssiKey: ssiKey);
 
@@ -72,13 +79,6 @@ Future<bool> isWalletCreated({
     walletCubit: walletCubit,
     ssiMnemonic: ssiMnemonic,
     secureStorageProvider: secureStorageProvider,
-  );
-
-  await didCubit.load(
-    did: did,
-    didMethod: didMethod,
-    didMethodName: didMethodName,
-    verificationMethod: verificationMethod,
   );
 
   return true;
@@ -116,6 +116,7 @@ Future<void> blockchainInitialize({
       mnemonicOrKey: ssiMnemonic,
       isImported: false,
       blockchainType: BlockchainType.tezos,
+      isFromOnboarding: true,
     );
   }
 }
