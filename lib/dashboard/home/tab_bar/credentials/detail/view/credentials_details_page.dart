@@ -110,7 +110,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     .credentialSubjectModel.credentialSubjectType ==
                 CredentialSubjectType.deviceInfo ||
             widget.credentialModel.credentialPreview.credentialSubjectModel
-                    .credentialCategory !=
+                    .credentialCategory ==
                 CredentialCategory.blockchainAccountsCards;
 
         return BasePage(

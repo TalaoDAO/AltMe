@@ -153,7 +153,7 @@ class App extends StatelessWidget {
             networkCubit: context.read<ManageNetworkCubit>(),
             secureStorageProvider: secure_storage.getSecureStorage,
             client: DioClient(
-              context.read<ManageNetworkCubit>().state.network.tzktUrl,
+              context.read<ManageNetworkCubit>().state.network.apiUrl,
               Dio(),
             ),
             walletCubit: context.read<WalletCubit>(),
@@ -162,7 +162,7 @@ class App extends StatelessWidget {
         BlocProvider<NftCubit>(
           create: (context) => NftCubit(
             client: DioClient(
-              context.read<ManageNetworkCubit>().state.network.tzktUrl,
+              context.read<ManageNetworkCubit>().state.network.apiUrl,
               Dio(),
             ),
             walletCubit: context.read<WalletCubit>(),

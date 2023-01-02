@@ -4,7 +4,6 @@ part of 'insert_withdrawal_page_cubit.dart';
 class InsertWithdrawalPageState extends Equatable {
   const InsertWithdrawalPageState({
     this.selectedToken = const TokenModel(
-      id: -1,
       contractAddress: '',
       name: 'Tezos',
       symbol: 'XTZ',

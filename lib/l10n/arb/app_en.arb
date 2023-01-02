@@ -490,7 +490,14 @@
   "send": "Send",
   "receive": "Receive",
   "recentTransactions": "Recent transactions",
-  "sendOnlyXtzToThisAddressDescription": "Only send XTZ to this address. Sending other tokens may result in permanent loss.",
+  "sendOnlyToThisAddressDescription": "Only send {symbol} to this address. Sending other tokens may result in permanent loss.",
+  "@sendOnlyToThisAddressDescription": {
+    "description": "symbol name when showing address in receive page",
+    "type": "text",
+    "placeholders": {
+      "symbol": {}
+    }
+  },
   "addTokens": "Add tokens",
   "providedBy": "Provided by",
   "issuedOn": "Issued on",

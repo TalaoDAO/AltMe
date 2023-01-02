@@ -3,8 +3,11 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/services.dart' hide MessageHandler;
+import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tezart/tezart.dart';
+import 'package:web3dart/web3dart.dart';
 
 part 'confirm_token_transaction_cubit.g.dart';
 
@@ -90,7 +93,70 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     }
   }
 
+  Future<void> _withdrawEthereum({
+    required double tokenAmount,
+    required String selectedAccountSecretKey,
+  }) async {
+    try {
+      emit(state.loading());
+
+      final rpcNodeUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+
+      final amount = int.parse(
+        tokenAmount.toStringAsFixed(18).replaceAll(',', '').replaceAll('.', ''),
+      );
+
+      final httpClient = Client();
+      final ethClient = Web3Client(rpcNodeUrl, httpClient);
+
+      final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
+
+      await ethClient.sendTransaction(
+        credentials,
+        Transaction(
+          to: EthereumAddress.fromHex(state.withdrawalAddress),
+          gasPrice: EtherAmount.inWei(BigInt.one),
+          maxGas: 100000,
+          value: EtherAmount.fromUnitAndValue(EtherUnit.wei, amount),
+        ),
+      );
+      logger.i('after withdrawal execute');
+      emit(state.success());
+    } catch (e, s) {
+      logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        ),
+      );
+    }
+  }
+
   Future<void> sendContractInvocationOperation({
+    required double tokenAmount,
+    required String selectedAccountSecretKey,
+    required TokenModel token,
+  }) async {
+    if (manageNetworkCubit.state.network is TezosNetwork) {
+      await _sendContractInvocationOperationTezos(
+        tokenAmount: tokenAmount,
+        selectedAccountSecretKey: selectedAccountSecretKey,
+        token: token,
+      );
+    } else if (manageNetworkCubit.state.network is EthereumNetwork) {
+      await _sendContractInvocationOperationEthereum(
+        tokenAmount: tokenAmount,
+        selectedAccountSecretKey: selectedAccountSecretKey,
+        token: token,
+      );
+    } else {
+      throw Exception('Not Implemented !');
+    }
+  }
+
+  Future<void> _sendContractInvocationOperationTezos({
     required double tokenAmount,
     required String selectedAccountSecretKey,
     required TokenModel token,
@@ -192,5 +258,112 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       getLogger(runtimeType.toString())
           .e('error in transferOperation , e: $e, s: $s');
     }
+  }
+
+  Future<void> _sendContractInvocationOperationEthereum({
+    required double tokenAmount,
+    required String selectedAccountSecretKey,
+    required TokenModel token,
+  }) async {
+    try {
+      if (token.symbol == 'ETH') {
+        await _withdrawEthereum(
+          tokenAmount: tokenAmount,
+          selectedAccountSecretKey: selectedAccountSecretKey,
+        );
+        return;
+      }
+      if (token.contractAddress.isEmpty) return;
+
+      emit(state.loading());
+
+      final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+
+
+      final amount = (tokenAmount *
+              double.parse(
+                1
+                    .toStringAsFixed(int.parse(token.decimals))
+                    .replaceAll('.', ''),
+              ))
+          .toInt();
+
+      final client = Web3Client(rpcUrl, Client());
+      final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
+      final ownAddress = await credentials.extractAddress();
+
+      // read the contract abi and tell web3dart where
+      // it's deployed (contractAddr)
+      final abiCode = await rootBundle.loadString('assets/abi/erc20.abi.json');
+      final contractAddress = EthereumAddress.fromHex(token.contractAddress);
+      final contract = DeployedContract(
+        ContractAbi.fromJson(abiCode, token.name),
+        contractAddress,
+      );
+
+      // extracting some functions and events that we'll need later
+      final transferEvent = contract.event('Transfer');
+      final balanceFunction = contract.function('getBalance');
+      final sendFunction = contract.function('sendCoin');
+
+      // listen for the Transfer event when it's emitted by the contract above
+      final subscription = client
+          .events(
+            FilterOptions.events(contract: contract, event: transferEvent),
+          )
+          .take(1)
+          .listen((event) {
+        final decoded =
+            transferEvent.decodeResults(event.topics ?? [], event.data ?? '');
+
+        final from = decoded[0] as EthereumAddress;
+        final to = decoded[1] as EthereumAddress;
+        final value = decoded[2] as BigInt;
+
+        getLogger(toString()).i('$from sent $value ${token.name} to $to');
+      });
+
+      // check our balance in MetaCoins by calling the appropriate function
+      final balance = await client.call(
+        contract: contract,
+        function: balanceFunction,
+        params: <dynamic>[ownAddress],
+      );
+      getLogger(toString()).i('We have ${balance.first} ${token.name}');
+
+      final EthereumAddress receiver =
+          EthereumAddress.fromHex(state.withdrawalAddress);
+
+      await client.sendTransaction(
+        credentials,
+        Transaction.callContract(
+          contract: contract,
+          function: sendFunction,
+          parameters: <dynamic>[receiver, amount],
+        ),
+      );
+
+      await subscription.asFuture<FilterEvent>();
+      await subscription.cancel();
+
+      await client.dispose();
+
+      emit(state.success());
+    } catch (e, s) {
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        ),
+      );
+      getLogger(runtimeType.toString())
+          .e('error in transferOperation , e: $e, s: $s');
+    }
+  }
+
+  @override
+  String toString() {
+    return 'ConfirmTokenTransactionCubit';
   }
 }

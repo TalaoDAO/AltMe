@@ -31,7 +31,7 @@ class ConnectedDappsPage extends StatelessWidget {
         beacon: Beacon(),
         networkCubit: context.read<ManageNetworkCubit>(),
         client: DioClient(
-          context.read<ManageNetworkCubit>().state.network.tzktUrl,
+          context.read<ManageNetworkCubit>().state.network.apiUrl,
           Dio(),
         ),
         connectedDappRepository: ConnectedDappRepository(

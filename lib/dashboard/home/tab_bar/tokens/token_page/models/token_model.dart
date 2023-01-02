@@ -19,7 +19,6 @@ class TokenModel extends Equatable {
     required this.decimals,
     this.tokenUSDPrice = 0,
     this.balanceInUSD = 0,
-    required this.id,
     this.standard,
     this.tokenId = '0',
   });
@@ -42,7 +41,6 @@ class TokenModel extends Equatable {
   final double tokenUSDPrice;
   @JsonKey(defaultValue: 0)
   final double balanceInUSD;
-  final int id;
   final String? tokenId;
   final String? standard;
 
@@ -58,7 +56,6 @@ class TokenModel extends Equatable {
     String? decimals,
     double? tokenUSDPrice,
     double? balanceInUSD,
-    int? id,
     String? tokenId,
     String? standard,
   }) {
@@ -72,7 +69,6 @@ class TokenModel extends Equatable {
       decimals: decimals ?? this.decimals,
       tokenUSDPrice: tokenUSDPrice ?? this.tokenUSDPrice,
       balanceInUSD: balanceInUSD ?? this.balanceInUSD,
-      id: id ?? this.id,
       tokenId: tokenId ?? this.tokenId,
       standard: standard ?? this.standard,
     );
@@ -130,7 +126,6 @@ class TokenModel extends Equatable {
         decimals,
         tokenUSDPrice,
         balanceInUSD,
-        id,
         tokenId,
         standard,
       ];

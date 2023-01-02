@@ -54,15 +54,14 @@ class DiplomaCardRecto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final diplomaCardModel = credentialModel
-        .credentialPreview.credentialSubjectModel as DiplomaCardModel;
+    // final diplomaCardModel = credentialModel
+    //     .credentialPreview.credentialSubjectModel as DiplomaCardModel;
 
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.diplomaCard,
       issuerName: credentialModel
           .credentialPreview.credentialSubjectModel.issuedBy?.name,
-      value: '${diplomaCardModel.givenName}'
-          ' ${diplomaCardModel.familyName}',
+      value: '',
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),

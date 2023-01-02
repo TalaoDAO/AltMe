@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,6 +41,11 @@ class _ChangeNetworkBottomSheetPageState
     final l10n = context.l10n;
     return BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
       builder: (context, state) {
+        final isTezos =
+            context.read<WalletCubit>().state.currentAccount.blockchainType ==
+                BlockchainType.tezos;
+        final allNetworks =
+            isTezos ? state.tezosNetworks : state.ethereumNetworks;
         return Container(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
@@ -91,10 +97,10 @@ class _ChangeNetworkBottomSheetPageState
                       ),
                     ),
                     child: ListView.separated(
-                      itemCount: state.allNetworks.length,
+                      itemCount: allNetworks.length,
                       itemBuilder: (context, i) {
-                        return TezosNetworkSelector(
-                          tezosNetwork: state.allNetworks[i],
+                        return NetworkSelector(
+                          network: allNetworks[i],
                           groupValue: state.network,
                         );
                       },

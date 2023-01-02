@@ -1,5 +1,4 @@
-import 'package:altme/app/shared/constants/urls.dart';
-import 'package:altme/dashboard/home/home.dart';
+import 'package:altme/app/app.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -10,45 +9,31 @@ part 'nft_model.g.dart';
 @immutable
 class NftModel extends Equatable {
   const NftModel({
-    required this.id,
-    required this.name,
-    this.displayUri,
-    this.thumbnailUri,
-    required this.balance,
-    this.description,
     required this.tokenId,
+    required this.name,
     this.symbol,
     required this.contractAddress,
-    this.standard,
-    this.identifier,
-    this.creators,
-    this.publishers,
-    this.date,
-    this.isTransferable,
+    required this.balance,
+    this.description,
+    this.displayUri,
+    this.thumbnailUri,
+    this.isTransferable = true,
   });
 
   factory NftModel.fromJson(Map<String, dynamic> json) =>
       _$NftModelFromJson(json);
 
-  @JsonKey(defaultValue: '0')
-  final String tokenId;
   @JsonKey(defaultValue: '')
   final String name;
+  final String? symbol;
+  @JsonKey(defaultValue: '0')
+  final String tokenId;
+  final String? description;
   final String? displayUri;
   final String? thumbnailUri;
-  final String balance;
-  final String? description;
-  final String? standard;
-  final int id;
-  final String? symbol;
   final String contractAddress;
-  final String? identifier;
-  final List<String>? creators;
-  final List<String>? publishers;
-  final String? date;
-  final bool? isTransferable;
-
-  Map<String, dynamic> toJson() => _$NftModelToJson(this);
+  final String balance;
+  final bool isTransferable;
 
   String? get displayUrl {
     if (displayUri?.isEmpty ?? true) {
@@ -70,31 +55,18 @@ class NftModel extends Equatable {
     );
   }
 
-  TokenModel getToken() {
-    return TokenModel(
-      contractAddress: contractAddress,
-      name: name,
-      symbol: symbol ?? name,
-      balance: balance,
-      standard: standard ?? 'fa2',
-      decimals: '0',
-      tokenId: tokenId,
-      id: id,
-    );
-  }
+  Map<String, dynamic> toJson() => _$NftModelToJson(this);
 
   @override
   List<Object?> get props => [
-        id,
         name,
+        symbol,
+        tokenId,
+        description,
         displayUri,
         thumbnailUri,
+        contractAddress,
         balance,
-        description,
-        identifier,
-        publishers,
-        creators,
-        date,
         isTransferable,
       ];
 }
