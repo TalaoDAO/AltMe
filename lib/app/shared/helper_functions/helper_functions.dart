@@ -41,10 +41,17 @@ bool isEbsiIssuer(CredentialModel credentialModel) {
 }
 
 bool isValidPrivateKey(String value) {
+  bool isEthereumPrivateKey = false;
+  try {
+    EthPrivateKey.fromHex(value);
+    isEthereumPrivateKey = true;
+  } catch (_) {}
+
   return value.startsWith('edsk') ||
       value.startsWith('spsk') ||
       value.startsWith('p2sk') ||
-      value.startsWith('0x');
+      value.startsWith('0x') ||
+      isEthereumPrivateKey;
 }
 
 KeyStoreModel getKeysFromSecretKey({required String secretKey}) {
