@@ -74,8 +74,9 @@ class CredentialsListPageItem extends StatelessWidget {
           .credentialPreview.credentialSubjectModel.credentialSubjectType
           .backgroundColor(credentialModel),
       child: selected == null
-          ? DisplayInList(
+          ? CredentialDisplay(
               credentialModel: credentialModel,
+              credDisplayType: CredDisplayType.List,
             )
           : displaySelectionElement(context),
     );
@@ -86,7 +87,10 @@ class CredentialsListPageItem extends StatelessWidget {
     return CredentialSelectionPadding(
       child: Column(
         children: <Widget>[
-          DisplayInSelectionList(credentialModel: credentialModel),
+          CredentialDisplay(
+            credentialModel: credentialModel,
+            credDisplayType: CredDisplayType.List,
+          ),
           Align(
             alignment: Alignment.centerRight,
             child: Padding(

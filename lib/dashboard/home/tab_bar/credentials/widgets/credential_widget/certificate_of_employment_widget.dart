@@ -4,36 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class CertificateOfEmploymentDisplayInList extends StatelessWidget {
-  const CertificateOfEmploymentDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return CertificateOfEmploymentRecto(credentialModel: credentialModel);
-  }
-}
-
-class CertificateOfEmploymentDisplayInSelectionList extends StatelessWidget {
-  const CertificateOfEmploymentDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return CertificateOfEmploymentRecto(credentialModel: credentialModel);
-  }
-}
-
-class CertificateOfEmploymentDisplayDetail extends StatelessWidget {
-  const CertificateOfEmploymentDisplayDetail({
+class CertificateOfEmploymentWidget extends StatelessWidget {
+  const CertificateOfEmploymentWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);

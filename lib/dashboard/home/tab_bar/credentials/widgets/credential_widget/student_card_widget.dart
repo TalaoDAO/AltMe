@@ -4,36 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class StudentCardDisplayInList extends StatelessWidget {
-  const StudentCardDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return StudentCardRecto(credentialModel: credentialModel);
-  }
-}
-
-class StudentCardDisplayInSelectionList extends StatelessWidget {
-  const StudentCardDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return StudentCardRecto(credentialModel: credentialModel);
-  }
-}
-
-class StudentCardDisplayDetail extends StatelessWidget {
-  const StudentCardDisplayDetail({
+class StudentCardWidget extends StatelessWidget {
+  const StudentCardWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);

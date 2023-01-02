@@ -2,40 +2,8 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
-class ProfessionalStudentCardDisplayInList extends StatelessWidget {
-  const ProfessionalStudentCardDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInList(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class ProfessionalStudentCardDisplayInSelectionList extends StatelessWidget {
-  const ProfessionalStudentCardDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInSelectionList(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class ProfessionalStudentCardDisplayDetail extends StatelessWidget {
-  const ProfessionalStudentCardDisplayDetail({
+class ProfessionalStudentCardWidget extends StatelessWidget {
+  const ProfessionalStudentCardWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
