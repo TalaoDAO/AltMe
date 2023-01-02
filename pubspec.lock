@@ -783,13 +783,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.17.0"
-  invert_colors:
-    dependency: "direct main"
-    description:
-      name: invert_colors
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4"
   io:
     dependency: transitive
     description:

@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/flavor/flavor.dart';
 import 'package:flutter/material.dart';
-import 'package:invert_colors/invert_colors.dart';
 import 'package:provider/provider.dart';
 
 class AltMeLogo extends StatelessWidget {
@@ -12,17 +11,15 @@ class AltMeLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FlavorCubit flavorCubit = context.read<FlavorCubit>();
-    return InvertColors(
-      child: Image.asset(
-        flavorCubit.state == FlavorMode.development
-            ? ImageStrings.splashDev
-            : flavorCubit.state == FlavorMode.staging
-                ? ImageStrings.splashStage
-                : ImageStrings.splash,
-        width: size,
-        height: size,
-        fit: BoxFit.fitHeight,
-      ),
+    return Image.asset(
+      flavorCubit.state == FlavorMode.development
+          ? ImageStrings.splashDev
+          : flavorCubit.state == FlavorMode.staging
+              ? ImageStrings.splashStage
+              : ImageStrings.splash,
+      width: size,
+      height: size,
+      fit: BoxFit.fitHeight,
     );
   }
 }
