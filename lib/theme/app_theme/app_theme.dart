@@ -1,53 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+final Color primary = Color(0xff6600FF);
+final Color onPrimary = Color(0xffFFFFFF);
+final Color secondary = Color(0xff00A1FF);
+final Color onTertiary = Color(0xffD1CCE3);
+final Color surface = Color(0xff1A182D);
+final Color onSurface = Color(0xFFA79ABA);
+final Color shadow = Color(0xff1D1D1D);
+final Color disabled = Color(0xFF605A71);
+final Color error = Color(0xffcf6679);
+final Color highlight = Color(0xFF36334E);
+final Color snackBarBackground = Colors.green;
+final Color transactionApplied = Color(0xFF00B267);
+final Color transactionFailed = Color(0xFFFF0045);
+final Color transactionSkipped = Color(0xFFFF5F0A);
+final Color activeColorOfNetwork = Color(0xFF2C7DF7);
+final Color kyc = Color(0xFF0045FF);
+
 abstract class AppTheme {
   /// A color frequently across your app’s screens and components.
-  static Color darkPrimary = const Color(0xff6600FF);
+  static Color darkPrimary = primary;
 
   /// A color that's clearly legible when drawn on primary
-  static Color darkOnPrimary = const Color(0xffFFFFFF);
+  static Color darkOnPrimary = onPrimary;
 
   /// An accent color used for less prominent components in the UI, such as
   /// filter chips, while expanding the opportunity for color expression.
-  static Color darkSecondary = const Color(0xff00A1FF);
+  static Color darkSecondary = secondary;
 
   /// A color that's clearly legible when drawn on secondary
-  static Color darkOnSecondary = const Color(0xffFFFFFF);
+  static Color darkOnSecondary = onPrimary;
 
   /// A color used as a contrasting accent that can balance primary
   /// and secondary colors or bring heightened attention to an element,
   /// such as an input field.
-  static Color darkTertiary = const Color(0xffFFFFFF);
+  static Color darkTertiary = onPrimary;
 
   /// A color that's clearly legible when drawn on tertiary.
-  static Color darkOnTertiary = const Color(0xffD1CCE3);
+  static Color darkOnTertiary = onTertiary;
 
   /// The background color for widgets like Card.
-  static Color darkSurface = const Color(0xff1A182D);
+  static Color darkSurface = surface;
 
   /// A color that's clearly legible when drawn on surface.
-  static Color darkOnSurface = const Color(0xffEDEAF5);
+  static Color darkOnSurface = onSurface;
 
   /// A color that typically appears behind scrollable content.
-  static Color darkBackground = const Color(0xff0B0514);
+  static Color darkBackground = surface;
 
   /// A color that's clearly legible when drawn on background.
-  static Color darkOnBackground = const Color(0xffFFFFFF);
+  static Color darkOnBackground = onPrimary;
 
   /// The color to use for input validation errors, e.g. for
   /// InputDecoration.errorText
-  static const Color darkError = Color(0xffcf6679);
+  static Color darkError = error;
 
   /// A color that's clearly legible when drawn on error.
-  static const Color darkOnError = Colors.black;
+  static Color darkOnError = surface;
 
   /// A color use to paint the drop shadows of elevated components.
-  static Color darkShadow = const Color(0xff1D1D1D).withOpacity(0.1);
+  static Color darkShadow = shadow.withOpacity(0.1);
 
-  static Color dividerColor = const Color(0xFF605A71);
+  static Color dividerColor = disabled;
 
-  static Color highlightColor = const Color(0xFF36334E);
+  static Color highlightColor = highlight;
 
   static ThemeData get darkThemeData => ThemeData(
         brightness: Brightness.dark,
@@ -71,31 +88,31 @@ abstract class AppTheme {
         ),
         textTheme: TextTheme(
           caption: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
+            color: onPrimary,
             fontSize: 13,
             fontWeight: FontWeight.w600,
           ),
           headline6: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
+            color: onPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
           headline5: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
+            color: onPrimary,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
           headline4: GoogleFonts.nunito(
-            color: const Color(0xFFFFFFFF),
+            color: onPrimary,
             fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: const IconThemeData(color: Color(0xff6600FF)),
+        iconTheme: IconThemeData(color: primary),
         snackBarTheme: SnackBarThemeData(
-          backgroundColor: Colors.green,
+          backgroundColor: snackBarBackground,
           contentTextStyle: GoogleFonts.roboto(
-            color: const Color(0xFFFFFFFF),
+            color: onPrimary,
             fontSize: 12,
             fontWeight: FontWeight.w400,
           ),
@@ -104,30 +121,30 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
-  Color get transactionApplied => const Color(0xFF00B267);
-  Color get transactionFailed => const Color(0xFFFF0045);
-  Color get transactionSkipped => const Color(0xFFFF5F0A);
-  Color get activeColorOfNetwork => const Color(0xFF2C7DF7);
+  Color get transactionApplied => transactionApplied;
+  Color get transactionFailed => transactionFailed;
+  Color get transactionSkipped => transactionSkipped;
+  Color get activeColorOfNetwork => activeColorOfNetwork;
 
-  Color get greyText => const Color(0xFFD1CCE3);
+  Color get greyText => onTertiary;
 
-  Color get cardHighlighted => const Color(0xFF251F38);
+  Color get cardHighlighted => surface;
 
-  Color get defaultDialogDark => const Color(0xFF322643);
+  Color get defaultDialogDark => surface;
 
-  Color get closeIconColor => const Color(0xFFA79ABA);
+  Color get closeIconColor => onSurface;
 
-  Color get kycVerifyButton => const Color(0xFF0045FF);
+  Color get kycVerifyButton => kyc;
 
-  Color get checkMarkColor => const Color(0xFF00B267);
+  Color get checkMarkColor => transactionApplied;
 
-  Color get accountBottomSheetBorder => Colors.grey[200]!;
+  Color get accountBottomSheetBorder => onPrimary;
 
-  Color get digitPrimaryColor => Colors.white;
+  Color get digitPrimaryColor => onPrimary;
 
   Color get digitFillColor => Colors.transparent;
 
-  Color get disabledBgColor => const Color(0xFF6A5F7B);
+  Color get disabledBgColor => disabled;
 
   Color get disabledTextColor => const Color(0xFF000000);
 
@@ -137,9 +154,9 @@ extension CustomColorScheme on ColorScheme {
 
   Color get transparent => Colors.transparent;
 
-  Color get onOutlineButton => const Color(0xFF6600FF);
+  Color get onOutlineButton => primary;
 
-  Color get onElevatedButton => const Color(0xFFFFFFFF);
+  Color get onElevatedButton => onPrimary;
 
   Color get appBarUpperLayer => const Color(0xff25095B);
 
@@ -149,7 +166,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get drawerSurface => const Color(0xff232630);
 
-  Color get label => Colors.white;
+  Color get label => onPrimary;
 
   Color get unSelectedLabel => const Color(0xff86809D);
 
@@ -157,19 +174,19 @@ extension CustomColorScheme on ColorScheme {
 
   Color get selectedBottomBar => surface;
 
-  Color get drawerBackground => const Color(0xff0B0514);
+  Color get drawerBackground => background;
 
   Color get borderColor => const Color(0xFFDDCEF4);
 
-  Color get markDownH1 => const Color(0xFFFFFFFF);
+  Color get markDownH1 => onPrimary;
 
-  Color get markDownH2 => const Color(0xFFFFFFFF);
+  Color get markDownH2 => onPrimary;
 
-  Color get markDownP => const Color(0xFFD1CCE3);
+  Color get markDownP => onTertiary;
 
-  Color get markDownA => const Color(0xff517bff);
+  Color get markDownA => secondary;
 
-  Color get subtitle1 => const Color(0xFFFFFFFF);
+  Color get subtitle1 => onPrimary;
 
   Color get subtitle2 => const Color(0xFF8B8C92);
 
@@ -183,7 +200,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get genderIcon => const Color(0xFF212121);
 
-  Color get activeCredential => Colors.green;
+  Color get activeCredential => snackBarBackground;
 
   Color get expiredCredential => Colors.orange;
 
@@ -197,7 +214,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get alertInfoMessage => Colors.cyan;
 
-  Color get alertSuccessMessage => Colors.green;
+  Color get alertSuccessMessage => snackBarBackground;
 
   Color get qrScanBackground => const Color(0xff2B1C48);
 
@@ -215,15 +232,15 @@ extension CustomColorScheme on ColorScheme {
 
   Color get startButtonColorA => const Color(0xff8436F8);
 
-  Color get startButtonColorB => const Color(0xff6600FF);
+  Color get startButtonColorB => primary;
 
   Color get associatedWalletBorder => const Color(0xff524B67);
 
   Color get deleteColor => const Color(0xff322643);
 
-  Color get titleColor => const Color(0xffD1CCE3);
+  Color get titleColor => onTertiary;
 
-  Color get valueColor => const Color(0xffFFFFFF);
+  Color get valueColor => onPrimary;
 
   Color get lightGrey => const Color(0xFF616161);
 
@@ -231,7 +248,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get activeColor => const Color(0xFF08B530);
 
-  Color get inactiveColor => const Color(0xFFFF0045);
+  Color get inactiveColor => transactionFailed;
 
   Color get beaconBorder => const Color(0xff86809D);
 
@@ -244,29 +261,29 @@ extension CustomTextTheme on TextTheme {
         height: 1.5,
         letterSpacing: 1.02,
         fontWeight: FontWeight.normal,
-        color: const Color(0xffD1CCE3),
+        color: onTertiary,
       );
 
   TextStyle get keyboardDigitTextStyle =>
-      GoogleFonts.roboto(fontSize: 30, color: Colors.white);
+      GoogleFonts.roboto(fontSize: 30, color: onPrimary);
 
   TextStyle get calculatorKeyboardDigitTextStyle => GoogleFonts.roboto(
         fontSize: 30,
-        color: Colors.white,
+        color: onPrimary,
         fontWeight: FontWeight.bold,
       );
 
   TextStyle get keyboardDeleteButtonTextStyle =>
-      GoogleFonts.roboto(fontSize: 16, color: Colors.white);
+      GoogleFonts.roboto(fontSize: 16, color: onPrimary);
 
   TextStyle get loadingText => GoogleFonts.roboto(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w600,
       );
 
   TextStyle get starterTitleStyle => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 34,
         fontWeight: FontWeight.w700,
       );
@@ -278,7 +295,7 @@ extension CustomTextTheme on TextTheme {
       ).copyWith(height: 1.4);
 
   TextStyle get customListTileTitleStyle => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
@@ -296,68 +313,68 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get onBoardingTitleStyle => GoogleFonts.roboto(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 22,
         fontWeight: FontWeight.w600,
       );
 
   TextStyle get onBoardingSubTitleStyle => GoogleFonts.roboto(
-        color: const Color(0xFFD1CCE3),
+        color: onTertiary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get learnMoreTextStyle => GoogleFonts.roboto(
-        color: const Color(0xFFD1CCE3),
+        color: onTertiary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
         decoration: TextDecoration.underline,
       );
 
   TextStyle get infoTitle => GoogleFonts.roboto(
-        color: const Color(0xFFEDEAF5),
+        color: onSurface,
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
   TextStyle get infoSubtitle => GoogleFonts.roboto(
-        color: const Color(0xFFD1CCE3),
+        color: onTertiary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get normal => GoogleFonts.roboto(
-        color: const Color(0xFFD1CCE3),
+        color: onTertiary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get appBar => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 24,
         fontWeight: FontWeight.w800,
       );
 
   TextStyle get bottomBar => GoogleFonts.roboto(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 10,
         fontWeight: FontWeight.w600,
       );
 
   TextStyle get title => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
   TextStyle get listTitle => GoogleFonts.roboto(
-        color: const Color(0xFFEDEAF5),
+        color: onSurface,
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
   TextStyle get listSubtitle => GoogleFonts.roboto(
-        color: const Color(0xFFEDEAF5),
+        color: onSurface,
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
@@ -375,7 +392,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get listTileTitle => GoogleFonts.roboto(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 14,
         fontWeight: FontWeight.w600,
       );
@@ -393,47 +410,47 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get dialogClose => GoogleFonts.roboto(
-        color: const Color(0xFFA79ABA),
+        color: onSurface,
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get drawerMenu => GoogleFonts.roboto(
-        color: const Color(0xFFD1CCE3),
+        color: onTertiary,
         fontSize: 15,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get drawerItem => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w700,
       );
 
   TextStyle get drawerCategoryTitle => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
   TextStyle get resetWalletTitle => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w700,
       );
   TextStyle get resetWalletSubtitle => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w500,
       );
   TextStyle get subtitle4 => GoogleFonts.nunito(
-        color: const Color(0xFF00A1FF),
+        color: secondary,
         fontSize: 16,
         fontWeight: FontWeight.w500,
       );
 
   TextStyle get drawerCategorySubTitle => GoogleFonts.nunito(
-        color: const Color(0xFFD1CCE3),
+        color: onTertiary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
@@ -445,25 +462,25 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get pinCodeTitle => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 20,
         fontWeight: FontWeight.w700,
       );
 
   TextStyle get pinCodeMessage => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 14,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get getCardsButton => GoogleFonts.roboto(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 12,
         fontWeight: FontWeight.w600,
       );
 
   TextStyle get miniButton => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 11,
         fontWeight: FontWeight.w500,
       );
@@ -494,13 +511,13 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get discoverFieldTitle => GoogleFonts.roboto(
-        color: const Color(0xffD1CCE3),
+        color: onTertiary,
         fontSize: 14,
         fontWeight: FontWeight.w800,
       );
 
   TextStyle get discoverFieldDescription => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 14,
         height: 1.5,
         fontWeight: FontWeight.w400,
@@ -531,7 +548,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get loyaltyCard => GoogleFonts.roboto(
-        color: const Color(0xffffffff),
+        color: onPrimary,
         fontSize: 13,
         fontWeight: FontWeight.w600,
       );
@@ -543,7 +560,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get voucherOverlay => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
@@ -579,13 +596,13 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get identityCardData => GoogleFonts.roboto(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
   TextStyle get tezosAssociatedAddressData => GoogleFonts.roboto(
-        color: const Color(0xff605A71),
+        color: disabled,
         fontSize: 17,
         fontWeight: FontWeight.normal,
       );
@@ -597,13 +614,13 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get credentialStudentCardTextCard => GoogleFonts.roboto(
-        color: const Color(0xffffffff),
+        color: onPrimary,
         fontSize: 14,
         fontWeight: FontWeight.normal,
       );
 
   TextStyle get over18 => GoogleFonts.roboto(
-        color: const Color(0xffffffff),
+        color: onPrimary,
         fontSize: 20,
         fontWeight: FontWeight.normal,
       );
@@ -615,13 +632,13 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get studentCardData => GoogleFonts.roboto(
-        color: const Color(0xffffffff),
+        color: onPrimary,
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
   TextStyle get credentialTitleCard => GoogleFonts.roboto(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 20,
         fontWeight: FontWeight.bold,
       );
@@ -639,7 +656,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get illustrationPageDescription => GoogleFonts.roboto(
-        color: Colors.white,
+        color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w600,
       );
@@ -647,13 +664,13 @@ extension CustomTextTheme on TextTheme {
   TextStyle get dialogTitle => GoogleFonts.roboto(
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: Colors.white,
+        color: onPrimary,
       );
 
   TextStyle get dialogSubtitle => GoogleFonts.roboto(
         fontSize: 13,
         fontWeight: FontWeight.w400,
-        color: Colors.white.withOpacity(0.67),
+        color: onPrimary.withOpacity(0.67),
       );
 
   TextStyle get walletAltme => GoogleFonts.roboto(
@@ -695,7 +712,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get kycDialogCaption => GoogleFonts.nunito(
         fontSize: 20,
         fontWeight: FontWeight.bold,
-        color: const Color(0xFF0045FF),
+        color: kyc,
       );
 
   TextStyle get kycDialogBody => GoogleFonts.nunito(
@@ -719,7 +736,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get credentialCategoryTitle => GoogleFonts.roboto(
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: const Color(0xffEDEAF5),
+        color: onSurface,
       );
 
   TextStyle get credentialCategorySubTitle => GoogleFonts.roboto(
@@ -731,31 +748,31 @@ extension CustomTextTheme on TextTheme {
   TextStyle get credentialSurfaceText => GoogleFonts.roboto(
         fontSize: 10,
         fontWeight: FontWeight.w400,
-        color: const Color(0xff00B267),
+        color: transactionApplied,
       );
 
   TextStyle get errorMessage => GoogleFonts.roboto(
         fontSize: 15,
         fontWeight: FontWeight.w400,
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
       );
 
   TextStyle get accountsText => GoogleFonts.roboto(
         fontSize: 22,
         fontWeight: FontWeight.w600,
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
       );
 
   TextStyle get accountsName => GoogleFonts.roboto(
         fontSize: 18,
         fontWeight: FontWeight.w500,
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
       );
 
   TextStyle get accountsListItemTitle => GoogleFonts.nunito(
         fontSize: 16,
         fontWeight: FontWeight.w500,
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
       );
 
   TextStyle get walletAddress => GoogleFonts.roboto(
@@ -767,25 +784,25 @@ extension CustomTextTheme on TextTheme {
   TextStyle get textButton => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w700,
-        color: const Color(0xff6600FF),
+        color: primary,
       );
 
   TextStyle get scrollText => GoogleFonts.roboto(
         fontSize: 9,
         fontWeight: FontWeight.w500,
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
       );
 
   TextStyle get passPhraseText => GoogleFonts.nunito(
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: const Color(0xffD1CCE3),
+        color: onTertiary,
       );
 
   TextStyle get message => GoogleFonts.nunito(
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: const Color(0xffEDEAF5),
+        color: onSurface,
       );
 
   TextStyle get subMessage => GoogleFonts.nunito(
@@ -803,12 +820,12 @@ extension CustomTextTheme on TextTheme {
   TextStyle get identitiyBaseLightText => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w300,
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
       );
   TextStyle get identitiyBaseBoldText => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
       );
 
   TextStyle get copyToClipBoard => GoogleFonts.nunito(
@@ -821,59 +838,59 @@ extension CustomTextTheme on TextTheme {
   TextStyle get onBoardingCheckMessage => GoogleFonts.nunito(
         fontSize: 18,
         fontWeight: FontWeight.w700,
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
       );
 
   TextStyle get messageTitle => GoogleFonts.roboto(
         fontSize: 20,
         fontWeight: FontWeight.w600,
-        color: const Color(0xffEDEAF5),
+        color: onSurface,
       );
 
   TextStyle get messageSubtitle => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        color: const Color(0xffEDEAF5),
+        color: onSurface,
       );
 
   TextStyle get radioTitle => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
   TextStyle get radioOption => GoogleFonts.nunito(
-        color: const Color(0xFFFFFFFF),
+        color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get credentialManifestTitle1 => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w700,
       );
 
   TextStyle get credentialManifestDescription => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get credentialManifestTitle2 => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w700,
       );
 
   TextStyle get credentialSubtitle => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 14,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get credentialStatus => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
@@ -885,31 +902,31 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get beaconSelectAccont => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
   TextStyle get uploadFileTitle => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
   TextStyle get beaconPermissionTitle => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
   TextStyle get beaconPermissions => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get beaconPayload => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
@@ -917,29 +934,29 @@ extension CustomTextTheme on TextTheme {
   TextStyle get beaconWalletAddress => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
       );
 
   TextStyle get dappName => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
       );
 
   TextStyle get cacheErrorMessage => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
       );
 
   TextStyle get credentialSteps => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w600,
       );
 
   TextStyle get discoverOverlayDescription => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 11,
         fontWeight: FontWeight.w600,
       );
