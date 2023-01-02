@@ -57,10 +57,7 @@ class DefaultCredentialListWidget extends StatelessWidget {
                 ? const <Alignment>[Alignment.bottomRight]
                 : const <Alignment>[],
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: descriptionWidget,
-          ),
+          child: descriptionWidget,
         ),
       ),
     );

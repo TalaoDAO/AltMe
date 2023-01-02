@@ -19,8 +19,8 @@ class CredentialManifestCard extends StatelessWidget {
         getColorFromCredential(outputDescriptor.styles?.text, Colors.black);
     final credential = Credential.fromJsonOrDummy(credentialModel.data);
     return FractionallySizedBox(
-      widthFactor: 0.95,
-      heightFactor: 0.9,
+      widthFactor: 0.85,
+      heightFactor: 0.8,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -32,9 +32,8 @@ class CredentialManifestCard extends StatelessWidget {
                 Row(
                   children: [
                     CredentialIcon(
-                      iconData: credential
-                          .credentialSubjectModel.credentialSubjectType
-                          .iconData(),
+                      iconData: credential.credentialSubjectModel
+                          .credentialSubjectType.iconData,
                       color: textColor,
                       size: 20,
                     ),
