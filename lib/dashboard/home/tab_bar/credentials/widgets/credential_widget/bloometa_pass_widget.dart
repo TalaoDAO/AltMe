@@ -2,55 +2,10 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
-class BloometaPassDisplayInList extends StatelessWidget {
-  const BloometaPassDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return BloometaPassRecto(credentialModel: credentialModel);
-  }
-}
-
-class BloometaPassDisplayInSelectionList extends StatelessWidget {
-  const BloometaPassDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return BloometaPassRecto(credentialModel: credentialModel);
-  }
-}
-
-class BloometaPassDisplayDetail extends StatelessWidget {
-  const BloometaPassDisplayDetail({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        BloometaPassRecto(credentialModel: credentialModel),
-      ],
-    );
-  }
-}
-
-class BloometaPassRecto extends Recto {
-  const BloometaPassRecto({Key? key, required this.credentialModel})
+class BloometaPassWidget extends StatelessWidget {
+  const BloometaPassWidget({Key? key, required this.credentialModel})
       : super(key: key);
+
   final CredentialModel credentialModel;
 
   @override

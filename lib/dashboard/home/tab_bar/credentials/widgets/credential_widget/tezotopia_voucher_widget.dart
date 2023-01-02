@@ -4,56 +4,14 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class TezotopiaVoucherDisplayInList extends StatelessWidget {
-  const TezotopiaVoucherDisplayInList({
-    Key? key,
+class TezotopiaVoucherWidget extends StatelessWidget {
+  const TezotopiaVoucherWidget({
     required this.credentialModel,
+    Key? key,
   }) : super(key: key);
 
   final CredentialModel credentialModel;
 
-  @override
-  Widget build(BuildContext context) {
-    return TezotopiaVoucherRecto(credentialModel);
-  }
-}
-
-class TezotopiaVoucherDisplayInSelectionList extends StatelessWidget {
-  const TezotopiaVoucherDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return TezotopiaVoucherRecto(credentialModel);
-  }
-}
-
-class TezotopiaVoucherDisplayDetail extends StatelessWidget {
-  const TezotopiaVoucherDisplayDetail({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return TezotopiaVoucherRecto(credentialModel);
-  }
-}
-
-class TezotopiaVoucherRecto extends Recto {
-  const TezotopiaVoucherRecto(
-    this.credentialModel, {
-    Key? key,
-  }) : super(
-          key: key,
-        );
-  final CredentialModel credentialModel;
   @override
   Widget build(BuildContext context) {
     final tezotopiaVoucherModel = credentialModel

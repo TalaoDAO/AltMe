@@ -2,50 +2,8 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
-class PassportFootprintDisplayInList extends StatelessWidget {
-  const PassportFootprintDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return PassportFootprintRecto(credentialModel: credentialModel);
-  }
-}
-
-class PassportFootprintDisplayInSelectionList extends StatelessWidget {
-  const PassportFootprintDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return PassportFootprintRecto(credentialModel: credentialModel);
-  }
-}
-
-class PassportFootprintDisplayDetail extends StatelessWidget {
-  const PassportFootprintDisplayDetail({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return PassportFootprintRecto(credentialModel: credentialModel);
-  }
-}
-
-class PassportFootprintRecto extends Verso {
-  const PassportFootprintRecto({Key? key, required this.credentialModel})
+class PassportFootprintWidget extends StatelessWidget {
+  const PassportFootprintWidget({Key? key, required this.credentialModel})
       : super(key: key);
   final CredentialModel credentialModel;
 

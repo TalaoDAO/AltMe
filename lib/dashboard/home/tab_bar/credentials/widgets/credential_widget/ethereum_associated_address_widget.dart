@@ -4,56 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class EthereumAssociatedAddressDisplayInList extends StatelessWidget {
-  const EthereumAssociatedAddressDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return EthereumAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class EthereumAssociatedAddressDisplayInSelectionList extends StatelessWidget {
-  const EthereumAssociatedAddressDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return EthereumAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class EthereumAssociatedAddressDisplayDetail extends StatelessWidget {
-  const EthereumAssociatedAddressDisplayDetail({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return EthereumAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class EthereumAssociatedAddressRecto extends Recto {
-  const EthereumAssociatedAddressRecto({
+class EthereumAssociatedAddressWidget extends StatelessWidget {
+  const EthereumAssociatedAddressWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);

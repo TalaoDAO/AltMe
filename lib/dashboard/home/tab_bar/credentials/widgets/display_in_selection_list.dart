@@ -15,47 +15,47 @@ class DisplayInSelectionList extends StatelessWidget {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
       case CredentialSubjectType.deviceInfo:
-        return DeviceInfoDisplayInSelectionList(
+        return DeviceInfoWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.bloometaPass:
-        return BloometaPassDisplayInSelectionList(
+        return BloometaPassWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.tezotopiaMembership:
-        return TezotopiaMemberShipDisplayInSelectionList(
+        return TezotopiaMemberShipWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.chainbornMembership:
-        return ChainbornMemberShipDisplayInSelectionList(
+        return ChainbornMemberShipWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.tezoniaPass:
-        return TezoniaPassDisplayInSelectionList(
+        return TezoniaPassWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.tzlandPass:
-        return TzlandPassDisplayInSelectionList(
+        return TzlandPassWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.troopezPass:
-        return TrooperzPassDisplayInSelectionList(
+        return TrooperzPassWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.pigsPass:
-        return PigsPassDisplayInSelectionList(
+        return PigsPassWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.matterlightPass:
-        return MatterlightPassDisplayInSelectionList(
+        return MatterlightPassWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.dogamiPass:
-        return DogamiPassDisplayInSelectionList(
+        return DogamiPassWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.bunnyPass:
-        return BunnyPassDisplayInSelectionList(
+        return BunnyPassWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.ageRange:
@@ -63,15 +63,15 @@ class DisplayInSelectionList extends StatelessWidget {
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.nationality:
-        return NationalityDisplayInSelectionList(
+        return NationalityWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.gender:
-        return GenderDisplayInSelectionList(
+        return GenderWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.tezosAssociatedWallet:
-        return TezosAssociatedAddressDisplayInSelectionList(
+        return TezosAssociatedAddressWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.certificateOfEmployment:
@@ -88,7 +88,7 @@ class DisplayInSelectionList extends StatelessWidget {
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.emailPass:
-        return EmailPassDisplayInSelectionList(
+        return EmailPassWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.identityPass:
@@ -96,7 +96,7 @@ class DisplayInSelectionList extends StatelessWidget {
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.verifiableIdCard:
-        return VerifiableIdCardDisplayInSelectionList(
+        return VerifiableIdCardWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.learningAchievement:
@@ -108,19 +108,19 @@ class DisplayInSelectionList extends StatelessWidget {
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.over18:
-        return Over18DisplayInSelectionList(
+        return Over18Widget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.over13:
-        return Over13DisplayInSelectionList(
+        return Over13Widget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.passportFootprint:
-        return PassportFootprintDisplayInSelectionList(
+        return PassportFootprintWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.phonePass:
-        return PhonePassDisplayInSelectionList(
+        return PhonePassWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.professionalExperienceAssessment:
@@ -152,27 +152,27 @@ class DisplayInSelectionList extends StatelessWidget {
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.tezVoucher:
-        return TezotopiaVoucherDisplayInSelectionList(
+        return TezotopiaVoucherWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.talaoCommunityCard:
-        return TalaoCommunityCardDisplayInSelectionList(
+        return TalaoCommunityCardWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.diplomaCard:
-        return DiplomaCardDisplayInSelectionList(
+        return DiplomaCardWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.aragoPass:
-        return AragoPassDisplayInSelectionList(
+        return AragoPassWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.aragoEmailPass:
-        return AragoEmailPassDisplayInSelectionList(
+        return AragoEmailPassWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.aragoIdentityCard:
-        return AragoIdentityCardDisplayInSelectionList(
+        return AragoIdentityCardWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.aragoLearningAchievement:
@@ -180,31 +180,31 @@ class DisplayInSelectionList extends StatelessWidget {
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.aragoOver18:
-        return AragoOver18DisplayInSelectionList(
+        return AragoOver18Widget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.ethereumAssociatedWallet:
-        return EthereumAssociatedAddressDisplayInSelectionList(
+        return EthereumAssociatedAddressWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.pcdsAgentCertificate:
-        return PcdsAgentCertificateDisplayInSelectionList(
+        return PcdsAgentCertificateWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.fantomAssociatedWallet:
-        return FantomAssociatedAddressDisplayInSelectionList(
+        return FantomAssociatedAddressWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.polygonAssociatedWallet:
-        return PolygonAssociatedAddressDisplayInSelectionList(
+        return PolygonAssociatedAddressWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.binanceAssociatedWallet:
-        return BinanceAssociatedAddressDisplayInSelectionList(
+        return BinanceAssociatedAddressWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.twitterCard:
-        return TwitterCardDisplayInSelectionList(
+        return TwitterCardWidget(
           credentialModel: credentialModel,
         );
     }

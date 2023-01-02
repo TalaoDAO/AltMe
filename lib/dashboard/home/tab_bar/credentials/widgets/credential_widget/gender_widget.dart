@@ -2,54 +2,8 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
-class GenderDisplayInList extends StatelessWidget {
-  const GenderDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return GenderRecto(credentialModel: credentialModel);
-  }
-}
-
-class GenderDisplayInSelectionList extends StatelessWidget {
-  const GenderDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return GenderRecto(credentialModel: credentialModel);
-  }
-}
-
-class GenderDisplayDetail extends StatelessWidget {
-  const GenderDisplayDetail({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        GenderRecto(credentialModel: credentialModel),
-      ],
-    );
-  }
-}
-
-class GenderRecto extends Recto {
-  const GenderRecto({Key? key, required this.credentialModel})
+class GenderWidget extends StatelessWidget {
+  const GenderWidget({Key? key, required this.credentialModel})
       : super(key: key);
   final CredentialModel credentialModel;
 
