@@ -6,6 +6,7 @@ final Color onPrimary = Color(0xffFFFFFF);
 final Color secondary = Color(0xff00A1FF);
 final Color onTertiary = Color(0xffD1CCE3);
 final Color surface = Color(0xff1A182D);
+final Color surfaceAccent = Color(0xFF180B2B);
 final Color onSurface = Color(0xFFA79ABA);
 final Color shadow = Color(0xff1D1D1D);
 final Color disabled = Color(0xFF605A71);
@@ -168,7 +169,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get label => onPrimary;
 
-  Color get unSelectedLabel => const Color(0xff86809D);
+  Color get unSelectedLabel => onSurface;
 
   Color get leadingButton => const Color(0xffF1EFF8);
 
@@ -216,43 +217,43 @@ extension CustomColorScheme on ColorScheme {
 
   Color get alertSuccessMessage => snackBarBackground;
 
-  Color get qrScanBackground => const Color(0xff2B1C48);
+  Color get qrScanBackground => surface;
 
-  Color get qrScanInnerShadow => const Color(0xff000000).withOpacity(0.16);
+  Color get qrScanInnerShadow => surface;
 
-  Color get qrScanOuterShadow => const Color(0xff430F91);
+  Color get qrScanOuterShadow => primary;
 
-  Color get dialogText => const Color(0xFF180B2B);
+  Color get dialogText => surfaceAccent;
 
-  Color get tabBarNotSelected => const Color(0xFF280164);
+  Color get tabBarNotSelected => surfaceAccent;
 
-  Color get credentialBackground => const Color(0xFF211F33);
+  Color get credentialBackground => surface;
 
-  Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
+  Color get cryptoAccountNotSelected => disabled.withOpacity(0.15);
 
-  Color get startButtonColorA => const Color(0xff8436F8);
+  Color get startButtonColorA => primary;
 
   Color get startButtonColorB => primary;
 
-  Color get associatedWalletBorder => const Color(0xff524B67);
+  Color get associatedWalletBorder => disabled;
 
-  Color get deleteColor => const Color(0xff322643);
+  Color get deleteColor => surfaceAccent;
 
   Color get titleColor => onTertiary;
 
   Color get valueColor => onPrimary;
 
-  Color get lightGrey => const Color(0xFF616161);
+  Color get lightGrey => disabled;
 
-  Color get darkGrey => const Color(0xFF212121);
+  Color get darkGrey => surfaceAccent;
 
-  Color get activeColor => const Color(0xFF08B530);
+  Color get activeColor => transactionApplied;
 
   Color get inactiveColor => transactionFailed;
 
-  Color get beaconBorder => const Color(0xff86809D);
+  Color get beaconBorder => onSurface;
 
-  Color get cardBackground => const Color(0xFF211F33);
+  Color get cardBackground => surface;
 }
 
 extension CustomTextTheme on TextTheme {
@@ -289,7 +290,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get subtitle3 => GoogleFonts.nunito(
-        color: const Color(0xFF86809D),
+        color: onSurface,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       ).copyWith(height: 1.4);
@@ -301,13 +302,13 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get customListTileSubTitleStyle => GoogleFonts.nunito(
-        color: const Color(0xFF86809D),
+        color: onSurface,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get starterSubTitleStyle => GoogleFonts.nunito(
-        color: const Color(0xFFEEEEEE),
+        color: onPrimary,
         fontSize: 26,
         fontWeight: FontWeight.w600,
       );
@@ -386,7 +387,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get caption3 => GoogleFonts.nunito(
-        color: const Color(0xFF86809D),
+        color: onSurface,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
@@ -456,7 +457,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get biometricMessage => GoogleFonts.roboto(
-        color: const Color(0xFFB1ADC3),
+        color: onTertiary,
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
@@ -742,7 +743,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get credentialCategorySubTitle => GoogleFonts.roboto(
         fontSize: 14,
         fontWeight: FontWeight.normal,
-        color: const Color(0xFF86809D),
+        color: onSurface,
       );
 
   TextStyle get credentialSurfaceText => GoogleFonts.roboto(
@@ -896,7 +897,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get beaconRequestPermission => GoogleFonts.roboto(
-        color: const Color(0xff86809D),
+        color: onSurface,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
