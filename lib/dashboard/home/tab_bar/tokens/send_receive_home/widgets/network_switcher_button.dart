@@ -4,8 +4,8 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TezosNetworkSwitcherButton extends StatelessWidget {
-  const TezosNetworkSwitcherButton({Key? key, this.onTap}) : super(key: key);
+class NetworkSwitcherButton extends StatelessWidget {
+  const NetworkSwitcherButton({Key? key, this.onTap}) : super(key: key);
 
   final VoidCallback? onTap;
 

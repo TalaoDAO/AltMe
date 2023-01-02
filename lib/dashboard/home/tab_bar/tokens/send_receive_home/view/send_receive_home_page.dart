@@ -30,7 +30,7 @@ class SendReceiveHomePage extends StatefulWidget {
 
 class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
   late final dioClient = DioClient(
-    context.read<ManageNetworkCubit>().state.network.tzktUrl,
+    context.read<ManageNetworkCubit>().state.network.apiUrl,
     Dio(),
   );
 
@@ -83,11 +83,8 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                 prev.currentCryptoIndex != next.currentCryptoIndex,
             listener: (_, walletState) {
               context.read<SendReceiveHomeCubit>().init(
-                    baseUrl: context
-                        .read<ManageNetworkCubit>()
-                        .state
-                        .network
-                        .tzktUrl,
+                    baseUrl:
+                        context.read<ManageNetworkCubit>().state.network.apiUrl,
                   );
             },
           ),
@@ -96,7 +93,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
             listener: (_, manageNetworkState) {
               context
                   .read<SendReceiveHomeCubit>()
-                  .init(baseUrl: manageNetworkState.network.tzktUrl);
+                  .init(baseUrl: manageNetworkState.network.apiUrl);
             },
           ),
           BlocListener<SendReceiveHomeCubit, SendReceiveHomeState>(
@@ -147,7 +144,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                       l10n.myTokens,
                       style: Theme.of(context).textTheme.headline5,
                     ),
-                    TezosNetworkSwitcherButton(
+                    NetworkSwitcherButton(
                       onTap: () {
                         ChangeNetworkBottomSheetView.show(context: context);
                       },
@@ -234,7 +231,9 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                                         .walletAddress,
                                     item: state.selectedToken.symbol,
                                     description: l10n
-                                        .sendOnlyXtzToThisAddressDescription,
+                                        .sendOnlyToThisAddressDescription(
+                                      state.selectedToken.symbol,
+                                    ),
                                   ),
                                 );
                               },
@@ -258,7 +257,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                                   .read<ManageNetworkCubit>()
                                   .state
                                   .network
-                                  .tzktUrl,
+                                  .apiUrl,
                             );
                       },
                       operations: state.operations,

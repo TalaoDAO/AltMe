@@ -93,8 +93,6 @@ class ReceivePage extends StatelessWidget {
                 const SizedBox(
                   height: Sizes.spaceSmall,
                 ),
-                // TODO(Taleb): pass token symbol to l10n to return translation
-                //depends on variable ( How to pass variable to l10n object?)
                 Text(
                   description,
                   textAlign: TextAlign.center,

@@ -154,7 +154,7 @@ class _NftViewState extends State<NftView> {
                       .data[index]
                       .blockchainType;
 
-                  if (blockchain != BlockchainType.tezos) {
+                  if (blockchain.isdisabled) {
                     return Center(
                       child: Text(l10n.thisFeatureIsNotSupportedMessage),
                     );
