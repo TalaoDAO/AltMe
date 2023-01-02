@@ -60,11 +60,24 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
     }
     if (state.status == WalletStatus.populate) {
       final blockchainType = state.currentAccount.blockchainType;
-      context.read<ManageNetworkCubit>().setNetwork(
-            blockchainType == BlockchainType.tezos
-                ? TezosNetwork.mainNet()
-                : EthereumNetwork.mainNet(),
-          );
+      if (context.read<ManageNetworkCubit>().state.network.type !=
+          blockchainType) {
+        BlockchainNetwork network;
+        if (blockchainType == BlockchainType.tezos) {
+          network = TezosNetwork.mainNet();
+        } else if (blockchainType == BlockchainType.ethereum) {
+          network = EthereumNetwork.mainNet();
+        } else if (blockchainType == BlockchainType.polygon) {
+          network = PolygonNetwork.mainNet();
+        } else if (blockchainType == BlockchainType.fantom) {
+          network = FantomNetwork.mainNet();
+        } else if (blockchainType == BlockchainType.binance) {
+          network = BinanceNetwork.mainNet();
+        } else {
+          network = TezosNetwork.mainNet();
+        }
+        context.read<ManageNetworkCubit>().setNetwork(network);
+      }
     }
   },
 );

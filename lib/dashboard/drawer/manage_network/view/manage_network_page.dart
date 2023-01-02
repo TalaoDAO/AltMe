@@ -26,11 +26,9 @@ class ManageNetworkPage extends StatelessWidget {
       body: BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
         bloc: context.read<ManageNetworkCubit>(),
         builder: (context, state) {
-          final isTezosAccount =
-              context.read<WalletCubit>().state.currentAccount.blockchainType ==
-                  BlockchainType.tezos;
-          final allNetworks =
-              isTezosAccount ? state.tezosNetworks : state.ethereumNetworks;
+          final blockchainType =
+              context.read<WalletCubit>().state.currentAccount.blockchainType;
+          final allNetworks = blockchainType.networks;
 
           return BackgroundCard(
             child: Column(

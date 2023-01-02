@@ -13,6 +13,7 @@ class EthereumNetwork extends BlockchainNetwork {
     required String subTitle,
     required this.chainId,
     required this.chain,
+    required BlockchainType type,
     String apiKey = '',
   }) : super(
           networkname: networkname,
@@ -21,9 +22,11 @@ class EthereumNetwork extends BlockchainNetwork {
           title: title,
           subTitle: subTitle,
           apiKey: apiKey,
+          type: type,
         );
 
   factory EthereumNetwork.mainNet() => const EthereumNetwork(
+        type: BlockchainType.ethereum,
         networkname: 'Mainnet',
         apiUrl: Urls.moralisBaseUrl,
         chainId: 1,
@@ -36,6 +39,7 @@ class EthereumNetwork extends BlockchainNetwork {
       );
 
   factory EthereumNetwork.testNet() => const EthereumNetwork(
+        type: BlockchainType.ethereum,
         networkname: 'Testnet',
         apiUrl: Urls.moralisBaseUrl,
         chain: 'sepolia',

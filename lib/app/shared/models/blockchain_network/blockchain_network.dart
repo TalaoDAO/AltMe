@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -11,6 +12,7 @@ class BlockchainNetwork extends Equatable {
     required this.rpcNodeUrl,
     required this.title,
     required this.subTitle,
+    required this.type,
     this.apiKey = '',
   });
 
@@ -25,6 +27,7 @@ class BlockchainNetwork extends Equatable {
   final String rpcNodeUrl;
   final String? title;
   final String? subTitle;
+  final BlockchainType type;
 
   @override
   List<Object?> get props => [
@@ -34,12 +37,13 @@ class BlockchainNetwork extends Equatable {
         rpcNodeUrl,
         title,
         subTitle,
+        type,
       ];
 
   @override
   String toString() {
     return 'BlockchainNetwork{networkName: $networkname,apiUrl: $apiUrl, '
         'rpcNodeUrl: $rpcNodeUrl, apiKey: $apiKey ,title:$title '
-        ',subTitle:$subTitle}';
+        ',subTitle:$subTitle, type: $type}';
   }
 }
