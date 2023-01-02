@@ -6,7 +6,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:did_kit/did_kit.dart';
+//import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
@@ -31,7 +31,7 @@ class ImportAccountStep3Page extends StatelessWidget {
       create: (_) => ImportAccountCubit(
         secureStorageProvider: getSecureStorage,
         didCubit: context.read<DIDCubit>(),
-        didKitProvider: DIDKitProvider(),
+        //didKitProvider: DIDKitProvider(),
         keyGenerator: KeyGenerator(),
         homeCubit: context.read<HomeCubit>(),
         walletCubit: context.read<WalletCubit>(),

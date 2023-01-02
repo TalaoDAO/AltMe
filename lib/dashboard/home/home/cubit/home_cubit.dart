@@ -10,7 +10,7 @@ import 'package:altme/wallet/model/crypto_account.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';
-import 'package:did_kit/did_kit.dart';
+//import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -62,58 +62,58 @@ class HomeCubit extends Cubit<HomeState> {
     final key = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
     final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
 
-    final DIDKitProvider didKitProvider = DIDKitProvider();
-    final String did_auth = await didKitProvider.didAuth(
-      did,
-      jsonEncode(options),
-      key,
-    );
+    // final DIDKitProvider didKitProvider = DIDKitProvider();
+    // final String did_auth = await didKitProvider.didAuth(
+    //   did,
+    //   jsonEncode(options),
+    //   key,
+    // );
 
-    final data = <String, dynamic>{
-      'base64_encoded_string': base64EncodedImage,
-      'vp': did_auth,
-      'did': did,
-    };
+    // final data = <String, dynamic>{
+    //   'base64_encoded_string': base64EncodedImage,
+    //   'vp': did_auth,
+    //   'did': did,
+    // };
 
     await dotenv.load();
     final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');
 
     try {
-      await _getCredentialByAI(
-        url: Urls.over13AIValidationUrl,
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'Over13',
-        walletCubit: walletCubit,
-        cameraCubit: cameraCubit,
-      );
+      // await _getCredentialByAI(
+      //   url: Urls.over13AIValidationUrl,
+      //   apiKey: YOTI_AI_API_KEY,
+      //   data: data,
+      //   credentialType: 'Over13',
+      //   walletCubit: walletCubit,
+      //   cameraCubit: cameraCubit,
+      // );
 
-      await _getCredentialByAI(
-        url: Urls.over18AIValidationUrl,
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'Over18',
-        walletCubit: walletCubit,
-        cameraCubit: cameraCubit,
-      );
+      // await _getCredentialByAI(
+      //   url: Urls.over18AIValidationUrl,
+      //   apiKey: YOTI_AI_API_KEY,
+      //   data: data,
+      //   credentialType: 'Over18',
+      //   walletCubit: walletCubit,
+      //   cameraCubit: cameraCubit,
+      // );
 
-      await _getCredentialByAI(
-        url: Urls.ageRangeAIValidationUrl,
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'AgeRange',
-        walletCubit: walletCubit,
-        cameraCubit: cameraCubit,
-      );
+      // await _getCredentialByAI(
+      //   url: Urls.ageRangeAIValidationUrl,
+      //   apiKey: YOTI_AI_API_KEY,
+      //   data: data,
+      //   credentialType: 'AgeRange',
+      //   walletCubit: walletCubit,
+      //   cameraCubit: cameraCubit,
+      // );
 
-      await _getCredentialByAI(
-        url: 'https://issuer.talao.co/ai/ageestimate',
-        apiKey: YOTI_AI_API_KEY,
-        data: data,
-        credentialType: 'AgeEstimate',
-        walletCubit: walletCubit,
-        cameraCubit: cameraCubit,
-      );
+      // await _getCredentialByAI(
+      //   url: 'https://issuer.talao.co/ai/ageestimate',
+      //   apiKey: YOTI_AI_API_KEY,
+      //   data: data,
+      //   credentialType: 'AgeEstimate',
+      //   walletCubit: walletCubit,
+      //   cameraCubit: cameraCubit,
+      // );
     } catch (e) {
       final logger = getLogger('HomeCubit - AISelfiValidation');
       logger.e('error: $e');

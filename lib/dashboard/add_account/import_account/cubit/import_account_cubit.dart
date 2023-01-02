@@ -3,7 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:did_kit/did_kit.dart';
+//import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -16,7 +16,7 @@ part 'import_account_state.dart';
 
 class ImportAccountCubit extends Cubit<ImportAccountState> {
   ImportAccountCubit({
-    required this.didKitProvider,
+    //required this.didKitProvider,
     required this.secureStorageProvider,
     required this.keyGenerator,
     required this.homeCubit,
@@ -24,7 +24,7 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
     required this.walletCubit,
   }) : super(const ImportAccountState());
 
-  final DIDKitProvider didKitProvider;
+  //final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;
   final HomeCubit homeCubit;
