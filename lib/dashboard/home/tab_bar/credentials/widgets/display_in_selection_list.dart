@@ -59,7 +59,7 @@ class DisplayInSelectionList extends StatelessWidget {
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.ageRange:
-        return AgeRangeDisplayInSelectionList(
+        return AgeRangeWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.nationality:

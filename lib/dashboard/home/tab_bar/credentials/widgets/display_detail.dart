@@ -61,7 +61,7 @@ class DisplayDetail extends StatelessWidget {
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.ageRange:
-        return AgeRangeDisplayDetail(
+        return AgeRangeWidget(
           credentialModel: credentialModel,
         );
       case CredentialSubjectType.nationality:
