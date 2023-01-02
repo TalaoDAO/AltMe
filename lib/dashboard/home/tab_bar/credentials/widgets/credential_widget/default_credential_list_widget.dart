@@ -50,7 +50,6 @@ class DefaultCredentialListWidget extends StatelessWidget {
         aspectRatio: Sizes.credentialAspectRatio,
         child: Container(
           decoration: BaseBoxDecoration(
-            borderRadius: BorderRadius.circular(20),
             color: backgroundColor,
             shapeColor: Theme.of(context).colorScheme.documentShape,
             value: 1,
@@ -59,7 +58,7 @@ class DefaultCredentialListWidget extends StatelessWidget {
                 : const <Alignment>[],
           ),
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(15),
             child: descriptionWidget,
           ),
         ),
