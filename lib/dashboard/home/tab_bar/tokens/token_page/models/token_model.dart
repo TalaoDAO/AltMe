@@ -21,6 +21,7 @@ class TokenModel extends Equatable {
     this.balanceInUSD = 0,
     this.standard,
     this.tokenId = '0',
+    this.decimalsToShow = 2,
   });
 
   factory TokenModel.fromJson(Map<String, dynamic> json) =>
@@ -43,6 +44,7 @@ class TokenModel extends Equatable {
   final double balanceInUSD;
   final String? tokenId;
   final String? standard;
+  final int decimalsToShow;
 
   Map<String, dynamic> toJson() => _$TokenModelToJson(this);
 
@@ -128,5 +130,6 @@ class TokenModel extends Equatable {
         balanceInUSD,
         tokenId,
         standard,
+        decimalsToShow,
       ];
 }

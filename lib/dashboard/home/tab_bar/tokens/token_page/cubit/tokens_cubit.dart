@@ -137,6 +137,7 @@ class TokensCubit extends Cubit<TokensState> {
               decimals: ((json['decimals'] as int?) ?? 0).toString(),
               thumbnailUri: json['thumbnail'] as String?,
               icon: json['logo'] as String?,
+              decimalsToShow: 5,
             ),
           )
           .toList();
@@ -322,6 +323,7 @@ class TokensCubit extends Cubit<TokensState> {
         balance: response['balance'] as String,
         decimals: '18',
         standard: 'ERC20',
+        decimalsToShow: 5,
       );
     } catch (e, s) {
       getLogger(toString()).e('error: $e, stack: $s');
