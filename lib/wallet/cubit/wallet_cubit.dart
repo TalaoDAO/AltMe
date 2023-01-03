@@ -141,118 +141,85 @@ class WalletCubit extends Cubit<WalletState> {
 
     final isSecretKey = isValidPrivateKey(mnemonicOrKey);
 
-    if (isSecretKey) {
-      final isTezosSecretKey = mnemonicOrKey.startsWith('edsk') ||
-          mnemonicOrKey.startsWith('spsk') ||
-          mnemonicOrKey.startsWith('p2sk');
-
-      // TODO(bibash): handle case if blochain is not null
-      if (blockchainType != null) {}
-
-      log.i(
-        'creating ${isTezosSecretKey ? 'tezos' : 'ethereum based'} account',
+    /// when blockchain type is pre-selected
+    if (blockchainType != null) {
+      log.i('creating both $blockchainType accounts');
+      updatedCryptoAccount = await createBlockchainAccount(
+        accountName: accountName,
+        mnemonicOrKey: mnemonicOrKey,
+        isImported: isImported,
+        isSecretKey: isSecretKey,
+        blockchainType: blockchainType,
+        totalAccountsYet: accountsCount,
       );
-
-      if (isTezosSecretKey) {
-        /// creating tezos account
-        updatedCryptoAccount = await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.tezos,
-          totalAccountsYet: accountsCount,
-        );
-      } else {
-        /// creating all ethereum based accounts
-        await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.fantom,
-          totalAccountsYet: accountsCount,
-        );
-        await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.polygon,
-          totalAccountsYet: accountsCount + 1,
-        );
-        await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.binance,
-          totalAccountsYet: accountsCount + 2,
-        );
-        updatedCryptoAccount = await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.ethereum,
-          totalAccountsYet: accountsCount + 3,
-        );
-      }
     } else {
-      if (blockchainType != null) {
-        log.i('creating both $blockchainType accounts');
-        updatedCryptoAccount = await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: blockchainType,
-          totalAccountsYet: accountsCount,
+      if (isSecretKey) {
+        final isTezosSecretKey = mnemonicOrKey.startsWith('edsk') ||
+            mnemonicOrKey.startsWith('spsk') ||
+            mnemonicOrKey.startsWith('p2sk');
+
+        log.i(
+          'creating ${isTezosSecretKey ? 'tezos' : 'ethereum based'} account',
         );
+
+        if (isTezosSecretKey) {
+          /// creating tezos account
+          updatedCryptoAccount = await createBlockchainAccount(
+            accountName: accountName,
+            mnemonicOrKey: mnemonicOrKey,
+            isImported: isImported,
+            isSecretKey: isSecretKey,
+            blockchainType: BlockchainType.tezos,
+            totalAccountsYet: accountsCount,
+          );
+        } else {
+          /// creating all ethereum based accounts
+          await createBlockchainAccount(
+            accountName: accountName,
+            mnemonicOrKey: mnemonicOrKey,
+            isImported: isImported,
+            isSecretKey: isSecretKey,
+            blockchainType: BlockchainType.fantom,
+            totalAccountsYet: accountsCount,
+          );
+          await createBlockchainAccount(
+            accountName: accountName,
+            mnemonicOrKey: mnemonicOrKey,
+            isImported: isImported,
+            isSecretKey: isSecretKey,
+            blockchainType: BlockchainType.polygon,
+            totalAccountsYet: accountsCount + 1,
+          );
+          await createBlockchainAccount(
+            accountName: accountName,
+            mnemonicOrKey: mnemonicOrKey,
+            isImported: isImported,
+            isSecretKey: isSecretKey,
+            blockchainType: BlockchainType.binance,
+            totalAccountsYet: accountsCount + 2,
+          );
+          updatedCryptoAccount = await createBlockchainAccount(
+            accountName: accountName,
+            mnemonicOrKey: mnemonicOrKey,
+            isImported: isImported,
+            isSecretKey: isSecretKey,
+            blockchainType: BlockchainType.ethereum,
+            totalAccountsYet: accountsCount + 3,
+          );
+        }
       } else {
-        log.i('creating both all blockchain accounts');
-        await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.ethereum,
-          totalAccountsYet: accountsCount,
-        );
-        await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.fantom,
-          totalAccountsYet: accountsCount + 1,
-        );
-        await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.polygon,
-          totalAccountsYet: accountsCount + 2,
-        );
-        await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.binance,
-          totalAccountsYet: accountsCount + 3,
-        );
+        /// only creating tezos at start
         updatedCryptoAccount = await createBlockchainAccount(
           accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.tezos,
-          totalAccountsYet: accountsCount + 4,
+          totalAccountsYet: accountsCount,
         );
       }
     }
+
     onComplete?.call(
       cryptoAccount: updatedCryptoAccount,
       messageHandler: ResponseMessage(
