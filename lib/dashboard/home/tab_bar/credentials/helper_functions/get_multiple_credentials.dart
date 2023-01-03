@@ -85,7 +85,7 @@ Future<CredentialManifest> getCredentialManifestFromAltMe(
 Future<bool> getCredentialsFromIssuer(
   String preAuthorizedCode,
   DioClient client,
-  List<String> credentialTypeList,
+  List<CredentialSubjectType> credentialTypeList,
   secure_storage.SecureStorageProvider secureStorageProvider,
   WalletCubit walletCubit,
 ) async {
@@ -102,11 +102,17 @@ Future<bool> getCredentialsFromIssuer(
 
   try {
     for (final type in credentialTypeList) {
+      final isAlreadyAdded = await isCredentialAvaialble(type);
+
+      if (isAlreadyAdded) {
+        continue;
+      }
+
       final dynamic credential = await getCredential(
         accessToken,
         nonce,
         credentialEndPoint,
-        type,
+        type.name,
         client,
         secureStorageProvider,
       );
@@ -119,7 +125,7 @@ Future<bool> getCredentialsFromIssuer(
         final CredentialManifest credentialManifest =
             await getCredentialManifestFromAltMe(client);
         credentialManifest.outputDescriptors
-            ?.removeWhere((element) => element.id != type);
+            ?.removeWhere((element) => element.id != type.name);
         if (credentialManifest.outputDescriptors!.isNotEmpty) {
           newCredential['credential_manifest'] = CredentialManifest(
             credentialManifest.id,

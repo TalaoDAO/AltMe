@@ -176,6 +176,14 @@ Future<bool> isCredentialPresentable(String credentialName) async {
     return true;
   }
 
+  final isPresentable = await isCredentialAvaialble(credentialSubjectType);
+
+  return isPresentable;
+}
+
+Future<bool> isCredentialAvaialble(
+  CredentialSubjectType credentialSubjectType,
+) async {
   /// fetching all the credentials
   final CredentialsRepository repository =
       CredentialsRepository(getSecureStorage);
