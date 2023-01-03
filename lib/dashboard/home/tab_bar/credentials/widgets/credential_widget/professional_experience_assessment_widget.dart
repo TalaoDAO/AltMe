@@ -4,43 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class ProfessionalExperienceAssessmentDisplayInList extends StatelessWidget {
-  const ProfessionalExperienceAssessmentDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInList(
-      credentialModel: credentialModel,
-      descriptionMaxLine: 3,
-    );
-  }
-}
-
-class ProfessionalExperienceAssessmentDisplayInSelectionList
-    extends StatelessWidget {
-  const ProfessionalExperienceAssessmentDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInSelectionList(
-      credentialModel: credentialModel,
-      descriptionMaxLine: 3,
-    );
-  }
-}
-
-class ProfessionalExperienceAssessmentDisplayDetail extends StatelessWidget {
-  const ProfessionalExperienceAssessmentDisplayDetail({
+class ProfessionalExperienceAssessmentWidget extends StatelessWidget {
+  const ProfessionalExperienceAssessmentWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);

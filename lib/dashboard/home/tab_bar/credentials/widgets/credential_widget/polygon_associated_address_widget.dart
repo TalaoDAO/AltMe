@@ -4,56 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class PolygonAssociatedAddressDisplayInList extends StatelessWidget {
-  const PolygonAssociatedAddressDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return PolygonAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class PolygonAssociatedAddressDisplayInSelectionList extends StatelessWidget {
-  const PolygonAssociatedAddressDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return PolygonAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class PolygonAssociatedAddressDisplayDetail extends StatelessWidget {
-  const PolygonAssociatedAddressDisplayDetail({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return PolygonAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class PolygonAssociatedAddressRecto extends Recto {
-  const PolygonAssociatedAddressRecto({
+class PolygonAssociatedAddressWidget extends StatelessWidget {
+  const PolygonAssociatedAddressWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);

@@ -349,15 +349,18 @@ class ResponseMessage with MessageHandler {
 
         case ResponseString.RESPONSE_STRING_twitterWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_twitterWhyGetThisCard.localise(
-              context);
+            context,
+          );
 
         case ResponseString.RESPONSE_STRING_twitterExpirationDate:
           return ResponseString.RESPONSE_STRING_twitterExpirationDate.localise(
-              context);
+            context,
+          );
 
         case ResponseString.RESPONSE_STRING_twitterHowToGetIt:
           return ResponseString.RESPONSE_STRING_twitterHowToGetIt.localise(
-              context);
+            context,
+          );
 
         case ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard

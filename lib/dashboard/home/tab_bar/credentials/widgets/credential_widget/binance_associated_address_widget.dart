@@ -4,56 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class BinanceAssociatedAddressDisplayInList extends StatelessWidget {
-  const BinanceAssociatedAddressDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return BinanceAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class BinanceAssociatedAddressDisplayInSelectionList extends StatelessWidget {
-  const BinanceAssociatedAddressDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return BinanceAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class BinanceAssociatedAddressDisplayDetail extends StatelessWidget {
-  const BinanceAssociatedAddressDisplayDetail({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return BinanceAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class BinanceAssociatedAddressRecto extends Recto {
-  const BinanceAssociatedAddressRecto({
+class BinanceAssociatedAddressWidget extends StatelessWidget {
+  const BinanceAssociatedAddressWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -71,7 +23,7 @@ class BinanceAssociatedAddressRecto extends Recto {
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
           delegate:
-              BinanceAssociatedAddressRectoDelegate(position: Offset.zero),
+              BinanceAssociatedAddressWidgetDelegate(position: Offset.zero),
           children: [
             LayoutId(
               id: 'name',
@@ -121,8 +73,8 @@ class BinanceAssociatedAddressRecto extends Recto {
   }
 }
 
-class BinanceAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
-  BinanceAssociatedAddressRectoDelegate({this.position = Offset.zero});
+class BinanceAssociatedAddressWidgetDelegate extends MultiChildLayoutDelegate {
+  BinanceAssociatedAddressWidgetDelegate({this.position = Offset.zero});
 
   final Offset position;
 
@@ -154,7 +106,7 @@ class BinanceAssociatedAddressRectoDelegate extends MultiChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(BinanceAssociatedAddressRectoDelegate oldDelegate) {
+  bool shouldRelayout(BinanceAssociatedAddressWidgetDelegate oldDelegate) {
     return oldDelegate.position != position;
   }
 }

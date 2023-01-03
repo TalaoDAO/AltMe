@@ -77,8 +77,9 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
               //   ],
               // ),
               const SizedBox(height: 16),
-              DisplayDetail(
+              CredentialDisplay(
                 credentialModel: credentialModel,
+                credDisplayType: CredDisplayType.Detail,
                 fromCredentialOffer: true,
               ),
               if (outputDescriptors != null) ...[

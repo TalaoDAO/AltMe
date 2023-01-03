@@ -3,42 +3,8 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
-class IdentityPassDisplayInList extends StatelessWidget {
-  const IdentityPassDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInList(
-      credentialModel: credentialModel,
-      descriptionMaxLine: 4,
-    );
-  }
-}
-
-class IdentityPassDisplayInSelectionList extends StatelessWidget {
-  const IdentityPassDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInSelectionList(
-      credentialModel: credentialModel,
-      descriptionMaxLine: 4,
-    );
-  }
-}
-
-class IdentityPassDisplayDetail extends StatelessWidget {
-  const IdentityPassDisplayDetail({
+class IdentityPassWidget extends StatelessWidget {
+  const IdentityPassWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);

@@ -3,38 +3,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class LoyaltyCardDisplayInList extends StatelessWidget {
-  const LoyaltyCardDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInList(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class LoyaltyCardDisplayInSelectionList extends StatelessWidget {
-  const LoyaltyCardDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInSelectionList(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
 class LoyaltyCardDisplayDetail extends StatelessWidget {
   const LoyaltyCardDisplayDetail({Key? key, required this.credentialModel})
       : super(key: key);

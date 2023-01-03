@@ -2,50 +2,8 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
-class DiplomaCardDisplayInList extends StatelessWidget {
-  const DiplomaCardDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DiplomaCardRecto(credentialModel: credentialModel);
-  }
-}
-
-class DiplomaCardDisplayInSelectionList extends StatelessWidget {
-  const DiplomaCardDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DiplomaCardRecto(credentialModel: credentialModel);
-  }
-}
-
-class DiplomaCardDisplayDetail extends StatelessWidget {
-  const DiplomaCardDisplayDetail({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DiplomaCardRecto(credentialModel: credentialModel);
-  }
-}
-
-class DiplomaCardRecto extends StatelessWidget {
-  const DiplomaCardRecto({
+class DiplomaCardWidget extends StatelessWidget {
+  const DiplomaCardWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);

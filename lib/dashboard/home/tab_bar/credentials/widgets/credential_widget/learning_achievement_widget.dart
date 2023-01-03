@@ -4,34 +4,6 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class LearningAchievementDisplayInList extends StatelessWidget {
-  const LearningAchievementDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return LearningAchievementRecto(credentialModel: credentialModel);
-  }
-}
-
-class LearningAchievementDisplayInSelectionList extends StatelessWidget {
-  const LearningAchievementDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return LearningAchievementRecto(credentialModel: credentialModel);
-  }
-}
-
 class LearningAchievementDisplayDetail extends StatelessWidget {
   const LearningAchievementDisplayDetail({
     Key? key,

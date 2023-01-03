@@ -17,8 +17,8 @@ class DefaultDisplayDescriptor extends StatelessWidget {
   Widget build(BuildContext context) {
     final credential = Credential.fromJsonOrDummy(credentialModel.data);
     return FractionallySizedBox(
-      widthFactor: 0.95,
-      heightFactor: 0.9,
+      widthFactor: 0.85,
+      heightFactor: 0.8,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -32,9 +32,8 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                   Row(
                     children: [
                       CredentialIcon(
-                        iconData: credential
-                            .credentialSubjectModel.credentialSubjectType
-                            .iconData(),
+                        iconData: credential.credentialSubjectModel
+                            .credentialSubjectType.iconData,
                         size: 20,
                       ),
                       const SizedBox(width: 4),

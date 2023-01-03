@@ -8,12 +8,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         int.parse('FF${credentialModel.display.backgroundColor}', radix: 16),
       );
     } else {
-      _backgroundColor = defaultBackgroundColor();
+      _backgroundColor = defaultBackgroundColor;
     }
     return _backgroundColor;
   }
 
-  Color defaultBackgroundColor() {
+  Color get defaultBackgroundColor {
     switch (this) {
       case CredentialSubjectType.deviceInfo:
         return const Color(0xff14181D);
@@ -111,7 +111,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
-  IconData iconData() {
+  IconData get iconData {
     switch (this) {
       case CredentialSubjectType.deviceInfo:
         return Icons.phone_android_rounded;
@@ -209,7 +209,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
-  bool isDisabled() {
+  bool get isDisabled {
     if (this == CredentialSubjectType.dogamiPass ||
         this == CredentialSubjectType.pigsPass ||
         this == CredentialSubjectType.bunnyPass ||
