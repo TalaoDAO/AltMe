@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -56,7 +55,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> process({required String? scannedResponse}) async {
     log.i('processing scanned qr code - $scannedResponse');
-    emit(state.loading(isDeepLink: false));
+    emit(state.loading(isScan: true));
     try {
       final isInternetAvailable = await isConnected();
       if (!isInternetAvailable) {
@@ -110,7 +109,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> host({required String? url}) async {
-    emit(state.loading(isDeepLink: false));
+    emit(state.loading(isScan: true));
     try {
       final isInternetAvailable = await isConnected();
       if (!isInternetAvailable) {
@@ -124,7 +123,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       } else {
         final uri = Uri.parse(url);
-        await verify(uri: uri);
+        await verify(uri: uri, isScan: true);
       }
     } on FormatException {
       emit(
@@ -151,13 +150,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> deepLink() async {
-    emit(state.loading(isDeepLink: true));
+    emit(state.loading(isScan: false));
     final deepLinkUrl = deepLinkCubit.state;
     if (deepLinkUrl != '') {
       deepLinkCubit.resetDeepLink();
       try {
         final uri = Uri.parse(deepLinkUrl);
-        await verify(uri: uri);
+        await verify(uri: uri, isScan: false);
       } on FormatException {
         emit(
           state.error(
@@ -177,13 +176,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> verify({
     required Uri? uri,
-    bool isConnectionBridgeSSI = false,
+    required bool isScan,
   }) async {
-    if (isConnectionBridgeSSI) {
-      emit(state.loading(isDeepLink: isConnectionBridgeSSI));
-    } else {
-      emit(state.loading());
-    }
+    emit(state.loading(isScan: isScan));
     try {
       ///Check if SIOPV2 request
       if (uri?.queryParameters['scope'] == 'openid') {
@@ -314,8 +309,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> accept({
     required Uri uri,
     required Issuer issuer,
+    required bool isScan,
   }) async {
-    emit(state.loading());
+    emit(state.loading(isScan: isScan));
     final log = getLogger('QRCodeScanCubit - accept');
 
     late final dynamic data;
@@ -348,34 +344,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             final credentialName =
                 credentialField['filter']['pattern'] as String;
 
-            late CredentialSubjectType credentialSubjectType;
+            final isPresentable = await isCredentialPresentable(credentialName);
 
-            for (final element in CredentialSubjectType.values) {
-              if (credentialName == element.name) {
-                credentialSubjectType = element;
-                break;
-              }
-            }
-
-            /// fetching all the credentials
-            final CredentialsRepository repository =
-                CredentialsRepository(getSecureStorage);
-
-            final List<CredentialModel> allCredentials =
-                await repository.findAll();
-
-            bool isPresentable = false;
-
-            for (final credential in allCredentials) {
-              if (credentialSubjectType ==
-                  credential.credentialPreview.credentialSubjectModel
-                      .credentialSubjectType) {
-                isPresentable = true;
-                break;
-              } else {
-                isPresentable = false;
-              }
-            }
             if (!isPresentable) {
               emit(
                 state.copyWith(
@@ -408,9 +378,32 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         case 'VerifiablePresentationRequest':
           if (data['query'] != null) {
-            queryByExampleCubit.setQueryByExampleCubit(
-              (data['query']).first as Map<String, dynamic>,
-            );
+            final query =
+                Query.fromJson(data['query'].first as Map<String, dynamic>);
+
+            for (final credentialQuery in query.credentialQuery) {
+              final String? credentialName = credentialQuery.example?.type;
+
+              if (credentialName == null) {
+                continue;
+              }
+
+              final isPresentable =
+                  await isCredentialPresentable(credentialName);
+
+              if (!isPresentable) {
+                emit(
+                  state.copyWith(
+                    qrScanStatus: QrScanStatus.success,
+                    route: MissingCredentialsPage.route(query: query),
+                  ),
+                );
+                return;
+              }
+            }
+
+            queryByExampleCubit.setQueryByExampleCubit(query);
+
             log.i(data['query']);
             if (data['query'].first['type'] == 'DIDAuth') {
               log.i('DIDAuth');

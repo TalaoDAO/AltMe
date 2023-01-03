@@ -174,6 +174,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           await context.read<QRCodeScanCubit>().accept(
                 uri: state.uri!,
                 issuer: approvedIssuer,
+                isScan: state.isScan,
               );
         } else {
           await context.read<QRCodeScanCubit>().emitError(
@@ -188,10 +189,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
     if (state.status == QrScanStatus.success) {
       if (state.route != null) {
-        if (state.isDeepLink) {
-          await Navigator.of(context).push<void>(state.route!);
-        } else {
+        if (state.isScan) {
           await Navigator.of(context).pushReplacement<void, void>(state.route!);
+        } else {
+          await Navigator.of(context).push<void>(state.route!);
         }
       }
     }

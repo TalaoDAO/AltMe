@@ -4,9 +4,8 @@ import 'package:bloc/bloc.dart';
 class QueryByExampleCubit extends Cubit<Query> {
   QueryByExampleCubit() : super(Query(type: '', credentialQuery: []));
 
-  void setQueryByExampleCubit(Map<String, dynamic> queryByExample) {
-    final _query = Query.fromJson(queryByExample);
-    emit(_query);
+  void setQueryByExampleCubit(Query query) {
+    emit(query);
   }
 
   void resetQueryByExampleCubit() {

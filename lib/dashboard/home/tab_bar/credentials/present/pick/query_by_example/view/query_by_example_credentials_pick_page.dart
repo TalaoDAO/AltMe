@@ -94,11 +94,9 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
       /// Query by Example case
       if (queryByExampleCubit.credentialQuery[credentialQueryIndex].reason !=
           null) {
-        final _reason =
-            queryByExampleCubit.credentialQuery[credentialQueryIndex].reason;
-        if (_reason != null) {
-          reason += '${GetTranslation.getTranslation(_reason, l10n)}\n';
-        }
+        reason =
+            queryByExampleCubit.credentialQuery[credentialQueryIndex].reason ??
+                '';
       }
     }
 
