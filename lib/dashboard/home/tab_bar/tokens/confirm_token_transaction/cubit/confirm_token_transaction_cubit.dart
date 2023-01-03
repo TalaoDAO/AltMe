@@ -114,7 +114,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
 
-      await ethClient.sendTransaction(
+      final response = await ethClient.sendTransaction(
         credentials,
         chainId: selectedEthereumNetwork.chainId,
         Transaction(
@@ -125,7 +125,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           value: EtherAmount.fromUnitAndValue(EtherUnit.wei, amount),
         ),
       );
-      logger.i('after withdrawal execute');
+      logger.i('after withdrawal ETH execute => response: $response');
       emit(state.success());
     } catch (e, s) {
       logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
