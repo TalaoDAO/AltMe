@@ -10,13 +10,16 @@ class DeviceInfoModel extends CredentialSubjectModel {
     this.systemName,
     this.device,
     this.systemVersion,
+    this.walletBuild,
     String? id,
     String? type,
+    required Author issuedBy,
   }) : super(
           id: id,
           type: type,
           credentialSubjectType: CredentialSubjectType.deviceInfo,
           credentialCategory: CredentialCategory.othersCards,
+          issuedBy: issuedBy,
         );
 
   factory DeviceInfoModel.fromJson(Map<String, dynamic> json) =>
@@ -30,6 +33,9 @@ class DeviceInfoModel extends CredentialSubjectModel {
 
   @JsonKey(defaultValue: '')
   final String? systemVersion;
+
+  @JsonKey(defaultValue: '')
+  final String? walletBuild;
 
   @override
   Map<String, dynamic> toJson() => _$DeviceInfoModelToJson(this);
