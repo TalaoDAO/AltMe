@@ -20,7 +20,7 @@ class DiplomaCardModel extends CredentialSubjectModel {
           type: type,
           issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.diplomaCard,
-          credentialCategory: CredentialCategory.othersCards,
+          credentialCategory: CredentialCategory.myProfessionalCards,
         );
 
   factory DiplomaCardModel.fromJson(Map<String, dynamic> json) =>
