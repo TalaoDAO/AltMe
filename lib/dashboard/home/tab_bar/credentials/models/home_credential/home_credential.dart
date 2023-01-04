@@ -142,8 +142,17 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_verifiableIdCardExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_verifiableIdCardHowToGetIt;
-        dummyDesc =
-            ResponseString.RESPONSE_STRING_identityProofDummyDescription;
+        dummyDesc = ResponseString.RESPONSE_STRING_verifiableIdCardDummyDesc;
+        break;
+
+      case CredentialSubjectType.linkedInCard:
+        image = ImageStrings.dummyLinkedinCard;
+        link = Urls.linkedinCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_linkedinCardExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt;
         break;
 
       case CredentialSubjectType.tezotopiaMembership:

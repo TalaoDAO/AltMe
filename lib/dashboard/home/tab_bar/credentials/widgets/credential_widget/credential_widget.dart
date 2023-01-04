@@ -23,6 +23,7 @@ export 'fantom_associated_address_widget.dart';
 export 'gender_widget.dart';
 export 'identity_pass_widget.dart';
 export 'learning_achievement_widget.dart';
+export 'linkedin_card_widget.dart';
 export 'loyalty_card_widget.dart';
 export 'matterlight_pass_widget.dart';
 export 'nationality_widget.dart';

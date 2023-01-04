@@ -50,6 +50,16 @@ class DiscoverCredentialList extends StatelessWidget {
             ),
             const SizedBox(height: 10),
           ],
+          if (state.myProfessionalCategories.isNotEmpty) ...[
+            /// Professional Credentials
+            HomeCredentialWidget(
+              title: l10n.myProfessionalCards,
+              credentials: state.myProfessionalCredentials,
+              fromDiscover: true,
+              categorySubtitle: l10n.myProfessionalCredentialDiscoverSubtitle,
+            ),
+            const SizedBox(height: 10),
+          ],
           // Note: ProofOfOwnershipCredentials is hidden. Later we will
           // give user an option to show it
           // if (state.proofOfOwnershipCredentials.isNotEmpty) ...[
