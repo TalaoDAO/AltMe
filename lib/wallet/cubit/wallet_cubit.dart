@@ -583,12 +583,12 @@ class WalletCubit extends Cubit<WalletState> {
       }
     }
 
-    if (credentialCategory == CredentialCategory.blockchainAccountsCards &&
-        credentialListCubit.state.blockchainAccountsCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isBlockchainAccountsEnabled) {
-        advanceSettingsCubit.toggleBlockchainAccountsRadio();
-      }
-    }
+    // if (credentialCategory == CredentialCategory.blockchainAccountsCards &&
+    //     credentialListCubit.state.blockchainAccountsCredentials.isEmpty) {
+    //   if (!advanceSettingsCubit.state.isBlockchainAccountsEnabled) {
+    //     advanceSettingsCubit.toggleBlockchainAccountsRadio();
+    //   }
+    // }
 
     if (credentialCategory == CredentialCategory.othersCards &&
         credentialListCubit.state.othersCredentials.isEmpty) {

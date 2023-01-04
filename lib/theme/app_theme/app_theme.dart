@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-final Color primary = Color(0xff6600FF);
-final Color onPrimary = Color(0xff1A182D);
-final Color secondary = Color(0xff00A1FF);
-final Color onTertiary = Color(0xFF36334E);
-final Color surface = Color(0xffFFFFFF);
-final Color surfaceAccent = Color(0xffD1CCE3);
-final Color onSurface = Color(0xff1D1D1D);
-final Color shadow = Color(0xFFA79ABA);
-final Color disabled = Color(0xFF605A71);
-final Color error = Color(0xffcf6679);
-final Color highlight = Color(0xFF180B2B);
-final Color snackBarBackground = Colors.green;
-final Color transactionApplied = Color(0xFF00B267);
-final Color transactionFailed = Color(0xFFFF0045);
-final Color transactionSkipped = Color(0xFFFF5F0A);
-final Color activeColorOfNetwork = Color(0xFF2C7DF7);
-final Color kyc = Color(0xFF0045FF);
+const Color primary = Color(0xff6600FF);
+const Color onPrimary = Color(0xff1A182D);
+const Color secondary = Color(0xff00A1FF);
+const Color onTertiary = Color(0xFF36334E);
+const Color surface = Color(0xffFFFFFF);
+const Color surfaceAccent = Color(0xffD1CCE3);
+const Color onSurface = Color(0xff1D1D1D);
+const Color shadow = Color(0xFFA79ABA);
+const Color disabled = Color(0xFF605A71);
+const Color error = Color(0xffcf6679);
+const Color highlight = Color(0xFF180B2B);
+const Color snackBarBackground = Colors.green;
+const Color applied = Color(0xFF00B267);
+const Color failed = Color(0xFFFF0045);
+const Color skipped = Color(0xFFFF5F0A);
+const Color activeNetwork = Color(0xFF2C7DF7);
+const Color kyc = Color(0xFF0045FF);
 
 abstract class AppTheme {
   /// A color frequently across your app’s screens and components.
@@ -68,7 +68,7 @@ abstract class AppTheme {
   static Color highlightColor = highlight;
 
   static ThemeData get darkThemeData => ThemeData(
-        brightness: Brightness.dark,
+        brightness: Brightness.light,
         dividerColor: dividerColor,
         highlightColor: highlightColor,
         colorScheme: ColorScheme(
@@ -85,7 +85,7 @@ abstract class AppTheme {
           error: darkError,
           onError: darkOnError,
           shadow: darkShadow,
-          brightness: Brightness.dark,
+          brightness: Brightness.light,
         ),
         textTheme: TextTheme(
           caption: GoogleFonts.nunito(
@@ -122,10 +122,10 @@ abstract class AppTheme {
 }
 
 extension CustomColorScheme on ColorScheme {
-  Color get transactionApplied => transactionApplied;
-  Color get transactionFailed => transactionFailed;
-  Color get transactionSkipped => transactionSkipped;
-  Color get activeColorOfNetwork => activeColorOfNetwork;
+  Color get transactionApplied => applied;
+  Color get transactionFailed => failed;
+  Color get transactionSkipped => skipped;
+  Color get activeColorOfNetwork => activeNetwork;
 
   Color get greyText => onTertiary;
 
@@ -147,11 +147,11 @@ extension CustomColorScheme on ColorScheme {
 
   Color get disabledBgColor => disabled;
 
-  Color get disabledTextColor => const Color(0xFF000000);
+  Color get disabledTextColor => disabled;
 
-  Color get darkGradientStartColor => const Color(0xff0A0F19);
+  Color get darkGradientStartColor => surface;
 
-  Color get darkGradientEndColor => const Color(0xff25095B);
+  Color get darkGradientEndColor => surface;
 
   Color get transparent => Colors.transparent;
 
@@ -159,25 +159,25 @@ extension CustomColorScheme on ColorScheme {
 
   Color get onElevatedButton => onPrimary;
 
-  Color get appBarUpperLayer => const Color(0xff25095B);
+  Color get appBarUpperLayer => onSurface;
 
   Color get appBarLowerLayer => background;
 
-  Color get surfaceContainer => const Color(0xff707070).withOpacity(0.07);
+  Color get surfaceContainer => surface.withOpacity(0.07);
 
-  Color get drawerSurface => const Color(0xff232630);
+  Color get drawerSurface => surface;
 
   Color get label => onPrimary;
 
   Color get unSelectedLabel => onSurface;
 
-  Color get leadingButton => const Color(0xffF1EFF8);
+  Color get leadingButton => primary;
 
   Color get selectedBottomBar => surface;
 
   Color get drawerBackground => background;
 
-  Color get borderColor => const Color(0xFFDDCEF4);
+  Color get borderColor => onSurface;
 
   Color get markDownH1 => onPrimary;
 
@@ -189,11 +189,11 @@ extension CustomColorScheme on ColorScheme {
 
   Color get subtitle1 => onPrimary;
 
-  Color get subtitle2 => const Color(0xFF8B8C92);
+  Color get subtitle2 => secondary;
 
   Color get profileDummy => const Color(0xFF212121);
 
-  Color get documentShadow => const Color(0xFF424242);
+  Color get documentShadow => shadow;
 
   Color get documentShape => const Color(0xff3700b3).withOpacity(0.05);
 
@@ -363,7 +363,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get title => GoogleFonts.nunito(
-        color: onPrimary,
+        color: onSurface,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
@@ -749,7 +749,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get credentialSurfaceText => GoogleFonts.roboto(
         fontSize: 10,
         fontWeight: FontWeight.w400,
-        color: transactionApplied,
+        color: applied,
       );
 
   TextStyle get errorMessage => GoogleFonts.roboto(
