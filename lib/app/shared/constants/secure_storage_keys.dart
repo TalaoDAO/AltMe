@@ -35,7 +35,7 @@ class SecureStorageKeys {
   static const String issuerVerificationUrlKey =
       'profile/issuerVerificationUrl';
 
-  static const String tezosNetworkKey = 'profile/tezosNetwork';
+  static const String blockchainNetworkKey = 'profile/blockchainNetwork';
   static const String credentialKey = 'credential';
 
   static const String ssiMnemonic = 'ssi/mnemonic';

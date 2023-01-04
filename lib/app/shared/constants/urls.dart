@@ -49,9 +49,15 @@ class Urls {
   static const ethPrice =
       'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD';
 
-  //
+  // TZKT
   static const tzktMainnetUrl = 'https://api.tzkt.io';
   static const tzktGhostnetUrl = 'https://api.ghostnet.tzkt.io';
+
+  //INFURA
+  static const infuraNftBaseUrl = 'https://nft.api.infura.io';
+
+  //Moralis
+  static const moralisBaseUrl = 'https://deep-index.moralis.io/api/v2';
 
   static const objktUrl = 'https://objkt.com/';
   static const raribleUrl = 'https://rarible.com/';

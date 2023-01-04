@@ -1,8 +1,10 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/drawer/manage_network/cubit/manage_network_cubit.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/tokens.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ConfirmTransactionDetailsCard extends StatelessWidget {
   const ConfirmTransactionDetailsCard({
@@ -47,26 +49,28 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
               ),
             ],
           ),
-          _buildDivider(context),
-          Row(
-            children: [
-              Text(
-                l10n.networkFee,
-                style: Theme.of(context).textTheme.caption,
-              ),
-              const SizedBox(
-                width: Sizes.spaceXSmall,
-              ),
-              EditButton(
-                onTap: onEditButtonPressed,
-              ),
-              const Spacer(),
-              Text(
-                '''${networkFee.fee.toStringAsFixed(6).formatNumber()} ${networkFee.tokenSymbol}''',
-                style: Theme.of(context).textTheme.caption,
-              ),
-            ],
-          ),
+          if (context.read<ManageNetworkCubit>().state.network is TezosNetwork)
+            _buildDivider(context),
+          if (context.read<ManageNetworkCubit>().state.network is TezosNetwork)
+            Row(
+              children: [
+                Text(
+                  l10n.networkFee,
+                  style: Theme.of(context).textTheme.caption,
+                ),
+                const SizedBox(
+                  width: Sizes.spaceXSmall,
+                ),
+                EditButton(
+                  onTap: onEditButtonPressed,
+                ),
+                const Spacer(),
+                Text(
+                  '''${networkFee.fee.toStringAsFixed(6).formatNumber()} ${networkFee.tokenSymbol}''',
+                  style: Theme.of(context).textTheme.caption,
+                ),
+              ],
+            ),
           _buildDivider(context),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,

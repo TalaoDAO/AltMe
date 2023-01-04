@@ -35,7 +35,7 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
       log.i('fetching xtzData');
       emit(state.loading());
 
-      final baseUrl = networkCubit.state.network.tzktUrl;
+      final baseUrl = networkCubit.state.network.apiUrl;
 
       log.i('fetching balance');
       final int balance = await client
@@ -50,7 +50,6 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
       final xtzUSDPrice = xtzData.price!;
 
       final token = TokenModel(
-        id: -1,
         contractAddress: '',
         name: 'Tezos',
         symbol: 'XTZ',
