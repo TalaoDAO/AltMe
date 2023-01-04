@@ -36,6 +36,8 @@ class Urls {
 
   static const String identityCardUrl =
       'https://issuer.talao.co/passbase/endpoint/verifiableid/';
+  static const String linkedinCardUrl =
+      'https://issuer.talao.co/passbase/endpoint/linkedincard/';
   static const String talaoIpfsGateway = 'https://talao.mypinata.cloud/ipfs/';
 
   /// main tezos rpc

@@ -29,6 +29,7 @@ enum CredentialSubjectType {
   emailPass,
   identityPass,
   verifiableIdCard,
+  linkedInCard,
   learningAchievement,
   loyaltyCard,
   over18,

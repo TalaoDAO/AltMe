@@ -53,6 +53,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.verifiableIdCard:
         return const Color(0xff2596be);
+      case CredentialSubjectType.linkedInCard:
+        return const Color(0xff2596be);
       case CredentialSubjectType.voucher:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.loyaltyCard:
@@ -150,6 +152,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.identityPass:
         return Icons.perm_identity;
       case CredentialSubjectType.verifiableIdCard:
+        return Icons.perm_identity;
+      case CredentialSubjectType.linkedInCard:
         return Icons.perm_identity;
       case CredentialSubjectType.loyaltyCard:
         return Icons.loyalty;
@@ -274,6 +278,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'IdentityPass';
       case CredentialSubjectType.verifiableIdCard:
         return 'VerifiableId';
+      case CredentialSubjectType.linkedInCard:
+        return 'LinkedinCard';
       case CredentialSubjectType.learningAchievement:
         return 'LearningAchievement';
       case CredentialSubjectType.loyaltyCard:
@@ -421,6 +427,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return AragoOver18Model.fromJson(json);
       case CredentialSubjectType.pcdsAgentCertificate:
         return PcdsAgentCertificateModel.fromJson(json);
+      case CredentialSubjectType.linkedInCard:
+        return LinkedinCardModel.fromJson(json);
     }
   }
 
@@ -443,7 +451,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.ageRange ||
         this == CredentialSubjectType.nationality ||
         this == CredentialSubjectType.gender ||
-        this == CredentialSubjectType.passportFootprint) {
+        this == CredentialSubjectType.passportFootprint ||
+        this == CredentialSubjectType.linkedInCard) {
       return true;
     }
     return false;
