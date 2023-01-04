@@ -23,11 +23,11 @@ class DiscoverList {
     CredentialSubjectType.over18,
     CredentialSubjectType.over13,
     CredentialSubjectType.passportFootprint,
-    CredentialSubjectType.verifiableIdCard,
     CredentialSubjectType.phonePass,
     CredentialSubjectType.twitterCard,
   ];
   static final List<CredentialSubjectType> myProfessionalCategories = [
-    CredentialSubjectType.linkedInCard
+    CredentialSubjectType.linkedInCard,
+    CredentialSubjectType.verifiableIdCard,
   ];
 }
