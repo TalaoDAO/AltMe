@@ -270,7 +270,7 @@ class _DashboardViewState extends State<DashboardView> {
                               isSelected: state.selectedIndex == 2,
                             ),
                             BottomBarItem(
-                              icon: IconStrings.settings,
+                              icon: IconStrings.cashInHand,
                               text: l10n.buy,
                               onTap: () => bottomTapped(3),
                               isSelected: state.selectedIndex == 3,
