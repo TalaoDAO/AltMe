@@ -6,4 +6,10 @@ class LaunchUrl {
         ? await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication)
         : throw Exception('Could not launch $url');
   }
+
+  static Future<void> launchUri(Uri uri) async {
+    await canLaunchUrl(uri)
+        ? await launchUrl(uri, mode: LaunchMode.externalApplication)
+        : throw Exception('Could not launch $uri');
+  }
 }

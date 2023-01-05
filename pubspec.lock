@@ -476,6 +476,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0+2"
+  ebsi:
+    dependency: "direct main"
+    description:
+      path: "packages/ebsi"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   ed25519_hd_key:
     dependency: "direct main"
     description:
@@ -544,6 +551,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_appauth:
+    dependency: "direct main"
+    description:
+      name: flutter_appauth
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.2.1"
+  flutter_appauth_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_appauth_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.2.0"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -1780,5 +1801,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.17.5 <3.0.0"
-  flutter: ">=3.0.0"
+  dart: ">=2.18.0 <3.0.0"
+  flutter: ">=3.3.7"
