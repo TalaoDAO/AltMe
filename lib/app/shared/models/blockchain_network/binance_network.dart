@@ -43,4 +43,16 @@ class BinanceNetwork extends EthereumNetwork {
             'This network is the official Binance blockchain running Network.'
             ' You should use this network by default.',
       );
+
+  factory BinanceNetwork.testNet() => const BinanceNetwork(
+        type: BlockchainType.binance,
+        networkname: 'Testnet',
+        apiUrl: Urls.moralisBaseUrl,
+        chainId: 97,
+        chain: 'bsc testnet',
+        rpcNodeUrl: 'https://bsc-testnet.public.blastapi.io',
+        title: 'Binance Testnet',
+        subTitle: 'This network is used to test protocol upgrades'
+            ' (do not use it unless you are a developer).',
+      );
 }

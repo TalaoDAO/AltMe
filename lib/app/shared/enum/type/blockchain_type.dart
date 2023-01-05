@@ -144,6 +144,7 @@ extension BlockchainTypeX on BlockchainType {
       case BlockchainType.binance:
         return [
           BinanceNetwork.mainNet(),
+          BinanceNetwork.testNet(),
         ];
     }
   }
