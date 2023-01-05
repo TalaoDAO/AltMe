@@ -706,7 +706,8 @@
     "userNotFitErrorMessage",
     "youAreMissing",
     "credentialsRequestedBy",
-    "transactionIsLikelyToFail"
+    "transactionIsLikelyToFail",
+    "buy"
   ],
 
   "es": [
@@ -1416,7 +1417,8 @@
     "userNotFitErrorMessage",
     "youAreMissing",
     "credentialsRequestedBy",
-    "transactionIsLikelyToFail"
+    "transactionIsLikelyToFail",
+    "buy"
   ],
 
   "fr": [
@@ -2126,7 +2128,8 @@
     "userNotFitErrorMessage",
     "youAreMissing",
     "credentialsRequestedBy",
-    "transactionIsLikelyToFail"
+    "transactionIsLikelyToFail",
+    "buy"
   ],
 
   "it": [
@@ -2836,6 +2839,7 @@
     "userNotFitErrorMessage",
     "youAreMissing",
     "credentialsRequestedBy",
-    "transactionIsLikelyToFail"
+    "transactionIsLikelyToFail",
+    "buy"
   ]
 }
