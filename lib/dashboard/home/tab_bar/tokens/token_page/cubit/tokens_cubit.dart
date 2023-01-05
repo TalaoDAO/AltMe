@@ -55,10 +55,6 @@ class TokensCubit extends Cubit<TokensState> {
     _offsetOfLoadedData = state.offset;
     if (data.length < state.offset) return;
     try {
-      if (state.offset == 0) {
-        emit(state.fetching());
-      }
-
       //final activeIndex = walletCubit.state.currentCryptoIndex;
       if (walletCubit.state.cryptoAccount.data.isEmpty) {
         final String? ssiKey =
@@ -71,9 +67,16 @@ class TokensCubit extends Cubit<TokensState> {
       }
       final walletAddress =
           walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
-
-      if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType ==
-          BlockchainType.tezos) {
+      final selectedAccountBlockchainType =
+          walletCubit.state.cryptoAccount.data[activeIndex].blockchainType;
+      if (state.blockchainType != selectedAccountBlockchainType) {
+        emit(state.reset(blockchainType: selectedAccountBlockchainType));
+      }
+      if (state.offset == 0) {
+        emit(state.fetching());
+      }
+      
+      if (selectedAccountBlockchainType == BlockchainType.tezos) {
         await getTokensOnTezos(
           walletAddress: walletAddress,
           tezosNetwork: networkCubit.state.network as TezosNetwork,

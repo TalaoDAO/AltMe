@@ -39,6 +39,7 @@ class ManageNetworkCubit extends Cubit<ManageNetworkState> {
   }
 
   Future<void> setNetwork(BlockchainNetwork network) async {
+    if (network == state.network) return;
     Map<String, dynamic> networkJson;
     if (network is EthereumNetwork) {
       networkJson = network.toJson();
