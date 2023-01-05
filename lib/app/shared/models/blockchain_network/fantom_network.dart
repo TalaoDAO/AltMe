@@ -25,6 +25,10 @@ class FantomNetwork extends EthereumNetwork {
           type: type,
           chain: chain,
           chainId: chainId,
+          mainTokenName: 'Fantom',
+          mainTokenDecimal: '18',
+          mainTokenIcon: IconStrings.fantom,
+          mainTokenSymbol: 'FTM',
         );
 
   factory FantomNetwork.mainNet() => const FantomNetwork(
@@ -38,5 +42,17 @@ class FantomNetwork extends EthereumNetwork {
         subTitle:
             'This network is the official Fantom blockchain running Network.'
             ' You should use this network by default.',
+      );
+
+  factory FantomNetwork.testNet() => const FantomNetwork(
+        type: BlockchainType.fantom,
+        networkname: 'Testnet',
+        apiUrl: Urls.moralisBaseUrl,
+        chainId: 4002,
+        chain: 'fantom',
+        rpcNodeUrl: 'https://rpc.testnet.fantom.network',
+        title: 'Fantom Testnet',
+        subTitle: 'This network is used to test protocol upgrades'
+            ' (do not use it unless you are a developer).',
       );
 }

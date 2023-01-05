@@ -154,14 +154,17 @@ extension BlockchainTypeX on BlockchainType {
       case BlockchainType.fantom:
         return [
           FantomNetwork.mainNet(),
+          FantomNetwork.testNet(),
         ];
       case BlockchainType.polygon:
         return [
           PolygonNetwork.mainNet(),
+          PolygonNetwork.testNet(),
         ];
       case BlockchainType.binance:
         return [
           BinanceNetwork.mainNet(),
+          BinanceNetwork.testNet(),
         ];
     }
   }

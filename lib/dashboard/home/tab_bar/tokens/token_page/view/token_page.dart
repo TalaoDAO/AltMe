@@ -118,30 +118,28 @@ class _TokensViewState extends State<TokensView> {
                     .data[index]
                     .blockchainType;
 
-                if (blockchain == BlockchainType.ethereum) {
-                  return Container();
-                }
-
                 return Column(
                   children: [
                     TotalWalletBalance(
                       tokensCubit: context.read<TokensCubit>(),
                     ),
-                    const SizedBox(
-                      height: Sizes.spaceSmall,
-                    ),
-                    AddTokenButton(
-                      onTap: () {
-                        Navigator.of(context)
-                            .push<void>(
-                              AllTokensPage.route(),
-                            )
-                            .then(
-                              (value) =>
-                                  context.read<TokensCubit>().fetchFromZero(),
-                            );
-                      },
-                    ),
+                    if (blockchain == BlockchainType.tezos)
+                      const SizedBox(
+                        height: Sizes.spaceSmall,
+                      ),
+                    if (blockchain == BlockchainType.tezos)
+                      AddTokenButton(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push<void>(
+                                AllTokensPage.route(),
+                              )
+                              .then(
+                                (value) =>
+                                    context.read<TokensCubit>().fetchFromZero(),
+                              );
+                        },
+                      ),
                   ],
                 );
               },

@@ -13,6 +13,10 @@ class EthereumNetwork extends BlockchainNetwork {
     required String subTitle,
     required this.chainId,
     required this.chain,
+    this.mainTokenName = 'Ethereum',
+    this.mainTokenDecimal = '18',
+    this.mainTokenIcon = IconStrings.ethereum,
+    this.mainTokenSymbol = 'ETH',
     required BlockchainType type,
     String apiKey = '',
   }) : super(
@@ -55,10 +59,22 @@ class EthereumNetwork extends BlockchainNetwork {
 
   final int chainId;
   final String chain;
+  final String mainTokenName;
+  final String mainTokenSymbol;
+  final String mainTokenIcon;
+  final String mainTokenDecimal;
 
   @override
   Map<String, dynamic> toJson() => _$EthereumNetworkToJson(this);
 
   @override
-  List<Object?> get props => [super.props, chainId, chain];
+  List<Object?> get props => [
+        super.props,
+        chainId,
+        chain,
+        mainTokenName,
+        mainTokenIcon,
+        mainTokenSymbol,
+        mainTokenDecimal,
+      ];
 }
