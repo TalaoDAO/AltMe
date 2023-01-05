@@ -231,7 +231,9 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                                         .walletAddress,
                                     item: state.selectedToken.symbol,
                                     description: l10n
-                                        .sendOnlyXtzToThisAddressDescription,
+                                        .sendOnlyToThisAddressDescription(
+                                      state.selectedToken.symbol,
+                                    ),
                                   ),
                                 );
                               },

@@ -56,19 +56,19 @@ class NftCubit extends Cubit<NftState> {
       late List<NftModel> newData;
 
       if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType ==
-          BlockchainType.ethereum) {
-        newData = await getEthereumNFTs(
-          offset: state.offset,
-          limit: _limit,
-          walletAddress: walletAddress,
-          network: manageNetworkCubit.state.network as EthereumNetwork,
-        );
-      } else {
+          BlockchainType.tezos) {
         newData = await getTezosNFTs(
           offset: state.offset,
           limit: _limit,
           walletAddress: walletAddress,
           network: manageNetworkCubit.state.network as TezosNetwork,
+        );
+      } else {
+        newData = await getEthereumNFTs(
+          offset: state.offset,
+          limit: _limit,
+          walletAddress: walletAddress,
+          network: manageNetworkCubit.state.network as EthereumNetwork,
         );
       }
 
@@ -122,14 +122,14 @@ class NftCubit extends Cubit<NftState> {
     await dotenv.load();
     final moralisApiKey = dotenv.get('MORALIS_API_KEY');
 
-    //If you want to see example nft data you should hardcode 
+    //If you want to see example nft data you should hardcode
     // this wallet address in API call ->
     // 0xd8da6bf26964af9d7eed9e03e53415d37aa96045
 
     final Map<String, dynamic> response = await client.get(
       '${Urls.moralisBaseUrl}/$walletAddress/nft',
       queryParameters: <String, dynamic>{
-        'chain': 'eth',
+        'chain': network.chain,
         'format': 'decimal',
         'normalizeMetadata': true,
       },

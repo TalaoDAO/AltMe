@@ -99,8 +99,11 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   }) async {
     try {
       emit(state.loading());
+      final selectedEthereumNetwork =
+          manageNetworkCubit.state.network as EthereumNetwork;
 
-      final rpcNodeUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+      final rpcNodeUrl = selectedEthereumNetwork.rpcNodeUrl;
+      getLogger(toString()).i('selected network node rpc: $rpcNodeUrl');
 
       final amount = int.parse(
         tokenAmount.toStringAsFixed(18).replaceAll(',', '').replaceAll('.', ''),
@@ -111,16 +114,18 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
 
-      await ethClient.sendTransaction(
+      final response = await ethClient.sendTransaction(
         credentials,
+        chainId: selectedEthereumNetwork.chainId,
         Transaction(
+          from: await credentials.extractAddress(),
           to: EthereumAddress.fromHex(state.withdrawalAddress),
           gasPrice: EtherAmount.inWei(BigInt.one),
           maxGas: 100000,
           value: EtherAmount.fromUnitAndValue(EtherUnit.wei, amount),
         ),
       );
-      logger.i('after withdrawal execute');
+      logger.i('after withdrawal ETH execute => response: $response');
       emit(state.success());
     } catch (e, s) {
       logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
@@ -279,7 +284,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
 
-
       final amount = (tokenAmount *
               double.parse(
                 1
@@ -297,7 +301,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       final abiCode = await rootBundle.loadString('assets/abi/erc20.abi.json');
       final contractAddress = EthereumAddress.fromHex(token.contractAddress);
       final contract = DeployedContract(
-        ContractAbi.fromJson(abiCode, token.name),
+        ContractAbi.fromJson(abiCode, 'ERC20'),
         contractAddress,
       );
 

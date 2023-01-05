@@ -19,6 +19,7 @@ class TezosNetwork extends BlockchainNetwork {
           title: title,
           subTitle: subTitle,
           apiKey: apiKey,
+          type: BlockchainType.tezos,
         );
 
   factory TezosNetwork.fromJson(Map<String, dynamic> json) =>
@@ -43,5 +44,6 @@ class TezosNetwork extends BlockchainNetwork {
             ' (do not use it unless you are a developer).',
       );
 
+  @override
   Map<String, dynamic> toJson() => _$TezosNetworkToJson(this);
 }

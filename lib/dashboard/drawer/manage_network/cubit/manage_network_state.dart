@@ -10,20 +10,6 @@ class ManageNetworkState extends Equatable {
       _$ManageNetworkStateFromJson(json);
 
   final BlockchainNetwork network;
-  List<BlockchainNetwork> get allNetworks => [
-        TezosNetwork.mainNet(),
-        TezosNetwork.ghostnet(),
-        EthereumNetwork.mainNet(),
-      ];
-
-  List<TezosNetwork> get tezosNetworks => [
-        TezosNetwork.mainNet(),
-        TezosNetwork.ghostnet(),
-      ];
-
-  List<EthereumNetwork> get ethereumNetworks => [
-        EthereumNetwork.mainNet(),
-      ];
 
   ManageNetworkState copyWith({
     BlockchainNetwork? network,
@@ -38,6 +24,5 @@ class ManageNetworkState extends Equatable {
   @override
   List<Object?> get props => [
         network,
-        allNetworks,
       ];
 }
