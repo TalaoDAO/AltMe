@@ -56,6 +56,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.nationality:
         case CredentialSubjectType.gender:
         case CredentialSubjectType.identityPass:
+        case CredentialSubjectType.verifiableIdCard:
         case CredentialSubjectType.over18:
         case CredentialSubjectType.over13:
         case CredentialSubjectType.passportFootprint:
@@ -65,7 +66,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           break;
 
         case CredentialSubjectType.linkedInCard:
-        case CredentialSubjectType.verifiableIdCard:
           myProfessionalCategories.remove(credentialSubjectType);
           break;
 
@@ -240,6 +240,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.ageRange:
           case CredentialSubjectType.nationality:
           case CredentialSubjectType.identityPass:
+          case CredentialSubjectType.verifiableIdCard:
           case CredentialSubjectType.over18:
           case CredentialSubjectType.over13:
           case CredentialSubjectType.passportFootprint:
@@ -254,7 +255,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             break;
 
           case CredentialSubjectType.linkedInCard:
-          case CredentialSubjectType.verifiableIdCard:
             _removeDummyIfCredentialExist(
               _credentials,
               myProfessionalCategories,
@@ -525,8 +525,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         final credentialSubjectType = credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
 
-        if (credentialSubjectType == CredentialSubjectType.linkedInCard ||
-            credentialSubjectType == CredentialSubjectType.verifiableIdCard) {
+        if (credentialSubjectType == CredentialSubjectType.linkedInCard) {
           myProfessionalCategories.add(credentialSubjectType);
         }
         emit(
@@ -558,6 +557,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         switch (credentialSubjectType) {
           case CredentialSubjectType.ageRange:
+          case CredentialSubjectType.verifiableIdCard:
           case CredentialSubjectType.nationality:
           case CredentialSubjectType.gender:
           case CredentialSubjectType.over18:
@@ -568,7 +568,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             // _credentials.add(HomeCredential.isDummy(credentialSubjectType));
             identityCategories.add(credentialSubjectType);
             break;
-          case CredentialSubjectType.verifiableIdCard:
           case CredentialSubjectType.phonePass:
           case CredentialSubjectType.professionalExperienceAssessment:
           case CredentialSubjectType.professionalSkillAssessment:
