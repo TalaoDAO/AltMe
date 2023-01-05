@@ -209,13 +209,11 @@ class _DashboardViewState extends State<DashboardView> {
                                 );
                                 return;
                               }
-                              if (state.selectedIndex != 2) {
+                              if (state.selectedIndex != 3) {
                                 pageController.nextPage(
                                   duration: pageTurnDuration,
                                   curve: pageTurnCurve,
                                 );
-                              } else {
-                                scaffoldKey.currentState!.openDrawer();
                               }
                             } else if (drag.primaryVelocity! > 0) {
                               if (context.read<HomeCubit>().state.homeStatus ==
@@ -239,11 +237,11 @@ class _DashboardViewState extends State<DashboardView> {
                             onPageChanged:
                                 context.read<DashboardCubit>().onPageChanged,
                             physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              const HomePage(),
-                              const DiscoverPage(),
-                              const SearchPage(),
-                              Container(),
+                            children: const [
+                              HomePage(),
+                              DiscoverPage(),
+                              SearchPage(),
+                              WertPage(),
                             ],
                           ),
                         ),
@@ -264,8 +262,7 @@ class _DashboardViewState extends State<DashboardView> {
                               onTap: () => bottomTapped(1),
                               isSelected: state.selectedIndex == 1,
                             ),
-                            const SizedBox.shrink(),
-                            const SizedBox.shrink(),
+                            const SizedBox(width: 75 * 0.6),
                             BottomBarItem(
                               icon: IconStrings.searchNormal,
                               text: l10n.search,
@@ -274,21 +271,8 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                             BottomBarItem(
                               icon: IconStrings.settings,
-                              text: l10n.settings,
-                              onTap: () {
-                                if (context
-                                        .read<HomeCubit>()
-                                        .state
-                                        .homeStatus ==
-                                    HomeStatus.hasNoWallet) {
-                                  showDialog<void>(
-                                    context: context,
-                                    builder: (_) => const WalletDialog(),
-                                  );
-                                  return;
-                                }
-                                scaffoldKey.currentState!.openDrawer();
-                              },
+                              text: l10n.buy,
+                              onTap: () => bottomTapped(3),
                               isSelected: state.selectedIndex == 3,
                             ),
                           ],
