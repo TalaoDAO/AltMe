@@ -22,6 +22,7 @@ import 'package:jose/jose.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -478,7 +479,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> openidDeepLink() async {
-    emit(state.loading(isDeepLink: true));
+    emit(state.loading(isScan: false));
     final deepLinkUrl = deepLinkCubit.state;
     if (deepLinkUrl != '') {
       deepLinkCubit.resetDeepLink();
