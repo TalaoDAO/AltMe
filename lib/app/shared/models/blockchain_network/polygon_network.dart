@@ -25,6 +25,10 @@ class PolygonNetwork extends EthereumNetwork {
           type: type,
           chain: chain,
           chainId: chainId,
+          mainTokenName: 'Polygon',
+          mainTokenDecimal: '18',
+          mainTokenIcon: IconStrings.polygon,
+          mainTokenSymbol: 'Matic',
         );
 
   factory PolygonNetwork.mainNet() => const PolygonNetwork(

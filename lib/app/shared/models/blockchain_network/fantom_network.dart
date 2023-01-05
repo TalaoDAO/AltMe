@@ -25,6 +25,10 @@ class FantomNetwork extends EthereumNetwork {
           type: type,
           chain: chain,
           chainId: chainId,
+          mainTokenName: 'Fantom',
+          mainTokenDecimal: '18',
+          mainTokenIcon: IconStrings.fantom,
+          mainTokenSymbol: 'FTM',
         );
 
   factory FantomNetwork.mainNet() => const FantomNetwork(

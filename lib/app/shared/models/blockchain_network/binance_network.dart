@@ -25,6 +25,10 @@ class BinanceNetwork extends EthereumNetwork {
           type: type,
           chain: chain,
           chainId: chainId,
+          mainTokenName: 'Binance',
+          mainTokenDecimal: '18',
+          mainTokenIcon: IconStrings.binance,
+          mainTokenSymbol: 'BNB',
         );
 
   factory BinanceNetwork.mainNet() => const BinanceNetwork(
