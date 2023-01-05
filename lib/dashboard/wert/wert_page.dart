@@ -4,7 +4,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 // #docregion platform_imports
@@ -28,6 +30,15 @@ class _WertPageState extends State<WertPage> {
   void initState() {
     super.initState();
     final log = getLogger('WertInitState');
+
+    var link =
+        '''https://sandbox.wert.io/01GMWDYDRESASBVVV7SB6FHYZE/redirect?theme=dark&lang=en''';
+
+    final walletCubit = context.read<WalletCubit>();
+
+    final symbol = walletCubit.state.currentAccount.blockchainType.symbol;
+
+    link = '$link&commodity=$symbol';
 
     // #docregion platform_features
     late final PlatformWebViewControllerCreationParams params;
@@ -91,9 +102,7 @@ class _WertPageState extends State<WertPage> {
         },
       )
       ..loadRequest(
-        Uri.parse(
-          'https://sandbox.wert.io/01GMWDYDRESASBVVV7SB6FHYZE/redirect?theme=dark&lang=en',
-        ),
+        Uri.parse(link),
       );
 
     // #docregion platform_features

@@ -43,6 +43,25 @@ extension BlockchainTypeX on BlockchainType {
     }
   }
 
+  String get symbol {
+    switch (this) {
+      case BlockchainType.tezos:
+        return 'XTZ';
+
+      case BlockchainType.ethereum:
+        return 'ETH';
+
+      case BlockchainType.fantom:
+        return 'FTM';
+
+      case BlockchainType.polygon:
+        return 'MATIC';
+
+      case BlockchainType.binance:
+        return 'BNB';
+    }
+  }
+
   String get derivePathIndexKey {
     switch (this) {
       case BlockchainType.tezos:
