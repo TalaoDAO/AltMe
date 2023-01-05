@@ -135,6 +135,7 @@ extension BlockchainTypeX on BlockchainType {
       case BlockchainType.fantom:
         return [
           FantomNetwork.mainNet(),
+          FantomNetwork.testNet(),
         ];
       case BlockchainType.polygon:
         return [
