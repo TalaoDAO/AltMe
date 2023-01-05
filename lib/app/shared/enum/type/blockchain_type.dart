@@ -140,6 +140,7 @@ extension BlockchainTypeX on BlockchainType {
       case BlockchainType.polygon:
         return [
           PolygonNetwork.mainNet(),
+          PolygonNetwork.testNet(),
         ];
       case BlockchainType.binance:
         return [
