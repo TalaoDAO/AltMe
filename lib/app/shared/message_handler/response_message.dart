@@ -362,6 +362,11 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
+        case ResponseString.RESPONSE_STRING_twitterDummyDesc:
+          return ResponseString.RESPONSE_STRING_twitterDummyDesc.localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard
               .localise(context);

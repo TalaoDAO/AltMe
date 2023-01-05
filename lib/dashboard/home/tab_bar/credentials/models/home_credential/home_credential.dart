@@ -184,6 +184,7 @@ class HomeCredential extends Equatable {
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_twitterExpirationDate;
         howToGetIt = ResponseString.RESPONSE_STRING_twitterHowToGetIt;
+        dummyDesc = ResponseString.RESPONSE_STRING_twitterDummyDesc;
         break;
 
       case CredentialSubjectType.bunnyPass:

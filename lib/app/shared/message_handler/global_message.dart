@@ -259,6 +259,7 @@ class GlobalMessage {
   String get RESPONSE_STRING_twitterExpirationDate =>
       l10n.twitterExpirationDate;
   String get RESPONSE_STRING_twitterHowToGetIt => l10n.twitterHowToGetIt;
+  String get RESPONSE_STRING_twitterDummyDesc => l10n.twitterDummyDesc;
 
   String get RESPONSE_STRING_tezoniaPassWhyGetThisCard =>
       l10n.tezoniaPassWhyGetThisCard;
