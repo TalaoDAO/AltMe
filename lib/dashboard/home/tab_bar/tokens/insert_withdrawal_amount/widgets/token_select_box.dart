@@ -96,16 +96,12 @@ class _TokenSelectBoxItem extends StatelessWidget {
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          ClipRRect(
+                          CachedImageFromNetwork(
+                            tokenModel.iconUrl ?? '',
+                            width: Sizes.icon2x,
+                            height: Sizes.icon2x,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(Sizes.smallRadius),
-                            ),
-                            child: SizedBox(
-                              width: Sizes.icon2x,
-                              height: Sizes.icon2x,
-                              child: CachedImageFromNetwork(
-                                tokenModel.iconUrl ?? '',
-                              ),
                             ),
                           ),
                           const SizedBox(
