@@ -4,56 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class FantomAssociatedAddressDisplayInList extends StatelessWidget {
-  const FantomAssociatedAddressDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return FantomAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class FantomAssociatedAddressDisplayInSelectionList extends StatelessWidget {
-  const FantomAssociatedAddressDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return FantomAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class FantomAssociatedAddressDisplayDetail extends StatelessWidget {
-  const FantomAssociatedAddressDisplayDetail({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return FantomAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class FantomAssociatedAddressRecto extends Recto {
-  const FantomAssociatedAddressRecto({
+class FantomAssociatedAddressWidget extends StatelessWidget {
+  const FantomAssociatedAddressWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);

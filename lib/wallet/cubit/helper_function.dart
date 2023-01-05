@@ -248,12 +248,21 @@ Future<CredentialModel?> generateDeviceInfoCredential({
       systemVersion = iosDeviceInfo.systemVersion ?? '';
     }
 
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    final version = packageInfo.version;
+    final buildNumber = packageInfo.buildNumber;
+
+    final walletBuild = '$version ($buildNumber)';
+
     final deviceInfoModel = DeviceInfoModel(
       id: didSsi,
       systemName: systemName,
       device: device,
       systemVersion: systemVersion,
       type: 'DeviceInfo',
+      issuedBy: const Author('My wallet'),
+      walletBuild: walletBuild,
     );
 
     final deviceInfoCredential = DeviceInfoCredential(

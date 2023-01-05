@@ -56,19 +56,19 @@ class NftCubit extends Cubit<NftState> {
       late List<NftModel> newData;
 
       if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType ==
-          BlockchainType.ethereum) {
-        newData = await getEthereumNFTs(
-          offset: state.offset,
-          limit: _limit,
-          walletAddress: walletAddress,
-          network: manageNetworkCubit.state.network as EthereumNetwork,
-        );
-      } else {
+          BlockchainType.tezos) {
         newData = await getTezosNFTs(
           offset: state.offset,
           limit: _limit,
           walletAddress: walletAddress,
           network: manageNetworkCubit.state.network as TezosNetwork,
+        );
+      } else {
+        newData = await getEthereumNFTs(
+          offset: state.offset,
+          limit: _limit,
+          walletAddress: walletAddress,
+          network: manageNetworkCubit.state.network as EthereumNetwork,
         );
       }
 

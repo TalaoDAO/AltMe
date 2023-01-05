@@ -25,6 +25,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     final gamingCategories = state.gamingCategories;
     final identityCategories = state.identityCategories;
     final communityCategories = state.communityCategories;
+    final myProfessionalCategories = state.myProfessionalCategories;
 
     /// tezVoucher and tezotopiaMembership is available only on Android platform
     if (!isAndroid()) {
@@ -62,6 +63,10 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.residentCard:
         case CredentialSubjectType.twitterCard:
           identityCategories.remove(credentialSubjectType);
+          break;
+
+        case CredentialSubjectType.linkedInCard:
+          myProfessionalCategories.remove(credentialSubjectType);
           break;
 
         case CredentialSubjectType.talaoCommunityCard:
@@ -185,6 +190,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     emit(state.loading());
     final identityCategories = state.identityCategories;
     final gamingCategories = state.gamingCategories;
+    final myProfessionalCategories = state.myProfessionalCategories;
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
@@ -244,6 +250,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             _removeDummyIfCredentialExist(
               _credentials,
               identityCategories,
+              credentialSubjectType,
+            );
+            break;
+
+          case CredentialSubjectType.linkedInCard:
+            _removeDummyIfCredentialExist(
+              _credentials,
+              myProfessionalCategories,
               credentialSubjectType,
             );
             break;
@@ -463,7 +477,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
   Future deleteById(CredentialModel credential) async {
     emit(state.loading());
-    final identityCategories = state.identityCategories;
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
@@ -504,11 +517,23 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         break;
 
       case CredentialCategory.myProfessionalCards:
+        final myProfessionalCategories = state.myProfessionalCategories;
         final _credentials = List.of(state.myProfessionalCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
-        emit(state.populate(myProfessionalCredentials: _credentials));
+        final credentialSubjectType = credential
+            .credentialPreview.credentialSubjectModel.credentialSubjectType;
+
+        if (credentialSubjectType == CredentialSubjectType.linkedInCard) {
+          myProfessionalCategories.add(credentialSubjectType);
+        }
+        emit(
+          state.populate(
+            myProfessionalCredentials: _credentials,
+            myProfessionalCategories: myProfessionalCategories,
+          ),
+        );
         break;
       case CredentialCategory.communityCards:
         final _credentials = List.of(state.communityCredentials)
@@ -519,6 +544,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         break;
 
       case CredentialCategory.identityCards:
+        final identityCategories = state.identityCategories;
         late List<HomeCredential> _credentials;
 
         final credentialSubjectType = credential
@@ -531,9 +557,9 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         switch (credentialSubjectType) {
           case CredentialSubjectType.ageRange:
+          case CredentialSubjectType.verifiableIdCard:
           case CredentialSubjectType.nationality:
           case CredentialSubjectType.gender:
-          case CredentialSubjectType.verifiableIdCard:
           case CredentialSubjectType.over18:
           case CredentialSubjectType.over13:
           case CredentialSubjectType.passportFootprint:
@@ -582,6 +608,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.fantomAssociatedWallet:
           case CredentialSubjectType.polygonAssociatedWallet:
           case CredentialSubjectType.binanceAssociatedWallet:
+          case CredentialSubjectType.linkedInCard:
             break;
         }
 
@@ -632,6 +659,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         gamingCategories: List.from(DiscoverList.gamingCategories),
         communityCategories: List.from(DiscoverList.communityCategories),
         identityCategories: List.from(DiscoverList.identityCategories),
+        myProfessionalCategories:
+            List.from(DiscoverList.myProfessionalCategories),
       ),
     );
   }

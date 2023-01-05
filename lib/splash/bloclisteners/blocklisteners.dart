@@ -60,11 +60,24 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
     }
     if (state.status == WalletStatus.populate) {
       final blockchainType = state.currentAccount.blockchainType;
-      context.read<ManageNetworkCubit>().setNetwork(
-            blockchainType == BlockchainType.tezos
-                ? TezosNetwork.mainNet()
-                : EthereumNetwork.mainNet(),
-          );
+      if (context.read<ManageNetworkCubit>().state.network.type !=
+          blockchainType) {
+        BlockchainNetwork network;
+        if (blockchainType == BlockchainType.tezos) {
+          network = TezosNetwork.mainNet();
+        } else if (blockchainType == BlockchainType.ethereum) {
+          network = EthereumNetwork.mainNet();
+        } else if (blockchainType == BlockchainType.polygon) {
+          network = PolygonNetwork.mainNet();
+        } else if (blockchainType == BlockchainType.fantom) {
+          network = FantomNetwork.mainNet();
+        } else if (blockchainType == BlockchainType.binance) {
+          network = BinanceNetwork.mainNet();
+        } else {
+          network = TezosNetwork.mainNet();
+        }
+        context.read<ManageNetworkCubit>().setNetwork(network);
+      }
     }
   },
 );
@@ -182,6 +195,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           await context.read<QRCodeScanCubit>().accept(
                 uri: state.uri!,
                 issuer: approvedIssuer,
+                isScan: state.isScan,
               );
         } else {
           await context.read<QRCodeScanCubit>().emitError(
@@ -196,10 +210,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
     if (state.status == QrScanStatus.success) {
       if (state.route != null) {
-        if (state.isDeepLink) {
-          await Navigator.of(context).push<void>(state.route!);
-        } else {
+        if (state.isScan) {
           await Navigator.of(context).pushReplacement<void, void>(state.route!);
+        } else {
+          await Navigator.of(context).push<void>(state.route!);
         }
       }
     }

@@ -8,12 +8,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         int.parse('FF${credentialModel.display.backgroundColor}', radix: 16),
       );
     } else {
-      _backgroundColor = defaultBackgroundColor();
+      _backgroundColor = defaultBackgroundColor;
     }
     return _backgroundColor;
   }
 
-  Color defaultBackgroundColor() {
+  Color get defaultBackgroundColor {
     switch (this) {
       case CredentialSubjectType.deviceInfo:
         return const Color(0xff14181D);
@@ -52,6 +52,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.identityPass:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.verifiableIdCard:
+        return const Color(0xff2596be);
+      case CredentialSubjectType.linkedInCard:
         return const Color(0xff2596be);
       case CredentialSubjectType.voucher:
         return const Color(0xffCAFFBF);
@@ -111,7 +113,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
-  IconData iconData() {
+  IconData get iconData {
     switch (this) {
       case CredentialSubjectType.deviceInfo:
         return Icons.phone_android_rounded;
@@ -150,6 +152,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.identityPass:
         return Icons.perm_identity;
       case CredentialSubjectType.verifiableIdCard:
+        return Icons.perm_identity;
+      case CredentialSubjectType.linkedInCard:
         return Icons.perm_identity;
       case CredentialSubjectType.loyaltyCard:
         return Icons.loyalty;
@@ -209,7 +213,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
-  bool isDisabled() {
+  bool get isDisabled {
     if (this == CredentialSubjectType.dogamiPass ||
         this == CredentialSubjectType.pigsPass ||
         this == CredentialSubjectType.bunnyPass ||
@@ -274,6 +278,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'IdentityPass';
       case CredentialSubjectType.verifiableIdCard:
         return 'VerifiableId';
+      case CredentialSubjectType.linkedInCard:
+        return 'LinkedinCard';
       case CredentialSubjectType.learningAchievement:
         return 'LearningAchievement';
       case CredentialSubjectType.loyaltyCard:
@@ -421,6 +427,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return AragoOver18Model.fromJson(json);
       case CredentialSubjectType.pcdsAgentCertificate:
         return PcdsAgentCertificateModel.fromJson(json);
+      case CredentialSubjectType.linkedInCard:
+        return LinkedinCardModel.fromJson(json);
     }
   }
 
@@ -443,7 +451,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.ageRange ||
         this == CredentialSubjectType.nationality ||
         this == CredentialSubjectType.gender ||
-        this == CredentialSubjectType.passportFootprint) {
+        this == CredentialSubjectType.passportFootprint ||
+        this == CredentialSubjectType.linkedInCard) {
       return true;
     }
     return false;

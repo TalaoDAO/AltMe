@@ -3,40 +3,8 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
-class SelfIssuedDisplayInList extends StatelessWidget {
-  const SelfIssuedDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInList(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class SelfIssuedDisplayInSelectionList extends StatelessWidget {
-  const SelfIssuedDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInSelectionList(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class SelfIssuedDisplayDetail extends StatelessWidget {
-  const SelfIssuedDisplayDetail({
+class SelfIssuedWidget extends StatelessWidget {
+  const SelfIssuedWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);

@@ -322,6 +322,12 @@ class GlobalMessage {
       l10n.verifiableIdCardExpirationDate;
   String get RESPONSE_STRING_verifiableIdCardHowToGetIt =>
       l10n.verifiableIdCardHowToGetIt;
+  String get RESPONSE_STRING_linkedinCardWhyGetThisCard =>
+      l10n.linkedinCardWhyGetThisCard;
+  String get RESPONSE_STRING_linkedinCardExpirationDate =>
+      l10n.linkedinCardExpirationDate;
+  String get RESPONSE_STRING_linkedinCardHowToGetIt =>
+      l10n.linkedinCardHowToGetIt;
   String get RESPONSE_STRING_phoneProofWhyGetThisCard =>
       l10n.phoneProofWhyGetThisCard;
   String get RESPONSE_STRING_phoneProofExpirationDate =>
@@ -354,4 +360,6 @@ class GlobalMessage {
       l10n.userNotFitErrorMessage;
   String get RESPONSE_STRING_transactionIsLikelyToFail =>
       l10n.transactionIsLikelyToFail;
+  String get RESPONSE_STRING_verifiableIdCardDummyDesc =>
+      l10n.verifiableIdCardDummyDesc;
 }

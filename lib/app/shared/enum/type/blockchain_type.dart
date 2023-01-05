@@ -119,15 +119,46 @@ extension BlockchainTypeX on BlockchainType {
     }
   }
 
+  List<BlockchainNetwork> get networks {
+    switch (this) {
+      case BlockchainType.tezos:
+        return [
+          TezosNetwork.mainNet(),
+          TezosNetwork.ghostnet(),
+        ];
+
+      case BlockchainType.ethereum:
+        return [
+          EthereumNetwork.mainNet(),
+          EthereumNetwork.testNet(),
+        ];
+      case BlockchainType.fantom:
+        return [
+          FantomNetwork.mainNet(),
+        ];
+      case BlockchainType.polygon:
+        return [
+          PolygonNetwork.mainNet(),
+        ];
+      case BlockchainType.binance:
+        return [
+          BinanceNetwork.mainNet(),
+        ];
+    }
+  }
+
   bool get isdisabled {
     switch (this) {
       case BlockchainType.tezos:
+        return false;
       case BlockchainType.ethereum:
         return false;
       case BlockchainType.fantom:
+        return false;
       case BlockchainType.polygon:
+        return false;
       case BlockchainType.binance:
-        return true;
+        return false;
     }
   }
 }

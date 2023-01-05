@@ -258,7 +258,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
               ),
             ),
           );
-          await qrCodeScanCubit.verify(uri: uri, isConnectionBridgeSSI: true);
+          await qrCodeScanCubit.verify(uri: uri, isScan: false);
         } else {
           emit(
             state.copyWith(

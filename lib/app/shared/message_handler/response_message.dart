@@ -349,15 +349,18 @@ class ResponseMessage with MessageHandler {
 
         case ResponseString.RESPONSE_STRING_twitterWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_twitterWhyGetThisCard.localise(
-              context);
+            context,
+          );
 
         case ResponseString.RESPONSE_STRING_twitterExpirationDate:
           return ResponseString.RESPONSE_STRING_twitterExpirationDate.localise(
-              context);
+            context,
+          );
 
         case ResponseString.RESPONSE_STRING_twitterHowToGetIt:
           return ResponseString.RESPONSE_STRING_twitterHowToGetIt.localise(
-              context);
+            context,
+          );
 
         case ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_bunnyPassWhyGetThisCard
@@ -601,6 +604,25 @@ class ResponseMessage with MessageHandler {
 
         case ResponseString.RESPONSE_STRING_transactionIsLikelyToFail:
           return ResponseString.RESPONSE_STRING_transactionIsLikelyToFail
+              .localise(
+            context,
+          );
+        case ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard
+              .localise(
+            context,
+          );
+        case ResponseString.RESPONSE_STRING_linkedinCardExpirationDate:
+          return ResponseString.RESPONSE_STRING_linkedinCardExpirationDate
+              .localise(
+            context,
+          );
+        case ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt:
+          return ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt.localise(
+            context,
+          );
+        case ResponseString.RESPONSE_STRING_verifiableIdCardDummyDesc:
+          return ResponseString.RESPONSE_STRING_verifiableIdCardDummyDesc
               .localise(
             context,
           );

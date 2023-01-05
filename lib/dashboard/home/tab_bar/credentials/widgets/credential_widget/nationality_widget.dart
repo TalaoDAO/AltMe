@@ -2,54 +2,8 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
-class NationalityDisplayInList extends StatelessWidget {
-  const NationalityDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return NationalityRecto(credentialModel: credentialModel);
-  }
-}
-
-class NationalityDisplayInSelectionList extends StatelessWidget {
-  const NationalityDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return NationalityRecto(credentialModel: credentialModel);
-  }
-}
-
-class NationalityDisplayDetail extends StatelessWidget {
-  const NationalityDisplayDetail({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        NationalityRecto(credentialModel: credentialModel),
-      ],
-    );
-  }
-}
-
-class NationalityRecto extends Recto {
-  const NationalityRecto({Key? key, required this.credentialModel})
+class NationalityWidget extends StatelessWidget {
+  const NationalityWidget({Key? key, required this.credentialModel})
       : super(key: key);
   final CredentialModel credentialModel;
 

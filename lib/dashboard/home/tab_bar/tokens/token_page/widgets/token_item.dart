@@ -49,7 +49,7 @@ class TokenItem extends StatelessWidget {
                 child: MyText(
                   isSecure
                       ? '****'
-                      : ('''${token.calculatedBalanceInDouble.toStringAsFixed(2).formatNumber()} ${token.symbol}'''),
+                      : ('''${token.calculatedBalanceInDouble.toStringAsFixed(token.decimalsToShow).formatNumber()} ${token.symbol}'''),
                   style: Theme.of(context)
                       .textTheme
                       .listTileTitle

@@ -6,7 +6,7 @@ class QRCodeScanState extends Equatable {
     this.status = QrScanStatus.init,
     this.uri,
     this.route,
-    this.isDeepLink = false,
+    this.isScan = false,
     this.message,
   });
 
@@ -17,15 +17,15 @@ class QRCodeScanState extends Equatable {
   final Uri? uri;
   @JsonKey(ignore: true)
   final Route? route;
-  final bool isDeepLink;
+  final bool isScan;
   final StateMessage? message;
 
   Map<String, dynamic> toJson() => _$QRCodeScanStateToJson(this);
 
-  QRCodeScanState loading({bool? isDeepLink}) {
+  QRCodeScanState loading({required bool isScan}) {
     return QRCodeScanState(
       status: QrScanStatus.loading,
-      isDeepLink: isDeepLink ?? this.isDeepLink,
+      isScan: isScan,
       uri: uri,
     );
   }
@@ -33,7 +33,7 @@ class QRCodeScanState extends Equatable {
   QRCodeScanState acceptHost({required Uri uri}) {
     return QRCodeScanState(
       status: QrScanStatus.acceptHost,
-      isDeepLink: isDeepLink,
+      isScan: isScan,
       uri: uri,
     );
   }
@@ -42,7 +42,7 @@ class QRCodeScanState extends Equatable {
     return QRCodeScanState(
       status: QrScanStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
-      isDeepLink: isDeepLink,
+      isScan: isScan,
       uri: uri,
     );
   }
@@ -55,12 +55,12 @@ class QRCodeScanState extends Equatable {
     return QRCodeScanState(
       status: qrScanStatus,
       message: message,
-      isDeepLink: isDeepLink,
+      isScan: isScan,
       uri: uri,
       route: route ?? this.route,
     );
   }
 
   @override
-  List<Object?> get props => [status, uri, route, isDeepLink, message];
+  List<Object?> get props => [status, uri, route, isScan, message];
 }

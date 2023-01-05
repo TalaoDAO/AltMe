@@ -2,36 +2,8 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
-class VoucherDisplayInList extends StatelessWidget {
-  const VoucherDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return const VoucherRecto();
-  }
-}
-
-class VoucherDisplayInSelectionList extends StatelessWidget {
-  const VoucherDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return const VoucherRecto();
-  }
-}
-
-class VoucherDisplayDetail extends StatelessWidget {
-  const VoucherDisplayDetail({
+class VoucherWidget extends StatelessWidget {
+  const VoucherWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);

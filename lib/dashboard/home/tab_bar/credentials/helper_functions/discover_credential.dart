@@ -63,7 +63,7 @@ Future<void> launchUrlAfterDiscovery({
     final uri = Uri.parse(
       '''${homeCredential.link!}$uuid?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du''',
     );
-    await context.read<QRCodeScanCubit>().verify(uri: uri);
+    await context.read<QRCodeScanCubit>().verify(uri: uri, isScan: false);
   } else {
     await LaunchUrl.launch(homeCredential.link!);
   }

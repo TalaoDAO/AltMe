@@ -4,56 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class TezosAssociatedAddressDisplayInList extends StatelessWidget {
-  const TezosAssociatedAddressDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class TezosAssociatedAddressDisplayInSelectionList extends StatelessWidget {
-  const TezosAssociatedAddressDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class TezosAssociatedAddressDisplayDetail extends StatelessWidget {
-  const TezosAssociatedAddressDisplayDetail({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return TezosAssociatedAddressRecto(
-      credentialModel: credentialModel,
-    );
-  }
-}
-
-class TezosAssociatedAddressRecto extends Recto {
-  const TezosAssociatedAddressRecto({
+class TezosAssociatedAddressWidget extends StatelessWidget {
+  const TezosAssociatedAddressWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);

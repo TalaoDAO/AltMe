@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
@@ -17,65 +18,72 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
     required this.repository,
     required this.secureStorageProvider,
     required this.credentialManifest,
+    required this.query,
   }) : super(MissingCredentialsState()) {
     initialize();
   }
 
   final CredentialsRepository repository;
   final SecureStorageProvider secureStorageProvider;
-  final CredentialManifest credentialManifest;
+  final CredentialManifest? credentialManifest;
+  final Query? query;
 
   Future initialize() async {
     emit(state.loading());
 
     final List<HomeCredential> homeCredentials = [];
-    final PresentationDefinition? presentationDefinition =
-        credentialManifest.presentationDefinition;
 
-    if (presentationDefinition != null) {
-      for (final descriptor in presentationDefinition.inputDescriptors) {
-        /// using JsonPath to find credential Name
-        final dynamic json = jsonDecode(jsonEncode(descriptor.constraints));
-        final dynamic credentialField =
-            JsonPath(r'$..fields').read(json).first.value.toList().first;
+    if (credentialManifest != null) {
+      final PresentationDefinition? presentationDefinition =
+          credentialManifest!.presentationDefinition;
 
-        final credentialName = credentialField['filter']['pattern'] as String;
+      if (presentationDefinition != null) {
+        for (final descriptor in presentationDefinition.inputDescriptors) {
+          /// using JsonPath to find credential Name
+          final dynamic json = jsonDecode(jsonEncode(descriptor.constraints));
+          final dynamic credentialField =
+              JsonPath(r'$..fields').read(json).first.value.toList().first;
 
-        /// converting string to CredentialSubjectModel
-        final Map<String, dynamic> credentialNameJson = <String, dynamic>{
-          'type': credentialName
-        };
-
-        final CredentialSubjectModel credentialSubjectModel =
-            CredentialSubjectModel.fromJson(credentialNameJson);
-
-        /// fetching all the credentials
-        final CredentialsRepository repository =
-            CredentialsRepository(getSecureStorage);
-
-        final List<CredentialModel> allCredentials = await repository.findAll();
-
-        bool isPresentable = false;
-
-        for (final credential in allCredentials) {
-          if (credentialSubjectModel.credentialSubjectType ==
-              credential.credentialPreview.credentialSubjectModel
-                  .credentialSubjectType) {
-            isPresentable = true;
-            break;
-          } else {
-            isPresentable = false;
+          if (credentialField['filter'] == null) {
+            continue;
           }
-        }
-        if (!isPresentable) {
-          homeCredentials.add(
-            HomeCredential.isDummy(
-              credentialSubjectModel.credentialSubjectType,
-            ),
-          );
+
+          final credentialName = credentialField['filter']['pattern'] as String;
+
+          final isPresentable = await isCredentialPresentable(credentialName);
+
+          if (!isPresentable) {
+            final credentialSubjectType = getCredTypeFromName(credentialName);
+
+            if (credentialSubjectType != null) {
+              homeCredentials
+                  .add(HomeCredential.isDummy(credentialSubjectType));
+            }
+          }
         }
       }
     }
+
+    if (query != null) {
+      for (final credentialQuery in query!.credentialQuery) {
+        final String? credentialName = credentialQuery.example?.type;
+
+        if (credentialName == null) {
+          continue;
+        }
+
+        final isPresentable = await isCredentialPresentable(credentialName);
+
+        if (!isPresentable) {
+          final credentialSubjectType = getCredTypeFromName(credentialName);
+
+          if (credentialSubjectType != null) {
+            homeCredentials.add(HomeCredential.isDummy(credentialSubjectType));
+          }
+        }
+      }
+    }
+
     emit(
       state.copyWith(
         status: AppStatus.idle,

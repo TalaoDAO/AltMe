@@ -38,7 +38,7 @@ class DeviceInfoCredential {
     'https://www.w3.org/2018/credentials/v1',
     {
       'DeviceInfo': {
-        '@id': 'https://github.com/TalaoDAO/context/blob/main/README.me',
+        '@id': 'https://github.com/TalaoDAO/context#deviceinfo',
         '@context': {
           '@version': 1.1,
           '@protected': true,
@@ -48,7 +48,7 @@ class DeviceInfoCredential {
           'systemName': 'schema:productName',
           'device': 'schema:productName',
           'systemVersion': 'schema:productName',
-          'identifier': 'schema:productID',
+          'walletBuild': 'schema:identifier',
           'issuedBy': {
             '@id': 'schema:issuedBy',
             '@context': {

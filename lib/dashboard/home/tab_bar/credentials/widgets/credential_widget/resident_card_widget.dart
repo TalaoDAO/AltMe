@@ -4,42 +4,8 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class ResidentCardDisplayInList extends StatelessWidget {
-  const ResidentCardDisplayInList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInList(
-      credentialModel: credentialModel,
-      descriptionMaxLine: 3,
-    );
-  }
-}
-
-class ResidentCardDisplayInSelectionList extends StatelessWidget {
-  const ResidentCardDisplayInSelectionList({
-    Key? key,
-    required this.credentialModel,
-  }) : super(key: key);
-
-  final CredentialModel credentialModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultCredentialSubjectDisplayInSelectionList(
-      credentialModel: credentialModel,
-      descriptionMaxLine: 3,
-    );
-  }
-}
-
-class ResidentCardDisplayDetail extends StatelessWidget {
-  const ResidentCardDisplayDetail({
+class ResidentCardWidget extends StatelessWidget {
+  const ResidentCardWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);

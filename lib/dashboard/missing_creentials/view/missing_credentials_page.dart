@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/query_by_example/model/query.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
@@ -10,15 +11,19 @@ import 'package:secure_storage/secure_storage.dart' as secure_storage;
 class MissingCredentialsPage extends StatelessWidget {
   const MissingCredentialsPage({
     Key? key,
-    required this.credentialManifest,
+    this.credentialManifest,
+    this.query,
   }) : super(key: key);
 
-  final CredentialManifest credentialManifest;
+  final CredentialManifest? credentialManifest;
+  final Query? query;
 
-  static Route route({required CredentialManifest credentialManifest}) =>
+  static Route route({CredentialManifest? credentialManifest, Query? query}) =>
       MaterialPageRoute<void>(
-        builder: (_) =>
-            MissingCredentialsPage(credentialManifest: credentialManifest),
+        builder: (_) => MissingCredentialsPage(
+          credentialManifest: credentialManifest,
+          query: query,
+        ),
         settings: const RouteSettings(name: '/MissingCredentialsPage'),
       );
 
@@ -29,8 +34,12 @@ class MissingCredentialsPage extends StatelessWidget {
         secureStorageProvider: secure_storage.getSecureStorage,
         repository: CredentialsRepository(secure_storage.getSecureStorage),
         credentialManifest: credentialManifest,
+        query: query,
       ),
-      child: MissingCredentialsView(credentialManifest: credentialManifest),
+      child: MissingCredentialsView(
+        credentialManifest: credentialManifest,
+        query: query,
+      ),
     );
   }
 }
@@ -38,14 +47,28 @@ class MissingCredentialsPage extends StatelessWidget {
 class MissingCredentialsView extends StatelessWidget {
   const MissingCredentialsView({
     Key? key,
-    required this.credentialManifest,
+    this.credentialManifest,
+    this.query,
   }) : super(key: key);
 
-  final CredentialManifest credentialManifest;
+  final CredentialManifest? credentialManifest;
+  final Query? query;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    String issuerName = '';
+
+    if (credentialManifest != null) {
+      issuerName = credentialManifest!.issuedBy!.name;
+    }
+
+    if (query != null) {
+      // TOOD(bibash): Is there issuer name?
+      issuerName = '';
+    }
+
     return BlocBuilder<MissingCredentialsCubit, MissingCredentialsState>(
       builder: (context, state) {
         return BasePage(
@@ -57,7 +80,7 @@ class MissingCredentialsView extends StatelessWidget {
           body: Column(
             children: [
               Text(
-                '''${l10n.youAreMissing} ${state.dummyCredentials.length} ${l10n.credentialsRequestedBy} ${credentialManifest.issuedBy!.name}.''',
+                '''${l10n.youAreMissing} ${state.dummyCredentials.length} ${l10n.credentialsRequestedBy} $issuerName.''',
                 style: Theme.of(context).textTheme.discoverFieldDescription,
                 textAlign: TextAlign.center,
               ),

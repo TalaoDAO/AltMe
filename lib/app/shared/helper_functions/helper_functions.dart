@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -7,6 +8,7 @@ import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
 import 'package:json_path/json_path.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:secure_storage/secure_storage.dart';
 import 'package:web3dart/web3dart.dart';
 
 String generateDefaultAccountName(
@@ -162,4 +164,46 @@ BlockchainType getBlockchainType(AccountType accountType) {
     case AccountType.binance:
       return BlockchainType.binance;
   }
+}
+
+CredentialSubjectType? getCredTypeFromName(String credentialName) {
+  for (final element in CredentialSubjectType.values) {
+    if (credentialName == element.name) {
+      return element;
+    }
+  }
+  return null;
+}
+
+Future<bool> isCredentialPresentable(String credentialName) async {
+  final CredentialSubjectType? credentialSubjectType =
+      getCredTypeFromName(credentialName);
+
+  if (credentialSubjectType == null) {
+    return true;
+  }
+
+  final isPresentable = await isCredentialAvaialble(credentialSubjectType);
+
+  return isPresentable;
+}
+
+Future<bool> isCredentialAvaialble(
+  CredentialSubjectType credentialSubjectType,
+) async {
+  /// fetching all the credentials
+  final CredentialsRepository repository =
+      CredentialsRepository(getSecureStorage);
+
+  final List<CredentialModel> allCredentials = await repository.findAll();
+
+  for (final credential in allCredentials) {
+    if (credentialSubjectType ==
+        credential
+            .credentialPreview.credentialSubjectModel.credentialSubjectType) {
+      return true;
+    }
+  }
+
+  return false;
 }

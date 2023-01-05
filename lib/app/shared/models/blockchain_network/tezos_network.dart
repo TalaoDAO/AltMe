@@ -19,6 +19,7 @@ class TezosNetwork extends BlockchainNetwork {
           title: title,
           subTitle: subTitle,
           apiKey: apiKey,
+          type: BlockchainType.tezos,
         );
 
   factory TezosNetwork.fromJson(Map<String, dynamic> json) =>

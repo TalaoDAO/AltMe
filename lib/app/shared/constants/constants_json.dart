@@ -3,7 +3,7 @@
 abstract class ConstantsJson {
   static const deviceInfoCredentialManifestJson = <String, dynamic>{
     'id': 'DeviceInfo',
-    'issuer': {'id': '', 'name': 'My Wallet'},
+    'issuer': {'id': '', 'name': 'Wallet issuer'},
     'output_descriptors': [
       {
         'id': '',
@@ -55,6 +55,12 @@ abstract class ConstantsJson {
               'schema': {'type': 'string'},
               'fallback': 'Unknown',
               'label': 'System version'
+            },
+            {
+              'path': [r'$.credentialSubject.walletBuild'],
+              'schema': {'type': 'string'},
+              'fallback': 'Unknown',
+              'label': 'Wallet build'
             }
           ]
         }
@@ -65,7 +71,7 @@ abstract class ConstantsJson {
 
   static const tezosAssociatedAddressCredentialManifestJson = <String, dynamic>{
     'id': 'TezosAssociatedAddress',
-    'issuer': {'id': '', 'name': 'My Wallet'},
+    'issuer': {'id': '', 'name': 'Wallet issuer'},
     'output_descriptors': [
       {
         'id': '',
@@ -115,7 +121,7 @@ abstract class ConstantsJson {
   static const ethereumAssociatedAddressCredentialManifestJson =
       <String, dynamic>{
     'id': 'EthereumAssociatedAddress',
-    'issuer': {'id': '', 'name': 'My Wallet'},
+    'issuer': {'id': '', 'name': 'Wallet issuer'},
     'output_descriptors': [
       {
         'id': '',
@@ -165,7 +171,7 @@ abstract class ConstantsJson {
   static const fantomAssociatedAddressCredentialManifestJson =
       <String, dynamic>{
     'id': 'FantomAssociatedAddress',
-    'issuer': {'id': '', 'name': 'My Wallet'},
+    'issuer': {'id': '', 'name': 'Wallet issuer'},
     'output_descriptors': [
       {
         'id': '',
@@ -215,7 +221,7 @@ abstract class ConstantsJson {
   static const polygonAssociatedAddressCredentialManifestJson =
       <String, dynamic>{
     'id': 'PolygonAssociatedAddress',
-    'issuer': {'id': '', 'name': 'My Wallet'},
+    'issuer': {'id': '', 'name': 'Wallet issuer'},
     'output_descriptors': [
       {
         'id': '',
@@ -265,7 +271,7 @@ abstract class ConstantsJson {
   static const binanceAssociatedAddressCredentialManifestJson =
       <String, dynamic>{
     'id': 'BinanceAssociatedAddress',
-    'issuer': {'id': '', 'name': 'My Wallet'},
+    'issuer': {'id': '', 'name': 'Wallet issuer'},
     'output_descriptors': [
       {
         'id': '',

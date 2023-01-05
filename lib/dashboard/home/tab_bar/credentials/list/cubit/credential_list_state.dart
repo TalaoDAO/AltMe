@@ -15,12 +15,15 @@ class CredentialListState extends Equatable {
     List<CredentialSubjectType>? gamingCategories,
     List<CredentialSubjectType>? communityCategories,
     List<CredentialSubjectType>? identityCategories,
+    List<CredentialSubjectType>? myProfessionalCategories,
   })  : gamingCategories =
             gamingCategories ?? List.from(DiscoverList.gamingCategories),
         communityCategories =
             communityCategories ?? List.from(DiscoverList.communityCategories),
         identityCategories =
-            identityCategories ?? List.from(DiscoverList.identityCategories);
+            identityCategories ?? List.from(DiscoverList.identityCategories),
+        myProfessionalCategories = myProfessionalCategories ??
+            List.from(DiscoverList.myProfessionalCategories);
 
   factory CredentialListState.fromJson(Map<String, dynamic> json) =>
       _$CredentialListStateFromJson(json);
@@ -36,6 +39,7 @@ class CredentialListState extends Equatable {
   final List<CredentialSubjectType> gamingCategories;
   final List<CredentialSubjectType> communityCategories;
   final List<CredentialSubjectType> identityCategories;
+  final List<CredentialSubjectType> myProfessionalCategories;
   final StateMessage? message;
 
   CredentialListState fetching() {
@@ -51,6 +55,7 @@ class CredentialListState extends Equatable {
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
       identityCategories: identityCategories,
+      myProfessionalCategories: myProfessionalCategories,
     );
   }
 
@@ -70,6 +75,7 @@ class CredentialListState extends Equatable {
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
       identityCategories: identityCategories,
+      myProfessionalCategories: myProfessionalCategories,
     );
   }
 
@@ -86,6 +92,7 @@ class CredentialListState extends Equatable {
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
       identityCategories: identityCategories,
+      myProfessionalCategories: myProfessionalCategories,
     );
   }
 
@@ -103,6 +110,7 @@ class CredentialListState extends Equatable {
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
       identityCategories: identityCategories,
+      myProfessionalCategories: myProfessionalCategories,
     );
   }
 
@@ -117,6 +125,7 @@ class CredentialListState extends Equatable {
     List<CredentialSubjectType>? gamingCategories,
     List<CredentialSubjectType>? communityCategories,
     List<CredentialSubjectType>? identityCategories,
+    List<CredentialSubjectType>? myProfessionalCategories,
   }) {
     return CredentialListState(
       status: AppStatus.populate,
@@ -132,6 +141,8 @@ class CredentialListState extends Equatable {
       gamingCategories: gamingCategories ?? this.gamingCategories,
       communityCategories: communityCategories ?? this.communityCategories,
       identityCategories: identityCategories ?? this.identityCategories,
+      myProfessionalCategories:
+          myProfessionalCategories ?? this.myProfessionalCategories,
     );
   }
 
@@ -154,6 +165,7 @@ class CredentialListState extends Equatable {
       gamingCategories: gamingCategories,
       communityCategories: communityCategories,
       identityCategories: identityCategories,
+      myProfessionalCategories: myProfessionalCategories,
     );
   }
 
@@ -173,5 +185,6 @@ class CredentialListState extends Equatable {
         communityCategories,
         identityCategories,
         myProfessionalCredentials,
+        myProfessionalCategories
       ];
 }

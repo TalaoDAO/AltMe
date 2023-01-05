@@ -167,8 +167,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        DisplayDetail(
+                        CredentialDisplay(
                           credentialModel: widget.credentialModel,
+                          credDisplayType: CredDisplayType.Detail,
                           fromCredentialOffer: false,
                         ),
                         const SizedBox(height: 20),
