@@ -119,6 +119,19 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
           TransactionDoneDialog.show(
             context: context,
             amountAndSymbol: amountAndSymbol,
+            transactionHash: state.transactionHash,
+            onTrasactionHashTap: () {
+              final network = context.read<ManageNetworkCubit>().state.network;
+              if (network is TezosNetwork) {
+                LaunchUrl.launch(
+                  'https://tzkt.io/${state.transactionHash}',
+                );
+              } else {
+                LaunchUrl.launch(
+                  'https://etherscan.io/tx/${state.transactionHash}',
+                );
+              }
+            },
             onDoneButtonClick: () {
               Navigator.popUntil(
                 context,
