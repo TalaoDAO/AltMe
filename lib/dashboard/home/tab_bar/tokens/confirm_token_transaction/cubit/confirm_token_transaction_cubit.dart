@@ -1,3 +1,7 @@
+// ignore_for_file: lines_longer_than_80_chars
+
+import 'dart:developer';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
@@ -113,6 +117,12 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       final ethClient = Web3Client(rpcNodeUrl, httpClient);
 
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
+      final fromAddress = await credentials.extractAddress();
+
+      logger.i(
+        'sending from: $fromAddress to : ${state.withdrawalAddress},etherAmountInWei: ${EtherAmount.inWei(BigInt.from(amount))} with '
+        'GasPrice in wei: 25000000000',
+      );
 
       final transactionHash = await ethClient.sendTransaction(
         credentials,
@@ -120,9 +130,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         Transaction(
           from: await credentials.extractAddress(),
           to: EthereumAddress.fromHex(state.withdrawalAddress),
-          gasPrice: EtherAmount.inWei(BigInt.one),
-          maxGas: 100000,
-          value: EtherAmount.fromUnitAndValue(EtherUnit.wei, amount),
+          gasPrice: EtherAmount.inWei(BigInt.from(25000000000)),
+          value: EtherAmount.inWei(BigInt.from(amount)),
         ),
       );
       logger.i(
