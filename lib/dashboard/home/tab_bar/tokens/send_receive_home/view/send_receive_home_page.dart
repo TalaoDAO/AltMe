@@ -39,6 +39,7 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
     selectedToken: widget.selectedToken,
     walletCubit: context.read<WalletCubit>(),
     tokensCubit: context.read<TokensCubit>(),
+    manageNetworkCubit: context.read<ManageNetworkCubit>(),
   );
 
   @override
@@ -230,8 +231,8 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                                         .currentAccount
                                         .walletAddress,
                                     item: state.selectedToken.symbol,
-                                    description: l10n
-                                        .sendOnlyToThisAddressDescription(
+                                    description:
+                                        l10n.sendOnlyToThisAddressDescription(
                                       state.selectedToken.symbol,
                                     ),
                                   ),
@@ -247,6 +248,7 @@ class _SendReceiveHomePageViewState extends State<_SendReceiveHomePageView> {
                     ),
                     RecentTransactions(
                       decimal: int.parse(state.selectedToken.decimals),
+                      decimalToShow:state.selectedToken.decimalsToShow,
                       symbol: state.selectedToken.symbol,
                       tokenUsdPrice: state.selectedToken.tokenUSDPrice,
                       onRefresh: () async {

@@ -11,6 +11,7 @@ class TransactionItem extends StatelessWidget {
     Key? key,
     required this.operationModel,
     required this.decimal,
+    required this.decimalToShow,
     required this.symbol,
     this.tokenUsdPrice,
   }) : super(key: key);
@@ -19,6 +20,7 @@ class TransactionItem extends StatelessWidget {
   final int decimal;
   final double? tokenUsdPrice;
   final String symbol;
+  final int decimalToShow;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +126,7 @@ class TransactionItem extends StatelessWidget {
               ),
               Expanded(
                 child: MyText(
-                  '${amount.toStringAsFixed(2).formatNumber()} '
+                  '${amount.toStringAsFixed(decimalToShow).formatNumber()} '
                   '$symbol',
                   minFontSize: 8,
                   textAlign: TextAlign.end,

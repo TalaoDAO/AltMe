@@ -9,6 +9,7 @@ class RecentTransactions extends StatelessWidget {
     Key? key,
     this.operations = const [],
     required this.decimal,
+    required this.decimalToShow,
     required this.symbol,
     this.tokenUsdPrice,
     required this.onRefresh,
@@ -16,6 +17,7 @@ class RecentTransactions extends StatelessWidget {
 
   final List<OperationModel> operations;
   final int decimal;
+  final int decimalToShow;
   final String symbol;
   final double? tokenUsdPrice;
   final RefreshCallback onRefresh;
@@ -48,6 +50,7 @@ class RecentTransactions extends StatelessWidget {
                           operationModel: operations[index],
                           symbol: symbol,
                           decimal: decimal,
+                          decimalToShow: decimalToShow,
                           tokenUsdPrice: tokenUsdPrice,
                         ),
                         separatorBuilder: (_, __) {
