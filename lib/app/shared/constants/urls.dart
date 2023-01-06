@@ -48,8 +48,8 @@ class Urls {
   static const tezToolBase = 'https://api.teztools.io';
 
   static const xtzPrice = 'https://api.teztools.io/v1/xtz-price';
-  static const ethPrice =
-      'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD';
+  static const cryptoCompareBaseUrl = 'https://min-api.cryptocompare.com';
+  static const ethPrice = '$cryptoCompareBaseUrl/data/price?fsym=ETH&tsyms=USD';
 
   // TZKT
   static const tzktMainnetUrl = 'https://api.tzkt.io';

@@ -60,6 +60,7 @@ class TokenModel extends Equatable {
     double? balanceInUSD,
     String? tokenId,
     String? standard,
+    int? decimalsToShow,
   }) {
     return TokenModel(
       contractAddress: contractAddress ?? this.contractAddress,
@@ -73,6 +74,7 @@ class TokenModel extends Equatable {
       balanceInUSD: balanceInUSD ?? this.balanceInUSD,
       tokenId: tokenId ?? this.tokenId,
       standard: standard ?? this.standard,
+      decimalsToShow: decimalsToShow ?? this.decimalsToShow,
     );
   }
 

@@ -75,7 +75,7 @@ class TokensCubit extends Cubit<TokensState> {
       if (state.offset == 0) {
         emit(state.fetching());
       }
-      
+
       if (selectedAccountBlockchainType == BlockchainType.tezos) {
         await getTokensOnTezos(
           walletAddress: walletAddress,
@@ -160,10 +160,36 @@ class TokensCubit extends Cubit<TokensState> {
       data.addAll(newData);
     }
 
+    for (int i = 0; i < data.length; i++) {
+      try {
+        final token = data[i];
+        final dynamic response = await client.get(
+          '${Urls.cryptoCompareBaseUrl}/data/price?fsym=${token.symbol}&tsyms=USD',
+        );
+        if (response['USD'] != null) {
+          final balanceUSDPrice = response['USD'] as double;
+          data[i] = token.copyWith(
+            tokenUSDPrice: balanceUSDPrice,
+            balanceInUSD: balanceUSDPrice * token.calculatedBalanceInDouble,
+          );
+        }
+      } catch (e, s) {
+        getLogger(toString()).e(
+          'error in finding contract, error: $e, s: $s',
+        );
+      }
+    }
+    double totalBalanceInUSD = 0;
+    for (final tokenElement in data) {
+      totalBalanceInUSD += tokenElement.balanceInUSD;
+    }
+    data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
+
     emit(
       state.copyWith(
         status: AppStatus.success,
         data: data,
+        totalBalanceInUSD: totalBalanceInUSD,
       ),
     );
   }
