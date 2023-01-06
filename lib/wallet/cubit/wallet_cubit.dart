@@ -485,36 +485,7 @@ class WalletCubit extends Cubit<WalletState> {
     required CredentialModel credential,
     bool showMessage = true,
   }) async {
-    /// Old EmailPass needs to be removed if currently adding new EmailPass
-    /// with same email address
-    if (credential
-            .credentialPreview.credentialSubjectModel.credentialSubjectType ==
-        CredentialSubjectType.emailPass) {
-      final String? email = (credential.credentialPreview.credentialSubjectModel
-              as EmailPassModel)
-          .email;
-
-      if (email != null) {
-        final List<CredentialModel> allCredentials =
-            await credentialsRepository.findAll();
-
-        for (final storedCredential in allCredentials) {
-          final credentialSubjectModel =
-              storedCredential.credentialPreview.credentialSubjectModel;
-          if (credentialSubjectModel.credentialSubjectType ==
-              CredentialSubjectType.emailPass) {
-            if (email == (credentialSubjectModel as EmailPassModel).email) {
-              await deleteById(
-                credential: storedCredential,
-                showMessage: false,
-              );
-              await credentialListCubit.deleteById(storedCredential);
-              break;
-            }
-          }
-        }
-      }
-    }
+    await replaceCredential(credential: credential);
 
     /// if same email credential is present
     await credentialsRepository.insert(credential);
@@ -580,6 +551,101 @@ class WalletCubit extends Cubit<WalletState> {
             : null,
       ),
     );
+  }
+
+  Future replaceCredential({
+    required CredentialModel credential,
+    bool showMessage = true,
+  }) async {
+    final credentialSubjectModel =
+        credential.credentialPreview.credentialSubjectModel;
+
+    /// Old EmailPass needs to be removed if currently adding new EmailPass
+    /// with same email address
+    if (credentialSubjectModel.credentialSubjectType ==
+        CredentialSubjectType.emailPass) {
+      final String? email = (credentialSubjectModel as EmailPassModel).email;
+
+      final List<CredentialModel> allCredentials =
+          await credentialsRepository.findAll();
+
+      if (email != null) {
+        for (final storedCredential in allCredentials) {
+          final iteratedCredentialSubjectModel =
+              storedCredential.credentialPreview.credentialSubjectModel;
+
+          if (storedCredential.credentialPreview.credentialSubjectModel
+                  .credentialSubjectType ==
+              CredentialSubjectType.emailPass) {
+            if (email ==
+                (iteratedCredentialSubjectModel as EmailPassModel).email) {
+              await deleteById(
+                credential: storedCredential,
+                showMessage: false,
+              );
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    ///remove old card added by YOTI
+    if (credentialSubjectModel.credentialSubjectType ==
+        CredentialSubjectType.over13) {
+      final List<CredentialModel> allCredentials =
+          await credentialsRepository.findAll();
+      for (final storedCredential in allCredentials) {
+        final credentialSubjectModel =
+            storedCredential.credentialPreview.credentialSubjectModel;
+        if (credentialSubjectModel.credentialSubjectType ==
+            CredentialSubjectType.over13) {
+          await deleteById(
+            credential: storedCredential,
+            showMessage: false,
+          );
+          break;
+        }
+      }
+    }
+
+    ///remove old card added by YOTI
+    if (credentialSubjectModel.credentialSubjectType ==
+        CredentialSubjectType.over18) {
+      final List<CredentialModel> allCredentials =
+          await credentialsRepository.findAll();
+      for (final storedCredential in allCredentials) {
+        final credentialSubjectModel =
+            storedCredential.credentialPreview.credentialSubjectModel;
+        if (credentialSubjectModel.credentialSubjectType ==
+            CredentialSubjectType.over18) {
+          await deleteById(
+            credential: storedCredential,
+            showMessage: false,
+          );
+          break;
+        }
+      }
+    }
+
+    ///remove old card added by YOTI
+    if (credentialSubjectModel.credentialSubjectType ==
+        CredentialSubjectType.ageRange) {
+      final List<CredentialModel> allCredentials =
+          await credentialsRepository.findAll();
+      for (final storedCredential in allCredentials) {
+        final credentialSubjectModel =
+            storedCredential.credentialPreview.credentialSubjectModel;
+        if (credentialSubjectModel.credentialSubjectType ==
+            CredentialSubjectType.ageRange) {
+          await deleteById(
+            credential: storedCredential,
+            showMessage: false,
+          );
+          break;
+        }
+      }
+    }
   }
 
   Future resetWallet() async {
