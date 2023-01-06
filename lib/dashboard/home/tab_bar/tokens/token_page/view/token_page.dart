@@ -33,8 +33,6 @@ class TokensView extends StatefulWidget {
 }
 
 class _TokensViewState extends State<TokensView> {
-  int activeIndex = -1;
-
   Future<void> onRefresh() async {
     await context.read<TokensCubit>().fetchFromZero();
   }
@@ -57,14 +55,6 @@ class _TokensViewState extends State<TokensView> {
 
     return MultiBlocListener(
       listeners: [
-        BlocListener<WalletCubit, WalletState>(
-          listener: (context, state) {
-            if (activeIndex != state.currentCryptoIndex) {
-              onRefresh();
-            }
-            activeIndex = state.currentCryptoIndex;
-          },
-        ),
         BlocListener<ManageNetworkCubit, ManageNetworkState>(
           listener: (context, state) {
             onRefresh();
@@ -118,8 +108,8 @@ class _TokensViewState extends State<TokensView> {
                     .data[index]
                     .blockchainType;
 
-                if (blockchain == BlockchainType.ethereum) {
-                  return Container();
+                if (blockchain.isdisabled) {
+                  return const Center();
                 }
 
                 return Column(
@@ -127,21 +117,23 @@ class _TokensViewState extends State<TokensView> {
                     TotalWalletBalance(
                       tokensCubit: context.read<TokensCubit>(),
                     ),
-                    const SizedBox(
-                      height: Sizes.spaceSmall,
-                    ),
-                    AddTokenButton(
-                      onTap: () {
-                        Navigator.of(context)
-                            .push<void>(
-                              AllTokensPage.route(),
-                            )
-                            .then(
-                              (value) =>
-                                  context.read<TokensCubit>().fetchFromZero(),
-                            );
-                      },
-                    ),
+                    if (blockchain == BlockchainType.tezos)
+                      const SizedBox(
+                        height: Sizes.spaceSmall,
+                      ),
+                    if (blockchain == BlockchainType.tezos)
+                      AddTokenButton(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push<void>(
+                                AllTokensPage.route(),
+                              )
+                              .then(
+                                (value) =>
+                                    context.read<TokensCubit>().fetchFromZero(),
+                              );
+                        },
+                      ),
                   ],
                 );
               },
@@ -172,6 +164,21 @@ class _TokensViewState extends State<TokensView> {
                   }
                 },
                 builder: (context, state) {
+                  final index =
+                      context.read<WalletCubit>().state.currentCryptoIndex;
+
+                  final blockchain = context
+                      .read<WalletCubit>()
+                      .state
+                      .cryptoAccount
+                      .data[index]
+                      .blockchainType;
+
+                  if (blockchain.isdisabled) {
+                    return Center(
+                      child: Text(l10n.thisFeatureIsNotSupportedMessage),
+                    );
+                  }
                   String message = '';
                   if (state.message != null) {
                     final MessageHandler messageHandler =

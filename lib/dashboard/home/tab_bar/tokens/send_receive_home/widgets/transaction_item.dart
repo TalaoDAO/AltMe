@@ -11,14 +11,18 @@ class TransactionItem extends StatelessWidget {
     Key? key,
     required this.operationModel,
     required this.decimal,
+    required this.decimalToShow,
     required this.symbol,
     this.tokenUsdPrice,
+    this.onTap,
   }) : super(key: key);
 
   final OperationModel operationModel;
   final int decimal;
   final double? tokenUsdPrice;
   final String symbol;
+  final int decimalToShow;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +33,7 @@ class TransactionItem extends StatelessWidget {
           operationModel.amount.toString(),
     );
     return InkWell(
-      onTap: () {
-        LaunchUrl.launch(
-          'https://tzkt.io/${operationModel.hash}/${operationModel.counter}',
-        );
-      },
+      onTap: onTap,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -124,7 +124,7 @@ class TransactionItem extends StatelessWidget {
               ),
               Expanded(
                 child: MyText(
-                  '${amount.toStringAsFixed(2).formatNumber()} '
+                  '${amount.toStringAsFixed(decimalToShow).formatNumber()} '
                   '$symbol',
                   minFontSize: 8,
                   textAlign: TextAlign.end,

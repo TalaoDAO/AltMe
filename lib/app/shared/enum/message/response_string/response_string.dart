@@ -82,6 +82,7 @@ enum ResponseString {
   RESPONSE_STRING_twitterWhyGetThisCard,
   RESPONSE_STRING_twitterExpirationDate,
   RESPONSE_STRING_twitterHowToGetIt,
+  RESPONSE_STRING_twitterDummyDesc,
   RESPONSE_STRING_tezoniaPassWhyGetThisCard,
   RESPONSE_STRING_tezoniaPassExpirationDate,
   RESPONSE_STRING_tezoniaPassHowToGetIt,

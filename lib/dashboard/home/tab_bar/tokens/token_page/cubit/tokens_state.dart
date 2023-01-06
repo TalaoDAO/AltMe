@@ -9,6 +9,7 @@ class TokensState extends Equatable {
     this.isSecure = false,
     this.totalBalanceInUSD = 0.0,
     this.offset = 0,
+    this.blockchainType = BlockchainType.tezos,
   });
 
   factory TokensState.fromJson(Map<String, dynamic> json) =>
@@ -20,6 +21,7 @@ class TokensState extends Equatable {
   final bool isSecure;
   final double totalBalanceInUSD;
   final int offset;
+  final BlockchainType blockchainType;
 
   TokensState fetching() {
     return copyWith(
@@ -73,6 +75,18 @@ class TokensState extends Equatable {
     );
   }
 
+  TokensState reset({required BlockchainType blockchainType}) {
+    return TokensState(
+      status: AppStatus.init,
+      message: null,
+      data: const [],
+      isSecure: false,
+      totalBalanceInUSD: 0,
+      offset: 0,
+      blockchainType: blockchainType,
+    );
+  }
+
   TokensState copyWith({
     AppStatus? status,
     StateMessage? message,
@@ -80,14 +94,16 @@ class TokensState extends Equatable {
     bool? isSecure,
     double? totalBalanceInUSD,
     int? offset,
+    BlockchainType? blockchainType,
   }) {
     return TokensState(
       status: status ?? this.status,
-      message: message ?? this.message,
+      message: message,
       data: data ?? this.data,
       isSecure: isSecure ?? this.isSecure,
       totalBalanceInUSD: totalBalanceInUSD ?? this.totalBalanceInUSD,
       offset: offset ?? this.offset,
+      blockchainType: blockchainType ?? this.blockchainType,
     );
   }
 
@@ -101,5 +117,6 @@ class TokensState extends Equatable {
         isSecure,
         totalBalanceInUSD,
         offset,
+        blockchainType,
       ];
 }

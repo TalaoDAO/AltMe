@@ -23,44 +23,55 @@ class CachedImageFromNetwork extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: borderRadius ?? BorderRadius.zero,
-      child: url.endsWith('.svg')
-          ? SvgPicture.network(
-              url,
-              width: width,
-              height: height,
-              placeholderBuilder: (_) => Container(
+    if (url.startsWith('assets')) {
+      return ClipRRect(
+        borderRadius: borderRadius,
+        child: Image.asset(
+          url,
+          width: width,
+          height: height,
+        ),
+      );
+    } else {
+      return ClipRRect(
+        borderRadius: borderRadius ?? BorderRadius.zero,
+        child: url.endsWith('.svg')
+            ? SvgPicture.network(
+                url,
                 width: width,
                 height: height,
-                color: Theme.of(context).colorScheme.lightGrey,
-              ),
-            )
-          : CachedNetworkImage(
-              imageUrl: url,
-              fit: fit,
-              width: width,
-              height: height,
-              progressIndicatorBuilder: (context, child, downloadProgress) {
-                return errorMessage == null
+                placeholderBuilder: (_) => Container(
+                  width: width,
+                  height: height,
+                  color: Theme.of(context).colorScheme.lightGrey,
+                ),
+              )
+            : CachedNetworkImage(
+                imageUrl: url,
+                fit: fit,
+                width: width,
+                height: height,
+                progressIndicatorBuilder: (context, child, downloadProgress) {
+                  return errorMessage == null
+                      ? Container(
+                          color: Theme.of(context).colorScheme.lightGrey,
+                          margin: const EdgeInsets.all(10),
+                          child: Text(downloadProgress.progress.toString()),
+                        )
+                      : ErrorWidget(errorMessage: errorMessage);
+                },
+                errorWidget: (context, error, dynamic _) => errorMessage == null
                     ? Container(
                         color: Theme.of(context).colorScheme.lightGrey,
-                        margin: const EdgeInsets.all(10),
-                        child: Text(downloadProgress.progress.toString()),
+                        child: Icon(
+                          Icons.error,
+                          color: Theme.of(context).colorScheme.darkGrey,
+                        ),
                       )
-                    : ErrorWidget(errorMessage: errorMessage);
-              },
-              errorWidget: (context, error, dynamic _) => errorMessage == null
-                  ? Container(
-                      color: Theme.of(context).colorScheme.lightGrey,
-                      child: Icon(
-                        Icons.error,
-                        color: Theme.of(context).colorScheme.darkGrey,
-                      ),
-                    )
-                  : ErrorWidget(errorMessage: errorMessage),
-            ),
-    );
+                    : ErrorWidget(errorMessage: errorMessage),
+              ),
+      );
+    }
   }
 }
 

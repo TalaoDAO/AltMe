@@ -522,6 +522,7 @@
     "twitterHowToGetIt",
     "twitterWhyGetThisCard",
     "twitterExpirationDate",
+    "twitterDummyDesc",
     "linkedinCardHowToGetIt",
     "linkedinCardWhyGetThisCard",
     "linkedinCardExpirationDate",
@@ -705,7 +706,8 @@
     "userNotFitErrorMessage",
     "youAreMissing",
     "credentialsRequestedBy",
-    "transactionIsLikelyToFail"
+    "transactionIsLikelyToFail",
+    "buy"
   ],
 
   "es": [
@@ -1231,6 +1233,7 @@
     "twitterHowToGetIt",
     "twitterWhyGetThisCard",
     "twitterExpirationDate",
+    "twitterDummyDesc",
     "linkedinCardHowToGetIt",
     "linkedinCardWhyGetThisCard",
     "linkedinCardExpirationDate",
@@ -1414,7 +1417,8 @@
     "userNotFitErrorMessage",
     "youAreMissing",
     "credentialsRequestedBy",
-    "transactionIsLikelyToFail"
+    "transactionIsLikelyToFail",
+    "buy"
   ],
 
   "fr": [
@@ -1940,6 +1944,7 @@
     "twitterHowToGetIt",
     "twitterWhyGetThisCard",
     "twitterExpirationDate",
+    "twitterDummyDesc",
     "linkedinCardHowToGetIt",
     "linkedinCardWhyGetThisCard",
     "linkedinCardExpirationDate",
@@ -2123,7 +2128,8 @@
     "userNotFitErrorMessage",
     "youAreMissing",
     "credentialsRequestedBy",
-    "transactionIsLikelyToFail"
+    "transactionIsLikelyToFail",
+    "buy"
   ],
 
   "it": [
@@ -2649,6 +2655,7 @@
     "twitterHowToGetIt",
     "twitterWhyGetThisCard",
     "twitterExpirationDate",
+    "twitterDummyDesc",
     "linkedinCardHowToGetIt",
     "linkedinCardWhyGetThisCard",
     "linkedinCardExpirationDate",
@@ -2832,6 +2839,7 @@
     "userNotFitErrorMessage",
     "youAreMissing",
     "credentialsRequestedBy",
-    "transactionIsLikelyToFail"
+    "transactionIsLikelyToFail",
+    "buy"
   ]
 }

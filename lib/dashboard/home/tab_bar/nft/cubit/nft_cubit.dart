@@ -43,11 +43,6 @@ class NftCubit extends Cubit<NftState> {
     if (data.length < state.offset) return;
     try {
       log.i('starting funtion getTezosNftList()');
-      if (state.offset == 0) {
-        emit(state.fetching());
-      } else {
-        emit(state.loading());
-      }
 
       //final activeIndex = walletCubit.state.currentCryptoIndex;
       final walletAddress =
@@ -55,8 +50,18 @@ class NftCubit extends Cubit<NftState> {
 
       late List<NftModel> newData;
 
-      if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType ==
-          BlockchainType.tezos) {
+      final selectedAccountBlockchainType =
+          walletCubit.state.cryptoAccount.data[activeIndex].blockchainType;
+      if (state.blockchainType != selectedAccountBlockchainType) {
+        emit(state.reset(blockchainType: selectedAccountBlockchainType));
+      }
+      if (state.offset == 0) {
+        emit(state.fetching());
+      } else {
+        emit(state.loading());
+      }
+
+      if (selectedAccountBlockchainType == BlockchainType.tezos) {
         newData = await getTezosNFTs(
           offset: state.offset,
           limit: _limit,

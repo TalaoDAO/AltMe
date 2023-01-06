@@ -82,4 +82,5 @@ class IconStrings {
   static const String tezos = '$base/blockchain-tezos.png';
   static const String upload = '$base/upload.png';
   static const String document = '$base/document.png';
+  static const String cashInHand = '$base/cash-in-hand.png';
 }

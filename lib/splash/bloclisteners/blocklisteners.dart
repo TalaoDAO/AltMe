@@ -38,7 +38,7 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
 );
 
 final walletBlocListener = BlocListener<WalletCubit, WalletState>(
-  listener: (BuildContext context, WalletState state) {
+  listener: (BuildContext context, WalletState state) async {
     if (state.message != null) {
       AlertMessage.showStateMessage(
         context: context,
@@ -52,7 +52,7 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
     }
     if (state.status == WalletStatus.reset) {
       /// Removes every stack except first route (splashPage)
-      Navigator.pushAndRemoveUntil<void>(
+      await Navigator.pushAndRemoveUntil<void>(
         context,
         StarterPage.route(),
         (Route<dynamic> route) => route.isFirst,
@@ -76,7 +76,11 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
         } else {
           network = TezosNetwork.mainNet();
         }
-        context.read<ManageNetworkCubit>().setNetwork(network);
+        await context.read<ManageNetworkCubit>().setNetwork(network);
+        try {
+          await context.read<TokensCubit>().getTokens();
+          await context.read<NftCubit>().getNftList();
+        } catch (_) {}
       }
     }
   },

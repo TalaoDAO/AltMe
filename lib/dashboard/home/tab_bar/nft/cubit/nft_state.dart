@@ -7,6 +7,7 @@ class NftState extends Equatable {
     this.message,
     this.offset = 0,
     this.data = const [],
+    this.blockchainType = BlockchainType.tezos,
   });
 
   factory NftState.fromJson(Map<String, dynamic> json) =>
@@ -16,6 +17,7 @@ class NftState extends Equatable {
   final StateMessage? message;
   final List<NftModel> data;
   final int offset;
+  final BlockchainType blockchainType;
 
   NftState fetching() {
     return NftState(
@@ -55,23 +57,41 @@ class NftState extends Equatable {
     );
   }
 
+  NftState reset({required BlockchainType blockchainType}) {
+    return NftState(
+      status: AppStatus.init,
+      message: null,
+      data: const [],
+      offset: 0,
+      blockchainType: blockchainType,
+    );
+  }
+
   NftState copyWith({
     AppStatus? status,
     MessageHandler? messageHandler,
     List<NftModel>? data,
     int? offset,
     StateMessage? message,
+    BlockchainType? blockchainType,
   }) {
     return NftState(
       status: status ?? this.status,
       data: data ?? this.data,
-      message: message ?? this.message,
+      message: message,
       offset: offset ?? this.offset,
+      blockchainType: blockchainType ?? this.blockchainType,
     );
   }
 
   Map<String, dynamic> toJson() => _$NftStateToJson(this);
 
   @override
-  List<Object?> get props => [status, message, data, offset];
+  List<Object?> get props => [
+        status,
+        message,
+        data,
+        offset,
+        blockchainType,
+      ];
 }

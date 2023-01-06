@@ -34,8 +34,6 @@ class NftView extends StatefulWidget {
 }
 
 class _NftViewState extends State<NftView> {
-  int activeIndex = -1;
-
   Future<void> onRefresh() async {
     await context.read<NftCubit>().fetchFromZero();
   }
@@ -103,14 +101,6 @@ class _NftViewState extends State<NftView> {
           Expanded(
             child: MultiBlocListener(
               listeners: [
-                BlocListener<WalletCubit, WalletState>(
-                  listener: (context, state) {
-                    if (activeIndex != state.currentCryptoIndex) {
-                      onRefresh();
-                    }
-                    activeIndex = state.currentCryptoIndex;
-                  },
-                ),
                 BlocListener<ManageNetworkCubit, ManageNetworkState>(
                   listener: (context, state) {
                     onRefresh();

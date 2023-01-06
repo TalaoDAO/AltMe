@@ -25,6 +25,10 @@ class PolygonNetwork extends EthereumNetwork {
           type: type,
           chain: chain,
           chainId: chainId,
+          mainTokenName: 'Polygon',
+          mainTokenDecimal: '18',
+          mainTokenIcon: IconStrings.polygon,
+          mainTokenSymbol: 'Matic',
         );
 
   factory PolygonNetwork.mainNet() => const PolygonNetwork(
@@ -38,5 +42,17 @@ class PolygonNetwork extends EthereumNetwork {
         subTitle:
             'This network is the official Polygon blockchain running Network.'
             ' You should use this network by default.',
+      );
+
+  factory PolygonNetwork.testNet() => const PolygonNetwork(
+        type: BlockchainType.polygon,
+        networkname: 'Testnet',
+        apiUrl: Urls.moralisBaseUrl,
+        chainId: 80001,
+        chain: 'mumbai',
+        rpcNodeUrl: 'https://rpc-mumbai.maticvigil.com',
+        title: 'Polygon Testnet (Mumbai)',
+        subTitle: 'This network is used to test protocol upgrades'
+            ' (do not use it unless you are a developer).',
       );
 }

@@ -102,12 +102,6 @@ Future<bool> getCredentialsFromIssuer(
 
   try {
     for (final type in credentialTypeList) {
-      final isAlreadyAdded = await isCredentialAvaialble(type);
-
-      if (isAlreadyAdded) {
-        continue;
-      }
-
       final dynamic credential = await getCredential(
         accessToken,
         nonce,

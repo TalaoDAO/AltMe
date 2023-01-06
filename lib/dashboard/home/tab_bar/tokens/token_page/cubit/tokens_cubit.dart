@@ -55,10 +55,6 @@ class TokensCubit extends Cubit<TokensState> {
     _offsetOfLoadedData = state.offset;
     if (data.length < state.offset) return;
     try {
-      if (state.offset == 0) {
-        emit(state.fetching());
-      }
-
       //final activeIndex = walletCubit.state.currentCryptoIndex;
       if (walletCubit.state.cryptoAccount.data.isEmpty) {
         final String? ssiKey =
@@ -71,9 +67,16 @@ class TokensCubit extends Cubit<TokensState> {
       }
       final walletAddress =
           walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
+      final selectedAccountBlockchainType =
+          walletCubit.state.cryptoAccount.data[activeIndex].blockchainType;
+      if (state.blockchainType != selectedAccountBlockchainType) {
+        emit(state.reset(blockchainType: selectedAccountBlockchainType));
+      }
+      if (state.offset == 0) {
+        emit(state.fetching());
+      }
 
-      if (walletCubit.state.cryptoAccount.data[activeIndex].blockchainType ==
-          BlockchainType.tezos) {
+      if (selectedAccountBlockchainType == BlockchainType.tezos) {
         await getTokensOnTezos(
           walletAddress: walletAddress,
           tezosNetwork: networkCubit.state.network as TezosNetwork,
@@ -144,22 +147,49 @@ class TokensCubit extends Cubit<TokensState> {
     }
 
     if (offset == 0) {
-      final ethereumToken = await _getEthBalance(
+      final ethereumBaseToken = await _getBaseTokenBalanceOnEth(
         walletAddress,
         ethereumNetwork.chain,
+        ethereumNetwork,
       );
-      if (ethereumToken != null) {
-        newData.insert(0, ethereumToken);
+      if (ethereumBaseToken != null) {
+        newData.insert(0, ethereumBaseToken);
       }
       data = newData;
     } else {
       data.addAll(newData);
     }
 
+    for (int i = 0; i < data.length; i++) {
+      try {
+        final token = data[i];
+        final dynamic response = await client.get(
+          '${Urls.cryptoCompareBaseUrl}/data/price?fsym=${token.symbol}&tsyms=USD',
+        );
+        if (response['USD'] != null) {
+          final balanceUSDPrice = response['USD'] as double;
+          data[i] = token.copyWith(
+            tokenUSDPrice: balanceUSDPrice,
+            balanceInUSD: balanceUSDPrice * token.calculatedBalanceInDouble,
+          );
+        }
+      } catch (e, s) {
+        getLogger(toString()).e(
+          'error in finding contract, error: $e, s: $s',
+        );
+      }
+    }
+    double totalBalanceInUSD = 0;
+    for (final tokenElement in data) {
+      totalBalanceInUSD += tokenElement.balanceInUSD;
+    }
+    data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
+
     emit(
       state.copyWith(
         status: AppStatus.success,
         data: data,
+        totalBalanceInUSD: totalBalanceInUSD,
       ),
     );
   }
@@ -298,9 +328,10 @@ class TokensCubit extends Cubit<TokensState> {
     }
   }
 
-  Future<TokenModel?> _getEthBalance(
+  Future<TokenModel?> _getBaseTokenBalanceOnEth(
     String walletAddress,
     String chain,
+    EthereumNetwork ethereumNetwork,
   ) async {
     try {
       await dotenv.load();
@@ -317,11 +348,11 @@ class TokensCubit extends Cubit<TokensState> {
 
       return TokenModel(
         contractAddress: '',
-        name: 'Ethereum',
-        symbol: 'ETH',
-        icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
+        name: ethereumNetwork.mainTokenName,
+        symbol: ethereumNetwork.mainTokenSymbol,
+        icon: ethereumNetwork.mainTokenIcon,
         balance: response['balance'] as String,
-        decimals: '18',
+        decimals: ethereumNetwork.mainTokenDecimal,
         standard: 'ERC20',
         decimalsToShow: 5,
       );
