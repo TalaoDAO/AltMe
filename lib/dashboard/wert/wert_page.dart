@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'package:webview_flutter/webview_flutter.dart';
 // #docregion platform_imports
 // Import for Android features.
@@ -24,23 +21,41 @@ class WertPage extends StatefulWidget {
 }
 
 class _WertPageState extends State<WertPage> {
-  late final WebViewController _controller;
+  late WebViewController _controller;
+
+  Future<void> onNetworkChange() async {
+    final String link = getUrl();
+    await _controller.loadRequest(Uri.parse(link));
+  }
+
+  String getUrl() {
+    final walletCubit = context.read<WalletCubit>();
+
+    String link =
+        '''https://sandbox.wert.io/01GMWDYDRESASBVVV7SB6FHYZE/redirect?theme=dark&lang=en''';
+
+    final symbol = walletCubit.state.currentAccount.blockchainType.symbol;
+    final address = walletCubit.state.currentAccount.walletAddress;
+
+    link = '$link&commodity=$symbol';
+    link = '$link&address=$address';
+
+    //input phone
+    //link = '$link&phone=$phone';
+
+    //input email
+    //link = '$link&email=$email';
+
+    return link;
+  }
 
   @override
   void initState() {
     super.initState();
     final log = getLogger('WertInitState');
 
-    var link =
-        '''https://sandbox.wert.io/01GMWDYDRESASBVVV7SB6FHYZE/redirect?theme=dark&lang=en''';
+    final String link = getUrl();
 
-    final walletCubit = context.read<WalletCubit>();
-
-    final symbol = walletCubit.state.currentAccount.blockchainType.symbol;
-
-    link = '$link&commodity=$symbol';
-
-    // #docregion platform_features
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
@@ -84,6 +99,7 @@ class _WertPageState extends State<WertPage> {
           ''');
           },
           onNavigationRequest: (NavigationRequest request) {
+            log.i('navigate - ${request.url}');
             // if (request.url.startsWith('https://www.youtube.com/')) {
             //   log.i('blocking navigation to ${request.url}');
             //   return NavigationDecision.prevent;
@@ -101,9 +117,7 @@ class _WertPageState extends State<WertPage> {
           );
         },
       )
-      ..loadRequest(
-        Uri.parse(link),
-      );
+      ..loadRequest(Uri.parse(link));
 
     // #docregion platform_features
     if (controller.platform is AndroidWebViewController) {
@@ -112,16 +126,20 @@ class _WertPageState extends State<WertPage> {
           .setMediaPlaybackRequiresUserGesture(false);
     }
     // #enddocregion platform_features
-
     _controller = controller;
   }
 
   @override
   Widget build(BuildContext context) {
-    return BasePage(
-      scrollView: false,
-      body: WebViewWidget(controller: _controller),
-      padding: EdgeInsets.zero,
+    return BlocListener<ManageNetworkCubit, ManageNetworkState>(
+      listener: (context, state) {
+        onNetworkChange();
+      },
+      child: BasePage(
+        scrollView: false,
+        body: WebViewWidget(controller: _controller!),
+        padding: EdgeInsets.zero,
+      ),
     );
   }
 }
