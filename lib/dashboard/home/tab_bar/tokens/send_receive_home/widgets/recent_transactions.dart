@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RecentTransactions extends StatelessWidget {
   const RecentTransactions({
@@ -52,6 +53,21 @@ class RecentTransactions extends StatelessWidget {
                           decimal: decimal,
                           decimalToShow: decimalToShow,
                           tokenUsdPrice: tokenUsdPrice,
+                          onTap: () {
+                            final network = context
+                                .read<ManageNetworkCubit>()
+                                .state
+                                .network;
+                            if (network is TezosNetwork) {
+                              LaunchUrl.launch(
+                                'https://tzkt.io/${operations[index].hash}/${operations[index].counter}',
+                              );
+                            } else {
+                              LaunchUrl.launch(
+                                'https://etherscan.io/tx/${operations[index].hash}',
+                              );
+                            }
+                          },
                         ),
                         separatorBuilder: (_, __) {
                           return Padding(
