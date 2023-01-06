@@ -176,11 +176,11 @@ extension BlockchainTypeX on BlockchainType {
       case BlockchainType.ethereum:
         return false;
       case BlockchainType.fantom:
-        return false;
+        return true;
       case BlockchainType.polygon:
-        return false;
+        return true;
       case BlockchainType.binance:
-        return false;
+        return true;
     }
   }
 }

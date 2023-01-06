@@ -108,6 +108,10 @@ class _TokensViewState extends State<TokensView> {
                     .data[index]
                     .blockchainType;
 
+                if (blockchain.isdisabled) {
+                  return const Center();
+                }
+
                 return Column(
                   children: [
                     TotalWalletBalance(
@@ -160,6 +164,21 @@ class _TokensViewState extends State<TokensView> {
                   }
                 },
                 builder: (context, state) {
+                  final index =
+                      context.read<WalletCubit>().state.currentCryptoIndex;
+
+                  final blockchain = context
+                      .read<WalletCubit>()
+                      .state
+                      .cryptoAccount
+                      .data[index]
+                      .blockchainType;
+
+                  if (blockchain.isdisabled) {
+                    return Center(
+                      child: Text(l10n.thisFeatureIsNotSupportedMessage),
+                    );
+                  }
                   String message = '';
                   if (state.message != null) {
                     final MessageHandler messageHandler =
