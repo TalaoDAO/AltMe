@@ -204,13 +204,13 @@ Future<CredentialModel> _createCredential(
   );
 }
 
-Future<CredentialModel?> generateDeviceInfoCredential({
+Future<CredentialModel?> generateWalletCredential({
   required String ssiKey,
   required DIDKitProvider didKitProvider,
   required DIDCubit didCubit,
   String? oldId,
 }) async {
-  final log = getLogger('WalletCubit - generateDeviceInfoCredential');
+  final log = getLogger('WalletCubit - generateWalletCredentialCredential');
   try {
     const didMethod = AltMeStrings.defaultDIDMethod;
     final didSsi = didCubit.state.did!;
@@ -229,21 +229,21 @@ Future<CredentialModel?> generateDeviceInfoCredential({
     final issuanceDate = '${formatter.format(DateTime.now())}Z';
 
     final credentialManifest = CredentialManifest.fromJson(
-      ConstantsJson.deviceInfoCredentialManifestJson,
+      ConstantsJson.walletCredentialManifestJson,
     );
 
-    late String device;
+    late String deviceName;
     late String systemName;
     late String systemVersion;
 
     if (isAndroid()) {
       final androidDeviceInfo = await DeviceInfoPlugin().androidInfo;
-      device = androidDeviceInfo.model;
+      deviceName = androidDeviceInfo.model;
       systemName = 'android';
       systemVersion = androidDeviceInfo.version.codename;
     } else {
       final iosDeviceInfo = await DeviceInfoPlugin().iosInfo;
-      device = iosDeviceInfo.utsname.machine ?? '';
+      deviceName = iosDeviceInfo.utsname.machine ?? '';
       systemName = 'iOS';
       systemVersion = iosDeviceInfo.systemVersion ?? '';
     }
@@ -255,27 +255,27 @@ Future<CredentialModel?> generateDeviceInfoCredential({
 
     final walletBuild = '$version ($buildNumber)';
 
-    final deviceInfoModel = DeviceInfoModel(
+    final walletCredentialModel = WalletCredentialModel(
       id: didSsi,
       systemName: systemName,
-      device: device,
+      deviceName: deviceName,
       systemVersion: systemVersion,
-      type: 'DeviceInfo',
+      type: 'WalletCredential',
       issuedBy: const Author('My wallet'),
       walletBuild: walletBuild,
     );
 
-    final deviceInfoCredential = DeviceInfoCredential(
+    final walletCredential = WalletCredential(
       id: id,
       issuer: did,
       issuanceDate: issuanceDate,
-      credentialSubjectModel: deviceInfoModel,
+      credentialSubjectModel: walletCredentialModel,
     );
 
-    log.i('deviceInfoCredential: ${deviceInfoCredential.toJson()}');
+    log.i('walletCredential: ${walletCredential.toJson()}');
 
     final vc = await didKitProvider.issueCredential(
-      jsonEncode(deviceInfoCredential.toJson()),
+      jsonEncode(walletCredential.toJson()),
       jsonEncode(options),
       ssiKey,
     );

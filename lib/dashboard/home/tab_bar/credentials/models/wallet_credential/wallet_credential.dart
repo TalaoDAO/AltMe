@@ -2,11 +2,11 @@ import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'device_info_credential.g.dart';
+part 'wallet_credential.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class DeviceInfoCredential {
-  DeviceInfoCredential({
+class WalletCredential {
+  WalletCredential({
     required this.id,
     required this.issuer,
     required this.issuanceDate,
@@ -15,10 +15,10 @@ class DeviceInfoCredential {
     this.type = _type,
   });
 
-  factory DeviceInfoCredential.fromJson(
+  factory WalletCredential.fromJson(
     Map<String, dynamic> json,
   ) =>
-      _$DeviceInfoCredentialFromJson(json);
+      _$WalletCredentialFromJson(json);
 
   @JsonKey(name: '@context', defaultValue: _context)
   final List<dynamic> context;
@@ -30,14 +30,17 @@ class DeviceInfoCredential {
   final String issuer;
   final String issuanceDate;
 
-  Map<String, dynamic> toJson() => _$DeviceInfoCredentialToJson(this);
+  Map<String, dynamic> toJson() => _$WalletCredentialToJson(this);
 
-  static const List<String> _type = ['VerifiableCredential', 'DeviceInfo'];
+  static const List<String> _type = [
+    'VerifiableCredential',
+    'WalletCredential'
+  ];
 
   static const List<dynamic> _context = <dynamic>[
     'https://www.w3.org/2018/credentials/v1',
     {
-      'DeviceInfo': {
+      'WalletCredential': {
         '@id': 'https://github.com/TalaoDAO/context#deviceinfo',
         '@context': {
           '@version': 1.1,
@@ -46,9 +49,10 @@ class DeviceInfoCredential {
           'id': '@id',
           'type': '@type',
           'systemName': 'schema:productName',
-          'device': 'schema:productName',
+          'deviceName': 'schema:productName',
           'systemVersion': 'schema:productName',
           'walletBuild': 'schema:identifier',
+          'deviceIdentifier': 'schema:identifier',
           'issuedBy': {
             '@id': 'schema:issuedBy',
             '@context': {

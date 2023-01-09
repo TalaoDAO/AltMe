@@ -2,8 +2,8 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
-class DeviceInfoWidget extends StatelessWidget {
-  const DeviceInfoWidget({
+class WalletCredentialWidget extends StatelessWidget {
+  const WalletCredentialWidget({
     Key? key,
     required this.credentialModel,
   }) : super(key: key);
@@ -12,12 +12,12 @@ class DeviceInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deviceInfo = credentialModel.credentialPreview.credentialSubjectModel
-        as DeviceInfoModel;
+    final WalletCredential = credentialModel
+        .credentialPreview.credentialSubjectModel as WalletCredentialModel;
     return CredentialImage(
-      image: deviceInfo.systemName == 'iOS'
-          ? ImageStrings.iOSProof
-          : ImageStrings.androidProof,
+      image: WalletCredential.systemName == 'iOS'
+          ? ImageStrings.walletCertificateiOS
+          : ImageStrings.walletCertificateAndroid,
       child: const AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
       ),

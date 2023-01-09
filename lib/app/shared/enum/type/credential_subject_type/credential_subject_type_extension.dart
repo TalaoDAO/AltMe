@@ -15,7 +15,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   Color get defaultBackgroundColor {
     switch (this) {
-      case CredentialSubjectType.deviceInfo:
+      case CredentialSubjectType.walletCredential:
         return const Color(0xff14181D);
       case CredentialSubjectType.bloometaPass:
         return const Color(0xff14181D);
@@ -115,7 +115,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   IconData get iconData {
     switch (this) {
-      case CredentialSubjectType.deviceInfo:
+      case CredentialSubjectType.walletCredential:
         return Icons.phone_android_rounded;
       case CredentialSubjectType.bloometaPass:
         return Icons.games;
@@ -256,8 +256,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Nationality';
       case CredentialSubjectType.gender:
         return 'Gender';
-      case CredentialSubjectType.deviceInfo:
-        return 'DeviceInfo';
+      case CredentialSubjectType.walletCredential:
+        return 'WalletCredential';
       case CredentialSubjectType.tezosAssociatedWallet:
         return 'TezosAssociatedAddress';
       case CredentialSubjectType.ethereumAssociatedWallet:
@@ -359,8 +359,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return NationalityModel.fromJson(json);
       case CredentialSubjectType.gender:
         return GenderModel.fromJson(json);
-      case CredentialSubjectType.deviceInfo:
-        return DeviceInfoModel.fromJson(json);
+      case CredentialSubjectType.walletCredential:
+        return WalletCredentialModel.fromJson(json);
       case CredentialSubjectType.tezosAssociatedWallet:
         return TezosAssociatedAddressModel.fromJson(json);
       case CredentialSubjectType.ethereumAssociatedWallet:
