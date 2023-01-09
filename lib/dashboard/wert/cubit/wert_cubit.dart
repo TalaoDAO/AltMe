@@ -19,7 +19,6 @@ class WertCubit extends Cubit<String> {
     String link =
         '''https://sandbox.wert.io/01GMWDYDRESASBVVV7SB6FHYZE/redirect?theme=dark&lang=en&currency=EUR''';
 
-    final symbol = walletCubit.state.currentAccount.blockchainType.symbol;
     final address = walletCubit.state.currentAccount.walletAddress;
 
     switch (walletCubit.state.currentAccount.blockchainType) {
@@ -37,7 +36,6 @@ class WertCubit extends Cubit<String> {
         break;
     }
 
-    link = '$link&commodity=$symbol';
     link = '$link&address=$address';
 
     final List<CredentialModel> allCredentials =
