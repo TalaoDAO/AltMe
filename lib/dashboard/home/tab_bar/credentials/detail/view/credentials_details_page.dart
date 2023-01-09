@@ -108,7 +108,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
         final bool disAllowDelete = widget.credentialModel.credentialPreview
                     .credentialSubjectModel.credentialSubjectType ==
-                CredentialSubjectType.deviceInfo ||
+                CredentialSubjectType.walletCredential ||
             widget.credentialModel.credentialPreview.credentialSubjectModel
                     .credentialCategory ==
                 CredentialCategory.blockchainAccountsCards;

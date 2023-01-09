@@ -18,8 +18,8 @@ class CredentialDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (credentialModel
         .credentialPreview.credentialSubjectModel.credentialSubjectType) {
-      case CredentialSubjectType.deviceInfo:
-        return DeviceInfoWidget(credentialModel: credentialModel);
+      case CredentialSubjectType.walletCredential:
+        return WalletCredentialWidget(credentialModel: credentialModel);
 
       case CredentialSubjectType.bloometaPass:
         return BloometaPassWidget(credentialModel: credentialModel);

@@ -2,13 +2,13 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'device_info_model.g.dart';
+part 'wallet_credential_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class DeviceInfoModel extends CredentialSubjectModel {
-  DeviceInfoModel({
+class WalletCredentialModel extends CredentialSubjectModel {
+  WalletCredentialModel({
     this.systemName,
-    this.device,
+    this.deviceName,
     this.systemVersion,
     this.walletBuild,
     String? id,
@@ -17,19 +17,19 @@ class DeviceInfoModel extends CredentialSubjectModel {
   }) : super(
           id: id,
           type: type,
-          credentialSubjectType: CredentialSubjectType.deviceInfo,
+          credentialSubjectType: CredentialSubjectType.walletCredential,
           credentialCategory: CredentialCategory.othersCards,
           issuedBy: issuedBy,
         );
 
-  factory DeviceInfoModel.fromJson(Map<String, dynamic> json) =>
-      _$DeviceInfoModelFromJson(json);
+  factory WalletCredentialModel.fromJson(Map<String, dynamic> json) =>
+      _$WalletCredentialModelFromJson(json);
 
   @JsonKey(defaultValue: '')
   final String? systemName;
 
   @JsonKey(defaultValue: '')
-  final String? device;
+  final String? deviceName;
 
   @JsonKey(defaultValue: '')
   final String? systemVersion;
@@ -38,5 +38,5 @@ class DeviceInfoModel extends CredentialSubjectModel {
   final String? walletBuild;
 
   @override
-  Map<String, dynamic> toJson() => _$DeviceInfoModelToJson(this);
+  Map<String, dynamic> toJson() => _$WalletCredentialModelToJson(this);
 }
