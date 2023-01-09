@@ -574,8 +574,7 @@ class WalletCubit extends Cubit<WalletState> {
           final iteratedCredentialSubjectModel =
               storedCredential.credentialPreview.credentialSubjectModel;
 
-          if (storedCredential.credentialPreview.credentialSubjectModel
-                  .credentialSubjectType ==
+          if (iteratedCredentialSubjectModel.credentialSubjectType ==
               CredentialSubjectType.emailPass) {
             if (email ==
                 (iteratedCredentialSubjectModel as EmailPassModel).email) {
