@@ -92,7 +92,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         ),
       );
     } catch (e) {
-      log.i('Error -$e');
+      log.e('Error -$e');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {

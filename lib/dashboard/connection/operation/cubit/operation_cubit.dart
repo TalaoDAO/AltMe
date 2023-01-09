@@ -465,7 +465,6 @@ class OperationCubit extends Cubit<OperationState> {
       }
 
       log.i(
-        'secretKey: ${keystore.secretKey}'
         'publicKey: ${keystore.publicKey} '
         'amount: ${state.amount} '
         'networkFee: ${state.fee} '

@@ -70,7 +70,7 @@ void callbackDispatcher() {
                     break;
                 }
               } catch (e) {
-                log.i(e.toString());
+                log.e(e.toString());
                 await secureStorageProvider.set(
                   SecureStorageKeys.passBaseStatus,
                   PassBaseStatus.idle.name,

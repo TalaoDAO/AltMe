@@ -74,7 +74,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         publicKey: sourceKeystore.publicKey,
       );
       logger.i(
-        'before execute: withdrawal from secretKey: ${sourceKeystore.secretKey}'
         ' , publicKey: ${sourceKeystore.publicKey} '
         'amount: $amount '
         'networkFee: $customFee '
