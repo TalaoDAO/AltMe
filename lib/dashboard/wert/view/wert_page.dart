@@ -118,13 +118,6 @@ class _WertViewState extends State<WertView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
-    /// if current wallet is fantom then not allowed
-
-    final walletCubit = context.read<WalletCubit>();
-
-    final isFantom = walletCubit.state.currentAccount.blockchainType ==
-        BlockchainType.fantom;
     return MultiBlocListener(
       listeners: [
         BlocListener<ManageNetworkCubit, ManageNetworkState>(
@@ -138,14 +131,18 @@ class _WertViewState extends State<WertView> {
           },
         ),
       ],
-      child: BasePage(
-        scrollView: false,
-        body: isFantom
-            ? Center(
-                child: Text(l10n.thisFeatureIsNotSupportedYetForFantom),
-              )
-            : WebViewWidget(controller: _controller),
-        padding: EdgeInsets.zero,
+      child: BlocBuilder<WalletCubit, WalletState>(
+        builder: (context, state) {
+          return BasePage(
+            scrollView: false,
+            body: state.currentAccount.blockchainType == BlockchainType.fantom
+                ? Center(
+                    child: Text(l10n.thisFeatureIsNotSupportedYetForFantom),
+                  )
+                : WebViewWidget(controller: _controller),
+            padding: EdgeInsets.zero,
+          );
+        },
       ),
     );
   }
