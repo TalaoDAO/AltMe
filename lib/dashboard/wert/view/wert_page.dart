@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -116,6 +117,14 @@ class _WertViewState extends State<WertView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    /// if current wallet is fantom then not allowed
+
+    final walletCubit = context.read<WalletCubit>();
+
+    final isFantom = walletCubit.state.currentAccount.blockchainType ==
+        BlockchainType.fantom;
     return MultiBlocListener(
       listeners: [
         BlocListener<ManageNetworkCubit, ManageNetworkState>(
@@ -131,7 +140,11 @@ class _WertViewState extends State<WertView> {
       ],
       child: BasePage(
         scrollView: false,
-        body: WebViewWidget(controller: _controller),
+        body: isFantom
+            ? Center(
+                child: Text(l10n.thisFeatureIsNotSupportedYetForFantom),
+              )
+            : WebViewWidget(controller: _controller),
         padding: EdgeInsets.zero,
       ),
     );
