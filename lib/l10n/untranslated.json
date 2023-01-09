@@ -707,7 +707,8 @@
     "youAreMissing",
     "credentialsRequestedBy",
     "transactionIsLikelyToFail",
-    "buy"
+    "buy",
+    "thisFeatureIsNotSupportedYetForFantom"
   ],
 
   "es": [
@@ -1418,7 +1419,8 @@
     "youAreMissing",
     "credentialsRequestedBy",
     "transactionIsLikelyToFail",
-    "buy"
+    "buy",
+    "thisFeatureIsNotSupportedYetForFantom"
   ],
 
   "fr": [
@@ -2129,7 +2131,8 @@
     "youAreMissing",
     "credentialsRequestedBy",
     "transactionIsLikelyToFail",
-    "buy"
+    "buy",
+    "thisFeatureIsNotSupportedYetForFantom"
   ],
 
   "it": [
@@ -2840,6 +2843,7 @@
     "youAreMissing",
     "credentialsRequestedBy",
     "transactionIsLikelyToFail",
-    "buy"
+    "buy",
+    "thisFeatureIsNotSupportedYetForFantom"
   ]
 }

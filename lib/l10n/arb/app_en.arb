@@ -771,5 +771,6 @@
   "youAreMissing": "You are missing",
   "credentialsRequestedBy": "credentials requested by",
   "transactionIsLikelyToFail": "Transaction is likely to fail.",
-  "buy": "Buy"
+  "buy": "Buy",
+  "thisFeatureIsNotSupportedYetForFantom": "This feature is not supported yet for Fantom."
 }
