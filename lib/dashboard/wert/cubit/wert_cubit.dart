@@ -17,10 +17,25 @@ class WertCubit extends Cubit<String> {
   Future<void> getUrl() async {
     final log = getLogger('WertCubit - getUrl');
     String link =
-        '''https://sandbox.wert.io/01GMWDYDRESASBVVV7SB6FHYZE/redirect?theme=dark&lang=en''';
+        '''https://sandbox.wert.io/01GMWDYDRESASBVVV7SB6FHYZE/redirect?theme=dark&lang=en&currency=EUR''';
 
     final symbol = walletCubit.state.currentAccount.blockchainType.symbol;
     final address = walletCubit.state.currentAccount.walletAddress;
+
+    switch (walletCubit.state.currentAccount.blockchainType) {
+      case BlockchainType.tezos:
+        link = '$link&commodities=XTZ,ATF,DOGA,EURL';
+        break;
+      case BlockchainType.ethereum:
+        link = '$link&commodities=ETH,TT Goreli';
+        break;
+      case BlockchainType.polygon:
+        link = '$link&commodities=MATIC,GHST';
+        break;
+      case BlockchainType.fantom:
+      case BlockchainType.binance:
+        break;
+    }
 
     link = '$link&commodity=$symbol';
     link = '$link&address=$address';
