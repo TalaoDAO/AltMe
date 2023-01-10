@@ -102,23 +102,6 @@ Future<bool> isConnected() async {
   return false;
 }
 
-double formatEthAmount({
-  required BigInt amount,
-  EtherUnit fromUnit = EtherUnit.wei,
-  EtherUnit toUnit = EtherUnit.ether,
-}) {
-  if (amount == BigInt.zero) return 0;
-
-  final String ethAmount = EtherAmount.fromUnitAndValue(fromUnit, amount)
-      .getValueInUnit(toUnit)
-      .toStringAsFixed(6)
-      .characters
-      .take(7)
-      .toString();
-
-  return double.parse(ethAmount);
-}
-
 String getCredentialName(String constraints) {
   final dynamic constraintsJson = jsonDecode(constraints);
   final fieldsPath = JsonPath(r'$..fields');

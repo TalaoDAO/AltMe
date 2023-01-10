@@ -9,12 +9,10 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:tezart/tezart.dart';
 import 'package:wallet_connect/wallet_connect.dart';
-import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 part 'operation_cubit.g.dart';
@@ -102,7 +100,7 @@ class OperationCubit extends Cubit<OperationState> {
             EtherUnit.wei,
             transaction.value ?? 0,
           );
-          amount = formatEthAmount(amount: ethAmount.getInWei);
+          amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
 
           await dotenv.load();
           final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
@@ -114,7 +112,7 @@ class OperationCubit extends Cubit<OperationState> {
             amount: ethAmount,
             data: transaction.data,
           );
-          fee = formatEthAmount(amount: feeData);
+          fee = MWeb3Client.formatEthAmount(amount: feeData);
           break;
       }
 

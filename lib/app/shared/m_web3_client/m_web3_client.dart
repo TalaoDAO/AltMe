@@ -1,10 +1,27 @@
-import 'package:altme/app/logger/logger.dart';
+import 'package:altme/app/app.dart';
 import 'package:http/http.dart' as http;
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 class MWeb3Client {
   static final log = getLogger('MWeb3Client');
+
+  static double formatEthAmount({
+    required BigInt amount,
+    EtherUnit fromUnit = EtherUnit.wei,
+    EtherUnit toUnit = EtherUnit.ether,
+  }) {
+    if (amount == BigInt.zero) return 0;
+
+    final String ethAmount = EtherAmount.fromUnitAndValue(fromUnit, amount)
+        .getValueInUnit(toUnit)
+        .toStringAsFixed(6)
+        .characters
+        .take(7)
+        .toString();
+
+    return double.parse(ethAmount);
+  }
 
   static Future<BigInt> estimateEthereumFee({
     required String web3RpcURL,
