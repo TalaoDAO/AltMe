@@ -38,7 +38,7 @@ class TokensCubit extends Cubit<TokensState> {
 
   Future<void> fetchFromZero() async {
     _offsetOfLoadedData = -1;
-    emit(state.copyWith(offset: 0));
+    emit(state.copyWith(offset: 0,totalBalanceInUSD: 0));
     await getTokens();
   }
 
@@ -130,20 +130,23 @@ class TokensCubit extends Cubit<TokensState> {
     ) as List<dynamic>;
     List<TokenModel> newData = [];
     if (tokensBalancesJsonArray.isNotEmpty) {
-      newData = tokensBalancesJsonArray
-          .map(
-            (dynamic json) => TokenModel(
-              contractAddress: json['token_address'] as String,
-              name: (json['name'] as String?) ?? '',
-              symbol: (json['symbol'] as String?) ?? '',
-              balance: (json['balance'] as String?) ?? '',
-              decimals: ((json['decimals'] as int?) ?? 0).toString(),
-              thumbnailUri: json['thumbnail'] as String?,
-              icon: json['logo'] as String?,
-              decimalsToShow: 5,
-            ),
-          )
-          .toList();
+      newData = tokensBalancesJsonArray.map(
+        (dynamic json) {
+          final icon = (json['logo'] == null && json['symbol'] == 'TALAO')
+              ? IconStrings.talaoIcon
+              : json['logo'] as String?;
+          return TokenModel(
+            contractAddress: json['token_address'] as String,
+            name: (json['name'] as String?) ?? '',
+            symbol: (json['symbol'] as String?) ?? '',
+            balance: (json['balance'] as String?) ?? '',
+            decimals: ((json['decimals'] as int?) ?? 0).toString(),
+            thumbnailUri: json['thumbnail'] as String?,
+            icon: icon,
+            decimalsToShow: 2,
+          );
+        },
+      ).toList();
     }
 
     if (offset == 0) {
@@ -167,10 +170,11 @@ class TokensCubit extends Cubit<TokensState> {
           '${Urls.cryptoCompareBaseUrl}/data/price?fsym=${token.symbol}&tsyms=USD',
         );
         if (response['USD'] != null) {
-          final balanceUSDPrice = response['USD'] as double;
+          final tokenUSDPrice = response['USD'] as double;
           data[i] = token.copyWith(
-            tokenUSDPrice: balanceUSDPrice,
-            balanceInUSD: balanceUSDPrice * token.calculatedBalanceInDouble,
+            tokenUSDPrice: tokenUSDPrice,
+            balanceInUSD: tokenUSDPrice * token.calculatedBalanceInDouble,
+            decimalsToShow: tokenUSDPrice > 500 ? 5 : 2,
           );
         }
       } catch (e, s) {

@@ -57,7 +57,7 @@ class OperationModel extends Equatable {
       target: OperationAddressModel(
         address: (json['to']?['address'] as String?) ?? '',
       ),
-      amount: int.parse(json['amount'] as String),
+      amount: json['amount'] as String,
       status: 'applied',
       hasInternals: true,
     );
@@ -79,13 +79,13 @@ class OperationModel extends Equatable {
   final int storageFee;
   final int allocationFee;
   final OperationAddressModel target;
-  final int amount;
+  final String amount;
   final String status;
   final bool hasInternals;
   final OperationParameterModel? parameter;
 
   DateTime get dateTime {
-    return DateFormat('y-M-dTHH:mm:ssZ').parse(timestamp,true).toLocal();
+    return DateFormat('y-M-dTHH:mm:ssZ').parse(timestamp, true).toLocal();
   }
 
   String get formatedDateTime {

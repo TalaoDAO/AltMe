@@ -17,7 +17,7 @@ class WertCubit extends Cubit<String> {
   Future<void> getUrl() async {
     final log = getLogger('WertCubit - getUrl');
     String link =
-        '''https://sandbox.wert.io/01GMWDYDRESASBVVV7SB6FHYZE/redirect?theme=dark&lang=en&currency=EUR''';
+        '''https://widget.wert.io/01GPB3PAQ0KF3SCDMHRAN6AZ2B/redirect?theme=dark&lang=en&currency=EUR''';
 
     final address = walletCubit.state.currentAccount.walletAddress;
 
