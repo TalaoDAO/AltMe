@@ -45,7 +45,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
         getLogger(runtimeType.toString())
             .e('did not found the token: e: $e, s: $s');
       }
-      emit(state.success(selectedToken: selectedToken));
+      emit(state.copyWith(selectedToken: selectedToken));
       await getOperations(
         baseUrl: baseUrl,
       );
