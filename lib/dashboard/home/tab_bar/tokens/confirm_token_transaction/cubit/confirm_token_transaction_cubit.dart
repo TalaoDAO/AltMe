@@ -1,7 +1,5 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import 'dart:developer';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
@@ -112,27 +110,31 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         tokenAmount.toStringAsFixed(18).replaceAll(',', '').replaceAll('.', ''),
       );
 
-      final httpClient = Client();
-      final ethClient = Web3Client(rpcNodeUrl, httpClient);
-
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
       final fromAddress = await credentials.extractAddress();
+      final sender = await credentials.extractAddress();
+
+      // final gasPrice = await MWeb3Client.estimateEthereumFee(
+      //   web3RpcURL: rpcNodeUrl,
+      //   sender: await credentials.extractAddress(),
+      //   reciever: EthereumAddress.fromHex(state.withdrawalAddress),
+      //   amount: EtherAmount.inWei(BigInt.from(amount)),
+      // );
+
+      final transactionHash = await MWeb3Client.sendEthereumTransaction(
+        web3RpcURL: rpcNodeUrl,
+        chainId: selectedEthereumNetwork.chainId,
+        privateKey: selectedAccountSecretKey,
+        sender: sender,
+        //gas: gasPrice,
+        reciever: EthereumAddress.fromHex(state.withdrawalAddress),
+        amount: EtherAmount.inWei(BigInt.from(amount)),
+      );
 
       logger.i(
-        'sending from: $fromAddress to : ${state.withdrawalAddress},etherAmountInWei: ${EtherAmount.inWei(BigInt.from(amount))} with '
-        'GasPrice in wei: 25000000000',
+        'sending from: $fromAddress to : ${state.withdrawalAddress},etherAmountInWei: ${EtherAmount.inWei(BigInt.from(amount))}',
       );
 
-      final transactionHash = await ethClient.sendTransaction(
-        credentials,
-        chainId: selectedEthereumNetwork.chainId,
-        Transaction(
-          from: await credentials.extractAddress(),
-          to: EthereumAddress.fromHex(state.withdrawalAddress),
-          gasPrice: EtherAmount.inWei(BigInt.from(25000000000)),
-          value: EtherAmount.inWei(BigInt.from(amount)),
-        ),
-      );
       logger.i(
         'after withdrawal ETH execute => transactionHash: $transactionHash',
       );
