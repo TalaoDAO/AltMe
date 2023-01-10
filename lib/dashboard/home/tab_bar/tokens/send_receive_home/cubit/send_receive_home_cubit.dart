@@ -191,7 +191,8 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
 
         result = response['result'] as List<dynamic>;
         result.removeWhere(
-            (dynamic element) => element['address'] != contractAddress);
+          (dynamic element) => element['address'] != contractAddress,
+        );
         operations = result.map(
           (dynamic e) {
             return OperationModel(
@@ -219,7 +220,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
           },
         ).toList();
       } catch (e) {
-        print('having issue');
+        getLogger(toString()).e('having issue: $e');
       }
     } else {
       try {
@@ -260,7 +261,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
             )
             .toList();
       } catch (e) {
-        print('having issue');
+        getLogger(toString()).e('having issue: $e');
       }
     }
 
