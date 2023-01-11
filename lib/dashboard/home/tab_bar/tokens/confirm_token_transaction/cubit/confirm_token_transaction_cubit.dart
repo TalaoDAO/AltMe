@@ -27,49 +27,82 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
   Future<void> calculateFee() async {
     emit(state.loading());
-    if (manageNetworkCubit.state.network is TezosNetwork) {
-      final tezosNetworkFees = NetworkFeeModel.tezosNetworkFees();
-      emit(
-        state.copyWith(
-          networkFee: tezosNetworkFees[1],
-          networkFees: tezosNetworkFees,
-          status: AppStatus.init,
-        ),
-      );
-    } else {
-      final selectedEthereumNetwork =
-          manageNetworkCubit.state.network as EthereumNetwork;
-
-      final web3RpcURL = selectedEthereumNetwork.rpcNodeUrl;
-
-      final amount = int.parse(
-        state.tokenAmount
-            .toStringAsFixed(int.parse(state.selectedToken.decimals))
-            .replaceAll(',', '')
-            .replaceAll('.', ''),
-      );
-
-      final credentials = EthPrivateKey.fromHex(state.selectedAccountSecretKey);
-      final sender = await credentials.extractAddress();
-      final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
-
-      final gasPrice = await MWeb3Client.estimateEthereumFee(
-        web3RpcURL: web3RpcURL,
-        sender: sender,
-        reciever: reciever,
-        amount: EtherAmount.inWei(BigInt.from(amount)),
-      );
-
-      emit(
-        state.copyWith(
-          status: AppStatus.init,
-          networkFee: NetworkFeeModel(
-            fee: EtherAmount.inWei(gasPrice).getValueInUnit(EtherUnit.ether),
-            networkSpeed: NetworkSpeed.average,
-            tokenSymbol: 'ETH',
+    try {
+      if (manageNetworkCubit.state.network is TezosNetwork) {
+        final tezosNetworkFees = NetworkFeeModel.tezosNetworkFees();
+        final networkFee = tezosNetworkFees[1];
+        final double feeInUSD = state.selectedToken.symbol == 'XTZ'
+            ? state.selectedToken.tokenUSDPrice * networkFee.fee
+            : 0;
+        emit(
+          state.copyWith(
+            networkFee: networkFee.copyWith(
+              feeInUSD: feeInUSD,
+            ),
+            networkFees: tezosNetworkFees
+                .map(
+                  (e) => e.copyWith(
+                    feeInUSD: state.selectedToken.symbol == 'XTZ'
+                        ? state.selectedToken.tokenUSDPrice * e.fee
+                        : 0,
+                  ),
+                )
+                .toList(),
+            status: AppStatus.init,
+            totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
+                ? state.tokenAmount - networkFee.fee
+                : state.tokenAmount,
           ),
-        ),
-      );
+        );
+      } else {
+        final selectedEthereumNetwork =
+            manageNetworkCubit.state.network as EthereumNetwork;
+
+        final web3RpcURL = selectedEthereumNetwork.rpcNodeUrl;
+
+        final amount = int.parse(
+          state.tokenAmount
+              .toStringAsFixed(int.parse(state.selectedToken.decimals))
+              .replaceAll(',', '')
+              .replaceAll('.', ''),
+        );
+
+        final credentials =
+            EthPrivateKey.fromHex(state.selectedAccountSecretKey);
+        final sender = await credentials.extractAddress();
+        final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
+
+        final maxGas = await MWeb3Client.estimateEthereumFee(
+          web3RpcURL: web3RpcURL,
+          sender: sender,
+          reciever: reciever,
+          amount: EtherAmount.inWei(BigInt.from(amount)),
+        );
+
+        final fee = EtherAmount.inWei(maxGas).getValueInUnit(EtherUnit.ether);
+        final double feeInUSD = state.selectedToken.symbol == 'ETH'
+            ? state.selectedToken.tokenUSDPrice * fee
+            : 0;
+        final networkFee = NetworkFeeModel(
+          fee: fee,
+          networkSpeed: NetworkSpeed.average,
+          tokenSymbol: 'ETH',
+          feeInUSD: feeInUSD,
+        );
+
+        emit(
+          state.copyWith(
+            status: AppStatus.init,
+            networkFee: networkFee,
+            totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
+                ? state.tokenAmount - networkFee.fee
+                : state.tokenAmount,
+          ),
+        );
+      }
+    } catch (e, _) {
+      logger.i('error: $e');
+      emit(state.copyWith(status: AppStatus.init));
     }
   }
 
@@ -152,11 +185,13 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           manageNetworkCubit.state.network as EthereumNetwork;
 
       final rpcNodeUrl = selectedEthereumNetwork.rpcNodeUrl;
-      getLogger(toString()).i('selected network node rpc: $rpcNodeUrl');
 
       final amount = int.parse(
         tokenAmount.toStringAsFixed(18).replaceAll(',', '').replaceAll('.', ''),
       );
+
+      getLogger(toString())
+          .i('selected network node rpc: $rpcNodeUrl, amount: $tokenAmount');
 
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
       final sender = await credentials.extractAddress();
@@ -201,13 +236,13 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   Future<void> sendContractInvocationOperation() async {
     if (manageNetworkCubit.state.network is TezosNetwork) {
       await _sendContractInvocationOperationTezos(
-        tokenAmount: state.tokenAmount,
+        tokenAmount: state.totalAmount,
         selectedAccountSecretKey: state.selectedAccountSecretKey,
         token: state.selectedToken,
       );
     } else if (manageNetworkCubit.state.network is EthereumNetwork) {
       await _sendContractInvocationOperationEthereum(
-        tokenAmount: state.tokenAmount,
+        tokenAmount: state.totalAmount,
         selectedAccountSecretKey: state.selectedAccountSecretKey,
         token: state.selectedToken,
       );

@@ -45,6 +45,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
         initialState: ConfirmTokenTransactionState(
           withdrawalAddress: withdrawalAddress,
           tokenAmount: amount,
+          totalAmount: amount,
           selectedToken: selectedToken,
           selectedAccountSecretKey:
               context.read<WalletCubit>().state.currentAccount.secretKey,
@@ -81,9 +82,6 @@ class ConfirmWithdrawalView extends StatefulWidget {
 class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
   late final TextEditingController withdrawalAddressController =
       TextEditingController(text: widget.withdrawalAddress);
-
-  late final amountAndSymbol =
-      '''${widget.isNFT ? widget.amount.toInt() : widget.amount.toStringAsFixed(6).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
 
   @override
   void initState() {
@@ -122,6 +120,8 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
           // );
         }
         if (state.status == AppStatus.success) {
+          final amountAndSymbol =
+              '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(6).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
           TransactionDoneDialog.show(
             context: context,
             amountAndSymbol: amountAndSymbol,
@@ -148,6 +148,8 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
         }
       },
       builder: (context, state) {
+        final amountAndSymbol =
+            '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(6).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
         return BasePage(
           scrollView: false,
           title: l10n.confirm,
@@ -197,8 +199,9 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     ),
                   ),
                   ConfirmTransactionDetailsCard(
-                    amount: widget.amount,
-                    symbol: widget.selectedToken.symbol,
+                    amount: state.tokenAmount,
+                    symbol: state.selectedToken.symbol,
+                    grandTotal: state.totalAmount,
                     tokenUSDRate: widget.selectedToken.tokenUSDPrice,
                     networkFee: state.networkFee,
                     isNFT: widget.isNFT,

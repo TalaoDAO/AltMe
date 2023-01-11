@@ -11,6 +11,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
     required this.tokenUSDRate,
     required this.symbol,
     required this.networkFee,
+    required this.grandTotal,
     this.networkFees,
     this.onEditButtonPressed,
     this.isNFT = false,
@@ -23,14 +24,11 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
   final List<NetworkFeeModel>? networkFees;
   final VoidCallback? onEditButtonPressed;
   final bool isNFT;
+  final double grandTotal;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
-    final double grandTotal = symbol.toLowerCase() == 'xtz'
-        ? (amount + (networkFee?.fee ?? 0))
-        : amount;
     return BackgroundCard(
       color: Theme.of(context).colorScheme.cardBackground,
       child: Column(
@@ -44,9 +42,22 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.caption,
               ),
               const Spacer(),
-              Text(
-                '''${isNFT ? amount.toInt() : amount.toStringAsFixed(6).formatNumber()} $symbol''',
-                style: Theme.of(context).textTheme.caption,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    '''${isNFT ? amount.toInt() : amount.toStringAsFixed(6).formatNumber()} $symbol''',
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                  if (tokenUSDRate > 0)
+                    Text(
+                      r'$' +
+                          (amount * tokenUSDRate)
+                              .toStringAsFixed(2)
+                              .formatNumber(),
+                      style: Theme.of(context).textTheme.caption2,
+                    ),
+                ],
               ),
             ],
           ),
@@ -66,9 +77,22 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                     onTap: onEditButtonPressed,
                   ),
                 const Spacer(),
-                Text(
-                  '''${networkFee!.fee.toStringAsFixed(6).formatNumber()} ${networkFee!.tokenSymbol}''',
-                  style: Theme.of(context).textTheme.caption,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      '''${networkFee!.fee.toStringAsFixed(6).formatNumber()} ${networkFee!.tokenSymbol}''',
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                    if (tokenUSDRate > 0 && networkFee?.tokenSymbol == symbol)
+                      Text(
+                        r'$' +
+                            networkFee!.feeInUSD
+                                .toStringAsFixed(2)
+                                .formatNumber(),
+                        style: Theme.of(context).textTheme.caption2,
+                      ),
+                  ],
                 ),
               ],
             ),

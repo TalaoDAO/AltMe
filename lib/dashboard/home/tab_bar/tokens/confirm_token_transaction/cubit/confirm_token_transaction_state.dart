@@ -8,6 +8,7 @@ class ConfirmTokenTransactionState extends Equatable {
     required this.selectedAccountSecretKey,
     this.networkFee,
     required this.tokenAmount,
+    required this.totalAmount,
     this.networkFees,
     this.status = AppStatus.init,
     this.message,
@@ -24,6 +25,7 @@ class ConfirmTokenTransactionState extends Equatable {
   final StateMessage? message;
   final String? transactionHash;
   final double tokenAmount;
+  final double totalAmount;
   final TokenModel selectedToken;
   final String selectedAccountSecretKey;
 
@@ -69,6 +71,7 @@ class ConfirmTokenTransactionState extends Equatable {
     StateMessage? message,
     String? transactionHash,
     double? tokenAmount,
+    double? totalAmount,
     TokenModel? selectedToken,
     String? selectedAccountSecretKey,
   }) {
@@ -83,6 +86,7 @@ class ConfirmTokenTransactionState extends Equatable {
       selectedToken: selectedToken ?? this.selectedToken,
       selectedAccountSecretKey:
           selectedAccountSecretKey ?? this.selectedAccountSecretKey,
+      totalAmount: totalAmount ?? this.totalAmount,
     );
   }
 
@@ -96,6 +100,7 @@ class ConfirmTokenTransactionState extends Equatable {
         networkFee,
         networkFees,
         tokenAmount,
+        totalAmount,
         selectedToken,
         transactionHash,
         selectedAccountSecretKey,
