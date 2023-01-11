@@ -135,11 +135,19 @@ class _WertViewState extends State<WertView> {
         builder: (context, state) {
           return BasePage(
             scrollView: false,
-            body: state.currentAccount.blockchainType == BlockchainType.fantom
-                ? Center(
-                    child: Text(l10n.thisFeatureIsNotSupportedYetForFantom),
-                  )
-                : WebViewWidget(controller: _controller),
+            body:
+                state.currentAccount.blockchainType == BlockchainType.fantom ||
+                        state.currentAccount.blockchainType ==
+                            BlockchainType.binance
+                    ? Center(
+                        child: Text(
+                          state.currentAccount.blockchainType ==
+                                  BlockchainType.binance
+                              ? l10n.thisFeatureIsNotSupportedYetForBinance
+                              : l10n.thisFeatureIsNotSupportedYetForFantom,
+                        ),
+                      )
+                    : WebViewWidget(controller: _controller),
             padding: EdgeInsets.zero,
           );
         },

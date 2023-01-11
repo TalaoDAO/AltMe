@@ -708,7 +708,8 @@
     "credentialsRequestedBy",
     "transactionIsLikelyToFail",
     "buy",
-    "thisFeatureIsNotSupportedYetForFantom"
+    "thisFeatureIsNotSupportedYetForFantom",
+    "thisFeatureIsNotSupportedYetForBinance"
   ],
 
   "es": [
@@ -1420,7 +1421,8 @@
     "credentialsRequestedBy",
     "transactionIsLikelyToFail",
     "buy",
-    "thisFeatureIsNotSupportedYetForFantom"
+    "thisFeatureIsNotSupportedYetForFantom",
+    "thisFeatureIsNotSupportedYetForBinance"
   ],
 
   "fr": [
@@ -2132,7 +2134,8 @@
     "credentialsRequestedBy",
     "transactionIsLikelyToFail",
     "buy",
-    "thisFeatureIsNotSupportedYetForFantom"
+    "thisFeatureIsNotSupportedYetForFantom",
+    "thisFeatureIsNotSupportedYetForBinance"
   ],
 
   "it": [
@@ -2844,6 +2847,7 @@
     "credentialsRequestedBy",
     "transactionIsLikelyToFail",
     "buy",
-    "thisFeatureIsNotSupportedYetForFantom"
+    "thisFeatureIsNotSupportedYetForFantom",
+    "thisFeatureIsNotSupportedYetForBinance"
   ]
 }
