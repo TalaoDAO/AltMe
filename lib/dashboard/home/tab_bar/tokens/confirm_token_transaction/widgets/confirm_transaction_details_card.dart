@@ -1,10 +1,8 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/manage_network/cubit/manage_network_cubit.dart';
 import 'package:altme/dashboard/home/tab_bar/tokens/tokens.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ConfirmTransactionDetailsCard extends StatelessWidget {
   const ConfirmTransactionDetailsCard({
@@ -13,6 +11,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
     required this.tokenUSDRate,
     required this.symbol,
     required this.networkFee,
+    this.networkFees,
     this.onEditButtonPressed,
     this.isNFT = false,
   }) : super(key: key);
@@ -20,7 +19,8 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
   final double amount;
   final double tokenUSDRate;
   final String symbol;
-  final NetworkFeeModel networkFee;
+  final NetworkFeeModel? networkFee;
+  final List<NetworkFeeModel>? networkFees;
   final VoidCallback? onEditButtonPressed;
   final bool isNFT;
 
@@ -28,8 +28,9 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final double grandTotal =
-        symbol.toLowerCase() == 'xtz' ? (amount + networkFee.fee) : amount;
+    final double grandTotal = symbol.toLowerCase() == 'xtz'
+        ? (amount + (networkFee?.fee ?? 0))
+        : amount;
     return BackgroundCard(
       color: Theme.of(context).colorScheme.cardBackground,
       child: Column(
@@ -49,9 +50,8 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
               ),
             ],
           ),
-          if (context.read<ManageNetworkCubit>().state.network is TezosNetwork)
-            _buildDivider(context),
-          if (context.read<ManageNetworkCubit>().state.network is TezosNetwork)
+          if (networkFee != null) _buildDivider(context),
+          if (networkFee != null)
             Row(
               children: [
                 Text(
@@ -61,12 +61,13 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                 const SizedBox(
                   width: Sizes.spaceXSmall,
                 ),
-                EditButton(
-                  onTap: onEditButtonPressed,
-                ),
+                if (networkFees != null)
+                  EditButton(
+                    onTap: onEditButtonPressed,
+                  ),
                 const Spacer(),
                 Text(
-                  '''${networkFee.fee.toStringAsFixed(6).formatNumber()} ${networkFee.tokenSymbol}''',
+                  '''${networkFee!.fee.toStringAsFixed(6).formatNumber()} ${networkFee!.tokenSymbol}''',
                   style: Theme.of(context).textTheme.caption,
                 ),
               ],

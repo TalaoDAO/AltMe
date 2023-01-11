@@ -18,7 +18,7 @@ class SelectNetworkFeeBottomSheet extends StatelessWidget {
   static Future<NetworkFeeModel?> show({
     required BuildContext context,
     required NetworkFeeModel selectedNetworkFee,
-    List<NetworkFeeModel>? networkFeeList,
+    List<NetworkFeeModel> networkFeeList = const [],
   }) {
     return showModalBottomSheet<NetworkFeeModel?>(
       shape: const RoundedRectangleBorder(
@@ -30,7 +30,7 @@ class SelectNetworkFeeBottomSheet extends StatelessWidget {
       context: context,
       builder: (_) => SelectNetworkFeeBottomSheet(
         selectedNetworkFee: selectedNetworkFee,
-        networkFeeList: networkFeeList ?? NetworkFeeModel.networks(),
+        networkFeeList: networkFeeList,
       ),
     );
   }

@@ -42,8 +42,13 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
     return BlocProvider<ConfirmTokenTransactionCubit>(
       create: (_) => ConfirmTokenTransactionCubit(
         manageNetworkCubit: context.read<ManageNetworkCubit>(),
-        initialState:
-            ConfirmTokenTransactionState(withdrawalAddress: withdrawalAddress),
+        initialState: ConfirmTokenTransactionState(
+          withdrawalAddress: withdrawalAddress,
+          tokenAmount: amount,
+          selectedToken: selectedToken,
+          selectedAccountSecretKey:
+              context.read<WalletCubit>().state.currentAccount.secretKey,
+        ),
       ),
       child: ConfirmWithdrawalView(
         selectedToken: selectedToken,
@@ -87,6 +92,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
             withdrawalAddress: withdrawalAddressController.text,
           );
     });
+    Future.microtask(context.read<ConfirmTokenTransactionCubit>().calculateFee);
     super.initState();
   }
 
@@ -196,11 +202,13 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     tokenUSDRate: widget.selectedToken.tokenUSDPrice,
                     networkFee: state.networkFee,
                     isNFT: widget.isNFT,
+                    networkFees: state.networkFees,
                     onEditButtonPressed: () async {
                       final NetworkFeeModel? networkFeeModel =
                           await SelectNetworkFeeBottomSheet.show(
                         context: context,
-                        selectedNetworkFee: state.networkFee,
+                        selectedNetworkFee: state.networkFee!,
+                        networkFeeList: state.networkFees ?? [],
                       );
 
                       if (networkFeeModel != null) {
@@ -231,25 +239,13 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                           selectedToken: widget.selectedToken,
                         )
                     ? () {
-                        ///send to this account for test :
-                        ///tz1Z5ad29RQnbn6bcN8E9YTz3djnqhTSgStf
-                        ///this is EmptyAcc1
                         Navigator.of(context).push<void>(
                           PinCodePage.route(
                             restrictToBack: false,
                             isValidCallback: () {
-                              final walletState =
-                                  context.read<WalletCubit>().state;
                               context
                                   .read<ConfirmTokenTransactionCubit>()
-                                  .sendContractInvocationOperation(
-                                    token: widget.selectedToken,
-                                    tokenAmount: widget.amount,
-                                    selectedAccountSecretKey: walletState
-                                        .cryptoAccount
-                                        .data[walletState.currentCryptoIndex]
-                                        .secretKey,
-                                  );
+                                  .sendContractInvocationOperation();
                             },
                           ),
                         );
