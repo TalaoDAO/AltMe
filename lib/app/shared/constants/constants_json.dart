@@ -51,12 +51,6 @@ abstract class ConstantsJson {
               'label': 'Device'
             },
             {
-              'path': [r'$.credentialSubject.deviceIdentifier'],
-              'schema': {'type': 'string'},
-              'fallback': 'Unknown',
-              'label': 'Device Id'
-            },
-            {
               'path': [r'$.credentialSubject.systemVersion'],
               'schema': {'type': 'string'},
               'fallback': 'Unknown',

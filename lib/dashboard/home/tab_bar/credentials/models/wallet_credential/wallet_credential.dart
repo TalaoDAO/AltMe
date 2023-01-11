@@ -52,7 +52,6 @@ class WalletCredential {
           'deviceName': 'schema:productName',
           'systemVersion': 'schema:productName',
           'walletBuild': 'schema:identifier',
-          'deviceIdentifier': 'schema:identifier',
           'issuedBy': {
             '@id': 'schema:issuedBy',
             '@context': {
