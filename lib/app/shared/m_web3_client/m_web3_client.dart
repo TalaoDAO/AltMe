@@ -1,5 +1,8 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -21,6 +24,86 @@ class MWeb3Client {
         .toString();
 
     return double.parse(ethAmount);
+  }
+
+  static Future<String?> sendToken({
+    required String selectedAccountSecretKey,
+    required String rpcUrl,
+    required TokenModel token,
+    required String withdrawalAddress,
+    required double amountInWei,
+    required int chainId,
+  }) async {
+    try {
+      final client = Web3Client(rpcUrl, Client());
+      final gasPrice = await client.getGasPrice();
+      final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
+      final sender = await credentials.extractAddress();
+
+      // read the contract abi and tell web3dart where
+      // it's deployed (contractAddr)
+      final abiCode = await rootBundle.loadString('assets/abi/erc20.abi.json');
+      final contractAddress = EthereumAddress.fromHex(token.contractAddress);
+      final contract = DeployedContract(
+        ContractAbi.fromJson(abiCode, 'ERC20'),
+        contractAddress,
+      );
+
+      // extracting some functions and events that we'll need later
+      final transferEvent = contract.event('Transfer');
+      final balanceFunction = contract.function('balanceOf');
+      final sendFunction = contract.function('transfer');
+
+      // listen for the Transfer event when it's emitted by the contract above
+      final subscription = client
+          .events(
+            FilterOptions.events(contract: contract, event: transferEvent),
+          )
+          .take(1)
+          .listen((event) {
+        final decoded =
+            transferEvent.decodeResults(event.topics ?? [], event.data ?? '');
+
+        final from = decoded[0] as EthereumAddress;
+        final to = decoded[1] as EthereumAddress;
+        final value = decoded[2] as BigInt;
+
+        log.i('decoded response: $decoded');
+        log.i('$from sent $value ${token.name} to $to');
+      });
+
+      // check our balance in MetaCoins by calling the appropriate function
+      final balance = await client.call(
+        contract: contract,
+        function: balanceFunction,
+        params: <dynamic>[sender],
+      );
+      log.i('We have ${balance.first} ${token.name}');
+
+      final EthereumAddress receiver =
+          EthereumAddress.fromHex(withdrawalAddress);
+
+      final txId = await client.sendTransaction(
+        credentials,
+        chainId: chainId,
+        Transaction.callContract(
+          contract: contract,
+          function: sendFunction,
+          from: EthereumAddress.fromHex(token.contractAddress),
+          gasPrice: gasPrice,
+          parameters: <dynamic>[receiver, BigInt.from(amountInWei)],
+        ),
+      );
+
+      await subscription.asFuture<FilterEvent>();
+      await subscription.cancel();
+
+      await client.dispose();
+      return txId;
+    } catch (e, s) {
+      log.e('sendToken() error: $e , stack: $s');
+      return null;
+    }
   }
 
   static Future<BigInt> estimateEthereumFee({
@@ -53,8 +136,8 @@ class MWeb3Client {
       final fee = gas * gasPrice.getInWei;
       log.i('gas * gasPrice.getInWei = $fee');
       return fee;
-    } catch (e) {
-      log.e(e.toString());
+    } catch (e,s) {
+      log.e('e: $e, s: $s');
       final fee = BigInt.from(21000) * gasPrice.getInWei;
       log.i('2100 * gasPrice.getInWei = $fee');
       return fee;
