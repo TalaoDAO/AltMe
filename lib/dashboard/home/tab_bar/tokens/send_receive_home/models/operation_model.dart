@@ -57,7 +57,7 @@ class OperationModel extends Equatable {
       target: OperationAddressModel(
         address: (json['to']?['address'] as String?) ?? '',
       ),
-      amount: int.parse(['amount'].toString()),
+      amount: int.parse(json['amount'].toString()),
       status: 'applied',
       hasInternals: true,
     );
