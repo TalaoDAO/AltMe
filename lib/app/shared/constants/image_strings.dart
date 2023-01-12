@@ -73,14 +73,7 @@ class ImageStrings {
   static const String verifiableIdCard = '$imagePath/verifiable_id_card.png';
   static const String linkedInCard = '$imagePath/linkedin_card.png';
 
-  static const String paymentTezosCard = '$imagePath/payment-tezos-card.png';
-  static const String paymentEthereumCard =
-      '$imagePath/payment-ethereum-card.png';
-  static const String paymentFantomCard = '$imagePath/payment-fantom-card.png';
-  static const String paymentPolygonCard =
-      '$imagePath/payment-polygon-card.png';
-  static const String paymentBinanceCard =
-      '$imagePath/payment-binance-card.png';
+  static const String myAccountCard = '$imagePath/my_account_card.png';
 
   static const String diplomaCard = '$imagePath/diploma_card.png';
 
