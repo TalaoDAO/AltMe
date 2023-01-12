@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const Color primary = Color(0xff6600FF);
-const Color onPrimary = Color(0xff1A182D);
+const Color primary = icon;
+const Color onPrimary = Color(0xffFFFFFF);
 const Color secondary = Color(0xff00A1FF);
-const Color onTertiary = Color(0xFF36334E);
-const Color surface = Color(0xffFFFFFF);
-const Color surfaceAccent = Color(0xffD1CCE3);
-const Color onSurface = Color(0xff1D1D1D);
-const Color shadow = Color(0xFFA79ABA);
-const Color disabled = Color(0xFF605A71);
+const Color onTertiary = Color(0xffD1CCE3);
+const Color surface = Color(0xff1A182D);
+const Color onSurface = Color(0xffEDEAF5);
+const Color background = Color(0xff0B0514);
 const Color error = Color(0xffcf6679);
-const Color highlight = Color(0xFF180B2B);
+const Color onError = Colors.black;
+Color shadow = const Color(0xff1D1D1D).withOpacity(0.1);
+const Color divider = Color(0xFF605A71);
+const Color highlight = Color(0xFF36334E);
+const Color icon = Color(0xff6600FF);
 const Color snackBarBackground = Colors.green;
 const Color applied = Color(0xFF00B267);
 const Color failed = Color(0xFFFF0045);
 const Color skipped = Color(0xFFFF5F0A);
-const Color activeNetwork = Color(0xFF2C7DF7);
-const Color kyc = Color(0xFF0045FF);
+const Color network = Color(0xFF2C7DF7);
+
+const Color cardHighlight = Color(0xFF251F38);
+const Color defaultDialog = Color(0xFF322643);
+const Color closeIcon = Color(0xFFA79ABA);
+const Color kycVerifyButton = Color(0xFF0045FF);
+Color accountBottomSheetBorder = Colors.grey[200]!;
+const Color digitPrimary = Colors.white;
 
 abstract class AppTheme {
   /// A color frequently across your app’s screens and components.
@@ -48,27 +56,27 @@ abstract class AppTheme {
   static Color darkOnSurface = onSurface;
 
   /// A color that typically appears behind scrollable content.
-  static Color darkBackground = surface;
+  static Color darkBackground = background;
 
   /// A color that's clearly legible when drawn on background.
   static Color darkOnBackground = onPrimary;
 
   /// The color to use for input validation errors, e.g. for
   /// InputDecoration.errorText
-  static Color darkError = error;
+  static const Color darkError = error;
 
   /// A color that's clearly legible when drawn on error.
-  static Color darkOnError = surface;
+  static const Color darkOnError = onError;
 
   /// A color use to paint the drop shadows of elevated components.
-  static Color darkShadow = shadow.withOpacity(0.1);
+  static Color darkShadow = shadow;
 
-  static Color dividerColor = disabled;
+  static Color dividerColor = divider;
 
   static Color highlightColor = highlight;
 
   static ThemeData get darkThemeData => ThemeData(
-        brightness: Brightness.light,
+        brightness: Brightness.dark,
         dividerColor: dividerColor,
         highlightColor: highlightColor,
         colorScheme: ColorScheme(
@@ -85,7 +93,7 @@ abstract class AppTheme {
           error: darkError,
           onError: darkOnError,
           shadow: darkShadow,
-          brightness: Brightness.light,
+          brightness: Brightness.dark,
         ),
         textTheme: TextTheme(
           caption: GoogleFonts.nunito(
@@ -109,7 +117,7 @@ abstract class AppTheme {
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: IconThemeData(color: primary),
+        iconTheme: const IconThemeData(color: icon),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: snackBarBackground,
           contentTextStyle: GoogleFonts.roboto(
@@ -125,33 +133,33 @@ extension CustomColorScheme on ColorScheme {
   Color get transactionApplied => applied;
   Color get transactionFailed => failed;
   Color get transactionSkipped => skipped;
-  Color get activeColorOfNetwork => activeNetwork;
+  Color get activeColorOfNetwork => network;
 
   Color get greyText => onTertiary;
 
-  Color get cardHighlighted => surface;
+  Color get cardHighlighted => cardHighlight;
 
-  Color get defaultDialogDark => surface;
+  Color get defaultDialogDark => defaultDialog;
 
-  Color get closeIconColor => onSurface;
+  Color get closeIconColor => closeIcon;
 
-  Color get kycVerifyButton => kyc;
+  Color get kycVerifyButtonColor => kycVerifyButton;
 
-  Color get checkMarkColor => transactionApplied;
+  Color get checkMarkColor => applied;
 
-  Color get accountBottomSheetBorder => onPrimary;
+  Color get accountBottomSheetBorderColor => accountBottomSheetBorder;
 
-  Color get digitPrimaryColor => onPrimary;
+  Color get digitPrimaryColor => digitPrimary;
 
   Color get digitFillColor => Colors.transparent;
 
-  Color get disabledBgColor => disabled;
+  Color get disabledBgColor => const Color(0xFF6A5F7B);
 
-  Color get disabledTextColor => disabled;
+  Color get disabledTextColor => const Color(0xFF000000);
 
-  Color get darkGradientStartColor => surface;
+  Color get darkGradientStartColor => const Color(0xff0A0F19);
 
-  Color get darkGradientEndColor => surface;
+  Color get darkGradientEndColor => const Color(0xff25095B);
 
   Color get transparent => Colors.transparent;
 
@@ -159,25 +167,25 @@ extension CustomColorScheme on ColorScheme {
 
   Color get onElevatedButton => onPrimary;
 
-  Color get appBarUpperLayer => onSurface;
+  Color get appBarUpperLayer => const Color(0xff25095B);
 
   Color get appBarLowerLayer => background;
 
-  Color get surfaceContainer => surface.withOpacity(0.07);
+  Color get surfaceContainer => const Color(0xff707070).withOpacity(0.07);
 
-  Color get drawerSurface => surface;
+  Color get drawerSurface => const Color(0xff232630);
 
-  Color get label => onPrimary;
+  Color get label => digitPrimary;
 
-  Color get unSelectedLabel => onSurface;
+  Color get unSelectedLabel => const Color(0xff86809D);
 
-  Color get leadingButton => primary;
+  Color get leadingButton => const Color(0xffF1EFF8);
 
   Color get selectedBottomBar => surface;
 
   Color get drawerBackground => background;
 
-  Color get borderColor => onSurface;
+  Color get borderColor => const Color(0xFFDDCEF4);
 
   Color get markDownH1 => onPrimary;
 
@@ -185,15 +193,15 @@ extension CustomColorScheme on ColorScheme {
 
   Color get markDownP => onTertiary;
 
-  Color get markDownA => secondary;
+  Color get markDownA => const Color(0xff517bff);
 
   Color get subtitle1 => onPrimary;
 
-  Color get subtitle2 => secondary;
+  Color get subtitle2 => const Color(0xFF8B8C92);
 
   Color get profileDummy => const Color(0xFF212121);
 
-  Color get documentShadow => shadow;
+  Color get documentShadow => const Color(0xFF424242);
 
   Color get documentShape => const Color(0xff3700b3).withOpacity(0.05);
 
@@ -217,43 +225,43 @@ extension CustomColorScheme on ColorScheme {
 
   Color get alertSuccessMessage => snackBarBackground;
 
-  Color get qrScanBackground => surface;
+  Color get qrScanBackground => const Color(0xff2B1C48);
 
-  Color get qrScanInnerShadow => surface;
+  Color get qrScanInnerShadow => const Color(0xff000000).withOpacity(0.16);
 
-  Color get qrScanOuterShadow => primary;
+  Color get qrScanOuterShadow => const Color(0xff430F91);
 
-  Color get dialogText => surfaceAccent;
+  Color get dialogText => const Color(0xFF180B2B);
 
-  Color get tabBarNotSelected => surfaceAccent;
+  Color get tabBarNotSelected => const Color(0xFF280164);
 
-  Color get credentialBackground => surface;
+  Color get credentialBackground => const Color(0xFF211F33);
 
-  Color get cryptoAccountNotSelected => disabled.withOpacity(0.15);
+  Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
 
-  Color get startButtonColorA => primary;
+  Color get startButtonColorA => const Color(0xff8436F8);
 
   Color get startButtonColorB => primary;
 
-  Color get associatedWalletBorder => disabled;
+  Color get associatedWalletBorder => const Color(0xff524B67);
 
-  Color get deleteColor => surfaceAccent;
+  Color get deleteColor => defaultDialog;
 
   Color get titleColor => onTertiary;
 
   Color get valueColor => onPrimary;
 
-  Color get lightGrey => disabled;
+  Color get lightGrey => const Color(0xFF616161);
 
-  Color get darkGrey => surfaceAccent;
+  Color get darkGrey => const Color(0xFF212121);
 
-  Color get activeColor => transactionApplied;
+  Color get activeColor => const Color(0xFF08B530);
 
-  Color get inactiveColor => transactionFailed;
+  Color get inactiveColor => failed;
 
-  Color get beaconBorder => onSurface;
+  Color get beaconBorder => const Color(0xff86809D);
 
-  Color get cardBackground => surface;
+  Color get cardBackground => const Color(0xFF211F33);
 }
 
 extension CustomTextTheme on TextTheme {
@@ -266,16 +274,16 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get keyboardDigitTextStyle =>
-      GoogleFonts.roboto(fontSize: 30, color: onPrimary);
+      GoogleFonts.roboto(fontSize: 30, color: digitPrimary);
 
   TextStyle get calculatorKeyboardDigitTextStyle => GoogleFonts.roboto(
         fontSize: 30,
-        color: onPrimary,
+        color: digitPrimary,
         fontWeight: FontWeight.bold,
       );
 
   TextStyle get keyboardDeleteButtonTextStyle =>
-      GoogleFonts.roboto(fontSize: 16, color: onPrimary);
+      GoogleFonts.roboto(fontSize: 16, color: digitPrimary);
 
   TextStyle get loadingText => GoogleFonts.roboto(
         color: onPrimary,
@@ -290,7 +298,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get subtitle3 => GoogleFonts.nunito(
-        color: onSurface,
+        color: const Color(0xFF86809D),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       ).copyWith(height: 1.4);
@@ -302,13 +310,13 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get customListTileSubTitleStyle => GoogleFonts.nunito(
-        color: onSurface,
+        color: const Color(0xFF86809D),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
   TextStyle get starterSubTitleStyle => GoogleFonts.nunito(
-        color: onPrimary,
+        color: const Color(0xFFEEEEEE),
         fontSize: 26,
         fontWeight: FontWeight.w600,
       );
@@ -363,7 +371,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get title => GoogleFonts.nunito(
-        color: onSurface,
+        color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
@@ -387,7 +395,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get caption3 => GoogleFonts.nunito(
-        color: onSurface,
+        color: const Color(0xFF86809D),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
@@ -411,7 +419,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get dialogClose => GoogleFonts.roboto(
-        color: onSurface,
+        color: closeIcon,
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
@@ -457,7 +465,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get biometricMessage => GoogleFonts.roboto(
-        color: onTertiary,
+        color: const Color(0xFFB1ADC3),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
@@ -603,7 +611,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get tezosAssociatedAddressData => GoogleFonts.roboto(
-        color: disabled,
+        color: divider,
         fontSize: 17,
         fontWeight: FontWeight.normal,
       );
@@ -657,7 +665,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get illustrationPageDescription => GoogleFonts.roboto(
-        color: onPrimary,
+        color: digitPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w600,
       );
@@ -665,13 +673,13 @@ extension CustomTextTheme on TextTheme {
   TextStyle get dialogTitle => GoogleFonts.roboto(
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: onPrimary,
+        color: digitPrimary,
       );
 
   TextStyle get dialogSubtitle => GoogleFonts.roboto(
         fontSize: 13,
         fontWeight: FontWeight.w400,
-        color: onPrimary.withOpacity(0.67),
+        color: digitPrimary.withOpacity(0.67),
       );
 
   TextStyle get walletAltme => GoogleFonts.roboto(
@@ -713,7 +721,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get kycDialogCaption => GoogleFonts.nunito(
         fontSize: 20,
         fontWeight: FontWeight.bold,
-        color: kyc,
+        color: kycVerifyButton,
       );
 
   TextStyle get kycDialogBody => GoogleFonts.nunito(
@@ -743,7 +751,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get credentialCategorySubTitle => GoogleFonts.roboto(
         fontSize: 14,
         fontWeight: FontWeight.normal,
-        color: onSurface,
+        color: const Color(0xFF86809D),
       );
 
   TextStyle get credentialSurfaceText => GoogleFonts.roboto(
@@ -897,7 +905,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get beaconRequestPermission => GoogleFonts.roboto(
-        color: onSurface,
+        color: const Color(0xff86809D),
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
@@ -963,7 +971,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get faqQue => GoogleFonts.roboto(
-        color: const Color(0xffFFFFFF),
+        color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w700,
       );

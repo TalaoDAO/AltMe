@@ -88,7 +88,8 @@ class KycDialog extends StatelessWidget {
               verticalSpacing: 18,
               fontSize: 18,
               borderRadius: 20,
-              backgroundColor: Theme.of(context).colorScheme.kycVerifyButton,
+              backgroundColor:
+                  Theme.of(context).colorScheme.kycVerifyButtonColor,
               onPressed: () {
                 Navigator.of(context).pop();
                 startVerificationPressed.call();

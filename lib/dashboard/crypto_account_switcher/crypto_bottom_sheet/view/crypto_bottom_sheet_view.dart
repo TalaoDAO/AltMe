@@ -141,7 +141,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                 border: Border.all(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .accountBottomSheetBorder,
+                                      .accountBottomSheetBorderColor,
                                   width: 0.2,
                                 ),
                                 borderRadius: const BorderRadius.all(
