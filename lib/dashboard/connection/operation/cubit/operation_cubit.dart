@@ -9,12 +9,10 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:tezart/tezart.dart';
 import 'package:wallet_connect/wallet_connect.dart';
-import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 part 'operation_cubit.g.dart';
@@ -102,15 +100,19 @@ class OperationCubit extends Cubit<OperationState> {
             EtherUnit.wei,
             transaction.value ?? 0,
           );
-          amount = formatEthAmount(amount: ethAmount.getInWei);
+          amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
 
-          final feeData = await estimateEthereumFee(
+          await dotenv.load();
+          final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
+
+          final feeData = await MWeb3Client.estimateEthereumFee(
+            web3RpcURL: web3RpcURL,
             sender: EthereumAddress.fromHex(transaction.from),
             reciever: EthereumAddress.fromHex(transaction.to!),
             amount: ethAmount,
             data: transaction.data,
           );
-          fee = formatEthAmount(amount: feeData);
+          fee = MWeb3Client.formatEthAmount(amount: feeData);
           break;
       }
 
@@ -269,7 +271,14 @@ class OperationCubit extends Cubit<OperationState> {
             transaction.value ?? 0,
           );
 
-          final String transactionHash = await sendEthereumTransaction(
+          await dotenv.load();
+          final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
+          final chainId = int.parse(dotenv.get('WEB3_MAINNET_CHAIN_ID'));
+
+          final String transactionHash =
+              await MWeb3Client.sendEthereumTransaction(
+            chainId: chainId,
+            web3RpcURL: web3RpcURL,
             privateKey: currentAccount.secretKey,
             sender: EthereumAddress.fromHex(transaction.from),
             reciever: EthereumAddress.fromHex(transaction.to!),
@@ -465,7 +474,6 @@ class OperationCubit extends Cubit<OperationState> {
       }
 
       log.i(
-        'secretKey: ${keystore.secretKey}'
         'publicKey: ${keystore.publicKey} '
         'amount: ${state.amount} '
         'networkFee: ${state.fee} '
@@ -540,95 +548,5 @@ class OperationCubit extends Cubit<OperationState> {
 
     log.i('operations - $operations');
     return operations;
-  }
-
-  Future<BigInt> estimateEthereumFee({
-    required EthereumAddress sender,
-    required EthereumAddress reciever,
-    required EtherAmount amount,
-    String? data,
-  }) async {
-    log.i('estimateEthereumFee');
-    await dotenv.load();
-    final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
-    final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
-    final gasPrice = await web3Client.getGasPrice();
-
-    log.i('from: ${sender.hex}');
-    log.i('to: ${reciever.hex}');
-    log.i('gasPrice: ${gasPrice.getInWei}');
-    log.i('value: ${amount.getInWei}');
-    log.i('data: $data');
-
-    try {
-      final BigInt gas = await web3Client.estimateGas(
-        sender: sender,
-        to: reciever,
-        value: amount,
-        gasPrice: gasPrice,
-        data: data != null ? hexToBytes(data) : null,
-      );
-      log.i('gas - $gas');
-
-      final fee = gas * gasPrice.getInWei;
-      log.i('gas * gasPrice.getInWei = $fee');
-      return fee;
-    } catch (e) {
-      log.e(e.toString());
-      final fee = BigInt.from(21000) * gasPrice.getInWei;
-      log.i('2100 * gasPrice.getInWei = $fee');
-      return fee;
-    }
-  }
-
-  Future<String> sendEthereumTransaction({
-    required String privateKey,
-    required EthereumAddress sender,
-    required EthereumAddress reciever,
-    required EtherAmount amount,
-    BigInt? gas,
-    String? data,
-  }) async {
-    log.i('sendEthereumTransaction');
-    await dotenv.load();
-    final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
-    final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
-    final int nonce = await web3Client.getTransactionCount(sender);
-    final EtherAmount gasPrice = await web3Client.getGasPrice();
-
-    final maxGas = await web3Client.estimateGas(
-      sender: sender,
-      to: reciever,
-      gasPrice: gasPrice,
-      value: amount,
-      data: data != null ? hexToBytes(data) : null,
-    );
-
-    final chainId = int.parse(dotenv.get('WEB3_MAINNET_CHAIN_ID'));
-
-    final Credentials credentials = EthPrivateKey.fromHex(privateKey);
-
-    final transaction = Transaction(
-      from: sender,
-      to: reciever,
-      gasPrice: gasPrice,
-      value: amount,
-      data: data != null ? hexToBytes(data) : null,
-      nonce: nonce,
-      maxGas: maxGas.toInt(),
-    );
-
-    log.i('nonce: $nonce');
-    log.i('maxGas: ${maxGas.toInt()}');
-    log.i('chainId: $chainId');
-
-    final transactionHash = await web3Client.sendTransaction(
-      credentials,
-      transaction,
-      chainId: chainId,
-    );
-
-    log.i('transactionHash - $transactionHash');
-    return transactionHash;
   }
 }

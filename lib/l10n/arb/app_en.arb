@@ -317,7 +317,7 @@
   "gamingCards": "Gaming cards",
   "identityCards": "Identity cards",
   "communityCards": "Community cards",
-  "myProfessionalCards": "Professinoal cards",
+  "myProfessionalCards": "Professional cards",
   "otherCards": "Other cards",
   "inMyWallet": "In my wallet",
   "details": "Details",
@@ -553,7 +553,7 @@
   "gamingCredentialDiscoverSubtitle": "Benefit from exclusive advantages offered by Web3 Games.",
   "identityCredentialHomeSubtitle": "Prove things about yourself while protection your data.",
   "identityCredentialDiscoverSubtitle": "Prove things about yourself while protection your data.",
-  "myProfessionalCredentialDiscoverSubtitle": "This card is a proof of your identity for your LinkedIn profile.",
+  "myProfessionalCredentialDiscoverSubtitle": "Use your professional cards securely.",
   "blockchainAccountsCredentialHomeSubtitle": "Use your blockchain accounts securely.",
   "passCredentialHomeSubtitle": "Use exclusive Passes: Supercharge your Web3 experience.",
   "communityCredentialHomeSubtitle": "Benefit from advantages offered by Communities you like.",
@@ -695,8 +695,8 @@
   "tzlandPassHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Talao’s KYC check.",
   "tezoniaPassWhyGetThisCard": "This Membership card will give you 25% cash backs on ALL Tezotopia Game transactions when you buy a Drops on the marketplace or mint an NFT on starbase.",
   "tezoniaPassExpirationDate": "This card will remain active and reusable for 1 YEAR.",
-  "tezoniaPassHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Talao’s KYC check.",
-  "deviceInfo": "Device info",
+  "tezoniaPassHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Altme’s KYC check.",
+  "wallet_credential": "Wallet Credential",
   "walletSecurity": "Wallet Security",
   "walletSecurityDescription": "Protect your wallet with Pin Code and Biometrics Authentication",
   "blockchainSettings": "Blockchain Settings",
@@ -771,5 +771,8 @@
   "youAreMissing": "You are missing",
   "credentialsRequestedBy": "credentials requested by",
   "transactionIsLikelyToFail": "Transaction is likely to fail.",
-  "buy": "Buy"
+  "buy": "Buy",
+  "thisFeatureIsNotSupportedYetForFantom": "This feature is not supported yet for Fantom.",
+  "thisFeatureIsNotSupportedYetForBinance": "This feature is not supported yet for Binance.",
+  "faqs": "FAQs"
 }

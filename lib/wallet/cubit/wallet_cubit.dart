@@ -78,19 +78,19 @@ class WalletCubit extends Cubit<WalletState> {
     final log = getLogger('addRequiredCredentials');
 
     /// device info card
-    final deviceInfoCards = await credentialListFromCredentialSubjectType(
-      CredentialSubjectType.deviceInfo,
+    final walletCredentialCards = await credentialListFromCredentialSubjectType(
+      CredentialSubjectType.walletCredential,
     );
-    if (deviceInfoCards.isEmpty) {
-      final deviceInfoCredential = await generateDeviceInfoCredential(
+    if (walletCredentialCards.isEmpty) {
+      final walletCredential = await generateWalletCredential(
         ssiKey: ssiKey,
         didKitProvider: didKitProvider,
         didCubit: didCubit,
       );
-      if (deviceInfoCredential != null) {
-        log.i('CredentialSubjectType.deviceInfo added');
+      if (walletCredential != null) {
+        log.i('CredentialSubjectType.walletCredential added');
         await insertCredential(
-          credential: deviceInfoCredential,
+          credential: walletCredential,
           showMessage: false,
         );
       }
@@ -574,8 +574,7 @@ class WalletCubit extends Cubit<WalletState> {
           final iteratedCredentialSubjectModel =
               storedCredential.credentialPreview.credentialSubjectModel;
 
-          if (storedCredential.credentialPreview.credentialSubjectModel
-                  .credentialSubjectType ==
+          if (iteratedCredentialSubjectModel.credentialSubjectType ==
               CredentialSubjectType.emailPass) {
             if (email ==
                 (iteratedCredentialSubjectModel as EmailPassModel).email) {

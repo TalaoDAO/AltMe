@@ -1,13 +1,13 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 abstract class ConstantsJson {
-  static const deviceInfoCredentialManifestJson = <String, dynamic>{
-    'id': 'DeviceInfo',
+  static const walletCredentialManifestJson = <String, dynamic>{
+    'id': 'CredentialManifest',
     'issuer': {'id': '', 'name': 'Wallet issuer'},
     'output_descriptors': [
       {
         'id': '',
-        'schema': 'DeviceInfo',
+        'schema': 'CredentialManifest',
         'display': {
           'title': {
             'path': <dynamic>[],
@@ -23,7 +23,7 @@ abstract class ConstantsJson {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
             'fallback':
-                'You can transfer this credential when you need to give information about your mobile device to a third party.'
+                'You can transfer this credential when you need to give assurance about your mobile device and wallet to a third party. It helps protect your apps from potentially risky and fraudulent interactions, allowing you to respond with appropriate actions to reduce attacks and abuse such as fraud, cheating, and unauthorized access. '
           },
           'properties': [
             {
@@ -33,10 +33,10 @@ abstract class ConstantsJson {
               'label': 'Verified by'
             },
             {
-              'path': [r'$.expirationDate'],
+              'path': [r'$.issuanceDate'],
               'schema': {'type': 'string', 'format': 'date'},
               'fallback': 'None',
-              'label': 'Expires'
+              'label': 'Issue data'
             },
             {
               'path': [r'$.credentialSubject.systemName'],
@@ -45,7 +45,7 @@ abstract class ConstantsJson {
               'label': 'Operating System'
             },
             {
-              'path': [r'$.credentialSubject.device'],
+              'path': [r'$.credentialSubject.deviceName'],
               'schema': {'type': 'string'},
               'fallback': 'Unknown',
               'label': 'Device'

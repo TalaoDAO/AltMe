@@ -7,6 +7,7 @@ class ConfirmTokenTransactionState extends Equatable {
     NetworkFeeModel? networkFee,
     this.status = AppStatus.init,
     this.message,
+    this.transactionHash,
   }) : networkFee = networkFee ?? NetworkFeeModel.networks()[1];
 
   factory ConfirmTokenTransactionState.fromJson(Map<String, dynamic> json) =>
@@ -16,6 +17,7 @@ class ConfirmTokenTransactionState extends Equatable {
   final NetworkFeeModel networkFee;
   final AppStatus status;
   final StateMessage? message;
+  final String? transactionHash;
 
   ConfirmTokenTransactionState loading() {
     return copyWith(
@@ -38,9 +40,11 @@ class ConfirmTokenTransactionState extends Equatable {
 
   ConfirmTokenTransactionState success({
     MessageHandler? messageHandler,
+    String? transactionHash,
   }) {
     return copyWith(
       status: AppStatus.success,
+      transactionHash: transactionHash,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
@@ -54,17 +58,25 @@ class ConfirmTokenTransactionState extends Equatable {
     NetworkFeeModel? networkFee,
     AppStatus? status,
     StateMessage? message,
+    String? transactionHash,
   }) {
     return ConfirmTokenTransactionState(
       withdrawalAddress: withdrawalAddress ?? this.withdrawalAddress,
       networkFee: networkFee ?? this.networkFee,
       status: status ?? this.status,
       message: message ?? this.message,
+      transactionHash: transactionHash ?? this.transactionHash,
     );
   }
 
   Map<String, dynamic> toJson() => _$ConfirmTokenTransactionStateToJson(this);
 
   @override
-  List<Object?> get props => [withdrawalAddress, status, message, networkFee];
+  List<Object?> get props => [
+        withdrawalAddress,
+        status,
+        message,
+        networkFee,
+        transactionHash,
+      ];
 }

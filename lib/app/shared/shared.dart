@@ -10,6 +10,7 @@ export 'launch_url/launch_url.dart';
 export 'loading/loading.dart';
 export 'local_auth/local_auth_api.dart';
 export 'local_notification/local_notification.dart';
+export 'm_web3_client/m_web3_client.dart';
 export 'message_handler/message_handler.dart';
 export 'models/model.dart';
 export 'text_field_helper/text_field_helper.dart';

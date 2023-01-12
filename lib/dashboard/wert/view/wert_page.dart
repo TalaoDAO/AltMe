@@ -1,9 +1,10 @@
-import 'dart:async';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
 // #docregion platform_imports
@@ -13,48 +14,35 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 // #enddocregion platform_imports
 
-class WertPage extends StatefulWidget {
-  const WertPage({super.key});
+class WertPage extends StatelessWidget {
+  const WertPage({Key? key}) : super(key: key);
 
   @override
-  State<WertPage> createState() => _WertPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => WertCubit(
+        walletCubit: context.read<WalletCubit>(),
+        credentialsRepository: CredentialsRepository(getSecureStorage),
+      ),
+      child: const WertView(),
+    );
+  }
 }
 
-class _WertPageState extends State<WertPage> {
+class WertView extends StatefulWidget {
+  const WertView({super.key});
+
+  @override
+  State<WertView> createState() => _WertViewState();
+}
+
+class _WertViewState extends State<WertView> {
   late WebViewController _controller;
-
-  Future<void> onNetworkChange() async {
-    final String link = getUrl();
-    await _controller.loadRequest(Uri.parse(link));
-  }
-
-  String getUrl() {
-    final walletCubit = context.read<WalletCubit>();
-
-    String link =
-        '''https://sandbox.wert.io/01GMWDYDRESASBVVV7SB6FHYZE/redirect?theme=dark&lang=en''';
-
-    final symbol = walletCubit.state.currentAccount.blockchainType.symbol;
-    final address = walletCubit.state.currentAccount.walletAddress;
-
-    link = '$link&commodity=$symbol';
-    link = '$link&address=$address';
-
-    //input phone
-    //link = '$link&phone=$phone';
-
-    //input email
-    //link = '$link&email=$email';
-
-    return link;
-  }
 
   @override
   void initState() {
     super.initState();
     final log = getLogger('WertInitState');
-
-    final String link = getUrl();
 
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
@@ -68,7 +56,6 @@ class _WertPageState extends State<WertPage> {
 
     final WebViewController controller =
         WebViewController.fromPlatformCreationParams(params);
-    // #enddocregion platform_features
 
     controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -116,8 +103,7 @@ class _WertPageState extends State<WertPage> {
             SnackBar(content: Text(message.message)),
           );
         },
-      )
-      ..loadRequest(Uri.parse(link));
+      );
 
     // #docregion platform_features
     if (controller.platform is AndroidWebViewController) {
@@ -131,14 +117,40 @@ class _WertPageState extends State<WertPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ManageNetworkCubit, ManageNetworkState>(
-      listener: (context, state) {
-        onNetworkChange();
-      },
-      child: BasePage(
-        scrollView: false,
-        body: WebViewWidget(controller: _controller!),
-        padding: EdgeInsets.zero,
+    final l10n = context.l10n;
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<ManageNetworkCubit, ManageNetworkState>(
+          listener: (context, state) async {
+            await context.read<WertCubit>().getUrl();
+          },
+        ),
+        BlocListener<WertCubit, String>(
+          listener: (context, link) async {
+            await _controller.loadRequest(Uri.parse(link));
+          },
+        ),
+      ],
+      child: BlocBuilder<WalletCubit, WalletState>(
+        builder: (context, state) {
+          return BasePage(
+            scrollView: false,
+            body:
+                state.currentAccount.blockchainType == BlockchainType.fantom ||
+                        state.currentAccount.blockchainType ==
+                            BlockchainType.binance
+                    ? Center(
+                        child: Text(
+                          state.currentAccount.blockchainType ==
+                                  BlockchainType.binance
+                              ? l10n.thisFeatureIsNotSupportedYetForBinance
+                              : l10n.thisFeatureIsNotSupportedYetForFantom,
+                        ),
+                      )
+                    : WebViewWidget(controller: _controller),
+            padding: EdgeInsets.zero,
+          );
+        },
       ),
     );
   }

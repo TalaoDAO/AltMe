@@ -14,6 +14,7 @@ class ResetWalletMenu extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => const ResetWalletMenu(),
+      settings: const RouteSettings(name: '/ResetWalletMenu'),
     );
   }
 

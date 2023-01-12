@@ -632,7 +632,7 @@
     "tezoniaPassWhyGetThisCard",
     "tezoniaPassExpirationDate",
     "tezoniaPassHowToGetIt",
-    "deviceInfo",
+    "wallet_credential",
     "walletSecurity",
     "walletSecurityDescription",
     "blockchainSettings",
@@ -707,7 +707,10 @@
     "youAreMissing",
     "credentialsRequestedBy",
     "transactionIsLikelyToFail",
-    "buy"
+    "buy",
+    "thisFeatureIsNotSupportedYetForFantom",
+    "thisFeatureIsNotSupportedYetForBinance",
+    "faqs"
   ],
 
   "es": [
@@ -1343,7 +1346,7 @@
     "tezoniaPassWhyGetThisCard",
     "tezoniaPassExpirationDate",
     "tezoniaPassHowToGetIt",
-    "deviceInfo",
+    "wallet_credential",
     "walletSecurity",
     "walletSecurityDescription",
     "blockchainSettings",
@@ -1418,7 +1421,10 @@
     "youAreMissing",
     "credentialsRequestedBy",
     "transactionIsLikelyToFail",
-    "buy"
+    "buy",
+    "thisFeatureIsNotSupportedYetForFantom",
+    "thisFeatureIsNotSupportedYetForBinance",
+    "faqs"
   ],
 
   "fr": [
@@ -2054,7 +2060,7 @@
     "tezoniaPassWhyGetThisCard",
     "tezoniaPassExpirationDate",
     "tezoniaPassHowToGetIt",
-    "deviceInfo",
+    "wallet_credential",
     "walletSecurity",
     "walletSecurityDescription",
     "blockchainSettings",
@@ -2129,7 +2135,10 @@
     "youAreMissing",
     "credentialsRequestedBy",
     "transactionIsLikelyToFail",
-    "buy"
+    "buy",
+    "thisFeatureIsNotSupportedYetForFantom",
+    "thisFeatureIsNotSupportedYetForBinance",
+    "faqs"
   ],
 
   "it": [
@@ -2765,7 +2774,7 @@
     "tezoniaPassWhyGetThisCard",
     "tezoniaPassExpirationDate",
     "tezoniaPassHowToGetIt",
-    "deviceInfo",
+    "wallet_credential",
     "walletSecurity",
     "walletSecurityDescription",
     "blockchainSettings",
@@ -2840,6 +2849,9 @@
     "youAreMissing",
     "credentialsRequestedBy",
     "transactionIsLikelyToFail",
-    "buy"
+    "buy",
+    "thisFeatureIsNotSupportedYetForFantom",
+    "thisFeatureIsNotSupportedYetForBinance",
+    "faqs"
   ]
 }
