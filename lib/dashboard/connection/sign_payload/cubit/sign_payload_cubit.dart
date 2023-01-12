@@ -169,9 +169,11 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
               await connectedDappRepository.findAll();
 
           final SavedDappData? dappData = savedDapps.firstWhereOrNull(
-            (element) =>
-                element.wcSessionStore!.session.key ==
-                wcClient.sessionStore.session.key,
+            (element) {
+              return element.wcSessionStore != null &&
+                  element.wcSessionStore!.session.key ==
+                      wcClient.sessionStore.session.key;
+            },
           );
 
           log.i('dappData -$dappData');
