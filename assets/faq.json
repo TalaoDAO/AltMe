@@ -1,0 +1,40 @@
+{
+  "faq": [
+    {
+      "que": "What is a cryptocurrency?",
+      "ans": "A cryptocurrency is a digital or virtual currency that uses cryptography for security. It operates independently of a central bank or government."
+    },
+    {
+      "que": "What is a blockchain?",
+      "ans": "A blockchain is a decentralized, digital ledger that records transactions across a network of computers. It is the technology that underlies most cryptocurrencies."
+    },
+    {
+      "que": "How do I buy and sell cryptocurrencies?",
+      "ans": "In order to buy and sell cryptocurrencies, you need to set up an account on a cryptocurrency exchange. Once your account is verified, you can deposit funds and use them to buy and sell different cryptocurrencies."
+    },
+    {
+      "que": "How can I store my cryptocurrencies?",
+      "ans": "Cryptocurrencies can be stored in digital wallets. These can be either software wallets, which are stored on your device, or hardware wallets, which are physical devices that store your cryptocurrencies offline."
+    },
+    {
+      "que": "How do I protect my cryptocurrencies from theft?",
+      "ans": "It is important to keep your digital wallet's private key or seed phrase secure and to not share it with anyone. Additionally, you should use a hardware wallet for storing large amounts of cryptocurrency."
+    },
+    {
+      "que": "Are cryptocurrencies legal?",
+      "ans": "The legality of cryptocurrencies varies from country to country. In some countries, they are completely legal, while in others, they are heavily restricted. It is important to check the laws in your country before buying or selling cryptocurrencies."
+    },
+    {
+      "que": "How can I track the value of my cryptocurrencies?",
+      "ans": "There are many websites and apps that track the value of different cryptocurrencies in real-time. You can use these to keep track of the value of your investments."
+    },
+    {
+      "que": "Can I use cryptocurrencies to make purchases?",
+      "ans": "While the acceptance of cryptocurrencies as a form of payment is still relatively limited, it is becoming more common. More and more businesses are beginning to accept them as a form of payment."
+    },
+    {
+      "que": "What is the difference between a coin and a token?",
+      "ans": "A coin is a cryptocurrency that operates on its own blockchain, while a token is built on top of an existing blockchain, such as Ethereum."
+    }
+  ]
+}

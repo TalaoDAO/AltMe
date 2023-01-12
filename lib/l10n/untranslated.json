@@ -709,7 +709,8 @@
     "transactionIsLikelyToFail",
     "buy",
     "thisFeatureIsNotSupportedYetForFantom",
-    "thisFeatureIsNotSupportedYetForBinance"
+    "thisFeatureIsNotSupportedYetForBinance",
+    "faqs"
   ],
 
   "es": [
@@ -1422,7 +1423,8 @@
     "transactionIsLikelyToFail",
     "buy",
     "thisFeatureIsNotSupportedYetForFantom",
-    "thisFeatureIsNotSupportedYetForBinance"
+    "thisFeatureIsNotSupportedYetForBinance",
+    "faqs"
   ],
 
   "fr": [
@@ -2135,7 +2137,8 @@
     "transactionIsLikelyToFail",
     "buy",
     "thisFeatureIsNotSupportedYetForFantom",
-    "thisFeatureIsNotSupportedYetForBinance"
+    "thisFeatureIsNotSupportedYetForBinance",
+    "faqs"
   ],
 
   "it": [
@@ -2848,6 +2851,7 @@
     "transactionIsLikelyToFail",
     "buy",
     "thisFeatureIsNotSupportedYetForFantom",
-    "thisFeatureIsNotSupportedYetForBinance"
+    "thisFeatureIsNotSupportedYetForBinance",
+    "faqs"
   ]
 }

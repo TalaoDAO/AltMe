@@ -127,3 +127,4 @@ flutter:
     - assets/privacy/
     - assets/terms/
     - assets/notices/
+    - assets/faq.json

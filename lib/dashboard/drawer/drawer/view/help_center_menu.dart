@@ -10,6 +10,7 @@ class HelpCenterMenu extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => const HelpCenterMenu(),
+      settings: const RouteSettings(name: '/HelpCenterMenu'),
     );
   }
 
@@ -43,6 +44,12 @@ class HelpCenterView extends StatelessWidget {
                 ),
                 const SizedBox(
                   height: Sizes.spaceSmall,
+                ),
+                DrawerItem(
+                  title: l10n.faqs,
+                  onTap: () {
+                    Navigator.of(context).push<void>(FAQsPage.route());
+                  },
                 ),
                 DrawerItem(
                   title: '${l10n.contactUs} : ${AltMeStrings.appSupportMail}',
