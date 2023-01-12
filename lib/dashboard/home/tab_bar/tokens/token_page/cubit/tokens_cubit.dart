@@ -168,10 +168,10 @@ class TokensCubit extends Cubit<TokensState> {
         final token = data[i];
         if (token.symbol == 'USDT') {
           data[i] = token.copyWith(
-              tokenUSDPrice: token.calculatedBalanceInDouble,
-              balanceInUSD: token.calculatedBalanceInDouble,
-              decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
-            );
+            tokenUSDPrice: token.calculatedBalanceInDouble,
+            balanceInUSD: token.calculatedBalanceInDouble,
+            decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
+          );
         } else {
           final dynamic response = await client.get(
             '${Urls.cryptoCompareBaseUrl}/data/price?fsym=${token.symbol}&tsyms=USD',
@@ -181,6 +181,10 @@ class TokensCubit extends Cubit<TokensState> {
             data[i] = token.copyWith(
               tokenUSDPrice: tokenUSDPrice.toDouble(),
               balanceInUSD: tokenUSDPrice * token.calculatedBalanceInDouble,
+              decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
+            );
+          } else {
+            data[i] = token.copyWith(
               decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
             );
           }
