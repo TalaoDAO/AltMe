@@ -224,7 +224,7 @@ class TokensCubit extends Cubit<TokensState> {
         (dynamic json) {
           final token = TokenModel.fromJson(json as Map<String, dynamic>);
           return token.copyWith(
-            decimalsToShow: token.calculatedBalanceInDouble < 0 ? 5 : 2,
+            decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
           );
         },
       ).toList();
@@ -296,7 +296,7 @@ class TokensCubit extends Cubit<TokensState> {
               icon: token.icon ?? contract.iconUrl,
               tokenUSDPrice: contract.usdValue,
               balanceInUSD: token.calculatedBalanceInDouble * contract.usdValue,
-              decimalsToShow: token.calculatedBalanceInDouble < 0.0 ? 5 : 2,
+              decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
             );
           } else {
             getLogger(toString()).i(
@@ -398,7 +398,7 @@ class TokensCubit extends Cubit<TokensState> {
       return token.copyWith(
         tokenUSDPrice: xtzUSDPrice,
         balanceInUSD: token.calculatedBalanceInDouble * xtzUSDPrice,
-        decimalsToShow: token.calculatedBalanceInDouble < 0 ? 5 : 2,
+        decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
       );
     } catch (e, s) {
       getLogger(toString()).e('unable to get usd balance of XTZ, e: $e, s: $s');
