@@ -25,6 +25,87 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
   final logger = getLogger('ConfirmWithdrawal');
 
+  Future<void> calculateFee() async {
+    emit(state.loading());
+    try {
+      if (manageNetworkCubit.state.network is TezosNetwork) {
+        final tezosNetworkFees = NetworkFeeModel.tezosNetworkFees();
+        final networkFee = tezosNetworkFees[1];
+        final double feeInUSD = state.selectedToken.symbol == 'XTZ'
+            ? state.selectedToken.tokenUSDPrice * networkFee.fee
+            : 0;
+        emit(
+          state.copyWith(
+            networkFee: networkFee.copyWith(
+              feeInUSD: feeInUSD,
+            ),
+            networkFees: tezosNetworkFees
+                .map(
+                  (e) => e.copyWith(
+                    feeInUSD: state.selectedToken.symbol == 'XTZ'
+                        ? state.selectedToken.tokenUSDPrice * e.fee
+                        : 0,
+                  ),
+                )
+                .toList(),
+            status: AppStatus.init,
+            totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
+                ? state.tokenAmount - networkFee.fee
+                : state.tokenAmount,
+          ),
+        );
+      } else {
+        final selectedEthereumNetwork =
+            manageNetworkCubit.state.network as EthereumNetwork;
+
+        final web3RpcURL = selectedEthereumNetwork.rpcNodeUrl;
+
+        final amount = int.parse(
+          state.tokenAmount
+              .toStringAsFixed(int.parse(state.selectedToken.decimals))
+              .replaceAll(',', '')
+              .replaceAll('.', ''),
+        );
+
+        final credentials =
+            EthPrivateKey.fromHex(state.selectedAccountSecretKey);
+        final sender = await credentials.extractAddress();
+        final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
+
+        final maxGas = await MWeb3Client.estimateEthereumFee(
+          web3RpcURL: web3RpcURL,
+          sender: sender,
+          reciever: reciever,
+          amount: EtherAmount.inWei(BigInt.from(amount)),
+        );
+
+        final fee = EtherAmount.inWei(maxGas).getValueInUnit(EtherUnit.ether);
+        final double feeInUSD = state.selectedToken.symbol == 'ETH'
+            ? state.selectedToken.tokenUSDPrice * fee
+            : 0;
+        final networkFee = NetworkFeeModel(
+          fee: fee,
+          networkSpeed: NetworkSpeed.average,
+          tokenSymbol: 'ETH',
+          feeInUSD: feeInUSD,
+        );
+
+        emit(
+          state.copyWith(
+            status: AppStatus.init,
+            networkFee: networkFee,
+            totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
+                ? state.tokenAmount - networkFee.fee
+                : state.tokenAmount,
+          ),
+        );
+      }
+    } catch (e, _) {
+      logger.i('error: $e');
+      emit(state.copyWith(status: AppStatus.init));
+    }
+  }
+
   void setWithdrawalAddress({required String withdrawalAddress}) {
     emit(state.copyWith(withdrawalAddress: withdrawalAddress));
   }
@@ -58,7 +139,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       );
 
       final customFee = int.parse(
-        state.networkFee.fee
+        state.networkFee!.fee
             .toStringAsFixed(6)
             .replaceAll('.', '')
             .replaceAll(',', ''),
@@ -104,14 +185,15 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           manageNetworkCubit.state.network as EthereumNetwork;
 
       final rpcNodeUrl = selectedEthereumNetwork.rpcNodeUrl;
-      getLogger(toString()).i('selected network node rpc: $rpcNodeUrl');
 
       final amount = int.parse(
         tokenAmount.toStringAsFixed(18).replaceAll(',', '').replaceAll('.', ''),
       );
 
+      getLogger(toString())
+          .i('selected network node rpc: $rpcNodeUrl, amount: $tokenAmount');
+
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
-      final fromAddress = await credentials.extractAddress();
       final sender = await credentials.extractAddress();
 
       // final gasPrice = await MWeb3Client.estimateEthereumFee(
@@ -132,7 +214,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       );
 
       logger.i(
-        'sending from: $fromAddress to : ${state.withdrawalAddress},etherAmountInWei: ${EtherAmount.inWei(BigInt.from(amount))}',
+        'sending from: $sender to : ${state.withdrawalAddress},etherAmountInWei: ${EtherAmount.inWei(BigInt.from(amount))}',
       );
 
       logger.i(
@@ -151,22 +233,18 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     }
   }
 
-  Future<void> sendContractInvocationOperation({
-    required double tokenAmount,
-    required String selectedAccountSecretKey,
-    required TokenModel token,
-  }) async {
+  Future<void> sendContractInvocationOperation() async {
     if (manageNetworkCubit.state.network is TezosNetwork) {
       await _sendContractInvocationOperationTezos(
-        tokenAmount: tokenAmount,
-        selectedAccountSecretKey: selectedAccountSecretKey,
-        token: token,
+        tokenAmount: state.totalAmount,
+        selectedAccountSecretKey: state.selectedAccountSecretKey,
+        token: state.selectedToken,
       );
     } else if (manageNetworkCubit.state.network is EthereumNetwork) {
       await _sendContractInvocationOperationEthereum(
-        tokenAmount: tokenAmount,
-        selectedAccountSecretKey: selectedAccountSecretKey,
-        token: token,
+        tokenAmount: state.totalAmount,
+        selectedAccountSecretKey: state.selectedAccountSecretKey,
+        token: state.selectedToken,
       );
     } else {
       throw Exception('Not Implemented !');
@@ -209,7 +287,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       // fee calculated by XTZ
       final customFee = int.parse(
-        state.networkFee.fee
+        state.networkFee!.fee
             .toStringAsFixed(
               6,
             ) // 6 is because the deciaml of XTZ is alway 6 (mutez)
