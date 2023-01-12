@@ -173,9 +173,9 @@ class TokensCubit extends Cubit<TokensState> {
           '${Urls.cryptoCompareBaseUrl}/data/price?fsym=${token.symbol}&tsyms=USD',
         );
         if (response['USD'] != null) {
-          final tokenUSDPrice = response['USD'] as double;
+          final tokenUSDPrice = response['USD'] as num;
           data[i] = token.copyWith(
-            tokenUSDPrice: tokenUSDPrice,
+            tokenUSDPrice: tokenUSDPrice.toDouble(),
             balanceInUSD: tokenUSDPrice * token.calculatedBalanceInDouble,
           );
         }
