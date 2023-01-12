@@ -10,6 +10,7 @@ class HelpCenterMenu extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => const HelpCenterMenu(),
+      settings: const RouteSettings(name: '/HelpCenterMenu'),
     );
   }
 

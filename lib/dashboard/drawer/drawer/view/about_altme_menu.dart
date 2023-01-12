@@ -11,6 +11,7 @@ class AboutAltmeMenu extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => const AboutAltmeMenu(),
+      settings: const RouteSettings(name: '/AboutAltmeMenu'),
     );
   }
 
