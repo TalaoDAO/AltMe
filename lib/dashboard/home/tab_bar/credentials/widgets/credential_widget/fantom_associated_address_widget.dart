@@ -20,9 +20,7 @@ class FantomAssociatedAddressWidget extends StatelessWidget {
     return MyBlockchainAccountBaseWidget(
       image: IconStrings.fantom,
       name: l10n.fantomNetwork,
-      walletAddress: associatedAddress.associatedAddress?.isEmpty == true
-          ? ''
-          : associatedAddress.associatedAddress.toString(),
+      walletAddress: associatedAddress.associatedAddress ?? '',
     );
   }
 }

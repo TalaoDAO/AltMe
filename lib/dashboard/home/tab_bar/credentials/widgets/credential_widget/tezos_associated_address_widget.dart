@@ -19,9 +19,7 @@ class TezosAssociatedAddressWidget extends StatelessWidget {
     return MyBlockchainAccountBaseWidget(
       image: IconStrings.tezos,
       name: l10n.tezosNetwork,
-      walletAddress: associatedAddress.associatedAddress?.isEmpty == true
-          ? ''
-          : associatedAddress.associatedAddress.toString(),
+      walletAddress: associatedAddress.associatedAddress ?? '',
     );
   }
 }

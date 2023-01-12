@@ -74,6 +74,7 @@ class ImageStrings {
   static const String linkedInCard = '$imagePath/linkedin_card.png';
 
   static const String myAccountCard = '$imagePath/my_account_card.png';
+  static const String pooAccountCard = '$imagePath/poo_account_card.png';
 
   static const String diplomaCard = '$imagePath/diploma_card.png';
 

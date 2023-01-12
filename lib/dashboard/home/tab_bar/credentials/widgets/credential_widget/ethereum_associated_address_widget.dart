@@ -20,9 +20,7 @@ class EthereumAssociatedAddressWidget extends StatelessWidget {
     return MyBlockchainAccountBaseWidget(
       image: IconStrings.ethereum,
       name: l10n.ethereumNetwork,
-      walletAddress: associatedAddress.associatedAddress?.isEmpty == true
-          ? ''
-          : associatedAddress.associatedAddress.toString(),
+      walletAddress: associatedAddress.associatedAddress ?? '',
     );
   }
 }

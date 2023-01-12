@@ -19,9 +19,7 @@ class PolygonAssociatedAddressWidget extends StatelessWidget {
     return MyBlockchainAccountBaseWidget(
       image: IconStrings.polygon,
       name: l10n.polygonNetwork,
-      walletAddress: associatedAddress.associatedAddress?.isEmpty == true
-          ? ''
-          : associatedAddress.associatedAddress.toString(),
+      walletAddress: associatedAddress.associatedAddress ?? '',
     );
   }
 }
