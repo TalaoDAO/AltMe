@@ -247,35 +247,38 @@ class _DashboardViewState extends State<DashboardView> {
                         ),
                       ),
                       BottomBarDecoration(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            BottomBarItem(
-                              icon: IconStrings.home,
-                              text: l10n.home,
-                              onTap: () => bottomTapped(0),
-                              isSelected: state.selectedIndex == 0,
-                            ),
-                            BottomBarItem(
-                              icon: IconStrings.discover,
-                              text: l10n.discover,
-                              onTap: () => bottomTapped(1),
-                              isSelected: state.selectedIndex == 1,
-                            ),
-                            const SizedBox(width: 75 * 0.6),
-                            BottomBarItem(
-                              icon: IconStrings.searchNormal,
-                              text: l10n.search,
-                              onTap: () => bottomTapped(2),
-                              isSelected: state.selectedIndex == 2,
-                            ),
-                            BottomBarItem(
-                              icon: IconStrings.cashInHand,
-                              text: l10n.buy,
-                              onTap: () => bottomTapped(3),
-                              isSelected: state.selectedIndex == 3,
-                            ),
-                          ],
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              BottomBarItem(
+                                icon: IconStrings.home,
+                                text: l10n.home,
+                                onTap: () => bottomTapped(0),
+                                isSelected: state.selectedIndex == 0,
+                              ),
+                              BottomBarItem(
+                                icon: IconStrings.discover,
+                                text: l10n.discover,
+                                onTap: () => bottomTapped(1),
+                                isSelected: state.selectedIndex == 1,
+                              ),
+                              const SizedBox(width: 75 * 0.6),
+                              BottomBarItem(
+                                icon: IconStrings.searchNormal,
+                                text: l10n.search,
+                                onTap: () => bottomTapped(2),
+                                isSelected: state.selectedIndex == 2,
+                              ),
+                              BottomBarItem(
+                                icon: IconStrings.cashInHand,
+                                text: l10n.buy,
+                                onTap: () => bottomTapped(3),
+                                isSelected: state.selectedIndex == 3,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(height: 1),
@@ -283,7 +286,10 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                   const Align(
                     alignment: Alignment.bottomCenter,
-                    child: QRIcon(),
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: QRIcon(),
+                    ),
                   ),
                 ],
               ),

@@ -19,7 +19,7 @@ class AltMeLogo extends StatelessWidget {
               : ImageStrings.splash,
       width: size,
       height: size,
-      fit: BoxFit.fitHeight,
+      fit: BoxFit.contain,
     );
   }
 }

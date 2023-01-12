@@ -6,10 +6,13 @@ class SplashImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      ImageStrings.splashImage,
-      fit: BoxFit.fitWidth,
-      height: MediaQuery.of(context).size.longestSide / 2.2,
+    return Padding(
+      padding: const EdgeInsets.all(Sizes.space2XLarge),
+      child: Image.asset(
+        ImageStrings.splashImage,
+        fit: BoxFit.fitWidth,
+        height: MediaQuery.of(context).size.longestSide / 2.2,
+      ),
     );
   }
 }

@@ -1,12 +1,13 @@
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyGradientButton extends StatelessWidget {
   const MyGradientButton({
     Key? key,
     required this.text,
     this.icon,
-    this.borderRadius = 18,
+    this.borderRadius = 16,
     this.verticalSpacing = 20,
     this.elevation = 2,
     this.fontSize = 18,
@@ -132,7 +133,7 @@ class GradientButtonText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       upperCase ? text.toUpperCase() : text,
-      style: TextStyle(
+      style: GoogleFonts.poppins(
         color: onPressed != null
             ? Theme.of(context).colorScheme.onElevatedButton
             : Theme.of(context).colorScheme.disabledTextColor,

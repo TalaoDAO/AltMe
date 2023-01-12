@@ -10,7 +10,7 @@ class BottomBarDecoration extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.only(left: 11, right: 11, top: 8, bottom: 2),
+        padding: const EdgeInsets.all(16),
         child: BackgroundCard(
           padding: const EdgeInsets.all(8),
           child: child,

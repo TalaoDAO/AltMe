@@ -123,7 +123,7 @@ class ElevatedButtonText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.toUpperCase(),
-      style: GoogleFonts.nunito(
+      style: GoogleFonts.poppins(
         color: textColor ?? Theme.of(context).colorScheme.onElevatedButton,
         fontSize: fontSize,
         fontWeight: FontWeight.w700,

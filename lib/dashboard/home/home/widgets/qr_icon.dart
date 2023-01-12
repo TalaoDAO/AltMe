@@ -42,24 +42,11 @@ class QRIcon extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             Container(
-              height: 75,
-              width: 75,
+              height: 80,
+              width: 80,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.qrScanBackground,
                 borderRadius: BorderRadius.circular(50),
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).colorScheme.qrScanOuterShadow,
-                    blurRadius: 5,
-                    offset: Offset.zero,
-                  ),
-                  BoxShadow(
-                    color: Theme.of(context).colorScheme.qrScanInnerShadow,
-                    blurRadius: 12,
-                    spreadRadius: -12,
-                    offset: Offset.zero,
-                  )
-                ],
               ),
             ),
             Container(
@@ -68,6 +55,14 @@ class QRIcon extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(50),
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.qrScanInnerShadow,
+                    blurRadius: 25,
+                    spreadRadius: 5,
+                    offset: const Offset(0, 10),
+                  )
+                ],
               ),
             ),
             SizedBox(

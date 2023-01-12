@@ -64,7 +64,9 @@ class Step extends StatelessWidget {
       width: width,
       margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: isEnable ? Colors.white : Colors.white.withOpacity(0.5),
+        color: isEnable
+            ? Theme.of(context).colorScheme.secondary
+            : Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.all(Radius.circular(3)),
       ),
     );
