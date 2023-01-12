@@ -38,7 +38,7 @@ class TokensCubit extends Cubit<TokensState> {
 
   Future<void> fetchFromZero() async {
     _offsetOfLoadedData = -1;
-    emit(state.copyWith(offset: 0,totalBalanceInUSD: 0));
+    emit(state.copyWith(offset: 0, totalBalanceInUSD: 0));
     await getTokens();
   }
 
@@ -135,7 +135,7 @@ class TokensCubit extends Cubit<TokensState> {
           final icon = (json['logo'] == null && json['symbol'] == 'TALAO')
               ? IconStrings.talaoIcon
               : json['logo'] as String?;
-          return TokenModel(
+          final token = TokenModel(
             contractAddress: json['token_address'] as String,
             name: (json['name'] as String?) ?? '',
             symbol: (json['symbol'] as String?) ?? '',
@@ -144,6 +144,9 @@ class TokensCubit extends Cubit<TokensState> {
             thumbnailUri: json['thumbnail'] as String?,
             icon: icon,
             decimalsToShow: 2,
+          );
+          return token.copyWith(
+            decimalsToShow: token.calculatedBalanceInDouble < 0 ? 5 : 2,
           );
         },
       ).toList();
@@ -174,7 +177,6 @@ class TokensCubit extends Cubit<TokensState> {
           data[i] = token.copyWith(
             tokenUSDPrice: tokenUSDPrice,
             balanceInUSD: tokenUSDPrice * token.calculatedBalanceInDouble,
-            decimalsToShow: tokenUSDPrice > 500 ? 5 : 2,
           );
         }
       } catch (e, s) {
@@ -220,11 +222,14 @@ class TokensCubit extends Cubit<TokensState> {
     ) as List<dynamic>;
     List<TokenModel> newData = [];
     if (tokensBalancesJsonArray.isNotEmpty) {
-      newData = tokensBalancesJsonArray
-          .map(
-            (dynamic json) => TokenModel.fromJson(json as Map<String, dynamic>),
-          )
-          .toList();
+      newData = tokensBalancesJsonArray.map(
+        (dynamic json) {
+          final token = TokenModel.fromJson(json as Map<String, dynamic>);
+          return token.copyWith(
+            decimalsToShow: token.calculatedBalanceInDouble < 0 ? 5 : 2,
+          );
+        },
+      ).toList();
     }
 
     if (offset == 0) {
@@ -350,7 +355,7 @@ class TokensCubit extends Cubit<TokensState> {
         },
       ) as Map<String, dynamic>;
 
-      return TokenModel(
+      final token = TokenModel(
         contractAddress: '',
         name: ethereumNetwork.mainTokenName,
         symbol: ethereumNetwork.mainTokenSymbol,
@@ -359,6 +364,9 @@ class TokensCubit extends Cubit<TokensState> {
         decimals: ethereumNetwork.mainTokenDecimal,
         standard: 'ERC20',
         decimalsToShow: 5,
+      );
+      return token.copyWith(
+        decimalsToShow: token.calculatedBalanceInDouble < 0 ? 5 : 2,
       );
     } catch (e, s) {
       getLogger(toString()).e('error: $e, stack: $s');
@@ -392,6 +400,7 @@ class TokensCubit extends Cubit<TokensState> {
       return token.copyWith(
         tokenUSDPrice: xtzUSDPrice,
         balanceInUSD: token.calculatedBalanceInDouble * xtzUSDPrice,
+        decimalsToShow: token.calculatedBalanceInDouble < 0 ? 5 : 2,
       );
     } catch (e, s) {
       getLogger(toString()).e('unable to get usd balance of XTZ, e: $e, s: $s');
