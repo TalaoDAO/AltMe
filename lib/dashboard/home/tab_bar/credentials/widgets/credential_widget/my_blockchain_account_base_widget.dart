@@ -62,13 +62,16 @@ class MyBlockchainAccountBaseWidget extends StatelessWidget {
               child: FractionallySizedBox(
                 widthFactor: 0.88,
                 heightFactor: 0.26,
-                child: MyText(
-                  walletAddress,
-                  style: Theme.of(context).textTheme.subMessage.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                  minFontSize: 8,
-                  maxLines: 2,
+                child: Container(
+                  alignment: Alignment.bottomLeft,
+                  child: MyText(
+                    walletAddress,
+                    style: Theme.of(context).textTheme.subMessage.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                    minFontSize: 8,
+                    maxLines: 2,
+                  ),
                 ),
               ),
             ),
