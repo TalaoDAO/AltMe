@@ -6,7 +6,10 @@ class ContactUsPage extends StatelessWidget {
   const ContactUsPage({super.key});
 
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => const ContactUsPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => const ContactUsPage(),
+      settings: const RouteSettings(name: '/ContactUsPage'),
+    );
   }
 
   @override

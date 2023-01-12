@@ -46,6 +46,12 @@ class HelpCenterView extends StatelessWidget {
                   height: Sizes.spaceSmall,
                 ),
                 DrawerItem(
+                  title: l10n.faqs,
+                  onTap: () {
+                    Navigator.of(context).push<void>(FAQsPage.route());
+                  },
+                ),
+                DrawerItem(
                   title: '${l10n.contactUs} : ${AltMeStrings.appSupportMail}',
                   onTap: () {
                     Navigator.of(context).push<void>(ContactUsPage.route());
