@@ -20,9 +20,7 @@ class BinanceAssociatedAddressWidget extends StatelessWidget {
     return MyBlockchainAccountBaseWidget(
       image: IconStrings.binance,
       name: l10n.binanceNetwork,
-      walletAddress: associatedAddress.associatedAddress?.isEmpty == true
-          ? ''
-          : associatedAddress.associatedAddress.toString(),
+      walletAddress: associatedAddress.associatedAddress ?? '',
     );
   }
 }

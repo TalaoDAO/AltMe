@@ -3,27 +3,30 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class MyBlockchainAccountBaseWidget extends StatelessWidget {
-  const MyBlockchainAccountBaseWidget({
+class PooAddressBaseWidget extends StatelessWidget {
+  const PooAddressBaseWidget({
     Key? key,
     required this.name,
     required this.walletAddress,
     required this.image,
+    required this.issuerName,
+    required this.issuedOn,
   }) : super(key: key);
 
   final String name;
   final String walletAddress;
   final String image;
+  final String issuerName;
+  final String issuedOn;
 
   @override
   Widget build(BuildContext context) {
     return CredentialImage(
-      image: ImageStrings.myAccountCard,
+      image: ImageStrings.pooAccountCard,
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
-          delegate:
-              MyBlockchainAccountBaseWidgetDelegate(position: Offset.zero),
+          delegate: PooAddressBaseWidgetDelegate(position: Offset.zero),
           children: [
             LayoutId(
               id: 'name',
@@ -63,7 +66,7 @@ class MyBlockchainAccountBaseWidget extends StatelessWidget {
                 widthFactor: 0.88,
                 heightFactor: 0.26,
                 child: Container(
-                  alignment: Alignment.bottomLeft,
+                  alignment: Alignment.centerLeft,
                   child: MyText(
                     walletAddress,
                     style: Theme.of(context).textTheme.subMessage.copyWith(
@@ -75,6 +78,36 @@ class MyBlockchainAccountBaseWidget extends StatelessWidget {
                 ),
               ),
             ),
+            LayoutId(
+              id: 'issuerName',
+              child: FractionallySizedBox(
+                widthFactor: 0.5,
+                heightFactor: 0.1,
+                child: Container(
+                  alignment: Alignment.bottomLeft,
+                  child: MyText(
+                    issuerName,
+                    style: Theme.of(context).textTheme.proofCardDetail,
+                    minFontSize: 8,
+                  ),
+                ),
+              ),
+            ),
+            LayoutId(
+              id: 'issuedOn',
+              child: FractionallySizedBox(
+                widthFactor: 0.5,
+                heightFactor: 0.1,
+                child: Container(
+                  alignment: Alignment.bottomLeft,
+                  child: MyText(
+                    issuedOn,
+                    style: Theme.of(context).textTheme.proofCardDetail,
+                    minFontSize: 8,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -82,8 +115,8 @@ class MyBlockchainAccountBaseWidget extends StatelessWidget {
   }
 }
 
-class MyBlockchainAccountBaseWidgetDelegate extends MultiChildLayoutDelegate {
-  MyBlockchainAccountBaseWidgetDelegate({this.position = Offset.zero});
+class PooAddressBaseWidgetDelegate extends MultiChildLayoutDelegate {
+  PooAddressBaseWidgetDelegate({this.position = Offset.zero});
 
   final Offset position;
 
@@ -117,13 +150,29 @@ class MyBlockchainAccountBaseWidgetDelegate extends MultiChildLayoutDelegate {
       layoutChild('walletAddress', BoxConstraints.loose(size));
       positionChild(
         'walletAddress',
-        Offset(size.width * 0.06, size.height * 0.70),
+        Offset(size.width * 0.06, size.height * 0.41),
+      );
+    }
+
+    if (hasChild('issuerName')) {
+      layoutChild('issuerName', BoxConstraints.loose(size));
+      positionChild(
+        'issuerName',
+        Offset(size.width * 0.065, size.height * 0.82),
+      );
+    }
+
+    if (hasChild('issuedOn')) {
+      layoutChild('issuedOn', BoxConstraints.loose(size));
+      positionChild(
+        'issuedOn',
+        Offset(size.width * 0.46, size.height * 0.82),
       );
     }
   }
 
   @override
-  bool shouldRelayout(MyBlockchainAccountBaseWidgetDelegate oldDelegate) {
+  bool shouldRelayout(PooAddressBaseWidgetDelegate oldDelegate) {
     return oldDelegate.position != position;
   }
 }
