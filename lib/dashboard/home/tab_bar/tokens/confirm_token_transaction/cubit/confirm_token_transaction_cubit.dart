@@ -19,11 +19,39 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   ConfirmTokenTransactionCubit({
     required ConfirmTokenTransactionState initialState,
     required this.manageNetworkCubit,
+    required this.client,
   }) : super(initialState);
 
   final ManageNetworkCubit manageNetworkCubit;
+  final DioClient client;
 
   final logger = getLogger('ConfirmWithdrawal');
+
+  Future<double?> getXtzUSDPrice() async {
+    try {
+      final responseOfXTZUsdPrice = await client
+          .get('${Urls.tezToolBase}/v1/xtz-price') as Map<String, dynamic>;
+      final xtzUSDPrice = responseOfXTZUsdPrice['price'] as double;
+      return xtzUSDPrice;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<double?> getEthUSDPrice() async {
+    try {
+      final dynamic response = await client.get(
+        '${Urls.cryptoCompareBaseUrl}/data/price?fsym=ETH&tsyms=USD',
+      );
+      if (response['USD'] != null) {
+        final tokenUSDPrice = response['USD'] as double;
+        return tokenUSDPrice;
+      }
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
 
   Future<void> calculateFee() async {
     emit(state.loading());
@@ -31,20 +59,16 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       if (manageNetworkCubit.state.network is TezosNetwork) {
         final tezosNetworkFees = NetworkFeeModel.tezosNetworkFees();
         final networkFee = tezosNetworkFees[1];
-        final double feeInUSD = state.selectedToken.symbol == 'XTZ'
-            ? state.selectedToken.tokenUSDPrice * networkFee.fee
-            : 0;
+        final XtzUSDPrice = (await getXtzUSDPrice()) ?? 0;
         emit(
           state.copyWith(
             networkFee: networkFee.copyWith(
-              feeInUSD: feeInUSD,
+              feeInUSD: XtzUSDPrice * networkFee.fee,
             ),
             networkFees: tezosNetworkFees
                 .map(
                   (e) => e.copyWith(
-                    feeInUSD: state.selectedToken.symbol == 'XTZ'
-                        ? state.selectedToken.tokenUSDPrice * e.fee
-                        : 0,
+                    feeInUSD: XtzUSDPrice * e.fee,
                   ),
                 )
                 .toList(),
@@ -60,12 +84,10 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
         final web3RpcURL = selectedEthereumNetwork.rpcNodeUrl;
 
-        final amount = int.parse(
-          state.tokenAmount
-              .toStringAsFixed(int.parse(state.selectedToken.decimals))
-              .replaceAll(',', '')
-              .replaceAll('.', ''),
-        );
+        final amount = state.tokenAmount
+            .toStringAsFixed(int.parse(state.selectedToken.decimals))
+            .replaceAll(',', '')
+            .replaceAll('.', '');
 
         final credentials =
             EthPrivateKey.fromHex(state.selectedAccountSecretKey);
@@ -76,13 +98,16 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           web3RpcURL: web3RpcURL,
           sender: sender,
           reciever: reciever,
-          amount: EtherAmount.inWei(BigInt.from(amount)),
+          amount: EtherAmount.inWei(
+            state.selectedToken.symbol == 'ETH'
+                ? BigInt.from(double.parse(amount))
+                : BigInt.zero,
+          ),
         );
 
         final fee = EtherAmount.inWei(maxGas).getValueInUnit(EtherUnit.ether);
-        final double feeInUSD = state.selectedToken.symbol == 'ETH'
-            ? state.selectedToken.tokenUSDPrice * fee
-            : 0;
+        final etherUSDPrice = (await getEthUSDPrice()) ?? 0;
+        final double feeInUSD = etherUSDPrice * fee;
         final networkFee = NetworkFeeModel(
           fee: fee,
           networkSpeed: NetworkSpeed.average,
@@ -100,8 +125,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           ),
         );
       }
-    } catch (e, _) {
-      logger.i('error: $e');
+    } catch (e, s) {
+      logger.i('error: $e , stack: $s');
       emit(state.copyWith(status: AppStatus.init));
     }
   }
@@ -241,10 +266,13 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         token: state.selectedToken,
       );
     } else if (manageNetworkCubit.state.network is EthereumNetwork) {
+      final selectedEthereumNetwork =
+          manageNetworkCubit.state.network as EthereumNetwork;
       await _sendContractInvocationOperationEthereum(
         tokenAmount: state.totalAmount,
         selectedAccountSecretKey: state.selectedAccountSecretKey,
         token: state.selectedToken,
+        chainId: selectedEthereumNetwork.chainId,
       );
     } else {
       throw Exception('Not Implemented !');
@@ -359,6 +387,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     required double tokenAmount,
     required String selectedAccountSecretKey,
     required TokenModel token,
+    required int chainId,
   }) async {
     try {
       if (token.symbol == 'ETH') {
@@ -374,75 +403,32 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
 
-      final amount = (tokenAmount *
-              double.parse(
-                1
-                    .toStringAsFixed(int.parse(token.decimals))
-                    .replaceAll('.', ''),
-              ))
-          .toInt();
+      final amount = tokenAmount *
+          double.parse(
+            1.toStringAsFixed(int.parse(token.decimals)).replaceAll('.', ''),
+          );
 
-      final client = Web3Client(rpcUrl, Client());
-      final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
-      final ownAddress = await credentials.extractAddress();
-
-      // read the contract abi and tell web3dart where
-      // it's deployed (contractAddr)
-      final abiCode = await rootBundle.loadString('assets/abi/erc20.abi.json');
-      final contractAddress = EthereumAddress.fromHex(token.contractAddress);
-      final contract = DeployedContract(
-        ContractAbi.fromJson(abiCode, 'ERC20'),
-        contractAddress,
+      final txId = await MWeb3Client.sendToken(
+        amountInWei: amount,
+        rpcUrl: rpcUrl,
+        withdrawalAddress: state.withdrawalAddress,
+        token: token,
+        selectedAccountSecretKey: selectedAccountSecretKey,
+        chainId: chainId,
       );
 
-      // extracting some functions and events that we'll need later
-      final transferEvent = contract.event('Transfer');
-      final balanceFunction = contract.function('getBalance');
-      final sendFunction = contract.function('sendCoin');
-
-      // listen for the Transfer event when it's emitted by the contract above
-      final subscription = client
-          .events(
-            FilterOptions.events(contract: contract, event: transferEvent),
-          )
-          .take(1)
-          .listen((event) {
-        final decoded =
-            transferEvent.decodeResults(event.topics ?? [], event.data ?? '');
-
-        final from = decoded[0] as EthereumAddress;
-        final to = decoded[1] as EthereumAddress;
-        final value = decoded[2] as BigInt;
-
-        getLogger(toString()).i('$from sent $value ${token.name} to $to');
-      });
-
-      // check our balance in MetaCoins by calling the appropriate function
-      final balance = await client.call(
-        contract: contract,
-        function: balanceFunction,
-        params: <dynamic>[ownAddress],
-      );
-      getLogger(toString()).i('We have ${balance.first} ${token.name}');
-
-      final EthereumAddress receiver =
-          EthereumAddress.fromHex(state.withdrawalAddress);
-
-      await client.sendTransaction(
-        credentials,
-        Transaction.callContract(
-          contract: contract,
-          function: sendFunction,
-          parameters: <dynamic>[receiver, amount],
-        ),
-      );
-
-      await subscription.asFuture<FilterEvent>();
-      await subscription.cancel();
-
-      await client.dispose();
-
-      emit(state.success());
+      if (txId != null) {
+        emit(state.copyWith(status: AppStatus.success, transactionHash: txId));
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
+      }
     } catch (e, s) {
       emit(
         state.error(

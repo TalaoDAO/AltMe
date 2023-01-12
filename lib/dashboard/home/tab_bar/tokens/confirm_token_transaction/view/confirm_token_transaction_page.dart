@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,6 +43,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
     return BlocProvider<ConfirmTokenTransactionCubit>(
       create: (_) => ConfirmTokenTransactionCubit(
         manageNetworkCubit: context.read<ManageNetworkCubit>(),
+        client: DioClient('', Dio()),
         initialState: ConfirmTokenTransactionState(
           withdrawalAddress: withdrawalAddress,
           tokenAmount: amount,
