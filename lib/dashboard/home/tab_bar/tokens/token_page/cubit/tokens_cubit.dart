@@ -166,28 +166,20 @@ class TokensCubit extends Cubit<TokensState> {
     for (int i = 0; i < data.length; i++) {
       try {
         final token = data[i];
-        if (token.symbol == 'USDT') {
+        final dynamic response = await client.get(
+          '${Urls.cryptoCompareBaseUrl}/data/price?fsym=${token.symbol}&tsyms=USD',
+        );
+        if (response['USD'] != null) {
+          final tokenUSDPrice = response['USD'] as num;
           data[i] = token.copyWith(
-            tokenUSDPrice: token.calculatedBalanceInDouble,
-            balanceInUSD: token.calculatedBalanceInDouble,
+            tokenUSDPrice: tokenUSDPrice.toDouble(),
+            balanceInUSD: tokenUSDPrice * token.calculatedBalanceInDouble,
             decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
           );
         } else {
-          final dynamic response = await client.get(
-            '${Urls.cryptoCompareBaseUrl}/data/price?fsym=${token.symbol}&tsyms=USD',
+          data[i] = token.copyWith(
+            decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
           );
-          if (response['USD'] != null) {
-            final tokenUSDPrice = response['USD'] as num;
-            data[i] = token.copyWith(
-              tokenUSDPrice: tokenUSDPrice.toDouble(),
-              balanceInUSD: tokenUSDPrice * token.calculatedBalanceInDouble,
-              decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
-            );
-          } else {
-            data[i] = token.copyWith(
-              decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
-            );
-          }
         }
       } catch (e, s) {
         getLogger(toString()).e(
