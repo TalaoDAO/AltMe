@@ -13,6 +13,7 @@ class TokenModel extends Equatable {
     required this.contractAddress,
     required this.name,
     required this.symbol,
+    required this.decimalsToShow,
     this.icon,
     this.thumbnailUri,
     required this.balance,
@@ -21,7 +22,6 @@ class TokenModel extends Equatable {
     this.balanceInUSD = 0,
     this.standard,
     this.tokenId = '0',
-    this.decimalsToShow = 2,
   });
 
   factory TokenModel.fromJson(Map<String, dynamic> json) =>

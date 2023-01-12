@@ -135,7 +135,7 @@ class TokensCubit extends Cubit<TokensState> {
           final icon = (json['logo'] == null && json['symbol'] == 'TALAO')
               ? IconStrings.talaoIcon
               : json['logo'] as String?;
-          final token = TokenModel(
+          return TokenModel(
             contractAddress: json['token_address'] as String,
             name: (json['name'] as String?) ?? '',
             symbol: (json['symbol'] as String?) ?? '',
@@ -144,9 +144,6 @@ class TokensCubit extends Cubit<TokensState> {
             thumbnailUri: json['thumbnail'] as String?,
             icon: icon,
             decimalsToShow: 2,
-          );
-          return token.copyWith(
-            decimalsToShow: token.calculatedBalanceInDouble < 0 ? 5 : 2,
           );
         },
       ).toList();
@@ -177,6 +174,7 @@ class TokensCubit extends Cubit<TokensState> {
           data[i] = token.copyWith(
             tokenUSDPrice: tokenUSDPrice.toDouble(),
             balanceInUSD: tokenUSDPrice * token.calculatedBalanceInDouble,
+            decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
           );
         }
       } catch (e, s) {
@@ -276,6 +274,7 @@ class TokensCubit extends Cubit<TokensState> {
                 icon: e.thumbnailUri,
                 decimals: e.decimals.toString(),
                 standard: e.type,
+                decimalsToShow: 2,
               ),
             ),
       );
@@ -297,6 +296,7 @@ class TokensCubit extends Cubit<TokensState> {
               icon: token.icon ?? contract.iconUrl,
               tokenUSDPrice: contract.usdValue,
               balanceInUSD: token.calculatedBalanceInDouble * contract.usdValue,
+              decimalsToShow: token.calculatedBalanceInDouble < 0.0 ? 5 : 2,
             );
           } else {
             getLogger(toString()).i(
@@ -355,7 +355,7 @@ class TokensCubit extends Cubit<TokensState> {
         },
       ) as Map<String, dynamic>;
 
-      final token = TokenModel(
+      return TokenModel(
         contractAddress: '',
         name: ethereumNetwork.mainTokenName,
         symbol: ethereumNetwork.mainTokenSymbol,
@@ -364,9 +364,6 @@ class TokensCubit extends Cubit<TokensState> {
         decimals: ethereumNetwork.mainTokenDecimal,
         standard: 'ERC20',
         decimalsToShow: 5,
-      );
-      return token.copyWith(
-        decimalsToShow: token.calculatedBalanceInDouble < 0 ? 5 : 2,
       );
     } catch (e, s) {
       getLogger(toString()).e('error: $e, stack: $s');
@@ -389,6 +386,7 @@ class TokensCubit extends Cubit<TokensState> {
       balance: balance.toString(),
       decimals: '6',
       standard: 'fa1.2',
+      decimalsToShow: 2,
     );
 
     try {

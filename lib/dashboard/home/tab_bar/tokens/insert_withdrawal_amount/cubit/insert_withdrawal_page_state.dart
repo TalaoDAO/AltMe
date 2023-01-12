@@ -11,6 +11,7 @@ class InsertWithdrawalPageState extends Equatable {
       balance: '00000000',
       decimals: '6',
       standard: 'fa1.2',
+      decimalsToShow: 2,
     ),
     this.amount = 0.0,
     this.isValidWithdrawal = false,

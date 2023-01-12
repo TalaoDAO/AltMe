@@ -59,6 +59,7 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
         standard: 'fa1.2',
         tokenUSDPrice: xtzUSDPrice,
         balanceInUSD: formattedBalance * xtzUSDPrice,
+        decimalsToShow: 2,
       );
 
       emit(
