@@ -943,4 +943,16 @@ extension CustomTextTheme on TextTheme {
         fontSize: 11,
         fontWeight: FontWeight.w600,
       );
+
+  TextStyle get faqQue => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+      );
+
+  TextStyle get faqAns => GoogleFonts.roboto(
+        color: const Color(0xFF757575),
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+      );
 }
