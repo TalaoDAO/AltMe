@@ -38,7 +38,7 @@ class TokensCubit extends Cubit<TokensState> {
 
   Future<void> fetchFromZero() async {
     _offsetOfLoadedData = -1;
-    emit(state.copyWith(offset: 0,totalBalanceInUSD: 0));
+    emit(state.copyWith(offset: 0, totalBalanceInUSD: 0));
     await getTokens();
   }
 
@@ -170,11 +170,15 @@ class TokensCubit extends Cubit<TokensState> {
           '${Urls.cryptoCompareBaseUrl}/data/price?fsym=${token.symbol}&tsyms=USD',
         );
         if (response['USD'] != null) {
-          final tokenUSDPrice = response['USD'] as double;
+          final tokenUSDPrice = response['USD'] as num;
           data[i] = token.copyWith(
-            tokenUSDPrice: tokenUSDPrice,
+            tokenUSDPrice: tokenUSDPrice.toDouble(),
             balanceInUSD: tokenUSDPrice * token.calculatedBalanceInDouble,
-            decimalsToShow: tokenUSDPrice > 500 ? 5 : 2,
+            decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
+          );
+        } else {
+          data[i] = token.copyWith(
+            decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
           );
         }
       } catch (e, s) {
@@ -220,11 +224,14 @@ class TokensCubit extends Cubit<TokensState> {
     ) as List<dynamic>;
     List<TokenModel> newData = [];
     if (tokensBalancesJsonArray.isNotEmpty) {
-      newData = tokensBalancesJsonArray
-          .map(
-            (dynamic json) => TokenModel.fromJson(json as Map<String, dynamic>),
-          )
-          .toList();
+      newData = tokensBalancesJsonArray.map(
+        (dynamic json) {
+          final token = TokenModel.fromJson(json as Map<String, dynamic>);
+          return token.copyWith(
+            decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
+          );
+        },
+      ).toList();
     }
 
     if (offset == 0) {
@@ -271,6 +278,7 @@ class TokensCubit extends Cubit<TokensState> {
                 icon: e.thumbnailUri,
                 decimals: e.decimals.toString(),
                 standard: e.type,
+                decimalsToShow: 2,
               ),
             ),
       );
@@ -292,6 +300,7 @@ class TokensCubit extends Cubit<TokensState> {
               icon: token.icon ?? contract.iconUrl,
               tokenUSDPrice: contract.usdValue,
               balanceInUSD: token.calculatedBalanceInDouble * contract.usdValue,
+              decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
             );
           } else {
             getLogger(toString()).i(
@@ -381,6 +390,7 @@ class TokensCubit extends Cubit<TokensState> {
       balance: balance.toString(),
       decimals: '6',
       standard: 'fa1.2',
+      decimalsToShow: 2,
     );
 
     try {
@@ -392,6 +402,7 @@ class TokensCubit extends Cubit<TokensState> {
       return token.copyWith(
         tokenUSDPrice: xtzUSDPrice,
         balanceInUSD: token.calculatedBalanceInDouble * xtzUSDPrice,
+        decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
       );
     } catch (e, s) {
       getLogger(toString()).e('unable to get usd balance of XTZ, e: $e, s: $s');

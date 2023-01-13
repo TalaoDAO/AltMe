@@ -60,9 +60,6 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.gender:
         return GenderWidget(credentialModel: credentialModel);
 
-      case CredentialSubjectType.tezosAssociatedWallet:
-        return TezosAssociatedAddressWidget(credentialModel: credentialModel);
-
       case CredentialSubjectType.certificateOfEmployment:
         switch (credDisplayType) {
           case CredDisplayType.List:
@@ -264,13 +261,19 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.aragoOver18:
         return AragoOver18Widget(credentialModel: credentialModel);
 
+      case CredentialSubjectType.pcdsAgentCertificate:
+        return PcdsAgentCertificateWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.twitterCard:
+        return TwitterCardWidget(credentialModel: credentialModel);
+
       case CredentialSubjectType.ethereumAssociatedWallet:
         return EthereumAssociatedAddressWidget(
           credentialModel: credentialModel,
         );
 
-      case CredentialSubjectType.pcdsAgentCertificate:
-        return PcdsAgentCertificateWidget(credentialModel: credentialModel);
+      case CredentialSubjectType.tezosAssociatedWallet:
+        return TezosAssociatedAddressWidget(credentialModel: credentialModel);
 
       case CredentialSubjectType.fantomAssociatedWallet:
         return FantomAssociatedAddressWidget(credentialModel: credentialModel);
@@ -281,8 +284,22 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.binanceAssociatedWallet:
         return BinanceAssociatedAddressWidget(credentialModel: credentialModel);
 
-      case CredentialSubjectType.twitterCard:
-        return TwitterCardWidget(credentialModel: credentialModel);
+      case CredentialSubjectType.ethereumPooAddress:
+        return EthereumPooAddressWidget(
+          credentialModel: credentialModel,
+        );
+
+      case CredentialSubjectType.tezosPooAddress:
+        return TezosPooAddressWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.fantomPooAddress:
+        return FantomPooAddressWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.polygonPooAddress:
+        return PolygonPooAddressWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.binancePooAddress:
+        return BinancePooAddressWidget(credentialModel: credentialModel);
     }
   }
 }

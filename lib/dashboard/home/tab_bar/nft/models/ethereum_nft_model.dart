@@ -45,6 +45,7 @@ class EthereumNftModel extends NftModel {
       standard: type,
       decimals: '0',
       tokenId: tokenId,
+      decimalsToShow: 0,
     );
   }
 

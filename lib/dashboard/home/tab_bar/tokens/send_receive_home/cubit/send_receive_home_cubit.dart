@@ -195,13 +195,15 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
         );
         operations = result.map(
           (dynamic e) {
-            final amount = (e['amount'] is String)
-                ? int.parse(e['amount'] as String)
-                : (e['amount'] is List<String>)
-                    ? int.parse((e['amount'] as List<String>)[0])
-                    : (e['amount'] is int)
-                        ? e['amount'] as int
-                        : 0;
+            final amount = (e['value'] is String)
+                ? e['value'] as String
+                : (e['amount'] is String)
+                    ? e['amount'] as String
+                    : (e['amount'] is List<String>)
+                        ? (e['amount'] as List<String>)[0]
+                        : (e['amount'] is int)
+                            ? (e['amount'] as int).toString()
+                            : 0.toString();
             return OperationModel(
               type: '',
               id: -1,
@@ -259,7 +261,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
                 allocationFee: 0,
                 target:
                     OperationAddressModel(address: e['to_address'] as String),
-                amount: int.parse(e['value'] as String),
+                amount: e['value'] as String,
                 status: (e['receipt_status'] as String) == '1'
                     ? 'applied'
                     : 'failed',

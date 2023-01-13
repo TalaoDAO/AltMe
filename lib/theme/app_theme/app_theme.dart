@@ -986,4 +986,10 @@ extension CustomTextTheme on TextTheme {
         fontSize: 14,
         fontWeight: FontWeight.w400,
       );
+
+  TextStyle get proofCardDetail => GoogleFonts.roboto(
+        fontSize: 12,
+        fontWeight: FontWeight.w300,
+        color: const Color(0xffFFFFFF),
+      );
 }

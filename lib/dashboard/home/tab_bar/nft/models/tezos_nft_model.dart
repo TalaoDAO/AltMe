@@ -57,6 +57,7 @@ class TezosNftModel extends NftModel {
       standard: standard ?? 'fa2',
       decimals: '0',
       tokenId: tokenId,
+      decimalsToShow: 0,
     );
   }
 

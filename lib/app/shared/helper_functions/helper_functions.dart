@@ -6,6 +6,7 @@ import 'package:altme/dashboard/home/home.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:json_path/json_path.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -93,6 +94,9 @@ String char2Bytes(String text) {
 
 Future<bool> isConnected() async {
   final log = getLogger('Check Internet Connection');
+  if (!(await DeviceInfoPlugin().iosInfo).isPhysicalDevice) {
+    return true;
+  }
   final connectivityResult = await Connectivity().checkConnectivity();
   if (connectivityResult == ConnectivityResult.mobile ||
       connectivityResult == ConnectivityResult.wifi) {

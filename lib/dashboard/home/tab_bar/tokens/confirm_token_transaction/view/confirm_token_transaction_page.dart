@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,8 +43,15 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
     return BlocProvider<ConfirmTokenTransactionCubit>(
       create: (_) => ConfirmTokenTransactionCubit(
         manageNetworkCubit: context.read<ManageNetworkCubit>(),
-        initialState:
-            ConfirmTokenTransactionState(withdrawalAddress: withdrawalAddress),
+        client: DioClient('', Dio()),
+        initialState: ConfirmTokenTransactionState(
+          withdrawalAddress: withdrawalAddress,
+          tokenAmount: amount,
+          totalAmount: amount,
+          selectedToken: selectedToken,
+          selectedAccountSecretKey:
+              context.read<WalletCubit>().state.currentAccount.secretKey,
+        ),
       ),
       child: ConfirmWithdrawalView(
         selectedToken: selectedToken,
@@ -77,9 +85,6 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
   late final TextEditingController withdrawalAddressController =
       TextEditingController(text: widget.withdrawalAddress);
 
-  late final amountAndSymbol =
-      '''${widget.isNFT ? widget.amount.toInt() : widget.amount.toStringAsFixed(6).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
-
   @override
   void initState() {
     withdrawalAddressController.addListener(() {
@@ -87,6 +92,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
             withdrawalAddress: withdrawalAddressController.text,
           );
     });
+    Future.microtask(context.read<ConfirmTokenTransactionCubit>().calculateFee);
     super.initState();
   }
 
@@ -116,6 +122,8 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
           // );
         }
         if (state.status == AppStatus.success) {
+          final amountAndSymbol =
+              '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(6).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
           TransactionDoneDialog.show(
             context: context,
             amountAndSymbol: amountAndSymbol,
@@ -142,6 +150,8 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
         }
       },
       builder: (context, state) {
+        final amountAndSymbol =
+            '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(6).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
         return BasePage(
           scrollView: false,
           title: l10n.confirm,
@@ -191,16 +201,19 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     ),
                   ),
                   ConfirmTransactionDetailsCard(
-                    amount: widget.amount,
-                    symbol: widget.selectedToken.symbol,
+                    amount: state.tokenAmount,
+                    symbol: state.selectedToken.symbol,
+                    grandTotal: state.totalAmount,
                     tokenUSDRate: widget.selectedToken.tokenUSDPrice,
                     networkFee: state.networkFee,
                     isNFT: widget.isNFT,
+                    networkFees: state.networkFees,
                     onEditButtonPressed: () async {
                       final NetworkFeeModel? networkFeeModel =
                           await SelectNetworkFeeBottomSheet.show(
                         context: context,
-                        selectedNetworkFee: state.networkFee,
+                        selectedNetworkFee: state.networkFee!,
+                        networkFeeList: state.networkFees ?? [],
                       );
 
                       if (networkFeeModel != null) {
@@ -231,25 +244,13 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                           selectedToken: widget.selectedToken,
                         )
                     ? () {
-                        ///send to this account for test :
-                        ///tz1Z5ad29RQnbn6bcN8E9YTz3djnqhTSgStf
-                        ///this is EmptyAcc1
                         Navigator.of(context).push<void>(
                           PinCodePage.route(
                             restrictToBack: false,
                             isValidCallback: () {
-                              final walletState =
-                                  context.read<WalletCubit>().state;
                               context
                                   .read<ConfirmTokenTransactionCubit>()
-                                  .sendContractInvocationOperation(
-                                    token: widget.selectedToken,
-                                    tokenAmount: widget.amount,
-                                    selectedAccountSecretKey: walletState
-                                        .cryptoAccount
-                                        .data[walletState.currentCryptoIndex]
-                                        .secretKey,
-                                  );
+                                  .sendContractInvocationOperation();
                             },
                           ),
                         );

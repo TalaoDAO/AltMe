@@ -102,6 +102,11 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.fantomAssociatedWallet:
         case CredentialSubjectType.polygonAssociatedWallet:
         case CredentialSubjectType.binanceAssociatedWallet:
+        case CredentialSubjectType.tezosPooAddress:
+        case CredentialSubjectType.ethereumPooAddress:
+        case CredentialSubjectType.fantomPooAddress:
+        case CredentialSubjectType.polygonPooAddress:
+        case CredentialSubjectType.binancePooAddress:
           break;
       }
 
@@ -296,6 +301,11 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.fantomAssociatedWallet:
           case CredentialSubjectType.polygonAssociatedWallet:
           case CredentialSubjectType.binanceAssociatedWallet:
+          case CredentialSubjectType.tezosPooAddress:
+          case CredentialSubjectType.ethereumPooAddress:
+          case CredentialSubjectType.fantomPooAddress:
+          case CredentialSubjectType.polygonPooAddress:
+          case CredentialSubjectType.binancePooAddress:
             break;
         }
 
@@ -609,6 +619,11 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.polygonAssociatedWallet:
           case CredentialSubjectType.binanceAssociatedWallet:
           case CredentialSubjectType.linkedInCard:
+          case CredentialSubjectType.tezosPooAddress:
+          case CredentialSubjectType.ethereumPooAddress:
+          case CredentialSubjectType.fantomPooAddress:
+          case CredentialSubjectType.polygonPooAddress:
+          case CredentialSubjectType.binancePooAddress:
             break;
         }
 
