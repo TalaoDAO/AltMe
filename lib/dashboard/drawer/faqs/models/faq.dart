@@ -25,13 +25,15 @@ class FaqElement extends Equatable {
   const FaqElement({
     required this.que,
     required this.ans,
+    this.href,
   });
 
   factory FaqElement.fromJson(Map<String, dynamic> json) =>
       _$FaqElementFromJson(json);
 
   final String que;
-  final String ans;
+  final List<String> ans;
+  final String? href;
 
   Map<String, dynamic> toJson() => _$FaqElementToJson(this);
 
