@@ -243,7 +243,6 @@ class _SendReceiveHomePageView extends StatelessWidget {
                     if (state.status == AppStatus.success)
                       RecentTransactions(
                         decimal: int.parse(state.selectedToken.decimals),
-                        decimalToShow: state.selectedToken.decimalsToShow,
                         symbol: state.selectedToken.symbol,
                         tokenUsdPrice: state.selectedToken.tokenUSDPrice,
                         onRefresh: () async {

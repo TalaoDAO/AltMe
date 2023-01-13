@@ -152,20 +152,25 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
       };
     }
 
-    final result = await client.get(
-      '$baseUrl/v1/operations/transactions',
-      queryParameters: params,
-    ) as List<dynamic>;
+    try {
+      final result = await client.get(
+        '$baseUrl/v1/operations/transactions',
+        queryParameters: params,
+      ) as List<dynamic>;
 
-    final operations = result
-        .map(
-          (dynamic e) => OperationModel.fromJson(e as Map<String, dynamic>),
-        )
-        .toList();
-    operations.sort(
-      (a, b) => b.dateTime.compareTo(a.dateTime),
-    );
-    return operations;
+      final operations = result
+          .map(
+            (dynamic e) => OperationModel.fromJson(e as Map<String, dynamic>),
+          )
+          .toList();
+      operations.sort(
+        (a, b) => b.dateTime.compareTo(a.dateTime),
+      );
+      return operations;
+    } catch (e, s) {
+      getLogger(toString()).e('e: $e, s: $s');
+      return [];
+    }
   }
 
   Future<List<OperationModel>> _getEthereumOperations({

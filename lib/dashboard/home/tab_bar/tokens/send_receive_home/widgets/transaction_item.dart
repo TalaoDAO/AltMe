@@ -11,7 +11,6 @@ class TransactionItem extends StatelessWidget {
     Key? key,
     required this.operationModel,
     required this.decimal,
-    required this.decimalToShow,
     required this.symbol,
     this.tokenUsdPrice,
     this.onTap,
@@ -21,7 +20,6 @@ class TransactionItem extends StatelessWidget {
   final int decimal;
   final double? tokenUsdPrice;
   final String symbol;
-  final int decimalToShow;
   final VoidCallback? onTap;
 
   @override
@@ -124,7 +122,7 @@ class TransactionItem extends StatelessWidget {
               ),
               Expanded(
                 child: MyText(
-                  '${amount.toStringAsFixed(decimalToShow).formatNumber()} '
+                  '${amount.toStringAsFixed(amount < 1 ? 5 : 2).formatNumber()} '
                   '$symbol',
                   minFontSize: 8,
                   textAlign: TextAlign.end,

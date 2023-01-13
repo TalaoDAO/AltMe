@@ -386,11 +386,11 @@ class TokensCubit extends Cubit<TokensState> {
       contractAddress: '',
       name: 'Tezos',
       symbol: 'XTZ',
-      icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2011.png',
+      icon: IconStrings.tezos,
       balance: balance.toString(),
       decimals: '6',
       standard: 'fa1.2',
-      decimalsToShow: 2,
+      decimalsToShow: balance < 1 ? 5 : 2,
     );
 
     try {
