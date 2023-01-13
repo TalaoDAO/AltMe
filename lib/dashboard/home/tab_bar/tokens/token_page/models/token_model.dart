@@ -13,7 +13,7 @@ class TokenModel extends Equatable {
     required this.contractAddress,
     required this.name,
     required this.symbol,
-    required this.decimalsToShow,
+    this.decimalsToShow = 2,
     this.icon,
     this.thumbnailUri,
     required this.balance,
