@@ -89,13 +89,12 @@ class MWeb3Client {
         Transaction.callContract(
           contract: contract,
           function: sendFunction,
-          from: EthereumAddress.fromHex(token.contractAddress),
           gasPrice: gasPrice,
           parameters: <dynamic>[receiver, BigInt.from(amountInWei)],
         ),
       );
 
-      await subscription.asFuture<FilterEvent>();
+      await subscription.asFuture<dynamic>();
       await subscription.cancel();
 
       await client.dispose();
@@ -136,7 +135,7 @@ class MWeb3Client {
       final fee = gas * gasPrice.getInWei;
       log.i('gas * gasPrice.getInWei = $fee');
       return fee;
-    } catch (e,s) {
+    } catch (e, s) {
       log.e('e: $e, s: $s');
       final fee = BigInt.from(21000) * gasPrice.getInWei;
       log.i('2100 * gasPrice.getInWei = $fee');

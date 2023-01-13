@@ -5,8 +5,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/services.dart' hide MessageHandler;
-import 'package:http/http.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tezart/tezart.dart';
 import 'package:web3dart/web3dart.dart';
@@ -82,7 +81,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         final selectedEthereumNetwork =
             manageNetworkCubit.state.network as EthereumNetwork;
 
-        final web3RpcURL = selectedEthereumNetwork.rpcNodeUrl;
+        //final web3RpcURL = selectedEthereumNetwork.rpcNodeUrl;
+        await dotenv.load();
+        final web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
 
         final amount = state.tokenAmount
             .toStringAsFixed(int.parse(state.selectedToken.decimals))
@@ -401,7 +402,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       emit(state.loading());
 
-      final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+      //final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+      await dotenv.load();
+      final rpcUrl = dotenv.get('WEB3_RPC_MAINNET_URL');
 
       final amount = tokenAmount *
           double.parse(
