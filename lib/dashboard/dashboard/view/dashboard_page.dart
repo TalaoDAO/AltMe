@@ -271,12 +271,22 @@ class _DashboardViewState extends State<DashboardView> {
                                 onTap: () => bottomTapped(2),
                                 isSelected: state.selectedIndex == 2,
                               ),
-                              BottomBarItem(
-                                icon: IconStrings.cashInHand,
-                                text: l10n.buy,
-                                onTap: () => bottomTapped(3),
-                                isSelected: state.selectedIndex == 3,
-                              ),
+                              if (Parameters.hasCryptoCallToAction)
+                                BottomBarItem(
+                                  icon: IconStrings.cashInHand,
+                                  text: l10n.buy,
+                                  onTap: () => bottomTapped(3),
+                                  isSelected: state.selectedIndex == 3,
+                                )
+                              else
+                                BottomBarItem(
+                                  icon: IconStrings.settings,
+                                  text: l10n.settings,
+                                  onTap: () {
+                                    scaffoldKey.currentState!.openDrawer();
+                                  },
+                                  isSelected: state.selectedIndex == 3,
+                                ),
                             ],
                           ),
                         ),
