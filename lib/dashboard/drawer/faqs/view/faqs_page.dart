@@ -54,32 +54,28 @@ class FAQsView extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: ListView.builder(
-                        itemCount: faqElement.ans.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, i) => Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: TransparentInkWell(
-                            child: Text(
-                              faqElement.ans[i],
-                              style: faqElement.href != null
-                                  ? Theme.of(context).textTheme.faqAns.copyWith(
-                                        decoration: TextDecoration.underline,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .markDownA,
-                                      )
-                                  : Theme.of(context).textTheme.faqAns,
-                              textAlign: TextAlign.justify,
-                            ),
-                            onTap: () async {
-                              if (faqElement.href != null) {
-                                await LaunchUrl.launch(faqElement.href!);
-                              }
-                            },
+                      child: TransparentInkWell(
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            faqElement.ans,
+                            style: faqElement.href != null
+                                ? Theme.of(context).textTheme.faqAns.copyWith(
+                                      decoration: TextDecoration.underline,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .markDownA,
+                                    )
+                                : Theme.of(context).textTheme.faqAns,
+                            textAlign: TextAlign.justify,
                           ),
                         ),
+                        onTap: () async {
+                          if (faqElement.href != null) {
+                            await LaunchUrl.launch(faqElement.href!);
+                          }
+                        },
                       ),
                     ),
                   ],

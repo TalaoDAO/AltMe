@@ -32,7 +32,7 @@ class FaqElement extends Equatable {
       _$FaqElementFromJson(json);
 
   final String que;
-  final List<String> ans;
+  final String ans;
   final String? href;
 
   Map<String, dynamic> toJson() => _$FaqElementToJson(this);
