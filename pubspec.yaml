@@ -102,9 +102,9 @@ dependency_overrides:
   ffi: ^2.0.1
 
 dev_dependencies:
-  flutter_launcher_icons: "^0.11.0"
   bloc_test: ^9.0.3
   build_runner: ^2.1.10
+  flutter_launcher_icons: "^0.11.0"
   flutter_test:
     sdk: flutter
   http_mock_adapter: ^0.3.2
