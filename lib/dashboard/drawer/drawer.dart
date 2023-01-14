@@ -12,5 +12,6 @@ export 'manage_network/manage_network.dart';
 export 'recovery_credential/recovery_credential.dart';
 export 'recovery_key/recovery_key.dart';
 export 'secret_key/secret_key.dart';
+export 'sofware_licenses/software_licesnses.dart';
 export 'support/support.dart';
 export 'terms/terms.dart';
