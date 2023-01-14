@@ -26,11 +26,10 @@ class CredentialQrPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final String data = jsonEncode(credentialModel.credentialPreview);
+    final String data = jsonEncode(credentialModel.data);
 
     const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-    final String prettyprint =
-        encoder.convert(credentialModel.credentialPreview);
+    final String prettyprint = encoder.convert(credentialModel.data);
 
     return BasePage(
       title: credentialModel
