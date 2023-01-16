@@ -136,12 +136,12 @@ class _WertViewState extends State<WertView> {
           return BasePage(
             scrollView: false,
             body:
-                state.currentAccount.blockchainType == BlockchainType.fantom ||
-                        state.currentAccount.blockchainType ==
+                state.currentAccount!.blockchainType == BlockchainType.fantom ||
+                        state.currentAccount!.blockchainType ==
                             BlockchainType.binance
                     ? Center(
                         child: Text(
-                          state.currentAccount.blockchainType ==
+                          state.currentAccount!.blockchainType ==
                                   BlockchainType.binance
                               ? l10n.thisFeatureIsNotSupportedYetForBinance
                               : l10n.thisFeatureIsNotSupportedYetForFantom,

@@ -63,7 +63,7 @@ class BlockchainSettingsView extends StatelessWidget {
                             .read<WalletCubit>()
                             .state
                             .currentAccount
-                            .walletAddress,
+                            !.walletAddress,
                       ),
                     );
                   },

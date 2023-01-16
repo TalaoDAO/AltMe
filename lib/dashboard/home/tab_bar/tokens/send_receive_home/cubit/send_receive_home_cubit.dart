@@ -51,6 +51,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
       );
     } catch (e, s) {
       getLogger(runtimeType.toString()).e('error in init() e: $e, $s', e, s);
+      if (isClosed) return;
       emit(
         state.error(
           messageHandler: ResponseMessage(

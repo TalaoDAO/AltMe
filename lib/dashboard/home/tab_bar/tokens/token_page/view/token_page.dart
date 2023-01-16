@@ -151,8 +151,8 @@ class _TokensViewState extends State<TokensView> {
                   }
 
                   if (state.message != null &&
-                          state.status == AppStatus.error ||
-                      state.status == AppStatus.errorWhileFetching) {
+                      (state.status == AppStatus.error ||
+                          state.status == AppStatus.errorWhileFetching)) {
                     AlertMessage.showStateMessage(
                       context: context,
                       stateMessage: state.message!,

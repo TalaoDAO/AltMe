@@ -709,7 +709,7 @@ class WalletCubit extends Cubit<WalletState> {
         status: WalletStatus.reset,
         credentials: [],
         cryptoAccount: CryptoAccount(data: const []),
-        currentCryptoIndex: null,
+        currentCryptoIndex: 0,
       ),
     );
     emit(state.copyWith(status: WalletStatus.init));

@@ -151,6 +151,7 @@ class _SplashViewState extends State<SplashView> {
       listeners: [
         splashBlocListener,
         walletBlocListener,
+        walletBlocAccountChangeListener,
         scanBlocListener,
         qrCodeBlocListener,
         beaconBlocListener,

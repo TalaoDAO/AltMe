@@ -42,7 +42,7 @@ class _ChangeNetworkBottomSheetPageState
     return BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
       builder: (context, state) {
         final blockchainType =
-            context.read<WalletCubit>().state.currentAccount.blockchainType;
+            context.read<WalletCubit>().state.currentAccount!.blockchainType;
         final allNetworks = blockchainType.networks;
         return Container(
           decoration: BoxDecoration(

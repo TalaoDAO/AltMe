@@ -227,7 +227,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                                         .read<WalletCubit>()
                                         .state
                                         .currentAccount
-                                        .walletAddress,
+                                        !.walletAddress,
                                     item: state.selectedToken.symbol,
                                     description:
                                         l10n.sendOnlyToThisAddressDescription(

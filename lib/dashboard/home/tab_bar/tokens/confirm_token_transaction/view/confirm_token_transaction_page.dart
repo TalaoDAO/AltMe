@@ -50,7 +50,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
           totalAmount: amount,
           selectedToken: selectedToken,
           selectedAccountSecretKey:
-              context.read<WalletCubit>().state.currentAccount.secretKey,
+              context.read<WalletCubit>().state.currentAccount!.secretKey,
         ),
       ),
       child: ConfirmWithdrawalView(
