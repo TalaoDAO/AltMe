@@ -1,6 +1,6 @@
 name: altme
 description: AltMe Flutter App 
-version: 1.8.11+140
+version: 1.8.13+142
 publish_to: none
 
 environment:
@@ -130,7 +130,8 @@ flutter:
     - assets/notices/
     - assets/faq.json
 flutter_icons:
-  android: "launcher_icon"
+  android: "ic_launcher"
   ios: true
-  image_path: "assets/splash/altme.png"
+  remove_alpha_ios: true
+  image_path: "assets/launcher_icon.png"
   min_sdk_android: 21

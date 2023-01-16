@@ -22,7 +22,7 @@
 
     <application
         android:label="${appName}"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name="io.flutter.embedding.android.FlutterFragmentActivity"
             android:exported="true"
