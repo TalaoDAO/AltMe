@@ -65,9 +65,10 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
 
 final walletBlocAccountChangeListener = BlocListener<WalletCubit, WalletState>(
   listenWhen: (previous, current) {
-    if ((previous.currentCryptoIndex != current.currentCryptoIndex) ||
-        previous.currentAccount?.blockchainType !=
-            current.currentAccount?.blockchainType) {
+    if ((current.currentAccount?.blockchainType != null) &&
+        ((previous.currentCryptoIndex != current.currentCryptoIndex) ||
+            previous.currentAccount?.blockchainType !=
+                current.currentAccount?.blockchainType)) {
       return true;
     } else {
       return false;

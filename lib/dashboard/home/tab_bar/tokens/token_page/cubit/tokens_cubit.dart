@@ -18,9 +18,7 @@ class TokensCubit extends Cubit<TokensState> {
     required this.networkCubit,
     required this.allTokensCubit,
     required this.secureStorageProvider,
-  }) : super(const TokensState()) {
-    getTokens();
-  }
+  }) : super(const TokensState());
 
   final SecureStorageProvider secureStorageProvider;
   final DioClient client;
@@ -112,100 +110,90 @@ class TokensCubit extends Cubit<TokensState> {
       //because at this time pagination not supported for Ethereum tokens
       return;
     }
-    try {
-      await dotenv.load();
-      final moralisApiKey = dotenv.get('MORALIS_API_KEY');
+    await dotenv.load();
+    final moralisApiKey = dotenv.get('MORALIS_API_KEY');
 
-      final List<dynamic> tokensBalancesJsonArray = await client.get(
-        '${Urls.moralisBaseUrl}/$walletAddress/erc20',
-        queryParameters: <String, dynamic>{
-          'chain': ethereumNetwork.chain,
-        },
-        headers: <String, dynamic>{
-          'X-API-KEY': moralisApiKey,
-        },
-      ) as List<dynamic>;
-      List<TokenModel> newData = [];
-      if (tokensBalancesJsonArray.isNotEmpty) {
-        newData = tokensBalancesJsonArray.map(
-          (dynamic json) {
-            final icon = (json['logo'] == null && json['symbol'] == 'TALAO')
-                ? IconStrings.talaoIcon
-                : json['logo'] as String?;
-            return TokenModel(
-              contractAddress: json['token_address'] as String,
-              name: (json['name'] as String?) ?? '',
-              symbol: (json['symbol'] as String?) ?? '',
-              balance: (json['balance'] as String?) ?? '',
-              decimals: ((json['decimals'] as int?) ?? 0).toString(),
-              thumbnailUri: json['thumbnail'] as String?,
-              icon: icon,
-              decimalsToShow: 2,
-            );
-          },
-        ).toList();
-      }
-
-      if (offset == 0) {
-        final ethereumBaseToken = await _getBaseTokenBalanceOnEth(
-          walletAddress,
-          ethereumNetwork.chain,
-          ethereumNetwork,
-        );
-        if (ethereumBaseToken != null) {
-          newData.insert(0, ethereumBaseToken);
-        }
-        data = newData;
-      } else {
-        data.addAll(newData);
-      }
-
-      for (int i = 0; i < data.length; i++) {
-        try {
-          final token = data[i];
-          final dynamic response = await client.get(
-            '${Urls.cryptoCompareBaseUrl}/data/price?fsym=${token.symbol}&tsyms=USD',
+    final List<dynamic> tokensBalancesJsonArray = await client.get(
+      '${Urls.moralisBaseUrl}/$walletAddress/erc20',
+      queryParameters: <String, dynamic>{
+        'chain': ethereumNetwork.chain,
+      },
+      headers: <String, dynamic>{
+        'X-API-KEY': moralisApiKey,
+      },
+    ) as List<dynamic>;
+    List<TokenModel> newData = [];
+    if (tokensBalancesJsonArray.isNotEmpty) {
+      newData = tokensBalancesJsonArray.map(
+        (dynamic json) {
+          final icon = (json['logo'] == null && json['symbol'] == 'TALAO')
+              ? IconStrings.talaoIcon
+              : json['logo'] as String?;
+          return TokenModel(
+            contractAddress: json['token_address'] as String,
+            name: (json['name'] as String?) ?? '',
+            symbol: (json['symbol'] as String?) ?? '',
+            balance: (json['balance'] as String?) ?? '',
+            decimals: ((json['decimals'] as int?) ?? 0).toString(),
+            thumbnailUri: json['thumbnail'] as String?,
+            icon: icon,
+            decimalsToShow: 2,
           );
-          if (response['USD'] != null) {
-            final tokenUSDPrice = response['USD'] as num;
-            data[i] = token.copyWith(
-              tokenUSDPrice: tokenUSDPrice.toDouble(),
-              balanceInUSD: tokenUSDPrice * token.calculatedBalanceInDouble,
-              decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
-            );
-          } else {
-            data[i] = token.copyWith(
-              decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
-            );
-          }
-        } catch (e, s) {
-          getLogger(toString()).e(
-            'error in finding contract, error: $e, s: $s',
-          );
-        }
-      }
-      double totalBalanceInUSD = 0;
-      for (final tokenElement in data) {
-        totalBalanceInUSD += tokenElement.balanceInUSD;
-      }
-      data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
-
-      emit(
-        state.copyWith(
-          status: AppStatus.success,
-          data: data,
-          totalBalanceInUSD: totalBalanceInUSD,
-        ),
-      );
-    } catch (e, s) {
-      getLogger(toString()).e('e: $e, s: $s');
-      emit(
-        state.copyWith(
-          status: AppStatus.error,
-          data: [],
-        ),
-      );
+        },
+      ).toList();
     }
+
+    if (offset == 0) {
+      final ethereumBaseToken = await _getBaseTokenBalanceOnEth(
+        walletAddress,
+        ethereumNetwork.chain,
+        ethereumNetwork,
+      );
+      if (ethereumBaseToken != null) {
+        newData.insert(0, ethereumBaseToken);
+      }
+      data = newData;
+    } else {
+      data.addAll(newData);
+    }
+
+    for (int i = 0; i < data.length; i++) {
+      try {
+        final token = data[i];
+        final dynamic response = await client.get(
+          '${Urls.cryptoCompareBaseUrl}/data/price?fsym=${token.symbol}&tsyms=USD',
+        );
+        if (response['USD'] != null) {
+          final tokenUSDPrice = response['USD'] as num;
+          data[i] = token.copyWith(
+            tokenUSDPrice: tokenUSDPrice.toDouble(),
+            balanceInUSD: tokenUSDPrice * token.calculatedBalanceInDouble,
+            decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
+          );
+        } else {
+          data[i] = token.copyWith(
+            decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
+          );
+        }
+      } catch (e, s) {
+        getLogger(toString()).e(
+          'error in finding contract, error: $e, s: $s',
+        );
+      }
+    }
+    double totalBalanceInUSD = 0;
+    for (final tokenElement in data) {
+      totalBalanceInUSD += tokenElement.balanceInUSD;
+    }
+    data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
+
+    emit(
+      state.copyWith(
+        status: AppStatus.success,
+        data: data,
+        totalBalanceInUSD: totalBalanceInUSD,
+      ),
+    );
   }
 
   Future<void> getTokensOnTezos({
