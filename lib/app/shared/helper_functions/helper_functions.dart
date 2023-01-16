@@ -194,3 +194,11 @@ Future<bool> isCredentialAvaialble(
 
   return false;
 }
+
+String timeFormatter({required int timeInSecond}) {
+  final int sec = timeInSecond % 60;
+  final int min = (timeInSecond / 60).floor();
+  final String minute = min.toString().length <= 1 ? '0$min' : '$min';
+  final String second = sec.toString().length <= 1 ? '0$sec' : '$sec';
+  return '$minute : $second';
+}
