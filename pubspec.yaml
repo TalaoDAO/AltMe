@@ -1,6 +1,6 @@
 name: altme
 description: AltMe Flutter App 
-version: 1.0.0+100
+version: 1.7.5+140
 publish_to: none
 
 environment:
@@ -107,9 +107,9 @@ dependency_overrides:
   ffi: ^2.0.1
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.11.0"
   bloc_test: ^9.0.3
   build_runner: ^2.1.10
-  flutter_launcher_icons: "^0.11.0"
   flutter_test:
     sdk: flutter
   http_mock_adapter: ^0.3.2

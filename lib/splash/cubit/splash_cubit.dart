@@ -32,6 +32,8 @@ class SplashCubit extends Cubit<SplashState> {
   final WalletCubit walletCubit;
   final DioClient client;
 
+  final log = getLogger('SplashCubit');
+
   Future<void> initialiseApp() async {
     final newVersion = NewVersion(
       iOSId: 'io.altme.wallet',
@@ -41,6 +43,12 @@ class SplashCubit extends Cubit<SplashState> {
     final VersionStatus? versionStatus = await newVersion.getVersionStatus();
 
     if (versionStatus != null && versionStatus.canUpdate) {
+      log.i('''
+                localVersion: ${versionStatus.localVersion},
+                storeVersion: ${versionStatus.storeVersion},
+                appStoreLink: ${versionStatus.appStoreLink},
+                releaseNotes: ${versionStatus.releaseNotes}
+          ''');
       emit(
         state.copyWith(
           status: SplashStatus.routeToAppUpdate,
@@ -90,6 +98,10 @@ class SplashCubit extends Cubit<SplashState> {
 
   Future<void> _getAppVersion() async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    log.i('''
+          versionNumber: ${packageInfo.version},
+          buildNumber: ${packageInfo.buildNumber}, 
+          ''');
     emit(
       state.copyWith(
         versionNumber: packageInfo.version,

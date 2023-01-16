@@ -1,15 +1,11 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/wallet.dart';
-import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppUpgradePage extends StatelessWidget {
   const AppUpgradePage({Key? key, required this.storeInfo}) : super(key: key);
@@ -35,10 +31,21 @@ class AppUpgradeView extends StatelessWidget {
 
   final StoreInfo storeInfo;
 
+  Future<void> launchAppStore(String appStoreLink) async {
+    debugPrint(appStoreLink);
+    if (await canLaunchUrl(Uri.parse(appStoreLink))) {
+      await launchUrl(Uri.parse(appStoreLink));
+    } else {
+      throw Exception('Could not launch appStoreLink');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final l10n = context.l10n;
+
+    // TODO(bibash): localise
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -93,7 +100,9 @@ class AppUpgradeView extends StatelessWidget {
               ],
               const SizedBox(height: 30),
               MyGradientButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await launchAppStore(storeInfo.appStoreLink);
+                },
                 text: 'Update Now',
               ),
               const SizedBox(height: 10),
@@ -111,7 +120,7 @@ class AppUpgradeView extends StatelessWidget {
                                 .push<void>(BackupCredentialPage.route());
                           },
                           child: Text(
-                            'Backup your Credential',
+                            'Backup your Credentials',
                             style: Theme.of(context).textTheme.copyToClipBoard,
                           ),
                         );
