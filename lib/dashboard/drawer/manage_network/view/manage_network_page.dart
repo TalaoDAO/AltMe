@@ -27,7 +27,7 @@ class ManageNetworkPage extends StatelessWidget {
         bloc: context.read<ManageNetworkCubit>(),
         builder: (context, state) {
           final blockchainType =
-              context.read<WalletCubit>().state.currentAccount.blockchainType;
+              context.read<WalletCubit>().state.currentAccount!.blockchainType;
           final allNetworks = blockchainType.networks;
 
           return BackgroundCard(

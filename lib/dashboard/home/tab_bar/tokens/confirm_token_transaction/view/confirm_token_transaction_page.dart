@@ -50,7 +50,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
           totalAmount: amount,
           selectedToken: selectedToken,
           selectedAccountSecretKey:
-              context.read<WalletCubit>().state.currentAccount.secretKey,
+              context.read<WalletCubit>().state.currentAccount!.secretKey,
         ),
       ),
       child: ConfirmWithdrawalView(
@@ -96,6 +96,14 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
     super.initState();
   }
 
+  int getDecimalsToShow(double amount) {
+    return widget.selectedToken.decimalsToShow == 0
+        ? 0
+        : amount >= 1
+            ? 2
+            : 5;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -123,7 +131,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
         }
         if (state.status == AppStatus.success) {
           final amountAndSymbol =
-              '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(6).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
+              '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(getDecimalsToShow(state.totalAmount)).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
           TransactionDoneDialog.show(
             context: context,
             amountAndSymbol: amountAndSymbol,
@@ -151,7 +159,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
       },
       builder: (context, state) {
         final amountAndSymbol =
-            '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(6).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
+            '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(getDecimalsToShow(state.totalAmount)).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
         return BasePage(
           scrollView: false,
           title: l10n.confirm,

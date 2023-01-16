@@ -69,6 +69,11 @@ class AboutAltmeView extends StatelessWidget {
                   onTap: () =>
                       Navigator.of(context).push<void>(LicensesPage.route()),
                 ),
+                DrawerItem(
+                  title: l10n.softwareLicenses,
+                  onTap: () => Navigator.of(context)
+                      .push<void>(SoftwareLicensePage.route()),
+                ),
               ],
             ),
           ),

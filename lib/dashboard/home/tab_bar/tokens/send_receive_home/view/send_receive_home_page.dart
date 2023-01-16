@@ -151,7 +151,11 @@ class _SendReceiveHomePageView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         MyText(
-                          state.selectedToken.calculatedBalance.formatNumber(),
+                          state.selectedToken.calculatedBalanceInDouble
+                              .toStringAsFixed(
+                                state.selectedToken.decimalsToShow,
+                              )
+                              .formatNumber(),
                           style: Theme.of(context).textTheme.headline4,
                           maxLength: 12,
                         ),
@@ -223,7 +227,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                                         .read<WalletCubit>()
                                         .state
                                         .currentAccount
-                                        .walletAddress,
+                                        !.walletAddress,
                                     item: state.selectedToken.symbol,
                                     description:
                                         l10n.sendOnlyToThisAddressDescription(

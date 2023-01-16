@@ -63,33 +63,33 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage> {
                 );
               },
             ),
-            Padding(
-              padding: const EdgeInsets.all(Sizes.spaceXLarge),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CopyButton(
-                    onTap: () async {
-                      await Clipboard.setData(
-                        ClipboardData(
-                          text: context.read<DIDPrivateKeyCubit>().state,
-                        ),
-                      );
-                      AlertMessage.showStateMessage(
-                        context: context,
-                        stateMessage: StateMessage.success(
-                          stringMessage: l10n.copySecretKeyToClipboard,
-                        ),
-                      );
-                    },
-                  ),
-                  // const SizedBox(
-                  //   width: Sizes.spaceXLarge,
-                  // ),
-                  //const ExportButton(),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(Sizes.spaceXLarge),
+            //   child: Row(
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: [
+            //       CopyButton(
+            //         onTap: () async {
+            //           await Clipboard.setData(
+            //             ClipboardData(
+            //               text: context.read<DIDPrivateKeyCubit>().state,
+            //             ),
+            //           );
+            //           AlertMessage.showStateMessage(
+            //             context: context,
+            //             stateMessage: StateMessage.success(
+            //               stringMessage: l10n.copySecretKeyToClipboard,
+            //             ),
+            //           );
+            //         },
+            //       ),
+            //       // const SizedBox(
+            //       //   width: Sizes.spaceXLarge,
+            //       // ),
+            //       //const ExportButton(),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

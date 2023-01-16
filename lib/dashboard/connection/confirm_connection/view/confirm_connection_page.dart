@@ -154,7 +154,7 @@ class ConfirmConnectionView extends StatelessWidget {
                         verticalSpacing: 15,
                         borderRadius: Sizes.normalRadius,
                         text: l10n.connect,
-                        onPressed: walletState.currentAccount.blockchainType
+                        onPressed: walletState.currentAccount!.blockchainType
                                     .connectionBridge !=
                                 connectionBridgeType
                             ? null
