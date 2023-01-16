@@ -47,24 +47,24 @@ class AccountPrivateKeyPage extends StatelessWidget {
                         decoration: TextDecoration.underline,
                       ),
                 ),
-                const SizedBox(
-                  height: Sizes.spaceXLarge,
-                ),
-                CopyButton(
-                  onTap: () async {
-                    await Clipboard.setData(
-                      ClipboardData(
-                        text: privateKey,
-                      ),
-                    );
-                    AlertMessage.showStateMessage(
-                      context: context,
-                      stateMessage: StateMessage.success(
-                        stringMessage: l10n.copiedToClipboard,
-                      ),
-                    );
-                  },
-                ),
+                // const SizedBox(
+                //   height: Sizes.spaceXLarge,
+                // ),
+                // CopyButton(
+                //   onTap: () async {
+                //     await Clipboard.setData(
+                //       ClipboardData(
+                //         text: privateKey,
+                //       ),
+                //     );
+                //     AlertMessage.showStateMessage(
+                //       context: context,
+                //       stateMessage: StateMessage.success(
+                //         stringMessage: l10n.copiedToClipboard,
+                //       ),
+                //     );
+                //   },
+                // ),
               ],
             ),
           ),
