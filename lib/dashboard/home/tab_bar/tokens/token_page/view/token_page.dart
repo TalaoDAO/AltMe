@@ -108,7 +108,7 @@ class _TokensViewState extends State<TokensView> {
                     .data[index]
                     .blockchainType;
 
-                if (blockchain.isdisabled) {
+                if (blockchain.isDisabled) {
                   return const Center();
                 }
 
@@ -174,7 +174,7 @@ class _TokensViewState extends State<TokensView> {
                       .data[index]
                       .blockchainType;
 
-                  if (blockchain.isdisabled) {
+                  if (blockchain.isDisabled) {
                     return Center(
                       child: Text(l10n.thisFeatureIsNotSupportedMessage),
                     );

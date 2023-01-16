@@ -28,7 +28,9 @@ class PolygonNetwork extends EthereumNetwork {
           mainTokenName: 'Polygon',
           mainTokenDecimal: '18',
           mainTokenIcon: IconStrings.polygon,
-          mainTokenSymbol: 'Matic',
+          mainTokenSymbol: 'MATIC',
+          mainTokenContractAddress:
+              '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0',
         );
 
   factory PolygonNetwork.mainNet() => const PolygonNetwork(
@@ -37,7 +39,7 @@ class PolygonNetwork extends EthereumNetwork {
         apiUrl: Urls.moralisBaseUrl,
         chainId: 137,
         chain: 'polygon',
-        rpcNodeUrl: 'https://ethereum.publicnode.com',
+        rpcNodeUrl: 'https://polygon-rpc.com/',
         title: 'Polygon Mainnet',
         subTitle:
             'This network is the official Polygon blockchain running Network.'

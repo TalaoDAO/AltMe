@@ -169,7 +169,7 @@ extension BlockchainTypeX on BlockchainType {
     }
   }
 
-  bool get isdisabled {
+  bool get isDisabled {
     switch (this) {
       case BlockchainType.tezos:
         return false;
@@ -178,7 +178,7 @@ extension BlockchainTypeX on BlockchainType {
       case BlockchainType.fantom:
         return true;
       case BlockchainType.polygon:
-        return true;
+        return false;
       case BlockchainType.binance:
         return true;
     }

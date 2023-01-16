@@ -29,6 +29,7 @@ class FantomNetwork extends EthereumNetwork {
           mainTokenDecimal: '18',
           mainTokenIcon: IconStrings.fantom,
           mainTokenSymbol: 'FTM',
+          mainTokenContractAddress: '',
         );
 
   factory FantomNetwork.mainNet() => const FantomNetwork(

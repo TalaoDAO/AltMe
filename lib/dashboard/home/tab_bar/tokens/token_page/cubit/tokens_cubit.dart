@@ -354,7 +354,7 @@ class TokensCubit extends Cubit<TokensState> {
       ) as Map<String, dynamic>;
 
       return TokenModel(
-        contractAddress: '',
+        contractAddress: ethereumNetwork.mainTokenContractAddress,
         name: ethereumNetwork.mainTokenName,
         symbol: ethereumNetwork.mainTokenSymbol,
         icon: ethereumNetwork.mainTokenIcon,

@@ -201,7 +201,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     }
   }
 
-  Future<void> _withdrawEthereum({
+  Future<void> _withdrawEthereumBaseTokenByChainId({
     required double tokenAmount,
     required String selectedAccountSecretKey,
   }) async {
@@ -213,7 +213,12 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       final rpcNodeUrl = selectedEthereumNetwork.rpcNodeUrl;
 
       final amount = int.parse(
-        tokenAmount.toStringAsFixed(18).replaceAll(',', '').replaceAll('.', ''),
+        tokenAmount
+            .toStringAsFixed(
+              int.parse(selectedEthereumNetwork.mainTokenDecimal),
+            )
+            .replaceAll(',', '')
+            .replaceAll('.', ''),
       );
 
       getLogger(toString())
@@ -222,19 +227,11 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
       final sender = await credentials.extractAddress();
 
-      // final gasPrice = await MWeb3Client.estimateEthereumFee(
-      //   web3RpcURL: rpcNodeUrl,
-      //   sender: await credentials.extractAddress(),
-      //   reciever: EthereumAddress.fromHex(state.withdrawalAddress),
-      //   amount: EtherAmount.inWei(BigInt.from(amount)),
-      // );
-
       final transactionHash = await MWeb3Client.sendEthereumTransaction(
         web3RpcURL: rpcNodeUrl,
         chainId: selectedEthereumNetwork.chainId,
         privateKey: selectedAccountSecretKey,
         sender: sender,
-        //gas: gasPrice,
         reciever: EthereumAddress.fromHex(state.withdrawalAddress),
         amount: EtherAmount.inWei(BigInt.from(amount)),
       );
@@ -266,7 +263,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         selectedAccountSecretKey: state.selectedAccountSecretKey,
         token: state.selectedToken,
       );
-    } else if (manageNetworkCubit.state.network is EthereumNetwork) {
+    } else {
       final selectedEthereumNetwork =
           manageNetworkCubit.state.network as EthereumNetwork;
       await _sendContractInvocationOperationEthereum(
@@ -275,8 +272,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         token: state.selectedToken,
         chainId: selectedEthereumNetwork.chainId,
       );
-    } else {
-      throw Exception('Not Implemented !');
     }
   }
 
@@ -391,8 +386,11 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     required int chainId,
   }) async {
     try {
-      if (token.symbol == 'ETH') {
-        await _withdrawEthereum(
+      if (token.symbol == 'ETH' ||
+          token.symbol == 'MATIC' ||
+          token.symbol == 'FTM' ||
+          token.symbol == 'BNB') {
+        await _withdrawEthereumBaseTokenByChainId(
           tokenAmount: tokenAmount,
           selectedAccountSecretKey: selectedAccountSecretKey,
         );

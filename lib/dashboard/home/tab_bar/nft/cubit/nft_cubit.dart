@@ -32,7 +32,7 @@ class NftCubit extends Cubit<NftState> {
 
   Future<void> getNftList() async {
     if (walletCubit.state.currentAccount == null) return;
-    if (walletCubit.state.currentAccount!.blockchainType.isdisabled) {
+    if (walletCubit.state.currentAccount!.blockchainType.isDisabled) {
       emit(state.copyWith(status: AppStatus.idle));
       return;
     }
