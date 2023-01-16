@@ -1,1 +1,6 @@
-enum SplashStatus { init, routeToPassCode, routeToOnboarding }
+enum SplashStatus {
+  init,
+  routeToPassCode,
+  routeToOnboarding,
+  routeToAppUpdate,
+}

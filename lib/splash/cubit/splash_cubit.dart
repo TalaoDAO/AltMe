@@ -8,6 +8,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:new_version/new_version.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -32,6 +33,28 @@ class SplashCubit extends Cubit<SplashState> {
   final DioClient client;
 
   Future<void> initialiseApp() async {
+    final newVersion = NewVersion(
+      iOSId: 'io.altme.wallet',
+      androidId: 'co.altme.alt.me.altme',
+    );
+
+    final VersionStatus? versionStatus = await newVersion.getVersionStatus();
+
+    if (versionStatus != null && versionStatus.canUpdate) {
+      emit(
+        state.copyWith(
+          status: SplashStatus.routeToAppUpdate,
+          storeInfo: StoreInfo(
+            localVersion: versionStatus.localVersion,
+            storeVersion: versionStatus.storeVersion,
+            appStoreLink: versionStatus.appStoreLink,
+            releaseNotes: versionStatus.releaseNotes ?? '',
+          ),
+        ),
+      );
+      return;
+    }
+
     final bool hasWallet = await isWalletCreated(
       secureStorageProvider: secureStorageProvider,
       didCubit: didCubit,

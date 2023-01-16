@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app_upgrade/app_upgrade.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -18,20 +19,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
-    if (state.status == SplashStatus.routeToPassCode) {
-      Navigator.of(context).push<void>(
-        PinCodePage.route(
-          isValidCallback: () {
-            Navigator.of(context).push<void>(DashboardPage.route());
-          },
-        ),
-      );
+    switch (state.status) {
+      case SplashStatus.init:
+        break;
+      case SplashStatus.routeToPassCode:
+        Navigator.of(context).push<void>(
+          PinCodePage.route(
+            isValidCallback: () {
+              Navigator.of(context).push<void>(DashboardPage.route());
+            },
+          ),
+        );
+        break;
+      case SplashStatus.routeToOnboarding:
+        Navigator.of(context).push<void>(StarterPage.route());
+        break;
+      case SplashStatus.routeToAppUpdate:
+        Navigator.of(context).push<void>(
+          AppUpgradePage.route(
+            storeInfo: state.storeInfo,
+          ),
+        );
+        break;
     }
 
-    if (state.status == SplashStatus.routeToOnboarding) {
-      Navigator.of(context).push<void>(StarterPage.route());
-    }
-
+    // TODO(all): remove
     // just for next build -> 117 and then we should remove for build -> 118
     context.read<AdvanceSettingsCubit>().setState(
           Parameters.defaultAdvanceSettingsState,
