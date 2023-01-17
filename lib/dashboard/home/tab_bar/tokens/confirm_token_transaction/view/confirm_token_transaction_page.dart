@@ -116,18 +116,13 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
           LoadingView().hide();
         }
 
-        if (state.message != null) {
+        if (state.message != null &&
+            (state.status == AppStatus.error ||
+                state.status == AppStatus.errorWhileFetching)) {
           AlertMessage.showStateMessage(
             context: context,
-            stateMessage: StateMessage.error(
-              stringMessage: l10n.withdrawalFailedMessage,
-            ),
+            stateMessage: state.message!,
           );
-          // TODO(Taleb): update to this later
-          // AlertMessage.showStateMessage(
-          //   context: context,
-          //   stateMessage: state.message!,
-          // );
         }
         if (state.status == AppStatus.success) {
           final amountAndSymbol =
@@ -138,14 +133,8 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
             transactionHash: state.transactionHash,
             onTrasactionHashTap: () {
               final network = context.read<ManageNetworkCubit>().state.network;
-              if (network is TezosNetwork) {
-                LaunchUrl.launch(
-                  'https://tzkt.io/${state.transactionHash}',
-                );
-              } else {
-                LaunchUrl.launch(
-                  'https://etherscan.io/tx/${state.transactionHash}',
-                );
+              if (state.transactionHash != null) {
+                openBlockchainExplorer(network, state.transactionHash!);
               }
             },
             onDoneButtonClick: () {

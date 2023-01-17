@@ -8,6 +8,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tezart/tezart.dart';
+import 'package:web3dart/json_rpc.dart';
 import 'package:web3dart/web3dart.dart';
 
 part 'confirm_token_transaction_cubit.g.dart';
@@ -246,17 +247,32 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       emit(state.success(transactionHash: transactionHash));
     } catch (e, s) {
       logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+      if (e is RPCError) {
+        logger.i('rpc error=> e.message: ${e.message} , e.data: ${e.data}');
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage.error(
+              stringMessage: e.message,
+              showDialog: true,
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
+      }
     }
   }
 
   Future<void> sendContractInvocationOperation() async {
+    emit(state.copyWith(status: AppStatus.init));
     if (manageNetworkCubit.state.network is TezosNetwork) {
       await _sendContractInvocationOperationTezos(
         tokenAmount: state.totalAmount,

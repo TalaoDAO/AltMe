@@ -55,15 +55,10 @@ class RecentTransactions extends StatelessWidget {
                                 .read<ManageNetworkCubit>()
                                 .state
                                 .network;
-                            if (network is TezosNetwork) {
-                              LaunchUrl.launch(
-                                'https://tzkt.io/${operations[index].hash}/${operations[index].counter}',
-                              );
-                            } else {
-                              LaunchUrl.launch(
-                                'https://etherscan.io/tx/${operations[index].hash}',
-                              );
-                            }
+                            openBlockchainExplorer(
+                              network,
+                              operations[index].hash,
+                            );
                           },
                         ),
                         separatorBuilder: (_, __) {

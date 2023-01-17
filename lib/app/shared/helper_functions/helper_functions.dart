@@ -12,6 +12,25 @@ import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:web3dart/web3dart.dart';
 
+Future<void> openBlockchainExplorer(
+  BlockchainNetwork network,
+  String txHash,
+) async {
+  if (network is TezosNetwork) {
+    await LaunchUrl.launch(
+      'https://tzkt.io/$txHash',
+    );
+  } else if (network is PolygonNetwork) {
+    await LaunchUrl.launch(
+      'https://polygonscan.com/tx/$txHash',
+    );
+  } else {
+    await LaunchUrl.launch(
+      'https://etherscan.io/tx/$txHash',
+    );
+  }
+}
+
 String generateDefaultAccountName(
   int accountIndex,
   List<String> accountNameList,
