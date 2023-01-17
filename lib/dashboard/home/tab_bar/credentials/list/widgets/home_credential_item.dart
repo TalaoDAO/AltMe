@@ -62,7 +62,6 @@ class DummyCredentialItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackgroundCard(
-      color: Theme.of(context).colorScheme.credentialBackground,
       padding: const EdgeInsets.all(4),
       child: InkWell(
         onTap: () async {
