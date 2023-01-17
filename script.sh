@@ -2,10 +2,20 @@ if [[ "$*" == *-build_runner* ]];
 then
   echo "build runner"
   fvm flutter clean
+  cd packages
+  cd credential_manifest
   fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs 
-
-  elif [[ "$*" == *-rundev* ]]; 
+  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+  cd ..
+  cd cryptocurrency_keys
+  fvm flutter pub get
+  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+  cd ..
+  cd ..
+  fvm flutter pub get
+  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+  fvm flutter pub get 
+elif [[ "$*" == *-rundev* ]]; 
 then
   echo "flutter run development"
   fvm flutter run --flavor development --target lib/main_development.dart
@@ -62,7 +72,17 @@ then
 else
   echo "build runner"
   fvm flutter clean
+  cd packages
+  cd credential_manifest
   fvm flutter pub get
   fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  fvm flutter pub get  
+  cd ..
+  cd cryptocurrency_keys
+  fvm flutter pub get
+  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+  cd ..
+  cd ..
+  fvm flutter pub get
+  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+  fvm flutter pub get 
 fi
