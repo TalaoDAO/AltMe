@@ -5,10 +5,10 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/services.dart' hide MessageHandler;
-import 'package:http/http.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tezart/tezart.dart';
+import 'package:web3dart/json_rpc.dart';
 import 'package:web3dart/web3dart.dart';
 
 part 'confirm_token_transaction_cubit.g.dart';
@@ -82,7 +82,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         final selectedEthereumNetwork =
             manageNetworkCubit.state.network as EthereumNetwork;
 
-        final web3RpcURL = selectedEthereumNetwork.rpcNodeUrl;
+        //final web3RpcURL = selectedEthereumNetwork.rpcNodeUrl;
+        await dotenv.load();
+        final web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
 
         final amount = state.tokenAmount
             .toStringAsFixed(int.parse(state.selectedToken.decimals))
@@ -200,7 +202,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     }
   }
 
-  Future<void> _withdrawEthereum({
+  Future<void> _withdrawEthereumBaseTokenByChainId({
     required double tokenAmount,
     required String selectedAccountSecretKey,
   }) async {
@@ -212,7 +214,12 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       final rpcNodeUrl = selectedEthereumNetwork.rpcNodeUrl;
 
       final amount = int.parse(
-        tokenAmount.toStringAsFixed(18).replaceAll(',', '').replaceAll('.', ''),
+        tokenAmount
+            .toStringAsFixed(
+              int.parse(selectedEthereumNetwork.mainTokenDecimal),
+            )
+            .replaceAll(',', '')
+            .replaceAll('.', ''),
       );
 
       getLogger(toString())
@@ -221,19 +228,11 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
       final sender = await credentials.extractAddress();
 
-      // final gasPrice = await MWeb3Client.estimateEthereumFee(
-      //   web3RpcURL: rpcNodeUrl,
-      //   sender: await credentials.extractAddress(),
-      //   reciever: EthereumAddress.fromHex(state.withdrawalAddress),
-      //   amount: EtherAmount.inWei(BigInt.from(amount)),
-      // );
-
       final transactionHash = await MWeb3Client.sendEthereumTransaction(
         web3RpcURL: rpcNodeUrl,
         chainId: selectedEthereumNetwork.chainId,
         privateKey: selectedAccountSecretKey,
         sender: sender,
-        //gas: gasPrice,
         reciever: EthereumAddress.fromHex(state.withdrawalAddress),
         amount: EtherAmount.inWei(BigInt.from(amount)),
       );
@@ -248,24 +247,39 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       emit(state.success(transactionHash: transactionHash));
     } catch (e, s) {
       logger.e('error after withdrawal execute: e: $e, stack: $s', e, s);
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+      if (e is RPCError) {
+        logger.i('rpc error=> e.message: ${e.message} , e.data: ${e.data}');
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage.error(
+              stringMessage: e.message,
+              showDialog: true,
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
+      }
     }
   }
 
   Future<void> sendContractInvocationOperation() async {
+    emit(state.copyWith(status: AppStatus.init));
     if (manageNetworkCubit.state.network is TezosNetwork) {
       await _sendContractInvocationOperationTezos(
         tokenAmount: state.totalAmount,
         selectedAccountSecretKey: state.selectedAccountSecretKey,
         token: state.selectedToken,
       );
-    } else if (manageNetworkCubit.state.network is EthereumNetwork) {
+    } else {
       final selectedEthereumNetwork =
           manageNetworkCubit.state.network as EthereumNetwork;
       await _sendContractInvocationOperationEthereum(
@@ -274,8 +288,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         token: state.selectedToken,
         chainId: selectedEthereumNetwork.chainId,
       );
-    } else {
-      throw Exception('Not Implemented !');
     }
   }
 
@@ -390,8 +402,11 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     required int chainId,
   }) async {
     try {
-      if (token.symbol == 'ETH') {
-        await _withdrawEthereum(
+      if (token.symbol == 'ETH' ||
+          token.symbol == 'MATIC' ||
+          token.symbol == 'FTM' ||
+          token.symbol == 'BNB') {
+        await _withdrawEthereumBaseTokenByChainId(
           tokenAmount: tokenAmount,
           selectedAccountSecretKey: selectedAccountSecretKey,
         );
@@ -401,7 +416,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       emit(state.loading());
 
-      final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+      //final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+      await dotenv.load();
+      final rpcUrl = dotenv.get('WEB3_RPC_MAINNET_URL');
 
       final amount = tokenAmount *
           double.parse(

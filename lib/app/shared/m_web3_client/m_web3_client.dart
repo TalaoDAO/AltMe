@@ -89,13 +89,12 @@ class MWeb3Client {
         Transaction.callContract(
           contract: contract,
           function: sendFunction,
-          from: EthereumAddress.fromHex(token.contractAddress),
           gasPrice: gasPrice,
           parameters: <dynamic>[receiver, BigInt.from(amountInWei)],
         ),
       );
 
-      await subscription.asFuture<FilterEvent>();
+      await subscription.asFuture<dynamic>();
       await subscription.cancel();
 
       await client.dispose();
@@ -114,29 +113,30 @@ class MWeb3Client {
     String? data,
   }) async {
     log.i('estimateEthereumFee');
-    final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
-    final gasPrice = await web3Client.getGasPrice();
-
-    log.i('from: ${sender.hex}');
-    log.i('to: ${reciever.hex}');
-    log.i('gasPrice: ${gasPrice.getInWei}');
-    log.i('value: ${amount.getInWei}');
-    log.i('data: $data');
-
+    late EtherAmount gasPrice = EtherAmount.inWei(BigInt.one);
     try {
-      final BigInt gas = await web3Client.estimateGas(
+      final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
+      gasPrice = await web3Client.getGasPrice();
+
+      log.i('from: ${sender.hex}');
+      log.i('to: ${reciever.hex}');
+      log.i('gasPrice: ${gasPrice.getInWei}');
+      log.i('value: ${amount.getInWei}');
+      log.i('data: $data');
+
+      final BigInt maxGas = await web3Client.estimateGas(
         sender: sender,
         to: reciever,
         value: amount,
         gasPrice: gasPrice,
         data: data != null ? hexToBytes(data) : null,
       );
-      log.i('gas - $gas');
+      log.i('maxGas - $maxGas');
 
-      final fee = gas * gasPrice.getInWei;
-      log.i('gas * gasPrice.getInWei = $fee');
+      final fee = maxGas * gasPrice.getInWei;
+      log.i('maxGas * gasPrice.getInWei = $fee');
       return fee;
-    } catch (e,s) {
+    } catch (e, s) {
       log.e('e: $e, s: $s');
       final fee = BigInt.from(21000) * gasPrice.getInWei;
       log.i('2100 * gasPrice.getInWei = $fee');

@@ -31,9 +31,8 @@ class NftCubit extends Cubit<NftState> {
   final log = getLogger('NftCubit');
 
   Future<void> getNftList() async {
-    final activeIndex = walletCubit.state.currentCryptoIndex;
-    if (walletCubit
-        .state.cryptoAccount.data[activeIndex].blockchainType.isdisabled) {
+    if (walletCubit.state.currentAccount == null) return;
+    if (walletCubit.state.currentAccount!.blockchainType.isDisabled) {
       emit(state.copyWith(status: AppStatus.idle));
       return;
     }
@@ -45,13 +44,12 @@ class NftCubit extends Cubit<NftState> {
       log.i('starting funtion getTezosNftList()');
 
       //final activeIndex = walletCubit.state.currentCryptoIndex;
-      final walletAddress =
-          walletCubit.state.cryptoAccount.data[activeIndex].walletAddress;
+      final walletAddress = walletCubit.state.currentAccount!.walletAddress;
 
       late List<NftModel> newData;
 
       final selectedAccountBlockchainType =
-          walletCubit.state.cryptoAccount.data[activeIndex].blockchainType;
+          walletCubit.state.currentAccount!.blockchainType;
       if (state.blockchainType != selectedAccountBlockchainType) {
         emit(state.reset(blockchainType: selectedAccountBlockchainType));
       }
@@ -124,45 +122,50 @@ class NftCubit extends Cubit<NftState> {
     required String walletAddress,
     required EthereumNetwork network,
   }) async {
-    await dotenv.load();
-    final moralisApiKey = dotenv.get('MORALIS_API_KEY');
+    try {
+      await dotenv.load();
+      final moralisApiKey = dotenv.get('MORALIS_API_KEY');
 
-    //If you want to see example nft data you should hardcode
-    // this wallet address in API call ->
-    // 0xd8da6bf26964af9d7eed9e03e53415d37aa96045
+      //If you want to see example nft data you should hardcode
+      // this wallet address in API call ->
+      // 0xd8da6bf26964af9d7eed9e03e53415d37aa96045
 
-    final Map<String, dynamic> response = await client.get(
-      '${Urls.moralisBaseUrl}/$walletAddress/nft',
-      queryParameters: <String, dynamic>{
-        'chain': network.chain,
-        'format': 'decimal',
-        'normalizeMetadata': true,
-      },
-      headers: <String, String>{
-        'X-API-KEY': moralisApiKey,
-      },
-    ) as Map<String, dynamic>;
+      final Map<String, dynamic> response = await client.get(
+        '${Urls.moralisBaseUrl}/$walletAddress/nft',
+        queryParameters: <String, dynamic>{
+          'chain': network.chain,
+          'format': 'decimal',
+          'normalizeMetadata': true,
+        },
+        headers: <String, String>{
+          'X-API-KEY': moralisApiKey,
+        },
+      ) as Map<String, dynamic>;
 
-    final result = response['result'] as List<dynamic>;
-    if (result.isEmpty) {
+      final result = response['result'] as List<dynamic>;
+      if (result.isEmpty) {
+        return [];
+      }
+
+      return List<EthereumNftModel>.from(
+        result.map<EthereumNftModel>((dynamic e) {
+          return EthereumNftModel(
+            name: e['name'] as String,
+            symbol: e['symbol'] as String?,
+            description: e['normalized_metadata']['description'] as String?,
+            tokenId: e['token_id'] as String,
+            contractAddress: e['token_address'] as String,
+            balance: e['amount'] as String,
+            type: e['contract_type'] as String,
+            image: e['normalized_metadata']['image'] as String?,
+            animationUrl: e['normalized_metadata']['animation_url'] as String?,
+          );
+        }),
+      ).toList();
+    } catch (e, s) {
+      getLogger(toString()).e('e: $e, s: $s');
       return [];
     }
-
-    return List<EthereumNftModel>.from(
-      result.map<EthereumNftModel>((dynamic e) {
-        return EthereumNftModel(
-          name: e['name'] as String,
-          symbol: e['symbol'] as String?,
-          description: e['normalized_metadata']['description'] as String?,
-          tokenId: e['token_id'] as String,
-          contractAddress: e['token_address'] as String,
-          balance: e['amount'] as String,
-          type: e['contract_type'] as String,
-          image: e['normalized_metadata']['image'] as String?,
-          animationUrl: e['normalized_metadata']['animation_url'] as String?,
-        );
-      }),
-    ).toList();
   }
 
   Future<List<NftModel>> getTezosNFTs({
@@ -171,22 +174,27 @@ class NftCubit extends Cubit<NftState> {
     required String walletAddress,
     required TezosNetwork network,
   }) async {
-    final List<dynamic> response = await client.get(
-      '${network.apiUrl}/v1/tokens/balances',
-      queryParameters: <String, dynamic>{
-        'account': walletAddress,
-        'balance.eq': 1,
-        'token.metadata.null': false,
-        'sort.desc': 'firstLevel',
-        'select':
-            'token.tokenId as tokenId,token.id as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri,token.metadata.description as description,token.standard as standard,token.metadata.symbol as symbol,token.contract.address as contractAddress,token.metadata.identifier as identifier,token.metadata.creators as creators,token.metadata.publishers as publishers,token.metadata.date as date,token.metadata.is_transferable as isTransferable', // ignore: lines_longer_than_80_chars
-        'offset': offset,
-        'limit': limit,
-      },
-    ) as List<dynamic>;
-    final List<TezosNftModel> data = response
-        .map((dynamic e) => TezosNftModel.fromJson(e as Map<String, dynamic>))
-        .toList();
-    return data;
+    try {
+      final List<dynamic> response = await client.get(
+        '${network.apiUrl}/v1/tokens/balances',
+        queryParameters: <String, dynamic>{
+          'account': walletAddress,
+          'balance.eq': 1,
+          'token.metadata.null': false,
+          'sort.desc': 'firstLevel',
+          'select':
+              'token.tokenId as tokenId,token.id as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri,token.metadata.description as description,token.standard as standard,token.metadata.symbol as symbol,token.contract.address as contractAddress,token.metadata.identifier as identifier,token.metadata.creators as creators,token.metadata.publishers as publishers,token.metadata.date as date,token.metadata.is_transferable as isTransferable', // ignore: lines_longer_than_80_chars
+          'offset': offset,
+          'limit': limit,
+        },
+      ) as List<dynamic>;
+      final List<TezosNftModel> data = response
+          .map((dynamic e) => TezosNftModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      return data;
+    } catch (e, s) {
+      getLogger(toString()).e('e: $e, s: $s');
+      return [];
+    }
   }
 }

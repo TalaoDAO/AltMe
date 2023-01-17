@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -58,30 +60,43 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
         (Route<dynamic> route) => route.isFirst,
       );
     }
-    if (state.status == WalletStatus.populate) {
-      final blockchainType = state.currentAccount.blockchainType;
-      if (context.read<ManageNetworkCubit>().state.network.type !=
-          blockchainType) {
-        BlockchainNetwork network;
-        if (blockchainType == BlockchainType.tezos) {
-          network = TezosNetwork.mainNet();
-        } else if (blockchainType == BlockchainType.ethereum) {
-          network = EthereumNetwork.mainNet();
-        } else if (blockchainType == BlockchainType.polygon) {
-          network = PolygonNetwork.mainNet();
-        } else if (blockchainType == BlockchainType.fantom) {
-          network = FantomNetwork.mainNet();
-        } else if (blockchainType == BlockchainType.binance) {
-          network = BinanceNetwork.mainNet();
-        } else {
-          network = TezosNetwork.mainNet();
-        }
-        await context.read<ManageNetworkCubit>().setNetwork(network);
-        try {
-          await context.read<TokensCubit>().getTokens();
-          await context.read<NftCubit>().getNftList();
-        } catch (_) {}
-      }
+  },
+);
+
+final walletBlocAccountChangeListener = BlocListener<WalletCubit, WalletState>(
+  listenWhen: (previous, current) {
+    if ((current.currentAccount?.blockchainType != null) &&
+        ((previous.currentCryptoIndex != current.currentCryptoIndex) ||
+            previous.currentAccount?.blockchainType !=
+                current.currentAccount?.blockchainType)) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+  listener: (context, state) async {
+    final BlockchainType? blockchainType = state.currentAccount?.blockchainType;
+    if (blockchainType == null) return;
+    BlockchainNetwork network;
+    if (blockchainType == BlockchainType.tezos) {
+      network = TezosNetwork.mainNet();
+    } else if (blockchainType == BlockchainType.ethereum) {
+      network = EthereumNetwork.mainNet();
+    } else if (blockchainType == BlockchainType.polygon) {
+      network = PolygonNetwork.mainNet();
+    } else if (blockchainType == BlockchainType.fantom) {
+      network = FantomNetwork.mainNet();
+    } else if (blockchainType == BlockchainType.binance) {
+      network = BinanceNetwork.mainNet();
+    } else {
+      network = TezosNetwork.mainNet();
+    }
+    try {
+      await context.read<ManageNetworkCubit>().setNetwork(network);
+      unawaited(context.read<TokensCubit>().fetchFromZero());
+      unawaited(context.read<NftCubit>().fetchFromZero());
+    } catch (e, s) {
+      getLogger('BlocListeners: e: $e , s: $s');
     }
   },
 );

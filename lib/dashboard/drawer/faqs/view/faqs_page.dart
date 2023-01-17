@@ -41,21 +41,41 @@ class FAQsView extends StatelessWidget {
           return ListView.builder(
             itemCount: state.faq.length,
             itemBuilder: (context, index) {
+              final FaqElement faqElement = state.faq[index];
               return ExpansionTileContainer(
                 child: ExpansionTile(
                   initiallyExpanded: false,
                   childrenPadding: EdgeInsets.zero,
                   tilePadding: const EdgeInsets.symmetric(horizontal: 8),
                   title: Text(
-                    state.faq[index].que,
+                    faqElement.que,
                     style: Theme.of(context).textTheme.faqQue,
                   ),
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Text(
-                        state.faq[index].ans,
-                        style: Theme.of(context).textTheme.faqAns,
+                      child: TransparentInkWell(
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            faqElement.ans,
+                            style: faqElement.href != null
+                                ? Theme.of(context).textTheme.faqAns.copyWith(
+                                      decoration: TextDecoration.underline,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .markDownA,
+                                    )
+                                : Theme.of(context).textTheme.faqAns,
+                            textAlign: TextAlign.justify,
+                          ),
+                        ),
+                        onTap: () async {
+                          if (faqElement.href != null) {
+                            await LaunchUrl.launch(faqElement.href!);
+                          }
+                        },
                       ),
                     ),
                   ],

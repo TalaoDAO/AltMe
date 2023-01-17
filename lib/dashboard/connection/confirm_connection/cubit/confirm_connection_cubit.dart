@@ -45,7 +45,8 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
         );
       }
 
-      final CryptoAccountData currentAccount = walletCubit.state.currentAccount;
+      final CryptoAccountData currentAccount =
+          walletCubit.state.currentAccount!;
 
       switch (connectionBridgeType) {
 

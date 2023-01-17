@@ -1,9 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class AccountPrivateKeyPage extends StatelessWidget {
+class AccountPrivateKeyPage extends StatefulWidget {
   const AccountPrivateKeyPage({
     Key? key,
     required this.privateKey,
@@ -21,6 +20,42 @@ class AccountPrivateKeyPage extends StatelessWidget {
   final String privateKey;
 
   @override
+  State<AccountPrivateKeyPage> createState() => _AccountPrivateKeyPageState();
+}
+
+class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
+    with SingleTickerProviderStateMixin {
+  bool animate = true;
+
+  late Animation<double> animation;
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 10),
+    );
+
+    final Tween<double> _rotationTween = Tween(begin: 10, end: 0);
+
+    animation = _rotationTween.animate(animationController)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          Navigator.pop(context);
+        }
+      });
+    animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
@@ -28,6 +63,16 @@ class AccountPrivateKeyPage extends StatelessWidget {
       titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
+      titleTrailing: AnimatedBuilder(
+        animation: animation,
+        builder: (BuildContext context, Widget? child) {
+          return Text(
+            timeFormatter(timeInSecond: animation.value.toInt()),
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleLarge,
+          );
+        },
+      ),
       body: BackgroundCard(
         height: double.infinity,
         width: double.infinity,
@@ -41,30 +86,30 @@ class AccountPrivateKeyPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
-                  privateKey,
+                  widget.privateKey,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         decoration: TextDecoration.underline,
                       ),
                 ),
-                const SizedBox(
-                  height: Sizes.spaceXLarge,
-                ),
-                CopyButton(
-                  onTap: () async {
-                    await Clipboard.setData(
-                      ClipboardData(
-                        text: privateKey,
-                      ),
-                    );
-                    AlertMessage.showStateMessage(
-                      context: context,
-                      stateMessage: StateMessage.success(
-                        stringMessage: l10n.copiedToClipboard,
-                      ),
-                    );
-                  },
-                ),
+                // const SizedBox(
+                //   height: Sizes.spaceXLarge,
+                // ),
+                // CopyButton(
+                //   onTap: () async {
+                //     await Clipboard.setData(
+                //       ClipboardData(
+                //         text: privateKey,
+                //       ),
+                //     );
+                //     AlertMessage.showStateMessage(
+                //       context: context,
+                //       stateMessage: StateMessage.success(
+                //         stringMessage: l10n.copiedToClipboard,
+                //       ),
+                //     );
+                //   },
+                // ),
               ],
             ),
           ),

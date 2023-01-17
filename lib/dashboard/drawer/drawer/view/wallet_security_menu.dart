@@ -35,6 +35,7 @@ class WalletSecurityView extends StatelessWidget {
     BuildContext context,
     AppLocalizations l10n,
   ) {
+    Navigator.of(context).pop();
     Navigator.of(context).push<void>(
       EnterNewPinCodePage.route(
         isFromOnboarding: false,
@@ -143,6 +144,37 @@ class WalletSecurityView extends StatelessWidget {
                       );
                     },
                   ),
+                ),
+                DrawerItem(
+                  title: l10n.showWalletRecoveryPhrase,
+                  onTap: () async {
+                    final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => ConfirmDialog(
+                            title: l10n.warningDialogTitle,
+                            subtitle: l10n.warningDialogSubtitle,
+                            yes: l10n.showDialogYes,
+                            no: l10n.showDialogNo,
+                          ),
+                        ) ??
+                        false;
+
+                    if (confirm) {
+                      final pinCode =
+                          await getSecureStorage.get(SecureStorageKeys.pinCode);
+                      if (pinCode?.isEmpty ?? true) {
+                        setNewPinCode(context, l10n);
+                      } else {
+                        await Navigator.of(context).push<void>(
+                          PinCodePage.route(
+                            isValidCallback: () => Navigator.of(context)
+                                .push<void>(RecoveryKeyPage.route()),
+                            restrictToBack: false,
+                          ),
+                        );
+                      }
+                    }
+                  },
                 ),
               ],
             ),

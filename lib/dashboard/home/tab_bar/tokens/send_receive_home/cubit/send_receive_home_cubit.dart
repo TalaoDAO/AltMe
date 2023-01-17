@@ -51,6 +51,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
       );
     } catch (e, s) {
       getLogger(runtimeType.toString()).e('error in init() e: $e, $s', e, s);
+      if (isClosed) return;
       emit(
         state.error(
           messageHandler: ResponseMessage(
@@ -152,20 +153,25 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
       };
     }
 
-    final result = await client.get(
-      '$baseUrl/v1/operations/transactions',
-      queryParameters: params,
-    ) as List<dynamic>;
+    try {
+      final result = await client.get(
+        '$baseUrl/v1/operations/transactions',
+        queryParameters: params,
+      ) as List<dynamic>;
 
-    final operations = result
-        .map(
-          (dynamic e) => OperationModel.fromJson(e as Map<String, dynamic>),
-        )
-        .toList();
-    operations.sort(
-      (a, b) => b.dateTime.compareTo(a.dateTime),
-    );
-    return operations;
+      final operations = result
+          .map(
+            (dynamic e) => OperationModel.fromJson(e as Map<String, dynamic>),
+          )
+          .toList();
+      operations.sort(
+        (a, b) => b.dateTime.compareTo(a.dateTime),
+      );
+      return operations;
+    } catch (e, s) {
+      getLogger(toString()).e('e: $e, s: $s');
+      return [];
+    }
   }
 
   Future<List<OperationModel>> _getEthereumOperations({
@@ -173,7 +179,6 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     required String contractAddress,
     required EthereumNetwork ehtereumNetwork,
   }) async {
-    // https://deep-index.moralis.io/api/v2/0xd8da6bf26964af9d7eed9e03e53415d37aa96045?chain=eth
 
     await dotenv.load();
     final moralisApiKey = dotenv.get('MORALIS_API_KEY');

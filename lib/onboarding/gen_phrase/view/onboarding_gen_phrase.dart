@@ -106,22 +106,22 @@ class OnBoardingGenPhraseView extends StatelessWidget {
                       ),
                       const SizedBox(height: Sizes.spaceNormal),
                       MnemonicDisplay(mnemonic: state.mnemonic),
-                      const SizedBox(
-                        height: Sizes.spaceSmall,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Clipboard.setData(
-                            ClipboardData(
-                              text: state.mnemonic.join(' '),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          l10n.copyToClipboard,
-                          style: Theme.of(context).textTheme.copyToClipBoard,
-                        ),
-                      ),
+                      // const SizedBox(
+                      //   height: Sizes.spaceSmall,
+                      // ),
+                      // TextButton(
+                      //   onPressed: () {
+                      //     Clipboard.setData(
+                      //       ClipboardData(
+                      //         text: state.mnemonic.join(' '),
+                      //       ),
+                      //     );
+                      //   },
+                      //   child: Text(
+                      //     l10n.copyToClipboard,
+                      //     style: Theme.of(context).textTheme.copyToClipBoard,
+                      //   ),
+                      // ),
                       const SizedBox(height: Sizes.spaceLarge),
                       Text(
                         l10n.onboardingAltmeMessage,

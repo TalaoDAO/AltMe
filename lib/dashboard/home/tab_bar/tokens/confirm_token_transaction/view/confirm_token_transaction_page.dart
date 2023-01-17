@@ -50,7 +50,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
           totalAmount: amount,
           selectedToken: selectedToken,
           selectedAccountSecretKey:
-              context.read<WalletCubit>().state.currentAccount.secretKey,
+              context.read<WalletCubit>().state.currentAccount!.secretKey,
         ),
       ),
       child: ConfirmWithdrawalView(
@@ -96,6 +96,14 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
     super.initState();
   }
 
+  int getDecimalsToShow(double amount) {
+    return widget.selectedToken.decimalsToShow == 0
+        ? 0
+        : amount >= 1
+            ? 2
+            : 5;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -108,36 +116,25 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
           LoadingView().hide();
         }
 
-        if (state.message != null) {
+        if (state.message != null &&
+            (state.status == AppStatus.error ||
+                state.status == AppStatus.errorWhileFetching)) {
           AlertMessage.showStateMessage(
             context: context,
-            stateMessage: StateMessage.error(
-              stringMessage: l10n.withdrawalFailedMessage,
-            ),
+            stateMessage: state.message!,
           );
-          // TODO(Taleb): update to this later
-          // AlertMessage.showStateMessage(
-          //   context: context,
-          //   stateMessage: state.message!,
-          // );
         }
         if (state.status == AppStatus.success) {
           final amountAndSymbol =
-              '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(6).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
+              '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(getDecimalsToShow(state.totalAmount)).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
           TransactionDoneDialog.show(
             context: context,
             amountAndSymbol: amountAndSymbol,
             transactionHash: state.transactionHash,
             onTrasactionHashTap: () {
               final network = context.read<ManageNetworkCubit>().state.network;
-              if (network is TezosNetwork) {
-                LaunchUrl.launch(
-                  'https://tzkt.io/${state.transactionHash}',
-                );
-              } else {
-                LaunchUrl.launch(
-                  'https://etherscan.io/tx/${state.transactionHash}',
-                );
+              if (state.transactionHash != null) {
+                openBlockchainExplorer(network, state.transactionHash!);
               }
             },
             onDoneButtonClick: () {
@@ -151,7 +148,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
       },
       builder: (context, state) {
         final amountAndSymbol =
-            '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(6).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
+            '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(getDecimalsToShow(state.totalAmount)).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
         return BasePage(
           scrollView: false,
           title: l10n.confirm,

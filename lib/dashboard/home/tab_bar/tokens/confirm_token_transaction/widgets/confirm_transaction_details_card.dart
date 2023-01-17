@@ -46,7 +46,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '''${isNFT ? amount.toInt() : amount.toStringAsFixed(6).formatNumber()} $symbol''',
+                    '''${isNFT ? amount.toInt() : amount.toStringAsFixed(getDecimalsToShow(amount)).formatNumber()} $symbol''',
                     style: Theme.of(context).textTheme.caption,
                   ),
                   if (tokenUSDRate > 0)
@@ -110,7 +110,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '''${isNFT ? grandTotal.toInt() : grandTotal.toStringAsFixed(6).formatNumber()} $symbol''',
+                    '''${isNFT ? grandTotal.toInt() : grandTotal.toStringAsFixed(getDecimalsToShow(grandTotal)).formatNumber()} $symbol''',
                     style: Theme.of(context).textTheme.caption,
                   ),
                   if (tokenUSDRate > 0)
@@ -140,5 +140,11 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
         color: Theme.of(context).colorScheme.borderColor,
       ),
     );
+  }
+
+  int getDecimalsToShow(double amount) {
+    return amount >= 1
+            ? 2
+            : 5;
   }
 }

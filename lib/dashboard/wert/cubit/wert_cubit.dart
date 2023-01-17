@@ -17,11 +17,11 @@ class WertCubit extends Cubit<String> {
   Future<void> getUrl() async {
     final log = getLogger('WertCubit - getUrl');
     String link =
-        '''https://widget.wert.io/01GPB3PAQ0KF3SCDMHRAN6AZ2B/redirect?theme=dark&lang=en&currency=EUR''';
+        '''https://widget.wert.io/01GPB3PAQ0KF3SCDMHRAN6AZ2B/redirect?theme=dark&lang=en''';
 
-    final address = walletCubit.state.currentAccount.walletAddress;
+    final address = walletCubit.state.currentAccount!.walletAddress;
 
-    switch (walletCubit.state.currentAccount.blockchainType) {
+    switch (walletCubit.state.currentAccount!.blockchainType) {
       case BlockchainType.tezos:
         link = '$link&commodities=XTZ&commodity=XTZ';
         break;

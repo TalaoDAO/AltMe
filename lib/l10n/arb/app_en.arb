@@ -774,5 +774,6 @@
   "buy": "Buy",
   "thisFeatureIsNotSupportedYetForFantom": "This feature is not supported yet for Fantom.",
   "thisFeatureIsNotSupportedYetForBinance": "This feature is not supported yet for Binance.",
-  "faqs": "FAQs"
+  "faqs": "FAQs",
+  "softwareLicenses": "Software Licenses"
 }

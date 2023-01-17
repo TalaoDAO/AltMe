@@ -73,7 +73,7 @@ class _NftViewState extends State<NftView> {
                     accountAddress: context
                         .read<WalletCubit>()
                         .state
-                        .currentAccount
+                        .currentAccount!
                         .walletAddress,
                     item: l10n.nft,
                     description: l10n.sendOnlyNftToThisAddressDescription,
@@ -115,7 +115,8 @@ class _NftViewState extends State<NftView> {
                     }
 
                     if (state.message != null &&
-                        state.status != AppStatus.errorWhileFetching) {
+                        (state.status != AppStatus.errorWhileFetching ||
+                            state.status == AppStatus.error)) {
                       AlertMessage.showStateMessage(
                         context: context,
                         stateMessage: state.message!,
@@ -144,7 +145,7 @@ class _NftViewState extends State<NftView> {
                       .data[index]
                       .blockchainType;
 
-                  if (blockchain.isdisabled) {
+                  if (blockchain.isDisabled) {
                     return Center(
                       child: Text(l10n.thisFeatureIsNotSupportedMessage),
                     );
