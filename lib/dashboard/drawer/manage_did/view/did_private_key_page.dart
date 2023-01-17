@@ -36,21 +36,8 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
   late AnimationController animationController;
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive) {
-      secureApplicationController.lock();
-    }
-  }
-
-  @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addObserver(this);
     Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
     animationController = AnimationController(
@@ -67,7 +54,22 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
         }
       });
     animationController.forward();
-    super.initState();
+    disableScreenshot();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      secureApplicationController.lock();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    animationController.dispose();
+    enableScreenshot();
+    super.dispose();
   }
 
   @override
