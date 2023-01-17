@@ -36,21 +36,24 @@ class RecoveryKeyView extends StatefulWidget {
 }
 
 class _RecoveryKeyViewState extends State<RecoveryKeyView>
-    with WidgetsBindingObserver {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   final SecureApplicationController secureApplicationController =
       SecureApplicationController(
     SecureApplicationState(secured: true, authenticated: true),
   );
 
+  late Animation<double> animation;
+  late AnimationController animationController;
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    animationController.dispose();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print(state);
     if (state == AppLifecycleState.inactive) {
       secureApplicationController.lock();
     }
@@ -58,8 +61,22 @@ class _RecoveryKeyViewState extends State<RecoveryKeyView>
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 10),
+    );
+
+    final Tween<double> _rotationTween = Tween(begin: 20, end: 0);
+
+    animation = _rotationTween.animate(animationController)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          Navigator.pop(context);
+        }
+      });
+    animationController.forward();
   }
 
   @override
@@ -87,6 +104,16 @@ class _RecoveryKeyViewState extends State<RecoveryKeyView>
             title: l10n.recoveryKeyTitle,
             titleAlignment: Alignment.topCenter,
             titleLeading: const BackLeadingButton(),
+            titleTrailing: AnimatedBuilder(
+              animation: animation,
+              builder: (BuildContext context, Widget? child) {
+                return Text(
+                  timeFormatter(timeInSecond: animation.value.toInt()),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge,
+                );
+              },
+            ),
             scrollView: false,
             body: BlocBuilder<RecoveryKeyCubit, RecoveryKeyState>(
               builder: (context, state) {

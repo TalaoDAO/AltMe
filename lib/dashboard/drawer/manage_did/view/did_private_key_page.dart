@@ -26,15 +26,19 @@ class DIDPrivateKeyPage extends StatefulWidget {
 }
 
 class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
-    with WidgetsBindingObserver {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   final SecureApplicationController secureApplicationController =
       SecureApplicationController(
     SecureApplicationState(secured: true, authenticated: true),
   );
 
+  late Animation<double> animation;
+  late AnimationController animationController;
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    animationController.dispose();
     super.dispose();
   }
 
@@ -49,6 +53,20 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 10),
+    );
+
+    final Tween<double> _rotationTween = Tween(begin: 20, end: 0);
+
+    animation = _rotationTween.animate(animationController)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          Navigator.pop(context);
+        }
+      });
+    animationController.forward();
     super.initState();
   }
 
@@ -77,6 +95,16 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
             title: l10n.decentralizedIDKey,
             titleAlignment: Alignment.topCenter,
             titleLeading: const BackLeadingButton(),
+            titleTrailing: AnimatedBuilder(
+              animation: animation,
+              builder: (BuildContext context, Widget? child) {
+                return Text(
+                  timeFormatter(timeInSecond: animation.value.toInt()),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge,
+                );
+              },
+            ),
             body: BackgroundCard(
               width: double.infinity,
               height: double.infinity,
