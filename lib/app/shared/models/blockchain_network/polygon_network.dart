@@ -29,8 +29,6 @@ class PolygonNetwork extends EthereumNetwork {
           mainTokenDecimal: '18',
           mainTokenIcon: IconStrings.polygon,
           mainTokenSymbol: 'MATIC',
-          mainTokenContractAddress:
-              '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0',
         );
 
   factory PolygonNetwork.mainNet() => const PolygonNetwork(

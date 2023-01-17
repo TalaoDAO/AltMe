@@ -17,8 +17,6 @@ class EthereumNetwork extends BlockchainNetwork {
     this.mainTokenDecimal = '18',
     this.mainTokenIcon = IconStrings.ethereum,
     this.mainTokenSymbol = 'ETH',
-    this.mainTokenContractAddress =
-        '0x2170ed0880ac9a755fd29b2688956bd959f933f8',
     required BlockchainType type,
     String apiKey = '',
   }) : super(
@@ -65,7 +63,6 @@ class EthereumNetwork extends BlockchainNetwork {
   final String mainTokenSymbol;
   final String mainTokenIcon;
   final String mainTokenDecimal;
-  final String mainTokenContractAddress;
 
   @override
   Map<String, dynamic> toJson() => _$EthereumNetworkToJson(this);
@@ -79,6 +76,5 @@ class EthereumNetwork extends BlockchainNetwork {
         mainTokenIcon,
         mainTokenSymbol,
         mainTokenDecimal,
-        mainTokenContractAddress,
       ];
 }

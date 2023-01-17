@@ -179,7 +179,6 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     required String contractAddress,
     required EthereumNetwork ehtereumNetwork,
   }) async {
-    // https://deep-index.moralis.io/api/v2/0xd8da6bf26964af9d7eed9e03e53415d37aa96045?chain=eth
 
     await dotenv.load();
     final moralisApiKey = dotenv.get('MORALIS_API_KEY');
