@@ -323,13 +323,17 @@ class WalletCubit extends Cubit<WalletState> {
     await setCurrentWalletAccount(cryptoAccounts.length - 1);
     log.i('$blockchainType created');
 
-    final credential = await generateAssociatedWalletCredential(
-      cryptoAccountData: cryptoAccountData,
-      didCubit: didCubit,
-      didKitProvider: didKitProvider,
-      blockchainType: blockchainType,
-      keyGenerator: keyGenerator,
-    );
+    /// If we are not using crypto in the wallet we are not generating
+    /// AssociatedAddress credentials.
+    final credential = Parameters.hasCryptoCallToAction
+        ? await generateAssociatedWalletCredential(
+            cryptoAccountData: cryptoAccountData,
+            didCubit: didCubit,
+            didKitProvider: didKitProvider,
+            blockchainType: blockchainType,
+            keyGenerator: keyGenerator,
+          )
+        : null;
 
     if (credential != null) {
       await insertCredential(
