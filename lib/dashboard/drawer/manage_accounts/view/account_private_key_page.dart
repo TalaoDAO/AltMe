@@ -35,20 +35,6 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
   late AnimationController animationController;
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive) {
-      secureApplicationController.lock();
-    }
-  }
-
-  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
@@ -66,6 +52,22 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
         }
       });
     animationController.forward();
+    disableScreenshot();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      secureApplicationController.lock();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    animationController.dispose();
+    enableScreenshot();
+    super.dispose();
   }
 
   @override

@@ -52,9 +52,11 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView>
   );
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
+    disableScreenshot();
   }
 
   @override
@@ -65,10 +67,10 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView>
   }
 
   @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
-    super.initState();
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    enableScreenshot();
+    super.dispose();
   }
 
   @override
