@@ -24,4 +24,7 @@ class Parameters {
     isOtherEnabled: true,
     isPassEnabled: true,
   );
+
+  static const double blurr = 100;
+  static const double opacity = 0.1;
 }

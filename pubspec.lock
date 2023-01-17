@@ -1307,7 +1307,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.27.5"
+    version: "0.26.0"
   secp256k1:
     dependency: transitive
     description:
@@ -1315,6 +1315,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
+  secure_application:
+    dependency: "direct main"
+    description:
+      name: secure_application
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.8.0"
   secure_storage:
     dependency: "direct main"
     description:
