@@ -31,6 +31,9 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
     SecureApplicationState(secured: true, authenticated: true),
   );
 
+  late Animation<double> animation;
+  late AnimationController animationController;
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -44,9 +47,6 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
       secureApplicationController.lock();
     }
   }
-
-  late Animation<double> animation;
-  late AnimationController animationController;
 
   @override
   void initState() {
