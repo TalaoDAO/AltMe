@@ -7,7 +7,6 @@ const Color onPrimary = Color(0xffFFFFFF);
 const Color secondary = Color(0xff00A1FF);
 const Color onTertiary = Color(0xFFECF3FA);
 // secondary dans figma Christophe pour new talao
-// TODO: couleur contour dans discover devrait être la même
 const Color surface = Color(0xff191D2E);
 const Color onSurface = Color(0xffEDEAF5);
 const Color background = Color(0xff020820);
