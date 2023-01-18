@@ -56,4 +56,7 @@ class SecureStorageKeys {
   static const String preAuthorizedCode = 'preAuthorizedCode';
 
   static const String savedDaaps = 'savedDaaps';
+
+  static const String importAccountStep2Mnemonics =
+      'importAccountStep2Mnemonics';
 }

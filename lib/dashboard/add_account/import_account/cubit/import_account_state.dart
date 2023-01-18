@@ -7,7 +7,6 @@ class ImportAccountState extends Equatable {
     this.message,
     this.isTextFieldEdited = false,
     this.isMnemonicOrKeyValid = false,
-    this.mnemonicOrKey = '',
     this.accountType = AccountType.tezos,
   });
 
@@ -18,7 +17,6 @@ class ImportAccountState extends Equatable {
   final StateMessage? message;
   final bool isTextFieldEdited;
   final bool isMnemonicOrKeyValid;
-  final String mnemonicOrKey;
   final AccountType accountType;
 
   ImportAccountState loading() {
@@ -26,7 +24,6 @@ class ImportAccountState extends Equatable {
       status: AppStatus.loading,
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
-      mnemonicOrKey: mnemonicOrKey,
       accountType: accountType,
     );
   }
@@ -35,14 +32,12 @@ class ImportAccountState extends Equatable {
     bool? isTextFieldEdited,
     bool? isMnemonicOrKeyValid,
     int? recoveredCredentialLength,
-    String? mnemonicOrKey,
     AccountType? accountType,
   }) {
     return ImportAccountState(
       status: AppStatus.populate,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid ?? this.isMnemonicOrKeyValid,
-      mnemonicOrKey: mnemonicOrKey ?? this.mnemonicOrKey,
       accountType: accountType ?? this.accountType,
     );
   }
@@ -53,7 +48,6 @@ class ImportAccountState extends Equatable {
       message: StateMessage.error(messageHandler: messageHandler),
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
-      mnemonicOrKey: mnemonicOrKey,
       accountType: accountType,
     );
   }
@@ -68,7 +62,6 @@ class ImportAccountState extends Equatable {
           : StateMessage.success(messageHandler: messageHandler),
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
-      mnemonicOrKey: '',
       accountType: accountType,
     );
   }
@@ -81,7 +74,6 @@ class ImportAccountState extends Equatable {
         isMnemonicOrKeyValid,
         isTextFieldEdited,
         message,
-        mnemonicOrKey,
         accountType,
       ];
 }
