@@ -7,10 +7,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:json_path/json_path.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:no_screenshot/no_screenshot.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:web3dart/web3dart.dart';
 
