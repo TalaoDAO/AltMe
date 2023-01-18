@@ -42,17 +42,59 @@ class MWeb3Client {
 
       // read the contract abi and tell web3dart where
       // it's deployed (contractAddr)
-      final abiCode = await rootBundle.loadString('assets/abi/erc20.abi.json');
-      final contractAddress = EthereumAddress.fromHex(token.contractAddress);
-      final contract = DeployedContract(
-        ContractAbi.fromJson(abiCode, 'ERC20'),
-        contractAddress,
-      );
 
-      // extracting some functions and events that we'll need later
-      final transferEvent = contract.event('Transfer');
-      final balanceFunction = contract.function('balanceOf');
-      final sendFunction = contract.function('transfer');
+      late DeployedContract contract;
+      late ContractEvent transferEvent;
+      late ContractFunction balanceFunction;
+      late ContractFunction sendFunction;
+      late List<dynamic> balanceFunctionParams;
+
+      if (token.standard?.toLowerCase() == 'erc20') {
+        final abiCode =
+            await rootBundle.loadString('assets/abi/erc20.abi.json');
+        final contractAddress = EthereumAddress.fromHex(token.contractAddress);
+        contract = DeployedContract(
+          ContractAbi.fromJson(abiCode, 'ERC20'),
+          contractAddress,
+        );
+
+        // extracting some functions and events that we'll need later
+        transferEvent = contract.event('Transfer');
+        balanceFunction = contract.function('balanceOf');
+        sendFunction = contract.function('transfer');
+
+        balanceFunctionParams = <dynamic>[sender];
+      } else if (token.standard?.toLowerCase() == 'erc721') {
+        final abiCode =
+            await rootBundle.loadString('assets/abi/erc721.abi.json');
+        final contractAddress = EthereumAddress.fromHex(token.contractAddress);
+        contract = DeployedContract(
+          ContractAbi.fromJson(abiCode, 'ERC721'),
+          contractAddress,
+        );
+
+        // extracting some functions and events that we'll need later
+        transferEvent = contract.event('Transfer');
+        balanceFunction = contract.function('balanceOf');
+        sendFunction = contract.function('safeTransferFrom');
+
+        balanceFunctionParams = <dynamic>[sender, token.tokenId];
+      } else {
+        //ERC1155
+        final abiCode =
+            await rootBundle.loadString('assets/abi/erc1155.abi.json');
+        final contractAddress = EthereumAddress.fromHex(token.contractAddress);
+        contract = DeployedContract(
+          ContractAbi.fromJson(abiCode, 'ERC1155'),
+          contractAddress,
+        );
+
+        // extracting some functions and events that we'll need later
+        transferEvent = contract.event('TransferSingle');
+        balanceFunction = contract.function('balanceOf');
+        sendFunction = contract.function('safeTransferFrom');
+        balanceFunctionParams = <dynamic>[sender, token.tokenId];
+      }
 
       // listen for the Transfer event when it's emitted by the contract above
       final subscription = client
@@ -76,7 +118,7 @@ class MWeb3Client {
       final balance = await client.call(
         contract: contract,
         function: balanceFunction,
-        params: <dynamic>[sender],
+        params: balanceFunctionParams,
       );
       log.i('We have ${balance.first} ${token.name}');
 
