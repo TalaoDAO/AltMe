@@ -53,6 +53,8 @@ class _CardAnimationState extends State<CardAnimation>
     return GestureDetector(
       onTap: () async {
         await _animationController.reverse();
+
+        // TODO(all): remove setstate
         setState(() {
           if (_card is Recto) {
             _card = widget.verso;

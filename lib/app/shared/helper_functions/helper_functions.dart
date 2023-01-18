@@ -10,6 +10,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:json_path/json_path.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:no_screenshot/no_screenshot.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -221,16 +222,4 @@ String timeFormatter({required int timeInSecond}) {
   final String minute = min.toString().length <= 1 ? '0$min' : '$min';
   final String second = sec.toString().length <= 1 ? '0$sec' : '$sec';
   return '$minute : $second';
-}
-
-Future<void> disableScreenshot() async {
-  if (isAndroid()) {
-    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-  }
-}
-
-Future<void> enableScreenshot() async {
-  if (isAndroid()) {
-    await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
-  }
 }

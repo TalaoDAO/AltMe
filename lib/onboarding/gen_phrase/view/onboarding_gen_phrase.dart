@@ -9,7 +9,6 @@ import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:secure_application/secure_application.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingGenPhrasePage extends StatelessWidget {
@@ -44,33 +43,11 @@ class OnBoardingGenPhraseView extends StatefulWidget {
       _OnBoardingGenPhraseViewState();
 }
 
-class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView>
-    with WidgetsBindingObserver {
-  final SecureApplicationController secureApplicationController =
-      SecureApplicationController(
-    SecureApplicationState(secured: true, authenticated: true),
-  );
-
+class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
-    disableScreenshot();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive) {
-      secureApplicationController.lock();
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    enableScreenshot();
-    super.dispose();
   }
 
   @override
@@ -100,159 +77,134 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView>
         }
       },
       builder: (context, state) {
-        return SecureApplication(
-          nativeRemoveDelay: 800,
-          autoUnlockNative: true,
-          secureApplicationController: secureApplicationController,
-          onNeedUnlock: (secureApplicationController) async {
-            /// need unlock maybe use biometric to confirm and then sercure.unlock()
-            /// or you can use the lockedBuilder
-
-            secureApplicationController!.authSuccess(unlock: true);
-            return SecureApplicationAuthenticationStatus.SUCCESS;
-            //return null;
-          },
-          child: Builder(builder: (context) {
-            return SecureGate(
-              blurr: Parameters.blurr,
-              opacity: Parameters.opacity,
-              lockedBuilder: (context, secureNotifier) => Container(),
-              child: BasePage(
-                scrollView: false,
-                useSafeArea: true,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
-                titleLeading: const BackLeadingButton(),
-                body: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            const MStepper(
-                              step: 3,
-                              totalStep: 3,
-                            ),
-                            const SizedBox(
-                              height: Sizes.spaceNormal,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: Sizes.spaceNormal,
-                              ),
-                              child: Text(
-                                l10n.onboardingPleaseStoreMessage,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.headline5,
-                              ),
-                            ),
-                            const SizedBox(height: Sizes.spaceNormal),
-                            MnemonicDisplay(mnemonic: state.mnemonic),
-                            // const SizedBox(
-                            //   height: Sizes.spaceSmall,
-                            // ),
-                            // TextButton(
-                            //   onPressed: () {
-                            //     Clipboard.setData(
-                            //       ClipboardData(
-                            //         text: state.mnemonic.join(' '),
-                            //       ),
-                            //     );
-                            //   },
-                            //   child: Text(
-                            //     l10n.copyToClipboard,
-                            //     style: Theme.of(context).textTheme.copyToClipBoard,
-                            //   ),
-                            // ),
-                            const SizedBox(height: Sizes.spaceLarge),
-                            Text(
-                              l10n.onboardingAltmeMessage,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .genPhraseSubmessage,
-                            ),
-                          ],
+        return BasePage(
+          scrollView: false,
+          useSafeArea: true,
+          padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
+          titleLeading: const BackLeadingButton(),
+          secureScreen: true,
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const MStepper(
+                        step: 3,
+                        totalStep: 3,
+                      ),
+                      const SizedBox(
+                        height: Sizes.spaceNormal,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Sizes.spaceNormal,
+                        ),
+                        child: Text(
+                          l10n.onboardingPleaseStoreMessage,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headline5,
                         ),
                       ),
-                    ),
-                    //const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(
-                        Sizes.spaceNormal,
+                      const SizedBox(height: Sizes.spaceNormal),
+                      MnemonicDisplay(mnemonic: state.mnemonic),
+                      // const SizedBox(
+                      //   height: Sizes.spaceSmall,
+                      // ),
+                      // TextButton(
+                      //   onPressed: () {
+                      //     Clipboard.setData(
+                      //       ClipboardData(
+                      //         text: state.mnemonic.join(' '),
+                      //       ),
+                      //     );
+                      //   },
+                      //   child: Text(
+                      //     l10n.copyToClipboard,
+                      //     style: Theme.of(context).textTheme.copyToClipBoard,
+                      //   ),
+                      // ),
+                      const SizedBox(height: Sizes.spaceLarge),
+                      Text(
+                        l10n.onboardingAltmeMessage,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.genPhraseSubmessage,
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Transform.scale(
-                            scale: 1.5,
-                            child: Checkbox(
-                              value: state.isTicked,
-                              fillColor: MaterialStateProperty.all(
-                                Theme.of(context).colorScheme.primary,
-                              ),
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(6),
-                                ),
-                              ),
-                              onChanged: (newValue) => context
-                                  .read<OnBoardingGenPhraseCubit>()
-                                  .switchTick(),
-                            ),
+                    ],
+                  ),
+                ),
+              ),
+              //const Spacer(),
+              Padding(
+                padding: const EdgeInsets.all(
+                  Sizes.spaceNormal,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Transform.scale(
+                      scale: 1.5,
+                      child: Checkbox(
+                        value: state.isTicked,
+                        fillColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.primary,
+                        ),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(6),
                           ),
-                          const SizedBox(
-                            width: Sizes.spaceXSmall,
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                context
-                                    .read<OnBoardingGenPhraseCubit>()
-                                    .switchTick();
-                              },
-                              child: MyText(
-                                l10n.onboardingWroteDownMessage,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .onBoardingCheckMessage,
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
+                        onChanged: (newValue) => context
+                            .read<OnBoardingGenPhraseCubit>()
+                            .switchTick(),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: Sizes.spaceXSmall,
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          context.read<OnBoardingGenPhraseCubit>().switchTick();
+                        },
+                        child: MyText(
+                          l10n.onboardingWroteDownMessage,
+                          style: Theme.of(context)
+                              .textTheme
+                              .onBoardingCheckMessage,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                navigation: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.spaceSmall,
-                      vertical: Sizes.spaceSmall,
-                    ),
-                    child: MyGradientButton(
-                      text: l10n.onBoardingGenPhraseButton,
-                      verticalSpacing: 18,
-                      onPressed: state.isTicked
-                          ? () async {
-                              await context
-                                  .read<OnBoardingGenPhraseCubit>()
-                                  .generateSSIAndCryptoAccount(state.mnemonic);
-                            }
-                          : null,
-                    ),
-                  ),
-                ),
               ),
-            );
-          }),
+            ],
+          ),
+          navigation: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Sizes.spaceSmall,
+                vertical: Sizes.spaceSmall,
+              ),
+              child: MyGradientButton(
+                text: l10n.onBoardingGenPhraseButton,
+                verticalSpacing: 18,
+                onPressed: state.isTicked
+                    ? () async {
+                        await context
+                            .read<OnBoardingGenPhraseCubit>()
+                            .generateSSIAndCryptoAccount(state.mnemonic);
+                      }
+                    : null,
+              ),
+            ),
+          ),
         );
       },
     );
