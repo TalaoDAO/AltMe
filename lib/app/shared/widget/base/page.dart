@@ -75,6 +75,8 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
       case AppLifecycleState.resumed:
         if (widget.secureScreen) {
           noScreenShot.screenshotOff();
+        } else {
+          noScreenShot.screenshotOn();
         }
         break;
 
