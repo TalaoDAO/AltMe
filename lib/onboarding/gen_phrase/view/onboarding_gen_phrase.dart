@@ -7,7 +7,6 @@ import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -36,8 +35,20 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
   }
 }
 
-class OnBoardingGenPhraseView extends StatelessWidget {
+class OnBoardingGenPhraseView extends StatefulWidget {
   const OnBoardingGenPhraseView({Key? key}) : super(key: key);
+
+  @override
+  State<OnBoardingGenPhraseView> createState() =>
+      _OnBoardingGenPhraseViewState();
+}
+
+class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,14 +81,8 @@ class OnBoardingGenPhraseView extends StatelessWidget {
           scrollView: false,
           useSafeArea: true,
           padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
-          titleLeading: BackLeadingButton(
-            onPressed: () {
-              if (context.read<OnBoardingGenPhraseCubit>().state.status !=
-                  AppStatus.loading) {
-                Navigator.of(context).pop();
-              }
-            },
-          ),
+          titleLeading: const BackLeadingButton(),
+          secureScreen: true,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,

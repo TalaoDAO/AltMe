@@ -3,7 +3,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -25,11 +24,36 @@ class DIDPrivateKeyPage extends StatefulWidget {
   State<DIDPrivateKeyPage> createState() => _DIDPrivateKeyPageState();
 }
 
-class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage> {
+class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
+    with SingleTickerProviderStateMixin {
+  late Animation<double> animation;
+  late AnimationController animationController;
+
   @override
   void initState() {
-    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
     super.initState();
+    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
+
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 10),
+    );
+
+    final Tween<double> _rotationTween = Tween(begin: 20, end: 0);
+
+    animation = _rotationTween.animate(animationController)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          Navigator.pop(context);
+        }
+      });
+    animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -40,6 +64,17 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage> {
       title: l10n.decentralizedIDKey,
       titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
+      titleTrailing: AnimatedBuilder(
+        animation: animation,
+        builder: (BuildContext context, Widget? child) {
+          return Text(
+            timeFormatter(timeInSecond: animation.value.toInt()),
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleLarge,
+          );
+        },
+      ),
+      secureScreen: true,
       body: BackgroundCard(
         width: double.infinity,
         height: double.infinity,

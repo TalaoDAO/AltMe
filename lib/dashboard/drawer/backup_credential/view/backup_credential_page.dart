@@ -32,9 +32,14 @@ class BackupCredentialPage extends StatelessWidget {
   }
 }
 
-class BackupCredentialView extends StatelessWidget {
+class BackupCredentialView extends StatefulWidget {
   const BackupCredentialView({Key? key}) : super(key: key);
 
+  @override
+  State<BackupCredentialView> createState() => _BackupCredentialViewState();
+}
+
+class _BackupCredentialViewState extends State<BackupCredentialView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -49,6 +54,7 @@ class BackupCredentialView extends StatelessWidget {
         left: Sizes.spaceSmall,
         right: Sizes.spaceSmall,
       ),
+      secureScreen: true,
       body: BlocConsumer<BackupCredentialCubit, BackupCredentialState>(
         listener: (context, state) async {
           if (state.status == AppStatus.loading) {
