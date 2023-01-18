@@ -53,7 +53,13 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     }
   }
 
+  bool validEtherumAddress(String ethereumAddress) {
+    final etherumAddressRegExp = RegExp(r'^0x[0-9a-f]{40}$');
+    return etherumAddressRegExp.hasMatch(ethereumAddress);
+  }
+
   Future<void> calculateFee() async {
+    if (state.withdrawalAddress.trim().isEmpty) return;
     emit(state.loading());
     try {
       if (manageNetworkCubit.state.network is TezosNetwork) {
@@ -79,10 +85,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           ),
         );
       } else {
-        final selectedEthereumNetwork =
-            manageNetworkCubit.state.network as EthereumNetwork;
-
-        //final web3RpcURL = selectedEthereumNetwork.rpcNodeUrl;
         await dotenv.load();
         final web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
 
@@ -447,13 +449,26 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         );
       }
     } catch (e, s) {
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+      if (e is RPCError) {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage.error(
+              stringMessage: e.message,
+              showDialog: true,
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
+      }
       getLogger(runtimeType.toString())
           .e('error in transferOperation , e: $e, s: $s');
     }
