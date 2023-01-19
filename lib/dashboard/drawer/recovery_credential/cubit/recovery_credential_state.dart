@@ -8,7 +8,6 @@ class RecoveryCredentialState extends Equatable {
     this.isTextFieldEdited = false,
     this.isMnemonicValid = false,
     this.recoveredCredentialLength,
-    this.mnemonic,
     this.backupFilePath,
   });
 
@@ -20,7 +19,6 @@ class RecoveryCredentialState extends Equatable {
   final bool isTextFieldEdited;
   final bool isMnemonicValid;
   final int? recoveredCredentialLength;
-  final String? mnemonic;
   final String? backupFilePath;
 
   RecoveryCredentialState loading() {
@@ -46,13 +44,11 @@ class RecoveryCredentialState extends Equatable {
     bool? isTextFieldEdited,
     bool? isMnemonicValid,
     int? recoveredCredentialLength,
-    String? mnemonic,
   }) {
     return copyWith(
       status: AppStatus.populate,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
       isMnemonicValid: isMnemonicValid ?? this.isMnemonicValid,
-      mnemonic: mnemonic,
     );
   }
 
@@ -78,7 +74,6 @@ class RecoveryCredentialState extends Equatable {
     bool? isTextFieldEdited,
     bool? isMnemonicValid,
     int? recoveredCredentialLength,
-    String? mnemonic,
     String? backupFilePath,
   }) {
     return RecoveryCredentialState(
@@ -88,7 +83,6 @@ class RecoveryCredentialState extends Equatable {
       message: message ?? this.message,
       recoveredCredentialLength:
           recoveredCredentialLength ?? this.recoveredCredentialLength,
-      mnemonic: mnemonic ?? this.mnemonic,
       backupFilePath: backupFilePath ?? this.backupFilePath,
     );
   }
@@ -102,7 +96,6 @@ class RecoveryCredentialState extends Equatable {
         isTextFieldEdited,
         message,
         recoveredCredentialLength,
-        mnemonic,
         backupFilePath,
       ];
 }

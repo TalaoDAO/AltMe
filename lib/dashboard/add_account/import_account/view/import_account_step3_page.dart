@@ -169,6 +169,9 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
                   ? null
                   : () async {
                       LoadingView().show(context: context);
+                      await getSecureStorage.delete(
+                        SecureStorageKeys.importAccountStep2Mnemonics,
+                      );
                       await getSecureStorage.set(
                         SecureStorageKeys.importAccountStep2Mnemonics,
                         mnemonicController.text,

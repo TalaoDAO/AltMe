@@ -88,9 +88,6 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
         },
       );
 
-      await getSecureStorage
-          .delete(SecureStorageKeys.importAccountStep2Mnemonics);
-
       await homeCubit.emitHasWallet();
       emit(state.success());
     } catch (error, stack) {

@@ -7,6 +7,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class RecoveryCredentialPage extends StatelessWidget {
   const RecoveryCredentialPage({Key? key}) : super(key: key);
@@ -22,6 +23,7 @@ class RecoveryCredentialPage extends StatelessWidget {
       create: (context) => RecoveryCredentialCubit(
         walletCubit: context.read<WalletCubit>(),
         cryptoKeys: const CryptocurrencyKeys(),
+        secureStorageProvider: getSecureStorage,
       ),
       child: const RecoveryCredentialView(),
     );
@@ -118,8 +120,17 @@ class _RecoveryCredentialViewState extends State<RecoveryCredentialView> {
             return MyGradientButton(
               onPressed: !state.isMnemonicValid
                   ? null
-                  : () {
-                      Navigator.of(context).push<void>(
+                  : () async {
+                      LoadingView().show(context: context);
+                      await getSecureStorage.delete(
+                        SecureStorageKeys.recoverCredentialMnemonics,
+                      );
+                      await getSecureStorage.set(
+                        SecureStorageKeys.recoverCredentialMnemonics,
+                        mnemonicController.text,
+                      );
+                      LoadingView().hide();
+                      await Navigator.of(context).push<void>(
                         UploadRecoveryCredentialPage.route(
                           recoveryCredentialCubit:
                               context.read<RecoveryCredentialCubit>(),

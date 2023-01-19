@@ -59,4 +59,6 @@ class SecureStorageKeys {
 
   static const String importAccountStep2Mnemonics =
       'importAccountStep2Mnemonics';
+
+  static const String recoverCredentialMnemonics = 'recoverCredentialMnemonics';
 }
