@@ -110,8 +110,8 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
             autoUnlockNative: true,
             secureApplicationController: secureApplicationController,
             onNeedUnlock: (secureApplicationController) async {
-              /// need unlock maybe use biometric to confirm and then sercure.unlock()
-              /// or you can use the lockedBuilder
+              /// need unlock maybe use biometric to confirm and then
+              /// sercure.unlock() or you can use the lockedBuilder
 
               secureApplicationController!.authSuccess(unlock: true);
               return SecureApplicationAuthenticationStatus.SUCCESS;

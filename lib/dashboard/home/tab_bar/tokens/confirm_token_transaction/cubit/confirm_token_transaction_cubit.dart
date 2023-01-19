@@ -135,7 +135,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   }
 
   void setNetworkFee({required NetworkFeeModel networkFee}) {
-    
     final totalAmount = state.selectedToken.symbol == networkFee.tokenSymbol
         ? state.tokenAmount - networkFee.fee
         : state.tokenAmount;
