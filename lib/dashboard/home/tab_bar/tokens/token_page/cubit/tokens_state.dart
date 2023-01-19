@@ -5,7 +5,7 @@ class TokensState extends Equatable {
   const TokensState({
     this.status = AppStatus.init,
     this.message,
-    this.data = const [],
+    this.data = const {},
     this.isSecure = false,
     this.totalBalanceInUSD = 0.0,
     this.offset = 0,
@@ -17,7 +17,7 @@ class TokensState extends Equatable {
 
   final AppStatus status;
   final StateMessage? message;
-  final List<TokenModel> data;
+  final Set<TokenModel> data;
   final bool isSecure;
   final double totalBalanceInUSD;
   final int offset;
@@ -54,7 +54,7 @@ class TokensState extends Equatable {
   }
 
   TokensState populate({
-    List<TokenModel>? data,
+    Set<TokenModel>? data,
   }) {
     return copyWith(
       status: AppStatus.populate,
@@ -64,7 +64,7 @@ class TokensState extends Equatable {
 
   TokensState success({
     MessageHandler? messageHandler,
-    List<TokenModel>? data,
+    Set<TokenModel>? data,
   }) {
     return copyWith(
       status: AppStatus.success,
@@ -79,7 +79,7 @@ class TokensState extends Equatable {
     return TokensState(
       status: AppStatus.init,
       message: null,
-      data: const [],
+      data: const {},
       isSecure: false,
       totalBalanceInUSD: 0,
       offset: 0,
@@ -90,7 +90,7 @@ class TokensState extends Equatable {
   TokensState copyWith({
     AppStatus? status,
     StateMessage? message,
-    List<TokenModel>? data,
+    Set<TokenModel>? data,
     bool? isSecure,
     double? totalBalanceInUSD,
     int? offset,

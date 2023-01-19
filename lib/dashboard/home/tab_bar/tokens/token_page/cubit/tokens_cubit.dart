@@ -56,7 +56,7 @@ class TokensCubit extends Cubit<TokensState> {
             await secureStorageProvider.get(SecureStorageKeys.ssiKey);
         await walletCubit.initialize(ssiKey: ssiKey);
         if (walletCubit.state.cryptoAccount.data.isEmpty) {
-          emit(state.populate(data: []));
+          emit(state.populate(data: {}));
           return;
         }
       }
@@ -88,7 +88,7 @@ class TokensCubit extends Cubit<TokensState> {
     } catch (e, s) {
       getLogger(runtimeType.toString()).e('error in get tokens e: $e , s:$s');
       data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
-      emit(state.copyWith(data: data));
+      emit(state.copyWith(data: data.toSet()));
       if (isClosed) return;
       emit(
         state.errorWhileFetching(
@@ -157,30 +157,7 @@ class TokensCubit extends Cubit<TokensState> {
       data.addAll(newData);
     }
 
-    for (int i = 0; i < data.length; i++) {
-      try {
-        final token = data[i];
-        final dynamic response = await client.get(
-          '${Urls.cryptoCompareBaseUrl}/data/price?fsym=${token.symbol}&tsyms=USD',
-        );
-        if (response['USD'] != null) {
-          final tokenUSDPrice = response['USD'] as num;
-          data[i] = token.copyWith(
-            tokenUSDPrice: tokenUSDPrice.toDouble(),
-            balanceInUSD: tokenUSDPrice * token.calculatedBalanceInDouble,
-            decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
-          );
-        } else {
-          data[i] = token.copyWith(
-            decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
-          );
-        }
-      } catch (e, s) {
-        getLogger(toString()).e(
-          'error in finding contract, error: $e, s: $s',
-        );
-      }
-    }
+    data = await setUSDValues(data);
     double totalBalanceInUSD = 0;
     for (final tokenElement in data) {
       totalBalanceInUSD += tokenElement.balanceInUSD;
@@ -190,10 +167,36 @@ class TokensCubit extends Cubit<TokensState> {
     emit(
       state.copyWith(
         status: AppStatus.success,
-        data: data,
+        data: data.toSet(),
         totalBalanceInUSD: totalBalanceInUSD,
       ),
     );
+  }
+
+  Future<List<TokenModel>> setUSDValues(List<TokenModel> tokens) async {
+    try {
+      final dynamic response = await client.get(
+        '${Urls.cryptoCompareBaseUrl}/data/pricemulti?fsyms=${tokens.map((e) => e.symbol).toList().join(',')}&tsyms=USD',
+      );
+      for (var i = 0; i < tokens.length; i++) {
+        final tokenUSDPrice = response[tokens[i].symbol]['USD'] as num?;
+        if (tokenUSDPrice == null) {
+          data[i] = tokens[i].copyWith(
+            decimalsToShow: tokens[i].calculatedBalanceInDouble < 1.0 ? 5 : 2,
+          );
+        } else {
+          tokens[i] = tokens[i].copyWith(
+            tokenUSDPrice: tokenUSDPrice.toDouble(),
+            balanceInUSD: tokenUSDPrice * tokens[i].calculatedBalanceInDouble,
+            decimalsToShow: tokens[i].calculatedBalanceInDouble < 1.0 ? 5 : 2,
+          );
+        }
+      }
+      return tokens;
+    } catch (e, s) {
+      getLogger(toString()).e('error in setUSDValues, e: $e, s: $s');
+      return tokens;
+    }
   }
 
   Future<void> getTokensOnTezos({
@@ -315,7 +318,7 @@ class TokensCubit extends Cubit<TokensState> {
       emit(
         state.copyWith(
           status: AppStatus.success,
-          data: data,
+          data: data.toSet(),
           totalBalanceInUSD: totalBalanceInUSD,
         ),
       );
@@ -328,7 +331,7 @@ class TokensCubit extends Cubit<TokensState> {
       emit(
         state.copyWith(
           status: AppStatus.success,
-          data: data,
+          data: data.toSet(),
           totalBalanceInUSD: totalBalanceInUSD,
         ),
       );
