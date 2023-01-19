@@ -9,6 +9,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:ebsi/ebsi.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -16,6 +17,49 @@ import 'package:mocktail/mocktail.dart';
 class MockDio extends Mock implements Dio {}
 
 void main() {
+  group('EBSI DID and JWK', () {
+    test('JWK from mnemonic', () async {
+      final expectedJwk = {
+        "kty": "EC",
+        "crv": "secp256k1",
+        "d": "lrKEpyoUOWRQIUOepeOpiOWI1ovobYfK9M8hYkcSnxY",
+        "x": "MpE6Qo0XYS7FVM13JADFFjtfg4ehhmdpMFlzR4TsiR8",
+        "y": "up-oVN_-EHHlwup51eHO7qLRS9bdN7faXug2fzTS8Uc",
+        "alg": "ES256K"
+      };
+      final client = MockDio();
+      final ebsi = Ebsi(client: client);
+      final mnemonic =
+          'jambon fromage comte camembert pain fleur voiture bac pere mere fille fils';
+      final jwk = await ebsi.jwkFromMnemonic(mnemonic: mnemonic);
+      expect(jsonDecode(jwk), expectedJwk);
+    });
+    test('DID from JWK', () async {
+      // final jwk = {
+      //   'crv': 'secp256k1',
+      //   'd': 'dBE5MSwGh1ypjymY48CGv_FaFQHQUPaZ632rhFVpZNw',
+      //   'kty': 'EC',
+      //   'x': 'liIvy6clecfH9riQNvs1VsX7m1bYmYZ2JsHhpPkey_dictJjfgY',
+      //   'y': 'j8Q9Xfa8MIY78JiEpzMrlJzYz2vTkJY183hJBLLcKiU'
+      // };
+      final jwk = {
+        "kty": "EC",
+        "d": "d_PpSCGQWWgUc1t4iLLH8bKYlYfc9Zy_M7TsfOAcbg8",
+        "use": "sig",
+        "crv": "P-256",
+        "x": "ngy44T1vxAT6Di4nr-UaM9K3Tlnz9pkoksDokKFkmNc",
+        "y": "QCRfOKlSM31GTkb4JHx3nXB4G_jSPMsbdjzlkT_UpPc",
+        "alg": "ES256",
+      };
+      final expectedDid =
+          'did:ebsi:znxntxQrN369GsNyjFjYb8fuvU7g3sJGyYGwMTcUGdzuy';
+      final client = MockDio();
+      final ebsi = Ebsi(client: client);
+      final did = ebsi.getDidFromJwk(jwk);
+      expect(did, expectedDid);
+    });
+  });
+
   group('Ebsi', () {
     test('can be instantiated', () {
       final client = MockDio();
