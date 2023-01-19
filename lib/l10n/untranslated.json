@@ -709,7 +709,8 @@
     "thisFeatureIsNotSupportedYetForFantom",
     "thisFeatureIsNotSupportedYetForBinance",
     "faqs",
-    "softwareLicenses"
+    "softwareLicenses",
+    "notAValidWalletAddress"
   ],
 
   "es": [
@@ -1422,7 +1423,8 @@
     "thisFeatureIsNotSupportedYetForFantom",
     "thisFeatureIsNotSupportedYetForBinance",
     "faqs",
-    "softwareLicenses"
+    "softwareLicenses",
+    "notAValidWalletAddress"
   ],
 
   "fr": [
@@ -2135,7 +2137,8 @@
     "thisFeatureIsNotSupportedYetForFantom",
     "thisFeatureIsNotSupportedYetForBinance",
     "faqs",
-    "softwareLicenses"
+    "softwareLicenses",
+    "notAValidWalletAddress"
   ],
 
   "it": [
@@ -2848,6 +2851,7 @@
     "thisFeatureIsNotSupportedYetForFantom",
     "thisFeatureIsNotSupportedYetForBinance",
     "faqs",
-    "softwareLicenses"
+    "softwareLicenses",
+    "notAValidWalletAddress"
   ]
 }

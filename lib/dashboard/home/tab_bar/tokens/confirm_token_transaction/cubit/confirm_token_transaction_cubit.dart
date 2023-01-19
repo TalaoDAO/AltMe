@@ -53,11 +53,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     }
   }
 
-  bool validEtherumAddress(String ethereumAddress) {
-    final etherumAddressRegExp = RegExp(r'^0x[0-9a-f]{40}$');
-    return etherumAddressRegExp.hasMatch(ethereumAddress);
-  }
-
   Future<void> calculateFee() async {
     if (state.withdrawalAddress.trim().isEmpty) return;
     emit(state.loading());
