@@ -135,7 +135,17 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   }
 
   void setNetworkFee({required NetworkFeeModel networkFee}) {
-    emit(state.copyWith(networkFee: networkFee));
+    
+    final totalAmount = state.selectedToken.symbol == networkFee.tokenSymbol
+        ? state.tokenAmount - networkFee.fee
+        : state.tokenAmount;
+
+    emit(
+      state.copyWith(
+        networkFee: networkFee,
+        totalAmount: totalAmount,
+      ),
+    );
   }
 
   bool canConfirmTheWithdrawal({
