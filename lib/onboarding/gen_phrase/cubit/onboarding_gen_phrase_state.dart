@@ -2,7 +2,7 @@ part of 'onboarding_gen_phrase_cubit.dart';
 
 @JsonSerializable()
 class OnBoardingGenPhraseState extends Equatable {
-  OnBoardingGenPhraseState({
+  const OnBoardingGenPhraseState({
     this.status = AppStatus.init,
     this.message,
     this.isTicked = false,
