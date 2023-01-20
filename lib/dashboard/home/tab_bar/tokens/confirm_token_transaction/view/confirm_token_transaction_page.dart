@@ -184,7 +184,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                         ),
                   ),
                   const SizedBox(height: Sizes.spaceSmall),
-                  const AccountSelectBoxView(isEnabled: false),
+                  const FromAccountWidget(isEnabled: false),
                   const SizedBox(height: Sizes.spaceNormal),
                   WithdrawalAddressInputView(
                     withdrawalAddressController: withdrawalAddressController,

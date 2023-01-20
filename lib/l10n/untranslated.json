@@ -710,7 +710,9 @@
     "thisFeatureIsNotSupportedYetForBinance",
     "faqs",
     "softwareLicenses",
-    "notAValidWalletAddress"
+    "notAValidWalletAddress",
+    "otherAccount",
+    "thereIsNoAccountInYourWallet"
   ],
 
   "es": [
@@ -1424,7 +1426,9 @@
     "thisFeatureIsNotSupportedYetForBinance",
     "faqs",
     "softwareLicenses",
-    "notAValidWalletAddress"
+    "notAValidWalletAddress",
+    "otherAccount",
+    "thereIsNoAccountInYourWallet"
   ],
 
   "fr": [
@@ -2138,7 +2142,9 @@
     "thisFeatureIsNotSupportedYetForBinance",
     "faqs",
     "softwareLicenses",
-    "notAValidWalletAddress"
+    "notAValidWalletAddress",
+    "otherAccount",
+    "thereIsNoAccountInYourWallet"
   ],
 
   "it": [
@@ -2852,6 +2858,8 @@
     "thisFeatureIsNotSupportedYetForBinance",
     "faqs",
     "softwareLicenses",
-    "notAValidWalletAddress"
+    "notAValidWalletAddress",
+    "otherAccount",
+    "thereIsNoAccountInYourWallet"
   ]
 }

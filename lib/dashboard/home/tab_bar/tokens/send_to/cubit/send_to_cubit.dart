@@ -10,6 +10,10 @@ part 'send_to_cubit.g.dart';
 class SendToCubit extends Cubit<SendToState> {
   SendToCubit() : super(const SendToState());
 
+  void setOtherAccountTab({required bool isOtherAccount}) {
+    emit(state.copyWith(isOtherAccountTab: isOtherAccount));
+  }
+
   void setSelectedAccount({required CryptoAccountData selectedAccount}) {
     emit(state.copyWith(selectedAccount: selectedAccount));
   }

@@ -774,5 +774,7 @@
   "thisFeatureIsNotSupportedYetForBinance": "This feature is not supported yet for Binance.",
   "faqs":"FAQs",
   "softwareLicenses": "Software Licenses",
-  "notAValidWalletAddress": "Not a valid wallet address!"
+  "notAValidWalletAddress": "Not a valid wallet address!",
+  "otherAccount": "Other account",
+  "thereIsNoAccountInYourWallet": "There is no account in your wallet"
 }
