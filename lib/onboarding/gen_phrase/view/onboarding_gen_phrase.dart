@@ -5,6 +5,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,9 +45,12 @@ class OnBoardingGenPhraseView extends StatefulWidget {
 }
 
 class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
+  late List<String>? mnemonic;
+
   @override
   void initState() {
     super.initState();
+    mnemonic = bip39.generateMnemonic().split(' ');
     Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
   }
 
@@ -110,7 +114,8 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                         ),
                       ),
                       const SizedBox(height: Sizes.spaceNormal),
-                      MnemonicDisplay(mnemonic: state.mnemonic),
+                      if (mnemonic != null)
+                        MnemonicDisplay(mnemonic: mnemonic!),
                       // const SizedBox(
                       //   height: Sizes.spaceSmall,
                       // ),
@@ -195,11 +200,11 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
               child: MyGradientButton(
                 text: l10n.onBoardingGenPhraseButton,
                 verticalSpacing: 18,
-                onPressed: state.isTicked
+                onPressed: state.isTicked || mnemonic != null
                     ? () async {
                         await context
                             .read<OnBoardingGenPhraseCubit>()
-                            .generateSSIAndCryptoAccount(state.mnemonic);
+                            .generateSSIAndCryptoAccount(mnemonic!);
                       }
                     : null,
               ),

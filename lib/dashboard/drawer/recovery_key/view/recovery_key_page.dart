@@ -1,11 +1,7 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class RecoveryKeyPage extends StatelessWidget {
   const RecoveryKeyPage({Key? key}) : super(key: key);
@@ -17,13 +13,7 @@ class RecoveryKeyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => RecoveryKeyCubit(
-        secureStorageProvider: getSecureStorage,
-        walletCubit: context.read<WalletCubit>(),
-      ),
-      child: const RecoveryKeyView(),
-    );
+    return const RecoveryKeyView();
   }
 }
 
@@ -84,32 +74,41 @@ class _RecoveryKeyViewState extends State<RecoveryKeyView>
       ),
       secureScreen: true,
       scrollView: false,
-      body: BlocBuilder<RecoveryKeyCubit, RecoveryKeyState>(
-        builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Column(
-                children: [
-                  Text(
-                    l10n.genPhraseInstruction,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.messageTitle,
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    l10n.genPhraseExplanation,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.messageSubtitle,
-                  ),
-                ],
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Column(
+            children: [
+              Text(
+                l10n.genPhraseInstruction,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.messageTitle,
               ),
-              const SizedBox(height: 32),
-              if (state.mnemonic != null && state.mnemonic!.isNotEmpty)
-                MnemonicDisplay(mnemonic: state.mnemonic!),
+              const SizedBox(height: 20),
+              Text(
+                l10n.genPhraseExplanation,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.messageSubtitle,
+              ),
             ],
-          );
-        },
+          ),
+          const SizedBox(height: 32),
+          FutureBuilder<List<String>>(
+            future: getssiMnemonicsInList(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.done:
+                  final mnemonics = snapshot.data!;
+
+                  return MnemonicDisplay(mnemonic: mnemonics);
+                case ConnectionState.waiting:
+                case ConnectionState.none:
+                case ConnectionState.active:
+                  return const SizedBox();
+              }
+            },
+          )
+        ],
       ),
     );
   }

@@ -89,8 +89,20 @@ class _BackupCredentialViewState extends State<BackupCredentialView> {
                 ],
               ),
               const SizedBox(height: 32),
-              if (state.mnemonic != null)
-                MnemonicDisplay(mnemonic: state.mnemonic!),
+              FutureBuilder<List<String>>(
+                future: context.read<BackupCredentialCubit>().loadMnemonic(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.done:
+                      final mnemonics = snapshot.data!;
+                      return MnemonicDisplay(mnemonic: mnemonics);
+                    case ConnectionState.waiting:
+                    case ConnectionState.none:
+                    case ConnectionState.active:
+                      return const SizedBox();
+                  }
+                },
+              )
             ],
           );
         },
@@ -100,16 +112,17 @@ class _BackupCredentialViewState extends State<BackupCredentialView> {
         child: BlocBuilder<BackupCredentialCubit, BackupCredentialState>(
           builder: (context, state) {
             return MyGradientButton(
-              onPressed: state.mnemonic == null
-                  ? null
-                  : () {
-                      Navigator.of(context).push<void>(
-                        SaveBackupCredentialPage.route(
-                          backupCredentialCubit:
-                              context.read<BackupCredentialCubit>(),
-                        ),
-                      );
-                    },
+              onPressed: () {
+                if (context.read<BackupCredentialCubit>().mnemonics == null) {
+                  return;
+                }
+                Navigator.of(context).push<void>(
+                  SaveBackupCredentialPage.route(
+                    backupCredentialCubit:
+                        context.read<BackupCredentialCubit>(),
+                  ),
+                );
+              },
               text: l10n.next,
             );
           },

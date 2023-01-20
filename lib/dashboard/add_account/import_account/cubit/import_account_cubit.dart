@@ -39,7 +39,6 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
     emit(
       state.populating(
         isTextFieldEdited: value.isNotEmpty,
-        mnemonicOrKey: value,
         isMnemonicOrKeyValid:
             (bip39.validateMnemonic(value) || isSecretKey) && value.isNotEmpty,
       ),
@@ -54,9 +53,7 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
     );
   }
 
-  Future<void> import({
-    String? accountName,
-  }) async {
+  Future<void> import({String? accountName}) async {
     final log = getLogger('ImportAccountCubit - import');
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -66,9 +63,14 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
       final BlockchainType blockchainType =
           getBlockchainType(state.accountType);
 
+      final String? mnemonicOrKey = await getSecureStorage
+          .get(SecureStorageKeys.importAccountStep2Mnemonics);
+
+      if (mnemonicOrKey == null) throw Exception();
+
       await walletCubit.createCryptoWallet(
         accountName: accountName,
-        mnemonicOrKey: state.mnemonicOrKey,
+        mnemonicOrKey: mnemonicOrKey,
         isImported: true,
         blockchainType: blockchainType,
         isFromOnboarding: false,

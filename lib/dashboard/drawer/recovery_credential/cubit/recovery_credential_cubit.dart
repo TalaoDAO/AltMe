@@ -9,6 +9,7 @@ import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'recovery_credential_cubit.g.dart';
 part 'recovery_credential_state.dart';
@@ -17,17 +18,18 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
   RecoveryCredentialCubit({
     required this.walletCubit,
     required this.cryptoKeys,
+    required this.secureStorageProvider,
   }) : super(const RecoveryCredentialState());
 
   final WalletCubit walletCubit;
   final CryptocurrencyKeys cryptoKeys;
+  final SecureStorageProvider secureStorageProvider;
 
   void isMnemonicsValid(String value) {
     emit(
       state.populating(
         isTextFieldEdited: value.isNotEmpty,
         isMnemonicValid: bip39.validateMnemonic(value) && value.isNotEmpty,
-        mnemonic: value,
       ),
     );
   }
@@ -37,8 +39,14 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
   }
 
   Future<void> recoverWallet() async {
-    if (state.mnemonic == null || state.backupFilePath == null) return;
+    if (state.backupFilePath == null) return;
     emit(state.loading());
+
+    final String? mnemonics = await secureStorageProvider
+        .get(SecureStorageKeys.recoverCredentialMnemonics);
+
+    if (mnemonics == null) throw Exception();
+
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
       final file = File(state.backupFilePath!);
@@ -57,8 +65,7 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
         cipherText: json['cipherText'] as String,
         authenticationTag: json['authenticationTag'] as String,
       );
-      final decryptedText =
-          await cryptoKeys.decrypt(state.mnemonic!, encryption);
+      final decryptedText = await cryptoKeys.decrypt(mnemonics, encryption);
       final decryptedJson = jsonDecode(decryptedText) as Map<String, dynamic>;
       if (!decryptedJson.containsKey('date') ||
           !decryptedJson.containsKey('credentials') ||
