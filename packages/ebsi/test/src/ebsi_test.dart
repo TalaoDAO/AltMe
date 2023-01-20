@@ -29,30 +29,64 @@ void main() {
       };
       final client = MockDio();
       final ebsi = Ebsi(client: client);
-      final mnemonic =
+      const mnemonic =
           'jambon fromage comte camembert pain fleur voiture bac pere mere fille fils';
       final jwk = await ebsi.jwkFromMnemonic(mnemonic: mnemonic);
       expect(jsonDecode(jwk), expectedJwk);
     });
     test('DID from JWK', () async {
-      // final jwk = {
-      //   'crv': 'secp256k1',
-      //   'd': 'dBE5MSwGh1ypjymY48CGv_FaFQHQUPaZ632rhFVpZNw',
-      //   'kty': 'EC',
-      //   'x': 'liIvy6clecfH9riQNvs1VsX7m1bYmYZ2JsHhpPkey_dictJjfgY',
-      //   'y': 'j8Q9Xfa8MIY78JiEpzMrlJzYz2vTkJY183hJBLLcKiU'
-      // };
       final jwk = {
-        "kty": "EC",
-        "d": "d_PpSCGQWWgUc1t4iLLH8bKYlYfc9Zy_M7TsfOAcbg8",
-        "use": "sig",
-        "crv": "P-256",
-        "x": "ngy44T1vxAT6Di4nr-UaM9K3Tlnz9pkoksDokKFkmNc",
-        "y": "QCRfOKlSM31GTkb4JHx3nXB4G_jSPMsbdjzlkT_UpPc",
-        "alg": "ES256",
+        'crv': 'secp256k1',
+        'd': 'dBE5MSwGh1ypjymY48CGv_FaFQHQUPaZ632rhFVpZNw',
+        'kty': 'EC',
+        'x': 'liIvy6clecfH9riQNvs1VsX7m1bYmYZ2JsHhpPkey_dictJjfgY',
+        'y': 'j8Q9Xfa8MIY78JiEpzMrlJzYz2vTkJY183hJBLLcKiU'
       };
-      final expectedDid =
+
+      const expectedDid =
           'did:ebsi:znxntxQrN369GsNyjFjYb8fuvU7g3sJGyYGwMTcUGdzuy';
+
+      final client = MockDio();
+      final ebsi = Ebsi(client: client);
+      final did = ebsi.getDidFromJwk(jwk);
+      expect(did, expectedDid);
+    });
+    test('Alice DID from JWK', () async {
+      // alice
+      final jwk = {
+        'kty': "EC",
+        'd': "d_PpSCGQWWgUc1t4iLLH8bKYlYfc9Zy_M7TsfOAcbg8",
+        'use': "sig",
+        'crv': "P-256",
+        'x': "ngy44T1vxAT6Di4nr-UaM9K3Tlnz9pkoksDokKFkmNc",
+        'y': "QCRfOKlSM31GTkb4JHx3nXB4G_jSPMsbdjzlkT_UpPc",
+        'alg': "ES256",
+      };
+
+// alice
+      const expectedDid =
+          'did:ebsi:znxntxQrN369GsNyjFjYb8fuvU7g3sJGyYGwMTcUGdzuy';
+
+      final client = MockDio();
+      final ebsi = Ebsi(client: client);
+      final did = ebsi.getDidFromJwk(jwk);
+      expect(did, expectedDid);
+    });
+    test('Bob DID from JWK', () async {
+      // bob
+      final jwk = {
+        'kty': "EC",
+        'd': "qAAbNWOBUYBcEuDYHMWE6h4O1hgsSIhMlzR2v17F-Ls",
+        'use': "sig",
+        'crv': "P-256",
+        'x': "n1l8HzJyfmvqCprbrsDoK9sUyRK2DTWoTbOFdRT_6HE",
+        'y': "DDd9ecdyVsFJGVS1f1AtItefpKKZQDt4zFJFpk9G06A",
+        'alg': "ES256",
+      };
+// bob
+      const expectedDid =
+          'did:ebsi:zjg6EQC8TzGGEkrKArL1Pci6JhyQo83ZrvUrrnawXi66W';
+
       final client = MockDio();
       final ebsi = Ebsi(client: client);
       final did = ebsi.getDidFromJwk(jwk);
@@ -60,11 +94,13 @@ void main() {
     });
   });
 
-  group('Ebsi', () {
-    test('can be instantiated', () {
+  group('Ebsi request credential', () {
+    test('EBSI class can be instantiated', () {
       final client = MockDio();
       expect(Ebsi(client: client), isNotNull);
     });
+
+    test('isEbsiUrl is true', () {});
     test(
         'When getCredentialRequest receive good url it returns credential_type',
         () {

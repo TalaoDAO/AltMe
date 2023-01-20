@@ -7,6 +7,7 @@ import 'package:dart_bip32_bip44/dart_bip32_bip44.dart';
 import 'package:dart_web3/crypto.dart';
 import 'package:dart_web3/dart_web3.dart';
 import 'package:dio/dio.dart';
+import 'package:ebsi/src/config.dart';
 import 'package:ed25519_hd_key/ed25519_hd_key.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:hex/hex.dart';
@@ -82,11 +83,73 @@ class Ebsi {
   /// getDidFromJwk
   String getDidFromJwk(Map<String, String> jwk) {
     final jwkKey = JsonWebKey.fromJson(jwk);
+
     final thumbprint = jwkKey.toBytes();
 
     final encodedAddress = Base58Encode([2, ...thumbprint]);
     final decodedAddress = Base58Decode(encodedAddress);
     return 'did:ebsi:z$encodedAddress';
+  }
+
+  /// Verifiy is url is first EBSI url, starting point to get a credential
+  ///
+  static bool isEbsiUrl(String url) {
+    if (url.startsWith('openid://initiate_issuance?')) {
+      return true;
+    }
+    return false;
+  }
+
+  ///
+  Future<void> getAuthorizationFromIssuer(
+    String authorizationUrl,
+    String credentialType,
+  ) async {
+    final uri = Uri.parse(authorizationUrl);
+    final headers = {'Content-Type': 'application/json'};
+    final myRequest = <String, dynamic>{
+      'scope': 'openid',
+      'client_id': redirectUri,
+      'response_type': 'code',
+      'authorization_details': jsonEncode([
+        {
+          'type': 'openid_credential',
+          'credential_type': credentialType,
+          'format': 'jwt_vc'
+        }
+      ]),
+      'redirect_uri': redirectUri,
+      'state': '1234'
+    };
+
+    try {
+      final Uri authorizationUri = Uri.parse(authorizationUrl);
+      authorizationUri.replace(queryParameters: myRequest);
+
+      // final Uri authorizationUri = Uri(
+      //   scheme: 'https',
+      //   path: '/conformance/v2/issuer-mock/authorize',
+      //   queryParameters: myRequest,
+      //   host: 'api-conformance.ebsi.eu',
+      // );
+      final dynamic authorizationResponse = await client.get(authorizeUrl,
+          headers: headers, queryParameters: myRequest);
+      print('got authorization');
+      // Should get code from authorization response or this callback system
+      /// we should receive something through deepLink ?
+
+    } catch (e) {
+      if (e is NetworkException) {
+        if (e.data != null) {
+          if (e.data['detail'] != null) {
+            final String error = e.data['detail'] as String;
+            final codeSplit = error.split('code=');
+            code = codeSplit[1];
+          }
+        }
+      }
+      print('Lokks like wa can get code from here');
+    }
   }
 
   /// Extract credential_type's Url from openid request

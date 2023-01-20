@@ -88,60 +88,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith('openid://initiate_issuance?')) {
         // convert String from QR code into Uri
-        final uri = Uri.parse(scannedResponse);
-        final String conformance = uri.queryParameters['conformance']!;
-        final credential_type = uri.queryParameters['credential_type']!;
-        final issuer = uri.queryParameters['issuer']!;
-        const redirectUri = 'app.altme.io/app/download/callback';
-        // final redirectUri = 'app.altme.io';
-        final headers = {
-          'Conformance': conformance,
-          'Content-Type': 'application/json'
-        };
-        const authorizeUrl =
-            'https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/authorize';
-
-        final my_request = <String, dynamic>{
-          'scope': 'openid',
-          'client_id': redirectUri,
-          'response_type': 'code',
-          'authorization_details': jsonEncode([
-            {
-              'type': 'openid_credential',
-              'credential_type': credential_type,
-              'format': 'jwt_vc'
-            }
-          ]),
-          'redirect_uri': redirectUri,
-          'state': '1234'
-        };
-        String code = '210901fc2fc063e9a30a';
-
-        try {
-          final Uri authorizationUri = Uri(
-            scheme: 'https',
-            path: '/conformance/v2/issuer-mock/authorize',
-            queryParameters: my_request,
-            host: 'api-conformance.ebsi.eu',
-          );
-          final dynamic authorizationResponse = await client.get(authorizeUrl,
-              headers: headers, queryParameters: my_request);
-          print('got authorization');
-          // Should get code from authorization response or this callback system
-          /// we should receive something through deepLink ?
-
-        } catch (e) {
-          if (e is NetworkException) {
-            if (e.data != null) {
-              if (e.data['detail'] != null) {
-                final String error = e.data['detail'] as String;
-                final codeSplit = error.split('code=');
-                code = codeSplit[1];
-              }
-            }
-          }
-          print('Lokks like wa can get code from here');
-        }
 
         /// getting token
         final tokenHeaders = <String, dynamic>{
