@@ -33,7 +33,6 @@ class _RecoveryKeyViewState extends State<RecoveryKeyView>
   @override
   void initState() {
     super.initState();
-    getMnemonics();
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 10),
@@ -48,11 +47,6 @@ class _RecoveryKeyViewState extends State<RecoveryKeyView>
         }
       });
     animationController.forward();
-  }
-
-  Future<List<String>> getMnemonics() async {
-    final phrase = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-    return phrase!.split(' ');
   }
 
   @override
@@ -101,7 +95,7 @@ class _RecoveryKeyViewState extends State<RecoveryKeyView>
           ),
           const SizedBox(height: 32),
           FutureBuilder<List<String>>(
-            future: getMnemonics(),
+            future: getssiMnemonicsInList(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:

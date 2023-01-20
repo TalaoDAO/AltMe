@@ -6,7 +6,6 @@ class BackupCredentialState extends Equatable {
     this.status = AppStatus.init,
     this.message,
     this.filePath = '',
-    this.mnemonic,
   });
 
   factory BackupCredentialState.fromJson(Map<String, dynamic> json) =>
@@ -15,13 +14,11 @@ class BackupCredentialState extends Equatable {
   final AppStatus status;
   final StateMessage? message;
   final String filePath;
-  final List<String>? mnemonic;
 
   BackupCredentialState loading() {
     return BackupCredentialState(
       status: AppStatus.loading,
       filePath: filePath,
-      mnemonic: mnemonic,
     );
   }
 
@@ -32,7 +29,6 @@ class BackupCredentialState extends Equatable {
       status: AppStatus.error,
       filePath: filePath,
       message: StateMessage.error(messageHandler: messageHandler),
-      mnemonic: mnemonic,
     );
   }
 
@@ -46,20 +42,11 @@ class BackupCredentialState extends Equatable {
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
-      mnemonic: mnemonic,
-    );
-  }
-
-  BackupCredentialState setMnemonics({List<String>? mnemonic}) {
-    return BackupCredentialState(
-      status: AppStatus.populate,
-      filePath: filePath,
-      mnemonic: mnemonic ?? this.mnemonic,
     );
   }
 
   Map<String, dynamic> toJson() => _$BackupCredentialStateToJson(this);
 
   @override
-  List<Object?> get props => [status, filePath, message, mnemonic];
+  List<Object?> get props => [status, filePath, message];
 }

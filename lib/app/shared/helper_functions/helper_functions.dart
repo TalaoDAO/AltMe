@@ -221,3 +221,8 @@ String timeFormatter({required int timeInSecond}) {
   final String second = sec.toString().length <= 1 ? '0$sec' : '$sec';
   return '$minute : $second';
 }
+
+Future<List<String>> getssiMnemonicsInList() async {
+  final phrase = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+  return phrase!.split(' ');
+}
