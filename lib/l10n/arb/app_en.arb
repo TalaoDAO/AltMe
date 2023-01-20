@@ -469,7 +469,7 @@
   "licenses": "Licenses",
   "sendTo": "Send to",
   "next": "Next",
-  "withdrawalInputHint": "Copy address, scan or whitelist",
+  "withdrawalInputHint": "Copy address or scan",
   "amount": "Amount",
   "max": "Max",
   "edit": "Edit",
