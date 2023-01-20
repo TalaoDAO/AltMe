@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,6 +62,8 @@ class DummyCredentialItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return BackgroundCard(
       color: Theme.of(context).colorScheme.credentialBackground,
       padding: const EdgeInsets.all(4),
@@ -75,16 +78,26 @@ class DummyCredentialItem extends StatelessWidget {
             return;
           }
 
+          final bool isLinkeInCard = homeCredential.credentialSubjectType ==
+              CredentialSubjectType.linkedInCard;
+
           await Navigator.push<void>(
             context,
             DiscoverDetailsPage.route(
               homeCredential: homeCredential,
+              buttonText:
+                  isLinkeInCard ? l10n.exportToLinkedIn : l10n.getThisCard,
               onCallBack: () async {
-                await discoverCredential(
-                  homeCredential: homeCredential,
-                  context: context,
-                );
-                Navigator.pop(context);
+                if (isLinkeInCard) {
+                  await Navigator.of(context)
+                      .push<void>(GetLinkedinInfoPage.route());
+                } else {
+                  await discoverCredential(
+                    homeCredential: homeCredential,
+                    context: context,
+                  );
+                  Navigator.pop(context);
+                }
               },
             ),
           );

@@ -777,4 +777,9 @@
   "notAValidWalletAddress": "Not a valid wallet address!",
   "otherAccount": "Other account",
   "thereIsNoAccountInYourWallet": "There is no account in your wallet"
+  "exportToLinkedIn": "Export To LinkedIn",
+  "addLinkedInInfo": "Add LinkedIn Info",
+  "whatsYourLinkedinProfileUrl": "What's your linkedIn profile url?", 
+  "invalidUrlError": "Please enter valid linkedIn url", 
+  "successfullyExported": "Your linkedIn banner has been successfully exported."
 }

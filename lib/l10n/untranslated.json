@@ -713,6 +713,11 @@
     "notAValidWalletAddress",
     "otherAccount",
     "thereIsNoAccountInYourWallet"
+    "exportToLinkedIn",
+    "addLinkedInInfo",
+    "whatsYourLinkedinProfileUrl",
+    "invalidUrlError",
+    "successfullyExported"
   ],
 
   "es": [
@@ -1429,6 +1434,11 @@
     "notAValidWalletAddress",
     "otherAccount",
     "thereIsNoAccountInYourWallet"
+    "exportToLinkedIn",
+    "addLinkedInInfo",
+    "whatsYourLinkedinProfileUrl",
+    "invalidUrlError",
+    "successfullyExported"
   ],
 
   "fr": [
@@ -2145,6 +2155,11 @@
     "notAValidWalletAddress",
     "otherAccount",
     "thereIsNoAccountInYourWallet"
+    "exportToLinkedIn",
+    "addLinkedInInfo",
+    "whatsYourLinkedinProfileUrl",
+    "invalidUrlError",
+    "successfullyExported"
   ],
 
   "it": [
@@ -2861,5 +2876,10 @@
     "notAValidWalletAddress",
     "otherAccount",
     "thereIsNoAccountInYourWallet"
+    "exportToLinkedIn",
+    "addLinkedInInfo",
+    "whatsYourLinkedinProfileUrl",
+    "invalidUrlError",
+    "successfullyExported"
   ]
 }
