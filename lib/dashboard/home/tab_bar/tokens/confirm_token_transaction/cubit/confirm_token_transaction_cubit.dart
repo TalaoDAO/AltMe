@@ -147,12 +147,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     );
   }
 
-  bool canConfirmTheWithdrawal({
-    required double amount,
-    required TokenModel selectedToken,
-  }) {
-    // TODO(Taleb): update minimum withdrawal later for every token
-    return amount > 0.00001 &&
+  bool canConfirmTheWithdrawal() {
+    return state.totalAmount > 0.0 &&
         state.withdrawalAddress.trim().isNotEmpty &&
         state.status != AppStatus.loading;
   }

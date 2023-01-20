@@ -236,10 +236,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                 text: l10n.confirm,
                 onPressed: context
                         .read<ConfirmTokenTransactionCubit>()
-                        .canConfirmTheWithdrawal(
-                          amount: widget.amount,
-                          selectedToken: widget.selectedToken,
-                        )
+                        .canConfirmTheWithdrawal()
                     ? () {
                         Navigator.of(context).push<void>(
                           PinCodePage.route(
