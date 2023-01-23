@@ -2,15 +2,15 @@ import 'package:altme/app/app.dart';
 
 class DiscoverList {
   static final List<CredentialSubjectType> gamingCategories = [
-    CredentialSubjectType.tezotopiaMembership,
-    CredentialSubjectType.chainbornMembership,
-    CredentialSubjectType.tezoniaPass,
-    CredentialSubjectType.tzlandPass,
-    CredentialSubjectType.troopezPass,
-    CredentialSubjectType.pigsPass,
-    CredentialSubjectType.matterlightPass,
-    // CredentialSubjectType.dogamiPass,
-    CredentialSubjectType.bunnyPass,
+    // CredentialSubjectType.tezotopiaMembership,
+    // CredentialSubjectType.chainbornMembership,
+    // CredentialSubjectType.tezoniaPass,
+    // CredentialSubjectType.tzlandPass,
+    // CredentialSubjectType.troopezPass,
+    // CredentialSubjectType.pigsPass,
+    // CredentialSubjectType.matterlightPass,
+    // // CredentialSubjectType.dogamiPass,
+    // CredentialSubjectType.bunnyPass,
   ];
   static final List<CredentialSubjectType> communityCategories = [
     // CredentialSubjectType.talaoCommunityCard
