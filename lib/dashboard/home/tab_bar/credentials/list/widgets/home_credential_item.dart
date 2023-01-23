@@ -78,15 +78,11 @@ class DummyCredentialItem extends StatelessWidget {
             return;
           }
 
-          final bool isLinkeInCard = homeCredential.credentialSubjectType ==
-              CredentialSubjectType.linkedInCard;
-
           await Navigator.push<void>(
             context,
             DiscoverDetailsPage.route(
               homeCredential: homeCredential,
-              buttonText:
-                  isLinkeInCard ? l10n.exportToLinkedIn : l10n.getThisCard,
+              buttonText: l10n.getThisCard,
               onCallBack: () async {
                 await discoverCredential(
                   homeCredential: homeCredential,

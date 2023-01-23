@@ -63,16 +63,7 @@ Future<void> launchUrlAfterDiscovery({
     final uri = Uri.parse(
       '''${homeCredential.link!}$uuid?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du''',
     );
-
-    final bool isLinkeInCard = homeCredential.credentialSubjectType ==
-        CredentialSubjectType.linkedInCard;
-
-    if (isLinkeInCard) {
-      await Navigator.of(context)
-          .push<void>(GetLinkedinInfoPage.route(uri: uri));
-    } else {
-      await context.read<QRCodeScanCubit>().verify(uri: uri, isScan: false);
-    }
+    await context.read<QRCodeScanCubit>().verify(uri: uri, isScan: false);
   } else {
     await LaunchUrl.launch(homeCredential.link!);
   }

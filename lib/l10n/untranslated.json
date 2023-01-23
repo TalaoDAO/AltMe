@@ -718,6 +718,7 @@
     "whatsYourLinkedinProfileUrl",
     "invalidUrlError",
     "linkedInBannerSuccessfullyExported",
+    "credentialSuccessfullyExported",
     "linkedInBanner"
   ],
 
@@ -1440,6 +1441,7 @@
     "whatsYourLinkedinProfileUrl",
     "invalidUrlError",
     "linkedInBannerSuccessfullyExported",
+    "credentialSuccessfullyExported",
     "linkedInBanner"
   ],
 
@@ -2162,6 +2164,7 @@
     "whatsYourLinkedinProfileUrl",
     "invalidUrlError",
     "linkedInBannerSuccessfullyExported",
+    "credentialSuccessfullyExported",
     "linkedInBanner"
   ],
 
@@ -2884,6 +2887,7 @@
     "whatsYourLinkedinProfileUrl",
     "invalidUrlError",
     "linkedInBannerSuccessfullyExported",
+    "credentialSuccessfullyExported",
     "linkedInBanner"
   ]
 }

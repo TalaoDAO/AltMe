@@ -106,6 +106,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.removeLast();
         }
 
+        final bool isLinkeInCard = widget.credentialModel.credentialPreview
+                .credentialSubjectModel.credentialSubjectType ==
+            CredentialSubjectType.linkedInCard;
+
         final bool disAllowDelete = widget.credentialModel.credentialPreview
                     .credentialSubjectModel.credentialSubjectType ==
                 CredentialSubjectType.walletCredential ||
@@ -127,6 +131,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               color: Theme.of(context).colorScheme.onBackground,
             ),
           ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           navigation: SafeArea(
             child: Container(
               padding: const EdgeInsets.symmetric(
@@ -139,6 +144,21 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                   MyOutlinedButton(
                     onPressed: disAllowDelete ? null : delete,
                     text: l10n.credentialDetailDeleteCard,
+                  ),
+                  const SizedBox(height: 8),
+                  MyGradientButton(
+                    verticalSpacing: 15,
+                    borderRadius: 50,
+                    text: isLinkeInCard ? l10n.exportToLinkedIn : l10n.export,
+                    onPressed: () async {
+                      if (isLinkeInCard) {
+                        await Navigator.of(context).push<void>(
+                          GetLinkedinInfoPage.route(
+                            credentialModel: widget.credentialModel,
+                          ),
+                        );
+                      } else {}
+                    },
                   ),
                   if (widget.credentialModel.shareLink != '')
                     MyOutlinedButton.icon(

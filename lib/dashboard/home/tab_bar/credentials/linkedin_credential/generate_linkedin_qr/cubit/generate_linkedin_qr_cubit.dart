@@ -21,30 +21,22 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
     required this.secureStorageProvider,
     required this.fileSaver,
     required this.didCubit,
-    required this.client,
   }) : super(const GenerateLinkedInQrState());
 
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
   final FileSaver fileSaver;
   final DIDCubit didCubit;
-  final DioClient client;
 
   Future<void> generatePresentationForLinkedInCard({
     required String linkedInUrl,
-    required Uri uri,
+    required CredentialModel credentialModel,
   }) async {
     final log = getLogger(
       'GenerateLinkedInQrCubit - generatePresentationForLinkedInCard',
     );
     try {
       emit(state.loading());
-
-      final dynamic response = await client.get(uri.toString());
-      final dynamic data = response is String ? jsonDecode(response) : response;
-
-      final credentialModel =
-          CredentialModel.fromJson(data as Map<String, dynamic>);
 
       final presentationId = 'urn:uuid:${const Uuid().v4()}';
 

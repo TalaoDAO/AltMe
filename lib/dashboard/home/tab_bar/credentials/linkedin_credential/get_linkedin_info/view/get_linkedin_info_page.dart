@@ -8,15 +8,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class GetLinkedinInfoPage extends StatelessWidget {
   const GetLinkedinInfoPage({
     super.key,
-    required this.uri,
+    required this.credentialModel,
   });
 
-  final Uri uri;
+  final CredentialModel credentialModel;
 
-  static Route route({required Uri uri}) {
+  static Route route({required CredentialModel credentialModel}) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/GetLinkedinInfoPage'),
-      builder: (_) => GetLinkedinInfoPage(uri: uri),
+      builder: (_) => GetLinkedinInfoPage(credentialModel: credentialModel),
     );
   }
 
@@ -24,7 +24,7 @@ class GetLinkedinInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => GetLinkedinInfoCubit(),
-      child: GetLinkedinInfoView(uri: uri),
+      child: GetLinkedinInfoView(credentialModel: credentialModel),
     );
   }
 }
@@ -32,10 +32,10 @@ class GetLinkedinInfoPage extends StatelessWidget {
 class GetLinkedinInfoView extends StatefulWidget {
   const GetLinkedinInfoView({
     super.key,
-    required this.uri,
+    required this.credentialModel,
   });
 
-  final Uri uri;
+  final CredentialModel credentialModel;
 
   @override
   State<GetLinkedinInfoView> createState() => _GetLinkedinInfoViewState();
@@ -139,7 +139,7 @@ class _GetLinkedinInfoViewState extends State<GetLinkedinInfoView> {
                       Navigator.of(context).push<void>(
                         GenerateLinkedinQrPage.route(
                           linkedinUrl: linkedInUrlController.text,
-                          uri: widget.uri,
+                          credentialModel: widget.credentialModel,
                         ),
                       );
                     },

@@ -3,7 +3,6 @@ import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:did_kit/did_kit.dart';
-import 'package:dio/dio.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,17 +15,22 @@ class GenerateLinkedinQrPage extends StatelessWidget {
   const GenerateLinkedinQrPage({
     super.key,
     required this.linkedinUrl,
-    required this.uri,
+    required this.credentialModel,
   });
 
-  final Uri uri;
+  final CredentialModel credentialModel;
   final String linkedinUrl;
 
-  static Route route({required String linkedinUrl, required Uri uri}) {
+  static Route route({
+    required String linkedinUrl,
+    required CredentialModel credentialModel,
+  }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/GenerateLinkedinQrPage'),
-      builder: (_) =>
-          GenerateLinkedinQrPage(linkedinUrl: linkedinUrl, uri: uri),
+      builder: (_) => GenerateLinkedinQrPage(
+        linkedinUrl: linkedinUrl,
+        credentialModel: credentialModel,
+      ),
     );
   }
 
@@ -38,9 +42,11 @@ class GenerateLinkedinQrPage extends StatelessWidget {
         secureStorageProvider: getSecureStorage,
         fileSaver: FileSaver.instance,
         didCubit: context.read<DIDCubit>(),
-        client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
       ),
-      child: GenerateLinkedinQrView(linkedinUrl: linkedinUrl, uri: uri),
+      child: GenerateLinkedinQrView(
+        linkedinUrl: linkedinUrl,
+        credentialModel: credentialModel,
+      ),
     );
   }
 }
@@ -49,10 +55,10 @@ class GenerateLinkedinQrView extends StatefulWidget {
   const GenerateLinkedinQrView({
     super.key,
     required this.linkedinUrl,
-    required this.uri,
+    required this.credentialModel,
   });
 
-  final Uri uri;
+  final CredentialModel credentialModel;
   final String linkedinUrl;
 
   @override
@@ -70,7 +76,7 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
           .read<GenerateLinkedInQrCubit>()
           .generatePresentationForLinkedInCard(
             linkedInUrl: widget.linkedinUrl,
-            uri: widget.uri,
+            credentialModel: widget.credentialModel,
           );
     });
   }
