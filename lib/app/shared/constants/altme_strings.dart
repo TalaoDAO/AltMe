@@ -8,7 +8,7 @@ class AltMeStrings {
   static const String databaseFilename = 'wallet.db';
   static const String appContactWebsiteName = 'www.talao.io';
   static const String appContactMail = 'contact@altme.io';
-  static const String appSupportMail = 'support@altme.io';
+  static const String appSupportMail = 'support@talao.io';
   static const String ivVector = 'Talao';
   static const String additionalAuthenticatedData = 'Credible';
   static const String passBasePublishableApiKey =

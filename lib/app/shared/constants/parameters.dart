@@ -16,7 +16,7 @@ class Parameters {
 
   static const AdvanceSettingsState defaultAdvanceSettingsState =
       AdvanceSettingsState(
-    isGamingEnabled: true,
+    isGamingEnabled: false,
     isIdentityEnabled: true,
     isBlockchainAccountsEnabled: false,
     isSocialMediaEnabled: true,
