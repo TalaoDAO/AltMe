@@ -33,6 +33,7 @@ class NftModel extends Equatable {
   final String? thumbnailUri;
   final String contractAddress;
   final String balance;
+  @JsonKey(defaultValue: true)
   final bool isTransferable;
 
   String? get displayUrl {
