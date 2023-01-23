@@ -776,7 +776,7 @@
   "softwareLicenses": "Software Licenses",
   "notAValidWalletAddress": "Not a valid wallet address!",
   "otherAccount": "Other account",
-  "thereIsNoAccountInYourWallet": "There is no account in your wallet"
+  "thereIsNoAccountInYourWallet": "There is no account in your wallet",
   "exportToLinkedIn": "Export To LinkedIn",
   "addLinkedInInfo": "Add LinkedIn Info",
   "whatsYourLinkedinProfileUrl": "What's your linkedIn profile url?", 

@@ -712,7 +712,7 @@
     "softwareLicenses",
     "notAValidWalletAddress",
     "otherAccount",
-    "thereIsNoAccountInYourWallet"
+    "thereIsNoAccountInYourWallet",
     "exportToLinkedIn",
     "addLinkedInInfo",
     "whatsYourLinkedinProfileUrl",
@@ -1434,7 +1434,7 @@
     "softwareLicenses",
     "notAValidWalletAddress",
     "otherAccount",
-    "thereIsNoAccountInYourWallet"
+    "thereIsNoAccountInYourWallet",
     "exportToLinkedIn",
     "addLinkedInInfo",
     "whatsYourLinkedinProfileUrl",
@@ -2156,7 +2156,7 @@
     "softwareLicenses",
     "notAValidWalletAddress",
     "otherAccount",
-    "thereIsNoAccountInYourWallet"
+    "thereIsNoAccountInYourWallet",
     "exportToLinkedIn",
     "addLinkedInInfo",
     "whatsYourLinkedinProfileUrl",
@@ -2878,7 +2878,7 @@
     "softwareLicenses",
     "notAValidWalletAddress",
     "otherAccount",
-    "thereIsNoAccountInYourWallet"
+    "thereIsNoAccountInYourWallet",
     "exportToLinkedIn",
     "addLinkedInInfo",
     "whatsYourLinkedinProfileUrl",
