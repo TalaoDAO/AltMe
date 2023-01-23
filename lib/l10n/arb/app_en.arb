@@ -781,5 +781,6 @@
   "addLinkedInInfo": "Add LinkedIn Info",
   "whatsYourLinkedinProfileUrl": "What's your linkedIn profile url?", 
   "invalidUrlError": "Please enter valid linkedIn url", 
-  "successfullyExported": "Your linkedIn banner has been successfully exported."
+  "successfullyExported": "Your linkedIn banner has been successfully exported.", 
+  "linkedInBanner": "LinkedIn Banner"
 }

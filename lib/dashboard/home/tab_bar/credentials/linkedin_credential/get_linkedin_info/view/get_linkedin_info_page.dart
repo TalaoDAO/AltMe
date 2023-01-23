@@ -123,7 +123,14 @@ class _GetLinkedinInfoViewState extends State<GetLinkedinInfoView> {
           builder: (context, state) {
             return MyElevatedButton(
               text: l10n.exportToLinkedIn,
-              onPressed: !state.isLinkedUrlValid ? null : () async {},
+              onPressed: !state.isLinkedUrlValid
+                  ? null
+                  : () {
+                      Navigator.of(context)
+                          .push<void>(GenerateLinkedinQrPage.route(
+                        linkedinUrl: linkedInUrlController.text,
+                      ));
+                    },
             );
           },
         ),

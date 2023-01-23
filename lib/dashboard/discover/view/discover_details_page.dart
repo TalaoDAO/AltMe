@@ -117,10 +117,11 @@ class DiscoverDetailsView extends StatelessWidget {
           Sizes.spaceSmall,
         ),
         child: MyGradientButton(
-            onPressed: homeCredential.credentialSubjectType.isDisabled
-                ? null
-                : onCallBack,
-            text: buttonText),
+          onPressed: homeCredential.credentialSubjectType.isDisabled
+              ? null
+              : onCallBack,
+          text: buttonText,
+        ),
       ),
     );
   }

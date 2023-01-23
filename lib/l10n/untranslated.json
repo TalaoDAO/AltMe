@@ -717,7 +717,8 @@
     "addLinkedInInfo",
     "whatsYourLinkedinProfileUrl",
     "invalidUrlError",
-    "successfullyExported"
+    "successfullyExported",
+    "linkedInBanner"
   ],
 
   "es": [
@@ -1438,7 +1439,8 @@
     "addLinkedInInfo",
     "whatsYourLinkedinProfileUrl",
     "invalidUrlError",
-    "successfullyExported"
+    "successfullyExported",
+    "linkedInBanner"
   ],
 
   "fr": [
@@ -2159,7 +2161,8 @@
     "addLinkedInInfo",
     "whatsYourLinkedinProfileUrl",
     "invalidUrlError",
-    "successfullyExported"
+    "successfullyExported",
+    "linkedInBanner"
   ],
 
   "it": [
@@ -2880,6 +2883,7 @@
     "addLinkedInInfo",
     "whatsYourLinkedinProfileUrl",
     "invalidUrlError",
-    "successfullyExported"
+    "successfullyExported",
+    "linkedInBanner"
   ]
 }
