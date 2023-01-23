@@ -192,7 +192,7 @@ class _TokensViewState extends State<TokensView> {
                   } else if (state.status == AppStatus.populate ||
                       state.status == AppStatus.success) {
                     return TokenList(
-                      tokenList: state.data,
+                      tokenList: state.data.toList(),
                       onRefresh: onRefresh,
                       onScrollEnded: onScrollEnded,
                       onItemTap: onItemTap,

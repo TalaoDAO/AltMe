@@ -15,4 +15,5 @@ export 'message_handler/message_handler.dart';
 export 'models/model.dart';
 export 'text_field_helper/text_field_helper.dart';
 export 'translation/translation.dart';
+export 'validators/validators.dart';
 export 'widget/widget.dart';

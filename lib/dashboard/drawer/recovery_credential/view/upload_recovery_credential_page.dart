@@ -151,10 +151,11 @@ class _UploadRecoveryCredentialViewState
           child: BlocBuilder<RecoveryCredentialCubit, RecoveryCredentialState>(
             builder: (context, state) {
               return MyGradientButton(
-                onPressed:
-                    !state.isMnemonicValid || state.backupFilePath == null
-                        ? null
-                        : context.read<RecoveryCredentialCubit>().recoverWallet,
+                onPressed: !state.isMnemonicValid ||
+                        state.backupFilePath == null
+                    ? null
+                    : () =>
+                        context.read<RecoveryCredentialCubit>().recoverWallet(),
                 text: l10n.loadFile,
               );
             },

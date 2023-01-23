@@ -25,8 +25,6 @@ class AccountPrivateKeyPage extends StatefulWidget {
 
 class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
     with SingleTickerProviderStateMixin {
-  bool animate = true;
-
   late Animation<double> animation;
   late AnimationController animationController;
 
@@ -73,6 +71,7 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
           );
         },
       ),
+      secureScreen: true,
       body: BackgroundCard(
         height: double.infinity,
         width: double.infinity,

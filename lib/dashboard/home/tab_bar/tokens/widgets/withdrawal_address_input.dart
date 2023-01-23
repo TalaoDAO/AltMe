@@ -43,7 +43,7 @@ class _WithdrawalAddressInputPage extends StatefulWidget {
 }
 
 class _WithdrawalAddressInputPageState
-    extends State<_WithdrawalAddressInputPage> {
+    extends State<_WithdrawalAddressInputPage> with WalletAddressValidator {
   late final withdrawalAddressController =
       widget.withdrawalAddressController ?? TextEditingController();
 
@@ -89,15 +89,25 @@ class _WithdrawalAddressInputPageState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: TextField(
-                  controller: withdrawalAddressController,
-                  style: Theme.of(context).textTheme.labelMedium,
-                  textInputAction: TextInputAction.done,
-                  maxLines: 2,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: l10n.withdrawalInputHint,
-                    contentPadding: EdgeInsets.zero,
+                child: Form(
+                  autovalidateMode: AutovalidateMode.always,
+                  child: TextFormField(
+                    controller: withdrawalAddressController,
+                    style: Theme.of(context).textTheme.labelMedium,
+                    textInputAction: TextInputAction.done,
+                    maxLines: 2,
+                    validator: (value) {
+                      if (validateWalletAddress(value)) {
+                        return null;
+                      } else {
+                        return l10n.notAValidWalletAddress;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: l10n.withdrawalInputHint,
+                      contentPadding: EdgeInsets.zero,
+                    ),
                   ),
                 ),
               ),
@@ -131,8 +141,10 @@ class _WithdrawalAddressInputPageState
   Future<void> _openQRScanner() async {
     final result =
         await Navigator.push<String?>(context, QrScannerPage.route());
-    if ((result?.isNotEmpty ?? false) && result!.length > 8) {
-      withdrawalAddressController.text = result;
+    if (result?.startsWith('ethereum:') ?? false) {
+      withdrawalAddressController.text = result!.replaceAll('ethereum:', '');
+    } else {
+      withdrawalAddressController.text = result ?? '';
     }
   }
 }

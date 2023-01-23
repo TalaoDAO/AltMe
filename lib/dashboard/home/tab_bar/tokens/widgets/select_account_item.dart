@@ -10,11 +10,13 @@ class SelectedAccountItem extends StatelessWidget {
     required this.cryptoAccountData,
     required this.isBoxOpen,
     required this.onPressed,
+    required this.title,
   }) : super(key: key);
 
   final CryptoAccountData cryptoAccountData;
   final bool isBoxOpen;
   final VoidCallback? onPressed;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class SelectedAccountItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          l10n.from,
+          title,
           style: Theme.of(context).textTheme.caption?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface,
               ),

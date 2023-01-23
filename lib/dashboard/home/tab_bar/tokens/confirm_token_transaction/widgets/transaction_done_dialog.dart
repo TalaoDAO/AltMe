@@ -67,7 +67,7 @@ class TransactionDoneDialog extends StatelessWidget {
             ),
             const SizedBox(height: Sizes.spaceSmall),
             Text(
-              l10n.transactionDoneDialogDescription,
+              l10n.operationCompleted,
               style: Theme.of(context).textTheme.defaultDialogBody,
               textAlign: TextAlign.center,
             ),

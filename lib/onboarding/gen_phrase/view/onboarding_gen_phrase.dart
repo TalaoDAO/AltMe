@@ -5,9 +5,9 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -36,8 +36,23 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
   }
 }
 
-class OnBoardingGenPhraseView extends StatelessWidget {
+class OnBoardingGenPhraseView extends StatefulWidget {
   const OnBoardingGenPhraseView({Key? key}) : super(key: key);
+
+  @override
+  State<OnBoardingGenPhraseView> createState() =>
+      _OnBoardingGenPhraseViewState();
+}
+
+class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
+  late List<String>? mnemonic;
+
+  @override
+  void initState() {
+    super.initState();
+    mnemonic = bip39.generateMnemonic().split(' ');
+    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,14 +85,8 @@ class OnBoardingGenPhraseView extends StatelessWidget {
           scrollView: false,
           useSafeArea: true,
           padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
-          titleLeading: BackLeadingButton(
-            onPressed: () {
-              if (context.read<OnBoardingGenPhraseCubit>().state.status !=
-                  AppStatus.loading) {
-                Navigator.of(context).pop();
-              }
-            },
-          ),
+          titleLeading: const BackLeadingButton(),
+          secureScreen: true,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -105,7 +114,8 @@ class OnBoardingGenPhraseView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: Sizes.spaceNormal),
-                      MnemonicDisplay(mnemonic: state.mnemonic),
+                      if (mnemonic != null)
+                        MnemonicDisplay(mnemonic: mnemonic!),
                       // const SizedBox(
                       //   height: Sizes.spaceSmall,
                       // ),
@@ -190,11 +200,11 @@ class OnBoardingGenPhraseView extends StatelessWidget {
               child: MyGradientButton(
                 text: l10n.onBoardingGenPhraseButton,
                 verticalSpacing: 18,
-                onPressed: state.isTicked
+                onPressed: state.isTicked || mnemonic != null
                     ? () async {
                         await context
                             .read<OnBoardingGenPhraseCubit>()
-                            .generateSSIAndCryptoAccount(state.mnemonic);
+                            .generateSSIAndCryptoAccount(mnemonic!);
                       }
                     : null,
               ),

@@ -32,9 +32,14 @@ class BackupCredentialPage extends StatelessWidget {
   }
 }
 
-class BackupCredentialView extends StatelessWidget {
+class BackupCredentialView extends StatefulWidget {
   const BackupCredentialView({Key? key}) : super(key: key);
 
+  @override
+  State<BackupCredentialView> createState() => _BackupCredentialViewState();
+}
+
+class _BackupCredentialViewState extends State<BackupCredentialView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -49,6 +54,7 @@ class BackupCredentialView extends StatelessWidget {
         left: Sizes.spaceSmall,
         right: Sizes.spaceSmall,
       ),
+      secureScreen: true,
       body: BlocConsumer<BackupCredentialCubit, BackupCredentialState>(
         listener: (context, state) async {
           if (state.status == AppStatus.loading) {
@@ -83,8 +89,20 @@ class BackupCredentialView extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 32),
-              if (state.mnemonic != null)
-                MnemonicDisplay(mnemonic: state.mnemonic!),
+              FutureBuilder<List<String>>(
+                future: context.read<BackupCredentialCubit>().loadMnemonic(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.done:
+                      final mnemonics = snapshot.data!;
+                      return MnemonicDisplay(mnemonic: mnemonics);
+                    case ConnectionState.waiting:
+                    case ConnectionState.none:
+                    case ConnectionState.active:
+                      return const SizedBox();
+                  }
+                },
+              )
             ],
           );
         },
@@ -94,16 +112,17 @@ class BackupCredentialView extends StatelessWidget {
         child: BlocBuilder<BackupCredentialCubit, BackupCredentialState>(
           builder: (context, state) {
             return MyGradientButton(
-              onPressed: state.mnemonic == null
-                  ? null
-                  : () {
-                      Navigator.of(context).push<void>(
-                        SaveBackupCredentialPage.route(
-                          backupCredentialCubit:
-                              context.read<BackupCredentialCubit>(),
-                        ),
-                      );
-                    },
+              onPressed: () {
+                if (context.read<BackupCredentialCubit>().mnemonics == null) {
+                  return;
+                }
+                Navigator.of(context).push<void>(
+                  SaveBackupCredentialPage.route(
+                    backupCredentialCubit:
+                        context.read<BackupCredentialCubit>(),
+                  ),
+                );
+              },
               text: l10n.next,
             );
           },

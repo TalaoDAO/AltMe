@@ -426,8 +426,6 @@
     "changeFee",
     "sent",
     "done",
-    "transactionDoneDialogDescription",
-    "withdrawalFailedMessage",
     "link",
     "myTokens",
     "tezosMainNetwork",
@@ -711,7 +709,10 @@
     "thisFeatureIsNotSupportedYetForFantom",
     "thisFeatureIsNotSupportedYetForBinance",
     "faqs",
-    "softwareLicenses"
+    "softwareLicenses",
+    "notAValidWalletAddress",
+    "otherAccount",
+    "thereIsNoAccountInYourWallet"
   ],
 
   "es": [
@@ -1141,8 +1142,6 @@
     "changeFee",
     "sent",
     "done",
-    "transactionDoneDialogDescription",
-    "withdrawalFailedMessage",
     "link",
     "myTokens",
     "tezosMainNetwork",
@@ -1426,7 +1425,10 @@
     "thisFeatureIsNotSupportedYetForFantom",
     "thisFeatureIsNotSupportedYetForBinance",
     "faqs",
-    "softwareLicenses"
+    "softwareLicenses",
+    "notAValidWalletAddress",
+    "otherAccount",
+    "thereIsNoAccountInYourWallet"
   ],
 
   "fr": [
@@ -1856,8 +1858,6 @@
     "changeFee",
     "sent",
     "done",
-    "transactionDoneDialogDescription",
-    "withdrawalFailedMessage",
     "link",
     "myTokens",
     "tezosMainNetwork",
@@ -2141,7 +2141,10 @@
     "thisFeatureIsNotSupportedYetForFantom",
     "thisFeatureIsNotSupportedYetForBinance",
     "faqs",
-    "softwareLicenses"
+    "softwareLicenses",
+    "notAValidWalletAddress",
+    "otherAccount",
+    "thereIsNoAccountInYourWallet"
   ],
 
   "it": [
@@ -2571,8 +2574,6 @@
     "changeFee",
     "sent",
     "done",
-    "transactionDoneDialogDescription",
-    "withdrawalFailedMessage",
     "link",
     "myTokens",
     "tezosMainNetwork",
@@ -2856,6 +2857,9 @@
     "thisFeatureIsNotSupportedYetForFantom",
     "thisFeatureIsNotSupportedYetForBinance",
     "faqs",
-    "softwareLicenses"
+    "softwareLicenses",
+    "notAValidWalletAddress",
+    "otherAccount",
+    "thereIsNoAccountInYourWallet"
   ]
 }

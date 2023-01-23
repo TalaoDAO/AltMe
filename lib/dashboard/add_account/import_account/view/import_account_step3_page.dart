@@ -1,5 +1,4 @@
-import 'package:altme/app/shared/constants/sizes.dart';
-import 'package:altme/app/shared/widget/widget.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -168,8 +167,17 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
               text: l10n.next,
               onPressed: !state.isMnemonicOrKeyValid
                   ? null
-                  : () {
-                      Navigator.of(context).push<void>(
+                  : () async {
+                      LoadingView().show(context: context);
+                      await getSecureStorage.delete(
+                        SecureStorageKeys.importAccountStep2Mnemonics,
+                      );
+                      await getSecureStorage.set(
+                        SecureStorageKeys.importAccountStep2Mnemonics,
+                        mnemonicController.text,
+                      );
+                      LoadingView().hide();
+                      await Navigator.of(context).push<void>(
                         ImportAccountStep4Page.route(
                           importAccountCubit:
                               context.read<ImportAccountCubit>(),

@@ -21,22 +21,19 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
     required this.cryptoKeys,
     required this.walletCubit,
     required this.fileSaver,
-  }) : super(const BackupCredentialState()) {
-    loadMnemonic();
-  }
+  }) : super(const BackupCredentialState());
 
   final SecureStorageProvider secureStorageProvider;
   final CryptocurrencyKeys cryptoKeys;
   final WalletCubit walletCubit;
   final FileSaver fileSaver;
 
-  Future<void> loadMnemonic() async {
-    emit(state.loading());
+  String? mnemonics;
 
-    final phrase = await secureStorageProvider.get(
-      SecureStorageKeys.ssiMnemonic,
-    );
-    emit(state.setMnemonics(mnemonic: phrase!.split(' ')));
+  Future<List<String>> loadMnemonic() async {
+    final mnemonicList = await getssiMnemonicsInList();
+    mnemonics = mnemonicList.join(' ');
+    return mnemonicList;
   }
 
   Future<bool> _getStoragePermission() async {
@@ -70,9 +67,8 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
         'credentials': walletCubit.state.credentials,
       };
 
-      final String mnemonicFormatted = state.mnemonic!.join(' ');
       final encrypted =
-          await cryptoKeys.encrypt(jsonEncode(message), mnemonicFormatted);
+          await cryptoKeys.encrypt(jsonEncode(message), mnemonics!);
       final fileBytes = Uint8List.fromList(utf8.encode(jsonEncode(encrypted)));
       final filePath =
           await fileSaver.saveAs(fileName, fileBytes, 'txt', MimeType.TEXT);

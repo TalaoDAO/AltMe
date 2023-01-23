@@ -148,7 +148,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
       },
       builder: (context, state) {
         final amountAndSymbol =
-            '''${widget.isNFT ? widget.amount.toInt() : state.totalAmount.toStringAsFixed(getDecimalsToShow(state.totalAmount)).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
+            '''${widget.isNFT ? widget.amount.toInt() : state.tokenAmount.toStringAsFixed(getDecimalsToShow(state.tokenAmount)).formatNumber()} ${widget.isNFT ? '${widget.selectedToken.symbol} #${widget.selectedToken.tokenId}' : widget.selectedToken.symbol}''';
         return BasePage(
           scrollView: false,
           title: l10n.confirm,
@@ -184,7 +184,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                         ),
                   ),
                   const SizedBox(height: Sizes.spaceSmall),
-                  const AccountSelectBoxView(isEnabled: false),
+                  const FromAccountWidget(isEnabled: false),
                   const SizedBox(height: Sizes.spaceNormal),
                   WithdrawalAddressInputView(
                     withdrawalAddressController: withdrawalAddressController,
@@ -236,10 +236,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                 text: l10n.confirm,
                 onPressed: context
                         .read<ConfirmTokenTransactionCubit>()
-                        .canConfirmTheWithdrawal(
-                          amount: widget.amount,
-                          selectedToken: widget.selectedToken,
-                        )
+                        .canConfirmTheWithdrawal()
                     ? () {
                         Navigator.of(context).push<void>(
                           PinCodePage.route(

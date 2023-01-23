@@ -54,6 +54,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   }
 
   Future<void> calculateFee() async {
+    if (state.withdrawalAddress.trim().isEmpty) return;
     emit(state.loading());
     try {
       if (manageNetworkCubit.state.network is TezosNetwork) {
@@ -79,10 +80,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           ),
         );
       } else {
-        final selectedEthereumNetwork =
-            manageNetworkCubit.state.network as EthereumNetwork;
-
-        //final web3RpcURL = selectedEthereumNetwork.rpcNodeUrl;
         await dotenv.load();
         final web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
 
@@ -138,15 +135,20 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   }
 
   void setNetworkFee({required NetworkFeeModel networkFee}) {
-    emit(state.copyWith(networkFee: networkFee));
+    final totalAmount = state.selectedToken.symbol == networkFee.tokenSymbol
+        ? state.tokenAmount - networkFee.fee
+        : state.tokenAmount;
+
+    emit(
+      state.copyWith(
+        networkFee: networkFee,
+        totalAmount: totalAmount,
+      ),
+    );
   }
 
-  bool canConfirmTheWithdrawal({
-    required double amount,
-    required TokenModel selectedToken,
-  }) {
-    // TODO(Taleb): update minimum withdrawal later for every token
-    return amount > 0.00001 &&
+  bool canConfirmTheWithdrawal() {
+    return state.totalAmount > 0.0 &&
         state.withdrawalAddress.trim().isNotEmpty &&
         state.status != AppStatus.loading;
   }
@@ -447,13 +449,26 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         );
       }
     } catch (e, s) {
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+      if (e is RPCError) {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage.error(
+              stringMessage: e.message,
+              showDialog: true,
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
+      }
       getLogger(runtimeType.toString())
           .e('error in transferOperation , e: $e, s: $s');
     }
