@@ -158,7 +158,7 @@
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
     "backupCredentialEmptyError",
-    "backupCredentialPermissionDeniedMessage",
+    "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
     "backupCredentialError",
@@ -717,7 +717,7 @@
     "addLinkedInInfo",
     "whatsYourLinkedinProfileUrl",
     "invalidUrlError",
-    "successfullyExported",
+    "linkedInBannerSuccessfullyExported",
     "linkedInBanner"
   ],
 
@@ -880,7 +880,7 @@
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
     "backupCredentialEmptyError",
-    "backupCredentialPermissionDeniedMessage",
+    "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
     "backupCredentialError",
@@ -1439,7 +1439,7 @@
     "addLinkedInInfo",
     "whatsYourLinkedinProfileUrl",
     "invalidUrlError",
-    "successfullyExported",
+    "linkedInBannerSuccessfullyExported",
     "linkedInBanner"
   ],
 
@@ -1602,7 +1602,7 @@
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
     "backupCredentialEmptyError",
-    "backupCredentialPermissionDeniedMessage",
+    "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
     "backupCredentialError",
@@ -2161,7 +2161,7 @@
     "addLinkedInInfo",
     "whatsYourLinkedinProfileUrl",
     "invalidUrlError",
-    "successfullyExported",
+    "linkedInBannerSuccessfullyExported",
     "linkedInBanner"
   ],
 
@@ -2324,7 +2324,7 @@
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
     "backupCredentialEmptyError",
-    "backupCredentialPermissionDeniedMessage",
+    "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
     "backupCredentialError",
@@ -2883,7 +2883,7 @@
     "addLinkedInInfo",
     "whatsYourLinkedinProfileUrl",
     "invalidUrlError",
-    "successfullyExported",
+    "linkedInBannerSuccessfullyExported",
     "linkedInBanner"
   ]
 }

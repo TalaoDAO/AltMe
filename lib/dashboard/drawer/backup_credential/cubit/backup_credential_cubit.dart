@@ -9,7 +9,6 @@ import 'package:equatable/equatable.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'backup_credential_cubit.g.dart';
@@ -44,8 +43,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
     try {
       if (!isPermissionStatusGranted) {
         throw ResponseMessage(
-          ResponseString
-              .RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE,
+          ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE,
         );
       }
       final date = UiDate.formatDate(DateTime.now());
@@ -65,7 +63,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
         state.success(
           filePath: filePath,
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
+            ResponseString.RESPONSE_STRING_linkedInBannerSuccessfullyExported,
           ),
         ),
       );

@@ -201,7 +201,7 @@
   "backupCredentialPhraseExplanation": "To backup your credentials write down your Recovery Phrase and keep it in a safe place.",
   "backupCredentialButtonTitle": "Save The File",
   "backupCredentialEmptyError": "You do not have any credential in your wallet.",
-  "backupCredentialPermissionDeniedMessage": "You need permission to download this file.",
+  "needStoragePermission": "Sorry, You need storage permission to download this file.",
   "backupCredentialNotificationTitle": "Success",
   "backupCredentialNotificationMessage": "File has been successfully downloaded. Tap to open the file.",
   "backupCredentialError": "Something went wrong. Please try again later.",
@@ -781,6 +781,6 @@
   "addLinkedInInfo": "Add LinkedIn Info",
   "whatsYourLinkedinProfileUrl": "What's your linkedIn profile url?", 
   "invalidUrlError": "Please enter valid linkedIn url", 
-  "successfullyExported": "Your linkedIn banner has been successfully exported.", 
+  "linkedInBannerSuccessfullyExported": "Your linkedIn banner has been successfully exported.", 
   "linkedInBanner": "LinkedIn Banner"
 }

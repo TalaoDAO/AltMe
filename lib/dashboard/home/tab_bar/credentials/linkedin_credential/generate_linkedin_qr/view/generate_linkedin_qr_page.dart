@@ -1,7 +1,9 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
+import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,14 +16,17 @@ class GenerateLinkedinQrPage extends StatelessWidget {
   const GenerateLinkedinQrPage({
     super.key,
     required this.linkedinUrl,
+    required this.uri,
   });
 
+  final Uri uri;
   final String linkedinUrl;
 
-  static Route route({required String linkedinUrl}) {
+  static Route route({required String linkedinUrl, required Uri uri}) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/GenerateLinkedinQrPage'),
-      builder: (_) => GenerateLinkedinQrPage(linkedinUrl: linkedinUrl),
+      builder: (_) =>
+          GenerateLinkedinQrPage(linkedinUrl: linkedinUrl, uri: uri),
     );
   }
 
@@ -32,8 +37,10 @@ class GenerateLinkedinQrPage extends StatelessWidget {
         didKitProvider: DIDKitProvider(),
         secureStorageProvider: getSecureStorage,
         fileSaver: FileSaver.instance,
+        didCubit: context.read<DIDCubit>(),
+        client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
       ),
-      child: GenerateLinkedinQrView(linkedinUrl: linkedinUrl),
+      child: GenerateLinkedinQrView(linkedinUrl: linkedinUrl, uri: uri),
     );
   }
 }
@@ -42,8 +49,10 @@ class GenerateLinkedinQrView extends StatefulWidget {
   const GenerateLinkedinQrView({
     super.key,
     required this.linkedinUrl,
+    required this.uri,
   });
 
+  final Uri uri;
   final String linkedinUrl;
 
   @override
@@ -59,7 +68,10 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context
           .read<GenerateLinkedInQrCubit>()
-          .generatePresentationForLinkedInCard(liinkedUrl: widget.linkedinUrl);
+          .generatePresentationForLinkedInCard(
+            linkedInUrl: widget.linkedinUrl,
+            uri: widget.uri,
+          );
     });
   }
 

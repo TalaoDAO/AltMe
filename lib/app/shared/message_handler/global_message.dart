@@ -120,11 +120,13 @@ class GlobalMessage {
   String get RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR =>
       l10n.backupCredentialError;
 
-  String get RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE =>
-      l10n.backupCredentialPermissionDeniedMessage;
+  String get STORAGE_PERMISSION_DENIED_MESSAGE => l10n.needStoragePermission;
 
   String get RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE =>
       l10n.backupCredentialSuccessMessage;
+
+  String get RESPONSE_STRING_linkedInBannerSuccessfullyExported =>
+      l10n.linkedInBannerSuccessfullyExported;
 
   String get RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE =>
       l10n.recoveryCredentialJSONFormatErrorMessage;

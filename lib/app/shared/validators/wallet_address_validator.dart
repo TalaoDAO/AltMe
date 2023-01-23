@@ -16,7 +16,7 @@ mixin WalletAddressValidator {
     } else if (address.startsWith('0x')) {
       return _validEtherumAddress(address);
     } else if (address.startsWith('tz')) {
-      //TODO(all): validate tezos address
+      // TODO(all): validate tezos address
       return address.length > 8;
     } else {
       // The wallet not support other blockchains

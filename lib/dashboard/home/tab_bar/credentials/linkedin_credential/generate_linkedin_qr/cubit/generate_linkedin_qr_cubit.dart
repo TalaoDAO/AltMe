@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/home/home.dart';
+import 'package:altme/did/did.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_saver/file_saver.dart';
@@ -18,43 +20,49 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
     required this.didKitProvider,
     required this.secureStorageProvider,
     required this.fileSaver,
+    required this.didCubit,
+    required this.client,
   }) : super(const GenerateLinkedInQrState());
 
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
   final FileSaver fileSaver;
+  final DIDCubit didCubit;
+  final DioClient client;
 
   Future<void> generatePresentationForLinkedInCard({
-    required String liinkedUrl,
+    required String linkedInUrl,
+    required Uri uri,
   }) async {
     final log = getLogger(
-        'GenerateLinkedInQrCubit - generatePresentationForLinkedInCard');
+      'GenerateLinkedInQrCubit - generatePresentationForLinkedInCard',
+    );
     try {
-      //TODO(bibas): fetch real data
       emit(state.loading());
 
-      final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
+      final dynamic response = await client.get(uri.toString());
+      final dynamic data = response is String ? jsonDecode(response) : response;
+
+      final credentialModel =
+          CredentialModel.fromJson(data as Map<String, dynamic>);
 
       final presentationId = 'urn:uuid:${const Uuid().v4()}';
 
       final key = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
-
-      final verificationMethod =
-          await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
 
       final presentation = await didKitProvider.issuePresentation(
         jsonEncode({
           '@context': ['https://www.w3.org/2018/credentials/v1'],
           'type': ['VerifiablePresentation'],
           'id': presentationId,
-          'holder': did,
-          //'verifiableCredential': item.data,
+          'holder': didCubit.state.did,
+          'verifiableCredential': credentialModel.data,
         }),
         jsonEncode({
-          'verificationMethod': verificationMethod,
+          'verificationMethod': didCubit.state.verificationMethod,
           'proofPurpose': 'assertionMethod',
-          //'challenge': credentialModel.challenge,
-          //'domain': credentialModel.domain,
+          'challenge': credentialModel.challenge,
+          'domain': linkedInUrl,
         }),
         key!,
       );
@@ -69,7 +77,7 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
           state.error(
             messageHandler: ResponseMessage(
               ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
         );
@@ -83,23 +91,18 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
 
     try {
       if (!isPermissionStatusGranted) {
-        // TODO(bibash): change string
-        throw ResponseMessage(
-          ResponseString
-              .RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE,
-        );
+        throw ResponseMessage(ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE);
       }
       final date = UiDate.formatDate(DateTime.now());
       final fileName = 'linkedin-banner-$date';
 
-      final filePath =
-          await fileSaver.saveAs(fileName, capturedImage, 'png', MimeType.PNG);
+      await fileSaver.saveAs(fileName, capturedImage, 'png', MimeType.PNG);
 
       emit(
         state.copyWith(
           status: AppStatus.success,
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
+            ResponseString.RESPONSE_STRING_linkedInBannerSuccessfullyExported,
           ),
         ),
       );
@@ -110,7 +113,8 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
         emit(
           state.error(
             messageHandler: ResponseMessage(
-              ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR,
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             ),
           ),
         );

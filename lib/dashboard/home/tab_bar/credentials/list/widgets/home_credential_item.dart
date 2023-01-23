@@ -88,16 +88,11 @@ class DummyCredentialItem extends StatelessWidget {
               buttonText:
                   isLinkeInCard ? l10n.exportToLinkedIn : l10n.getThisCard,
               onCallBack: () async {
-                if (isLinkeInCard) {
-                  await Navigator.of(context)
-                      .push<void>(GetLinkedinInfoPage.route());
-                } else {
-                  await discoverCredential(
-                    homeCredential: homeCredential,
-                    context: context,
-                  );
-                  Navigator.pop(context);
-                }
+                await discoverCredential(
+                  homeCredential: homeCredential,
+                  context: context,
+                );
+                Navigator.pop(context);
               },
             ),
           );
