@@ -36,22 +36,10 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
     return mnemonicList;
   }
 
-  Future<bool> _getStoragePermission() async {
-    if (await Permission.storage.request().isGranted) {
-      return true;
-    } else if (await Permission.storage.request().isPermanentlyDenied) {
-      //todo: show dialog to choose this option
-      await openAppSettings();
-    } else if (await Permission.storage.request().isDenied) {
-      return false;
-    }
-    return false;
-  }
-
   Future<void> encryptAndDownloadFile() async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
-    final isPermissionStatusGranted = await _getStoragePermission();
+    final isPermissionStatusGranted = await getStoragePermission();
 
     try {
       if (!isPermissionStatusGranted) {

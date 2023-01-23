@@ -2,9 +2,12 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:file_saver/file_saver.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class GenerateLinkedinQrPage extends StatelessWidget {
@@ -28,6 +31,7 @@ class GenerateLinkedinQrPage extends StatelessWidget {
       create: (_) => GenerateLinkedInQrCubit(
         didKitProvider: DIDKitProvider(),
         secureStorageProvider: getSecureStorage,
+        fileSaver: FileSaver.instance,
       ),
       child: GenerateLinkedinQrView(linkedinUrl: linkedinUrl),
     );
@@ -47,10 +51,11 @@ class GenerateLinkedinQrView extends StatefulWidget {
 }
 
 class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
+  ScreenshotController screenshotController = ScreenshotController();
+
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context
           .read<GenerateLinkedInQrCubit>()
@@ -66,12 +71,7 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
       titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       scrollView: false,
-      padding: const EdgeInsets.only(
-        top: 0,
-        left: Sizes.spaceSmall,
-        right: Sizes.spaceSmall,
-        bottom: Sizes.spaceSmall,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       body: BlocConsumer<GenerateLinkedInQrCubit, GenerateLinkedInQrState>(
         listener: (context, state) {
           if (state.status == AppStatus.loading) {
@@ -86,39 +86,47 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
               stateMessage: state.message!,
             );
           }
+
+          if (state.status == AppStatus.success) {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          }
         },
         builder: (context, state) {
           return Center(
-            child: AspectRatio(
-              aspectRatio: 1584 / 396,
-              child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage(ImageStrings.linkedInBanner),
-                  ),
-                ),
-                child: FractionallySizedBox(
-                  heightFactor: 0.49,
-                  widthFactor: 0.12,
-                  child: CustomMultiChildLayout(
-                    delegate: QrDelegate(
-                      position: Offset.zero,
+            child: Screenshot<dynamic>(
+              controller: screenshotController,
+              child: AspectRatio(
+                aspectRatio: 1584 / 396,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage(ImageStrings.linkedInBanner),
                     ),
-                    children: [
-                      LayoutId(
-                        id: 'qr',
-                        child: Center(
-                          child: state.qrValue == null
-                              ? Container()
-                              : QrImage(
-                                  data: state.qrValue!,
-                                  backgroundColor: Colors.white,
-                                  padding: EdgeInsets.zero,
-                                ),
-                        ),
+                  ),
+                  child: FractionallySizedBox(
+                    heightFactor: 0.49,
+                    widthFactor: 0.12,
+                    child: CustomMultiChildLayout(
+                      delegate: QrDelegate(
+                        position: Offset.zero,
                       ),
-                    ],
+                      children: [
+                        LayoutId(
+                          id: 'qr',
+                          child: Center(
+                            child: state.qrValue == null
+                                ? Container()
+                                : QrImage(
+                                    data: state.qrValue!,
+                                    backgroundColor: Colors.white,
+                                    padding: EdgeInsets.zero,
+                                  ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -130,7 +138,19 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
         padding: const EdgeInsets.all(Sizes.spaceSmall),
         child: MyElevatedButton(
           text: l10n.exportToLinkedIn,
-          onPressed: () async {},
+          onPressed: () async {
+            await screenshotController
+                .capture(delay: const Duration(milliseconds: 10))
+                .then((capturedImage) {
+              context
+                  .read<GenerateLinkedInQrCubit>()
+                  .saveScreenshot(capturedImage!);
+            }).catchError((dynamic onError) {
+              if (kDebugMode) {
+                print(onError);
+              }
+            });
+          },
         ),
       ),
     );
