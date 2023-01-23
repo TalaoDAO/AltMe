@@ -41,24 +41,25 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BasePage(
-      title: l10n.credentialReceiveTitle,
-      body: BlocConsumer<ScanCubit, ScanState>(
-        listener: (BuildContext context, ScanState state) async {
-          if (state.status == ScanStatus.loading) {
-            LoadingView().show(context: context);
-          } else {
-            LoadingView().hide();
-          }
-        },
-        builder: (context, state) {
-          final credentialModel = CredentialModel.fromJson(widget.preview);
-          final outputDescriptors =
-              credentialModel.credentialManifest?.outputDescriptors;
+    return BlocConsumer<ScanCubit, ScanState>(
+      listener: (BuildContext context, ScanState state) async {
+        if (state.status == ScanStatus.loading) {
+          LoadingView().show(context: context);
+        } else {
+          LoadingView().hide();
+        }
+      },
+      builder: (context, state) {
+        final credentialModel = CredentialModel.fromJson(widget.preview);
+        final outputDescriptors =
+            credentialModel.credentialManifest?.outputDescriptors;
 
-          final textColor = Theme.of(context).colorScheme.valueColor;
+        final textColor = Theme.of(context).colorScheme.valueColor;
 
-          return Column(
+        return BasePage(
+          title: l10n.credentialReceiveTitle,
+          useSafeArea: true,
+          body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               // Row(
@@ -109,43 +110,50 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                 ),
               ],
               const SizedBox(height: 24),
-              MyGradientButton(
-                text: l10n.credentialAddThisCard,
-                onPressed: () {
-                  if (credentialModel
-                          .credentialManifest?.presentationDefinition !=
-                      null) {
-                    Navigator.of(context).pushReplacement<void, void>(
-                      CredentialManifestOfferPickPage.route(
-                        uri: widget.uri,
-                        credential: credentialModel,
-                        issuer: widget.issuer,
-                        inputDescriptorIndex: 0,
-                        credentialsToBePresented: [],
-                      ),
-                    );
-                  } else {
-                    context.read<ScanCubit>().credentialOffer(
-                          uri: widget.uri,
-                          credentialModel: credentialModel,
-                          keyId: SecureStorageKeys.ssiKey,
-                          issuer: widget.issuer,
-                        );
-                  }
-                },
-              ),
-
-              const SizedBox(height: 8),
-              MyOutlinedButton(
-                verticalSpacing: 20,
-                borderRadius: 20,
-                text: l10n.credentialReceiveCancel,
-                onPressed: () => Navigator.of(context).pop(),
-              ),
             ],
-          );
-        },
-      ),
+          ),
+          navigation: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                MyGradientButton(
+                  text: l10n.credentialAddThisCard,
+                  onPressed: () {
+                    if (credentialModel
+                            .credentialManifest?.presentationDefinition !=
+                        null) {
+                      Navigator.of(context).pushReplacement<void, void>(
+                        CredentialManifestOfferPickPage.route(
+                          uri: widget.uri,
+                          credential: credentialModel,
+                          issuer: widget.issuer,
+                          inputDescriptorIndex: 0,
+                          credentialsToBePresented: [],
+                        ),
+                      );
+                    } else {
+                      context.read<ScanCubit>().credentialOffer(
+                            uri: widget.uri,
+                            credentialModel: credentialModel,
+                            keyId: SecureStorageKeys.ssiKey,
+                            issuer: widget.issuer,
+                          );
+                    }
+                  },
+                ),
+                const SizedBox(height: 8),
+                MyOutlinedButton(
+                  verticalSpacing: 20,
+                  borderRadius: 20,
+                  text: l10n.credentialReceiveCancel,
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
