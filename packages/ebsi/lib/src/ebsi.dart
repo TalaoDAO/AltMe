@@ -24,7 +24,9 @@ import 'package:tezart/tezart.dart';
 /// {@endtemplate}
 class Ebsi {
   /// {@macro ebsi}
-  const Ebsi({required this.client});
+  Ebsi(this.client);
+
+  ///
   final Dio client;
 
   /// create JWK from mnemonic
@@ -93,7 +95,7 @@ class Ebsi {
 
   /// Verifiy is url is first EBSI url, starting point to get a credential
   ///
-  static bool isEbsiUrl(String url) {
+  static bool isEbsiInitiateIssuanceUrl(String url) {
     if (url.startsWith('openid://initiate_issuance?')) {
       return true;
     }
@@ -101,55 +103,40 @@ class Ebsi {
   }
 
   ///
-  Future<void> getAuthorizationFromIssuer(
-    String authorizationUrl,
-    String credentialType,
-  ) async {
-    final uri = Uri.parse(authorizationUrl);
-    final headers = {'Content-Type': 'application/json'};
-    final myRequest = <String, dynamic>{
-      'scope': 'openid',
-      'client_id': redirectUri,
-      'response_type': 'code',
-      'authorization_details': jsonEncode([
-        {
-          'type': 'openid_credential',
-          'credential_type': credentialType,
-          'format': 'jwt_vc'
-        }
-      ]),
-      'redirect_uri': redirectUri,
-      'state': '1234'
-    };
-
-    try {
-      final Uri authorizationUri = Uri.parse(authorizationUrl);
-      authorizationUri.replace(queryParameters: myRequest);
-
-      // final Uri authorizationUri = Uri(
-      //   scheme: 'https',
-      //   path: '/conformance/v2/issuer-mock/authorize',
-      //   queryParameters: myRequest,
-      //   host: 'api-conformance.ebsi.eu',
-      // );
-      final dynamic authorizationResponse = await client.get(authorizeUrl,
-          headers: headers, queryParameters: myRequest);
-      print('got authorization');
-      // Should get code from authorization response or this callback system
-      /// we should receive something through deepLink ?
-
-    } catch (e) {
-      if (e is NetworkException) {
-        if (e.data != null) {
-          if (e.data['detail'] != null) {
-            final String error = e.data['detail'] as String;
-            final codeSplit = error.split('code=');
-            code = codeSplit[1];
+  Uri getAuthorizationUriForIssuer(
+    String openIdRequest,
+  ) {
+    if (isEbsiInitiateIssuanceUrl(openIdRequest)) {
+      const authorizationUrl =
+          'https://talao.co/sandbox/ebsi/issuer/vgvghylozl';
+      const credentialType =
+          'https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd';
+      const state = '46cc5d84-9b29-11ed-ae36-0a1628958560';
+      const issuer = 'https://talao.co/sandbox/ebsi/issuer/vgvghylozl';
+      final uri = Uri.parse(authorizationUrl);
+      final myRequest = <String, dynamic>{
+        'scope': 'openid',
+        'client_id': redirectUri,
+        'response_type': 'code',
+        'authorization_details': jsonEncode([
+          {
+            'type': 'openid_credential',
+            'credential_type': credentialType,
+            'format': 'jwt_vc'
           }
-        }
-      }
-      print('Lokks like wa can get code from here');
+        ]),
+        'redirect_uri':
+            '$redirectUri?credentialType=$credentialType&issuer=$issuer',
+        'state': state
+      };
+
+      final Uri authorizationUri = Uri.parse(authorizationUrl);
+      authorizationUri.replace(
+        queryParameters: myRequest,
+      );
+      return authorizationUri;
     }
+    throw Exception('Not a valid openid url to initiate issuance');
   }
 
   /// Extract credential_type's Url from openid request
@@ -183,7 +170,7 @@ class Ebsi {
   }
 
   /// Retreive credential_type from url
-  Future<dynamic> getCredentialType(
+  Future<dynamic> getCredential(
     String credentialTypeRequest,
   ) async {
     final dynamic response =

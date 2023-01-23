@@ -397,7 +397,7 @@ class _SplashViewState extends State<SplashView> {
               final Dio client = Dio();
 
               final String credentialType =
-                  Ebsi(client: client).getCredentialRequest(uri.toString());
+                  Ebsi(client).getCredentialRequest(uri.toString());
               context.read<DeepLinkCubit>().addDeepLink(credentialType);
               final ssiKey = await secure_storage.getSecureStorage
                   .get(SecureStorageKeys.ssiKey);

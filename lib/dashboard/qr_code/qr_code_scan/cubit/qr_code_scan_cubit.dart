@@ -88,111 +88,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith('openid://initiate_issuance?')) {
         // convert String from QR code into Uri
+        final Ebsi ebsi = Ebsi(Dio());
+        final Uri ebsiAuthenticationUri =
+            ebsi.getAuthorizationUriForIssuer(scannedResponse);
 
-        /// getting token
-        final tokenHeaders = <String, dynamic>{
-          'Conformance': conformance,
-          'Content-Type': 'application/x-www-form-urlencoded'
-        };
-        final String tokenUrl =
-            'https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/token';
-
-        final tokenData = <String, dynamic>{
-          'code': code,
-          'grant_type': 'authorization_code',
-          'redirect_uri': redirectUri
-        };
-        String accessToken = '';
-        String cNonce = '';
-        try {
-          final dynamic tokenResponse = await client.post(
-            tokenUrl,
-            headers: tokenHeaders,
-            data: tokenData,
-          );
-          accessToken = tokenResponse['access_token'] as String;
-          cNonce = tokenResponse['c_nonce'] as String;
-        } catch (e) {
-          print('what the !!');
-        }
-
-        /// preparation before getting credential
-        final keyDict = {
-          'crv': 'P-256',
-          'd': 'ZpntMmvHtDxw6przKSJY-zOHMrEZd8C47D3yuqAsqrw',
-          'kty': 'EC',
-          'x': 'NB1ylMveV4_PPYtx9KYEjoS1WWA8qN33SJav9opWTaM',
-          'y': 'UtOG2jR3NHadMMJ7wdYEq5_nHJHVfcy7QPt_OBHhBrE'
-        };
-
-        final keyJwk = {
-          'crv': 'P-256',
-          'kty': 'EC',
-          'x': 'NB1ylMveV4_PPYtx9KYEjoS1WWA8qN33SJav9opWTaM',
-          'y': 'UtOG2jR3NHadMMJ7wdYEq5_nHJHVfcy7QPt_OBHhBrE'
-        };
-
-        final verifierKey = JsonWebKey.fromJson(keyDict);
-        final alg = keyDict['crv'] == 'P-256' ? 'ES256' : 'ES256K';
-        final did = 'did:ebsi:zmSKef6zQZDC66MppKLHou9zCwjYE4Fwar7NSVy2c7aya';
-        final kid =
-            'did:ebsi:zmSKef6zQZDC66MppKLHou9zCwjYE4Fwar7NSVy2c7aya#lD7U7tcVLZWmqECJYRyGeLnDcU4ETX3reBN3Zdd0iTU';
-
-        final proofHeader = {
-          'typ': 'JWT',
-          'alg': alg,
-          'jwk': keyJwk,
-          'kid': kid
-        };
-        final payload = {
-          'iss': did,
-          'nonce': cNonce,
-          'iat': DateTime.now().microsecondsSinceEpoch,
-          'aud': issuer
-        };
-        final claims = new JsonWebTokenClaims.fromJson(payload);
-// create a builder, decoding the JWT in a JWS, so using a
-        // JsonWebSignatureBuilder
-        final builder = new JsonWebSignatureBuilder();
-// set the content
-        builder.jsonContent = claims.toJson();
-
-        builder.setProtectedHeader('typ', 'JWT');
-        builder.setProtectedHeader('alg', alg);
-        builder.setProtectedHeader('jwk', keyJwk);
-        builder.setProtectedHeader('kid', kid);
-
-        // add a key to sign, can only add one for JWT
-        builder.addRecipient(
-          verifierKey,
-          algorithm: alg,
-        );
-        // build the jws
-        var jws = builder.build();
-
-        // output the compact serialization
-        print('jwt compact serialization: ${jws.toCompactSerialization()}');
-        final jwt = jws.toCompactSerialization();
-
-        const String credentialUrl =
-            'https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/credential';
-        final credentialHeaders = <String, dynamic>{
-          'Conformance': conformance,
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken'
-        };
-
-        final credentialData = <String, dynamic>{
-          'type': credential_type,
-          'format': 'jwt_vc',
-          'proof': {'proof_type': 'jwt', 'jwt': jwt}
-        };
-
-        final dynamic credentialResponse = await client.post(credentialUrl,
-            headers: credentialHeaders, data: credentialData);
-        final storage = getSecureStorage;
-        await storage.set('ebsiCredential', jsonEncode(credentialResponse));
-        await storage.set('conformance', conformance);
+        LaunchUrl.launchUri(ebsiAuthenticationUri);
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse
@@ -431,9 +331,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       deepLinkCubit.resetDeepLink();
       try {
         final Dio client = Dio();
-        final credentialType =
-            Ebsi(client: client).getCredentialType(deepLinkUrl);
-        print(credentialType);
+        final Ebsi ebsi = Ebsi(client);
+        final credentialType = ebsi.getCredential(deepLinkUrl);
       } on FormatException {
         emit(
           state.error(
