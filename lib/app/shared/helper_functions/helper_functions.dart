@@ -24,10 +24,20 @@ Future<void> openBlockchainExplorer(
     await LaunchUrl.launch(
       'https://polygonscan.com/tx/$txHash',
     );
-  } else {
+  } else if (network is BinanceNetwork) {
+    await LaunchUrl.launch(
+      'https://www.bscscan.com/tx/$txHash',
+    );
+  } else if (network is FantomNetwork) {
+    await LaunchUrl.launch(
+      'https://ftmscan.com/tx/$txHash',
+    );
+  } else if (network is EthereumNetwork) {
     await LaunchUrl.launch(
       'https://etherscan.io/tx/$txHash',
     );
+  } else {
+    UnimplementedError();
   }
 }
 
