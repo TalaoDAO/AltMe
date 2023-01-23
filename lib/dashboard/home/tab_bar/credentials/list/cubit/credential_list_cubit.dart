@@ -66,9 +66,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           break;
 
         case CredentialSubjectType.linkedInCard:
-          myProfessionalCategories.remove(credentialSubjectType);
-          break;
-
         case CredentialSubjectType.talaoCommunityCard:
         case CredentialSubjectType.aragoEmailPass:
         case CredentialSubjectType.aragoIdentityCard:
@@ -260,13 +257,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             break;
 
           case CredentialSubjectType.linkedInCard:
-            _removeDummyIfCredentialExist(
-              _credentials,
-              myProfessionalCategories,
-              credentialSubjectType,
-            );
-            break;
-
           case CredentialSubjectType.tezosAssociatedWallet:
           case CredentialSubjectType.ethereumAssociatedWallet:
           case CredentialSubjectType.certificateOfEmployment:
