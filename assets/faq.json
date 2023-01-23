@@ -1,44 +1,44 @@
 {
   "faq": [
     {
-      "que": "What can I do with Altme ?",
-      "ans": "Altme give users the ability to take back control of their personal information and share these with Web 3 applications when its required. For example, with Altme users can present digital credentials (Over 18 proof, KYC...) in order to access certain services or take advantage of certain offers (membership card, loyalty card, Exclusive pass...)."
+      "que": "What can I do with Talao ?",
+      "ans": "Talao give users the ability to take back control of their personal information and share these with Web 3 applications when its required. For example, with Talao users can present digital credentials (Over 18 proof, KYC...) in order to access certain services or take advantage of certain offers (membership card, loyalty card, Exclusive pass...)."
     },
     {
-      "que": "Why is Altme called a Universal wallet and why is it different from other digital wallets ?",
-      "ans": "Altme is called a 'Universal wallet' because just like a physical wallet in which you can carry your ID cards and funds, you can use the Altme wallet to gather digital credentials (Identity card, Age range proof, diploma, etc.) and digital assets (Cryptos, NFTs, tokens...). The future of digital identity is being build on Self-Sovereign Identity (SSI standard), which is the technology that powers Altme wallet and give its users the ability to manage digital credentials in a privacy-preserving and decentralized manner."
+      "que": "Why is Talao called a Universal wallet and why is it different from other digital wallets ?",
+      "ans": "Talao is called a 'Universal wallet' because just like a physical wallet in which you can carry your ID cards and funds, you can use the Talao wallet to gather digital credentials (Identity card, Age range proof, diploma, etc.) and digital assets (Cryptos, NFTs, tokens...). The future of digital identity is being build on Self-Sovereign Identity (SSI standard), which is the technology that powers Talao wallet and give its users the ability to manage digital credentials in a privacy-preserving and decentralized manner."
     },
     {
       "que": "What is Self-Sovereign Identity (SSI) ?",
       "ans": "Self-Sovereign Identity, or SSI, is a new technology compatible with blockchain that gives users and organizations the ability to control their own digital credentials and identity data, rather than relying on a central authority or central database to manage their personal information. With SSI, users are able to store, manage and share their personal data in a decentralize manner, enabling greater privacy and security. SSI also uses Zero-Knowledge Proof and 'Selective Disclosure' to protect users privacy."
     },
     {
-      "que": "How can I use my Altme SSI wallet to manage and share my verifiable credentials?",
-      "ans": "When you receive a verifiable credential in the Altme wallet, it is added to your digital identity. You can then use this credential to prove your identity or access certain services. For example, you might use a membership credential to access a members-only area of a website, or an 'Over 18' proof to access a DeFi application. You can use the “scan” button in Altme to share credentials when it is requested. It’s super easy. Just scan the QR code, and accept the request to share your digital credentials."
+      "que": "How can I use my Talao SSI wallet to manage and share my verifiable credentials?",
+      "ans": "When you receive a verifiable credential in the Talao wallet, it is added to your digital identity. You can then use this credential to prove your identity or access certain services. For example, you might use a membership credential to access a members-only area of a website, or an 'Over 18' proof to access a DeFi application. You can use the “scan” button in Talao to share credentials when it is requested. It’s super easy. Just scan the QR code, and accept the request to share your digital credentials."
     },
     {
-      "que": "What is the level of security of Altme wallet ?",
-      "ans": "Altme wallet is self-custodial and protected by military grade encryption and biometrics authentication. Your data are encrypted and stored on your device, enabling better privacy and security."
+      "que": "What is the level of security of Talao wallet ?",
+      "ans": "Talao wallet is self-custodial and protected by military grade encryption and biometrics authentication. Your data are encrypted and stored on your device, enabling better privacy and security."
     },
     {
-      "que": "What does it mean that Altme is “self-custodial” ?",
+      "que": "What does it mean that Talao is “self-custodial” ?",
       "ans": "A self-custodial wallet (= non-custodial) means that your data are encrypted and stored on your device. Only you can access your keys, data and assets. Not us. Not anyone else."
     },
     {
-      "que": "Are there any risks related to verifying my address to get a 'proof the ownership' in Altme ?",
-      "ans": "No there is zero risk.&nbsp;You don’t need to share or disclose any passphrase or private keys to get a proof of ownership. All you have to do is scan a QR code with your favorite crypto wallet (address) in order to get the credential that proves you hold the private key of this address. Altme wallet is never connected your crypto wallet."
+      "que": "Are there any risks related to verifying my address to get a 'proof the ownership' in Talao ?",
+      "ans": "No there is zero risk.&nbsp;You don’t need to share or disclose any passphrase or private keys to get a proof of ownership. All you have to do is scan a QR code with your favorite crypto wallet (address) in order to get the credential that proves you hold the private key of this address. Talao wallet is never connected your crypto wallet."
     },
     {
-      "que": "How does Altme wallet protect my personal information?",
-      "ans": "Altme is built on Self-Sovereign Identity (SSI) technology which is a new digital identity standard that enables the storage and management of personal information in a decentralized, secure and private way. All your personal information are encrypted and stored in your phone. Only you have the power to share credentials information that are encrypted in your wallet."
+      "que": "How does Talao wallet protect my personal information?",
+      "ans": "Talao is built on Self-Sovereign Identity (SSI) technology which is a new digital identity standard that enables the storage and management of personal information in a decentralized, secure and private way. All your personal information are encrypted and stored in your phone. Only you have the power to share credentials information that are encrypted in your wallet."
     },
     {
-      "que": "Where are my digital credentials stored in Altme ?",
+      "que": "Where are my digital credentials stored in Talao ?",
       "ans": "Your digital credentials are encrypted and stored on your phone. There is no central database or cloud that stores your data. This is why it is called “self-sovereign identity” (SSI). Only you should own and access your data."
     },
     {
-      "que": "How do I backup my keys and credentials in Altme ?",
-      "ans": "To backup your Altme wallet, you need to write down your passphrase and download your digital credentials. It's important to store these in a secure location, such as a password-protected file or a physical safe. If you lose access to your Altme wallet, there is nothing we can do to help you. Altme is self-custodial which means only you can control your keys and your credentials."
+      "que": "How do I backup my keys and credentials in Talao ?",
+      "ans": "To backup your Talao wallet, you need to write down your passphrase and download your digital credentials. It's important to store these in a secure location, such as a password-protected file or a physical safe. If you lose access to your Talao wallet, there is nothing we can do to help you. Talao is self-custodial which means only you can control your keys and your credentials."
     },
     {
       "que": "What are Verifiable Credentials and why is it useful ?",
@@ -50,68 +50,16 @@
     },
     {
       "que": "What should I do if I find a bug?",
-      "ans": "You can contact us at our support email : support@altme.io"
+      "ans": "You can contact us at our support email : support@Talao.io"
     },
     {
-      "que": "How can I contact Altme if I need supports ?",
-      "ans": "You can contact us by using our support email :  support@altme.io. Currently, the Altme SSI wallet is only available in English. However, we are working on expanding the availability of the wallet to other languages in the future."
+      "que": "How can I contact Talao if I need supports ?",
+      "ans": "You can contact us by using our support email :  support@Talao.io. Currently, the Talao SSI wallet is only available in English. However, we are working on expanding the availability of the wallet to other languages in the future."
     },
     {
-      "que": "What are Altme's Terms of Service?",
+      "que": "What are Talao's Terms of Service?",
       "ans": "Redirect to CGU.",
-      "href": "https://altme.io/cgu"
-    },
-    {
-      "que": "Can I restore my wallet?",
-      "ans": "You can recover your wallet thanks to its recovery phrase, you can find it in parameters > blockchain settings > show wallet recovery phrase."
-    },
-    {
-      "que": "How can I secure my wallet?",
-      "ans": "You can secure your wallet with biometric recognition and a 4-digit code."
-    },
-    {
-      "que": "Where is my public address?",
-      "ans": "To find your public address you have to go in  parameters > blockchain settings > manage blockchain account for see each address by account."
-    },
-    {
-      "que": "How can I use my existing crypto wallet with Altme ?",
-      "ans": "It's extremely simple ! All you have to do is to verify your  favorite wallet address and get a 'Proof of ownership' credential in Altme. You can follow the process above to start."
-    },
-    {
-      "que": "Which crypto wallets are compatible with Altme ?",
-      "ans": "Right now, you can easily prove ownership of any Tezos wallets like Temple, Kukai, Naan, Autonomy, Ait Gap, Umami...Soon, you will be able to do the same with Ethereum and EVM compatible wallets like Metamask, Trust wallet, etc."
-    },
-    {
-      "que": "Do I need cryptocurrency to use Altme?",
-      "ans": "There is no need for cryptocurrency to use Altme. You can have an account only to confirm your information without having cryptocurrency."
-    },
-    {
-      "que": "Does Altme support NFT?",
-      "ans": "Altme support NFT in the wallet part."
-    },
-    {
-      "que": "How do I deposit/receive/send money?",
-      "ans": "You can deposit money using your credit card or Apple Pay. You can receive money in your crypto-wallet for each incoming transaction with your iD address for each cryptocurrency. You can send money to the crypto-wallet you want thanks to its ID address of the desired crypto-currency."
-    },
-    {
-      "que": "How do I send my ETH and tokens?",
-      "ans": "To send tokens you have to go to CARDS then TOKENS, select your token and define how many and to whom and send (find your token ID on the reveice part."
-    },
-    {
-      "que": "Why is my balance not updating?",
-      "ans": "You have to wait or refresh the tokens page."
-    },
-    {
-      "que": "Why is my NFT not showing up?",
-      "ans": "You have to wait or refresh the NFT part."
-    },
-    {
-      "que": "Why do I need to approve tokens before trading?",
-      "ans": "You must approve the tokens before trading to verify and ensure the transaction."
-    },
-    {
-      "que": "Will Altme charge for exchanges?",
-      "ans": "Currently there is a fixed rate on sending tokens from the TEZOS blockchain at 0.0219XTZ (about 0.017€) and rates calculated on the ethereum blockchains."
+      "href": "https://talao.io/"
     }
   ]
 }
