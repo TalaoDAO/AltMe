@@ -8,7 +8,7 @@ import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -109,7 +109,7 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
             child: Screenshot<dynamic>(
               controller: screenshotController,
               child: AspectRatio(
-                aspectRatio: 1584 / 396,
+                aspectRatio: Sizes.linkedinBannerAspectRatio,
                 child: Container(
                   decoration: const BoxDecoration(
                     image: DecorationImage(
@@ -117,28 +117,26 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
                       image: AssetImage(ImageStrings.linkedInBanner),
                     ),
                   ),
-                  child: FractionallySizedBox(
-                    heightFactor: 0.49,
-                    widthFactor: 0.12,
-                    child: CustomMultiChildLayout(
-                      delegate: QrDelegate(
-                        position: Offset.zero,
+                  child: CustomMultiChildLayout(
+                    delegate: QrDelegate(position: Offset.zero),
+                    children: [
+                      LayoutId(
+                        id: 'qr',
+                        child: state.qrValue == null
+                            ? Container()
+                            : FractionallySizedBox(
+                                heightFactor: 0.48,
+                                widthFactor: 0.12,
+                                child: PrettyQr(
+                                  size: 300,
+                                  data: state.qrValue!,
+                                  errorCorrectLevel: QrErrorCorrectLevel.M,
+                                  typeNumber: null,
+                                  roundEdges: true,
+                                ),
+                              ),
                       ),
-                      children: [
-                        LayoutId(
-                          id: 'qr',
-                          child: Center(
-                            child: state.qrValue == null
-                                ? Container()
-                                : QrImage(
-                                    data: state.qrValue!,
-                                    backgroundColor: Colors.white,
-                                    padding: EdgeInsets.zero,
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
               ),
@@ -178,7 +176,7 @@ class QrDelegate extends MultiChildLayoutDelegate {
   void performLayout(Size size) {
     if (hasChild('qr')) {
       layoutChild('qr', BoxConstraints.loose(size));
-      positionChild('qr', Offset(size.width * 3.145, size.height * -0.15));
+      positionChild('qr', Offset(size.width * 0.8175, size.height * 0.185));
     }
   }
 
