@@ -783,5 +783,8 @@
   "invalidUrlError": "Please enter valid linkedIn url", 
   "linkedInBannerSuccessfullyExported": "Your linkedin banner has been successfully exported.", 
   "credentialSuccessfullyExported": "Your credential has been successfully exported.", 
-  "linkedInBanner": "LinkedIn Banner" 
+  "linkedInBanner": "Linkedin Banner",  
+  "linkedInProfile": "Linkedin Profile",
+  "checkLinkedinProfile":"Check a Linkedin Profile", 
+  "scanAndDisplay":"Scan and Display" 
 }

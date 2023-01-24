@@ -67,8 +67,9 @@ class CredentialsListPageItem extends StatelessWidget {
       isCustom: true,
       onTap: onTap ??
           () {
-            Navigator.of(context)
-                .push<void>(CredentialsDetailsPage.route(credentialModel));
+            Navigator.of(context).push<void>(
+              CredentialsDetailsPage.route(credentialModel: credentialModel),
+            );
           },
       color: credentialModel
           .credentialPreview.credentialSubjectModel.credentialSubjectType

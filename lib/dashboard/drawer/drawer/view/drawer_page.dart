@@ -36,13 +36,9 @@ class DrawerView extends StatelessWidget {
                   ),
                 ),
                 const Center(child: AltMeLogo(size: 90)),
-                const SizedBox(
-                  height: Sizes.space2XSmall,
-                ),
+                const SizedBox(height: Sizes.spaceSmall),
                 const AppVersionDrawer(),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
+                const SizedBox(height: Sizes.spaceLarge),
                 // const DidKey(),
                 DrawerCategoryItem(
                   title: l10n.walletSecurity,
@@ -55,9 +51,7 @@ class DrawerView extends StatelessWidget {
                 if (Parameters.hasCryptoCallToAction)
                   Column(
                     children: [
-                      const SizedBox(
-                        height: Sizes.spaceSmall,
-                      ),
+                      const SizedBox(height: Sizes.spaceSmall),
                       DrawerCategoryItem(
                         title: l10n.blockchainSettings,
                         subTitle: l10n.blockchainSettingsDescription,
@@ -70,9 +64,7 @@ class DrawerView extends StatelessWidget {
                   )
                 else
                   const SizedBox.shrink(),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
+                const SizedBox(height: Sizes.spaceSmall),
                 DrawerCategoryItem(
                   title: l10n.ssi,
                   subTitle: l10n.ssiDescription,
@@ -80,9 +72,16 @@ class DrawerView extends StatelessWidget {
                     Navigator.of(context).push<void>(SSIMenu.route());
                   },
                 ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
+                const SizedBox(height: Sizes.spaceSmall),
+                DrawerCategoryItem(
+                  title: l10n.checkLinkedinProfile,
+                  subTitle: l10n.checkLinkedinProfile,
+                  onClick: () {
+                    Navigator.of(context)
+                        .push<void>(CheckForLinkedInProfile.route());
+                  },
                 ),
+                const SizedBox(height: Sizes.spaceSmall),
                 DrawerCategoryItem(
                   title: l10n.helpCenter,
                   subTitle: l10n.helpCenterDescription,
@@ -90,9 +89,7 @@ class DrawerView extends StatelessWidget {
                     Navigator.of(context).push<void>(HelpCenterMenu.route());
                   },
                 ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
+                const SizedBox(height: Sizes.spaceSmall),
                 DrawerCategoryItem(
                   title: l10n.aboutAltme,
                   subTitle: l10n.aboutAltmeDescription,
@@ -100,9 +97,7 @@ class DrawerView extends StatelessWidget {
                     Navigator.of(context).push<void>(AboutAltmeMenu.route());
                   },
                 ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
+                const SizedBox(height: Sizes.spaceSmall),
                 DrawerCategoryItem(
                   title: l10n.resetWallet,
                   subTitle: l10n.resetWalletDescription,
