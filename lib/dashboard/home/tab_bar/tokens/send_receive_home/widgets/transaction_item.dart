@@ -75,8 +75,8 @@ class TransactionItem extends StatelessWidget {
                   walletAddress: context
                       .read<WalletCubit>()
                       .state
-                      .currentAccount
-                      !.walletAddress,
+                      .currentAccount!
+                      .walletAddress,
                 )
                     ? IconStrings.send
                     : IconStrings.receive,
@@ -91,8 +91,8 @@ class TransactionItem extends StatelessWidget {
                   walletAddress: context
                       .read<WalletCubit>()
                       .state
-                      .currentAccount
-                      !.walletAddress,
+                      .currentAccount!
+                      .walletAddress,
                 )
                     ? l10n.send
                     : l10n.receive,

@@ -109,15 +109,22 @@ class ResponseMessage with MessageHandler {
           return ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR
               .localise(context);
 
-        case ResponseString
-            .RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE:
-          return ResponseString
-              .RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE
+        case ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE:
+          return ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE
               .localise(context);
 
         case ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE:
           return ResponseString
               .RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_linkedInBannerSuccessfullyExported:
+          return ResponseString
+                  .RESPONSE_STRING_linkedInBannerSuccessfullyExported
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_credentialSuccessfullyExported:
+          return ResponseString.RESPONSE_STRING_credentialSuccessfullyExported
               .localise(context);
 
         case ResponseString

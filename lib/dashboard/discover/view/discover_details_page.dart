@@ -8,19 +8,23 @@ class DiscoverDetailsPage extends StatelessWidget {
     Key? key,
     required this.homeCredential,
     required this.onCallBack,
+    required this.buttonText,
   }) : super(key: key);
 
   final HomeCredential homeCredential;
   final VoidCallback onCallBack;
+  final String buttonText;
 
   static Route route({
     required HomeCredential homeCredential,
     required VoidCallback onCallBack,
+    required String buttonText,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => DiscoverDetailsPage(
         homeCredential: homeCredential,
         onCallBack: onCallBack,
+        buttonText: buttonText,
       ),
       settings: const RouteSettings(name: '/DiscoverDetailsPages'),
     );
@@ -31,6 +35,7 @@ class DiscoverDetailsPage extends StatelessWidget {
     return DiscoverDetailsView(
       homeCredential: homeCredential,
       onCallBack: onCallBack,
+      buttonText: buttonText,
     );
   }
 }
@@ -40,10 +45,12 @@ class DiscoverDetailsView extends StatelessWidget {
     Key? key,
     required this.homeCredential,
     required this.onCallBack,
+    required this.buttonText,
   }) : super(key: key);
 
   final HomeCredential homeCredential;
   final VoidCallback onCallBack;
+  final String buttonText;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +120,7 @@ class DiscoverDetailsView extends StatelessWidget {
           onPressed: homeCredential.credentialSubjectType.isDisabled
               ? null
               : onCallBack,
-          text: l10n.getThisCard,
+          text: buttonText,
         ),
       ),
     );

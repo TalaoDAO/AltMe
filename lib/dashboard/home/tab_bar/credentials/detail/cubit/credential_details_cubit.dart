@@ -1,12 +1,15 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'credential_details_cubit.g.dart';
 
@@ -16,10 +19,12 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   CredentialDetailsCubit({
     required this.walletCubit,
     required this.didKitProvider,
+    required this.fileSaver,
   }) : super(const CredentialDetailsState());
 
   final WalletCubit walletCubit;
   final DIDKitProvider didKitProvider;
+  final FileSaver fileSaver;
 
   void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {
     emit(state.copyWith(credentialDetailTabStatus: credentialDetailTabStatus));
@@ -96,6 +101,62 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           status: AppStatus.idle,
         ),
       );
+    }
+  }
+
+  Future<void> exportCredential(CredentialModel credentialModel) async {
+    emit(state.loading());
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+    final isPermissionStatusGranted = await getStoragePermission();
+
+    try {
+      if (!isPermissionStatusGranted) {
+        throw ResponseMessage(ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE);
+      }
+
+      final String name = credentialModel
+          .credentialPreview.credentialSubjectModel.credentialSubjectType.name
+          .toLowerCase();
+
+      final dateTime = getDateTimeWithoutSpace();
+
+      final fileName = '$name-altme-credential-$dateTime';
+
+      final String data = jsonEncode(credentialModel.data);
+
+      final fileBytes = Uint8List.fromList(utf8.encode(data));
+      final filePath =
+          await fileSaver.saveAs(fileName, fileBytes, 'txt', MimeType.TEXT);
+
+      if (filePath.isEmpty) {
+        emit(state.copyWith(status: AppStatus.idle));
+      } else {
+        emit(
+          state.copyWith(
+            status: AppStatus.success,
+            message: StateMessage.success(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_credentialSuccessfullyExported,
+              ),
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (e is MessageHandler) {
+        emit(state.error(message: StateMessage.error(messageHandler: e)));
+      } else {
+        emit(
+          state.error(
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          ),
+        );
+      }
     }
   }
 }

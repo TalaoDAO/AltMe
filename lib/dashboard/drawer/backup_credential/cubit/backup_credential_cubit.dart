@@ -9,7 +9,6 @@ import 'package:equatable/equatable.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'backup_credential_cubit.g.dart';
@@ -36,32 +35,22 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
     return mnemonicList;
   }
 
-  Future<bool> _getStoragePermission() async {
-    if (await Permission.storage.request().isGranted) {
-      return true;
-    } else if (await Permission.storage.request().isPermanentlyDenied) {
-      //todo: show dialog to choose this option
-      await openAppSettings();
-    } else if (await Permission.storage.request().isDenied) {
-      return false;
-    }
-    return false;
-  }
-
   Future<void> encryptAndDownloadFile() async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
-    final isPermissionStatusGranted = await _getStoragePermission();
+    final isPermissionStatusGranted = await getStoragePermission();
 
     try {
       if (!isPermissionStatusGranted) {
         throw ResponseMessage(
-          ResponseString
-              .RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE,
+          ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE,
         );
       }
+
+      final dateTime = getDateTimeWithoutSpace();
+      final fileName = 'altme-credential-$dateTime';
+
       final date = UiDate.formatDate(DateTime.now());
-      final fileName = 'altme-credential-$date';
       final message = {
         'date': date,
         'credentials': walletCubit.state.credentials,
@@ -73,14 +62,19 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       final filePath =
           await fileSaver.saveAs(fileName, fileBytes, 'txt', MimeType.TEXT);
 
-      emit(
-        state.success(
-          filePath: filePath,
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
+      if (filePath.isEmpty) {
+        emit(state.copyWith(status: AppStatus.idle));
+      } else {
+        emit(
+          state.copyWith(
+            status: AppStatus.success,
+            filePath: filePath,
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
+            ),
           ),
-        ),
-      );
+        );
+      }
     } catch (e) {
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));

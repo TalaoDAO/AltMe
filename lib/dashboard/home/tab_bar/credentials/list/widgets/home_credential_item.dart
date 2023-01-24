@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,6 +62,8 @@ class DummyCredentialItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return BackgroundCard(
       color: Theme.of(context).colorScheme.credentialBackground,
       padding: const EdgeInsets.all(4),
@@ -79,6 +82,7 @@ class DummyCredentialItem extends StatelessWidget {
             context,
             DiscoverDetailsPage.route(
               homeCredential: homeCredential,
+              buttonText: l10n.getThisCard,
               onCallBack: () async {
                 await discoverCredential(
                   homeCredential: homeCredential,

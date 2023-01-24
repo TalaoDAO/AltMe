@@ -5,6 +5,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,6 +32,7 @@ class CredentialsDetailsPage extends StatelessWidget {
       create: (context) => CredentialDetailsCubit(
         walletCubit: context.read<WalletCubit>(),
         didKitProvider: DIDKitProvider(),
+        fileSaver: FileSaver.instance,
       ),
       child: CredentialsDetailsView(credentialModel: credentialModel),
     );
@@ -93,6 +95,13 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         } else {
           LoadingView().hide();
         }
+
+        if (state.message != null) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: state.message!,
+          );
+        }
       },
       builder: (context, state) {
         final List<Activity> activities =
@@ -105,6 +114,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.insert(0, activities[0]);
           reversedList.removeLast();
         }
+
+        final bool isLinkeInCard = widget.credentialModel.credentialPreview
+                .credentialSubjectModel.credentialSubjectType ==
+            CredentialSubjectType.linkedInCard;
 
         final bool disAllowDelete = widget.credentialModel.credentialPreview
                     .credentialSubjectModel.credentialSubjectType ==
@@ -127,6 +140,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               color: Theme.of(context).colorScheme.onBackground,
             ),
           ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           navigation: SafeArea(
             child: Container(
               padding: const EdgeInsets.symmetric(
@@ -139,6 +153,25 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                   MyOutlinedButton(
                     onPressed: disAllowDelete ? null : delete,
                     text: l10n.credentialDetailDeleteCard,
+                  ),
+                  const SizedBox(height: 8),
+                  MyGradientButton(
+                    verticalSpacing: 15,
+                    borderRadius: 50,
+                    text: isLinkeInCard ? l10n.exportToLinkedIn : l10n.export,
+                    onPressed: () {
+                      if (isLinkeInCard) {
+                        Navigator.of(context).push<void>(
+                          GetLinkedinInfoPage.route(
+                            credentialModel: widget.credentialModel,
+                          ),
+                        );
+                      } else {
+                        context
+                            .read<CredentialDetailsCubit>()
+                            .exportCredential(widget.credentialModel);
+                      }
+                    },
                   ),
                   if (widget.credentialModel.shareLink != '')
                     MyOutlinedButton.icon(

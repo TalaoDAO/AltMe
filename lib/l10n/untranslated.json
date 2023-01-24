@@ -158,7 +158,7 @@
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
     "backupCredentialEmptyError",
-    "backupCredentialPermissionDeniedMessage",
+    "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
     "backupCredentialError",
@@ -712,7 +712,14 @@
     "softwareLicenses",
     "notAValidWalletAddress",
     "otherAccount",
-    "thereIsNoAccountInYourWallet"
+    "thereIsNoAccountInYourWallet",
+    "exportToLinkedIn",
+    "addLinkedInInfo",
+    "whatsYourLinkedinProfileUrl",
+    "invalidUrlError",
+    "linkedInBannerSuccessfullyExported",
+    "credentialSuccessfullyExported",
+    "linkedInBanner"
   ],
 
   "es": [
@@ -874,7 +881,7 @@
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
     "backupCredentialEmptyError",
-    "backupCredentialPermissionDeniedMessage",
+    "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
     "backupCredentialError",
@@ -1428,7 +1435,14 @@
     "softwareLicenses",
     "notAValidWalletAddress",
     "otherAccount",
-    "thereIsNoAccountInYourWallet"
+    "thereIsNoAccountInYourWallet",
+    "exportToLinkedIn",
+    "addLinkedInInfo",
+    "whatsYourLinkedinProfileUrl",
+    "invalidUrlError",
+    "linkedInBannerSuccessfullyExported",
+    "credentialSuccessfullyExported",
+    "linkedInBanner"
   ],
 
   "fr": [
@@ -1590,7 +1604,7 @@
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
     "backupCredentialEmptyError",
-    "backupCredentialPermissionDeniedMessage",
+    "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
     "backupCredentialError",
@@ -2144,7 +2158,14 @@
     "softwareLicenses",
     "notAValidWalletAddress",
     "otherAccount",
-    "thereIsNoAccountInYourWallet"
+    "thereIsNoAccountInYourWallet",
+    "exportToLinkedIn",
+    "addLinkedInInfo",
+    "whatsYourLinkedinProfileUrl",
+    "invalidUrlError",
+    "linkedInBannerSuccessfullyExported",
+    "credentialSuccessfullyExported",
+    "linkedInBanner"
   ],
 
   "it": [
@@ -2306,7 +2327,7 @@
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
     "backupCredentialEmptyError",
-    "backupCredentialPermissionDeniedMessage",
+    "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
     "backupCredentialError",
@@ -2860,6 +2881,13 @@
     "softwareLicenses",
     "notAValidWalletAddress",
     "otherAccount",
-    "thereIsNoAccountInYourWallet"
+    "thereIsNoAccountInYourWallet",
+    "exportToLinkedIn",
+    "addLinkedInInfo",
+    "whatsYourLinkedinProfileUrl",
+    "invalidUrlError",
+    "linkedInBannerSuccessfullyExported",
+    "credentialSuccessfullyExported",
+    "linkedInBanner"
   ]
 }

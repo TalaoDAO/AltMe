@@ -25,7 +25,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     final gamingCategories = state.gamingCategories;
     final identityCategories = state.identityCategories;
     final communityCategories = state.communityCategories;
-    final myProfessionalCategories = state.myProfessionalCategories;
+    //final myProfessionalCategories = state.myProfessionalCategories;
 
     /// tezVoucher and tezotopiaMembership is available only on Android platform
     if (!isAndroid()) {
@@ -66,9 +66,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           break;
 
         case CredentialSubjectType.linkedInCard:
-          myProfessionalCategories.remove(credentialSubjectType);
-          break;
-
         case CredentialSubjectType.talaoCommunityCard:
         case CredentialSubjectType.aragoEmailPass:
         case CredentialSubjectType.aragoIdentityCard:
@@ -195,7 +192,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     emit(state.loading());
     final identityCategories = state.identityCategories;
     final gamingCategories = state.gamingCategories;
-    final myProfessionalCategories = state.myProfessionalCategories;
+    //final myProfessionalCategories = state.myProfessionalCategories;
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
@@ -260,13 +257,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             break;
 
           case CredentialSubjectType.linkedInCard:
-            _removeDummyIfCredentialExist(
-              _credentials,
-              myProfessionalCategories,
-              credentialSubjectType,
-            );
-            break;
-
           case CredentialSubjectType.tezosAssociatedWallet:
           case CredentialSubjectType.ethereumAssociatedWallet:
           case CredentialSubjectType.certificateOfEmployment:

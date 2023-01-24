@@ -9,6 +9,7 @@ import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:json_path/json_path.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -235,4 +236,23 @@ String timeFormatter({required int timeInSecond}) {
 Future<List<String>> getssiMnemonicsInList() async {
   final phrase = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
   return phrase!.split(' ');
+}
+
+Future<bool> getStoragePermission() async {
+  if (await Permission.storage.request().isGranted) {
+    return true;
+  } else if (await Permission.storage.request().isPermanentlyDenied) {
+    //todo: show dialog to choose this option
+    await openAppSettings();
+  } else if (await Permission.storage.request().isDenied) {
+    return false;
+  }
+  return false;
+}
+
+String getDateTimeWithoutSpace() {
+  final dateTime = DateTime.fromMicrosecondsSinceEpoch(
+    DateTime.now().microsecondsSinceEpoch,
+  ).toString().replaceAll(' ', '-');
+  return dateTime;
 }
