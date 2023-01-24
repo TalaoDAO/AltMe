@@ -719,7 +719,10 @@
     "invalidUrlError",
     "linkedInBannerSuccessfullyExported",
     "credentialSuccessfullyExported",
-    "linkedInBanner"
+    "linkedInBanner",
+    "linkedInProfile",
+    "checkLinkedinProfile",
+    "scanAndDisplay"
   ],
 
   "es": [
@@ -1442,7 +1445,10 @@
     "invalidUrlError",
     "linkedInBannerSuccessfullyExported",
     "credentialSuccessfullyExported",
-    "linkedInBanner"
+    "linkedInBanner",
+    "linkedInProfile",
+    "checkLinkedinProfile",
+    "scanAndDisplay"
   ],
 
   "fr": [
@@ -2165,7 +2171,10 @@
     "invalidUrlError",
     "linkedInBannerSuccessfullyExported",
     "credentialSuccessfullyExported",
-    "linkedInBanner"
+    "linkedInBanner",
+    "linkedInProfile",
+    "checkLinkedinProfile",
+    "scanAndDisplay"
   ],
 
   "it": [
@@ -2888,6 +2897,9 @@
     "invalidUrlError",
     "linkedInBannerSuccessfullyExported",
     "credentialSuccessfullyExported",
-    "linkedInBanner"
+    "linkedInBanner",
+    "linkedInProfile",
+    "checkLinkedinProfile",
+    "scanAndDisplay"
   ]
 }

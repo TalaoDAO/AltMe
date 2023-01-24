@@ -39,7 +39,7 @@ class RealCredentialItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           Navigator.of(context).push<void>(
-            CredentialsDetailsPage.route(credentialModel),
+            CredentialsDetailsPage.route(credentialModel: credentialModel),
           );
         },
         child: CredentialsListPageItem(

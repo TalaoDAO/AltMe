@@ -30,7 +30,7 @@ class DrawerCategoryItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Flexible(
+            Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
