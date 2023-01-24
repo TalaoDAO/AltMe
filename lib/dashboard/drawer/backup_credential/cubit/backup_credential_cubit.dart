@@ -63,7 +63,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
         state.success(
           filePath: filePath,
           messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_linkedInBannerSuccessfullyExported,
+            ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
           ),
         ),
       );

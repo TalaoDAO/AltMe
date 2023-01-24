@@ -5,6 +5,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,6 +32,7 @@ class CredentialsDetailsPage extends StatelessWidget {
       create: (context) => CredentialDetailsCubit(
         walletCubit: context.read<WalletCubit>(),
         didKitProvider: DIDKitProvider(),
+        fileSaver: FileSaver.instance,
       ),
       child: CredentialsDetailsView(credentialModel: credentialModel),
     );
@@ -93,6 +95,13 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         } else {
           LoadingView().hide();
         }
+
+        if (state.message != null) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: state.message!,
+          );
+        }
       },
       builder: (context, state) {
         final List<Activity> activities =
@@ -150,14 +159,18 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     verticalSpacing: 15,
                     borderRadius: 50,
                     text: isLinkeInCard ? l10n.exportToLinkedIn : l10n.export,
-                    onPressed: () async {
+                    onPressed: () {
                       if (isLinkeInCard) {
-                        await Navigator.of(context).push<void>(
+                        Navigator.of(context).push<void>(
                           GetLinkedinInfoPage.route(
                             credentialModel: widget.credentialModel,
                           ),
                         );
-                      } else {}
+                      } else {
+                        context
+                            .read<CredentialDetailsCubit>()
+                            .exportCredential(widget.credentialModel);
+                      }
                     },
                   ),
                   if (widget.credentialModel.shareLink != '')

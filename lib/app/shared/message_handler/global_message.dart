@@ -128,6 +128,9 @@ class GlobalMessage {
   String get RESPONSE_STRING_linkedInBannerSuccessfullyExported =>
       l10n.linkedInBannerSuccessfullyExported;
 
+  String get RESPONSE_STRING_credentialSuccessfullyExported =>
+      l10n.credentialSuccessfullyExported;
+
   String get RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE =>
       l10n.recoveryCredentialJSONFormatErrorMessage;
 

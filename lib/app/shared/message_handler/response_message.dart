@@ -123,6 +123,10 @@ class ResponseMessage with MessageHandler {
                   .RESPONSE_STRING_linkedInBannerSuccessfullyExported
               .localise(context);
 
+        case ResponseString.RESPONSE_STRING_credentialSuccessfullyExported:
+          return ResponseString.RESPONSE_STRING_credentialSuccessfullyExported
+              .localise(context);
+
         case ResponseString
             .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE:
           return ResponseString

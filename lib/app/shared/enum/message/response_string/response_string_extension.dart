@@ -89,6 +89,9 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_linkedInBannerSuccessfullyExported:
         return globalMessage.RESPONSE_STRING_linkedInBannerSuccessfullyExported;
 
+      case ResponseString.RESPONSE_STRING_credentialSuccessfullyExported:
+        return globalMessage.RESPONSE_STRING_credentialSuccessfullyExported;
+
       case ResponseString
           .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE:
         return globalMessage

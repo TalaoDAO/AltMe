@@ -4,6 +4,7 @@ part of 'credential_details_cubit.dart';
 class CredentialDetailsState extends Equatable {
   const CredentialDetailsState({
     this.status = AppStatus.init,
+    this.message,
     this.credentialStatus = CredentialStatus.pending,
     this.credentialDetailTabStatus = CredentialDetailTabStatus.informations,
   });
@@ -12,17 +13,38 @@ class CredentialDetailsState extends Equatable {
       _$CredentialDetailsStateFromJson(json);
 
   final AppStatus status;
+  final StateMessage? message;
   final CredentialStatus credentialStatus;
   final CredentialDetailTabStatus credentialDetailTabStatus;
 
+  CredentialDetailsState loading() {
+    return CredentialDetailsState(
+      status: AppStatus.loading,
+      credentialStatus: credentialStatus,
+      credentialDetailTabStatus: credentialDetailTabStatus,
+    );
+  }
+
+  CredentialDetailsState error({
+    required StateMessage message,
+  }) {
+    return CredentialDetailsState(
+      status: AppStatus.error,
+      credentialStatus: credentialStatus,
+      credentialDetailTabStatus: credentialDetailTabStatus,
+      message: message,
+    );
+  }
+
   CredentialDetailsState copyWith({
     AppStatus? status,
+    StateMessage? message,
     CredentialStatus? credentialStatus,
     CredentialDetailTabStatus? credentialDetailTabStatus,
-    String? title,
   }) {
     return CredentialDetailsState(
       status: status ?? this.status,
+      message: message,
       credentialStatus: credentialStatus ?? this.credentialStatus,
       credentialDetailTabStatus:
           credentialDetailTabStatus ?? this.credentialDetailTabStatus,
@@ -33,5 +55,5 @@ class CredentialDetailsState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [credentialStatus, status, credentialDetailTabStatus];
+      [credentialStatus, message, status, credentialDetailTabStatus];
 }

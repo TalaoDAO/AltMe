@@ -140,4 +140,5 @@ enum ResponseString {
   RESPONSE_STRING_userNotFitErrorMessage,
   RESPONSE_STRING_transactionIsLikelyToFail,
   RESPONSE_STRING_linkedInBannerSuccessfullyExported,
+  RESPONSE_STRING_credentialSuccessfullyExported,
 }
