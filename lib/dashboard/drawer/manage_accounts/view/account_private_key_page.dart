@@ -61,56 +61,58 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
       titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
-      titleTrailing: AnimatedBuilder(
-        animation: animation,
-        builder: (BuildContext context, Widget? child) {
-          return Text(
-            timeFormatter(timeInSecond: animation.value.toInt()),
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge,
-          );
-        },
-      ),
       secureScreen: true,
       body: BackgroundCard(
         height: double.infinity,
         width: double.infinity,
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(Sizes.spaceNormal),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  widget.privateKey,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        decoration: TextDecoration.underline,
-                      ),
+        child: Padding(
+          padding: const EdgeInsets.all(Sizes.spaceNormal),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                widget.privateKey,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      decoration: TextDecoration.underline,
+                    ),
+              ),
+              Expanded(
+                child: Center(
+                  child: AnimatedBuilder(
+                    animation: animation,
+                    builder: (BuildContext context, Widget? child) {
+                      return Text(
+                        timeFormatter(timeInSecond: animation.value.toInt()),
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.displayMedium,
+                      );
+                    },
+                  ),
                 ),
-                // const SizedBox(
-                //   height: Sizes.spaceXLarge,
-                // ),
-                // CopyButton(
-                //   onTap: () async {
-                //     await Clipboard.setData(
-                //       ClipboardData(
-                //         text: privateKey,
-                //       ),
-                //     );
-                //     AlertMessage.showStateMessage(
-                //       context: context,
-                //       stateMessage: StateMessage.success(
-                //         stringMessage: l10n.copiedToClipboard,
-                //       ),
-                //     );
-                //   },
-                // ),
-              ],
-            ),
+              ),
+              // const SizedBox(
+              //   height: Sizes.spaceXLarge,
+              // ),
+              // CopyButton(
+              //   onTap: () async {
+              //     await Clipboard.setData(
+              //       ClipboardData(
+              //         text: privateKey,
+              //       ),
+              //     );
+              //     AlertMessage.showStateMessage(
+              //       context: context,
+              //       stateMessage: StateMessage.success(
+              //         stringMessage: l10n.copiedToClipboard,
+              //       ),
+              //     );
+              //   },
+              // ),
+            ],
           ),
         ),
       ),
