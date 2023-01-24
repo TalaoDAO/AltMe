@@ -85,19 +85,24 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
       if (!isPermissionStatusGranted) {
         throw ResponseMessage(ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE);
       }
-      final date = UiDate.formatDate(DateTime.now());
-      final fileName = 'linkedin-banner-$date';
+      final dateTime = getDateTimeWithoutSpace();
+      final fileName = 'linkedin-banner-$dateTime';
 
-      await fileSaver.saveAs(fileName, capturedImage, 'png', MimeType.PNG);
+      final filePath =
+          await fileSaver.saveAs(fileName, capturedImage, 'png', MimeType.PNG);
 
-      emit(
-        state.copyWith(
-          status: AppStatus.success,
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_linkedInBannerSuccessfullyExported,
+      if (filePath.isEmpty) {
+        emit(state.copyWith(status: AppStatus.idle));
+      } else {
+        emit(
+          state.copyWith(
+            status: AppStatus.success,
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_linkedInBannerSuccessfullyExported,
+            ),
           ),
-        ),
-      );
+        );
+      }
     } catch (e) {
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));

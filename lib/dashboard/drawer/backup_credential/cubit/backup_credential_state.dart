@@ -32,12 +32,13 @@ class BackupCredentialState extends Equatable {
     );
   }
 
-  BackupCredentialState success({
+  BackupCredentialState copyWith({
+    required AppStatus status,
     MessageHandler? messageHandler,
     String? filePath,
   }) {
     return BackupCredentialState(
-      status: AppStatus.success,
+      status: status,
       filePath: filePath ?? this.filePath,
       message: messageHandler == null
           ? null

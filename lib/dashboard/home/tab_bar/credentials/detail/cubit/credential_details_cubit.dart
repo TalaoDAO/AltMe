@@ -118,9 +118,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           .credentialPreview.credentialSubjectModel.credentialSubjectType.name
           .toLowerCase();
 
-      final dateTime = DateTime.fromMicrosecondsSinceEpoch(
-        DateTime.now().microsecondsSinceEpoch,
-      ).toString().replaceAll(' ', '-');
+      final dateTime = getDateTimeWithoutSpace();
 
       final fileName = '$name-altme-credential-$dateTime';
 

@@ -46,8 +46,11 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
           ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE,
         );
       }
+
+      final dateTime = getDateTimeWithoutSpace();
+      final fileName = 'altme-credential-$dateTime';
+
       final date = UiDate.formatDate(DateTime.now());
-      final fileName = 'altme-credential-$date';
       final message = {
         'date': date,
         'credentials': walletCubit.state.credentials,
@@ -59,14 +62,19 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       final filePath =
           await fileSaver.saveAs(fileName, fileBytes, 'txt', MimeType.TEXT);
 
-      emit(
-        state.success(
-          filePath: filePath,
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
+      if (filePath.isEmpty) {
+        emit(state.copyWith(status: AppStatus.idle));
+      } else {
+        emit(
+          state.copyWith(
+            status: AppStatus.success,
+            filePath: filePath,
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE,
+            ),
           ),
-        ),
-      );
+        );
+      }
     } catch (e) {
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));

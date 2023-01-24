@@ -249,3 +249,10 @@ Future<bool> getStoragePermission() async {
   }
   return false;
 }
+
+String getDateTimeWithoutSpace() {
+  final dateTime = DateTime.fromMicrosecondsSinceEpoch(
+    DateTime.now().microsecondsSinceEpoch,
+  ).toString().replaceAll(' ', '-');
+  return dateTime;
+}
