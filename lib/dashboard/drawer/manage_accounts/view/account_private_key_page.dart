@@ -33,10 +33,10 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
     super.initState();
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10),
+      duration: const Duration(seconds: 20),
     );
 
-    final Tween<double> _rotationTween = Tween(begin: 10, end: 0);
+    final Tween<double> _rotationTween = Tween(begin: 20, end: 0);
 
     animation = _rotationTween.animate(animationController)
       ..addStatusListener((status) {
