@@ -65,6 +65,12 @@ class _SplashViewState extends State<SplashView> {
         (Uri? uri) async {
           if (!mounted) return;
           log.i('got uri: $uri');
+          final url = '${uri!.scheme}://${uri.authority}/${uri.path}';
+          if (url == Parameters.ebsiUniversalLink) {
+            final client = Dio();
+            final ebsi = Ebsi(client);
+            final credentialFromEbsi = ebsi.getCredential(uri);
+          }
           final String scannedResponse = uri.toString();
           final client = DioClient(Urls.issuerBaseUrl, Dio());
           if (scannedResponse.startsWith('openid://initiate_issuance?')) {

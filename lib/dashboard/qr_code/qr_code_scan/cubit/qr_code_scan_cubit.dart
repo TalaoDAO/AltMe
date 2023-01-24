@@ -90,9 +90,23 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         // convert String from QR code into Uri
         final Ebsi ebsi = Ebsi(Dio());
         final Uri ebsiAuthenticationUri =
-            ebsi.getAuthorizationUriForIssuer(scannedResponse);
+            await ebsi.getAuthorizationUriForIssuer(
+          scannedResponse,
+          Parameters.ebsiUniversalLink,
+        );
+        final headers = {
+          'Conformance': 'conformance',
+          'Content-Type': 'application/json'
+        };
 
-        LaunchUrl.launchUri(ebsiAuthenticationUri);
+        // final headers = {'Content-Type': 'application/json'};
+        print(ebsiAuthenticationUri);
+        final dynamic authorizationResponse = await client.get(
+          '${ebsiAuthenticationUri.scheme}://${ebsiAuthenticationUri.authority}/${ebsiAuthenticationUri.path}',
+          // headers: headers,
+          queryParameters: ebsiAuthenticationUri.queryParameters,
+        );
+        await LaunchUrl.launchUri(ebsiAuthenticationUri);
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse
