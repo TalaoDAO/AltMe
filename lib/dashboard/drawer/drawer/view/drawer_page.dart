@@ -37,11 +37,11 @@ class DrawerView extends StatelessWidget {
                 ),
                 const Center(child: AltMeLogo(size: 90)),
                 const SizedBox(
-                  height: Sizes.spaceSmall,
+                  height: Sizes.space2XSmall,
                 ),
                 const AppVersionDrawer(),
                 const SizedBox(
-                  height: Sizes.spaceLarge,
+                  height: Sizes.spaceNormal,
                 ),
                 // const DidKey(),
                 DrawerCategoryItem(
@@ -109,6 +109,9 @@ class DrawerView extends StatelessWidget {
                   onClick: () {
                     Navigator.of(context).push<void>(ResetWalletMenu.route());
                   },
+                ),
+                const SizedBox(
+                  height: Sizes.spaceNormal,
                 ),
               ],
             ),
