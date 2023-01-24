@@ -53,6 +53,7 @@ class _SoftwareLicenseViewState extends State<SoftwareLicenseView> {
       builder: (context, state) {
         return BasePage(
           title: l10n.softwareLicenses,
+          titleAlignment: Alignment.topCenter,
           scrollView: false,
           titleLeading: const BackLeadingButton(),
           body: ListView.builder(
