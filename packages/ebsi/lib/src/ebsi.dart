@@ -104,7 +104,9 @@ class Ebsi {
 
   ///
   Future<Uri> getAuthorizationUriForIssuer(
-      String openIdRequest, String redirectUrl) async {
+    String openIdRequest,
+    String redirectUrl,
+  ) async {
     if (_isEbsiInitiateIssuanceUrl(openIdRequest)) {
       try {
         final jsonPath = JsonPath(r'$..authorization_endpoint');
@@ -130,7 +132,9 @@ class Ebsi {
   }
 
   Map<String, dynamic> _getAuthorizationRequestParemeters(
-      String openIdRequest, String redirectUrl) {
+    String openIdRequest,
+    String redirectUrl,
+  ) {
     final openIdRequestUri = Uri.parse(openIdRequest);
     final credentialType = openIdRequestUri.queryParameters['credential_type'];
     final issuerState = openIdRequestUri.queryParameters['issuer_state'];
@@ -193,24 +197,34 @@ class Ebsi {
     Uri credentialRequestReceived,
   ) async {
     /// getting token
-    // final tokenHeaders = <String, dynamic>{
-    //   'Conformance': conformance,
-    //   'Content-Type': 'application/x-www-form-urlencoded'
-    // };
-    final String tokenUrl =
-        'https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/token';
+    final tokenHeaders = <String, dynamic>{
+      'Content-Type': 'application/x-www-form-urlencoded'
+    };
+
+    final jsonPath = JsonPath(r'$..token_endpoint');
+    final openidConfigurationUrl =
+        '${_getIssuerFromOpenidRequest(credentialRequestReceived.toString())}/.well-known/openid-configuration';
+    final openidConfigurationResponse =
+        await client.get(openidConfigurationUrl);
+    final tokenEndPoint =
+        jsonPath.readValues(openidConfigurationResponse.data).first as String;
+
+    final credentialType =
+        credentialRequestReceived.queryParameters['credential_type'];
+    final code = credentialRequestReceived.queryParameters['code'];
+    final issuer = credentialRequestReceived.queryParameters['issuer'];
 
     final tokenData = <String, dynamic>{
       'code': code,
       'grant_type': 'authorization_code',
-      'redirect_uri': redirectUri
+      'redirect_uri': credentialRequestReceived
     };
     String accessToken = '';
     String cNonce = '';
     try {
       final dynamic tokenResponse = await client.post(
-        tokenUrl,
-        headers: tokenHeaders,
+        tokenEndPoint,
+        options: Options(headers: tokenHeaders),
         data: tokenData,
       );
       accessToken = tokenResponse['access_token'] as String;
@@ -272,27 +286,29 @@ class Ebsi {
     print('jwt compact serialization: ${jws.toCompactSerialization()}');
     final jwt = jws.toCompactSerialization();
 
-    const String credentialUrl =
-        'https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/credential';
+    final jsonPathCredential = JsonPath(r'$..credential_endpoint');
+    final credentialEndpoint = jsonPathCredential
+        .readValues(openidConfigurationResponse.data)
+        .first as String;
+
     final credentialHeaders = <String, dynamic>{
-      'Conformance': conformance,
+      // 'Conformance': conformance,
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken'
     };
 
     final credentialData = <String, dynamic>{
-      'type': credential_type,
+      'type': credentialType,
       'format': 'jwt_vc',
       'proof': {'proof_type': 'jwt', 'jwt': jwt}
     };
 
-    final dynamic credentialResponse = await client.post(credentialUrl,
-        headers: credentialHeaders, data: credentialData);
+    final dynamic credentialResponse = await client.post(
+      credentialEndpoint,
+      options: Options(headers: credentialHeaders),
+      data: credentialData,
+    );
 
-    final dynamic response =
-        await client.get<Map<String, dynamic>>(credentialTypeRequest);
-    final data = response is String ? jsonDecode(response) : response;
-
-    return data;
+    return credentialResponse.data;
   }
 }

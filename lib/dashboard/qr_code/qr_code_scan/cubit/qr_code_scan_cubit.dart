@@ -346,7 +346,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       try {
         final Dio client = Dio();
         final Ebsi ebsi = Ebsi(client);
-        final credentialType = ebsi.getCredential(deepLinkUrl);
+        final credentialType = ebsi.getCredential(Uri.parse(deepLinkUrl));
       } on FormatException {
         emit(
           state.error(
