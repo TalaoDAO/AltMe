@@ -487,7 +487,7 @@ class OperationCubit extends Cubit<OperationState> {
       if (e is MessageHandler) {
         rethrow;
       } else if (e is TezartNodeError) {
-        log.e('e: ${e.toString()} , metadata: ${e.metadata} , s: $s');
+        log.e('e: $e , metadata: ${e.metadata} , s: $s');
         rethrow;
       } else {
         throw ResponseMessage(
