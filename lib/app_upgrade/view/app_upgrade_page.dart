@@ -47,8 +47,6 @@ class AppUpgradeView extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final l10n = context.l10n;
 
-    // TODO(bibash): localise
-
     return WillPopScope(
       onWillPop: () async => false,
       child: BasePage(
@@ -67,18 +65,21 @@ class AppUpgradeView extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               Text(
-                'Time to update',
+                l10n.timeToUpdate,
                 style: textTheme.titleLarge,
               ),
               const SizedBox(height: 20),
               Text(
-                '''We have added lots of features and fixed some bugs to make your experience as much as possible.''',
+                l10n.appUpdateTitle,
                 textAlign: TextAlign.center,
                 style: textTheme.bodyLarge,
               ),
               const SizedBox(height: 20),
               Text(
-                '''A new version of Altme is avaible! You can now update this app from v${storeInfo.localVersion} to v${storeInfo.storeVersion}.''',
+                l10n.appUpdateSubtitle(
+                  storeInfo.localVersion,
+                  storeInfo.storeVersion,
+                ),
                 textAlign: TextAlign.center,
                 style: textTheme.bodyLarge,
               ),
@@ -95,7 +96,7 @@ class AppUpgradeView extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    "What's new in v${storeInfo.storeVersion}?",
+                    l10n.whatisnew(storeInfo.storeVersion),
                     style: Theme.of(context).textTheme.copyToClipBoard,
                   ),
                 ),
@@ -105,7 +106,7 @@ class AppUpgradeView extends StatelessWidget {
                 onPressed: () {
                   final log = getLogger('AppUpgradeView - onPress');
                   if (isAndroid()) {
-                    log.i('checkFor Androdi Update');
+                    log.i('checkFor Android Update');
                     InAppUpdate.checkForUpdate().then((info) {
                       log.i('info - $info');
                       InAppUpdate.performImmediateUpdate().then((_) {
@@ -123,7 +124,7 @@ class AppUpgradeView extends StatelessWidget {
                     launchAppStore(storeInfo.appStoreLink);
                   }
                 },
-                text: 'Update Now',
+                text: l10n.updateNow,
               ),
               const SizedBox(height: 10),
               FutureBuilder<List<CredentialModel>>(
@@ -140,7 +141,7 @@ class AppUpgradeView extends StatelessWidget {
                                 .push<void>(BackupCredentialPage.route());
                           },
                           child: Text(
-                            'Backup your Credentials',
+                            l10n.backupYourCredentials,
                             style: Theme.of(context).textTheme.copyToClipBoard,
                           ),
                         );

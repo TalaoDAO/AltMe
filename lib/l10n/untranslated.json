@@ -722,7 +722,13 @@
     "linkedInBanner",
     "linkedInProfile",
     "checkLinkedinProfile",
-    "scanAndDisplay"
+    "scanAndDisplay",
+    "timeToUpdate",
+    "appUpdateTitle",
+    "appUpdateSubtitle",
+    "whatisnew",
+    "updateNow",
+    "backupYourCredentials"
   ],
 
   "es": [
@@ -1448,7 +1454,13 @@
     "linkedInBanner",
     "linkedInProfile",
     "checkLinkedinProfile",
-    "scanAndDisplay"
+    "scanAndDisplay",
+    "timeToUpdate",
+    "appUpdateTitle",
+    "appUpdateSubtitle",
+    "whatisnew",
+    "updateNow",
+    "backupYourCredentials"
   ],
 
   "fr": [
@@ -2174,7 +2186,13 @@
     "linkedInBanner",
     "linkedInProfile",
     "checkLinkedinProfile",
-    "scanAndDisplay"
+    "scanAndDisplay",
+    "timeToUpdate",
+    "appUpdateTitle",
+    "appUpdateSubtitle",
+    "whatisnew",
+    "updateNow",
+    "backupYourCredentials"
   ],
 
   "it": [
@@ -2900,6 +2918,12 @@
     "linkedInBanner",
     "linkedInProfile",
     "checkLinkedinProfile",
-    "scanAndDisplay"
+    "scanAndDisplay",
+    "timeToUpdate",
+    "appUpdateTitle",
+    "appUpdateSubtitle",
+    "whatisnew",
+    "updateNow",
+    "backupYourCredentials"
   ]
 }

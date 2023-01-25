@@ -786,5 +786,26 @@
   "linkedInBanner": "Linkedin Banner",  
   "linkedInProfile": "Linkedin Profile",
   "checkLinkedinProfile":"Check a Linkedin Profile", 
-  "scanAndDisplay":"Scan and Display" 
+  "scanAndDisplay":"Scan and Display",
+  "timeToUpdate":"Time to update", 
+  "appUpdateTitle":"We have added lots of features and fixed some bugs to make your experience as much as possible.", 
+  "appUpdateSubtitle":"A new version of Altme is avaible! You can now update this app from v{from} to v{to}.", 
+  "@appUpdateSubtitle": {
+    "description": "from - old version and to - new version",
+    "type": "text",
+    "placeholders": {
+      "from": {},
+      "to": {}
+    }
+  },   
+  "whatisnew":"What's new in v{version}?",   
+  "@whatisnew": {
+    "description": "version",
+    "type": "text",
+    "placeholders": {
+      "version": {}
+    }
+  }, 
+  "updateNow":"Update Now'", 
+  "backupYourCredentials":"Backup your Credentials"
 }
