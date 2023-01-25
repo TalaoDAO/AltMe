@@ -10,6 +10,21 @@ import 'package:web3dart/web3dart.dart';
 class MWeb3Client {
   static final log = getLogger('MWeb3Client');
 
+  static Future<double> getETHBalance({
+    required String secretKey,
+    required String rpcUrl,
+  }) async {
+    final httpClient = Client();
+    final ethClient = Web3Client(rpcUrl, httpClient);
+
+    final credentials = EthPrivateKey.fromHex(secretKey);
+
+    final balance = await ethClient.getBalance(credentials.address);
+    final balanceInUnit = balance.getValueInUnit(EtherUnit.ether);
+    log.i('ETH balance in unit: $balanceInUnit');
+    return balanceInUnit;
+  }
+
   static double formatEthAmount({
     required BigInt amount,
     EtherUnit fromUnit = EtherUnit.wei,
@@ -17,7 +32,7 @@ class MWeb3Client {
   }) {
     if (amount == BigInt.zero) return 0;
 
-    final String ethAmount = EtherAmount.fromUnitAndValue(fromUnit, amount)
+    final String ethAmount = EtherAmount.fromBigInt(fromUnit, amount)
         .getValueInUnit(toUnit)
         .toStringAsFixed(6)
         .characters
@@ -39,7 +54,7 @@ class MWeb3Client {
       final client = Web3Client(rpcUrl, Client());
       final gasPrice = await client.getGasPrice();
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
-      final sender = await credentials.extractAddress();
+      final sender = credentials.address;
       final EthereumAddress receiver =
           EthereumAddress.fromHex(withdrawalAddress);
 
@@ -114,13 +129,15 @@ class MWeb3Client {
           BigInt.parse(token.tokenId!),
         ];
 
+        final bytes = Uint8List.fromList([1]);
         sendTransactionFunctionParams = <dynamic>[
           sender, // from
           receiver, // to
           BigInt.parse(token.tokenId!), //token id
           BigInt.from(amountInWei), //amount
-          Uint8List(0), //bytes
+          bytes, //bytes
         ];
+        log.i('ERC1155 bytes : $bytes');
       }
 
       // listen for the Transfer event when it's emitted by the contract above
