@@ -65,8 +65,9 @@ class _QrScannerPageState extends State<QrScannerPage> {
                   key: qrKey,
                   fit: BoxFit.cover,
                   controller: scannerController,
-                  allowDuplicates: false,
-                  onDetect: (qrcode, args) {
+                  onDetect: (capture) {
+                    final List<Barcode> qrcodes = capture.barcodes;
+                    final Barcode qrcode = qrcodes[0];
                     if (qrcode.rawValue == null) {
                       Navigator.of(context).pop();
                     } else {

@@ -90,7 +90,7 @@ class LoadingView {
       },
     );
 
-    state?.insert(overlay);
+    state.insert(overlay);
 
     return LoadingViewController(
       close: () {
