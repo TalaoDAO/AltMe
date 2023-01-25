@@ -44,7 +44,7 @@ packages:
     source: hosted
     version: "1.1.0"
   async:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: async
       url: "https://pub.dartlang.org"
@@ -317,7 +317,7 @@ packages:
       name: convert
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.2"
+    version: "3.1.1"
   coverage:
     dependency: transitive
     description:
@@ -490,6 +490,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.0"
+  eip1559:
+    dependency: transitive
+    description:
+      name: eip1559
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.1"
+  eip55:
+    dependency: transitive
+    description:
+      name: eip55
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   equatable:
     dependency: "direct main"
     description:
@@ -1230,7 +1244,7 @@ packages:
       name: pointycastle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.6.1"
+    version: "3.6.2"
   pool:
     dependency: transitive
     description:
@@ -1329,6 +1343,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  sec:
+    dependency: transitive
+    description:
+      name: sec
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   secp256k1:
     dependency: transitive
     description:
@@ -1545,7 +1566,7 @@ packages:
     source: hosted
     version: "1.10.0"
   stream_channel:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: stream_channel
       url: "https://pub.dartlang.org"
@@ -1557,7 +1578,7 @@ packages:
       name: stream_transform
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   string_scanner:
     dependency: transitive
     description:
@@ -1727,7 +1748,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.6"
+    version: "3.0.7"
   vector_math:
     dependency: transitive
     description:
@@ -1749,6 +1770,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.3.0"
+  wallet:
+    dependency: transitive
+    description:
+      name: wallet
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
   wallet_connect:
     dependency: "direct main"
     description:
@@ -1771,7 +1799,7 @@ packages:
       name: web3dart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.5"
+    version: "2.6.1"
   web_socket_channel:
     dependency: transitive
     description:

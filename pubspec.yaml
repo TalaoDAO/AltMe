@@ -97,13 +97,15 @@ dependencies:
     git:
       url: https://github.com/bibash28/wallet-connect-dart.git
       ref: fba9b209ee2b61b62ddd643f07f6a7f64426d7b2
-  web3dart: ^2.3.3
+  web3dart: ^2.6.1
   webview_flutter: ^4.0.1
   workmanager: ^0.5.0
 
 dependency_overrides:
 # Because flutter_sodium 0.2.0 depends on ffi ^1.0.0 and no versions of flutter_sodium match >0.2.0 <0.3.0, flutter_sodium ^0.2.0 requires ffi ^1.0.0
+  async: ^2.9.0
   ffi: ^2.0.1
+  stream_channel: ^2.1.0
 
 dev_dependencies:
   bloc_test: ^9.0.3
