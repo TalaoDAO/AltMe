@@ -49,7 +49,7 @@ class SenderReceiverCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             MyText(
               value,

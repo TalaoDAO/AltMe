@@ -50,7 +50,7 @@ class NftItem extends StatelessWidget {
               maxLines: 1,
               minFontSize: 12,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),

@@ -123,7 +123,7 @@ class MissingCredentialsView extends StatelessWidget {
                                           maxLines: 3,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .caption,
+                                              .bodySmall,
                                         ),
                                       ),
                                     ),

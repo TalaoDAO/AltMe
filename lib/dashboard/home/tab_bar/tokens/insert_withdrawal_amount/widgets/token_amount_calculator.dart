@@ -113,7 +113,7 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                     child: TextFormField(
                       selectionControls: _selectionControls,
                       controller: amountController,
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
                           ),
@@ -160,7 +160,7 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                         ),
                         suffixText: widget.selectedToken.symbol,
                         suffixStyle:
-                            Theme.of(context).textTheme.headline6?.copyWith(
+                            Theme.of(context).textTheme.titleLarge?.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w900,
                                 ),

@@ -48,7 +48,7 @@ class CreateAccountStep1View extends StatelessWidget {
           Text(
             l10n.chooseABlockchainForAccountCreation,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.caption3,
+            style: Theme.of(context).textTheme.bodySmall3,
           ),
           const SizedBox(height: Sizes.spaceNormal),
           CustomListTileCard(

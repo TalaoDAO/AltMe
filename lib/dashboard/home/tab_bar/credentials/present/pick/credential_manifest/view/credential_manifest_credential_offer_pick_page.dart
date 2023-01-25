@@ -136,14 +136,14 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                           l10n.credentialSelectionListEmptyError,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1
+                              .bodyLarge
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       )
                     else
                       Text(
                         l10n.credentialPickSelect,
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     const SizedBox(height: 12),
                     ...List.generate(

@@ -30,7 +30,7 @@ class NetworkSwitcherButton extends StatelessWidget {
               builder: (context, state) {
                 return Text(
                   state.network.title!,
-                  style: Theme.of(context).textTheme.caption?.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         decoration: TextDecoration.underline,
                       ),
                 );

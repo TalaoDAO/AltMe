@@ -94,7 +94,7 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
                 return Text(
                   state,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.titleMedium,
                 );
               },
             ),

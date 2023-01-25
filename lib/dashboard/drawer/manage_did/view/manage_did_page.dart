@@ -43,7 +43,7 @@ class ManageDIDPage extends StatelessWidget {
             Text(
               context.read<DIDCubit>().state.did ?? '...',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             Padding(
               padding: const EdgeInsets.all(Sizes.spaceXLarge),
@@ -89,7 +89,7 @@ class ManageDIDPage extends StatelessWidget {
             Text(
               l10n.didPrivateKeyDescription,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(
               height: Sizes.spaceXLarge,

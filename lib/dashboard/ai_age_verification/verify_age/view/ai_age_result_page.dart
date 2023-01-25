@@ -114,7 +114,7 @@ class SuccessWidget extends StatelessWidget {
           child: Text(
             'Your AI age estimation is ${state.ageEstimate} years',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
         const SizedBox(
@@ -125,7 +125,7 @@ class SuccessWidget extends StatelessWidget {
           child: Text(
             'You got ${state.acquiredCredentialsQuantity} credentials',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline5?.copyWith(
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.normal,
                   color: Theme.of(context).colorScheme.onTertiary,
                 ),
@@ -173,7 +173,7 @@ class FailureWidget extends StatelessWidget {
         Text(
           'AI system was not able to estimate your age',
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline4,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
         const SizedBox(
           height: Sizes.spaceNormal,
@@ -181,7 +181,7 @@ class FailureWidget extends StatelessWidget {
         Text(
           'Would you like to get your credentials through KYC system?',
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline5?.copyWith(
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.normal,
                 color: Theme.of(context).colorScheme.onTertiary,
               ),

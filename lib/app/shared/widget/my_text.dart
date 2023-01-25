@@ -23,7 +23,7 @@ class MyText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style ?? Theme.of(context).textTheme.subtitle1;
+    final style = this.style ?? Theme.of(context).textTheme.titleMedium;
     return AutoSizeText(
       textWithDesiredLength,
       style: style,

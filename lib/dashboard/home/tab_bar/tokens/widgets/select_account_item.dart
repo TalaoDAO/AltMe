@@ -26,7 +26,7 @@ class SelectedAccountItem extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.caption?.copyWith(
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface,
               ),
         ),

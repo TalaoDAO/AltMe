@@ -39,7 +39,7 @@ class BiometricsSwitch extends StatelessWidget {
             ' (${l10n.option})',
             maxLines: 1,
             minFontSize: 10,
-            style: Theme.of(context).textTheme.caption2,
+            style: Theme.of(context).textTheme.bodySmall2,
           ),
           const Spacer(),
           CupertinoSwitch(

@@ -178,7 +178,7 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     amountAndSymbol,
                     textAlign: TextAlign.center,
                     minFontSize: 12,
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w900,
                         ),

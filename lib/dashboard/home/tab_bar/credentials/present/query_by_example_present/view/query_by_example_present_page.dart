@@ -58,7 +58,7 @@ class _QueryByExamplePresentPageState extends State<QueryByExamplePresentPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
                   '''${l10n.credentialPresentRequiredCredential} credential(s).''',
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
               // const SizedBox(height: 16.0),

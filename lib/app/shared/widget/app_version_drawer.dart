@@ -20,7 +20,7 @@ class AppVersionDrawer extends StatelessWidget {
 
               return Text(
                 'Version $version ($buildNumber)',
-                style: Theme.of(context).textTheme.caption2,
+                style: Theme.of(context).textTheme.bodySmall2,
               );
             case ConnectionState.waiting:
             case ConnectionState.none:

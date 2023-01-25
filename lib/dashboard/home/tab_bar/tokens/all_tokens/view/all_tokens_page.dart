@@ -62,7 +62,7 @@ class _AllTokensViewState extends State<_AllTokensView> {
                   children: [
                     Text(
                       l10n.addTokens,
-                      style: Theme.of(context).textTheme.headline5,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     TextButton(
                       onPressed: (state.status == AppStatus.loading ||

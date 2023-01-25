@@ -46,7 +46,7 @@ class _AdvancedSettingsViewState extends State<AdvancedSettingsView> {
                 Text(
                   // ignore: lines_longer_than_80_chars
                   l10n.selectCredentialCategoryWhichYouWantToShowInCredentialList,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 AdvanceSettingsRadioItem(
                   title: l10n.gaming,

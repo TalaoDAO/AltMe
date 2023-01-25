@@ -48,7 +48,7 @@ class WalletTypeItem extends StatelessWidget {
             ),
             Text(
               model.title,
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             const Spacer(),
             Icon(

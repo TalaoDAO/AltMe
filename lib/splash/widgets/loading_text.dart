@@ -12,7 +12,7 @@ class LoadingText extends StatelessWidget {
         l10n.splashLoading,
         maxLines: 1,
         textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.bodyText1,
+        style: Theme.of(context).textTheme.bodyLarge,
       ),
     );
   }

@@ -137,7 +137,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                     ),
                     Text(
                       l10n.myTokens,
-                      style: Theme.of(context).textTheme.headline5,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     NetworkSwitcherButton(
                       onTap: () {
@@ -156,7 +156,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                                 state.selectedToken.decimalsToShow,
                               )
                               .formatNumber(),
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                           maxLength: 12,
                         ),
                         const SizedBox(
@@ -164,7 +164,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                         ),
                         MyText(
                           state.selectedToken.symbol,
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                           maxLength: 8,
                         ),
                       ],
@@ -226,8 +226,8 @@ class _SendReceiveHomePageView extends StatelessWidget {
                                     accountAddress: context
                                         .read<WalletCubit>()
                                         .state
-                                        .currentAccount
-                                        !.walletAddress,
+                                        .currentAccount!
+                                        .walletAddress,
                                     item: state.selectedToken.symbol,
                                     description:
                                         l10n.sendOnlyToThisAddressDescription(

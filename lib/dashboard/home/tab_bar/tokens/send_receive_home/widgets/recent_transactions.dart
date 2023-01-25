@@ -34,7 +34,7 @@ class RecentTransactions extends StatelessWidget {
           children: [
             Text(
               l10n.recentTransactions,
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(
               height: Sizes.spaceNormal,

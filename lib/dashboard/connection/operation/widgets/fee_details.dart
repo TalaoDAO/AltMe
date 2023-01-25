@@ -32,12 +32,12 @@ class FeeDetails extends StatelessWidget {
             children: [
               Text(
                 l10n.amount,
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const Spacer(),
               Text(
                 '${amount.toStringAsFixed(6).formatNumber()}  $symbol',
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
           ),
@@ -46,12 +46,12 @@ class FeeDetails extends StatelessWidget {
             children: [
               Text(
                 l10n.fee,
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const Spacer(),
               Text(
                 '${fee.toStringAsFixed(6).formatNumber()} $symbol',
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
           ),
@@ -61,7 +61,7 @@ class FeeDetails extends StatelessWidget {
             children: [
               Text(
                 l10n.totalAmount,
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const Spacer(),
               Column(
@@ -70,7 +70,7 @@ class FeeDetails extends StatelessWidget {
                 children: [
                   Text(
                     '''${grandTotal.toStringAsFixed(6).formatNumber()} $symbol''',
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                   if (tokenUSDRate > 0)
                     Text(
@@ -78,7 +78,7 @@ class FeeDetails extends StatelessWidget {
                           (grandTotal * tokenUSDRate)
                               .toStringAsFixed(6)
                               .formatNumber(),
-                      style: Theme.of(context).textTheme.caption2,
+                      style: Theme.of(context).textTheme.bodySmall2,
                     ),
                 ],
               ),

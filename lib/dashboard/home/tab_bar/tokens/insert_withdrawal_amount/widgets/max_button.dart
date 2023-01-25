@@ -25,7 +25,7 @@ class MaxButton extends StatelessWidget {
         ),
         child: Text(
           l10n.max,
-          style: Theme.of(context).textTheme.button,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
     );

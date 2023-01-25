@@ -102,7 +102,7 @@ class SnackBarContent extends StatelessWidget {
             },
             child: Text(
               l10n.close.toUpperCase(),
-              style: Theme.of(context).textTheme.button?.copyWith(
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),

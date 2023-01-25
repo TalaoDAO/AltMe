@@ -70,22 +70,22 @@ abstract class AppTheme {
           brightness: Brightness.dark,
         ),
         textTheme: TextTheme(
-          caption: GoogleFonts.nunito(
+          bodySmall: GoogleFonts.nunito(
             color: const Color(0xFFFFFFFF),
             fontSize: 13,
             fontWeight: FontWeight.w600,
           ),
-          headline6: GoogleFonts.nunito(
+          titleLarge: GoogleFonts.nunito(
             color: const Color(0xFFFFFFFF),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
-          headline5: GoogleFonts.nunito(
+          headlineSmall: GoogleFonts.nunito(
             color: const Color(0xFFFFFFFF),
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
-          headline4: GoogleFonts.nunito(
+          headlineMedium: GoogleFonts.nunito(
             color: const Color(0xFFFFFFFF),
             fontSize: 28,
             fontWeight: FontWeight.bold,
@@ -362,13 +362,13 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get caption2 => GoogleFonts.roboto(
+  TextStyle get bodySmall2 => GoogleFonts.roboto(
         color: const Color(0xFF8682A8),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get caption3 => GoogleFonts.nunito(
+  TextStyle get bodySmall3 => GoogleFonts.nunito(
         color: const Color(0xFF86809D),
         fontSize: 16,
         fontWeight: FontWeight.w400,
@@ -692,7 +692,7 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff180B2B),
       );
 
-  TextStyle get kycDialogCaption => GoogleFonts.nunito(
+  TextStyle get kycDialogBodySmall => GoogleFonts.nunito(
         fontSize: 20,
         fontWeight: FontWeight.bold,
         color: const Color(0xFF0045FF),

@@ -105,7 +105,7 @@ class _ImportAccountStep4ViewState extends State<ImportAccountStep4View> {
             Text(
               l10n.setAccountNameDescription,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.caption3,
+              style: Theme.of(context).textTheme.bodySmall3,
             ),
             const SizedBox(
               height: Sizes.spaceNormal,

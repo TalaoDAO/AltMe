@@ -34,7 +34,7 @@ class KycDialog extends StatelessWidget {
             const SizedBox(height: Sizes.spaceLarge),
             Text(
               l10n.idVerificationProcess,
-              style: Theme.of(context).textTheme.kycDialogCaption,
+              style: Theme.of(context).textTheme.kycDialogBodySmall,
               textAlign: TextAlign.center,
             ),
             Padding(

@@ -53,7 +53,7 @@ class ManageIssuersRegistryPage extends StatelessWidget {
                 child: Text(
                   l10n.chooseIssuerRegistryDescription,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.caption3,
+                  style: Theme.of(context).textTheme.bodySmall3,
                 ),
               ),
               const SizedBox(height: 15),

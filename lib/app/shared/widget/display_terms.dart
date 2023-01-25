@@ -87,7 +87,7 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
                       ),
                       Text(
                         isExpand ? l10n.showLess : l10n.showMore,
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],
                   ),

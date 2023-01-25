@@ -20,7 +20,7 @@ class AppVersion extends StatelessWidget {
 
               return Text(
                 '$appName v$version ($buildNumber)',
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
               );
             case ConnectionState.waiting:
             case ConnectionState.none:

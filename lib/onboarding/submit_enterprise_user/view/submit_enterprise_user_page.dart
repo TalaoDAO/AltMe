@@ -88,7 +88,7 @@ class _SubmitEnterpriseUserViewState extends State<SubmitEnterpriseUserView> {
               Text(
                 localization.insertYourDIDKey,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(
                 height: 20,
@@ -102,7 +102,7 @@ class _SubmitEnterpriseUserViewState extends State<SubmitEnterpriseUserView> {
               Text(
                 localization.importYourRSAKeyJsonFile,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(
                 height: 20,

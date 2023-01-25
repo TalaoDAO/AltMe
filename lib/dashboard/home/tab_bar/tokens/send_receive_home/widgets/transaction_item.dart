@@ -44,12 +44,12 @@ class TransactionItem extends StatelessWidget {
             children: [
               Text(
                 operationModel.formatedDateTime,
-                style: Theme.of(context).textTheme.caption2,
+                style: Theme.of(context).textTheme.bodySmall2,
               ),
               const Spacer(),
               Text(
                 l10n.seeTransaction,
-                style: Theme.of(context).textTheme.caption2,
+                style: Theme.of(context).textTheme.bodySmall2,
               ),
               const SizedBox(
                 width: Sizes.spaceSmall,
@@ -61,7 +61,7 @@ class TransactionItem extends StatelessWidget {
                             .formatNumber() +
                         r'$'
                     : r'$--.--',
-                style: Theme.of(context).textTheme.caption2,
+                style: Theme.of(context).textTheme.bodySmall2,
               ),
             ],
           ),
@@ -96,7 +96,7 @@ class TransactionItem extends StatelessWidget {
                 )
                     ? l10n.send
                     : l10n.receive,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(
                 width: Sizes.space2XSmall,
@@ -122,11 +122,11 @@ class TransactionItem extends StatelessWidget {
               ),
               Expanded(
                 child: MyText(
-                  '${amount.toStringAsFixed(amount < 1 ? 5 : 2).formatNumber()} '
+                  '''${amount.toStringAsFixed(amount < 1 ? 5 : 2).formatNumber()} '''
                   '$symbol',
                   minFontSize: 8,
                   textAlign: TextAlign.end,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
             ],

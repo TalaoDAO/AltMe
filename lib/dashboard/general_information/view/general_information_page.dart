@@ -32,7 +32,7 @@ class GeneralInformationPage extends StatelessWidget {
           Center(
             child: Text(
               'DIDKit v${context.read<DIDCubit>().didKitProvider.getVersion()}',
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           const SizedBox(height: 16),

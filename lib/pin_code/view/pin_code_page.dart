@@ -104,11 +104,11 @@ class _PinCodeViewState extends State<PinCodeView> {
           passwordEnteredCallback: _onPasscodeEntered,
           deleteButton: Text(
             l10n.delete,
-            style: Theme.of(context).textTheme.button,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
           cancelButton: Text(
             l10n.cancel,
-            style: Theme.of(context).textTheme.button,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
           cancelCallback: _onPasscodeCancelled,
           isValidCallback: () {

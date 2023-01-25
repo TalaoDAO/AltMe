@@ -38,7 +38,7 @@ class NftUrlWidget extends StatelessWidget {
           child: Text(
             text,
             softWrap: false,
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
             overflow: TextOverflow.fade,
           ),
         ),

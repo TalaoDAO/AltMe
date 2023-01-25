@@ -91,7 +91,7 @@ class _NftViewState extends State<NftView> {
                   const SizedBox(width: Sizes.spaceXSmall),
                   Text(
                     l10n.receiveNft,
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
               ),

@@ -32,7 +32,7 @@ class NetworkSelector extends StatelessWidget {
           ),
           subtitle: Text(
             network.subTitle!,
-            style: Theme.of(context).textTheme.caption2,
+            style: Theme.of(context).textTheme.bodySmall2,
           ),
           onChanged: (BlockchainNetwork? value) async {
             if (value != null) {

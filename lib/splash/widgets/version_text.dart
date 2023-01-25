@@ -15,7 +15,7 @@ class VersionText extends StatelessWidget {
           '${l10n.version} ${state.versionNumber}',
           maxLines: 1,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2,
+          style: Theme.of(context).textTheme.bodyMedium,
         );
       },
     );

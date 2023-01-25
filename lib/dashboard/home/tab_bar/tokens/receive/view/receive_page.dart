@@ -96,7 +96,7 @@ class ReceivePage extends StatelessWidget {
                 Text(
                   description,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.caption2,
+                  style: Theme.of(context).textTheme.bodySmall2,
                 ),
                 const SizedBox(
                   height: Sizes.spaceXLarge,

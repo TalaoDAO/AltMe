@@ -64,7 +64,7 @@ class BeCarefulDialog extends StatelessWidget {
           ),
           Text(
             l10n.beCareful,
-            style: Theme.of(context).textTheme.caption2,
+            style: Theme.of(context).textTheme.bodySmall2,
           ),
           const SizedBox(height: Sizes.spaceSmall),
           Text(

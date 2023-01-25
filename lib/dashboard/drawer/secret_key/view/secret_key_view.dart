@@ -43,7 +43,7 @@ class SecretKeyView extends StatelessWidget {
               Text(
                 state,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
               Center(

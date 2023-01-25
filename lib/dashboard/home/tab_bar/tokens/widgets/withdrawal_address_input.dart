@@ -88,7 +88,7 @@ class _WithdrawalAddressInputPageState
           if (widget.caption != null)
             Text(
               widget.caption!,
-              style: Theme.of(context).textTheme.caption?.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
             ),

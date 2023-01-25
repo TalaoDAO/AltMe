@@ -133,7 +133,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                             minFontSize: 10,
                             maxLength: 15,
                             textAlign: TextAlign.right,
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                             overflow: TextOverflow.ellipsis,
                           ),
                           MyText(
@@ -141,7 +141,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                             minFontSize: 10,
                             maxLength: 10,
                             textAlign: TextAlign.right,
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],

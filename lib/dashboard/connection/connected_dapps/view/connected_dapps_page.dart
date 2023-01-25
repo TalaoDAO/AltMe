@@ -140,7 +140,7 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                             Center(
                               child: Text(
                                 l10n.noDappConnected,
-                                style: Theme.of(context).textTheme.caption,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             )
                           else

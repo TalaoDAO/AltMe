@@ -28,7 +28,7 @@ class TotalWalletBalance extends StatelessWidget {
                       ? '****'
                       : '''${state.totalBalanceInUSD.toStringAsFixed(2).formatNumber()} \$''',
                   minFontSize: 8,
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
             ),

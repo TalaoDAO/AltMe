@@ -69,7 +69,7 @@ class ActivateBiometricsView extends StatelessWidget {
                 Text(
                   l10n.activateBiometricsTitle,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const Spacer(),
                 Image.asset(
