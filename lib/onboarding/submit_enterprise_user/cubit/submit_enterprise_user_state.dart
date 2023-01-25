@@ -14,7 +14,7 @@ class SubmitEnterpriseUserState extends Equatable {
 
   final AppStatus status;
   final StateMessage? message;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final PlatformFile? rsaFile;
   final String did;
 

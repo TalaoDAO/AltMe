@@ -21,7 +21,7 @@ class ScanState extends Equatable {
   final String? keyId;
   final String? challenge;
   final String? domain;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final void Function(String)? done;
 
   ScanState loading() {

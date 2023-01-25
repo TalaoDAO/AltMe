@@ -15,7 +15,7 @@ class QRCodeScanState extends Equatable {
 
   final QrScanStatus status;
   final Uri? uri;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final Route? route;
   final bool isScan;
   final StateMessage? message;
