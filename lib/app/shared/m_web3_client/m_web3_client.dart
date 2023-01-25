@@ -129,7 +129,7 @@ class MWeb3Client {
           BigInt.parse(token.tokenId!),
         ];
 
-        final bytes = Uint8List.fromList([1]);
+        final bytes = Uint8List.fromList([]);
         sendTransactionFunctionParams = <dynamic>[
           sender, // from
           receiver, // to
@@ -140,23 +140,23 @@ class MWeb3Client {
         log.i('ERC1155 bytes : $bytes');
       }
 
-      // listen for the Transfer event when it's emitted by the contract above
-      final subscription = client
-          .events(
-            FilterOptions.events(contract: contract, event: transferEvent),
-          )
-          .take(1)
-          .listen((event) {
-        final decoded =
-            transferEvent.decodeResults(event.topics ?? [], event.data ?? '');
+      // // listen for the Transfer event when it's emitted by the contract above
+      // final subscription = client
+      //     .events(
+      //       FilterOptions.events(contract: contract, event: transferEvent),
+      //     )
+      //     .take(1)
+      //     .listen((event) {
+      //   final decoded =
+      //       transferEvent.decodeResults(event.topics ?? [], event.data ?? '');
 
-        final from = decoded[0] as EthereumAddress;
-        final to = decoded[1] as EthereumAddress;
-        final value = decoded[2] as BigInt;
+      //   final from = decoded[0] as EthereumAddress;
+      //   final to = decoded[1] as EthereumAddress;
+      //   final value = decoded[2] as BigInt;
 
-        log.i('decoded response: $decoded');
-        log.i('$from sent $value ${token.name} to $to');
-      });
+      //   log.i('decoded response: $decoded');
+      //   log.i('$from sent $value ${token.name} to $to');
+      // });
 
       try {
         // check our balance in MetaCoins by calling the appropriate function
@@ -181,8 +181,8 @@ class MWeb3Client {
         ),
       );
 
-      await subscription.asFuture<dynamic>();
-      await subscription.cancel();
+      // await subscription.asFuture<dynamic>();
+      // await subscription.cancel();
 
       await client.dispose();
       return txId;
