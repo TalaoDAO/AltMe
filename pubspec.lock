@@ -996,9 +996,11 @@ packages:
   new_version:
     dependency: "direct main"
     description:
-      name: new_version
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "07f9a2d057a15130bceab1fe72a5b6bd44a1b490"
+      resolved-ref: "07f9a2d057a15130bceab1fe72a5b6bd44a1b490"
+      url: "https://github.com/bibash28/new_version.git"
+    source: git
     version: "0.3.1"
   nm:
     dependency: transitive

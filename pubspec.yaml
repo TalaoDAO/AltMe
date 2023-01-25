@@ -68,9 +68,13 @@ dependencies:
   local_auth: ^2.1.0
   logger: ^1.1.0
   mobile_scanner: ^3.0.0-beta.1
+  #new_version: ^0.3.1
+  new_version:
+   git:
+      url: https://github.com/bibash28/new_version.git
+      ref: 07f9a2d057a15130bceab1fe72a5b6bd44a1b490
   network_image_mock: ^2.1.0
   no_screenshot: ^0.0.1+5
-  new_version: ^0.3.1
   package_info_plus: ^1.3.0
   passbase_flutter: ^2.13.3
   path: ^1.8.0
