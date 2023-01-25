@@ -50,6 +50,7 @@ abstract class AppTheme {
   static Color highlightColor = const Color(0xFF36334E);
 
   static ThemeData get darkThemeData => ThemeData(
+        useMaterial3: true,
         brightness: Brightness.dark,
         dividerColor: dividerColor,
         highlightColor: highlightColor,
