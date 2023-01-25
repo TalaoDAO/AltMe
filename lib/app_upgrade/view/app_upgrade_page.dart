@@ -4,6 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,7 +33,8 @@ class AppUpgradeView extends StatelessWidget {
   final StoreInfo storeInfo;
 
   Future<void> launchAppStore(String appStoreLink) async {
-    debugPrint(appStoreLink);
+    final log = getLogger('AppUpgradeView - launchAppStore');
+    log.i('Launching $appStoreLink');
     if (await canLaunchUrl(Uri.parse(appStoreLink))) {
       await launchUrl(Uri.parse(appStoreLink));
     } else {
@@ -100,8 +102,26 @@ class AppUpgradeView extends StatelessWidget {
               ],
               const SizedBox(height: 30),
               MyGradientButton(
-                onPressed: () async {
-                  await launchAppStore(storeInfo.appStoreLink);
+                onPressed: () {
+                  final log = getLogger('AppUpgradeView - onPress');
+                  if (isAndroid()) {
+                    log.i('checkFor Androdi Update');
+                    InAppUpdate.checkForUpdate().then((info) {
+                      log.i('info - $info');
+                      InAppUpdate.performImmediateUpdate().then((_) {
+                        log.i('Update Complete');
+                      }).catchError((dynamic e) {
+                        log.e(e.toString());
+                        launchAppStore(storeInfo.appStoreLink);
+                      });
+                    }).catchError((dynamic e) {
+                      log.e(e.toString());
+                      launchAppStore(storeInfo.appStoreLink);
+                    });
+                  } else {
+                    log.i('iOS update');
+                    launchAppStore(storeInfo.appStoreLink);
+                  }
                 },
                 text: 'Update Now',
               ),
