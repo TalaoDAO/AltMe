@@ -126,7 +126,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       }
     } catch (e, s) {
       logger.i('error: $e , stack: $s');
-      emit(state.copyWith(status: AppStatus.init));
+      emit(state.copyWith(status: AppStatus.error));
     }
   }
 

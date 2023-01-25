@@ -189,6 +189,14 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                   WithdrawalAddressInputView(
                     withdrawalAddressController: withdrawalAddressController,
                     caption: l10n.to,
+                    onValidAddress: (address) {
+                      context
+                          .read<ConfirmTokenTransactionCubit>()
+                          .setWithdrawalAddress(withdrawalAddress: address);
+                      context
+                          .read<ConfirmTokenTransactionCubit>()
+                          .calculateFee();
+                    },
                   ),
                   Padding(
                     padding: const EdgeInsets.all(Sizes.spaceSmall),

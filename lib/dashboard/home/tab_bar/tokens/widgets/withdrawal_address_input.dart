@@ -10,10 +10,12 @@ class WithdrawalAddressInputView extends StatelessWidget {
     Key? key,
     this.caption,
     this.withdrawalAddressController,
+    this.onValidAddress,
   }) : super(key: key);
 
   final String? caption;
   final TextEditingController? withdrawalAddressController;
+  final Function(String)? onValidAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,7 @@ class WithdrawalAddressInputView extends StatelessWidget {
       child: _WithdrawalAddressInputPage(
         withdrawalAddressController: withdrawalAddressController,
         caption: caption,
+        onValidAddress: onValidAddress,
       ),
     );
   }
@@ -32,10 +35,12 @@ class _WithdrawalAddressInputPage extends StatefulWidget {
     Key? key,
     this.caption,
     this.withdrawalAddressController,
+    this.onValidAddress,
   }) : super(key: key);
 
   final String? caption;
   final TextEditingController? withdrawalAddressController;
+  final Function(String)? onValidAddress;
 
   @override
   State<_WithdrawalAddressInputPage> createState() =>
@@ -46,6 +51,9 @@ class _WithdrawalAddressInputPageState
     extends State<_WithdrawalAddressInputPage> with WalletAddressValidator {
   late final withdrawalAddressController =
       widget.withdrawalAddressController ?? TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
+  AutovalidateMode autoValidateMode = AutovalidateMode.always;
 
   @override
   void initState() {
@@ -90,18 +98,33 @@ class _WithdrawalAddressInputPageState
             children: [
               Expanded(
                 child: Form(
-                  autovalidateMode: AutovalidateMode.always,
+                  autovalidateMode: autoValidateMode,
+                  key: formKey,
                   child: TextFormField(
                     controller: withdrawalAddressController,
                     style: Theme.of(context).textTheme.labelMedium,
                     textInputAction: TextInputAction.done,
                     maxLines: 2,
+                    onChanged: (value) {
+                      if (autoValidateMode == AutovalidateMode.disabled) {
+                        formKey.currentState?.setState(() {
+                          autoValidateMode = AutovalidateMode.always;
+                        });
+                      }
+                    },
                     validator: (value) {
                       if (validateWalletAddress(value)) {
+                        formKey.currentState?.setState(() {
+                          autoValidateMode = AutovalidateMode.disabled;
+                        });
+                        formKey.currentState?.save();
                         return null;
                       } else {
                         return l10n.notAValidWalletAddress;
                       }
+                    },
+                    onSaved: (value) {
+                      widget.onValidAddress?.call(value!);
                     },
                     decoration: InputDecoration(
                       border: InputBorder.none,
