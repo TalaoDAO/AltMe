@@ -39,7 +39,7 @@ class MWeb3Client {
       final client = Web3Client(rpcUrl, Client());
       final gasPrice = await client.getGasPrice();
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
-      final sender = await credentials.extractAddress();
+      final sender = credentials.address;
       final EthereumAddress receiver =
           EthereumAddress.fromHex(withdrawalAddress);
 

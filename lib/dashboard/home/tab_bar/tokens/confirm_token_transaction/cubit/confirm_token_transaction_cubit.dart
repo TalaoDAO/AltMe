@@ -90,7 +90,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
         final credentials =
             EthPrivateKey.fromHex(state.selectedAccountSecretKey);
-        final sender = await credentials.extractAddress();
+        final sender = credentials.address;
         final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
 
         final maxGas = await MWeb3Client.estimateEthereumFee(
@@ -228,7 +228,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           .i('selected network node rpc: $rpcNodeUrl, amount: $tokenAmount');
 
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
-      final sender = await credentials.extractAddress();
+      final sender = credentials.address;
 
       final transactionHash = await MWeb3Client.sendEthereumTransaction(
         web3RpcURL: rpcNodeUrl,
