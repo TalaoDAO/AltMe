@@ -12,6 +12,7 @@ import 'package:ebsi/ebsi.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jose/jose.dart';
+import 'package:json_path/json_path.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockDio extends Mock implements Dio {}
@@ -52,7 +53,7 @@ void main() {
         'x': 'liIvy6clecfH9riQNvs1VsX7m1bYmYZ2JsHhpPkey_dictJjfgY',
         'y': 'j8Q9Xfa8MIY78JiEpzMrlJzYz2vTkJY183hJBLLcKiU'
       };
-
+// ES256K pour alg
       const expectedDid =
           'did:ebsi:znxntxQrN369GsNyjFjYb8fuvU7g3sJGyYGwMTcUGdzuy';
 

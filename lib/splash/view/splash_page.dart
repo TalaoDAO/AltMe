@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/deep_link/deep_link.dart';
+import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -18,7 +18,6 @@ import 'package:flutter/services.dart' as services;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jose/jose.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
-import 'package:secure_storage/secure_storage.dart';
 import 'package:uni_links/uni_links.dart';
 
 bool _initialUriIsHandled = false;
@@ -69,6 +68,7 @@ class _SplashViewState extends State<SplashView> {
           if (!mounted) return;
           log.i('got uri: $uri');
           final url = '${uri!.scheme}://${uri.authority}${uri.path}';
+
           if (url == Parameters.ebsiUniversalLink) {
             print('listen');
             final client = Dio();
@@ -83,11 +83,18 @@ class _SplashViewState extends State<SplashView> {
             final Map<String, dynamic> newCredential =
                 Map<String, dynamic>.from(credentialFromEbsi);
             newCredential['credentialPreview'] = credentialFromEbsi;
+            final String credentialSchema =
+                uri.queryParameters['credential_type'] ?? '';
+            final issuerAndCode = uri.queryParameters['issuer'];
+            final issuerAndCodeUri = Uri.parse(issuerAndCode!);
+            final issuer =
+                '${issuerAndCodeUri.scheme}://${issuerAndCodeUri.authority}${issuerAndCodeUri.path}';
+
             final CredentialManifest credentialManifest =
                 await getCredentialManifest(
               Dio(),
-              'https://talao.co/sandbox/ebsi/issuer/vgvghylozl',
-              'VerifiableDiploma',
+              issuer,
+              credentialSchema,
             );
             if (credentialManifest.outputDescriptors!.isNotEmpty) {
               newCredential['credential_manifest'] = CredentialManifest(
@@ -109,41 +116,34 @@ class _SplashViewState extends State<SplashView> {
             await context
                 .read<WalletCubit>()
                 .insertCredential(credential: credentialModel);
-          }
-
-          String beaconData = '';
-          bool isBeaconRequest = false;
-          uri.queryParameters.forEach((key, value) async {
-            if (key == 'uri') {
-              final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
-              context.read<DeepLinkCubit>().addDeepLink(url);
-              final ssiKey = await secure_storage.getSecureStorage
-                  .get(SecureStorageKeys.ssiKey);
-              if (ssiKey != null) {
-                await context.read<QRCodeScanCubit>().deepLink();
+          } else {
+            String beaconData = '';
+            bool isBeaconRequest = false;
+            uri.queryParameters.forEach((key, value) async {
+              if (key == 'uri') {
+                final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
+                context.read<DeepLinkCubit>().addDeepLink(url);
+                final ssiKey = await secure_storage.getSecureStorage
+                    .get(SecureStorageKeys.ssiKey);
+                if (ssiKey != null) {
+                  await context.read<QRCodeScanCubit>().deepLink();
+                }
               }
-            }
-            if (key == 'type' && value == 'tzip10') {
-              isBeaconRequest = true;
-            }
-            if (key == 'data') {
-              beaconData = value;
-            }
-            if (uri.scheme == 'openid') {
-              final Dio client = Dio();
-
-              final String credentialType =
-                  Ebsi(client).getCredentialRequest(uri.toString());
-              context.read<DeepLinkCubit>().addDeepLink(credentialType);
-              final ssiKey = await secure_storage.getSecureStorage
-                  .get(SecureStorageKeys.ssiKey);
-              if (ssiKey != null) {
-                await context.read<QRCodeScanCubit>().openidDeepLink();
+              if (key == 'type' && value == 'tzip10') {
+                isBeaconRequest = true;
               }
+              if (key == 'data') {
+                beaconData = value;
+              }
+              if (uri.scheme == 'openid' &&
+                  uri.authority == 'initiate_issuance') {
+                final DioClient client = DioClient('', Dio());
+                await initiateEbsiCredentialIssuance(uri.toString(), client);
+              }
+            });
+            if (isBeaconRequest && beaconData != '') {
+              context.read<BeaconCubit>().peerFromDeepLink(beaconData);
             }
-          });
-          if (isBeaconRequest && beaconData != '') {
-            context.read<BeaconCubit>().peerFromDeepLink(beaconData);
           }
         },
         onError: (Object err) {

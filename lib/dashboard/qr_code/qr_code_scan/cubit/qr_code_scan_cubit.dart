@@ -5,6 +5,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
+import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
@@ -88,25 +89,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith('openid://initiate_issuance?')) {
         // convert String from QR code into Uri
-        final Ebsi ebsi = Ebsi(Dio());
-        final Uri ebsiAuthenticationUri =
-            await ebsi.getAuthorizationUriForIssuer(
-          scannedResponse,
-          Parameters.ebsiUniversalLink,
-        );
-        final headers = {
-          'Conformance': 'conformance',
-          'Content-Type': 'application/json'
-        };
-
-        // final headers = {'Content-Type': 'application/json'};
-        print(ebsiAuthenticationUri);
-        final dynamic authorizationResponse = await client.get(
-          '${ebsiAuthenticationUri.scheme}://${ebsiAuthenticationUri.authority}/${ebsiAuthenticationUri.path}',
-          // headers: headers,
-          queryParameters: ebsiAuthenticationUri.queryParameters,
-        );
-        await LaunchUrl.launchUri(ebsiAuthenticationUri);
+        await initiateEbsiCredentialIssuance(scannedResponse, client);
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse

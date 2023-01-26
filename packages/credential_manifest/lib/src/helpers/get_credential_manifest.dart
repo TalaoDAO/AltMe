@@ -1,23 +1,48 @@
 import 'dart:convert';
 
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:credential_manifest/src/credential_manifest.dart';
 import 'package:dio/dio.dart';
 import 'package:json_path/json_path.dart';
 
 Future<CredentialManifest> getCredentialManifest(
-    Dio client, String baseUrl, String type) async {
+  Dio client,
+  String baseUrl,
+  String type,
+) async {
   final dynamic wellKnown = await client.get<String>(
     '$baseUrl/.well-known/openid-configuration',
   );
-  final JsonPath credentialManifetPath = JsonPath(
-    r'$..credential_manifests, $..credential_manifest',
+  final JsonPath credentialManifestPath = JsonPath(
+    r'$..credential_manifests[?(@.id)]',
   );
-  final credentialManifest = CredentialManifest.fromJson(
-    credentialManifetPath.read(jsonEncode(wellKnown.data)).first.value
-        as Map<String, dynamic>,
-  );
-  credentialManifest.outputDescriptors
-      ?.removeWhere((element) => element.id != type);
 
-  return credentialManifest;
+  /// select first credential manifest
+  final credentialManifestMap = credentialManifestPath
+      .read(jsonDecode(wellKnown.data as String))
+      .first
+      .value as Map<String, dynamic>;
+
+  /// create credentialManisfest object
+  final credentialManifest = CredentialManifest.fromJson(
+    credentialManifestMap,
+  );
+
+  /// select wanted output desciptor
+  final JsonPath outputDescriptorPath = JsonPath(
+    r'$..output_descriptors[?(@.schema=="' + type + '")]',
+  );
+
+  /// There are some possible issues with this way of filtering :-/
+  final Map<String, dynamic> outputDescriptorMap = outputDescriptorPath
+      .read(jsonDecode(wellKnown.data as String))
+      .first
+      .value as Map<String, dynamic>;
+  final OutputDescriptor outputDescriptor =
+      OutputDescriptor.fromJson(outputDescriptorMap);
+
+  final CredentialManifest sanitizedCredentialManifest =
+      credentialManifest.copyWith(outputDescriptors: [outputDescriptor]);
+
+  return sanitizedCredentialManifest;
 }
