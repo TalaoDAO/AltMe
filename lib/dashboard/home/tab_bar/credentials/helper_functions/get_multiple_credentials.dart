@@ -8,6 +8,7 @@ import 'package:altme/dashboard/home/tab_bar/tab_bar.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_path/json_path.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
@@ -69,19 +70,6 @@ Future<void> multipleCredentialsTimer(
   });
 }
 
-Future<CredentialManifest> getCredentialManifestFromAltMe(
-  DioClient client,
-) async {
-  final dynamic wellKnown = await client.get(
-    'https://issuer.talao.co/.well-known/openid-configuration',
-  );
-  final JsonPath credentialManifetPath = JsonPath(r'$..credential_manifest');
-  final credentialManifest = CredentialManifest.fromJson(
-    credentialManifetPath.read(wellKnown).first.value as Map<String, dynamic>,
-  );
-  return credentialManifest;
-}
-
 Future<bool> getCredentialsFromIssuer(
   String preAuthorizedCode,
   DioClient client,
@@ -117,9 +105,7 @@ Future<bool> getCredentialsFromIssuer(
             Map<String, dynamic>.from(credential as Map<String, dynamic>);
         newCredential['credentialPreview'] = credential;
         final CredentialManifest credentialManifest =
-            await getCredentialManifestFromAltMe(client);
-        credentialManifest.outputDescriptors
-            ?.removeWhere((element) => element.id != type);
+            await getCredentialManifest(Dio(), 'https://issuer.talao.co', type);
         if (credentialManifest.outputDescriptors!.isNotEmpty) {
           newCredential['credential_manifest'] = CredentialManifest(
             credentialManifest.id,

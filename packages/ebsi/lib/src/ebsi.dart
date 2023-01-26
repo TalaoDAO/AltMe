@@ -151,8 +151,9 @@ class Ebsi {
         }
       ]),
       'redirect_uri':
-          '$redirectUrl?credentialType=$credentialType&issuer=$issuer',
-      'state': issuerState
+          '$redirectUrl?credential_type=$credentialType&issuer=$issuer',
+      'state': issuerState,
+      'issuer_state': issuerState
     };
     return myRequest;
   }
@@ -196,23 +197,26 @@ class Ebsi {
   Future<dynamic> getCredential(
     Uri credentialRequestReceived,
   ) async {
+    print('credential !!!');
+
     /// getting token
     final tokenHeaders = <String, dynamic>{
       'Content-Type': 'application/x-www-form-urlencoded'
     };
 
+    final credentialType =
+        credentialRequestReceived.queryParameters['credential_type'];
+    final issuerAndCode = credentialRequestReceived.queryParameters['issuer'];
+    final issuerAndCodeUri = Uri.parse(issuerAndCode!);
+    final code = issuerAndCodeUri.queryParameters['code'];
+    final issuer =
+        '${issuerAndCodeUri.scheme}://${issuerAndCodeUri.authority}${issuerAndCodeUri.path}';
     final jsonPath = JsonPath(r'$..token_endpoint');
-    final openidConfigurationUrl =
-        '${_getIssuerFromOpenidRequest(credentialRequestReceived.toString())}/.well-known/openid-configuration';
+    final openidConfigurationUrl = '$issuer/.well-known/openid-configuration';
     final openidConfigurationResponse =
         await client.get(openidConfigurationUrl);
     final tokenEndPoint =
         jsonPath.readValues(openidConfigurationResponse.data).first as String;
-
-    final credentialType =
-        credentialRequestReceived.queryParameters['credential_type'];
-    final code = credentialRequestReceived.queryParameters['code'];
-    final issuer = credentialRequestReceived.queryParameters['issuer'];
 
     final tokenData = <String, dynamic>{
       'code': code,
@@ -227,8 +231,8 @@ class Ebsi {
         options: Options(headers: tokenHeaders),
         data: tokenData,
       );
-      accessToken = tokenResponse['access_token'] as String;
-      cNonce = tokenResponse['c_nonce'] as String;
+      accessToken = tokenResponse.data['access_token'] as String;
+      cNonce = tokenResponse.data['c_nonce'] as String;
     } catch (e) {
       print('what the !!');
     }
@@ -255,7 +259,6 @@ class Ebsi {
     final kid =
         'did:ebsi:zmSKef6zQZDC66MppKLHou9zCwjYE4Fwar7NSVy2c7aya#lD7U7tcVLZWmqECJYRyGeLnDcU4ETX3reBN3Zdd0iTU';
 
-    final proofHeader = {'typ': 'JWT', 'alg': alg, 'jwk': keyJwk, 'kid': kid};
     final payload = {
       'iss': did,
       'nonce': cNonce,

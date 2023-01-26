@@ -223,9 +223,11 @@ class HomeCubit extends Cubit<HomeState> {
               Map<String, dynamic>.from(credential);
           newCredential['credentialPreview'] = credential;
           final CredentialManifest credentialManifest =
-              await getCredentialManifestFromAltMe(client);
-          credentialManifest.outputDescriptors
-              ?.removeWhere((element) => element.id != credentialType);
+              await getCredentialManifest(
+            Dio(),
+            'https://issuer.talao.co',
+            credentialType,
+          );
           if (credentialManifest.outputDescriptors!.isNotEmpty) {
             newCredential['credential_manifest'] = CredentialManifest(
               credentialManifest.id,

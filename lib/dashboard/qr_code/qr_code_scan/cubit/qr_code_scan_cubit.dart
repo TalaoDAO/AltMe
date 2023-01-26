@@ -138,7 +138,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         final String credential = credentialResponse['credential'] as String;
         // decode the jwt, note: this constructor can only be used for JWT inside JWS
         // structures
-        final jwt = new JsonWebToken.unverified(credential);
+        final jwt = JsonWebToken.unverified(credential);
         final claims = jwt.claims;
         final String audience = claims['iss'] as String;
         final uri = Uri.parse(scannedResponse);
@@ -169,10 +169,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             }
           }
         };
-        final verifierClaims = new JsonWebTokenClaims.fromJson(payload);
+        final verifierClaims = JsonWebTokenClaims.fromJson(payload);
 // create a builder, decoding the JWT in a JWS, so using a
         // JsonWebSignatureBuilder
-        final builder = new JsonWebSignatureBuilder();
+        final builder = JsonWebSignatureBuilder();
 // set the content
         builder.jsonContent = verifierClaims.toJson();
 
@@ -211,11 +211,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           },
           'nonce': nonce
         };
-        final vpVerifierClaims =
-            new JsonWebTokenClaims.fromJson(vpTokenPayload);
+        final vpVerifierClaims = JsonWebTokenClaims.fromJson(vpTokenPayload);
 // create a builder, decoding the JWT in a JWS, so using a
         // JsonWebSignatureBuilder
-        final vpBuilder = new JsonWebSignatureBuilder();
+        final vpBuilder = JsonWebSignatureBuilder();
 // set the content
         vpBuilder.jsonContent = vpVerifierClaims.toJson();
 

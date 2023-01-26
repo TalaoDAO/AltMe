@@ -4,9 +4,12 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dio/dio.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:flutter/foundation.dart';
@@ -65,325 +68,52 @@ class _SplashViewState extends State<SplashView> {
         (Uri? uri) async {
           if (!mounted) return;
           log.i('got uri: $uri');
-          final url = '${uri!.scheme}://${uri.authority}/${uri.path}';
+          final url = '${uri!.scheme}://${uri.authority}${uri.path}';
           if (url == Parameters.ebsiUniversalLink) {
+            print('listen');
             final client = Dio();
             final ebsi = Ebsi(client);
-            final credentialFromEbsi = ebsi.getCredential(uri);
-          }
-          final String scannedResponse = uri.toString();
-          final client = DioClient(Urls.issuerBaseUrl, Dio());
-          if (scannedResponse.startsWith('openid://initiate_issuance?')) {
-            // convert String from QR code into Uri
-            final uri = Uri.parse(scannedResponse);
-            final String conformance = uri.queryParameters['conformance']!;
-            final credential_type = uri.queryParameters['credential_type']!;
-            final issuer = uri.queryParameters['issuer']!;
-            const redirectUri = 'app.altme.io/app/download/callback';
-            // final redirectUri = 'app.altme.io';
-            final headers = {
-              'Conformance': conformance,
-              'Content-Type': 'application/json'
-            };
-            const authorizeUrl =
-                'https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/authorize';
+            final dynamic encodedCredentialFromEbsi =
+                await ebsi.getCredential(uri);
+            var jws = JsonWebSignature.fromCompactSerialization(
+                encodedCredentialFromEbsi['credential'] as String);
 
-            final my_request = <String, dynamic>{
-              'scope': 'openid',
-              'client_id': redirectUri,
-              'response_type': 'code',
-              'authorization_details': jsonEncode([
-                {
-                  'type': 'openid_credential',
-                  'credential_type': credential_type,
-                  'format': 'jwt_vc'
-                }
-              ]),
-              'redirect_uri': redirectUri,
-              'state': '1234'
-            };
-            String code = '210901fc2fc063e9a30a';
-
-            try {
-              final Uri authorizationUri = Uri(
-                scheme: 'https',
-                path: '/conformance/v2/issuer-mock/authorize',
-                queryParameters: my_request,
-                host: 'api-conformance.ebsi.eu',
-              );
-              final dynamic authorizationResponse = await client.get(
-                  authorizeUrl,
-                  headers: headers,
-                  queryParameters: my_request);
-              print('got authorization');
-              // Should get code from authorization response or this callback system
-              /// we should receive something through deepLink ?
-
-            } catch (e) {
-              if (e is NetworkException) {
-                if (e.data != null) {
-                  if (e.data['detail'] != null) {
-                    final String error = e.data['detail'] as String;
-                    final codeSplit = error.split('code=');
-                    code = codeSplit[1];
-                  }
-                }
-              }
-              print('Lokks like wa can get code from here');
+            final credentialFromEbsi =
+                jws.unverifiedPayload.jsonContent['vc'] as Map<String, dynamic>;
+            final Map<String, dynamic> newCredential =
+                Map<String, dynamic>.from(credentialFromEbsi);
+            newCredential['credentialPreview'] = credentialFromEbsi;
+            final CredentialManifest credentialManifest =
+                await getCredentialManifest(
+              Dio(),
+              'https://talao.co/sandbox/ebsi/issuer/vgvghylozl',
+              'VerifiableDiploma',
+            );
+            if (credentialManifest.outputDescriptors!.isNotEmpty) {
+              newCredential['credential_manifest'] = CredentialManifest(
+                credentialManifest.id,
+                credentialManifest.issuedBy,
+                credentialManifest.outputDescriptors,
+                credentialManifest.presentationDefinition,
+              ).toJson();
             }
 
-            /// getting token
-            final tokenHeaders = <String, dynamic>{
-              'Conformance': conformance,
-              'Content-Type': 'application/x-www-form-urlencoded'
-            };
-            final String tokenUrl =
-                'https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/token';
-
-            final tokenData = <String, dynamic>{
-              'code': code,
-              'grant_type': 'authorization_code',
-              'redirect_uri': redirectUri
-            };
-            String accessToken = '';
-            String cNonce = '';
-            try {
-              final dynamic tokenResponse = await client.post(
-                tokenUrl,
-                headers: tokenHeaders,
-                data: tokenData,
-              );
-              accessToken = tokenResponse['access_token'] as String;
-              cNonce = tokenResponse['c_nonce'] as String;
-            } catch (e) {
-              print('what the !!');
-            }
-
-            /// preparation before getting credential
-            final keyDict = {
-              'crv': 'P-256',
-              'd': 'ZpntMmvHtDxw6przKSJY-zOHMrEZd8C47D3yuqAsqrw',
-              'kty': 'EC',
-              'x': 'NB1ylMveV4_PPYtx9KYEjoS1WWA8qN33SJav9opWTaM',
-              'y': 'UtOG2jR3NHadMMJ7wdYEq5_nHJHVfcy7QPt_OBHhBrE'
-            };
-
-            final keyJwk = {
-              'crv': 'P-256',
-              'kty': 'EC',
-              'x': 'NB1ylMveV4_PPYtx9KYEjoS1WWA8qN33SJav9opWTaM',
-              'y': 'UtOG2jR3NHadMMJ7wdYEq5_nHJHVfcy7QPt_OBHhBrE'
-            };
-
-            final verifierKey = JsonWebKey.fromJson(keyDict);
-            final alg = keyDict['crv'] == 'P-256' ? 'ES256' : 'ES256K';
-            final did =
-                'did:ebsi:zmSKef6zQZDC66MppKLHou9zCwjYE4Fwar7NSVy2c7aya';
-            final kid =
-                'did:ebsi:zmSKef6zQZDC66MppKLHou9zCwjYE4Fwar7NSVy2c7aya#lD7U7tcVLZWmqECJYRyGeLnDcU4ETX3reBN3Zdd0iTU';
-
-            final proofHeader = {
-              'typ': 'JWT',
-              'alg': alg,
-              'jwk': keyJwk,
-              'kid': kid
-            };
-            final payload = {
-              'iss': did,
-              'nonce': cNonce,
-              'iat': DateTime.now().microsecondsSinceEpoch,
-              'aud': issuer
-            };
-            final claims = new JsonWebTokenClaims.fromJson(payload);
-// create a builder, decoding the JWT in a JWS, so using a
-            // JsonWebSignatureBuilder
-            final builder = new JsonWebSignatureBuilder();
-// set the content
-            builder.jsonContent = claims.toJson();
-
-            builder.setProtectedHeader('typ', 'JWT');
-            builder.setProtectedHeader('alg', alg);
-            builder.setProtectedHeader('jwk', keyJwk);
-            builder.setProtectedHeader('kid', kid);
-
-            // add a key to sign, can only add one for JWT
-            builder.addRecipient(
-              verifierKey,
-              algorithm: alg,
+            final credentialModel = CredentialModel.copyWithData(
+              oldCredentialModel: CredentialModel.fromJson(
+                newCredential,
+              ),
+              newData: credentialFromEbsi,
+              activities: [Activity(acquisitionAt: DateTime.now())],
             );
-            // build the jws
-            var jws = builder.build();
-
-            // output the compact serialization
-            print('jwt compact serialization: ${jws.toCompactSerialization()}');
-            final jwt = jws.toCompactSerialization();
-
-            const String credentialUrl =
-                'https://api-conformance.ebsi.eu/conformance/v2/issuer-mock/credential';
-            final credentialHeaders = <String, dynamic>{
-              'Conformance': conformance,
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer $accessToken'
-            };
-
-            final credentialData = <String, dynamic>{
-              'type': credential_type,
-              'format': 'jwt_vc',
-              'proof': {'proof_type': 'jwt', 'jwt': jwt}
-            };
-
-            final dynamic credentialResponse = await client.post(credentialUrl,
-                headers: credentialHeaders, data: credentialData);
-            final storage = getSecureStorage;
-            await storage.set('ebsiCredential', jsonEncode(credentialResponse));
-            await storage.set('conformance', conformance);
-            return;
-          } else if (scannedResponse
-              .startsWith('openid://?scope=openid&response_type=id_token')) {
-            final keyDict = {
-              'crv': 'P-256',
-              'd': 'ZpntMmvHtDxw6przKSJY-zOHMrEZd8C47D3yuqAsqrw',
-              'kty': 'EC',
-              'x': 'NB1ylMveV4_PPYtx9KYEjoS1WWA8qN33SJav9opWTaM',
-              'y': 'UtOG2jR3NHadMMJ7wdYEq5_nHJHVfcy7QPt_OBHhBrE'
-            };
-
-            final keyJwk = {
-              'crv': 'P-256',
-              'kty': 'EC',
-              'x': 'NB1ylMveV4_PPYtx9KYEjoS1WWA8qN33SJav9opWTaM',
-              'y': 'UtOG2jR3NHadMMJ7wdYEq5_nHJHVfcy7QPt_OBHhBrE'
-            };
-
-            final verifierKey = JsonWebKey.fromJson(keyDict);
-            final alg = keyDict['crv'] == 'P-256' ? 'ES256' : 'ES256K';
-            final did =
-                'did:ebsi:zmSKef6zQZDC66MppKLHou9zCwjYE4Fwar7NSVy2c7aya';
-            final kid =
-                'did:ebsi:zmSKef6zQZDC66MppKLHou9zCwjYE4Fwar7NSVy2c7aya#lD7U7tcVLZWmqECJYRyGeLnDcU4ETX3reBN3Zdd0iTU';
-            final storage = getSecureStorage;
-            final conformance = await storage.get('conformance') as String;
-            final credentialJson =
-                await storage.get('ebsiCredential') as String;
-            final dynamic credentialResponse = jsonDecode(credentialJson);
-            final String credential =
-                credentialResponse['credential'] as String;
-            // decode the jwt, note: this constructor can only be used for JWT inside JWS
-            // structures
-            final jwt = new JsonWebToken.unverified(credential);
-            final claims = jwt.claims;
-            final String audience = claims['iss'] as String;
-            final uri = Uri.parse(scannedResponse);
-            final redirectUri = uri.queryParameters['redirect_uri'];
-            final clientId = uri.queryParameters['client_id'];
-            final nonce = uri.queryParameters['nonce'];
-            final claimsFromUri = uri.queryParameters['claims'];
-
-            /// build id token
-            final payload = {
-              'iat': DateTime.now().microsecondsSinceEpoch,
-              'aud': audience,
-              'exp': DateTime.now().microsecondsSinceEpoch + 1000,
-              'sub': did,
-              'iss': 'https://self-issued.me/v2',
-              'nonce': nonce,
-              '_vp_token': {
-                'presentation_submission': {
-                  'definition_id': 'conformance_mock_vp_request',
-                  'id': 'VA presentation Talao',
-                  'descriptor_map': [
-                    {
-                      'id': 'conformance_mock_vp',
-                      'format': 'jwt_vp',
-                      'path': r'$',
-                    }
-                  ]
-                }
-              }
-            };
-            final verifierClaims = new JsonWebTokenClaims.fromJson(payload);
-// create a builder, decoding the JWT in a JWS, so using a
-            // JsonWebSignatureBuilder
-            final builder = new JsonWebSignatureBuilder();
-// set the content
-            builder.jsonContent = verifierClaims.toJson();
-
-            builder.setProtectedHeader('typ', 'JWT');
-            builder.setProtectedHeader('alg', alg);
-            builder.setProtectedHeader('jwk', keyJwk);
-            builder.setProtectedHeader('kid', kid);
-
-            // add a key to sign, can only add one for JWT
-            builder.addRecipient(
-              verifierKey,
-              algorithm: alg,
-            );
-            // build the jws
-            final jws = builder.build();
-
-            // output the compact serialization
-            final verifierIdJwt = jws.toCompactSerialization();
-
-            /// build vp token
-            final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-            final vpTokenPayload = {
-              'iat': iat,
-              'jti': 'http://example.org/presentations/talao/01',
-              'nbf': iat - 10,
-              'aud': audience,
-              'exp': iat + 1000,
-              'sub': did,
-              'iss': did,
-              'vp': {
-                '@context': ['https://www.w3.org/2018/credentials/v1'],
-                'id': 'http://example.org/presentations/talao/01',
-                'type': ['VerifiablePresentation'],
-                'holder': did,
-                'verifiableCredential': [credential]
-              },
-              'nonce': nonce
-            };
-            final vpVerifierClaims =
-                new JsonWebTokenClaims.fromJson(vpTokenPayload);
-// create a builder, decoding the JWT in a JWS, so using a
-            // JsonWebSignatureBuilder
-            final vpBuilder = new JsonWebSignatureBuilder();
-// set the content
-            vpBuilder.jsonContent = vpVerifierClaims.toJson();
-
-            vpBuilder.setProtectedHeader('typ', 'JWT');
-            vpBuilder.setProtectedHeader('alg', alg);
-            vpBuilder.setProtectedHeader('jwk', keyJwk);
-            vpBuilder.setProtectedHeader('kid', kid);
-
-            // add a key to sign, can only add one for JWT
-            vpBuilder.addRecipient(
-              verifierKey,
-              algorithm: alg,
-            );
-            // build the jws
-            final vpJws = vpBuilder.build();
-
-            // output the compact serialization
-            final verifierVpJwt = vpJws.toCompactSerialization();
-
-            final responseHeaders = {
-              'Conformance': conformance,
-              'Content-Type': 'application/x-www-form-urlencoded',
-            };
-
-            final responseData = <String, dynamic>{
-              'id_token': verifierIdJwt,
-              'vp_token': verifierVpJwt
-            };
-            final dynamic verifierResponse = await client.post(redirectUri!,
-                headers: responseHeaders, data: responseData);
-            return;
+            // insert the credential in the wallet
+            await context
+                .read<WalletCubit>()
+                .insertCredential(credential: credentialModel);
           }
 
           String beaconData = '';
           bool isBeaconRequest = false;
-          uri?.queryParameters.forEach((key, value) async {
+          uri.queryParameters.forEach((key, value) async {
             if (key == 'uri') {
               final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
               context.read<DeepLinkCubit>().addDeepLink(url);
