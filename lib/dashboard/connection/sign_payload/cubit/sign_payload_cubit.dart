@@ -201,7 +201,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           log.i('type -${walletConnectCubit.state.signMessage!.type}}');
 
           switch (walletConnectCubit.state.signMessage!.type) {
-
             /// rejected in wallet_connect_cubit
             case WCSignType.MESSAGE:
               break;
@@ -225,7 +224,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
                   EthPrivateKey.fromHex(currentAccount.secretKey);
 
               final MsgSignature signature =
-                  await credentials.signToSignature(concatPayload);
+                  credentials.signToEcSignature(concatPayload);
 
               final String r = signature.r.toRadixString(16);
               log.i('r -$r');
