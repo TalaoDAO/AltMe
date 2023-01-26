@@ -96,10 +96,18 @@ class OperationCubit extends Cubit<OperationState> {
         case ConnectionBridgeType.walletconnect:
           final WCEthereumTransaction transaction =
               walletConnectCubit.state.transaction!;
-          final EtherAmount ethAmount = EtherAmount.fromUnitAndValue(
-            EtherUnit.wei,
-            transaction.value ?? 0,
-          );
+
+          late EtherAmount ethAmount;
+
+          if (transaction.value != null) {
+            ethAmount = EtherAmount.fromBase10String(
+              EtherUnit.wei,
+              transaction.value!,
+            );
+          } else {
+            ethAmount = EtherAmount.fromInt(EtherUnit.wei, 0);
+          }
+
           amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
 
           await dotenv.load();
@@ -266,10 +274,17 @@ class OperationCubit extends Cubit<OperationState> {
 
           final WCEthereumTransaction transaction =
               walletConnectCubit.state.transaction!;
-          final EtherAmount ethAmount = EtherAmount.fromUnitAndValue(
-            EtherUnit.wei,
-            transaction.value ?? 0,
-          );
+
+          late EtherAmount ethAmount;
+
+          if (transaction.value != null) {
+            ethAmount = EtherAmount.fromBase10String(
+              EtherUnit.wei,
+              transaction.value!,
+            );
+          } else {
+            ethAmount = EtherAmount.fromInt(EtherUnit.wei, 0);
+          }
 
           await dotenv.load();
           final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');

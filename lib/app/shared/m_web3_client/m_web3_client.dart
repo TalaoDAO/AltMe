@@ -17,7 +17,7 @@ class MWeb3Client {
   }) {
     if (amount == BigInt.zero) return 0;
 
-    final String ethAmount = EtherAmount.fromUnitAndValue(fromUnit, amount)
+    final String ethAmount = EtherAmount.fromBigInt(fromUnit, amount)
         .getValueInUnit(toUnit)
         .toStringAsFixed(6)
         .characters
