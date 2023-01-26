@@ -1077,6 +1077,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  passbase_flutter:
+    dependency: "direct main"
+    description:
+      name: passbase_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.13.3"
   path:
     dependency: "direct main"
     description:

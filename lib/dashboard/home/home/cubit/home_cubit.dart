@@ -15,7 +15,7 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
-// import 'package:passbase_flutter/passbase_flutter.dart';
+import 'package:passbase_flutter/passbase_flutter.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:workmanager/workmanager.dart';
@@ -402,71 +402,71 @@ class HomeCubit extends Cubit<HomeState> {
     final log = getLogger('HomeCubit - startPassbaseVerification');
     final did = didCubit.state.did!;
     emit(state.loading());
-    // PassbaseSDK.startVerification(
-    //   onFinish: (identityAccessKey) async {
-    //     // IdentityAccessKey to run the process manually:
-    //     // 22a363e6-2f93-4dd3-9ac8-6cba5a046acd
+    PassbaseSDK.startVerification(
+      onFinish: (identityAccessKey) async {
+        // IdentityAccessKey to run the process manually:
+        // 22a363e6-2f93-4dd3-9ac8-6cba5a046acd
 
-    //     unawaited(
-    //       getMutipleCredentials(
-    //         identityAccessKey,
-    //         client,
-    //         walletCubit,
-    //         secureStorageProvider,
-    //       ),
-    //     );
+        unawaited(
+          getMutipleCredentials(
+            identityAccessKey,
+            client,
+            walletCubit,
+            secureStorageProvider,
+          ),
+        );
 
-    //     /// Do not remove: Following POST tell backend the relation between DID
-    //     /// and passbase token.
-    //     try {
-    //       await dotenv.load();
-    //       final PASSBASE_WEBHOOK_AUTH_TOKEN =
-    //           dotenv.get('PASSBASE_WEBHOOK_AUTH_TOKEN');
-    //       final dynamic response = await client.post(
-    //         '/wallet/webhook',
-    //         headers: <String, dynamic>{
-    //           'Content-Type': 'application/json',
-    //           'Authorization': 'Bearer $PASSBASE_WEBHOOK_AUTH_TOKEN',
-    //         },
-    //         data: <String, dynamic>{
-    //           'identityAccessKey': identityAccessKey,
-    //           'DID': did,
-    //         },
-    //       );
+        /// Do not remove: Following POST tell backend the relation between DID
+        /// and passbase token.
+        try {
+          await dotenv.load();
+          final PASSBASE_WEBHOOK_AUTH_TOKEN =
+              dotenv.get('PASSBASE_WEBHOOK_AUTH_TOKEN');
+          final dynamic response = await client.post(
+            '/wallet/webhook',
+            headers: <String, dynamic>{
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $PASSBASE_WEBHOOK_AUTH_TOKEN',
+            },
+            data: <String, dynamic>{
+              'identityAccessKey': identityAccessKey,
+              'DID': did,
+            },
+          );
 
-    //       if (response == 'ok') {
-    //         emit(
-    //           state.copyWith(
-    //             status: AppStatus.idle,
-    //             passBaseStatus: PassBaseStatus.complete,
-    //           ),
-    //         );
-    //       } else {
-    //         throw Exception();
-    //       }
-    //     } catch (e) {
-    //       emit(
-    //         state.copyWith(
-    //           status: AppStatus.populate,
-    //           passBaseStatus: PassBaseStatus.declined,
-    //         ),
-    //       );
-    //     }
-    //   },
-    //   onError: (e) {
-    //     if (e == 'CANCELLED_BY_USER') {
-    //       log.e('Cancelled by user');
-    //     } else {
-    //       log.e('Unknown error');
-    //     }
-    //     emit(
-    //       state.copyWith(
-    //         status: AppStatus.idle,
-    //         passBaseStatus: PassBaseStatus.idle,
-    //       ),
-    //     );
-    //   },
-    // );
+          if (response == 'ok') {
+            emit(
+              state.copyWith(
+                status: AppStatus.idle,
+                passBaseStatus: PassBaseStatus.complete,
+              ),
+            );
+          } else {
+            throw Exception();
+          }
+        } catch (e) {
+          emit(
+            state.copyWith(
+              status: AppStatus.populate,
+              passBaseStatus: PassBaseStatus.declined,
+            ),
+          );
+        }
+      },
+      onError: (e) {
+        if (e == 'CANCELLED_BY_USER') {
+          log.e('Cancelled by user');
+        } else {
+          log.e('Unknown error');
+        }
+        emit(
+          state.copyWith(
+            status: AppStatus.idle,
+            passBaseStatus: PassBaseStatus.idle,
+          ),
+        );
+      },
+    );
   }
 
   /// Give user metadata to KYC. Currently we are just sending user DID.
@@ -491,8 +491,8 @@ class HomeCubit extends Cubit<HomeState> {
         /// Give user email from first EmailPass to KYC. When KYC is successful
         /// this email is used to send the over18 credential link to user.
 
-        // PassbaseSDK.prefillUserEmail = firstEmailPassCredentialSubject.email;
-        // PassbaseSDK.metaData = firstEmailPassCredentialSubject.passbaseMetadata;
+        PassbaseSDK.prefillUserEmail = firstEmailPassCredentialSubject.email;
+        PassbaseSDK.metaData = firstEmailPassCredentialSubject.passbaseMetadata;
         return true;
       }
     }
