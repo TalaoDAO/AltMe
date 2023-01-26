@@ -4,7 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class ImportedTag extends StatelessWidget {
-  const ImportedTag({Key? key}) : super(key: key);
+  const ImportedTag({super.key});
 
   @override
   Widget build(BuildContext context) {

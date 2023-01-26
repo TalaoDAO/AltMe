@@ -10,13 +10,10 @@ class IdentityPassModel extends CredentialSubjectModel {
   IdentityPassModel({
     this.recipient,
     this.expires,
-    Author? issuedBy,
-    String? id,
-    String? type,
+    super.issuedBy,
+    super.id,
+    super.type,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.identityPass,
           credentialCategory: CredentialCategory.identityCards,
         );

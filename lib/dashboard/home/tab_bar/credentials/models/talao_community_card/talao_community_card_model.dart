@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/author/author.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -8,14 +7,11 @@ part 'talao_community_card_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class TalaoCommunityCardModel extends CredentialSubjectModel {
   TalaoCommunityCardModel({
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
     this.identifier,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.talaoCommunityCard,
           credentialCategory: CredentialCategory.communityCards,
         );

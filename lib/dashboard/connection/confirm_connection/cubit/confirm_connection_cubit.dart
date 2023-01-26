@@ -49,7 +49,6 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           walletCubit.state.currentAccount!;
 
       switch (connectionBridgeType) {
-
         // TODO(bibash): check if tezos or ethereum
 
         case ConnectionBridgeType.beacon:
@@ -57,7 +56,8 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
               getKeysFromSecretKey(secretKey: currentAccount.secretKey);
 
           log.i('Start connecting to beacon');
-          final Map response = await beacon.permissionResponse(
+          final Map<dynamic, dynamic> response =
+              await beacon.permissionResponse(
             id: beaconCubit.state.beaconRequest!.request!.id!,
             publicKey: sourceKeystore.publicKey,
             address: currentAccount.walletAddress,

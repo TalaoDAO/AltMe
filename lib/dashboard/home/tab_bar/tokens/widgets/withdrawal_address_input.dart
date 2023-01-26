@@ -7,15 +7,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WithdrawalAddressInputView extends StatelessWidget {
   const WithdrawalAddressInputView({
-    Key? key,
+    super.key,
     this.caption,
     this.withdrawalAddressController,
     this.onValidAddress,
-  }) : super(key: key);
+  });
 
   final String? caption;
   final TextEditingController? withdrawalAddressController;
-  final Function(String)? onValidAddress;
+  final dynamic Function(String)? onValidAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +32,14 @@ class WithdrawalAddressInputView extends StatelessWidget {
 
 class _WithdrawalAddressInputPage extends StatefulWidget {
   const _WithdrawalAddressInputPage({
-    Key? key,
     this.caption,
     this.withdrawalAddressController,
     this.onValidAddress,
-  }) : super(key: key);
+  });
 
   final String? caption;
   final TextEditingController? withdrawalAddressController;
-  final Function(String)? onValidAddress;
+  final dynamic Function(String)? onValidAddress;
 
   @override
   State<_WithdrawalAddressInputPage> createState() =>

@@ -9,13 +9,10 @@ class NationalityModel extends CredentialSubjectModel {
   NationalityModel({
     this.expires,
     this.nationality,
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.nationality,
           credentialCategory: CredentialCategory.identityCards,
         );

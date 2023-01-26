@@ -10,32 +10,22 @@ part 'tezos_nft_model.g.dart';
 @immutable
 class TezosNftModel extends NftModel {
   const TezosNftModel({
-    required String name,
-    String? displayUri,
-    String? thumbnailUri,
-    String? description,
-    required String tokenId,
-    required String contractAddress,
-    required String balance,
-    bool isTransferable = true,
+    required super.name,
+    super.displayUri,
+    super.thumbnailUri,
+    super.description,
+    required super.tokenId,
+    required super.contractAddress,
+    required super.balance,
+    super.isTransferable,
     required this.id,
-    String? symbol,
+    super.symbol,
     this.standard,
     this.identifier,
     this.mCreators,
     this.mPublishers,
     this.date,
-  }) : super(
-          name: name,
-          symbol: symbol,
-          displayUri: displayUri,
-          description: description,
-          thumbnailUri: thumbnailUri,
-          tokenId: tokenId,
-          contractAddress: contractAddress,
-          balance: balance,
-          isTransferable: isTransferable,
-        );
+  });
 
   factory TezosNftModel.fromJson(Map<String, dynamic> json) =>
       _$TezosNftModelFromJson(json);

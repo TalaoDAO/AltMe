@@ -9,13 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SendReceiveHomePage extends StatefulWidget {
   const SendReceiveHomePage({
-    Key? key,
+    super.key,
     required this.selectedToken,
-  }) : super(key: key);
+  });
 
   final TokenModel selectedToken;
 
-  static Route route({required TokenModel selectedToken}) {
+  static Route<dynamic> route({required TokenModel selectedToken}) {
     return MaterialPageRoute<void>(
       builder: (_) => SendReceiveHomePage(
         selectedToken: selectedToken,
@@ -60,9 +60,7 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
 }
 
 class _SendReceiveHomePageView extends StatelessWidget {
-  const _SendReceiveHomePageView({
-    Key? key,
-  }) : super(key: key);
+  const _SendReceiveHomePageView();
 
   @override
   Widget build(BuildContext context) {

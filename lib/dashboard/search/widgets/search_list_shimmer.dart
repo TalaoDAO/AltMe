@@ -2,7 +2,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class SearchListShimmer extends StatelessWidget {
-  const SearchListShimmer({Key? key}) : super(key: key);
+  const SearchListShimmer({super.key});
 
   @override
   Widget build(BuildContext context) {

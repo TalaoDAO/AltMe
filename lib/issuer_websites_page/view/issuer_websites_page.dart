@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 class IssuerWebsitesPage extends StatelessWidget {
   const IssuerWebsitesPage(
     this.issuerFilter, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String? issuerFilter;
 
-  static Route route(String? issuerType) => MaterialPageRoute<void>(
+  static Route<dynamic> route(String? issuerType) => MaterialPageRoute<void>(
         builder: (context) => IssuerWebsitesPage(issuerType),
         settings: const RouteSettings(name: '/issuerWebsitesPage'),
       );

@@ -345,7 +345,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> checkForPassBaseStatusThenLaunchUrl({
     required String link,
-    required Function() onPassBaseApproved,
+    required dynamic Function() onPassBaseApproved,
   }) async {
     log.i('Checking PassbaseStatus');
     emit(state.loading());

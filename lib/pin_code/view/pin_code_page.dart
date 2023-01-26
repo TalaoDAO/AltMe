@@ -10,17 +10,17 @@ import 'package:secure_storage/secure_storage.dart';
 
 class PinCodePage extends StatelessWidget {
   const PinCodePage({
-    Key? key,
+    super.key,
     required this.isValidCallback,
     this.restrictToBack = true,
     required this.localAuthApi,
-  }) : super(key: key);
+  });
 
   final VoidCallback isValidCallback;
   final bool restrictToBack;
   final LocalAuthApi localAuthApi;
 
-  static Route route({
+  static Route<dynamic> route({
     required VoidCallback isValidCallback,
     bool restrictToBack = true,
   }) =>
@@ -48,11 +48,11 @@ class PinCodePage extends StatelessWidget {
 
 class PinCodeView extends StatefulWidget {
   const PinCodeView({
-    Key? key,
+    super.key,
     required this.isValidCallback,
     this.restrictToBack = true,
     required this.localAuthApi,
-  }) : super(key: key);
+  });
 
   final VoidCallback isValidCallback;
   final bool restrictToBack;

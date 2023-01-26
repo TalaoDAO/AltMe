@@ -6,11 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class IssuerVerificationRegistrySelector extends StatelessWidget {
   const IssuerVerificationRegistrySelector({
-    Key? key,
+    super.key,
     required this.issuerVerificationRegistry,
     required this.groupValue,
     this.isEnable = true,
-  }) : super(key: key);
+  });
 
   final IssuerVerificationRegistry issuerVerificationRegistry;
   final IssuerVerificationRegistry groupValue;

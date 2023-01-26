@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class CheckForLinkedInProfile extends StatelessWidget {
   const CheckForLinkedInProfile({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/CheckForLinkedInProfile'),
       builder: (_) => const CheckForLinkedInProfile(),

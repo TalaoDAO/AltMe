@@ -8,13 +8,10 @@ part 'tezos_poo_address_model.g.dart';
 class TezosPooAddressModel extends CredentialSubjectModel {
   TezosPooAddressModel({
     this.associatedAddress,
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.tezosPooAddress,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
         );

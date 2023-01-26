@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 class BottomBarItem extends StatelessWidget {
   const BottomBarItem({
-    Key? key,
+    super.key,
     required this.icon,
     required this.text,
     required this.onTap,
     required this.isSelected,
-  }) : super(key: key);
+  });
 
   final String text;
   final String icon;

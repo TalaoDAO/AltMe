@@ -49,10 +49,10 @@ class AlertMessage {
 
 class SnackBarContent extends StatelessWidget {
   const SnackBarContent({
-    Key? key,
+    super.key,
     required this.message,
     required this.iconPath,
-  }) : super(key: key);
+  });
 
   final String message;
   final String iconPath;

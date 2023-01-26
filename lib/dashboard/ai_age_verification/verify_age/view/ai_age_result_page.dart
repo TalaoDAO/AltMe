@@ -13,7 +13,7 @@ class AiAgeResultPage extends StatelessWidget {
 
   final BuildContext blocContext;
 
-  static Route route(BuildContext context) {
+  static Route<dynamic> route(BuildContext context) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/AiAgeResultPage'),
       builder: (_) => AiAgeResultPage(blocContext: context),
@@ -90,8 +90,8 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
 class SuccessWidget extends StatelessWidget {
   const SuccessWidget(
     this.state, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final CameraState state;
 
   @override
@@ -151,8 +151,8 @@ class SuccessWidget extends StatelessWidget {
 class FailureWidget extends StatelessWidget {
   const FailureWidget(
     this.state, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final CameraState state;
 
   @override

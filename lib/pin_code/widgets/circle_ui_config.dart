@@ -19,11 +19,11 @@ class CircleUIConfig {
 
 class Circle extends StatelessWidget {
   const Circle({
-    Key? key,
+    super.key,
     this.filled = false,
     required this.circleUIConfig,
     this.extraSize = 0,
-  }) : super(key: key);
+  });
 
   final bool filled;
   final CircleUIConfig circleUIConfig;

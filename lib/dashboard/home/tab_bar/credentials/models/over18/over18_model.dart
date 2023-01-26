@@ -7,13 +7,10 @@ part 'over18_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Over18Model extends CredentialSubjectModel {
   Over18Model({
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.over18,
           credentialCategory: CredentialCategory.identityCards,
         );

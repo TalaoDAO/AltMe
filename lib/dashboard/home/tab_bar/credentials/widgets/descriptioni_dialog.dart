@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class DescriptionDialog extends StatelessWidget {
   const DescriptionDialog({
-    Key? key,
+    super.key,
     required this.text,
-  }) : super(key: key);
+  });
 
   final String text;
 

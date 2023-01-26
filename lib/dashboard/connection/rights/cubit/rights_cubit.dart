@@ -63,7 +63,8 @@ class RightsCubit extends Cubit<RightsState> {
           );
           break;
         case BlockchainType.tezos:
-          final Map response = await beacon.removePeerUsingPublicKey(
+          final Map<dynamic, dynamic> response =
+              await beacon.removePeerUsingPublicKey(
             publicKey: savedDappData.peer!.publicKey,
           );
 

@@ -7,9 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QrCodeScanPage extends StatefulWidget {
-  const QrCodeScanPage({Key? key}) : super(key: key);
+  const QrCodeScanPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (context) => const QrCodeScanPage(),
         settings: const RouteSettings(name: '/qrCodeScanPage'),
       );

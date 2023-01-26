@@ -15,7 +15,7 @@ class ImportAccountStep3Page extends StatelessWidget {
   const ImportAccountStep3Page({super.key, required this.accountType});
   final AccountType accountType;
 
-  static Route route({required AccountType accountType}) {
+  static Route<dynamic> route({required AccountType accountType}) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/importAccountStep3Page'),
       builder: (_) => ImportAccountStep3Page(

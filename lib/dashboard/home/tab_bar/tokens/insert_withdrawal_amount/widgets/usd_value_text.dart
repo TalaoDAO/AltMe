@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class UsdValueText extends StatelessWidget {
   const UsdValueText({
-    Key? key,
+    super.key,
     required this.usdValue,
-  }) : super(key: key);
+  });
 
   final double usdValue;
 

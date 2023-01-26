@@ -5,8 +5,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class TezotopiaMemberShipWidget extends StatelessWidget {
-  const TezotopiaMemberShipWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const TezotopiaMemberShipWidget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

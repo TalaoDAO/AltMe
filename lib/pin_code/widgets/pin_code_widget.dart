@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PinCodeWidget extends StatefulWidget {
   const PinCodeWidget({
-    Key? key,
+    super.key,
     required this.title,
     this.passwordDigits = 4,
     required this.passwordEnteredCallback,
@@ -24,8 +24,7 @@ class PinCodeWidget extends StatefulWidget {
     this.subTitle,
     this.header,
   })  : circleUIConfig = circleUIConfig ?? const CircleUIConfig(),
-        keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig(),
-        super(key: key);
+        keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
 
   final Widget? header;
   final String title;
@@ -68,16 +67,15 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
       duration: const Duration(milliseconds: 400),
       vsync: this,
     );
-    final Animation curve =
+    final Animation<double> curve =
         CurvedAnimation(parent: controller, curve: ShakeCurve());
-    animation =
-        Tween<double>(begin: 0, end: 10).animate(curve as Animation<double>)
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.completed) {
-              context.read<PinCodeViewCubit>().setEnteredPasscode('');
-              controller.value = 0;
-            }
-          });
+    animation = Tween<double>(begin: 0, end: 10).animate(curve)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          context.read<PinCodeViewCubit>().setEnteredPasscode('');
+          controller.value = 0;
+        }
+      });
   }
 
   @override

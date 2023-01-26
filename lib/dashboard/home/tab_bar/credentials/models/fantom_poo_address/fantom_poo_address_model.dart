@@ -8,13 +8,10 @@ part 'fantom_poo_address_model.g.dart';
 class FantomPooAddressModel extends CredentialSubjectModel {
   FantomPooAddressModel({
     this.associatedAddress,
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.fantomPooAddress,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
         );

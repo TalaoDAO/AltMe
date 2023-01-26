@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class ConfirmTransactionDetailsCard extends StatelessWidget {
   const ConfirmTransactionDetailsCard({
-    Key? key,
+    super.key,
     required this.amount,
     required this.tokenUSDRate,
     required this.symbol,
@@ -15,7 +15,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
     this.networkFees,
     this.onEditButtonPressed,
     this.isNFT = false,
-  }) : super(key: key);
+  });
 
   final double amount;
   final double tokenUSDRate;

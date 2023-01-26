@@ -18,13 +18,13 @@ class CredentialsRepository {
           '${SecureStorageKeys.credentialKey}/',
         ),
       );
-      final _credentialList = <CredentialModel>[];
+      final credentialList = <CredentialModel>[];
       data.forEach((key, value) {
-        _credentialList.add(
+        credentialList.add(
           CredentialModel.fromJson(json.decode(value) as Map<String, dynamic>),
         );
       });
-      return _credentialList;
+      return credentialList;
     } catch (e) {
       throw ResponseMessage(
         ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,

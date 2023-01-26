@@ -16,7 +16,7 @@ class VerifyAgePage extends StatelessWidget {
 
   final CredentialSubjectType credentialSubjectType;
 
-  static Route route({
+  static Route<dynamic> route({
     required CredentialSubjectType credentialSubjectType,
   }) {
     return MaterialPageRoute<void>(

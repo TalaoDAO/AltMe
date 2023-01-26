@@ -28,7 +28,7 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
   final CredentialManifest? credentialManifest;
   final Query? query;
 
-  Future initialize() async {
+  Future<void> initialize() async {
     emit(state.loading());
 
     final List<HomeCredential> homeCredentials = [];

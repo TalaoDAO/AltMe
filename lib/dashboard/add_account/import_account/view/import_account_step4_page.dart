@@ -15,7 +15,9 @@ class ImportAccountStep4Page extends StatelessWidget {
 
   final ImportAccountCubit importAccountCubit;
 
-  static Route route({required ImportAccountCubit importAccountCubit}) {
+  static Route<dynamic> route({
+    required ImportAccountCubit importAccountCubit,
+  }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/importAccountStep4Page'),
       builder: (_) => ImportAccountStep4Page(

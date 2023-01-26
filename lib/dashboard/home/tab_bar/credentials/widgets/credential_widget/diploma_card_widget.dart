@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class DiplomaCardWidget extends StatelessWidget {
   const DiplomaCardWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 

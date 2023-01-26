@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 
 class SelectedAccountItem extends StatelessWidget {
   const SelectedAccountItem({
-    Key? key,
+    super.key,
     required this.cryptoAccountData,
     required this.isBoxOpen,
     required this.onPressed,
     required this.title,
-  }) : super(key: key);
+  });
 
   final CryptoAccountData cryptoAccountData;
   final bool isBoxOpen;

@@ -6,28 +6,20 @@ part 'ethereum_network.g.dart';
 @JsonSerializable()
 class EthereumNetwork extends BlockchainNetwork {
   const EthereumNetwork({
-    required String networkname,
-    required String apiUrl,
-    required String rpcNodeUrl,
-    required String title,
-    required String subTitle,
+    required super.networkname,
+    required super.apiUrl,
+    required super.rpcNodeUrl,
+    required String super.title,
+    required String super.subTitle,
     required this.chainId,
     required this.chain,
     this.mainTokenName = 'Ethereum',
     this.mainTokenDecimal = '18',
     this.mainTokenIcon = IconStrings.ethereum,
     this.mainTokenSymbol = 'ETH',
-    required BlockchainType type,
-    String apiKey = '',
-  }) : super(
-          networkname: networkname,
-          apiUrl: apiUrl,
-          rpcNodeUrl: rpcNodeUrl,
-          title: title,
-          subTitle: subTitle,
-          apiKey: apiKey,
-          type: type,
-        );
+    required super.type,
+    super.apiKey,
+  });
 
   factory EthereumNetwork.mainNet() => const EthereumNetwork(
         type: BlockchainType.ethereum,

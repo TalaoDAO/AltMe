@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class AdvanceSettingsRadioItem extends StatelessWidget {
   const AdvanceSettingsRadioItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.isSelected,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   final String title;
   final bool isSelected;

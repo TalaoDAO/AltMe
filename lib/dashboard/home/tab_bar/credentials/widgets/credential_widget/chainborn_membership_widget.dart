@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class ChainbornMemberShipWidget extends StatelessWidget {
-  const ChainbornMemberShipWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const ChainbornMemberShipWidget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

@@ -93,18 +93,18 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
 
       log.i('savedPeerDatas - $savedDapps');
 
-      final _peersListToShow = <SavedDappData>[];
+      final peersListToShow = <SavedDappData>[];
 
       /// loop in saved permitted peer data
       for (final savedData in savedDapps) {
         /// display data for selected walletAddress only
         if (walletAddress == savedData.walletAddress) {
-          _peersListToShow.add(savedData);
+          peersListToShow.add(savedData);
         }
       }
 
       emit(
-        state.copyWith(status: AppStatus.idle, savedDapps: _peersListToShow),
+        state.copyWith(status: AppStatus.idle, savedDapps: peersListToShow),
       );
     } catch (e) {
       log.e('getPeers failure , e: $e');

@@ -9,7 +9,7 @@ class CongratulationsAccountImportPage extends StatelessWidget {
     super.key,
   });
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/congratulationsAccountImportPage'),
       builder: (_) => const CongratulationsAccountImportPage(),

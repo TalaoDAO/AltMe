@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class MyOutlinedButton extends StatelessWidget {
   const MyOutlinedButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
     this.icon,
@@ -14,10 +14,10 @@ class MyOutlinedButton extends StatelessWidget {
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,
-  }) : super(key: key);
+  });
 
   const MyOutlinedButton.icon({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
     required this.icon,
@@ -28,7 +28,7 @@ class MyOutlinedButton extends StatelessWidget {
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,
-  }) : super(key: key);
+  });
 
   final String text;
   final GestureTapCallback? onPressed;
@@ -115,12 +115,12 @@ ButtonStyle outlinedStyleFrom({
 
 class OutlinedButtonText extends StatelessWidget {
   const OutlinedButtonText({
-    Key? key,
+    super.key,
     required this.text,
     this.textColor,
     this.fontSize = 18,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   final String text;
   final Color? textColor;

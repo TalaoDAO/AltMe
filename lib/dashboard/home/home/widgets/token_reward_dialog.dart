@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 
 class TokenRewardDialog extends StatelessWidget {
   const TokenRewardDialog({
-    Key? key,
+    super.key,
     required this.tokenReward,
-  }) : super(key: key);
+  });
 
   final TokenReward tokenReward;
 

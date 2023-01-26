@@ -9,14 +9,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ConfirmTokenTransactionPage extends StatelessWidget {
   const ConfirmTokenTransactionPage({
-    Key? key,
+    super.key,
     required this.selectedToken,
     required this.withdrawalAddress,
     required this.amount,
     this.isNFT = false,
-  }) : super(key: key);
+  });
 
-  static Route route({
+  static Route<dynamic> route({
     required TokenModel selectedToken,
     required String withdrawalAddress,
     required double amount,
@@ -65,12 +65,12 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
 
 class ConfirmWithdrawalView extends StatefulWidget {
   const ConfirmWithdrawalView({
-    Key? key,
+    super.key,
     required this.selectedToken,
     required this.withdrawalAddress,
     required this.amount,
     this.isNFT = false,
-  }) : super(key: key);
+  });
 
   final TokenModel selectedToken;
   final String withdrawalAddress;

@@ -75,7 +75,8 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
               .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE,
         );
       }
-      final List credentialJson = decryptedJson['credentials'] as List<dynamic>;
+      final List<dynamic> credentialJson =
+          decryptedJson['credentials'] as List<dynamic>;
       final credentials = credentialJson.map(
         (dynamic credential) =>
             CredentialModel.fromJson(credential as Map<String, dynamic>),

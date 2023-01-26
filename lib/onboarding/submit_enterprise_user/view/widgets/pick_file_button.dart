@@ -2,7 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class PickFileButton extends StatelessWidget {
-  const PickFileButton({Key? key, required this.onTap}) : super(key: key);
+  const PickFileButton({super.key, required this.onTap});
 
   final VoidCallback onTap;
 

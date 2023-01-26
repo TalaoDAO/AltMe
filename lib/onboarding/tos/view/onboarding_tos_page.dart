@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OnBoardingTosPage extends StatelessWidget {
-  const OnBoardingTosPage({Key? key}) : super(key: key);
+  const OnBoardingTosPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (context) => const OnBoardingTosPage(),
         settings: const RouteSettings(name: '/onBoardingTermsPage'),
       );
@@ -24,7 +24,7 @@ class OnBoardingTosPage extends StatelessWidget {
 }
 
 class OnBoardingTosView extends StatefulWidget {
-  const OnBoardingTosView({Key? key}) : super(key: key);
+  const OnBoardingTosView({super.key});
 
   @override
   State<OnBoardingTosView> createState() => _OnBoardingTosViewState();

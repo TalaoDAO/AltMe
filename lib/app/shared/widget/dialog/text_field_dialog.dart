@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class TextFieldDialog extends StatefulWidget {
   const TextFieldDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.label,
     this.subtitle,
@@ -15,7 +15,7 @@ class TextFieldDialog extends StatefulWidget {
     this.dialogColor,
     this.bgColor,
     this.textColor,
-  }) : super(key: key);
+  });
 
   final String title;
   final String label;

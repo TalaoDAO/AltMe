@@ -11,9 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class BackupCredentialPage extends StatelessWidget {
-  const BackupCredentialPage({Key? key}) : super(key: key);
+  const BackupCredentialPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (_) => const BackupCredentialPage(),
         settings: const RouteSettings(name: '/backupCredentialPage'),
       );
@@ -33,7 +33,7 @@ class BackupCredentialPage extends StatelessWidget {
 }
 
 class BackupCredentialView extends StatefulWidget {
-  const BackupCredentialView({Key? key}) : super(key: key);
+  const BackupCredentialView({super.key});
 
   @override
   State<BackupCredentialView> createState() => _BackupCredentialViewState();

@@ -3,10 +3,10 @@ import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
-typedef OnItemTap = Function(WalletTypeModel);
+typedef OnItemTap = dynamic Function(WalletTypeModel);
 
 class WalletTypeList extends StatelessWidget {
-  const WalletTypeList({Key? key, this.onItemTap}) : super(key: key);
+  const WalletTypeList({super.key, this.onItemTap});
 
   final OnItemTap? onItemTap;
 

@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 class DisplayDescriptionCard extends StatelessWidget {
   const DisplayDescriptionCard({
-    Key? key,
+    super.key,
     required this.credentialModel,
     required this.style,
     this.maxLines = 5,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final TextStyle style;
@@ -26,14 +26,14 @@ class DisplayDescriptionCard extends StatelessWidget {
   }
 
   String getDescription(BuildContext context) {
-    var _nameValue = GetTranslation.getTranslation(
+    var nameValue = GetTranslation.getTranslation(
       credentialModel.credentialPreview.description,
       context.l10n,
     );
-    if (_nameValue == '') {
-      _nameValue = credentialModel.display.descriptionFallback;
+    if (nameValue == '') {
+      nameValue = credentialModel.display.descriptionFallback;
     }
 
-    return _nameValue;
+    return nameValue;
   }
 }

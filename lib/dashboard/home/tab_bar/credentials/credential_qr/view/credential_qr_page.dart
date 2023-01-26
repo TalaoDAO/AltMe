@@ -10,13 +10,13 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 class CredentialQrPage extends StatelessWidget {
   const CredentialQrPage({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 
-  static Route route(CredentialModel credentialModel) =>
+  static Route<dynamic> route(CredentialModel credentialModel) =>
       MaterialPageRoute<void>(
         builder: (context) =>
             CredentialQrPage(credentialModel: credentialModel),

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class BackLeadingButton extends StatelessWidget {
   const BackLeadingButton({
-    Key? key,
+    super.key,
     this.color,
     this.onPressed,
     this.padding = const EdgeInsets.all(8),
-  }) : super(key: key);
+  });
 
   final GestureTapCallback? onPressed;
   final Color? color;

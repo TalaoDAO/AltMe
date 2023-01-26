@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChangeNetworkBottomSheetView extends StatelessWidget {
-  const ChangeNetworkBottomSheetView({Key? key}) : super(key: key);
+  const ChangeNetworkBottomSheetView({super.key});
 
   static Future<void> show({required BuildContext context}) {
     return showModalBottomSheet<void>(
@@ -27,7 +27,7 @@ class ChangeNetworkBottomSheetView extends StatelessWidget {
 }
 
 class ChangeNetworkBottomSheetPage extends StatefulWidget {
-  const ChangeNetworkBottomSheetPage({Key? key}) : super(key: key);
+  const ChangeNetworkBottomSheetPage({super.key});
 
   @override
   State<ChangeNetworkBottomSheetPage> createState() =>
@@ -44,7 +44,7 @@ class _ChangeNetworkBottomSheetPageState
         final blockchainType =
             context.read<WalletCubit>().state.currentAccount!.blockchainType;
         final allNetworks = blockchainType.networks;
-        return Container(
+        return DecoratedBox(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             boxShadow: [

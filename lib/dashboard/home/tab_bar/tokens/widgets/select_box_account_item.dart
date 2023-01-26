@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 
 class SelectBoxAccountItem extends StatelessWidget {
   const SelectBoxAccountItem({
-    Key? key,
+    super.key,
     required this.cryptoAccountData,
     required this.isSelected,
     required this.listIndex,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   final CryptoAccountData cryptoAccountData;
   final bool isSelected;

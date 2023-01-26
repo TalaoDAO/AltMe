@@ -3,7 +3,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/list/widgets/credential
 import 'package:flutter/material.dart';
 
 class CredentialListShimmer extends StatelessWidget {
-  const CredentialListShimmer({Key? key}) : super(key: key);
+  const CredentialListShimmer({super.key});
 
   @override
   Widget build(BuildContext context) {

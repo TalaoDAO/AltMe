@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ManageNetworkPage extends StatelessWidget {
-  const ManageNetworkPage({Key? key}) : super(key: key);
+  const ManageNetworkPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (_) => const ManageNetworkPage(),
         settings: const RouteSettings(name: '/manageNetworkPage'),
       );

@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TotalWalletBalance extends StatelessWidget {
   const TotalWalletBalance({
-    Key? key,
+    super.key,
     required this.tokensCubit,
-  }) : super(key: key);
+  });
 
   final TokensCubit tokensCubit;
 

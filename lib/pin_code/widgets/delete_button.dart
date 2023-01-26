@@ -5,13 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DeleteButton extends StatelessWidget {
   const DeleteButton({
-    Key? key,
+    super.key,
     required this.cancelButton,
     required this.deleteButton,
     KeyboardUIConfig? keyboardUIConfig,
     this.cancelCallback,
-  })  : keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig(),
-        super(key: key);
+  }) : keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
 
   final Widget cancelButton;
   final Widget deleteButton;

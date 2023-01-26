@@ -6,15 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InsertWithdrawalAmountPage extends StatelessWidget {
   const InsertWithdrawalAmountPage({
-    Key? key,
+    super.key,
     required this.withdrawalAddress,
     required this.defaultSelectedToken,
-  }) : super(key: key);
+  });
 
   final String withdrawalAddress;
   final TokenModel defaultSelectedToken;
 
-  static Route route({
+  static Route<dynamic> route({
     required String withdrawalAddress,
     required TokenModel defualtSelectedToken,
   }) {
@@ -39,9 +39,9 @@ class InsertWithdrawalAmountPage extends StatelessWidget {
 
 class InsertWithdrawalAmountView extends StatefulWidget {
   const InsertWithdrawalAmountView({
-    Key? key,
+    super.key,
     required this.withdrawalAddress,
-  }) : super(key: key);
+  });
 
   final String withdrawalAddress;
 

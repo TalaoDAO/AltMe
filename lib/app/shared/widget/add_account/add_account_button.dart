@@ -4,7 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class AddAccountButton extends StatelessWidget {
-  const AddAccountButton({Key? key, required this.onPressed}) : super(key: key);
+  const AddAccountButton({super.key, required this.onPressed});
 
   final VoidCallback onPressed;
 

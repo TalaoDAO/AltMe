@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class AragoIdentityCardWidget extends StatelessWidget {
   const AragoIdentityCardWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 

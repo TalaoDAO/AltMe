@@ -8,13 +8,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TransactionItem extends StatelessWidget {
   const TransactionItem({
-    Key? key,
+    super.key,
     required this.operationModel,
     required this.decimal,
     required this.symbol,
     this.tokenUsdPrice,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final OperationModel operationModel;
   final int decimal;

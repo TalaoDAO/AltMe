@@ -12,8 +12,8 @@ class DisplayDescriptionWidgetWithTitle extends StatelessWidget {
     required this.credentialModel,
     this.titleColor,
     this.valueColor,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final DisplayMapping? displayMapping;
   final CredentialModel credentialModel;
   final Color? titleColor;
@@ -70,11 +70,11 @@ class DisplayDescriptionWidgetWithTitle extends StatelessWidget {
 
 class DescriptionText extends StatelessWidget {
   const DescriptionText({
-    Key? key,
+    super.key,
     required this.text,
     required this.titleTheme,
     required this.valueTheme,
-  }) : super(key: key);
+  });
 
   final String text;
   final TextStyle titleTheme;

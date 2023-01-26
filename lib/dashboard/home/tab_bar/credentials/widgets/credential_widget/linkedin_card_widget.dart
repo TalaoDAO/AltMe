@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class LinkedinCardWidget extends StatelessWidget {
   const LinkedinCardWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 

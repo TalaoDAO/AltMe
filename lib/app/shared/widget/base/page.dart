@@ -5,7 +5,7 @@ import 'package:secure_application/secure_application.dart';
 
 class BasePage extends StatefulWidget {
   const BasePage({
-    Key? key,
+    super.key,
     this.scaffoldKey,
     this.backgroundColor,
     this.title,
@@ -27,7 +27,7 @@ class BasePage extends StatefulWidget {
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.secureScreen = false,
-  }) : super(key: key);
+  });
 
   final GlobalKey<ScaffoldState>? scaffoldKey;
   final String? title;

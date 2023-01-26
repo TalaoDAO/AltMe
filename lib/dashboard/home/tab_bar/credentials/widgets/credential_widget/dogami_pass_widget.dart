@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class DogamiPassWidget extends StatelessWidget {
-  const DogamiPassWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const DogamiPassWidget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

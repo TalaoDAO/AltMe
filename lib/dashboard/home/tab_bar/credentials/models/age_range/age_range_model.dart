@@ -9,13 +9,10 @@ class AgeRangeModel extends CredentialSubjectModel {
   AgeRangeModel({
     this.expires,
     this.ageRange,
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.ageRange,
           credentialCategory: CredentialCategory.identityCards,
         );

@@ -21,7 +21,7 @@ class SearchCubit extends Cubit<SearchState> {
   final CredentialsRepository repository;
   final SecureStorageProvider secureStorageProvider;
 
-  Future initialize() async {
+  Future<void> initialize() async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     final key = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
@@ -33,7 +33,7 @@ class SearchCubit extends Cubit<SearchState> {
     emit(state.copuWith(status: AppStatus.idle));
   }
 
-  Future loadAllCredentialsFromRepository() async {
+  Future<void> loadAllCredentialsFromRepository() async {
     await repository.findAll(/* filters */).then((values) {
       /// remove tezosAssociatedWallet
       // values.removeWhere(
@@ -46,7 +46,7 @@ class SearchCubit extends Cubit<SearchState> {
     });
   }
 
-  Future searchWallet(String searchText) async {
+  Future<void> searchWallet(String searchText) async {
     emit(state.loading(searchText: searchText));
     final searchKeywords = searchText.split(' ');
 

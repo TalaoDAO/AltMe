@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 
 class DiscoverDetailsPage extends StatelessWidget {
   const DiscoverDetailsPage({
-    Key? key,
+    super.key,
     required this.homeCredential,
     required this.onCallBack,
     required this.buttonText,
-  }) : super(key: key);
+  });
 
   final HomeCredential homeCredential;
   final VoidCallback onCallBack;
   final String buttonText;
 
-  static Route route({
+  static Route<dynamic> route({
     required HomeCredential homeCredential,
     required VoidCallback onCallBack,
     required String buttonText,
@@ -42,11 +42,11 @@ class DiscoverDetailsPage extends StatelessWidget {
 
 class DiscoverDetailsView extends StatelessWidget {
   const DiscoverDetailsView({
-    Key? key,
+    super.key,
     required this.homeCredential,
     required this.onCallBack,
     required this.buttonText,
-  }) : super(key: key);
+  });
 
   final HomeCredential homeCredential;
   final VoidCallback onCallBack;

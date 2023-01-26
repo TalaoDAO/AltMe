@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ImportTalaoCommunityCardPage extends StatelessWidget {
-  const ImportTalaoCommunityCardPage({Key? key}) : super(key: key);
+  const ImportTalaoCommunityCardPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (context) => const ImportTalaoCommunityCardPage(),
         settings: const RouteSettings(name: '/importTalaoCommunityCardPage'),
       );
@@ -26,7 +26,7 @@ class ImportTalaoCommunityCardPage extends StatelessWidget {
 }
 
 class ImportTalaoCommunityCardView extends StatefulWidget {
-  const ImportTalaoCommunityCardView({Key? key}) : super(key: key);
+  const ImportTalaoCommunityCardView({super.key});
 
   @override
   _ImportTalaoCommunityCardViewState createState() =>
