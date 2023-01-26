@@ -312,7 +312,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       final server = manageNetworkCubit.state.network.rpcNodeUrl;
 
-      // TODO(all): Do check this getKeysFromSecretKey() in helper function
       final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
 
       final keyStore = KeyStoreModel(

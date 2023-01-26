@@ -22,22 +22,7 @@ class _BaseItem extends StatefulWidget {
   __BaseItemState createState() => __BaseItemState();
 }
 
-class __BaseItemState extends State<_BaseItem>
-    with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-  late Animation<double> animation;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    // controller?.dispose();
-  }
-
+class __BaseItemState extends State<_BaseItem> {
   @override
   Widget build(BuildContext context) => Opacity(
         opacity: !widget.enabled ? 0.33 : 1,

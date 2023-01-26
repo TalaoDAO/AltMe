@@ -499,11 +499,6 @@ class HomeCubit extends Cubit<HomeState> {
     return false;
   }
 
-  @override
-  Future<void> close() {
-    return super.close();
-  }
-
   void getPassBaseStatusBackground() {
     final did = didCubit.state.did!;
     Workmanager().registerOneOffTask(
