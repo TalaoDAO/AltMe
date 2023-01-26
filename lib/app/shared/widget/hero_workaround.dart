@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class HeroFix extends StatelessWidget {
   const HeroFix({
-    Key? key,
+    super.key,
     required this.tag,
     required this.child,
-  }) : super(key: key);
+  });
 
   final String tag;
   final Widget child;

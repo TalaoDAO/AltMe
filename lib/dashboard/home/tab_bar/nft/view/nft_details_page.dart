@@ -7,13 +7,13 @@ import 'package:flutter_html/flutter_html.dart';
 
 class NftDetailsPage extends StatelessWidget {
   const NftDetailsPage({
-    Key? key,
+    super.key,
     required this.nftModel,
-  }) : super(key: key);
+  });
 
   final NftModel nftModel;
 
-  static Route route({required NftModel nftModel}) {
+  static Route<dynamic> route({required NftModel nftModel}) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/nftDetailsPage'),
       builder: (_) => NftDetailsPage(
@@ -32,9 +32,9 @@ class NftDetailsPage extends StatelessWidget {
 
 class NftDetailsView extends StatefulWidget {
   const NftDetailsView({
-    Key? key,
+    super.key,
     required this.nftModel,
-  }) : super(key: key);
+  });
 
   final NftModel nftModel;
 

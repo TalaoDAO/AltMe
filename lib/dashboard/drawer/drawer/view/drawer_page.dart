@@ -5,7 +5,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class DrawerPage extends StatelessWidget {
-  const DrawerPage({Key? key}) : super(key: key);
+  const DrawerPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class DrawerPage extends StatelessWidget {
 }
 
 class DrawerView extends StatelessWidget {
-  const DrawerView({Key? key}) : super(key: key);
+  const DrawerView({super.key});
 
   @override
   Widget build(BuildContext context) {

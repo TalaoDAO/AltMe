@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 
 class DefaultCredentialListWidget extends StatelessWidget {
   const DefaultCredentialListWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
     this.showBgDecoration = true,
     this.descriptionMaxLine = 2,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final int descriptionMaxLine;
@@ -48,7 +48,7 @@ class DefaultCredentialListWidget extends StatelessWidget {
     return CredentialContainer(
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
-        child: Container(
+        child: DecoratedBox(
           decoration: BaseBoxDecoration(
             color: backgroundColor,
             shapeColor: Theme.of(context).colorScheme.documentShape,

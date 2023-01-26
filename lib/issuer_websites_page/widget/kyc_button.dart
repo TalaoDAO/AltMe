@@ -8,8 +8,8 @@ import 'package:passbase_flutter/passbase_flutter.dart';
 
 class KYCButton extends StatelessWidget {
   const KYCButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

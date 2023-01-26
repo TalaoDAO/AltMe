@@ -22,7 +22,7 @@ class ScanState extends Equatable {
   final String? challenge;
   final String? domain;
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final void Function(String)? done;
+  final dynamic Function(String)? done;
 
   ScanState loading() {
     return ScanState(
@@ -40,7 +40,7 @@ class ScanState extends Equatable {
     required String keyId,
     String? challenge,
     String? domain,
-    required void Function(String) done,
+    required dynamic Function(String) done,
   }) {
     return ScanState(
       status: ScanStatus.askPermissionDidAuth,

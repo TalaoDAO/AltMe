@@ -7,19 +7,17 @@ part 'self_issued_model.g.dart';
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class SelfIssuedModel extends CredentialSubjectModel {
   SelfIssuedModel({
-    required String id,
+    required String super.id,
     this.address,
     this.familyName,
     this.givenName,
-    String? type = 'SelfIssued',
+    super.type = 'SelfIssued',
     this.telephone,
     this.email,
     this.workFor,
     this.companyWebsite,
     this.jobTitle,
   }) : super(
-          id: id,
-          type: type,
           issuedBy: const Author(''),
           credentialSubjectType: CredentialSubjectType.selfIssued,
           credentialCategory: CredentialCategory.othersCards,

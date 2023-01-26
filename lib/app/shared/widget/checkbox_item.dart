@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 class CheckboxItem extends StatelessWidget {
   const CheckboxItem({
-    Key? key,
+    super.key,
     this.value = false,
     this.textStyle,
     required this.text,
     required this.onChange,
-  }) : super(key: key);
+  });
 
   final String text;
-  final Function(bool) onChange;
+  final dynamic Function(bool) onChange;
   final bool value;
   final TextStyle? textStyle;
 

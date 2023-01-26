@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 class MyText extends StatelessWidget {
   const MyText(
     this.text, {
-    Key? key,
+    super.key,
     this.style,
     this.maxLines = 1,
     this.textAlign = TextAlign.left,
     this.overflow,
     this.minFontSize = 0,
     this.maxLength,
-  }) : super(key: key);
+  });
 
   final String text;
   final TextStyle? style;

@@ -12,15 +12,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class CredentialsDetailsPage extends StatelessWidget {
   const CredentialsDetailsPage({
-    Key? key,
+    super.key,
     required this.credentialModel,
     required this.readOnly,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final bool readOnly;
 
-  static Route route({
+  static Route<dynamic> route({
     required CredentialModel credentialModel,
     bool readOnly = false,
   }) {
@@ -51,10 +51,10 @@ class CredentialsDetailsPage extends StatelessWidget {
 
 class CredentialsDetailsView extends StatefulWidget {
   const CredentialsDetailsView({
-    Key? key,
+    super.key,
     required this.credentialModel,
     required this.readOnly,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final bool readOnly;

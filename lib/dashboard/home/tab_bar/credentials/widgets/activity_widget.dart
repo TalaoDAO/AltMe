@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 
 class ActivityWidget extends StatelessWidget {
   const ActivityWidget({
-    Key? key,
+    super.key,
     required this.activity,
-  }) : super(key: key);
+  });
 
   final Activity activity;
 

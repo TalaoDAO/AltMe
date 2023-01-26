@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NftPage extends StatefulWidget {
-  const NftPage({Key? key}) : super(key: key);
+  const NftPage({super.key});
 
   @override
   State<NftPage> createState() => _NftPageState();
@@ -27,7 +27,7 @@ class _NftPageState extends State<NftPage>
 }
 
 class NftView extends StatefulWidget {
-  const NftView({Key? key}) : super(key: key);
+  const NftView({super.key});
 
   @override
   _NftViewState createState() => _NftViewState();

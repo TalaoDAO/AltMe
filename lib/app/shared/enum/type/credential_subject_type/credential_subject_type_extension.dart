@@ -2,15 +2,15 @@ part of 'credential_subject_type.dart';
 
 extension CredentialSubjectTypeExtension on CredentialSubjectType {
   Color backgroundColor(CredentialModel credentialModel) {
-    Color _backgroundColor;
+    final Color backgroundColor;
     if (credentialModel.display.backgroundColor != '') {
-      _backgroundColor = Color(
+      backgroundColor = Color(
         int.parse('FF${credentialModel.display.backgroundColor}', radix: 16),
       );
     } else {
-      _backgroundColor = defaultBackgroundColor;
+      backgroundColor = defaultBackgroundColor;
     }
-    return _backgroundColor;
+    return backgroundColor;
   }
 
   Color get defaultBackgroundColor {

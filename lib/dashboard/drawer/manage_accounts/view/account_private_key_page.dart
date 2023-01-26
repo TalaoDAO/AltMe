@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class AccountPrivateKeyPage extends StatefulWidget {
   const AccountPrivateKeyPage({
-    Key? key,
+    super.key,
     required this.privateKey,
-  }) : super(key: key);
+  });
 
-  static Route route({
+  static Route<dynamic> route({
     required String privateKey,
   }) {
     return MaterialPageRoute<void>(
@@ -36,9 +36,9 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
       duration: const Duration(seconds: 20),
     );
 
-    final Tween<double> _rotationTween = Tween(begin: 20, end: 0);
+    final Tween<double> rotationTween = Tween(begin: 20, end: 0);
 
-    animation = _rotationTween.animate(animationController)
+    animation = rotationTween.animate(animationController)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           Navigator.pop(context);

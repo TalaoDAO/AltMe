@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AllTokensPage extends StatelessWidget {
-  const AllTokensPage({Key? key}) : super(key: key);
+  const AllTokensPage({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/addTokensPage'),
       builder: (_) => const AllTokensPage(),
@@ -22,7 +22,7 @@ class AllTokensPage extends StatelessWidget {
 }
 
 class _AllTokensView extends StatefulWidget {
-  const _AllTokensView({Key? key}) : super(key: key);
+  const _AllTokensView();
 
   @override
   State<_AllTokensView> createState() => _AllTokensViewState();

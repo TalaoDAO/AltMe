@@ -12,9 +12,9 @@ typedef SelectedTokenChangedCallback = TokenModel Function();
 
 class TokenAmountCalculatorView extends StatelessWidget {
   const TokenAmountCalculatorView({
-    Key? key,
+    super.key,
     required this.selectedToken,
-  }) : super(key: key);
+  });
 
   final TokenModel selectedToken;
 
@@ -31,9 +31,9 @@ class TokenAmountCalculatorView extends StatelessWidget {
 
 class TokenAmountCalculatorPage extends StatefulWidget {
   const TokenAmountCalculatorPage({
-    Key? key,
+    super.key,
     required this.selectedToken,
-  }) : super(key: key);
+  });
 
   final TokenModel selectedToken;
 

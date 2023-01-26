@@ -7,8 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DIDDisplay extends StatelessWidget {
-  const DIDDisplay({Key? key, required this.isEnterpriseUser})
-      : super(key: key);
+  const DIDDisplay({super.key, required this.isEnterpriseUser});
 
   final bool isEnterpriseUser;
 

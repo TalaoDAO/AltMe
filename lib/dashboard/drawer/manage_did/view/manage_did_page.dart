@@ -10,9 +10,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ManageDIDPage extends StatelessWidget {
-  const ManageDIDPage({Key? key}) : super(key: key);
+  const ManageDIDPage({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(builder: (_) => const ManageDIDPage());
   }
 

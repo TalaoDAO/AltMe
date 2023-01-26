@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class KycDialog extends StatelessWidget {
   const KycDialog({
-    Key? key,
+    super.key,
     required this.startVerificationPressed,
-  }) : super(key: key);
+  });
 
   final VoidCallback startVerificationPressed;
 

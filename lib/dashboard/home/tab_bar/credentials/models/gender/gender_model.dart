@@ -9,13 +9,10 @@ class GenderModel extends CredentialSubjectModel {
   GenderModel({
     this.expires,
     this.gender,
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.gender,
           credentialCategory: CredentialCategory.identityCards,
         );

@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class PcdsAgentCertificateWidget extends StatelessWidget {
-  const PcdsAgentCertificateWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const PcdsAgentCertificateWidget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

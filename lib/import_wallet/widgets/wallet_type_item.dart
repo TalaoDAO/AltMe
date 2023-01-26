@@ -4,8 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class WalletTypeItem extends StatelessWidget {
-  const WalletTypeItem({Key? key, required this.model, this.onTap})
-      : super(key: key);
+  const WalletTypeItem({super.key, required this.model, this.onTap});
 
   final WalletTypeModel model;
   final VoidCallback? onTap;

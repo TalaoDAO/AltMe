@@ -9,17 +9,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SIOPV2CredentialPickPage extends StatelessWidget {
   const SIOPV2CredentialPickPage({
-    Key? key,
+    super.key,
     required this.credentials,
     required this.sIOPV2Param,
     required this.issuer,
-  }) : super(key: key);
+  });
 
   final List<CredentialModel> credentials;
   final SIOPV2Param sIOPV2Param;
   final Issuer issuer;
 
-  static Route route({
+  static Route<dynamic> route({
     required List<CredentialModel> credentials,
     required SIOPV2Param sIOPV2Param,
     required Issuer issuer,
@@ -49,11 +49,11 @@ class SIOPV2CredentialPickPage extends StatelessWidget {
 
 class SIOPV2CredentialPickView extends StatelessWidget {
   const SIOPV2CredentialPickView({
-    Key? key,
+    super.key,
     required this.credentials,
     required this.sIOPV2Param,
     required this.issuer,
-  }) : super(key: key);
+  });
 
   final List<CredentialModel> credentials;
   final SIOPV2Param sIOPV2Param;

@@ -12,13 +12,15 @@ import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class SignPayloadPage extends StatelessWidget {
   const SignPayloadPage({
-    Key? key,
+    super.key,
     required this.connectionBridgeType,
-  }) : super(key: key);
+  });
 
   final ConnectionBridgeType connectionBridgeType;
 
-  static Route route({required ConnectionBridgeType connectionBridgeType}) {
+  static Route<dynamic> route({
+    required ConnectionBridgeType connectionBridgeType,
+  }) {
     return MaterialPageRoute<void>(
       builder: (_) => SignPayloadPage(
         connectionBridgeType: connectionBridgeType,
@@ -47,9 +49,9 @@ class SignPayloadPage extends StatelessWidget {
 
 class SignPayloadView extends StatefulWidget {
   const SignPayloadView({
-    Key? key,
+    super.key,
     required this.connectionBridgeType,
-  }) : super(key: key);
+  });
 
   final ConnectionBridgeType connectionBridgeType;
 

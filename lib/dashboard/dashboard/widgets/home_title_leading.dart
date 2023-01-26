@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class HomeTitleLeading extends StatelessWidget {
   const HomeTitleLeading({
-    Key? key,
+    super.key,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   final GestureTapCallback onPressed;
 

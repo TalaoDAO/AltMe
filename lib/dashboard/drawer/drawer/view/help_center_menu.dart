@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class HelpCenterMenu extends StatelessWidget {
   const HelpCenterMenu({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       builder: (_) => const HelpCenterMenu(),
       settings: const RouteSettings(name: '/HelpCenterMenu'),

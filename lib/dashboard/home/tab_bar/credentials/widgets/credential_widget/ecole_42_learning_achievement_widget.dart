@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 
 class Ecole42LearningAchievementWidget extends StatelessWidget {
   const Ecole42LearningAchievementWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 

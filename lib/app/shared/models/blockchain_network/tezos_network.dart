@@ -6,19 +6,13 @@ part 'tezos_network.g.dart';
 @JsonSerializable()
 class TezosNetwork extends BlockchainNetwork {
   const TezosNetwork({
-    required String networkname,
-    required String apiUrl,
-    required String rpcNodeUrl,
-    required String title,
-    required String subTitle,
-    String apiKey = '',
+    required super.networkname,
+    required super.apiUrl,
+    required super.rpcNodeUrl,
+    required String super.title,
+    required String super.subTitle,
+    super.apiKey,
   }) : super(
-          networkname: networkname,
-          apiUrl: apiUrl,
-          rpcNodeUrl: rpcNodeUrl,
-          title: title,
-          subTitle: subTitle,
-          apiKey: apiKey,
           type: BlockchainType.tezos,
         );
 

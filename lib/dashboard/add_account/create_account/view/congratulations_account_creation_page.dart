@@ -13,7 +13,7 @@ class CongratulationsAccountCreationPage extends StatelessWidget {
 
   final AccountType accountType;
 
-  static Route route({required AccountType accountType}) {
+  static Route<dynamic> route({required AccountType accountType}) {
     return MaterialPageRoute<void>(
       settings:
           const RouteSettings(name: '/congratulationsAccountCreationPage'),

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TabControllerPage extends StatelessWidget {
-  const TabControllerPage({Key? key}) : super(key: key);
+  const TabControllerPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class TabControllerPage extends StatelessWidget {
 }
 
 class TabControllerView extends StatefulWidget {
-  const TabControllerView({Key? key}) : super(key: key);
+  const TabControllerView({super.key});
 
   @override
   State<TabControllerView> createState() => _TabControllerViewState();

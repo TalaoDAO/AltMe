@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class BlockchainSettingsMenu extends StatelessWidget {
   const BlockchainSettingsMenu({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       builder: (_) => const BlockchainSettingsMenu(),
       settings: const RouteSettings(name: '/BlockchainSettingsMenu'),
@@ -62,8 +62,8 @@ class BlockchainSettingsView extends StatelessWidget {
                         walletAddress: context
                             .read<WalletCubit>()
                             .state
-                            .currentAccount
-                            !.walletAddress,
+                            .currentAccount!
+                            .walletAddress,
                       ),
                     );
                   },

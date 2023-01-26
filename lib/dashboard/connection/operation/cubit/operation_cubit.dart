@@ -235,7 +235,7 @@ class OperationCubit extends Cubit<OperationState> {
           final transactionHash = operationList.result.id;
           log.i('transactionHash - $transactionHash');
 
-          final Map response = await beacon.operationResponse(
+          final Map<dynamic, dynamic> response = await beacon.operationResponse(
             id: beaconCubit.state.beaconRequest!.request!.id!,
             transactionHash: transactionHash,
           );

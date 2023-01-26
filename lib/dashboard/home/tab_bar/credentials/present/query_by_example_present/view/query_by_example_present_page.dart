@@ -7,17 +7,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QueryByExamplePresentPage extends StatefulWidget {
   const QueryByExamplePresentPage({
-    Key? key,
+    super.key,
     required this.uri,
     required this.preview,
     required this.issuer,
-  }) : super(key: key);
+  });
 
   final Uri uri;
   final Map<String, dynamic> preview;
   final Issuer issuer;
 
-  static Route route({
+  static Route<dynamic> route({
     required Uri uri,
     required Map<String, dynamic> preview,
     required Issuer issuer,

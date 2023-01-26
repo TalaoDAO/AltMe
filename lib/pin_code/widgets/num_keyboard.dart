@@ -5,13 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NumKeyboard extends StatelessWidget {
   const NumKeyboard({
-    Key? key,
+    super.key,
     KeyboardUIConfig? keyboardUIConfig,
     this.passwordDigits = 4,
     required this.passwordEnteredCallback,
     this.cancelCallback,
-  })  : keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig(),
-        super(key: key);
+  }) : keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
 
   final KeyboardUIConfig keyboardUIConfig;
   final int passwordDigits;

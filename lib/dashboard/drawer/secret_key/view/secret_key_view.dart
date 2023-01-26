@@ -7,9 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SecretKeyPage extends StatelessWidget {
-  const SecretKeyPage({Key? key}) : super(key: key);
+  const SecretKeyPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (_) => const SecretKeyPage(),
         settings: const RouteSettings(name: '/secretKeyPage'),
       );
@@ -26,7 +26,7 @@ class SecretKeyPage extends StatelessWidget {
 }
 
 class SecretKeyView extends StatelessWidget {
-  const SecretKeyView({Key? key}) : super(key: key);
+  const SecretKeyView({super.key});
 
   @override
   Widget build(BuildContext context) {

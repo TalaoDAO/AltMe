@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class MyRichText extends StatelessWidget {
   const MyRichText({
-    Key? key,
+    super.key,
     required this.text,
     this.style,
     this.maxLines = 1,
-  }) : super(key: key);
+  });
 
   final TextSpan text;
   final TextStyle? style;

@@ -118,7 +118,10 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
     }
   }
 
-  bool checkPublicRSAKey(Map rsaKey, Map resolvedDID) {
+  bool checkPublicRSAKey(
+    Map<String, dynamic> rsaKey,
+    Map<String, dynamic> resolvedDID,
+  ) {
     try {
       final publicKeyJwks = JsonPath(r'$..publicKeyJwk');
       final publicKeyJwksList = publicKeyJwks

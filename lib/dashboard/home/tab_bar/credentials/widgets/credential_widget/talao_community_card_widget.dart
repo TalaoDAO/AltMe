@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class TalaoCommunityCardWidget extends StatelessWidget {
-  const TalaoCommunityCardWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const TalaoCommunityCardWidget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

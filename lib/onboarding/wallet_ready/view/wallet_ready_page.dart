@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class WalletReadyPage extends StatelessWidget {
   const WalletReadyPage({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/walletReadyPage'),
       builder: (_) => const WalletReadyPage(),

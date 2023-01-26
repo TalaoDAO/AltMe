@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WhiteCloseButton extends StatelessWidget {
-  const WhiteCloseButton({Key? key}) : super(key: key);
+  const WhiteCloseButton({super.key});
 
   @override
   Widget build(BuildContext context) {

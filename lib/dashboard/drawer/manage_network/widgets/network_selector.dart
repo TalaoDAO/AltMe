@@ -6,10 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NetworkSelector extends StatelessWidget {
   const NetworkSelector({
-    Key? key,
+    super.key,
     required this.network,
     required this.groupValue,
-  }) : super(key: key);
+  });
 
   final BlockchainNetwork network;
   final BlockchainNetwork groupValue;

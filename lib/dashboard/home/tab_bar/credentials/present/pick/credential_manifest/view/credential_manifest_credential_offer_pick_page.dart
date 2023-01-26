@@ -11,13 +11,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CredentialManifestOfferPickPage extends StatelessWidget {
   const CredentialManifestOfferPickPage({
-    Key? key,
+    super.key,
     required this.uri,
     required this.credential,
     required this.issuer,
     required this.inputDescriptorIndex,
     required this.credentialsToBePresented,
-  }) : super(key: key);
+  });
 
   final Uri uri;
   final CredentialModel credential;
@@ -25,7 +25,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
   final int inputDescriptorIndex;
   final List<CredentialModel> credentialsToBePresented;
 
-  static Route route({
+  static Route<dynamic> route({
     required Uri uri,
     required CredentialModel credential,
     required Issuer issuer,
@@ -69,13 +69,13 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
 
 class CredentialManifestOfferPickView extends StatelessWidget {
   const CredentialManifestOfferPickView({
-    Key? key,
+    super.key,
     required this.uri,
     required this.credential,
     required this.issuer,
     required this.inputDescriptorIndex,
     required this.credentialsToBePresented,
-  }) : super(key: key);
+  });
 
   final Uri uri;
   final CredentialModel credential;
@@ -95,7 +95,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
         return BlocBuilder<CredentialManifestPickCubit,
             CredentialManifestPickState>(
           builder: (context, credentialManifestState) {
-            final _purpose = presentationDefinition
+            final purpose = presentationDefinition
                 .inputDescriptors[inputDescriptorIndex].purpose;
 
             return BlocListener<ScanCubit, ScanState>(
@@ -119,11 +119,11 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                       style: Theme.of(context).textTheme.credentialSteps,
                     ),
                     const SizedBox(height: 10),
-                    if (_purpose != null)
+                    if (purpose != null)
                       Padding(
                         padding: const EdgeInsets.all(8),
                         child: Text(
-                          _purpose,
+                          purpose,
                           style: Theme.of(context).textTheme.credentialSubtitle,
                         ),
                       )

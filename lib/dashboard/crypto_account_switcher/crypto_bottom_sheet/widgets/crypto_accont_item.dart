@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 
 class CryptoAccountItem extends StatelessWidget {
   const CryptoAccountItem({
-    Key? key,
+    super.key,
     required this.cryptoAccountData,
     required this.isSelected,
     required this.listIndex,
     required this.onPressed,
     required this.onEditButtonPressed,
-  }) : super(key: key);
+  });
 
   final CryptoAccountData cryptoAccountData;
   final bool isSelected;

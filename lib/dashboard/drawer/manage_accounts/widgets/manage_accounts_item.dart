@@ -9,12 +9,12 @@ import 'package:flutter/material.dart';
 
 class ManageAccountsItem extends StatelessWidget {
   const ManageAccountsItem({
-    Key? key,
+    super.key,
     required this.cryptoAccountData,
     required this.listIndex,
     required this.onPressed,
     required this.onEditButtonPressed,
-  }) : super(key: key);
+  });
 
   final CryptoAccountData cryptoAccountData;
   final int listIndex;

@@ -11,7 +11,7 @@ import 'package:key_generator/key_generator.dart';
 class ImportAccountStep1Page extends StatelessWidget {
   const ImportAccountStep1Page({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/importAccountStep1Page'),
       builder: (_) => const ImportAccountStep1Page(),

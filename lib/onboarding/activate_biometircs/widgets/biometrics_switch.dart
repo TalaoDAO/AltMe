@@ -10,7 +10,7 @@ class BiometricsSwitch extends StatelessWidget {
     this.onChange,
     required this.value,
   });
-  final Function(bool)? onChange;
+  final dynamic Function(bool)? onChange;
   final bool value;
 
   @override

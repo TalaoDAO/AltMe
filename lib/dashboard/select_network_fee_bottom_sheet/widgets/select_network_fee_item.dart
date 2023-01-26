@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 
 class SelectNetworkFeeItem extends StatelessWidget {
   const SelectNetworkFeeItem({
-    Key? key,
+    super.key,
     required this.networkFeeModel,
     required this.isSelected,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   final NetworkFeeModel networkFeeModel;
   final bool isSelected;

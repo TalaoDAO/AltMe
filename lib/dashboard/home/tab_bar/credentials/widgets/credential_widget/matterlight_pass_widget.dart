@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class MatterlightPassWidget extends StatelessWidget {
-  const MatterlightPassWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const MatterlightPassWidget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

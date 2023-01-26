@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class CredentialDetailTabbar extends StatelessWidget {
   const CredentialDetailTabbar({
-    Key? key,
+    super.key,
     required this.isSelected,
     required this.title,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final bool isSelected;
   final String title;

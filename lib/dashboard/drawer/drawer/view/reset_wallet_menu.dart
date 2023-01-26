@@ -11,7 +11,7 @@ import 'package:secure_storage/secure_storage.dart';
 class ResetWalletMenu extends StatelessWidget {
   const ResetWalletMenu({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       builder: (_) => const ResetWalletMenu(),
       settings: const RouteSettings(name: '/ResetWalletMenu'),

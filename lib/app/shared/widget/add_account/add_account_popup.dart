@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 
 class AddAccountPopUp extends StatefulWidget {
   const AddAccountPopUp({
-    Key? key,
+    super.key,
     this.defaultAccountName,
     required this.onCreateAccount,
     required this.onImportAccount,
-  }) : super(key: key);
+  });
 
   final String? defaultAccountName;
-  final Function(String) onImportAccount;
-  final Function(String) onCreateAccount;
+  final dynamic Function(String) onImportAccount;
+  final dynamic Function(String) onCreateAccount;
 
   @override
   State<AddAccountPopUp> createState() => _AddAccountPopUpState();

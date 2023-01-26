@@ -3,7 +3,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class MyAssetsText extends StatelessWidget {
-  const MyAssetsText({Key? key}) : super(key: key);
+  const MyAssetsText({super.key});
 
   @override
   Widget build(BuildContext context) {

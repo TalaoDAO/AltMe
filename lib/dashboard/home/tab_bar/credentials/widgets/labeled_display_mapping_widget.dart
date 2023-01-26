@@ -9,8 +9,8 @@ class LabeledDisplayMappingWidget extends StatelessWidget {
     required this.credentialModel,
     this.titleColor,
     this.valueColor,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final DisplayMapping displayMapping;
   final CredentialModel credentialModel;
   final Color? titleColor;

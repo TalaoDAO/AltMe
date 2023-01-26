@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class EmailPassWidget extends StatelessWidget {
-  const EmailPassWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const EmailPassWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 

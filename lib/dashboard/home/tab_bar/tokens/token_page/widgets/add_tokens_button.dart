@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class AddTokenButton extends StatelessWidget {
   const AddTokenButton({
-    Key? key,
+    super.key,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final VoidCallback? onTap;
 

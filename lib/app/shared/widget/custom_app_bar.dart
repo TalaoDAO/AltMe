@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends PreferredSize {
   CustomAppBar({
-    Key? key,
+    super.key,
     this.title,
     this.titleMargin = EdgeInsets.zero,
     this.leading,
     this.trailing,
     this.titleAlignment = Alignment.bottomCenter,
   }) : super(
-          key: key,
           child: Container(),
           preferredSize: const Size.fromHeight(Sizes.appBarHeight),
         );

@@ -140,7 +140,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             payload: encodedPayload,
           );
 
-          final Map response = await beacon.signPayloadResponse(
+          final Map<dynamic, dynamic> response =
+              await beacon.signPayloadResponse(
             id: beaconCubit.state.beaconRequest!.request!.id!,
             signature: signature,
             type: signingType,
@@ -210,11 +211,11 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
               break;
 
             case WCSignType.PERSONAL_MESSAGE:
-              const _messagePrefix = '\u0019Ethereum Signed Message:\n';
+              const messagePrefix = '\u0019Ethereum Signed Message:\n';
 
               final payloadBytes = hexToBytes(encodedPayload);
 
-              final prefix = _messagePrefix + payloadBytes.length.toString();
+              final prefix = messagePrefix + payloadBytes.length.toString();
               final prefixBytes = ascii.encode(prefix);
 
               final concatPayload =

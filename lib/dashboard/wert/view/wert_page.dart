@@ -15,7 +15,7 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 // #enddocregion platform_imports
 
 class WertPage extends StatelessWidget {
-  const WertPage({Key? key}) : super(key: key);
+  const WertPage({super.key});
 
   @override
   Widget build(BuildContext context) {

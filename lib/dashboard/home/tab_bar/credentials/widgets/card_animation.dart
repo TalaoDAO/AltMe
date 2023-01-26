@@ -4,19 +4,19 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 abstract class Recto extends StatelessWidget {
-  const Recto({Key? key}) : super(key: key);
+  const Recto({super.key});
 }
 
 abstract class Verso extends StatelessWidget {
-  const Verso({Key? key}) : super(key: key);
+  const Verso({super.key});
 }
 
 class CardAnimation extends StatefulWidget {
   const CardAnimation({
-    Key? key,
+    super.key,
     required this.recto,
     required this.verso,
-  }) : super(key: key);
+  });
 
   final Verso verso;
 

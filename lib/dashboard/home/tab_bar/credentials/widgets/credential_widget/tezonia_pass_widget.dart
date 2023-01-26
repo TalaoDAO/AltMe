@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class TezoniaPassWidget extends StatelessWidget {
-  const TezoniaPassWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const TezoniaPassWidget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

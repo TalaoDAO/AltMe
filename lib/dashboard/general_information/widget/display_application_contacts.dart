@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 class DisplayAltmeContacts extends StatelessWidget {
   const DisplayAltmeContacts({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

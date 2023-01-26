@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/author/author.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'phone_pass_model.g.dart';
@@ -10,13 +9,10 @@ class PhonePassModel extends CredentialSubjectModel {
   PhonePassModel({
     this.expires,
     this.phone,
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.phonePass,
           credentialCategory: CredentialCategory.identityCards,
         );

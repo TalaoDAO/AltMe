@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class ChooseAddAccountMethodPage extends StatelessWidget {
   const ChooseAddAccountMethodPage({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/chooseAddAccountMethodPage'),
       builder: (_) => const ChooseAddAccountMethodPage(),

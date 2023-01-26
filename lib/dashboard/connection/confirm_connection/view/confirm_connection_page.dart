@@ -11,13 +11,15 @@ import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class ConfirmConnectionPage extends StatelessWidget {
   const ConfirmConnectionPage({
-    Key? key,
+    super.key,
     required this.connectionBridgeType,
-  }) : super(key: key);
+  });
 
   final ConnectionBridgeType connectionBridgeType;
 
-  static Route route({required ConnectionBridgeType connectionBridgeType}) {
+  static Route<dynamic> route({
+    required ConnectionBridgeType connectionBridgeType,
+  }) {
     return MaterialPageRoute<void>(
       builder: (_) => ConfirmConnectionPage(
         connectionBridgeType: connectionBridgeType,
@@ -44,9 +46,9 @@ class ConfirmConnectionPage extends StatelessWidget {
 
 class ConfirmConnectionView extends StatelessWidget {
   const ConfirmConnectionView({
-    Key? key,
+    super.key,
     required this.connectionBridgeType,
-  }) : super(key: key);
+  });
 
   final ConnectionBridgeType connectionBridgeType;
 

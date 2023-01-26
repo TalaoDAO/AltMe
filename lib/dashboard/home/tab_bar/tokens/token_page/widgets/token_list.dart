@@ -6,18 +6,18 @@ typedef OnScrollEnded = Future<void> Function();
 
 class TokenList extends StatefulWidget {
   const TokenList({
-    Key? key,
+    super.key,
     required this.tokenList,
     required this.onRefresh,
     this.onScrollEnded,
     this.onItemTap,
     this.isSecure = false,
-  }) : super(key: key);
+  });
 
   final List<TokenModel> tokenList;
   final RefreshCallback onRefresh;
   final OnScrollEnded? onScrollEnded;
-  final Function(TokenModel)? onItemTap;
+  final dynamic Function(TokenModel)? onItemTap;
   final bool isSecure;
 
   @override

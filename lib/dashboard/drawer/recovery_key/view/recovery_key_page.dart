@@ -4,9 +4,9 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class RecoveryKeyPage extends StatelessWidget {
-  const RecoveryKeyPage({Key? key}) : super(key: key);
+  const RecoveryKeyPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (_) => const RecoveryKeyPage(),
         settings: const RouteSettings(name: '/recoveryKeyPage'),
       );
@@ -18,7 +18,7 @@ class RecoveryKeyPage extends StatelessWidget {
 }
 
 class RecoveryKeyView extends StatefulWidget {
-  const RecoveryKeyView({Key? key}) : super(key: key);
+  const RecoveryKeyView({super.key});
 
   @override
   State<RecoveryKeyView> createState() => _RecoveryKeyViewState();
@@ -37,9 +37,9 @@ class _RecoveryKeyViewState extends State<RecoveryKeyView>
       duration: const Duration(seconds: 10),
     );
 
-    final Tween<double> _rotationTween = Tween(begin: 20, end: 0);
+    final Tween<double> rotationTween = Tween(begin: 20, end: 0);
 
-    animation = _rotationTween.animate(animationController)
+    animation = rotationTween.animate(animationController)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           Navigator.pop(context);

@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 
 class _BaseItem extends StatefulWidget {
   const _BaseItem({
-    Key? key,
     required this.child,
     this.onTap,
     this.enabled = true,
     this.color = Colors.white,
     this.isCustom = false,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final VoidCallback? onTap;
@@ -35,11 +34,11 @@ class __BaseItemState extends State<_BaseItem> {
 
 class CredentialsListPageItem extends StatelessWidget {
   const CredentialsListPageItem({
-    Key? key,
+    super.key,
     required this.credentialModel,
     this.onTap,
     this.selected,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final VoidCallback? onTap;
@@ -96,11 +95,11 @@ class CredentialsListPageItem extends StatelessWidget {
 
 class CredentialIcon extends StatelessWidget {
   const CredentialIcon({
-    Key? key,
+    super.key,
     required this.iconData,
     this.color,
     this.size = 24,
-  }) : super(key: key);
+  });
 
   final IconData iconData;
   final Color? color;

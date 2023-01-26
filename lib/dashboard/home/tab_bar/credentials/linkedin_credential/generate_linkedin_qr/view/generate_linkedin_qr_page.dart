@@ -21,7 +21,7 @@ class GenerateLinkedinQrPage extends StatelessWidget {
   final CredentialModel credentialModel;
   final String linkedinUrl;
 
-  static Route route({
+  static Route<dynamic> route({
     required String linkedinUrl,
     required CredentialModel credentialModel,
   }) {
@@ -116,7 +116,7 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
               controller: screenshotController,
               child: AspectRatio(
                 aspectRatio: Sizes.linkedinBannerAspectRatio,
-                child: Container(
+                child: DecoratedBox(
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.fill,

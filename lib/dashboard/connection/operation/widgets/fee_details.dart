@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 class FeeDetails extends StatelessWidget {
   const FeeDetails({
-    Key? key,
+    super.key,
     required this.amount,
     required this.tokenUSDRate,
     required this.symbol,
     required this.fee,
-  }) : super(key: key);
+  });
 
   final double amount;
   final double tokenUSDRate;
