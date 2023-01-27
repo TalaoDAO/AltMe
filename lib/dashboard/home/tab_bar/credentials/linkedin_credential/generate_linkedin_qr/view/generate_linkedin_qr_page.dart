@@ -155,6 +155,8 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
         child: MyElevatedButton(
           text: l10n.exportToLinkedIn,
           onPressed: () async {
+            final log =
+                getLogger('GenerateLinkedinQrView - screenshotController');
             await screenshotController
                 .capture(delay: const Duration(milliseconds: 10))
                 .then((capturedImage) {
@@ -163,7 +165,7 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
                   .saveScreenshot(capturedImage!);
             }).catchError((dynamic onError) {
               if (kDebugMode) {
-                print(onError);
+                log.e(onError);
               }
             });
           },
