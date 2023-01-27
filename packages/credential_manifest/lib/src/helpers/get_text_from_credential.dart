@@ -8,7 +8,7 @@ List<String> getTextsFromCredential(
   try {
     final fieldsPath = JsonPath(jsonPath);
     fieldsPath.read(data).forEach((a) {
-      final value = a.value;
+      final dynamic value = a.value;
       if (value is String) {
         textList.add(value);
       }
