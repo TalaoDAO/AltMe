@@ -687,6 +687,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xFF5F556F),
       );
 
+  TextStyle get defaultDialogSubtitle => GoogleFonts.nunito(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: const Color(0xff180B2B),
+      );
+
   TextStyle get kycDialogTitle => GoogleFonts.nunito(
         fontSize: 25,
         fontWeight: FontWeight.bold,
