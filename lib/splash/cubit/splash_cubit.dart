@@ -98,6 +98,7 @@ class SplashCubit extends Cubit<SplashState> {
       state.copyWith(
         versionNumber: packageInfo.version,
         buildNumber: packageInfo.buildNumber,
+        isNewVersion: isNewVersion,
       ),
     );
   }
