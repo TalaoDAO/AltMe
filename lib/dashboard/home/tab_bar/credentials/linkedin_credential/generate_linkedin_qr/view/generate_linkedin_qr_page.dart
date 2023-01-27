@@ -164,9 +164,13 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
                   .read<GenerateLinkedInQrCubit>()
                   .saveScreenshot(capturedImage!);
             }).catchError((dynamic onError) {
-              if (kDebugMode) {
-                log.e(onError);
-              }
+              log.e(onError);
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: StateMessage.error(
+                  stringMessage: l10n.somethingsWentWrongTryAgainLater,
+                ),
+              );
             });
           },
         ),
