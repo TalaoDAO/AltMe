@@ -84,6 +84,7 @@ class Ebsi {
 
   /// getDidFromJwk
   String getDidFromJwk(Map<String, String> jwk) {
+    // final jwkKey = JsonWebKey.fromJson(jwk);
     final jwkKey = JsonWebKey.fromJson(jwk);
 
     final thumbprint = jwkKey.toBytes();
@@ -223,20 +224,40 @@ class Ebsi {
       'grant_type': 'authorization_code',
       'redirect_uri': credentialRequestReceived
     };
-    String accessToken = '';
-    String cNonce = '';
-    try {
-      final dynamic tokenResponse = await client.post(
-        tokenEndPoint,
-        options: Options(headers: tokenHeaders),
-        data: tokenData,
-      );
-      accessToken = tokenResponse.data['access_token'] as String;
-      cNonce = tokenResponse.data['c_nonce'] as String;
-    } catch (e) {
-      print('what the !!');
-    }
+    final response = await _getToken(tokenEndPoint, tokenHeaders, tokenData);
+    final accessToken = response.data['access_token'] as String;
+    final cNonce = response.data['c_nonce'] as String;
 
+    /// preparation before getting credential
+    String jwt = _getJwt(cNonce, issuer);
+
+    final jsonPathCredential = JsonPath(r'$..credential_endpoint');
+    final credentialEndpoint = jsonPathCredential
+        .readValues(openidConfigurationResponse.data)
+        .first as String;
+
+    final credentialHeaders = <String, dynamic>{
+      // 'Conformance': conformance,
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken'
+    };
+
+    final credentialData = <String, dynamic>{
+      'type': credentialType,
+      'format': 'jwt_vc',
+      'proof': {'proof_type': 'jwt', 'jwt': jwt}
+    };
+
+    final dynamic credentialResponse = await client.post(
+      credentialEndpoint,
+      options: Options(headers: credentialHeaders),
+      data: credentialData,
+    );
+
+    return credentialResponse.data;
+  }
+
+  String _getJwt(String cNonce, String issuer) {
     /// preparation before getting credential
     final keyDict = {
       'crv': 'P-256',
@@ -266,10 +287,10 @@ class Ebsi {
       'aud': issuer
     };
     final claims = new JsonWebTokenClaims.fromJson(payload);
-// create a builder, decoding the JWT in a JWS, so using a
+    // create a builder, decoding the JWT in a JWS, so using a
     // JsonWebSignatureBuilder
     final builder = new JsonWebSignatureBuilder();
-// set the content
+    // set the content
     builder.jsonContent = claims.toJson();
 
     builder.setProtectedHeader('typ', 'JWT');
@@ -288,30 +309,24 @@ class Ebsi {
     // output the compact serialization
     print('jwt compact serialization: ${jws.toCompactSerialization()}');
     final jwt = jws.toCompactSerialization();
+    return jwt;
+  }
 
-    final jsonPathCredential = JsonPath(r'$..credential_endpoint');
-    final credentialEndpoint = jsonPathCredential
-        .readValues(openidConfigurationResponse.data)
-        .first as String;
-
-    final credentialHeaders = <String, dynamic>{
-      // 'Conformance': conformance,
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken'
-    };
-
-    final credentialData = <String, dynamic>{
-      'type': credentialType,
-      'format': 'jwt_vc',
-      'proof': {'proof_type': 'jwt', 'jwt': jwt}
-    };
-
-    final dynamic credentialResponse = await client.post(
-      credentialEndpoint,
-      options: Options(headers: credentialHeaders),
-      data: credentialData,
-    );
-
-    return credentialResponse.data;
+  Future<dynamic> _getToken(
+    String tokenEndPoint,
+    Map<String, dynamic> tokenHeaders,
+    Map<String, dynamic> tokenData,
+  ) async {
+    try {
+      final dynamic tokenResponse = await client.post(
+        tokenEndPoint,
+        options: Options(headers: tokenHeaders),
+        data: tokenData,
+      );
+      return tokenResponse.data;
+    } catch (e) {
+      print('what the !!');
+      throw Exception(e);
+    }
   }
 }
