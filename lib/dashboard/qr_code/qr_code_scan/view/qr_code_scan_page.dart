@@ -72,7 +72,7 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
           icon: ValueListenableBuilder(
             valueListenable: scannerController.torchState,
             builder: (context, state, child) {
-              switch (state! as TorchState) {
+              switch (state) {
                 case TorchState.off:
                   return const Icon(Icons.flash_off, color: Colors.grey);
                 case TorchState.on:

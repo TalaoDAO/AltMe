@@ -7,6 +7,7 @@ class AppCupertinoTextSelectionControls extends CupertinoTextSelectionControls {
   });
   ValueChanged<TextSelectionDelegate> onPaste;
 
+
   @override
   Future<void> handlePaste(TextSelectionDelegate delegate) {
     onPaste(delegate);
