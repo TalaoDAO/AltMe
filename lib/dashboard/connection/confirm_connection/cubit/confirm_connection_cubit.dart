@@ -97,12 +97,10 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           }
 
           await dotenv.load();
-          final int WEB3_MAINNET_CHAIN_ID =
-              int.parse(dotenv.get('WEB3_MAINNET_CHAIN_ID'));
 
           wcClient.approveSession(
             accounts: walletAddresses,
-            chainId: WEB3_MAINNET_CHAIN_ID,
+            chainId: 1,
           );
 
           log.i('Connected to walletconnect');
@@ -116,7 +114,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
               peerId: wcClient.peerId!,
               remotePeerId: wcClient.remotePeerId!,
               remotePeerMeta: wcClient.remotePeerMeta!,
-              chainId: WEB3_MAINNET_CHAIN_ID,
+              chainId: 1,
             ),
           );
 

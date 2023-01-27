@@ -288,7 +288,7 @@ class OperationCubit extends Cubit<OperationState> {
 
           await dotenv.load();
           final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
-          final chainId = int.parse(dotenv.get('WEB3_MAINNET_CHAIN_ID'));
+          const chainId = 1;
 
           final String transactionHash =
               await MWeb3Client.sendEthereumTransaction(
