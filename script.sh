@@ -69,6 +69,32 @@ then
   fastlane beta
   cd ..
 
+elif [[ "$*" == *-pub* ]];
+then
+  fvm flutter pub get
+  cd packages/credential_manifest
+  flutter pub get
+  cd  ..
+  cd cryptocurrency_keys
+  flutter pub get
+  cd ..
+  cd did_kit
+  flutter pub get
+  cd ..
+  cd ebsi  
+  flutter pub get
+  cd ..
+  cd jwt_decode
+  flutter pub get 
+  cd ..
+  cd key_generator
+  flutter pub get
+  cd ..
+  cd secure_storage
+  flutter pub get
+  cd ..
+  cd tezos_key
+  flutter pub get
 else
   echo "build runner"
   fvm flutter clean
