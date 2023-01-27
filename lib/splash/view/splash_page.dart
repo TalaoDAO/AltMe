@@ -3,20 +3,18 @@ import 'dart:async';
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/deep_link/deep_link.dart';
+import 'package:altme/ebsi/add_ebsi_credential.dart';
 import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:credential_manifest/credential_manifest.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:dio/dio.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jose/jose.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:uni_links/uni_links.dart';
 
@@ -75,47 +73,11 @@ class _SplashViewState extends State<SplashView> {
             final ebsi = Ebsi(client);
             final dynamic encodedCredentialFromEbsi =
                 await ebsi.getCredential(uri);
-            var jws = JsonWebSignature.fromCompactSerialization(
-                encodedCredentialFromEbsi['credential'] as String);
-
-            final credentialFromEbsi =
-                jws.unverifiedPayload.jsonContent['vc'] as Map<String, dynamic>;
-            final Map<String, dynamic> newCredential =
-                Map<String, dynamic>.from(credentialFromEbsi);
-            newCredential['credentialPreview'] = credentialFromEbsi;
-            final String credentialSchema =
-                uri.queryParameters['credential_type'] ?? '';
-            final issuerAndCode = uri.queryParameters['issuer'];
-            final issuerAndCodeUri = Uri.parse(issuerAndCode!);
-            final issuer =
-                '${issuerAndCodeUri.scheme}://${issuerAndCodeUri.authority}${issuerAndCodeUri.path}';
-
-            final CredentialManifest credentialManifest =
-                await getCredentialManifest(
-              Dio(),
-              issuer,
-              credentialSchema,
+            await addEbsiCredential(
+              encodedCredentialFromEbsi,
+              uri,
+              context.read<WalletCubit>(),
             );
-            if (credentialManifest.outputDescriptors!.isNotEmpty) {
-              newCredential['credential_manifest'] = CredentialManifest(
-                credentialManifest.id,
-                credentialManifest.issuedBy,
-                credentialManifest.outputDescriptors,
-                credentialManifest.presentationDefinition,
-              ).toJson();
-            }
-
-            final credentialModel = CredentialModel.copyWithData(
-              oldCredentialModel: CredentialModel.fromJson(
-                newCredential,
-              ),
-              newData: credentialFromEbsi,
-              activities: [Activity(acquisitionAt: DateTime.now())],
-            );
-            // insert the credential in the wallet
-            await context
-                .read<WalletCubit>()
-                .insertCredential(credential: credentialModel);
           } else {
             String beaconData = '';
             bool isBeaconRequest = false;
@@ -138,7 +100,11 @@ class _SplashViewState extends State<SplashView> {
               if (uri.scheme == 'openid' &&
                   uri.authority == 'initiate_issuance') {
                 final DioClient client = DioClient('', Dio());
-                await initiateEbsiCredentialIssuance(uri.toString(), client);
+                await initiateEbsiCredentialIssuance(
+                  uri.toString(),
+                  client,
+                  context.read<WalletCubit>(),
+                );
               }
             });
             if (isBeaconRequest && beaconData != '') {

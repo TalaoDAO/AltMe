@@ -1,11 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
-import 'package:dart_bip32_bip44/dart_bip32_bip44.dart';
-import 'package:dart_web3/crypto.dart';
-import 'package:dart_web3/dart_web3.dart';
 import 'package:dio/dio.dart';
 import 'package:ed25519_hd_key/ed25519_hd_key.dart';
 import 'package:fast_base58/fast_base58.dart';
@@ -14,10 +10,7 @@ import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:secp256k1/secp256k1.dart';
 // ignore: implementation_imports
-import 'package:tezart/src/crypto/crypto.dart' as crypto hide Prefixes;
 // ignore: implementation_imports, unnecessary_import
-import 'package:tezart/src/crypto/crypto.dart' show Prefixes;
-import 'package:tezart/tezart.dart';
 
 /// {@template ebsi}
 /// EBSI wallet compliance
@@ -328,5 +321,64 @@ class Ebsi {
       print('what the !!');
       throw Exception(e);
     }
+  }
+
+  ///
+  Future<dynamic> getCredentialWithPreAuthorizedCode(
+      Uri credentialRequestReceived) async {
+    /// getting token
+    final tokenHeaders = <String, dynamic>{
+      'Content-Type': 'application/x-www-form-urlencoded'
+    };
+
+    final credentialType =
+        credentialRequestReceived.queryParameters['credential_type'];
+    final issuer = credentialRequestReceived.queryParameters['issuer'];
+    final opState = credentialRequestReceived.queryParameters['issuer'];
+    final preAuthorizedCode =
+        credentialRequestReceived.queryParameters['pre-authorized_code'];
+    final jsonPath = JsonPath(r'$..token_endpoint');
+    final openidConfigurationUrl = '$issuer/.well-known/openid-configuration';
+    final openidConfigurationResponse =
+        await client.get(openidConfigurationUrl);
+    final tokenEndPoint =
+        jsonPath.readValues(openidConfigurationResponse.data).first as String;
+
+    final tokenData = <String, dynamic>{
+      'pre-authorized_code': preAuthorizedCode,
+      'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
+    };
+
+    final response = await _getToken(tokenEndPoint, tokenHeaders, tokenData);
+    final accessToken = response['access_token'] as String;
+    final cNonce = response['c_nonce'] as String;
+
+    /// preparation before getting credential
+    final jwt = _getJwt(cNonce, issuer!);
+
+    final jsonPathCredential = JsonPath(r'$..credential_endpoint');
+    final credentialEndpoint = jsonPathCredential
+        .readValues(openidConfigurationResponse.data)
+        .first as String;
+
+    final credentialHeaders = <String, dynamic>{
+      // 'Conformance': conformance,
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken'
+    };
+
+    final credentialData = <String, dynamic>{
+      'type': credentialType,
+      'format': 'jwt_vc',
+      'proof': {'proof_type': 'jwt', 'jwt': jwt}
+    };
+
+    final dynamic credentialResponse = await client.post(
+      credentialEndpoint,
+      options: Options(headers: credentialHeaders),
+      data: credentialData,
+    );
+
+    return credentialResponse.data;
   }
 }
