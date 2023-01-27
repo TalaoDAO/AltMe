@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DidKey extends StatelessWidget {
-  const DidKey({Key? key}) : super(key: key);
+  const DidKey({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class DidKey extends StatelessWidget {
           children: [
             Text(
               '${l10n.didDisplayId} : ',
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             Expanded(
               child: Text(
@@ -26,7 +26,7 @@ class DidKey extends StatelessWidget {
                     : '',
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText2!
+                    .bodyMedium!
                     .copyWith(fontWeight: FontWeight.bold),
                 textAlign: TextAlign.start,
               ),

@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 
 class BeCarefulDialog extends StatelessWidget {
   const BeCarefulDialog({
-    Key? key,
+    super.key,
     this.onContinueClick,
     required this.title,
     this.subtitle,
     this.yes,
     this.no,
-  }) : super(key: key);
+  });
 
   final VoidCallback? onContinueClick;
   final String title;
@@ -64,7 +64,7 @@ class BeCarefulDialog extends StatelessWidget {
           ),
           Text(
             l10n.beCareful,
-            style: Theme.of(context).textTheme.caption2,
+            style: Theme.of(context).textTheme.bodySmall2,
           ),
           const SizedBox(height: Sizes.spaceSmall),
           Text(

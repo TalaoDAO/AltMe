@@ -3,7 +3,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class MyCollectionText extends StatelessWidget {
-  const MyCollectionText({Key? key}) : super(key: key);
+  const MyCollectionText({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class DisplayNameCard extends StatelessWidget {
   const DisplayNameCard({
-    Key? key,
+    super.key,
     required this.credentialModel,
     required this.style,
-  }) : super(key: key);
+  });
   final CredentialModel credentialModel;
   final TextStyle style;
 
@@ -23,17 +23,17 @@ class DisplayNameCard extends StatelessWidget {
   }
 
   String getName(BuildContext context) {
-    var _nameValue = GetTranslation.getTranslation(
+    var nameValue = GetTranslation.getTranslation(
       credentialModel.credentialPreview.name,
       context.l10n,
     );
-    if (_nameValue == '') {
-      _nameValue = credentialModel.display.nameFallback;
+    if (nameValue == '') {
+      nameValue = credentialModel.display.nameFallback;
     }
-    if (_nameValue == '') {
-      _nameValue = credentialModel.credentialPreview.type.last;
+    if (nameValue == '') {
+      nameValue = credentialModel.credentialPreview.type.last;
     }
 
-    return _nameValue;
+    return nameValue;
   }
 }

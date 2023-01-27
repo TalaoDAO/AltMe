@@ -7,10 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectNetworkFeeBottomSheet extends StatelessWidget {
   const SelectNetworkFeeBottomSheet({
-    Key? key,
+    super.key,
     required this.selectedNetworkFee,
     required this.networkFeeList,
-  }) : super(key: key);
+  });
 
   final NetworkFeeModel selectedNetworkFee;
   final List<NetworkFeeModel> networkFeeList;
@@ -48,7 +48,7 @@ class SelectNetworkFeeBottomSheet extends StatelessWidget {
 }
 
 class _SelectNetworkFeeBottomSheetView extends StatefulWidget {
-  const _SelectNetworkFeeBottomSheetView({Key? key}) : super(key: key);
+  const _SelectNetworkFeeBottomSheetView();
 
   @override
   State<_SelectNetworkFeeBottomSheetView> createState() =>
@@ -60,7 +60,7 @@ class _SelectNetworkFeeBottomSheetViewState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         boxShadow: [

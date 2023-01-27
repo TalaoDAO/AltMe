@@ -101,7 +101,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         currentPeerMeta = dAppPeerMeta;
 
         log.i('dAppPeerId: $currentPeerId');
-        log.i('currentDAppPeerMeta: ${currentPeerMeta.toString()}');
+        log.i('currentDAppPeerMeta: $currentPeerMeta');
         emit(
           state.copyWith(
             sessionId: id,
@@ -118,7 +118,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         log.i('data: ${message.data}');
         log.i('type: ${message.type}');
         log.i('dAppPeerId: $currentPeerId');
-        log.i('currentDAppPeerMeta: ${currentPeerMeta.toString()}');
+        log.i('currentDAppPeerMeta: $currentPeerMeta');
 
         switch (message.type) {
           case WCSignType.MESSAGE:
@@ -148,7 +148,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         log.i('id: $id');
         log.i('tx: $transaction');
         log.i('dAppPeerId: $currentPeerId');
-        log.i('currentDAppPeerMeta: ${currentPeerMeta.toString()}');
+        log.i('currentDAppPeerMeta: $currentPeerMeta');
         emit(
           state.copyWith(
             signId: id,

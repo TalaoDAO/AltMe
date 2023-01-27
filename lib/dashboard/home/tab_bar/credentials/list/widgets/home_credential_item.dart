@@ -7,10 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeCredentialItem extends StatelessWidget {
   const HomeCredentialItem({
-    Key? key,
+    super.key,
     required this.homeCredential,
     required this.fromDiscover,
-  }) : super(key: key);
+  });
 
   final HomeCredential homeCredential;
   final bool fromDiscover;
@@ -27,8 +27,7 @@ class HomeCredentialItem extends StatelessWidget {
 }
 
 class RealCredentialItem extends StatelessWidget {
-  const RealCredentialItem({Key? key, required this.credentialModel})
-      : super(key: key);
+  const RealCredentialItem({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
@@ -42,9 +41,7 @@ class RealCredentialItem extends StatelessWidget {
             CredentialsDetailsPage.route(credentialModel: credentialModel),
           );
         },
-        child: CredentialsListPageItem(
-          credentialModel: credentialModel,
-        ),
+        child: CredentialsListPageItem(credentialModel: credentialModel),
       ),
     );
   }
@@ -52,10 +49,10 @@ class RealCredentialItem extends StatelessWidget {
 
 class DummyCredentialItem extends StatelessWidget {
   const DummyCredentialItem({
-    Key? key,
+    super.key,
     required this.homeCredential,
     required this.fromDiscover,
-  }) : super(key: key);
+  });
 
   final HomeCredential homeCredential;
   final bool fromDiscover;
@@ -93,40 +90,33 @@ class DummyCredentialItem extends StatelessWidget {
             ),
           );
         },
-        child: Column(
-          children: [
-            Expanded(
-              flex: 8,
-              child: CredentialImage(
-                image: homeCredential.image!,
-                child: homeCredential.dummyDescription == null
-                    ? null
-                    : CustomMultiChildLayout(
-                        delegate: DummyCredentialItemDelegate(
-                          position: Offset.zero,
-                        ),
-                        children: [
-                          LayoutId(
-                            id: 'dummyDesc',
-                            child: FractionallySizedBox(
-                              widthFactor: 0.85,
-                              heightFactor: 0.42,
-                              child: Text(
-                                homeCredential.dummyDescription!.getMessage(
-                                  context,
-                                  homeCredential.dummyDescription!,
-                                ),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .discoverOverlayDescription,
-                              ),
-                            ),
+        child: CredentialImage(
+          image: homeCredential.image!,
+          child: homeCredential.dummyDescription == null
+              ? null
+              : CustomMultiChildLayout(
+                  delegate: DummyCredentialItemDelegate(
+                    position: Offset.zero,
+                  ),
+                  children: [
+                    LayoutId(
+                      id: 'dummyDesc',
+                      child: FractionallySizedBox(
+                        widthFactor: 0.85,
+                        heightFactor: 0.42,
+                        child: Text(
+                          homeCredential.dummyDescription!.getMessage(
+                            context,
+                            homeCredential.dummyDescription!,
                           ),
-                        ],
+                          style: Theme.of(context)
+                              .textTheme
+                              .discoverOverlayDescription,
+                        ),
                       ),
-              ),
-            ),
-          ],
+                    ),
+                  ],
+                ),
         ),
       ),
     );

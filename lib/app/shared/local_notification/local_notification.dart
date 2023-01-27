@@ -21,12 +21,20 @@ class LocalNotification {
   Future<void> init() async {
     await _configureLocalTimeZone();
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iOS = IOSInitializationSettings();
+    const iOS = DarwinInitializationSettings();
     const initSettings = InitializationSettings(android: android, iOS: iOS);
 
     await flutterLocalNotificationsPlugin.initialize(
       initSettings,
-      onSelectNotification: _onSelectNotification,
+      onDidReceiveNotificationResponse:
+          (NotificationResponse notificationResponse) {
+        switch (notificationResponse.notificationResponseType) {
+          case NotificationResponseType.selectedNotification:
+          case NotificationResponseType.selectedNotificationAction:
+            _onSelectNotification(notificationResponse.payload);
+            break;
+        }
+      },
     );
   }
 
@@ -51,7 +59,7 @@ class LocalNotification {
       priority: Priority.high,
       importance: Importance.max,
     );
-    const iOS = IOSNotificationDetails();
+    const iOS = DarwinNotificationDetails();
     const platform = NotificationDetails(android: android, iOS: iOS);
 
     await flutterLocalNotificationsPlugin.show(

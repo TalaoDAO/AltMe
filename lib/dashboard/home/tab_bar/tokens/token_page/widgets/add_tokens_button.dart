@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class AddTokenButton extends StatelessWidget {
   const AddTokenButton({
-    Key? key,
+    super.key,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final VoidCallback? onTap;
 
@@ -29,7 +29,7 @@ class AddTokenButton extends StatelessWidget {
             ),
             Text(
               l10n.addTokens,
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ],
         ),

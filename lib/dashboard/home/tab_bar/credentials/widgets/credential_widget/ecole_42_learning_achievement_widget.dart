@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 
 class Ecole42LearningAchievementWidget extends StatelessWidget {
   const Ecole42LearningAchievementWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 
@@ -91,7 +91,7 @@ class Ecole42LearningAchievementWidget extends StatelessWidget {
               children: [
                 Text(
                   '${l10n.evidenceLabel}: ',
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(width: 5),
                 Flexible(
@@ -103,7 +103,7 @@ class Ecole42LearningAchievementWidget extends StatelessWidget {
                     },
                     child: Text(
                       evidenceText,
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: Theme.of(context).colorScheme.markDownA,
                             decoration: TextDecoration.underline,
                           ),

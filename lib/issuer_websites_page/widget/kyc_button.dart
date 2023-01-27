@@ -8,8 +8,8 @@ import 'package:passbase_flutter/passbase_flutter.dart';
 
 class KYCButton extends StatelessWidget {
   const KYCButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class KYCButton extends StatelessWidget {
                   ),
                   title: Text(
                     l10n.needEmailPass,
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,

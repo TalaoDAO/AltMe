@@ -4,8 +4,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 class AppVersionDrawer extends StatelessWidget {
   const AppVersionDrawer({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class AppVersionDrawer extends StatelessWidget {
 
               return Text(
                 'Version $version ($buildNumber)',
-                style: Theme.of(context).textTheme.caption2,
+                style: Theme.of(context).textTheme.bodySmall2,
               );
             case ConnectionState.waiting:
             case ConnectionState.none:

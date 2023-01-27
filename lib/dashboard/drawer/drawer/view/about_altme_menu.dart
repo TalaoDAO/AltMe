@@ -8,7 +8,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 class AboutAltmeMenu extends StatelessWidget {
   const AboutAltmeMenu({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       builder: (_) => const AboutAltmeMenu(),
       settings: const RouteSettings(name: '/AboutAltmeMenu'),

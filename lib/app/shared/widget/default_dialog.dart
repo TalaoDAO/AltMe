@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 class DefaultDialog extends StatelessWidget {
   const DefaultDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     this.buttonLabel,
     this.onButtonClick,
-  }) : super(key: key);
+  });
 
   final String title;
   final String description;

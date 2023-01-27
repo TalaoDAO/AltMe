@@ -3,9 +3,9 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class SupportPage extends StatelessWidget {
-  const SupportPage({Key? key}) : super(key: key);
+  const SupportPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (_) => const SupportPage(),
         settings: const RouteSettings(name: '/supportPage'),
       );

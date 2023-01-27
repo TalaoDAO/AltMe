@@ -9,8 +9,8 @@ class DisplayTitleWidget extends StatelessWidget {
     this.displayMapping,
     required this.credentialModel,
     this.textColor,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final DisplayMapping? displayMapping;
   final CredentialModel credentialModel;
   final Color? textColor;

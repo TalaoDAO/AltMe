@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class BloometaPassWidget extends StatelessWidget {
-  const BloometaPassWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const BloometaPassWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 

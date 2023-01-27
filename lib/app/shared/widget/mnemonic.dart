@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class MnemonicDisplay extends StatelessWidget {
   const MnemonicDisplay({
-    Key? key,
+    super.key,
     required this.mnemonic,
-  }) : super(key: key);
+  });
 
   final List<String> mnemonic;
 

@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 
 class StudentCardWidget extends StatelessWidget {
   const StudentCardWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 
@@ -26,8 +26,7 @@ class StudentCardWidget extends StatelessWidget {
 }
 
 class StudentCardRecto extends Recto {
-  const StudentCardRecto({Key? key, required this.credentialModel})
-      : super(key: key);
+  const StudentCardRecto({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override
@@ -88,9 +87,9 @@ class StudentCardRecto extends Recto {
 
 class StudentCardVerso extends Verso {
   const StudentCardVerso({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 

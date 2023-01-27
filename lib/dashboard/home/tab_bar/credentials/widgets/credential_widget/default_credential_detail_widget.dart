@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 
 class DefaultCredentialDetailWidget extends StatelessWidget {
   const DefaultCredentialDetailWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
     required this.showBgDecoration,
     required this.fromCredentialOffer,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final bool showBgDecoration;
@@ -34,7 +34,7 @@ class DefaultCredentialDetailWidget extends StatelessWidget {
       if (fromCredentialOffer) {
         return AspectRatio(
           aspectRatio: Sizes.credentialAspectRatio,
-          child: Container(
+          child: DecoratedBox(
             decoration: BaseBoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: getColorFromCredential(
@@ -61,7 +61,7 @@ class DefaultCredentialDetailWidget extends StatelessWidget {
       return CredentialContainer(
         child: AspectRatio(
           aspectRatio: Sizes.credentialAspectRatio,
-          child: Container(
+          child: DecoratedBox(
             decoration: BaseBoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: getColorFromCredential(

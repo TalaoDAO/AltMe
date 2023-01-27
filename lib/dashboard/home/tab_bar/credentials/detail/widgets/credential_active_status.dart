@@ -4,8 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CredentialActiveStatus extends StatelessWidget {
-  const CredentialActiveStatus({Key? key, required this.credentialStatus})
-      : super(key: key);
+  const CredentialActiveStatus({super.key, required this.credentialStatus});
 
   final CredentialStatus credentialStatus;
 

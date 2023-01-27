@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class IdentityPassWidget extends StatelessWidget {
   const IdentityPassWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 

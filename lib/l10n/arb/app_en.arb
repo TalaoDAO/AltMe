@@ -786,5 +786,7 @@
   "linkedInBanner": "Linkedin Banner",  
   "linkedInProfile": "Linkedin Profile",
   "checkLinkedinProfile":"Check a Linkedin Profile", 
-  "scanAndDisplay":"Scan and Display" 
+  "scanAndDisplay":"Scan and Display",
+  "whatsNew": "What's New",
+  "okGotIt": "OK, GOT IT!"
 }

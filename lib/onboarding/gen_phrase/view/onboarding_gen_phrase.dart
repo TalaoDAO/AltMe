@@ -13,9 +13,9 @@ import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingGenPhrasePage extends StatelessWidget {
-  const OnBoardingGenPhrasePage({Key? key}) : super(key: key);
+  const OnBoardingGenPhrasePage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (context) => const OnBoardingGenPhrasePage(),
         settings: const RouteSettings(name: '/onBoardingGenPhrasePage'),
       );
@@ -37,7 +37,7 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
 }
 
 class OnBoardingGenPhraseView extends StatefulWidget {
-  const OnBoardingGenPhraseView({Key? key}) : super(key: key);
+  const OnBoardingGenPhraseView({super.key});
 
   @override
   State<OnBoardingGenPhraseView> createState() =>
@@ -110,7 +110,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                         child: Text(
                           l10n.onboardingPleaseStoreMessage,
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline5,
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
                       const SizedBox(height: Sizes.spaceNormal),

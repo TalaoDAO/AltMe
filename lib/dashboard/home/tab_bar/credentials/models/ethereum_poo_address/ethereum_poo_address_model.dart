@@ -8,13 +8,10 @@ part 'ethereum_poo_address_model.g.dart';
 class EthereumPooAddressModel extends CredentialSubjectModel {
   EthereumPooAddressModel({
     this.associatedAddress,
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.ethereumPooAddress,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
         );

@@ -13,7 +13,7 @@ class GetLinkedinInfoPage extends StatelessWidget {
 
   final CredentialModel credentialModel;
 
-  static Route route({required CredentialModel credentialModel}) {
+  static Route<dynamic> route({required CredentialModel credentialModel}) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/GetLinkedinInfoPage'),
       builder: (_) => GetLinkedinInfoPage(credentialModel: credentialModel),

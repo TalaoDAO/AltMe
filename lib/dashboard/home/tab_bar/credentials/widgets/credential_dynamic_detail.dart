@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 
 class CredentialDynamicDetial extends StatelessWidget {
   const CredentialDynamicDetial({
-    Key? key,
+    super.key,
     required this.title,
     required this.value,
     this.titleColor,
     this.valueColor,
     this.padding = const EdgeInsets.all(8),
     required this.format,
-  }) : super(key: key);
+  });
 
   final String? title;
   final String value;

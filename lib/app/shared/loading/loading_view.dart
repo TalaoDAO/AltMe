@@ -32,8 +32,8 @@ class LoadingView {
     required BuildContext context,
     required String text,
   }) {
-    final _text = StreamController<String>();
-    _text.add(text);
+    final textController = StreamController<String>();
+    textController.add(text);
 
     final state = Overlay.of(context);
     // ignore: cast_nullable_to_non_nullable
@@ -67,7 +67,7 @@ class LoadingView {
                       const AltMeLogo(size: Sizes.logoNormal),
                       const SizedBox(height: 20),
                       StreamBuilder(
-                        stream: _text.stream,
+                        stream: textController.stream,
                         builder: (context, snapshopt) {
                           if (snapshopt.hasData) {
                             return Text(
@@ -90,16 +90,16 @@ class LoadingView {
       },
     );
 
-    state?.insert(overlay);
+    state.insert(overlay);
 
     return LoadingViewController(
       close: () {
-        _text.close();
+        textController.close();
         overlay.remove();
         return true;
       },
       update: (text) {
-        _text.add(text);
+        textController.add(text);
         return true;
       },
     );

@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 
 class PooAddressBaseWidget extends StatelessWidget {
   const PooAddressBaseWidget({
-    Key? key,
+    super.key,
     required this.name,
     required this.walletAddress,
     required this.image,
     required this.issuerName,
     required this.issuedOn,
-  }) : super(key: key);
+  });
 
   final String name;
   final String walletAddress;

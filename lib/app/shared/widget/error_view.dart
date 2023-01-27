@@ -4,8 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class ErrorView extends StatelessWidget {
-  const ErrorView({Key? key, required this.message, required this.onTap})
-      : super(key: key);
+  const ErrorView({super.key, required this.message, required this.onTap});
 
   final String message;
   final VoidCallback onTap;

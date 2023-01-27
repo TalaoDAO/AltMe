@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class MyRichText extends StatelessWidget {
   const MyRichText({
-    Key? key,
+    super.key,
     required this.text,
     this.style,
     this.maxLines = 1,
-  }) : super(key: key);
+  });
 
   final TextSpan text;
   final TextStyle? style;
@@ -15,7 +15,7 @@ class MyRichText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style ?? Theme.of(context).textTheme.subtitle1;
+    final style = this.style ?? Theme.of(context).textTheme.titleMedium;
     return AutoSizeText.rich(
       text,
       minFontSize: 0,

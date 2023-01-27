@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 
 class SoftwareLicenseDetailsPage extends StatelessWidget {
   const SoftwareLicenseDetailsPage({
-    Key? key,
+    super.key,
     required this.licenseModel,
-  }) : super(key: key);
+  });
 
   final LicenseModel licenseModel;
 
-  static Route route({required LicenseModel licenseModel}) {
+  static Route<dynamic> route({required LicenseModel licenseModel}) {
     return MaterialPageRoute<void>(
       builder: (_) => SoftwareLicenseDetailsPage(licenseModel: licenseModel),
       settings: const RouteSettings(name: '/SoftwareLicenseDetailsPage'),
@@ -26,9 +26,9 @@ class SoftwareLicenseDetailsPage extends StatelessWidget {
 
 class SoftwareLicenseDetailsView extends StatelessWidget {
   const SoftwareLicenseDetailsView({
-    Key? key,
+    super.key,
     required this.licenseModel,
-  }) : super(key: key);
+  });
 
   final LicenseModel licenseModel;
 

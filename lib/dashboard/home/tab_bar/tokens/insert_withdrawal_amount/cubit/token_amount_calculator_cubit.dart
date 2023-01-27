@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:altme/app/logger/logger.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
@@ -68,10 +66,5 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     } catch (e) {
       return false;
     }
-  }
-
-  @override
-  Future<void> close() {
-    return super.close();
   }
 }

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class CredentialDisplay extends StatelessWidget {
   const CredentialDisplay({
-    Key? key,
+    super.key,
     required this.credentialModel,
     required this.credDisplayType,
     this.fromCredentialOffer,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final bool? fromCredentialOffer;

@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class TrooperzPassWidget extends StatelessWidget {
-  const TrooperzPassWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const TrooperzPassWidget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

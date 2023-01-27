@@ -8,9 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectAccount extends StatelessWidget {
   const SelectAccount({
-    Key? key,
+    super.key,
     required this.blockchainType,
-  }) : super(key: key);
+  });
 
   final BlockchainType blockchainType;
 

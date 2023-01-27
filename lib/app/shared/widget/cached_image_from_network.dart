@@ -6,13 +6,13 @@ import 'package:flutter_svg/svg.dart';
 class CachedImageFromNetwork extends StatelessWidget {
   const CachedImageFromNetwork(
     this.url, {
-    Key? key,
+    super.key,
     this.fit = BoxFit.cover,
     this.width,
     this.height,
     this.borderRadius,
     this.errorMessage,
-  }) : super(key: key);
+  });
 
   final String url;
   final BoxFit fit;
@@ -61,7 +61,7 @@ class CachedImageFromNetwork extends StatelessWidget {
                       : ErrorWidget(errorMessage: errorMessage);
                 },
                 errorWidget: (context, error, dynamic _) => errorMessage == null
-                    ? Container(
+                    ? ColoredBox(
                         color: Theme.of(context).colorScheme.lightGrey,
                         child: Icon(
                           Icons.error,
@@ -77,15 +77,15 @@ class CachedImageFromNetwork extends StatelessWidget {
 
 class ErrorWidget extends StatelessWidget {
   const ErrorWidget({
-    Key? key,
+    super.key,
     required this.errorMessage,
-  }) : super(key: key);
+  });
 
   final String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [

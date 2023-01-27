@@ -7,15 +7,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EnterNewPinCodePage extends StatelessWidget {
   const EnterNewPinCodePage({
-    Key? key,
+    super.key,
     required this.isValidCallback,
     required this.isFromOnboarding,
-  }) : super(key: key);
+  });
 
   final VoidCallback isValidCallback;
   final bool isFromOnboarding;
 
-  static Route route({
+  static Route<dynamic> route({
     required VoidCallback isValidCallback,
     required bool isFromOnboarding,
     bool restrictToBack = true,
@@ -42,10 +42,10 @@ class EnterNewPinCodePage extends StatelessWidget {
 
 class EnterNewPinCodeView extends StatefulWidget {
   const EnterNewPinCodeView({
-    Key? key,
+    super.key,
     required this.isValidCallback,
     required this.isFromOnboarding,
-  }) : super(key: key);
+  });
 
   final VoidCallback isValidCallback;
   final bool isFromOnboarding;
@@ -84,11 +84,11 @@ class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
             : null,
         deleteButton: Text(
           l10n.delete,
-          style: Theme.of(context).textTheme.button,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
         cancelButton: Text(
           l10n.cancel,
-          style: Theme.of(context).textTheme.button,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
         cancelCallback: _onPasscodeCancelled,
       ),

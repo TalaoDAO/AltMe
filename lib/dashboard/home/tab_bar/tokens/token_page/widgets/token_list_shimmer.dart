@@ -2,7 +2,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class TokenListShimmer extends StatelessWidget {
-  const TokenListShimmer({Key? key}) : super(key: key);
+  const TokenListShimmer({super.key});
 
   @override
   Widget build(BuildContext context) {

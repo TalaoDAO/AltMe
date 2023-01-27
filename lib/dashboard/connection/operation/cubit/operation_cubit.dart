@@ -96,10 +96,18 @@ class OperationCubit extends Cubit<OperationState> {
         case ConnectionBridgeType.walletconnect:
           final WCEthereumTransaction transaction =
               walletConnectCubit.state.transaction!;
-          final EtherAmount ethAmount = EtherAmount.fromUnitAndValue(
-            EtherUnit.wei,
-            transaction.value ?? 0,
-          );
+
+          late EtherAmount ethAmount;
+
+          if (transaction.value != null) {
+            ethAmount = EtherAmount.fromBase10String(
+              EtherUnit.wei,
+              transaction.value!,
+            );
+          } else {
+            ethAmount = EtherAmount.fromInt(EtherUnit.wei, 0);
+          }
+
           amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
 
           await dotenv.load();
@@ -227,7 +235,7 @@ class OperationCubit extends Cubit<OperationState> {
           final transactionHash = operationList.result.id;
           log.i('transactionHash - $transactionHash');
 
-          final Map response = await beacon.operationResponse(
+          final Map<dynamic, dynamic> response = await beacon.operationResponse(
             id: beaconCubit.state.beaconRequest!.request!.id!,
             transactionHash: transactionHash,
           );
@@ -266,14 +274,21 @@ class OperationCubit extends Cubit<OperationState> {
 
           final WCEthereumTransaction transaction =
               walletConnectCubit.state.transaction!;
-          final EtherAmount ethAmount = EtherAmount.fromUnitAndValue(
-            EtherUnit.wei,
-            transaction.value ?? 0,
-          );
+
+          late EtherAmount ethAmount;
+
+          if (transaction.value != null) {
+            ethAmount = EtherAmount.fromBase10String(
+              EtherUnit.wei,
+              transaction.value!,
+            );
+          } else {
+            ethAmount = EtherAmount.fromInt(EtherUnit.wei, 0);
+          }
 
           await dotenv.load();
           final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
-          final chainId = int.parse(dotenv.get('WEB3_MAINNET_CHAIN_ID'));
+          const chainId = 1;
 
           final String transactionHash =
               await MWeb3Client.sendEthereumTransaction(
@@ -487,7 +502,7 @@ class OperationCubit extends Cubit<OperationState> {
       if (e is MessageHandler) {
         rethrow;
       } else if (e is TezartNodeError) {
-        log.e('e: ${e.toString()} , metadata: ${e.metadata} , s: $s');
+        log.e('e: $e , metadata: ${e.metadata} , s: $s');
         rethrow;
       } else {
         throw ResponseMessage(

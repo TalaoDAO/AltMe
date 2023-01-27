@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class DiscoverCredentialList extends StatelessWidget {
   const DiscoverCredentialList({
-    Key? key,
+    super.key,
     required this.state,
     required this.onRefresh,
-  }) : super(key: key);
+  });
 
   final CredentialListState state;
   final RefreshCallback onRefresh;

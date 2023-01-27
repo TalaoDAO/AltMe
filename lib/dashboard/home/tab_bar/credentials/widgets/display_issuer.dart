@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class DisplayIssuer extends StatelessWidget {
   const DisplayIssuer({
-    Key? key,
+    super.key,
     required this.issuer,
-  }) : super(key: key);
+  });
 
   final Author issuer;
 

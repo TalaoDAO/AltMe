@@ -7,13 +7,10 @@ part 'passport_footprint_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class PassportFootprintModel extends CredentialSubjectModel {
   PassportFootprintModel({
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.passportFootprint,
           credentialCategory: CredentialCategory.identityCards,
         );

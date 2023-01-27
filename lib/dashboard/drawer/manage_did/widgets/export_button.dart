@@ -4,7 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class ExportButton extends StatelessWidget {
-  const ExportButton({Key? key, this.onTap}) : super(key: key);
+  const ExportButton({super.key, this.onTap});
 
   final VoidCallback? onTap;
 

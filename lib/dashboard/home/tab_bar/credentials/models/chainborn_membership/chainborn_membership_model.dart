@@ -7,13 +7,10 @@ part 'chainborn_membership_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class ChainbornMembershipModel extends CredentialSubjectModel {
   ChainbornMembershipModel({
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.chainbornMembership,
           credentialCategory: CredentialCategory.gamingCards,
         );

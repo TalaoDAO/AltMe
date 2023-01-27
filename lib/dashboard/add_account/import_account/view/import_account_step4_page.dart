@@ -15,7 +15,9 @@ class ImportAccountStep4Page extends StatelessWidget {
 
   final ImportAccountCubit importAccountCubit;
 
-  static Route route({required ImportAccountCubit importAccountCubit}) {
+  static Route<dynamic> route({
+    required ImportAccountCubit importAccountCubit,
+  }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/importAccountStep4Page'),
       builder: (_) => ImportAccountStep4Page(
@@ -105,7 +107,7 @@ class _ImportAccountStep4ViewState extends State<ImportAccountStep4View> {
             Text(
               l10n.setAccountNameDescription,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.caption3,
+              style: Theme.of(context).textTheme.bodySmall3,
             ),
             const SizedBox(
               height: Sizes.spaceNormal,

@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GeneralInformationPage extends StatelessWidget {
-  const GeneralInformationPage({Key? key}) : super(key: key);
+  const GeneralInformationPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (_) => const GeneralInformationPage(),
         settings: const RouteSettings(name: '/globalInformationPage'),
       );
@@ -32,7 +32,7 @@ class GeneralInformationPage extends StatelessWidget {
           Center(
             child: Text(
               'DIDKit v${context.read<DIDCubit>().didKitProvider.getVersion()}',
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           const SizedBox(height: 16),

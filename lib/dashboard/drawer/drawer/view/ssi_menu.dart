@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class SSIMenu extends StatelessWidget {
   const SSIMenu({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/ssiMenu'),
       builder: (_) => const SSIMenu(),

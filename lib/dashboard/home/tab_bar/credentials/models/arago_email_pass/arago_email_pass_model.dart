@@ -9,14 +9,11 @@ class AragoEmailPassModel extends CredentialSubjectModel {
   AragoEmailPassModel({
     this.expires,
     this.email,
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
     this.passbaseMetadata,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.aragoEmailPass,
           credentialCategory: CredentialCategory.passCards,
         );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class MyGradientButton extends StatelessWidget {
   const MyGradientButton({
-    Key? key,
+    super.key,
     required this.text,
     this.icon,
     this.borderRadius = 18,
@@ -13,10 +13,10 @@ class MyGradientButton extends StatelessWidget {
     this.gradient,
     this.onPressed,
     this.upperCase = true,
-  }) : super(key: key);
+  });
 
   const MyGradientButton.icon({
-    Key? key,
+    super.key,
     required this.text,
     required this.icon,
     this.borderRadius = 20,
@@ -26,7 +26,7 @@ class MyGradientButton extends StatelessWidget {
     this.gradient,
     this.onPressed,
     this.upperCase = true,
-  }) : super(key: key);
+  });
 
   final String text;
   final double elevation;
@@ -52,7 +52,7 @@ class MyGradientButton extends StatelessWidget {
         );
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
           gradient: onPressed == null ? null : gradientValue,
@@ -116,12 +116,12 @@ ButtonStyle gradientStyleFrom({
 
 class GradientButtonText extends StatelessWidget {
   const GradientButtonText({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
     this.fontSize = 18,
     required this.upperCase,
-  }) : super(key: key);
+  });
 
   final String text;
   final GestureTapCallback? onPressed;

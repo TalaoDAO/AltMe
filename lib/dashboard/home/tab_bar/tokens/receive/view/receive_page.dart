@@ -8,13 +8,13 @@ import 'package:share_plus/share_plus.dart';
 
 class ReceivePage extends StatelessWidget {
   const ReceivePage({
-    Key? key,
+    super.key,
     required this.accountAddress,
     required this.item,
     required this.description,
-  }) : super(key: key);
+  });
 
-  static Route route({
+  static Route<dynamic> route({
     required String accountAddress,
     required String item,
     required String description,
@@ -96,7 +96,7 @@ class ReceivePage extends StatelessWidget {
                 Text(
                   description,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.caption2,
+                  style: Theme.of(context).textTheme.bodySmall2,
                 ),
                 const SizedBox(
                   height: Sizes.spaceXLarge,

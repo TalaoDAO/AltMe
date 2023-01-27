@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class AragoPassWidget extends StatelessWidget {
-  const AragoPassWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const AragoPassWidget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

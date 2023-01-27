@@ -13,9 +13,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class SubmitEnterpriseUserPage extends StatelessWidget {
-  const SubmitEnterpriseUserPage({Key? key}) : super(key: key);
+  const SubmitEnterpriseUserPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (context) => const SubmitEnterpriseUserPage(),
         settings: const RouteSettings(name: '/submitEnterpriseUserPage'),
       );
@@ -34,7 +34,7 @@ class SubmitEnterpriseUserPage extends StatelessWidget {
 }
 
 class SubmitEnterpriseUserView extends StatefulWidget {
-  const SubmitEnterpriseUserView({Key? key}) : super(key: key);
+  const SubmitEnterpriseUserView({super.key});
 
   @override
   _SubmitEnterpriseUserViewState createState() =>
@@ -88,7 +88,7 @@ class _SubmitEnterpriseUserViewState extends State<SubmitEnterpriseUserView> {
               Text(
                 localization.insertYourDIDKey,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(
                 height: 20,
@@ -102,7 +102,7 @@ class _SubmitEnterpriseUserViewState extends State<SubmitEnterpriseUserView> {
               Text(
                 localization.importYourRSAKeyJsonFile,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(
                 height: 20,

@@ -2,13 +2,11 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class PickedFile extends StatelessWidget {
-
   const PickedFile({
-    Key? key,
+    super.key,
     required this.fileName,
     required this.onDeleteButtonPress,
-  }) : super(key: key);
-
+  });
 
   final String fileName;
   final VoidCallback onDeleteButtonPress;

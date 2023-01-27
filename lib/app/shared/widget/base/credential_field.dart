@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 class CredentialField extends StatelessWidget {
   const CredentialField({
-    Key? key,
+    super.key,
     required this.value,
     this.title,
     this.titleColor,
     this.valueColor,
     this.padding = const EdgeInsets.all(8),
-  }) : super(key: key);
+  });
 
   final String value;
   final String? title;
@@ -34,13 +34,13 @@ class CredentialField extends StatelessWidget {
 
 class DisplayCredentialField extends StatelessWidget {
   const DisplayCredentialField({
-    Key? key,
+    super.key,
     required this.title,
     required this.value,
     this.titleColor,
     this.valueColor,
     required this.padding,
-  }) : super(key: key);
+  });
 
   final String? title;
   final String value;
@@ -83,8 +83,7 @@ class DisplayCredentialField extends StatelessWidget {
 }
 
 class HasDisplay extends StatelessWidget {
-  const HasDisplay({Key? key, required this.value, required this.child})
-      : super(key: key);
+  const HasDisplay({super.key, required this.value, required this.child});
 
   final String value;
   final Widget child;

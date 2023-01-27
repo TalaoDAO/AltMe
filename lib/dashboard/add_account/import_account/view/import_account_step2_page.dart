@@ -11,7 +11,7 @@ import 'package:key_generator/key_generator.dart';
 class ImportAccountStep2Page extends StatelessWidget {
   const ImportAccountStep2Page({super.key, required this.accountType});
   final AccountType accountType;
-  static Route route({required AccountType accountType}) {
+  static Route<dynamic> route({required AccountType accountType}) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/importAccountStep2Page'),
       builder: (_) => ImportAccountStep2Page(accountType: accountType),
@@ -57,7 +57,7 @@ class ImportAccountStep2View extends StatelessWidget {
           Text(
             l10n.importEasilyFrom,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.caption3,
+            style: Theme.of(context).textTheme.bodySmall3,
           ),
           const SizedBox(
             height: Sizes.spaceNormal,

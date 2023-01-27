@@ -3,7 +3,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class EditButton extends StatelessWidget {
-  const EditButton({Key? key, this.onTap}) : super(key: key);
+  const EditButton({super.key, this.onTap});
 
   final VoidCallback? onTap;
 
@@ -25,7 +25,7 @@ class EditButton extends StatelessWidget {
         ),
         child: Text(
           l10n.edit,
-          style: Theme.of(context).textTheme.button,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
     );

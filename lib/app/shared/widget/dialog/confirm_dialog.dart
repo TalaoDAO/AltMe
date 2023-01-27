@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ConfirmDialog extends StatelessWidget {
   const ConfirmDialog({
-    Key? key,
+    super.key,
     required this.title,
     this.subtitle,
     this.yes,
@@ -14,7 +14,7 @@ class ConfirmDialog extends StatelessWidget {
     this.dialogColor,
     this.bgColor,
     this.textColor,
-  }) : super(key: key);
+  });
 
   final String title;
   final String? subtitle;
@@ -41,7 +41,12 @@ class ConfirmDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(icon,width: 50,height: 50,color: color,),
+          Image.asset(
+            icon,
+            width: 50,
+            height: 50,
+            color: color,
+          ),
           Text(
             title,
             style:

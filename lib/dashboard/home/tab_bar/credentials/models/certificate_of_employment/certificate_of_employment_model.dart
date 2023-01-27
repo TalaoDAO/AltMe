@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/author/author.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/certificate_of_employment/work_for.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'certificate_of_employment_model.g.dart';
@@ -9,8 +8,8 @@ part 'certificate_of_employment_model.g.dart';
 @JsonSerializable(includeIfNull: false, explicitToJson: true)
 class CertificateOfEmploymentModel extends CredentialSubjectModel {
   CertificateOfEmploymentModel({
-    String? id,
-    String? type,
+    super.id,
+    super.type,
     this.familyName,
     this.givenName,
     this.startDate,
@@ -18,11 +17,8 @@ class CertificateOfEmploymentModel extends CredentialSubjectModel {
     this.employmentType,
     this.jobTitle,
     this.baseSalary,
-    Author? issuedBy,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.certificateOfEmployment,
           credentialCategory: CredentialCategory.identityCards,
         );

@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 class CredentialBackground extends StatelessWidget {
   const CredentialBackground({
-    Key? key,
+    super.key,
     this.showBgDecoration = true,
     required this.credentialModel,
     required this.child,
     this.backgroundColor,
-  }) : super(key: key);
+  });
 
   final bool showBgDecoration;
   final CredentialModel credentialModel;
@@ -20,7 +20,7 @@ class CredentialBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CredentialContainer(
-      child: Container(
+      child: DecoratedBox(
         decoration: BaseBoxDecoration(
           color: backgroundColor ??
               credentialModel.credentialPreview.credentialSubjectModel

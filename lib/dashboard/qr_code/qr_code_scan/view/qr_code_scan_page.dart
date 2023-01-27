@@ -7,9 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QrCodeScanPage extends StatefulWidget {
-  const QrCodeScanPage({Key? key}) : super(key: key);
+  const QrCodeScanPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (context) => const QrCodeScanPage(),
         settings: const RouteSettings(name: '/qrCodeScanPage'),
       );
@@ -93,10 +93,13 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
                   dimension: MediaQuery.of(context).size.shortestSide * 0.8,
                   child: MobileScanner(
                     key: qrKey,
-                    fit: BoxFit.cover,
                     controller: scannerController,
-                    allowDuplicates: false,
-                    onDetect: (qrcode, args) {
+                    onDetect: (capture) {
+                      final List<Barcode> qrcodes = capture.barcodes;
+                      final Barcode qrcode = qrcodes[0];
+                      for (final barcode in qrcodes) {
+                        debugPrint('Barcode found! ${barcode.rawValue}');
+                      }
                       if (qrcode.rawValue == null) {
                         context.read<QRCodeScanCubit>().emitError(
                               ResponseMessage(

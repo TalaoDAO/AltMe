@@ -11,13 +11,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QueryByExampleCredentialPickPage extends StatelessWidget {
   const QueryByExampleCredentialPickPage({
-    Key? key,
+    super.key,
     required this.uri,
     required this.preview,
     required this.issuer,
     required this.credentialQueryIndex,
     required this.credentialsToBePresented,
-  }) : super(key: key);
+  });
 
   final Uri uri;
   final Map<String, dynamic> preview;
@@ -25,7 +25,7 @@ class QueryByExampleCredentialPickPage extends StatelessWidget {
   final int credentialQueryIndex;
   final List<CredentialModel> credentialsToBePresented;
 
-  static Route route({
+  static Route<dynamic> route({
     required Uri uri,
     required Map<String, dynamic> preview,
     required Issuer issuer,
@@ -70,13 +70,13 @@ class QueryByExampleCredentialPickPage extends StatelessWidget {
 
 class QueryByExampleCredentialPickView extends StatelessWidget {
   const QueryByExampleCredentialPickView({
-    Key? key,
+    super.key,
     required this.uri,
     required this.preview,
     required this.issuer,
     required this.credentialQueryIndex,
     required this.credentialsToBePresented,
-  }) : super(key: key);
+  });
 
   final Uri uri;
   final Map<String, dynamic> preview;
@@ -239,7 +239,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                           l10n.credentialSelectionListEmptyError,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1
+                              .bodyLarge
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       )

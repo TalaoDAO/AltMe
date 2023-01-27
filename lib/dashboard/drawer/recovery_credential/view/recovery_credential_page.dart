@@ -10,9 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class RecoveryCredentialPage extends StatelessWidget {
-  const RecoveryCredentialPage({Key? key}) : super(key: key);
+  const RecoveryCredentialPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (context) => const RecoveryCredentialPage(),
         settings: const RouteSettings(name: '/recoveryCredentialPage'),
       );
@@ -31,7 +31,7 @@ class RecoveryCredentialPage extends StatelessWidget {
 }
 
 class RecoveryCredentialView extends StatefulWidget {
-  const RecoveryCredentialView({Key? key}) : super(key: key);
+  const RecoveryCredentialView({super.key});
 
   @override
   _RecoveryCredentialViewState createState() => _RecoveryCredentialViewState();

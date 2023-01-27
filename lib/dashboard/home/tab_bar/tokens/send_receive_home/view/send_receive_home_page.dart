@@ -9,13 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SendReceiveHomePage extends StatefulWidget {
   const SendReceiveHomePage({
-    Key? key,
+    super.key,
     required this.selectedToken,
-  }) : super(key: key);
+  });
 
   final TokenModel selectedToken;
 
-  static Route route({required TokenModel selectedToken}) {
+  static Route<dynamic> route({required TokenModel selectedToken}) {
     return MaterialPageRoute<void>(
       builder: (_) => SendReceiveHomePage(
         selectedToken: selectedToken,
@@ -60,9 +60,7 @@ class _SendReceiveHomePageState extends State<SendReceiveHomePage> {
 }
 
 class _SendReceiveHomePageView extends StatelessWidget {
-  const _SendReceiveHomePageView({
-    Key? key,
-  }) : super(key: key);
+  const _SendReceiveHomePageView();
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +135,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                     ),
                     Text(
                       l10n.myTokens,
-                      style: Theme.of(context).textTheme.headline5,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     NetworkSwitcherButton(
                       onTap: () {
@@ -156,7 +154,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                                 state.selectedToken.decimalsToShow,
                               )
                               .formatNumber(),
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                           maxLength: 12,
                         ),
                         const SizedBox(
@@ -164,7 +162,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                         ),
                         MyText(
                           state.selectedToken.symbol,
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                           maxLength: 8,
                         ),
                       ],
@@ -226,8 +224,8 @@ class _SendReceiveHomePageView extends StatelessWidget {
                                     accountAddress: context
                                         .read<WalletCubit>()
                                         .state
-                                        .currentAccount
-                                        !.walletAddress,
+                                        .currentAccount!
+                                        .walletAddress,
                                     item: state.selectedToken.symbol,
                                     description:
                                         l10n.sendOnlyToThisAddressDescription(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class TooltipText extends StatelessWidget {
   const TooltipText({
-    Key? key,
+    super.key,
     this.tag,
     required this.text,
     this.tooltip,
@@ -11,7 +11,7 @@ class TooltipText extends StatelessWidget {
     this.style,
     this.textAlign = TextAlign.start,
     this.softWrap = false,
-  }) : super(key: key);
+  });
 
   final String? tag;
   final String text;

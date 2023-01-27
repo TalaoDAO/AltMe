@@ -24,7 +24,7 @@ class WalletCredential {
   final List<dynamic> context;
   final String id;
   @JsonKey(defaultValue: _type)
-  final List type;
+  final List<String> type;
   @JsonKey(name: 'credentialSubject')
   final CredentialSubjectModel credentialSubjectModel;
   final String issuer;

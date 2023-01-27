@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class PhonePassWidget extends StatelessWidget {
-  const PhonePassWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const PhonePassWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 

@@ -1,3 +1,3 @@
-typedef PasswordEnteredCallback = void Function(String text);
-typedef IsValidCallback = void Function();
-typedef CancelCallback = void Function();
+typedef PasswordEnteredCallback = dynamic Function(String text);
+typedef IsValidCallback = dynamic Function();
+typedef CancelCallback = dynamic Function();

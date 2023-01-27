@@ -3,7 +3,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class ScrollDownButton extends StatelessWidget {
-  const ScrollDownButton({Key? key, required this.onPressed}) : super(key: key);
+  const ScrollDownButton({super.key, required this.onPressed});
 
   final VoidCallback onPressed;
 

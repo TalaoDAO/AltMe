@@ -8,8 +8,8 @@ class DisplayPropertiesWidget extends StatelessWidget {
     required this.credentialModel,
     this.titleColor,
     this.valueColor,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final List<DisplayMapping>? properties;
   final CredentialModel credentialModel;

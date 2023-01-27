@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class CryptoBottomSheetView extends StatelessWidget {
-  const CryptoBottomSheetView({Key? key}) : super(key: key);
+  const CryptoBottomSheetView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class CryptoBottomSheetView extends StatelessWidget {
 }
 
 class CryptoBottomSheetPage extends StatefulWidget {
-  const CryptoBottomSheetPage({Key? key}) : super(key: key);
+  const CryptoBottomSheetPage({super.key});
 
   @override
   State<CryptoBottomSheetPage> createState() => _CryptoBottomSheetPageState();
@@ -94,7 +94,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Colors.transparent,
-          body: Container(
+          body: DecoratedBox(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               boxShadow: [
@@ -136,7 +136,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
+                            DecoratedBox(
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: Theme.of(context)

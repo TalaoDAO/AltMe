@@ -4,7 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CopyButton extends StatelessWidget {
-  const CopyButton({Key? key, this.onTap}) : super(key: key);
+  const CopyButton({super.key, this.onTap});
 
   final VoidCallback? onTap;
 

@@ -1,10 +1,10 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/flavor/flavor.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AltMeLogo extends StatelessWidget {
-  const AltMeLogo({Key? key, this.size = Sizes.logoLarge}) : super(key: key);
+  const AltMeLogo({super.key, this.size = Sizes.logoLarge});
 
   final double size;
 

@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 
 class ResidentCardWidget extends StatelessWidget {
   const ResidentCardWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 
@@ -84,30 +84,30 @@ class ResidentCardWidget extends StatelessWidget {
 
 class GenderDisplay extends StatelessWidget {
   const GenderDisplay({
-    Key? key,
+    super.key,
     required this.residentCardModel,
-  }) : super(key: key);
+  });
 
   final ResidentCardModel residentCardModel;
 
   @override
   Widget build(BuildContext context) {
-    Widget _genderIcon;
+    Widget genderIcon;
     switch (residentCardModel.gender) {
       case 'male':
-        _genderIcon =
+        genderIcon =
             Icon(Icons.male, color: Theme.of(context).colorScheme.genderIcon);
         break;
       case 'female':
-        _genderIcon =
+        genderIcon =
             Icon(Icons.female, color: Theme.of(context).colorScheme.genderIcon);
         break;
       default:
-        _genderIcon = Icon(
+        genderIcon = Icon(
           Icons.transgender,
           color: Theme.of(context).colorScheme.genderIcon,
         );
     }
-    return _genderIcon;
+    return genderIcon;
   }
 }

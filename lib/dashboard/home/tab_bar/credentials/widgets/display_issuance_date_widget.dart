@@ -7,8 +7,8 @@ class DisplayIssuanceDateWidget extends StatelessWidget {
   const DisplayIssuanceDateWidget({
     this.issuanceDate,
     this.textColor,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final String? issuanceDate;
   final Color? textColor;
 

@@ -8,8 +8,8 @@ class DisplayDescriptionWidget extends StatelessWidget {
     this.displayMapping,
     required this.credentialModel,
     this.textColor,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final DisplayMapping? displayMapping;
   final CredentialModel credentialModel;
   final Color? textColor;
@@ -48,10 +48,10 @@ class DisplayDescriptionWidget extends StatelessWidget {
 
 class ManifestText extends StatelessWidget {
   const ManifestText({
-    Key? key,
+    super.key,
     required this.text,
     required this.style,
-  }) : super(key: key);
+  });
 
   final String text;
   final TextStyle style;

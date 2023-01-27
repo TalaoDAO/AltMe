@@ -13,7 +13,7 @@ class CongratulationsAccountCreationPage extends StatelessWidget {
 
   final AccountType accountType;
 
-  static Route route({required AccountType accountType}) {
+  static Route<dynamic> route({required AccountType accountType}) {
     return MaterialPageRoute<void>(
       settings:
           const RouteSettings(name: '/congratulationsAccountCreationPage'),
@@ -106,7 +106,7 @@ class _CongratulationsAccountCreationViewState
                 ),
                 Text(
                   l10n.congratulations,
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(
                   height: Sizes.spaceNormal,
@@ -114,7 +114,7 @@ class _CongratulationsAccountCreationViewState
                 Text(
                   message,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline5?.copyWith(
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.normal,
                         color: Theme.of(context).colorScheme.onTertiary,
                       ),
