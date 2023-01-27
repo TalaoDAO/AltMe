@@ -37,18 +37,18 @@ void main() {
 
   test('sandbox', () async {
     const cNonce = 'cNonce';
-    var did = 'did';
+    var did1 = 'did';
     var issuer = 'issuer';
-    final payload = {
-      'iss': did,
+    final payload1 = {
+      'iss': did1,
       'nonce': cNonce,
       'iat': DateTime.now().microsecondsSinceEpoch,
       'aud': issuer
     };
 
-    final jwt = JWT(
+    final jwt1 = JWT(
       // Payload
-      payload,
+      payload1,
 
       issuer: issuer,
     );
@@ -58,16 +58,59 @@ void main() {
     final Ebsi ebsi = Ebsi(Dio());
     final Jwk = await ebsi.jwkFromMnemonic(mnemonic: mnemonic);
     final private = jsonDecode(Jwk) as Map<String, dynamic>;
-    final public = private.removeWhere((key, value) => key == 'd');
+    final public = Map.from(private);
+    public.removeWhere((key, value) => key == 'd');
 
     final hexEncodedNewKey =
         '5AgHMMkzfDxdAHHHmpqjQYLqaKnrXTddWGpMQW8Dsj4391Fm7G79ZutmKwZousSvUWbYsf1W8Q12RAMFjXjDcDs6';
     final newKey = Base58Decode(hexEncodedNewKey);
 // Sign it (default with HS256 algorithm)
     final token =
-        jwt.sign(EdDSAPrivateKey(newKey), algorithm: JWTAlgorithm.EdDSA);
+        jwt1.sign(EdDSAPrivateKey(newKey), algorithm: JWTAlgorithm.EdDSA);
 // EdDSAPrivateKey
     print('Signed token: $token\n');
     print('toto');
+
+    /// preparation before getting credential
+    final keyDict = private;
+
+    final keyJwk = jsonEncode(public);
+
+    final verifierKey = JsonWebKey.fromJson(keyDict);
+    final alg = keyDict['crv'] == 'P-256' ? 'ES256' : 'ES256K';
+    final did = 'did:ebsi:zmSKef6zQZDC66MppKLHou9zCwjYE4Fwar7NSVy2c7aya';
+    final kid =
+        'did:ebsi:zmSKef6zQZDC66MppKLHou9zCwjYE4Fwar7NSVy2c7aya#lD7U7tcVLZWmqECJYRyGeLnDcU4ETX3reBN3Zdd0iTU';
+
+    final payload = {
+      'iss': did,
+      'nonce': cNonce,
+      'iat': DateTime.now().microsecondsSinceEpoch,
+      'aud': issuer
+    };
+    final claims = new JsonWebTokenClaims.fromJson(payload);
+    // create a builder, decoding the JWT in a JWS, so using a
+    // JsonWebSignatureBuilder
+    final builder = new JsonWebSignatureBuilder();
+    // set the content
+    builder.jsonContent = claims.toJson();
+
+    builder.setProtectedHeader('typ', 'JWT');
+    builder.setProtectedHeader('alg', alg);
+    builder.setProtectedHeader('jwk', keyJwk);
+    builder.setProtectedHeader('kid', kid);
+
+    // add a key to sign, can only add one for JWT
+    builder.addRecipient(
+      verifierKey,
+      algorithm: alg,
+    );
+    // build the jws
+    var jws = builder.build();
+
+    // output the compact serialization
+    print('jwt compact serialization: ${jws.toCompactSerialization()}');
+    final jwt = jws.toCompactSerialization();
+    return jwt;
   });
 }

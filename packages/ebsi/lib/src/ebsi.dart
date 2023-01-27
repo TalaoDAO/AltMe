@@ -66,7 +66,7 @@ class Ebsi {
     // use alg "ES256K" for did:key
     final jwk = {
       'kty': 'EC',
-      'crv': 'secp256k1',
+      'crv': 'P-256K',
       'd': d,
       'x': x,
       'y': y,
