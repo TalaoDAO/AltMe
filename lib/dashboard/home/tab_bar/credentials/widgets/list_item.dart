@@ -7,15 +7,11 @@ class _BaseItem extends StatefulWidget {
     required this.child,
     this.onTap,
     this.enabled = true,
-    this.color = Colors.white,
-    this.isCustom = false,
   });
 
   final Widget child;
   final VoidCallback? onTap;
   final bool enabled;
-  final Color color;
-  final bool isCustom;
 
   @override
   __BaseItemState createState() => __BaseItemState();
@@ -48,16 +44,12 @@ class CredentialsListPageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BaseItem(
       enabled: true,
-      isCustom: true,
       onTap: onTap ??
           () {
             Navigator.of(context).push<void>(
               CredentialsDetailsPage.route(credentialModel: credentialModel),
             );
           },
-      color: credentialModel
-          .credentialPreview.credentialSubjectModel.credentialSubjectType
-          .backgroundColor(credentialModel),
       child: selected == null
           ? CredentialDisplay(
               credentialModel: credentialModel,
