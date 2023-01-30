@@ -237,32 +237,31 @@ For smooth running of the functionalities of Altme, you need to add the followin
 keys:
 
 
-##### PASSBASE_WEBHOOK_AUTH_TOKEN
-You can get this key from [`here`](https://passbase.com/)
+1. PASSBASE_WEBHOOK_AUTH_TOKEN
+You can get this key from [`here`](https://passbase.com/).
 
-##### PASSBASE_CHECK_DID_AUTH_TOKEN 
-The key is available [`here`](https://passbase.com/)
+2. PASSBASE_CHECK_DID_AUTH_TOKEN 
+The key is available [`here`](https://passbase.com/).
 
-##### YOTI_AI_API_KEY
-This key can be obtained from [`here`](https://developers.yoti.com/)
+3. YOTI_AI_API_KEY
+This key can be obtained from [`here`](https://developers.yoti.com/).
 
-##### TALAO_ISSUER_API_KEY
-The key is available [`here`](https://talao.io/)
+4. TALAO_ISSUER_API_KEY
+The key is available [`here`](https://talao.io/).
 
-##### WEB3_RPC_MAINNET_URL
-You can get this key from [`here`](https://chainlist.org/chain/1)
+5. You can get this key from [`here`](https://chainlist.org/chain/1).
 
-##### INFURA_API_KEY
-This key can be obtained from [`here`](https://docs.infura.io/infura/networks/ethereum/how-to/secure-a-project/project-id)
+6. INFURA_API_KEY
+This key can be obtained from [`here`](https://docs.infura.io/infura/networks/ethereum/how-to/secure-a-project/project-id).
 
-##### INFURA_API_KEY_SECRET 
-The key is available [`here`](https://docs.infura.io/infura/networks/ethereum/how-to/secure-a-project/project-id)
+7. INFURA_API_KEY_SECRET 
+The key is available [`here`](https://docs.infura.io/infura/networks/ethereum/how-to/secure-a-project/project-id).
 
-##### ETHERSCAN_API_KEY
-You can get this key from [`here`](https://docs.etherscan.io/getting-started/viewing-api-usage-statistics)
+8. ETHERSCAN_API_KEY
+You can get this key from [`here`](https://docs.etherscan.io/getting-started/viewing-api-usage-statistics).
 
-##### MORALIS_API_KEY
-This key can be obtained from [`here`](https://docs.moralis.io/web3-data-api/get-your-api-key)
+9. MORALIS_API_KEY
+This key can be obtained from [`here`](https://docs.moralis.io/web3-data-api/get-your-api-key).
 
 ## Building Altme
 
