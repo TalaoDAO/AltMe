@@ -237,8 +237,8 @@ For smooth running of the functionalities of Altme, you need to add the followin
 keys:
 
 
-```
-1. PASSBASE_WEBHOOK_AUTH_TOKEN
+ 
+1. PASSBASE_WEBHOOK_AUTH_TOKEN<br />
 You can get this key from [`here`](https://passbase.com/).
 
 2. PASSBASE_CHECK_DID_AUTH_TOKEN
@@ -264,7 +264,7 @@ You can get this key from [`here`](https://docs.etherscan.io/getting-started/vie
 
 9. MORALIS_API_KEY
 This key can be obtained from [`here`](https://docs.moralis.io/web3-data-api/get-your-api-key).
-```
+ 
 
 ## Building Altme
 
