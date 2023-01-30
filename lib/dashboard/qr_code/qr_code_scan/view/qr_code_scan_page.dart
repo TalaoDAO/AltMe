@@ -110,7 +110,7 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
                       } else {
                         if (!isScanned) {
                           isScanned = true;
-                          final String code = qrcode.rawValue!;
+                          final String code = qrcode.barcodes.first.rawValue!;
                           context
                               .read<QRCodeScanCubit>()
                               .process(scannedResponse: code);

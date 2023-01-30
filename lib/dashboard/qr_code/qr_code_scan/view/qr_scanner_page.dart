@@ -71,7 +71,7 @@ class _QrScannerPageState extends State<QrScannerPage> {
                     if (qrcode.rawValue == null) {
                       Navigator.of(context).pop();
                     } else {
-                      final String code = qrcode.rawValue!;
+                      final String code = qrcode.barcodes.first.rawValue!;
                       scannerController.stop();
                       Navigator.of(context).pop(code);
                     }
