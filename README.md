@@ -237,31 +237,31 @@ For smooth running of the functionalities of Altme, you need to add the followin
 keys:
 
 
-### PASSBASE_WEBHOOK_AUTH_TOKEN
+##### PASSBASE_WEBHOOK_AUTH_TOKEN
 You can get this key from [`here`](https://passbase.com/)
 
-### PASSBASE_CHECK_DID_AUTH_TOKEN 
+##### PASSBASE_CHECK_DID_AUTH_TOKEN 
 The key is available [`here`](https://passbase.com/)
 
-### YOTI_AI_API_KEY
+##### YOTI_AI_API_KEY
 This key can be obtained from [`here`](https://developers.yoti.com/)
 
-### TALAO_ISSUER_API_KEY
+##### TALAO_ISSUER_API_KEY
 The key is available [`here`](https://talao.io/)
 
-### WEB3_RPC_MAINNET_URL
+##### WEB3_RPC_MAINNET_URL
 You can get this key from [`here`](https://chainlist.org/chain/1)
 
-### INFURA_API_KEY
+##### INFURA_API_KEY
 This key can be obtained from [`here`](https://docs.infura.io/infura/networks/ethereum/how-to/secure-a-project/project-id)
 
-### INFURA_API_KEY_SECRET 
+##### INFURA_API_KEY_SECRET 
 The key is available [`here`](https://docs.infura.io/infura/networks/ethereum/how-to/secure-a-project/project-id)
 
-### ETHERSCAN_API_KEY
+##### ETHERSCAN_API_KEY
 You can get this key from [`here`](https://docs.etherscan.io/getting-started/viewing-api-usage-statistics)
 
-### MORALIS_API_KEY
+##### MORALIS_API_KEY
 This key can be obtained from [`here`](https://docs.moralis.io/web3-data-api/get-your-api-key)
 
 ## Building Altme

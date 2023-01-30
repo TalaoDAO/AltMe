@@ -44,6 +44,7 @@ then
   fvm flutter build appbundle --flavor "production" --target "lib/main_production.dart"
 
 elif [[ "$*" == *-deploy$sios* ]]; 
+then 
   echo "deploy ios"
   echo "Make sure you are in right branch"
   fvm flutter build ios --release --flavor "production" --target "lib/main_production.dart"
