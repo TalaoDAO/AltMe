@@ -36,7 +36,7 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
 
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10),
+      duration: const Duration(seconds: 20),
     );
 
     final Tween<double> rotationTween = Tween(begin: 20, end: 0);
@@ -64,16 +64,6 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
       title: l10n.decentralizedIDKey,
       titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
-      titleTrailing: AnimatedBuilder(
-        animation: animation,
-        builder: (BuildContext context, Widget? child) {
-          return Text(
-            timeFormatter(timeInSecond: animation.value.toInt()),
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge,
-          );
-        },
-      ),
       secureScreen: true,
       body: BackgroundCard(
         width: double.infinity,
@@ -97,6 +87,20 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
                   style: Theme.of(context).textTheme.titleMedium,
                 );
               },
+            ),
+            Expanded(
+              child: Center(
+                child: AnimatedBuilder(
+                  animation: animation,
+                  builder: (BuildContext context, Widget? child) {
+                    return Text(
+                      timeFormatter(timeInSecond: animation.value.toInt()),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.displayMedium,
+                    );
+                  },
+                ),
+              ),
             ),
             // Padding(
             //   padding: const EdgeInsets.all(Sizes.spaceXLarge),
