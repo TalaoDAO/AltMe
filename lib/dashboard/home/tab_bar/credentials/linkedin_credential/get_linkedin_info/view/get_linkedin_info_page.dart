@@ -93,7 +93,7 @@ class _GetLinkedinInfoViewState extends State<GetLinkedinInfoView> {
                 children: [
                   BaseTextField(
                     height: 100,
-                    hint: 'e.g. https://www.linkedin.com/in/thierrythevenet/',
+                    hint: 'e.g. https://www.linkedin.com/john.doe',
                     fillColor: Colors.transparent,
                     hintStyle: Theme.of(context).textTheme.hintTextFieldStyle,
                     maxLines: 3,
