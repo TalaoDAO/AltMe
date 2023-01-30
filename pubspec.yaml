@@ -55,7 +55,7 @@ dependencies:
   flutter_local_notifications: ^13.0.0
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: ^0.6.10
+  flutter_markdown: ^0.6.13
   flutter_native_timezone: ^2.0.0
   flutter_svg: ^1.0.0
   google_fonts: ^3.0.1
@@ -72,6 +72,7 @@ dependencies:
     path: packages/key_generator
   local_auth: ^2.1.0
   logger: ^1.1.0
+  matrix: ^0.15.13
   mobile_scanner: ^3.0.0-beta.1
   network_image_mock: ^2.1.0
   no_screenshot: ^0.0.1+5
@@ -113,6 +114,7 @@ dependency_overrides:
 # Because flutter_sodium 0.2.0 depends on ffi ^1.0.0 and no versions of flutter_sodium match >0.2.0 <0.3.0, flutter_sodium ^0.2.0 requires ffi ^1.0.0
   async: ^2.9.0
   ffi: ^2.0.1
+  markdown: ^6.0.0
   stream_channel: ^2.1.0
 
 dev_dependencies:
