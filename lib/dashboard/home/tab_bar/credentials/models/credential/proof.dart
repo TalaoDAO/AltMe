@@ -23,8 +23,8 @@ class Proof {
       );
 
   final String type;
-  final String proofPurpose;
-  final String verificationMethod;
+  final String? proofPurpose;
+  final String? verificationMethod;
   final String created;
   final String jws;
 

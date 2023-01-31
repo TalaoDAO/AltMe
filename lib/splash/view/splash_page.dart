@@ -4,8 +4,13 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
+import 'package:altme/ebsi/add_ebsi_credential.dart';
+import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
+import 'package:altme/wallet/wallet.dart';
+import 'package:dio/dio.dart';
+import 'package:ebsi/ebsi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
@@ -57,30 +62,60 @@ class _SplashViewState extends State<SplashView> {
       // It will handle app links while the app is already started - be it in
       // the foreground or in the background.
       _sub = uriLinkStream.listen(
-        (Uri? uri) {
+        (Uri? uri) async {
           if (!mounted) return;
           log.i('got uri: $uri');
-          String beaconData = '';
-          bool isBeaconRequest = false;
-          uri?.queryParameters.forEach((key, value) async {
-            if (key == 'uri') {
-              final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
-              context.read<DeepLinkCubit>().addDeepLink(url);
-              final ssiKey = await secure_storage.getSecureStorage
-                  .get(SecureStorageKeys.ssiKey);
-              if (ssiKey != null) {
-                await context.read<QRCodeScanCubit>().deepLink();
+          final url = '${uri!.scheme}://${uri.authority}${uri.path}';
+
+          if (url == Parameters.ebsiUniversalLink) {
+            final client = Dio();
+            final ebsi = Ebsi(client);
+            final mnemonic = await secure_storage.getSecureStorage.get(
+              SecureStorageKeys.ssiMnemonic,
+            );
+
+            final dynamic encodedCredentialFromEbsi = await ebsi.getCredential(
+              uri,
+              mnemonic!,
+            );
+            await addEbsiCredential(
+              encodedCredentialFromEbsi,
+              uri,
+              context.read<WalletCubit>(),
+            );
+          } else {
+            String beaconData = '';
+            bool isBeaconRequest = false;
+            uri.queryParameters.forEach((key, value) async {
+              if (key == 'uri') {
+                final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
+                context.read<DeepLinkCubit>().addDeepLink(url);
+                final ssiKey = await secure_storage.getSecureStorage
+                    .get(SecureStorageKeys.ssiKey);
+                if (ssiKey != null) {
+                  await context.read<QRCodeScanCubit>().deepLink();
+                }
               }
+              if (key == 'type' && value == 'tzip10') {
+                isBeaconRequest = true;
+              }
+              if (key == 'data') {
+                beaconData = value;
+              }
+              if (uri.scheme == 'openid' &&
+                  uri.authority == 'initiate_issuance') {
+                final DioClient client = DioClient('', Dio());
+                await initiateEbsiCredentialIssuance(
+                  uri.toString(),
+                  client,
+                  context.read<WalletCubit>(),
+                  secure_storage.getSecureStorage,
+                );
+              }
+            });
+            if (isBeaconRequest && beaconData != '') {
+              context.read<BeaconCubit>().peerFromDeepLink(beaconData);
             }
-            if (key == 'type' && value == 'tzip10') {
-              isBeaconRequest = true;
-            }
-            if (key == 'data') {
-              beaconData = value;
-            }
-          });
-          if (isBeaconRequest && beaconData != '') {
-            context.read<BeaconCubit>().peerFromDeepLink(beaconData);
           }
         },
         onError: (Object err) {

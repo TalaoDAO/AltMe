@@ -24,4 +24,6 @@ class Parameters {
     isOtherEnabled: true,
     isPassEnabled: true,
   );
+
+  static const ebsiUniversalLink = 'https://app.altme.io/app/download';
 }

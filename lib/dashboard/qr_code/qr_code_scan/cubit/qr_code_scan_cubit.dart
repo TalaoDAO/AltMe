@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
+import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
@@ -77,6 +79,16 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith('wc:')) {
         await walletConnectCubit.connect(scannedResponse);
+
+        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+      } else if (scannedResponse.startsWith('openid://initiate_issuance?')) {
+        // convert String from QR code into Uri
+        await initiateEbsiCredentialIssuance(
+          scannedResponse,
+          client,
+          walletCubit,
+          getSecureStorage,
+        );
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else {
@@ -446,6 +458,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               ),
             );
           }
+          break;
+        case 'object':
+          log.i('object');
+          emit(
+            state.copyWith(
+              qrScanStatus: QrScanStatus.success,
+              route: CredentialsReceivePage.route(
+                uri: uri,
+                preview: data as Map<String, dynamic>,
+                issuer: issuer,
+              ),
+            ),
+          );
           break;
 
         default:
