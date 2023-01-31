@@ -126,12 +126,7 @@ class ConfirmConnectionView extends StatelessWidget {
                     const SizedBox(height: Sizes.spaceXLarge),
                     const Permissions(),
                     const SizedBox(height: Sizes.spaceXLarge),
-                    SelectAccount(
-                      blockchainType:
-                          connectionBridgeType == ConnectionBridgeType.beacon
-                              ? BlockchainType.tezos
-                              : BlockchainType.ethereum,
-                    ),
+                    SelectAccount(connectionBridgeType: connectionBridgeType),
                     const SizedBox(
                       height: Sizes.spaceNormal,
                     ),

@@ -96,11 +96,9 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
             );
           }
 
-          await dotenv.load();
-
           wcClient.approveSession(
             accounts: walletAddresses,
-            chainId: 1,
+            chainId: currentAccount.blockchainType.chainId,
           );
 
           log.i('Connected to walletconnect');
@@ -114,7 +112,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
               peerId: wcClient.peerId!,
               remotePeerId: wcClient.remotePeerId!,
               remotePeerMeta: wcClient.remotePeerMeta!,
-              chainId: 1,
+              chainId: currentAccount.blockchainType.chainId,
             ),
           );
 
