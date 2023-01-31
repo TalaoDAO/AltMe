@@ -8,6 +8,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "47.0.0"
+  adaptive_number:
+    dependency: transitive
+    description:
+      name: adaptive_number
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   analyzer:
     dependency: transitive
     description:
@@ -310,7 +317,7 @@ packages:
       name: convert
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.2"
+    version: "3.1.1"
   coverage:
     dependency: transitive
     description:
@@ -345,7 +352,7 @@ packages:
       name: crypto_keys
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.3.0+1"
   cryptocurrency_keys:
     dependency: "direct main"
     description:
@@ -374,6 +381,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+  dart_jsonwebtoken:
+    dependency: transitive
+    description:
+      name: dart_jsonwebtoken
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.6.4"
   dart_style:
     dependency: transitive
     description:
@@ -483,6 +497,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0+1"
+  ed25519_edwards:
+    dependency: transitive
+    description:
+      name: ed25519_edwards
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1"
   ed25519_hd_key:
     dependency: "direct main"
     description:
@@ -511,6 +532,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.1"
+  fast_base58:
+    dependency: transitive
+    description:
+      name: fast_base58
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.1"
   ffi:
     dependency: "direct overridden"
     description:
@@ -817,7 +845,7 @@ packages:
       name: jose
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.2"
+    version: "0.3.3"
   js:
     dependency: transitive
     description:
@@ -1230,7 +1258,7 @@ packages:
       name: pointycastle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.6.1"
+    version: "3.6.2"
   pool:
     dependency: transitive
     description:

@@ -2,6 +2,7 @@ library credential_manifest;
 
 export 'src/credential_manifest.dart';
 export 'src/helpers/get_color_from_credential.dart';
+export 'src/helpers/get_credential_manifest.dart';
 export 'src/helpers/get_text_from_credential.dart';
 export 'src/models/color_object.dart';
 export 'src/models/constraints.dart';
