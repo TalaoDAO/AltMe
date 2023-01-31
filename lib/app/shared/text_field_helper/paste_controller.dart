@@ -6,8 +6,10 @@ class AppCupertinoTextSelectionControls extends CupertinoTextSelectionControls {
     required this.onPaste,
   });
   ValueChanged<TextSelectionDelegate> onPaste;
+
+
   @override
-  Future<void> handlePaste(final TextSelectionDelegate delegate) {
+  Future<void> handlePaste(TextSelectionDelegate delegate) {
     onPaste(delegate);
     return super.handlePaste(delegate);
   }
@@ -19,7 +21,7 @@ class AppMaterialTextSelectionControls extends MaterialTextSelectionControls {
   });
   ValueChanged<TextSelectionDelegate> onPaste;
   @override
-  Future<void> handlePaste(final TextSelectionDelegate delegate) {
+  Future<void> handlePaste(TextSelectionDelegate delegate) {
     onPaste(delegate);
     return super.handlePaste(delegate);
   }

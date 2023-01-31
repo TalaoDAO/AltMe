@@ -8,8 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CredentialsListPage extends StatefulWidget {
   const CredentialsListPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<CredentialsListPage> createState() => _CredentialsListPageState();

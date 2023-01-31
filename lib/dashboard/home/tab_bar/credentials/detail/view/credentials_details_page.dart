@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
@@ -5,22 +7,22 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CredentialsDetailsPage extends StatelessWidget {
   const CredentialsDetailsPage({
-    Key? key,
+    super.key,
     required this.credentialModel,
     required this.readOnly,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final bool readOnly;
 
-  static Route route({
+  static Route<dynamic> route({
     required CredentialModel credentialModel,
     bool readOnly = false,
   }) {
@@ -37,9 +39,7 @@ class CredentialsDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CredentialDetailsCubit>(
       create: (context) => CredentialDetailsCubit(
-        walletCubit: context.read<WalletCubit>(),
         didKitProvider: DIDKitProvider(),
-        fileSaver: FileSaver.instance,
       ),
       child: CredentialsDetailsView(
         credentialModel: credentialModel,
@@ -51,10 +51,10 @@ class CredentialsDetailsPage extends StatelessWidget {
 
 class CredentialsDetailsView extends StatefulWidget {
   const CredentialsDetailsView({
-    Key? key,
+    super.key,
     required this.credentialModel,
     required this.readOnly,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final bool readOnly;
@@ -142,16 +142,16 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
           titleAlignment: Alignment.topCenter,
           titleLeading: const BackLeadingButton(),
-          titleTrailing: IconButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .push<void>(CredentialQrPage.route(widget.credentialModel));
-            },
-            icon: Icon(
-              Icons.qr_code,
-              color: Theme.of(context).colorScheme.onBackground,
-            ),
-          ),
+          // titleTrailing: IconButton(
+          //   onPressed: () {
+          //     Navigator.of(context)
+          //         .push<void>(CredentialQrPage.route(widget.credentialModel));
+          //   },
+          //   icon: Icon(
+          //     Icons.qr_code,
+          //     color: Theme.of(context).colorScheme.onBackground,
+          //   ),
+          // ),
           padding: const EdgeInsets.symmetric(horizontal: 10),
           navigation: widget.readOnly
               ? null
@@ -169,12 +169,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                           text: l10n.credentialDetailDeleteCard,
                         ),
                         const SizedBox(height: 8),
-                        MyGradientButton(
-                          verticalSpacing: 15,
-                          borderRadius: 50,
+                        MyOutlinedButton(
                           text: isLinkeInCard
                               ? l10n.exportToLinkedIn
-                              : l10n.export,
+                              : l10n.share,
                           onPressed: () {
                             if (isLinkeInCard) {
                               Navigator.of(context).push<void>(
@@ -183,9 +181,16 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                 ),
                               );
                             } else {
-                              context
-                                  .read<CredentialDetailsCubit>()
-                                  .exportCredential(widget.credentialModel);
+                              final box =
+                                  context.findRenderObject() as RenderBox?;
+                              final subject = l10n.shareWith;
+
+                              Share.share(
+                                jsonEncode(widget.credentialModel.data),
+                                subject: subject,
+                                sharePositionOrigin:
+                                    box!.localToGlobal(Offset.zero) & box.size,
+                              );
                             }
                           },
                         ),

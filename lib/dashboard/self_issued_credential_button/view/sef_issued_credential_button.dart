@@ -8,9 +8,9 @@ typedef SelfIssuedCredentialButtonClick = SelfIssuedCredentialDataModel
 
 class SelfIssuedCredentialButton extends StatefulWidget {
   const SelfIssuedCredentialButton({
-    Key? key,
+    super.key,
     required this.selfIssuedCredentialButtonClick,
-  }) : super(key: key);
+  });
 
   final SelfIssuedCredentialButtonClick selfIssuedCredentialButtonClick;
 

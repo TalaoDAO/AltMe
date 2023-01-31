@@ -7,15 +7,15 @@ import 'package:switcher/switcher.dart';
 
 class TokenContractItem extends StatelessWidget {
   const TokenContractItem({
-    Key? key,
+    super.key,
     required this.tokenContractModel,
     this.isOn = false,
     required this.onChange,
-  }) : super(key: key);
+  });
 
   final ContractModel tokenContractModel;
   final bool isOn;
-  final Function(bool) onChange;
+  final dynamic Function(bool) onChange;
 
   @override
   Widget build(BuildContext context) {

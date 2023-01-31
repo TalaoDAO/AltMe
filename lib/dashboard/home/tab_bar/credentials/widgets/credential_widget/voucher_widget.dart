@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class VoucherWidget extends StatelessWidget {
   const VoucherWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 
@@ -24,7 +24,7 @@ class VoucherWidget extends StatelessWidget {
 }
 
 class VoucherRecto extends Recto {
-  const VoucherRecto({Key? key}) : super(key: key);
+  const VoucherRecto({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class VoucherRecto extends Recto {
 }
 
 class VoucherVerso extends Verso {
-  const VoucherVerso({Key? key}) : super(key: key);
+  const VoucherVerso({super.key});
 
   @override
   Widget build(BuildContext context) {

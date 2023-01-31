@@ -12,13 +12,15 @@ import 'package:key_generator/key_generator.dart';
 
 class OperationPage extends StatelessWidget {
   const OperationPage({
-    Key? key,
+    super.key,
     required this.connectionBridgeType,
-  }) : super(key: key);
+  });
 
   final ConnectionBridgeType connectionBridgeType;
 
-  static Route route({required ConnectionBridgeType connectionBridgeType}) {
+  static Route<dynamic> route({
+    required ConnectionBridgeType connectionBridgeType,
+  }) {
     return MaterialPageRoute<void>(
       builder: (_) => OperationPage(
         connectionBridgeType: connectionBridgeType,
@@ -47,9 +49,9 @@ class OperationPage extends StatelessWidget {
 
 class OperationView extends StatefulWidget {
   const OperationView({
-    Key? key,
+    super.key,
     required this.connectionBridgeType,
-  }) : super(key: key);
+  });
 
   final ConnectionBridgeType connectionBridgeType;
 
@@ -181,7 +183,7 @@ class _OperationViewState extends State<OperationView> {
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline5
+                                  .headlineSmall
                                   ?.copyWith(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w900,

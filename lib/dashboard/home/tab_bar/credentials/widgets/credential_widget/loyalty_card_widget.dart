@@ -4,8 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class LoyaltyCardDisplayDetail extends StatelessWidget {
-  const LoyaltyCardDisplayDetail({Key? key, required this.credentialModel})
-      : super(key: key);
+  const LoyaltyCardDisplayDetail({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
@@ -25,7 +24,7 @@ class LoyaltyCardDisplayDetail extends StatelessWidget {
 }
 
 class LoyaltyCardRecto extends Recto {
-  const LoyaltyCardRecto({Key? key}) : super(key: key);
+  const LoyaltyCardRecto({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +39,7 @@ class LoyaltyCardRecto extends Recto {
 }
 
 class LoyaltyCardVerso extends Verso {
-  const LoyaltyCardVerso({Key? key, required this.loyaltyCardModel})
-      : super(key: key);
+  const LoyaltyCardVerso({super.key, required this.loyaltyCardModel});
 
   final LoyaltyCardModel loyaltyCardModel;
 
@@ -50,7 +48,7 @@ class LoyaltyCardVerso extends Verso {
     return CredentialContainer(
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
-        child: Container(
+        child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Theme.of(context).colorScheme.error,
@@ -87,9 +85,9 @@ class LoyaltyCardVerso extends Verso {
 
 class TextWithLoyaltyCardStyle extends StatelessWidget {
   const TextWithLoyaltyCardStyle({
-    Key? key,
+    super.key,
     required this.value,
-  }) : super(key: key);
+  });
 
   final String value;
 

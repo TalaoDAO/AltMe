@@ -8,24 +8,18 @@ part 'ethereum_nft_model.g.dart';
 @immutable
 class EthereumNftModel extends NftModel {
   const EthereumNftModel({
-    required String name,
-    required String tokenId,
-    required String contractAddress,
-    required String balance,
-    String? symbol,
+    required super.name,
+    required super.tokenId,
+    required super.contractAddress,
+    required super.balance,
+    super.symbol,
     String? animationUrl,
     String? image,
-    String? description,
+    super.description,
     required this.type,
   }) : super(
-          name: name,
-          symbol: symbol,
           displayUri: animationUrl,
-          description: description,
           thumbnailUri: image,
-          tokenId: tokenId,
-          contractAddress: contractAddress,
-          balance: balance,
         );
 
   factory EthereumNftModel.fromJson(Map<String, dynamic> json) =>

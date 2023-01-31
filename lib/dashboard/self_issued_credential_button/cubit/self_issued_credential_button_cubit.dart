@@ -85,7 +85,7 @@ class SelfIssuedCredentialCubit extends Cubit<SelfIssuedCredentialButtonState> {
       final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
 
       log.i('vc: $vc');
-      log.i('verifyResult: ${jsonVerification.toString()}');
+      log.i('verifyResult: $jsonVerification');
 
       if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
         log.w(

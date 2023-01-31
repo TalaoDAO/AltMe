@@ -322,7 +322,7 @@ class ScanCubit extends Cubit<ScanState> {
   Future<void> getDIDAuthCHAPI({
     required Uri uri,
     required String keyId,
-    required void Function(String) done,
+    required dynamic Function(String) done,
     required String challenge,
     required String domain,
   }) async {
@@ -476,7 +476,7 @@ class ScanCubit extends Cubit<ScanState> {
     String? challenge,
     String? domain,
     required Uri uri,
-    required void Function(String) done,
+    required dynamic Function(String) done,
   }) async {
     emit(
       state.scanPermission(

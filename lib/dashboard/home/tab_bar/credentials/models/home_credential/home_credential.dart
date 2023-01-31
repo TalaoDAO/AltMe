@@ -318,17 +318,17 @@ class HomeCredential extends Equatable {
 
   final CredentialModel? credentialModel;
   final String? link;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? dummyDescription;
   final String? image;
   final bool isDummy;
   final CredentialSubjectType credentialSubjectType;
   final String? websiteGameLink;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? whyGetThisCard;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? expirationDateDetails;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? howToGetIt;
 
   Map<String, dynamic> toJson() => _$HomeCredentialToJson(this);

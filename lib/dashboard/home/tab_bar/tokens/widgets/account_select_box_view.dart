@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 
 class AccountSelectBoxView extends StatelessWidget {
   const AccountSelectBoxView({
-    Key? key,
+    super.key,
     this.isEnabled = true,
     required this.accounts,
     required this.selectedAccountIndex,
     required this.onSelectAccount,
     required this.title,
-  }) : super(key: key);
+  });
 
   final bool isEnabled;
   final List<CryptoAccountData> accounts;
   final int selectedAccountIndex;
-  final Function(CryptoAccountData, int) onSelectAccount;
+  final dynamic Function(CryptoAccountData, int) onSelectAccount;
   final String title;
 
   @override

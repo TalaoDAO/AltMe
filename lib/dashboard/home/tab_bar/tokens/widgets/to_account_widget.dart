@@ -13,7 +13,7 @@ class ToAccountWidget extends StatelessWidget {
   });
 
   final bool isEnabled;
-  final Function(CryptoAccountData?) onAccountSelected;
+  final dynamic Function(CryptoAccountData?) onAccountSelected;
   final bool triggerInitialAccount;
 
   @override

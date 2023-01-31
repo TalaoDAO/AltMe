@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TokensPage extends StatefulWidget {
-  const TokensPage({Key? key}) : super(key: key);
+  const TokensPage({super.key});
 
   @override
   State<TokensPage> createState() => _TokensPageState();
@@ -26,7 +26,7 @@ class _TokensPageState extends State<TokensPage>
 }
 
 class TokensView extends StatefulWidget {
-  const TokensView({Key? key}) : super(key: key);
+  const TokensView({super.key});
 
   @override
   _TokensViewState createState() => _TokensViewState();

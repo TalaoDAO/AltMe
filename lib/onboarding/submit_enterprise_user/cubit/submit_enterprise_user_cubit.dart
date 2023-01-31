@@ -103,7 +103,7 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
       }
       emit(state.success());
     } catch (e, s) {
-      log.e('error in verifying RSA key :${e.toString()}, s: $s', e, s);
+      log.e('error in verifying RSA key :$e}, s: $s', e, s);
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
@@ -118,7 +118,10 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
     }
   }
 
-  bool checkPublicRSAKey(Map rsaKey, Map resolvedDID) {
+  bool checkPublicRSAKey(
+    Map<String, dynamic> rsaKey,
+    Map<String, dynamic> resolvedDID,
+  ) {
     try {
       final publicKeyJwks = JsonPath(r'$..publicKeyJwk');
       final publicKeyJwksList = publicKeyJwks

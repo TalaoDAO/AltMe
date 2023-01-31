@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 class TezotopiaVoucherWidget extends StatelessWidget {
   const TezotopiaVoucherWidget({
     required this.credentialModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final CredentialModel credentialModel;
 

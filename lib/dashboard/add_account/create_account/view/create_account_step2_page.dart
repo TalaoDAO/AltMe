@@ -16,7 +16,7 @@ class CreateAccountStep2Page extends StatelessWidget {
 
   final AccountType accountType;
 
-  static Route route({required AccountType accountType}) {
+  static Route<dynamic> route({required AccountType accountType}) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/createAccountStep2Page'),
       builder: (_) => CreateAccountStep2Page(accountType: accountType),
@@ -115,7 +115,7 @@ class _CreateAccountStep2ViewState extends State<CreateAccountStep2View> {
             Text(
               l10n.setAccountNameDescription,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.caption3,
+              style: Theme.of(context).textTheme.bodySmall3,
             ),
             const SizedBox(
               height: Sizes.spaceNormal,

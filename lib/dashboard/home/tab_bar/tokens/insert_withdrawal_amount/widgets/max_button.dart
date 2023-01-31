@@ -3,7 +3,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class MaxButton extends StatelessWidget {
-  const MaxButton({Key? key, this.onTap}) : super(key: key);
+  const MaxButton({super.key, this.onTap});
 
   final VoidCallback? onTap;
 
@@ -25,7 +25,7 @@ class MaxButton extends StatelessWidget {
         ),
         child: Text(
           l10n.max,
-          style: Theme.of(context).textTheme.button,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoadingProgress extends StatefulWidget {
-  const LoadingProgress({Key? key}) : super(key: key);
+  const LoadingProgress({super.key});
 
   @override
   State<LoadingProgress> createState() => _LoadingProgressState();
@@ -41,7 +41,7 @@ class _LoadingProgressState extends State<LoadingProgress>
         ),
         borderRadius: BorderRadius.circular(borderRadius),
       ),
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border.all(
             color: Theme.of(context).colorScheme.background,

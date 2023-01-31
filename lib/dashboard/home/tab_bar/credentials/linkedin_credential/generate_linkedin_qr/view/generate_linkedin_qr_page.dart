@@ -4,7 +4,6 @@ import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:file_saver/file_saver.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
@@ -21,7 +20,7 @@ class GenerateLinkedinQrPage extends StatelessWidget {
   final CredentialModel credentialModel;
   final String linkedinUrl;
 
-  static Route route({
+  static Route<dynamic> route({
     required String linkedinUrl,
     required CredentialModel credentialModel,
   }) {
@@ -116,7 +115,7 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
               controller: screenshotController,
               child: AspectRatio(
                 aspectRatio: Sizes.linkedinBannerAspectRatio,
-                child: Container(
+                child: DecoratedBox(
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.fill,
@@ -155,6 +154,8 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
         child: MyElevatedButton(
           text: l10n.exportToLinkedIn,
           onPressed: () async {
+            final log =
+                getLogger('GenerateLinkedinQrView - screenshotController');
             await screenshotController
                 .capture(delay: const Duration(milliseconds: 10))
                 .then((capturedImage) {
@@ -162,9 +163,13 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
                   .read<GenerateLinkedInQrCubit>()
                   .saveScreenshot(capturedImage!);
             }).catchError((dynamic onError) {
-              if (kDebugMode) {
-                print(onError);
-              }
+              log.e(onError);
+              AlertMessage.showStateMessage(
+                context: context,
+                stateMessage: StateMessage.error(
+                  stringMessage: l10n.somethingsWentWrongTryAgainLater,
+                ),
+              );
             });
           },
         ),

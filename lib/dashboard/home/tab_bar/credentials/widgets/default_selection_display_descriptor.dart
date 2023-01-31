@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 
 class DefaultSelectionDisplayDescriptor extends StatelessWidget {
   const DefaultSelectionDisplayDescriptor({
-    Key? key,
+    super.key,
     required this.credentialModel,
     required this.showBgDecoration,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final bool showBgDecoration;

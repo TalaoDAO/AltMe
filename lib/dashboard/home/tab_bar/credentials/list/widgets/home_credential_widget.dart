@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 
 class HomeCredentialWidget extends StatelessWidget {
   const HomeCredentialWidget({
-    Key? key,
+    super.key,
     required this.credentials,
     required this.title,
     required this.categorySubtitle,
     this.showAddOption = false,
     this.fromDiscover = false,
-  }) : super(key: key);
+  });
 
   final List<HomeCredential> credentials;
   final String title;

@@ -14,13 +14,13 @@ import 'package:secure_storage/secure_storage.dart';
 
 class ImportFromWalletPage extends StatelessWidget {
   const ImportFromWalletPage({
-    Key? key,
+    super.key,
     required this.walletTypeModel,
     this.accountName,
     required this.isFromOnboard,
-  }) : super(key: key);
+  });
 
-  static Route route({
+  static Route<dynamic> route({
     required WalletTypeModel walletTypeModel,
     required bool isFromOnboard,
     String? accountName,
@@ -60,11 +60,11 @@ class ImportFromWalletPage extends StatelessWidget {
 
 class ImportFromOtherWalletView extends StatefulWidget {
   const ImportFromOtherWalletView({
-    Key? key,
+    super.key,
     required this.walletTypeModel,
     required this.isFromOnboard,
     this.accountName,
-  }) : super(key: key);
+  });
 
   final WalletTypeModel walletTypeModel;
   final String? accountName;

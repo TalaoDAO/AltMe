@@ -9,14 +9,11 @@ class EmailPassModel extends CredentialSubjectModel {
   EmailPassModel({
     this.expires,
     this.email,
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
     this.passbaseMetadata,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.emailPass,
           credentialCategory: CredentialCategory.identityCards,
         );

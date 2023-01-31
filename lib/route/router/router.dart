@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class RightToLeftRoute<T> extends MaterialPageRoute<T> {
-  RightToLeftRoute({WidgetBuilder? builder, RouteSettings? settings})
-      : super(builder: builder!, settings: settings);
+  RightToLeftRoute({WidgetBuilder? builder, super.settings})
+      : super(builder: builder!);
 
   @override
   Widget buildTransitions(

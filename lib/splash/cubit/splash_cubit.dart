@@ -67,10 +67,38 @@ class SplashCubit extends Cubit<SplashState> {
 
   Future<void> _getAppVersion() async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    final String? savedVersion = await secureStorageProvider.get(
+      SecureStorageKeys.version,
+    );
+
+    final String? savedBuildNumber = await secureStorageProvider.get(
+      SecureStorageKeys.buildNumber,
+    );
+
+    var isNewVersion = false;
+
+    if (savedVersion != null && savedBuildNumber != null) {
+      if (savedVersion != packageInfo.version ||
+          savedBuildNumber != packageInfo.buildNumber) {
+        isNewVersion = true;
+      }
+    }
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.version,
+      packageInfo.version,
+    );
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.buildNumber,
+      packageInfo.buildNumber,
+    );
+
     emit(
       state.copyWith(
         versionNumber: packageInfo.version,
         buildNumber: packageInfo.buildNumber,
+        isNewVersion: isNewVersion,
       ),
     );
   }

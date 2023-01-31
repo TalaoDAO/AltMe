@@ -41,7 +41,7 @@ class StateMessage extends Equatable {
   }) : type = MessageType.success;
 
   final MessageType type;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? messageHandler;
   final String? stringMessage;
   final bool showDialog;

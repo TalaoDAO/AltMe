@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 class SenderReceiver extends StatelessWidget {
   const SenderReceiver({
-    Key? key,
+    super.key,
     required this.from,
     required this.to,
     required this.dAppName,
-  }) : super(key: key);
+  });
 
   final String from;
   final String to;
@@ -30,10 +30,10 @@ class SenderReceiver extends StatelessWidget {
 
 class SenderReceiverCard extends StatelessWidget {
   const SenderReceiverCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.value,
-  }) : super(key: key);
+  });
 
   final String title;
   final String value;
@@ -49,7 +49,7 @@ class SenderReceiverCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             MyText(
               value,

@@ -6,6 +6,7 @@ class SplashState extends Equatable {
     this.status = SplashStatus.init,
     this.versionNumber = '',
     this.buildNumber = '',
+    this.isNewVersion = false,
   });
 
   factory SplashState.fromJson(Map<String, dynamic> json) =>
@@ -14,21 +15,24 @@ class SplashState extends Equatable {
   final SplashStatus status;
   final String versionNumber;
   final String buildNumber;
+  final bool isNewVersion;
 
   SplashState copyWith({
     SplashStatus? status,
     String? versionNumber,
     String? buildNumber,
+    bool? isNewVersion,
   }) {
     return SplashState(
       status: status ?? this.status,
       versionNumber: versionNumber ?? this.versionNumber,
       buildNumber: buildNumber ?? this.buildNumber,
+      isNewVersion: isNewVersion ?? this.isNewVersion,
     );
   }
 
   Map<String, dynamic> toJson() => _$SplashStateToJson(this);
 
   @override
-  List<Object?> get props => [status, versionNumber, buildNumber];
+  List<Object?> get props => [status, versionNumber, buildNumber, isNewVersion];
 }

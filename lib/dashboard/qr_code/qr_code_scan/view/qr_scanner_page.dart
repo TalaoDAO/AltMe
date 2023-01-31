@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QrScannerPage extends StatefulWidget {
-  const QrScannerPage({Key? key}) : super(key: key);
+  const QrScannerPage({super.key});
 
   static Route<String?> route() => MaterialPageRoute<String?>(
         builder: (context) => const QrScannerPage(),
@@ -42,7 +42,7 @@ class _QrScannerPageState extends State<QrScannerPage> {
         icon: ValueListenableBuilder(
           valueListenable: scannerController.torchState,
           builder: (context, state, child) {
-            switch (state! as TorchState) {
+            switch (state) {
               case TorchState.off:
                 return const Icon(Icons.flash_off, color: Colors.grey);
               case TorchState.on:
@@ -65,8 +65,9 @@ class _QrScannerPageState extends State<QrScannerPage> {
                   key: qrKey,
                   fit: BoxFit.cover,
                   controller: scannerController,
-                  allowDuplicates: false,
-                  onDetect: (qrcode, args) {
+                  onDetect: (capture) {
+                    final List<Barcode> qrcodes = capture.barcodes;
+                    final Barcode qrcode = qrcodes[0];
                     if (qrcode.rawValue == null) {
                       Navigator.of(context).pop();
                     } else {

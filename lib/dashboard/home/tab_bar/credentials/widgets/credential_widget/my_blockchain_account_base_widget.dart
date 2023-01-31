@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 class MyBlockchainAccountBaseWidget extends StatelessWidget {
   const MyBlockchainAccountBaseWidget({
-    Key? key,
+    super.key,
     required this.name,
     required this.walletAddress,
     required this.image,
-  }) : super(key: key);
+  });
 
   final String name;
   final String walletAddress;

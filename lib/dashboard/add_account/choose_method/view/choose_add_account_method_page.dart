@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class ChooseAddAccountMethodPage extends StatelessWidget {
   const ChooseAddAccountMethodPage({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/chooseAddAccountMethodPage'),
       builder: (_) => const ChooseAddAccountMethodPage(),
@@ -38,7 +38,7 @@ class ChooseAddAccountMethodView extends StatelessWidget {
           Text(
             l10n.selectAMethodToAddAccount,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.caption3,
+            style: Theme.of(context).textTheme.bodySmall3,
           ),
           const SizedBox(height: Sizes.spaceXLarge),
           CustomListTileCard(

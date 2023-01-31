@@ -7,14 +7,11 @@ part 'pcds_agent_certificate_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class PcdsAgentCertificateModel extends CredentialSubjectModel {
   PcdsAgentCertificateModel({
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
     this.identifier,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.pcdsAgentCertificate,
           credentialCategory: CredentialCategory.myProfessionalCards,
         );

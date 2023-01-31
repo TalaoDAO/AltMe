@@ -6,20 +6,20 @@ class GetTranslation {
     List<Translation> translations,
     AppLocalizations l10n,
   ) {
-    String _translation;
+    String translation;
     final translated =
         translations.where((element) => element.language == l10n.localeName);
     if (translated.isEmpty) {
       final List<Translation> translationList =
           translations.where((element) => element.language == 'en').toList();
       if (translationList.isEmpty) {
-        _translation = '';
+        translation = '';
       } else {
-        _translation = translationList.single.value;
+        translation = translationList.single.value;
       }
     } else {
-      _translation = translated.single.value;
+      translation = translated.single.value;
     }
-    return _translation;
+    return translation;
   }
 }

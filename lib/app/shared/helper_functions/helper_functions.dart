@@ -7,6 +7,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_path/json_path.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -242,7 +243,7 @@ Future<bool> getStoragePermission() async {
   if (await Permission.storage.request().isGranted) {
     return true;
   } else if (await Permission.storage.request().isPermanentlyDenied) {
-    //todo: show dialog to choose this option
+    // TODO(all): show dialog to choose this option
     await openAppSettings();
   } else if (await Permission.storage.request().isDenied) {
     return false;
@@ -255,4 +256,11 @@ String getDateTimeWithoutSpace() {
     DateTime.now().microsecondsSinceEpoch,
   ).toString().replaceAll(' ', '-');
   return dateTime;
+}
+
+Future<String> web3RpcMainnetInfuraURL() async {
+  await dotenv.load();
+  final String infuraApiKey = dotenv.get('INFURA_API_KEY');
+  const String prefixUrl = Parameters.web3RpcMainnetUrl;
+  return '$prefixUrl$infuraApiKey';
 }

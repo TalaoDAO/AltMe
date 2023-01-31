@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class CredentialManifestCard extends StatelessWidget {
   const CredentialManifestCard({
-    Key? key,
+    super.key,
     required this.credentialModel,
     required this.outputDescriptor,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final OutputDescriptor outputDescriptor;

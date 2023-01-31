@@ -7,17 +7,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QueryByExamplePresentPage extends StatefulWidget {
   const QueryByExamplePresentPage({
-    Key? key,
+    super.key,
     required this.uri,
     required this.preview,
     required this.issuer,
-  }) : super(key: key);
+  });
 
   final Uri uri;
   final Map<String, dynamic> preview;
   final Issuer issuer;
 
-  static Route route({
+  static Route<dynamic> route({
     required Uri uri,
     required Map<String, dynamic> preview,
     required Issuer issuer,
@@ -58,7 +58,7 @@ class _QueryByExamplePresentPageState extends State<QueryByExamplePresentPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
                   '''${l10n.credentialPresentRequiredCredential} credential(s).''',
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
               // const SizedBox(height: 16.0),

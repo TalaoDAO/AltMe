@@ -10,17 +10,17 @@ import 'package:secure_storage/secure_storage.dart';
 
 class ConfirmPinCodePage extends StatelessWidget {
   const ConfirmPinCodePage({
-    Key? key,
+    super.key,
     required this.storedPassword,
     required this.isValidCallback,
     required this.isFromOnboarding,
-  }) : super(key: key);
+  });
 
   final String storedPassword;
   final VoidCallback isValidCallback;
   final bool isFromOnboarding;
 
-  static Route route({
+  static Route<dynamic> route({
     required String storedPassword,
     required VoidCallback isValidCallback,
     required bool isFromOnboarding,
@@ -50,11 +50,11 @@ class ConfirmPinCodePage extends StatelessWidget {
 
 class ConfirmPinCodeView extends StatefulWidget {
   const ConfirmPinCodeView({
-    Key? key,
+    super.key,
     required this.storedPassword,
     required this.isValidCallback,
     required this.isFromOnboarding,
-  }) : super(key: key);
+  });
 
   final String storedPassword;
   final VoidCallback isValidCallback;
@@ -98,11 +98,11 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
             : null,
         deleteButton: Text(
           l10n.delete,
-          style: Theme.of(context).textTheme.button,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
         cancelButton: Text(
           l10n.cancel,
-          style: Theme.of(context).textTheme.button,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
         cancelCallback: _onPasscodeCancelled,
         isValidCallback: widget.isValidCallback,

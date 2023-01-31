@@ -4,7 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class SeeAddressButton extends StatelessWidget {
-  const SeeAddressButton({Key? key, this.onTap}) : super(key: key);
+  const SeeAddressButton({super.key, this.onTap});
 
   final VoidCallback? onTap;
 

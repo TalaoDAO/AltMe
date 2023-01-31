@@ -7,17 +7,17 @@ typedef OnScrollEnded = Future<void> Function();
 
 class NftList extends StatefulWidget {
   const NftList({
-    Key? key,
+    super.key,
     required this.nftList,
     required this.onRefresh,
     this.onScrollEnded,
     this.onItemClick,
-  }) : super(key: key);
+  });
 
   final List<NftModel> nftList;
   final RefreshCallback onRefresh;
   final OnScrollEnded? onScrollEnded;
-  final Function(NftModel)? onItemClick;
+  final dynamic Function(NftModel)? onItemClick;
 
   @override
   State<NftList> createState() => _NftListState();

@@ -11,7 +11,7 @@ import 'package:key_generator/key_generator.dart';
 class CreateAccountStep1Page extends StatelessWidget {
   const CreateAccountStep1Page({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/createAccountStep1Page'),
       builder: (_) => const CreateAccountStep1Page(),
@@ -48,7 +48,7 @@ class CreateAccountStep1View extends StatelessWidget {
           Text(
             l10n.chooseABlockchainForAccountCreation,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.caption3,
+            style: Theme.of(context).textTheme.bodySmall3,
           ),
           const SizedBox(height: Sizes.spaceNormal),
           CustomListTileCard(

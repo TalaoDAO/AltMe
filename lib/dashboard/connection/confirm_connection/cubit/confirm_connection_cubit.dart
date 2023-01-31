@@ -49,7 +49,6 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           walletCubit.state.currentAccount!;
 
       switch (connectionBridgeType) {
-
         // TODO(bibash): check if tezos or ethereum
 
         case ConnectionBridgeType.beacon:
@@ -57,7 +56,8 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
               getKeysFromSecretKey(secretKey: currentAccount.secretKey);
 
           log.i('Start connecting to beacon');
-          final Map response = await beacon.permissionResponse(
+          final Map<dynamic, dynamic> response =
+              await beacon.permissionResponse(
             id: beaconCubit.state.beaconRequest!.request!.id!,
             publicKey: sourceKeystore.publicKey,
             address: currentAccount.walletAddress,
@@ -96,13 +96,9 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
             );
           }
 
-          await dotenv.load();
-          final int WEB3_MAINNET_CHAIN_ID =
-              int.parse(dotenv.get('WEB3_MAINNET_CHAIN_ID'));
-
           wcClient.approveSession(
             accounts: walletAddresses,
-            chainId: WEB3_MAINNET_CHAIN_ID,
+            chainId: currentAccount.blockchainType.chainId,
           );
 
           log.i('Connected to walletconnect');
@@ -116,7 +112,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
               peerId: wcClient.peerId!,
               remotePeerId: wcClient.remotePeerId!,
               remotePeerMeta: wcClient.remotePeerMeta!,
-              chainId: WEB3_MAINNET_CHAIN_ID,
+              chainId: currentAccount.blockchainType.chainId,
             ),
           );
 

@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 
 class ProfessionalExperienceAssessmentWidget extends StatelessWidget {
   const ProfessionalExperienceAssessmentWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 

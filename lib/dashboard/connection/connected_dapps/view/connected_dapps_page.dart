@@ -11,13 +11,13 @@ import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class ConnectedDappsPage extends StatelessWidget {
   const ConnectedDappsPage({
-    Key? key,
+    super.key,
     required this.walletAddress,
-  }) : super(key: key);
+  });
 
   final String walletAddress;
 
-  static Route route({required String walletAddress}) {
+  static Route<dynamic> route({required String walletAddress}) {
     return MaterialPageRoute<void>(
       builder: (_) => ConnectedDappsPage(walletAddress: walletAddress),
       settings: const RouteSettings(name: '/ConnectedDappsPage'),
@@ -45,9 +45,9 @@ class ConnectedDappsPage extends StatelessWidget {
 
 class ConnectedDappsView extends StatefulWidget {
   const ConnectedDappsView({
-    Key? key,
+    super.key,
     required this.walletAddress,
-  }) : super(key: key);
+  });
 
   final String walletAddress;
 
@@ -140,7 +140,7 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                             Center(
                               child: Text(
                                 l10n.noDappConnected,
-                                style: Theme.of(context).textTheme.caption,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             )
                           else

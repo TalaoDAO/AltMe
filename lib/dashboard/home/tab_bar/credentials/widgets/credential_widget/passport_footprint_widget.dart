@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class PassportFootprintWidget extends StatelessWidget {
-  const PassportFootprintWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const PassportFootprintWidget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

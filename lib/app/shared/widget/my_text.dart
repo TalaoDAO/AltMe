@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 class MyText extends StatelessWidget {
   const MyText(
     this.text, {
-    Key? key,
+    super.key,
     this.style,
     this.maxLines = 1,
     this.textAlign = TextAlign.left,
     this.overflow,
     this.minFontSize = 0,
     this.maxLength,
-  }) : super(key: key);
+  });
 
   final String text;
   final TextStyle? style;
@@ -23,7 +23,7 @@ class MyText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style ?? Theme.of(context).textTheme.subtitle1;
+    final style = this.style ?? Theme.of(context).textTheme.titleMedium;
     return AutoSizeText(
       textWithDesiredLength,
       style: style,

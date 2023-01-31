@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class PinCodeTitle extends StatelessWidget {
   const PinCodeTitle({
-    Key? key,
+    super.key,
     required this.title,
     required this.subTitle,
-  }) : super(key: key);
+  });
 
   final String title;
   final String? subTitle;

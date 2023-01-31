@@ -28,15 +28,15 @@ class CameraCubit extends Cubit<CameraState> {
       return;
     }
 
-    CameraDescription? _selectedCamera = cameras[0];
+    CameraDescription? selectedCamera = cameras[0];
     try {
       if (defaultConfig.frontCameraAsDefault) {
-        _selectedCamera = cameras.firstWhere(
+        selectedCamera = cameras.firstWhere(
           (description) =>
               description.lensDirection == CameraLensDirection.front,
         );
       } else {
-        _selectedCamera = cameras.firstWhere(
+        selectedCamera = cameras.firstWhere(
           (description) =>
               description.lensDirection == CameraLensDirection.back,
         );
@@ -46,7 +46,7 @@ class CameraCubit extends Cubit<CameraState> {
       logger.e('error: $e, stack: $s', e, s);
     }
     cameraController = CameraController(
-      _selectedCamera ?? cameras[0],
+      selectedCamera ?? cameras[0],
       ResolutionPreset.high,
       imageFormatGroup: ImageFormatGroup.yuv420,
       enableAudio: false,

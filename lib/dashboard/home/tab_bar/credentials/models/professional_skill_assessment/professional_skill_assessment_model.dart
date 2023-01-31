@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/author/author.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/professional_experience_assessment/skill.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/signature/signature.dart';
@@ -10,17 +9,14 @@ part 'professional_skill_assessment_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class ProfessionalSkillAssessmentModel extends CredentialSubjectModel {
   ProfessionalSkillAssessmentModel({
-    String? id,
-    String? type,
+    super.id,
+    super.type,
     this.skills,
-    Author? issuedBy,
+    super.issuedBy,
     this.signatureLines,
     this.familyName,
     this.givenName,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType:
               CredentialSubjectType.professionalSkillAssessment,
           credentialCategory: CredentialCategory.identityCards,

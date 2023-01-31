@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NetworkSwitcherButton extends StatelessWidget {
-  const NetworkSwitcherButton({Key? key, this.onTap}) : super(key: key);
+  const NetworkSwitcherButton({super.key, this.onTap});
 
   final VoidCallback? onTap;
 
@@ -30,7 +30,7 @@ class NetworkSwitcherButton extends StatelessWidget {
               builder: (context, state) {
                 return Text(
                   state.network.title!,
-                  style: Theme.of(context).textTheme.caption?.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         decoration: TextDecoration.underline,
                       ),
                 );

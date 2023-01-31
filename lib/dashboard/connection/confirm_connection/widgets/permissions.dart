@@ -4,7 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class Permissions extends StatelessWidget {
-  const Permissions({Key? key}) : super(key: key);
+  const Permissions({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class Permissions extends StatelessWidget {
 }
 
 class PermissionText extends StatelessWidget {
-  const PermissionText({Key? key, required this.text}) : super(key: key);
+  const PermissionText({super.key, required this.text});
 
   final String text;
 

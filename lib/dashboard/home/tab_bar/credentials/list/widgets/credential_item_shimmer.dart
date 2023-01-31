@@ -3,7 +3,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CredentialItemShimmer extends StatelessWidget {
-  const CredentialItemShimmer({Key? key}) : super(key: key);
+  const CredentialItemShimmer({super.key});
 
   @override
   Widget build(BuildContext context) {

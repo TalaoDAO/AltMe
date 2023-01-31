@@ -7,9 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class DIDPrivateKeyPage extends StatefulWidget {
-  const DIDPrivateKeyPage({Key? key}) : super(key: key);
+  const DIDPrivateKeyPage({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       builder: (_) => BlocProvider<DIDPrivateKeyCubit>(
         create: (_) =>
@@ -36,12 +36,12 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
 
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10),
+      duration: const Duration(seconds: 20),
     );
 
-    final Tween<double> _rotationTween = Tween(begin: 20, end: 0);
+    final Tween<double> rotationTween = Tween(begin: 20, end: 0);
 
-    animation = _rotationTween.animate(animationController)
+    animation = rotationTween.animate(animationController)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           Navigator.pop(context);
@@ -64,16 +64,6 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
       title: l10n.decentralizedIDKey,
       titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
-      titleTrailing: AnimatedBuilder(
-        animation: animation,
-        builder: (BuildContext context, Widget? child) {
-          return Text(
-            timeFormatter(timeInSecond: animation.value.toInt()),
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge,
-          );
-        },
-      ),
       secureScreen: true,
       body: BackgroundCard(
         width: double.infinity,
@@ -94,9 +84,23 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
                 return Text(
                   state,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.titleMedium,
                 );
               },
+            ),
+            Expanded(
+              child: Center(
+                child: AnimatedBuilder(
+                  animation: animation,
+                  builder: (BuildContext context, Widget? child) {
+                    return Text(
+                      timeFormatter(timeInSecond: animation.value.toInt()),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.displayMedium,
+                    );
+                  },
+                ),
+              ),
             ),
             // Padding(
             //   padding: const EdgeInsets.all(Sizes.spaceXLarge),

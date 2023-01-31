@@ -6,10 +6,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DisplaySignatures extends StatelessWidget {
   const DisplaySignatures({
-    Key? key,
+    super.key,
     required this.localizations,
     required this.signature,
-  }) : super(key: key);
+  });
 
   final AppLocalizations localizations;
   final Signature signature;

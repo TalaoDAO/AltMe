@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class DescriptionDialog extends StatelessWidget {
   const DescriptionDialog({
-    Key? key,
+    super.key,
     required this.text,
-  }) : super(key: key);
+  });
 
   final String text;
 
@@ -36,7 +36,7 @@ class DescriptionDialog extends StatelessWidget {
             children: [
               Text(
                 '${context.l10n.credentialManifestDescription}:',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.left,
               ),
               TransparentInkWell(
@@ -62,7 +62,7 @@ class DescriptionDialog extends StatelessWidget {
           const SizedBox(height: 5),
           Text(
             text,
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
             textAlign: TextAlign.left,
           ),
         ],

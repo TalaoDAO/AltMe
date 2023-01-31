@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 class MyTab extends StatelessWidget {
   const MyTab({
-    Key? key,
+    super.key,
     required this.icon,
     required this.text,
     required this.isSelected,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   final String text;
   final String icon;

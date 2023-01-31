@@ -9,13 +9,13 @@ import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class RightsPage extends StatelessWidget {
   const RightsPage({
-    Key? key,
+    super.key,
     required this.savedDappData,
-  }) : super(key: key);
+  });
 
   final SavedDappData savedDappData;
 
-  static Route route({required SavedDappData savedDappData}) {
+  static Route<dynamic> route({required SavedDappData savedDappData}) {
     return MaterialPageRoute<void>(
       builder: (_) => RightsPage(savedDappData: savedDappData),
       settings: const RouteSettings(name: '/RightsPage'),
@@ -38,9 +38,9 @@ class RightsPage extends StatelessWidget {
 
 class RightsView extends StatelessWidget {
   const RightsView({
-    Key? key,
+    super.key,
     required this.savedDappData,
-  }) : super(key: key);
+  });
 
   final SavedDappData savedDappData;
 

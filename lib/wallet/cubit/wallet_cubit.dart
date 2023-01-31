@@ -53,7 +53,7 @@ class WalletCubit extends Cubit<WalletState> {
 
   final log = getLogger('WalletCubit');
 
-  Future initialize({required String? ssiKey}) async {
+  Future<void> initialize({required String? ssiKey}) async {
     if (ssiKey != null) {
       if (ssiKey.isNotEmpty) {
         unawaited(loadAllCredentials(ssiKey: ssiKey));
@@ -61,7 +61,7 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future loadAllCredentials({required String ssiKey}) async {
+  Future<void> loadAllCredentials({required String ssiKey}) async {
     final log = getLogger('loadAllCredentials');
     final savedCredentials = await credentialsRepository.findAll(/* filters */);
     emit(
@@ -74,7 +74,7 @@ class WalletCubit extends Cubit<WalletState> {
     await addRequiredCredentials(ssiKey: ssiKey);
   }
 
-  Future addRequiredCredentials({required String ssiKey}) async {
+  Future<void> addRequiredCredentials({required String ssiKey}) async {
     final log = getLogger('addRequiredCredentials');
 
     /// device info card
@@ -117,7 +117,7 @@ class WalletCubit extends Cubit<WalletState> {
     required bool isImported,
     required bool isFromOnboarding,
     BlockchainType? blockchainType,
-    Function({
+    void Function({
       required CryptoAccount cryptoAccount,
       required MessageHandler messageHandler,
     })?
@@ -344,7 +344,7 @@ class WalletCubit extends Cubit<WalletState> {
   Future<void> editCryptoAccountName({
     required String newAccountName,
     required int index,
-    Function(CryptoAccount cryptoAccount)? onComplete,
+    dynamic Function(CryptoAccount cryptoAccount)? onComplete,
     required BlockchainType blockchainType,
   }) async {
     final CryptoAccountData cryptoAccountData = state.cryptoAccount.data[index];
@@ -415,7 +415,7 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future deleteById({
+  Future<void> deleteById({
     required CredentialModel credential,
     bool showMessage = true,
   }) async {
@@ -438,7 +438,7 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future updateCredential({
+  Future<void> updateCredential({
     required CredentialModel credential,
     bool showMessage = true,
   }) async {
@@ -464,7 +464,7 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future handleUnknownRevocationStatus(CredentialModel credential) async {
+  Future<void> handleUnknownRevocationStatus(CredentialModel credential) async {
     await credentialsRepository.update(credential);
     final index =
         state.credentials.indexWhere((element) => element.id == credential.id);
@@ -481,7 +481,7 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future insertCredential({
+  Future<void> insertCredential({
     required CredentialModel credential,
     bool showMessage = true,
   }) async {
@@ -553,7 +553,7 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future replaceCredential({
+  Future<void> replaceCredential({
     required CredentialModel credential,
     bool showMessage = true,
   }) async {
@@ -647,7 +647,7 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future resetWallet() async {
+  Future<void> resetWallet() async {
     /// reward operations id in all accounts
     for (final cryptoAccountData in state.cryptoAccount.data) {
       await secureStorageProvider.delete(

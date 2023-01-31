@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 void sensibleRoute({
   required BuildContext context,
-  required Route route,
+  required Route<dynamic> route,
   required bool isSameRoute,
 }) {
   if (isSameRoute) {

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectTokenBottomSheet extends StatelessWidget {
-  const SelectTokenBottomSheet({Key? key}) : super(key: key);
+  const SelectTokenBottomSheet({super.key});
 
   static Future<TokenModel?> show(BuildContext context) {
     return showModalBottomSheet(
@@ -28,7 +28,7 @@ class SelectTokenBottomSheet extends StatelessWidget {
 }
 
 class _SelectTokenBottomSheetView extends StatefulWidget {
-  const _SelectTokenBottomSheetView({Key? key}) : super(key: key);
+  const _SelectTokenBottomSheetView();
 
   @override
   State<_SelectTokenBottomSheetView> createState() =>
@@ -54,7 +54,7 @@ class _SelectTokenBottomSheetViewState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         boxShadow: [

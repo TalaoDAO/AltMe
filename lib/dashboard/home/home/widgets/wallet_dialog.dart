@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 
 class WalletDialog extends StatelessWidget {
   const WalletDialog({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

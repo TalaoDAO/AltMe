@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class BunnyPassWidget extends StatelessWidget {
-  const BunnyPassWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const BunnyPassWidget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

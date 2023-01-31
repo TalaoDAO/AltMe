@@ -4,7 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-typedef KeyboardTapCallback = void Function(String text);
+typedef KeyboardTapCallback = dynamic Function(String text);
 
 @immutable
 class KeyboardUIConfig {
@@ -33,12 +33,12 @@ class KeyboardUIConfig {
 
 class NumericKeyboard extends StatelessWidget {
   NumericKeyboard({
-    Key? key,
+    super.key,
     required this.keyboardUIConfig,
     required this.onKeyboardTap,
     this.leadingButton,
     this.trailingButton,
-  }) : super(key: key);
+  });
 
   final KeyboardUIConfig keyboardUIConfig;
   final KeyboardTapCallback onKeyboardTap;
@@ -46,7 +46,8 @@ class NumericKeyboard extends StatelessWidget {
   static String deleteButton = 'keyboard_delete_button';
 
   //should have a proper order [1...9, 0]
-  final Widget? leadingButton, trailingButton;
+  final Widget? leadingButton;
+  final Widget? trailingButton;
 
   @override
   Widget build(BuildContext context) => _buildKeyboard(context);
@@ -125,7 +126,7 @@ class NumericKeyboard extends StatelessWidget {
 
 class KeyboardButton extends StatelessWidget {
   const KeyboardButton({
-    Key? key,
+    super.key,
     required this.semanticsLabel,
     this.label,
     this.icon,
@@ -134,14 +135,14 @@ class KeyboardButton extends StatelessWidget {
     this.digitShape = BoxShape.circle,
     this.digitBorderWidth = 3.4,
     this.digitTextStyle,
-  }) : super(key: key);
+  });
 
   final BoxShape digitShape;
   final double digitBorderWidth;
   final String? label;
   final Widget? icon;
-  final Function(String)? onTap;
-  final Function(String)? onLongPress;
+  final dynamic Function(String)? onTap;
+  final dynamic Function(String)? onLongPress;
   final String semanticsLabel;
   final TextStyle? digitTextStyle;
 
@@ -161,7 +162,7 @@ class KeyboardButton extends StatelessWidget {
                   onTap: () {
                     onTap?.call(semanticsLabel);
                   },
-                  child: Container(
+                  child: DecoratedBox(
                     decoration: BoxDecoration(
                       shape: digitShape,
                       color: Colors.transparent,
@@ -203,7 +204,7 @@ class KeyboardButton extends StatelessWidget {
                   onTap: () {
                     onTap?.call(semanticsLabel);
                   },
-                  child: Container(
+                  child: DecoratedBox(
                     decoration: BoxDecoration(
                       shape: digitShape,
                       color: Colors.transparent,
@@ -243,12 +244,12 @@ class KeyboardButton extends StatelessWidget {
 
 class AlignedGrid extends StatelessWidget {
   const AlignedGrid({
-    Key? key,
+    super.key,
     required this.children,
     required this.keyboardSize,
     this.spacing = 4,
     this.runSpacing = 4,
-  }) : super(key: key);
+  });
 
   final double runSpacing;
   final double spacing;

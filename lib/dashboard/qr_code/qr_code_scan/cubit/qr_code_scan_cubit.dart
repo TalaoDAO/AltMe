@@ -455,7 +455,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
     } catch (e) {
       log.e(
-        'An error occurred while connecting to the server. ${e.toString()}',
+        'An error occurred while connecting to the server. $e',
       );
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));

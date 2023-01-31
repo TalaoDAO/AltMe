@@ -3,9 +3,9 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class TermsPage extends StatelessWidget {
-  const TermsPage({Key? key}) : super(key: key);
+  const TermsPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (_) => const TermsPage(),
         settings: const RouteSettings(name: '/termsPage'),
       );

@@ -5,15 +5,15 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 class QrCodeDisplayPage extends StatelessWidget {
   const QrCodeDisplayPage({
-    Key? key,
+    super.key,
     required this.name,
     required this.data,
-  }) : super(key: key);
+  });
 
   final String name;
   final CredentialModel data;
 
-  static Route route(String name, CredentialModel data) =>
+  static Route<dynamic> route(String name, CredentialModel data) =>
       MaterialPageRoute<void>(
         builder: (context) => QrCodeDisplayPage(name: name, data: data),
         settings: const RouteSettings(name: '/qrCodeDisplay'),

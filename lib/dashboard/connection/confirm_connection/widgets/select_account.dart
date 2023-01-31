@@ -8,11 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectAccount extends StatelessWidget {
   const SelectAccount({
-    Key? key,
-    required this.blockchainType,
-  }) : super(key: key);
+    super.key,
+    required this.connectionBridgeType,
+  });
 
-  final BlockchainType blockchainType;
+  final ConnectionBridgeType connectionBridgeType;
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +32,29 @@ class SelectAccount extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, i) {
                 final cryptoAccountData = walletState.cryptoAccount.data[i];
-                return cryptoAccountData.blockchainType == blockchainType
-                    ? SelectBoxAccountItem(
-                        cryptoAccountData: cryptoAccountData,
-                        isSelected: walletState.currentCryptoIndex == i,
-                        listIndex: i,
-                        onPressed: () {
-                          context
-                              .read<WalletCubit>()
-                              .setCurrentWalletAccount(i);
-                        },
-                      )
-                    : Container();
+
+                if (connectionBridgeType == ConnectionBridgeType.beacon) {
+                  if (cryptoAccountData.blockchainType !=
+                      BlockchainType.tezos) {
+                    // beacon and ethereum, matic, polygon, binance
+                    return Container();
+                  }
+                } else {
+                  if (cryptoAccountData.blockchainType ==
+                      BlockchainType.tezos) {
+                    // wallet-connect and tezos
+                    return Container();
+                  }
+                }
+
+                return SelectBoxAccountItem(
+                  cryptoAccountData: cryptoAccountData,
+                  isSelected: walletState.currentCryptoIndex == i,
+                  listIndex: i,
+                  onPressed: () {
+                    context.read<WalletCubit>().setCurrentWalletAccount(i);
+                  },
+                );
               },
               separatorBuilder: (_, __) => Padding(
                 padding: const EdgeInsets.symmetric(

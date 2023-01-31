@@ -5,15 +5,15 @@ class CredentialImage extends StatelessWidget {
   const CredentialImage({
     this.child,
     required this.image,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final Widget? child;
   final String image;
 
   @override
   Widget build(BuildContext context) {
     return CredentialContainer(
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.fill,

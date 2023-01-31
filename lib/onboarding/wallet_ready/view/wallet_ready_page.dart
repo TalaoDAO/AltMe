@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class WalletReadyPage extends StatelessWidget {
   const WalletReadyPage({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/walletReadyPage'),
       builder: (_) => const WalletReadyPage(),
@@ -73,7 +73,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                     ),
                     Text(
                       l10n.walletReadyTitle,
-                      style: Theme.of(context).textTheme.headline4,
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     const SizedBox(
                       height: Sizes.spaceNormal,
@@ -81,10 +81,11 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                     Text(
                       l10n.walletReadySubtitle,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
-                            fontWeight: FontWeight.normal,
-                            color: Theme.of(context).colorScheme.onTertiary,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.normal,
+                                color: Theme.of(context).colorScheme.onTertiary,
+                              ),
                     ),
                     const SizedBox(
                       height: Sizes.space3XLarge,

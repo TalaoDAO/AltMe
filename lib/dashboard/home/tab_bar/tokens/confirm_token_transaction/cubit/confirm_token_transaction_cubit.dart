@@ -80,8 +80,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           ),
         );
       } else {
-        await dotenv.load();
-        final web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
+        final web3RpcURL = await web3RpcMainnetInfuraURL();
 
         final amount = state.tokenAmount
             .toStringAsFixed(int.parse(state.selectedToken.decimals))
@@ -90,7 +89,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
         final credentials =
             EthPrivateKey.fromHex(state.selectedAccountSecretKey);
-        final sender = await credentials.extractAddress();
+        final sender = credentials.address;
         final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
 
         final maxGas = await MWeb3Client.estimateEthereumFee(
@@ -325,7 +324,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       final server = manageNetworkCubit.state.network.rpcNodeUrl;
 
-      // TODO(all): Do check this getKeysFromSecretKey() in helper function
       final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
 
       final keyStore = KeyStoreModel(
@@ -449,6 +447,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       emit(state.loading());
 
+      //final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+      final rpcUrl = await web3RpcMainnetInfuraURL();
       final amount = tokenAmount *
           double.parse(
             1.toStringAsFixed(int.parse(token.decimals)).replaceAll('.', ''),

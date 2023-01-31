@@ -722,7 +722,9 @@
     "linkedInBanner",
     "linkedInProfile",
     "checkLinkedinProfile",
-    "scanAndDisplay"
+    "scanAndDisplay",
+    "whatsNew",
+    "okGotIt"
   ],
 
   "es": [
@@ -1448,7 +1450,9 @@
     "linkedInBanner",
     "linkedInProfile",
     "checkLinkedinProfile",
-    "scanAndDisplay"
+    "scanAndDisplay",
+    "whatsNew",
+    "okGotIt"
   ],
 
   "fr": [
@@ -2174,7 +2178,9 @@
     "linkedInBanner",
     "linkedInProfile",
     "checkLinkedinProfile",
-    "scanAndDisplay"
+    "scanAndDisplay",
+    "whatsNew",
+    "okGotIt"
   ],
 
   "it": [
@@ -2900,6 +2906,8 @@
     "linkedInBanner",
     "linkedInProfile",
     "checkLinkedinProfile",
-    "scanAndDisplay"
+    "scanAndDisplay",
+    "whatsNew",
+    "okGotIt"
   ]
 }

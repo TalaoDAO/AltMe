@@ -3,7 +3,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class TokenItemShimmer extends StatelessWidget {
-  const TokenItemShimmer({Key? key}) : super(key: key);
+  const TokenItemShimmer({super.key});
 
   @override
   Widget build(BuildContext context) {

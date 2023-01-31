@@ -3,15 +3,16 @@ import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
+import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class DashboardPage extends StatelessWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+  const DashboardPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (context) => const DashboardPage(),
         settings: const RouteSettings(name: '/dashboardPage'),
       );
@@ -26,7 +27,7 @@ class DashboardPage extends StatelessWidget {
 }
 
 class DashboardView extends StatefulWidget {
-  const DashboardView({Key? key}) : super(key: key);
+  const DashboardView({super.key});
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
@@ -37,10 +38,16 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
-      /// If there is a deepLink we give do as if it coming from QRCode
-      context.read<QRCodeScanCubit>().deepLink();
-      context.read<BeaconCubit>().startBeacon();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration.zero, () {
+        /// If there is a deepLink we give do as if it coming from QRCode
+        context.read<QRCodeScanCubit>().deepLink();
+        context.read<BeaconCubit>().startBeacon();
+
+        if (context.read<SplashCubit>().state.isNewVersion) {
+          WhatIsNewDialog.show(context);
+        }
+      });
     });
     super.initState();
   }

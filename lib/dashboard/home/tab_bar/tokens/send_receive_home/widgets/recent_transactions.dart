@@ -7,13 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RecentTransactions extends StatelessWidget {
   const RecentTransactions({
-    Key? key,
+    super.key,
     this.operations = const [],
     required this.decimal,
     required this.symbol,
     this.tokenUsdPrice,
     required this.onRefresh,
-  }) : super(key: key);
+  });
 
   final List<OperationModel> operations;
   final int decimal;
@@ -34,7 +34,7 @@ class RecentTransactions extends StatelessWidget {
           children: [
             Text(
               l10n.recentTransactions,
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(
               height: Sizes.spaceNormal,

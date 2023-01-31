@@ -49,10 +49,10 @@ class AlertMessage {
 
 class SnackBarContent extends StatelessWidget {
   const SnackBarContent({
-    Key? key,
+    super.key,
     required this.message,
     required this.iconPath,
-  }) : super(key: key);
+  });
 
   final String message;
   final String iconPath;
@@ -102,7 +102,7 @@ class SnackBarContent extends StatelessWidget {
             },
             child: Text(
               l10n.close.toUpperCase(),
-              style: Theme.of(context).textTheme.button?.copyWith(
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
