@@ -344,7 +344,7 @@ class Ebsi {
     final jsonPath = JsonPath(r'$..token_endpoint');
     final openidConfigurationUrl = '$issuer/.well-known/openid-configuration';
     final openidConfigurationResponse =
-        await client.get<String>(openidConfigurationUrl);
+        await client.get<Map<String, dynamic>>(openidConfigurationUrl);
     final tokenEndPoint =
         jsonPath.readValues(openidConfigurationResponse.data).first as String;
 

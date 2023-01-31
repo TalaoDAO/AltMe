@@ -11,6 +11,26 @@ then
   fvm flutter pub get
   fvm flutter packages pub run build_runner build --delete-conflicting-outputs
   cd ..
+  cd did_kit
+  fvm flutter pub get
+  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+  cd ..
+  cd ebsi
+  fvm flutter pub get
+  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+  cd ..
+  cd jwt_decode
+  fvm flutter pub get
+  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+  cd ..
+  cd key_generator
+  fvm flutter pub get
+  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+  cd ..
+  cd secure_storage
+  fvm flutter pub get
+  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+  cd ..
   cd ..
   fvm flutter pub get
   fvm flutter packages pub run build_runner build --delete-conflicting-outputs

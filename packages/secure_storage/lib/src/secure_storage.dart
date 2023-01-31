@@ -11,9 +11,8 @@ class SecureStorageProvider {
 
   final FlutterSecureStorage _storage;
 
-  IOSOptions get _defaultIOSOptions => const IOSOptions(
-        accessibility: IOSAccessibility.unlocked_this_device,
-      );
+  IOSOptions get _defaultIOSOptions =>
+      const IOSOptions(accessibility: KeychainAccessibility.first_unlock);
 
   ///get
   Future<String?> get(String key) async {
