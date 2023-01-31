@@ -61,17 +61,17 @@ class CredentialManifest {
     return PresentationDefinition.fromJson(json as Map<String, dynamic>);
   }
 
-  static CredentialManifest copyWith({
+  CredentialManifest copyWith({
     String? id,
     List<OutputDescriptor>? outputDescriptors,
     PresentationDefinition? presentationDefinition,
     IssuedBy? issuedBy,
   }) {
     return CredentialManifest(
-      id,
-      issuedBy,
-      outputDescriptors,
-      presentationDefinition,
+      id ?? this.id,
+      issuedBy ?? this.issuedBy,
+      outputDescriptors ?? this.outputDescriptors,
+      presentationDefinition ?? this.presentationDefinition,
     );
   }
 }

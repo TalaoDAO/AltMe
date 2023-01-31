@@ -1,0 +1,35 @@
+name: ebsi
+description: EBSI wallet compliance
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+  flutter: 3.3.7
+
+dependencies:
+  bip32: ^2.0.0
+  bip39: ^1.0.6
+  crypto: ^3.0.2
+  dart_bip32_bip44: ^0.2.0
+  dart_jsonwebtoken: ^2.6.4
+  dart_web3: ^0.0.3
+  dio: ^4.0.6
+  ed25519_hd_key: ^2.2.0
+  fast_base58: ^0.2.1
+  flutter:
+    sdk: flutter
+  jose: ^0.3.2
+  json_path: ^0.3.1
+  pinenacl: ^0.3.4
+  secp256k1: ^0.3.0
+  tezart:
+    git:
+      url: https://github.com/autonomy-system/tezart.git
+      ref: bd4b8db6e3a352590a6e556d31df8aef60db3465
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.1.0

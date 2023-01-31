@@ -31,7 +31,7 @@ class SecureStorageProvider {
     return _storage.write(
       key: key,
       value: val,
-      iOptions: _defaultIOSOptions,
+      // iOptions: _defaultIOSOptions,
     );
   }
 
@@ -39,7 +39,7 @@ class SecureStorageProvider {
   Future<void> delete(String key) async {
     return _storage.delete(
       key: key,
-      iOptions: _defaultIOSOptions,
+      // iOptions: _defaultIOSOptions,
     );
   }
 

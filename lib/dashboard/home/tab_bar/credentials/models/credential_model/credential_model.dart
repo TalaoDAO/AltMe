@@ -38,6 +38,10 @@ class CredentialModel extends Equatable {
       newJson.putIfAbsent('data', () => newJson['credentialPreview']);
     }
 
+    if (newJson['type'] == 'object') {
+      newJson.putIfAbsent('data', () => newJson['credentialPreview']);
+    }
+
     return _$CredentialModelFromJson(newJson);
   }
 
