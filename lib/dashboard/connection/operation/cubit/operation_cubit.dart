@@ -8,7 +8,6 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:tezart/tezart.dart';
@@ -110,8 +109,7 @@ class OperationCubit extends Cubit<OperationState> {
 
           amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
 
-          await dotenv.load();
-          final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
+          final String web3RpcURL = await web3RpcMainnetInfuraURL();
 
           final feeData = await MWeb3Client.estimateEthereumFee(
             web3RpcURL: web3RpcURL,
@@ -294,8 +292,7 @@ class OperationCubit extends Cubit<OperationState> {
             case BlockchainType.tezos:
               throw Exception();
             case BlockchainType.ethereum:
-              await dotenv.load();
-              rpcUrl = dotenv.get('WEB3_RPC_MAINNET_URL');
+              rpcUrl = await web3RpcMainnetInfuraURL();
               break;
             case BlockchainType.fantom:
               rpcUrl = FantomNetwork.mainNet().rpcNodeUrl;

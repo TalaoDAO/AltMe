@@ -25,4 +25,6 @@ class Parameters {
     isOtherEnabled: true,
     isPassEnabled: true,
   );
+
+  static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 }

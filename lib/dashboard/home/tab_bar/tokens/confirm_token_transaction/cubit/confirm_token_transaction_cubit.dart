@@ -80,8 +80,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           ),
         );
       } else {
-        await dotenv.load();
-        final web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
+        final web3RpcURL = await web3RpcMainnetInfuraURL();
 
         final amount = state.tokenAmount
             .toStringAsFixed(int.parse(state.selectedToken.decimals))
@@ -418,8 +417,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       emit(state.loading());
 
       //final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
-      await dotenv.load();
-      final rpcUrl = dotenv.get('WEB3_RPC_MAINNET_URL');
+      final rpcUrl = await web3RpcMainnetInfuraURL();
 
       final amount = tokenAmount *
           double.parse(

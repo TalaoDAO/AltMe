@@ -250,19 +250,13 @@ This key can be obtained from [`here`](https://developers.yoti.com/).
 4. TALAO_ISSUER_API_KEY<br />
 The key is available [`here`](https://talao.io/).
 
-5. WEB3_RPC_MAINNET_URL<br />
-You can get this key from [`here`](https://chainlist.org/chain/1).
-
-6. INFURA_API_KEY<br />
+5. INFURA_API_KEY<br />
 This key can be obtained from [`here`](https://docs.infura.io/infura/networks/ethereum/how-to/secure-a-project/project-id).
 
-7. INFURA_API_KEY_SECRET<br />
-The key is available [`here`](https://docs.infura.io/infura/networks/ethereum/how-to/secure-a-project/project-id).
-
-8. ETHERSCAN_API_KEY<br />
+6. ETHERSCAN_API_KEY<br />
 You can get this key from [`here`](https://docs.etherscan.io/getting-started/viewing-api-usage-statistics).
 
-9. MORALIS_API_KEY<br />
+7. MORALIS_API_KEY<br />
 This key can be obtained from [`here`](https://docs.moralis.io/web3-data-api/get-your-api-key).
  
 
