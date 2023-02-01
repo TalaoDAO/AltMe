@@ -1,15 +1,12 @@
-import 'dart:io';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart' hide Message, FileMessage;
 import 'package:matrix/matrix.dart' hide User;
-import 'package:open_filex/open_filex.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 

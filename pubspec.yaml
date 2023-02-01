@@ -79,6 +79,7 @@ dependencies:
   mobile_scanner: ^3.0.0-beta.1
   network_image_mock: ^2.1.0
   no_screenshot: ^0.0.1+5
+  open_filex: ^4.3.2
   package_info_plus: ^3.0.2
   passbase_flutter: ^2.13.3
   path: ^1.8.2
