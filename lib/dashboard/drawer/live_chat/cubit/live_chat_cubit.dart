@@ -37,14 +37,18 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   StreamSubscription<Event>? _onEventSubscription;
 
   Future<void> onSendPressed(PartialText partialText) async {
+    final messageId = const Uuid().v4();
     final message = TextMessage(
       author: state.user,
-      id: const Uuid().v4(),
+      id: messageId,
       text: partialText.text,
+      status: Status.sending,
     );
     emit(state.copyWith(messages: [message, ...state.messages]));
-
-    await client.getRoomById(_roomId)?.sendTextEvent(partialText.text);
+    await client.getRoomById(_roomId)?.sendTextEvent(
+          partialText.text,
+          txid: messageId,
+        );
   }
 
   Future<void> handleMessageTap(Message message) async {
@@ -110,22 +114,25 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     );
 
     if (result != null && result.files.single.path != null) {
+      final messageId = const Uuid().v4();
       final message = FileMessage(
         author: state.user,
         createdAt: DateTime.now().millisecondsSinceEpoch,
-        id: const Uuid().v4(),
+        id: messageId,
         mimeType: lookupMimeType(result.files.single.path!),
         name: result.files.single.name,
         size: result.files.single.size,
         uri: result.files.single.path!,
+        status: Status.sending,
       );
       emit(state.copyWith(messages: [message, ...state.messages]));
 
       await client.getRoomById(_roomId)?.sendFileEvent(
             MatrixFile(
-              bytes: result.files.single.bytes!,
+              bytes: File(result.files.single.path!).readAsBytesSync(),
               name: result.files.single.name,
             ),
+            txid: messageId,
           );
     }
   }
@@ -140,16 +147,18 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     if (result != null) {
       final bytes = await result.readAsBytes();
       final image = await decodeImageFromList(bytes);
+      final messageId = const Uuid().v4();
 
       final message = ImageMessage(
         author: state.user,
         createdAt: DateTime.now().millisecondsSinceEpoch,
         height: image.height.toDouble(),
-        id: const Uuid().v4(),
+        id: messageId,
         name: result.name,
         size: bytes.length,
         uri: result.path,
         width: image.width.toDouble(),
+        status: Status.sending,
       );
 
       emit(state.copyWith(messages: [message, ...state.messages]));
@@ -159,6 +168,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
               bytes: bytes,
               name: result.name,
             ),
+            txid: messageId,
           );
     }
   }
@@ -180,24 +190,76 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   void _subscribeToEventsOfRoom() {
     _onEventSubscription?.cancel();
     _onEventSubscription = client.onRoomState.stream.listen((Event event) {
-      logger.i('onEvent roomId: ${event.roomId} senderId: ${event.senderId}');
-      if (event.roomId == _roomId && event.senderId != state.user.id) {
-        late final TextMessage message;
-        if (event.messageType == 'm.text') {
-          message = TextMessage(
-            id: const Uuid().v4(),
-            text: event.text,
-            createdAt: DateTime.now().millisecondsSinceEpoch,
-            author: User(
-              id: event.senderId,
+      logger.i(
+        'onEvent roomId: ${event.roomId} senderId: ${event.senderId}'
+        'messageType: ${event.messageType}',
+      );
+      logger.i('event: ${event.toJson()}');
+      final eventId = event.eventId;
+      final txId = event.content['unsigned']['transaction_id'] as String?;
+      if (event.roomId == _roomId) {
+        if (state.messages.any(
+          (element) => element.id == eventId,
+        )) {
+          final index = state.messages.indexWhere(
+            (element) => element.id == eventId,
+          );
+          final updatedMessage = state.messages[index].copyWith(
+            status: Status.sent,
+          );
+          state.messages[index] = updatedMessage;
+          emit(state.copyWith(messages: state.messages));
+        } else if (state.messages.any(
+          (element) => element.id == txId,
+        )) {
+          final index = state.messages.indexWhere(
+            (element) => element.id == txId,
+          );
+          final updatedMessage = state.messages[index].copyWith(
+            status: Status.delivered,
+          );
+          state.messages[index] = updatedMessage;
+          emit(state.copyWith(messages: state.messages));
+        } else {
+          late final Message message;
+          if (event.messageType == 'm.text') {
+            message = TextMessage(
+              id: const Uuid().v4(),
+              text: event.text,
+              createdAt: DateTime.now().millisecondsSinceEpoch,
+              author: User(
+                id: event.senderId,
+              ),
+            );
+          } else if (event.messageType == 'm.image') {
+            message = ImageMessage(
+              id: const Uuid().v4(),
+              name: event.content['filename'] as String,
+              size: event.content['info']['size'] as num,
+              uri: event.content['url'] as String,
+              createdAt: DateTime.now().millisecondsSinceEpoch,
+              author: User(
+                id: event.senderId,
+              ),
+            );
+          } else if (event.messageType == 'm.file') {
+            message = FileMessage(
+              id: const Uuid().v4(),
+              name: event.content['filename'] as String,
+              size: event.content['info']['size'] as num,
+              uri: event.content['url'] as String,
+              createdAt: DateTime.now().millisecondsSinceEpoch,
+              author: User(
+                id: event.senderId,
+              ),
+            );
+          }
+          emit(
+            state.copyWith(
+              messages: [message, ...state.messages],
             ),
           );
-        } else if (event.messageType == 'file') {}
-        emit(
-          state.copyWith(
-            messages: [message, ...state.messages],
-          ),
-        );
+        }
       }
     });
   }
