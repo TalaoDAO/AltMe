@@ -724,7 +724,8 @@
     "checkLinkedinProfile",
     "scanAndDisplay",
     "whatsNew",
-    "okGotIt"
+    "okGotIt",
+    "altmeSupport"
   ],
 
   "es": [
@@ -1452,7 +1453,8 @@
     "checkLinkedinProfile",
     "scanAndDisplay",
     "whatsNew",
-    "okGotIt"
+    "okGotIt",
+    "altmeSupport"
   ],
 
   "fr": [
@@ -2180,7 +2182,8 @@
     "checkLinkedinProfile",
     "scanAndDisplay",
     "whatsNew",
-    "okGotIt"
+    "okGotIt",
+    "altmeSupport"
   ],
 
   "it": [
@@ -2908,6 +2911,7 @@
     "checkLinkedinProfile",
     "scanAndDisplay",
     "whatsNew",
-    "okGotIt"
+    "okGotIt",
+    "altmeSupport"
   ]
 }

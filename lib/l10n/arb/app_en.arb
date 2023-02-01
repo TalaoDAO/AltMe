@@ -788,5 +788,6 @@
   "checkLinkedinProfile":"Check a Linkedin Profile", 
   "scanAndDisplay":"Scan and Display",
   "whatsNew": "What's New",
-  "okGotIt": "OK, GOT IT!"
+  "okGotIt": "OK, GOT",
+  "altmeSupport": "AltMe support"
 }

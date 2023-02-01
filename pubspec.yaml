@@ -114,7 +114,7 @@ dependency_overrides:
 # Because flutter_sodium 0.2.0 depends on ffi ^1.0.0 and no versions of flutter_sodium match >0.2.0 <0.3.0, flutter_sodium ^0.2.0 requires ffi ^1.0.0
   async: ^2.9.0
   ffi: ^2.0.1
-  markdown: ^6.0.0
+  markdown: ^4.0.0
   stream_channel: ^2.1.0
 
 dev_dependencies:
