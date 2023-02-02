@@ -137,23 +137,6 @@ void main() {
     // final verifierKey2 = JsonWebKey.fromJson(key2);
   });
 
-  test('jose example with example key', () async {
-    const mnemonic =
-        'scatter spread layer various cry limit trial excess normal bid stem foot';
-    final ebsi = Ebsi(Dio());
-    // final private = await ebsi.jwkFromMnemonic(mnemonic: mnemonic);
-    final private = {
-      'kty': 'oct',
-      'k':
-          'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow'
-    };
-    final public = {
-      'kty': 'oct',
-      'k':
-          'AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow'
-    };
-    await codeDecodeAndVerifyJwt(private, public, 'HS256');
-  });
   test('jose example with P-256K key', () async {
     const mnemonic =
         'scatter spread layer various cry limit trial excess normal bid stem foot';

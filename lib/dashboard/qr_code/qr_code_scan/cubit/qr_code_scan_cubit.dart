@@ -194,13 +194,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     try {
       ///Check if SIOPV2 request
       if (uri?.queryParameters['scope'] == 'openid') {
-        ///restrict non-enterprise user
-        if (!profileCubit.state.model.isEnterprise) {
-          throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE,
-          );
-        }
-
         ///credential should not be empty since we have to present
         if (walletCubit.state.credentials.isEmpty) {
           emit(
@@ -221,20 +214,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         }
 
         ///request attribute check
-        if (requestAttributeExists()) {
+        if (requestAttributeExists(uri!)) {
           throw ResponseMessage(
             ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
           );
         }
 
         ///request_uri attribute check
-        if (!requestUriAttributeExists()) {
-          throw ResponseMessage(
-            ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
-          );
-        }
+        // if (!requestUriAttributeExists(uri)) {
+        //   throw ResponseMessage(
+        //     ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
+        //   );
+        // }
 
-        final sIOPV2Param = await getSIOPV2Parameters();
+        final sIOPV2Param = await getSIOPV2Parameters(uri);
 
         ///check if claims exists
         if (sIOPV2Param.claims == null) {
@@ -497,9 +490,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  bool requestAttributeExists() {
+  bool requestAttributeExists(Uri uri) {
     var condition = false;
-    state.uri!.queryParameters.forEach((key, value) {
+    uri.queryParameters.forEach((key, value) {
       if (key == 'request') {
         condition = true;
       }
@@ -507,9 +500,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return condition;
   }
 
-  bool requestUriAttributeExists() {
+  bool requestUriAttributeExists(Uri uri) {
     var condition = false;
-    state.uri!.queryParameters.forEach((key, value) {
+    uri.queryParameters.forEach((key, value) {
       if (key == 'request_uri') {
         condition = true;
       }
@@ -517,14 +510,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return condition;
   }
 
-  Future<SIOPV2Param> getSIOPV2Parameters() async {
+  Future<SIOPV2Param> getSIOPV2Parameters(Uri uri) async {
     String? nonce;
     String? redirect_uri;
     String? request_uri;
     String? claims;
     String? requestUriPayload;
 
-    state.uri!.queryParameters.forEach((key, value) {
+    uri.queryParameters.forEach((key, value) {
       if (key == 'nonce') {
         nonce = value;
       }

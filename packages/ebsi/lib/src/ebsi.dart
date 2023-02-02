@@ -8,6 +8,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:ed25519_hd_key/ed25519_hd_key.dart';
 import 'package:fast_base58/fast_base58.dart';
+import 'package:flutter/foundation.dart';
 // ignore: depend_on_referenced_packages
 import 'package:hex/hex.dart';
 import 'package:jose/jose.dart';
@@ -85,9 +86,9 @@ class Ebsi {
 
   /// getDidFromJwk
   String getDidFromPrivate(Map<String, dynamic> jwk) {
-    final thumbprint = _thumbprint(jwk);
+    final jwkThumbprint = thumbprint(jwk);
 
-    final encodedAddress = Base58Encode([2, ...thumbprint.bytes]);
+    final encodedAddress = Base58Encode([2, ...jwkThumbprint]);
     return 'did:ebsi:z$encodedAddress';
   }
 
@@ -95,17 +96,26 @@ class Ebsi {
   String getKidFromJwk(Map<String, dynamic> private) {
     final firstPart = getDidFromPrivate(private);
 
-    final sha256Digest = _thumbprint(private);
-    final lastPart = Base58Encode(sha256Digest.bytes);
+    final sha256Digest = thumbprint(private);
+    final lastPart = Base58Encode(sha256Digest);
 
     return '$firstPart#$lastPart';
   }
 
-  Digest _thumbprint(Map<String, dynamic> jwk) {
+  /// https://www.rfc-editor.org/rfc/rfc7638
+  /// Received JWT is already filtered on required members
+  /// Received JWT keys are already sorted in lexicographic order
+  @visibleForTesting
+  List<int> thumbprint(Map<String, dynamic> jwk) {
     final jsonString = jsonEncode(jwk);
+    print(jsonString);
     final bytesToHash = utf8.encode(jsonString);
+    print(bytesToHash);
     final sha256Digest = sha256.convert(bytesToHash);
-    return sha256Digest;
+    print(sha256Digest.bytes);
+    print(sha256Digest.bytes.length);
+
+    return sha256Digest.bytes;
   }
 
   /// Verifiy is url is first EBSI url, starting point to get a credential

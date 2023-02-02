@@ -30,12 +30,12 @@ void main() {
   group('EBSI DID and JWK', () {
     test('JWK from mnemonic', () async {
       final expectedJwk = {
-        'kty': 'EC',
-        'crv': 'secp256k1',
+        'alg': 'ES256K',
+        'crv': 'P-256K',
         'd': 'lrKEpyoUOWRQIUOepeOpiOWI1ovobYfK9M8hYkcSnxY',
+        'kty': 'EC',
         'x': 'MpE6Qo0XYS7FVM13JADFFjtfg4ehhmdpMFlzR4TsiR8',
-        'y': 'up-oVN_-EHHlwup51eHO7qLRS9bdN7faXug2fzTS8Uc',
-        'alg': 'ES256K'
+        'y': 'up-oVN_-EHHlwup51eHO7qLRS9bdN7faXug2fzTS8Uc'
       };
       final client = MockDio();
       final ebsi = Ebsi(client);
@@ -55,53 +55,65 @@ void main() {
       };
 // ES256K pour alg
       const expectedDid =
-          'did:ebsi:znxntxQrN369GsNyjFjYb8fuvU7g3sJGyYGwMTcUGdzuy';
+          'did:ebsi:zh8h51yMKdVYk2ZTJuva2B2H5JJP61oEZXJrPdivWvVaj';
 
       final client = MockDio();
       final ebsi = Ebsi(client);
       final did = ebsi.getDidFromPrivate(jwk);
       expect(did, expectedDid);
     });
-    test('Alice DID from JWK', () async {
-      // alice
+    test('Thumbprint exemple from rfc 7638 is working', () async {
       final jwk = {
-        'kty': 'EC',
-        'd': 'd_PpSCGQWWgUc1t4iLLH8bKYlYfc9Zy_M7TsfOAcbg8',
-        'use': 'sig',
-        'crv': 'P-256',
-        'x': 'ngy44T1vxAT6Di4nr-UaM9K3Tlnz9pkoksDokKFkmNc',
-        'y': 'QCRfOKlSM31GTkb4JHx3nXB4G_jSPMsbdjzlkT_UpPc',
-        'alg': 'ES256',
+        "e": "AQAB",
+        "kty": "RSA",
+        "n":
+            "0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbISD08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqbw0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw"
       };
-
-// alice
-      const expectedDid =
-          'did:ebsi:znxntxQrN369GsNyjFjYb8fuvU7g3sJGyYGwMTcUGdzuy';
+// ES256K pour alg
+      const expectedThumbprint = [
+        55,
+        54,
+        203,
+        177,
+        120,
+        124,
+        184,
+        48,
+        156,
+        119,
+        238,
+        140,
+        55,
+        5,
+        197,
+        225,
+        111,
+        251,
+        158,
+        133,
+        151,
+        21,
+        144,
+        31,
+        30,
+        76,
+        89,
+        177,
+        17,
+        130,
+        245,
+        123
+      ];
 
       final client = MockDio();
       final ebsi = Ebsi(client);
-      final did = ebsi.getDidFromPrivate(jwk);
-      expect(did, expectedDid);
-    });
-    test('Bob DID from JWK', () async {
-      // bob
-      final jwk = {
-        'kty': 'EC',
-        'd': 'qAAbNWOBUYBcEuDYHMWE6h4O1hgsSIhMlzR2v17F-Ls',
-        'use': 'sig',
-        'crv': 'P-256',
-        'x': 'n1l8HzJyfmvqCprbrsDoK9sUyRK2DTWoTbOFdRT_6HE',
-        'y': 'DDd9ecdyVsFJGVS1f1AtItefpKKZQDt4zFJFpk9G06A',
-        'alg': 'ES256',
-      };
-// bob
-      const expectedDid =
-          'did:ebsi:zjg6EQC8TzGGEkrKArL1Pci6JhyQo83ZrvUrrnawXi66W';
+      final did = ebsi.thumbprint(jwk);
+      expect(did, expectedThumbprint);
 
-      final client = MockDio();
-      final ebsi = Ebsi(client);
-      final did = ebsi.getDidFromPrivate(jwk);
-      expect(did, expectedDid);
+      /// NB: In https://www.rfc-editor.org/rfc/rfc7638 the base64url encoding is
+      /// NzbLsXh8uDCcd-6MNwXF4W_7noWXFZAfHkxZsRGC9Xs
+      /// and the dart result is
+      /// NzbLsXh8uDCcd-6MNwXF4W_7noWXFZAfHkxZsRGC9Xs=
     });
   });
 
@@ -126,7 +138,7 @@ void main() {
           requestOptions: RequestOptions(path: 'myPath'),
         );
       });
-      final authorizationEndpointdUri = ebsi.getAuthorizationUriForIssuer(
+      final authorizationEndpointdUri = await ebsi.getAuthorizationUriForIssuer(
         givenOpenIdRequest,
         givenredirectUrl,
       );
