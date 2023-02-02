@@ -1,19 +1,20 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart' hide Message, FileMessage;
 import 'package:matrix/matrix.dart' hide User;
-import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 class LiveChatPage extends StatelessWidget {
   const LiveChatPage({super.key});
 
-  static Route route() {
+  static Route<void> route() {
     return MaterialPageRoute<void>(
       builder: (_) => const LiveChatPage(),
       settings: const RouteSettings(name: '/liveChatPage'),
@@ -27,6 +28,7 @@ class LiveChatPage extends StatelessWidget {
             const Uuid().v4();
     return BlocProvider<LiveChatCubit>(
       create: (_) => LiveChatCubit(
+        didCubit: context.read<DIDCubit>(),
         secureStorageProvider: getSecureStorage,
         user: User(id: clientId),
         client: Client(

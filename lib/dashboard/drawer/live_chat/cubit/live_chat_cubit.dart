@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:bloc/bloc.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,7 @@ part 'live_chat_state.dart';
 
 class LiveChatCubit extends Cubit<LiveChatState> {
   LiveChatCubit({
+    required this.didCubit,
     required this.secureStorageProvider,
     required this.client,
     required User user,
@@ -35,6 +38,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   final logger = getLogger('LiveChatCubit');
   String _roomId = '';
   StreamSubscription<Event>? _onEventSubscription;
+  final DIDCubit didCubit;
 
   Future<void> onSendPressed(PartialText partialText) async {
     final messageId = const Uuid().v4();
@@ -177,7 +181,15 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     try {
       emit(state.copyWith(status: AppStatus.loading));
       await _initClient();
-      await _login();
+      final username = (didCubit.state.did ?? '').replaceAll(':', '-');
+      final password = await secureStorageProvider.get(username);
+      if (password == null || password.isEmpty) {
+        final newPassword = await _register(username: username);
+        await secureStorageProvider.set(username, newPassword);
+        await _login(username: username, password: newPassword);
+      } else {
+        await _login(username: username, password: password);
+      }
       _roomId = await _createRoomAndInviteSupport();
       _subscribeToEventsOfRoom();
       emit(state.copyWith(status: AppStatus.init));
@@ -281,15 +293,43 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   }
 
   Future<void> _initClient() async {
-    await dotenv.load();
-    final homeServer = dotenv.get('MATRIX_HOME_SERVER');
-    client.homeserver = Uri.parse(homeServer);
+    client.homeserver = Uri.parse(Urls.matrixHomeServer);
     await client.init();
   }
 
-  Future<void> _login() async {
-    final username = dotenv.get('MATRIX_USERNAME');
-    final password = dotenv.get('MATRIX_PASSWORD');
+  Future<String> _register({
+    required String username,
+  }) async {
+    late String deviceId;
+    late String deviceName;
+
+    if (isAndroid()) {
+      final androidDeviceInfo = await DeviceInfoPlugin().androidInfo;
+      deviceId = androidDeviceInfo.id;
+      deviceName = androidDeviceInfo.model;
+    } else {
+      final iosDeviceInfo = await DeviceInfoPlugin().iosInfo;
+      deviceId = iosDeviceInfo.identifierForVendor ?? 'unkown';
+      deviceName = iosDeviceInfo.name ?? iosDeviceInfo.model ?? 'uknown';
+    }
+    final password = const Uuid().v4();
+    final response = await client.register(
+      username: username,
+      password: password,
+      deviceId: deviceId,
+      initialDeviceDisplayName: deviceName,
+      kind: AccountKind.user,
+    );
+
+    logger.i('regester response: ${response.toJson()}');
+
+    return password;
+  }
+
+  Future<void> _login({
+    required String username,
+    required String password,
+  }) async {
     await client.login(
       LoginType.mLoginPassword,
       password: password,
