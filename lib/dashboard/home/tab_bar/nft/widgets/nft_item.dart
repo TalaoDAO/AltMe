@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 
 class NftItem extends StatelessWidget {
   const NftItem({
-    Key? key,
+    super.key,
     required this.assetUrl,
     required this.description,
     required this.assetValue,
     required this.id,
     this.onClick,
-  }) : super(key: key);
+  });
 
   final String assetUrl;
   final String description;
@@ -50,7 +50,7 @@ class NftItem extends StatelessWidget {
               maxLines: 1,
               minFontSize: 12,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class ContactUsPage extends StatelessWidget {
   const ContactUsPage({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       builder: (_) => const ContactUsPage(),
       settings: const RouteSettings(name: '/ContactUsPage'),
@@ -46,7 +46,7 @@ class _ContactUsViewState extends State<ContactUsView> {
           children: [
             Text(
               '${l10n.subject} :',
-              style: Theme.of(context).textTheme.subtitle2,
+              style: Theme.of(context).textTheme.titleSmall,
             ),
             const SizedBox(
               height: Sizes.spaceXSmall,
@@ -54,7 +54,7 @@ class _ContactUsViewState extends State<ContactUsView> {
             TextFormField(
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.emailAddress,
-              style: Theme.of(context).textTheme.subtitle2,
+              style: Theme.of(context).textTheme.titleSmall,
               onSaved: (value) {
                 subject = value ?? '';
               },
@@ -81,7 +81,7 @@ class _ContactUsViewState extends State<ContactUsView> {
             ),
             Text(
               '${l10n.message} :',
-              style: Theme.of(context).textTheme.subtitle2,
+              style: Theme.of(context).textTheme.titleSmall,
             ),
             const SizedBox(
               height: Sizes.spaceXSmall,
@@ -90,7 +90,7 @@ class _ContactUsViewState extends State<ContactUsView> {
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.text,
               maxLines: 6,
-              style: Theme.of(context).textTheme.subtitle2,
+              style: Theme.of(context).textTheme.titleSmall,
               onSaved: (value) {
                 message = value ?? '';
               },

@@ -138,4 +138,6 @@ class ImageStrings {
       '$imagePath/import-account-method.png';
 
   static const String receiveSqure = '$imagePath/receive-square.png';
+
+  static const String linkedInBanner = '$imagePath/linkedin_banner.png';
 }

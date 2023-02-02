@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class Over13Widget extends StatelessWidget {
-  const Over13Widget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const Over13Widget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

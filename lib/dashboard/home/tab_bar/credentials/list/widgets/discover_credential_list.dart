@@ -1,13 +1,14 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class DiscoverCredentialList extends StatelessWidget {
   const DiscoverCredentialList({
-    Key? key,
+    super.key,
     required this.state,
     required this.onRefresh,
-  }) : super(key: key);
+  });
 
   final CredentialListState state;
   final RefreshCallback onRefresh;
@@ -28,7 +29,7 @@ class DiscoverCredentialList extends StatelessWidget {
               fromDiscover: true,
               categorySubtitle: l10n.gamingCredentialDiscoverSubtitle,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: Sizes.spaceNormal),
           ],
           if (state.communityCredentials.isNotEmpty) ...[
             /// Community Credentials
@@ -38,7 +39,7 @@ class DiscoverCredentialList extends StatelessWidget {
               fromDiscover: true,
               categorySubtitle: l10n.communityCredentialDiscoverSubtitle,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: Sizes.spaceNormal),
           ],
           if (state.identityCredentials.isNotEmpty) ...[
             /// Identity Credentials
@@ -48,7 +49,7 @@ class DiscoverCredentialList extends StatelessWidget {
               fromDiscover: true,
               categorySubtitle: l10n.identityCredentialDiscoverSubtitle,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: Sizes.spaceNormal),
           ],
           if (state.myProfessionalCategories.isNotEmpty) ...[
             /// Professional Credentials
@@ -58,7 +59,7 @@ class DiscoverCredentialList extends StatelessWidget {
               fromDiscover: true,
               categorySubtitle: l10n.myProfessionalCredentialDiscoverSubtitle,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: Sizes.spaceNormal),
           ],
           // Note: ProofOfOwnershipCredentials is hidden. Later we will
           // give user an option to show it
@@ -69,7 +70,7 @@ class DiscoverCredentialList extends StatelessWidget {
           //     credentials: state.proofOfOwnershipCredentials,
           //     fromDiscover: true,
           //   ),
-          //   const SizedBox(height: 10),
+          //   const SizedBox(height: Sizes.spaceNormal),
           // ],
           if (state.othersCredentials.isNotEmpty) ...[
             /// Other Credentials
@@ -79,7 +80,7 @@ class DiscoverCredentialList extends StatelessWidget {
               fromDiscover: true,
               categorySubtitle: l10n.otherCredentialDiscoverSubtitle,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: Sizes.spaceNormal),
           ],
         ],
       ),

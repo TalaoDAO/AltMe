@@ -5,22 +5,26 @@ import 'package:flutter/material.dart';
 
 class DiscoverDetailsPage extends StatelessWidget {
   const DiscoverDetailsPage({
-    Key? key,
+    super.key,
     required this.homeCredential,
     required this.onCallBack,
-  }) : super(key: key);
+    required this.buttonText,
+  });
 
   final HomeCredential homeCredential;
   final VoidCallback onCallBack;
+  final String buttonText;
 
-  static Route route({
+  static Route<dynamic> route({
     required HomeCredential homeCredential,
     required VoidCallback onCallBack,
+    required String buttonText,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => DiscoverDetailsPage(
         homeCredential: homeCredential,
         onCallBack: onCallBack,
+        buttonText: buttonText,
       ),
       settings: const RouteSettings(name: '/DiscoverDetailsPages'),
     );
@@ -31,19 +35,22 @@ class DiscoverDetailsPage extends StatelessWidget {
     return DiscoverDetailsView(
       homeCredential: homeCredential,
       onCallBack: onCallBack,
+      buttonText: buttonText,
     );
   }
 }
 
 class DiscoverDetailsView extends StatelessWidget {
   const DiscoverDetailsView({
-    Key? key,
+    super.key,
     required this.homeCredential,
     required this.onCallBack,
-  }) : super(key: key);
+    required this.buttonText,
+  });
 
   final HomeCredential homeCredential;
   final VoidCallback onCallBack;
+  final String buttonText;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +95,7 @@ class DiscoverDetailsView extends StatelessWidget {
                                           maxLines: 3,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .caption,
+                                              .bodySmall,
                                         ),
                                       ),
                                     ),
@@ -113,7 +120,7 @@ class DiscoverDetailsView extends StatelessWidget {
           onPressed: homeCredential.credentialSubjectType.isDisabled
               ? null
               : onCallBack,
-          text: l10n.getThisCard,
+          text: buttonText,
         ),
       ),
     );

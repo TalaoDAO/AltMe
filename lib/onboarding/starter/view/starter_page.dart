@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class StarterPage extends StatelessWidget {
   const StarterPage({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/starterPage'),
       builder: (_) => const StarterPage(),
@@ -42,7 +42,7 @@ class StarterPage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const Spacer(flex: 1),
+                  const Spacer(flex: 2),
                   const TitleText(),
                   const Spacer(flex: 1),
                   const SubTitle(),

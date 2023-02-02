@@ -10,15 +10,18 @@ import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class MissingCredentialsPage extends StatelessWidget {
   const MissingCredentialsPage({
-    Key? key,
+    super.key,
     this.credentialManifest,
     this.query,
-  }) : super(key: key);
+  });
 
   final CredentialManifest? credentialManifest;
   final Query? query;
 
-  static Route route({CredentialManifest? credentialManifest, Query? query}) =>
+  static Route<dynamic> route({
+    CredentialManifest? credentialManifest,
+    Query? query,
+  }) =>
       MaterialPageRoute<void>(
         builder: (_) => MissingCredentialsPage(
           credentialManifest: credentialManifest,
@@ -46,10 +49,10 @@ class MissingCredentialsPage extends StatelessWidget {
 
 class MissingCredentialsView extends StatelessWidget {
   const MissingCredentialsView({
-    Key? key,
+    super.key,
     this.credentialManifest,
     this.query,
-  }) : super(key: key);
+  });
 
   final CredentialManifest? credentialManifest;
   final Query? query;
@@ -123,7 +126,7 @@ class MissingCredentialsView extends StatelessWidget {
                                           maxLines: 3,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .caption,
+                                              .bodySmall,
                                         ),
                                       ),
                                     ),
@@ -143,6 +146,7 @@ class MissingCredentialsView extends StatelessWidget {
                       context,
                       DiscoverDetailsPage.route(
                         homeCredential: credentials,
+                        buttonText: l10n.getThisCard,
                         onCallBack: () async {
                           await discoverCredential(
                             homeCredential: credentials,

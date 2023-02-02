@@ -29,6 +29,7 @@ abstract class Sizes {
   static const double largeRadius = 18;
 
   static const double credentialAspectRatio = 500 / 300;
+  static const double linkedinBannerAspectRatio = 1584 / 396;
 
   //Icon
   static const double iconXSmall = 12;

@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class BottomBarDecoration extends StatelessWidget {
-  const BottomBarDecoration({Key? key, required this.child}) : super(key: key);
+  const BottomBarDecoration({super.key, required this.child});
 
   final Widget child;
 

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class ProfessionalStudentCardWidget extends StatelessWidget {
   const ProfessionalStudentCardWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 
@@ -29,9 +29,9 @@ class ProfessionalStudentCardWidget extends StatelessWidget {
 
 class JobStudentCardRecto extends Recto {
   const JobStudentCardRecto({
-    Key? key,
+    super.key,
     required this.professionalStudentCardModel,
-  }) : super(key: key);
+  });
 
   final ProfessionalStudentCardModel professionalStudentCardModel;
 
@@ -92,7 +92,7 @@ class JobStudentCardRecto extends Recto {
 }
 
 class JobStudentCardVerso extends Verso {
-  const JobStudentCardVerso({Key? key}) : super(key: key);
+  const JobStudentCardVerso({super.key});
 
   @override
   Widget build(BuildContext context) {

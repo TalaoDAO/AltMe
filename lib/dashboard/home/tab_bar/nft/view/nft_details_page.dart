@@ -7,13 +7,13 @@ import 'package:flutter_html/flutter_html.dart';
 
 class NftDetailsPage extends StatelessWidget {
   const NftDetailsPage({
-    Key? key,
+    super.key,
     required this.nftModel,
-  }) : super(key: key);
+  });
 
   final NftModel nftModel;
 
-  static Route route({required NftModel nftModel}) {
+  static Route<dynamic> route({required NftModel nftModel}) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/nftDetailsPage'),
       builder: (_) => NftDetailsPage(
@@ -32,9 +32,9 @@ class NftDetailsPage extends StatelessWidget {
 
 class NftDetailsView extends StatefulWidget {
   const NftDetailsView({
-    Key? key,
+    super.key,
     required this.nftModel,
-  }) : super(key: key);
+  });
 
   final NftModel nftModel;
 
@@ -77,14 +77,14 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               ),
               MyText(
                 '${widget.nftModel.name} ${widget.nftModel.tokenId}',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
                 maxLines: 1,
                 minFontSize: 16,
               ),
               if (widget.nftModel is TezosNftModel)
                 MyText(
                   (widget.nftModel as TezosNftModel).symbol ?? '--',
-                  style: Theme.of(context).textTheme.caption2,
+                  style: Theme.of(context).textTheme.bodySmall2,
                   maxLines: 1,
                   minFontSize: 12,
                 ),
@@ -94,7 +94,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               else
                 Text(
                   widget.nftModel.description ?? '',
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               if (widget.nftModel is TezosNftModel)
                 ...buildTezosMoreDetails(l10n),
@@ -163,7 +163,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
             Text(
               nftModel.identifier ?? '?',
-              style: Theme.of(context).textTheme.caption3,
+              style: Theme.of(context).textTheme.bodySmall3,
             )
           ],
         ),
@@ -183,7 +183,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             Flexible(
               child: Text(
                 nftModel.creators?.join(', ') ?? '?',
-                style: Theme.of(context).textTheme.caption3,
+                style: Theme.of(context).textTheme.bodySmall3,
               ),
             ),
           ],
@@ -201,7 +201,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
             Text(
               nftModel.publishers?.join(', ') ?? '?',
-              style: Theme.of(context).textTheme.caption3,
+              style: Theme.of(context).textTheme.bodySmall3,
             )
           ],
         ),
@@ -218,7 +218,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
             Text(
               UiDate.normalFormat(nftModel.date) ?? '?',
-              style: Theme.of(context).textTheme.caption3,
+              style: Theme.of(context).textTheme.bodySmall3,
             ),
           ],
         ),

@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SoftwareLicensePage extends StatelessWidget {
-  const SoftwareLicensePage({Key? key}) : super(key: key);
+  const SoftwareLicensePage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (_) => const SoftwareLicensePage(),
         settings: const RouteSettings(name: '/SoftwareLicensePage'),
       );
@@ -23,7 +23,7 @@ class SoftwareLicensePage extends StatelessWidget {
 }
 
 class SoftwareLicenseView extends StatefulWidget {
-  const SoftwareLicenseView({Key? key}) : super(key: key);
+  const SoftwareLicenseView({super.key});
 
   @override
   State<SoftwareLicenseView> createState() => _SoftwareLicenseViewState();
@@ -53,6 +53,7 @@ class _SoftwareLicenseViewState extends State<SoftwareLicenseView> {
       builder: (context, state) {
         return BasePage(
           title: l10n.softwareLicenses,
+          titleAlignment: Alignment.topCenter,
           scrollView: false,
           titleLeading: const BackLeadingButton(),
           body: ListView.builder(

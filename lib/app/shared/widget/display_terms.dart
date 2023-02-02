@@ -16,10 +16,10 @@ class DisplayTermsOfUseCubit extends Cubit<bool> {
 
 class DisplayTermsofUse extends StatefulWidget {
   const DisplayTermsofUse({
-    Key? key,
+    super.key,
     this.physics,
     this.shrinkWrap = true,
-  }) : super(key: key);
+  });
 
   final ScrollPhysics? physics;
   final bool shrinkWrap;
@@ -87,7 +87,7 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
                       ),
                       Text(
                         isExpand ? l10n.showLess : l10n.showMore,
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],
                   ),
@@ -136,11 +136,11 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
 
 class MarkdownBody extends StatelessWidget {
   const MarkdownBody({
-    Key? key,
+    super.key,
     this.physics,
     this.shrinkWrap = true,
     required this.data,
-  }) : super(key: key);
+  });
 
   final ScrollPhysics? physics;
   final bool shrinkWrap;

@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class PolygonPooAddressWidget extends StatelessWidget {
   const PolygonPooAddressWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 

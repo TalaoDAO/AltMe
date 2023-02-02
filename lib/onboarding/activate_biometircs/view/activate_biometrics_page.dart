@@ -9,13 +9,13 @@ import 'package:secure_storage/secure_storage.dart';
 
 class ActiviateBiometricsPage extends StatelessWidget {
   const ActiviateBiometricsPage({
-    Key? key,
+    super.key,
     required this.routeType,
-  }) : super(key: key);
+  });
 
   final WalletRouteType routeType;
 
-  static Route route({required WalletRouteType routeType}) =>
+  static Route<dynamic> route({required WalletRouteType routeType}) =>
       RightToLeftRoute<void>(
         builder: (context) => ActiviateBiometricsPage(
           routeType: routeType,
@@ -37,10 +37,10 @@ class ActiviateBiometricsPage extends StatelessWidget {
 
 class ActivateBiometricsView extends StatelessWidget {
   const ActivateBiometricsView({
-    Key? key,
+    super.key,
     required this.localAuthApi,
     required this.routeType,
-  }) : super(key: key);
+  });
   final LocalAuthApi localAuthApi;
   final WalletRouteType routeType;
 
@@ -69,7 +69,7 @@ class ActivateBiometricsView extends StatelessWidget {
                 Text(
                   l10n.activateBiometricsTitle,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const Spacer(),
                 Image.asset(

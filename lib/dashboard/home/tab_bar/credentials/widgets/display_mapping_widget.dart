@@ -7,8 +7,8 @@ class DisplayMappingWidget extends StatelessWidget {
     this.displayMapping,
     required this.credentialModel,
     required this.style,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final DisplayMapping? displayMapping;
   final CredentialModel credentialModel;
   final TextStyle style;
@@ -60,10 +60,10 @@ class DisplayMappingWidget extends StatelessWidget {
 
 class ManifestText2 extends StatelessWidget {
   const ManifestText2({
-    Key? key,
+    super.key,
     required this.text,
     required this.style,
-  }) : super(key: key);
+  });
 
   final String text;
   final TextStyle style;

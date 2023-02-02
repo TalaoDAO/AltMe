@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:altme/app/logger/logger.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
@@ -56,7 +54,7 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     if (amount == null) return false;
     try {
       final insertedAmount = double.parse(amount.replaceAll(',', ''));
-      if (insertedAmount <= 0.00001) return false;
+      if (insertedAmount <= 0.0) return false;
       final maxAmount = double.parse(
         selectedToken.calculatedBalance.replaceAll(',', ''),
       );
@@ -68,10 +66,5 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
     } catch (e) {
       return false;
     }
-  }
-
-  @override
-  Future<void> close() {
-    return super.close();
   }
 }

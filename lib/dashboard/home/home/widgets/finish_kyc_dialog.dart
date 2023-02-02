@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 class FinishKycDialog extends StatelessWidget {
   const FinishKycDialog({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -59,7 +59,7 @@ Future<void> multipleCredentialsTimer(
     final bool result = await getCredentialsFromIssuer(
       preAuthorizedCode,
       client,
-      Parameters.credentialTypeList,
+      Parameters.passbaseCredentialTypeList,
       secureStorageProvider,
       walletCubit,
     );

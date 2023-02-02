@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class AragoLearningAchievementWidget extends StatelessWidget {
   const AragoLearningAchievementWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 
@@ -27,8 +27,11 @@ class AragoLearningAchievementWidget extends StatelessWidget {
 }
 
 class AragoLearningAchievementRecto extends Recto {
-  const AragoLearningAchievementRecto({Key? key, required this.credentialModel})
-      : super(key: key);
+  const AragoLearningAchievementRecto({
+    super.key,
+    required this.credentialModel,
+  });
+
   final CredentialModel credentialModel;
 
   @override
@@ -76,8 +79,10 @@ class AragoLearningAchievementRecto extends Recto {
 }
 
 class AragoLearningAchievementVerso extends Verso {
-  const AragoLearningAchievementVerso({Key? key, required this.credentialModel})
-      : super(key: key);
+  const AragoLearningAchievementVerso({
+    super.key,
+    required this.credentialModel,
+  });
 
   final CredentialModel credentialModel;
 

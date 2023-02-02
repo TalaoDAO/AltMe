@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class MyElevatedButton extends StatelessWidget {
   const MyElevatedButton({
-    Key? key,
+    super.key,
     required this.text,
     this.onPressed,
     this.icon,
@@ -14,10 +14,10 @@ class MyElevatedButton extends StatelessWidget {
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,
-  }) : super(key: key);
+  });
 
   const MyElevatedButton.icon({
-    Key? key,
+    super.key,
     required this.text,
     this.onPressed,
     required this.icon,
@@ -27,7 +27,7 @@ class MyElevatedButton extends StatelessWidget {
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,
-  }) : super(key: key);
+  });
 
   final String text;
   final GestureTapCallback? onPressed;
@@ -109,11 +109,11 @@ ButtonStyle elevatedStyleFrom({
 
 class ElevatedButtonText extends StatelessWidget {
   const ElevatedButtonText({
-    Key? key,
+    super.key,
     required this.text,
     this.textColor,
     this.fontSize = 18,
-  }) : super(key: key);
+  });
 
   final String text;
   final Color? textColor;

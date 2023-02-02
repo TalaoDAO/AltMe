@@ -6,12 +6,11 @@ import 'package:flutter/services.dart';
 
 class TransactionDoneDialog extends StatelessWidget {
   const TransactionDoneDialog._({
-    Key? key,
     required this.amountAndSymbol,
     this.transactionHash,
     this.onDoneButtonClick,
     this.onTrasactionHashTap,
-  }) : super(key: key);
+  });
 
   final String amountAndSymbol;
   final String? transactionHash;

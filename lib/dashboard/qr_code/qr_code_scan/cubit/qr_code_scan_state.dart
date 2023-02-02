@@ -15,8 +15,8 @@ class QRCodeScanState extends Equatable {
 
   final QrScanStatus status;
   final Uri? uri;
-  @JsonKey(ignore: true)
-  final Route? route;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final Route<dynamic>? route;
   final bool isScan;
   final StateMessage? message;
 
@@ -50,7 +50,7 @@ class QRCodeScanState extends Equatable {
   QRCodeScanState copyWith({
     QrScanStatus qrScanStatus = QrScanStatus.idle,
     StateMessage? message,
-    Route? route,
+    Route<dynamic>? route,
   }) {
     return QRCodeScanState(
       status: qrScanStatus,

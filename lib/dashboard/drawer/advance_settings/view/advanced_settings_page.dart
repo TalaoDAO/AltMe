@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdvancedSettingsPage extends StatelessWidget {
-  const AdvancedSettingsPage({Key? key}) : super(key: key);
+  const AdvancedSettingsPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (_) => const AdvancedSettingsPage(),
         settings: const RouteSettings(name: '/advanceSettingsPage'),
       );
@@ -22,7 +22,7 @@ class AdvancedSettingsPage extends StatelessWidget {
 }
 
 class AdvancedSettingsView extends StatefulWidget {
-  const AdvancedSettingsView({Key? key}) : super(key: key);
+  const AdvancedSettingsView({super.key});
 
   @override
   State<AdvancedSettingsView> createState() => _AdvancedSettingsViewState();
@@ -46,7 +46,7 @@ class _AdvancedSettingsViewState extends State<AdvancedSettingsView> {
                 Text(
                   // ignore: lines_longer_than_80_chars
                   l10n.selectCredentialCategoryWhichYouWantToShowInCredentialList,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 AdvanceSettingsRadioItem(
                   title: l10n.gaming,

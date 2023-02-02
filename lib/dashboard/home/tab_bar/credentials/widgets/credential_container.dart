@@ -3,14 +3,14 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CredentialContainer extends StatelessWidget {
-  const CredentialContainer({required this.child, Key? key}) : super(key: key);
+  const CredentialContainer({required this.child, super.key});
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(Sizes.credentialBorderRadius),
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class WalletCredentialWidget extends StatelessWidget {
   const WalletCredentialWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 

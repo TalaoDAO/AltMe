@@ -11,15 +11,12 @@ class WalletCredentialModel extends CredentialSubjectModel {
     this.deviceName,
     this.systemVersion,
     this.walletBuild,
-    String? id,
-    String? type,
-    required Author issuedBy,
+    super.id,
+    super.type,
+    required Author super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
           credentialSubjectType: CredentialSubjectType.walletCredential,
           credentialCategory: CredentialCategory.othersCards,
-          issuedBy: issuedBy,
         );
 
   factory WalletCredentialModel.fromJson(Map<String, dynamic> json) =>

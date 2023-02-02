@@ -8,13 +8,10 @@ part 'binance_poo_address_model.g.dart';
 class BinancePooAddressModel extends CredentialSubjectModel {
   BinancePooAddressModel({
     this.associatedAddress,
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.binancePooAddress,
           credentialCategory: CredentialCategory.blockchainAccountsCards,
         );

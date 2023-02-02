@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/author/author.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -8,20 +7,17 @@ part 'loyalty_card_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class LoyaltyCardModel extends CredentialSubjectModel {
   LoyaltyCardModel({
-    String? id,
-    String? type,
+    super.id,
+    super.type,
     this.address,
     this.familyName,
-    Author? issuedBy,
+    super.issuedBy,
     this.birthDate,
     this.givenName,
     this.programName,
     this.telephone,
     this.email,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.loyaltyCard,
           credentialCategory: CredentialCategory.communityCards,
         );

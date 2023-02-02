@@ -80,13 +80,17 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR:
         return globalMessage.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR;
 
-      case ResponseString
-          .RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE:
-        return globalMessage
-            .RESPONSE_STRING_BACKUP_CREDENTIAL_PERMISSION_DENIED_MESSAGE;
+      case ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE:
+        return globalMessage.STORAGE_PERMISSION_DENIED_MESSAGE;
 
       case ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE:
         return globalMessage.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE;
+
+      case ResponseString.RESPONSE_STRING_linkedInBannerSuccessfullyExported:
+        return globalMessage.RESPONSE_STRING_linkedInBannerSuccessfullyExported;
+
+      case ResponseString.RESPONSE_STRING_credentialSuccessfullyExported:
+        return globalMessage.RESPONSE_STRING_credentialSuccessfullyExported;
 
       case ResponseString
           .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE:

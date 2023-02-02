@@ -4,7 +4,6 @@ export 'contact_us/contact_us.dart';
 export 'drawer/drawer.dart';
 export 'faqs/faqs.dart';
 export 'import_talao_community_card/import_talao_community_card.dart';
-export 'licenses/licenses.dart';
 export 'manage_accounts/manage_accounts.dart';
 export 'manage_did/manage_did.dart';
 export 'manage_issuers_registry/manage_issuers_registry.dart';

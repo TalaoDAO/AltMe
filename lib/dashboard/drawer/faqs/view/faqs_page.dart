@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class FAQsPage extends StatelessWidget {
   const FAQsPage({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       builder: (_) => const FAQsPage(),
       settings: const RouteSettings(name: '/FAQsPage'),

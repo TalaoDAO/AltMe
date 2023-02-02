@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 class DiscoverDynamicDetial extends StatelessWidget {
   const DiscoverDynamicDetial({
-    Key? key,
+    super.key,
     required this.title,
     required this.value,
     this.padding = const EdgeInsets.all(8),
     this.format,
-  }) : super(key: key);
+  });
 
   final String? title;
   final String value;

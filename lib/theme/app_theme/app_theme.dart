@@ -81,6 +81,7 @@ abstract class AppTheme {
   static Color highlightColor = highlight;
 
   static ThemeData get darkThemeData => ThemeData(
+        useMaterial3: true,
         brightness: Brightness.dark,
         dividerColor: dividerColor,
         highlightColor: highlightColor,
@@ -101,22 +102,22 @@ abstract class AppTheme {
           brightness: Brightness.dark,
         ),
         textTheme: TextTheme(
-          caption: GoogleFonts.poppins(
+          bodySmall: GoogleFonts.poppins(
             color: onPrimary,
             fontSize: 13,
             fontWeight: FontWeight.w600,
           ),
-          headline6: GoogleFonts.poppins(
+          titleLarge: GoogleFonts.poppins(
             color: onPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
-          headline5: GoogleFonts.poppins(
+          headlineSmall: GoogleFonts.poppins(
             color: onPrimary,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
-          headline4: GoogleFonts.poppins(
+          headlineMedium: GoogleFonts.poppins(
             color: onPrimary,
             fontSize: 28,
             fontWeight: FontWeight.bold,
@@ -392,13 +393,13 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get caption2 => GoogleFonts.roboto(
+  TextStyle get bodySmall2 => GoogleFonts.roboto(
         color: const Color(0xFF8682A8),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get caption3 => GoogleFonts.poppins(
+  TextStyle get bodySmall3 => GoogleFonts.poppins(
         color: onTertiary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
@@ -716,13 +717,19 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xFF5F556F),
       );
 
-  TextStyle get kycDialogTitle => GoogleFonts.poppins(
+  TextStyle get defaultDialogSubtitle => GoogleFonts.poppins(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: const Color(0xff180B2B),
+      );
+
+  TextStyle get kycDialogTitle => GoogleFonts.nunito(
         fontSize: 25,
         fontWeight: FontWeight.bold,
         color: const Color(0xff180B2B),
       );
 
-  TextStyle get kycDialogCaption => GoogleFonts.poppins(
+  TextStyle get kycDialogBodySmall => GoogleFonts.poppins(
         fontSize: 20,
         fontWeight: FontWeight.bold,
         color: kycVerifyButton,

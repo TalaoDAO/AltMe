@@ -13,13 +13,13 @@ import 'package:permission_handler/permission_handler.dart';
 
 class UploadRecoveryCredentialPage extends StatelessWidget {
   const UploadRecoveryCredentialPage({
-    Key? key,
+    super.key,
     required this.recoveryCredentialCubit,
-  }) : super(key: key);
+  });
 
   final RecoveryCredentialCubit recoveryCredentialCubit;
 
-  static Route route({
+  static Route<dynamic> route({
     required RecoveryCredentialCubit recoveryCredentialCubit,
   }) =>
       MaterialPageRoute<void>(
@@ -39,7 +39,7 @@ class UploadRecoveryCredentialPage extends StatelessWidget {
 }
 
 class UploadRecoveryCredentialView extends StatefulWidget {
-  const UploadRecoveryCredentialView({Key? key}) : super(key: key);
+  const UploadRecoveryCredentialView({super.key});
 
   @override
   _UploadRecoveryCredentialViewState createState() =>

@@ -1,41 +1,39 @@
-if [[ "$*" == *-build_runner* ]]; 
-then
-  echo "build runner"
-  fvm flutter clean
-  cd packages
-  cd credential_manifest
+
+function pub {
+  for d in `ls packages`;
+  do
+    (
+      cd "packages/$d"
+      flutter pub get
+    )
+  done 
   fvm flutter pub get
+}
+
+function buildRunner {
+  echo "build_runner"
+  for d in `ls packages`;
+  do
+    (
+      echo "$d"
+      cd "packages/$d"
+      flutter packages pub run build_runner build --delete-conflicting-outputs
+    )
+  done 
   fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+}
+
+function pod {
+  echo "pod install"
+  cd ios
+  pod install
+  pod update
   cd ..
-  cd cryptocurrency_keys
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  cd ..
-  cd did_kit
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  cd ..
-  cd ebsi
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  cd ..
-  cd jwt_decode
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  cd ..
-  cd key_generator
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  cd ..
-  cd secure_storage
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  cd ..
-  cd ..
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  fvm flutter pub get 
-elif [[ "$*" == *-rundev* ]]; 
+
+}
+
+
+if [[ "$*" == *-runDev* ]]; 
 then
   echo "flutter run development"
   fvm flutter run --flavor development --target lib/main_development.dart
@@ -50,59 +48,34 @@ then
   echo "flutter run production"
   fvm flutter run --flavor production --target lib/main_production.dart
 
-elif [[ "$*" == *-pod$sinstall* ]]; 
+elif [[ "$*" == *-pod* ]]; 
 then 
-  echo "pod install"
-  cd ios
-  pod install
-  cd ..
-
-elif [[ "$*" == *-build$sappbundle* ]]; 
+  pod
+elif [[ "$*" == *-android* ]]; 
 then 
-  echo "app bundle"
-  fvm flutter build appbundle --flavor "production" --target "lib/main_production.dart"
-
-elif [[ "$*" == *-deploy$sios* ]]; 
-then 
-  echo "deploy ios"
+  pub
+  buildRunner
+  echo "deploy android"
   echo "Make sure you are in right branch"
-  fvm flutter build ios --release 
-  cd ios 
+  fvm flutter build appbundle --flavor "production" --target "lib/main_production.dart"
+  cd android 
   fastlane beta
-  cd ..
+  echo "app bundle deployed on internal testing track"
 
-elif [[ "$*" == *-completeIos* ]]; 
+elif [[ "$*" == *-ios* ]]; 
 then 
-  echo "build runner"
-  fvm flutter clean
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  echo "pod install"
-  cd ios
-  pod install
-  pod update
-  cd ..
+  pub
+  buildRunner
+  pod
   echo "deploy ios"
   echo "Make sure you are in right branch"
   fvm flutter build ios --release --flavor "production" --target "lib/main_production.dart"
   cd ios 
   fastlane beta
-  cd ..
-
+elif [[ "$*" == *-pub* ]];
+then
+pub
 else
-  echo "build runner"
-  fvm flutter clean
-  cd packages
-  cd credential_manifest
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  cd ..
-  cd cryptocurrency_keys
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  cd ..
-  cd ..
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  fvm flutter pub get 
+  pub
+  buildRunner
 fi

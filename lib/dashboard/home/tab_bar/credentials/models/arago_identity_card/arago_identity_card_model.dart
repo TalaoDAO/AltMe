@@ -12,13 +12,10 @@ class AragoIdentityCardModel extends CredentialSubjectModel {
     this.bithPlace,
     this.birthDate,
     this.addressCountry,
-    Author? issuedBy,
-    String? id,
-    String? type,
+    super.issuedBy,
+    super.id,
+    super.type,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.aragoIdentityCard,
           credentialCategory: CredentialCategory.passCards,
         );

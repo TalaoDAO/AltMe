@@ -80,8 +80,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           ),
         );
       } else {
-        await dotenv.load();
-        final web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
+        final web3RpcURL = await web3RpcMainnetInfuraURL();
 
         final amount = state.tokenAmount
             .toStringAsFixed(int.parse(state.selectedToken.decimals))
@@ -90,7 +89,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
         final credentials =
             EthPrivateKey.fromHex(state.selectedAccountSecretKey);
-        final sender = await credentials.extractAddress();
+        final sender = credentials.address;
         final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
 
         final maxGas = await MWeb3Client.estimateEthereumFee(
@@ -126,7 +125,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       }
     } catch (e, s) {
       logger.i('error: $e , stack: $s');
-      emit(state.copyWith(status: AppStatus.init));
+      emit(state.copyWith(status: AppStatus.error));
     }
   }
 
@@ -228,7 +227,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           .i('selected network node rpc: $rpcNodeUrl, amount: $tokenAmount');
 
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
-      final sender = await credentials.extractAddress();
+      final sender = credentials.address;
 
       final transactionHash = await MWeb3Client.sendEthereumTransaction(
         web3RpcURL: rpcNodeUrl,
@@ -282,13 +281,26 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         token: state.selectedToken,
       );
     } else {
-      final selectedEthereumNetwork =
-          manageNetworkCubit.state.network as EthereumNetwork;
+      final selectedEthereumNetwork = manageNetworkCubit.state.network;
+
+      await dotenv.load();
+      final ethRpcUrl = dotenv.get('WEB3_RPC_MAINNET_URL');
+
+      String chainRpcUrl = ethRpcUrl;
+      if (selectedEthereumNetwork is PolygonNetwork ||
+          selectedEthereumNetwork is BinanceNetwork ||
+          selectedEthereumNetwork is FantomNetwork) {
+        chainRpcUrl = selectedEthereumNetwork.rpcNodeUrl;
+      } else {
+        chainRpcUrl = ethRpcUrl;
+      }
       await _sendContractInvocationOperationEthereum(
         tokenAmount: state.totalAmount,
         selectedAccountSecretKey: state.selectedAccountSecretKey,
         token: state.selectedToken,
-        chainId: selectedEthereumNetwork.chainId,
+        chainId: (selectedEthereumNetwork as EthereumNetwork).chainId,
+        chainRpcUrl: chainRpcUrl,
+        ethRpcUrl: ethRpcUrl,
       );
     }
   }
@@ -312,7 +324,6 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       final server = manageNetworkCubit.state.network.rpcNodeUrl;
 
-      // TODO(all): Do check this getKeysFromSecretKey() in helper function
       final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
 
       final keyStore = KeyStoreModel(
@@ -402,8 +413,26 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     required String selectedAccountSecretKey,
     required TokenModel token,
     required int chainId,
+    required String chainRpcUrl,
+    required String ethRpcUrl,
   }) async {
     try {
+      final ethBalance = await MWeb3Client.getETHBalance(
+        secretKey: state.selectedAccountSecretKey,
+        rpcUrl: ethRpcUrl,
+      );
+
+      if ((state.networkFee?.fee ?? 0) > ethBalance) {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE,
+            ),
+          ),
+        );
+        return;
+      }
+
       if (token.symbol == 'ETH' ||
           token.symbol == 'MATIC' ||
           token.symbol == 'FTM' ||
@@ -419,9 +448,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       emit(state.loading());
 
       //final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
-      await dotenv.load();
-      final rpcUrl = dotenv.get('WEB3_RPC_MAINNET_URL');
-
+      final rpcUrl = await web3RpcMainnetInfuraURL();
       final amount = tokenAmount *
           double.parse(
             1.toStringAsFixed(int.parse(token.decimals)).replaceAll('.', ''),
@@ -429,7 +456,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       final txId = await MWeb3Client.sendToken(
         amountInWei: amount,
-        rpcUrl: rpcUrl,
+        rpcUrl: chainRpcUrl,
         withdrawalAddress: state.withdrawalAddress,
         token: token,
         selectedAccountSecretKey: selectedAccountSecretKey,

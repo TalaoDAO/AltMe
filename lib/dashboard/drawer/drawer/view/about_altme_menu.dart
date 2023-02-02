@@ -8,7 +8,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 class AboutAltmeMenu extends StatelessWidget {
   const AboutAltmeMenu({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       builder: (_) => const AboutAltmeMenu(),
       settings: const RouteSettings(name: '/AboutAltmeMenu'),
@@ -63,11 +63,6 @@ class AboutAltmeView extends StatelessWidget {
                   title: l10n.termsOfUse,
                   onTap: () =>
                       Navigator.of(context).push<void>(TermsPage.route()),
-                ),
-                DrawerItem(
-                  title: l10n.licenses,
-                  onTap: () =>
-                      Navigator.of(context).push<void>(LicensesPage.route()),
                 ),
                 DrawerItem(
                   title: l10n.softwareLicenses,

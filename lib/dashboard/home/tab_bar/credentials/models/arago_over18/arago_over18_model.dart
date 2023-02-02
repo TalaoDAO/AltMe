@@ -7,13 +7,10 @@ part 'arago_over18_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class AragoOver18Model extends CredentialSubjectModel {
   AragoOver18Model({
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType: CredentialSubjectType.aragoOver18,
           credentialCategory: CredentialCategory.passCards,
         );

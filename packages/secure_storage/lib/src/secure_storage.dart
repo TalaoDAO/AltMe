@@ -17,7 +17,10 @@ class SecureStorageProvider {
   ///get
   Future<String?> get(String key) async {
     try {
-      return await _storage.read(key: key);
+      return await _storage.read(
+        key: key,
+        iOptions: _defaultIOSOptions,
+      );
     } catch (e) {
       return null;
     }

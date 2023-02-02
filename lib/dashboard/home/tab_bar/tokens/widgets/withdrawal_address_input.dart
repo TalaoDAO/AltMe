@@ -7,13 +7,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WithdrawalAddressInputView extends StatelessWidget {
   const WithdrawalAddressInputView({
-    Key? key,
+    super.key,
     this.caption,
     this.withdrawalAddressController,
-  }) : super(key: key);
+    this.onValidAddress,
+  });
 
   final String? caption;
   final TextEditingController? withdrawalAddressController;
+  final dynamic Function(String)? onValidAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,7 @@ class WithdrawalAddressInputView extends StatelessWidget {
       child: _WithdrawalAddressInputPage(
         withdrawalAddressController: withdrawalAddressController,
         caption: caption,
+        onValidAddress: onValidAddress,
       ),
     );
   }
@@ -29,13 +32,14 @@ class WithdrawalAddressInputView extends StatelessWidget {
 
 class _WithdrawalAddressInputPage extends StatefulWidget {
   const _WithdrawalAddressInputPage({
-    Key? key,
     this.caption,
     this.withdrawalAddressController,
-  }) : super(key: key);
+    this.onValidAddress,
+  });
 
   final String? caption;
   final TextEditingController? withdrawalAddressController;
+  final dynamic Function(String)? onValidAddress;
 
   @override
   State<_WithdrawalAddressInputPage> createState() =>
@@ -46,6 +50,9 @@ class _WithdrawalAddressInputPageState
     extends State<_WithdrawalAddressInputPage> with WalletAddressValidator {
   late final withdrawalAddressController =
       widget.withdrawalAddressController ?? TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
+  AutovalidateMode autoValidateMode = AutovalidateMode.always;
 
   @override
   void initState() {
@@ -80,7 +87,7 @@ class _WithdrawalAddressInputPageState
           if (widget.caption != null)
             Text(
               widget.caption!,
-              style: Theme.of(context).textTheme.caption?.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
             ),
@@ -90,18 +97,33 @@ class _WithdrawalAddressInputPageState
             children: [
               Expanded(
                 child: Form(
-                  autovalidateMode: AutovalidateMode.always,
+                  autovalidateMode: autoValidateMode,
+                  key: formKey,
                   child: TextFormField(
                     controller: withdrawalAddressController,
                     style: Theme.of(context).textTheme.labelMedium,
                     textInputAction: TextInputAction.done,
                     maxLines: 2,
+                    onChanged: (value) {
+                      if (autoValidateMode == AutovalidateMode.disabled) {
+                        formKey.currentState?.setState(() {
+                          autoValidateMode = AutovalidateMode.always;
+                        });
+                      }
+                    },
                     validator: (value) {
                       if (validateWalletAddress(value)) {
+                        formKey.currentState?.setState(() {
+                          autoValidateMode = AutovalidateMode.disabled;
+                        });
+                        formKey.currentState?.save();
                         return null;
                       } else {
                         return l10n.notAValidWalletAddress;
                       }
+                    },
+                    onSaved: (value) {
+                      widget.onValidAddress?.call(value!);
                     },
                     decoration: InputDecoration(
                       border: InputBorder.none,

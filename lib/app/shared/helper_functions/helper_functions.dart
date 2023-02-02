@@ -7,8 +7,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_path/json_path.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -24,10 +26,20 @@ Future<void> openBlockchainExplorer(
     await LaunchUrl.launch(
       'https://polygonscan.com/tx/$txHash',
     );
-  } else {
+  } else if (network is BinanceNetwork) {
+    await LaunchUrl.launch(
+      'https://www.bscscan.com/tx/$txHash',
+    );
+  } else if (network is FantomNetwork) {
+    await LaunchUrl.launch(
+      'https://ftmscan.com/tx/$txHash',
+    );
+  } else if (network is EthereumNetwork) {
     await LaunchUrl.launch(
       'https://etherscan.io/tx/$txHash',
     );
+  } else {
+    UnimplementedError();
   }
 }
 
@@ -225,4 +237,30 @@ String timeFormatter({required int timeInSecond}) {
 Future<List<String>> getssiMnemonicsInList() async {
   final phrase = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
   return phrase!.split(' ');
+}
+
+Future<bool> getStoragePermission() async {
+  if (await Permission.storage.request().isGranted) {
+    return true;
+  } else if (await Permission.storage.request().isPermanentlyDenied) {
+    // TODO(all): show dialog to choose this option
+    await openAppSettings();
+  } else if (await Permission.storage.request().isDenied) {
+    return false;
+  }
+  return false;
+}
+
+String getDateTimeWithoutSpace() {
+  final dateTime = DateTime.fromMicrosecondsSinceEpoch(
+    DateTime.now().microsecondsSinceEpoch,
+  ).toString().replaceAll(' ', '-');
+  return dateTime;
+}
+
+Future<String> web3RpcMainnetInfuraURL() async {
+  await dotenv.load();
+  final String infuraApiKey = dotenv.get('INFURA_API_KEY');
+  const String prefixUrl = Parameters.web3RpcMainnetUrl;
+  return '$prefixUrl$infuraApiKey';
 }

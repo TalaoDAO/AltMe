@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VersionText extends StatelessWidget {
-  const VersionText({Key? key}) : super(key: key);
+  const VersionText({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class VersionText extends StatelessWidget {
           '${l10n.version} ${state.versionNumber}',
           maxLines: 1,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2,
+          style: Theme.of(context).textTheme.bodyMedium,
         );
       },
     );

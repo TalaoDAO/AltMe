@@ -8,7 +8,6 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:tezart/tezart.dart';
@@ -96,14 +95,21 @@ class OperationCubit extends Cubit<OperationState> {
         case ConnectionBridgeType.walletconnect:
           final WCEthereumTransaction transaction =
               walletConnectCubit.state.transaction!;
-          final EtherAmount ethAmount = EtherAmount.fromUnitAndValue(
-            EtherUnit.wei,
-            transaction.value ?? 0,
-          );
+
+          late EtherAmount ethAmount;
+
+          if (transaction.value != null) {
+            ethAmount = EtherAmount.fromBase10String(
+              EtherUnit.wei,
+              transaction.value!,
+            );
+          } else {
+            ethAmount = EtherAmount.fromInt(EtherUnit.wei, 0);
+          }
+
           amount = MWeb3Client.formatEthAmount(amount: ethAmount.getInWei);
 
-          await dotenv.load();
-          final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
+          final String web3RpcURL = await web3RpcMainnetInfuraURL();
 
           final feeData = await MWeb3Client.estimateEthereumFee(
             web3RpcURL: web3RpcURL,
@@ -227,7 +233,7 @@ class OperationCubit extends Cubit<OperationState> {
           final transactionHash = operationList.result.id;
           log.i('transactionHash - $transactionHash');
 
-          final Map response = await beacon.operationResponse(
+          final Map<dynamic, dynamic> response = await beacon.operationResponse(
             id: beaconCubit.state.beaconRequest!.request!.id!,
             transactionHash: transactionHash,
           );
@@ -253,7 +259,9 @@ class OperationCubit extends Cubit<OperationState> {
           final CryptoAccountData? currentAccount =
               walletCubit.state.cryptoAccount.data.firstWhereOrNull(
             (element) =>
-                element.walletAddress == walletConnectState.transaction!.from,
+                element.walletAddress == walletConnectState.transaction!.from &&
+                element.blockchainType ==
+                    walletCubit.state.currentAccount!.blockchainType,
           );
 
           log.i('currentAccount -$currentAccount');
@@ -266,19 +274,41 @@ class OperationCubit extends Cubit<OperationState> {
 
           final WCEthereumTransaction transaction =
               walletConnectCubit.state.transaction!;
-          final EtherAmount ethAmount = EtherAmount.fromUnitAndValue(
-            EtherUnit.wei,
-            transaction.value ?? 0,
-          );
 
-          await dotenv.load();
-          final String web3RpcURL = dotenv.get('WEB3_RPC_MAINNET_URL');
-          final chainId = int.parse(dotenv.get('WEB3_MAINNET_CHAIN_ID'));
+          late EtherAmount ethAmount;
+
+          if (transaction.value != null) {
+            ethAmount = EtherAmount.fromBase10String(
+              EtherUnit.wei,
+              transaction.value!,
+            );
+          } else {
+            ethAmount = EtherAmount.fromInt(EtherUnit.wei, 0);
+          }
+
+          late String rpcUrl;
+
+          switch (currentAccount.blockchainType) {
+            case BlockchainType.tezos:
+              throw Exception();
+            case BlockchainType.ethereum:
+              rpcUrl = await web3RpcMainnetInfuraURL();
+              break;
+            case BlockchainType.fantom:
+              rpcUrl = FantomNetwork.mainNet().rpcNodeUrl;
+              break;
+            case BlockchainType.polygon:
+              rpcUrl = PolygonNetwork.mainNet().rpcNodeUrl;
+              break;
+            case BlockchainType.binance:
+              rpcUrl = BinanceNetwork.mainNet().rpcNodeUrl;
+              break;
+          }
 
           final String transactionHash =
               await MWeb3Client.sendEthereumTransaction(
-            chainId: chainId,
-            web3RpcURL: web3RpcURL,
+            chainId: currentAccount.blockchainType.chainId,
+            web3RpcURL: rpcUrl,
             privateKey: currentAccount.secretKey,
             sender: EthereumAddress.fromHex(transaction.from),
             reciever: EthereumAddress.fromHex(transaction.to!),
@@ -487,7 +517,7 @@ class OperationCubit extends Cubit<OperationState> {
       if (e is MessageHandler) {
         rethrow;
       } else if (e is TezartNodeError) {
-        log.e('e: ${e.toString()} , metadata: ${e.metadata} , s: $s');
+        log.e('e: $e , metadata: ${e.metadata} , s: $s');
         rethrow;
       } else {
         throw ResponseMessage(

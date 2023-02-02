@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ManageIssuersRegistryPage extends StatelessWidget {
-  const ManageIssuersRegistryPage({Key? key}) : super(key: key);
+  const ManageIssuersRegistryPage({super.key});
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<void>(
         builder: (_) => const ManageIssuersRegistryPage(),
         settings: const RouteSettings(name: '/manageIssuersRegistryPage'),
       );
@@ -53,7 +53,7 @@ class ManageIssuersRegistryPage extends StatelessWidget {
                 child: Text(
                   l10n.chooseIssuerRegistryDescription,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.caption3,
+                  style: Theme.of(context).textTheme.bodySmall3,
                 ),
               ),
               const SizedBox(height: 15),

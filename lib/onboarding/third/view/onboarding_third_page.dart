@@ -5,9 +5,9 @@ import 'package:altme/route/route.dart';
 import 'package:flutter/material.dart';
 
 class OnBoardingThirdPage extends StatelessWidget {
-  const OnBoardingThirdPage({Key? key}) : super(key: key);
+  const OnBoardingThirdPage({super.key});
 
-  static Route route() => RightToLeftRoute<void>(
+  static Route<dynamic> route() => RightToLeftRoute<void>(
         builder: (context) => const OnBoardingThirdPage(),
         settings: const RouteSettings(name: '/onBoardingThirdPage'),
       );
@@ -19,9 +19,9 @@ class OnBoardingThirdPage extends StatelessWidget {
 }
 
 class OnBoardingThirdView extends StatefulWidget {
-  const OnBoardingThirdView({Key? key}) : super(key: key);
+  const OnBoardingThirdView({super.key});
 
-  static Route route() => RightToLeftRoute<void>(
+  static Route<dynamic> route() => RightToLeftRoute<void>(
         builder: (context) => const OnBoardingThirdView(),
         settings: const RouteSettings(name: '/onBoardingThirdPage'),
       );

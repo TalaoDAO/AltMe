@@ -14,7 +14,9 @@ class SaveBackupCredentialPage extends StatelessWidget {
 
   final BackupCredentialCubit backupCredentialCubit;
 
-  static Route route({required BackupCredentialCubit backupCredentialCubit}) {
+  static Route<dynamic> route({
+    required BackupCredentialCubit backupCredentialCubit,
+  }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/saveBackupCredentialPage'),
       builder: (_) => SaveBackupCredentialPage(

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 class PhraseWord extends StatelessWidget {
   const PhraseWord({
-    Key? key,
+    super.key,
     required this.order,
     required this.word,
-  }) : super(key: key);
+  });
 
   final int order;
   final String word;

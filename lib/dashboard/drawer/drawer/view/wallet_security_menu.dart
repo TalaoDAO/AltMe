@@ -10,7 +10,7 @@ import 'package:secure_storage/secure_storage.dart';
 class WalletSecurityMenu extends StatelessWidget {
   const WalletSecurityMenu({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       builder: (_) => const WalletSecurityMenu(),
       settings: const RouteSettings(name: '/WalletSecurityMenu'),
@@ -35,7 +35,6 @@ class WalletSecurityView extends StatelessWidget {
     BuildContext context,
     AppLocalizations l10n,
   ) {
-    Navigator.of(context).pop();
     Navigator.of(context).push<void>(
       EnterNewPinCodePage.route(
         isFromOnboarding: false,
@@ -44,6 +43,7 @@ class WalletSecurityView extends StatelessWidget {
           AlertMessage.showStateMessage(
             context: context,
             stateMessage: StateMessage.success(
+              showDialog: true,
               stringMessage: l10n.yourPinCodeChangedSuccessfully,
             ),
           );

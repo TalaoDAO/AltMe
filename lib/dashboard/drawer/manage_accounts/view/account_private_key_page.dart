@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class AccountPrivateKeyPage extends StatefulWidget {
   const AccountPrivateKeyPage({
-    Key? key,
+    super.key,
     required this.privateKey,
-  }) : super(key: key);
+  });
 
-  static Route route({
+  static Route<dynamic> route({
     required String privateKey,
   }) {
     return MaterialPageRoute<void>(
@@ -33,12 +33,12 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
     super.initState();
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10),
+      duration: const Duration(seconds: 20),
     );
 
-    final Tween<double> _rotationTween = Tween(begin: 10, end: 0);
+    final Tween<double> rotationTween = Tween(begin: 20, end: 0);
 
-    animation = _rotationTween.animate(animationController)
+    animation = rotationTween.animate(animationController)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           Navigator.pop(context);
@@ -61,56 +61,58 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
       titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
-      titleTrailing: AnimatedBuilder(
-        animation: animation,
-        builder: (BuildContext context, Widget? child) {
-          return Text(
-            timeFormatter(timeInSecond: animation.value.toInt()),
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge,
-          );
-        },
-      ),
       secureScreen: true,
       body: BackgroundCard(
         height: double.infinity,
         width: double.infinity,
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(Sizes.spaceNormal),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  widget.privateKey,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        decoration: TextDecoration.underline,
-                      ),
+        child: Padding(
+          padding: const EdgeInsets.all(Sizes.spaceNormal),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                widget.privateKey,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      decoration: TextDecoration.underline,
+                    ),
+              ),
+              Expanded(
+                child: Center(
+                  child: AnimatedBuilder(
+                    animation: animation,
+                    builder: (BuildContext context, Widget? child) {
+                      return Text(
+                        timeFormatter(timeInSecond: animation.value.toInt()),
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.displayMedium,
+                      );
+                    },
+                  ),
                 ),
-                // const SizedBox(
-                //   height: Sizes.spaceXLarge,
-                // ),
-                // CopyButton(
-                //   onTap: () async {
-                //     await Clipboard.setData(
-                //       ClipboardData(
-                //         text: privateKey,
-                //       ),
-                //     );
-                //     AlertMessage.showStateMessage(
-                //       context: context,
-                //       stateMessage: StateMessage.success(
-                //         stringMessage: l10n.copiedToClipboard,
-                //       ),
-                //     );
-                //   },
-                // ),
-              ],
-            ),
+              ),
+              // const SizedBox(
+              //   height: Sizes.spaceXLarge,
+              // ),
+              // CopyButton(
+              //   onTap: () async {
+              //     await Clipboard.setData(
+              //       ClipboardData(
+              //         text: privateKey,
+              //       ),
+              //     );
+              //     AlertMessage.showStateMessage(
+              //       context: context,
+              //       stateMessage: StateMessage.success(
+              //         stringMessage: l10n.copiedToClipboard,
+              //       ),
+              //     );
+              //   },
+              // ),
+            ],
           ),
         ),
       ),

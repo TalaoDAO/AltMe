@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GetCardsWidget extends StatelessWidget {
-  const GetCardsWidget({Key? key}) : super(key: key);
+  const GetCardsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class DrawerItem extends StatelessWidget {
   const DrawerItem({
-    Key? key,
+    super.key,
     required this.title,
     this.onTap,
     this.trailing,
-  }) : super(key: key);
+  });
 
   final Widget? trailing;
   final String title;

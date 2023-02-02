@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 class NftUrlWidget extends StatelessWidget {
   const NftUrlWidget({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   final String text;
   final VoidCallback onPressed;
@@ -38,7 +38,7 @@ class NftUrlWidget extends StatelessWidget {
           child: Text(
             text,
             softWrap: false,
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
             overflow: TextOverflow.fade,
           ),
         ),

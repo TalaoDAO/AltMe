@@ -4,40 +4,20 @@ import 'package:flutter/material.dart';
 
 class _BaseItem extends StatefulWidget {
   const _BaseItem({
-    Key? key,
     required this.child,
     this.onTap,
     this.enabled = true,
-    this.color = Colors.white,
-    this.isCustom = false,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final VoidCallback? onTap;
   final bool enabled;
-  final Color color;
-  final bool isCustom;
 
   @override
   __BaseItemState createState() => __BaseItemState();
 }
 
-class __BaseItemState extends State<_BaseItem>
-    with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-  late Animation<double> animation;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    // controller?.dispose();
-  }
-
+class __BaseItemState extends State<_BaseItem> {
   @override
   Widget build(BuildContext context) => Opacity(
         opacity: !widget.enabled ? 0.33 : 1,
@@ -50,11 +30,11 @@ class __BaseItemState extends State<_BaseItem>
 
 class CredentialsListPageItem extends StatelessWidget {
   const CredentialsListPageItem({
-    Key? key,
+    super.key,
     required this.credentialModel,
     this.onTap,
     this.selected,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final VoidCallback? onTap;
@@ -64,15 +44,12 @@ class CredentialsListPageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BaseItem(
       enabled: true,
-      isCustom: true,
       onTap: onTap ??
           () {
-            Navigator.of(context)
-                .push<void>(CredentialsDetailsPage.route(credentialModel));
+            Navigator.of(context).push<void>(
+              CredentialsDetailsPage.route(credentialModel: credentialModel),
+            );
           },
-      color: credentialModel
-          .credentialPreview.credentialSubjectModel.credentialSubjectType
-          .backgroundColor(credentialModel),
       child: selected == null
           ? CredentialDisplay(
               credentialModel: credentialModel,
@@ -110,11 +87,11 @@ class CredentialsListPageItem extends StatelessWidget {
 
 class CredentialIcon extends StatelessWidget {
   const CredentialIcon({
-    Key? key,
+    super.key,
     required this.iconData,
     this.color,
     this.size = 24,
-  }) : super(key: key);
+  });
 
   final IconData iconData;
   final Color? color;

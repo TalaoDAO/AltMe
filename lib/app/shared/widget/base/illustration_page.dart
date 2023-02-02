@@ -5,13 +5,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class BaseIllustrationPage extends StatelessWidget {
   const BaseIllustrationPage({
-    Key? key,
+    super.key,
     required this.asset,
     this.description,
     required this.action,
     this.onPressed,
     this.backgroundColor = Colors.transparent,
-  }) : super(key: key);
+  });
 
   final String asset;
   final String? description;

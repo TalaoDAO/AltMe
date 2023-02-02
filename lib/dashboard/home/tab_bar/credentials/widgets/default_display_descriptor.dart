@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class DefaultDisplayDescriptor extends StatelessWidget {
   const DefaultDisplayDescriptor({
-    Key? key,
+    super.key,
     required this.credentialModel,
     required this.descriptionMaxLine,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
   final int descriptionMaxLine;

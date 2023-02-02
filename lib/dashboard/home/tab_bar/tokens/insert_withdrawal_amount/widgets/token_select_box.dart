@@ -5,13 +5,13 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-typedef TokenSelectBoxChanged = Function(TokenModel);
+typedef TokenSelectBoxChanged = dynamic Function(TokenModel);
 
 class TokenSelectBoxView extends StatelessWidget {
   const TokenSelectBoxView({
-    Key? key,
+    super.key,
     required this.selectedToken,
-  }) : super(key: key);
+  });
 
   final TokenModel selectedToken;
 
@@ -28,10 +28,7 @@ class TokenSelectBoxView extends StatelessWidget {
 }
 
 class _TokenSelectBox extends StatefulWidget {
-  const _TokenSelectBox({
-    Key? key,
-    required this.selectedToken,
-  }) : super(key: key);
+  const _TokenSelectBox({required this.selectedToken});
 
   final TokenModel selectedToken;
 
@@ -62,10 +59,7 @@ class _TokenSelectBoxState extends State<_TokenSelectBox> {
 }
 
 class _TokenSelectBoxItem extends StatelessWidget {
-  const _TokenSelectBoxItem({
-    Key? key,
-    required this.selectedToken,
-  }) : super(key: key);
+  const _TokenSelectBoxItem({required this.selectedToken});
 
   final TokenModel selectedToken;
 
@@ -133,7 +127,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                             minFontSize: 10,
                             maxLength: 15,
                             textAlign: TextAlign.right,
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                             overflow: TextOverflow.ellipsis,
                           ),
                           MyText(
@@ -141,7 +135,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                             minFontSize: 10,
                             maxLength: 10,
                             textAlign: TextAlign.right,
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],

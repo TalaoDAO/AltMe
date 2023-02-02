@@ -6,10 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CredentialListData extends StatelessWidget {
   const CredentialListData({
-    Key? key,
+    super.key,
     required this.state,
     required this.onRefresh,
-  }) : super(key: key);
+  });
 
   final CredentialListState state;
   final RefreshCallback onRefresh;

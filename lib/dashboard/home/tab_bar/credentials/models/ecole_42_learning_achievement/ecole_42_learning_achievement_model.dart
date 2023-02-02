@@ -8,18 +8,15 @@ part 'ecole_42_learning_achievement_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Ecole42LearningAchievementModel extends CredentialSubjectModel {
   Ecole42LearningAchievementModel({
-    String? id,
-    String? type,
-    Author? issuedBy,
+    super.id,
+    super.type,
+    super.issuedBy,
     this.givenName,
     this.signatureLines,
     this.birthDate,
     this.familyName,
     this.hasCredential,
   }) : super(
-          id: id,
-          type: type,
-          issuedBy: issuedBy,
           credentialSubjectType:
               CredentialSubjectType.ecole42LearningAchievement,
           credentialCategory: CredentialCategory.identityCards,

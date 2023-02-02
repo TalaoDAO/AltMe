@@ -4,7 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class TitleText extends StatelessWidget {
-  const TitleText({Key? key}) : super(key: key);
+  const TitleText({super.key});
 
   @override
   Widget build(BuildContext context) {

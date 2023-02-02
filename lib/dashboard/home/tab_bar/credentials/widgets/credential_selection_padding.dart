@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CredentialSelectionPadding extends StatelessWidget {
-  const CredentialSelectionPadding({required this.child, Key? key})
-      : super(key: key);
+  const CredentialSelectionPadding({required this.child, super.key});
   final Widget child;
   @override
   Widget build(BuildContext context) {

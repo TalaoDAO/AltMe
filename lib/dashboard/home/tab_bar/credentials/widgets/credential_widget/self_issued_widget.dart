@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class SelfIssuedWidget extends StatelessWidget {
   const SelfIssuedWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 

@@ -19,13 +19,13 @@ class ManageNetworkCubit extends Cubit<ManageNetworkState> {
   final SecureStorageProvider secureStorageProvider;
 
   Future<void> _load() async {
-    final _blockchainNetworkJson =
+    final blockchainNetworkJson =
         await secureStorageProvider.get(SecureStorageKeys.blockchainNetworkKey);
 
     late final BlockchainNetwork blockchainNetwork;
 
-    if (_blockchainNetworkJson != null) {
-      final mJson = json.decode(_blockchainNetworkJson) as Map<String, dynamic>;
+    if (blockchainNetworkJson != null) {
+      final mJson = json.decode(blockchainNetworkJson) as Map<String, dynamic>;
       if (mJson['chain'] != null) {
         blockchainNetwork = EthereumNetwork.fromJson(mJson);
       } else {

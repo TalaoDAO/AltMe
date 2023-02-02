@@ -21,7 +21,7 @@ import 'package:uni_links/uni_links.dart';
 bool _initialUriIsHandled = false;
 
 class SplashPage extends StatelessWidget {
-  const SplashPage({Key? key}) : super(key: key);
+  const SplashPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +30,14 @@ class SplashPage extends StatelessWidget {
 }
 
 class SplashView extends StatefulWidget {
-  const SplashView({Key? key}) : super(key: key);
+  const SplashView({super.key});
 
   @override
   State<SplashView> createState() => _SplashViewState();
 }
 
 class _SplashViewState extends State<SplashView> {
-  StreamSubscription? _sub;
+  StreamSubscription<Uri?>? _sub;
 
   @override
   void initState() {
@@ -211,17 +211,17 @@ class _SplashViewState extends State<SplashView> {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: const [
-                  Spacer(flex: 1),
+                  Spacer(flex: 3),
                   TitleText(),
                   Spacer(flex: 1),
                   SubTitle(),
-                  Spacer(flex: 3),
+                  Spacer(flex: 2),
                   SplashImage(),
-                  Spacer(flex: 10),
+                  Spacer(flex: 3),
                   LoadingText(),
                   SizedBox(height: 10),
                   LoadingProgress(),
-                  Spacer(flex: 7),
+                  Spacer(flex: 2),
                 ],
               ),
             ),

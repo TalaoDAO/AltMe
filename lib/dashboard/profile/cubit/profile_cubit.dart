@@ -47,11 +47,11 @@ class ProfileCubit extends Cubit<ProfileState> {
       final issuerVerificationUrl = await secureStorageProvider
               .get(SecureStorageKeys.issuerVerificationUrlKey) ??
           '';
-      final _tezosNetworkJson = await secureStorageProvider
+      final tezosNetworkJson = await secureStorageProvider
           .get(SecureStorageKeys.blockchainNetworkKey);
-      final tezosNetwork = _tezosNetworkJson != null
+      final tezosNetwork = tezosNetworkJson != null
           ? TezosNetwork.fromJson(
-              json.decode(_tezosNetworkJson) as Map<String, dynamic>,
+              json.decode(tezosNetworkJson) as Map<String, dynamic>,
             )
           : TezosNetwork.mainNet();
       final isEnterprise = (await secureStorageProvider
@@ -166,23 +166,23 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateIssuerVerificationUrl(
     IssuerVerificationRegistry registry,
   ) async {
-    var _issuerVerificationUrl = Urls.checkIssuerTalaoUrl;
+    var issuerVerificationUrl = Urls.checkIssuerTalaoUrl;
     switch (registry) {
       case IssuerVerificationRegistry.Compellio:
-        _issuerVerificationUrl = '';
+        issuerVerificationUrl = '';
         break;
       case IssuerVerificationRegistry.EBSI:
-        _issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
+        issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
         break;
       case IssuerVerificationRegistry.None:
-        _issuerVerificationUrl = '';
+        issuerVerificationUrl = '';
         break;
       case IssuerVerificationRegistry.Talao:
-        _issuerVerificationUrl = Urls.checkIssuerTalaoUrl;
+        issuerVerificationUrl = Urls.checkIssuerTalaoUrl;
         break;
     }
-    final _newModel =
-        state.model.copyWith(issuerVerificationUrl: _issuerVerificationUrl);
-    await update(_newModel);
+    final newModel =
+        state.model.copyWith(issuerVerificationUrl: issuerVerificationUrl);
+    await update(newModel);
   }
 }

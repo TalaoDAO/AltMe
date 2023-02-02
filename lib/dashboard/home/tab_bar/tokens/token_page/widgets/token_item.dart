@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class TokenItem extends StatelessWidget {
   const TokenItem({
-    Key? key,
+    super.key,
     required this.token,
     this.isSecure = false,
-  }) : super(key: key);
+  });
 
   final TokenModel token;
   final bool isSecure;

@@ -4,7 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class RevealPrivateKeyButton extends StatelessWidget {
-  const RevealPrivateKeyButton({Key? key, this.onTap}) : super(key: key);
+  const RevealPrivateKeyButton({super.key, this.onTap});
 
   final VoidCallback? onTap;
 

@@ -5,8 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 class MarkdownPage extends StatelessWidget {
-  MarkdownPage({Key? key, required this.title, required this.file})
-      : super(key: key);
+  MarkdownPage({super.key, required this.title, required this.file});
 
   final String title;
   final String file;

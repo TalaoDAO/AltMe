@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 
 class OnBoardingWidget extends StatelessWidget {
   const OnBoardingWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
     required this.index,
     required this.image,
-  }) : super(key: key);
+  });
 
   final String title;
   final String subtitle;

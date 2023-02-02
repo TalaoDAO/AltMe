@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,12 +12,9 @@ part 'credential_details_cubit.g.dart';
 part 'credential_details_state.dart';
 
 class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
-  CredentialDetailsCubit({
-    required this.walletCubit,
-    required this.didKitProvider,
-  }) : super(const CredentialDetailsState());
+  CredentialDetailsCubit({required this.didKitProvider})
+      : super(const CredentialDetailsState());
 
-  final WalletCubit walletCubit;
   final DIDKitProvider didKitProvider;
 
   void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {

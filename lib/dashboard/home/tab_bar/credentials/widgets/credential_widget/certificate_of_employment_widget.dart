@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 
 class CertificateOfEmploymentWidget extends StatelessWidget {
   const CertificateOfEmploymentWidget({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 
@@ -28,8 +28,10 @@ class CertificateOfEmploymentWidget extends StatelessWidget {
 }
 
 class CertificateOfEmploymentRecto extends Recto {
-  const CertificateOfEmploymentRecto({Key? key, required this.credentialModel})
-      : super(key: key);
+  const CertificateOfEmploymentRecto({
+    super.key,
+    required this.credentialModel,
+  });
   final CredentialModel credentialModel;
 
   @override
@@ -74,8 +76,8 @@ class CertificateOfEmploymentRecto extends Recto {
 class CertificateOfEmploymentVerso extends Verso {
   const CertificateOfEmploymentVerso({
     required this.credentialModel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final CredentialModel credentialModel;
 

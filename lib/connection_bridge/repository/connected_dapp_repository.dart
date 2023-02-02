@@ -22,13 +22,13 @@ class ConnectedDappRepository {
           '${SecureStorageKeys.savedDaaps}/',
         ),
       );
-      final _savedPeerData = <SavedDappData>[];
+      final savedPeerData = <SavedDappData>[];
       data.forEach((key, value) {
-        _savedPeerData.add(
+        savedPeerData.add(
           SavedDappData.fromJson(json.decode(value) as Map<String, dynamic>),
         );
       });
-      return _savedPeerData;
+      return savedPeerData;
     } catch (e) {
       throw ResponseMessage(
         ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,

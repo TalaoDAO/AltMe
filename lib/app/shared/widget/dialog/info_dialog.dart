@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class InfoDialog extends StatelessWidget {
   const InfoDialog({
-    Key? key,
+    super.key,
     required this.title,
     this.subtitle,
     required this.button,
@@ -12,7 +12,7 @@ class InfoDialog extends StatelessWidget {
     this.dialogColor,
     this.bgColor,
     this.textColor,
-  }) : super(key: key);
+  });
 
   final String title;
   final String? subtitle;

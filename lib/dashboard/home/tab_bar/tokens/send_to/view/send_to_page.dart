@@ -1,19 +1,18 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SendToPage extends StatelessWidget {
   const SendToPage({
-    Key? key,
+    super.key,
     required this.defaultSelectedToken,
-  }) : super(key: key);
+  });
 
   final TokenModel defaultSelectedToken;
 
-  static Route route({required TokenModel defaultSelectedToken}) {
+  static Route<dynamic> route({required TokenModel defaultSelectedToken}) {
     return MaterialPageRoute<void>(
       builder: (_) => SendToPage(
         defaultSelectedToken: defaultSelectedToken,
@@ -35,9 +34,9 @@ class SendToPage extends StatelessWidget {
 
 class SendToView extends StatefulWidget {
   const SendToView({
-    Key? key,
+    super.key,
     required this.defaultSelectedToken,
-  }) : super(key: key);
+  });
 
   final TokenModel defaultSelectedToken;
 

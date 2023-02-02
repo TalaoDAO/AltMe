@@ -3,8 +3,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class SkillsListDisplay extends StatelessWidget {
-  const SkillsListDisplay({required this.skillWidgetList, Key? key})
-      : super(key: key);
+  const SkillsListDisplay({required this.skillWidgetList, super.key});
 
   final List<Skill> skillWidgetList;
 

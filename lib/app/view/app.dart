@@ -31,8 +31,7 @@ import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:secure_storage/secure_storage.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key, this.flavorMode = FlavorMode.production})
-      : super(key: key);
+  const App({super.key, this.flavorMode = FlavorMode.production});
 
   final FlavorMode flavorMode;
 
@@ -176,7 +175,7 @@ class App extends StatelessWidget {
 }
 
 class MaterialAppDefinition extends StatelessWidget {
-  const MaterialAppDefinition({Key? key}) : super(key: key);
+  const MaterialAppDefinition({super.key});
 
   @override
   Widget build(BuildContext context) {

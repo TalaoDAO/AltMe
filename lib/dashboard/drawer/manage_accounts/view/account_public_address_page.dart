@@ -7,12 +7,12 @@ import 'package:share_plus/share_plus.dart';
 
 class AccountPublicAddressPage extends StatelessWidget {
   const AccountPublicAddressPage({
-    Key? key,
+    super.key,
     required this.accountName,
     required this.accountAddress,
-  }) : super(key: key);
+  });
 
-  static Route route({
+  static Route<dynamic> route({
     required String accountName,
     required String accountAddress,
   }) {

@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 
 class CredentialBaseWidget extends StatelessWidget {
   const CredentialBaseWidget({
-    Key? key,
+    super.key,
     required this.cardBackgroundImagePath,
     this.aspectRatio = Sizes.credentialAspectRatio,
     this.issuerName,
     this.value,
     this.issuanceDate,
     this.expirationDate,
-  }) : super(key: key);
+  });
 
   final String cardBackgroundImagePath;
   final double aspectRatio;

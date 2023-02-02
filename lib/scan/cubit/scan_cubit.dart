@@ -17,6 +17,16 @@ import 'package:uuid/uuid.dart';
 part 'scan_cubit.g.dart';
 part 'scan_state.dart';
 
+/// VC = Verifibale Credential : signed and issued by issuer
+/// VP = Verifiable Presentation = VC + wallet signature
+/// VP is what you trasnfer to Verifier in the Presentation Request prootocol
+
+/// the issuer signs and sends a VC to the wallet
+///the wallet stores the VC
+/// If needed the wallet builds a VP with the VC and sends it to a Verifier
+
+/// In LinkedIn case the VP is embedded in the QR code, not sent to the verifier
+
 class ScanCubit extends Cubit<ScanState> {
   ScanCubit({
     required this.client,
@@ -92,6 +102,8 @@ class ScanCubit extends Cubit<ScanState> {
           presentations = List.of(presentations)..add(presentation);
         }
       }
+
+      log.i('presentations - $presentations');
 
       FormData data;
       if (credentialModel.receivedId == null) {
@@ -310,7 +322,7 @@ class ScanCubit extends Cubit<ScanState> {
   Future<void> getDIDAuthCHAPI({
     required Uri uri,
     required String keyId,
-    required void Function(String) done,
+    required dynamic Function(String) done,
     required String challenge,
     required String domain,
   }) async {
@@ -464,7 +476,7 @@ class ScanCubit extends Cubit<ScanState> {
     String? challenge,
     String? domain,
     required Uri uri,
-    required void Function(String) done,
+    required dynamic Function(String) done,
   }) async {
     emit(
       state.scanPermission(

@@ -4,7 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class ShareButton extends StatelessWidget {
-  const ShareButton({Key? key, this.onTap}) : super(key: key);
+  const ShareButton({super.key, this.onTap});
 
   final VoidCallback? onTap;
 

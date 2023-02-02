@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class AppVersion extends StatelessWidget {
-  const AppVersion({
-    Key? key,
-  }) : super(key: key);
+  const AppVersion({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +18,7 @@ class AppVersion extends StatelessWidget {
 
               return Text(
                 '$appName v$version ($buildNumber)',
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
               );
             case ConnectionState.waiting:
             case ConnectionState.none:

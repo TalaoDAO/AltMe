@@ -8,9 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ManageAccountsPage extends StatefulWidget {
-  const ManageAccountsPage({Key? key}) : super(key: key);
+  const ManageAccountsPage({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(
       builder: (_) => BlocProvider(
         create: (context) => ManageAccountsCubit(

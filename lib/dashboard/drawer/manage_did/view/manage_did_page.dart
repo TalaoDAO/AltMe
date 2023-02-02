@@ -10,9 +10,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ManageDIDPage extends StatelessWidget {
-  const ManageDIDPage({Key? key}) : super(key: key);
+  const ManageDIDPage({super.key});
 
-  static Route route() {
+  static Route<dynamic> route() {
     return MaterialPageRoute<void>(builder: (_) => const ManageDIDPage());
   }
 
@@ -43,7 +43,7 @@ class ManageDIDPage extends StatelessWidget {
             Text(
               context.read<DIDCubit>().state.did ?? '...',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             Padding(
               padding: const EdgeInsets.all(Sizes.spaceXLarge),
@@ -89,7 +89,7 @@ class ManageDIDPage extends StatelessWidget {
             Text(
               l10n.didPrivateKeyDescription,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(
               height: Sizes.spaceXLarge,

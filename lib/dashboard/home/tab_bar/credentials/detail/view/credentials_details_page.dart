@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
@@ -8,19 +10,27 @@ import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CredentialsDetailsPage extends StatelessWidget {
   const CredentialsDetailsPage({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+    required this.readOnly,
+  });
 
   final CredentialModel credentialModel;
+  final bool readOnly;
 
-  static Route route(CredentialModel credentialModel) {
+  static Route<dynamic> route({
+    required CredentialModel credentialModel,
+    bool readOnly = false,
+  }) {
     return MaterialPageRoute<void>(
-      builder: (context) =>
-          CredentialsDetailsPage(credentialModel: credentialModel),
+      builder: (context) => CredentialsDetailsPage(
+        credentialModel: credentialModel,
+        readOnly: readOnly,
+      ),
       settings: const RouteSettings(name: '/credentialsDetailsPages'),
     );
   }
@@ -29,21 +39,25 @@ class CredentialsDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CredentialDetailsCubit>(
       create: (context) => CredentialDetailsCubit(
-        walletCubit: context.read<WalletCubit>(),
         didKitProvider: DIDKitProvider(),
       ),
-      child: CredentialsDetailsView(credentialModel: credentialModel),
+      child: CredentialsDetailsView(
+        credentialModel: credentialModel,
+        readOnly: readOnly,
+      ),
     );
   }
 }
 
 class CredentialsDetailsView extends StatefulWidget {
   const CredentialsDetailsView({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+    required this.readOnly,
+  });
 
   final CredentialModel credentialModel;
+  final bool readOnly;
 
   @override
   _CredentialsDetailsViewState createState() => _CredentialsDetailsViewState();
@@ -53,7 +67,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       context
           .read<CredentialDetailsCubit>()
           .verifyCredential(widget.credentialModel);
@@ -93,6 +107,13 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         } else {
           LoadingView().hide();
         }
+
+        if (state.message != null) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: state.message!,
+          );
+        }
       },
       builder: (context, state) {
         final List<Activity> activities =
@@ -106,6 +127,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           reversedList.removeLast();
         }
 
+        final bool isLinkeInCard = widget.credentialModel.credentialPreview
+                .credentialSubjectModel.credentialSubjectType ==
+            CredentialSubjectType.linkedInCard;
+
         final bool disAllowDelete = widget.credentialModel.credentialPreview
                     .credentialSubjectModel.credentialSubjectType ==
                 CredentialSubjectType.walletCredential ||
@@ -114,56 +139,85 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                 CredentialCategory.blockchainAccountsCards;
 
         return BasePage(
-          title: l10n.cardDetails,
+          title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
           titleAlignment: Alignment.topCenter,
           titleLeading: const BackLeadingButton(),
-          titleTrailing: IconButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .push<void>(CredentialQrPage.route(widget.credentialModel));
-            },
-            icon: Icon(
-              Icons.qr_code,
-              color: Theme.of(context).colorScheme.onBackground,
-            ),
-          ),
-          navigation: SafeArea(
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 5,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  MyOutlinedButton(
-                    onPressed: disAllowDelete ? null : delete,
-                    text: l10n.credentialDetailDeleteCard,
+          // titleTrailing: IconButton(
+          //   onPressed: () {
+          //     Navigator.of(context)
+          //         .push<void>(CredentialQrPage.route(widget.credentialModel));
+          //   },
+          //   icon: Icon(
+          //     Icons.qr_code,
+          //     color: Theme.of(context).colorScheme.onBackground,
+          //   ),
+          // ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          navigation: widget.readOnly
+              ? null
+              : SafeArea(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 5,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        MyOutlinedButton(
+                          onPressed: disAllowDelete ? null : delete,
+                          text: l10n.credentialDetailDeleteCard,
+                        ),
+                        const SizedBox(height: 8),
+                        MyOutlinedButton(
+                          text: isLinkeInCard
+                              ? l10n.exportToLinkedIn
+                              : l10n.share,
+                          onPressed: () {
+                            if (isLinkeInCard) {
+                              Navigator.of(context).push<void>(
+                                GetLinkedinInfoPage.route(
+                                  credentialModel: widget.credentialModel,
+                                ),
+                              );
+                            } else {
+                              final box =
+                                  context.findRenderObject() as RenderBox?;
+                              final subject = l10n.shareWith;
+
+                              Share.share(
+                                jsonEncode(widget.credentialModel.data),
+                                subject: subject,
+                                sharePositionOrigin:
+                                    box!.localToGlobal(Offset.zero) & box.size,
+                              );
+                            }
+                          },
+                        ),
+                        if (widget.credentialModel.shareLink != '')
+                          MyOutlinedButton.icon(
+                            icon: SvgPicture.asset(
+                              IconStrings.qrCode,
+                              width: 24,
+                              height: 24,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).push<void>(
+                                QrCodeDisplayPage.route(
+                                  widget.credentialModel.id,
+                                  widget.credentialModel,
+                                ),
+                              );
+                            },
+                            text: l10n.credentialDetailShare,
+                          )
+                        else
+                          Container(),
+                      ],
+                    ),
                   ),
-                  if (widget.credentialModel.shareLink != '')
-                    MyOutlinedButton.icon(
-                      icon: SvgPicture.asset(
-                        IconStrings.qrCode,
-                        width: 24,
-                        height: 24,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).push<void>(
-                          QrCodeDisplayPage.route(
-                            widget.credentialModel.id,
-                            widget.credentialModel,
-                          ),
-                        );
-                      },
-                      text: l10n.credentialDetailShare,
-                    )
-                  else
-                    Container(),
-                ],
-              ),
-            ),
-          ),
+                ),
           scrollView: false,
           body: Column(
             children: [
@@ -197,19 +251,20 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                         ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: CredentialDetailTabbar(
-                                    isSelected:
-                                        state.credentialDetailTabStatus ==
-                                            CredentialDetailTabStatus.activity,
-                                    title: l10n.credentialDetailsActivity,
-                                    onTap: () => context
-                                        .read<CredentialDetailsCubit>()
-                                        .changeTabStatus(
+                                if (!widget.readOnly)
+                                  Expanded(
+                                    child: CredentialDetailTabbar(
+                                      isSelected: state
+                                              .credentialDetailTabStatus ==
                                           CredentialDetailTabStatus.activity,
-                                        ),
+                                      title: l10n.credentialDetailsActivity,
+                                      onTap: () => context
+                                          .read<CredentialDetailsCubit>()
+                                          .changeTabStatus(
+                                            CredentialDetailTabStatus.activity,
+                                          ),
+                                    ),
                                   ),
-                                ),
                               ],
                             ),
                             Divider(

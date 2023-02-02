@@ -62,6 +62,25 @@ extension BlockchainTypeX on BlockchainType {
     }
   }
 
+  int get chainId {
+    switch (this) {
+      case BlockchainType.tezos:
+        throw Exception();
+
+      case BlockchainType.ethereum:
+        return 1;
+
+      case BlockchainType.fantom:
+        return 250;
+
+      case BlockchainType.polygon:
+        return 137;
+
+      case BlockchainType.binance:
+        return 56;
+    }
+  }
+
   String get derivePathIndexKey {
     switch (this) {
       case BlockchainType.tezos:
@@ -176,11 +195,11 @@ extension BlockchainTypeX on BlockchainType {
       case BlockchainType.ethereum:
         return false;
       case BlockchainType.fantom:
-        return true;
+        return false;
       case BlockchainType.polygon:
         return false;
       case BlockchainType.binance:
-        return true;
+        return false;
     }
   }
 }

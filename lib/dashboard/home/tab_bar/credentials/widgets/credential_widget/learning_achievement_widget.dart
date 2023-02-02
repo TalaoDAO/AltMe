@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 
 class LearningAchievementDisplayDetail extends StatelessWidget {
   const LearningAchievementDisplayDetail({
-    Key? key,
+    super.key,
     required this.credentialModel,
-  }) : super(key: key);
+  });
 
   final CredentialModel credentialModel;
 
@@ -26,8 +26,7 @@ class LearningAchievementDisplayDetail extends StatelessWidget {
 }
 
 class LearningAchievementRecto extends Recto {
-  const LearningAchievementRecto({Key? key, required this.credentialModel})
-      : super(key: key);
+  const LearningAchievementRecto({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override
@@ -74,8 +73,7 @@ class LearningAchievementRecto extends Recto {
 }
 
 class LearningAchievementVerso extends Verso {
-  const LearningAchievementVerso({Key? key, required this.credentialModel})
-      : super(key: key);
+  const LearningAchievementVerso({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 

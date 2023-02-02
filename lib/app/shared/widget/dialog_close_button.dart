@@ -4,8 +4,7 @@ import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class DialogCloseButton extends StatelessWidget {
-  const DialogCloseButton({Key? key, this.color, this.showText = true})
-      : super(key: key);
+  const DialogCloseButton({super.key, this.color, this.showText = true});
 
   final Color? color;
   final bool showText;

@@ -3,8 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class AgeRangeWidget extends StatelessWidget {
-  const AgeRangeWidget({Key? key, required this.credentialModel})
-      : super(key: key);
+  const AgeRangeWidget({super.key, required this.credentialModel});
   final CredentialModel credentialModel;
 
   @override

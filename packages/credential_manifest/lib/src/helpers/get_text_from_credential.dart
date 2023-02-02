@@ -8,17 +8,18 @@ List<String> getTextsFromCredential(
   try {
     final fieldsPath = JsonPath(jsonPath);
     fieldsPath.read(data).forEach((a) {
-      if (a.value is String) {
-        textList.add(a.value as String);
+      final dynamic value = a.value;
+      if (value is String) {
+        textList.add(value);
       }
-      if (a.value is bool) {
-        textList.add(a.value.toString());
+      if (value is bool) {
+        textList.add(value.toString());
       }
-      if (a.value is num) {
-        textList.add(a.value.toString());
+      if (value is num) {
+        textList.add(value.toString());
       }
-      if (a.value is List) {
-        for (final value in a.value) {
+      if (value is List) {
+        for (final value in value) {
           if (value is String) {
             textList.add(value);
           }

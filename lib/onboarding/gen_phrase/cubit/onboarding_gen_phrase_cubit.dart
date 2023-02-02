@@ -22,7 +22,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     required this.didCubit,
     required this.homeCubit,
     required this.walletCubit,
-  }) : super(OnBoardingGenPhraseState());
+  }) : super(const OnBoardingGenPhraseState());
 
   final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;

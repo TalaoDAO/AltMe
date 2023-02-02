@@ -25,13 +25,13 @@ class WalletConnectState extends Equatable {
   final int? sessionId;
   final String? currentDappPeerId;
   final WCPeerMeta? currentDAppPeerMeta;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final List<WCClient> wcClients;
   final int? signId;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final WCEthereumSignMessage? signMessage;
   final int? transactionId;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final WCEthereumTransaction? transaction;
 
   Map<String, dynamic> toJson() => _$WalletConnectStateToJson(this);

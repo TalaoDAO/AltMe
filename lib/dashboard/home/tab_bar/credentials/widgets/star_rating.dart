@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-typedef RatingChangeCallback = void Function(double rating);
+typedef RatingChangeCallback = dynamic Function(double rating);
 
 class StarRating extends StatelessWidget {
   const StarRating({
-    Key? key,
+    super.key,
     this.starCount = 5,
     this.rating = .0,
     required this.color,
-  }) : super(key: key);
+  });
 
   final int starCount;
   final double rating;

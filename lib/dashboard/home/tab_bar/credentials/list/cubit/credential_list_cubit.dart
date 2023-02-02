@@ -25,7 +25,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     final gamingCategories = state.gamingCategories;
     final identityCategories = state.identityCategories;
     final communityCategories = state.communityCategories;
-    final myProfessionalCategories = state.myProfessionalCategories;
+    //final myProfessionalCategories = state.myProfessionalCategories;
 
     /// tezVoucher and tezotopiaMembership is available only on Android platform
     if (!isAndroid()) {
@@ -66,9 +66,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           break;
 
         case CredentialSubjectType.linkedInCard:
-          myProfessionalCategories.remove(credentialSubjectType);
-          break;
-
         case CredentialSubjectType.talaoCommunityCard:
         case CredentialSubjectType.aragoEmailPass:
         case CredentialSubjectType.aragoIdentityCard:
@@ -191,41 +188,41 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     return dummyCredentialsList;
   }
 
-  Future insertCredential({required CredentialModel credential}) async {
+  Future<void> insertCredential({required CredentialModel credential}) async {
     emit(state.loading());
     final identityCategories = state.identityCategories;
     final gamingCategories = state.gamingCategories;
-    final myProfessionalCategories = state.myProfessionalCategories;
+    //final myProfessionalCategories = state.myProfessionalCategories;
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
       case CredentialCategory.myProfessionalCards:
 
         /// adding real credentials
-        final _credentials = List.of(state.myProfessionalCredentials)
+        final credentials = List.of(state.myProfessionalCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
-        emit(state.populate(myProfessionalCredentials: _credentials));
+        emit(state.populate(myProfessionalCredentials: credentials));
         break;
       case CredentialCategory.gamingCards:
 
         /// adding real credentials
-        final _credentials = List.of(state.gamingCredentials)
+        final credentials = List.of(state.gamingCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
-        emit(state.populate(gamingCredentials: _credentials));
+        emit(state.populate(gamingCredentials: credentials));
         break;
 
       case CredentialCategory.communityCards:
 
         /// adding real credentials
-        final _credentials = List.of(state.communityCredentials)
+        final credentials = List.of(state.communityCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
-        emit(state.populate(communityCredentials: _credentials));
+        emit(state.populate(communityCredentials: credentials));
         break;
 
       case CredentialCategory.identityCards:
 
         /// adding real credentials
-        final _credentials = List.of(state.identityCredentials)
+        final credentials = List.of(state.identityCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
 
         final credentialSubjectType = credential
@@ -236,7 +233,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.voucher:
           case CredentialSubjectType.tezVoucher:
             _removeDummyIfCredentialExist(
-              _credentials,
+              credentials,
               gamingCategories,
               credentialSubjectType,
             );
@@ -253,20 +250,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.gender:
           case CredentialSubjectType.twitterCard:
             _removeDummyIfCredentialExist(
-              _credentials,
+              credentials,
               identityCategories,
               credentialSubjectType,
             );
             break;
 
           case CredentialSubjectType.linkedInCard:
-            _removeDummyIfCredentialExist(
-              _credentials,
-              myProfessionalCategories,
-              credentialSubjectType,
-            );
-            break;
-
           case CredentialSubjectType.tezosAssociatedWallet:
           case CredentialSubjectType.ethereumAssociatedWallet:
           case CredentialSubjectType.certificateOfEmployment:
@@ -311,7 +301,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         emit(
           state.populate(
-            identityCredentials: _credentials,
+            identityCredentials: credentials,
             gamingCategories: gamingCategories,
             identityCategories: identityCategories,
           ),
@@ -321,46 +311,46 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       case CredentialCategory.blockchainAccountsCards:
 
         /// adding real credentials
-        final _credentials = List.of(state.blockchainAccountsCredentials)
+        final credentials = List.of(state.blockchainAccountsCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
-        emit(state.populate(blockchainAccountsCredentials: _credentials));
+        emit(state.populate(blockchainAccountsCredentials: credentials));
         break;
 
       case CredentialCategory.passCards:
 
         /// adding real credentials
-        final _credentials = List.of(state.passCredentials)
+        final credentials = List.of(state.passCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
-        emit(state.populate(passCredentials: _credentials));
+        emit(state.populate(passCredentials: credentials));
         break;
 
       case CredentialCategory.othersCards:
 
         /// adding real credentials
-        final _credentials = List.of(state.othersCredentials)
+        final credentials = List.of(state.othersCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
-        emit(state.populate(othersCredentials: _credentials));
+        emit(state.populate(othersCredentials: credentials));
         break;
     }
   }
 
   void _removeDummyIfCredentialExist(
-    List<HomeCredential> _credentials,
+    List<HomeCredential> credentials,
     List<CredentialSubjectType> categories,
     CredentialSubjectType credentialSubjectType,
   ) {
-    final HomeCredential? dummyCredential = _credentials.firstWhereOrNull(
+    final HomeCredential? dummyCredential = credentials.firstWhereOrNull(
       (element) =>
           element.isDummy &&
           element.credentialSubjectType == credentialSubjectType,
     );
     if (dummyCredential != null) {
-      _credentials.remove(dummyCredential);
+      credentials.remove(dummyCredential);
     }
     categories.remove(credentialSubjectType);
   }
 
-  Future updateCredential(CredentialModel credential) async {
+  Future<void> updateCredential(CredentialModel credential) async {
     emit(state.loading());
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
@@ -373,13 +363,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         );
 
         ///create updated credential list
-        final _credentials = List.of(state.myProfessionalCredentials)
+        final credentials = List.of(state.myProfessionalCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           )
           ..insert(index, HomeCredential.isNotDummy(credential));
 
-        emit(state.populate(myProfessionalCredentials: _credentials));
+        emit(state.populate(myProfessionalCredentials: credentials));
         break;
       case CredentialCategory.gamingCards:
 
@@ -389,13 +379,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         );
 
         ///create updated credential list
-        final _credentials = List.of(state.gamingCredentials)
+        final credentials = List.of(state.gamingCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           )
           ..insert(index, HomeCredential.isNotDummy(credential));
 
-        emit(state.populate(gamingCredentials: _credentials));
+        emit(state.populate(gamingCredentials: credentials));
         break;
 
       case CredentialCategory.communityCards:
@@ -406,13 +396,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         );
 
         ///create updated credential list
-        final _credentials = List.of(state.communityCredentials)
+        final credentials = List.of(state.communityCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           )
           ..insert(index, HomeCredential.isNotDummy(credential));
 
-        emit(state.populate(communityCredentials: _credentials));
+        emit(state.populate(communityCredentials: credentials));
         break;
 
       case CredentialCategory.identityCards:
@@ -423,13 +413,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         );
 
         ///create updated credential list
-        final _credentials = List.of(state.identityCredentials)
+        final credentials = List.of(state.identityCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           )
           ..insert(index, HomeCredential.isNotDummy(credential));
 
-        emit(state.populate(identityCredentials: _credentials));
+        emit(state.populate(identityCredentials: credentials));
         break;
 
       case CredentialCategory.blockchainAccountsCards:
@@ -440,13 +430,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         );
 
         ///create updated credential list
-        final _credentials = List.of(state.blockchainAccountsCredentials)
+        final credentials = List.of(state.blockchainAccountsCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           )
           ..insert(index, HomeCredential.isNotDummy(credential));
 
-        emit(state.populate(blockchainAccountsCredentials: _credentials));
+        emit(state.populate(blockchainAccountsCredentials: credentials));
         break;
 
       case CredentialCategory.passCards:
@@ -457,13 +447,13 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         );
 
         ///create updated credential list
-        final _credentials = List.of(state.passCredentials)
+        final credentials = List.of(state.passCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           )
           ..insert(index, HomeCredential.isNotDummy(credential));
 
-        emit(state.populate(passCredentials: _credentials));
+        emit(state.populate(passCredentials: credentials));
         break;
 
       case CredentialCategory.othersCards:
@@ -474,25 +464,25 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         );
 
         ///create updated credential list
-        final _credentials = List.of(state.othersCredentials)
+        final credentials = List.of(state.othersCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           )
           ..insert(index, HomeCredential.isNotDummy(credential));
 
-        emit(state.populate(othersCredentials: _credentials));
+        emit(state.populate(othersCredentials: credentials));
         break;
     }
   }
 
-  Future deleteById(CredentialModel credential) async {
+  Future<void> deleteById(CredentialModel credential) async {
     emit(state.loading());
     final CredentialSubjectModel credentialSubject =
         credential.credentialPreview.credentialSubjectModel;
     switch (credentialSubject.credentialCategory) {
       case CredentialCategory.gamingCards:
         final gamingCategories = state.gamingCategories;
-        final _credentials = List.of(state.gamingCredentials)
+        final credentials = List.of(state.gamingCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
@@ -520,7 +510,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         emit(
           state.populate(
-            gamingCredentials: _credentials,
+            gamingCredentials: credentials,
             gamingCategories: gamingCategories,
           ),
         );
@@ -528,7 +518,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
       case CredentialCategory.myProfessionalCards:
         final myProfessionalCategories = state.myProfessionalCategories;
-        final _credentials = List.of(state.myProfessionalCredentials)
+        final credentials = List.of(state.myProfessionalCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
@@ -540,27 +530,27 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         }
         emit(
           state.populate(
-            myProfessionalCredentials: _credentials,
+            myProfessionalCredentials: credentials,
             myProfessionalCategories: myProfessionalCategories,
           ),
         );
         break;
       case CredentialCategory.communityCards:
-        final _credentials = List.of(state.communityCredentials)
+        final credentials = List.of(state.communityCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
-        emit(state.populate(communityCredentials: _credentials));
+        emit(state.populate(communityCredentials: credentials));
         break;
 
       case CredentialCategory.identityCards:
         final identityCategories = state.identityCategories;
-        late List<HomeCredential> _credentials;
+        late List<HomeCredential> credentials;
 
         final credentialSubjectType = credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
 
-        _credentials = List.of(state.identityCredentials)
+        credentials = List.of(state.identityCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
@@ -575,7 +565,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.passportFootprint:
           case CredentialSubjectType.twitterCard:
             // // Note: Uncomment if we need to display dummies again.
-            // _credentials.add(HomeCredential.isDummy(credentialSubjectType));
+            // credentials.add(HomeCredential.isDummy(credentialSubjectType));
             identityCategories.add(credentialSubjectType);
             break;
           case CredentialSubjectType.phonePass:
@@ -629,39 +619,39 @@ class CredentialListCubit extends Cubit<CredentialListState> {
 
         emit(
           state.populate(
-            identityCredentials: _credentials,
+            identityCredentials: credentials,
             identityCategories: identityCategories,
           ),
         );
         break;
 
       case CredentialCategory.blockchainAccountsCards:
-        final _credentials = List.of(state.blockchainAccountsCredentials)
+        final credentials = List.of(state.blockchainAccountsCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
-        emit(state.populate(blockchainAccountsCredentials: _credentials));
+        emit(state.populate(blockchainAccountsCredentials: credentials));
         break;
 
       case CredentialCategory.passCards:
-        final _credentials = List.of(state.passCredentials)
+        final credentials = List.of(state.passCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
-        emit(state.populate(passCredentials: _credentials));
+        emit(state.populate(passCredentials: credentials));
         break;
 
       case CredentialCategory.othersCards:
-        final _credentials = List.of(state.othersCredentials)
+        final credentials = List.of(state.othersCredentials)
           ..removeWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
-        emit(state.populate(othersCredentials: _credentials));
+        emit(state.populate(othersCredentials: credentials));
         break;
     }
   }
 
-  Future clearHomeCredentials() async {
+  Future<void> clearHomeCredentials() async {
     emit(
       state.populate(
         gamingCredentials: [],

@@ -109,8 +109,8 @@ class CredentialModel extends Equatable {
   }
 
   Future<CredentialStatus> checkRevocationStatus() async {
-    final _status = await getRevocationStatus();
-    switch (_status) {
+    final status = await getRevocationStatus();
+    switch (status) {
       case RevocationStatus.active:
         return CredentialStatus.active;
       case RevocationStatus.revoked:
@@ -151,7 +151,7 @@ class CredentialModel extends Equatable {
     return CredentialManifest.fromJson(json);
   }
 
-  static String? readValueReceivedId(Map map, String value) {
+  static String? readValueReceivedId(Map<dynamic, dynamic> map, String value) {
     if (map['receivedId'] != null) {
       return map['receivedId'] as String;
     }

@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 
 class SelectBoxAccountItem extends StatelessWidget {
   const SelectBoxAccountItem({
-    Key? key,
+    super.key,
     required this.cryptoAccountData,
     required this.isSelected,
     required this.listIndex,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   final CryptoAccountData cryptoAccountData;
   final bool isSelected;
@@ -39,14 +39,25 @@ class SelectBoxAccountItem extends StatelessWidget {
         onChanged: (_) => onPressed.call(),
         shape: const CircleBorder(),
       ),
-      title: MyText(
-        cryptoAccountData.name.trim().isEmpty
-            ? l10n.unknown
-            : cryptoAccountData.name,
-        maxLines: 1,
-        minFontSize: 12,
-        overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.title,
+      title: Row(
+        children: [
+          Image.asset(
+            cryptoAccountData.blockchainType.icon,
+            width: Sizes.icon,
+          ),
+          const SizedBox(width: Sizes.spaceXSmall),
+          Expanded(
+            child: MyText(
+              cryptoAccountData.name.trim().isEmpty
+                  ? l10n.unknown
+                  : cryptoAccountData.name,
+              maxLines: 1,
+              minFontSize: 12,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.title,
+            ),
+          ),
+        ],
       ),
       subtitle: Padding(
         padding: const EdgeInsets.symmetric(vertical: Sizes.spaceXSmall),
