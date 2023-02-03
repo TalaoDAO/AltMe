@@ -72,15 +72,15 @@ class DrawerView extends StatelessWidget {
                     Navigator.of(context).push<void>(SSIMenu.route());
                   },
                 ),
-                const SizedBox(height: Sizes.spaceSmall),
-                DrawerCategoryItem(
-                  title: l10n.checkLinkedinProfile,
-                  subTitle: l10n.checkLinkedinProfile,
-                  onClick: () {
-                    Navigator.of(context)
-                        .push<void>(CheckForLinkedInProfile.route());
-                  },
-                ),
+                // const SizedBox(height: Sizes.spaceSmall),
+                // DrawerCategoryItem(
+                //   title: l10n.checkLinkedinProfile,
+                //   subTitle: l10n.checkLinkedinProfile,
+                //   onClick: () {
+                //     Navigator.of(context)
+                //         .push<void>(CheckForLinkedInProfile.route());
+                //   },
+                // ),
                 const SizedBox(height: Sizes.spaceSmall),
                 DrawerCategoryItem(
                   title: l10n.helpCenter,
