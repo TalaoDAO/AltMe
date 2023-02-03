@@ -63,7 +63,7 @@ class HelpCenterView extends StatelessWidget {
                       'https://${AltMeStrings.appContactWebsiteName}',
                     );
                   },
-                  title: '${l10n.officialWebsite} :',
+                  title: '${l10n.officialWebsite} : ',
                   trailing: Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
