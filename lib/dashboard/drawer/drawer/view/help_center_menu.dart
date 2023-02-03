@@ -65,13 +65,21 @@ class HelpCenterView extends StatelessWidget {
                   },
                   title: '${l10n.officialWebsite} :',
                   trailing: Expanded(
-                    flex: 1,
-                    child: Text(
-                      AltMeStrings.appContactWebsiteName,
-                      textAlign: TextAlign.left,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            decoration: TextDecoration.underline,
-                          ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AltMeStrings.appContactWebsiteName,
+                          textAlign: TextAlign.left,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        const SizedBox(width: 16),
+                        Icon(
+                          Icons.chevron_right,
+                          size: 26,
+                          color: Theme.of(context).colorScheme.unSelectedLabel,
+                        )
+                      ],
                     ),
                   ),
                 ),
