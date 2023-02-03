@@ -23,7 +23,7 @@ function buildRunner {
   fvm flutter packages pub run build_runner build --delete-conflicting-outputs
 }
 
-function pod {
+function podUpdate {
   echo "pod install"
   cd ios
   pod install
@@ -50,7 +50,7 @@ then
 
 elif [[ "$*" == *-pod* ]]; 
 then 
-  pod
+  podUpdate
 elif [[ "$*" == *-android* ]]; 
 then 
   pub
@@ -66,7 +66,7 @@ elif [[ "$*" == *-ios* ]];
 then 
   pub
   buildRunner
-  pod
+  podUpdate
   echo "deploy ios"
   echo "Make sure you are in right branch"
   fvm flutter build ios --release --flavor "production" --target "lib/main_production.dart"
