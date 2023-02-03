@@ -1,8 +1,6 @@
 // ignore_for_file: avoid_dynamic_calls
 
 import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:bip39/bip39.dart' as bip393;
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
@@ -395,4 +393,7 @@ class Ebsi {
 
     return credentialResponse.data;
   }
+
+  sendPresentation(
+      Uri uri, List<String> credentialsToBePresented, String mnemonic) {}
 }
