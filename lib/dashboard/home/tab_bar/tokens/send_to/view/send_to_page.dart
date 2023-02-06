@@ -48,8 +48,6 @@ class _SendToViewState extends State<SendToView>
     with SingleTickerProviderStateMixin {
   final TextEditingController withdrawalAddressController =
       TextEditingController();
-  late final TabController tabController =
-      TabController(length: 2, vsync: this);
 
   @override
   void initState() {
@@ -58,12 +56,6 @@ class _SendToViewState extends State<SendToView>
             withdrawalAddress: withdrawalAddressController.text,
           );
     });
-    tabController.addListener(() {
-      context
-          .read<SendToCubit>()
-          .setOtherAccountTab(isOtherAccount: tabController.index == 0);
-    });
-
     super.initState();
   }
 
@@ -98,48 +90,9 @@ class _SendToViewState extends State<SendToView>
                 const SizedBox(
                   height: Sizes.spaceNormal,
                 ),
-                TabBar(
-                  controller: tabController,
-                  tabs: [
-                    Tab(
-                      icon: const Icon(Icons.account_balance_wallet_rounded),
-                      text: l10n.otherAccount,
-                    ),
-                    Tab(
-                      icon: const Icon(Icons.move_down),
-                      text: l10n.myAccount,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
-                BlocBuilder<SendToCubit, SendToState>(
-                  buildWhen: (previous, current) =>
-                      previous.isOtherAccountTab != current.isOtherAccountTab,
-                  builder: (_, state) {
-                    context
-                        .read<SendToCubit>()
-                        .setWithdrawalAddress(withdrawalAddress: '');
-                    if (state.isOtherAccountTab) {
-                      withdrawalAddressController.text = '';
-                      return WithdrawalAddressInputView(
-                        withdrawalAddressController:
-                            withdrawalAddressController,
-                        caption: l10n.to,
-                      );
-                    } else {
-                      return ToAccountWidget(
-                        triggerInitialAccount: true,
-                        onAccountSelected: (cryptoAccount) {
-                          context.read<SendToCubit>().setWithdrawalAddress(
-                                withdrawalAddress:
-                                    cryptoAccount?.walletAddress ?? '',
-                              );
-                        },
-                      );
-                    }
-                  },
+                WithdrawalAddressInputView(
+                  withdrawalAddressController: withdrawalAddressController,
+                  caption: l10n.to,
                 ),
               ],
             ),

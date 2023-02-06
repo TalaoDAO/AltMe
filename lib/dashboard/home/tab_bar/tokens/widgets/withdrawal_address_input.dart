@@ -138,12 +138,24 @@ class _WithdrawalAddressInputPageState
               ),
               BlocBuilder<WithdrawalInputCubit, bool>(
                 builder: (_, isEmpty) => isEmpty
-                    ? InkWell(
-                        onTap: _openQRScanner,
-                        child: Image.asset(
-                          IconStrings.scanAddress,
-                          width: Sizes.icon2x,
-                        ),
+                    ? Row(
+                        children: [
+                          InkWell(
+                            onTap: _openQRScanner,
+                            child: Image.asset(
+                              IconStrings.scanAddress,
+                              width: Sizes.icon2x,
+                            ),
+                          ),
+                          const SizedBox(width: Sizes.spaceSmall,),
+                          InkWell(
+                            onTap: _openWhiteList,
+                            child: Image.asset(
+                              IconStrings.whiteList,
+                              width: Sizes.icon2x,
+                            ),
+                          ),
+                        ],
                       )
                     : InkWell(
                         onTap: withdrawalAddressController.clear,
@@ -168,5 +180,11 @@ class _WithdrawalAddressInputPageState
     } else {
       withdrawalAddressController.text = result ?? '';
     }
+  }
+
+  Future<void> _openWhiteList() async {
+    final result =
+        await Navigator.push<String?>(context, WhiteListPage.route());
+    withdrawalAddressController.text = result ?? '';
   }
 }
