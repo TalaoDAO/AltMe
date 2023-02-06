@@ -724,7 +724,10 @@
     "checkLinkedinProfile",
     "scanAndDisplay",
     "whatsNew",
-    "okGotIt"
+    "okGotIt",
+    "transactionDoneDialogDescription",
+    "withdrawalFailedMessage",
+    "credentialRequiredMessage"
   ],
 
   "es": [
@@ -1452,7 +1455,10 @@
     "checkLinkedinProfile",
     "scanAndDisplay",
     "whatsNew",
-    "okGotIt"
+    "okGotIt",
+    "transactionDoneDialogDescription",
+    "withdrawalFailedMessage",
+    "credentialRequiredMessage"
   ],
 
   "fr": [
@@ -2180,7 +2186,10 @@
     "checkLinkedinProfile",
     "scanAndDisplay",
     "whatsNew",
-    "okGotIt"
+    "okGotIt",
+    "transactionDoneDialogDescription",
+    "withdrawalFailedMessage",
+    "credentialRequiredMessage"
   ],
 
   "it": [
@@ -2908,6 +2917,9 @@
     "checkLinkedinProfile",
     "scanAndDisplay",
     "whatsNew",
-    "okGotIt"
+    "okGotIt",
+    "transactionDoneDialogDescription",
+    "withdrawalFailedMessage",
+    "credentialRequiredMessage"
   ]
 }
