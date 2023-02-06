@@ -181,16 +181,20 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     try {
       emit(state.copyWith(status: AppStatus.loading));
       await _initClient();
-      final username = (didCubit.state.did ?? '').replaceAll(':', '-');
-      final password = await secureStorageProvider.get(username);
-      if (password == null || password.isEmpty) {
-        final newPassword = await _register(username: username);
-        await secureStorageProvider.set(username, newPassword);
-        await _login(username: username, password: newPassword);
-      } else {
-        await _login(username: username, password: password);
-      }
-      _roomId = await _createRoomAndInviteSupport();
+      // final username = (didCubit.state.did ?? '').replaceAll(':', '-');
+      // final password = await secureStorageProvider.get(username);
+      // if (password == null || password.isEmpty) {
+      //   final newPassword = await _register(username: username);
+      //   await secureStorageProvider.set(username, newPassword);
+      //   await _login(username: username, password: newPassword);
+      // } else {
+      //   await _login(username: username, password: password);
+      // }
+      await _login(username: 'Taleb', password: 'altme2023');
+      _roomId = await _createRoomAndInviteSupport(
+        didCubit.state.did?.replaceAll(':', '-') ?? '',
+      );
+      logger.i('roomId : $_roomId');
       _subscribeToEventsOfRoom();
       emit(state.copyWith(status: AppStatus.init));
     } catch (e, s) {
@@ -208,7 +212,12 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       );
       logger.i('event: ${event.toJson()}');
       final eventId = event.eventId;
-      final txId = event.content['unsigned']['transaction_id'] as String?;
+      String? txId;
+      if (event.content.isNotEmpty) {
+        txId = event.content
+            .tryGet<Map<String, dynamic>>('unsigned')
+            ?.tryGet('transaction_id') as String?;
+      }
       if (event.roomId == _roomId) {
         if (state.messages.any(
           (element) => element.id == eventId,
@@ -276,17 +285,25 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     });
   }
 
-  Future<String> _createRoomAndInviteSupport() async {
+  Future<String> _createRoomAndInviteSupport(String name) async {
     final mRoomId =
         await secureStorageProvider.get(SecureStorageKeys.supportRoomId);
     if (mRoomId == null) {
-      final roomId = await client.createRoom(
-        isDirect: true,
-        name: 'AltMe-Support',
-        roomAliasName: 'AltMe-Support',
-      );
-      await secureStorageProvider.set(SecureStorageKeys.supportRoomId, roomId);
-      return roomId;
+      try {
+        final roomId = await client.createRoom(
+          isDirect: true,
+          name: name,
+          invite: ['@support:matrix.talao.co'],
+          roomAliasName: name,
+        );
+        await secureStorageProvider.set(
+            SecureStorageKeys.supportRoomId, roomId);
+        return roomId;
+      } catch (e, s) {
+        logger.e('e: $e, s: $s');
+        final roomId = await client.joinRoom(name);
+        return roomId;
+      }
     } else {
       return mRoomId;
     }
@@ -330,6 +347,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     required String username,
     required String password,
   }) async {
+    client.homeserver = Uri.parse(Urls.matrixHomeServer);
     await client.login(
       LoginType.mLoginPassword,
       password: password,

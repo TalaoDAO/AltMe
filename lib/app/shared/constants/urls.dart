@@ -77,5 +77,5 @@ class Urls {
   static const ageRangeAIValidationUrl = 'https://issuer.talao.co/ai/agerange';
 
   //Matrix home server
-  static const matrixHomeServer = 'http://matrix.talao.co';
+  static const matrixHomeServer = 'https://matrix.talao.co';
 }
