@@ -36,6 +36,7 @@ dependencies:
       ref: 1.0.0
   device_info_plus: ^8.0.0
   device_preview: ^1.1.0
+  devicelocale: ^0.5.5
   did_kit:
     path: packages/did_kit
   dio: ^4.0.6
