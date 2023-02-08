@@ -130,7 +130,7 @@ class Ebsi {
   ) {
     final openIdRequestUri = Uri.parse(openIdRequest);
     final credentialType = openIdRequestUri.queryParameters['credential_type'];
-    final issuerState = openIdRequestUri.queryParameters['issuer_state'];
+    final opState = openIdRequestUri.queryParameters['op_state'];
     final issuer = openIdRequestUri.queryParameters['issuer'];
     final myRequest = <String, dynamic>{
       'scope': 'openid',
@@ -145,8 +145,8 @@ class Ebsi {
       ]),
       'redirect_uri':
           '$redirectUrl?credential_type=$credentialType&issuer=$issuer',
-      'state': issuerState,
-      'issuer_state': issuerState
+      'state': opState,
+      'op_state': opState
     };
     return myRequest;
   }
@@ -376,7 +376,7 @@ class Ebsi {
       'vp_token': vpToken
     };
     try {
-      await client.post(
+      final presentationResponse = await client.post(
         uri.queryParameters['redirect_uri']!,
         options: Options(headers: responseHeaders),
         data: responseData,
