@@ -39,8 +39,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
       case CredentialSubjectType.twitterCard:
-      case CredentialSubjectType.tezoniaPass:
-      case CredentialSubjectType.tzlandPass:
       case CredentialSubjectType.troopezPass:
       case CredentialSubjectType.pigsPass:
       case CredentialSubjectType.matterlightPass:
@@ -108,8 +106,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.tezotopiaMembership:
       case CredentialSubjectType.chainbornMembership:
       case CredentialSubjectType.twitterCard:
-      case CredentialSubjectType.tezoniaPass:
-      case CredentialSubjectType.tzlandPass:
       case CredentialSubjectType.troopezPass:
       case CredentialSubjectType.pigsPass:
       case CredentialSubjectType.matterlightPass:
@@ -156,9 +152,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.pigsPass ||
         this == CredentialSubjectType.bunnyPass ||
         this == CredentialSubjectType.troopezPass ||
-        this == CredentialSubjectType.tzlandPass ||
-        this == CredentialSubjectType.matterlightPass ||
-        this == CredentialSubjectType.tezoniaPass) {
+        this == CredentialSubjectType.matterlightPass) {
       return true;
     }
     return false;
@@ -168,10 +162,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.bloometaPass:
         return 'BloometaPass';
-      case CredentialSubjectType.tezoniaPass:
-        return 'TezoniaPass';
-      case CredentialSubjectType.tzlandPass:
-        return 'TzlandPass';
       case CredentialSubjectType.troopezPass:
         return 'TroopezPass';
       case CredentialSubjectType.pigsPass:
@@ -281,10 +271,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     switch (this) {
       case CredentialSubjectType.bloometaPass:
         return BloometaPassModel.fromJson(json);
-      case CredentialSubjectType.tezoniaPass:
-        return TezoniaPassModel.fromJson(json);
-      case CredentialSubjectType.tzlandPass:
-        return TzlandPassModel.fromJson(json);
       case CredentialSubjectType.troopezPass:
         return TroopezPassModel.fromJson(json);
       case CredentialSubjectType.pigsPass:
