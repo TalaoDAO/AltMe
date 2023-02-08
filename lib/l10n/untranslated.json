@@ -724,7 +724,9 @@
     "checkLinkedinProfile",
     "scanAndDisplay",
     "whatsNew",
-    "okGotIt"
+    "okGotIt",
+    "manageKeyDecentralizedId",
+    "manageEbsiDecentralizedId"
   ],
 
   "es": [
@@ -1452,7 +1454,9 @@
     "checkLinkedinProfile",
     "scanAndDisplay",
     "whatsNew",
-    "okGotIt"
+    "okGotIt",
+    "manageKeyDecentralizedId",
+    "manageEbsiDecentralizedId"
   ],
 
   "fr": [
@@ -2180,7 +2184,9 @@
     "checkLinkedinProfile",
     "scanAndDisplay",
     "whatsNew",
-    "okGotIt"
+    "okGotIt",
+    "manageKeyDecentralizedId",
+    "manageEbsiDecentralizedId"
   ],
 
   "it": [
@@ -2908,6 +2914,8 @@
     "checkLinkedinProfile",
     "scanAndDisplay",
     "whatsNew",
-    "okGotIt"
+    "okGotIt",
+    "manageKeyDecentralizedId",
+    "manageEbsiDecentralizedId"
   ]
 }

@@ -5,10 +5,10 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
-/// EBSI wallet compliance
-library ebsi;
+import 'package:dio/dio.dart';
 
-export 'src/ebsi.dart';
-export 'src/issuer_token_parameters.dart';
-export 'src/token_parameters.dart';
-export 'src/verifier_token_parameters.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockDio extends Mock implements Dio {}
+
+void main() {}

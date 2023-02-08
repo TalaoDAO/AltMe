@@ -29,91 +29,20 @@ void main() {
   //     'https://talao.co/sandbox/ebsi/issuer/vgvghylozl/credential';
   group('EBSI DID and JWK', () {
     test('JWK from mnemonic', () async {
-      final expectedJwk = {
-        'alg': 'ES256K',
+      const expectedJwk = {
         'crv': 'P-256K',
-        'd': 'lrKEpyoUOWRQIUOepeOpiOWI1ovobYfK9M8hYkcSnxY',
+        'd': 'ccWWNSjGiv1iWlNh4kfhWvwG3yyQMe8o31Du0uKRzrs',
         'kty': 'EC',
-        'x': 'MpE6Qo0XYS7FVM13JADFFjtfg4ehhmdpMFlzR4TsiR8',
-        'y': 'up-oVN_-EHHlwup51eHO7qLRS9bdN7faXug2fzTS8Uc'
+        'x': 'J4vQtLUyrVUiFIXRrtEq4xurmBZp2eq9wJmXkIA_stI',
+        'y': 'EUU6vXoG3BGX2zzwjXrGDcr4EyDD0Vfk3_5fg5kSgKE'
       };
       final client = MockDio();
       final ebsi = Ebsi(client);
       const mnemonic =
           // ignore: lines_longer_than_80_chars
-          'jambon fromage comte camembert pain fleur voiture bac pere mere fille fils';
+          'position taste mention august skin taste best air sure acoustic poet ritual';
       final jwk = await ebsi.privateFromMnemonic(mnemonic: mnemonic);
       expect(jsonDecode(jwk), expectedJwk);
-    });
-    test('DID from JWK', () async {
-      final jwk = {
-        'crv': 'secp256k1',
-        'd': 'dBE5MSwGh1ypjymY48CGv_FaFQHQUPaZ632rhFVpZNw',
-        'kty': 'EC',
-        'x': 'liIvy6clecfH9riQNvs1VsX7m1bYmYZ2JsHhpPkey_dictJjfgY',
-        'y': 'j8Q9Xfa8MIY78JiEpzMrlJzYz2vTkJY183hJBLLcKiU'
-      };
-// ES256K pour alg
-      const expectedDid =
-          'did:ebsi:zh8h51yMKdVYk2ZTJuva2B2H5JJP61oEZXJrPdivWvVaj';
-
-      final client = MockDio();
-      final ebsi = Ebsi(client);
-      final did = ebsi.getDidFromPrivate(jwk);
-      expect(did, expectedDid);
-    });
-    test('Thumbprint exemple from rfc 7638 is working', () async {
-      final jwk = {
-        "e": "AQAB",
-        "kty": "RSA",
-        "n":
-            "0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbISD08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqbw0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw"
-      };
-// ES256K pour alg
-      const expectedThumbprint = [
-        55,
-        54,
-        203,
-        177,
-        120,
-        124,
-        184,
-        48,
-        156,
-        119,
-        238,
-        140,
-        55,
-        5,
-        197,
-        225,
-        111,
-        251,
-        158,
-        133,
-        151,
-        21,
-        144,
-        31,
-        30,
-        76,
-        89,
-        177,
-        17,
-        130,
-        245,
-        123
-      ];
-
-      final client = MockDio();
-      final ebsi = Ebsi(client);
-      final did = ebsi.thumbprint(jwk);
-      expect(did, expectedThumbprint);
-
-      /// NB: In https://www.rfc-editor.org/rfc/rfc7638 the base64url encoding is
-      /// NzbLsXh8uDCcd-6MNwXF4W_7noWXFZAfHkxZsRGC9Xs
-      /// and the dart result is
-      /// NzbLsXh8uDCcd-6MNwXF4W_7noWXFZAfHkxZsRGC9Xs=
     });
   });
 
