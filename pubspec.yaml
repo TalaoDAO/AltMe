@@ -18,7 +18,6 @@ dependencies:
   bloc: ^8.0.3
   cached_network_image: ^3.2.1
   camera: ^0.10.0
-  confetti: ^0.7.0
   connectivity_plus: ^3.0.2
   convert: ^3.1.1
   credential_manifest:
