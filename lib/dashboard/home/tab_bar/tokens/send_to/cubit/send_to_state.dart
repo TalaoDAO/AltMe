@@ -4,14 +4,12 @@ part of 'send_to_cubit.dart';
 class SendToState extends Equatable {
   const SendToState({
     this.withdrawalAddress = '',
-    this.isOtherAccountTab = true,
   });
 
   factory SendToState.fromJson(Map<String, dynamic> json) =>
       _$SendToStateFromJson(json);
 
   final String withdrawalAddress;
-  final bool isOtherAccountTab;
 
   SendToState copyWith({
     String? withdrawalAddress,
@@ -20,7 +18,6 @@ class SendToState extends Equatable {
   }) {
     return SendToState(
       withdrawalAddress: withdrawalAddress ?? this.withdrawalAddress,
-      isOtherAccountTab: isOtherAccountTab ?? this.isOtherAccountTab,
     );
   }
 
@@ -29,6 +26,5 @@ class SendToState extends Equatable {
   @override
   List<Object?> get props => [
         withdrawalAddress,
-        isOtherAccountTab,
       ];
 }
