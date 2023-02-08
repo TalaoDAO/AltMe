@@ -793,5 +793,6 @@
   "requiredCredentialNotFoundSubTitle": "The required credential is not in your wallet",
   "requiredCredentialNotFoundDescription": "Please ask Tezotopia to reach us on :",
   "backToHome": "Back to home",
-  "help": "Help"
+  "help": "Help",
+  "searchCredentials": "Search credentials"
 }

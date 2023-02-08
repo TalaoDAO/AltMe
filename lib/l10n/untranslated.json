@@ -729,7 +729,8 @@
     "requiredCredentialNotFoundSubTitle",
     "requiredCredentialNotFoundDescription",
     "backToHome",
-    "help"
+    "help",
+    "searchCredentials"
   ],
 
   "es": [
@@ -1462,7 +1463,8 @@
     "requiredCredentialNotFoundSubTitle",
     "requiredCredentialNotFoundDescription",
     "backToHome",
-    "help"
+    "help",
+    "searchCredentials"
   ],
 
   "fr": [
@@ -1473,7 +1475,8 @@
     "requiredCredentialNotFoundSubTitle",
     "requiredCredentialNotFoundDescription",
     "backToHome",
-    "help"
+    "help",
+    "searchCredentials"
   ],
 
   "it": [
@@ -2206,6 +2209,7 @@
     "requiredCredentialNotFoundSubTitle",
     "requiredCredentialNotFoundDescription",
     "backToHome",
-    "help"
+    "help",
+    "searchCredentials"
   ]
 }
