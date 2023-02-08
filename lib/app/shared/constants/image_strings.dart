@@ -57,11 +57,6 @@ class ImageStrings {
   static const String trooperzPassDummy =
       '$imagePath/trooperz-pass-dummy-soon.png';
   static const String trooperzPass = '$imagePath/trooperz-pass.png';
-  static const String tzlandPassDummy = '$imagePath/tzland-pass-dummy-soon.png';
-  static const String tzlandPass = '$imagePath/tzland-pass.png';
-  static const String tezoniaPassDummy =
-      '$imagePath/tezonia-pass-dummy-soon.png';
-  static const String tezoniaPass = '$imagePath/tezonia-pass.png';
   static const String ecole42LearningAchievement =
       '$imagePath/certificate-42.png';
   static const String associatedWalletFront =

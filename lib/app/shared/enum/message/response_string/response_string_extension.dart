@@ -272,12 +272,6 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_twitterHowToGetIt:
         return globalMessage.RESPONSE_STRING_twitterHowToGetIt;
 
-      case ResponseString.RESPONSE_STRING_tezoniaPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_tezoniaPassWhyGetThisCard;
-
-      case ResponseString.RESPONSE_STRING_tzlandPassWhyGetThisCard:
-        return globalMessage.RESPONSE_STRING_tzlandPassWhyGetThisCard;
-
       case ResponseString.RESPONSE_STRING_trooperzPassWhyGetThisCard:
         return globalMessage.RESPONSE_STRING_trooperzPassWhyGetThisCard;
 
@@ -322,18 +316,6 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt:
         return globalMessage.RESPONSE_STRING_trooperzPassHowToGetIt;
-
-      case ResponseString.RESPONSE_STRING_tzlandPassExpirationDate:
-        return globalMessage.RESPONSE_STRING_tzlandPassExpirationDate;
-
-      case ResponseString.RESPONSE_STRING_tzlandPassHowToGetIt:
-        return globalMessage.RESPONSE_STRING_tzlandPassHowToGetIt;
-
-      case ResponseString.RESPONSE_STRING_tezoniaPassExpirationDate:
-        return globalMessage.RESPONSE_STRING_tezoniaPassExpirationDate;
-
-      case ResponseString.RESPONSE_STRING_tezoniaPassHowToGetIt:
-        return globalMessage.RESPONSE_STRING_tezoniaPassHowToGetIt;
 
       case ResponseString.RESPONSE_STRING_over18WhyGetThisCard:
         return globalMessage.RESPONSE_STRING_over18WhyGetThisCard;

@@ -30,12 +30,6 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.chainbornMembership:
         return ChainbornMemberShipWidget(credentialModel: credentialModel);
 
-      case CredentialSubjectType.tezoniaPass:
-        return TezoniaPassWidget(credentialModel: credentialModel);
-
-      case CredentialSubjectType.tzlandPass:
-        return TzlandPassWidget(credentialModel: credentialModel);
-
       case CredentialSubjectType.troopezPass:
         return TrooperzPassWidget(credentialModel: credentialModel);
 

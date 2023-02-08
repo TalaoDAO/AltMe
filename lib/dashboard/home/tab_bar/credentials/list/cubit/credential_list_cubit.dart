@@ -88,10 +88,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.dogamiPass:
         case CredentialSubjectType.bunnyPass:
         case CredentialSubjectType.troopezPass:
-        case CredentialSubjectType.tzlandPass:
         case CredentialSubjectType.matterlightPass:
         case CredentialSubjectType.pigsPass:
-        case CredentialSubjectType.tezoniaPass:
         case CredentialSubjectType.learningAchievement:
         case CredentialSubjectType.loyaltyCard:
         case CredentialSubjectType.selfIssued:
@@ -280,8 +278,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.aragoLearningAchievement:
           case CredentialSubjectType.aragoOver18:
           case CredentialSubjectType.aragoPass:
-          case CredentialSubjectType.tezoniaPass:
-          case CredentialSubjectType.tzlandPass:
           case CredentialSubjectType.troopezPass:
           case CredentialSubjectType.pigsPass:
           case CredentialSubjectType.matterlightPass:
@@ -598,10 +594,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.bloometaPass:
           case CredentialSubjectType.dogamiPass:
           case CredentialSubjectType.troopezPass:
-          case CredentialSubjectType.tzlandPass:
           case CredentialSubjectType.bunnyPass:
           case CredentialSubjectType.pigsPass:
-          case CredentialSubjectType.tezoniaPass:
           case CredentialSubjectType.matterlightPass:
           case CredentialSubjectType.tezotopiaMembership:
           case CredentialSubjectType.chainbornMembership:
