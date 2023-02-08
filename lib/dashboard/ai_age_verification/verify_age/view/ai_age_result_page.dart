@@ -4,9 +4,9 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+//import 'package:confetti/confetti.dart';
 
 class AiAgeResultPage extends StatelessWidget {
   const AiAgeResultPage({super.key, required this.blocContext});
@@ -29,29 +29,8 @@ class AiAgeResultPage extends StatelessWidget {
   }
 }
 
-class AiAgeResultView extends StatefulWidget {
+class AiAgeResultView extends StatelessWidget {
   const AiAgeResultView({super.key});
-
-  @override
-  State<AiAgeResultView> createState() => _AiAgeResultViewState();
-}
-
-class _AiAgeResultViewState extends State<AiAgeResultView> {
-  late final ConfettiController confettiController = ConfettiController();
-
-  @override
-  void initState() {
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => confettiController.play());
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    confettiController.stop();
-    confettiController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

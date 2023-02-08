@@ -354,14 +354,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.0"
-  confetti:
-    dependency: "direct main"
-    description:
-      name: confetti
-      sha256: "979aafde2428c53947892c95eb244466c109c129b7eee9011f0a66caaca52267"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.0"
   connectivity_plus:
     dependency: "direct main"
     description:
@@ -538,6 +530,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  devicelocale:
+    dependency: "direct main"
+    description:
+      name: devicelocale
+      sha256: "5fd46b8c2a987b1c14b1551433be1974dbca5ec6ab00e7d53288b5197a21863e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.5"
   did_kit:
     dependency: "direct main"
     description:

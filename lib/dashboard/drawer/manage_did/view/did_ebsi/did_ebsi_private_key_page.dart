@@ -1,39 +1,40 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:dio/dio.dart';
+import 'package:ebsi/ebsi.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class DIDPrivateKeyPage extends StatefulWidget {
-  const DIDPrivateKeyPage({super.key});
+class DidEbsiPrivateKeyPage extends StatefulWidget {
+  const DidEbsiPrivateKeyPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => BlocProvider<DIDPrivateKeyCubit>(
-        create: (_) =>
-            DIDPrivateKeyCubit(secureStorageProvider: getSecureStorage),
-        child: const DIDPrivateKeyPage(),
-      ),
-      settings: const RouteSettings(name: '/DIDPrivateKeyPage'),
+      builder: (_) => const DidEbsiPrivateKeyPage(),
+      settings: const RouteSettings(name: '/DidEbsiPrivateKeyPage'),
     );
   }
 
   @override
-  State<DIDPrivateKeyPage> createState() => _DIDPrivateKeyPageState();
+  State<DidEbsiPrivateKeyPage> createState() => _DidEbsiPrivateKeyPageState();
 }
 
-class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
+class _DidEbsiPrivateKeyPageState extends State<DidEbsiPrivateKeyPage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
 
+  Future<String> getPrivateKey() async {
+    final ebsi = Ebsi(Dio());
+    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+    final privateKey = await ebsi.privateFromMnemonic(mnemonic: mnemonic!);
+    return privateKey;
+  }
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
-
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 20),
@@ -79,13 +80,21 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
             const SizedBox(
               height: Sizes.spaceNormal,
             ),
-            BlocBuilder<DIDPrivateKeyCubit, String>(
-              builder: (context, state) {
-                return Text(
-                  state,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium,
-                );
+            FutureBuilder<String>(
+              future: getPrivateKey(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.done:
+                    return Text(
+                      snapshot.data!,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    );
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                  case ConnectionState.active:
+                    return const Text('');
+                }
               },
             ),
             Expanded(
@@ -102,33 +111,6 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
                 ),
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.all(Sizes.spaceXLarge),
-            //   child: Row(
-            //     mainAxisSize: MainAxisSize.min,
-            //     children: [
-            //       CopyButton(
-            //         onTap: () async {
-            //           await Clipboard.setData(
-            //             ClipboardData(
-            //               text: context.read<DIDPrivateKeyCubit>().state,
-            //             ),
-            //           );
-            //           AlertMessage.showStateMessage(
-            //             context: context,
-            //             stateMessage: StateMessage.success(
-            //               stringMessage: l10n.copySecretKeyToClipboard,
-            //             ),
-            //           );
-            //         },
-            //       ),
-            //       // const SizedBox(
-            //       //   width: Sizes.spaceXLarge,
-            //       // ),
-            //       //const ExportButton(),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),

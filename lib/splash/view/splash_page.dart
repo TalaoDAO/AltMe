@@ -73,14 +73,18 @@ class _SplashViewState extends State<SplashView> {
             final mnemonic = await secure_storage.getSecureStorage.get(
               SecureStorageKeys.ssiMnemonic,
             );
-
+            var credentialUri = uri;
+            if (uri.queryParameters['uri'] != null) {
+              final credentialUrl = uri.queryParameters['uri'];
+              credentialUri = Uri.parse(credentialUrl!);
+            }
             final dynamic encodedCredentialFromEbsi = await ebsi.getCredential(
-              uri,
+              credentialUri,
               mnemonic!,
             );
             await addEbsiCredential(
               encodedCredentialFromEbsi,
-              uri,
+              credentialUri,
               context.read<WalletCubit>(),
             );
           } else {
@@ -211,17 +215,17 @@ class _SplashViewState extends State<SplashView> {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: const [
-                  Spacer(flex: 1),
+                  Spacer(flex: 3),
                   TitleText(),
                   Spacer(flex: 1),
                   SubTitle(),
-                  Spacer(flex: 3),
+                  Spacer(flex: 2),
                   SplashImage(),
-                  Spacer(flex: 10),
+                  Spacer(flex: 3),
                   LoadingText(),
                   SizedBox(height: 10),
                   LoadingProgress(),
-                  Spacer(flex: 7),
+                  Spacer(flex: 2),
                 ],
               ),
             ),

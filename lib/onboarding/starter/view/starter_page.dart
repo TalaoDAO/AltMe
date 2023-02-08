@@ -42,7 +42,7 @@ class StarterPage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const Spacer(flex: 1),
+                  const Spacer(flex: 2),
                   const TitleText(),
                   const Spacer(flex: 1),
                   const SubTitle(),

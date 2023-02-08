@@ -9,3 +9,6 @@
 library ebsi;
 
 export 'src/ebsi.dart';
+export 'src/issuer_token_parameters.dart';
+export 'src/token_parameters.dart';
+export 'src/verifier_token_parameters.dart';

@@ -235,26 +235,6 @@ class HomeCredential extends Equatable {
         howToGetIt = ResponseString.RESPONSE_STRING_trooperzPassHowToGetIt;
         break;
 
-      case CredentialSubjectType.tzlandPass:
-        image = ImageStrings.tzlandPassDummy;
-        link = Urls.tzlandPassCardUrl;
-        whyGetThisCard =
-            ResponseString.RESPONSE_STRING_tzlandPassWhyGetThisCard;
-        expirationDateDetails =
-            ResponseString.RESPONSE_STRING_tzlandPassExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_tzlandPassHowToGetIt;
-        break;
-
-      case CredentialSubjectType.tezoniaPass:
-        image = ImageStrings.tezoniaPassDummy;
-        link = Urls.tezoniaPassCardUrl;
-        whyGetThisCard =
-            ResponseString.RESPONSE_STRING_tezoniaPassWhyGetThisCard;
-        expirationDateDetails =
-            ResponseString.RESPONSE_STRING_tezoniaPassExpirationDate;
-        howToGetIt = ResponseString.RESPONSE_STRING_tezoniaPassHowToGetIt;
-        break;
-
       case CredentialSubjectType.phonePass:
         image = ImageStrings.dummyPhonePassCard;
         dummyDesc = ResponseString.RESPONSE_STRING_phoneProofDummyDescription;

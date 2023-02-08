@@ -68,8 +68,6 @@ class Urls {
       'https://issuer.tezotopia.altme.io';
   static const String pigsPassCardUrl = 'https://issuer.tezotopia.altme.io';
   static const String trooperzPassCardUrl = 'https://issuer.tezotopia.altme.io';
-  static const String tzlandPassCardUrl = 'https://issuer.tezotopia.altme.io';
-  static const String tezoniaPassCardUrl = 'https://issuer.tezotopia.altme.io';
 
   //
   static const over13AIValidationUrl = 'https://issuer.talao.co/ai/over13';

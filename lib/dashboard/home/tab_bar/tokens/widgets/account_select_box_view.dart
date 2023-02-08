@@ -8,6 +8,7 @@ class AccountSelectBoxView extends StatelessWidget {
   const AccountSelectBoxView({
     super.key,
     this.isEnabled = true,
+    this.initiallyExpanded = false,
     required this.accounts,
     required this.selectedAccountIndex,
     required this.onSelectAccount,
@@ -15,6 +16,7 @@ class AccountSelectBoxView extends StatelessWidget {
   });
 
   final bool isEnabled;
+  final bool initiallyExpanded;
   final List<CryptoAccountData> accounts;
   final int selectedAccountIndex;
   final dynamic Function(CryptoAccountData, int) onSelectAccount;
@@ -47,7 +49,7 @@ class AccountSelectBoxView extends StatelessWidget {
                 ),
               ),
               child: ExpansionTile(
-                initiallyExpanded: false,
+                initiallyExpanded: initiallyExpanded,
                 childrenPadding: EdgeInsets.zero,
                 tilePadding: const EdgeInsets.symmetric(horizontal: 8),
                 title: SelectedAccountItem(
