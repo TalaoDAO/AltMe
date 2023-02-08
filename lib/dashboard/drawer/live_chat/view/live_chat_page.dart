@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
@@ -35,6 +36,7 @@ class LiveChatPage extends StatelessWidget {
             const Uuid().v4();
     return BlocProvider<LiveChatCubit>(
       create: (_) => LiveChatCubit(
+        dioClient: DioClient('', Dio()),
         didCubit: context.read<DIDCubit>(),
         secureStorageProvider: getSecureStorage,
         user: User(id: clientId),

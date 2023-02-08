@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
@@ -28,6 +29,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     required this.didCubit,
     required this.secureStorageProvider,
     required this.client,
+    required this.dioClient,
     required User user,
   }) : super(
           LiveChatState(user: user),
@@ -35,6 +37,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
 
   final SecureStorageProvider secureStorageProvider;
   final Client client;
+  final DioClient dioClient;
   final logger = getLogger('LiveChatCubit');
   String _roomId = '';
   StreamSubscription<Event>? _onEventSubscription;
@@ -181,18 +184,17 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     try {
       emit(state.copyWith(status: AppStatus.loading));
       await _initClient();
-      // final username = (didCubit.state.did ?? '').replaceAll(':', '-');
-      // final password = await secureStorageProvider.get(username);
-      // if (password == null || password.isEmpty) {
-      //   final newPassword = await _register(username: username);
-      //   await secureStorageProvider.set(username, newPassword);
-      //   await _login(username: username, password: newPassword);
-      // } else {
-      //   await _login(username: username, password: password);
-      // }
-      await _login(username: 'Taleb', password: 'altme2023');
+      final username = didCubit.state.did!.replaceAll(':', '-');
+      final password = await secureStorageProvider.get(username);
+      if (password == null || password.isEmpty) {
+        final newPassword = await _register(username: username);
+        await secureStorageProvider.set(username, newPassword);
+        await _login(username: username, password: newPassword);
+      } else {
+        await _login(username: username, password: password);
+      }
       _roomId = await _createRoomAndInviteSupport(
-        didCubit.state.did?.replaceAll(':', '-') ?? '',
+        username,
       );
       logger.i('roomId : $_roomId');
       _subscribeToEventsOfRoom();
@@ -314,31 +316,66 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     await client.init();
   }
 
+  Future<String> _getDidAuth(String did, String nonce) async {
+    final verificationMethod =
+        await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
+
+    final options = <String, dynamic>{
+      'verificationMethod': verificationMethod,
+      'proofPurpose': 'authentication',
+      'challenge': nonce,
+      'domain': 'issuer.talao.co',
+    };
+
+    final key = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
+
+    final String didAuth = await didCubit.didKitProvider.didAuth(
+      did,
+      jsonEncode(options),
+      key,
+    );
+
+    return didAuth;
+  }
+
+  Future<String> _getNonce(String did) async {
+    await dotenv.load();
+    final apiKey = dotenv.get('TALAO_MATRIX_API_KEY');
+    final nonce = await dioClient.get(
+      Urls.getNonce,
+      queryParameters: <String, dynamic>{
+        'did': did,
+      },
+      headers: <String, dynamic>{
+        'X-API-KEY': apiKey,
+      },
+    ) as Map<String, dynamic>;
+    return nonce.values.first.toString();
+  }
+
   Future<String> _register({
     required String username,
   }) async {
-    late String deviceId;
-    late String deviceName;
-
-    if (isAndroid()) {
-      final androidDeviceInfo = await DeviceInfoPlugin().androidInfo;
-      deviceId = androidDeviceInfo.id;
-      deviceName = androidDeviceInfo.model;
-    } else {
-      final iosDeviceInfo = await DeviceInfoPlugin().iosInfo;
-      deviceId = iosDeviceInfo.identifierForVendor ?? 'unkown';
-      deviceName = iosDeviceInfo.name ?? iosDeviceInfo.model ?? 'uknown';
-    }
+    final nonce = await _getNonce(didCubit.state.did!);
+    final didAuth = await _getDidAuth(didCubit.state.did!, nonce);
+    await dotenv.load();
+    final apiKey = dotenv.get('TALAO_MATRIX_API_KEY');
     final password = const Uuid().v4();
-    final response = await client.register(
-      username: username,
-      password: password,
-      deviceId: deviceId,
-      initialDeviceDisplayName: deviceName,
-      kind: AccountKind.user,
+
+    final response = await dioClient.post(
+      Urls.registerToMatrix,
+      headers: <String, dynamic>{
+        'X-API-KEY': apiKey,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data: <String, dynamic>{
+        'username': username,
+        'password': password,
+        'didAuth': didAuth,
+      },
     );
 
-    logger.i('regester response: ${response.toJson()}');
+    logger.i('regester response: $response');
 
     return password;
   }

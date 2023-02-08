@@ -76,4 +76,7 @@ class Urls {
 
   //Matrix home server
   static const matrixHomeServer = 'https://matrix.talao.co';
+  static const getNonce = 'https://talao.co/matrix/nonce';
+  static const registerToMatrix = 'https://talao.co/matrix/register';
+
 }
