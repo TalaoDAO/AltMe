@@ -247,8 +247,11 @@ class _DashboardViewState extends State<DashboardView> {
                             children: const [
                               HomePage(),
                               DiscoverPage(),
-                              SearchPage(),
-                              WertPage(),
+                              if (Parameters.hasCryptoCallToAction)
+                                WertPage()
+                              else
+                                SearchPage(),
+                              LiveChatPage(hideAppBar: true),
                             ],
                           ),
                         ),
@@ -270,15 +273,23 @@ class _DashboardViewState extends State<DashboardView> {
                               isSelected: state.selectedIndex == 1,
                             ),
                             const SizedBox(width: 75 * 0.6),
+                            if (Parameters.hasCryptoCallToAction)
+                              BottomBarItem(
+                                icon: IconStrings.cashInHand,
+                                text: l10n.buy,
+                                onTap: () => bottomTapped(2),
+                                isSelected: state.selectedIndex == 2,
+                              )
+                            else
+                              BottomBarItem(
+                                icon: IconStrings.searchNormal,
+                                text: l10n.search,
+                                onTap: () => bottomTapped(2),
+                                isSelected: state.selectedIndex == 2,
+                              ),
                             BottomBarItem(
-                              icon: IconStrings.searchNormal,
-                              text: l10n.search,
-                              onTap: () => bottomTapped(2),
-                              isSelected: state.selectedIndex == 2,
-                            ),
-                            BottomBarItem(
-                              icon: IconStrings.cashInHand,
-                              text: l10n.buy,
+                              icon: IconStrings.messaging,
+                              text: l10n.help,
                               onTap: () => bottomTapped(3),
                               isSelected: state.selectedIndex == 3,
                             ),

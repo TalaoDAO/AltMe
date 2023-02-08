@@ -1,6 +1,7 @@
 class IconStrings {
   static const String base = 'assets/icon';
   static const String call = '$base/call.png';
+  static const String messaging = '$base/messaging.png';
   static const String alertErrorIcon = '$base/alert-error-icon.png';
   static const String talaoIcon = '$base/talao_token.png';
   static const String alertWarningIcon = '$base/alert-warning-icon.png';

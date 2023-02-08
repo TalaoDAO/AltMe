@@ -12,14 +12,21 @@ import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 class LiveChatPage extends StatelessWidget {
-  const LiveChatPage({super.key});
+  const LiveChatPage({
+    super.key,
+    this.hideAppBar = false,
+  });
 
   static Route<void> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => const LiveChatPage(),
+      builder: (_) => const LiveChatPage(
+        hideAppBar: false,
+      ),
       settings: const RouteSettings(name: '/liveChatPage'),
     );
   }
+
+  final bool hideAppBar;
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +42,19 @@ class LiveChatPage extends StatelessWidget {
           clientId,
         ),
       ),
-      child: const LiveChatView(),
+      child: LiveChatView(
+        hideAppBar: hideAppBar,
+      ),
     );
   }
 }
 
 class LiveChatView extends StatefulWidget {
-  const LiveChatView({super.key});
+  const LiveChatView({
+    super.key,
+    this.hideAppBar = false,
+  });
+  final bool hideAppBar;
 
   @override
   State<LiveChatView> createState() => _ContactUsViewState();
@@ -66,9 +79,9 @@ class _ContactUsViewState extends State<LiveChatView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.altmeSupport,
+      title: widget.hideAppBar ? null : l10n.altmeSupport,
       scrollView: false,
-      titleLeading: const BackLeadingButton(),
+      titleLeading: widget.hideAppBar ? null : const BackLeadingButton(),
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.all(Sizes.spaceSmall),
       body: BlocBuilder<LiveChatCubit, LiveChatState>(
