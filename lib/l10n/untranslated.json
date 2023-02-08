@@ -727,7 +727,9 @@
     "okGotIt",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
-    "credentialRequiredMessage"
+    "credentialRequiredMessage",
+    "manageKeyDecentralizedId",
+    "manageEbsiDecentralizedId"
   ],
 
   "es": [
@@ -1458,7 +1460,14 @@
     "okGotIt",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
-    "credentialRequiredMessage"
+    "credentialRequiredMessage",
+    "manageKeyDecentralizedId",
+    "manageEbsiDecentralizedId"
+  ],
+
+  "fr": [
+    "manageKeyDecentralizedId",
+    "manageEbsiDecentralizedId"
   ],
 
   "it": [
@@ -2189,6 +2198,8 @@
     "okGotIt",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
-    "credentialRequiredMessage"
+    "credentialRequiredMessage",
+    "manageKeyDecentralizedId",
+    "manageEbsiDecentralizedId"
   ]
 }

@@ -1,13 +1,14 @@
-// ignore_for_file: avoid_dynamic_calls
+// ignore_for_file: avoid_dynamic_calls, public_member_api_docs
 
 import 'dart:convert';
-import 'dart:typed_data';
 
+import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
-import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:ed25519_hd_key/ed25519_hd_key.dart';
-import 'package:fast_base58/fast_base58.dart';
+import 'package:ebsi/src/issuer_token_parameters.dart';
+import 'package:ebsi/src/token_parameters.dart';
+import 'package:ebsi/src/verifier_token_parameters.dart';
+import 'package:flutter/foundation.dart';
 // ignore: depend_on_referenced_packages
 import 'package:hex/hex.dart';
 import 'package:jose/jose.dart';
@@ -30,18 +31,19 @@ class Ebsi {
   Future<String> privateFromMnemonic({
     required String mnemonic,
   }) async {
-    //notice photo opera keen climb agent soft parrot best joke field devote
     final seed = bip393.mnemonicToSeed(mnemonic);
 
-    late Uint8List seedBytes;
-
-    /// m/44'/5467'/0'/0' is already used for did:key in Altme project
-    final child = await ED25519_HD_KEY.derivePath("m/44'/5467'/0'/1'", seed);
-    seedBytes = Uint8List.fromList(child.key);
+    final rootKey = bip32.BIP32.fromSeed(seed); //Instance of 'BIP32'
+    final child = rootKey.derivePath(
+      "m/44'/5467'/0'/1'",
+    ); //Instance of 'BIP32'
+    final Iterable<int> iterable = child.privateKey!;
+    final seedBytes = Uint8List.fromList(List.from(iterable));
 
     final key = jwkFromSeed(
       seedBytes: seedBytes,
     );
+
     return jsonEncode(key);
   }
 
@@ -49,6 +51,8 @@ class Ebsi {
   Map<String, String> jwkFromSeed({
     required Uint8List seedBytes,
   }) {
+    // generate JWK for secp256k from bip39 mnemonic
+    // see https://iancoleman.io/bip39/
     final epk = HEX.encode(seedBytes);
     final pk = PrivateKey.fromHex(epk); //Instance of 'PrivateKey'
     final pub = pk.publicKey.toHex().substring(2);
@@ -65,52 +69,25 @@ class Ebsi {
     final ay = HEX.decode(my);
     final y = base64Url.encode(ay).substring(0, 43);
     // ATTENTION !!!!!
+    /// we are using P-256K for dart library conformance which is
+    /// the same as secp256k1
     final jwk = {
-      'alg': 'ES256K',
       'crv': 'P-256K',
       'd': d,
       'kty': 'EC',
       'x': x,
       'y': y,
     };
-    // final jwk = {
-    //   'crv': 'P-256K',
-    //   'd': d,
-    //   'kty': 'EC',
-    //   'x': x,
-    //   'y': y,
-    // };
     return jwk;
   }
 
-  /// getDidFromJwk
-  String getDidFromPrivate(Map<String, dynamic> jwk) {
-    final thumbprint = _thumbprint(jwk);
-
-    final encodedAddress = Base58Encode([2, ...thumbprint.bytes]);
-    return 'did:ebsi:z$encodedAddress';
-  }
-
-  /// getKidFromJwk
-  String getKidFromJwk(Map<String, dynamic> private) {
-    final firstPart = getDidFromPrivate(private);
-
-    final sha256Digest = _thumbprint(private);
-    final lastPart = Base58Encode(sha256Digest.bytes);
-
-    return '$firstPart#$lastPart';
-  }
-
-  Digest _thumbprint(Map<String, dynamic> jwk) {
-    final jsonString = jsonEncode(jwk);
-    final bytesToHash = utf8.encode(jsonString);
-    final sha256Digest = sha256.convert(bytesToHash);
-    return sha256Digest;
-  }
+  /// https://www.rfc-editor.org/rfc/rfc7638
+  /// Received JWT is already filtered on required members
+  /// Received JWT keys are already sorted in lexicographic order
 
   /// Verifiy is url is first EBSI url, starting point to get a credential
-  ///
-  static bool _isEbsiInitiateIssuanceUrl(String url) {
+  @visibleForTesting
+  static bool isEbsiInitiateIssuanceUrl(String url) {
     if (url.startsWith('openid://initiate_issuance?')) {
       return true;
     }
@@ -122,18 +99,18 @@ class Ebsi {
     String openIdRequest,
     String redirectUrl,
   ) async {
-    if (_isEbsiInitiateIssuanceUrl(openIdRequest)) {
+    if (isEbsiInitiateIssuanceUrl(openIdRequest)) {
       try {
         final jsonPath = JsonPath(r'$..authorization_endpoint');
         final openidConfigurationUrl =
-            '${_getIssuerFromOpenidRequest(openIdRequest)}/.well-known/openid-configuration';
+            '${getIssuerFromOpenidRequest(openIdRequest)}/.well-known/openid-configuration';
         final openidConfigurationResponse =
             await client.get<String>(openidConfigurationUrl);
         final authorizationEndpoint = jsonPath
-            .readValues(openidConfigurationResponse.data)
+            .readValues(jsonDecode(openidConfigurationResponse.data!))
             .first as String;
         final authorizationRequestParemeters =
-            _getAuthorizationRequestParemeters(openIdRequest, redirectUrl);
+            getAuthorizationRequestParemeters(openIdRequest, redirectUrl);
 
         final url = Uri.parse(authorizationEndpoint);
         final authorizationUri =
@@ -146,7 +123,8 @@ class Ebsi {
     throw Exception('Not a valid openid url to initiate issuance');
   }
 
-  Map<String, dynamic> _getAuthorizationRequestParemeters(
+  @visibleForTesting
+  Map<String, dynamic> getAuthorizationRequestParemeters(
     String openIdRequest,
     String redirectUrl,
   ) {
@@ -173,15 +151,14 @@ class Ebsi {
     return myRequest;
   }
 
-  String _getIssuerFromOpenidRequest(String openIdRequest) {
+  @visibleForTesting
+  String getIssuerFromOpenidRequest(String openIdRequest) {
     final openIdRequestUri = Uri.parse(openIdRequest);
     final issuer = openIdRequestUri.queryParameters['issuer'] ?? '';
     return issuer;
   }
 
   /// Extract credential_type's Url from openid request
-  ///
-  ///
   String getCredentialRequest(String openidRequest) {
     var credentialType = '';
     try {
@@ -214,55 +191,33 @@ class Ebsi {
     Uri credentialRequestReceived,
     String mnemonic,
   ) async {
-    /// getting token
-    final tokenHeaders = <String, dynamic>{
-      'Content-Type': 'application/x-www-form-urlencoded'
-    };
-
-    final credentialType =
-        credentialRequestReceived.queryParameters['credential_type'];
-    final issuerAndCode = credentialRequestReceived.queryParameters['issuer'];
-    final issuerAndCodeUri = Uri.parse(issuerAndCode!);
-    final code = issuerAndCodeUri.queryParameters['code'];
-    final issuer =
-        '${issuerAndCodeUri.scheme}://${issuerAndCodeUri.authority}${issuerAndCodeUri.path}';
-    final jsonPath = JsonPath(r'$..token_endpoint');
+    late final String issuer;
+    late final Map<String, dynamic> tokenData;
+    if (credentialRequestReceived.queryParameters['pre-authorized_code'] !=
+        null) {
+      issuer = credentialRequestReceived.queryParameters['issuer']!;
+      tokenData =
+          buildTokenDataWithPreAuthorizedCode(credentialRequestReceived);
+    } else {
+      tokenData = buildTokenDataWithCode(credentialRequestReceived);
+      issuer = readIssuerFromAuthorizationUri(credentialRequestReceived);
+    }
     final openidConfigurationUrl = '$issuer/.well-known/openid-configuration';
     final openidConfigurationResponse =
-        await client.get<String>(openidConfigurationUrl);
-    final tokenEndPoint =
-        jsonPath.readValues(openidConfigurationResponse.data).first as String;
+        await client.get<Map<String, dynamic>>(openidConfigurationUrl);
+    final tokenEndPoint = readTokenEndPoint(openidConfigurationResponse);
+    final response = await getToken(tokenEndPoint, tokenData);
+    final credentialData = await buildCredentialData(
+      response as Map<String, dynamic>,
+      mnemonic,
+      issuer,
+      credentialRequestReceived,
+    );
+    final credentialEndpoint =
+        readCredentialEndpoint(openidConfigurationResponse);
 
-    final tokenData = <String, dynamic>{
-      'code': code,
-      'grant_type': 'authorization_code',
-      'redirect_uri': credentialRequestReceived
-    };
-    final response = await _getToken(tokenEndPoint, tokenHeaders, tokenData);
-    final accessToken = response.data['access_token'] as String;
-    final cNonce = response.data['c_nonce'] as String;
-
-    /// preparation before getting credential
-    final jwt = await _getJwt(cNonce, issuer, mnemonic);
-
-    final jsonPathCredential = JsonPath(r'$..credential_endpoint');
-    final credentialEndpoint = jsonPathCredential
-        .readValues(openidConfigurationResponse.data)
-        .first as String;
-
-    final credentialHeaders = <String, dynamic>{
-      // 'Conformance': conformance,
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken'
-    };
-
-    final credentialData = <String, dynamic>{
-      'type': credentialType,
-      'format': 'jwt_vc',
-      'proof': {'proof_type': 'jwt', 'jwt': jwt}
-    };
-
-    final dynamic credentialResponse = await client.post<Map<String, dynamic>>(
+    final credentialHeaders = buildCredentialHeaders(response);
+    final dynamic credentialResponse = await client.post(
       credentialEndpoint,
       options: Options(headers: credentialHeaders),
       data: credentialData,
@@ -271,50 +226,115 @@ class Ebsi {
     return credentialResponse.data;
   }
 
-  Future<String> _getJwt(String cNonce, String issuer, String mnemonic) async {
+  Map<String, dynamic> buildTokenDataWithPreAuthorizedCode(
+    Uri credentialRequestReceived,
+  ) {
+    final preAuthorizedCode =
+        credentialRequestReceived.queryParameters['pre-authorized_code'];
+    final tokenData = <String, dynamic>{
+      'pre-authorized_code': preAuthorizedCode,
+      'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
+    };
+    return tokenData;
+  }
+
+  String readIssuerFromAuthorizationUri(Uri credentialRequestReceived) {
+    final issuerAndCode = credentialRequestReceived.queryParameters['issuer'];
+    final issuerAndCodeUri = Uri.parse(issuerAndCode!);
+    final issuer =
+        '${issuerAndCodeUri.scheme}://${issuerAndCodeUri.authority}${issuerAndCodeUri.path}';
+    return issuer;
+  }
+
+  Map<String, dynamic> buildTokenDataWithCode(Uri credentialRequestReceived) {
+    final issuerAndCode = credentialRequestReceived.queryParameters['issuer'];
+    final issuerAndCodeUri = Uri.parse(issuerAndCode!);
+    final code = issuerAndCodeUri.queryParameters['code'];
+    final tokenData = <String, dynamic>{
+      'code': code,
+      'grant_type': 'authorization_code',
+    };
+    return tokenData;
+  }
+
+  String readTokenEndPoint(
+    Response<Map<String, dynamic>> openidConfigurationResponse,
+  ) {
+    final jsonPath = JsonPath(r'$..token_endpoint');
+    final tokenEndPoint =
+        jsonPath.readValues(openidConfigurationResponse.data).first as String;
+    return tokenEndPoint;
+  }
+
+  Future<Map<String, dynamic>> buildCredentialData(
+    Map<String, dynamic> response,
+    String mnemonic,
+    String issuer,
+    Uri credentialRequestReceived,
+  ) async {
+    final nonce = response['c_nonce'] as String;
     final private = jsonDecode(await privateFromMnemonic(mnemonic: mnemonic))
         as Map<String, dynamic>;
 
-    final public = Map.of(private)..removeWhere((key, value) => key == 'd');
-    final did = getDidFromPrivate(private);
-    final kid = getKidFromJwk(private);
-    public.addAll({'kid': kid});
-    final alg = private['crv'] == 'P-256' ? 'ES256' : 'ES256K';
-
-    final payload = {
-      'iss': did,
-      'nonce': cNonce,
-      'iat': DateTime.now().microsecondsSinceEpoch,
-      'aud': issuer
+    final issuerTokenParameters = IssuerTokenParameters(private, issuer);
+    final jwt = await getIssuerJwt(issuerTokenParameters, nonce);
+    final credentialType =
+        credentialRequestReceived.queryParameters['credential_type'];
+    final credentialData = <String, dynamic>{
+      'type': credentialType,
+      'format': 'jwt_vc',
+      'proof': {'proof_type': 'jwt', 'jwt': jwt}
     };
-    final claims = JsonWebTokenClaims.fromJson(payload);
-    // create a builder, decoding the JWT in a JWS, so using a
-    // JsonWebSignatureBuilder
-    final builder = JsonWebSignatureBuilder()
-      ..jsonContent = claims.toJson()
-      ..setProtectedHeader('typ', 'JWT')
-      ..setProtectedHeader('alg', alg)
-      ..setProtectedHeader('jwk', public)
-      ..setProtectedHeader('kid', kid)
-      // add a key to sign, can only add one for JWT
-      ..addRecipient(
-        JsonWebKey.fromJson(private),
-        algorithm: alg,
-      );
-    // build the jws
-    final jws = builder.build();
+    return credentialData;
+  }
 
-    // output the compact serialization
-    final jwt = jws.toCompactSerialization();
+  String readCredentialEndpoint(
+    Response<Map<String, dynamic>> openidConfigurationResponse,
+  ) {
+    final jsonPathCredential = JsonPath(r'$..credential_endpoint');
+
+    final credentialEndpoint = jsonPathCredential
+        .readValues(openidConfigurationResponse.data)
+        .first as String;
+    return credentialEndpoint;
+  }
+
+  Map<String, dynamic> buildCredentialHeaders(response) {
+    final accessToken = response['access_token'] as String;
+    final credentialHeaders = <String, dynamic>{
+      // 'Conformance': conformance,
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken'
+    };
+    return credentialHeaders;
+  }
+
+  @visibleForTesting
+  Future<String> getIssuerJwt(
+    IssuerTokenParameters tokenParameters,
+    String nonce,
+  ) async {
+    final payload = {
+      'iss': tokenParameters.did,
+      'nonce': nonce,
+      'iat': DateTime.now().microsecondsSinceEpoch,
+      'aud': tokenParameters.issuer
+    };
+    final jwt = generateToken(payload, tokenParameters);
     return jwt;
   }
 
-  Future<dynamic> _getToken(
+  @visibleForTesting
+  Future<dynamic> getToken(
     String tokenEndPoint,
-    Map<String, dynamic> tokenHeaders,
     Map<String, dynamic> tokenData,
   ) async {
     try {
+      /// getting token
+      final tokenHeaders = <String, dynamic>{
+        'Content-Type': 'application/x-www-form-urlencoded'
+      };
+
       final dynamic tokenResponse = await client.post<Map<String, dynamic>>(
         tokenEndPoint,
         options: Options(headers: tokenHeaders),
@@ -326,63 +346,138 @@ class Ebsi {
     }
   }
 
-  ///
-  Future<dynamic> getCredentialWithPreAuthorizedCode(
-    Uri credentialRequestReceived,
+  Future<void> sendPresentation(
+    Uri uri,
+    List<String> credentialsToBePresented,
     String mnemonic,
   ) async {
-    /// getting token
-    final tokenHeaders = <String, dynamic>{
-      'Content-Type': 'application/x-www-form-urlencoded'
-    };
+    final private = jsonDecode(await privateFromMnemonic(mnemonic: mnemonic))
+        as Map<String, dynamic>;
 
-    final credentialType =
-        credentialRequestReceived.queryParameters['credential_type'];
-    final issuer = credentialRequestReceived.queryParameters['issuer'];
-    final preAuthorizedCode =
-        credentialRequestReceived.queryParameters['pre-authorized_code'];
-    final jsonPath = JsonPath(r'$..token_endpoint');
-    final openidConfigurationUrl = '$issuer/.well-known/openid-configuration';
-    final openidConfigurationResponse =
-        await client.get<Map<String, dynamic>>(openidConfigurationUrl);
-    final tokenEndPoint =
-        jsonPath.readValues(openidConfigurationResponse.data).first as String;
-
-    final tokenData = <String, dynamic>{
-      'pre-authorized_code': preAuthorizedCode,
-      'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
-    };
-
-    final response = await _getToken(tokenEndPoint, tokenHeaders, tokenData);
-    final accessToken = response['access_token'] as String;
-    final cNonce = response['c_nonce'] as String;
-
-    /// preparation before getting credential
-    final jwt = await _getJwt(cNonce, issuer!, mnemonic);
-
-    final jsonPathCredential = JsonPath(r'$..credential_endpoint');
-    final credentialEndpoint = jsonPathCredential
-        .readValues(openidConfigurationResponse.data)
-        .first as String;
-
-    final credentialHeaders = <String, dynamic>{
-      // 'Conformance': conformance,
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken'
-    };
-
-    final credentialData = <String, dynamic>{
-      'type': credentialType,
-      'format': 'jwt_vc',
-      'proof': {'proof_type': 'jwt', 'jwt': jwt}
-    };
-
-    final dynamic credentialResponse = await client.post<Map<String, dynamic>>(
-      credentialEndpoint,
-      options: Options(headers: credentialHeaders),
-      data: credentialData,
+    final tokenParameters = VerifierTokenParameters(
+      private,
+      uri,
+      credentialsToBePresented,
     );
 
-    return credentialResponse.data;
+    // structures
+    final verifierIdToken = await getIdToken(tokenParameters);
+
+    /// build vp token
+
+    final vpToken = await getVpToken(tokenParameters);
+
+    final responseHeaders = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    final responseData = <String, dynamic>{
+      'id_token': verifierIdToken,
+      'vp_token': vpToken
+    };
+    try {
+      await client.post(
+        uri.queryParameters['redirect_uri']!,
+        options: Options(headers: responseHeaders),
+        data: responseData,
+      );
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @visibleForTesting
+  Future<String> getVpToken(
+    VerifierTokenParameters tokenParameters,
+  ) async {
+    final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+    final vpTokenPayload = {
+      'iat': iat,
+      'jti': 'http://example.org/presentations/talao/01',
+      'nbf': iat - 10,
+      'aud': tokenParameters.audience,
+      'exp': iat + 1000,
+      'sub': tokenParameters.did,
+      'iss': tokenParameters.did,
+      'vp': {
+        '@context': ['https://www.w3.org/2018/credentials/v1'],
+        'id': 'http://example.org/presentations/talao/01',
+        'type': ['VerifiablePresentation'],
+        'holder': tokenParameters.did,
+        'verifiableCredential': [jsonEncode(tokenParameters.credentials)]
+      },
+      'nonce': tokenParameters.nonce
+    };
+    final verifierVpJwt = generateToken(vpTokenPayload, tokenParameters);
+    return verifierVpJwt;
+  }
+
+  @visibleForTesting
+  String generateToken(
+    Map<String, Object> vpTokenPayload,
+    TokenParameters tokenParameters,
+  ) {
+    final vpVerifierClaims = JsonWebTokenClaims.fromJson(vpTokenPayload);
+    // create a builder, decoding the JWT in a JWS, so using a
+    // JsonWebSignatureBuilder
+    final vpBuilder = JsonWebSignatureBuilder()
+      // set the content
+      ..jsonContent = vpVerifierClaims.toJson()
+      ..setProtectedHeader('typ', 'JWT')
+      ..setProtectedHeader('alg', tokenParameters.alg)
+      ..setProtectedHeader('jwk', tokenParameters.public)
+      ..setProtectedHeader('kid', tokenParameters.kid)
+
+      // add a key to sign, can only add one for JWT
+      ..addRecipient(
+        JsonWebKey.fromJson(tokenParameters.private),
+        algorithm: tokenParameters.alg,
+      );
+    // build the jws
+    final vpJws = vpBuilder.build();
+
+    // output the compact serialization
+    final verifierVpJwt = vpJws.toCompactSerialization();
+    return verifierVpJwt;
+  }
+
+  @visibleForTesting
+  Future<String> getIdToken(
+    VerifierTokenParameters tokenParameters,
+  ) async {
+    /// build id token
+    final payload = {
+      'iat': DateTime.now().microsecondsSinceEpoch,
+      'aud': tokenParameters.audience, // devrait être verifier
+      'exp': DateTime.now().microsecondsSinceEpoch + 1000,
+      'sub': tokenParameters.did,
+      'iss': 'https://self-issued.me/v2',
+      'nonce': tokenParameters.nonce,
+      '_vp_token': {
+        'presentation_submission': {
+          'definition_id': 'conformance_mock_vp_request',
+          'id': 'VA presentation Talao',
+          'descriptor_map': [
+            {
+              'id': 'conformance_mock_vp',
+              'format': 'jwt_vp',
+              'path': r'$',
+            }
+          ]
+        }
+      }
+    };
+    final verifierIdJwt = generateToken(payload, tokenParameters);
+    return verifierIdJwt;
+  }
+
+  Future<String> getDidFromMnemonic(String mnemonic) async {
+    final private = jsonDecode(await privateFromMnemonic(mnemonic: mnemonic))
+        as Map<String, dynamic>;
+
+    final tokenParameters = TokenParameters(
+      private,
+    );
+    return tokenParameters.did;
   }
 }

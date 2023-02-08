@@ -1,25 +1,43 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/drawer/manage_did/view/did.dart';
+import 'package:altme/dashboard/drawer/manage_did/view/did_ebsi_private_key_page.dart';
 import 'package:altme/dashboard/drawer/manage_did/view/did_private_key.dart';
-import 'package:altme/dashboard/drawer/manage_did/view/did_private_key_page.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:dio/dio.dart';
+import 'package:ebsi/ebsi.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
-class ManageDIDPage extends StatelessWidget {
-  const ManageDIDPage({super.key});
+class ManageDidEbsiPage extends StatefulWidget {
+  const ManageDidEbsiPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(builder: (_) => const ManageDIDPage());
+    return MaterialPageRoute<void>(builder: (_) => const ManageDidEbsiPage());
+  }
+
+  @override
+  State<ManageDidEbsiPage> createState() => _ManageDidEbsiPageState();
+}
+
+class _ManageDidEbsiPageState extends State<ManageDidEbsiPage> {
+  String did = '';
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () async {
+      final ebsi = Ebsi(Dio());
+      final mnemonic =
+          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+      did = await ebsi.getDidFromMnemonic(mnemonic!);
+      setState(() {});
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final did = context.read<DIDCubit>().state.did ?? '...';
     return BasePage(
-      title: l10n.manageKeyDecentralizedId,
+      title: l10n.manageEbsiDecentralizedId,
       titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
@@ -39,7 +57,7 @@ class ManageDIDPage extends StatelessWidget {
             ),
             DidPrivateKey(
               l10n: l10n,
-              route: DIDPrivateKeyPage.route(),
+              route: DidEbsiPrivateKeyPage.route(),
             ),
           ],
         ),

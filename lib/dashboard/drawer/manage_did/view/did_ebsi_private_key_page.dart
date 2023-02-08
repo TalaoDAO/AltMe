@@ -1,38 +1,40 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:dio/dio.dart';
+import 'package:ebsi/ebsi.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class DIDPrivateKeyPage extends StatefulWidget {
-  const DIDPrivateKeyPage({super.key});
+class DidEbsiPrivateKeyPage extends StatefulWidget {
+  const DidEbsiPrivateKeyPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => BlocProvider<DIDPrivateKeyCubit>(
-        create: (_) =>
-            DIDPrivateKeyCubit(secureStorageProvider: getSecureStorage),
-        child: const DIDPrivateKeyPage(),
-      ),
-      settings: const RouteSettings(name: '/DIDPrivateKeyPage'),
+      builder: (_) => const DidEbsiPrivateKeyPage(),
+      settings: const RouteSettings(name: '/DidEbsiPrivateKeyPage'),
     );
   }
 
   @override
-  State<DIDPrivateKeyPage> createState() => _DIDPrivateKeyPageState();
+  State<DidEbsiPrivateKeyPage> createState() => _DidEbsiPrivateKeyPageState();
 }
 
-class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
+class _DidEbsiPrivateKeyPageState extends State<DidEbsiPrivateKeyPage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
-
+  String private = '';
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
+    Future.microtask(() async {
+      final ebsi = Ebsi(Dio());
+      final mnemonic =
+          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+      private = await ebsi.privateFromMnemonic(mnemonic: mnemonic!);
+      setState(() {});
+    });
 
     animationController = AnimationController(
       vsync: this,
@@ -79,14 +81,10 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
             const SizedBox(
               height: Sizes.spaceNormal,
             ),
-            BlocBuilder<DIDPrivateKeyCubit, String>(
-              builder: (context, state) {
-                return Text(
-                  state,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium,
-                );
-              },
+            Text(
+              private,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             Expanded(
               child: Center(

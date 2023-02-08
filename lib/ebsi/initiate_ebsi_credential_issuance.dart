@@ -22,8 +22,7 @@ Future<void> initiateEbsiCredentialIssuance(
       SecureStorageKeys.ssiMnemonic,
     );
 
-    final dynamic encodedCredentialFromEbsi =
-        await ebsi.getCredentialWithPreAuthorizedCode(
+    final dynamic encodedCredentialFromEbsi = await ebsi.getCredential(
       uriFromScannedResponse,
       mnemonic!,
     );
