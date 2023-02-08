@@ -723,7 +723,11 @@
     "withdrawalFailedMessage",
     "credentialRequiredMessage",
     "manageKeyDecentralizedId",
-    "manageEbsiDecentralizedId"
+    "manageEbsiDecentralizedId",
+    "requiredCredentialNotFoundTitle",
+    "requiredCredentialNotFoundSubTitle",
+    "requiredCredentialNotFoundDescription",
+    "backToHome"
   ],
 
   "es": [
@@ -1450,12 +1454,20 @@
     "withdrawalFailedMessage",
     "credentialRequiredMessage",
     "manageKeyDecentralizedId",
-    "manageEbsiDecentralizedId"
+    "manageEbsiDecentralizedId",
+    "requiredCredentialNotFoundTitle",
+    "requiredCredentialNotFoundSubTitle",
+    "requiredCredentialNotFoundDescription",
+    "backToHome"
   ],
 
   "fr": [
     "manageKeyDecentralizedId",
-    "manageEbsiDecentralizedId"
+    "manageEbsiDecentralizedId",
+    "requiredCredentialNotFoundTitle",
+    "requiredCredentialNotFoundSubTitle",
+    "requiredCredentialNotFoundDescription",
+    "backToHome"
   ],
 
   "it": [
@@ -2182,6 +2194,10 @@
     "withdrawalFailedMessage",
     "credentialRequiredMessage",
     "manageKeyDecentralizedId",
-    "manageEbsiDecentralizedId"
+    "manageEbsiDecentralizedId",
+    "requiredCredentialNotFoundTitle",
+    "requiredCredentialNotFoundSubTitle",
+    "requiredCredentialNotFoundDescription",
+    "backToHome"
   ]
 }

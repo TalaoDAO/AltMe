@@ -787,5 +787,9 @@
   "withdrawalFailedMessage": "The withdrawal from the account was unsuccessful",
   "credentialRequiredMessage": "You need to get those credentials in your wallet to acquire this card:",
   "manageKeyDecentralizedId": "Key Decentralized ID",
-  "manageEbsiDecentralizedId": "EBSI Decentralized ID"
+  "manageEbsiDecentralizedId": "EBSI Decentralized ID",
+  "requiredCredentialNotFoundTitle": "We are unable to find the credential\nyou need in Altme.",
+  "requiredCredentialNotFoundSubTitle": "The required credential is not in your wallet",
+  "requiredCredentialNotFoundDescription": "Please ask Tezotopia to reach us on :",
+  "backToHome": "Back to home"
 }
