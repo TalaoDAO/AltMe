@@ -34,12 +34,14 @@ class ScanCubit extends Cubit<ScanState> {
     required this.walletCubit,
     required this.didKitProvider,
     required this.secureStorageProvider,
+    required this.ebsi,
   }) : super(const ScanState());
 
   final DioClient client;
   final WalletCubit walletCubit;
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
+  final Ebsi ebsi;
 
   Future<void> credentialOffer({
     required Uri uri,
@@ -59,8 +61,18 @@ class ScanCubit extends Cubit<ScanState> {
         final credentialList = credentialsToBePresented!
             .map((e) => jsonEncode(e.toJson()))
             .toList();
-        await Ebsi(Dio()).sendPresentation(uri, credentialList, mnemonic!);
-        emit(state.copyWith(status: ScanStatus.success));
+        await ebsi.sendPresentation(uri, credentialList, mnemonic!);
+        emit(
+          state.copyWith(
+            status: ScanStatus.success,
+            message: StateMessage.success(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+              ),
+            ),
+          ),
+        );
       } else {
         {
           final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
@@ -205,7 +217,6 @@ class ScanCubit extends Cubit<ScanState> {
               issuer: issuer,
             );
           }
-
           emit(state.copyWith(status: ScanStatus.success));
         }
       }
