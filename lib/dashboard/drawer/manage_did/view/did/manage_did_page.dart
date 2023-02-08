@@ -1,7 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/manage_did/view/did.dart';
-import 'package:altme/dashboard/drawer/manage_did/view/did_private_key.dart';
-import 'package:altme/dashboard/drawer/manage_did/view/did_private_key_page.dart';
+import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +30,7 @@ class ManageDIDPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Did(l10n: l10n, did: did),
+            Did(did: did),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
               child: Divider(),

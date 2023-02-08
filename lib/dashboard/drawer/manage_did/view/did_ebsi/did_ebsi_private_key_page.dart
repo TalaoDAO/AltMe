@@ -24,18 +24,17 @@ class _DidEbsiPrivateKeyPageState extends State<DidEbsiPrivateKeyPage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
-  String private = '';
+
+  Future<String> getPrivateKey() async {
+    final ebsi = Ebsi(Dio());
+    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+    final privateKey = await ebsi.privateFromMnemonic(mnemonic: mnemonic!);
+    return privateKey;
+  }
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(() async {
-      final ebsi = Ebsi(Dio());
-      final mnemonic =
-          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-      private = await ebsi.privateFromMnemonic(mnemonic: mnemonic!);
-      setState(() {});
-    });
-
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 20),
@@ -81,10 +80,22 @@ class _DidEbsiPrivateKeyPageState extends State<DidEbsiPrivateKeyPage>
             const SizedBox(
               height: Sizes.spaceNormal,
             ),
-            Text(
-              private,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium,
+            FutureBuilder<String>(
+              future: getPrivateKey(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.done:
+                    return Text(
+                      snapshot.data!,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    );
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                  case ConnectionState.active:
+                    return const Text('');
+                }
+              },
             ),
             Expanded(
               child: Center(

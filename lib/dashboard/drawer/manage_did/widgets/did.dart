@@ -5,17 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Did extends StatelessWidget {
-  const Did({
-    super.key,
-    required this.l10n,
-    required this.did,
-  });
+  const Did({super.key, required this.did});
 
-  final AppLocalizations l10n;
   final String did;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       children: [
         Text(
