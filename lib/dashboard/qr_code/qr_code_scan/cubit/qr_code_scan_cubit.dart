@@ -194,9 +194,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     try {
       ///Check if SIOPV2 request
       if (uri?.queryParameters['scope'] == 'openid') {
-// Check if we can respond to presentation request:
-// having credentials?
-// having correct crv in ebsi key
+        // Check if we can respond to presentation request:
+        // having credentials?
+        // having correct crv in ebsi key
         if (!await isSiopV2RequestValid(uri!)) {
           emit(
             state.copyWith(

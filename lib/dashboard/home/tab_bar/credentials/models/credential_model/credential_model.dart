@@ -86,6 +86,7 @@ class CredentialModel extends Equatable {
   final String? domain;
   final List<Activity> activities;
   final String? jwt;
+
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
   String get issuer => data['issuer'] as String;

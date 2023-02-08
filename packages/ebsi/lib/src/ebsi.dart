@@ -188,36 +188,32 @@ class Ebsi {
 
   /// Retreive credential_type from url
   Future<dynamic> getCredential(
-    Uri credentialRequestReceived,
+    Uri credentialRequestUri,
     String mnemonic,
   ) async {
-    late final String issuer;
-    late final Map<String, dynamic> tokenData;
-    if (credentialRequestReceived.queryParameters['pre-authorized_code'] !=
-        null) {
-      issuer = credentialRequestReceived.queryParameters['issuer']!;
-      tokenData =
-          buildTokenDataWithPreAuthorizedCode(credentialRequestReceived);
-    } else {
-      tokenData = buildTokenDataWithCode(credentialRequestReceived);
-      issuer = readIssuerFromAuthorizationUri(credentialRequestReceived);
-    }
+    final issuer = getIssuer(credentialRequestUri);
+
+    final tokenData = buildTokenData(credentialRequestUri);
+
     final openidConfigurationUrl = '$issuer/.well-known/openid-configuration';
     final openidConfigurationResponse =
         await client.get<Map<String, dynamic>>(openidConfigurationUrl);
+
     final tokenEndPoint = readTokenEndPoint(openidConfigurationResponse);
     final response = await getToken(tokenEndPoint, tokenData);
+
     final credentialData = await buildCredentialData(
       response as Map<String, dynamic>,
       mnemonic,
       issuer,
-      credentialRequestReceived,
+      credentialRequestUri,
     );
+
     final credentialEndpoint =
         readCredentialEndpoint(openidConfigurationResponse);
 
     final credentialHeaders = buildCredentialHeaders(response);
-    final dynamic credentialResponse = await client.post(
+    final dynamic credentialResponse = await client.post<dynamic>(
       credentialEndpoint,
       options: Options(headers: credentialHeaders),
       data: credentialData,
@@ -226,35 +222,44 @@ class Ebsi {
     return credentialResponse.data;
   }
 
-  Map<String, dynamic> buildTokenDataWithPreAuthorizedCode(
-    Uri credentialRequestReceived,
-  ) {
+  Map<String, dynamic> buildTokenData(Uri credentialRequestUri) {
+    late Map<String, dynamic> tokenData;
+
     final preAuthorizedCode =
-        credentialRequestReceived.queryParameters['pre-authorized_code'];
-    final tokenData = <String, dynamic>{
-      'pre-authorized_code': preAuthorizedCode,
-      'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
-    };
+        credentialRequestUri.queryParameters['pre-authorized_code'];
+    if (preAuthorizedCode != null) {
+      tokenData = <String, dynamic>{
+        'pre-authorized_code': preAuthorizedCode,
+        'grant_type': 'urn:ietf:params:oauth:grant-type:pre-authorized_code',
+      };
+    } else {
+      final issuerAndCode = credentialRequestUri.queryParameters['issuer'];
+      final issuerAndCodeUri = Uri.parse(issuerAndCode!);
+      final code = issuerAndCodeUri.queryParameters['code'];
+      tokenData = <String, dynamic>{
+        'code': code,
+        'grant_type': 'authorization_code',
+      };
+    }
     return tokenData;
   }
 
-  String readIssuerFromAuthorizationUri(Uri credentialRequestReceived) {
-    final issuerAndCode = credentialRequestReceived.queryParameters['issuer'];
-    final issuerAndCodeUri = Uri.parse(issuerAndCode!);
-    final issuer =
-        '${issuerAndCodeUri.scheme}://${issuerAndCodeUri.authority}${issuerAndCodeUri.path}';
+  String getIssuer(Uri credentialRequestUri) {
+    late String issuer;
+
+    final preAuthorizedCode =
+        credentialRequestUri.queryParameters['pre-authorized_code'];
+
+    if (preAuthorizedCode != null) {
+      issuer = credentialRequestUri.queryParameters['issuer']!;
+    } else {
+      final issuerAndCode = credentialRequestUri.queryParameters['issuer'];
+      final issuerAndCodeUri = Uri.parse(issuerAndCode!);
+      issuer =
+          '${issuerAndCodeUri.scheme}://${issuerAndCodeUri.authority}${issuerAndCodeUri.path}';
+    }
+
     return issuer;
-  }
-
-  Map<String, dynamic> buildTokenDataWithCode(Uri credentialRequestReceived) {
-    final issuerAndCode = credentialRequestReceived.queryParameters['issuer'];
-    final issuerAndCodeUri = Uri.parse(issuerAndCode!);
-    final code = issuerAndCodeUri.queryParameters['code'];
-    final tokenData = <String, dynamic>{
-      'code': code,
-      'grant_type': 'authorization_code',
-    };
-    return tokenData;
   }
 
   String readTokenEndPoint(
@@ -270,7 +275,7 @@ class Ebsi {
     Map<String, dynamic> response,
     String mnemonic,
     String issuer,
-    Uri credentialRequestReceived,
+    Uri credentialRequestUri,
   ) async {
     final nonce = response['c_nonce'] as String;
     final private = jsonDecode(await privateFromMnemonic(mnemonic: mnemonic))
@@ -279,7 +284,7 @@ class Ebsi {
     final issuerTokenParameters = IssuerTokenParameters(private, issuer);
     final jwt = await getIssuerJwt(issuerTokenParameters, nonce);
     final credentialType =
-        credentialRequestReceived.queryParameters['credential_type'];
+        credentialRequestUri.queryParameters['credential_type'];
     final credentialData = <String, dynamic>{
       'type': credentialType,
       'format': 'jwt_vc',
@@ -299,7 +304,7 @@ class Ebsi {
     return credentialEndpoint;
   }
 
-  Map<String, dynamic> buildCredentialHeaders(response) {
+  Map<String, dynamic> buildCredentialHeaders(dynamic response) {
     final accessToken = response['access_token'] as String;
     final credentialHeaders = <String, dynamic>{
       // 'Conformance': conformance,
