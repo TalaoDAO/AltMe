@@ -28,7 +28,7 @@ class _DidEbsiPrivateKeyPageState extends State<DidEbsiPrivateKeyPage>
   Future<String> getPrivateKey() async {
     final ebsi = Ebsi(Dio());
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-    final privateKey = await ebsi.privateFromMnemonic(mnemonic: mnemonic!);
+    final privateKey = await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic!);
     return privateKey;
   }
 

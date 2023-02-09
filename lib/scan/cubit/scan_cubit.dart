@@ -62,6 +62,7 @@ class ScanCubit extends Cubit<ScanState> {
             .map((e) => jsonEncode(e.toJson()))
             .toList();
         await ebsi.sendPresentation(uri, credentialList, mnemonic!);
+
         emit(
           state.copyWith(
             status: ScanStatus.success,
