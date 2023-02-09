@@ -26,6 +26,6 @@ class DiscoverList {
     CredentialSubjectType.twitterCard,
   ];
   static final List<CredentialSubjectType> myProfessionalCategories = [
-    CredentialSubjectType.linkedInCard,
+    // CredentialSubjectType.linkedInCard,
   ];
 }

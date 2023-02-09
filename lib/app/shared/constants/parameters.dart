@@ -11,7 +11,7 @@ class Parameters {
     CredentialSubjectType.verifiableIdCard,
     CredentialSubjectType.emailPass,
     CredentialSubjectType.nationality,
-    CredentialSubjectType.linkedInCard,
+    // CredentialSubjectType.linkedInCard,
   ];
   static const bool hasCryptoCallToAction = false;
 
