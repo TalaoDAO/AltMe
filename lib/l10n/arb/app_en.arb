@@ -783,6 +783,7 @@
   "scanAndDisplay": "Scan and Display",
   "whatsNew": "What's New",
   "okGotIt": "OK, GOT IT!",
+  "altmeSupport": "AltMe support",
   "transactionDoneDialogDescription": "It can take a few minutes for the transfer to complete",
   "withdrawalFailedMessage": "The withdrawal from the account was unsuccessful",
   "credentialRequiredMessage": "You need to get those credentials in your wallet to acquire this card:",
@@ -791,5 +792,7 @@
   "requiredCredentialNotFoundTitle": "We are unable to find the credential\nyou need in Altme.",
   "requiredCredentialNotFoundSubTitle": "The required credential is not in your wallet",
   "requiredCredentialNotFoundDescription": "Please ask Tezotopia to reach us on :",
-  "backToHome": "Back to home"
+  "backToHome": "Back to home",
+  "help": "Help",
+  "searchCredentials": "Search credentials"
 }

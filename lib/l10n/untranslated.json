@@ -719,6 +719,7 @@
     "scanAndDisplay",
     "whatsNew",
     "okGotIt",
+    "altmeSupport",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
     "credentialRequiredMessage",
@@ -727,7 +728,9 @@
     "requiredCredentialNotFoundTitle",
     "requiredCredentialNotFoundSubTitle",
     "requiredCredentialNotFoundDescription",
-    "backToHome"
+    "backToHome",
+    "help",
+    "searchCredentials"
   ],
 
   "es": [
@@ -1450,6 +1453,7 @@
     "scanAndDisplay",
     "whatsNew",
     "okGotIt",
+    "altmeSupport",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
     "credentialRequiredMessage",
@@ -1458,16 +1462,21 @@
     "requiredCredentialNotFoundTitle",
     "requiredCredentialNotFoundSubTitle",
     "requiredCredentialNotFoundDescription",
-    "backToHome"
+    "backToHome",
+    "help",
+    "searchCredentials"
   ],
 
   "fr": [
+    "altmeSupport",
     "manageKeyDecentralizedId",
     "manageEbsiDecentralizedId",
     "requiredCredentialNotFoundTitle",
     "requiredCredentialNotFoundSubTitle",
     "requiredCredentialNotFoundDescription",
-    "backToHome"
+    "backToHome",
+    "help",
+    "searchCredentials"
   ],
 
   "it": [
@@ -2190,6 +2199,7 @@
     "scanAndDisplay",
     "whatsNew",
     "okGotIt",
+    "altmeSupport",
     "transactionDoneDialogDescription",
     "withdrawalFailedMessage",
     "credentialRequiredMessage",
@@ -2198,6 +2208,8 @@
     "requiredCredentialNotFoundTitle",
     "requiredCredentialNotFoundSubTitle",
     "requiredCredentialNotFoundDescription",
-    "backToHome"
+    "backToHome",
+    "help",
+    "searchCredentials"
   ]
 }

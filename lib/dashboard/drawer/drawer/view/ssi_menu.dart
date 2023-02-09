@@ -102,6 +102,12 @@ class SSIView extends StatelessWidget {
                         .push<void>(ManageIssuersRegistryPage.route());
                   },
                 ),
+                DrawerItem(
+                  title: l10n.searchCredentials,
+                  onTap: () {
+                    Navigator.of(context).push<void>(SearchPage.route());
+                  },
+                ),
               ],
             ),
           ),
