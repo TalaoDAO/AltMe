@@ -41,7 +41,7 @@ void main() {
       const mnemonic =
           // ignore: lines_longer_than_80_chars
           'position taste mention august skin taste best air sure acoustic poet ritual';
-      final jwk = await ebsi.privateFromMnemonic(mnemonic: mnemonic);
+      final jwk = await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic);
       expect(jsonDecode(jwk), expectedJwk);
     });
   });

@@ -7,7 +7,7 @@ import 'package:jose/jose.dart';
 /// for verifier interactions.
 class VerifierTokenParameters extends TokenParameters {
   ///
-  VerifierTokenParameters(super.private, this.uri, this.jwtList);
+  VerifierTokenParameters(super.privateKey, this.uri, this.jwtList);
 
   /// [uri] provided by verifier and containing nonce
   final Uri uri;

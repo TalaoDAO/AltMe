@@ -28,7 +28,7 @@ class Ebsi {
   final Dio client;
 
   /// create JWK from mnemonic
-  Future<String> privateFromMnemonic({
+  Future<String> privateKeyFromMnemonic({
     required String mnemonic,
   }) async {
     final seed = bip393.mnemonicToSeed(mnemonic);
@@ -278,7 +278,7 @@ class Ebsi {
     Uri credentialRequestUri,
   ) async {
     final nonce = response['c_nonce'] as String;
-    final private = jsonDecode(await privateFromMnemonic(mnemonic: mnemonic))
+    final private = jsonDecode(await privateKeyFromMnemonic(mnemonic: mnemonic))
         as Map<String, dynamic>;
 
     final issuerTokenParameters = IssuerTokenParameters(private, issuer);
@@ -320,7 +320,7 @@ class Ebsi {
     String nonce,
   ) async {
     final payload = {
-      'iss': tokenParameters.did,
+      'iss': tokenParameters.didKey,
       'nonce': nonce,
       'iat': DateTime.now().microsecondsSinceEpoch,
       'aud': tokenParameters.issuer
@@ -356,11 +356,12 @@ class Ebsi {
     List<String> credentialsToBePresented,
     String mnemonic,
   ) async {
-    final private = jsonDecode(await privateFromMnemonic(mnemonic: mnemonic))
-        as Map<String, dynamic>;
+    final privateKey =
+        jsonDecode(await privateKeyFromMnemonic(mnemonic: mnemonic))
+            as Map<String, dynamic>;
 
     final tokenParameters = VerifierTokenParameters(
-      private,
+      privateKey,
       uri,
       credentialsToBePresented,
     );
@@ -402,13 +403,13 @@ class Ebsi {
       'nbf': iat - 10,
       'aud': tokenParameters.audience,
       'exp': iat + 1000,
-      'sub': tokenParameters.did,
-      'iss': tokenParameters.did,
+      'sub': tokenParameters.didKey,
+      'iss': tokenParameters.didKey,
       'vp': {
         '@context': ['https://www.w3.org/2018/credentials/v1'],
         'id': 'http://example.org/presentations/talao/01',
         'type': ['VerifiablePresentation'],
-        'holder': tokenParameters.did,
+        'holder': tokenParameters.didKey,
         'verifiableCredential': [jsonEncode(tokenParameters.credentials)]
       },
       'nonce': tokenParameters.nonce
@@ -430,12 +431,12 @@ class Ebsi {
       ..jsonContent = vpVerifierClaims.toJson()
       ..setProtectedHeader('typ', 'JWT')
       ..setProtectedHeader('alg', tokenParameters.alg)
-      ..setProtectedHeader('jwk', tokenParameters.public)
+      ..setProtectedHeader('jwk', tokenParameters.publicJWK)
       ..setProtectedHeader('kid', tokenParameters.kid)
 
       // add a key to sign, can only add one for JWT
       ..addRecipient(
-        JsonWebKey.fromJson(tokenParameters.private),
+        JsonWebKey.fromJson(tokenParameters.privateKey),
         algorithm: tokenParameters.alg,
       );
     // build the jws
@@ -455,7 +456,7 @@ class Ebsi {
       'iat': DateTime.now().microsecondsSinceEpoch,
       'aud': tokenParameters.audience, // devrait être verifier
       'exp': DateTime.now().microsecondsSinceEpoch + 1000,
-      'sub': tokenParameters.did,
+      'sub': tokenParameters.didKey,
       'iss': 'https://self-issued.me/v2',
       'nonce': tokenParameters.nonce,
       '_vp_token': {
@@ -477,12 +478,13 @@ class Ebsi {
   }
 
   Future<String> getDidFromMnemonic(String mnemonic) async {
-    final private = jsonDecode(await privateFromMnemonic(mnemonic: mnemonic))
-        as Map<String, dynamic>;
+    final privateKey =
+        jsonDecode(await privateKeyFromMnemonic(mnemonic: mnemonic))
+            as Map<String, dynamic>;
 
     final tokenParameters = TokenParameters(
-      private,
+      privateKey,
     );
-    return tokenParameters.did;
+    return tokenParameters.didKey;
   }
 }
