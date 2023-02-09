@@ -183,7 +183,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     try {
       emit(state.copyWith(status: AppStatus.loading));
       await _initClient();
-      final username = didCubit.state.did!.replaceAll(':', '-');
+      final username = didCubit.state.did!;
       final password = await secureStorageProvider.get(username);
       if (password == null || password.isEmpty) {
       final newPassword = await _register(username: username);
@@ -348,8 +348,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       headers: <String, dynamic>{
         'X-API-KEY': apiKey,
       },
-    ) as Map<String, dynamic>;
-    return nonce.values.first.toString();
+    ) as String;
+    return nonce;
   }
 
   Future<String> _register({
@@ -361,17 +361,19 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     final apiKey = dotenv.get('TALAO_MATRIX_API_KEY');
     final password = const Uuid().v4();
 
+    final data = <String, dynamic>{
+      'username': username,
+      'password': password,
+      'didAuth': didAuth,
+    };
+
     final response = await dioClient.post(
       Urls.registerToMatrix,
       headers: <String, dynamic>{
         'X-API-KEY': apiKey,
         'Content-Type': 'application/json',
       },
-      data: <String, dynamic>{
-        'username': username,
-        'password': password,
-        'didAuth': didAuth,
-      },
+      data: data,
     );
 
     logger.i('regester response: $response');
