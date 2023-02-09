@@ -63,6 +63,11 @@ class ScanCubit extends Cubit<ScanState> {
             .toList();
         await ebsi.sendPresentation(uri, credentialList, mnemonic!);
 
+        await presentationActivity(
+          credentialModels: credentialsToBePresented,
+          issuer: issuer,
+        );
+
         emit(
           state.copyWith(
             status: ScanStatus.success,
@@ -75,151 +80,149 @@ class ScanCubit extends Cubit<ScanState> {
           ),
         );
       } else {
-        {
-          final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
+        final did = (await secureStorageProvider.get(SecureStorageKeys.did))!;
 
-          /// If credential manifest exist we follow instructions to present
-          /// credential
-          /// If credential manifest doesn't exist we add DIDAuth to the post
-          /// If id was in preview we send it in the post
-          ///  https://github.com/TalaoDAO/wallet-interaction/blob/main/README.md#credential-offer-protocol
-          ///
-          final key = (await secureStorageProvider.get(keyId))!;
-          final verificationMethod = await secureStorageProvider
-              .get(SecureStorageKeys.verificationMethod);
+        /// If credential manifest exist we follow instructions to present
+        /// credential
+        /// If credential manifest doesn't exist we add DIDAuth to the post
+        /// If id was in preview we send it in the post
+        ///  https://github.com/TalaoDAO/wallet-interaction/blob/main/README.md#credential-offer-protocol
+        ///
+        final key = (await secureStorageProvider.get(keyId))!;
+        final verificationMethod = await secureStorageProvider
+            .get(SecureStorageKeys.verificationMethod);
 
-          List<String> presentations = <String>[];
-          if (credentialsToBePresented == null) {
-            final options = <String, dynamic>{
-              'verificationMethod': verificationMethod,
-              'proofPurpose': 'authentication',
-              'challenge': credentialModel.challenge ?? '',
-              'domain': credentialModel.domain ?? '',
-            };
+        List<String> presentations = <String>[];
+        if (credentialsToBePresented == null) {
+          final options = <String, dynamic>{
+            'verificationMethod': verificationMethod,
+            'proofPurpose': 'authentication',
+            'challenge': credentialModel.challenge ?? '',
+            'domain': credentialModel.domain ?? '',
+          };
 
-            final presentation = await didKitProvider.didAuth(
-              did,
-              jsonEncode(options),
+          final presentation = await didKitProvider.didAuth(
+            did,
+            jsonEncode(options),
+            key,
+          );
+
+          presentations = List.of(presentations)..add(presentation);
+        } else {
+          for (final item in credentialsToBePresented) {
+            final presentationId = 'urn:uuid:${const Uuid().v4()}';
+
+            final presentation = await didKitProvider.issuePresentation(
+              jsonEncode({
+                '@context': ['https://www.w3.org/2018/credentials/v1'],
+                'type': ['VerifiablePresentation'],
+                'id': presentationId,
+                'holder': did,
+                'verifiableCredential': item.data,
+              }),
+              jsonEncode({
+                'verificationMethod': verificationMethod,
+                'proofPurpose': 'assertionMethod',
+                'challenge': credentialModel.challenge,
+                'domain': credentialModel.domain,
+              }),
               key,
             );
-
             presentations = List.of(presentations)..add(presentation);
-          } else {
-            for (final item in credentialsToBePresented) {
-              final presentationId = 'urn:uuid:${const Uuid().v4()}';
-
-              final presentation = await didKitProvider.issuePresentation(
-                jsonEncode({
-                  '@context': ['https://www.w3.org/2018/credentials/v1'],
-                  'type': ['VerifiablePresentation'],
-                  'id': presentationId,
-                  'holder': did,
-                  'verifiableCredential': item.data,
-                }),
-                jsonEncode({
-                  'verificationMethod': verificationMethod,
-                  'proofPurpose': 'assertionMethod',
-                  'challenge': credentialModel.challenge,
-                  'domain': credentialModel.domain,
-                }),
-                key,
-              );
-              presentations = List.of(presentations)..add(presentation);
-            }
           }
+        }
 
-          log.i('presentations - $presentations');
+        log.i('presentations - $presentations');
 
-          FormData data;
-          if (credentialModel.receivedId == null) {
-            data = FormData.fromMap(<String, dynamic>{
-              'subject_id': did,
-              'presentation': presentations.length > 1
-                  ? jsonEncode(presentations)
-                  : presentations,
-            });
-          } else {
-            data = FormData.fromMap(<String, dynamic>{
-              'id': credentialModel.receivedId,
-              'subject_id': did,
-              'presentation': presentations.length > 1
-                  ? jsonEncode(presentations)
-                  : presentations,
-            });
-          }
+        FormData data;
+        if (credentialModel.receivedId == null) {
+          data = FormData.fromMap(<String, dynamic>{
+            'subject_id': did,
+            'presentation': presentations.length > 1
+                ? jsonEncode(presentations)
+                : presentations,
+          });
+        } else {
+          data = FormData.fromMap(<String, dynamic>{
+            'id': credentialModel.receivedId,
+            'subject_id': did,
+            'presentation': presentations.length > 1
+                ? jsonEncode(presentations)
+                : presentations,
+          });
+        }
 
-          final dynamic credential = await client.post(
-            uri.toString(),
-            data: data,
-          );
+        final dynamic credential = await client.post(
+          uri.toString(),
+          data: data,
+        );
 
-          final dynamic jsonCredential =
-              credential is String ? jsonDecode(credential) : credential;
+        final dynamic jsonCredential =
+            credential is String ? jsonDecode(credential) : credential;
 
-          if (!isEbsiIssuer(credentialModel)) {
-            /// not verifying credential for did:ebsi issuer
-            log.i('verifying Credential');
+        if (!isEbsiIssuer(credentialModel)) {
+          /// not verifying credential for did:ebsi issuer
+          log.i('verifying Credential');
 
-            final vcStr = jsonEncode(jsonCredential);
-            final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
+          final vcStr = jsonEncode(jsonCredential);
+          final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
 
-            await Future<void>.delayed(const Duration(milliseconds: 500));
-            final verification =
-                await didKitProvider.verifyCredential(vcStr, optStr);
+          await Future<void>.delayed(const Duration(milliseconds: 500));
+          final verification =
+              await didKitProvider.verifyCredential(vcStr, optStr);
 
-            log.i('[wallet/credential-offer/verify/vc] $vcStr');
-            log.i('[wallet/credential-offer/verify/options] $optStr');
-            log.i('[wallet/credential-offer/verify/result] $verification');
+          log.i('[wallet/credential-offer/verify/vc] $vcStr');
+          log.i('[wallet/credential-offer/verify/options] $optStr');
+          log.i('[wallet/credential-offer/verify/result] $verification');
 
-            final jsonVerification =
-                jsonDecode(verification) as Map<String, dynamic>;
+          final jsonVerification =
+              jsonDecode(verification) as Map<String, dynamic>;
 
-            if ((jsonVerification['warnings'] as List).isNotEmpty) {
-              log.w(
-                'credential verification return warnings',
-                jsonVerification['warnings'],
-              );
+          if ((jsonVerification['warnings'] as List).isNotEmpty) {
+            log.w(
+              'credential verification return warnings',
+              jsonVerification['warnings'],
+            );
 
-              emit(
-                state.warning(
-                  messageHandler: ResponseMessage(
-                    ResponseString
-                        .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING,
-                  ),
+            emit(
+              state.warning(
+                messageHandler: ResponseMessage(
+                  ResponseString
+                      .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING,
                 ),
-              );
-            }
-
-            if ((jsonVerification['errors'] as List).isNotEmpty) {
-              log.w('failed to verify credential', jsonVerification['errors']);
-              if (jsonVerification['errors'][0] != 'No applicable proof') {
-                throw ResponseMessage(
-                  ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
-                );
-              }
-            }
-          }
-
-          final List<Activity> activities =
-              List<Activity>.of(credentialModel.activities)
-                ..add(Activity(acquisitionAt: DateTime.now()));
-
-          await walletCubit.insertCredential(
-            credential: CredentialModel.copyWithData(
-              oldCredentialModel: credentialModel,
-              newData: jsonCredential as Map<String, dynamic>,
-              activities: activities,
-            ),
-          );
-
-          if (credentialsToBePresented != null) {
-            await presentationActivity(
-              credentialModels: credentialsToBePresented,
-              issuer: issuer,
+              ),
             );
           }
-          emit(state.copyWith(status: ScanStatus.success));
+
+          if ((jsonVerification['errors'] as List).isNotEmpty) {
+            log.w('failed to verify credential', jsonVerification['errors']);
+            if (jsonVerification['errors'][0] != 'No applicable proof') {
+              throw ResponseMessage(
+                ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL,
+              );
+            }
+          }
         }
+
+        final List<Activity> activities =
+            List<Activity>.of(credentialModel.activities)
+              ..add(Activity(acquisitionAt: DateTime.now()));
+
+        await walletCubit.insertCredential(
+          credential: CredentialModel.copyWithData(
+            oldCredentialModel: credentialModel,
+            newData: jsonCredential as Map<String, dynamic>,
+            activities: activities,
+          ),
+        );
+
+        if (credentialsToBePresented != null) {
+          await presentationActivity(
+            credentialModels: credentialsToBePresented,
+            issuer: issuer,
+          );
+        }
+        emit(state.copyWith(status: ScanStatus.success));
       }
     } catch (e) {
       log.e('something went wrong - $e');
