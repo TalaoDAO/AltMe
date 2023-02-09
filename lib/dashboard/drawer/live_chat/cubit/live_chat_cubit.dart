@@ -73,8 +73,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           state.messages[index] = updatedMessage;
           emit(state.copyWith(messages: state.messages));
 
-          final client = http.Client();
-          final request = await client.get(Uri.parse(message.uri));
+          final httpClient = http.Client();
+          final request = await httpClient.get(Uri.parse(message.uri));
           final bytes = request.bodyBytes;
           final documentsDir = (await getApplicationDocumentsDirectory()).path;
           localPath = '$documentsDir/${message.name}';
@@ -183,16 +183,18 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     try {
       emit(state.copyWith(status: AppStatus.loading));
       await _initClient();
-      final username = didCubit.state.did!;
+      final username = didCubit.state.did!.replaceAll(':', '-');
       final password = await secureStorageProvider.get(username);
       if (password == null || password.isEmpty) {
         final newPassword = await _register(username: username);
         await secureStorageProvider.set(username, newPassword);
         await _login(
-            username: username.replaceAll(':', '-'), password: newPassword);
+          username: username,
+          password: newPassword,
+        );
       } else {
         await _login(
-          username: username.replaceAll(':', '-'),
+          username: username,
           password: password,
         );
       }
@@ -302,7 +304,9 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           roomAliasName: name,
         );
         await secureStorageProvider.set(
-            SecureStorageKeys.supportRoomId, roomId);
+          SecureStorageKeys.supportRoomId,
+          roomId,
+        );
         return roomId;
       } catch (e, s) {
         logger.e('e: $e, s: $s');
@@ -359,14 +363,15 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   Future<String> _register({
     required String username,
   }) async {
-    final nonce = await _getNonce(didCubit.state.did!);
-    final didAuth = await _getDidAuth(didCubit.state.did!, nonce);
+    final did = didCubit.state.did!;
+    final nonce = await _getNonce(did);
+    final didAuth = await _getDidAuth(did, nonce);
     await dotenv.load();
     final apiKey = dotenv.get('TALAO_MATRIX_API_KEY');
     final password = const Uuid().v4();
 
     final data = <String, dynamic>{
-      'username': username,
+      'username': did,
       'password': password,
       'didAuth': didAuth,
     };
