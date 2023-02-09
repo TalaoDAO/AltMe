@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:altme/app/app.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:bloc/bloc.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -187,9 +186,9 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       final username = didCubit.state.did!.replaceAll(':', '-');
       final password = await secureStorageProvider.get(username);
       if (password == null || password.isEmpty) {
-        final newPassword = await _register(username: username);
-        await secureStorageProvider.set(username, newPassword);
-        await _login(username: username, password: newPassword);
+      final newPassword = await _register(username: username);
+      await secureStorageProvider.set(username, newPassword);
+      await _login(username: username, password: newPassword);
       } else {
         await _login(username: username, password: password);
       }
@@ -366,7 +365,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       Urls.registerToMatrix,
       headers: <String, dynamic>{
         'X-API-KEY': apiKey,
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
       data: <String, dynamic>{
         'username': username,
