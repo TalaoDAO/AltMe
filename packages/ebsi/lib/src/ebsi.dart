@@ -410,7 +410,7 @@ class Ebsi {
         'id': 'http://example.org/presentations/talao/01',
         'type': ['VerifiablePresentation'],
         'holder': tokenParameters.didKey,
-        'verifiableCredential': [jsonEncode(tokenParameters.credentials)]
+        'verifiableCredential': [jsonEncode(tokenParameters.jwtsOfCredentials)]
       },
       'nonce': tokenParameters.nonce
     };
