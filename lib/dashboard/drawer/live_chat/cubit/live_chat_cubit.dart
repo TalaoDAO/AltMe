@@ -186,11 +186,15 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       final username = didCubit.state.did!;
       final password = await secureStorageProvider.get(username);
       if (password == null || password.isEmpty) {
-      final newPassword = await _register(username: username);
-      await secureStorageProvider.set(username, newPassword);
-      await _login(username: username, password: newPassword);
+        final newPassword = await _register(username: username);
+        await secureStorageProvider.set(username, newPassword);
+        await _login(
+            username: username.replaceAll(':', '-'), password: newPassword);
       } else {
-        await _login(username: username, password: password);
+        await _login(
+          username: username.replaceAll(':', '-'),
+          password: password,
+        );
       }
       _roomId = await _createRoomAndInviteSupport(
         username,
