@@ -3,7 +3,6 @@ import 'dart:core';
 
 import 'package:crypto/crypto.dart';
 import 'package:fast_base58/fast_base58.dart';
-import 'package:flutter/foundation.dart';
 
 /// Most of the parameters used to get or present EBSI credentials
 /// are computed from private key of the user wallet.
@@ -42,7 +41,6 @@ class TokenParameters {
   }
 
   /// [thumbprint] of JWK as defined in https://www.rfc-editor.org/rfc/rfc7638
-  @visibleForTesting
   List<int> get thumbprint {
     /// we use crv P-256K in the rest of the package to ensure compatibility
     /// with jose dart package. In fact our crv is secp256k1 wich change the
