@@ -10,8 +10,10 @@ import 'dart:convert';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
 import 'package:ebsi/ebsi.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockDio extends Mock implements Dio {}
@@ -27,22 +29,92 @@ void main() {
   // const tokenEndpoint = 'https://talao.co/sandbox/ebsi/issuer/vgvghylozl/token';
   // const credentialEndpoint =
   //     'https://talao.co/sandbox/ebsi/issuer/vgvghylozl/credential';
+
+  final client = Dio();
+  final dioAdapter =
+      DioAdapter(dio: Dio(BaseOptions()), matcher: const UrlRequestMatcher());
+  client.httpClientAdapter = dioAdapter;
+
+  const mnemonic =
+      'position taste mention august skin taste best air sure acoustic poet ritual'; // ignore: lines_longer_than_80_chars
+
+  const issuer =
+      'https://talao.co/sandbox/ebsi/issuer/vgvghylozl/.well-known/openid-configuration';
+
+  test('EBSI class can be instantiated', () {
+    final ebsi = Ebsi(client);
+    expect(ebsi, isNotNull);
+  });
+
   group('EBSI DID and JWK', () {
+    const seedBytes = [
+      113,
+      197,
+      150,
+      53,
+      40,
+      198,
+      138,
+      253,
+      98,
+      90,
+      83,
+      97,
+      226,
+      71,
+      225,
+      90,
+      252,
+      6,
+      223,
+      44,
+      144,
+      49,
+      239,
+      40,
+      223,
+      80,
+      238,
+      210,
+      226,
+      145,
+      206,
+      187
+    ];
+
+    const expectedJwk = {
+      'crv': 'P-256K',
+      'd': 'ccWWNSjGiv1iWlNh4kfhWvwG3yyQMe8o31Du0uKRzrs',
+      'kty': 'EC',
+      'x': 'J4vQtLUyrVUiFIXRrtEq4xurmBZp2eq9wJmXkIA_stI',
+      'y': 'EUU6vXoG3BGX2zzwjXrGDcr4EyDD0Vfk3_5fg5kSgKE'
+    };
     test('JWK from mnemonic', () async {
-      const expectedJwk = {
-        'crv': 'P-256K',
-        'd': 'ccWWNSjGiv1iWlNh4kfhWvwG3yyQMe8o31Du0uKRzrs',
-        'kty': 'EC',
-        'x': 'J4vQtLUyrVUiFIXRrtEq4xurmBZp2eq9wJmXkIA_stI',
-        'y': 'EUU6vXoG3BGX2zzwjXrGDcr4EyDD0Vfk3_5fg5kSgKE'
-      };
-      final client = MockDio();
       final ebsi = Ebsi(client);
-      const mnemonic =
-          // ignore: lines_longer_than_80_chars
-          'position taste mention august skin taste best air sure acoustic poet ritual';
       final jwk = await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic);
       expect(jsonDecode(jwk), expectedJwk);
+    });
+
+    test('JWK from seeds', () {
+      final ebsi = Ebsi(client);
+      final jwk = ebsi.jwkFromSeed(seedBytes: Uint8List.fromList(seedBytes));
+      expect(jwk, expectedJwk);
+    });
+
+    test('isEbsiUrl is true', () {
+      final ebsi = Ebsi(client);
+      const openIdRequest =
+          'openid://initiate_issuance?issuer=https%3A%2F%2Fapi.conformance.intebsi.xyz%2Fconformance%2Fv2&credential_type=https%3A%2F%2Fapi.conformance.intebsi.xyz%2Ftrusted-schemas-registry%2Fv2%2Fschemas%2FzCfNxx5dMBdf4yVcsWzj1anWRuXcxrXj1aogyfN1xSu8t&conformance=ec4d929a-5439-46fb-b7d3-4a1a80d0c199';
+
+      final isCorrectUrl = ebsi.isEbsiInitiateIssuanceUrl(openIdRequest);
+      expect(isCorrectUrl, true);
+    });
+
+    test('isEbsiUrl is false', () {
+      final ebsi = Ebsi(client);
+      final isCorrectUrl =
+          ebsi.isEbsiInitiateIssuanceUrl('https://example.com');
+      expect(isCorrectUrl, false);
     });
   });
 
@@ -52,98 +124,99 @@ void main() {
         () async {
       const openidConfiguration =
           r'{"authorization_endpoint":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl/authorize","batch_credential_endpoint":null,"credential_endpoint":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl/credential","credential_issuer":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl","credential_manifests":[{"id":"VerifiableDiploma_1","issuer":{"id":"did:ebsi:zhSw5rPXkcHjvquwnVcTzzB","name":"Test EBSILUX"},"output_descriptors":[{"display":{"description":{"fallback":"This card is a proof that you passed this diploma successfully. You can use this card  when you need to prove this information to services that have adopted EU EBSI framework.","path":[],"schema":{"type":"string"}},"properties":[{"fallback":"Unknown","label":"First name","path":["$.credentialSubject.firstName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Last name","path":["$.credentialSubject.familyName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Birth date","path":["$.credentialSubject.dateOfBirth"],"schema":{"format":"date","type":"string"}},{"fallback":"Unknown","label":"Grading scheme","path":["$.credentialSubject.gradingScheme.title"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Title","path":["$.credentialSubject.learningAchievement.title"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Description","path":["$.credentialSubject.learningAchievement.description"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"ECTS Points","path":["$.credentialSubject.learningSpecification.ectsCreditPoints"],"schema":{"type":"number"}},{"fallback":"Unknown","label":"Issue date","path":["$.issuanceDate"],"schema":{"format":"date","type":"string"}},{"fallback":"Unknown","label":"Issued by","path":["$.credentialSubject.awardingOpportunity.awardingBody.preferredName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Registration","path":["$.credentialSubject.awardingOpportunity.awardingBody.registration"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Website","path":["$.credentialSubject.awardingOpportunity.awardingBody.homepage"],"schema":{"format":"uri","type":"string"}}],"subtitle":{"fallback":"EBSI Verifiable diploma","path":[],"schema":{"type":"string"}},"title":{"fallback":"Diploma","path":[],"schema":{"type":"string"}}},"id":"diploma_01","schema":"https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd"}],"spec_version":"https://identity.foundation/credential-manifest/spec/v1.0.0/"}],"credential_supported":[{"cryptographic_binding_methods_supported":["did"],"cryptographic_suites_supported":["ES256K","ES256","ES384","ES512","RS256"],"display":[{"locale":"en-US","name":"Issuer Talao"}],"format":"jwt_vc","id":"VerifiableDiploma","types":"https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd"}],"pre-authorized_grant_anonymous_access_supported":false,"subject_syntax_types_supported":["did:ebsi"],"token_endpoint":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl/token"}';
-      final expecteAuthorizationEndpointdUri = Uri.parse(
-        'https://talao.co/sandbox/ebsi/issuer/vgvghylozl/authorize',
+      final expectedAuthorizationEndpointdUri = Uri.parse(
+        'https://talao.co/sandbox/ebsi/issuer/vgvghylozl/authorize?scope=openid&client_id=app.altme.io%2Fapp%2Fdownload%2Fcallback&response_type=code&authorization_details=%5B%7B%22type%22%3A%22openid_credential%22%2C%22credential_type%22%3A%22https%3A%2F%2Fapi.preprod.ebsi.eu%2Ftrusted-schemas-registry%2Fv1%2Fschemas%2F0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd%22%2C%22format%22%3A%22jwt_vc%22%7D%5D&redirect_uri=app.altme.io%2Fapp%2Fdownload%2Fcallback%3Fcredential_type%3Dhttps%3A%2F%2Fapi.preprod.ebsi.eu%2Ftrusted-schemas-registry%2Fv1%2Fschemas%2F0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd%26issuer%3Dhttps%3A%2F%2Ftalao.co%2Fsandbox%2Febsi%2Fissuer%2Fvgvghylozl&state&op_state',
       );
       const givenredirectUrl = 'app.altme.io/app/download/callback';
       const givenOpenIdRequest =
           'openid://initiate_issuance?issuer=https%3A%2F%2Ftalao.co%2Fsandbox%2Febsi%2Fissuer%2Fvgvghylozl&credential_type=https%3A%2F%2Fapi.preprod.ebsi.eu%2Ftrusted-schemas-registry%2Fv1%2Fschemas%2F0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd&issuer_state=c8d25b7e-9bd2-11ed-9d05-0a1628958560';
-      final client = MockDio();
+
+      dioAdapter.onGet(
+        issuer,
+        (request) => request.reply(200, jsonDecode(openidConfiguration)),
+      );
       final ebsi = Ebsi(client);
 
-      when(() => client.get<Map<String, dynamic>>(any())).thenAnswer((_) async {
-        return Response(
-          data: jsonDecode(openidConfiguration) as Map<String, dynamic>,
-          requestOptions: RequestOptions(path: 'myPath'),
-        );
-      });
       final authorizationEndpointdUri = await ebsi.getAuthorizationUriForIssuer(
         givenOpenIdRequest,
         givenredirectUrl,
       );
-      expect(authorizationEndpointdUri, expecteAuthorizationEndpointdUri);
+      expect(authorizationEndpointdUri, expectedAuthorizationEndpointdUri);
     });
   });
 
   group('Ebsi request credential', () {
-    test('EBSI class can be instantiated', () {
-      final client = MockDio();
-      expect(Ebsi(client), isNotNull);
-    });
-
-    test('isEbsiUrl is true', () {});
     test(
         'When getCredentialRequest receive good url it returns credential_type',
         () {
-      const openidRequest =
-          'openid://initiate_issuance?issuer=https%3A%2F%2Fapi.conformance.intebsi.xyz%2Fconformance%2Fv2&credential_type=https%3A%2F%2Fapi.conformance.intebsi.xyz%2Ftrusted-schemas-registry%2Fv2%2Fschemas%2FzCfNxx5dMBdf4yVcsWzj1anWRuXcxrXj1aogyfN1xSu8t&conformance=ec4d929a-5439-46fb-b7d3-4a1a80d0c199';
       const credentialTypeRequest =
           'https://api.conformance.intebsi.xyz/trusted-schemas-registry/v2/schemas/zCfNxx5dMBdf4yVcsWzj1anWRuXcxrXj1aogyfN1xSu8t';
-      final client = MockDio();
-      expect(
-        Ebsi(client).getCredentialRequest(openidRequest),
-        credentialTypeRequest,
+      const openIdRequest =
+          'openid://initiate_issuance?issuer=https%3A%2F%2Fapi.conformance.intebsi.xyz%2Fconformance%2Fv2&credential_type=https%3A%2F%2Fapi.conformance.intebsi.xyz%2Ftrusted-schemas-registry%2Fv2%2Fschemas%2FzCfNxx5dMBdf4yVcsWzj1anWRuXcxrXj1aogyfN1xSu8t&conformance=ec4d929a-5439-46fb-b7d3-4a1a80d0c199';
+
+      dioAdapter.onGet(
+        openIdRequest,
+        (request) => request.reply(200, credentialTypeRequest),
       );
+      final ebsi = Ebsi(client);
+
+      final credentialRequest = ebsi.getCredentialRequest(openIdRequest);
+
+      expect(credentialRequest, credentialTypeRequest);
     });
+
     test('When getCredentialRequest receive bad url it returns ""', () {
       const openidRequest = 'this is a bad request :-)';
       final client = MockDio();
       expect(Ebsi(client).getCredentialRequest(openidRequest), '');
     });
 
-    test('When getCredentialType receive url it returns json response', () {
-      final credentialRequest = Uri.parse(
-        'https://app.altme.io/app/download?credential_type=https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd&issuer=https://talao.co/sandbox/ebsi/issuer/vgvghylozl?code=cb803d46-9c88-11ed-bdb3-0a1628958560&state=0d189873-9c87-11ed-8dbf-0a1628958560',
-      );
-      const jsonResponse =
-          r'{"$schema":"http://json-schema.org/draft-07/schema#","title":"EBSI Natural Person Verifiable ID","description":"Schema of an EBSI Verifiable ID for a natural person","type":"object","allOf":[{"$ref":"https://api.conformance.intebsi.xyz/trusted-schemas-registry/v1/schemas/0x28d76954924d1c4747a4f1f9e3e9edc9ca965efbf8ff20e4339c2bf2323a5773"},{"properties":{"credentialSubject":{"description":"Defines additional information about the subject that is described by the Verifiable ID","type":"object","properties":{"id":{"description":"Defines the DID of the subject that is described by the Verifiable Attestation","type":"string","format":"uri"},"familyName":{"description":"Defines current family name(s) of the credential subject","type":"string"},"firstName":{"description":"Defines current first name(s) of the credential subject","type":"string"},"dateOfBirth":{"description":"Defines date of birth of the credential subject","type":"string","format":"date"},"personalIdentifier":{"description":"Defines the unique national identifier of the credential subject (constructed by the sending Member State in accordance with the technical specifications for the purposes of cross-border identification and which is as persistent as possible in time)","type":"string"},"nameAndFamilyNameAtBirth":{"description":"Defines the first and the family name(s) of the credential subject at the time of their birth","type":"string"},"placeOfBirth":{"description":"Defines the place where the credential subjectis born","type":"string"},"currentAddress":{"description":"Defines the current address of the credential subject","type":"string"},"gender":{"description":"Defines the gender of the credential subject","type":"string"}},"required":["id","familyName","firstName","dateOfBirth","personalIdentifier"]}}}]}';
-      final client = MockDio();
-      // ignore: inference_failure_on_function_invocation
-      when(() => client.get(any())).thenAnswer((_) async {
-        return jsonDecode(jsonResponse) as Future<Response>;
-      });
-      const mnemonic =
-          // ignore: lines_longer_than_80_chars
-          'jambon fromage comte camembert pain fleur voiture bac pere mere fille fils';
-
-      expect(
-        Ebsi(client).getCredential(
-          credentialRequest,
-          mnemonic,
-        ),
-        jsonResponse,
-      );
-    });
-    test('When getCredentialType receive url, a request is done with Dio',
+    test('When getCredentialType receive url it returns json response',
         () async {
       final credentialRequest = Uri.parse(
         'https://app.altme.io/app/download?credential_type=https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd&issuer=https://talao.co/sandbox/ebsi/issuer/vgvghylozl?code=cb803d46-9c88-11ed-bdb3-0a1628958560&state=0d189873-9c87-11ed-8dbf-0a1628958560',
       );
-      const jsonResponse =
-          r'{"$schema":"http://json-schema.org/draft-07/schema#","title":"EBSI Natural Person Verifiable ID","description":"Schema of an EBSI Verifiable ID for a natural person","type":"object","allOf":[{"$ref":"https://api.conformance.intebsi.xyz/trusted-schemas-registry/v1/schemas/0x28d76954924d1c4747a4f1f9e3e9edc9ca965efbf8ff20e4339c2bf2323a5773"},{"properties":{"credentialSubject":{"description":"Defines additional information about the subject that is described by the Verifiable ID","type":"object","properties":{"id":{"description":"Defines the DID of the subject that is described by the Verifiable Attestation","type":"string","format":"uri"},"familyName":{"description":"Defines current family name(s) of the credential subject","type":"string"},"firstName":{"description":"Defines current first name(s) of the credential subject","type":"string"},"dateOfBirth":{"description":"Defines date of birth of the credential subject","type":"string","format":"date"},"personalIdentifier":{"description":"Defines the unique national identifier of the credential subject (constructed by the sending Member State in accordance with the technical specifications for the purposes of cross-border identification and which is as persistent as possible in time)","type":"string"},"nameAndFamilyNameAtBirth":{"description":"Defines the first and the family name(s) of the credential subject at the time of their birth","type":"string"},"placeOfBirth":{"description":"Defines the place where the credential subjectis born","type":"string"},"currentAddress":{"description":"Defines the current address of the credential subject","type":"string"},"gender":{"description":"Defines the gender of the credential subject","type":"string"}},"required":["id","familyName","firstName","dateOfBirth","personalIdentifier"]}}}]}';
-      final client = MockDio();
-      // ignore: inference_failure_on_function_invocation
-      when(() => client.get(any())).thenAnswer((_) async {
-        return jsonDecode(jsonResponse) as Future<Response>;
-      });
-      const mnemonic =
-          // ignore: lines_longer_than_80_chars
-          'jambon fromage comte camembert pain fleur voiture bac pere mere fille fils';
-      await Ebsi(client).getCredential(
+
+      const issuerResponse =
+          r'{"authorization_endpoint":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl/authorize","batch_credential_endpoint":null,"credential_endpoint":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl/credential","credential_issuer":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl","credential_manifests":[{"id":"VerifiableDiploma_1","issuer":{"id":"did:ebsi:zhSw5rPXkcHjvquwnVcTzzB","name":"Test EBSILUX"},"output_descriptors":[{"display":{"description":{"fallback":"This card is a proof that you passed this diploma successfully. You can use this card  when you need to prove this information to services that have adopted EU EBSI framework.","path":[],"schema":{"type":"string"}},"properties":[{"fallback":"Unknown","label":"First name","path":["$.credentialSubject.firstName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Last name","path":["$.credentialSubject.familyName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Birth date","path":["$.credentialSubject.dateOfBirth"],"schema":{"format":"date","type":"string"}},{"fallback":"Unknown","label":"Grading scheme","path":["$.credentialSubject.gradingScheme.title"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Title","path":["$.credentialSubject.learningAchievement.title"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Description","path":["$.credentialSubject.learningAchievement.description"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"ECTS Points","path":["$.credentialSubject.learningSpecification.ectsCreditPoints"],"schema":{"type":"number"}},{"fallback":"Unknown","label":"Issue date","path":["$.issuanceDate"],"schema":{"format":"date","type":"string"}},{"fallback":"Unknown","label":"Issued by","path":["$.credentialSubject.awardingOpportunity.awardingBody.preferredName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Registration","path":["$.credentialSubject.awardingOpportunity.awardingBody.registration"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Website","path":["$.credentialSubject.awardingOpportunity.awardingBody.homepage"],"schema":{"format":"uri","type":"string"}}],"subtitle":{"fallback":"EBSI Verifiable diploma","path":[],"schema":{"type":"string"}},"title":{"fallback":"Diploma","path":[],"schema":{"type":"string"}}},"id":"diploma_01","schema":"https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd"}],"spec_version":"https://identity.foundation/credential-manifest/spec/v1.0.0/"}],"credential_supported":[{"cryptographic_binding_methods_supported":["did"],"cryptographic_suites_supported":["ES256K","ES256","ES384","ES512","RS256"],"display":[{"locale":"en-US","name":"Issuer Talao"}],"format":"jwt_vc","id":"VerifiableDiploma","types":"https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd"}],"pre-authorized_grant_anonymous_access_supported":true,"subject_syntax_types_supported":["did:ebsi"],"token_endpoint":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl/token"}';
+
+      const tokenUrl = 'https://talao.co/sandbox/ebsi/issuer/vgvghylozl/token';
+
+      const tokenResponse =
+          '{"access_token":"7a07dd19-a879-11ed-ad95-0a1628958560","c_nonce":"7a07de0f-a879-11ed-822b-0a1628958560","token_type":"Bearer","expires_in":1000}';
+
+      const credentialRequestUrl =
+          'https://talao.co/sandbox/ebsi/issuer/vgvghylozl/credential';
+
+      const credentialRequestResponse =
+          r'{"format":"jwt_vc","credential":"eyJhbGciOiJFUzI1NksiLCJraWQiOiJkaWQ6ZWJzaTp6aFN3NXJQWGtjSGp2cXV3blZjVHp6QiM1MTVhOWM0MzZjMGYyYWQzYWI2NWQ2Y2VmYzVjMWYwNmMwNWI4YWRmY2Y1NGVlMDZkYzgwNTQzMjA0NzBmZmFmIiwidHlwIjoiSldUIn0.eyJleHAiOjE2NzU5NDcwNTguODkyNzc4LCJpYXQiOjE2NzU5NDYwNTguODkyNzcxLCJpc3MiOiJkaWQ6ZWJzaTp6aFN3NXJQWGtjSGp2cXV3blZjVHp6QiIsImp0aSI6InVybjp1dWlkOjZiMWQ4NDExLTllZDUtNDU2Ni05YzdmLTRjMjQxNjVmZjIzNiIsIm5iZiI6MTY3NTk0NjA1OC44OTI3NzYsIm5vbmNlIjoiMTFmNWY2MDAtYTg3Ni0xMWVkLTkwZjItMGExNjI4OTU4NTYwIiwic3ViIjoiZGlkOmVic2k6em94UkdWWlFuZFRmUWs1NEI3dEtkd3dOZGhhaTVnbTlGOE5hdjhlY2VOQUJhIiwidmMiOnsiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXSwiY3JlZGVudGlhbFNjaGVtYSI6eyJpZCI6Imh0dHBzOi8vYXBpLnByZXByb2QuZWJzaS5ldS90cnVzdGVkLXNjaGVtYXMtcmVnaXN0cnkvdjEvc2NoZW1hcy8weGJmNzhmYzA4YTdhOWYyOGY1NDc5ZjU4ZGVhMjY5ZDM2NTdmNTRmMTNjYTM3ZDM4MGNkNGU5MjIzN2ZiNjkxZGQiLCJ0eXBlIjoiSnNvblNjaGVtYVZhbGlkYXRvcjIwMTgifSwiY3JlZGVudGlhbFN0YXR1cyI6eyJpZCI6Imh0dHBzOi8vZXNzaWYuZXVyb3BhLmV1L3N0YXR1cy9lZHVjYXRpb24jaGlnaGVyRWR1Y2F0aW9uIzM5MmFjN2Y2LTM5OWEtNDM3Yi1hMjY4LTQ2OTFlYWQ4ZjE3NiIsInR5cGUiOiJDcmVkZW50aWFsU3RhdHVzTGlzdDIwMjAifSwiY3JlZGVudGlhbFN1YmplY3QiOnsiYXdhcmRpbmdPcHBvcnR1bml0eSI6eyJhd2FyZGluZ0JvZHkiOnsiZWlkYXNMZWdhbElkZW50aWZpZXIiOiJVbmtub3duIiwiaG9tZXBhZ2UiOiJodHRwczovL2xlYXN0b24uYmNkaXBsb21hLmNvbS8iLCJpZCI6ImRpZDplYnNpOnpkUnZ2S2JYaFZWQnNYaGF0anVpQmhzIiwicHJlZmVycmVkTmFtZSI6IkxlYXN0b24gVW5pdmVyc2l0eSIsInJlZ2lzdHJhdGlvbiI6IjA1OTcwNjVKIn0sImVuZGVkQXRUaW1lIjoiMjAyMC0wNi0yNlQwMDowMDowMFoiLCJpZCI6Imh0dHBzOi8vbGVhc3Rvbi5iY2RpcGxvbWEuY29tL2xhdy1lY29ub21pY3MtbWFuYWdlbWVudCNBd2FyZGluZ09wcG9ydHVuaXR5IiwiaWRlbnRpZmllciI6Imh0dHBzOi8vY2VydGlmaWNhdGUtZGVtby5iY2RpcGxvbWEuY29tL2NoZWNrLzg3RUQyRjIyNzBFNkM0MTQ1NkU5NEI4NkI5RDkxMTVCNEUzNUJDQ0FEMjAwQTQ5Qjg0NjU5MkMxNEY3OUM4NkJWMUZuYmxsdGEwTlpUbkprUjNsRFdsUm1URGxTUlVKRVZGWklTbU5tWXpKaFVVNXNaVUo1WjJGSlNIcFdibVpaIiwibG9jYXRpb24iOiJGUkFOQ0UiLCJzdGFydGVkQXRUaW1lIjoiMjAxOS0wOS0wMlQwMDowMDowMFoifSwiZGF0ZU9mQmlydGgiOiIxOTkzLTA0LTA4IiwiZmFtaWx5TmFtZSI6IkRPRSIsImdpdmVuTmFtZXMiOiJKYW5lIiwiZ3JhZGluZ1NjaGVtZSI6eyJpZCI6Imh0dHBzOi8vbGVhc3Rvbi5iY2RpcGxvbWEuY29tL2xhdy1lY29ub21pY3MtbWFuYWdlbWVudCNHcmFkaW5nU2NoZW1lIiwidGl0bGUiOiIyIHllYXIgZnVsbC10aW1lIHByb2dyYW1tZSAvIDQgc2VtZXN0ZXJzIn0sImlkIjoiZGlkOmVic2k6em94UkdWWlFuZFRmUWs1NEI3dEtkd3dOZGhhaTVnbTlGOE5hdjhlY2VOQUJhIiwiaWRlbnRpZmllciI6IjA5MDQwMDgwODRIIiwibGVhcm5pbmdBY2hpZXZlbWVudCI6eyJhZGRpdGlvbmFsTm90ZSI6WyJESVNUUklCVVRJT04gTUFOQUdFTUVOVCJdLCJkZXNjcmlwdGlvbiI6IlRoZSBNYXN0ZXIgaW4gSW5mb3JtYXRpb24gYW5kIENvbXB1dGVyIFNjaWVuY2VzIChNSUNTKSBhdCB0aGUgVW5pdmVyc2l0eSBvZiBMdXhlbWJvdXJnIGVuYWJsZXMgc3R1ZGVudHMgdG8gYWNxdWlyZSBkZWVwZXIga25vd2xlZGdlIGluIGNvbXB1dGVyIHNjaWVuY2UgYnkgdW5kZXJzdGFuZGluZyBpdHMgYWJzdHJhY3QgYW5kIGludGVyZGlzY2lwbGluYXJ5IGZvdW5kYXRpb25zLCBmb2N1c2luZyBvbiBwcm9ibGVtIHNvbHZpbmcgYW5kIGRldmVsb3BpbmcgbGlmZWxvbmcgbGVhcm5pbmcgc2tpbGxzLiIsImlkIjoiaHR0cHM6Ly9sZWFzdG9uLmJjZGlwbG9tYS5jb20vbGF3LWVjb25vbWljcy1tYW5hZ2VtZW50I0xlYXJuaW5nQWNoaWV2bWVudCIsInRpdGxlIjoiTWFzdGVyIGluIEluZm9ybWF0aW9uIGFuZCBDb21wdXRlciBTY2llbmNlcyJ9LCJsZWFybmluZ1NwZWNpZmljYXRpb24iOnsiZWN0c0NyZWRpdFBvaW50cyI6MTIwLCJlcWZMZXZlbCI6NywiaWQiOiJodHRwczovL2xlYXN0b24uYmNkaXBsb21hLmNvbS9sYXctZWNvbm9taWNzLW1hbmFnZW1lbnQjTGVhcm5pbmdTcGVjaWZpY2F0aW9uIiwiaXNjZWRmQ29kZSI6WyI3Il0sIm5xZkxldmVsIjpbIjciXX19LCJldmlkZW5jZSI6eyJkb2N1bWVudFByZXNlbmNlIjpbIlBoeXNpY2FsIl0sImV2aWRlbmNlRG9jdW1lbnQiOlsiUGFzc3BvcnQiXSwiaWQiOiJodHRwczovL2Vzc2lmLmV1cm9wYS5ldS90c3ItdmEvZXZpZGVuY2UvZjJhZWVjOTctZmMwZC00MmJmLThjYTctMDU0ODE5MmQ1Njc4Iiwic3ViamVjdFByZXNlbmNlIjoiUGh5c2ljYWwiLCJ0eXBlIjpbIkRvY3VtZW50VmVyaWZpY2F0aW9uIl0sInZlcmlmaWVyIjoiZGlkOmVic2k6Mjk2MmZiNzg0ZGY2MWJhYTI2N2M4MTMyNDk3NTM5ZjhjNjc0YjM3YzEyNDRhN2EifSwiaWQiOiJ1cm46dXVpZDo2YjFkODQxMS05ZWQ1LTQ1NjYtOWM3Zi00YzI0MTY1ZmYyMzYiLCJpc3N1YW5jZURhdGUiOiIyMDIzLTAyLTA5VDEyOjM0OjE4WiIsImlzc3VlZCI6IjIwMjMtMDItMDlUMTI6MzQ6MThaIiwiaXNzdWVyIjoiZGlkOmVic2k6emhTdzVyUFhrY0hqdnF1d25WY1R6ekIiLCJwcm9vZiI6eyJjcmVhdGVkIjoiMjAyMi0wNC0yN1QxMjoyNTowN1oiLCJjcmVhdG9yIjoiZGlkOmVic2k6emRSdnZLYlhoVlZCc1hoYXRqdWlCaHMiLCJkb21haW4iOiJodHRwczovL2FwaS5wcmVwcm9kLmVic2kuZXUiLCJqd3MiOiJleUppTmpRaU9tWmhiSE5sTENKamNtbDBJanBiSW1JMk5DSmRMQ0poYkdjaU9pSkZVekkxTmtzaWZRLi5tSUJuTThYRFFxU1lLUU5YX0x2YUpobXNieUNyNU9aNWNVMlprLVJlcUxwcjRkb0ZzZ21vb2JrTzUxMjh0WnktOEtpbVZqSmtHdzB3TDF1QlduTUxXUSIsIm5vbmNlIjoiM2VhNjhkYWUtZDA3YS00ZGFhLTkzMmItZmJiNThmNWMyMGM0IiwidHlwZSI6IkVjZHNhU2VjcDI1NmsxU2lnbmF0dXJlMjAxOSJ9LCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiVmVyaWZpYWJsZUF0dGVzdGF0aW9uIiwiVmVyaWZpYWJsZURpcGxvbWEiXSwidmFsaWRGcm9tIjoiMjAyMy0wMi0wOVQxMjozNDoxOFoifX0.uQK9sK-VtqmKjLJIw_v5Ff5xAMDAosZCtl1LFYxZhUolReD6a7O-NI1f5lcswBCZPLfJ-HJyb5iShehHObzFDA","c_nonce":"128952c8-a876-11ed-bbc4-0a1628958560","c_nonce_expires_in":1000}';
+      dioAdapter
+        ..onGet(
+          issuer,
+          (request) => request.reply(200, jsonDecode(issuerResponse)),
+        )
+        ..onPost(
+          tokenUrl,
+          (request) => request.reply(
+            200,
+            jsonDecode(tokenResponse),
+          ),
+        )
+        ..onPost(
+          credentialRequestUrl,
+          (request) => request.reply(
+            200,
+            jsonDecode(credentialRequestResponse),
+          ),
+        );
+      final ebsi = Ebsi(client);
+
+      final credential = await ebsi.getCredential(
         credentialRequest,
         mnemonic,
       );
-      verify(() => client.get<String>(credentialRequest.toString())).called(1);
+
+      expect(jsonEncode(credential), credentialRequestResponse);
     });
   });
 

@@ -87,7 +87,7 @@ class Ebsi {
 
   /// Verifiy is url is first EBSI url, starting point to get a credential
   @visibleForTesting
-  static bool isEbsiInitiateIssuanceUrl(String url) {
+  bool isEbsiInitiateIssuanceUrl(String url) {
     if (url.startsWith('openid://initiate_issuance?')) {
       return true;
     }
@@ -104,6 +104,7 @@ class Ebsi {
         final jsonPath = JsonPath(r'$..authorization_endpoint');
         final openidConfigurationUrl =
             '${getIssuerFromOpenidRequest(openIdRequest)}/.well-known/openid-configuration';
+
         final openidConfigurationResponse =
             await client.get<String>(openidConfigurationUrl);
         final authorizationEndpoint = jsonPath
@@ -196,10 +197,12 @@ class Ebsi {
     final tokenData = buildTokenData(credentialRequestUri);
 
     final openidConfigurationUrl = '$issuer/.well-known/openid-configuration';
+
     final openidConfigurationResponse =
         await client.get<Map<String, dynamic>>(openidConfigurationUrl);
 
     final tokenEndPoint = readTokenEndPoint(openidConfigurationResponse);
+
     final response = await getToken(tokenEndPoint, tokenData);
 
     final credentialData = await buildCredentialData(
@@ -213,12 +216,12 @@ class Ebsi {
         readCredentialEndpoint(openidConfigurationResponse);
 
     final credentialHeaders = buildCredentialHeaders(response);
+
     final dynamic credentialResponse = await client.post<dynamic>(
       credentialEndpoint,
       options: Options(headers: credentialHeaders),
       data: credentialData,
     );
-
     return credentialResponse.data;
   }
 
