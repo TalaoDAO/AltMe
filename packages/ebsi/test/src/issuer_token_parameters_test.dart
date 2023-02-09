@@ -5,10 +5,4 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
-import 'package:dio/dio.dart';
-
-import 'package:mocktail/mocktail.dart';
-
-class MockDio extends Mock implements Dio {}
-
 void main() {}

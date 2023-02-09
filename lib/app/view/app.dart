@@ -23,6 +23,7 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
+import 'package:ebsi/ebsi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -113,6 +114,7 @@ class App extends StatelessWidget {
             walletCubit: context.read<WalletCubit>(),
             didKitProvider: DIDKitProvider(),
             secureStorageProvider: secure_storage.getSecureStorage,
+            ebsi: Ebsi(Dio()),
           ),
         ),
         BlocProvider<QRCodeScanCubit>(

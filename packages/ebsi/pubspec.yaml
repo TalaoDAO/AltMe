@@ -19,6 +19,7 @@ dependencies:
   fast_base58: ^0.2.1
   flutter:
     sdk: flutter
+  http_mock_adapter: ^0.3.3
   jose: ^0.3.2
   json_path: ^0.4.2
   pinenacl: ^0.3.4
