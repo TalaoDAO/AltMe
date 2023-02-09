@@ -253,11 +253,8 @@ The key is available [`here`](https://talao.io/).
 5. INFURA_API_KEY<br />
 This key can be obtained from [`here`](https://docs.infura.io/infura/networks/ethereum/how-to/secure-a-project/project-id).
 
-6. ETHERSCAN_API_KEY<br />
-You can get this key from [`here`](https://docs.etherscan.io/getting-started/viewing-api-usage-statistics).
-
-7. MORALIS_API_KEY<br />
-This key can be obtained from [`here`](https://docs.moralis.io/web3-data-api/get-your-api-key).
+6. MORALIS_API_KEY<br />
+You can get this key from [`here`](https://docs.moralis.io/web3-data-api/get-your-api-key).
  
 
 ## Building Altme

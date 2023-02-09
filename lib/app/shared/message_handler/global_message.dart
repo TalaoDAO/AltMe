@@ -266,19 +266,6 @@ class GlobalMessage {
   String get RESPONSE_STRING_twitterHowToGetIt => l10n.twitterHowToGetIt;
   String get RESPONSE_STRING_twitterDummyDesc => l10n.twitterDummyDesc;
 
-  String get RESPONSE_STRING_tezoniaPassWhyGetThisCard =>
-      l10n.tezoniaPassWhyGetThisCard;
-  String get RESPONSE_STRING_tezoniaPassExpirationDate =>
-      l10n.tezoniaPassExpirationDate;
-  String get RESPONSE_STRING_tezoniaPassHowToGetIt =>
-      l10n.tezoniaPassHowToGetIt;
-
-  String get RESPONSE_STRING_tzlandPassWhyGetThisCard =>
-      l10n.tzlandPassWhyGetThisCard;
-  String get RESPONSE_STRING_tzlandPassExpirationDate =>
-      l10n.tzlandPassExpirationDate;
-  String get RESPONSE_STRING_tzlandPassHowToGetIt => l10n.tzlandPassHowToGetIt;
-
   String get RESPONSE_STRING_trooperzPassWhyGetThisCard =>
       l10n.trooperzPassWhyGetThisCard;
   String get RESPONSE_STRING_trooperzPassExpirationDate =>

@@ -18,6 +18,7 @@ Future<void> addEbsiCredential(
       jws.unverifiedPayload.jsonContent['vc'] as Map<String, dynamic>;
   final Map<String, dynamic> newCredential =
       Map<String, dynamic>.from(credentialFromEbsi);
+  newCredential['jwt'] = encodedCredentialFromEbsi['credential'];
   newCredential['credentialPreview'] = credentialFromEbsi;
   final String credentialSchema = uri.queryParameters['credential_type'] ?? '';
   final issuerAndCode = uri.queryParameters['issuer'];

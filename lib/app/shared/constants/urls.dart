@@ -68,11 +68,15 @@ class Urls {
       'https://issuer.tezotopia.altme.io';
   static const String pigsPassCardUrl = 'https://issuer.tezotopia.altme.io';
   static const String trooperzPassCardUrl = 'https://issuer.tezotopia.altme.io';
-  static const String tzlandPassCardUrl = 'https://issuer.tezotopia.altme.io';
-  static const String tezoniaPassCardUrl = 'https://issuer.tezotopia.altme.io';
 
   //
   static const over13AIValidationUrl = 'https://issuer.talao.co/ai/over13';
   static const over18AIValidationUrl = 'https://issuer.talao.co/ai/over18';
   static const ageRangeAIValidationUrl = 'https://issuer.talao.co/ai/agerange';
+
+  //Matrix home server
+  static const matrixHomeServer = 'https://matrix.talao.co';
+  static const getNonce = 'https://talao.co/matrix/nonce';
+  static const registerToMatrix = 'https://talao.co/matrix/register';
+
 }

@@ -12,6 +12,7 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
@@ -22,6 +23,7 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
+import 'package:ebsi/ebsi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -112,6 +114,7 @@ class App extends StatelessWidget {
             walletCubit: context.read<WalletCubit>(),
             didKitProvider: DIDKitProvider(),
             secureStorageProvider: secure_storage.getSecureStorage,
+            ebsi: Ebsi(Dio()),
           ),
         ),
         BlocProvider<QRCodeScanCubit>(
@@ -179,22 +182,32 @@ class MaterialAppDefinition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      useInheritedMediaQuery: true,
-      builder: DevicePreview.appBuilder,
-      locale: DevicePreview.locale(context),
-      title: 'Talao Wallet',
-      darkTheme: AppTheme.darkThemeData,
-      navigatorObservers: [MyRouteObserver(context)],
-      themeMode: ThemeMode.dark,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: const SplashPage(),
+    final bool isStaging =
+        context.read<FlavorCubit>().flavorMode == FlavorMode.staging;
+    return BlocProvider(
+      create: (context) => LangCubit(),
+      child: BlocBuilder<LangCubit, Locale>(
+        builder: (context, lang) {
+          context.read<LangCubit>().fetchLocale();
+          return MaterialApp(
+            useInheritedMediaQuery: true,
+            builder: isStaging ? DevicePreview.appBuilder : null,
+            locale: isStaging ? DevicePreview.locale(context) : lang,
+            title: 'Talao Wallet',
+            darkTheme: AppTheme.darkThemeData,
+            navigatorObservers: [MyRouteObserver(context)],
+            themeMode: ThemeMode.dark,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const SplashPage(),
+          );
+        },
+      ),
     );
   }
 }

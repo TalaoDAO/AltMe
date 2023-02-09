@@ -6,6 +6,7 @@ class ImageStrings {
   static const String splashStage = '$splashPath/altme-stage.png';
 
   static const String imagePath = 'assets/image';
+  static const String cardMissing = '$imagePath/card_missing.png';
   static const String employmentCertificateFront =
       '$imagePath/carte-attestation-employeur-recto.png';
   static const String employmentCertificateBack =
@@ -57,11 +58,6 @@ class ImageStrings {
   static const String trooperzPassDummy =
       '$imagePath/trooperz-pass-dummy-soon.png';
   static const String trooperzPass = '$imagePath/trooperz-pass.png';
-  static const String tzlandPassDummy = '$imagePath/tzland-pass-dummy-soon.png';
-  static const String tzlandPass = '$imagePath/tzland-pass.png';
-  static const String tezoniaPassDummy =
-      '$imagePath/tezonia-pass-dummy-soon.png';
-  static const String tezoniaPass = '$imagePath/tezonia-pass.png';
   static const String ecole42LearningAchievement =
       '$imagePath/certificate-42.png';
   static const String associatedWalletFront =

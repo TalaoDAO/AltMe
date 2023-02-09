@@ -440,32 +440,6 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
-        case ResponseString.RESPONSE_STRING_tzlandPassWhyGetThisCard:
-          return ResponseString.RESPONSE_STRING_tzlandPassWhyGetThisCard
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_tzlandPassExpirationDate:
-          return ResponseString.RESPONSE_STRING_tzlandPassExpirationDate
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_tzlandPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_tzlandPassHowToGetIt.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_tezoniaPassWhyGetThisCard:
-          return ResponseString.RESPONSE_STRING_tezoniaPassWhyGetThisCard
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_tezoniaPassExpirationDate:
-          return ResponseString.RESPONSE_STRING_tezoniaPassExpirationDate
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_tezoniaPassHowToGetIt:
-          return ResponseString.RESPONSE_STRING_tezoniaPassHowToGetIt.localise(
-            context,
-          );
-
         case ResponseString.RESPONSE_STRING_over18WhyGetThisCard:
           return ResponseString.RESPONSE_STRING_over18WhyGetThisCard.localise(
             context,

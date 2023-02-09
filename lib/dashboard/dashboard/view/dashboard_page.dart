@@ -247,55 +247,53 @@ class _DashboardViewState extends State<DashboardView> {
                             children: const [
                               HomePage(),
                               DiscoverPage(),
-                              SearchPage(),
-                              WertPage(),
+                              if (Parameters.hasCryptoCallToAction)
+                                WertPage()
+                              else
+                                SearchPage(),
+                              LiveChatPage(hideAppBar: true),
                             ],
                           ),
                         ),
                       ),
                       BottomBarDecoration(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            BottomBarItem(
+                              icon: IconStrings.home,
+                              text: l10n.home,
+                              onTap: () => bottomTapped(0),
+                              isSelected: state.selectedIndex == 0,
+                            ),
+                            BottomBarItem(
+                              icon: IconStrings.discover,
+                              text: l10n.discover,
+                              onTap: () => bottomTapped(1),
+                              isSelected: state.selectedIndex == 1,
+                            ),
+                            const SizedBox(width: 75 * 0.6),
+                            if (Parameters.hasCryptoCallToAction)
                               BottomBarItem(
-                                icon: IconStrings.home,
-                                text: l10n.home,
-                                onTap: () => bottomTapped(0),
-                                isSelected: state.selectedIndex == 0,
-                              ),
-                              BottomBarItem(
-                                icon: IconStrings.discover,
-                                text: l10n.discover,
-                                onTap: () => bottomTapped(1),
-                                isSelected: state.selectedIndex == 1,
-                              ),
-                              const SizedBox(width: 75 * 0.6),
+                                icon: IconStrings.cashInHand,
+                                text: l10n.buy,
+                                onTap: () => bottomTapped(2),
+                                isSelected: state.selectedIndex == 2,
+                              )
+                            else
                               BottomBarItem(
                                 icon: IconStrings.searchNormal,
                                 text: l10n.search,
                                 onTap: () => bottomTapped(2),
                                 isSelected: state.selectedIndex == 2,
                               ),
-                              if (Parameters.hasCryptoCallToAction)
-                                BottomBarItem(
-                                  icon: IconStrings.cashInHand,
-                                  text: l10n.buy,
-                                  onTap: () => bottomTapped(3),
-                                  isSelected: state.selectedIndex == 3,
-                                )
-                              else
-                                BottomBarItem(
-                                  icon: IconStrings.settings,
-                                  text: l10n.settings,
-                                  onTap: () {
-                                    scaffoldKey.currentState!.openDrawer();
-                                  },
-                                  isSelected: state.selectedIndex == 3,
-                                ),
-                            ],
-                          ),
+                            BottomBarItem(
+                              icon: IconStrings.messaging,
+                              text: l10n.help,
+                              onTap: () => bottomTapped(3),
+                              isSelected: state.selectedIndex == 3,
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 1),
