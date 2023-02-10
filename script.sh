@@ -71,7 +71,7 @@ then
   echo "Make sure you are in right branch"
   fvm flutter build ios --release --flavor "production" --target "lib/main_production.dart"
   cd ios 
-  fastlane beta
+  fastlane deploy
 elif [[ "$*" == *-pub* ]];
 then
 pub
