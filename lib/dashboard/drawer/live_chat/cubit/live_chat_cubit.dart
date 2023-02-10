@@ -47,6 +47,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     try {
       final eventId = await client.getRoomById(_roomId)?.sendTextEvent(
             partialText.text,
+            txid: const Uuid().v4(),
           );
       logger.i('send text event: $eventId');
     } catch (e, s) {
@@ -215,32 +216,27 @@ class LiveChatCubit extends Cubit<LiveChatState> {
 
   void _subscribeToEventsOfRoom() {
     _onEventSubscription?.cancel();
-    client.onEvent.stream.listen((event) {
-      logger.i('event: ${event.toString()}');
-    });
     _onEventSubscription = client.onRoomState.stream.listen((Event event) {
-      logger.i(
-        'onEvent roomId: ${event.roomId} senderId: ${event.senderId}'
-        'messageType: ${event.messageType}',
-      );
-      logger.i('event: ${event.toJson()}');
       if (event.roomId == _roomId && event.type == 'm.room.message') {
+        final txId = event.unsigned?['transaction_id'] as String?;
         if (state.messages.any(
-          (element) => element.remoteId == event.eventId,
+          (element) => element.id == txId,
         )) {
           final index = state.messages.indexWhere(
-            (element) => element.remoteId == event.eventId,
+            (element) => element.id == txId,
           );
           final updatedMessage = state.messages[index].copyWith(
             status: Status.delivered,
           );
-          state.messages[index] = updatedMessage;
-          emit(state.copyWith(messages: state.messages));
+          final newMessages = List.of(state.messages);
+          newMessages[index] = updatedMessage;
+          emit(state.copyWith(messages: newMessages));
         } else {
           late final Message message;
           if (event.messageType == 'm.text') {
             message = TextMessage(
-              id: const Uuid().v4(),
+              id: event.unsigned?['transaction_id'] as String? ??
+                  const Uuid().v4(),
               text: event.text,
               createdAt: event.originServerTs.millisecondsSinceEpoch,
               status: _mapEventStatusToMessageStatus(event.status),
