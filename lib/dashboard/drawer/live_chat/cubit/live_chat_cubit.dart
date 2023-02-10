@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:crypto/crypto.dart';
 import 'package:equatable/equatable.dart';
