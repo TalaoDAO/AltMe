@@ -19,6 +19,5 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
     build_app(workspace: "Runner.xcworkspace", scheme: "production")
-    upload_to_testflight
   end
 end
