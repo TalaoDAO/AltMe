@@ -29,8 +29,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:matrix/matrix.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:secure_storage/secure_storage.dart';
+import 'package:uuid/uuid.dart';
 
 class App extends StatelessWidget {
   const App({super.key, this.flavorMode = FlavorMode.production});
@@ -171,6 +173,16 @@ class App extends StatelessWidget {
             manageNetworkCubit: context.read<ManageNetworkCubit>(),
           ),
         ),
+        BlocProvider(
+          create: (context) => LiveChatCubit(
+            dioClient: DioClient('', Dio()),
+            didCubit: context.read<DIDCubit>(),
+            secureStorageProvider: getSecureStorage,
+            client: Client(
+              'AltMeUser',
+            ),
+          ),
+        ),
       ],
       child: const MaterialAppDefinition(),
     );
@@ -188,7 +200,7 @@ class MaterialAppDefinition extends StatelessWidget {
       create: (context) => LangCubit(),
       child: BlocBuilder<LangCubit, Locale>(
         builder: (context, lang) {
-          context.read<LangCubit>().fetchLocale();
+          //context.read<LangCubit>().fetchLocale();
           return MaterialApp(
             useInheritedMediaQuery: true,
             builder: isStaging ? DevicePreview.appBuilder : null,

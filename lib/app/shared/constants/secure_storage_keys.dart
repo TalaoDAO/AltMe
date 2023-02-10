@@ -1,5 +1,5 @@
 class SecureStorageKeys {
-  static const String supportRoomId = 'supportRoomId';
+  static const String supportRoomId = 'MatrixSupportRoomId';
   static const String isFirstSelectedTokenContracts =
       'isFirstSelectedTokenContracts';
   static const String selectedContracts = 'selectedContracts';
@@ -41,6 +41,8 @@ class SecureStorageKeys {
 
   static const String ssiMnemonic = 'ssi/mnemonic';
   static const String ssiKey = 'ssi/key';
+
+  static const String p256PrivateKey = 'ssi/p256PrivateKey';
 
   static const String cryptoAccount = 'cryptoAccount';
   static const String cryptoAccounTrackingIndex = 'cryptoAccounTrackingIndex';

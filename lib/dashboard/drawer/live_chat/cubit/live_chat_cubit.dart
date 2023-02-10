@@ -29,10 +29,11 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     required this.secureStorageProvider,
     required this.client,
     required this.dioClient,
-    required User user,
   }) : super(
-          LiveChatState(user: user),
-        );
+          const LiveChatState(),
+        ) {
+    _init();
+  }
 
   final SecureStorageProvider secureStorageProvider;
   final Client client;
@@ -43,18 +44,15 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   final DIDCubit didCubit;
 
   Future<void> onSendPressed(PartialText partialText) async {
-    final messageId = const Uuid().v4();
-    final message = TextMessage(
-      author: state.user,
-      id: messageId,
-      text: partialText.text,
-      status: Status.sending,
-    );
-    emit(state.copyWith(messages: [message, ...state.messages]));
-    await client.getRoomById(_roomId)?.sendTextEvent(
-          partialText.text,
-          txid: messageId,
-        );
+    try {
+      final eventId = await client.getRoomById(_roomId)?.sendTextEvent(
+            partialText.text,
+            txid: const Uuid().v4(),
+          );
+      logger.i('send text event: $eventId');
+    } catch (e, s) {
+      logger.e('e: $e , s: $s');
+    }
   }
 
   Future<void> handleMessageTap(Message message) async {
@@ -122,7 +120,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     if (result != null && result.files.single.path != null) {
       final messageId = const Uuid().v4();
       final message = FileMessage(
-        author: state.user,
+        author: state.user!,
         createdAt: DateTime.now().millisecondsSinceEpoch,
         id: messageId,
         mimeType: lookupMimeType(result.files.single.path!),
@@ -156,7 +154,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       final messageId = const Uuid().v4();
 
       final message = ImageMessage(
-        author: state.user,
+        author: state.user!,
         createdAt: DateTime.now().millisecondsSinceEpoch,
         height: image.height.toDouble(),
         id: messageId,
@@ -179,21 +177,22 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     }
   }
 
-  Future<void> init() async {
+  Future<void> _init() async {
     try {
       emit(state.copyWith(status: AppStatus.loading));
       await _initClient();
       final username = didCubit.state.did!.replaceAll(':', '-');
       final password = await secureStorageProvider.get(username);
+      late String userId;
       if (password == null || password.isEmpty) {
         final newPassword = await _register(username: username);
         await secureStorageProvider.set(username, newPassword);
-        await _login(
+        userId = await _login(
           username: username,
           password: newPassword,
         );
       } else {
-        await _login(
+        userId = await _login(
           username: username,
           password: password,
         );
@@ -203,7 +202,12 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       );
       logger.i('roomId : $_roomId');
       _subscribeToEventsOfRoom();
-      emit(state.copyWith(status: AppStatus.init));
+      emit(
+        state.copyWith(
+          status: AppStatus.init,
+          user: User(id: userId),
+        ),
+      );
     } catch (e, s) {
       logger.e('error: $e, stack: $s');
       emit(state.copyWith(status: AppStatus.error));
@@ -213,31 +217,9 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   void _subscribeToEventsOfRoom() {
     _onEventSubscription?.cancel();
     _onEventSubscription = client.onRoomState.stream.listen((Event event) {
-      logger.i(
-        'onEvent roomId: ${event.roomId} senderId: ${event.senderId}'
-        'messageType: ${event.messageType}',
-      );
-      logger.i('event: ${event.toJson()}');
-      final eventId = event.eventId;
-      String? txId;
-      if (event.content.isNotEmpty) {
-        txId = event.content
-            .tryGet<Map<String, dynamic>>('unsigned')
-            ?.tryGet('transaction_id') as String?;
-      }
-      if (event.roomId == _roomId) {
+      if (event.roomId == _roomId && event.type == 'm.room.message') {
+        final txId = event.unsigned?['transaction_id'] as String?;
         if (state.messages.any(
-          (element) => element.id == eventId,
-        )) {
-          final index = state.messages.indexWhere(
-            (element) => element.id == eventId,
-          );
-          final updatedMessage = state.messages[index].copyWith(
-            status: Status.sent,
-          );
-          state.messages[index] = updatedMessage;
-          emit(state.copyWith(messages: state.messages));
-        } else if (state.messages.any(
           (element) => element.id == txId,
         )) {
           final index = state.messages.indexWhere(
@@ -246,15 +228,18 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           final updatedMessage = state.messages[index].copyWith(
             status: Status.delivered,
           );
-          state.messages[index] = updatedMessage;
-          emit(state.copyWith(messages: state.messages));
+          final newMessages = List.of(state.messages);
+          newMessages[index] = updatedMessage;
+          emit(state.copyWith(messages: newMessages));
         } else {
           late final Message message;
           if (event.messageType == 'm.text') {
             message = TextMessage(
-              id: const Uuid().v4(),
+              id: event.unsigned?['transaction_id'] as String? ??
+                  const Uuid().v4(),
               text: event.text,
-              createdAt: DateTime.now().millisecondsSinceEpoch,
+              createdAt: event.originServerTs.millisecondsSinceEpoch,
+              status: _mapEventStatusToMessageStatus(event.status),
               author: User(
                 id: event.senderId,
               ),
@@ -262,10 +247,11 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           } else if (event.messageType == 'm.image') {
             message = ImageMessage(
               id: const Uuid().v4(),
-              name: event.content['filename'] as String,
+              name: event.body,
               size: event.content['info']['size'] as num,
-              uri: event.content['url'] as String,
-              createdAt: DateTime.now().millisecondsSinceEpoch,
+              uri: _getUrlFromUri(event.content['url'] as String),
+              status: _mapEventStatusToMessageStatus(event.status),
+              createdAt: event.originServerTs.millisecondsSinceEpoch,
               author: User(
                 id: event.senderId,
               ),
@@ -273,10 +259,36 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           } else if (event.messageType == 'm.file') {
             message = FileMessage(
               id: const Uuid().v4(),
-              name: event.content['filename'] as String,
+              name: event.body,
               size: event.content['info']['size'] as num,
-              uri: event.content['url'] as String,
-              createdAt: DateTime.now().millisecondsSinceEpoch,
+              uri: _getUrlFromUri(event.content['url'] as String),
+              status: _mapEventStatusToMessageStatus(event.status),
+              createdAt: event.originServerTs.millisecondsSinceEpoch,
+              author: User(
+                id: event.senderId,
+              ),
+            );
+          } else if (event.messageType == 'm.audio') {
+            message = AudioMessage(
+              id: const Uuid().v4(),
+              duration: Duration(
+                milliseconds: event.content['info']['duration'] as int,
+              ),
+              name: event.body,
+              size: event.content['info']['size'] as num,
+              uri: _getUrlFromUri(event.content['url'] as String),
+              status: _mapEventStatusToMessageStatus(event.status),
+              createdAt: event.originServerTs.millisecondsSinceEpoch,
+              author: User(
+                id: event.senderId,
+              ),
+            );
+          } else {
+            message = TextMessage(
+              id: const Uuid().v4(),
+              text: event.text,
+              createdAt: event.originServerTs.millisecondsSinceEpoch,
+              status: _mapEventStatusToMessageStatus(event.status),
               author: User(
                 id: event.senderId,
               ),
@@ -390,21 +402,43 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     return password;
   }
 
-  Future<void> _login({
+  Future<String> _login({
     required String username,
     required String password,
   }) async {
     client.homeserver = Uri.parse(Urls.matrixHomeServer);
-    await client.login(
+    final loginResonse = await client.login(
       LoginType.mLoginPassword,
       password: password,
       identifier: AuthenticationUserIdentifier(user: username),
     );
+    return loginResonse.userId!;
   }
 
   Future<void> dispose() async {
     await client.logout();
     await client.dispose();
     await _onEventSubscription?.cancel();
+  }
+
+  String _getUrlFromUri(String uri) {
+    return '${Urls.matrixHomeServer}/_matrix/media/v3/thumbnail/${Urls.matrixHomeServer.replaceAll('https://', '')}/${uri.split('/').last}?width=500&height=500';
+  }
+
+  Status _mapEventStatusToMessageStatus(EventStatus status) {
+    switch (status) {
+      case EventStatus.error:
+        return Status.error;
+      case EventStatus.removed:
+        return Status.error;
+      case EventStatus.roomState:
+        return Status.seen;
+      case EventStatus.sending:
+        return Status.sending;
+      case EventStatus.sent:
+        return Status.sent;
+      case EventStatus.synced:
+        return Status.delivered;
+    }
   }
 }

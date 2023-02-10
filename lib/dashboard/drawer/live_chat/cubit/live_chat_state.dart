@@ -5,7 +5,7 @@ class LiveChatState extends Equatable {
   const LiveChatState({
     this.status = AppStatus.idle,
     this.messages = const <Message>[],
-    required this.user,
+    this.user,
   });
 
   factory LiveChatState.fromJson(Map<String, dynamic> json) =>
@@ -13,7 +13,7 @@ class LiveChatState extends Equatable {
 
   final AppStatus status;
   final List<Message> messages;
-  final User user;
+  final User? user;
 
   Map<String, dynamic> toJson() => _$LiveChatStateToJson(this);
 

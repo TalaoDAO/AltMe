@@ -211,6 +211,21 @@ void main() {
         final tokenParameters = TokenParameters(thierryPrivate);
         expect(tokenParameters.didKey, expectedDid);
       });
+
+      test('did EBSI  from Alice s key', () {
+        final aliceKey = {
+          'crv': 'P-256',
+          'd': 'd_PpSCGQWWgUc1t4iLLH8bKYlYfc9Zy_M7TsfOAcbg8',
+          'kty': 'EC',
+          'x': 'ngy44T1vxAT6Di4nr-UaM9K3Tlnz9pkoksDokKFkmNc',
+          'y': 'QCRfOKlSM31GTkb4JHx3nXB4G_jSPMsbdjzlkT_UpPc',
+        };
+
+        const expectedDid =
+            'did:ebsi:znxntxQrN369GsNyjFjYb8fuvU7g3sJGyYGwMTcUGdzuy';
+        final tokenParameters = TokenParameters(aliceKey);
+        expect(tokenParameters.didKey, expectedDid);
+      });
     });
   });
 }

@@ -23,9 +23,11 @@ class _ManageDidEbsiPageState extends State<ManageDidEbsiPage> {
   void initState() {
     Future.delayed(Duration.zero, () async {
       final ebsi = Ebsi(Dio());
-      final mnemonic =
-          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-      did = await ebsi.getDidFromMnemonic(mnemonic!);
+      //final mnemonic =
+      // await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+      final String p256PrivateKey =
+          await getRandomP256PrivateKey(getSecureStorage);
+      did = await ebsi.getDidFromMnemonic(null, p256PrivateKey);
       setState(() {});
     });
     super.initState();
