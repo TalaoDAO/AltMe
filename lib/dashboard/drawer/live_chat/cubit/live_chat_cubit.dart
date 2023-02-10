@@ -31,7 +31,9 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     required this.dioClient,
   }) : super(
           const LiveChatState(),
-        );
+        ) {
+    _init();
+  }
 
   final SecureStorageProvider secureStorageProvider;
   final Client client;
@@ -174,7 +176,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     }
   }
 
-  Future<void> init() async {
+  Future<void> _init() async {
     try {
       emit(state.copyWith(status: AppStatus.loading));
       await _initClient();

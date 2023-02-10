@@ -1,16 +1,10 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/wallet/wallet.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart' hide Message, FileMessage;
-import 'package:matrix/matrix.dart' hide User;
-import 'package:secure_storage/secure_storage.dart';
-import 'package:uuid/uuid.dart';
 
 class LiveChatPage extends StatelessWidget {
   const LiveChatPage({
@@ -31,21 +25,8 @@ class LiveChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final clientId =
-        context.read<WalletCubit>().state.currentAccount?.walletAddress ??
-            const Uuid().v4();
-    return BlocProvider<LiveChatCubit>(
-      create: (_) => LiveChatCubit(
-        dioClient: DioClient('', Dio()),
-        didCubit: context.read<DIDCubit>(),
-        secureStorageProvider: getSecureStorage,
-        client: Client(
-          clientId,
-        ),
-      ),
-      child: LiveChatView(
-        hideAppBar: hideAppBar,
-      ),
+    return LiveChatView(
+      hideAppBar: hideAppBar,
     );
   }
 }
@@ -66,13 +47,11 @@ class _ContactUsViewState extends State<LiveChatView> {
   @override
   void initState() {
     liveChatCubit = context.read<LiveChatCubit>();
-    Future.microtask(liveChatCubit.init);
     super.initState();
   }
 
   @override
   void dispose() {
-    liveChatCubit.dispose();
     super.dispose();
   }
 
