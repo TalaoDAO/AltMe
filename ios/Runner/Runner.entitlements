@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:app.altme.io</string>
+		<string>applinks:app.talao.co</string>
 	</array>
 </dict>
 </plist>
