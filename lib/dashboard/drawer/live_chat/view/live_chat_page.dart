@@ -39,7 +39,6 @@ class LiveChatPage extends StatelessWidget {
         dioClient: DioClient('', Dio()),
         didCubit: context.read<DIDCubit>(),
         secureStorageProvider: getSecureStorage,
-        user: User(id: clientId),
         client: Client(
           clientId,
         ),
@@ -104,7 +103,7 @@ class _ContactUsViewState extends State<LiveChatView> {
               onAttachmentPressed: _handleAttachmentPressed,
               onMessageTap: _handleMessageTap,
               onPreviewDataFetched: liveChatCubit.handlePreviewDataFetched,
-              user: state.user,
+              user: state.user ?? const User(id: ''),
             );
           }
         },
