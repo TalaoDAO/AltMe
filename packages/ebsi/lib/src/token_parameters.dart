@@ -37,6 +37,9 @@ class TokenParameters {
 
   /// [alg] is computed from crv of [privateKey]'s fingerprint
   String get alg {
+    if (privateKey['alg'] != null) {
+      return privateKey['alg'] as String;
+    }
     return privateKey['crv'] == 'P-256' ? 'ES256' : 'ES256K';
   }
 
