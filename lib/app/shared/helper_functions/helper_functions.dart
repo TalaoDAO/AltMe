@@ -281,7 +281,7 @@ Future<String> getRandomP256PrivateKey(
     // Sort the keys in ascending order and remove alg
     final sortedJwk = Map.fromEntries(
       json.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
-    );
+    )..remove('keyOperations');
 
     await secureStorage.set(
       SecureStorageKeys.p256PrivateKey,
