@@ -54,7 +54,7 @@ class WhatIsNewDialog extends StatelessWidget {
             ),
             const SizedBox(height: Sizes.spaceXSmall),
             const NewFeature(
-              'Integration of Matrix.org to give users access to a decentralized chat in Altme',
+              'Integration of Matrix.org to give users access to a decentralized chat in Talao',
             ),
             const NewFeature(
               'Compliance with EBSI and support of new official ID documents (diplomas...)',
@@ -65,9 +65,6 @@ class WhatIsNewDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceXSmall),
-            const NewFeature(
-              'Integration of an on-ramp solution to buy crypto',
-            ),
             const NewFeature(
               'New features : Help center',
             ),
@@ -90,13 +87,7 @@ class WhatIsNewDialog extends StatelessWidget {
             ),
             const SizedBox(height: Sizes.spaceXSmall),
             const NewFeature(
-              'New Chainborn gaming membership card',
-            ),
-            const NewFeature(
               'Credential manifest input descriptors update',
-            ),
-            const NewFeature(
-              'Beacon pairing improvement',
             ),
             Text(
               '1.7.1',
@@ -108,10 +99,7 @@ class WhatIsNewDialog extends StatelessWidget {
               'Improve compatibility with more wallets',
             ),
             const NewFeature(
-              'Update Altme’s privacy, terms and conditions',
-            ),
-            const NewFeature(
-              'Update NFT detail screen information',
+              'Update Talao’s privacy, terms and conditions',
             ),
             const NewFeature(
               'New category for Professional credentials',
@@ -132,9 +120,6 @@ class WhatIsNewDialog extends StatelessWidget {
             ),
             const SizedBox(height: Sizes.spaceXSmall),
             const NewFeature(
-              'Support SBT (Soulbound Tokens)',
-            ),
-            const NewFeature(
               'New Drawer',
             ),
             const NewFeature(
@@ -142,15 +127,6 @@ class WhatIsNewDialog extends StatelessWidget {
             ),
             const NewFeature(
               'Bug fix',
-            ),
-            Text(
-              '1.5.7',
-              style: Theme.of(context).textTheme.defaultDialogSubtitle,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: Sizes.spaceXSmall),
-            const NewFeature(
-              'Upgrade Beacon behavior',
             ),
             Text(
               '1.5.6',
@@ -172,9 +148,6 @@ class WhatIsNewDialog extends StatelessWidget {
               'Al verification to get Over13 and Over18 pass',
             ),
             const NewFeature(
-              'Ethereum support',
-            ),
-            const NewFeature(
               'Privacy and terms update',
             ),
             const NewFeature(
@@ -187,9 +160,6 @@ class WhatIsNewDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceXSmall),
-            const NewFeature(
-              'Add Tezotopia membership card in Discover',
-            ),
             const NewFeature('Update design of credentials'),
             Text(
               '1.4.4',
@@ -198,30 +168,14 @@ class WhatIsNewDialog extends StatelessWidget {
             ),
             const SizedBox(height: Sizes.spaceXSmall),
             const NewFeature(
-              'Add the possibility to SEND an NFT to tezos blockchain address',
-            ),
-            const NewFeature(
               'Improvements of user experience',
             ),
-            Text(
-              '1.4.1',
-              style: Theme.of(context).textTheme.defaultDialogSubtitle,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: Sizes.spaceXSmall),
-            const NewFeature('New feature : NFT display in wallet'),
             Text(
               '1.3.7',
               style: Theme.of(context).textTheme.defaultDialogSubtitle,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceXSmall),
-            const NewFeature(
-              'FA1.2 and FA2 token support',
-            ),
-            const NewFeature(
-              'Beacon integration to connect to Tezos dApps',
-            ),
             const NewFeature(
               'Get multiple identity credentials after identity verification (OpenID for VC Issuance)',
             ),
@@ -249,9 +203,6 @@ class WhatIsNewDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceXSmall),
-            const NewFeature(
-              'USD value of tokens',
-            ),
             const NewFeature(
               'Multiple credentials presentation',
             ),
