@@ -215,6 +215,9 @@ class LiveChatCubit extends Cubit<LiveChatState> {
 
   void _subscribeToEventsOfRoom() {
     _onEventSubscription?.cancel();
+    client.onEvent.stream.listen((event) {
+      logger.i('event: ${event.toString()}');
+    });
     _onEventSubscription = client.onRoomState.stream.listen((Event event) {
       logger.i(
         'onEvent roomId: ${event.roomId} senderId: ${event.senderId}'

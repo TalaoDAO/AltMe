@@ -179,7 +179,7 @@ class App extends StatelessWidget {
             didCubit: context.read<DIDCubit>(),
             secureStorageProvider: getSecureStorage,
             client: Client(
-              const Uuid().v4(),
+              'AltMeUser',
             ),
           ),
         ),
