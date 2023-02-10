@@ -49,9 +49,10 @@ class TokenParameters {
     final tmpPublic = Map.from(publicJWK);
 
     /// this test is to be crv agnostic and respect https://www.rfc-editor.org/rfc/rfc7638
-    if (tmpPublic['crv'] != null) {
+    if (tmpPublic['crv'] == 'P-256K') {
       tmpPublic['crv'] = 'secp256k1';
     }
+
     final jsonString = jsonEncode(tmpPublic);
     final bytesToHash = utf8.encode(jsonString);
     final sha256Digest = sha256.convert(bytesToHash);
