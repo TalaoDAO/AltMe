@@ -179,7 +179,9 @@ class _DashboardViewState extends State<DashboardView> {
                   : state.selectedIndex == 1
                       ? l10n.discover
                       : state.selectedIndex == 2
-                          ? l10n.search
+                          ? Parameters.hasCryptoCallToAction
+                              ? l10n.buy
+                              : l10n.search
                           : '',
               scaffoldKey: scaffoldKey,
               padding: EdgeInsets.zero,
