@@ -53,6 +53,10 @@ class TokenParameters {
       tmpPublic['crv'] = 'secp256k1';
     }
 
+    tmpPublic
+      ..removeWhere((key, value) => key == 'use')
+      ..removeWhere((key, value) => key == 'alg');
+
     final jsonString = jsonEncode(tmpPublic);
     final bytesToHash = utf8.encode(jsonString);
     final sha256Digest = sha256.convert(bytesToHash);
