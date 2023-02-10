@@ -75,14 +75,29 @@ class _ContactUsViewState extends State<LiveChatView> {
               child: Text(l10n.somethingsWentWrongTryAgainLater),
             );
           } else {
-            return Chat(
-              theme: const DarkChatTheme(),
-              messages: state.messages,
-              onSendPressed: liveChatCubit.onSendPressed,
-              onAttachmentPressed: _handleAttachmentPressed,
-              onMessageTap: _handleMessageTap,
-              onPreviewDataFetched: liveChatCubit.handlePreviewDataFetched,
-              user: state.user ?? const User(id: ''),
+            return Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Chat(
+                  theme: const DarkChatTheme(),
+                  messages: state.messages,
+                  onSendPressed: liveChatCubit.onSendPressed,
+                  onAttachmentPressed: _handleAttachmentPressed,
+                  onMessageTap: _handleMessageTap,
+                  onPreviewDataFetched: liveChatCubit.handlePreviewDataFetched,
+                  user: state.user ?? const User(id: ''),
+                ),
+                if (state.messages.isEmpty)
+                  BackgroundCard(
+                    padding: const EdgeInsets.all(Sizes.spaceNormal),
+                    margin: const EdgeInsets.all(Sizes.spaceNormal),
+                    child: Text(
+                      l10n.supportChatWelcomeMessage,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                  ),
+              ],
             );
           }
         },
