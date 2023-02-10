@@ -37,6 +37,9 @@ class TokenParameters {
 
   /// [alg] is computed from crv of [privateKey]'s fingerprint
   String get alg {
+    if (privateKey['alg'] != null) {
+      return privateKey['alg'] as String;
+    }
     return privateKey['crv'] == 'P-256' ? 'ES256' : 'ES256K';
   }
 
@@ -52,6 +55,10 @@ class TokenParameters {
     if (tmpPublic['crv'] == 'P-256K') {
       tmpPublic['crv'] = 'secp256k1';
     }
+
+    tmpPublic
+      ..removeWhere((key, value) => key == 'use')
+      ..removeWhere((key, value) => key == 'alg');
 
     final jsonString = jsonEncode(tmpPublic);
     final bytesToHash = utf8.encode(jsonString);

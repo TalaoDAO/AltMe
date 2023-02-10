@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
+import 'package:secure_storage/secure_storage.dart';
 import 'package:uni_links/uni_links.dart';
 
 bool _initialUriIsHandled = false;
@@ -70,17 +71,20 @@ class _SplashViewState extends State<SplashView> {
           if (url == Parameters.ebsiUniversalLink) {
             final client = Dio();
             final ebsi = Ebsi(client);
-            final mnemonic = await secure_storage.getSecureStorage.get(
-              SecureStorageKeys.ssiMnemonic,
-            );
+            // final mnemonic = await secure_storage.getSecureStorage.get(
+            //   SecureStorageKeys.ssiMnemonic,
+            // );
             var credentialUri = uri;
             if (uri.queryParameters['uri'] != null) {
               final credentialUrl = uri.queryParameters['uri'];
               credentialUri = Uri.parse(credentialUrl!);
             }
+            final String p256PrivateKey =
+                await getRandomP256PrivateKey(getSecureStorage);
             final dynamic encodedCredentialFromEbsi = await ebsi.getCredential(
               credentialUri,
-              mnemonic!,
+              null,
+              p256PrivateKey,
             );
             await addEbsiCredential(
               encodedCredentialFromEbsi,
