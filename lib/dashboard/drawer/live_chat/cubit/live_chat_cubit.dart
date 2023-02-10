@@ -249,7 +249,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
               id: const Uuid().v4(),
               name: event.body,
               size: event.content['info']['size'] as num,
-              uri: event.content['url'] as String,
+              uri: _getUrlFromUri(event.content['url'] as String),
               status: _mapEventStatusToMessageStatus(event.status),
               createdAt: event.originServerTs.millisecondsSinceEpoch,
               author: User(
@@ -261,7 +261,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
               id: const Uuid().v4(),
               name: event.body,
               size: event.content['info']['size'] as num,
-              uri: event.content['url'] as String,
+              uri: _getUrlFromUri(event.content['url'] as String),
               status: _mapEventStatusToMessageStatus(event.status),
               createdAt: event.originServerTs.millisecondsSinceEpoch,
               author: User(
@@ -276,7 +276,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
               ),
               name: event.body,
               size: event.content['info']['size'] as num,
-              uri: event.content['url'] as String,
+              uri: _getUrlFromUri(event.content['url'] as String),
               status: _mapEventStatusToMessageStatus(event.status),
               createdAt: event.originServerTs.millisecondsSinceEpoch,
               author: User(
@@ -419,6 +419,10 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     await client.logout();
     await client.dispose();
     await _onEventSubscription?.cancel();
+  }
+
+  String _getUrlFromUri(String uri) {
+    return '${Urls.matrixHomeServer}/_matrix/media/v3/thumbnail/${Urls.matrixHomeServer.replaceAll('https://', '')}/${uri.split('/').last}?width=500&height=500';
   }
 
   Status _mapEventStatusToMessageStatus(EventStatus status) {
