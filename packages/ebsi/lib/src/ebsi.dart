@@ -28,9 +28,7 @@ class Ebsi {
   final Dio client;
 
   /// create JWK from mnemonic
-  Future<String> privateKeyFromMnemonic({
-    required String mnemonic,
-  }) async {
+  Future<String> privateKeyFromMnemonic({required String mnemonic}) async {
     final seed = bip393.mnemonicToSeed(mnemonic);
 
     final rootKey = bip32.BIP32.fromSeed(seed); //Instance of 'BIP32'
@@ -48,9 +46,7 @@ class Ebsi {
   }
 
   /// create JWK from seed
-  Map<String, String> jwkFromSeed({
-    required Uint8List seedBytes,
-  }) {
+  Map<String, String> jwkFromSeed({required Uint8List seedBytes}) {
     // generate JWK for secp256k from bip39 mnemonic
     // see https://iancoleman.io/bip39/
     final epk = HEX.encode(seedBytes);
@@ -94,7 +90,7 @@ class Ebsi {
     return false;
   }
 
-  ///
+  /// getAuthorizationUriForIssuer
   Future<Uri> getAuthorizationUriForIssuer(
     String openIdRequest,
     String redirectUrl,
