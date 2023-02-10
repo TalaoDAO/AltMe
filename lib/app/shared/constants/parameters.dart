@@ -27,7 +27,7 @@ class Parameters {
   );
 
   static const ebsiUniversalLink =
-      'https://app.altme.io/app/download/credential';
+      'https://app.talao.co/app/download/credential';
 
   static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 }
