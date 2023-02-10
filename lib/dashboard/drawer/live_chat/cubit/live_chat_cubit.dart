@@ -247,12 +247,11 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           } else if (event.messageType == 'm.image') {
             message = ImageMessage(
               id: const Uuid().v4(),
-              remoteId: event.eventId,
-              name: event.content['filename'] as String,
+              name: event.body,
               size: event.content['info']['size'] as num,
               uri: event.content['url'] as String,
               status: _mapEventStatusToMessageStatus(event.status),
-              createdAt: DateTime.now().millisecondsSinceEpoch,
+              createdAt: event.originServerTs.millisecondsSinceEpoch,
               author: User(
                 id: event.senderId,
               ),
@@ -260,12 +259,36 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           } else if (event.messageType == 'm.file') {
             message = FileMessage(
               id: const Uuid().v4(),
-              remoteId: event.eventId,
-              name: event.content['filename'] as String,
+              name: event.body,
               size: event.content['info']['size'] as num,
               uri: event.content['url'] as String,
               status: _mapEventStatusToMessageStatus(event.status),
-              createdAt: DateTime.now().millisecondsSinceEpoch,
+              createdAt: event.originServerTs.millisecondsSinceEpoch,
+              author: User(
+                id: event.senderId,
+              ),
+            );
+          } else if (event.messageType == 'm.audio') {
+            message = AudioMessage(
+              id: const Uuid().v4(),
+              duration: Duration(
+                milliseconds: event.content['info']['duration'] as int,
+              ),
+              name: event.body,
+              size: event.content['info']['size'] as num,
+              uri: event.content['url'] as String,
+              status: _mapEventStatusToMessageStatus(event.status),
+              createdAt: event.originServerTs.millisecondsSinceEpoch,
+              author: User(
+                id: event.senderId,
+              ),
+            );
+          } else {
+            message = TextMessage(
+              id: const Uuid().v4(),
+              text: event.text,
+              createdAt: event.originServerTs.millisecondsSinceEpoch,
+              status: _mapEventStatusToMessageStatus(event.status),
               author: User(
                 id: event.senderId,
               ),
