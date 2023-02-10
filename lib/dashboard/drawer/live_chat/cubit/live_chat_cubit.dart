@@ -4,7 +4,9 @@ import 'dart:io';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bloc/bloc.dart';
+import 'package:crypto/crypto.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +34,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   }) : super(
           const LiveChatState(),
         ) {
-    _init();
+    init();
   }
 
   final SecureStorageProvider secureStorageProvider;
@@ -177,24 +179,28 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     }
   }
 
-  Future<void> _init() async {
+  Future<void> init() async {
     try {
       emit(state.copyWith(status: AppStatus.loading));
       await _initClient();
       final username = didCubit.state.did!.replaceAll(':', '-');
-      final password = await secureStorageProvider.get(username);
+      final isUserRegisteredMatrix = await secureStorageProvider
+          .get(SecureStorageKeys.isUserRegisteredMatrix);
       late String userId;
-      if (password == null || password.isEmpty) {
-        final newPassword = await _register(username: username);
-        await secureStorageProvider.set(username, newPassword);
+      if (isUserRegisteredMatrix != 'true') {
+        await _register(username: username);
+        await secureStorageProvider.set(
+          SecureStorageKeys.isUserRegisteredMatrix,
+          true.toString(),
+        );
         userId = await _login(
           username: username,
-          password: newPassword,
+          password: await _getPasswordForDID(),
         );
       } else {
         userId = await _login(
           username: username,
-          password: password,
+          password: await _getPasswordForDID(),
         );
       }
       _roomId = await _createRoomAndInviteSupport(
@@ -372,7 +378,15 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     return nonce;
   }
 
-  Future<String> _register({
+  Future<String> _getPasswordForDID() async {
+    final ssiKey = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
+    final bytesToHash = utf8.encode(ssiKey);
+    final sha256Digest = sha256.convert(bytesToHash);
+    final password = sha256Digest.toString();
+    return password;
+  }
+
+  Future<void> _register({
     required String username,
   }) async {
     final did = didCubit.state.did!;
@@ -380,14 +394,13 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     final didAuth = await _getDidAuth(did, nonce);
     await dotenv.load();
     final apiKey = dotenv.get('TALAO_MATRIX_API_KEY');
-    final password = const Uuid().v4();
+    final password = await _getPasswordForDID();
 
     final data = <String, dynamic>{
       'username': did,
       'password': password,
       'didAuth': didAuth,
     };
-
     final response = await dioClient.post(
       Urls.registerToMatrix,
       headers: <String, dynamic>{
@@ -398,8 +411,6 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     );
 
     logger.i('regester response: $response');
-
-    return password;
   }
 
   Future<String> _login({

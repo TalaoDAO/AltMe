@@ -109,6 +109,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
         if (state.status == AppStatus.success) {
           /// Removes every stack except first route (splashPage)
           if (widget.isFromOnboarding) {
+            context.read<LiveChatCubit>().init();
             Navigator.pushAndRemoveUntil<void>(
               context,
               WalletReadyPage.route(),

@@ -660,6 +660,11 @@ class WalletCubit extends Cubit<WalletState> {
       );
     }
 
+    ///Matrix
+    await secureStorageProvider
+        .delete(SecureStorageKeys.isUserRegisteredMatrix);
+    await secureStorageProvider.delete(SecureStorageKeys.supportRoomId);
+
     /// ssi
     await secureStorageProvider.delete(SecureStorageKeys.ssiMnemonic);
     await secureStorageProvider.delete(SecureStorageKeys.ssiKey);

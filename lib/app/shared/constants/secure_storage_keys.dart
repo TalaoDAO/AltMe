@@ -1,4 +1,5 @@
 class SecureStorageKeys {
+  static const String isUserRegisteredMatrix = 'isUserRegisteredMatrix';
   static const String supportRoomId = 'MatrixSupportRoomId';
   static const String isFirstSelectedTokenContracts =
       'isFirstSelectedTokenContracts';
