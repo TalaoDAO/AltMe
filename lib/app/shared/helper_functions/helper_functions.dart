@@ -8,6 +8,7 @@ import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -263,4 +264,32 @@ Future<String> web3RpcMainnetInfuraURL() async {
   final String infuraApiKey = dotenv.get('INFURA_API_KEY');
   const String prefixUrl = Parameters.web3RpcMainnetUrl;
   return '$prefixUrl$infuraApiKey';
+}
+
+Future<String> getRandomP256PrivateKey(
+  SecureStorageProvider secureStorage,
+) async {
+  final String? p256PrivateKey = await secureStorage.get(
+    SecureStorageKeys.p256PrivateKey,
+  );
+
+  if (p256PrivateKey == null) {
+    final jwk = JsonWebKey.generate('ES256');
+
+    final json = jwk.toJson();
+
+    // Sort the keys in ascending order and remove alg
+    final sortedJwk = Map.fromEntries(
+      json.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
+    )..remove('alg');
+
+    await secureStorage.set(
+      SecureStorageKeys.p256PrivateKey,
+      jsonEncode(sortedJwk),
+    );
+
+    return jsonEncode(sortedJwk);
+  } else {
+    return p256PrivateKey;
+  }
 }

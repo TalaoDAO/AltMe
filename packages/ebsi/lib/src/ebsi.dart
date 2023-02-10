@@ -186,7 +186,8 @@ class Ebsi {
   /// Retreive credential_type from url
   Future<dynamic> getCredential(
     Uri credentialRequestUri,
-    String mnemonic,
+    String? mnemonic,
+    String? privateKey,
   ) async {
     final issuer = getIssuer(credentialRequestUri);
 
@@ -204,6 +205,7 @@ class Ebsi {
     final credentialData = await buildCredentialData(
       response as Map<String, dynamic>,
       mnemonic,
+      privateKey,
       issuer,
       credentialRequestUri,
     );
@@ -270,15 +272,32 @@ class Ebsi {
     return tokenEndPoint;
   }
 
+  Future<Map<String, dynamic>> getPrivateKey(
+    String? mnemonic,
+    String? privateKey,
+  ) async {
+    late Map<String, dynamic> private;
+
+    if (mnemonic != null) {
+      private = jsonDecode(await privateKeyFromMnemonic(mnemonic: mnemonic))
+          as Map<String, dynamic>;
+    } else {
+      private = jsonDecode(privateKey!) as Map<String, dynamic>;
+    }
+
+    return private;
+  }
+
   Future<Map<String, dynamic>> buildCredentialData(
     Map<String, dynamic> response,
-    String mnemonic,
+    String? mnemonic,
+    String? privateKey,
     String issuer,
     Uri credentialRequestUri,
   ) async {
     final nonce = response['c_nonce'] as String;
-    final private = jsonDecode(await privateKeyFromMnemonic(mnemonic: mnemonic))
-        as Map<String, dynamic>;
+
+    final private = await getPrivateKey(mnemonic, privateKey);
 
     final issuerTokenParameters = IssuerTokenParameters(private, issuer);
     final jwt = await getIssuerJwt(issuerTokenParameters, nonce);
@@ -353,14 +372,13 @@ class Ebsi {
   Future<void> sendPresentation(
     Uri uri,
     List<String> credentialsToBePresented,
-    String mnemonic,
+    String? mnemonic,
+    String? privateKey,
   ) async {
-    final privateKey =
-        jsonDecode(await privateKeyFromMnemonic(mnemonic: mnemonic))
-            as Map<String, dynamic>;
+    final private = await getPrivateKey(mnemonic, privateKey);
 
     final tokenParameters = VerifierTokenParameters(
-      privateKey,
+      private,
       uri,
       credentialsToBePresented,
     );
@@ -476,14 +494,13 @@ class Ebsi {
     return verifierIdJwt;
   }
 
-  Future<String> getDidFromMnemonic(String mnemonic) async {
-    final privateKey =
-        jsonDecode(await privateKeyFromMnemonic(mnemonic: mnemonic))
-            as Map<String, dynamic>;
+  Future<String> getDidFromMnemonic(
+    String? mnemonic,
+    String? privateKey,
+  ) async {
+    final private = await getPrivateKey(mnemonic, privateKey);
 
-    final tokenParameters = TokenParameters(
-      privateKey,
-    );
+    final tokenParameters = TokenParameters(private);
     return tokenParameters.didKey;
   }
 }

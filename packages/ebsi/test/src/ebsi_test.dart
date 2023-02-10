@@ -240,6 +240,7 @@ void main() {
       final credential = await ebsi.getCredential(
         credentialRequest,
         mnemonic,
+        null,
       );
       expect(jsonEncode(credential), credentialRequestResponse);
     });
