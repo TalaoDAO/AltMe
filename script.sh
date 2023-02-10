@@ -59,7 +59,7 @@ then
   echo "Make sure you are in right branch"
   fvm flutter build appbundle --flavor "production" --target "lib/main_production.dart"
   cd android 
-  fastlane beta
+  fastlane deploy
   echo "app bundle deployed on internal testing track"
 
 elif [[ "$*" == *-ios* ]]; 
@@ -71,7 +71,7 @@ then
   echo "Make sure you are in right branch"
   fvm flutter build ios --release --flavor "production" --target "lib/main_production.dart"
   cd ios 
-  fastlane deploy
+  fastlane beta
 elif [[ "$*" == *-pub* ]];
 then
 pub
