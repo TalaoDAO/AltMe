@@ -73,6 +73,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
           );
         }
         if (state.status == AppStatus.success) {
+          context.read<LiveChatCubit>().init();
           Navigator.pushAndRemoveUntil<void>(
             context,
             WalletReadyPage.route(),
