@@ -94,7 +94,7 @@ class _ContactUsViewState extends State<LiveChatView> {
                     child: Text(
                       l10n.supportChatWelcomeMessage,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
               ],
