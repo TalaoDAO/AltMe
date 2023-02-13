@@ -28,7 +28,6 @@ class NewFeature extends StatelessWidget {
             child: Text(
               feature,
               style: Theme.of(context).textTheme.defaultDialogBody,
-              textAlign: TextAlign.justify,
             ),
           ),
         ],
