@@ -54,10 +54,10 @@ class WhatIsNewDialog extends StatelessWidget {
             ),
             const SizedBox(height: Sizes.spaceXSmall),
             const NewFeature(
-              'Integration of Matrix.org to give users access to a decentralized chat in Altme',
+              'Integration of Matrix.org to give users access to a decentralized chat in Altme', // ignore: lines_longer_than_80_chars
             ),
             const NewFeature(
-              'Compliance with EBSI and support of new official ID documents (diplomas...)',
+              'Compliance with EBSI and support of new official ID documents (diplomas...)', // ignore: lines_longer_than_80_chars
             ),
             Text(
               '1.8.13',
@@ -223,7 +223,7 @@ class WhatIsNewDialog extends StatelessWidget {
               'Beacon integration to connect to Tezos dApps',
             ),
             const NewFeature(
-              'Get multiple identity credentials after identity verification (OpenID for VC Issuance)',
+              'Get multiple identity credentials after identity verification (OpenID for VC Issuance)', // ignore: lines_longer_than_80_chars
             ),
             const NewFeature(
               'Choose card categories to display',

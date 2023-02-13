@@ -113,7 +113,9 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                       titleAlignment: Alignment.topCenter,
                       titleTrailing: const WhiteCloseButton(),
                       padding: const EdgeInsets.symmetric(
-                          vertical: 24, horizontal: 16),
+                        vertical: 24,
+                        horizontal: 16,
+                      ),
                       body: Column(
                         children: <Widget>[
                           Text(
@@ -168,7 +170,8 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                           presentationDefinition
                                                   .inputDescriptors[
                                               inputDescriptorIndex];
-                                      //no sure if I'm correct to take first field
+                                      // TODO(all): no sure if I'm correct to
+                                      // take first field
                                       //to check optional
                                       final isOptional = inputDescriptor
                                               .constraints

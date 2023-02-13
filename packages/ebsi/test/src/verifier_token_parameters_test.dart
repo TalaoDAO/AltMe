@@ -64,7 +64,7 @@ void main() {
     //   });
 
     //   test('didKey', () {
-    //     const didKey = 'did:ebsi:zo4FR1YfAKFP3Q6dvqhxcXxnfeDiJDP97kmnqhyAUSACj';
+    //     const didKey = 'did:ebsi:zo4FR1YfAKFP3Q6dvqhxcXxnfeDiJDP97kmnqhyAUSACj'; // ignore: lines_longer_than_80_chars
     //     expect(verifierTokenParameters.didKey, didKey);
     //   });
 

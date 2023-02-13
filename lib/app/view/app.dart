@@ -32,7 +32,6 @@ import 'package:key_generator/key_generator.dart';
 import 'package:matrix/matrix.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:secure_storage/secure_storage.dart';
-import 'package:uuid/uuid.dart';
 
 class App extends StatelessWidget {
   const App({super.key, this.flavorMode = FlavorMode.production});

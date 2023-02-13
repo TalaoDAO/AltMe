@@ -448,7 +448,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       emit(state.loading());
 
       //final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
-      final rpcUrl = await web3RpcMainnetInfuraURL();
+      //final rpcUrl = await web3RpcMainnetInfuraURL();
       final amount = tokenAmount *
           double.parse(
             1.toStringAsFixed(int.parse(token.decimals)).replaceAll('.', ''),

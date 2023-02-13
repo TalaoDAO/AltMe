@@ -145,7 +145,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           // titleTrailing: IconButton(
           //   onPressed: () {
           //     Navigator.of(context)
-          //         .push<void>(CredentialQrPage.route(widget.credentialModel));
+          //         .push<void>(CredentialQrPage.route(widget.credentialModel)); // ignore: lines_longer_than_80_chars
           //   },
           //   icon: Icon(
           //     Icons.qr_code,

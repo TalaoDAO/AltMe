@@ -58,7 +58,7 @@ class VerifierTokenParameters extends TokenParameters {
   // @override
   // String get kid {
   //   const kid =
-  //       '''did:ebsi:zo9FR1YfAKFP3Q6dvrhxcXxnfeDiJDP97kmnqhyAUSACj#Cgcg1y9xj9uWFw56PMc29XBd9EReixzvnftBz8JwQFiB''';
+  //       '''did:ebsi:zo9FR1YfAKFP3Q6dvrhxcXxnfeDiJDP97kmnqhyAUSACj#Cgcg1y9xj9uWFw56PMc29XBd9EReixzvnftBz8JwQFiB''';// ignore: lines_longer_than_80_chars
 
   //   return kid;
   // }

@@ -148,7 +148,7 @@ class MWeb3Client {
       //     .take(1)
       //     .listen((event) {
       //   final decoded =
-      //       transferEvent.decodeResults(event.topics ?? [], event.data ?? '');
+      //       transferEvent.decodeResults(event.topics ?? [], event.data ?? ''); // ignore: lines_longer_than_80_chars
 
       //   final from = decoded[0] as EthereumAddress;
       //   final to = decoded[1] as EthereumAddress;

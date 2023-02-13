@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/drawer/drawer.dart';
-import 'package:altme/dashboard/drawer/live_chat/cubit/live_chat_cubit.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
