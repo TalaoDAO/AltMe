@@ -1,3 +1,4 @@
+/// credential_manifest
 library credential_manifest;
 
 export 'src/credential_manifest.dart';

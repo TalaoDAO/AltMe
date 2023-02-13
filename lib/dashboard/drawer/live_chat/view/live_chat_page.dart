@@ -4,7 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart' hide Message, FileMessage;
+import 'package:flutter_chat_ui/flutter_chat_ui.dart' hide FileMessage, Message;
 
 class LiveChatPage extends StatelessWidget {
   const LiveChatPage({

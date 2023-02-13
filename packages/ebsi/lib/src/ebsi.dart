@@ -399,7 +399,7 @@ class Ebsi {
       'vp_token': vpToken
     };
     try {
-      final presentationResponse = await client.post<dynamic>(
+      await client.post<dynamic>(
         uri.queryParameters['redirect_uri']!,
         options: Options(headers: responseHeaders),
         data: responseData,
