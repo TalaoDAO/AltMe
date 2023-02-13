@@ -102,6 +102,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.fantomPooAddress:
         case CredentialSubjectType.polygonPooAddress:
         case CredentialSubjectType.binancePooAddress:
+        case CredentialSubjectType.euDiplomaCard:
           break;
       }
 
@@ -292,6 +293,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.fantomPooAddress:
           case CredentialSubjectType.polygonPooAddress:
           case CredentialSubjectType.binancePooAddress:
+          case CredentialSubjectType.euDiplomaCard:
             break;
         }
 
@@ -593,6 +595,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.walletCredential:
           case CredentialSubjectType.bloometaPass:
           case CredentialSubjectType.dogamiPass:
+          case CredentialSubjectType.euDiplomaCard:
           case CredentialSubjectType.troopezPass:
           case CredentialSubjectType.bunnyPass:
           case CredentialSubjectType.pigsPass:
