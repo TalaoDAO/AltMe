@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AccountPrivateKeyPage extends StatefulWidget {
   const AccountPrivateKeyPage({
@@ -80,6 +81,20 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
                       decoration: TextDecoration.underline,
                     ),
               ),
+              const SizedBox(height: Sizes.spaceXLarge),
+              CopyButton(
+                onTap: () async {
+                  await Clipboard.setData(
+                    ClipboardData(text: widget.privateKey),
+                  );
+                  AlertMessage.showStateMessage(
+                    context: context,
+                    stateMessage: StateMessage.success(
+                      stringMessage: l10n.copiedToClipboard,
+                    ),
+                  );
+                },
+              ),
               Expanded(
                 child: Center(
                   child: AnimatedBuilder(
@@ -94,24 +109,6 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
                   ),
                 ),
               ),
-              // const SizedBox(
-              //   height: Sizes.spaceXLarge,
-              // ),
-              // CopyButton(
-              //   onTap: () async {
-              //     await Clipboard.setData(
-              //       ClipboardData(
-              //         text: privateKey,
-              //       ),
-              //     );
-              //     AlertMessage.showStateMessage(
-              //       context: context,
-              //       stateMessage: StateMessage.success(
-              //         stringMessage: l10n.copiedToClipboard,
-              //       ),
-              //     );
-              //   },
-              // ),
             ],
           ),
         ),

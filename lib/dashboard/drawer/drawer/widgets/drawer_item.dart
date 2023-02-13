@@ -32,9 +32,11 @@ class DrawerItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.drawerItem,
+            Expanded(
+              child: MyText(
+                title,
+                style: Theme.of(context).textTheme.drawerItem,
+              ),
             ),
             if (trailing != null)
               trailing!
