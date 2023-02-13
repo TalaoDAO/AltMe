@@ -48,19 +48,19 @@ class TokenParameters {
     /// we use crv P-256K in the rest of the package to ensure compatibility
     /// with jose dart package. In fact our crv is secp256k1 wich change the
     /// fingerprint
-    // ignore: inference_failure_on_instance_creation
-    final tmpPublic = Map.from(publicJWK);
 
-    /// this test is to be crv agnostic and respect https://www.rfc-editor.org/rfc/rfc7638
-    if (tmpPublic['crv'] == 'P-256K') {
-      tmpPublic['crv'] = 'secp256k1';
-    }
-
-    tmpPublic
+    final sortedJwk = Map.fromEntries(
+      publicJWK.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)),
+    )
       ..removeWhere((key, value) => key == 'use')
       ..removeWhere((key, value) => key == 'alg');
 
-    final jsonString = jsonEncode(tmpPublic);
+    /// this test is to be crv agnostic and respect https://www.rfc-editor.org/rfc/rfc7638
+    if (sortedJwk['crv'] == 'P-256K') {
+      sortedJwk['crv'] = 'secp256k1';
+    }
+
+    final jsonString = jsonEncode(sortedJwk);
     final bytesToHash = utf8.encode(jsonString);
     final sha256Digest = sha256.convert(bytesToHash);
 
