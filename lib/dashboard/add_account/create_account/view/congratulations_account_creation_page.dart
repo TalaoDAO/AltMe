@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:lottie/lottie.dart';
 //import 'package:confetti/confetti.dart';
 
 class CongratulationsAccountCreationPage extends StatelessWidget {
@@ -65,38 +66,43 @@ class CongratulationsAccountCreationView extends StatelessWidget {
 
     return BasePage(
       scrollView: false,
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const AltMeLogo(
-              size: Sizes.logo2XLarge,
+      body: Stack(
+        children: [
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const AltMeLogo(
+                  size: Sizes.logo2XLarge,
+                ),
+                const SizedBox(
+                  height: Sizes.spaceNormal,
+                ),
+                Text(
+                  l10n.congratulations,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(
+                  height: Sizes.spaceNormal,
+                ),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.normal,
+                        color: Theme.of(context).colorScheme.onTertiary,
+                      ),
+                ),
+                const SizedBox(
+                  height: Sizes.space3XLarge,
+                ),
+              ],
             ),
-            const SizedBox(
-              height: Sizes.spaceNormal,
-            ),
-            Text(
-              l10n.congratulations,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(
-              height: Sizes.spaceNormal,
-            ),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.normal,
-                    color: Theme.of(context).colorScheme.onTertiary,
-                  ),
-            ),
-            const SizedBox(
-              height: Sizes.space3XLarge,
-            ),
-          ],
-        ),
+          ),
+          Lottie.asset('assets/lottie/confetti.html',repeat: true),
+        ],
       ),
       navigation: Padding(
         padding: const EdgeInsets.all(
