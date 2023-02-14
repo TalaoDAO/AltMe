@@ -150,7 +150,9 @@ class NftCubit extends Cubit<NftState> {
       final nftList = List<EthereumNftModel>.from(
         result.map<EthereumNftModel>((dynamic e) {
           return EthereumNftModel(
-            name: e['name'] as String,
+            name: (e['name'] as String? ??
+                    e['normalized_metadata']['name'] as String?) ??
+                '',
             symbol: e['symbol'] as String?,
             description: e['normalized_metadata']['description'] as String?,
             tokenId: e['token_id'] as String,
