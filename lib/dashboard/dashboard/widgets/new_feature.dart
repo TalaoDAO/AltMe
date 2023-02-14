@@ -15,11 +15,11 @@ class NewFeature extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 3),
+          const Padding(
+            padding: EdgeInsets.only(top: 3),
             child: Icon(
               Icons.check_circle,
-              color: Theme.of(context).colorScheme.primary,
+              color: Colors.white,
               size: 20,
             ),
           ),
@@ -27,7 +27,10 @@ class NewFeature extends StatelessWidget {
           Expanded(
             child: Text(
               feature,
-              style: Theme.of(context).textTheme.defaultDialogBody,
+              textAlign: TextAlign.left,
+              style: Theme.of(context).textTheme.defaultDialogBody.copyWith(
+                    color: Colors.white,
+                  ),
             ),
           ),
         ],

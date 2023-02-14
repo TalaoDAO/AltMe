@@ -112,6 +112,8 @@ extension CustomColorScheme on ColorScheme {
 
   Color get greyText => const Color(0xFFD1CCE3);
 
+  Color get whatsNewPopupBackground => const Color(0xFF271C38);
+
   Color get cardHighlighted => const Color(0xFF251F38);
 
   Color get defaultDialogDark => const Color(0xFF322643);
@@ -682,8 +684,8 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get defaultDialogBody => GoogleFonts.nunito(
-        fontSize: 15,
-        fontWeight: FontWeight.w600,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
         color: const Color(0xFF5F556F),
       );
 
