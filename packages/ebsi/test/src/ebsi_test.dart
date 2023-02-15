@@ -300,4 +300,26 @@ void main() {
     // ignore: unused_local_variable
     final token = jwt.sign(SecretKey('secret passphrase'));
   });
+
+  // test('generateToken', () {
+  //   final jwk = {
+  //     'kty': 'OKP',
+  //     'crv': 'Ed25519',
+  //     'd': '-_9OD-PMHKE2mFKEVH5R1vDhEMimtXPUX-2w1Xa0hQ0=',
+  //     'x': '1tknP1Fx-YIQBzw3xXtCwLGgYoTb-nSsNn-k9uzWpuw=',
+  //   };
+
+  //   final vpTokenPayload = {
+  //     'iss': 'did:ebsi:zrDzYQPDztwjQ8HdXto1B4FVB14fxoiNawZd8eyEuhR7K',
+  //     'nonce': '8dd8d00a-ad17-11ed-9fe9-0a1628958560',
+  //     'iat': '1676455223753366',
+  //     'aud': 'https://talao.co/sandbox/ebsi/issuer/vgvghylozl',
+  //   };
+
+  //   final ebsi = Ebsi(client);
+
+  //   final tokenParameters = TokenParameters(jwk);
+  //   final token = ebsi.generateToken(vpTokenPayload, tokenParameters);
+
+  // });
 }
