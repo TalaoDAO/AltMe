@@ -48,8 +48,8 @@ class CredentialBaseWidget extends StatelessWidget {
               LayoutId(
                 id: 'value',
                 child: FractionallySizedBox(
-                  widthFactor: 0.65,
-                  heightFactor: 0.12,
+                  widthFactor: 0.8,
+                  heightFactor: 0.2,
                   child: MyText(
                     value!,
                     style: Theme.of(context).textTheme.identitiyBaseBoldText,

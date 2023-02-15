@@ -131,6 +131,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                 .credentialSubjectModel.credentialSubjectType ==
             CredentialSubjectType.linkedInCard;
 
+        final bool isEUDiplomaCard = widget.credentialModel.credentialPreview
+                .credentialSubjectModel.credentialSubjectType ==
+            CredentialSubjectType.euDiplomaCard;
+
         final bool disAllowDelete = widget.credentialModel.credentialPreview
                     .credentialSubjectModel.credentialSubjectType ==
                 CredentialSubjectType.walletCredential ||
@@ -181,6 +185,12 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                 ),
                               );
                             } else {
+                              if (isEUDiplomaCard) {
+                                /// removing type that was added in add_ebsi_credential.dart // ignore: lines_longer_than_80_chars
+                                widget.credentialModel.data['credentialSubject']
+                                    .remove('type');
+                              }
+
                               final box =
                                   context.findRenderObject() as RenderBox?;
                               final subject = l10n.shareWith;

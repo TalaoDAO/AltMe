@@ -76,6 +76,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.binancePooAddress:
       case CredentialSubjectType.tezosPooAddress:
       case CredentialSubjectType.pcdsAgentCertificate:
+      case CredentialSubjectType.euDiplomaCard:
         return Colors.white;
     }
   }
@@ -143,6 +144,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.binancePooAddress:
       case CredentialSubjectType.tezosPooAddress:
       case CredentialSubjectType.pcdsAgentCertificate:
+      case CredentialSubjectType.euDiplomaCard:
         return Icons.perm_identity;
     }
   }
@@ -262,6 +264,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'AragoOver18';
       case CredentialSubjectType.pcdsAgentCertificate:
         return 'PCDSAgentCertificate';
+      case CredentialSubjectType.euDiplomaCard:
+        return 'https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -373,6 +377,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return BinancePooAddressModel.fromJson(json);
       case CredentialSubjectType.tezosPooAddress:
         return TezosPooAddressModel.fromJson(json);
+      case CredentialSubjectType.euDiplomaCard:
+        return EUDiplomaCardModel.fromJson(json);
     }
   }
 

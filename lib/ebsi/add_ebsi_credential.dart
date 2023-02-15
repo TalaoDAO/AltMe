@@ -20,6 +20,11 @@ Future<void> addEbsiCredential(
       Map<String, dynamic>.from(credentialFromEbsi);
   newCredential['jwt'] = encodedCredentialFromEbsi['credential'];
   newCredential['credentialPreview'] = credentialFromEbsi;
+
+  /// added id as type to recognise the card
+  newCredential['credentialPreview']['credentialSubject']['type'] =
+      credentialFromEbsi['credentialSchema']['id'];
+
   final String credentialSchema = uri.queryParameters['credential_type'] ?? '';
   final issuerAndCode = uri.queryParameters['issuer'];
   final issuerAndCodeUri = Uri.parse(issuerAndCode!);
