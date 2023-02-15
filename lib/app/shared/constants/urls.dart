@@ -58,6 +58,10 @@ class Urls {
   //Moralis
   static const moralisBaseUrl = 'https://deep-index.moralis.io/api/v2';
 
+  //Infura
+  static const infuraBaseUrl =
+      'https://mainnet.infura.io/v3/';
+
   static const objktUrl = 'https://objkt.com/';
   static const raribleUrl = 'https://rarible.com/';
 
@@ -78,5 +82,4 @@ class Urls {
   static const matrixHomeServer = 'https://matrix.talao.co';
   static const getNonce = 'https://talao.co/matrix/nonce';
   static const registerToMatrix = 'https://talao.co/matrix/register';
-
 }

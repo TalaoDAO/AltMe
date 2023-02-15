@@ -79,7 +79,7 @@ class _InsertWithdrawalAmountViewState
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(
-                  height: Sizes.spaceNormal,
+                  height: Sizes.spaceSmall,
                 ),
                 TokenSelectBoxView(selectedToken: state.selectedToken),
                 TokenAmountCalculatorView(selectedToken: state.selectedToken),
