@@ -167,12 +167,16 @@ class NftCubit extends Cubit<NftState> {
 
       for (final element in nftList) {
         if (element.thumbnailUri == null) {
-          await client.get(
-            '${Urls.moralisBaseUrl}/nft/${element.contractAddress}/${element.tokenId}/metadata/resync',
-            headers: <String, String>{
-              'X-API-KEY': moralisApiKey,
-            },
-          );
+          try {
+            await client.get(
+              '${Urls.moralisBaseUrl}/nft/${element.contractAddress}/${element.tokenId}/metadata/resync',
+              headers: <String, String>{
+                'X-API-KEY': moralisApiKey,
+              },
+            );
+          } catch (e, s) {
+            getLogger(toString()).e('failed to resync e: $e s: $s');
+          }
         }
       }
       return nftList;
