@@ -9,13 +9,10 @@ import 'package:ebsi/src/issuer_token_parameters.dart';
 import 'package:ebsi/src/token_parameters.dart';
 import 'package:ebsi/src/verifier_token_parameters.dart';
 import 'package:flutter/foundation.dart';
-// ignore: depend_on_referenced_packages
 import 'package:hex/hex.dart';
 import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:secp256k1/secp256k1.dart';
-// ignore: implementation_imports
-// ignore: implementation_imports, unnecessary_import
 
 /// {@template ebsi}
 /// EBSI wallet compliance

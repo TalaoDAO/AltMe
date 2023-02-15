@@ -8,6 +8,8 @@
 import 'package:ebsi/ebsi.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../test_class.dart';
+
 void main() {
   group('Verifier TokenParameters', () {
     const url =
@@ -51,30 +53,41 @@ void main() {
       expect(verifierTokenParameters.audience, audience);
     });
 
-    // group('override test', () {
-    //   test('publicJWK', () {
-    //     const privateKey = {
-    //       'crv': 'P-256',
-    //       'd': 'ccWWNSjGiv1iWlNh4kfhWvwG3yyQMe8o31Du0uKRzrs',
-    //       'kty': 'EC',
-    //       'x': 'J4vQtLUyrVUiFIXRrtEq4xurmBZp2eq9wJmXkIA_stI',
-    //       'y': 'EUU6vXoG3BGX2zzwjXrGDcr4EyDD0Vfk3_5fg5kSgKE'
-    //     };
-    //     expect(verifierTokenParameters.publicJWK, privateKey);
-    //   });
+    group('override test', () {
+      final verifierTokenParametersTest = VerifierTokenParametersTest();
 
-    //   test('didKey', () {
-    //     const didKey = 'did:ebsi:zo4FR1YfAKFP3Q6dvqhxcXxnfeDiJDP97kmnqhyAUSACj'; // ignore: lines_longer_than_80_chars
-    //     expect(verifierTokenParameters.didKey, didKey);
-    //   });
+      test(
+        'public key is P-256K private key without d parameter',
+        verifierTokenParametersTest.publicKeyTest,
+      );
 
-    //   test('alg', () {
-    //     expect(verifierTokenParameters.alg, 'ES256K');
-    //   });
+      test('did EBSI', verifierTokenParametersTest.didTest);
 
-    //   test('thumbprint', () {
-    //     expect(verifierTokenParameters.thumbprint, [1, 2, 3]);
-    //   });
-    // });
+      test('kID EBSI', verifierTokenParametersTest.keyIdTest);
+
+      group('algorithm test', () {
+        test(
+          "algorithm is ES256K when key's curve is not P-256",
+          verifierTokenParametersTest.algorithmIsES256KTest,
+        );
+
+        test(
+          "algorithm is ES256 when key's curve is P-256",
+          verifierTokenParametersTest.algorithmIsES256Test,
+        );
+      });
+
+      group('thumbprint test', () {
+        test(
+          'thumbprint of the public Key',
+          verifierTokenParametersTest.thumprintOfKey,
+        );
+
+        test(
+          'thumbrprint of the Key from exemple in rfc 7638',
+          verifierTokenParametersTest.thumprintOfKeyForrfc7638,
+        );
+      });
+    });
   });
 }

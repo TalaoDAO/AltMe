@@ -19,8 +19,9 @@ dependencies:
   fast_base58: ^0.2.1
   flutter:
     sdk: flutter
+  hex: ^0.2.0  
   http_mock_adapter: ^0.3.3
-  jose: ^0.3.2
+  jose: ^0.3.3
   json_path: ^0.4.2
   pinenacl: ^0.3.3 # tezart from git depends on pinenacl ^0.3.3
   secp256k1: ^0.3.0
