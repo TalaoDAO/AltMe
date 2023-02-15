@@ -731,7 +731,10 @@
     "backToHome",
     "help",
     "searchCredentials",
-    "supportChatWelcomeMessage"
+    "supportChatWelcomeMessage",
+    "creator",
+    "contractAddress",
+    "lastMetadataSync"
   ],
 
   "es": [
@@ -1466,7 +1469,10 @@
     "backToHome",
     "help",
     "searchCredentials",
-    "supportChatWelcomeMessage"
+    "supportChatWelcomeMessage",
+    "creator",
+    "contractAddress",
+    "lastMetadataSync"
   ],
 
   "fr": [
@@ -1479,7 +1485,10 @@
     "backToHome",
     "help",
     "searchCredentials",
-    "supportChatWelcomeMessage"
+    "supportChatWelcomeMessage",
+    "creator",
+    "contractAddress",
+    "lastMetadataSync"
   ],
 
   "it": [
@@ -2214,6 +2223,9 @@
     "backToHome",
     "help",
     "searchCredentials",
-    "supportChatWelcomeMessage"
+    "supportChatWelcomeMessage",
+    "creator",
+    "contractAddress",
+    "lastMetadataSync"
   ]
 }

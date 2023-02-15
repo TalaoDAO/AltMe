@@ -159,6 +159,8 @@ class NftCubit extends Cubit<NftState> {
             contractAddress: e['token_address'] as String,
             balance: e['amount'] as String,
             type: e['contract_type'] as String,
+            minterAddress: e['minter_address'] as String?,
+            lastMetadataSync: e['last_metadata_sync'] as String?,
             image: e['normalized_metadata']['image'] as String?,
             animationUrl: e['normalized_metadata']['animation_url'] as String?,
           );

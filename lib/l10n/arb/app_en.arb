@@ -795,5 +795,8 @@
   "backToHome": "Back to home",
   "help": "Help",
   "searchCredentials": "Search credentials",
-  "supportChatWelcomeMessage": "Welcome to our chat support! We're here to assist you with any questions or concerns you may have about Altme."
+  "supportChatWelcomeMessage": "Welcome to our chat support! We're here to assist you with any questions or concerns you may have about Altme.",
+  "creator": "Creator",
+  "contractAddress": "Contract address",
+  "lastMetadataSync": "Last metadata sync"
 }

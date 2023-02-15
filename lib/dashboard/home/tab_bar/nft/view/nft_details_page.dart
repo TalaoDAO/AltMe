@@ -81,23 +81,27 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 maxLines: 1,
                 minFontSize: 16,
               ),
+              MyText(
+                widget.nftModel.symbol ?? '--',
+                style: Theme.of(context).textTheme.bodySmall2,
+                maxLines: 1,
+                minFontSize: 12,
+              ),
+              if (widget.nftModel.description != null &&
+                  widget.nftModel.description!.isNotEmpty) ...[
+                const SizedBox(height: Sizes.spaceNormal),
+                if (widget.nftModel.description?.contains('<p>') ?? false)
+                  Html(data: widget.nftModel.description ?? '')
+                else
+                  Text(
+                    widget.nftModel.description ?? '',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+              ],
               if (widget.nftModel is TezosNftModel)
-                MyText(
-                  (widget.nftModel as TezosNftModel).symbol ?? '--',
-                  style: Theme.of(context).textTheme.bodySmall2,
-                  maxLines: 1,
-                  minFontSize: 12,
-                ),
-              const SizedBox(height: Sizes.spaceNormal),
-              if (widget.nftModel.description?.contains('<p>') ?? false)
-                Html(data: widget.nftModel.description ?? '')
+                ...buildTezosMoreDetails(l10n)
               else
-                Text(
-                  widget.nftModel.description ?? '',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              if (widget.nftModel is TezosNftModel)
-                ...buildTezosMoreDetails(l10n),
+                ...buildEthereumMoreDetails(l10n),
               // Text(
               //   l10n.seeMoreNFTInformationOn,
               //   style: Theme.of(context).textTheme.bodyText1,
@@ -152,9 +156,24 @@ class _NftDetailsViewState extends State<NftDetailsView> {
   List<Widget> buildTezosMoreDetails(AppLocalizations l10n) {
     final nftModel = widget.nftModel as TezosNftModel;
     return [
-      if (nftModel.identifier != null)
+      const SizedBox(height: Sizes.spaceNormal),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${l10n.contractAddress} : ',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          Flexible(
+            child: Text(
+              nftModel.contractAddress,
+              style: Theme.of(context).textTheme.bodySmall3,
+            ),
+          )
+        ],
+      ),
+      if (nftModel.identifier != null) ...[
         const SizedBox(height: Sizes.spaceNormal),
-      if (nftModel.identifier != null)
         Row(
           children: [
             Text(
@@ -167,11 +186,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             )
           ],
         ),
-      if (nftModel.creators != null)
+      ],
+      if (nftModel.creators != null) ...[
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
-      if (nftModel.creators != null)
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,11 +207,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
           ],
         ),
-      if (nftModel.publishers != null)
+      ],
+      if (nftModel.publishers != null) ...[
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
-      if (nftModel.publishers != null)
         Row(
           children: [
             Text(
@@ -205,11 +224,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             )
           ],
         ),
-      if (nftModel.date != null)
+      ],
+      if (nftModel.date != null) ...[
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
-      if (nftModel.date != null)
         Row(
           children: [
             Text(
@@ -222,6 +241,67 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
           ],
         ),
+      ]
+    ];
+  }
+
+  List<Widget> buildEthereumMoreDetails(AppLocalizations l10n) {
+    final nftModel = widget.nftModel as EthereumNftModel;
+    return [
+      const SizedBox(height: Sizes.spaceNormal),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${l10n.contractAddress} : ',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          Flexible(
+            child: Text(
+              nftModel.contractAddress,
+              style: Theme.of(context).textTheme.bodySmall3,
+            ),
+          )
+        ],
+      ),
+      if (nftModel.minterAddress != null && nftModel.type != 'ERC1155') ...[
+        const SizedBox(
+          height: Sizes.spaceXSmall,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${l10n.creator} : ',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Flexible(
+              child: Text(
+                nftModel.minterAddress ?? '?',
+                style: Theme.of(context).textTheme.bodySmall3,
+              ),
+            ),
+          ],
+        ),
+      ],
+      if (nftModel.lastMetadataSync != null) ...[
+        const SizedBox(
+          height: Sizes.spaceXSmall,
+        ),
+        Row(
+          children: [
+            Text(
+              '${l10n.lastMetadataSync} : ',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Text(
+              UiDate.normalFormat(nftModel.lastMetadataSync) ?? '?',
+              style: Theme.of(context).textTheme.bodySmall3,
+            ),
+          ],
+        ),
+      ]
     ];
   }
 }
