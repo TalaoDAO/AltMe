@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -81,10 +82,28 @@ class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
             ),
             BlocBuilder<DIDPrivateKeyCubit, String>(
               builder: (context, state) {
-                return Text(
-                  state,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium,
+                return Column(
+                  children: [
+                    Text(
+                      state,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: Sizes.spaceXLarge),
+                    CopyButton(
+                      onTap: () async {
+                        await Clipboard.setData(
+                          ClipboardData(text: state),
+                        );
+                        AlertMessage.showStateMessage(
+                          context: context,
+                          stateMessage: StateMessage.success(
+                            stringMessage: l10n.copiedToClipboard,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 );
               },
             ),

@@ -71,7 +71,7 @@ class HelpCenterView extends StatelessWidget {
                         Text(
                           AltMeStrings.appContactWebsiteName,
                           textAlign: TextAlign.left,
-                          style: Theme.of(context).textTheme.titleSmall,
+                          style: Theme.of(context).textTheme.drawerItem,
                         ),
                         const SizedBox(width: 16),
                         Icon(

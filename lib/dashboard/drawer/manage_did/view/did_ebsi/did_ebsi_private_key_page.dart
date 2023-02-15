@@ -4,6 +4,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:dio/dio.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class DidEbsiPrivateKeyPage extends StatefulWidget {
@@ -85,10 +86,28 @@ class _DidEbsiPrivateKeyPageState extends State<DidEbsiPrivateKeyPage>
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.done:
-                    return Text(
-                      snapshot.data!,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleMedium,
+                    return Column(
+                      children: [
+                        Text(
+                          snapshot.data!,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: Sizes.spaceXLarge),
+                        CopyButton(
+                          onTap: () async {
+                            await Clipboard.setData(
+                              ClipboardData(text: snapshot.data),
+                            );
+                            AlertMessage.showStateMessage(
+                              context: context,
+                              stateMessage: StateMessage.success(
+                                stringMessage: l10n.copiedToClipboard,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     );
                   case ConnectionState.waiting:
                   case ConnectionState.none:

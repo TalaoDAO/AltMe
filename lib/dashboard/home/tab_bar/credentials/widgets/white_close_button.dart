@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class WhiteCloseButton extends StatelessWidget {
@@ -16,7 +17,7 @@ class WhiteCloseButton extends StatelessWidget {
         child: Icon(
           Icons.close,
           color: Theme.of(context).colorScheme.background,
-          size: 20,
+          size: Sizes.icon,
         ),
       ),
     );

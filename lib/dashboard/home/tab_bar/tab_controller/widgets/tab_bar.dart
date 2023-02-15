@@ -32,8 +32,8 @@ class MyTab extends StatelessWidget {
           gradient: isSelected
               ? LinearGradient(
                   colors: [
-                    Theme.of(context).colorScheme.primary,
-                    Theme.of(context).colorScheme.secondary,
+                    AppTheme.darkThemeData.colorScheme.primary,
+                    AppTheme.darkThemeData.colorScheme.secondary,
                   ],
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
@@ -42,7 +42,7 @@ class MyTab extends StatelessWidget {
               : null,
           color: isSelected
               ? null
-              : Theme.of(context).colorScheme.tabBarNotSelected,
+              : AppTheme.darkThemeData.colorScheme.tabBarNotSelected,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -56,9 +56,9 @@ class MyTab extends StatelessWidget {
               text,
               maxLines: 1,
               minFontSize: 12,
-              style: Theme.of(context).textTheme.title.copyWith(
-                    color: isSelected ? null : Colors.grey[400],
-                  ),
+              style: AppTheme.darkThemeData.textTheme.title.copyWith(
+                color: isSelected ? null : Colors.grey[400],
+              ),
               overflow: TextOverflow.fade,
             ),
           ],

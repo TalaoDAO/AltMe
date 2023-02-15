@@ -147,10 +147,12 @@ class NftCubit extends Cubit<NftState> {
         return [];
       }
 
-      return List<EthereumNftModel>.from(
+      final nftList = List<EthereumNftModel>.from(
         result.map<EthereumNftModel>((dynamic e) {
           return EthereumNftModel(
-            name: e['name'] as String,
+            name: (e['name'] as String? ??
+                    e['normalized_metadata']['name'] as String?) ??
+                '',
             symbol: e['symbol'] as String?,
             description: e['normalized_metadata']['description'] as String?,
             tokenId: e['token_id'] as String,
@@ -162,6 +164,18 @@ class NftCubit extends Cubit<NftState> {
           );
         }),
       ).toList();
+
+      for (final element in nftList) {
+        if (element.thumbnailUri == null) {
+          await client.get(
+            '${Urls.moralisBaseUrl}/nft/${element.contractAddress}/${element.tokenId}/metadata/resync',
+            headers: <String, String>{
+              'X-API-KEY': moralisApiKey,
+            },
+          );
+        }
+      }
+      return nftList;
     } catch (e, s) {
       getLogger(toString()).e('e: $e, s: $s');
       return [];

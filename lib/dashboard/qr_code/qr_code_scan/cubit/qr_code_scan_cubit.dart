@@ -205,14 +205,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             ),
           );
         } else {
-          //print(uri?.queryParameters['claims']);
-
-          // TODO(bibash): make the claims dynamic
-          var claims =
-              r'{"id_token": {"email": "None"}, "vp_token": {"presentation_definition": {"id": "0db80a1b-a3ac-11ed-bbb4-0a1628958560", "input_descriptors": [{"id": "0db80b58-a3ac-11ed-9a0b-0a1628958560", "name": "Input descriptor 1", "purpose": " ", "constraints": {"fields": [{"path": ["$..credentialSchema.id"], "filter": {"type": "string", "pattern": "https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd"}}]}}], "format": {"jwt_vp": {"alg": ["ES256K", "ES256", "PS256", "RS256"]}}}}}';
+          var claims = uri.queryParameters['claims'] ?? '';
 
           // TODO(hawkbee): change when correction is done on verifier
           claims = claims.replaceAll("'email': None", "'email': 'None'");
+
           claims = claims.replaceAll("'", '"');
           final jsonPath = JsonPath(r'$..input_descriptors');
           final outputDescriptors =
