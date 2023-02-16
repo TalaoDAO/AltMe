@@ -207,10 +207,12 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       );
       logger.i('roomId : $_roomId');
       _subscribeToEventsOfRoom();
+      final retrivedMessageFromDB = await _retriveMessagesFromDB(_roomId);
       emit(
         state.copyWith(
           status: AppStatus.init,
           user: User(id: userId),
+          messages: retrivedMessageFromDB,
         ),
       );
     } catch (e, s) {
@@ -221,6 +223,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
 
   void _subscribeToEventsOfRoom() {
     _onEventSubscription?.cancel();
+
     _onEventSubscription = client.onRoomState.stream.listen((Event event) {
       if (event.roomId == _roomId && event.type == 'm.room.message') {
         final txId = event.unsigned?['transaction_id'] as String?;
@@ -237,68 +240,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           newMessages[index] = updatedMessage;
           emit(state.copyWith(messages: newMessages));
         } else {
-          late final Message message;
-          if (event.messageType == 'm.text') {
-            message = TextMessage(
-              id: event.unsigned?['transaction_id'] as String? ??
-                  const Uuid().v4(),
-              text: event.text,
-              createdAt: event.originServerTs.millisecondsSinceEpoch,
-              status: _mapEventStatusToMessageStatus(event.status),
-              author: User(
-                id: event.senderId,
-              ),
-            );
-          } else if (event.messageType == 'm.image') {
-            message = ImageMessage(
-              id: const Uuid().v4(),
-              name: event.body,
-              size: event.content['info']['size'] as num,
-              uri: _getUrlFromUri(event.content['url'] as String),
-              status: _mapEventStatusToMessageStatus(event.status),
-              createdAt: event.originServerTs.millisecondsSinceEpoch,
-              author: User(
-                id: event.senderId,
-              ),
-            );
-          } else if (event.messageType == 'm.file') {
-            message = FileMessage(
-              id: const Uuid().v4(),
-              name: event.body,
-              size: event.content['info']['size'] as num,
-              uri: _getUrlFromUri(event.content['url'] as String),
-              status: _mapEventStatusToMessageStatus(event.status),
-              createdAt: event.originServerTs.millisecondsSinceEpoch,
-              author: User(
-                id: event.senderId,
-              ),
-            );
-          } else if (event.messageType == 'm.audio') {
-            message = AudioMessage(
-              id: const Uuid().v4(),
-              duration: Duration(
-                milliseconds: event.content['info']['duration'] as int,
-              ),
-              name: event.body,
-              size: event.content['info']['size'] as num,
-              uri: _getUrlFromUri(event.content['url'] as String),
-              status: _mapEventStatusToMessageStatus(event.status),
-              createdAt: event.originServerTs.millisecondsSinceEpoch,
-              author: User(
-                id: event.senderId,
-              ),
-            );
-          } else {
-            message = TextMessage(
-              id: const Uuid().v4(),
-              text: event.text,
-              createdAt: event.originServerTs.millisecondsSinceEpoch,
-              status: _mapEventStatusToMessageStatus(event.status),
-              author: User(
-                id: event.senderId,
-              ),
-            );
-          }
+          final Message message = _mapEventToMessage(event);
           emit(
             state.copyWith(
               messages: [message, ...state.messages],
@@ -307,6 +249,84 @@ class LiveChatCubit extends Cubit<LiveChatState> {
         }
       }
     });
+  }
+
+  Message _mapEventToMessage(Event event) {
+    late final Message message;
+    if (event.messageType == 'm.text') {
+      message = TextMessage(
+        id: event.unsigned?['transaction_id'] as String? ?? const Uuid().v4(),
+        text: event.text,
+        createdAt: event.originServerTs.millisecondsSinceEpoch,
+        status: _mapEventStatusToMessageStatus(event.status),
+        author: User(
+          id: event.senderId,
+        ),
+      );
+    } else if (event.messageType == 'm.image') {
+      message = ImageMessage(
+        id: const Uuid().v4(),
+        name: event.body,
+        size: event.content['info']['size'] as num,
+        uri: _getUrlFromUri(event.content['url'] as String),
+        status: _mapEventStatusToMessageStatus(event.status),
+        createdAt: event.originServerTs.millisecondsSinceEpoch,
+        author: User(
+          id: event.senderId,
+        ),
+      );
+    } else if (event.messageType == 'm.file') {
+      message = FileMessage(
+        id: const Uuid().v4(),
+        name: event.body,
+        size: event.content['info']['size'] as num,
+        uri: _getUrlFromUri(event.content['url'] as String),
+        status: _mapEventStatusToMessageStatus(event.status),
+        createdAt: event.originServerTs.millisecondsSinceEpoch,
+        author: User(
+          id: event.senderId,
+        ),
+      );
+    } else if (event.messageType == 'm.audio') {
+      message = AudioMessage(
+        id: const Uuid().v4(),
+        duration: Duration(
+          milliseconds: event.content['info']['duration'] as int,
+        ),
+        name: event.body,
+        size: event.content['info']['size'] as num,
+        uri: _getUrlFromUri(event.content['url'] as String),
+        status: _mapEventStatusToMessageStatus(event.status),
+        createdAt: event.originServerTs.millisecondsSinceEpoch,
+        author: User(
+          id: event.senderId,
+        ),
+      );
+    } else {
+      message = TextMessage(
+        id: const Uuid().v4(),
+        text: event.text,
+        createdAt: event.originServerTs.millisecondsSinceEpoch,
+        status: _mapEventStatusToMessageStatus(event.status),
+        author: User(
+          id: event.senderId,
+        ),
+      );
+    }
+    return message;
+  }
+
+  Future<List<Message>> _retriveMessagesFromDB(String roomId) async {
+    final room = client.getRoomById(roomId);
+    if (room == null) return [];
+    final events = await client.database?.getEventList(room);
+    if (events == null || events.isEmpty) return [];
+    final messageEvents =
+        events.where((event) => event.type == 'm.room.message').toList()
+          ..sort(
+            (e1, e2) => e2.originServerTs.compareTo(e1.originServerTs),
+          );
+    return messageEvents.map(_mapEventToMessage).toList();
   }
 
   Future<String> _createRoomAndInviteSupport(String name) async {
@@ -416,6 +436,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     required String username,
     required String password,
   }) async {
+    final isLogged = client.isLogged();
+    if (isLogged) return client.userID!;
     client.homeserver = Uri.parse(Urls.matrixHomeServer);
     final loginResonse = await client.login(
       LoginType.mLoginPassword,
