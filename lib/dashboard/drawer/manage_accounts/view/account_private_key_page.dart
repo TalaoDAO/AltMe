@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -63,6 +64,21 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
       scrollView: false,
       titleLeading: const BackLeadingButton(),
       secureScreen: true,
+      titleTrailing: IconButton(
+        onPressed: () {
+          Navigator.of(context).push<void>(
+            PrivateKeyQrPage.route(
+              title: l10n.privateKey,
+              data: widget.privateKey,
+              secondsLeft: animation.value,
+            ),
+          );
+        },
+        icon: Icon(
+          Icons.qr_code,
+          color: Theme.of(context).colorScheme.onBackground,
+        ),
+      ),
       body: BackgroundCard(
         height: double.infinity,
         width: double.infinity,

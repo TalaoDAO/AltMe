@@ -215,8 +215,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             onPressed: () {
                               Navigator.of(context).push<void>(
                                 QrCodeDisplayPage.route(
-                                  widget.credentialModel.id,
-                                  widget.credentialModel,
+                                  title: '',
+                                  data: widget.credentialModel.shareLink,
                                 ),
                               );
                             },
