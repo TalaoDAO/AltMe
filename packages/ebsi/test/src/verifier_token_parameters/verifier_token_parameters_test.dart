@@ -8,7 +8,7 @@
 import 'package:ebsi/ebsi.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../test_class.dart';
+import 'verifier_token_parameters_class.dart';
 
 void main() {
   group('Verifier TokenParameters', () {
@@ -74,6 +74,11 @@ void main() {
         test(
           "algorithm is ES256 when key's curve is P-256",
           verifierTokenParametersTest.algorithmIsES256Test,
+        );
+
+        test(
+          'if alg is not null then return as it is',
+          verifierTokenParametersTest.algorithmIsNotNullTest,
         );
       });
 
