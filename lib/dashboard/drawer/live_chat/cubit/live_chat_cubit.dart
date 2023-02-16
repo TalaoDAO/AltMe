@@ -416,6 +416,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     required String username,
     required String password,
   }) async {
+    final isLogged = client.isLogged();
+    if (isLogged) return client.userID!;
     client.homeserver = Uri.parse(Urls.matrixHomeServer);
     final loginResonse = await client.login(
       LoginType.mLoginPassword,
