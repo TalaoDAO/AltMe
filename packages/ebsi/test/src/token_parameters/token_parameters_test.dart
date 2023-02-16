@@ -12,7 +12,7 @@ import 'package:ebsi/ebsi.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../test_class.dart';
+import 'token_parameters_class.dart';
 
 class MockDio extends Mock implements Dio {}
 
@@ -38,6 +38,11 @@ void main() {
       test(
         "algorithm is ES256 when key's curve is P-256",
         tokenParametersTest.algorithmIsES256Test,
+      );
+
+      test(
+        'if alg is not null then return as it is',
+        tokenParametersTest.algorithmIsNotNullTest,
       );
     });
 
