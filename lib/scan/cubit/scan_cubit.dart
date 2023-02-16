@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:altme/ebsi/verify_credentials_to_be_presented.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
@@ -56,19 +57,25 @@ class ScanCubit extends Cubit<ScanState> {
 
     try {
       if (uri.queryParameters['scope'] == 'openid') {
-        // final mnemonic =
-        //     await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
-        final credentialList = credentialsToBePresented!
-            .map((e) => jsonEncode(e.toJson()))
-            .toList();
-
         final String p256PrivateKey =
             await getRandomP256PrivateKey(secureStorageProvider);
+        // final mnemonic =
+        //     await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+
+        final siopv2CredentialsToBePresented =
+            await verifyCredentialsToBePresented(
+          credentialsToBePresented: credentialsToBePresented!,
+          ebsi: ebsi,
+        );
+
+        final credentialList = siopv2CredentialsToBePresented
+            .map((e) => jsonEncode(e.toJson()))
+            .toList();
 
         await ebsi.sendPresentation(uri, credentialList, null, p256PrivateKey);
 
         await presentationActivity(
-          credentialModels: credentialsToBePresented,
+          credentialModels: siopv2CredentialsToBePresented,
           issuer: issuer,
         );
 

@@ -433,7 +433,6 @@ class Ebsi {
     return verifierVpJwt;
   }
 
-  @visibleForTesting
   String generateToken(
     Map<String, Object> vpTokenPayload,
     TokenParameters tokenParameters,
