@@ -308,6 +308,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(state.acceptHost(uri: uri!));
       }
     } catch (e) {
+      log.e(e);
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
