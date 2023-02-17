@@ -84,6 +84,7 @@ dependencies:
   path: ^1.8.2 # flutter_test from sdk depends on path 1.8.2
   path_provider: ^2.0.12
   permission_handler: ^10.2.0
+  platform_device_id: ^1.0.1
   pointycastle: ^3.6.2
   pretty_qr_code: ^2.0.2
   qr_flutter: ^4.0.0

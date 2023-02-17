@@ -8,6 +8,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_secure_storage_windows
   local_auth_windows
   permission_handler_windows
+  platform_device_id_windows
   secure_application
   share_plus
   url_launcher_windows
