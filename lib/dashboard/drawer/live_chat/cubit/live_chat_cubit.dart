@@ -18,7 +18,6 @@ import 'package:matrix/matrix.dart' hide User;
 import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -340,49 +339,19 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           name: name,
           invite: ['@support:matrix.talao.co'],
           roomAliasName: name,
-          initialState: [
-            StateEvent(
-              type: EventTypes.Encryption,
-              stateKey: '',
-              content: {
-                'algorithm': 'm.megolm.v1.aes-sha2',
-              },
-            ),
-          ],
         );
         await secureStorageProvider.set(
           SecureStorageKeys.supportRoomId,
           roomId,
         );
-        await _enableRoomEncyption(roomId);
-        logger.i('room created! => id: $roomId');
         return roomId;
       } catch (e, s) {
         logger.e('e: $e, s: $s');
         final roomId = await client.joinRoom(name);
-        await _enableRoomEncyption(roomId);
         return roomId;
       }
     } else {
-      await _enableRoomEncyption(mRoomId);
       return mRoomId;
-    }
-  }
-
-  Future<void> _enableRoomEncyption(String roomId) async {
-    try {
-      final room = client.getRoomById(roomId);
-      if (room == null) return;
-      final verificationResponse =
-          await DeviceKeysList(client.userID!, client).startVerification();
-      logger.i('verification response: $verificationResponse');
-      await verificationResponse.acceptVerification();
-      verificationResponse.onUpdate = () {
-        logger.i('on update the verifcation : ${verificationResponse.state}');
-      };
-      await room.enableEncryption();
-    } catch (e, s) {
-      logger.e('error in enabling room e2e encryption, e: $e, s: $s');
     }
   }
 
@@ -470,11 +439,9 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     final isLogged = client.isLogged();
     if (isLogged) return client.userID!;
     client.homeserver = Uri.parse(Urls.matrixHomeServer);
-    final deviceId = await PlatformDeviceId.getDeviceId;
     final loginResonse = await client.login(
       LoginType.mLoginPassword,
       password: password,
-      deviceId: deviceId,
       identifier: AuthenticationUserIdentifier(user: username),
     );
     return loginResonse.userId!;
