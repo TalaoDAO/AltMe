@@ -424,10 +424,11 @@ class Ebsi {
         'id': 'http://example.org/presentations/talao/01',
         'type': ['VerifiablePresentation'],
         'holder': tokenParameters.didKey,
-        'verifiableCredential': tokenParameters.jwtsOfCredentials
+        'verifiableCredential': tokenParameters.jsonIdOrJwtList
       },
       'nonce': tokenParameters.nonce
     };
+
     final verifierVpJwt = generateToken(vpTokenPayload, tokenParameters);
 
     return verifierVpJwt;

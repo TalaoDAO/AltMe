@@ -7,29 +7,36 @@ import 'package:jose/jose.dart';
 /// for verifier interactions.
 class VerifierTokenParameters extends TokenParameters {
   ///
-  VerifierTokenParameters(super.privateKey, this.uri, this.jwtList);
+  VerifierTokenParameters(super.privateKey, this.uri, this.credentials);
 
   /// [uri] provided by verifier and containing nonce
   final Uri uri;
 
-  /// [jwtList] is list of credentials to be presented
-  final List<String> jwtList;
+  /// [credentials] is list of credentials to be presented
+  final List<String> credentials;
 
   /// [nonce] is a number given by verifier to handle request authentication
   String get nonce => uri.queryParameters['nonce'] ?? '';
 
-  /// [jwtsOfCredentials] is list of jwt from the jwtList wich contains
-  /// other credential's metadata
-  List<String> get jwtsOfCredentials => jwtList
-      .map(
-        (credential) =>
-            (jsonDecode(credential) as Map<String, dynamic>)['jwt'] as String,
-      )
-      .toList();
+  /// [jsonIdOrJwtList] is list of jwt or jsonIds from the credentials
+  ///  wich contains other credential's metadata
+  List<String> get jsonIdOrJwtList {
+    final list = <String>[];
+
+    for (final credential in credentials) {
+      final credentialJson = jsonDecode(credential) as Map<String, dynamic>;
+      if (credentialJson['jwt'] != null) {
+        list.add(credentialJson['jwt'].toString());
+      } else {
+        list.add(credentialJson['data'].toString());
+      }
+    }
+    return list;
+  }
 
   /// [audience] is is from first jwt claims
   String get audience {
-    final jwt = JsonWebToken.unverified(jwtsOfCredentials[0]);
+    final jwt = JsonWebToken.unverified(jsonIdOrJwtList[0]);
     final claims = jwt.claims;
     return claims['iss'] as String;
   }

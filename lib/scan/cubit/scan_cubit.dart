@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
-import 'package:altme/ebsi/verify_credentials_to_be_presented.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
@@ -62,20 +62,14 @@ class ScanCubit extends Cubit<ScanState> {
         // final mnemonic =
         //     await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
-        final siopv2CredentialsToBePresented =
-            await verifyCredentialsToBePresented(
-          credentialsToBePresented: credentialsToBePresented!,
-          ebsi: ebsi,
-        );
-
-        final credentialList = siopv2CredentialsToBePresented
+        final credentialList = credentialsToBePresented!
             .map((e) => jsonEncode(e.toJson()))
             .toList();
 
         await ebsi.sendPresentation(uri, credentialList, null, p256PrivateKey);
 
         await presentationActivity(
-          credentialModels: siopv2CredentialsToBePresented,
+          credentialModels: credentialsToBePresented,
           issuer: issuer,
         );
 

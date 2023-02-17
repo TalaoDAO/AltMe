@@ -46,7 +46,7 @@ void main() {
     });
 
     test('jwtsOfCredentials', () {
-      expect(verifierTokenParameters.jwtsOfCredentials, jwtsOfCredentials);
+      expect(verifierTokenParameters.jsonIdOrJwtList, jwtsOfCredentials);
     });
 
     test('audience', () {
