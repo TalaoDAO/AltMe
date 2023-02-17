@@ -20,24 +20,20 @@ class VerifierTokenParameters extends TokenParameters {
 
   /// [jsonIdOrJwtList] is list of jwt or jsonIds from the credentials
   ///  wich contains other credential's metadata
-  List<String> get jsonIdOrJwtList {
-    final list = <String>[];
+  List<dynamic> get jsonIdOrJwtList {
+    final list = <dynamic>[];
 
     for (final credential in credentials) {
       final credentialJson = jsonDecode(credential) as Map<String, dynamic>;
       if (credentialJson['jwt'] != null) {
-        list.add(credentialJson['jwt'].toString());
+        list.add(credentialJson['jwt']);
       } else {
-        list.add(credentialJson['data'].toString());
+        list.add(credentialJson['data']);
       }
     }
     return list;
   }
 
-  /// [audience] is is from first jwt claims
-  String get audience {
-    final jwt = JsonWebToken.unverified(jsonIdOrJwtList[0]);
-    final claims = jwt.claims;
-    return claims['iss'] as String;
-  }
+  /// [audience] is is client id of the request
+  String get audience => uri.queryParameters['client_id'] ?? '';
 }
