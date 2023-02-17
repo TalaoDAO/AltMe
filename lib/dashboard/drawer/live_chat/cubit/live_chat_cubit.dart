@@ -316,22 +316,44 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       try {
         final roomId = await client.createRoom(
           isDirect: true,
+          preset: CreateRoomPreset.privateChat,
           name: name,
           invite: ['@support:matrix.talao.co'],
           roomAliasName: name,
+          initialState: [
+            StateEvent(
+              type: EventTypes.Encryption,
+              stateKey: '',
+              content: {
+                'algorithm': 'm.megolm.v1.aes-sha2',
+              },
+            ),
+          ],
         );
         await secureStorageProvider.set(
           SecureStorageKeys.supportRoomId,
           roomId,
         );
+        await _enableRoomEncyption(roomId);
+        logger.i('room created! => id: $roomId');
         return roomId;
       } catch (e, s) {
         logger.e('e: $e, s: $s');
         final roomId = await client.joinRoom(name);
+        await _enableRoomEncyption(roomId);
         return roomId;
       }
     } else {
+      await _enableRoomEncyption(mRoomId);
       return mRoomId;
+    }
+  }
+
+  Future<void> _enableRoomEncyption(String roomId) async {
+    try {
+      await client.getRoomById(roomId)?.enableEncryption();
+    } catch (e, s) {
+      logger.e('error in enabling room e2e encryption, e: $e, s: $s');
     }
   }
 
