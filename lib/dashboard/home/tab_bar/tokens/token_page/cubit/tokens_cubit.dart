@@ -136,6 +136,7 @@ class TokensCubit extends Cubit<TokensState> {
             balance: (json['balance'] as String?) ?? '',
             decimals: ((json['decimals'] as int?) ?? 0).toString(),
             thumbnailUri: json['thumbnail'] as String?,
+            standard: 'erc20',
             icon: icon,
             decimalsToShow: 2,
           );
