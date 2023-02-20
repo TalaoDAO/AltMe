@@ -1,8 +1,10 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/nft/widgets/widgets.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 class NftDetailsPage extends StatelessWidget {
@@ -102,28 +104,6 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 ...buildTezosMoreDetails(l10n)
               else
                 ...buildEthereumMoreDetails(l10n),
-              // Text(
-              //   l10n.seeMoreNFTInformationOn,
-              //   style: Theme.of(context).textTheme.bodyText1,
-              // ),
-              // const SizedBox(height: Sizes.spaceSmall),
-              // Row(
-              //   children: [
-              //     NftUrlWidget(
-              //       text: 'Objkt.com',
-              //       onPressed: () async {
-              //         await LaunchUrl.launch(Urls.objktUrl);
-              //       },
-              //     ),
-              //     const SizedBox(width: 15),
-              //     NftUrlWidget(
-              //       text: 'Rarible.com',
-              //       onPressed: () async {
-              //         await LaunchUrl.launch(Urls.raribleUrl);
-              //       },
-              //     ),
-              //   ],
-              // )
             ],
           ),
         ),
@@ -169,7 +149,19 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               nftModel.contractAddress,
               style: Theme.of(context).textTheme.bodySmall3,
             ),
-          )
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.open_in_new,
+              size: Sizes.icon,
+            ),
+            onPressed: () {
+              openAddressBlockchainExplorer(
+                context.read<ManageNetworkCubit>().state.network,
+                nftModel.contractAddress,
+              );
+            },
+          ),
         ],
       ),
       if (nftModel.identifier != null) ...[
@@ -187,7 +179,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
           ],
         ),
       ],
-      if (nftModel.creators != null) ...[
+      if (nftModel.creators != null && nftModel.creators!.isNotEmpty) ...[
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
@@ -205,10 +197,22 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 style: Theme.of(context).textTheme.bodySmall3,
               ),
             ),
+            IconButton(
+              icon: const Icon(
+                Icons.open_in_new,
+                size: Sizes.icon,
+              ),
+              onPressed: () {
+                openAddressBlockchainExplorer(
+                  context.read<ManageNetworkCubit>().state.network,
+                  nftModel.creators!.first,
+                );
+              },
+            ),
           ],
         ),
       ],
-      if (nftModel.publishers != null) ...[
+      if (nftModel.publishers != null && nftModel.publishers!.isNotEmpty) ...[
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
@@ -218,10 +222,24 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               '${l10n.publishers} : ',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            Text(
-              nftModel.publishers?.join(', ') ?? '?',
-              style: Theme.of(context).textTheme.bodySmall3,
-            )
+            Flexible(
+              child: Text(
+                nftModel.publishers?.join(', ') ?? '?',
+                style: Theme.of(context).textTheme.bodySmall3,
+              ),
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.open_in_new,
+                size: Sizes.icon,
+              ),
+              onPressed: () {
+                openAddressBlockchainExplorer(
+                  context.read<ManageNetworkCubit>().state.network,
+                  nftModel.publishers!.first,
+                );
+              },
+            ),
           ],
         ),
       ],
@@ -261,7 +279,19 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               nftModel.contractAddress,
               style: Theme.of(context).textTheme.bodySmall3,
             ),
-          )
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.open_in_new,
+              size: Sizes.icon,
+            ),
+            onPressed: () {
+              openAddressBlockchainExplorer(
+                context.read<ManageNetworkCubit>().state.network,
+                nftModel.contractAddress,
+              );
+            },
+          ),
         ],
       ),
       if (nftModel.minterAddress != null && nftModel.type != 'ERC1155') ...[
@@ -281,6 +311,18 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 nftModel.minterAddress ?? '?',
                 style: Theme.of(context).textTheme.bodySmall3,
               ),
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.open_in_new,
+                size: Sizes.icon,
+              ),
+              onPressed: () {
+                openAddressBlockchainExplorer(
+                  context.read<ManageNetworkCubit>().state.network,
+                  nftModel.minterAddress!,
+                );
+              },
             ),
           ],
         ),

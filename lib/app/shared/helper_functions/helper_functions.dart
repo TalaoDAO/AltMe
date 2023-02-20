@@ -44,6 +44,35 @@ Future<void> openBlockchainExplorer(
   }
 }
 
+Future<void> openAddressBlockchainExplorer(
+  BlockchainNetwork network,
+  String address,
+) async {
+  if (network is TezosNetwork) {
+    await LaunchUrl.launch(
+      'https://tzkt.io/$address/operations',
+    );
+  } else if (network is PolygonNetwork) {
+    await LaunchUrl.launch(
+      'https://polygonscan.com/address/$address',
+    );
+  } else if (network is BinanceNetwork) {
+    await LaunchUrl.launch(
+      'https://www.bscscan.com/address/$address',
+    );
+  } else if (network is FantomNetwork) {
+    await LaunchUrl.launch(
+      'https://ftmscan.com/address/$address',
+    );
+  } else if (network is EthereumNetwork) {
+    await LaunchUrl.launch(
+      'https://etherscan.io/address/$address',
+    );
+  } else {
+    UnimplementedError();
+  }
+}
+
 String generateDefaultAccountName(
   int accountIndex,
   List<String> accountNameList,
