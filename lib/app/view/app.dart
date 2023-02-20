@@ -178,16 +178,6 @@ class App extends StatelessWidget {
             dioClient: DioClient('', Dio()),
             didCubit: context.read<DIDCubit>(),
             secureStorageProvider: getSecureStorage,
-            client: Client(
-              'AltMeUser',
-              databaseBuilder: (_) async {
-                final dir = await getApplicationSupportDirectory();
-                final db =
-                    HiveCollectionsDatabase('matrix_support_chat', dir.path);
-                await db.open();
-                return db;
-              },
-            ),
           ),
         ),
       ],

@@ -28,7 +28,6 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   LiveChatCubit({
     required this.didCubit,
     required this.secureStorageProvider,
-    required this.client,
     required this.dioClient,
   }) : super(
           const LiveChatState(),
@@ -37,7 +36,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   }
 
   final SecureStorageProvider secureStorageProvider;
-  final Client client;
+  late Client client;
   final DioClient dioClient;
   final logger = getLogger('LiveChatCubit');
   String _roomId = '';
@@ -46,6 +45,10 @@ class LiveChatCubit extends Cubit<LiveChatState> {
 
   Future<void> onSendPressed(PartialText partialText) async {
     try {
+      final room = client.getRoomById(_roomId);
+      if (room == null) {
+        await client.joinRoomById(_roomId);
+      }
       final eventId = await client.getRoomById(_roomId)?.sendTextEvent(
             partialText.text,
             txid: const Uuid().v4(),
@@ -356,8 +359,18 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   }
 
   Future<void> _initClient() async {
-    client.homeserver = Uri.parse(Urls.matrixHomeServer);
-    await client.init();
+    client = Client(
+      'AltMeUser',
+      databaseBuilder: (_) async {
+        final dir = await getApplicationSupportDirectory();
+        final db = HiveCollectionsDatabase('matrix_support_chat', dir.path);
+        await db.open();
+        return db;
+      },
+    );
+    await client.init(
+      newHomeserver: Uri.parse(Urls.matrixHomeServer),
+    );
   }
 
   Future<String> _getDidAuth(String did, String nonce) async {
@@ -451,6 +464,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     await client.logout();
     await client.dispose();
     await _onEventSubscription?.cancel();
+    _onEventSubscription = null;
   }
 
   String _getUrlFromUri(String uri) {

@@ -109,11 +109,16 @@ class ResetWalletView extends StatelessWidget {
                           await getSecureStorage.get(SecureStorageKeys.pinCode);
                       if (pinCode?.isEmpty ?? true) {
                         await context.read<WalletCubit>().resetWallet();
+                        await context.read<LiveChatCubit>().dispose();
+                        await context.read<LiveChatCubit>().init();
                       } else {
                         await Navigator.of(context).push<void>(
                           PinCodePage.route(
-                            isValidCallback: () =>
-                                context.read<WalletCubit>().resetWallet(),
+                            isValidCallback: () {
+                              context.read<WalletCubit>().resetWallet();
+                              context.read<LiveChatCubit>().dispose();
+                              context.read<LiveChatCubit>().init();
+                            },
                             restrictToBack: false,
                           ),
                         );
