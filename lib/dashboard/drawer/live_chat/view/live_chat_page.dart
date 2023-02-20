@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
@@ -89,12 +90,36 @@ class _ContactUsViewState extends State<LiveChatView> {
                 ),
                 if (state.messages.isEmpty)
                   BackgroundCard(
-                    padding: const EdgeInsets.all(Sizes.spaceNormal),
+                    padding: const EdgeInsets.all(Sizes.spaceSmall),
                     margin: const EdgeInsets.all(Sizes.spaceNormal),
-                    child: Text(
-                      l10n.supportChatWelcomeMessage,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          l10n.supportChatWelcomeMessage,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(
+                          height: Sizes.spaceSmall,
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.lock,
+                              size: Sizes.icon,
+                            ),
+                            const SizedBox(
+                              width: Sizes.space2XSmall,
+                            ),
+                            Text(
+                              l10n.e2eEncyptedChat,
+                              style: Theme.of(context).textTheme.subtitle4,
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                   ),
               ],

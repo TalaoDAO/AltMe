@@ -734,7 +734,8 @@
     "supportChatWelcomeMessage",
     "creator",
     "contractAddress",
-    "lastMetadataSync"
+    "lastMetadataSync",
+    "e2eEncyptedChat"
   ],
 
   "es": [
@@ -1472,7 +1473,8 @@
     "supportChatWelcomeMessage",
     "creator",
     "contractAddress",
-    "lastMetadataSync"
+    "lastMetadataSync",
+    "e2eEncyptedChat"
   ],
 
   "fr": [
@@ -1488,7 +1490,8 @@
     "supportChatWelcomeMessage",
     "creator",
     "contractAddress",
-    "lastMetadataSync"
+    "lastMetadataSync",
+    "e2eEncyptedChat"
   ],
 
   "it": [
@@ -2226,6 +2229,7 @@
     "supportChatWelcomeMessage",
     "creator",
     "contractAddress",
-    "lastMetadataSync"
+    "lastMetadataSync",
+    "e2eEncyptedChat"
   ]
 }

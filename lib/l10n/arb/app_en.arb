@@ -798,5 +798,6 @@
   "supportChatWelcomeMessage": "Welcome to our chat support! We're here to assist you with any questions or concerns you may have about Altme.",
   "creator": "Creator",
   "contractAddress": "Contract address",
-  "lastMetadataSync": "Last metadata sync"
+  "lastMetadataSync": "Last metadata sync",
+  "e2eEncyptedChat": "Chat is encrypted from end to end."
 }
