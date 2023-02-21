@@ -359,9 +359,8 @@ class Ebsi {
     required String issuerDid,
     required String vcJwt,
   }) async {
-    final didDocument = await getDidDocument(issuerDid);
-
     try {
+      final didDocument = await getDidDocument(issuerDid);
       final publicKeyJwk = readPublicKeyJwk(issuerDid, didDocument);
 
       // using jose package
