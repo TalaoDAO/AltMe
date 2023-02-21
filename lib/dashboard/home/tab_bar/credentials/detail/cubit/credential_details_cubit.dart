@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/ebsi/verify_ebsi_credential.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
+import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -12,20 +15,22 @@ part 'credential_details_cubit.g.dart';
 part 'credential_details_state.dart';
 
 class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
-  CredentialDetailsCubit({required this.didKitProvider})
-      : super(const CredentialDetailsState());
+  CredentialDetailsCubit({
+    required this.didKitProvider,
+    required this.client,
+  }) : super(const CredentialDetailsState());
 
   final DIDKitProvider didKitProvider;
+  final DioClient client;
 
   void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {
     emit(state.copyWith(credentialDetailTabStatus: credentialDetailTabStatus));
   }
 
   Future<void> verifyCredential(CredentialModel item) async {
-    if (isEbsiIssuer(item)) return;
-
     emit(state.copyWith(status: AppStatus.loading));
     await Future<void>.delayed(const Duration(milliseconds: 500));
+
     if (item.expirationDate != null) {
       final DateTime dateTimeExpirationDate =
           DateTime.parse(item.expirationDate!);
@@ -38,21 +43,54 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         );
       }
     }
-    if (item.credentialPreview.credentialStatus.type != '') {
-      final CredentialStatus credentialStatus =
-          await item.checkRevocationStatus();
-      if (credentialStatus == CredentialStatus.active) {
-        await verifyProofOfPurpose(item);
-      } else {
-        emit(
-          state.copyWith(
-            credentialStatus: CredentialStatus.suspended,
-            status: AppStatus.idle,
-          ),
-        );
+
+    if (isEbsiIssuer(item)) {
+      final issuerDid = item.data['issuer']! as String;
+      //const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
+
+      final VerificationType isVerified = await isEbsiCredentialVerified(
+        issuerDid,
+        client,
+        item.jwt!,
+      );
+
+      var credentialStatus = CredentialStatus.unknown;
+
+      switch (isVerified) {
+        case VerificationType.verified:
+          credentialStatus = CredentialStatus.active;
+          break;
+        case VerificationType.notVerified:
+          credentialStatus = CredentialStatus.pending;
+          break;
+        case VerificationType.unKnown:
+          credentialStatus = CredentialStatus.unknown;
+          break;
       }
+
+      emit(
+        state.copyWith(
+          credentialStatus: credentialStatus,
+          status: AppStatus.idle,
+        ),
+      );
     } else {
-      await verifyProofOfPurpose(item);
+      if (item.credentialPreview.credentialStatus.type != '') {
+        final CredentialStatus credentialStatus =
+            await item.checkRevocationStatus();
+        if (credentialStatus == CredentialStatus.active) {
+          await verifyProofOfPurpose(item);
+        } else {
+          emit(
+            state.copyWith(
+              credentialStatus: CredentialStatus.suspended,
+              status: AppStatus.idle,
+            ),
+          );
+        }
+      } else {
+        await verifyProofOfPurpose(item);
+      }
     }
   }
 

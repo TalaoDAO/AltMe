@@ -7,6 +7,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -39,8 +40,7 @@ class CredentialsDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CredentialDetailsCubit>(
       create: (context) => CredentialDetailsCubit(
-        didKitProvider: DIDKitProvider(),
-      ),
+          didKitProvider: DIDKitProvider(), client: DioClient('', Dio())),
       child: CredentialsDetailsView(
         credentialModel: credentialModel,
         readOnly: readOnly,
@@ -288,12 +288,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         const SizedBox(height: 10),
                         if (state.credentialDetailTabStatus ==
                             CredentialDetailTabStatus.informations) ...[
-                          if (!isEbsiIssuer(widget.credentialModel)) ...[
-                            const SizedBox(height: 10),
-                            CredentialActiveStatus(
-                              credentialStatus: state.credentialStatus,
-                            ),
-                          ],
+                          const SizedBox(height: 10),
+                          CredentialActiveStatus(
+                            credentialStatus: state.credentialStatus,
+                          ),
                           if (outputDescriptors != null) ...[
                             const SizedBox(height: 10),
                             CredentialManifestDetails(

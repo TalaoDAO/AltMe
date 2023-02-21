@@ -34,7 +34,7 @@ void main() {
 
     const nonce = '69165b47-a851-11ed-bd52-0a1628958560';
 
-    const audience = 'did:ebsi:zhSw5rPXkcHjvquwnVcTzzB';
+    const audience = 'xjcqarovuv';
 
     const jwtsOfCredentials = [
       // ignore: lines_longer_than_80_chars
