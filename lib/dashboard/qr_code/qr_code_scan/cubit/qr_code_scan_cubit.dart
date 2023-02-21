@@ -108,13 +108,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
+        var message =
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER;
+
+        if (e.toString() == 'Exception: VERIFICATION_ISSUE') {
+          message = ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL;
+        }
+
         emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            ),
-          ),
+          state.error(messageHandler: ResponseMessage(message)),
         );
       }
     }

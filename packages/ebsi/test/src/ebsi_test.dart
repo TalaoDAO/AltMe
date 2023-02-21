@@ -16,6 +16,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'const_values.dart';
+
 class MockDio extends Mock implements Dio {}
 
 void main() {
@@ -345,6 +347,37 @@ void main() {
       );
       expect(issuer, tokenUrl);
     });
+
+    test('get issuer did with openidConfigurationResponse', () {
+      const openidConfigurationResponse =
+          r'{"authorization_endpoint":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl/authorize","batch_credential_endpoint":null,"credential_endpoint":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl/credential","credential_issuer":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl","credential_manifests":[{"id":"VerifiableDiploma_1","issuer":{"id":"did:ebsi:zhSw5rPXkcHjvquwnVcTzzB","name":"Test EBSILUX"},"output_descriptors":[{"display":{"description":{"fallback":"This card is a proof that you passed this diploma successfully. You can use this card  when you need to prove this information to services that have adopted EU EBSI framework.","path":[],"schema":{"type":"string"}},"properties":[{"fallback":"Unknown","label":"First name","path":["$.credentialSubject.firstName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Last name","path":["$.credentialSubject.familyName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Birth date","path":["$.credentialSubject.dateOfBirth"],"schema":{"format":"date","type":"string"}},{"fallback":"Unknown","label":"Grading scheme","path":["$.credentialSubject.gradingScheme.title"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Title","path":["$.credentialSubject.learningAchievement.title"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Description","path":["$.credentialSubject.learningAchievement.description"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"ECTS Points","path":["$.credentialSubject.learningSpecification.ectsCreditPoints"],"schema":{"type":"number"}},{"fallback":"Unknown","label":"Issue date","path":["$.issuanceDate"],"schema":{"format":"date","type":"string"}},{"fallback":"Unknown","label":"Issued by","path":["$.credentialSubject.awardingOpportunity.awardingBody.preferredName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Registration","path":["$.credentialSubject.awardingOpportunity.awardingBody.registration"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Website","path":["$.credentialSubject.awardingOpportunity.awardingBody.homepage"],"schema":{"format":"uri","type":"string"}}],"subtitle":{"fallback":"EBSI Verifiable diploma","path":[],"schema":{"type":"string"}},"title":{"fallback":"Diploma","path":[],"schema":{"type":"string"}}},"id":"diploma_01","schema":"https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd"}],"spec_version":"https://identity.foundation/credential-manifest/spec/v1.0.0/"}],"credential_supported":[{"cryptographic_binding_methods_supported":["did"],"cryptographic_suites_supported":["ES256K","ES256","ES384","ES512","RS256"],"display":[{"locale":"en-US","name":"Issuer Talao"}],"format":"jwt_vc","id":"VerifiableDiploma","types":"https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd"},{"id":"VerifiableDiploma_1","issuer":{"id":"did:ebsi:zhSw5rPXkcHjvquwnVcTzzB","name":"Test EBSILUX"},"output_descriptors":[{"display":{"description":{"fallback":"This card is a proof that you passed this diploma successfully. You can use this card  when you need to prove this information to services that have adopted EU EBSI framework.","path":[],"schema":{"type":"string"}},"properties":[{"fallback":"Unknown","label":"First name","path":["$.credentialSubject.firstName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Last name","path":["$.credentialSubject.familyName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Birth date","path":["$.credentialSubject.dateOfBirth"],"schema":{"format":"date","type":"string"}},{"fallback":"Unknown","label":"Grading scheme","path":["$.credentialSubject.gradingScheme.title"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Title","path":["$.credentialSubject.learningAchievement.title"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Description","path":["$.credentialSubject.learningAchievement.description"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"ECTS Points","path":["$.credentialSubject.learningSpecification.ectsCreditPoints"],"schema":{"type":"number"}},{"fallback":"Unknown","label":"Issue date","path":["$.issuanceDate"],"schema":{"format":"date","type":"string"}},{"fallback":"Unknown","label":"Issued by","path":["$.credentialSubject.awardingOpportunity.awardingBody.preferredName"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Registration","path":["$.credentialSubject.awardingOpportunity.awardingBody.registration"],"schema":{"type":"string"}},{"fallback":"Unknown","label":"Website","path":["$.credentialSubject.awardingOpportunity.awardingBody.homepage"],"schema":{"format":"uri","type":"string"}}],"subtitle":{"fallback":"EBSI Verifiable diploma","path":[],"schema":{"type":"string"}},"title":{"fallback":"Diploma","path":[],"schema":{"type":"string"}}},"id":"diploma_01","schema":"https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd"}],"spec_version":"https://identity.foundation/credential-manifest/spec/v1.0.0/"}],"credential_supported":[{"cryptographic_binding_methods_supported":["did"],"cryptographic_suites_supported":["ES256K","ES256","ES384","ES512","RS256"],"display":[{"locale":"en-US","name":"Issuer Talao"}],"format":"jwt_vc","id":"VerifiableDiploma","types":"https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd"}],"pre-authorized_grant_anonymous_access_supported":true,"subject_syntax_types_supported":["did:ebsi"],"token_endpoint":"https://talao.co/sandbox/ebsi/issuer/vgvghylozl/token"}';
+
+      final issuer = ebsi.readIssuerDid(
+        Response(
+          requestOptions: RequestOptions(path: ''),
+          data: jsonDecode(openidConfigurationResponse) as Map<String, dynamic>,
+        ),
+      );
+      expect(issuer, 'did:ebsi:zhSw5rPXkcHjvquwnVcTzzB');
+    });
+
+    test('get publicKey did with didDocumentResponse', () {
+      const didDocumentResponse =
+          '{"assertionMethod":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"authentication":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"@context":"https://www.w3.org/ns/did/v1","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","verificationMethod":[{"controller":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53","publicKeyJwk":{"alg":"EdDSA","crv":"Ed25519","kid":"3623b877bbb24b08ba390f3585418f53","kty":"OKP","use":"sig","x":"pWgA8M3etXlLaqcRmgjEQkz7waseg3FKzMCzfm9Yeow"},"type":"Ed25519VerificationKey2019"}]}';
+
+      const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
+
+      const expectedPublicKey =
+          '{alg: EdDSA, crv: Ed25519, kid: 3623b877bbb24b08ba390f3585418f53, kty: OKP, use: sig, x: pWgA8M3etXlLaqcRmgjEQkz7waseg3FKzMCzfm9Yeow}';
+      final publicKey = ebsi.readPublicKeyJwk(
+        issuerDid,
+        Response(
+          requestOptions: RequestOptions(path: ''),
+          data: jsonDecode(didDocumentResponse) as Map<String, dynamic>,
+        ),
+      );
+      expect(publicKey, expectedPublicKey);
+    });
   });
 
   group('getCredentialRequest', () {
@@ -489,6 +522,35 @@ void main() {
         );
       });
     });
+  });
+
+  test('get corresponding did document', () async {
+    const url = 'https://api-pilot.ebsi.eu/did-registry/v3/identifiers/$didKey';
+    const response = {
+      '@context': 'https://w3id.org/did/v1',
+      'id': 'did:ebsi:z24q8qN8UE1j4XAFiFKtvJbH',
+      'verificationMethod': [
+        {
+          'id': 'did:ebsi:z24q8qN8UE1j4XAFiFKtvJbH#keys-1',
+          'type': 'Secp256k1VerificationKey2018',
+          'controller': 'did:ebsi:z24q8qN8UE1j4XAFiFKtvJbH',
+          'publicKeyHex':
+              '04f9139fbd3b9780863b17e8390934a1017fc8d0f18b84f02acb04f24c9cae261e45745c6507881509b9e6d837329153ea75fafb2c1a5d504702d04f1e22a80ecc' // ignore: lines_longer_than_80_chars
+        }
+      ],
+      'authentication': ['did:ebsi:z24q8qN8UE1j4XAFiFKtvJbH'],
+      'assertionMethod': ['did:ebsi:z24q8qN8UE1j4XAFiFKtvJbH#keys-1']
+    };
+
+    dioAdapter.onGet(
+      url,
+      (request) => request.reply(200, response),
+    );
+    final ebsi = Ebsi(client);
+
+    final value = await ebsi.getDidDocument(didKey);
+
+    expect(value.data, response);
   });
 
   test('sandbox', () {
