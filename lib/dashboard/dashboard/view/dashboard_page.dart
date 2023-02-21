@@ -48,6 +48,7 @@ class _DashboardViewState extends State<DashboardView> {
         }
       });
     });
+
     super.initState();
   }
 
@@ -288,12 +289,20 @@ class _DashboardViewState extends State<DashboardView> {
                                 onTap: () => bottomTapped(2),
                                 isSelected: state.selectedIndex == 2,
                               ),
-                            BottomBarItem(
-                              icon: IconStrings.messaging,
-                              text: l10n.help,
-                              onTap: () => bottomTapped(3),
-                              isSelected: state.selectedIndex == 3,
-                            ),
+                            StreamBuilder(
+                              stream: context
+                                  .read<LiveChatCubit>()
+                                  .unreadMessageCountStream,
+                              builder: (_, snapShot) {
+                                return BottomBarItem(
+                                  icon: IconStrings.messaging,
+                                  text: l10n.help,
+                                  badgeCount: snapShot.data ?? 0,
+                                  onTap: () => bottomTapped(3),
+                                  isSelected: state.selectedIndex == 3,
+                                );
+                              },
+                            )
                           ],
                         ),
                       ),

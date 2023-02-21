@@ -174,6 +174,7 @@ class App extends StatelessWidget {
           ),
         ),
         BlocProvider(
+          lazy: false,
           create: (context) => LiveChatCubit(
             dioClient: DioClient('', Dio()),
             didCubit: context.read<DIDCubit>(),

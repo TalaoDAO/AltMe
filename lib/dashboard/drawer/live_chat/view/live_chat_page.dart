@@ -65,7 +65,11 @@ class _ContactUsViewState extends State<LiveChatView> {
       titleLeading: widget.hideAppBar ? null : const BackLeadingButton(),
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.all(Sizes.spaceSmall),
-      body: BlocBuilder<LiveChatCubit, LiveChatState>(
+      body: BlocConsumer<LiveChatCubit, LiveChatState>(
+        listener: (context, state) {
+          final eventIds = state.messages.map((e) => e.remoteId).toList();
+          liveChatCubit.markMessageAsRead(eventIds);
+        },
         builder: (context, state) {
           if (state.status == AppStatus.loading) {
             return const Center(
