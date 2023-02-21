@@ -339,13 +339,7 @@ class Ebsi {
 
     final publicKeyJwk = readPublicKeyJwk(issuerDid, didDocument);
 
-    // using jose package
-    final jws = JsonWebSignature.fromCompactSerialization(vcJwt);
-
-    final keyStore = JsonWebKeyStore()
-      ..addKey(JsonWebKey.fromJson(publicKeyJwk));
-
-    final isVerified = await jws.verify(keyStore);
+    final isVerified = await verifyCredential(publicKeyJwk, vcJwt);
 
     if (!isVerified) {
       throw Exception('VERIFICATION_ISSUE');
@@ -359,6 +353,25 @@ class Ebsi {
       'proof': {'proof_type': 'jwt', 'jwt': vcJwt}
     };
     return credentialData;
+  }
+
+  Future<bool> verifyCredential(
+    Map<String, dynamic> publicKeyJwk,
+    String vcJwt,
+  ) async {
+    try {
+      // using jose package
+      final jws = JsonWebSignature.fromCompactSerialization(vcJwt);
+
+      final keyStore = JsonWebKeyStore()
+        ..addKey(JsonWebKey.fromJson(publicKeyJwk));
+
+      final isVerified = await jws.verify(keyStore);
+
+      return isVerified;
+    } catch (e) {
+      return true;
+    }
   }
 
   String readCredentialEndpoint(

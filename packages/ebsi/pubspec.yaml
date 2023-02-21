@@ -15,7 +15,6 @@ dependencies:
   dart_jsonwebtoken: ^2.7.1
   dart_web3: ^0.0.3
   dio: ^4.0.6
-  ed25519_hd_key: ^2.2.0
   fast_base58: ^0.2.1
   flutter:
     sdk: flutter
