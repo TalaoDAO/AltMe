@@ -368,7 +368,7 @@ void main() {
       const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
 
       const expectedPublicKey =
-          '{alg: EdDSA, crv: Ed25519, kid: 3623b877bbb24b08ba390f3585418f53, kty: OKP, use: sig, x: pWgA8M3etXlLaqcRmgjEQkz7waseg3FKzMCzfm9Yeow}';
+          '{"alg":"EdDSA","crv":"Ed25519","kid":"3623b877bbb24b08ba390f3585418f53","kty":"OKP","use":"sig","x":"pWgA8M3etXlLaqcRmgjEQkz7waseg3FKzMCzfm9Yeow"}';
       final publicKey = ebsi.readPublicKeyJwk(
         issuerDid,
         Response(
@@ -376,7 +376,7 @@ void main() {
           data: jsonDecode(didDocumentResponse) as Map<String, dynamic>,
         ),
       );
-      expect(publicKey, expectedPublicKey);
+      expect(jsonEncode(publicKey), expectedPublicKey);
     });
   });
 
