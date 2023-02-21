@@ -20,6 +20,7 @@ class Parameters {
     isGamingEnabled: true,
     isIdentityEnabled: true,
     isBlockchainAccountsEnabled: true,
+    isEducationEnabled: true,
     isSocialMediaEnabled: true,
     isCommunityEnabled: true,
     isOtherEnabled: true,

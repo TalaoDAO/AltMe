@@ -3,6 +3,7 @@ enum CredentialCategory {
   identityCards,
   communityCards,
   blockchainAccountsCards,
+  educationCards,
   passCards,
   othersCards,
   myProfessionalCards,
