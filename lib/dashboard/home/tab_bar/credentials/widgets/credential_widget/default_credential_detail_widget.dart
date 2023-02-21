@@ -63,7 +63,7 @@ class DefaultCredentialDetailWidget extends StatelessWidget {
           aspectRatio: Sizes.credentialAspectRatio,
           child: DecoratedBox(
             decoration: BaseBoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(Sizes.credentialBorderRadius),
               color: isEUDiploma(credentialModel)
                   ? const Color(0xff200072)
                   : getColorFromCredential(
