@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/ebsi/verify_ebsi_credential.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
+import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -12,10 +15,13 @@ part 'credential_details_cubit.g.dart';
 part 'credential_details_state.dart';
 
 class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
-  CredentialDetailsCubit({required this.didKitProvider})
-      : super(const CredentialDetailsState());
+  CredentialDetailsCubit({
+    required this.didKitProvider,
+    required this.client,
+  }) : super(const CredentialDetailsState());
 
   final DIDKitProvider didKitProvider;
+  final DioClient client;
 
   void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {
     emit(state.copyWith(credentialDetailTabStatus: credentialDetailTabStatus));
@@ -39,14 +45,38 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     }
 
     if (isEbsiIssuer(item)) {
-      {
-        emit(
-          state.copyWith(
-            credentialStatus: CredentialStatus.unknown,
-            status: AppStatus.idle,
-          ),
-        );
+      print(item);
+      print(item.data);
+
+      // TODO(bibash): dynamic //item.data['issuer']
+      const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
+
+      final VerificationType isVerified = await isEbsiCredentialVerified(
+        issuerDid,
+        client,
+        item.jwt!,
+      );
+
+      var credentialStatus = CredentialStatus.unknown;
+
+      switch (isVerified) {
+        case VerificationType.verified:
+          credentialStatus = CredentialStatus.active;
+          break;
+        case VerificationType.notVerified:
+          credentialStatus = CredentialStatus.pending;
+          break;
+        case VerificationType.unKnown:
+          credentialStatus = CredentialStatus.unknown;
+          break;
       }
+
+      emit(
+        state.copyWith(
+          credentialStatus: credentialStatus,
+          status: AppStatus.idle,
+        ),
+      );
     } else {
       if (item.credentialPreview.credentialStatus.type != '') {
         final CredentialStatus credentialStatus =

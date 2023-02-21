@@ -7,6 +7,7 @@ import 'package:bip39/bip39.dart' as bip393;
 import 'package:dio/dio.dart';
 import 'package:ebsi/src/issuer_token_parameters.dart';
 import 'package:ebsi/src/token_parameters.dart';
+import 'package:ebsi/src/verification_type.dart';
 import 'package:ebsi/src/verifier_token_parameters.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
@@ -332,16 +333,13 @@ class Ebsi {
 
     //final issuerDid = readIssuerDid(openidConfigurationResponse);
 
+    // TODO(bibash): dynamic
     const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
 
-    final didDocument =
-        await getDidDocument('did:ebsi:zeFCExU2XAAshYkPCpjuahA');
+    final isVerified =
+        await verifyCredential(issuerDid: issuerDid, vcJwt: vcJwt);
 
-    final publicKeyJwk = readPublicKeyJwk(issuerDid, didDocument);
-
-    final isVerified = await verifyCredential(publicKeyJwk, vcJwt);
-
-    if (!isVerified) {
+    if (isVerified == VerificationType.notVerified) {
       throw Exception('VERIFICATION_ISSUE');
     }
 
@@ -355,11 +353,16 @@ class Ebsi {
     return credentialData;
   }
 
-  Future<bool> verifyCredential(
-    Map<String, dynamic> publicKeyJwk,
-    String vcJwt,
-  ) async {
+  // TODO(bibash): TEST
+  Future<VerificationType> verifyCredential({
+    required String issuerDid,
+    required String vcJwt,
+  }) async {
+    final didDocument = await getDidDocument(issuerDid);
+
     try {
+      final publicKeyJwk = readPublicKeyJwk(issuerDid, didDocument);
+
       // using jose package
       final jws = JsonWebSignature.fromCompactSerialization(vcJwt);
 
@@ -368,9 +371,13 @@ class Ebsi {
 
       final isVerified = await jws.verify(keyStore);
 
-      return isVerified;
+      if (isVerified) {
+        return VerificationType.verified;
+      } else {
+        return VerificationType.notVerified;
+      }
     } catch (e) {
-      return true;
+      return VerificationType.unKnown;
     }
   }
 
