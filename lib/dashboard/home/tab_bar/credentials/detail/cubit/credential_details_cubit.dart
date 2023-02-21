@@ -45,11 +45,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     }
 
     if (isEbsiIssuer(item)) {
-      print(item);
-      print(item.data);
-
-      // TODO(bibash): dynamic //item.data['issuer']
-      const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
+      final issuerDid = item.data['issuer']! as String;
+      //const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
 
       final VerificationType isVerified = await isEbsiCredentialVerified(
         issuerDid,

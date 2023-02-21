@@ -207,6 +207,7 @@ class Ebsi {
       response as Map<String, dynamic>,
       issuerTokenParameters,
       credentialRequestUri,
+      openidConfigurationResponse,
     );
 
     final credentialEndpoint =
@@ -326,15 +327,15 @@ class Ebsi {
     Map<String, dynamic> response,
     IssuerTokenParameters issuerTokenParameters,
     Uri credentialRequestUri,
+    Response<Map<String, dynamic>> openidConfigurationResponse,
   ) async {
     final nonce = response['c_nonce'] as String;
 
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
 
-    //final issuerDid = readIssuerDid(openidConfigurationResponse);
+    final issuerDid = readIssuerDid(openidConfigurationResponse);
 
-    // TODO(bibash): dynamic
-    const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
+    //const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
 
     final isVerified =
         await verifyCredential(issuerDid: issuerDid, vcJwt: vcJwt);
