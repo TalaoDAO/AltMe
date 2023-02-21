@@ -21,7 +21,7 @@ class EUDiplomaCardModel extends CredentialSubjectModel {
     super.issuedBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.euDiplomaCard,
-          credentialCategory: CredentialCategory.othersCards,
+          credentialCategory: CredentialCategory.educationCards,
         );
 
   factory EUDiplomaCardModel.fromJson(Map<String, dynamic> json) =>

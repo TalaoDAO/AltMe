@@ -22,7 +22,14 @@ class DefaultCredentialDetailWidget extends StatelessWidget {
         credentialModel.credentialManifest?.outputDescriptors;
     // If outputDescriptor exist, the credential has a credential manifest
     // telling us what to display
+
+    late Color backgroundColor;
+
     if (outputDescriptors == null) {
+      backgroundColor = credentialModel
+          .credentialPreview.credentialSubjectModel.credentialSubjectType
+          .backgroundColor(credentialModel);
+
       return AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: DefaultSelectionDisplayDescriptor(
@@ -31,16 +38,18 @@ class DefaultCredentialDetailWidget extends StatelessWidget {
         ),
       );
     } else {
+      backgroundColor = getColorFromCredential(
+        outputDescriptors.first.styles?.background,
+        Colors.white,
+      )!;
+
       if (fromCredentialOffer) {
         return AspectRatio(
           aspectRatio: Sizes.credentialAspectRatio,
           child: DecoratedBox(
             decoration: BaseBoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: getColorFromCredential(
-                outputDescriptors.first.styles?.background,
-                Colors.white,
-              ),
+              borderRadius: BorderRadius.circular(Sizes.credentialAspectRatio),
+              color: backgroundColor,
               shapeColor: Theme.of(context).colorScheme.documentShape,
               value: 1,
               anchors: showBgDecoration
@@ -48,7 +57,7 @@ class DefaultCredentialDetailWidget extends StatelessWidget {
                   : const <Alignment>[],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(Sizes.credentialAspectRatio),
               child: CredentialManifestCard(
                 credentialModel: credentialModel,
                 outputDescriptor: outputDescriptors.first,
@@ -63,11 +72,18 @@ class DefaultCredentialDetailWidget extends StatelessWidget {
           aspectRatio: Sizes.credentialAspectRatio,
           child: DecoratedBox(
             decoration: BaseBoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: getColorFromCredential(
-                outputDescriptors.first.styles?.background,
-                Colors.white,
-              ),
+              borderRadius: BorderRadius.circular(Sizes.credentialBorderRadius),
+              color: backgroundColor,
+              gradient: isVerifiableDiplomaType(credentialModel)
+                  ? const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0xff0B67C5),
+                        Color(0xff200072),
+                      ],
+                    )
+                  : null,
               shapeColor: Theme.of(context).colorScheme.documentShape,
               value: 1,
               anchors: showBgDecoration

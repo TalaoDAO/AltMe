@@ -9,6 +9,7 @@ class CredentialListState extends Equatable {
     this.communityCredentials = const [],
     this.identityCredentials = const [],
     this.blockchainAccountsCredentials = const [],
+    this.educationCredentials = const [],
     this.passCredentials = const [],
     this.othersCredentials = const [],
     this.myProfessionalCredentials = const [],
@@ -33,6 +34,7 @@ class CredentialListState extends Equatable {
   final List<HomeCredential> communityCredentials;
   final List<HomeCredential> identityCredentials;
   final List<HomeCredential> blockchainAccountsCredentials;
+  final List<HomeCredential> educationCredentials;
   final List<HomeCredential> passCredentials;
   final List<HomeCredential> othersCredentials;
   final List<HomeCredential> myProfessionalCredentials;
@@ -49,6 +51,7 @@ class CredentialListState extends Equatable {
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
       blockchainAccountsCredentials: blockchainAccountsCredentials,
+      educationCredentials: educationCredentials,
       passCredentials: passCredentials,
       othersCredentials: othersCredentials,
       myProfessionalCredentials: myProfessionalCredentials,
@@ -69,6 +72,7 @@ class CredentialListState extends Equatable {
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
       blockchainAccountsCredentials: blockchainAccountsCredentials,
+      educationCredentials: educationCredentials,
       passCredentials: passCredentials,
       othersCredentials: othersCredentials,
       myProfessionalCredentials: myProfessionalCredentials,
@@ -86,6 +90,7 @@ class CredentialListState extends Equatable {
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
       blockchainAccountsCredentials: blockchainAccountsCredentials,
+      educationCredentials: educationCredentials,
       passCredentials: passCredentials,
       othersCredentials: othersCredentials,
       myProfessionalCredentials: myProfessionalCredentials,
@@ -104,6 +109,7 @@ class CredentialListState extends Equatable {
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
       blockchainAccountsCredentials: blockchainAccountsCredentials,
+      educationCredentials: educationCredentials,
       passCredentials: passCredentials,
       othersCredentials: othersCredentials,
       myProfessionalCredentials: myProfessionalCredentials,
@@ -119,6 +125,7 @@ class CredentialListState extends Equatable {
     List<HomeCredential>? communityCredentials,
     List<HomeCredential>? identityCredentials,
     List<HomeCredential>? blockchainAccountsCredentials,
+    List<HomeCredential>? educationCredentials,
     List<HomeCredential>? passCredentials,
     List<HomeCredential>? othersCredentials,
     List<HomeCredential>? myProfessionalCredentials,
@@ -134,6 +141,7 @@ class CredentialListState extends Equatable {
       identityCredentials: identityCredentials ?? this.identityCredentials,
       blockchainAccountsCredentials:
           blockchainAccountsCredentials ?? this.blockchainAccountsCredentials,
+      educationCredentials: educationCredentials ?? this.educationCredentials,
       passCredentials: passCredentials ?? this.passCredentials,
       othersCredentials: othersCredentials ?? this.othersCredentials,
       myProfessionalCredentials:
@@ -159,6 +167,7 @@ class CredentialListState extends Equatable {
       communityCredentials: communityCredentials,
       identityCredentials: identityCredentials,
       blockchainAccountsCredentials: blockchainAccountsCredentials,
+      educationCredentials: educationCredentials,
       passCredentials: passCredentials,
       othersCredentials: othersCredentials,
       myProfessionalCredentials: myProfessionalCredentials,
@@ -178,6 +187,7 @@ class CredentialListState extends Equatable {
         communityCredentials,
         identityCredentials,
         blockchainAccountsCredentials,
+        educationCredentials,
         passCredentials,
         othersCredentials,
         message,

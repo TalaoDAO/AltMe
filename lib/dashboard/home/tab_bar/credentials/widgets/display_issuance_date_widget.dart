@@ -18,6 +18,7 @@ class DisplayIssuanceDateWidget extends StatelessWidget {
 
     if (issuanceDate != null) {
       return Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(
             flex: 6,
