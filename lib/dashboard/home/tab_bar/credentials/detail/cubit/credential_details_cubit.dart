@@ -4,7 +4,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/ebsi/verify_ebsi_credential.dart';
 import 'package:did_kit/did_kit.dart';
-import 'package:dio/dio.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
