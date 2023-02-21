@@ -15,7 +15,7 @@ class CredentialManifestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = isEUDiploma(credentialModel)
+    final textColor = isVerifiableDiplomaType(credentialModel)
         ? Colors.white
         : getColorFromCredential(outputDescriptor.styles?.text, Colors.black);
     final credential = Credential.fromJsonOrDummy(credentialModel.data);

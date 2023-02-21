@@ -40,7 +40,9 @@ class CredentialsDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CredentialDetailsCubit>(
       create: (context) => CredentialDetailsCubit(
-          didKitProvider: DIDKitProvider(), client: DioClient('', Dio())),
+        didKitProvider: DIDKitProvider(),
+        client: DioClient('', Dio()),
+      ),
       child: CredentialsDetailsView(
         credentialModel: credentialModel,
         readOnly: readOnly,

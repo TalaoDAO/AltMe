@@ -323,6 +323,6 @@ Future<String> getRandomP256PrivateKey(
   }
 }
 
-bool isEUDiploma(CredentialModel credentialModel) {
+bool isVerifiableDiplomaType(CredentialModel credentialModel) {
   return credentialModel.credentialPreview.type.contains('VerifiableDiploma');
 }

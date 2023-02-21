@@ -22,7 +22,10 @@ class CredentialBackground extends StatelessWidget {
     return CredentialContainer(
       child: DecoratedBox(
         decoration: BaseBoxDecoration(
-          color: Colors.amber,
+          color: backgroundColor ??
+              credentialModel.credentialPreview.credentialSubjectModel
+                  .credentialSubjectType
+                  .backgroundColor(credentialModel),
           shapeColor: Theme.of(context).colorScheme.documentShape,
           value: 0,
           shapeSize: 256,
