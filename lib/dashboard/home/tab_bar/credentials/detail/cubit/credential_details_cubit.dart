@@ -22,10 +22,9 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   }
 
   Future<void> verifyCredential(CredentialModel item) async {
-    if (isEbsiIssuer(item)) return;
-
     emit(state.copyWith(status: AppStatus.loading));
     await Future<void>.delayed(const Duration(milliseconds: 500));
+
     if (item.expirationDate != null) {
       final DateTime dateTimeExpirationDate =
           DateTime.parse(item.expirationDate!);
@@ -38,21 +37,33 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         );
       }
     }
-    if (item.credentialPreview.credentialStatus.type != '') {
-      final CredentialStatus credentialStatus =
-          await item.checkRevocationStatus();
-      if (credentialStatus == CredentialStatus.active) {
-        await verifyProofOfPurpose(item);
-      } else {
+
+    if (isEbsiIssuer(item)) {
+      {
         emit(
           state.copyWith(
-            credentialStatus: CredentialStatus.suspended,
+            credentialStatus: CredentialStatus.unknown,
             status: AppStatus.idle,
           ),
         );
       }
     } else {
-      await verifyProofOfPurpose(item);
+      if (item.credentialPreview.credentialStatus.type != '') {
+        final CredentialStatus credentialStatus =
+            await item.checkRevocationStatus();
+        if (credentialStatus == CredentialStatus.active) {
+          await verifyProofOfPurpose(item);
+        } else {
+          emit(
+            state.copyWith(
+              credentialStatus: CredentialStatus.suspended,
+              status: AppStatus.idle,
+            ),
+          );
+        }
+      } else {
+        await verifyProofOfPurpose(item);
+      }
     }
   }
 

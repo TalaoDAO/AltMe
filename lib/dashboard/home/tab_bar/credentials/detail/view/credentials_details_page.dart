@@ -288,12 +288,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         const SizedBox(height: 10),
                         if (state.credentialDetailTabStatus ==
                             CredentialDetailTabStatus.informations) ...[
-                          if (!isEbsiIssuer(widget.credentialModel)) ...[
-                            const SizedBox(height: 10),
-                            CredentialActiveStatus(
-                              credentialStatus: state.credentialStatus,
-                            ),
-                          ],
+                          const SizedBox(height: 10),
+                          CredentialActiveStatus(
+                            credentialStatus: state.credentialStatus,
+                          ),
                           if (outputDescriptors != null) ...[
                             const SizedBox(height: 10),
                             CredentialManifestDetails(
