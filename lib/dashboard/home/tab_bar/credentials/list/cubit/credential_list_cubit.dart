@@ -153,7 +153,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialCategory.othersCards:
 
           /// adding real credentials
-          if (credential.credentialPreview.type.contains('VerifiableDiploma')) {
+          if (isEUDiploma(credential)) {
             educationCredentials.add(HomeCredential.isNotDummy(credential));
           } else {
             othersCredentials.add(HomeCredential.isNotDummy(credential));
@@ -346,7 +346,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       case CredentialCategory.othersCards:
 
         /// adding real credentials
-        if (credential.credentialPreview.type.contains('VerifiableDiploma')) {
+        if (isEUDiploma(credential)) {
           final credentials = List.of(state.educationCredentials)
             ..insert(0, HomeCredential.isNotDummy(credential));
           emit(state.populate(educationCredentials: credentials));
@@ -502,7 +502,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       case CredentialCategory.othersCards:
 
         ///finding index of updated credential
-        if (credential.credentialPreview.type.contains('VerifiableDiploma')) {
+        if (isEUDiploma(credential)) {
           final index = state.educationCredentials.indexWhere(
             (element) => element.credentialModel?.id == credential.id,
           );
@@ -708,7 +708,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         break;
 
       case CredentialCategory.othersCards:
-        if (credential.credentialPreview.type.contains('VerifiableDiploma')) {
+        if (isEUDiploma(credential)) {
           final credentials = List.of(state.educationCredentials)
             ..removeWhere(
               (element) => element.credentialModel?.id == credential.id,

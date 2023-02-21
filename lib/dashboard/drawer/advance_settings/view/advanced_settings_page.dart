@@ -65,7 +65,7 @@ class _AdvancedSettingsViewState extends State<AdvancedSettingsView> {
                       advancedSettingsCubit.toggleBlockchainAccountsRadio,
                 ),
                 AdvanceSettingsRadioItem(
-                  title: l10n.educationAccounts,
+                  title: l10n.educationCredentials,
                   isSelected: state.isEducationEnabled,
                   onPressed: advancedSettingsCubit.toggleEducationRadio,
                 ),

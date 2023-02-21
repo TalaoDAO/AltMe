@@ -72,7 +72,7 @@ class CredentialListData extends StatelessWidget {
                     state.educationCredentials.isNotEmpty) ...[
                   /// Education Credentials
                   HomeCredentialWidget(
-                    title: l10n.educationAccounts,
+                    title: l10n.educationCredentials,
                     credentials: state.educationCredentials,
                     categorySubtitle: l10n.educationCredentialHomeSubtitle,
                   ),

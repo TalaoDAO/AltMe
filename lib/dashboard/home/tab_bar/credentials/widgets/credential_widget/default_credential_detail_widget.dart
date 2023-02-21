@@ -64,10 +64,12 @@ class DefaultCredentialDetailWidget extends StatelessWidget {
           child: DecoratedBox(
             decoration: BaseBoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: getColorFromCredential(
-                outputDescriptors.first.styles?.background,
-                Colors.white,
-              ),
+              color: isEUDiploma(credentialModel)
+                  ? const Color(0xff200072)
+                  : getColorFromCredential(
+                      outputDescriptors.first.styles?.background,
+                      Colors.white,
+                    ),
               shapeColor: Theme.of(context).colorScheme.documentShape,
               value: 1,
               anchors: showBgDecoration

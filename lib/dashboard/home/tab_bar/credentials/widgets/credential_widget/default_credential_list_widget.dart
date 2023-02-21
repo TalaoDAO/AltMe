@@ -27,10 +27,12 @@ class DefaultCredentialListWidget extends StatelessWidget {
         ? credentialModel
             .credentialPreview.credentialSubjectModel.credentialSubjectType
             .backgroundColor(credentialModel)
-        : getColorFromCredential(
-            outputDescriptor.styles?.background,
-            Colors.white,
-          );
+        : isEUDiploma(credentialModel)
+            ? const Color(0xff200072)
+            : getColorFromCredential(
+                outputDescriptor.styles?.background,
+                Colors.white,
+              );
 
     late Widget descriptionWidget;
 
