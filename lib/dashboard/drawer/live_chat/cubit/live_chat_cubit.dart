@@ -42,10 +42,12 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   String _roomId = '';
   StreamSubscription<Event>? _onEventSubscription;
   final DIDCubit didCubit;
-  final _notificationStreamController = StreamController<int>();
+  StreamController<int>? _notificationStreamController;
 
-  Stream<int> get unreadMessageCountStream =>
-      _notificationStreamController.stream;
+  Stream<int> get unreadMessageCountStream {
+    _notificationStreamController ??= StreamController<int>();
+    return _notificationStreamController!.stream;
+  }
 
   Future<void> onSendPressed(PartialText partialText) async {
     try {
@@ -249,13 +251,13 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           emit(state.copyWith(messages: newMessages));
         } else {
           final Message message = _mapEventToMessage(event);
+          _getUnreadMessageCount();
           emit(
             state.copyWith(
               messages: [message, ...state.messages],
             ),
           );
         }
-        _getUnreadMessageCount();
       }
     });
   }
@@ -330,22 +332,49 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     return message;
   }
 
+  int get unreadMessageCount =>
+      client.getRoomById(_roomId)?.notificationCount ?? 0;
+
   void _getUnreadMessageCount() {
-    final unreadCount = client.getRoomById(_roomId)?.notificationCount ?? 0;
-    _notificationStreamController.sink.add(unreadCount);
+    final unreadCount = unreadMessageCount;
+    logger.i('unread message count: $unreadCount');
+    _notificationStreamController?.sink.add(unreadCount);
   }
 
   Future<void> markMessageAsRead(List<String?>? eventIds) async {
-    if (eventIds == null) return;
+    if (eventIds == null || eventIds.isEmpty) return;
+
+    final room = client.getRoomById(_roomId);
+    if (room == null) return;
     try {
       for (final eventId in eventIds) {
         if (eventId != null) {
-          await client.getRoomById(_roomId)?.setReadMarker(eventId);
+          await room.postReceipt(eventId);
         }
       }
-      _getUnreadMessageCount();
     } catch (e, s) {
       logger.e('e: $e , s: $s');
+    }
+    _getUnreadMessageCount();
+  }
+
+  // this function called when state emited in UI and needs
+  // to set messages as read
+  void setMessagesAsRead() {
+    try {
+      logger.i('setMessagesAsRead');
+      if (unreadMessageCount > 0) {
+        final unreadMessageEventIds = state.messages
+            .take(unreadMessageCount)
+            .map((e) => e.remoteId!)
+            .toList();
+        logger.i(
+          'unread message event ids lenght: ${unreadMessageEventIds.length}',
+        );
+        markMessageAsRead(unreadMessageEventIds);
+      }
+    } catch (e, s) {
+      logger.e('e: $e, s: $s');
     }
   }
 
@@ -401,6 +430,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     await client.init(
       newHomeserver: Uri.parse(Urls.matrixHomeServer),
     );
+    _notificationStreamController = StreamController<int>();
   }
 
   Future<String> _getDidAuth(String did, String nonce) async {
@@ -493,7 +523,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   Future<void> dispose() async {
     await client.logout();
     await client.dispose();
-    await _notificationStreamController.close();
+    await _notificationStreamController?.close();
+    _notificationStreamController = null;
     await _onEventSubscription?.cancel();
     _onEventSubscription = null;
   }

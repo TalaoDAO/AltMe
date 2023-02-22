@@ -45,6 +45,7 @@ class LiveChatView extends StatefulWidget {
 
 class _ContactUsViewState extends State<LiveChatView> {
   late final LiveChatCubit liveChatCubit;
+
   @override
   void initState() {
     liveChatCubit = context.read<LiveChatCubit>();
@@ -65,11 +66,7 @@ class _ContactUsViewState extends State<LiveChatView> {
       titleLeading: widget.hideAppBar ? null : const BackLeadingButton(),
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.all(Sizes.spaceSmall),
-      body: BlocConsumer<LiveChatCubit, LiveChatState>(
-        listener: (context, state) {
-          final eventIds = state.messages.map((e) => e.remoteId).toList();
-          liveChatCubit.markMessageAsRead(eventIds);
-        },
+      body: BlocBuilder<LiveChatCubit, LiveChatState>(
         builder: (context, state) {
           if (state.status == AppStatus.loading) {
             return const Center(
@@ -80,6 +77,9 @@ class _ContactUsViewState extends State<LiveChatView> {
               child: Text(l10n.somethingsWentWrongTryAgainLater),
             );
           } else {
+            if (context.read<DashboardCubit>().state.selectedIndex == 3) {
+              liveChatCubit.setMessagesAsRead();
+            }
             return Stack(
               alignment: Alignment.topCenter,
               children: [

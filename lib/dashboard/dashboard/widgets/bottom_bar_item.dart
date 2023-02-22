@@ -1,6 +1,6 @@
 import 'package:altme/theme/theme.dart';
-import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:flutter/material.dart';
 
 class BottomBarItem extends StatelessWidget {
   const BottomBarItem({
