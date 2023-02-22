@@ -83,7 +83,7 @@ void main() {
           'learningAchievement': {
             'additionalNote': ['DISTRIBUTION MANAGEMENT'],
             'description':
-                'The Master in Information and Computer Sciences (MICS) at the University of Luxembourg enables students to acquire deeper knowledge in computer science by understanding its abstract and interdisciplinary foundations, focusing on problem solving and developing lifelong learning skills.',
+                'The Master in Information and Computer Sciences (MICS) at the University of Luxembourg enables students to acquire deeper knowledge in computer science by understanding its abstract and interdisciplinary foundations, focusing on problem solving and developing lifelong learning skills.', // ignore: lines_longer_than_80_chars
             'id':
                 'https://leaston.bcdiploma.com/law-economics-management#LearningAchievment',
             'title': 'Master in Information and Computer Sciences'
@@ -115,7 +115,7 @@ void main() {
           'creator': 'did:ebsi:zdRvvKbXhVVBsXhatjuiBhs',
           'domain': 'https://api.preprod.ebsi.eu',
           'jws':
-              'eyJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdLCJhbGciOiJFUzI1NksifQ..mIBnM8XDQqSYKQNX_LvaJhmsbyCr5OZ5cU2Zk-ReqLpr4doFsgmoobkO5128tZy-8KimVjJkGw0wL1uBWnMLWQ',
+              'eyJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdLCJhbGciOiJFUzI1NksifQ..mIBnM8XDQqSYKQNX_LvaJhmsbyCr5OZ5cU2Zk-ReqLpr4doFsgmoobkO5128tZy-8KimVjJkGw0wL1uBWnMLWQ', // ignore: lines_longer_than_80_chars
           'nonce': '3ea68dae-d07a-4daa-932b-fbb58f5c20c4',
           'type': 'EcdsaSecp256k1Signature2019'
         },
