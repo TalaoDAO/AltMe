@@ -190,6 +190,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
 
   Future<void> init() async {
     try {
+      final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+      if (ssiKey == null) return;
       emit(state.copyWith(status: AppStatus.loading));
       await _initClient();
       final username = didCubit.state.did!.replaceAll(':', '-');

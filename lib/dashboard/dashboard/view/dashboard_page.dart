@@ -165,6 +165,9 @@ class _DashboardViewState extends State<DashboardView> {
       ],
       child: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
+          if (state.selectedIndex == 3) {
+            context.read<LiveChatCubit>().setMessagesAsRead();
+          }
           return WillPopScope(
             onWillPop: () async {
               if (scaffoldKey.currentState!.isDrawerOpen) {

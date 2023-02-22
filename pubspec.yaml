@@ -105,6 +105,7 @@ dependencies:
   url_launcher: ^6.1.9
   uuid: ^3.0.7
   #wallet_connect: ^1.0.4
+  visibility_detector: ^0.3.3
   wallet_connect:
     git:
       url: https://github.com/bibash28/wallet-connect-dart.git

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart' hide FileMessage, Message;
+import 'package:visibility_detector/visibility_detector.dart';
 
 class LiveChatPage extends StatelessWidget {
   const LiveChatPage({
@@ -46,6 +47,8 @@ class LiveChatView extends StatefulWidget {
 class _ContactUsViewState extends State<LiveChatView> {
   late final LiveChatCubit liveChatCubit;
 
+  bool pageIsVisible = false;
+
   @override
   void initState() {
     liveChatCubit = context.read<LiveChatCubit>();
@@ -77,56 +80,68 @@ class _ContactUsViewState extends State<LiveChatView> {
               child: Text(l10n.somethingsWentWrongTryAgainLater),
             );
           } else {
-            if (context.read<DashboardCubit>().state.selectedIndex == 3) {
+            if (pageIsVisible) {
               liveChatCubit.setMessagesAsRead();
             }
-            return Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                Chat(
-                  theme: const DarkChatTheme(),
-                  messages: state.messages,
-                  onSendPressed: liveChatCubit.onSendPressed,
-                  onAttachmentPressed: _handleAttachmentPressed,
-                  onMessageTap: _handleMessageTap,
-                  onPreviewDataFetched: liveChatCubit.handlePreviewDataFetched,
-                  user: state.user ?? const User(id: ''),
-                ),
-                if (state.messages.isEmpty)
-                  BackgroundCard(
-                    padding: const EdgeInsets.all(Sizes.spaceSmall),
-                    margin: const EdgeInsets.all(Sizes.spaceNormal),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          l10n.supportChatWelcomeMessage,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        const SizedBox(
-                          height: Sizes.spaceSmall,
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.lock,
-                              size: Sizes.icon,
-                            ),
-                            const SizedBox(
-                              width: Sizes.space2XSmall,
-                            ),
-                            Text(
-                              l10n.e2eEncyptedChat,
-                              style: Theme.of(context).textTheme.subtitle4,
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+            return VisibilityDetector(
+              key: const Key('chat-widget'),
+              onVisibilityChanged: (visibilityInfo) {
+                if (visibilityInfo.visibleFraction == 1.0) {
+                  liveChatCubit.setMessagesAsRead();
+                  pageIsVisible = true;
+                } else {
+                  pageIsVisible = false;
+                }
+              },
+              child: Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  Chat(
+                    theme: const DarkChatTheme(),
+                    messages: state.messages,
+                    onSendPressed: liveChatCubit.onSendPressed,
+                    onAttachmentPressed: _handleAttachmentPressed,
+                    onMessageTap: _handleMessageTap,
+                    onPreviewDataFetched:
+                        liveChatCubit.handlePreviewDataFetched,
+                    user: state.user ?? const User(id: ''),
                   ),
-              ],
+                  if (state.messages.isEmpty)
+                    BackgroundCard(
+                      padding: const EdgeInsets.all(Sizes.spaceSmall),
+                      margin: const EdgeInsets.all(Sizes.spaceNormal),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            l10n.supportChatWelcomeMessage,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          const SizedBox(
+                            height: Sizes.spaceSmall,
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.lock,
+                                size: Sizes.icon,
+                              ),
+                              const SizedBox(
+                                width: Sizes.space2XSmall,
+                              ),
+                              Text(
+                                l10n.e2eEncyptedChat,
+                                style: Theme.of(context).textTheme.subtitle4,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                ],
+              ),
             );
           }
         },
