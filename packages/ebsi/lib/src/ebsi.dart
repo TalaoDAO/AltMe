@@ -201,6 +201,7 @@ class Ebsi {
     final response = await getToken(tokenEndPoint, tokenData);
 
     final private = await getPrivateKey(mnemonic, privateKey);
+
     final issuerTokenParameters = IssuerTokenParameters(private, issuer);
 
     final credentialData = await buildCredentialData(
@@ -335,8 +336,6 @@ class Ebsi {
 
     final issuerDid = readIssuerDid(openidConfigurationResponse);
 
-    //const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
-
     final isVerified =
         await verifyCredential(issuerDid: issuerDid, vcJwt: vcJwt);
 
@@ -354,20 +353,23 @@ class Ebsi {
     return credentialData;
   }
 
-  // TODO(bibash): TEST
   Future<VerificationType> verifyCredential({
     required String issuerDid,
     required String vcJwt,
   }) async {
     try {
       final didDocument = await getDidDocument(issuerDid);
+
       final publicKeyJwk = readPublicKeyJwk(issuerDid, didDocument);
 
-      // using jose package
+      // create a JsonWebSignature from the encoded string
       final jws = JsonWebSignature.fromCompactSerialization(vcJwt);
 
+      // create a JsonWebKey for verifying the signature
       final keyStore = JsonWebKeyStore()
-        ..addKey(JsonWebKey.fromJson(publicKeyJwk));
+        ..addKey(
+          JsonWebKey.fromJson(publicKeyJwk),
+        );
 
       final isVerified = await jws.verify(keyStore);
 
