@@ -42,6 +42,12 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   String _roomId = '';
   StreamSubscription<Event>? _onEventSubscription;
   final DIDCubit didCubit;
+  StreamController<int>? _notificationStreamController;
+
+  Stream<int> get unreadMessageCountStream {
+    _notificationStreamController ??= StreamController<int>();
+    return _notificationStreamController!.stream;
+  }
 
   Future<void> onSendPressed(PartialText partialText) async {
     try {
@@ -209,6 +215,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
         username,
       );
       logger.i('roomId : $_roomId');
+      _getUnreadMessageCount();
       _subscribeToEventsOfRoom();
       final retrivedMessageFromDB = await _retriveMessagesFromDB(_roomId);
       emit(
@@ -244,6 +251,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           emit(state.copyWith(messages: newMessages));
         } else {
           final Message message = _mapEventToMessage(event);
+          _getUnreadMessageCount();
           emit(
             state.copyWith(
               messages: [message, ...state.messages],
@@ -259,6 +267,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     if (event.messageType == 'm.text') {
       message = TextMessage(
         id: event.unsigned?['transaction_id'] as String? ?? const Uuid().v4(),
+        remoteId: event.eventId,
         text: event.text,
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         status: _mapEventStatusToMessageStatus(event.status),
@@ -269,6 +278,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     } else if (event.messageType == 'm.image') {
       message = ImageMessage(
         id: const Uuid().v4(),
+        remoteId: event.eventId,
         name: event.body,
         size: event.content['info']['size'] as num,
         uri: _getUrlFromUri(event.content['url'] as String),
@@ -281,6 +291,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     } else if (event.messageType == 'm.file') {
       message = FileMessage(
         id: const Uuid().v4(),
+        remoteId: event.eventId,
         name: event.body,
         size: event.content['info']['size'] as num,
         uri: _getUrlFromUri(event.content['url'] as String),
@@ -293,6 +304,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     } else if (event.messageType == 'm.audio') {
       message = AudioMessage(
         id: const Uuid().v4(),
+        remoteId: event.eventId,
         duration: Duration(
           milliseconds: event.content['info']['duration'] as int,
         ),
@@ -308,6 +320,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     } else {
       message = TextMessage(
         id: const Uuid().v4(),
+        remoteId: event.eventId,
         text: event.text,
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         status: _mapEventStatusToMessageStatus(event.status),
@@ -317,6 +330,52 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       );
     }
     return message;
+  }
+
+  int get unreadMessageCount =>
+      client.getRoomById(_roomId)?.notificationCount ?? 0;
+
+  void _getUnreadMessageCount() {
+    final unreadCount = unreadMessageCount;
+    logger.i('unread message count: $unreadCount');
+    _notificationStreamController?.sink.add(unreadCount);
+  }
+
+  Future<void> markMessageAsRead(List<String?>? eventIds) async {
+    if (eventIds == null || eventIds.isEmpty) return;
+
+    final room = client.getRoomById(_roomId);
+    if (room == null) return;
+    try {
+      for (final eventId in eventIds) {
+        if (eventId != null) {
+          await room.postReceipt(eventId);
+        }
+      }
+    } catch (e, s) {
+      logger.e('e: $e , s: $s');
+    }
+    _getUnreadMessageCount();
+  }
+
+  // this function called when state emited in UI and needs
+  // to set messages as read
+  void setMessagesAsRead() {
+    try {
+      logger.i('setMessagesAsRead');
+      if (unreadMessageCount > 0) {
+        final unreadMessageEventIds = state.messages
+            .take(unreadMessageCount)
+            .map((e) => e.remoteId!)
+            .toList();
+        logger.i(
+          'unread message event ids lenght: ${unreadMessageEventIds.length}',
+        );
+        markMessageAsRead(unreadMessageEventIds);
+      }
+    } catch (e, s) {
+      logger.e('e: $e, s: $s');
+    }
   }
 
   Future<List<Message>> _retriveMessagesFromDB(String roomId) async {
@@ -371,6 +430,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     await client.init(
       newHomeserver: Uri.parse(Urls.matrixHomeServer),
     );
+    _notificationStreamController = StreamController<int>();
   }
 
   Future<String> _getDidAuth(String did, String nonce) async {
@@ -463,6 +523,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   Future<void> dispose() async {
     await client.logout();
     await client.dispose();
+    await _notificationStreamController?.close();
+    _notificationStreamController = null;
     await _onEventSubscription?.cancel();
     _onEventSubscription = null;
   }

@@ -45,6 +45,7 @@ class LiveChatView extends StatefulWidget {
 
 class _ContactUsViewState extends State<LiveChatView> {
   late final LiveChatCubit liveChatCubit;
+
   @override
   void initState() {
     liveChatCubit = context.read<LiveChatCubit>();
@@ -76,6 +77,9 @@ class _ContactUsViewState extends State<LiveChatView> {
               child: Text(l10n.somethingsWentWrongTryAgainLater),
             );
           } else {
+            if (context.read<DashboardCubit>().state.selectedIndex == 3) {
+              liveChatCubit.setMessagesAsRead();
+            }
             return Stack(
               alignment: Alignment.topCenter,
               children: [

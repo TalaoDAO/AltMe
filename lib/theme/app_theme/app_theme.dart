@@ -298,6 +298,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
       );
 
+  TextStyle get badgeStyle => GoogleFonts.nunito(
+        color: const Color(0xFFEEEEEE),
+        fontSize: 8,
+        fontWeight: FontWeight.w500,
+      );
+
   TextStyle get onBoardingTitleStyle => GoogleFonts.roboto(
         color: const Color(0xFFFFFFFF),
         fontSize: 22,
