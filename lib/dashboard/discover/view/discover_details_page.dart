@@ -104,7 +104,7 @@ class DiscoverDetailsView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    _buildDetailsFields(context, l10n),
+                    DetailFields(homeCredential: homeCredential),
                   ],
                 ),
               ),
@@ -125,8 +125,19 @@ class DiscoverDetailsView extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildDetailsFields(BuildContext context, AppLocalizations l10n) {
+class DetailFields extends StatelessWidget {
+  const DetailFields({
+    super.key,
+    required this.homeCredential,
+  });
+
+  final HomeCredential homeCredential;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
     if (homeCredential.credentialSubjectType.isDisabled) {
       return DiscoverDynamicDetial(
         title: l10n.credentialManifestDescription,

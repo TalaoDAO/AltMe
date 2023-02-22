@@ -12,8 +12,10 @@ Future<void> discoverCredential({
       List.of(DiscoverList.identityCategories);
 
   /// items to remove to bypass KYC
-  credentialSubjectTypeList.remove(CredentialSubjectType.emailPass);
-  credentialSubjectTypeList.remove(CredentialSubjectType.phonePass);
+  credentialSubjectTypeList
+    ..remove(CredentialSubjectType.emailPass)
+    ..remove(CredentialSubjectType.phonePass)
+    ..remove(CredentialSubjectType.twitterCard);
 
   if (credentialSubjectTypeList
       .contains(homeCredential.credentialSubjectType)) {
