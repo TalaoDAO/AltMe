@@ -460,9 +460,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
         return db;
       },
     );
-    await client.init(
-      newHomeserver: Uri.parse(Urls.matrixHomeServer),
-    );
+    client.homeserver = Uri.parse(Urls.matrixHomeServer);
+    await client.init();
     _notificationStreamController = StreamController<int>();
   }
 

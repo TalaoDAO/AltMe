@@ -131,9 +131,13 @@ class _ContactUsViewState extends State<LiveChatView> {
                               const SizedBox(
                                 width: Sizes.space2XSmall,
                               ),
-                              Text(
-                                l10n.e2eEncyptedChat,
-                                style: Theme.of(context).textTheme.subtitle4,
+                              Flexible(
+                                child: MyText(
+                                  l10n.e2eEncyptedChat,
+                                  maxLines: 1,
+                                  minFontSize: 8,
+                                  style: Theme.of(context).textTheme.subtitle4,
+                                ),
                               ),
                             ],
                           )
