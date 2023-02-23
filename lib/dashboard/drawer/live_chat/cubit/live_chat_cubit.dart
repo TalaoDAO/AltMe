@@ -487,6 +487,10 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     try {
       final room = client.getRoomById(roomId);
       if (room == null) return;
+      if (room.encrypted) {
+        logger.i('the room with id: ${room.id} encyrpted before!');
+        return;
+      }
       final verificationResponse =
           await DeviceKeysList(client.userID!, client).startVerification();
       logger.i('verification response: $verificationResponse');
