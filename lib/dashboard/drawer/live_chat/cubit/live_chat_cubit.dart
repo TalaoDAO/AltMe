@@ -46,7 +46,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   StreamController<int>? _notificationStreamController;
 
   Stream<int> get unreadMessageCountStream {
-    _notificationStreamController ??= StreamController<int>();
+    _notificationStreamController ??= StreamController<int>.broadcast();
     return _notificationStreamController!.stream;
   }
 
@@ -189,6 +189,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   }
 
   Future<void> init() async {
+    logger.i('init()');
     try {
       final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
       if (ssiKey == null || ssiKey.isEmpty) {
@@ -511,7 +512,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     );
     client.homeserver = Uri.parse(Urls.matrixHomeServer);
     await client.init();
-    _notificationStreamController = StreamController<int>();
+    _notificationStreamController ??= StreamController<int>.broadcast();
   }
 
   Future<String> _getDidAuth(String did, String nonce) async {
