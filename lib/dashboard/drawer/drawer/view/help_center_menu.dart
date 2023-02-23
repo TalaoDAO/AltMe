@@ -73,7 +73,7 @@ class HelpCenterView extends StatelessWidget {
                           textAlign: TextAlign.left,
                           style: Theme.of(context).textTheme.drawerItem,
                         ),
-                        const SizedBox(width: 16),
+                        const Spacer(),
                         Icon(
                           Icons.chevron_right,
                           size: 26,
