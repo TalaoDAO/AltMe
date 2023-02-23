@@ -175,7 +175,7 @@ class App extends StatelessWidget {
           lazy: false,
           create: (context) => LiveChatCubit(
             dioClient: DioClient('', Dio()),
-            didCubit: context.read<DIDCubit>(),
+            didKit: DIDKitProvider(),
             secureStorageProvider: getSecureStorage,
           ),
         ),

@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:crypto/crypto.dart';
+import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,7 @@ part 'live_chat_state.dart';
 
 class LiveChatCubit extends Cubit<LiveChatState> {
   LiveChatCubit({
-    required this.didCubit,
+    required this.didKit,
     required this.secureStorageProvider,
     required this.dioClient,
   }) : super(
@@ -41,8 +41,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   final DioClient dioClient;
   final logger = getLogger('LiveChatCubit');
   String _roomId = '';
+  final DIDKitProvider didKit;
   StreamSubscription<Event>? _onEventSubscription;
-  final DIDCubit didCubit;
   StreamController<int>? _notificationStreamController;
 
   Stream<int> get unreadMessageCountStream {
@@ -191,15 +191,43 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   Future<void> init() async {
     try {
       final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
-      if (ssiKey == null) return;
+      if (ssiKey == null || ssiKey.isEmpty) {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          ),
+        );
+        return;
+      }
+      final did = await secureStorageProvider.get(SecureStorageKeys.did) ?? '';
+      final username = did.replaceAll(':', '-');
+      if (username.isEmpty) {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          ),
+        );
+        return;
+      }
       emit(state.copyWith(status: AppStatus.loading));
       await _initClient();
-      final username = didCubit.state.did!.replaceAll(':', '-');
       final isUserRegisteredMatrix = await secureStorageProvider
           .get(SecureStorageKeys.isUserRegisteredMatrix);
       late String userId;
       if (isUserRegisteredMatrix != 'true') {
-        await _register(username: username);
+        await _register(did: did);
         await secureStorageProvider.set(
           SecureStorageKeys.isUserRegisteredMatrix,
           true.toString(),
@@ -230,7 +258,28 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       );
     } catch (e, s) {
       logger.e('error: $e, stack: $s');
-      emit(state.copyWith(status: AppStatus.error));
+      if (e is MatrixException) {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage.error(
+              stringMessage: e.errorMessage,
+            ),
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -478,7 +527,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
 
     final key = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
 
-    final String didAuth = await didCubit.didKitProvider.didAuth(
+    final String didAuth = await didKit.didAuth(
       did,
       jsonEncode(options),
       key,
@@ -511,9 +560,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   }
 
   Future<void> _register({
-    required String username,
+    required String did,
   }) async {
-    final did = didCubit.state.did!;
     final nonce = await _getNonce(did);
     final didAuth = await _getDidAuth(did, nonce);
     await dotenv.load();
@@ -555,12 +603,16 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   }
 
   Future<void> dispose() async {
-    await client.logout();
-    await client.dispose();
-    await _notificationStreamController?.close();
-    _notificationStreamController = null;
-    await _onEventSubscription?.cancel();
-    _onEventSubscription = null;
+    try {
+      await client.logout();
+      await client.dispose();
+      await _notificationStreamController?.close();
+      _notificationStreamController = null;
+      await _onEventSubscription?.cancel();
+      _onEventSubscription = null;
+    } catch (e) {
+      logger.e('e: $e');
+    }
   }
 
   String _getUrlFromUri(String uri) {

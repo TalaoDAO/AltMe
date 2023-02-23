@@ -90,6 +90,21 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
+  String _getTitle(int selectedIndex, AppLocalizations l10n) {
+    switch (selectedIndex) {
+      case 0:
+        return l10n.myWallet;
+      case 1:
+        return l10n.discover;
+      case 2:
+        return Parameters.hasCryptoCallToAction ? l10n.buy : l10n.search;
+      case 3:
+        return l10n.help;
+      default:
+        return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -177,15 +192,7 @@ class _DashboardViewState extends State<DashboardView> {
             },
             child: BasePage(
               scrollView: false,
-              title: state.selectedIndex == 0
-                  ? l10n.myWallet
-                  : state.selectedIndex == 1
-                      ? l10n.discover
-                      : state.selectedIndex == 2
-                          ? Parameters.hasCryptoCallToAction
-                              ? l10n.buy
-                              : l10n.search
-                          : '',
+              title: _getTitle(state.selectedIndex, l10n),
               scaffoldKey: scaffoldKey,
               padding: EdgeInsets.zero,
               drawer: const DrawerPage(),

@@ -76,8 +76,21 @@ class _ContactUsViewState extends State<LiveChatView> {
               child: CircularProgressIndicator(),
             );
           } else if (state.status == AppStatus.error) {
+            String message = '';
+            if (state.message != null) {
+              if (state.message!.stringMessage != null) {
+                message = state.message!.stringMessage!;
+              } else if (state.message!.messageHandler != null) {
+                final MessageHandler messageHandler =
+                    state.message!.messageHandler!;
+                message = messageHandler.getMessage(context, messageHandler);
+              }
+            }
             return Center(
-              child: Text(l10n.somethingsWentWrongTryAgainLater),
+              child: ErrorView(
+                message: message,
+                onTap: liveChatCubit.init,
+              ),
             );
           } else {
             if (pageIsVisible) {

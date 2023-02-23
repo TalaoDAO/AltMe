@@ -90,7 +90,10 @@ class AllTokensCubit extends Cubit<AllTokensState> {
         emit(state.copyWith(selectedContracts: data));
         getLogger(
           'Tokens cubit',
-        ).i('returned selectedContracts from storage: $selectedContracts');
+        ).i(
+          'returned selectedContracts from storage'
+          ' lenght: ${selectedContracts.length}',
+        );
         return data;
       }
     } catch (e, s) {
