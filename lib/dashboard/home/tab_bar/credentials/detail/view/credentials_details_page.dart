@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
@@ -311,7 +309,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               final subject = l10n.shareWith;
 
                               Share.share(
-                                data!,
+                                data,
                                 subject: subject,
                                 sharePositionOrigin:
                                     box!.localToGlobal(Offset.zero) & box.size,

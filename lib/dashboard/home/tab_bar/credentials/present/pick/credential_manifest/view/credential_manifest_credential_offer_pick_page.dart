@@ -170,9 +170,7 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                           presentationDefinition
                                                   .inputDescriptors[
                                               inputDescriptorIndex];
-                                      // TODO(all): no sure if I'm correct to
-                                      // take first field
-                                      //to check optional
+
                                       final isOptional = inputDescriptor
                                               .constraints
                                               ?.fields
