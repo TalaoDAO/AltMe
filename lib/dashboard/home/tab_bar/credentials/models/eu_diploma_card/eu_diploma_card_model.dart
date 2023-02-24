@@ -136,11 +136,11 @@ class LearningSpecification {
   factory LearningSpecification.fromJson(Map<String, dynamic> json) =>
       _$LearningSpecificationFromJson(json);
 
-  int? ectsCreditPoints;
-  int? eqfLevel;
+  dynamic ectsCreditPoints;
+  dynamic eqfLevel;
   String id;
-  List<String>? iscedfCode;
-  List<String>? nqfLevel;
+  List<dynamic>? iscedfCode;
+  List<dynamic>? nqfLevel;
 
   Map<String, dynamic> toJson() => _$LearningSpecificationToJson(this);
 }

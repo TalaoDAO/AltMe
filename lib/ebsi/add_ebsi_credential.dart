@@ -45,10 +45,10 @@ Future<void> addEbsiCredential(
     ).toJson();
   }
 
+  final newCredentialModel = CredentialModel.fromJson(newCredential);
+
   final credentialModel = CredentialModel.copyWithData(
-    oldCredentialModel: CredentialModel.fromJson(
-      newCredential,
-    ),
+    oldCredentialModel: newCredentialModel,
     newData: credentialFromEbsi,
     activities: [Activity(acquisitionAt: DateTime.now())],
   );

@@ -5,7 +5,7 @@ class CredentialDetailsState extends Equatable {
   const CredentialDetailsState({
     this.status = AppStatus.init,
     this.message,
-    this.credentialStatus = CredentialStatus.pending,
+    this.credentialStatus,
     this.credentialDetailTabStatus = CredentialDetailTabStatus.informations,
   });
 
@@ -14,7 +14,7 @@ class CredentialDetailsState extends Equatable {
 
   final AppStatus status;
   final StateMessage? message;
-  final CredentialStatus credentialStatus;
+  final CredentialStatus? credentialStatus;
   final CredentialDetailTabStatus credentialDetailTabStatus;
 
   CredentialDetailsState loading() {

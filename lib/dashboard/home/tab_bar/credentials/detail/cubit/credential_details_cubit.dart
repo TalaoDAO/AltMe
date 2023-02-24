@@ -40,6 +40,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             status: AppStatus.idle,
           ),
         );
+        return;
       }
     }
 
@@ -53,7 +54,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         item.jwt!,
       );
 
-      var credentialStatus = CredentialStatus.unknown;
+      late CredentialStatus credentialStatus;
 
       switch (isVerified) {
         case VerificationType.verified:

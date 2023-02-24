@@ -4,9 +4,12 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class CredentialActiveStatus extends StatelessWidget {
-  const CredentialActiveStatus({super.key, required this.credentialStatus});
+  const CredentialActiveStatus({
+    super.key,
+    required this.credentialStatus,
+  });
 
-  final CredentialStatus credentialStatus;
+  final CredentialStatus? credentialStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,7 @@ class CredentialActiveStatus extends StatelessWidget {
                     .copyWith(color: Theme.of(context).colorScheme.titleColor),
               ),
               TextSpan(
-                text: credentialStatus.message(context),
+                text: credentialStatus?.message(context) ?? '',
                 style: Theme.of(context)
                     .textTheme
                     .credentialFieldDescription
@@ -36,11 +39,12 @@ class CredentialActiveStatus extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 5),
-        Icon(
-          credentialStatus.icon,
-          size: 18,
-          color: credentialStatus.color(context),
-        ),
+        if (credentialStatus != null)
+          Icon(
+            credentialStatus!.icon,
+            size: 18,
+            color: credentialStatus!.color(context),
+          ),
       ],
     );
   }
