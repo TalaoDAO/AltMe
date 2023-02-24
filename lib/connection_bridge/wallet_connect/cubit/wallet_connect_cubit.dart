@@ -26,8 +26,13 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       log.i('initialise');
       final List<SavedDappData> savedDapps =
           await connectedDappRepository.findAll();
+
       final ethereumConnectedDapps = List.of(savedDapps).where(
-        (element) => element.blockchainType == BlockchainType.ethereum,
+        (element) =>
+            element.blockchainType == BlockchainType.ethereum ||
+            element.blockchainType == BlockchainType.binance ||
+            element.blockchainType == BlockchainType.fantom ||
+            element.blockchainType == BlockchainType.polygon,
       );
 
       final List<WCClient> wcClients = List.empty(growable: true);

@@ -72,9 +72,14 @@ class ConnectedDappRepository {
         id = savedDappData.peer!.publicKey;
         break;
       case BlockchainType.fantom:
+        id = savedDappData.wcSessionStore!.session.topic;
+        break;
       case BlockchainType.polygon:
+        id = savedDappData.wcSessionStore!.session.topic;
+        break;
       case BlockchainType.binance:
-        throw Exception();
+        id = savedDappData.wcSessionStore!.session.topic;
+        break;
     }
     log.i('deleteing dapp data - ${SecureStorageKeys.savedDaaps}/$id');
     await _secureStorageProvider.delete('${SecureStorageKeys.savedDaaps}/$id');
@@ -95,9 +100,17 @@ class ConnectedDappRepository {
             return savedData.walletAddress == savedDappData.walletAddress &&
                 savedData.peer!.name == savedDappData.peer!.name;
           case BlockchainType.fantom:
+            return savedData.walletAddress == savedDappData.walletAddress &&
+                savedData.wcSessionStore!.remotePeerMeta.name ==
+                    savedDappData.wcSessionStore!.remotePeerMeta.name;
           case BlockchainType.polygon:
+            return savedData.walletAddress == savedDappData.walletAddress &&
+                savedData.wcSessionStore!.remotePeerMeta.name ==
+                    savedDappData.wcSessionStore!.remotePeerMeta.name;
           case BlockchainType.binance:
-            throw Exception();
+            return savedData.walletAddress == savedDappData.walletAddress &&
+                savedData.wcSessionStore!.remotePeerMeta.name ==
+                    savedDappData.wcSessionStore!.remotePeerMeta.name;
         }
       },
 
@@ -118,9 +131,14 @@ class ConnectedDappRepository {
         id = savedDappData.peer!.publicKey;
         break;
       case BlockchainType.fantom:
+        id = savedDappData.wcSessionStore!.session.topic;
+        break;
       case BlockchainType.polygon:
+        id = savedDappData.wcSessionStore!.session.topic;
+        break;
       case BlockchainType.binance:
-        throw Exception();
+        id = savedDappData.wcSessionStore!.session.topic;
+        break;
     }
 
     await _secureStorageProvider.set(

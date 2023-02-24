@@ -187,7 +187,9 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
           final CryptoAccountData? currentAccount =
               walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-            (element) => element.walletAddress == dappData.walletAddress,
+            (element) =>
+                element.walletAddress == dappData.walletAddress &&
+                element.blockchainType == dappData.blockchainType,
           );
 
           log.i('currentAccount -$currentAccount');

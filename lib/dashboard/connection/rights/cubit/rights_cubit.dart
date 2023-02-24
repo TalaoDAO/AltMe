@@ -90,12 +90,83 @@ class RightsCubit extends Cubit<RightsState> {
           }
           break;
         case BlockchainType.fantom:
+          final walletConnectState = walletConnectCubit.state;
+          final wcClient = walletConnectState.wcClients.firstWhereOrNull(
+            (element) =>
+                element.remotePeerId ==
+                walletConnectCubit.state.currentDappPeerId,
+          );
+          if (wcClient != null) {
+            log.i(
+              '''disconnected - ${savedDappData.wcSessionStore!.remotePeerMeta}''',
+            );
+            wcClient.disconnect();
+            //remove from collection
+          }
+
+          await connectedDappRepository.delete(savedDappData);
+          emit(
+            state.copyWith(
+              appStatus: AppStatus.success,
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP,
+              ),
+            ),
+          );
+          break;
         case BlockchainType.polygon:
+          final walletConnectState = walletConnectCubit.state;
+          final wcClient = walletConnectState.wcClients.firstWhereOrNull(
+            (element) =>
+                element.remotePeerId ==
+                walletConnectCubit.state.currentDappPeerId,
+          );
+          if (wcClient != null) {
+            log.i(
+              '''disconnected - ${savedDappData.wcSessionStore!.remotePeerMeta}''',
+            );
+            wcClient.disconnect();
+            //remove from collection
+          }
+
+          await connectedDappRepository.delete(savedDappData);
+          emit(
+            state.copyWith(
+              appStatus: AppStatus.success,
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP,
+              ),
+            ),
+          );
+          break;
         case BlockchainType.binance:
-          throw Exception();
+          final walletConnectState = walletConnectCubit.state;
+          final wcClient = walletConnectState.wcClients.firstWhereOrNull(
+            (element) =>
+                element.remotePeerId ==
+                walletConnectCubit.state.currentDappPeerId,
+          );
+          if (wcClient != null) {
+            log.i(
+              '''disconnected - ${savedDappData.wcSessionStore!.remotePeerMeta}''',
+            );
+            wcClient.disconnect();
+            //remove from collection
+          }
+
+          await connectedDappRepository.delete(savedDappData);
+          emit(
+            state.copyWith(
+              appStatus: AppStatus.success,
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP,
+              ),
+            ),
+          );
+          break;
       }
-    } catch (e) {
-      log.e('disconnect failure , e: $e');
+    } catch (e, s) {
+      log.e('disconnect failure , e: $e, s: $s');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
