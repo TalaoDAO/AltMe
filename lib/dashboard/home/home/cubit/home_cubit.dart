@@ -159,62 +159,7 @@ class HomeCubit extends Cubit<HomeState> {
           },
           data: data,
         );
-      } catch (e) {
-        if (e is NetworkException) {
-          String? message;
-          if (e.data != null) {
-            if (e.data['error_description'] is String) {
-              try {
-                final dynamic errorDescriptionJson =
-                    jsonDecode(e.data['error_description'] as String);
-                message = errorDescriptionJson['error_message'] as String;
-              } catch (_, __) {
-                message = e.data['error_description'] as String;
-              }
-            } else if (e.data['error_description'] is Map<String, dynamic>) {
-              message = e.data['error_description']['error_message'] as String;
-            }
-          }
-          emit(
-            state.copyWith(
-              status: AppStatus.error,
-              message: StateMessage(
-                messageHandler: ResponseMessage(
-                  ResponseString
-                      .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                ),
-              ),
-            ),
-          );
-          emit(
-            state.copyWith(
-              status: AppStatus.error,
-              message: StateMessage(
-                stringMessage: message,
-                messageHandler: message == null
-                    ? null
-                    : ResponseMessage(
-                        ResponseString
-                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-                      ),
-              ),
-            ),
-          );
-        } else {
-          emit(
-            state.copyWith(
-              status: AppStatus.error,
-              message: StateMessage(
-                messageHandler: ResponseMessage(
-                  ResponseString
-                      .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                ),
-              ),
-            ),
-          );
-        }
-      }
-      try {
+
         if (response != null) {
           final credential =
               jsonDecode(response as String) as Map<String, dynamic>;
@@ -248,11 +193,7 @@ class HomeCubit extends Cubit<HomeState> {
               showMessage: true,
             );
             await cameraCubit.incrementAcquiredCredentialsQuantity();
-            emit(
-              state.copyWith(
-                status: AppStatus.success,
-              ),
-            );
+            emit(state.copyWith(status: AppStatus.success));
           } else {
             await cameraCubit.updateAgeEstimate(
               credentialModel.data['credentialSubject']['ageEstimate']
@@ -260,8 +201,8 @@ class HomeCubit extends Cubit<HomeState> {
             );
           }
         }
-        logger.i('response : $response');
-      } catch (e, s) {
+      } catch (e) {
+        logger.e(e);
         if (e is NetworkException) {
           String? message;
           if (e.data != null) {
@@ -304,7 +245,6 @@ class HomeCubit extends Cubit<HomeState> {
             ),
           );
         }
-        logger.e('error: $e , stack: $s');
       }
     }
   }
