@@ -99,7 +99,7 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
         mainAxisSize: MainAxisSize.max,
         children: [
           const SizedBox(
-            height: Sizes.spaceLarge,
+            height: Sizes.spaceSmall,
           ),
           BlocBuilder<TokenAmountCalculatorCubit, TokenAmountCalculatorState>(
             builder: (context, state) {

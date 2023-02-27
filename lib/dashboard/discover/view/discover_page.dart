@@ -75,6 +75,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 state.myProfessionalCategories,
               ),
               blockchainAccountsCredentials: [],
+              educationCredentials: [],
               othersCredentials: [],
             ),
           );

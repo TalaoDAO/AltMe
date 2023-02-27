@@ -286,6 +286,7 @@
     "wallet",
     "manageAccounts",
     "blockchainAccounts",
+    "educationCredentials",
     "security",
     "networkAndRegistries",
     "chooseNetwork",
@@ -366,7 +367,6 @@
     "verfiedButton",
     "verifiedNotificationTitle",
     "verifiedNotificationDescription",
-    "blockChainAccounts",
     "showDecentralizedID",
     "manageDecentralizedID",
     "addressBook",
@@ -489,6 +489,7 @@
     "identityCredentialDiscoverSubtitle",
     "myProfessionalCredentialDiscoverSubtitle",
     "blockchainAccountsCredentialHomeSubtitle",
+    "educationCredentialHomeSubtitle",
     "passCredentialHomeSubtitle",
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
@@ -731,7 +732,11 @@
     "backToHome",
     "help",
     "searchCredentials",
-    "supportChatWelcomeMessage"
+    "supportChatWelcomeMessage",
+    "creator",
+    "contractAddress",
+    "lastMetadataSync",
+    "e2eEncyptedChat"
   ],
 
   "es": [
@@ -1021,6 +1026,7 @@
     "wallet",
     "manageAccounts",
     "blockchainAccounts",
+    "educationCredentials",
     "security",
     "networkAndRegistries",
     "chooseNetwork",
@@ -1101,7 +1107,6 @@
     "verfiedButton",
     "verifiedNotificationTitle",
     "verifiedNotificationDescription",
-    "blockChainAccounts",
     "showDecentralizedID",
     "manageDecentralizedID",
     "addressBook",
@@ -1224,6 +1229,7 @@
     "identityCredentialDiscoverSubtitle",
     "myProfessionalCredentialDiscoverSubtitle",
     "blockchainAccountsCredentialHomeSubtitle",
+    "educationCredentialHomeSubtitle",
     "passCredentialHomeSubtitle",
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
@@ -1466,10 +1472,16 @@
     "backToHome",
     "help",
     "searchCredentials",
-    "supportChatWelcomeMessage"
+    "supportChatWelcomeMessage",
+    "creator",
+    "contractAddress",
+    "lastMetadataSync",
+    "e2eEncyptedChat"
   ],
 
   "fr": [
+    "educationCredentials",
+    "educationCredentialHomeSubtitle",
     "altmeSupport",
     "manageKeyDecentralizedId",
     "manageEbsiDecentralizedId",
@@ -1479,7 +1491,11 @@
     "backToHome",
     "help",
     "searchCredentials",
-    "supportChatWelcomeMessage"
+    "supportChatWelcomeMessage",
+    "creator",
+    "contractAddress",
+    "lastMetadataSync",
+    "e2eEncyptedChat"
   ],
 
   "it": [
@@ -1769,6 +1785,7 @@
     "wallet",
     "manageAccounts",
     "blockchainAccounts",
+    "educationCredentials",
     "security",
     "networkAndRegistries",
     "chooseNetwork",
@@ -1849,7 +1866,6 @@
     "verfiedButton",
     "verifiedNotificationTitle",
     "verifiedNotificationDescription",
-    "blockChainAccounts",
     "showDecentralizedID",
     "manageDecentralizedID",
     "addressBook",
@@ -1972,6 +1988,7 @@
     "identityCredentialDiscoverSubtitle",
     "myProfessionalCredentialDiscoverSubtitle",
     "blockchainAccountsCredentialHomeSubtitle",
+    "educationCredentialHomeSubtitle",
     "passCredentialHomeSubtitle",
     "communityCredentialHomeSubtitle",
     "communityCredentialDiscoverSubtitle",
@@ -2214,6 +2231,10 @@
     "backToHome",
     "help",
     "searchCredentials",
-    "supportChatWelcomeMessage"
+    "supportChatWelcomeMessage",
+    "creator",
+    "contractAddress",
+    "lastMetadataSync",
+    "e2eEncyptedChat"
   ]
 }

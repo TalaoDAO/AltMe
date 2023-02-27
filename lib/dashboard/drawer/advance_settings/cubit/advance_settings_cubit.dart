@@ -38,6 +38,10 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
                 .get(SecureStorageKeys.isBlockchainAccountsEnabled) ??
             'false') ==
         'true';
+    final isEducationEnabled = (await secureStorageProvider
+                .get(SecureStorageKeys.isEducationEnabled) ??
+            'true') ==
+        'true';
     final isSocialMediaEnabled = (await secureStorageProvider
                 .get(SecureStorageKeys.isSocialMediaEnabled) ??
             'true') ==
@@ -52,6 +56,7 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
         isGamingEnabled: isGamingEnabled,
         isIdentityEnabled: isIdentityEnabled,
         isBlockchainAccountsEnabled: isBlockchainAccountsEnabled,
+        isEducationEnabled: isEducationEnabled,
         isSocialMediaEnabled: isSocialMediaEnabled,
         isCommunityEnabled: isCommunityEnabled,
         isOtherEnabled: isOtherEnabled,
@@ -73,6 +78,11 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
     await secureStorageProvider.set(
       SecureStorageKeys.isBlockchainAccountsEnabled,
       newState.isBlockchainAccountsEnabled.toString(),
+    );
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.isEducationEnabled,
+      newState.isEducationEnabled.toString(),
     );
 
     await secureStorageProvider.set(
@@ -122,6 +132,18 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
     secureStorageProvider.set(
       SecureStorageKeys.isBlockchainAccountsEnabled,
       state.isBlockchainAccountsEnabled.toString(),
+    );
+  }
+
+  void toggleEducationRadio() {
+    emit(
+      state.copyWith(
+        isEducationEnabled: !state.isEducationEnabled,
+      ),
+    );
+    secureStorageProvider.set(
+      SecureStorageKeys.isEducationEnabled,
+      state.isEducationEnabled.toString(),
     );
   }
 

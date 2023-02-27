@@ -13,6 +13,8 @@ extension CredentialStatusExtension on CredentialStatus {
         return l10n.cardsProblem;
       case CredentialStatus.pending:
         return l10n.cardsPending;
+      case CredentialStatus.unknown:
+        return l10n.unknown;
     }
   }
 
@@ -23,6 +25,7 @@ extension CredentialStatusExtension on CredentialStatus {
       case CredentialStatus.suspended:
         return Icons.error_rounded;
       case CredentialStatus.pending:
+      case CredentialStatus.unknown:
         return Icons.circle_outlined;
     }
   }
@@ -35,6 +38,8 @@ extension CredentialStatusExtension on CredentialStatus {
         return Theme.of(context).colorScheme.inactiveColor;
       case CredentialStatus.pending:
         return Colors.orange;
+      case CredentialStatus.unknown:
+        return Colors.blue;
     }
   }
 }

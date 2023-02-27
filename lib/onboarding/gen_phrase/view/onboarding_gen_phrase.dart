@@ -51,7 +51,8 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
   void initState() {
     super.initState();
     mnemonic = bip39.generateMnemonic().split(' ');
-    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize());
+    Future.microtask(() => context.read<DIDPrivateKeyCubit>().initialize())
+        .catchError((_) => null);
   }
 
   @override

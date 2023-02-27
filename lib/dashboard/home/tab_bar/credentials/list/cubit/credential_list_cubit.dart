@@ -20,6 +20,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
     final identityCredentials = <HomeCredential>[];
     final passCredentials = <HomeCredential>[];
     final blockchainAccountsCredentials = <HomeCredential>[];
+    final educationCredentials = <HomeCredential>[];
     final othersCredentials = <HomeCredential>[];
     final myProfessionalCredentials = <HomeCredential>[];
     final gamingCategories = state.gamingCategories;
@@ -102,6 +103,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.fantomPooAddress:
         case CredentialSubjectType.polygonPooAddress:
         case CredentialSubjectType.binancePooAddress:
+        case CredentialSubjectType.euDiplomaCard:
           break;
       }
 
@@ -136,6 +138,12 @@ class CredentialListCubit extends Cubit<CredentialListState> {
               .add(HomeCredential.isNotDummy(credential));
           break;
 
+        case CredentialCategory.educationCards:
+
+          /// adding real credentials
+          educationCredentials.add(HomeCredential.isNotDummy(credential));
+          break;
+
         case CredentialCategory.passCards:
 
           /// adding real credentials
@@ -145,7 +153,12 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialCategory.othersCards:
 
           /// adding real credentials
-          othersCredentials.add(HomeCredential.isNotDummy(credential));
+          if (isVerifiableDiplomaType(credential)) {
+            educationCredentials.add(HomeCredential.isNotDummy(credential));
+          } else {
+            othersCredentials.add(HomeCredential.isNotDummy(credential));
+          }
+
           break;
       }
     }
@@ -166,6 +179,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         communityCredentials: communityCredentials,
         identityCredentials: identityCredentials,
         blockchainAccountsCredentials: blockchainAccountsCredentials,
+        educationCredentials: educationCredentials,
         passCredentials: passCredentials,
         othersCredentials: othersCredentials,
         myProfessionalCredentials: myProfessionalCredentials,
@@ -292,6 +306,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.fantomPooAddress:
           case CredentialSubjectType.polygonPooAddress:
           case CredentialSubjectType.binancePooAddress:
+          case CredentialSubjectType.euDiplomaCard:
             break;
         }
 
@@ -312,6 +327,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         emit(state.populate(blockchainAccountsCredentials: credentials));
         break;
 
+      case CredentialCategory.educationCards:
+
+        /// adding real credentials
+        final credentials = List.of(state.educationCredentials)
+          ..insert(0, HomeCredential.isNotDummy(credential));
+        emit(state.populate(educationCredentials: credentials));
+        break;
+
       case CredentialCategory.passCards:
 
         /// adding real credentials
@@ -323,9 +346,16 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       case CredentialCategory.othersCards:
 
         /// adding real credentials
-        final credentials = List.of(state.othersCredentials)
-          ..insert(0, HomeCredential.isNotDummy(credential));
-        emit(state.populate(othersCredentials: credentials));
+        if (isVerifiableDiplomaType(credential)) {
+          final credentials = List.of(state.educationCredentials)
+            ..insert(0, HomeCredential.isNotDummy(credential));
+          emit(state.populate(educationCredentials: credentials));
+        } else {
+          final credentials = List.of(state.othersCredentials)
+            ..insert(0, HomeCredential.isNotDummy(credential));
+          emit(state.populate(othersCredentials: credentials));
+        }
+
         break;
     }
   }
@@ -435,6 +465,23 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         emit(state.populate(blockchainAccountsCredentials: credentials));
         break;
 
+      case CredentialCategory.educationCards:
+
+        ///finding index of updated credential
+        final index = state.educationCredentials.indexWhere(
+          (element) => element.credentialModel?.id == credential.id,
+        );
+
+        ///create updated credential list
+        final credentials = List.of(state.educationCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          )
+          ..insert(index, HomeCredential.isNotDummy(credential));
+
+        emit(state.populate(educationCredentials: credentials));
+        break;
+
       case CredentialCategory.passCards:
 
         ///finding index of updated credential
@@ -455,18 +502,34 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       case CredentialCategory.othersCards:
 
         ///finding index of updated credential
-        final index = state.othersCredentials.indexWhere(
-          (element) => element.credentialModel?.id == credential.id,
-        );
-
-        ///create updated credential list
-        final credentials = List.of(state.othersCredentials)
-          ..removeWhere(
+        if (isVerifiableDiplomaType(credential)) {
+          final index = state.educationCredentials.indexWhere(
             (element) => element.credentialModel?.id == credential.id,
-          )
-          ..insert(index, HomeCredential.isNotDummy(credential));
+          );
 
-        emit(state.populate(othersCredentials: credentials));
+          ///create updated credential list
+          final credentials = List.of(state.educationCredentials)
+            ..removeWhere(
+              (element) => element.credentialModel?.id == credential.id,
+            )
+            ..insert(index, HomeCredential.isNotDummy(credential));
+
+          emit(state.populate(educationCredentials: credentials));
+        } else {
+          final index = state.othersCredentials.indexWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          );
+
+          ///create updated credential list
+          final credentials = List.of(state.othersCredentials)
+            ..removeWhere(
+              (element) => element.credentialModel?.id == credential.id,
+            )
+            ..insert(index, HomeCredential.isNotDummy(credential));
+
+          emit(state.populate(othersCredentials: credentials));
+        }
+
         break;
     }
   }
@@ -593,6 +656,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.walletCredential:
           case CredentialSubjectType.bloometaPass:
           case CredentialSubjectType.dogamiPass:
+          case CredentialSubjectType.euDiplomaCard:
           case CredentialSubjectType.troopezPass:
           case CredentialSubjectType.bunnyPass:
           case CredentialSubjectType.pigsPass:
@@ -627,6 +691,14 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         emit(state.populate(blockchainAccountsCredentials: credentials));
         break;
 
+      case CredentialCategory.educationCards:
+        final credentials = List.of(state.educationCredentials)
+          ..removeWhere(
+            (element) => element.credentialModel?.id == credential.id,
+          );
+        emit(state.populate(educationCredentials: credentials));
+        break;
+
       case CredentialCategory.passCards:
         final credentials = List.of(state.passCredentials)
           ..removeWhere(
@@ -636,11 +708,19 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         break;
 
       case CredentialCategory.othersCards:
-        final credentials = List.of(state.othersCredentials)
-          ..removeWhere(
-            (element) => element.credentialModel?.id == credential.id,
-          );
-        emit(state.populate(othersCredentials: credentials));
+        if (isVerifiableDiplomaType(credential)) {
+          final credentials = List.of(state.educationCredentials)
+            ..removeWhere(
+              (element) => element.credentialModel?.id == credential.id,
+            );
+          emit(state.populate(educationCredentials: credentials));
+        } else {
+          final credentials = List.of(state.othersCredentials)
+            ..removeWhere(
+              (element) => element.credentialModel?.id == credential.id,
+            );
+          emit(state.populate(othersCredentials: credentials));
+        }
         break;
     }
   }
@@ -652,6 +732,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         communityCredentials: [],
         identityCredentials: [],
         blockchainAccountsCredentials: [],
+        educationCredentials: [],
         passCredentials: [],
         othersCredentials: [],
         myProfessionalCredentials: [],

@@ -147,21 +147,41 @@ class NftCubit extends Cubit<NftState> {
         return [];
       }
 
-      return List<EthereumNftModel>.from(
+      final nftList = List<EthereumNftModel>.from(
         result.map<EthereumNftModel>((dynamic e) {
           return EthereumNftModel(
-            name: e['name'] as String,
+            name: (e['name'] as String? ??
+                    e['normalized_metadata']['name'] as String?) ??
+                '',
             symbol: e['symbol'] as String?,
             description: e['normalized_metadata']['description'] as String?,
             tokenId: e['token_id'] as String,
             contractAddress: e['token_address'] as String,
             balance: e['amount'] as String,
             type: e['contract_type'] as String,
+            minterAddress: e['minter_address'] as String?,
+            lastMetadataSync: e['last_metadata_sync'] as String?,
             image: e['normalized_metadata']['image'] as String?,
             animationUrl: e['normalized_metadata']['animation_url'] as String?,
           );
         }),
       ).toList();
+
+      for (final element in nftList) {
+        if (element.thumbnailUri == null) {
+          try {
+            await client.get(
+              '${Urls.moralisBaseUrl}/nft/${element.contractAddress}/${element.tokenId}/metadata/resync',
+              headers: <String, String>{
+                'X-API-KEY': moralisApiKey,
+              },
+            );
+          } catch (e, s) {
+            getLogger(toString()).e('failed to resync e: $e s: $s');
+          }
+        }
+      }
+      return nftList;
     } catch (e, s) {
       getLogger(toString()).e('e: $e, s: $s');
       return [];

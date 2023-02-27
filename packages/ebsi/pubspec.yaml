@@ -12,17 +12,17 @@ dependencies:
   bip39: ^1.0.6
   crypto: ^3.0.2
   dart_bip32_bip44: ^0.2.0
-  dart_jsonwebtoken: ^2.6.4
+  dart_jsonwebtoken: ^2.7.1
   dart_web3: ^0.0.3
   dio: ^4.0.6
-  ed25519_hd_key: ^2.2.0
   fast_base58: ^0.2.1
   flutter:
     sdk: flutter
+  hex: ^0.2.0  
   http_mock_adapter: ^0.3.3
-  jose: ^0.3.2
+  jose: ^0.3.3
   json_path: ^0.4.2
-  pinenacl: ^0.3.4
+  pinenacl: ^0.3.3 # tezart from git depends on pinenacl ^0.3.3
   secp256k1: ^0.3.0
   tezart:
     git:
@@ -33,4 +33,4 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^0.3.0
-  very_good_analysis: ^3.1.0
+  very_good_analysis: ^4.0.0+1

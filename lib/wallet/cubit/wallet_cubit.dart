@@ -533,6 +533,13 @@ class WalletCubit extends Cubit<WalletState> {
     //   }
     // }
 
+    if (credentialCategory == CredentialCategory.educationCards &&
+        credentialListCubit.state.educationCredentials.isEmpty) {
+      if (!advanceSettingsCubit.state.isEducationEnabled) {
+        advanceSettingsCubit.toggleEducationRadio();
+      }
+    }
+
     if (credentialCategory == CredentialCategory.othersCards &&
         credentialListCubit.state.othersCredentials.isEmpty) {
       if (!advanceSettingsCubit.state.isOtherEnabled) {

@@ -67,7 +67,9 @@ class ImageStrings {
   static const String talaoCommunityCard =
       '$imagePath/talao_community_card.png';
   static const String verifiableIdCard = '$imagePath/verifiable_id_card.png';
+
   static const String linkedInCard = '$imagePath/linkedin_card.png';
+  static const String euDiplomaCard = '$imagePath/eu_diploma_card.png';
 
   static const String myAccountCard = '$imagePath/my_account_card.png';
   static const String pooAccountCard = '$imagePath/poo_account_card.png';

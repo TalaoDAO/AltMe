@@ -15,8 +15,9 @@ class CredentialManifestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor =
-        getColorFromCredential(outputDescriptor.styles?.text, Colors.black);
+    final textColor = isVerifiableDiplomaType(credentialModel)
+        ? Colors.white
+        : getColorFromCredential(outputDescriptor.styles?.text, Colors.black);
     final credential = Credential.fromJsonOrDummy(credentialModel.data);
     return FractionallySizedBox(
       widthFactor: 0.85,

@@ -143,6 +143,8 @@ extension CustomColorScheme on ColorScheme {
 
   Color get greyText => onTertiary;
 
+  Color get whatsNewPopupBackground => const Color(0xFF271C38);
+
   Color get cardHighlighted => cardHighlight;
 
   Color get defaultDialogDark => defaultDialog;
@@ -324,6 +326,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xFFEEEEEE),
         fontSize: 26,
         fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get badgeStyle => GoogleFonts.nunito(
+        color: const Color(0xFFEEEEEE),
+        fontSize: 8,
+        fontWeight: FontWeight.w500,
       );
 
   TextStyle get onBoardingTitleStyle => GoogleFonts.roboto(
@@ -712,8 +720,8 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get defaultDialogBody => GoogleFonts.poppins(
-        fontSize: 15,
-        fontWeight: FontWeight.w600,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
         color: const Color(0xFF5F556F),
       );
 

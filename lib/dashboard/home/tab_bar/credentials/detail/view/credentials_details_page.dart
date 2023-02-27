@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
@@ -7,6 +6,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -40,6 +40,7 @@ class CredentialsDetailsPage extends StatelessWidget {
     return BlocProvider<CredentialDetailsCubit>(
       create: (context) => CredentialDetailsCubit(
         didKitProvider: DIDKitProvider(),
+        client: DioClient('', Dio()),
       ),
       child: CredentialsDetailsView(
         credentialModel: credentialModel,
@@ -131,6 +132,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                 .credentialSubjectModel.credentialSubjectType ==
             CredentialSubjectType.linkedInCard;
 
+        final bool isEUDiplomaCard = widget.credentialModel.credentialPreview
+                .credentialSubjectModel.credentialSubjectType ==
+            CredentialSubjectType.euDiplomaCard;
+
         final bool disAllowDelete = widget.credentialModel.credentialPreview
                     .credentialSubjectModel.credentialSubjectType ==
                 CredentialSubjectType.walletCredential ||
@@ -145,7 +150,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           // titleTrailing: IconButton(
           //   onPressed: () {
           //     Navigator.of(context)
-          //         .push<void>(CredentialQrPage.route(widget.credentialModel));
+          //         .push<void>(CredentialQrPage.route(widget.credentialModel)); // ignore: lines_longer_than_80_chars
           //   },
           //   icon: Icon(
           //     Icons.qr_code,
@@ -153,71 +158,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           //   ),
           // ),
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          navigation: widget.readOnly
-              ? null
-              : SafeArea(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 5,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        MyOutlinedButton(
-                          onPressed: disAllowDelete ? null : delete,
-                          text: l10n.credentialDetailDeleteCard,
-                        ),
-                        const SizedBox(height: 8),
-                        MyOutlinedButton(
-                          text: isLinkeInCard
-                              ? l10n.exportToLinkedIn
-                              : l10n.share,
-                          onPressed: () {
-                            if (isLinkeInCard) {
-                              Navigator.of(context).push<void>(
-                                GetLinkedinInfoPage.route(
-                                  credentialModel: widget.credentialModel,
-                                ),
-                              );
-                            } else {
-                              final box =
-                                  context.findRenderObject() as RenderBox?;
-                              final subject = l10n.shareWith;
-
-                              Share.share(
-                                jsonEncode(widget.credentialModel.data),
-                                subject: subject,
-                                sharePositionOrigin:
-                                    box!.localToGlobal(Offset.zero) & box.size,
-                              );
-                            }
-                          },
-                        ),
-                        if (widget.credentialModel.shareLink != '')
-                          MyOutlinedButton.icon(
-                            icon: SvgPicture.asset(
-                              IconStrings.qrCode,
-                              width: 24,
-                              height: 24,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).push<void>(
-                                QrCodeDisplayPage.route(
-                                  widget.credentialModel.id,
-                                  widget.credentialModel,
-                                ),
-                              );
-                            },
-                            text: l10n.credentialDetailShare,
-                          )
-                        else
-                          Container(),
-                      ],
-                    ),
-                  ),
-                ),
           scrollView: false,
           body: Column(
             children: [
@@ -278,12 +218,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         const SizedBox(height: 10),
                         if (state.credentialDetailTabStatus ==
                             CredentialDetailTabStatus.informations) ...[
-                          if (!isEbsiIssuer(widget.credentialModel)) ...[
-                            const SizedBox(height: 10),
-                            CredentialActiveStatus(
-                              credentialStatus: state.credentialStatus,
-                            ),
-                          ],
+                          const SizedBox(height: 10),
+                          CredentialActiveStatus(
+                            credentialStatus: state.credentialStatus,
+                          ),
                           if (outputDescriptors != null) ...[
                             const SizedBox(height: 10),
                             CredentialManifestDetails(
@@ -312,6 +250,97 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               ),
             ],
           ),
+
+          navigation: widget.readOnly
+              ? null
+              : SafeArea(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 5,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        MyOutlinedButton(
+                          onPressed: disAllowDelete ? null : delete,
+                          text: l10n.credentialDetailDeleteCard,
+                        ),
+                        const SizedBox(height: 8),
+                        MyOutlinedButton(
+                          text: isLinkeInCard
+                              ? l10n.exportToLinkedIn
+                              : l10n.share,
+                          onPressed: () {
+                            if (isLinkeInCard) {
+                              Navigator.of(context).push<void>(
+                                GetLinkedinInfoPage.route(
+                                  credentialModel: widget.credentialModel,
+                                ),
+                              );
+                            } else {
+                              if (isEUDiplomaCard) {
+                                /// removing type that was added in add_ebsi_credential.dart // ignore: lines_longer_than_80_chars
+                                widget.credentialModel.data['credentialSubject']
+                                    .remove('type');
+                              }
+
+                              late String data;
+
+                              if (isVerifiableDiplomaType(
+                                widget.credentialModel,
+                              )) {
+                                final String? jwt = widget.credentialModel.jwt;
+                                if (jwt != null) {
+                                  data = jwt;
+                                } else {
+                                  data =
+                                      jsonEncode(widget.credentialModel.data);
+                                }
+                              } else {
+                                data = jsonEncode(widget.credentialModel.data);
+                              }
+
+                              getLogger('CredentialDetailsPage - shared date')
+                                  .i(data);
+
+                              final box =
+                                  context.findRenderObject() as RenderBox?;
+                              final subject = l10n.shareWith;
+
+                              Share.share(
+                                data,
+                                subject: subject,
+                                sharePositionOrigin:
+                                    box!.localToGlobal(Offset.zero) & box.size,
+                              );
+                            }
+                          },
+                        ),
+                        if (widget.credentialModel.shareLink != '')
+                          MyOutlinedButton.icon(
+                            icon: SvgPicture.asset(
+                              IconStrings.qrCode,
+                              width: 24,
+                              height: 24,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).push<void>(
+                                QrCodeDisplayPage.route(
+                                  title: '',
+                                  data: widget.credentialModel.shareLink,
+                                ),
+                              );
+                            },
+                            text: l10n.credentialDetailShare,
+                          )
+                        else
+                          Container(),
+                      ],
+                    ),
+                  ),
+                ),
         );
       },
     );

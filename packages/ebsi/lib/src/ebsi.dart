@@ -7,15 +7,13 @@ import 'package:bip39/bip39.dart' as bip393;
 import 'package:dio/dio.dart';
 import 'package:ebsi/src/issuer_token_parameters.dart';
 import 'package:ebsi/src/token_parameters.dart';
+import 'package:ebsi/src/verification_type.dart';
 import 'package:ebsi/src/verifier_token_parameters.dart';
 import 'package:flutter/foundation.dart';
-// ignore: depend_on_referenced_packages
 import 'package:hex/hex.dart';
 import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:secp256k1/secp256k1.dart';
-// ignore: implementation_imports
-// ignore: implementation_imports, unnecessary_import
 
 /// {@template ebsi}
 /// EBSI wallet compliance
@@ -202,12 +200,15 @@ class Ebsi {
 
     final response = await getToken(tokenEndPoint, tokenData);
 
+    final private = await getPrivateKey(mnemonic, privateKey);
+
+    final issuerTokenParameters = IssuerTokenParameters(private, issuer);
+
     final credentialData = await buildCredentialData(
       response as Map<String, dynamic>,
-      mnemonic,
-      privateKey,
-      issuer,
+      issuerTokenParameters,
       credentialRequestUri,
+      openidConfigurationResponse,
     );
 
     final credentialEndpoint =
@@ -263,13 +264,49 @@ class Ebsi {
     return issuer;
   }
 
+  Future<Response<Map<String, dynamic>>> getDidDocument(String didKey) async {
+    try {
+      final didDocument = await client.get<Map<String, dynamic>>(
+        'https://api-pilot.ebsi.eu/did-registry/v3/identifiers/$didKey',
+      );
+      return didDocument;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   String readTokenEndPoint(
     Response<Map<String, dynamic>> openidConfigurationResponse,
   ) {
     final jsonPath = JsonPath(r'$..token_endpoint');
+
     final tokenEndPoint =
         jsonPath.readValues(openidConfigurationResponse.data).first as String;
     return tokenEndPoint;
+  }
+
+  String readIssuerDid(
+    Response<Map<String, dynamic>> openidConfigurationResponse,
+  ) {
+    final jsonPath = JsonPath(r'$..issuer');
+    final data = jsonPath.read(openidConfigurationResponse.data).first.value;
+
+    return data['id'] as String;
+  }
+
+  Map<String, dynamic> readPublicKeyJwk(
+    String issuerDid,
+    Response<Map<String, dynamic>> didDocumentResponse,
+  ) {
+    final jsonPath = JsonPath(r'$..verificationMethod');
+    final data = jsonPath.read(didDocumentResponse.data).first.value
+      ..where(
+        (dynamic e) => e['controller'].toString() == issuerDid,
+      ).toList();
+
+    final value = data.first['publicKeyJwk'];
+
+    return jsonDecode(jsonEncode(value)) as Map<String, dynamic>;
   }
 
   Future<Map<String, dynamic>> getPrivateKey(
@@ -284,31 +321,66 @@ class Ebsi {
     } else {
       private = jsonDecode(privateKey!) as Map<String, dynamic>;
     }
-
     return private;
   }
 
   Future<Map<String, dynamic>> buildCredentialData(
     Map<String, dynamic> response,
-    String? mnemonic,
-    String? privateKey,
-    String issuer,
+    IssuerTokenParameters issuerTokenParameters,
     Uri credentialRequestUri,
+    Response<Map<String, dynamic>> openidConfigurationResponse,
   ) async {
     final nonce = response['c_nonce'] as String;
 
-    final private = await getPrivateKey(mnemonic, privateKey);
+    final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
 
-    final issuerTokenParameters = IssuerTokenParameters(private, issuer);
-    final jwt = await getIssuerJwt(issuerTokenParameters, nonce);
+    final issuerDid = readIssuerDid(openidConfigurationResponse);
+
+    final isVerified =
+        await verifyCredential(issuerDid: issuerDid, vcJwt: vcJwt);
+
+    if (isVerified == VerificationType.notVerified) {
+      throw Exception('VERIFICATION_ISSUE');
+    }
+
     final credentialType =
         credentialRequestUri.queryParameters['credential_type'];
     final credentialData = <String, dynamic>{
       'type': credentialType,
       'format': 'jwt_vc',
-      'proof': {'proof_type': 'jwt', 'jwt': jwt}
+      'proof': {'proof_type': 'jwt', 'jwt': vcJwt}
     };
     return credentialData;
+  }
+
+  Future<VerificationType> verifyCredential({
+    required String issuerDid,
+    required String vcJwt,
+  }) async {
+    try {
+      final didDocument = await getDidDocument(issuerDid);
+
+      final publicKeyJwk = readPublicKeyJwk(issuerDid, didDocument);
+
+      // create a JsonWebSignature from the encoded string
+      final jws = JsonWebSignature.fromCompactSerialization(vcJwt);
+
+      // create a JsonWebKey for verifying the signature
+      final keyStore = JsonWebKeyStore()
+        ..addKey(
+          JsonWebKey.fromJson(publicKeyJwk),
+        );
+
+      final isVerified = await jws.verify(keyStore);
+
+      if (isVerified) {
+        return VerificationType.verified;
+      } else {
+        return VerificationType.notVerified;
+      }
+    } catch (e) {
+      return VerificationType.unKnown;
+    }
   }
 
   String readCredentialEndpoint(
@@ -399,7 +471,7 @@ class Ebsi {
       'vp_token': vpToken
     };
     try {
-      final presentationResponse = await client.post<dynamic>(
+      await client.post<dynamic>(
         uri.queryParameters['redirect_uri']!,
         options: Options(headers: responseHeaders),
         data: responseData,
@@ -427,15 +499,16 @@ class Ebsi {
         'id': 'http://example.org/presentations/talao/01',
         'type': ['VerifiablePresentation'],
         'holder': tokenParameters.didKey,
-        'verifiableCredential': [jsonEncode(tokenParameters.jwtsOfCredentials)]
+        'verifiableCredential': tokenParameters.jsonIdOrJwtList
       },
       'nonce': tokenParameters.nonce
     };
+
     final verifierVpJwt = generateToken(vpTokenPayload, tokenParameters);
+
     return verifierVpJwt;
   }
 
-  @visibleForTesting
   String generateToken(
     Map<String, Object> vpTokenPayload,
     TokenParameters tokenParameters,
@@ -443,6 +516,9 @@ class Ebsi {
     final vpVerifierClaims = JsonWebTokenClaims.fromJson(vpTokenPayload);
     // create a builder, decoding the JWT in a JWS, so using a
     // JsonWebSignatureBuilder
+
+    final key = JsonWebKey.fromJson(tokenParameters.privateKey);
+
     final vpBuilder = JsonWebSignatureBuilder()
       // set the content
       ..jsonContent = vpVerifierClaims.toJson()
@@ -452,10 +528,8 @@ class Ebsi {
       ..setProtectedHeader('kid', tokenParameters.kid)
 
       // add a key to sign, can only add one for JWT
-      ..addRecipient(
-        JsonWebKey.fromJson(tokenParameters.privateKey),
-        algorithm: tokenParameters.alg,
-      );
+      ..addRecipient(key, algorithm: tokenParameters.alg);
+
     // build the jws
     final vpJws = vpBuilder.build();
 

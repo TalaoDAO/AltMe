@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:crypto/crypto.dart';
+import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +18,7 @@ import 'package:matrix/matrix.dart' hide User;
 import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -26,9 +27,8 @@ part 'live_chat_state.dart';
 
 class LiveChatCubit extends Cubit<LiveChatState> {
   LiveChatCubit({
-    required this.didCubit,
+    required this.didKit,
     required this.secureStorageProvider,
-    required this.client,
     required this.dioClient,
   }) : super(
           const LiveChatState(),
@@ -37,15 +37,25 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   }
 
   final SecureStorageProvider secureStorageProvider;
-  final Client client;
+  late Client client;
   final DioClient dioClient;
   final logger = getLogger('LiveChatCubit');
   String _roomId = '';
+  final DIDKitProvider didKit;
   StreamSubscription<Event>? _onEventSubscription;
-  final DIDCubit didCubit;
+  StreamController<int>? _notificationStreamController;
+
+  Stream<int> get unreadMessageCountStream {
+    _notificationStreamController ??= StreamController<int>.broadcast();
+    return _notificationStreamController!.stream;
+  }
 
   Future<void> onSendPressed(PartialText partialText) async {
     try {
+      final room = client.getRoomById(_roomId);
+      if (room == null) {
+        await client.joinRoomById(_roomId);
+      }
       final eventId = await client.getRoomById(_roomId)?.sendTextEvent(
             partialText.text,
             txid: const Uuid().v4(),
@@ -179,15 +189,46 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   }
 
   Future<void> init() async {
+    logger.i('init()');
     try {
+      final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+      if (ssiKey == null || ssiKey.isEmpty) {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          ),
+        );
+        return;
+      }
+      final did = await secureStorageProvider.get(SecureStorageKeys.did) ?? '';
+      final username = did.replaceAll(':', '-');
+      if (username.isEmpty) {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          ),
+        );
+        return;
+      }
       emit(state.copyWith(status: AppStatus.loading));
       await _initClient();
-      final username = didCubit.state.did!.replaceAll(':', '-');
       final isUserRegisteredMatrix = await secureStorageProvider
           .get(SecureStorageKeys.isUserRegisteredMatrix);
       late String userId;
       if (isUserRegisteredMatrix != 'true') {
-        await _register(username: username);
+        await _register(did: did);
         await secureStorageProvider.set(
           SecureStorageKeys.isUserRegisteredMatrix,
           true.toString(),
@@ -206,21 +247,46 @@ class LiveChatCubit extends Cubit<LiveChatState> {
         username,
       );
       logger.i('roomId : $_roomId');
+      _getUnreadMessageCount();
       _subscribeToEventsOfRoom();
+      final retrivedMessageFromDB = await _retriveMessagesFromDB(_roomId);
       emit(
         state.copyWith(
           status: AppStatus.init,
           user: User(id: userId),
+          messages: retrivedMessageFromDB,
         ),
       );
     } catch (e, s) {
       logger.e('error: $e, stack: $s');
-      emit(state.copyWith(status: AppStatus.error));
+      if (e is MatrixException) {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage.error(
+              stringMessage: e.errorMessage,
+            ),
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          ),
+        );
+      }
     }
   }
 
   void _subscribeToEventsOfRoom() {
     _onEventSubscription?.cancel();
+
     _onEventSubscription = client.onRoomState.stream.listen((Event event) {
       if (event.roomId == _roomId && event.type == 'm.room.message') {
         final txId = event.unsigned?['transaction_id'] as String?;
@@ -237,68 +303,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           newMessages[index] = updatedMessage;
           emit(state.copyWith(messages: newMessages));
         } else {
-          late final Message message;
-          if (event.messageType == 'm.text') {
-            message = TextMessage(
-              id: event.unsigned?['transaction_id'] as String? ??
-                  const Uuid().v4(),
-              text: event.text,
-              createdAt: event.originServerTs.millisecondsSinceEpoch,
-              status: _mapEventStatusToMessageStatus(event.status),
-              author: User(
-                id: event.senderId,
-              ),
-            );
-          } else if (event.messageType == 'm.image') {
-            message = ImageMessage(
-              id: const Uuid().v4(),
-              name: event.body,
-              size: event.content['info']['size'] as num,
-              uri: _getUrlFromUri(event.content['url'] as String),
-              status: _mapEventStatusToMessageStatus(event.status),
-              createdAt: event.originServerTs.millisecondsSinceEpoch,
-              author: User(
-                id: event.senderId,
-              ),
-            );
-          } else if (event.messageType == 'm.file') {
-            message = FileMessage(
-              id: const Uuid().v4(),
-              name: event.body,
-              size: event.content['info']['size'] as num,
-              uri: _getUrlFromUri(event.content['url'] as String),
-              status: _mapEventStatusToMessageStatus(event.status),
-              createdAt: event.originServerTs.millisecondsSinceEpoch,
-              author: User(
-                id: event.senderId,
-              ),
-            );
-          } else if (event.messageType == 'm.audio') {
-            message = AudioMessage(
-              id: const Uuid().v4(),
-              duration: Duration(
-                milliseconds: event.content['info']['duration'] as int,
-              ),
-              name: event.body,
-              size: event.content['info']['size'] as num,
-              uri: _getUrlFromUri(event.content['url'] as String),
-              status: _mapEventStatusToMessageStatus(event.status),
-              createdAt: event.originServerTs.millisecondsSinceEpoch,
-              author: User(
-                id: event.senderId,
-              ),
-            );
-          } else {
-            message = TextMessage(
-              id: const Uuid().v4(),
-              text: event.text,
-              createdAt: event.originServerTs.millisecondsSinceEpoch,
-              status: _mapEventStatusToMessageStatus(event.status),
-              author: User(
-                id: event.senderId,
-              ),
-            );
-          }
+          final Message message = _mapEventToMessage(event);
+          _getUnreadMessageCount();
           emit(
             state.copyWith(
               messages: [message, ...state.messages],
@@ -307,6 +313,135 @@ class LiveChatCubit extends Cubit<LiveChatState> {
         }
       }
     });
+  }
+
+  Message _mapEventToMessage(Event event) {
+    late final Message message;
+    if (event.messageType == 'm.text') {
+      message = TextMessage(
+        id: event.unsigned?['transaction_id'] as String? ?? const Uuid().v4(),
+        remoteId: event.eventId,
+        text: event.text,
+        createdAt: event.originServerTs.millisecondsSinceEpoch,
+        status: _mapEventStatusToMessageStatus(event.status),
+        author: User(
+          id: event.senderId,
+        ),
+      );
+    } else if (event.messageType == 'm.image') {
+      message = ImageMessage(
+        id: const Uuid().v4(),
+        remoteId: event.eventId,
+        name: event.body,
+        size: event.content['info']['size'] as num,
+        uri: _getUrlFromUri(event.content['url'] as String),
+        status: _mapEventStatusToMessageStatus(event.status),
+        createdAt: event.originServerTs.millisecondsSinceEpoch,
+        author: User(
+          id: event.senderId,
+        ),
+      );
+    } else if (event.messageType == 'm.file') {
+      message = FileMessage(
+        id: const Uuid().v4(),
+        remoteId: event.eventId,
+        name: event.body,
+        size: event.content['info']['size'] as num,
+        uri: _getUrlFromUri(event.content['url'] as String),
+        status: _mapEventStatusToMessageStatus(event.status),
+        createdAt: event.originServerTs.millisecondsSinceEpoch,
+        author: User(
+          id: event.senderId,
+        ),
+      );
+    } else if (event.messageType == 'm.audio') {
+      message = AudioMessage(
+        id: const Uuid().v4(),
+        remoteId: event.eventId,
+        duration: Duration(
+          milliseconds: event.content['info']['duration'] as int,
+        ),
+        name: event.body,
+        size: event.content['info']['size'] as num,
+        uri: _getUrlFromUri(event.content['url'] as String),
+        status: _mapEventStatusToMessageStatus(event.status),
+        createdAt: event.originServerTs.millisecondsSinceEpoch,
+        author: User(
+          id: event.senderId,
+        ),
+      );
+    } else {
+      message = TextMessage(
+        id: const Uuid().v4(),
+        remoteId: event.eventId,
+        text: event.text,
+        createdAt: event.originServerTs.millisecondsSinceEpoch,
+        status: _mapEventStatusToMessageStatus(event.status),
+        author: User(
+          id: event.senderId,
+        ),
+      );
+    }
+    return message;
+  }
+
+  int get unreadMessageCount =>
+      client.getRoomById(_roomId)?.notificationCount ?? 0;
+
+  void _getUnreadMessageCount() {
+    final unreadCount = unreadMessageCount;
+    logger.i('unread message count: $unreadCount');
+    _notificationStreamController?.sink.add(unreadCount);
+  }
+
+  Future<void> markMessageAsRead(List<String?>? eventIds) async {
+    if (eventIds == null || eventIds.isEmpty) return;
+
+    final room = client.getRoomById(_roomId);
+    if (room == null) return;
+    try {
+      for (final eventId in eventIds) {
+        if (eventId != null) {
+          await room.postReceipt(eventId);
+        }
+      }
+    } catch (e, s) {
+      logger.e('e: $e , s: $s');
+    }
+    _getUnreadMessageCount();
+  }
+
+  // this function called when state emited in UI and needs
+  // to set messages as read
+  void setMessagesAsRead() {
+    try {
+      logger.i('setMessagesAsRead');
+      if (unreadMessageCount > 0) {
+        final unreadMessageEventIds = state.messages
+            .take(unreadMessageCount)
+            .map((e) => e.remoteId!)
+            .toList();
+        logger.i(
+          'unread message event ids lenght: ${unreadMessageEventIds.length}',
+        );
+        markMessageAsRead(unreadMessageEventIds);
+      }
+    } catch (e, s) {
+      logger.e('e: $e, s: $s');
+    }
+  }
+
+  Future<List<Message>> _retriveMessagesFromDB(String roomId) async {
+    final room = client.getRoomById(roomId);
+    if (room == null) return [];
+    final events = await client.database?.getEventList(room);
+    if (events == null || events.isEmpty) return [];
+    final messageEvents =
+        events.where((event) => event.type == 'm.room.message').toList()
+          ..sort(
+            (e1, e2) => e2.originServerTs.compareTo(e1.originServerTs),
+          );
+    return messageEvents.map(_mapEventToMessage).toList();
   }
 
   Future<String> _createRoomAndInviteSupport(String name) async {
@@ -319,25 +454,76 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           name: name,
           invite: ['@support:matrix.talao.co'],
           roomAliasName: name,
+          initialState: [
+            StateEvent(
+              type: EventTypes.Encryption,
+              stateKey: '',
+              content: {
+                'algorithm': 'm.megolm.v1.aes-sha2',
+              },
+            ),
+          ],
         );
         await secureStorageProvider.set(
           SecureStorageKeys.supportRoomId,
           roomId,
         );
+        await _enableRoomEncyption(roomId);
+        logger.i('room created! => id: $roomId');
         return roomId;
       } catch (e, s) {
         logger.e('e: $e, s: $s');
-        final roomId = await client.joinRoom(name);
-        return roomId;
+        if (e is MatrixException && e.errcode == 'M_ROOM_IN_USE') {
+          final millisecondsSinceEpoch = DateTime.now().millisecondsSinceEpoch;
+          return _createRoomAndInviteSupport(
+            '$name-updated-$millisecondsSinceEpoch',
+          );
+        } else {
+          final roomId = await client.joinRoom(name);
+          await _enableRoomEncyption(roomId);
+          return roomId;
+        }
       }
     } else {
+      await _enableRoomEncyption(mRoomId);
       return mRoomId;
     }
   }
 
+  Future<void> _enableRoomEncyption(String roomId) async {
+    try {
+      final room = client.getRoomById(roomId);
+      if (room == null) return;
+      if (room.encrypted) {
+        logger.i('the room with id: ${room.id} encyrpted before!');
+        return;
+      }
+      final verificationResponse =
+          await DeviceKeysList(client.userID!, client).startVerification();
+      logger.i('verification response: $verificationResponse');
+      await verificationResponse.acceptVerification();
+      verificationResponse.onUpdate = () {
+        logger.i('on update the verifcation : ${verificationResponse.state}');
+      };
+      await room.enableEncryption();
+    } catch (e, s) {
+      logger.e('error in enabling room e2e encryption, e: $e, s: $s');
+    }
+  }
+
   Future<void> _initClient() async {
+    client = Client(
+      'AltMeUser',
+      databaseBuilder: (_) async {
+        final dir = await getApplicationSupportDirectory();
+        final db = HiveCollectionsDatabase('matrix_support_chat', dir.path);
+        await db.open();
+        return db;
+      },
+    );
     client.homeserver = Uri.parse(Urls.matrixHomeServer);
     await client.init();
+    _notificationStreamController ??= StreamController<int>.broadcast();
   }
 
   Future<String> _getDidAuth(String did, String nonce) async {
@@ -353,7 +539,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
 
     final key = (await secureStorageProvider.get(SecureStorageKeys.ssiKey))!;
 
-    final String didAuth = await didCubit.didKitProvider.didAuth(
+    final String didAuth = await didKit.didAuth(
       did,
       jsonEncode(options),
       key,
@@ -386,9 +572,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   }
 
   Future<void> _register({
-    required String username,
+    required String did,
   }) async {
-    final did = didCubit.state.did!;
     final nonce = await _getNonce(did);
     final didAuth = await _getDidAuth(did, nonce);
     await dotenv.load();
@@ -416,19 +601,30 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     required String username,
     required String password,
   }) async {
+    final isLogged = client.isLogged();
+    if (isLogged) return client.userID!;
     client.homeserver = Uri.parse(Urls.matrixHomeServer);
+    final deviceId = await PlatformDeviceId.getDeviceId;
     final loginResonse = await client.login(
       LoginType.mLoginPassword,
       password: password,
+      deviceId: deviceId,
       identifier: AuthenticationUserIdentifier(user: username),
     );
     return loginResonse.userId!;
   }
 
   Future<void> dispose() async {
-    await client.logout();
-    await client.dispose();
-    await _onEventSubscription?.cancel();
+    try {
+      await client.logout();
+      await client.dispose();
+      await _notificationStreamController?.close();
+      _notificationStreamController = null;
+      await _onEventSubscription?.cancel();
+      _onEventSubscription = null;
+    } catch (e) {
+      logger.e('e: $e');
+    }
   }
 
   String _getUrlFromUri(String uri) {

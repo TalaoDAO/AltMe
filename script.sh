@@ -58,8 +58,8 @@ then
   echo "deploy android"
   echo "Make sure you are in right branch"
   fvm flutter build appbundle --flavor "production" --target "lib/main_production.dart"
-  cd android 
-  fastlane deploy
+  # cd android 
+  # fastlane deploy
   echo "app bundle deployed on internal testing track"
 
 elif [[ "$*" == *-ios* ]]; 

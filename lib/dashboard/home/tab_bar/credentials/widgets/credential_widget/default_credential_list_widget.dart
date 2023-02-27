@@ -18,39 +18,51 @@ class DefaultCredentialListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final outputDescriptor =
-        credentialModel.credentialManifest?.outputDescriptors?.first;
+    final outputDescriptors =
+        credentialModel.credentialManifest?.outputDescriptors;
     // If outputDescriptor exist, the credential has a credential manifest
     // telling us what to display
 
-    final backgroundColor = outputDescriptor == null
-        ? credentialModel
-            .credentialPreview.credentialSubjectModel.credentialSubjectType
-            .backgroundColor(credentialModel)
-        : getColorFromCredential(
-            outputDescriptor.styles?.background,
-            Colors.white,
-          );
-
+    late Color backgroundColor;
     late Widget descriptionWidget;
 
-    if (outputDescriptor == null) {
+    if (outputDescriptors == null) {
+      backgroundColor = credentialModel
+          .credentialPreview.credentialSubjectModel.credentialSubjectType
+          .backgroundColor(credentialModel);
+
       descriptionWidget = DefaultDisplayDescriptor(
         credentialModel: credentialModel,
         descriptionMaxLine: descriptionMaxLine,
       );
     } else {
+      backgroundColor = getColorFromCredential(
+        outputDescriptors.first.styles?.background,
+        Colors.white,
+      )!;
+
       descriptionWidget = CredentialManifestCard(
         credentialModel: credentialModel,
-        outputDescriptor: outputDescriptor,
+        outputDescriptor: outputDescriptors.first,
       );
     }
+
     return CredentialContainer(
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: DecoratedBox(
           decoration: BaseBoxDecoration(
             color: backgroundColor,
+            gradient: isVerifiableDiplomaType(credentialModel)
+                ? const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xff0B67C5),
+                      Color(0xff200072),
+                    ],
+                  )
+                : null,
             shapeColor: Theme.of(context).colorScheme.documentShape,
             value: 1,
             anchors: showBgDecoration

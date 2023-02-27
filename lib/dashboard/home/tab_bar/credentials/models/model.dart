@@ -27,6 +27,7 @@ export 'email_pass/email_pass_model.dart';
 export 'ethereum_associated_address/ethereum_associated_address_credential.dart';
 export 'ethereum_associated_address/ethereum_associated_address_model.dart';
 export 'ethereum_poo_address/ethereum_poo_address_model.dart';
+export 'eu_diploma_card/eu_diploma_card_model.dart';
 export 'fantom_associated_address/fantom_associated_address_credential.dart';
 export 'fantom_associated_address/fantom_associated_address_model.dart';
 export 'fantom_poo_address/fantom_poo_address_model.dart';

@@ -108,13 +108,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
+        var message =
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER;
+
+        if (e.toString() == 'Exception: VERIFICATION_ISSUE') {
+          message = ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL;
+        }
+
         emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            ),
-          ),
+          state.error(messageHandler: ResponseMessage(message)),
         );
       }
     }
@@ -207,7 +209,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         } else {
           var claims = uri.queryParameters['claims'] ?? '';
 
-          // TODO(hawkbee) change when correction is done on verifier
+          // TODO(hawkbee): change when correction is done on verifier
           claims = claims.replaceAll("'email': None", "'email': 'None'");
 
           claims = claims.replaceAll("'", '"');
@@ -308,6 +310,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(state.acceptHost(uri: uri!));
       }
     } catch (e) {
+      log.e(e);
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {

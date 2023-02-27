@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AltMeLogo extends StatelessWidget {
-  const AltMeLogo({super.key, this.size = Sizes.logoLarge});
+  const AltMeLogo({
+    super.key,
+    this.size = Sizes.logoLarge,
+    this.color,
+  });
 
   final double size;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +24,7 @@ class AltMeLogo extends StatelessWidget {
               : ImageStrings.splash,
       width: size,
       height: size,
+      color: color,
       fit: BoxFit.contain,
     );
   }

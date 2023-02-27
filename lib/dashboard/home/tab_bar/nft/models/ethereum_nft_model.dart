@@ -17,6 +17,8 @@ class EthereumNftModel extends NftModel {
     String? image,
     super.description,
     required this.type,
+    this.minterAddress,
+    this.lastMetadataSync,
   }) : super(
           displayUri: animationUrl,
           thumbnailUri: image,
@@ -26,6 +28,10 @@ class EthereumNftModel extends NftModel {
       _$EthereumNftModelFromJson(json);
 
   final String type;
+  @JsonKey(name: 'minter_address')
+  final String? minterAddress;
+  @JsonKey(name: 'last_metadata_sync')
+  final String? lastMetadataSync;
 
   @override
   Map<String, dynamic> toJson() => _$EthereumNftModelToJson(this);
@@ -55,5 +61,7 @@ class EthereumNftModel extends NftModel {
         balance,
         type,
         isTransferable,
+        minterAddress,
+        lastMetadataSync,
       ];
 }

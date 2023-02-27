@@ -122,7 +122,9 @@ class _SplashViewState extends State<SplashView> {
               }
             });
             if (isBeaconRequest && beaconData != '') {
-              context.read<BeaconCubit>().peerFromDeepLink(beaconData);
+              unawaited(
+                context.read<BeaconCubit>().peerFromDeepLink(beaconData),
+              );
             }
           }
         },

@@ -6,6 +6,7 @@ class AdvanceSettingsState extends Equatable {
     required this.isGamingEnabled,
     required this.isIdentityEnabled,
     required this.isBlockchainAccountsEnabled,
+    required this.isEducationEnabled,
     required this.isPassEnabled,
     required this.isSocialMediaEnabled,
     required this.isCommunityEnabled,
@@ -18,6 +19,7 @@ class AdvanceSettingsState extends Equatable {
   final bool isGamingEnabled;
   final bool isIdentityEnabled;
   final bool isBlockchainAccountsEnabled;
+  final bool isEducationEnabled;
   final bool isPassEnabled;
   final bool isSocialMediaEnabled;
   final bool isCommunityEnabled;
@@ -29,6 +31,7 @@ class AdvanceSettingsState extends Equatable {
     bool? isGamingEnabled,
     bool? isIdentityEnabled,
     bool? isBlockchainAccountsEnabled,
+    bool? isEducationEnabled,
     bool? isPassEnabled,
     bool? isSocialMediaEnabled,
     bool? isCommunityEnabled,
@@ -39,6 +42,7 @@ class AdvanceSettingsState extends Equatable {
       isIdentityEnabled: isIdentityEnabled ?? this.isIdentityEnabled,
       isBlockchainAccountsEnabled:
           isBlockchainAccountsEnabled ?? this.isBlockchainAccountsEnabled,
+      isEducationEnabled: isEducationEnabled ?? this.isEducationEnabled,
       isPassEnabled: isPassEnabled ?? this.isPassEnabled,
       isSocialMediaEnabled: isSocialMediaEnabled ?? this.isSocialMediaEnabled,
       isCommunityEnabled: isCommunityEnabled ?? this.isCommunityEnabled,
@@ -51,6 +55,7 @@ class AdvanceSettingsState extends Equatable {
         isGamingEnabled,
         isIdentityEnabled,
         isBlockchainAccountsEnabled,
+        isEducationEnabled,
         isPassEnabled,
         isSocialMediaEnabled,
         isCommunityEnabled,

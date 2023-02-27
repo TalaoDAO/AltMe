@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/drawer/drawer.dart';
-import 'package:altme/dashboard/drawer/live_chat/cubit/live_chat_cubit.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
@@ -110,11 +109,14 @@ class ResetWalletView extends StatelessWidget {
                           await getSecureStorage.get(SecureStorageKeys.pinCode);
                       if (pinCode?.isEmpty ?? true) {
                         await context.read<WalletCubit>().resetWallet();
+                        await context.read<LiveChatCubit>().dispose();
                       } else {
                         await Navigator.of(context).push<void>(
                           PinCodePage.route(
-                            isValidCallback: () =>
-                                context.read<WalletCubit>().resetWallet(),
+                            isValidCallback: () {
+                              context.read<WalletCubit>().resetWallet();
+                              context.read<LiveChatCubit>().dispose();
+                            },
                             restrictToBack: false,
                           ),
                         );

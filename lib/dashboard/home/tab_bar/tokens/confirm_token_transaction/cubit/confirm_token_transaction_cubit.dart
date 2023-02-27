@@ -273,34 +273,46 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   }
 
   Future<void> sendContractInvocationOperation() async {
-    emit(state.copyWith(status: AppStatus.init));
-    if (manageNetworkCubit.state.network is TezosNetwork) {
-      await _sendContractInvocationOperationTezos(
-        tokenAmount: state.totalAmount,
-        selectedAccountSecretKey: state.selectedAccountSecretKey,
-        token: state.selectedToken,
-      );
-    } else {
-      final selectedEthereumNetwork = manageNetworkCubit.state.network;
-
-      await dotenv.load();
-      final ethRpcUrl = dotenv.get('WEB3_RPC_MAINNET_URL');
-
-      String chainRpcUrl = ethRpcUrl;
-      if (selectedEthereumNetwork is PolygonNetwork ||
-          selectedEthereumNetwork is BinanceNetwork ||
-          selectedEthereumNetwork is FantomNetwork) {
-        chainRpcUrl = selectedEthereumNetwork.rpcNodeUrl;
+    try {
+      emit(state.copyWith(status: AppStatus.init));
+      if (manageNetworkCubit.state.network is TezosNetwork) {
+        await _sendContractInvocationOperationTezos(
+          tokenAmount: state.totalAmount,
+          selectedAccountSecretKey: state.selectedAccountSecretKey,
+          token: state.selectedToken,
+        );
       } else {
-        chainRpcUrl = ethRpcUrl;
+        final selectedEthereumNetwork = manageNetworkCubit.state.network;
+
+        await dotenv.load();
+        final infuraApiKey = dotenv.get('INFURA_API_KEY');
+        final ethRpcUrl = Urls.infuraBaseUrl + infuraApiKey;
+
+        String chainRpcUrl = ethRpcUrl;
+        if (selectedEthereumNetwork is PolygonNetwork ||
+            selectedEthereumNetwork is BinanceNetwork ||
+            selectedEthereumNetwork is FantomNetwork) {
+          chainRpcUrl = selectedEthereumNetwork.rpcNodeUrl;
+        } else {
+          chainRpcUrl = ethRpcUrl;
+        }
+        await _sendContractInvocationOperationEthereum(
+          tokenAmount: state.totalAmount,
+          selectedAccountSecretKey: state.selectedAccountSecretKey,
+          token: state.selectedToken,
+          chainId: (selectedEthereumNetwork as EthereumNetwork).chainId,
+          chainRpcUrl: chainRpcUrl,
+          ethRpcUrl: ethRpcUrl,
+        );
       }
-      await _sendContractInvocationOperationEthereum(
-        tokenAmount: state.totalAmount,
-        selectedAccountSecretKey: state.selectedAccountSecretKey,
-        token: state.selectedToken,
-        chainId: (selectedEthereumNetwork as EthereumNetwork).chainId,
-        chainRpcUrl: chainRpcUrl,
-        ethRpcUrl: ethRpcUrl,
+    } catch (e, s) {
+      logger.e('e: $e s: $s');
+      emit(
+        state.error(
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+          ),
+        ),
       );
     }
   }
@@ -448,7 +460,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       emit(state.loading());
 
       //final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
-      final rpcUrl = await web3RpcMainnetInfuraURL();
+      //final rpcUrl = await web3RpcMainnetInfuraURL();
       final amount = tokenAmount *
           double.parse(
             1.toStringAsFixed(int.parse(token.decimals)).replaceAll('.', ''),

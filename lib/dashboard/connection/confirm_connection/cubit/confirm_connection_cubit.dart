@@ -7,7 +7,6 @@ import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wallet_connect/wallet_connect.dart';
 
@@ -105,7 +104,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
 
           final savedDappData = SavedDappData(
             walletAddress: currentAccount.walletAddress,
-            blockchainType: BlockchainType.ethereum,
+            blockchainType: currentAccount.blockchainType,
             wcSessionStore: WCSessionStore(
               session: wcClient.session!,
               peerMeta: wcClient.peerMeta!,
@@ -128,8 +127,8 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           ),
         ),
       );
-    } catch (e) {
-      log.e('error connecting to $connectionBridgeType , e: $e');
+    } catch (e,s) {
+      log.e('error connecting to $connectionBridgeType , e: $e , s: $s');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {

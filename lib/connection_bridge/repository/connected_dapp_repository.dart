@@ -72,9 +72,14 @@ class ConnectedDappRepository {
         id = savedDappData.peer!.publicKey;
         break;
       case BlockchainType.fantom:
+        id = savedDappData.wcSessionStore!.session.topic;
+        break;
       case BlockchainType.polygon:
+        id = savedDappData.wcSessionStore!.session.topic;
+        break;
       case BlockchainType.binance:
-        throw Exception();
+        id = savedDappData.wcSessionStore!.session.topic;
+        break;
     }
     log.i('deleteing dapp data - ${SecureStorageKeys.savedDaaps}/$id');
     await _secureStorageProvider.delete('${SecureStorageKeys.savedDaaps}/$id');
@@ -88,16 +93,15 @@ class ConnectedDappRepository {
       (SavedDappData savedData) {
         switch (savedDappData.blockchainType) {
           case BlockchainType.ethereum:
+          case BlockchainType.fantom:
+          case BlockchainType.polygon:
+          case BlockchainType.binance:
             return savedData.walletAddress == savedDappData.walletAddress &&
                 savedData.wcSessionStore!.remotePeerMeta.name ==
                     savedDappData.wcSessionStore!.remotePeerMeta.name;
           case BlockchainType.tezos:
             return savedData.walletAddress == savedDappData.walletAddress &&
                 savedData.peer!.name == savedDappData.peer!.name;
-          case BlockchainType.fantom:
-          case BlockchainType.polygon:
-          case BlockchainType.binance:
-            throw Exception();
         }
       },
 
@@ -112,15 +116,14 @@ class ConnectedDappRepository {
     late String id;
     switch (savedDappData.blockchainType) {
       case BlockchainType.ethereum:
+      case BlockchainType.fantom:
+      case BlockchainType.polygon:
+      case BlockchainType.binance:
         id = savedDappData.wcSessionStore!.session.topic;
         break;
       case BlockchainType.tezos:
         id = savedDappData.peer!.publicKey;
         break;
-      case BlockchainType.fantom:
-      case BlockchainType.polygon:
-      case BlockchainType.binance:
-        throw Exception();
     }
 
     await _secureStorageProvider.set(

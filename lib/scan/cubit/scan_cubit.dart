@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
@@ -56,14 +57,14 @@ class ScanCubit extends Cubit<ScanState> {
 
     try {
       if (uri.queryParameters['scope'] == 'openid') {
+        final String p256PrivateKey =
+            await getRandomP256PrivateKey(secureStorageProvider);
         // final mnemonic =
         //     await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+
         final credentialList = credentialsToBePresented!
             .map((e) => jsonEncode(e.toJson()))
             .toList();
-
-        final String p256PrivateKey =
-            await getRandomP256PrivateKey(secureStorageProvider);
 
         await ebsi.sendPresentation(uri, credentialList, null, p256PrivateKey);
 

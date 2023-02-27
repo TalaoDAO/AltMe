@@ -43,12 +43,12 @@ class _DashboardViewState extends State<DashboardView> {
         /// If there is a deepLink we give do as if it coming from QRCode
         context.read<QRCodeScanCubit>().deepLink();
         context.read<BeaconCubit>().startBeacon();
-
         if (context.read<SplashCubit>().state.isNewVersion) {
           WhatIsNewDialog.show(context);
         }
       });
     });
+
     super.initState();
   }
 
@@ -87,6 +87,21 @@ class _DashboardViewState extends State<DashboardView> {
           restrictToBack: false,
         ),
       );
+    }
+  }
+
+  String _getTitle(int selectedIndex, AppLocalizations l10n) {
+    switch (selectedIndex) {
+      case 0:
+        return l10n.myWallet;
+      case 1:
+        return l10n.discover;
+      case 2:
+        return Parameters.hasCryptoCallToAction ? l10n.buy : l10n.search;
+      case 3:
+        return l10n.help;
+      default:
+        return '';
     }
   }
 
@@ -165,6 +180,9 @@ class _DashboardViewState extends State<DashboardView> {
       ],
       child: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
+          if (state.selectedIndex == 3) {
+            context.read<LiveChatCubit>().setMessagesAsRead();
+          }
           return WillPopScope(
             onWillPop: () async {
               if (scaffoldKey.currentState!.isDrawerOpen) {
@@ -174,15 +192,7 @@ class _DashboardViewState extends State<DashboardView> {
             },
             child: BasePage(
               scrollView: false,
-              title: state.selectedIndex == 0
-                  ? l10n.myWallet
-                  : state.selectedIndex == 1
-                      ? l10n.discover
-                      : state.selectedIndex == 2
-                          ? Parameters.hasCryptoCallToAction
-                              ? l10n.buy
-                              : l10n.search
-                          : '',
+              title: _getTitle(state.selectedIndex, l10n),
               scaffoldKey: scaffoldKey,
               padding: EdgeInsets.zero,
               drawer: const DrawerPage(),
@@ -289,12 +299,20 @@ class _DashboardViewState extends State<DashboardView> {
                                 onTap: () => bottomTapped(2),
                                 isSelected: state.selectedIndex == 2,
                               ),
-                            BottomBarItem(
-                              icon: IconStrings.messaging,
-                              text: l10n.help,
-                              onTap: () => bottomTapped(3),
-                              isSelected: state.selectedIndex == 3,
-                            ),
+                            StreamBuilder(
+                              stream: context
+                                  .read<LiveChatCubit>()
+                                  .unreadMessageCountStream,
+                              builder: (_, snapShot) {
+                                return BottomBarItem(
+                                  icon: IconStrings.messaging,
+                                  text: l10n.help,
+                                  badgeCount: snapShot.data ?? 0,
+                                  onTap: () => bottomTapped(3),
+                                  isSelected: state.selectedIndex == 3,
+                                );
+                              },
+                            )
                           ],
                         ),
                       ),

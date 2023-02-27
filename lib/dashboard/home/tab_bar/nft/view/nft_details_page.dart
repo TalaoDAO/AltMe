@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 class NftDetailsPage extends StatelessWidget {
@@ -81,45 +82,27 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 maxLines: 1,
                 minFontSize: 16,
               ),
+              MyText(
+                widget.nftModel.symbol ?? '--',
+                style: Theme.of(context).textTheme.bodySmall2,
+                maxLines: 1,
+                minFontSize: 12,
+              ),
+              if (widget.nftModel.description != null &&
+                  widget.nftModel.description!.isNotEmpty) ...[
+                const SizedBox(height: Sizes.spaceNormal),
+                if (widget.nftModel.description?.contains('<p>') ?? false)
+                  Html(data: widget.nftModel.description ?? '')
+                else
+                  Text(
+                    widget.nftModel.description ?? '',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+              ],
               if (widget.nftModel is TezosNftModel)
-                MyText(
-                  (widget.nftModel as TezosNftModel).symbol ?? '--',
-                  style: Theme.of(context).textTheme.bodySmall2,
-                  maxLines: 1,
-                  minFontSize: 12,
-                ),
-              const SizedBox(height: Sizes.spaceNormal),
-              if (widget.nftModel.description?.contains('<p>') ?? false)
-                Html(data: widget.nftModel.description ?? '')
+                ...buildTezosMoreDetails(l10n)
               else
-                Text(
-                  widget.nftModel.description ?? '',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              if (widget.nftModel is TezosNftModel)
-                ...buildTezosMoreDetails(l10n),
-              // Text(
-              //   l10n.seeMoreNFTInformationOn,
-              //   style: Theme.of(context).textTheme.bodyText1,
-              // ),
-              // const SizedBox(height: Sizes.spaceSmall),
-              // Row(
-              //   children: [
-              //     NftUrlWidget(
-              //       text: 'Objkt.com',
-              //       onPressed: () async {
-              //         await LaunchUrl.launch(Urls.objktUrl);
-              //       },
-              //     ),
-              //     const SizedBox(width: 15),
-              //     NftUrlWidget(
-              //       text: 'Rarible.com',
-              //       onPressed: () async {
-              //         await LaunchUrl.launch(Urls.raribleUrl);
-              //       },
-              //     ),
-              //   ],
-              // )
+                ...buildEthereumMoreDetails(l10n),
             ],
           ),
         ),
@@ -152,10 +135,41 @@ class _NftDetailsViewState extends State<NftDetailsView> {
   List<Widget> buildTezosMoreDetails(AppLocalizations l10n) {
     final nftModel = widget.nftModel as TezosNftModel;
     return [
-      if (nftModel.identifier != null)
+      const SizedBox(height: Sizes.spaceNormal),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${l10n.contractAddress} : ',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          Row(
+            children: [
+              Flexible(
+                child: Text(
+                  nftModel.contractAddress,
+                  style: Theme.of(context).textTheme.bodySmall3,
+                ),
+              ),
+              IconButton(
+            icon: const Icon(
+              Icons.open_in_new,
+              size: Sizes.icon,
+            ),
+            onPressed: () {
+              openAddressBlockchainExplorer(
+                context.read<ManageNetworkCubit>().state.network,
+                nftModel.contractAddress,
+              );
+            },
+          ),
+            ],
+          ),
+        ],
+      ),
+      if (nftModel.identifier != null) ...[
         const SizedBox(height: Sizes.spaceNormal),
-      if (nftModel.identifier != null)
-        Row(
+        Column(
           children: [
             Text(
               '${l10n.identifier} : ',
@@ -167,49 +181,73 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             )
           ],
         ),
-      if (nftModel.creators != null)
+      ],
+      if (nftModel.creators != null && nftModel.creators!.isNotEmpty) ...[
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
-      if (nftModel.creators != null)
+        Text(
+          '${l10n.creators} : ',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${l10n.creators} : ',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
             Flexible(
               child: Text(
                 nftModel.creators?.join(', ') ?? '?',
                 style: Theme.of(context).textTheme.bodySmall3,
               ),
             ),
+            IconButton(
+              icon: const Icon(
+                Icons.open_in_new,
+                size: Sizes.icon,
+              ),
+              onPressed: () {
+                openAddressBlockchainExplorer(
+                  context.read<ManageNetworkCubit>().state.network,
+                  nftModel.creators!.first,
+                );
+              },
+            ),
           ],
         ),
-      if (nftModel.publishers != null)
+      ],
+      if (nftModel.publishers != null && nftModel.publishers!.isNotEmpty) ...[
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
-      if (nftModel.publishers != null)
+        Text(
+          '${l10n.publishers} : ',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         Row(
           children: [
-            Text(
-              '${l10n.publishers} : ',
-              style: Theme.of(context).textTheme.titleMedium,
+            Flexible(
+              child: Text(
+                nftModel.publishers?.join(', ') ?? '?',
+                style: Theme.of(context).textTheme.bodySmall3,
+              ),
             ),
-            Text(
-              nftModel.publishers?.join(', ') ?? '?',
-              style: Theme.of(context).textTheme.bodySmall3,
-            )
+            IconButton(
+              icon: const Icon(
+                Icons.open_in_new,
+                size: Sizes.icon,
+              ),
+              onPressed: () {
+                openAddressBlockchainExplorer(
+                  context.read<ManageNetworkCubit>().state.network,
+                  nftModel.publishers!.first,
+                );
+              },
+            ),
           ],
         ),
-      if (nftModel.date != null)
+      ],
+      if (nftModel.date != null) ...[
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
-      if (nftModel.date != null)
         Row(
           children: [
             Text(
@@ -222,6 +260,88 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
           ],
         ),
+      ]
+    ];
+  }
+
+  List<Widget> buildEthereumMoreDetails(AppLocalizations l10n) {
+    final nftModel = widget.nftModel as EthereumNftModel;
+    return [
+      const SizedBox(height: Sizes.spaceNormal),
+      Text(
+        '${l10n.contractAddress} : ',
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      Row(
+        children: [
+          Flexible(
+            child: Text(
+              nftModel.contractAddress,
+              style: Theme.of(context).textTheme.bodySmall3,
+            ),
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.open_in_new,
+              size: Sizes.icon,
+            ),
+            onPressed: () {
+              openAddressBlockchainExplorer(
+                context.read<ManageNetworkCubit>().state.network,
+                nftModel.contractAddress,
+              );
+            },
+          ),
+        ],
+      ),
+      if (nftModel.minterAddress != null && nftModel.type != 'ERC1155') ...[
+        const SizedBox(
+          height: Sizes.spaceXSmall,
+        ),
+        Text(
+          '${l10n.creator} : ',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        Row(
+          children: [
+            Flexible(
+              child: Text(
+                nftModel.minterAddress ?? '?',
+                style: Theme.of(context).textTheme.bodySmall3,
+              ),
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.open_in_new,
+                size: Sizes.icon,
+              ),
+              onPressed: () {
+                openAddressBlockchainExplorer(
+                  context.read<ManageNetworkCubit>().state.network,
+                  nftModel.minterAddress!,
+                );
+              },
+            ),
+          ],
+        ),
+      ],
+      if (nftModel.lastMetadataSync != null) ...[
+        const SizedBox(
+          height: Sizes.spaceXSmall,
+        ),
+        Row(
+          children: [
+            Text(
+              '${l10n.lastMetadataSync} : ',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Text(
+              UiDate.normalFormat(nftModel.lastMetadataSync) ?? '?',
+              style: Theme.of(context).textTheme.bodySmall3,
+            ),
+          ],
+        ),
+      ]
     ];
   }
 }

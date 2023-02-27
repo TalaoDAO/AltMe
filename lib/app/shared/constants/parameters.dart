@@ -20,14 +20,14 @@ class Parameters {
     isGamingEnabled: false,
     isIdentityEnabled: true,
     isBlockchainAccountsEnabled: false,
+    isEducationEnabled: true,
     isSocialMediaEnabled: true,
     isCommunityEnabled: true,
     isOtherEnabled: true,
     isPassEnabled: true,
   );
 
-  static const ebsiUniversalLink =
-      'https://app.talao.co/app/download/credential';
+  static const ebsiUniversalLink = 'https://app.talao.co/app/download/ebsi';
 
   static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 }

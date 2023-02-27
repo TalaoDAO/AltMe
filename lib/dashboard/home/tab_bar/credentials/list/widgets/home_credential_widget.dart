@@ -28,22 +28,21 @@ class HomeCredentialWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
           child: Text(
             '${fromDiscover ? l10n.get : l10n.my} ${title.toLowerCase()}',
             style: Theme.of(context).textTheme.credentialCategoryTitle,
           ),
         ),
-        const SizedBox(height: 4),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
           child: Text(
             categorySubtitle,
             maxLines: 3,
             style: Theme.of(context).textTheme.credentialCategorySubTitle,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
         GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
