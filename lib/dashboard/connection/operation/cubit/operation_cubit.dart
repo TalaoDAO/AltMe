@@ -27,6 +27,7 @@ class OperationCubit extends Cubit<OperationState> {
     required this.nftCubit,
     required this.tokensCubit,
     required this.walletConnectCubit,
+    required this.connectedDappRepository,
   }) : super(const OperationState());
 
   final WalletCubit walletCubit;
@@ -37,8 +38,98 @@ class OperationCubit extends Cubit<OperationState> {
   final NftCubit nftCubit;
   final TokensCubit tokensCubit;
   final WalletConnectCubit walletConnectCubit;
+  final ConnectedDappRepository connectedDappRepository;
 
   final log = getLogger('OperationCubit');
+
+  late WCClient? wcClient;
+
+  Future<void> initialise(ConnectionBridgeType connectionBridgeType) async {
+    if (isClosed) return;
+
+    try {
+      emit(state.loading());
+      switch (connectionBridgeType) {
+        case ConnectionBridgeType.beacon:
+          await getUsdPrice(connectionBridgeType);
+          break;
+        case ConnectionBridgeType.walletconnect:
+          final walletConnectState = walletConnectCubit.state;
+          wcClient = walletConnectState.wcClients.firstWhereOrNull(
+            (element) =>
+                element.remotePeerId ==
+                walletConnectCubit.state.currentDappPeerId,
+          );
+
+          log.i('wcClient -$wcClient');
+          if (wcClient == null) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
+
+          final List<SavedDappData> savedDapps =
+              await connectedDappRepository.findAll();
+
+          final SavedDappData? dappData = savedDapps.firstWhereOrNull(
+            (element) {
+              return element.wcSessionStore != null &&
+                  element.wcSessionStore!.session.key ==
+                      wcClient!.sessionStore.session.key;
+            },
+          );
+
+          log.i('dappData -$dappData');
+          if (dappData == null) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
+
+          if (walletConnectState.transaction!.from != dappData.walletAddress) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
+
+          final CryptoAccountData? cryptoAccountData =
+              walletCubit.state.cryptoAccount.data.firstWhereOrNull(
+            (element) =>
+                element.walletAddress == dappData.walletAddress &&
+                element.blockchainType == dappData.blockchainType,
+          );
+
+          log.i('cryptoAccountData -$cryptoAccountData');
+          if (cryptoAccountData == null) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          } else {
+            emit(state.copyWith(cryptoAccountData: cryptoAccountData));
+            await getUsdPrice(connectionBridgeType);
+          }
+          break;
+      }
+    } catch (e) {
+      log.e('intialisation , e: $e');
+      if (e is MessageHandler) {
+        emit(state.error(messageHandler: e));
+      } else {
+        emit(
+          state.error(
+            messageHandler: ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            ),
+          ),
+        );
+      }
+    }
+  }
 
   Future<void> getUsdPrice(ConnectionBridgeType connectionBridgeType) async {
     if (isClosed) return;
@@ -53,9 +144,12 @@ class OperationCubit extends Cubit<OperationState> {
           emit(state.copyWith(usdRate: xtzData.price));
           break;
         case ConnectionBridgeType.walletconnect:
-          log.i('fetching eth USDprice');
-          final response =
-              await dioClient.get(Urls.ethPrice) as Map<String, dynamic>;
+          log.i('fetching evm USDprice');
+
+          final symbol = state.cryptoAccountData!.blockchainType.symbol;
+
+          final response = await dioClient.get(Urls.ethPrice(symbol))
+              as Map<String, dynamic>;
           log.i('response - $response');
           final double usdRate = response['USD'] as double;
           emit(state.copyWith(usdRate: usdRate));
@@ -63,7 +157,27 @@ class OperationCubit extends Cubit<OperationState> {
       }
       await getOtherPrices(connectionBridgeType);
     } catch (e) {
-      log.e(e);
+      log.e('getUsdPrice failure , e: $e');
+      if (e is MessageHandler) {
+        emit(
+          state.copyWith(
+            status: AppStatus.errorWhileFetching,
+            message: StateMessage.error(messageHandler: e),
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            status: AppStatus.errorWhileFetching,
+            message: StateMessage.error(
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -241,36 +355,8 @@ class OperationCubit extends Cubit<OperationState> {
           success = json.decode(response['success'].toString()) as bool;
           break;
         case ConnectionBridgeType.walletconnect:
-          final walletConnectState = walletConnectCubit.state;
-          final wcClient = walletConnectState.wcClients.firstWhereOrNull(
-            (element) =>
-                element.remotePeerId ==
-                walletConnectCubit.state.currentDappPeerId,
-          );
-
-          log.i('wcClient -$wcClient');
-          if (wcClient == null) {
-            throw ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            );
-          }
-
-          final CryptoAccountData? currentAccount =
-              walletCubit.state.cryptoAccount.data.firstWhereOrNull(
-            (element) =>
-                element.walletAddress == walletConnectState.transaction!.from &&
-                element.blockchainType ==
-                    walletCubit.state.currentAccount!.blockchainType,
-          );
-
-          log.i('currentAccount -$currentAccount');
-          if (currentAccount == null) {
-            throw ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            );
-          }
+          final CryptoAccountData transactionAccountData =
+              state.cryptoAccountData!;
 
           final WCEthereumTransaction transaction =
               walletConnectCubit.state.transaction!;
@@ -288,7 +374,7 @@ class OperationCubit extends Cubit<OperationState> {
 
           late String rpcUrl;
 
-          switch (currentAccount.blockchainType) {
+          switch (transactionAccountData.blockchainType) {
             case BlockchainType.tezos:
               throw Exception();
             case BlockchainType.ethereum:
@@ -305,19 +391,21 @@ class OperationCubit extends Cubit<OperationState> {
               break;
           }
 
+          log.i('rpcUrl - $rpcUrl');
+
           final String transactionHash =
               await MWeb3Client.sendEthereumTransaction(
-            chainId: currentAccount.blockchainType.chainId,
+            chainId: transactionAccountData.blockchainType.chainId,
             web3RpcURL: rpcUrl,
-            privateKey: currentAccount.secretKey,
+            privateKey: transactionAccountData.secretKey,
             sender: EthereumAddress.fromHex(transaction.from),
             reciever: EthereumAddress.fromHex(transaction.to!),
             amount: ethAmount,
             data: transaction.data,
           );
 
-          wcClient.approveRequest<String>(
-            id: walletConnectState.transactionId!,
+          wcClient!.approveRequest<String>(
+            id: walletConnectCubit.state.transactionId!,
             result: transactionHash,
           );
 

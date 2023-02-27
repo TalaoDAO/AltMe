@@ -38,6 +38,9 @@ class RightsCubit extends Cubit<RightsState> {
 
       switch (savedDappData.blockchainType) {
         case BlockchainType.ethereum:
+        case BlockchainType.fantom:
+        case BlockchainType.polygon:
+        case BlockchainType.binance:
           final walletConnectState = walletConnectCubit.state;
           final wcClient = walletConnectState.wcClients.firstWhereOrNull(
             (element) =>
@@ -88,81 +91,6 @@ class RightsCubit extends Cubit<RightsState> {
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
             );
           }
-          break;
-        case BlockchainType.fantom:
-          final walletConnectState = walletConnectCubit.state;
-          final wcClient = walletConnectState.wcClients.firstWhereOrNull(
-            (element) =>
-                element.remotePeerId ==
-                walletConnectCubit.state.currentDappPeerId,
-          );
-          if (wcClient != null) {
-            log.i(
-              '''disconnected - ${savedDappData.wcSessionStore!.remotePeerMeta}''',
-            );
-            wcClient.disconnect();
-            //remove from collection
-          }
-
-          await connectedDappRepository.delete(savedDappData);
-          emit(
-            state.copyWith(
-              appStatus: AppStatus.success,
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP,
-              ),
-            ),
-          );
-          break;
-        case BlockchainType.polygon:
-          final walletConnectState = walletConnectCubit.state;
-          final wcClient = walletConnectState.wcClients.firstWhereOrNull(
-            (element) =>
-                element.remotePeerId ==
-                walletConnectCubit.state.currentDappPeerId,
-          );
-          if (wcClient != null) {
-            log.i(
-              '''disconnected - ${savedDappData.wcSessionStore!.remotePeerMeta}''',
-            );
-            wcClient.disconnect();
-            //remove from collection
-          }
-
-          await connectedDappRepository.delete(savedDappData);
-          emit(
-            state.copyWith(
-              appStatus: AppStatus.success,
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP,
-              ),
-            ),
-          );
-          break;
-        case BlockchainType.binance:
-          final walletConnectState = walletConnectCubit.state;
-          final wcClient = walletConnectState.wcClients.firstWhereOrNull(
-            (element) =>
-                element.remotePeerId ==
-                walletConnectCubit.state.currentDappPeerId,
-          );
-          if (wcClient != null) {
-            log.i(
-              '''disconnected - ${savedDappData.wcSessionStore!.remotePeerMeta}''',
-            );
-            wcClient.disconnect();
-            //remove from collection
-          }
-
-          await connectedDappRepository.delete(savedDappData);
-          emit(
-            state.copyWith(
-              appStatus: AppStatus.success,
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP,
-              ),
-            ),
-          );
           break;
       }
     } catch (e, s) {

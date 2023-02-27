@@ -28,7 +28,7 @@ class BinanceNetwork extends EthereumNetwork {
         apiUrl: Urls.moralisBaseUrl,
         chainId: 56,
         chain: 'bsc',
-        rpcNodeUrl: 'https://ethereum.publicnode.com',
+        rpcNodeUrl: 'https://bsc-dataseed.binance.org/',
         title: 'Binance Mainnet',
         subTitle:
             'This network is the official Binance blockchain running Network.'

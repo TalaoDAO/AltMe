@@ -9,6 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class OperationPage extends StatelessWidget {
   const OperationPage({
@@ -41,6 +42,7 @@ class OperationPage extends StatelessWidget {
         nftCubit: context.read<NftCubit>(),
         tokensCubit: context.read<TokensCubit>(),
         walletConnectCubit: context.read<WalletConnectCubit>(),
+        connectedDappRepository: ConnectedDappRepository(getSecureStorage),
       ),
       child: OperationView(connectionBridgeType: connectionBridgeType),
     );
@@ -67,7 +69,7 @@ class _OperationViewState extends State<OperationView> {
       (_) async {
         await context
             .read<OperationCubit>()
-            .getUsdPrice(widget.connectionBridgeType);
+            .initialise(widget.connectionBridgeType);
       },
     );
   }
@@ -75,34 +77,6 @@ class _OperationViewState extends State<OperationView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
-    final BeaconRequest? beaconRequest =
-        context.read<BeaconCubit>().state.beaconRequest;
-
-    final WalletConnectState walletConnectState =
-        context.read<WalletConnectCubit>().state;
-
-    late String dAppName;
-    late String sender;
-    late String reciever;
-
-    late String symbol;
-
-    switch (widget.connectionBridgeType) {
-      case ConnectionBridgeType.beacon:
-        dAppName = beaconRequest!.request!.appMetadata!.name!;
-        symbol = 'XTZ';
-        sender = beaconRequest.request!.sourceAddress!;
-        reciever = beaconRequest.operationDetails!.first.destination!;
-        break;
-
-      case ConnectionBridgeType.walletconnect:
-        dAppName = walletConnectState.currentDAppPeerMeta!.name;
-        symbol = 'ETH';
-        sender = walletConnectState.transaction!.from;
-        reciever = walletConnectState.transaction!.to ?? '';
-        break;
-    }
 
     return BlocConsumer<OperationCubit, OperationState>(
       listener: (context, state) {
@@ -130,6 +104,34 @@ class _OperationViewState extends State<OperationView> {
         }
       },
       builder: (context, state) {
+        final BeaconRequest? beaconRequest =
+            context.read<BeaconCubit>().state.beaconRequest;
+
+        final WalletConnectState walletConnectState =
+            context.read<WalletConnectCubit>().state;
+
+        late String dAppName;
+        late String sender;
+        late String reciever;
+
+        late String? symbol;
+
+        switch (widget.connectionBridgeType) {
+          case ConnectionBridgeType.beacon:
+            dAppName = beaconRequest!.request!.appMetadata!.name!;
+            symbol = 'XTZ';
+            sender = beaconRequest.request!.sourceAddress!;
+            reciever = beaconRequest.operationDetails!.first.destination!;
+            break;
+
+          case ConnectionBridgeType.walletconnect:
+            dAppName = walletConnectState.currentDAppPeerMeta!.name;
+            symbol = state.cryptoAccountData?.blockchainType.symbol;
+            sender = walletConnectState.transaction!.from;
+            reciever = walletConnectState.transaction!.to ?? '';
+            break;
+        }
+
         String message = '';
         if (state.message != null) {
           final MessageHandler messageHandler = state.message!.messageHandler!;
@@ -161,7 +163,7 @@ class _OperationViewState extends State<OperationView> {
                       onTap: () {
                         context
                             .read<OperationCubit>()
-                            .getOtherPrices(widget.connectionBridgeType);
+                            .initialise(widget.connectionBridgeType);
                       },
                     )
                   : SingleChildScrollView(
@@ -179,7 +181,7 @@ class _OperationViewState extends State<OperationView> {
                             ),
                             const SizedBox(height: Sizes.spaceSmall),
                             MyText(
-                              '''${state.amount.toStringAsFixed(6).formatNumber()} $symbol''',
+                              '''${state.amount.toStringAsFixed(6).formatNumber()} ${symbol ?? ''}''',
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
@@ -207,12 +209,13 @@ class _OperationViewState extends State<OperationView> {
                               height: Sizes.icon3x,
                             ),
                             const SizedBox(height: Sizes.spaceNormal),
-                            FeeDetails(
-                              amount: state.amount,
-                              symbol: symbol,
-                              tokenUSDRate: state.usdRate,
-                              fee: state.fee,
-                            ),
+                            if (symbol != null)
+                              FeeDetails(
+                                amount: state.amount,
+                                symbol: symbol,
+                                tokenUSDRate: state.usdRate,
+                                fee: state.fee,
+                              ),
                             const SizedBox(height: Sizes.spaceNormal),
                           ],
                         ),

@@ -49,7 +49,8 @@ class Urls {
 
   static const xtzPrice = 'https://api.teztools.io/v1/xtz-price';
   static const cryptoCompareBaseUrl = 'https://min-api.cryptocompare.com';
-  static const ethPrice = '$cryptoCompareBaseUrl/data/price?fsym=ETH&tsyms=USD';
+  static String ethPrice(String symbol) =>
+      '$cryptoCompareBaseUrl/data/price?fsym=$symbol&tsyms=USD';
 
   // TZKT
   static const tzktMainnetUrl = 'https://api.tzkt.io';
@@ -59,8 +60,7 @@ class Urls {
   static const moralisBaseUrl = 'https://deep-index.moralis.io/api/v2';
 
   //Infura
-  static const infuraBaseUrl =
-      'https://mainnet.infura.io/v3/';
+  static const infuraBaseUrl = 'https://mainnet.infura.io/v3/';
 
   static const objktUrl = 'https://objkt.com/';
   static const raribleUrl = 'https://rarible.com/';

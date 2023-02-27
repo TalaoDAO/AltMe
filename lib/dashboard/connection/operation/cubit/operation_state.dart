@@ -8,6 +8,7 @@ class OperationState extends Equatable {
     this.amount = 0,
     this.fee = 0,
     this.usdRate = 0,
+    this.cryptoAccountData,
   });
 
   factory OperationState.fromJson(Map<String, dynamic> json) =>
@@ -18,6 +19,7 @@ class OperationState extends Equatable {
   final double amount;
   final double fee;
   final double usdRate;
+  final CryptoAccountData? cryptoAccountData;
 
   OperationState loading() {
     return OperationState(
@@ -25,6 +27,7 @@ class OperationState extends Equatable {
       amount: amount,
       fee: fee,
       usdRate: usdRate,
+      cryptoAccountData: cryptoAccountData,
     );
   }
 
@@ -37,6 +40,7 @@ class OperationState extends Equatable {
       amount: amount,
       fee: fee,
       usdRate: usdRate,
+      cryptoAccountData: cryptoAccountData,
     );
   }
 
@@ -47,6 +51,7 @@ class OperationState extends Equatable {
     double? fee,
     double? usdRate,
     int? selectedIndex,
+    CryptoAccountData? cryptoAccountData,
   }) {
     return OperationState(
       status: status ?? this.status,
@@ -54,6 +59,7 @@ class OperationState extends Equatable {
       amount: amount ?? this.usdRate,
       fee: fee ?? this.usdRate,
       usdRate: usdRate ?? this.usdRate,
+      cryptoAccountData: cryptoAccountData ?? this.cryptoAccountData,
     );
   }
 
@@ -66,5 +72,6 @@ class OperationState extends Equatable {
         amount,
         fee,
         usdRate,
+        cryptoAccountData,
       ];
 }
