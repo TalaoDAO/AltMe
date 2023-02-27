@@ -28,7 +28,7 @@ class FantomNetwork extends EthereumNetwork {
         apiUrl: Urls.moralisBaseUrl,
         chainId: 250,
         chain: 'fantom',
-        rpcNodeUrl: 'https://ethereum.publicnode.com',
+        rpcNodeUrl: 'https://rpcapi.fantom.network/',
         title: 'Fantom Mainnet',
         subTitle:
             'This network is the official Fantom blockchain running Network.'

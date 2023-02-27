@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -26,12 +27,13 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       log.i('initialise');
       final List<SavedDappData> savedDapps =
           await connectedDappRepository.findAll();
-      final ethereumConnectedDapps = List.of(savedDapps).where(
-        (element) => element.blockchainType == BlockchainType.ethereum,
+
+      final connectedDapps = List.of(savedDapps).where(
+        (element) => element.blockchainType != BlockchainType.tezos,
       );
 
       final List<WCClient> wcClients = List.empty(growable: true);
-      for (final element in ethereumConnectedDapps) {
+      for (final element in connectedDapps) {
         final sessionStore = element.wcSessionStore;
 
         final WCClient? wcClient = createWCClient(element.wcSessionStore);

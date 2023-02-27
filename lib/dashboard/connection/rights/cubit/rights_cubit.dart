@@ -38,6 +38,9 @@ class RightsCubit extends Cubit<RightsState> {
 
       switch (savedDappData.blockchainType) {
         case BlockchainType.ethereum:
+        case BlockchainType.fantom:
+        case BlockchainType.polygon:
+        case BlockchainType.binance:
           final walletConnectState = walletConnectCubit.state;
           final wcClient = walletConnectState.wcClients.firstWhereOrNull(
             (element) =>
@@ -89,13 +92,9 @@ class RightsCubit extends Cubit<RightsState> {
             );
           }
           break;
-        case BlockchainType.fantom:
-        case BlockchainType.polygon:
-        case BlockchainType.binance:
-          throw Exception();
       }
-    } catch (e) {
-      log.e('disconnect failure , e: $e');
+    } catch (e, s) {
+      log.e('disconnect failure , e: $e, s: $s');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {

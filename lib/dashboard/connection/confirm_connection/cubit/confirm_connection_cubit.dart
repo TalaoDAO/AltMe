@@ -104,7 +104,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
 
           final savedDappData = SavedDappData(
             walletAddress: currentAccount.walletAddress,
-            blockchainType: BlockchainType.ethereum,
+            blockchainType: currentAccount.blockchainType,
             wcSessionStore: WCSessionStore(
               session: wcClient.session!,
               peerMeta: wcClient.peerMeta!,
@@ -127,8 +127,8 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           ),
         ),
       );
-    } catch (e) {
-      log.e('error connecting to $connectionBridgeType , e: $e');
+    } catch (e,s) {
+      log.e('error connecting to $connectionBridgeType , e: $e , s: $s');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
