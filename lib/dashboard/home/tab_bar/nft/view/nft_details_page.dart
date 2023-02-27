@@ -136,20 +136,22 @@ class _NftDetailsViewState extends State<NftDetailsView> {
     final nftModel = widget.nftModel as TezosNftModel;
     return [
       const SizedBox(height: Sizes.spaceNormal),
-      Row(
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             '${l10n.contractAddress} : ',
             style: Theme.of(context).textTheme.titleMedium,
           ),
-          Flexible(
-            child: Text(
-              nftModel.contractAddress,
-              style: Theme.of(context).textTheme.bodySmall3,
-            ),
-          ),
-          IconButton(
+          Row(
+            children: [
+              Flexible(
+                child: Text(
+                  nftModel.contractAddress,
+                  style: Theme.of(context).textTheme.bodySmall3,
+                ),
+              ),
+              IconButton(
             icon: const Icon(
               Icons.open_in_new,
               size: Sizes.icon,
@@ -161,11 +163,13 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               );
             },
           ),
+            ],
+          ),
         ],
       ),
       if (nftModel.identifier != null) ...[
         const SizedBox(height: Sizes.spaceNormal),
-        Row(
+        Column(
           children: [
             Text(
               '${l10n.identifier} : ',
@@ -182,14 +186,12 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
+        Text(
+          '${l10n.creators} : ',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${l10n.creators} : ',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
             Flexible(
               child: Text(
                 nftModel.creators?.join(', ') ?? '?',
@@ -215,12 +217,12 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
+        Text(
+          '${l10n.publishers} : ',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         Row(
           children: [
-            Text(
-              '${l10n.publishers} : ',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
             Flexible(
               child: Text(
                 nftModel.publishers?.join(', ') ?? '?',
@@ -266,13 +268,12 @@ class _NftDetailsViewState extends State<NftDetailsView> {
     final nftModel = widget.nftModel as EthereumNftModel;
     return [
       const SizedBox(height: Sizes.spaceNormal),
+      Text(
+        '${l10n.contractAddress} : ',
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
       Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '${l10n.contractAddress} : ',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
           Flexible(
             child: Text(
               nftModel.contractAddress,
@@ -297,14 +298,12 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
+        Text(
+          '${l10n.creator} : ',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${l10n.creator} : ',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
             Flexible(
               child: Text(
                 nftModel.minterAddress ?? '?',
