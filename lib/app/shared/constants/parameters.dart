@@ -27,7 +27,7 @@ class Parameters {
     isPassEnabled: true,
   );
 
-  static const ebsiUniversalLink = 'https://app.altme.io/app/download';
+  static const ebsiUniversalLink = 'https://app.altme.io/app/download/ebsi';
 
   static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 }
