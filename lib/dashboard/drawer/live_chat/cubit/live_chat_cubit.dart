@@ -473,9 +473,16 @@ class LiveChatCubit extends Cubit<LiveChatState> {
         return roomId;
       } catch (e, s) {
         logger.e('e: $e, s: $s');
-        final roomId = await client.joinRoom(name);
-        await _enableRoomEncyption(roomId);
-        return roomId;
+        if (e is MatrixException && e.errcode == 'M_ROOM_IN_USE') {
+          final millisecondsSinceEpoch = DateTime.now().millisecondsSinceEpoch;
+          return _createRoomAndInviteSupport(
+            '$name-updated-$millisecondsSinceEpoch',
+          );
+        } else {
+          final roomId = await client.joinRoom(name);
+          await _enableRoomEncyption(roomId);
+          return roomId;
+        }
       }
     } else {
       await _enableRoomEncyption(mRoomId);
