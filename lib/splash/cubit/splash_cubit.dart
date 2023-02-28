@@ -102,4 +102,8 @@ class SplashCubit extends Cubit<SplashState> {
       ),
     );
   }
+
+  void dialogOpened() {
+    emit(state.copyWith(isNewVersion: false));
+  }
 }
