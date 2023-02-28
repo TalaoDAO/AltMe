@@ -9,10 +9,13 @@ class DiscoverList {
     CredentialSubjectType.matterlightPass,
     // CredentialSubjectType.dogamiPass,
     CredentialSubjectType.bunnyPass,
+    CredentialSubjectType.bloometaPass,
   ];
+
   static final List<CredentialSubjectType> communityCategories = [
     // CredentialSubjectType.talaoCommunityCard
   ];
+
   static final List<CredentialSubjectType> identityCategories = [
     CredentialSubjectType.emailPass,
     //CredentialSubjectType.gender,
@@ -25,5 +28,6 @@ class DiscoverList {
     CredentialSubjectType.phonePass,
     CredentialSubjectType.twitterCard,
   ];
+
   static final List<CredentialSubjectType> myProfessionalCategories = [];
 }

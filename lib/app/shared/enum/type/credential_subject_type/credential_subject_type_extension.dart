@@ -154,7 +154,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.pigsPass ||
         this == CredentialSubjectType.bunnyPass ||
         this == CredentialSubjectType.troopezPass ||
-        this == CredentialSubjectType.matterlightPass) {
+        this == CredentialSubjectType.matterlightPass ||
+        this == CredentialSubjectType.bloometaPass) {
       return true;
     }
     return false;
