@@ -13,6 +13,7 @@ class Parameters {
     CredentialSubjectType.nationality,
     CredentialSubjectType.linkedInCard,
   ];
+
   static const bool hasCryptoCallToAction = true;
 
   static const AdvanceSettingsState defaultAdvanceSettingsState =
