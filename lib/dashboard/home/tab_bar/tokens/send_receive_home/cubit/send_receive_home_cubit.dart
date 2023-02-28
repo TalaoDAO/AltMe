@@ -141,6 +141,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
       params = <String, dynamic>{
         'anyof.sender.target': walletAddress,
         'amount.gt': 0,
+        'limit': 1000
       };
     } else {
       params = <String, dynamic>{

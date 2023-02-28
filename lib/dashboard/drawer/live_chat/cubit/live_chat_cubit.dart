@@ -629,17 +629,22 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     required String username,
     required String password,
   }) async {
-    final isLogged = client.isLogged();
-    if (isLogged) return client.userID!;
-    client.homeserver = Uri.parse(Urls.matrixHomeServer);
-    final deviceId = await PlatformDeviceId.getDeviceId;
-    final loginResonse = await client.login(
-      LoginType.mLoginPassword,
-      password: password,
-      deviceId: deviceId,
-      identifier: AuthenticationUserIdentifier(user: username),
-    );
-    return loginResonse.userId!;
+    try {
+      final isLogged = client.isLogged();
+      if (isLogged) return client.userID!;
+      client.homeserver = Uri.parse(Urls.matrixHomeServer);
+      final deviceId = await PlatformDeviceId.getDeviceId;
+      final loginResonse = await client.login(
+        LoginType.mLoginPassword,
+        password: password,
+        deviceId: deviceId,
+        identifier: AuthenticationUserIdentifier(user: username),
+      );
+      return loginResonse.userId!;
+    } catch (e, s) {
+      logger.i('e: $e, s: $s');
+      return '@$username:${Urls.matrixHomeServer.replaceAll('https://', '')}';
+    }
   }
 
   Future<void> dispose() async {
