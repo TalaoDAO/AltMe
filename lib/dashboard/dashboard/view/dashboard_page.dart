@@ -43,8 +43,11 @@ class _DashboardViewState extends State<DashboardView> {
         /// If there is a deepLink we give do as if it coming from QRCode
         context.read<QRCodeScanCubit>().deepLink();
         context.read<BeaconCubit>().startBeacon();
-        if (context.read<SplashCubit>().state.isNewVersion) {
+
+        final splashCubit = context.read<SplashCubit>();
+        if (splashCubit.state.isNewVersion) {
           WhatIsNewDialog.show(context);
+          splashCubit.dialogOpened();
         }
       });
     });
