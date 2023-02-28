@@ -40,7 +40,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   late Client client;
   final DioClient dioClient;
   final logger = getLogger('LiveChatCubit');
-  String _roomId = '';
+  String? _roomId;
   final DIDKitProvider didKit;
   StreamSubscription<Event>? _onEventSubscription;
   StreamController<int>? _notificationStreamController;
@@ -52,11 +52,12 @@ class LiveChatCubit extends Cubit<LiveChatState> {
 
   Future<void> onSendPressed(PartialText partialText) async {
     try {
-      final room = client.getRoomById(_roomId);
+      await _checkIfRoomNotExistThenCreateIt();
+      final room = client.getRoomById(_roomId!);
       if (room == null) {
-        await client.joinRoomById(_roomId);
+        await client.joinRoomById(_roomId!);
       }
-      final eventId = await client.getRoomById(_roomId)?.sendTextEvent(
+      final eventId = await client.getRoomById(_roomId!)?.sendTextEvent(
             partialText.text,
             txid: const Uuid().v4(),
           );
@@ -141,8 +142,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
         status: Status.sending,
       );
       emit(state.copyWith(messages: [message, ...state.messages]));
-
-      await client.getRoomById(_roomId)?.sendFileEvent(
+      await _checkIfRoomNotExistThenCreateIt();
+      await client.getRoomById(_roomId!)?.sendFileEvent(
             MatrixFile(
               bytes: File(result.files.single.path!).readAsBytesSync(),
               name: result.files.single.name,
@@ -178,7 +179,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
 
       emit(state.copyWith(messages: [message, ...state.messages]));
 
-      await client.getRoomById(_roomId)?.sendFileEvent(
+      await _checkIfRoomNotExistThenCreateIt();
+      await client.getRoomById(_roomId!)?.sendFileEvent(
             MatrixFile(
               bytes: bytes,
               name: result.name,
@@ -243,13 +245,16 @@ class LiveChatCubit extends Cubit<LiveChatState> {
           password: await _getPasswordForDID(),
         );
       }
-      _roomId = await _createRoomAndInviteSupport(
-        username,
-      );
+      List<Message> retrivedMessageFromDB = [];
+      final savedRoomId = await _getRoomIdFromStorage();
+      if (savedRoomId != null) {
+        _roomId = savedRoomId;
+        await _enableRoomEncyption(savedRoomId);
+        _getUnreadMessageCount();
+        _subscribeToEventsOfRoom();
+        retrivedMessageFromDB = await _retriveMessagesFromDB(_roomId!);
+      }
       logger.i('roomId : $_roomId');
-      _getUnreadMessageCount();
-      _subscribeToEventsOfRoom();
-      final retrivedMessageFromDB = await _retriveMessagesFromDB(_roomId);
       emit(
         state.copyWith(
           status: AppStatus.init,
@@ -284,8 +289,8 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     }
   }
 
-  void _subscribeToEventsOfRoom() {
-    _onEventSubscription?.cancel();
+  Future<void> _subscribeToEventsOfRoom() async {
+    await _onEventSubscription?.cancel();
 
     _onEventSubscription = client.onRoomState.stream.listen((Event event) {
       if (event.roomId == _roomId && event.type == 'm.room.message') {
@@ -386,7 +391,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   }
 
   int get unreadMessageCount =>
-      client.getRoomById(_roomId)?.notificationCount ?? 0;
+      client.getRoomById(_roomId ?? '')?.notificationCount ?? 0;
 
   void _getUnreadMessageCount() {
     final unreadCount = unreadMessageCount;
@@ -397,7 +402,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   Future<void> markMessageAsRead(List<String?>? eventIds) async {
     if (eventIds == null || eventIds.isEmpty) return;
 
-    final room = client.getRoomById(_roomId);
+    final room = client.getRoomById(_roomId ?? '');
     if (room == null) return;
     try {
       for (final eventId in eventIds) {
@@ -444,68 +449,81 @@ class LiveChatCubit extends Cubit<LiveChatState> {
     return messageEvents.map(_mapEventToMessage).toList();
   }
 
+  Future<void> _checkIfRoomNotExistThenCreateIt() async {
+    if (_roomId == null || _roomId!.isEmpty) {
+      final did = await secureStorageProvider.get(SecureStorageKeys.did) ?? '';
+      final username = did.replaceAll(':', '-');
+      _roomId = await _createRoomAndInviteSupport(
+        username,
+      );
+      await _setRoomIdInStorage(_roomId!);
+      _getUnreadMessageCount();
+      _subscribeToEventsOfRoom();
+    }
+  }
+
+  Future<String?> _getRoomIdFromStorage() async {
+    return secureStorageProvider.get(SecureStorageKeys.supportRoomId);
+  }
+
+  Future<void> _setRoomIdInStorage(String roomId) async {
+    await secureStorageProvider.set(
+      SecureStorageKeys.supportRoomId,
+      roomId,
+    );
+  }
+
+  /// before calling this function you need to check if
+  /// room not exist before with this [name] and alias
   Future<String> _createRoomAndInviteSupport(String name) async {
-    final mRoomId =
-        await secureStorageProvider.get(SecureStorageKeys.supportRoomId);
-    if (mRoomId == null) {
-      try {
-        final roomId = await client.createRoom(
-          isDirect: true,
-          name: name,
-          invite: ['@support:matrix.talao.co'],
-          roomAliasName: name,
-          initialState: [
-            StateEvent(
-              type: EventTypes.Encryption,
-              stateKey: '',
-              content: {
-                'algorithm': 'm.megolm.v1.aes-sha2',
-              },
-            ),
-          ],
+    try {
+      final roomId = await client.createRoom(
+        isDirect: true,
+        name: name,
+        invite: ['@support:matrix.talao.co'],
+        roomAliasName: name,
+        initialState: [
+          StateEvent(
+            type: EventTypes.Encryption,
+            stateKey: '',
+            content: {
+              'algorithm': 'm.megolm.v1.aes-sha2',
+            },
+          ),
+        ],
+      );
+      await _enableRoomEncyption(roomId);
+      logger.i('room created! => id: $roomId');
+      return roomId;
+    } catch (e, s) {
+      logger.e('e: $e, s: $s');
+      if (e is MatrixException && e.errcode == 'M_ROOM_IN_USE') {
+        final millisecondsSinceEpoch = DateTime.now().millisecondsSinceEpoch;
+        return _createRoomAndInviteSupport(
+          '$name-updated-$millisecondsSinceEpoch',
         );
-        await secureStorageProvider.set(
-          SecureStorageKeys.supportRoomId,
-          roomId,
-        );
+      } else {
+        final roomId = await client.joinRoom(name);
         await _enableRoomEncyption(roomId);
-        logger.i('room created! => id: $roomId');
         return roomId;
-      } catch (e, s) {
-        logger.e('e: $e, s: $s');
-        if (e is MatrixException && e.errcode == 'M_ROOM_IN_USE') {
-          final millisecondsSinceEpoch = DateTime.now().millisecondsSinceEpoch;
-          return _createRoomAndInviteSupport(
-            '$name-updated-$millisecondsSinceEpoch',
-          );
-        } else {
-          final roomId = await client.joinRoom(name);
-          await _enableRoomEncyption(roomId);
-          return roomId;
-        }
       }
-    } else {
-      await _enableRoomEncyption(mRoomId);
-      return mRoomId;
     }
   }
 
   Future<void> _enableRoomEncyption(String roomId) async {
     try {
+      if (roomId.isEmpty) return;
       final room = client.getRoomById(roomId);
       if (room == null) return;
       if (room.encrypted) {
         logger.i('the room with id: ${room.id} encyrpted before!');
         return;
       }
+      await room.enableEncryption();
       final verificationResponse =
           await DeviceKeysList(client.userID!, client).startVerification();
       logger.i('verification response: $verificationResponse');
       await verificationResponse.acceptVerification();
-      verificationResponse.onUpdate = () {
-        logger.i('on update the verifcation : ${verificationResponse.state}');
-      };
-      await room.enableEncryption();
     } catch (e, s) {
       logger.e('error in enabling room e2e encryption, e: $e, s: $s');
     }
@@ -622,6 +640,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       _notificationStreamController = null;
       await _onEventSubscription?.cancel();
       _onEventSubscription = null;
+      _roomId = null;
     } catch (e) {
       logger.e('e: $e');
     }
