@@ -52,6 +52,16 @@ class LiveChatCubit extends Cubit<LiveChatState> {
 
   Future<void> onSendPressed(PartialText partialText) async {
     try {
+      final messageId = const Uuid().v4();
+      final message = TextMessage(
+        author: state.user!,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        id: messageId,
+        text: partialText.text,
+        status: Status.sending,
+      );
+      emit(state.copyWith(messages: [message, ...state.messages]));
+      //
       await _checkIfRoomNotExistThenCreateIt();
       final room = client.getRoomById(_roomId!);
       if (room == null) {
@@ -59,7 +69,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       }
       final eventId = await client.getRoomById(_roomId!)?.sendTextEvent(
             partialText.text,
-            txid: const Uuid().v4(),
+            txid: messageId,
           );
       logger.i('send text event: $eventId');
     } catch (e, s) {
@@ -251,7 +261,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
         _roomId = savedRoomId;
         await _enableRoomEncyption(savedRoomId);
         _getUnreadMessageCount();
-        _subscribeToEventsOfRoom();
+        await _subscribeToEventsOfRoom();
         retrivedMessageFromDB = await _retriveMessagesFromDB(_roomId!);
       }
       logger.i('roomId : $_roomId');
@@ -302,7 +312,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
             (element) => element.id == txId,
           );
           final updatedMessage = state.messages[index].copyWith(
-            status: Status.delivered,
+            status: _mapEventStatusToMessageStatus(event.status),
           );
           final newMessages = List.of(state.messages);
           newMessages[index] = updatedMessage;
@@ -458,7 +468,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       );
       await _setRoomIdInStorage(_roomId!);
       _getUnreadMessageCount();
-      _subscribeToEventsOfRoom();
+      await _subscribeToEventsOfRoom();
     }
   }
 
@@ -657,13 +667,13 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       case EventStatus.removed:
         return Status.error;
       case EventStatus.roomState:
-        return Status.seen;
+        return Status.delivered;
       case EventStatus.sending:
         return Status.sending;
       case EventStatus.sent:
         return Status.sent;
       case EventStatus.synced:
-        return Status.delivered;
+        return Status.seen;
     }
   }
 }
