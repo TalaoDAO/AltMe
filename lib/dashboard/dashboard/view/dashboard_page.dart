@@ -47,7 +47,7 @@ class _DashboardViewState extends State<DashboardView> {
         final splashCubit = context.read<SplashCubit>();
         if (splashCubit.state.isNewVersion) {
           WhatIsNewDialog.show(context);
-          splashCubit.dialogOpened();
+          splashCubit.disableWhatsNewPopUp();
         }
       });
     });

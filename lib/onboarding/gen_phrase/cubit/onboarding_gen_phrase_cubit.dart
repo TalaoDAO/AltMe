@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
+import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
@@ -22,6 +23,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     required this.didCubit,
     required this.homeCubit,
     required this.walletCubit,
+    required this.splashCubit,
   }) : super(const OnBoardingGenPhraseState());
 
   final SecureStorageProvider secureStorageProvider;
@@ -30,6 +32,7 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
   final DIDCubit didCubit;
   final HomeCubit homeCubit;
   final WalletCubit walletCubit;
+  final SplashCubit splashCubit;
 
   final log = getLogger('OnBoardingGenPhraseCubit');
 
@@ -67,6 +70,9 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         didMethodName: didMethodName,
         verificationMethod: verificationMethod,
       );
+
+      /// what's new popup disabled
+      splashCubit.disableWhatsNewPopUp();
 
       /// crypto wallet
       await walletCubit.createCryptoWallet(

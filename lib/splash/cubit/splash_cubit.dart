@@ -99,11 +99,17 @@ class SplashCubit extends Cubit<SplashState> {
         versionNumber: packageInfo.version,
         buildNumber: packageInfo.buildNumber,
         isNewVersion: isNewVersion,
+        status: SplashStatus.idle,
       ),
     );
   }
 
-  void dialogOpened() {
-    emit(state.copyWith(isNewVersion: false));
+  void disableWhatsNewPopUp() {
+    emit(
+      state.copyWith(
+        isNewVersion: false,
+        status: SplashStatus.idle,
+      ),
+    );
   }
 }
