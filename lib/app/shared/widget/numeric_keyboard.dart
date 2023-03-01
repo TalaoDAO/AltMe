@@ -38,6 +38,7 @@ class NumericKeyboard extends StatelessWidget {
     required this.onKeyboardTap,
     this.leadingButton,
     this.trailingButton,
+    required this.allowAction,
   });
 
   final KeyboardUIConfig keyboardUIConfig;
@@ -48,11 +49,10 @@ class NumericKeyboard extends StatelessWidget {
   //should have a proper order [1...9, 0]
   final Widget? leadingButton;
   final Widget? trailingButton;
+  final bool allowAction;
 
   @override
-  Widget build(BuildContext context) => _buildKeyboard(context);
-
-  Widget _buildKeyboard(BuildContext context) {
+  Widget build(BuildContext context) {
     List<String> keyboardItems = List.filled(10, '0');
     keyboardItems = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
     final screenSize = MediaQuery.of(context).size;
@@ -63,6 +63,7 @@ class NumericKeyboard extends StatelessWidget {
     final keyboardSize = keyboardUIConfig.keyboardSize != null
         ? keyboardUIConfig.keyboardSize!
         : Size(keyboardWidth, keyboardHeight);
+
     return Container(
       width: keyboardSize.width,
       height: keyboardSize.height,
@@ -103,6 +104,7 @@ class NumericKeyboard extends StatelessWidget {
         onTap: onKeyboardTap,
         label: keyboardItems[index],
         digitTextStyle: keyboardUIConfig.digitTextStyle,
+        allowAction: allowAction,
       );
     });
 
@@ -135,6 +137,7 @@ class KeyboardButton extends StatelessWidget {
     this.digitShape = BoxShape.circle,
     this.digitBorderWidth = 3.4,
     this.digitTextStyle,
+    required this.allowAction,
   });
 
   final BoxShape digitShape;
@@ -145,6 +148,7 @@ class KeyboardButton extends StatelessWidget {
   final dynamic Function(String)? onLongPress;
   final String semanticsLabel;
   final TextStyle? digitTextStyle;
+  final bool allowAction;
 
   @override
   Widget build(BuildContext context) {
@@ -155,11 +159,18 @@ class KeyboardButton extends StatelessWidget {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  highlightColor: Theme.of(context).colorScheme.primary,
+                  highlightColor: allowAction
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.background,
+                  splashColor: allowAction
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.background,
                   onLongPress: () {
+                    if (!allowAction) return;
                     onLongPress?.call(semanticsLabel);
                   },
                   onTap: () {
+                    if (!allowAction) return;
                     onTap?.call(semanticsLabel);
                   },
                   child: DecoratedBox(
@@ -168,9 +179,14 @@ class KeyboardButton extends StatelessWidget {
                       color: Colors.transparent,
                       border: digitBorderWidth > 0.0
                           ? Border.all(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .digitPrimaryColor,
+                              color: allowAction
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .digitPrimaryColor
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .digitPrimaryColor
+                                      .withOpacity(0.1),
                               width: digitBorderWidth,
                             )
                           : null,
@@ -184,10 +200,28 @@ class KeyboardButton extends StatelessWidget {
                       child: label != null
                           ? Text(
                               label!,
-                              style: digitTextStyle ??
-                                  Theme.of(context)
-                                      .textTheme
-                                      .keyboardDigitTextStyle,
+                              style: digitTextStyle != null
+                                  ? allowAction
+                                      ? digitTextStyle
+                                      : digitTextStyle!.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .digitPrimaryColor
+                                              .withOpacity(0.1),
+                                        )
+                                  : allowAction
+                                      ? Theme.of(context)
+                                          .textTheme
+                                          .keyboardDigitTextStyle
+                                      : Theme.of(context)
+                                          .textTheme
+                                          .keyboardDigitTextStyle
+                                          .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .digitPrimaryColor
+                                                .withOpacity(0.1),
+                                          ),
                               semanticsLabel: semanticsLabel,
                             )
                           : icon,

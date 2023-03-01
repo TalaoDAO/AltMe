@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/cubit/pin_code_view_cubit.dart';
 import 'package:altme/pin_code/widgets/widgets.dart';
@@ -36,7 +37,8 @@ class PinCodePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PinCodeViewCubit(),
+      create: (context) =>
+          PinCodeViewCubit(profileCubit: context.read<ProfileCubit>()),
       child: PinCodeView(
         isValidCallback: isValidCallback,
         restrictToBack: restrictToBack,
@@ -98,33 +100,48 @@ class _PinCodeViewState extends State<PinCodeView> {
       child: BasePage(
         backgroundColor: Theme.of(context).colorScheme.background,
         scrollView: false,
-        body: PinCodeWidget(
-          title: l10n.enterYourPinCode,
-          subTitle: l10n.pinCodeMessage,
-          passwordEnteredCallback: _onPasscodeEntered,
-          deleteButton: Text(
-            l10n.delete,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-          cancelButton: Text(
-            l10n.cancel,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-          cancelCallback: _onPasscodeCancelled,
-          isValidCallback: () {
-            Navigator.pop(context);
-            widget.isValidCallback.call();
+        body: BlocBuilder<ProfileCubit, ProfileState>(
+          builder: (context, state) {
+            return PinCodeWidget(
+              title: l10n.enterYourPinCode,
+              subTitle: l10n.pinCodeMessage,
+              passwordEnteredCallback: _onPasscodeEntered,
+              deleteButton: Text(
+                l10n.delete,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              cancelButton: Text(
+                l10n.cancel,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              cancelCallback: _onPasscodeCancelled,
+              isValidCallback: () {
+                Navigator.pop(context);
+                widget.isValidCallback.call();
+              },
+              shouldTriggerVerification: _verificationNotifier.stream,
+              allowAction: state.allowLogin,
+            );
           },
-          shouldTriggerVerification: _verificationNotifier.stream,
         ),
       ),
     );
   }
 
   Future<void> _onPasscodeEntered(String enteredPasscode) async {
-    final bool isValid =
-        (await getSecureStorage.get(SecureStorageKeys.pinCode)) ==
-            enteredPasscode;
+    final profileCubit = context.read<ProfileCubit>();
+
+    profileCubit.passcodeEntered();
+
+    bool isValid = false;
+
+    if (profileCubit.state.allowLogin) {
+      isValid = (await getSecureStorage.get(SecureStorageKeys.pinCode)) ==
+          enteredPasscode;
+      if (isValid) {
+        profileCubit.resetloginAttemptCount();
+      }
+    }
     _verificationNotifier.add(isValid);
   }
 

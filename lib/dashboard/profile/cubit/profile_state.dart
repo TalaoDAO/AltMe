@@ -6,6 +6,7 @@ class ProfileState extends Equatable {
     this.status = AppStatus.init,
     this.message,
     required this.model,
+    this.allowLogin = true,
   });
 
   factory ProfileState.fromJson(Map<String, dynamic> json) =>
@@ -14,30 +15,43 @@ class ProfileState extends Equatable {
   final AppStatus status;
   final ProfileModel model;
   final StateMessage? message;
+  final bool allowLogin;
 
   Map<String, dynamic> toJson() => _$ProfileStateToJson(this);
 
   ProfileState loading() {
-    return ProfileState(status: AppStatus.loading, model: model);
+    return ProfileState(
+      status: AppStatus.loading,
+      model: model,
+      allowLogin: allowLogin,
+    );
   }
 
   ProfileState error({required MessageHandler messageHandler}) {
     return ProfileState(
-        status: AppStatus.error,
-        message: StateMessage.error(messageHandler: messageHandler),
-        model: model,);
+      status: AppStatus.error,
+      message: StateMessage.error(messageHandler: messageHandler),
+      model: model,
+      allowLogin: allowLogin,
+    );
   }
 
-  ProfileState success({MessageHandler? messageHandler, ProfileModel? model}) {
+  ProfileState copyWith({
+    required AppStatus status,
+    MessageHandler? messageHandler,
+    ProfileModel? model,
+    bool? allowLogin,
+  }) {
     return ProfileState(
-      status: AppStatus.success,
+      status: status,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
       model: model ?? this.model,
+      allowLogin: allowLogin ?? this.allowLogin,
     );
   }
 
   @override
-  List<Object?> get props => [status, model, message];
+  List<Object?> get props => [status, model, message, allowLogin];
 }

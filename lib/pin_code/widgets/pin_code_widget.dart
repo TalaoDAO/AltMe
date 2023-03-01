@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class PinCodeWidget extends StatefulWidget {
     this.cancelCallback,
     this.subTitle,
     this.header,
+    this.allowAction = true,
   })  : circleUIConfig = circleUIConfig ?? const CircleUIConfig(),
         keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
 
@@ -31,6 +33,7 @@ class PinCodeWidget extends StatefulWidget {
   final String? subTitle;
   final int passwordDigits;
   final PasswordEnteredCallback passwordEnteredCallback;
+  final bool allowAction;
 
   // Cancel button and delete button will be switched based on the screen state
   final Widget cancelButton;
@@ -80,74 +83,101 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocBuilder<PinCodeViewCubit, PinCodeViewState>(
       builder: (context, state) {
+        final PinCodeViewCubit pinCodeViewCubit =
+            context.read<PinCodeViewCubit>();
+        final enteredPasscode = pinCodeViewCubit.state.enteredPasscode;
+
         return OrientationBuilder(
           builder: (context, orientation) {
             return orientation == Orientation.portrait
-                ? Stack(
-                    children: [
-                      Positioned(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Stack(
                           children: [
-                            if (widget.header != null)
-                              widget.header!
-                            else
-                              const AltMeLogo(size: Sizes.logoLarge),
-                            const SizedBox(height: Sizes.spaceNormal),
-                            PinCodeTitle(
-                              title: widget.title,
-                              subTitle: widget.subTitle,
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                if (widget.header != null)
+                                  widget.header!
+                                else
+                                  const AltMeLogo(size: Sizes.logoLarge),
+                                const SizedBox(height: Sizes.spaceNormal),
+                                PinCodeTitle(
+                                  title: widget.title,
+                                  subTitle: widget.allowAction
+                                      ? widget.subTitle
+                                      : l10n.pincodeAttemptMessage,
+                                  allowAction: widget.allowAction,
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(top: 16),
+                                  height: 40,
+                                  child: AnimatedBuilder(
+                                    animation: animation,
+                                    builder: (_, __) {
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: List.generate(
+                                          widget.passwordDigits,
+                                          (index) => Container(
+                                            margin: const EdgeInsets.all(8),
+                                            child: Circle(
+                                              allowAction: widget.allowAction,
+                                              filled: index <
+                                                  enteredPasscode.length,
+                                              circleUIConfig:
+                                                  widget.circleUIConfig,
+                                              extraSize: animation.value,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                NumKeyboard(
+                                  passwordEnteredCallback:
+                                      widget.passwordEnteredCallback,
+                                  keyboardUIConfig: widget.keyboardUIConfig,
+                                  passwordDigits: widget.passwordDigits,
+                                  cancelCallback: widget.cancelCallback,
+                                  allowAction: widget.allowAction,
+                                ),
+                                widget.bottomWidget ?? Container()
+                              ],
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 16),
-                              height: 40,
-                              child: AnimatedBuilder(
-                                animation: animation,
-                                builder: (_, __) {
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: _buildCircles(),
-                                  );
-                                },
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: DeleteButton(
+                                  cancelButton: widget.cancelButton,
+                                  deleteButton: widget.deleteButton,
+                                  cancelCallback: widget.cancelCallback,
+                                  keyboardUIConfig: widget.keyboardUIConfig,
+                                ),
                               ),
                             ),
-                            NumKeyboard(
-                              passwordEnteredCallback:
-                                  widget.passwordEnteredCallback,
-                              keyboardUIConfig: widget.keyboardUIConfig,
-                              passwordDigits: widget.passwordDigits,
-                              cancelCallback: widget.cancelCallback,
-                            ),
-                            widget.bottomWidget ?? Container()
                           ],
                         ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: DeleteButton(
-                            cancelButton: widget.cancelButton,
-                            deleteButton: widget.deleteButton,
-                            cancelCallback: widget.cancelCallback,
-                            keyboardUIConfig: widget.keyboardUIConfig,
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )
                 : Stack(
                     children: [
-                      Positioned(
-                        child: Center(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Stack(
+                      Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: Stack(
                                 children: <Widget>[
                                   Positioned(
                                     child: Align(
@@ -169,6 +199,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                           PinCodeTitle(
                                             title: widget.title,
                                             subTitle: widget.subTitle,
+                                            allowAction: widget.allowAction,
                                           ),
                                           Container(
                                             margin:
@@ -180,7 +211,26 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                                 return Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
-                                                  children: _buildCircles(),
+                                                  children: List.generate(
+                                                    widget.passwordDigits,
+                                                    (index) => Container(
+                                                      margin:
+                                                          const EdgeInsets.all(
+                                                        8,
+                                                      ),
+                                                      child: Circle(
+                                                        allowAction:
+                                                            widget.allowAction,
+                                                        filled: index <
+                                                            enteredPasscode
+                                                                .length,
+                                                        circleUIConfig: widget
+                                                            .circleUIConfig,
+                                                        extraSize:
+                                                            animation.value,
+                                                      ),
+                                                    ),
+                                                  ),
                                                 );
                                               },
                                             ),
@@ -200,15 +250,18 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                     Container()
                                 ],
                               ),
-                              NumKeyboard(
+                            ),
+                            Expanded(
+                              child: NumKeyboard(
                                 passwordEnteredCallback:
                                     widget.passwordEnteredCallback,
                                 keyboardUIConfig: widget.keyboardUIConfig,
                                 passwordDigits: widget.passwordDigits,
                                 cancelCallback: widget.cancelCallback,
+                                allowAction: widget.allowAction,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                       Positioned(
@@ -230,27 +283,6 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
         );
       },
     );
-  }
-
-  List<Widget> _buildCircles() {
-    final PinCodeViewCubit pinCodeViewCubit = context.read<PinCodeViewCubit>();
-    final enteredPasscode = pinCodeViewCubit.state.enteredPasscode;
-    final list = <Widget>[];
-    final config = widget.circleUIConfig;
-    final extraSize = animation.value;
-    for (int i = 0; i < widget.passwordDigits; i++) {
-      list.add(
-        Container(
-          margin: const EdgeInsets.all(8),
-          child: Circle(
-            filled: i < enteredPasscode.length,
-            circleUIConfig: config,
-            extraSize: extraSize,
-          ),
-        ),
-      );
-    }
-    return list;
   }
 
   @override
