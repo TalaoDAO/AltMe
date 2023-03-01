@@ -736,7 +736,8 @@
     "creator",
     "contractAddress",
     "lastMetadataSync",
-    "e2eEncyptedChat"
+    "e2eEncyptedChat",
+    "pincodeAttemptMessage"
   ],
 
   "es": [
@@ -1476,7 +1477,8 @@
     "creator",
     "contractAddress",
     "lastMetadataSync",
-    "e2eEncyptedChat"
+    "e2eEncyptedChat",
+    "pincodeAttemptMessage"
   ],
 
   "fr": [
@@ -1495,7 +1497,8 @@
     "creator",
     "contractAddress",
     "lastMetadataSync",
-    "e2eEncyptedChat"
+    "e2eEncyptedChat",
+    "pincodeAttemptMessage"
   ],
 
   "it": [
@@ -2235,6 +2238,7 @@
     "creator",
     "contractAddress",
     "lastMetadataSync",
-    "e2eEncyptedChat"
+    "e2eEncyptedChat",
+    "pincodeAttemptMessage"
   ]
 }

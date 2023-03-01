@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
@@ -31,7 +32,8 @@ class EnterNewPinCodePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PinCodeViewCubit(),
+      create: (context) =>
+          PinCodeViewCubit(profileCubit: context.read<ProfileCubit>()),
       child: EnterNewPinCodeView(
         isValidCallback: isValidCallback,
         isFromOnboarding: isFromOnboarding,

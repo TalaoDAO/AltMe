@@ -1,14 +1,20 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 
 part 'pin_code_view_state.dart';
 
 class PinCodeViewCubit extends Cubit<PinCodeViewState> {
-  PinCodeViewCubit() : super(PinCodeViewState());
+  PinCodeViewCubit({
+    required this.profileCubit,
+  }) : super(const PinCodeViewState());
+
+  final ProfileCubit profileCubit;
 
   void setEnteredPasscode(String enteredPasscode) {
-    emit(state.copyWith(enteredPasscode));
+    emit(state.copyWith(enteredPasscode: enteredPasscode));
   }
 
   void onDeleteCancelButtonPressed(CancelCallback? cancelCallback) {
