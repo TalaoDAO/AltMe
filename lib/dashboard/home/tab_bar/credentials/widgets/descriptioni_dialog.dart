@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionDialog extends StatelessWidget {
@@ -14,7 +15,7 @@ class DescriptionDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final background = Theme.of(context).colorScheme.surface;
+    final background = Theme.of(context).colorScheme.popupBackground;
 
     return AlertDialog(
       backgroundColor: background,

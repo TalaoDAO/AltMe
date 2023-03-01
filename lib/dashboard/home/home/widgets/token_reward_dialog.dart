@@ -29,7 +29,7 @@ class TokenRewardDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.onBackground,
+      backgroundColor: Theme.of(context).colorScheme.popupBackground,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: Sizes.spaceNormal,
         vertical: Sizes.spaceSmall,
