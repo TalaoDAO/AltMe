@@ -20,33 +20,42 @@ Future<void> discoverCredential({
   if (credentialSubjectTypeList
       .contains(homeCredential.credentialSubjectType)) {
     getLogger('discoverCredential').i(homeCredential.credentialSubjectType);
-    //here check for over18 and over13 to take photo for AI KYC
+    //here check for over18, age range and over13 to take photo for AI KYC
     if (homeCredential.credentialSubjectType.checkForAIKYC) {
-      final passbaseStatus =
-          await context.read<HomeCubit>().checkPassbaseStatus();
-      if (passbaseStatus != PassBaseStatus.approved) {
-        // start verification by Yoti AI
-        await Navigator.of(context).push<void>(
-          VerifyAgePage.route(
-            credentialSubjectType: homeCredential.credentialSubjectType,
-          ),
-        );
-      } else {
-        await launchUrlAfterDiscovery(
-          homeCredential: homeCredential,
-          context: context,
-        );
-      }
+      // final passbaseStatus =
+      //     await context.read<HomeCubit>().checkPassbaseStatus();
+      await Navigator.push<void>(
+        context,
+        ChooseVerificationMethodPage.route(
+          credentialSubjectType: homeCredential.credentialSubjectType,
+          onSelectPassbase: () async {
+            await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
+                  link: homeCredential.link!,
+                  onPassBaseApproved: () async {
+                    await launchUrlAfterDiscovery(
+                      homeCredential: homeCredential,
+                      context: context,
+                    );
+                  },
+                );
+
+            Navigator.pop(context);
+          },
+          onSelectKYC: () async {
+            // start verification by Yoti AI
+            await Navigator.of(context).push<void>(
+              VerifyAgePage.route(
+                credentialSubjectType: homeCredential.credentialSubjectType,
+              ),
+            );
+          },
+        ),
+      );
     } else {
-      await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
-            link: homeCredential.link!,
-            onPassBaseApproved: () async {
-              await launchUrlAfterDiscovery(
-                homeCredential: homeCredential,
-                context: context,
-              );
-            },
-          );
+      await launchUrlAfterDiscovery(
+        homeCredential: homeCredential,
+        context: context,
+      );
     }
   } else {
     await launchUrlAfterDiscovery(

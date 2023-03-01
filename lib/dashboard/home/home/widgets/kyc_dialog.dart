@@ -99,16 +99,18 @@ class KycDialog extends StatelessWidget {
             ),
             Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.asset(
                   IconStrings.lockCircle,
                   width: Sizes.icon,
                 ),
-                Text(
-                  l10n.kycDialogFooter,
-                  style: Theme.of(context).textTheme.kycDialogFooter,
-                  textAlign: TextAlign.center,
+                Expanded(
+                  child: Text(
+                    l10n.kycDialogFooter,
+                    style: Theme.of(context).textTheme.kycDialogFooter,
+                  ),
                 ),
               ],
             ),
