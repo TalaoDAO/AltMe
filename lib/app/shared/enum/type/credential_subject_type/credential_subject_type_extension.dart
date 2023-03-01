@@ -154,8 +154,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.pigsPass ||
         this == CredentialSubjectType.bunnyPass ||
         this == CredentialSubjectType.troopezPass ||
-        this == CredentialSubjectType.matterlightPass ||
-        this == CredentialSubjectType.bloometaPass) {
+        this == CredentialSubjectType.matterlightPass) {
       return true;
     }
     return false;
@@ -394,6 +393,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   bool get byPassDeepLink {
     if (this == CredentialSubjectType.tezotopiaMembership ||
+        this == CredentialSubjectType.bloometaPass ||
         this == CredentialSubjectType.chainbornMembership ||
         this == CredentialSubjectType.twitterCard ||
         this == CredentialSubjectType.over13 ||

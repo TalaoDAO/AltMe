@@ -81,6 +81,7 @@ class DioClient {
     Map<String, dynamic> headers,
   ) async {
     if (uri.contains(Urls.tezotopiaMembershipCardUrl) ||
+        uri.contains(Urls.bloometaCardUrl) ||
         uri.contains(Urls.chainbornMembershipCardUrl) ||
         uri.contains(Urls.twitterCardUrl)) {
       await dotenv.load();

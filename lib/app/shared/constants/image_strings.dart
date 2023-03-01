@@ -92,6 +92,7 @@ class ImageStrings {
       '$imagePath/dummy_nationality_card.png';
   static const String tezotopiaMemberShipDummy =
       '$imagePath/tezotopia-membership-dummy.png';
+  static const String bloometaDummy = '$imagePath/bloometa-dummy.png';
   static const String chainbornMemberShipDummy =
       '$imagePath/chainborn-membership-dummy.png';
   static const String twitterCardDummy = '$imagePath/twitter-card-dummy.png';
