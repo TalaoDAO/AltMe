@@ -59,9 +59,11 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
         .catchError((_) => null);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await context
-          .read<OnBoardingGenPhraseCubit>()
-          .generateSSIAndCryptoAccount(mnemonic!);
+      if (byPassScreen) {
+        await context
+            .read<OnBoardingGenPhraseCubit>()
+            .generateSSIAndCryptoAccount(mnemonic!);
+      }
     });
   }
 
