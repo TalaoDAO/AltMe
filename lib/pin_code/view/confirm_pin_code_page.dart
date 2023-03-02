@@ -70,6 +70,8 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
   final StreamController<bool> _verificationNotifier =
       StreamController<bool>.broadcast();
 
+  bool get byPassScreen => !Parameters.hasCryptoCallToAction;
+
   @override
   void initState() {
     super.initState();
@@ -93,9 +95,9 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
         title: l10n.confirmYourPinCode,
         passwordEnteredCallback: _onPasscodeEntered,
         header: widget.isFromOnboarding
-            ? const MStepper(
+            ? MStepper(
                 step: 1,
-                totalStep: 3,
+                totalStep: byPassScreen ? 2 : 3,
               )
             : null,
         deleteButton: Text(

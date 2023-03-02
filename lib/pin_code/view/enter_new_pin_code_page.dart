@@ -57,6 +57,8 @@ class EnterNewPinCodeView extends StatefulWidget {
 }
 
 class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
+  bool get byPassScreen => !Parameters.hasCryptoCallToAction;
+
   @override
   void initState() {
     super.initState();
@@ -79,9 +81,9 @@ class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
         title: l10n.enterNewPinCode,
         passwordEnteredCallback: _onPasscodeEntered,
         header: widget.isFromOnboarding
-            ? const MStepper(
+            ? MStepper(
                 step: 1,
-                totalStep: 3,
+                totalStep: byPassScreen ? 2 : 3,
               )
             : null,
         deleteButton: Text(

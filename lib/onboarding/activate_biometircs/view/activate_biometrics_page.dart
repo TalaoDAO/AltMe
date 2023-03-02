@@ -44,6 +44,8 @@ class ActivateBiometricsView extends StatelessWidget {
   final LocalAuthApi localAuthApi;
   final WalletRouteType routeType;
 
+  bool get byPassScreen => !Parameters.hasCryptoCallToAction;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -61,9 +63,9 @@ class ActivateBiometricsView extends StatelessWidget {
           builder: (context, state) {
             return Column(
               children: [
-                const MStepper(
+                MStepper(
                   step: 2,
-                  totalStep: 3,
+                  totalStep: byPassScreen ? 2 : 3,
                 ),
                 const Spacer(),
                 Text(
