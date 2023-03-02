@@ -152,7 +152,9 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                     horizontal: Sizes.spaceLarge,
                   ),
                   child: Text(
-                    l10n.importWalletText,
+                    Parameters.hasCryptoCallToAction
+                        ? l10n.importWalletText
+                        : l10n.importWalletTextRecoveryPhraseOnly,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           letterSpacing: 1.2,
@@ -169,7 +171,9 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                         children: [
                           BaseTextField(
                             height: Sizes.recoveryPhraseTextFieldHeight,
-                            hint: l10n.importWalletHintText(54),
+                            hint: Parameters.hasCryptoCallToAction
+                                ? l10n.importWalletHintText(54)
+                                : l10n.importWalletHintTextRecoveryPhraseOnly,
                             fillColor: Colors.transparent,
                             hintStyle:
                                 Theme.of(context).textTheme.hintTextFieldStyle,
@@ -213,18 +217,20 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                   l10n.importEasilyFrom,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                const SizedBox(height: Sizes.spaceSmall),
-                WalletTypeList(
-                  onItemTap: (wallet) {
-                    Navigator.of(context).push<void>(
-                      ImportFromWalletPage.route(
-                        walletTypeModel: wallet,
-                        accountName: widget.accountName,
-                        isFromOnboard: widget.isFromOnboarding,
-                      ),
-                    );
-                  },
-                ),
+                if (Parameters.hasCryptoCallToAction) ...[
+                  const SizedBox(height: Sizes.spaceSmall),
+                  WalletTypeList(
+                    onItemTap: (wallet) {
+                      Navigator.of(context).push<void>(
+                        ImportFromWalletPage.route(
+                          walletTypeModel: wallet,
+                          accountName: widget.accountName,
+                          isFromOnboard: widget.isFromOnboarding,
+                        ),
+                      );
+                    },
+                  ),
+                ],
                 const SizedBox(height: Sizes.spaceLarge),
                 Text(
                   l10n.recoveryPhraseDescriptions,
@@ -232,13 +238,15 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                         fontSize: 12,
                       ),
                 ),
-                const SizedBox(height: Sizes.spaceLarge),
-                Text(
-                  l10n.privateKeyDescriptions,
-                  style: Theme.of(context).textTheme.infoSubtitle.copyWith(
-                        fontSize: 12,
-                      ),
-                ),
+                if (Parameters.hasCryptoCallToAction) ...[
+                  const SizedBox(height: Sizes.spaceLarge),
+                  Text(
+                    l10n.privateKeyDescriptions,
+                    style: Theme.of(context).textTheme.infoSubtitle.copyWith(
+                          fontSize: 12,
+                        ),
+                  ),
+                ],
                 const SizedBox(height: Sizes.spaceNormal),
               ],
             ),
