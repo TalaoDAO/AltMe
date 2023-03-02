@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
+import 'package:altme/onboarding/helper_function/helper_function.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
@@ -44,44 +45,16 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
-      final mnemonicFormatted = mnemonic.join(' ');
-
-      /// ssi wallet
-      await secureStorageProvider.set(
-        SecureStorageKeys.ssiMnemonic,
-        mnemonicFormatted,
+      await generateAccount(
+        mnemonic: mnemonic,
+        secureStorageProvider: secureStorageProvider,
+        keyGenerator: keyGenerator,
+        didKitProvider: didKitProvider,
+        didCubit: didCubit,
+        homeCubit: homeCubit,
+        walletCubit: walletCubit,
+        splashCubit: splashCubit,
       );
-
-      final ssiKey = await keyGenerator.jwkFromMnemonic(
-        mnemonic: mnemonicFormatted,
-        accountType: AccountType.ssi,
-      );
-      await secureStorageProvider.set(SecureStorageKeys.ssiKey, ssiKey);
-
-      const didMethod = AltMeStrings.defaultDIDMethod;
-      final did = didKitProvider.keyToDID(didMethod, ssiKey);
-      const didMethodName = AltMeStrings.defaultDIDMethodName;
-      final verificationMethod =
-          await didKitProvider.keyToVerificationMethod(didMethod, ssiKey);
-
-      await didCubit.set(
-        did: did,
-        didMethod: didMethod,
-        didMethodName: didMethodName,
-        verificationMethod: verificationMethod,
-      );
-
-      /// what's new popup disabled
-      splashCubit.disableWhatsNewPopUp();
-
-      /// crypto wallet
-      await walletCubit.createCryptoWallet(
-        mnemonicOrKey: mnemonicFormatted,
-        isImported: false,
-        isFromOnboarding: true,
-      );
-
-      await homeCubit.emitHasWallet();
       emit(state.success());
     } catch (error) {
       log.e('something went wrong when generating a key', error);
