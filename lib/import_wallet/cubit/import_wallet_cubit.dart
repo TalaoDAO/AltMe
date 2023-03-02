@@ -69,6 +69,12 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
             mnemonicOrKey.startsWith('0x');
 
         if (isSecretKey) {
+          if (!Parameters.hasCryptoCallToAction) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
           mnemonic = bip39.generateMnemonic();
         } else {
           mnemonic = mnemonicOrKey;
