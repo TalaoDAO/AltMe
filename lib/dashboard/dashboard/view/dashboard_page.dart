@@ -51,7 +51,6 @@ class _DashboardViewState extends State<DashboardView> {
         }
       });
     });
-
     super.initState();
   }
 

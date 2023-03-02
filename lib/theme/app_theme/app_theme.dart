@@ -113,7 +113,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get greyText => const Color(0xFFD1CCE3);
 
-  Color get whatsNewPopupBackground => const Color(0xFF271C38);
+  Color get popupBackground => const Color(0xff271C38);
 
   Color get cardHighlighted => const Color(0xFF251F38);
 
@@ -217,7 +217,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get cryptoAccountNotSelected => Colors.grey.withOpacity(0.15);
 
-  Color get startButtonColorA => const Color(0xff8436F8);
+  Color get startButtonColorA => const Color(0xff18ACFF);
 
   Color get startButtonColorB => const Color(0xff6600FF);
 
@@ -700,6 +700,12 @@ extension CustomTextTheme on TextTheme {
         fontSize: 20,
         fontWeight: FontWeight.bold,
         color: const Color(0xff180B2B),
+      );
+  
+  TextStyle get newVersionTitle => GoogleFonts.nunito(
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+        color: const Color(0xFFFFFFFF),
       );
 
   TextStyle get kycDialogTitle => GoogleFonts.nunito(

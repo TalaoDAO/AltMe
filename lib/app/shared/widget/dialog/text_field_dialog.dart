@@ -53,7 +53,8 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
     final no = widget.no ?? l10n.no;
 
     final color = widget.dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background = widget.bgColor ?? Theme.of(context).colorScheme.surface;
+    final background =
+        widget.bgColor ?? Theme.of(context).colorScheme.popupBackground;
     final text = widget.textColor ?? Theme.of(context).colorScheme.label;
 
     return AlertDialog(
