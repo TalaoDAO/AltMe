@@ -52,10 +52,15 @@ Future<void> discoverCredential({
         ),
       );
     } else {
-      await launchUrlAfterDiscovery(
-        homeCredential: homeCredential,
-        context: context,
-      );
+      await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
+            link: homeCredential.link!,
+            onPassBaseApproved: () async {
+              await launchUrlAfterDiscovery(
+                homeCredential: homeCredential,
+                context: context,
+              );
+            },
+          );
     }
   } else {
     await launchUrlAfterDiscovery(
