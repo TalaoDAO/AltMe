@@ -540,18 +540,25 @@ class LiveChatCubit extends Cubit<LiveChatState> {
   }
 
   Future<void> _initClient() async {
-    client = Client(
-      'AltMeUser',
-      databaseBuilder: (_) async {
-        final dir = await getApplicationSupportDirectory();
-        final db = HiveCollectionsDatabase('matrix_support_chat', dir.path);
-        await db.open();
-        return db;
-      },
-    );
-    client.homeserver = Uri.parse(Urls.matrixHomeServer);
-    await client.init();
-    _notificationStreamController ??= StreamController<int>.broadcast();
+    try {
+      client = Client(
+        'AltMeUser',
+        databaseBuilder: (_) async {
+          final dir = await getApplicationSupportDirectory();
+          final db = HiveCollectionsDatabase('matrix_support_chat', dir.path);
+          await db.open();
+          return db;
+        },
+      );
+      client.homeserver = Uri.parse(Urls.matrixHomeServer);
+      await client.init();
+      _notificationStreamController ??= StreamController<int>.broadcast();
+    } catch (e, s) {
+      logger.e('e: $e , s: $s');
+      await client.init(
+        newHomeserver: Uri.parse(Urls.matrixHomeServer),
+      );
+    }
   }
 
   Future<String> _getDidAuth(String did, String nonce) async {
@@ -649,11 +656,11 @@ class LiveChatCubit extends Cubit<LiveChatState> {
 
   Future<void> dispose() async {
     try {
-      await client.logout();
-      await client.dispose();
-      await _notificationStreamController?.close();
+      await client.logout().catchError((_) => null);
+      await client.dispose().catchError((_) => null);
+      await _notificationStreamController?.close().catchError((_) => null);
       _notificationStreamController = null;
-      await _onEventSubscription?.cancel();
+      await _onEventSubscription?.cancel().catchError((_) => null);
       _onEventSubscription = null;
       _roomId = null;
     } catch (e) {
