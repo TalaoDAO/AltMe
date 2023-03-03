@@ -80,6 +80,13 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'End to end encryption of decentralized chat in Altme',
+                                'Specific design for EBSI diploma card',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.9.9',
+                              features: [
                                 'Integration of Matrix.org to give users access to a decentralized chat in Altme',
                                 'Compliance with EBSI and support of new official ID documents (diplomas...)',
                               ],
