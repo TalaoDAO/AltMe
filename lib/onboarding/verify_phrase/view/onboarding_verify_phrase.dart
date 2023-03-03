@@ -40,15 +40,25 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
   }
 }
 
-class OnBoardingVerifyPhraseView extends StatelessWidget {
-  OnBoardingVerifyPhraseView({required this.mnemonic, super.key});
-
-  final fourthLastController = TextEditingController();
-  final thirdLastController = TextEditingController();
-  final secondLastController = TextEditingController();
-  final lastController = TextEditingController();
+class OnBoardingVerifyPhraseView extends StatefulWidget {
+  const OnBoardingVerifyPhraseView({required this.mnemonic, super.key});
 
   final List<String> mnemonic;
+
+  @override
+  State<OnBoardingVerifyPhraseView> createState() =>
+      _OnBoardingVerifyPhraseViewState();
+}
+
+class _OnBoardingVerifyPhraseViewState
+    extends State<OnBoardingVerifyPhraseView> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<OnBoardingVerifyPhraseCubit>().orderMnemonics();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,173 +91,115 @@ class OnBoardingVerifyPhraseView extends StatelessWidget {
       },
       builder: (context, state) {
         return BasePage(
-          scrollView: false,
+          scrollView: true,
           useSafeArea: true,
           padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
           titleLeading: const BackLeadingButton(),
           secureScreen: true,
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const MStepper(
-                        step: 4,
-                        totalStep: 4,
+          body: state.mnemonicStates.length < 12
+              ? Container()
+              : Column(
+                  children: [
+                    const MStepper(
+                      step: 4,
+                      totalStep: 4,
+                    ),
+                    const SizedBox(height: Sizes.spaceNormal),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Sizes.spaceNormal,
                       ),
-                      const SizedBox(height: Sizes.spaceNormal),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Sizes.spaceNormal,
-                        ),
-                        child: Text(
-                          l10n.onboardingVerifyPhraseMessage,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
-                      const SizedBox(height: Sizes.spaceNormal),
-                      const SizedBox(height: Sizes.spaceSmall),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: PhraseWord(order: 1, word: mnemonic[0]),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: PhraseWord(order: 2, word: mnemonic[1]),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: PhraseWord(order: 3, word: mnemonic[2]),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: Sizes.spaceNormal),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: PhraseWord(order: 4, word: mnemonic[3]),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: PhraseWord(order: 5, word: mnemonic[4]),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: PhraseWord(order: 6, word: mnemonic[5]),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: Sizes.spaceNormal),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: PhraseWord(order: 7, word: mnemonic[6]),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: PhraseWord(order: 8, word: mnemonic[7]),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: MnemonicTextField(
-                              controller: fourthLastController,
-                              onChanged: (value) {
-                                context
-                                    .read<OnBoardingVerifyPhraseCubit>()
-                                    .verify(
-                                  mnemonic: mnemonic,
-                                  lastFourMnemonics: [
-                                    fourthLastController.text,
-                                    thirdLastController.text,
-                                    secondLastController.text,
-                                    lastController.text,
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: Sizes.spaceNormal),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: MnemonicTextField(
-                              controller: thirdLastController,
-                              onChanged: (value) {
-                                context
-                                    .read<OnBoardingVerifyPhraseCubit>()
-                                    .verify(
-                                  mnemonic: mnemonic,
-                                  lastFourMnemonics: [
-                                    fourthLastController.text,
-                                    value,
-                                    secondLastController.text,
-                                    lastController.text,
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: MnemonicTextField(
-                              controller: secondLastController,
-                              onChanged: (value) {
-                                context
-                                    .read<OnBoardingVerifyPhraseCubit>()
-                                    .verify(
-                                  mnemonic: mnemonic,
-                                  lastFourMnemonics: [
-                                    fourthLastController.text,
-                                    thirdLastController.text,
-                                    value,
-                                    lastController.text,
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: MnemonicTextField(
-                              controller: lastController,
-                              onChanged: (value) {
-                                context
-                                    .read<OnBoardingVerifyPhraseCubit>()
-                                    .verify(
-                                  mnemonic: mnemonic,
-                                  lastFourMnemonics: [
-                                    fourthLastController.text,
-                                    thirdLastController.text,
-                                    secondLastController.text,
-                                    value,
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: Sizes.spaceLarge),
-                      const SizedBox(height: Sizes.spaceSmall),
-                      Text(
-                        l10n.onboardingAltmeMessage,
+                      child: Text(
+                        l10n.onboardingVerifyPhraseMessage,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.genPhraseSubmessage,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: Sizes.spaceSmall),
+                    Text(
+                      l10n.onboardingVerifyPhraseMessageDetails,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.pheaseVerifySubmessage,
+                    ),
+                    const SizedBox(height: Sizes.spaceNormal),
+                    ListView.builder(
+                      itemCount: 4,
+                      shrinkWrap: true,
+                      physics: const ScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final j = 3 * index;
+
+                        final col1Mnemonics = state.mnemonicStates[j];
+                        final col2Mnemonics = state.mnemonicStates[j + 1];
+                        final col3Mnemonics = state.mnemonicStates[j + 2];
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: PhraseWord(
+                                  order: col1Mnemonics.order,
+                                  word:
+                                      widget.mnemonic[col1Mnemonics.order - 1],
+                                  showOrder:
+                                      col1Mnemonics.mnemonicStatus.showOrder,
+                                  color: col1Mnemonics.mnemonicStatus.color,
+                                  onTap: () {
+                                    context
+                                        .read<OnBoardingVerifyPhraseCubit>()
+                                        .verify(
+                                          mnemonic: widget.mnemonic,
+                                          index: j,
+                                        );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: PhraseWord(
+                                  order: col2Mnemonics.order,
+                                  word:
+                                      widget.mnemonic[col2Mnemonics.order - 1],
+                                  showOrder:
+                                      col2Mnemonics.mnemonicStatus.showOrder,
+                                  color: col2Mnemonics.mnemonicStatus.color,
+                                  onTap: () {
+                                    context
+                                        .read<OnBoardingVerifyPhraseCubit>()
+                                        .verify(
+                                          mnemonic: widget.mnemonic,
+                                          index: j + 1,
+                                        );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: PhraseWord(
+                                  order: col3Mnemonics.order,
+                                  word:
+                                      widget.mnemonic[col3Mnemonics.order - 1],
+                                  showOrder:
+                                      col3Mnemonics.mnemonicStatus.showOrder,
+                                  color: col3Mnemonics.mnemonicStatus.color,
+                                  onTap: () {
+                                    context
+                                        .read<OnBoardingVerifyPhraseCubit>()
+                                        .verify(
+                                          mnemonic: widget.mnemonic,
+                                          index: j + 2,
+                                        );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
           navigation: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -261,7 +213,7 @@ class OnBoardingVerifyPhraseView extends StatelessWidget {
                     ? () async {
                         await context
                             .read<OnBoardingVerifyPhraseCubit>()
-                            .generateSSIAndCryptoAccount(mnemonic);
+                            .generateSSIAndCryptoAccount(widget.mnemonic);
                       }
                     : null,
               ),

@@ -701,7 +701,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.bold,
         color: const Color(0xff180B2B),
       );
-  
+
   TextStyle get newVersionTitle => GoogleFonts.nunito(
         fontSize: 18,
         fontWeight: FontWeight.w800,
@@ -820,6 +820,12 @@ extension CustomTextTheme on TextTheme {
         fontSize: 18,
         fontWeight: FontWeight.w400,
         color: const Color(0xff71CBFF),
+      );
+
+  TextStyle get pheaseVerifySubmessage => GoogleFonts.nunito(
+        fontSize: 18,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xff86809D),
       );
 
   TextStyle get identitiyBaseLightText => GoogleFonts.roboto(

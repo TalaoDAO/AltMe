@@ -3,6 +3,7 @@ export 'beacon_status.dart';
 export 'credential_detail_tab_status.dart';
 export 'credential_status.dart';
 export 'home_status.dart';
+export 'mnemonic_status.dart';
 export 'pass_base_status.dart';
 export 'qr_scan_status.dart';
 export 'revocation_status.dart';
