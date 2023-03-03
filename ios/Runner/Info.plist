@@ -52,12 +52,13 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>
-	    <string>fetch</string>
+		<string>fetch</string>
 	</array>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>getPassBaseStatusBackground</string>
-    </array>
+		<string>io.altme.wallet.matrixNotification</string>
+	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

@@ -21,6 +21,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
+import 'package:workmanager/workmanager.dart';
 
 part 'live_chat_cubit.g.dart';
 part 'live_chat_state.dart';
@@ -298,6 +299,14 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       }
     }
   }
+
+  Future<void> periodicCheckMatrixNotification() async {
+    Timer.periodic(const Duration(seconds: 20), (timer) async {
+      //MatrixApi(homeserver: Uri.parse(Urls.matrixHomeServer)).sync();
+    });
+  }
+
+//
 
   Future<void> _subscribeToEventsOfRoom() async {
     await _onEventSubscription?.cancel();

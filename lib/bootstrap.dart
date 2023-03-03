@@ -20,7 +20,8 @@ import 'package:workmanager/workmanager.dart';
 
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    final log = getLogger('Workmanager');
+    final log = getLogger('Workmanager()');
+    log.i('task: $task inputData: $inputData');
     switch (task) {
       case 'getPassBaseStatusBackground':
         if (inputData!['did'] != null) {
@@ -122,6 +123,11 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
     isInDebugMode:
         false, // If enabled it will post a notification whenever the task is
     // running. Handy for debugging tasks
+  );
+
+  await Workmanager().registerOneOffTask(
+    'io.altme.wallet.matrixNotification',
+    'io.altme.wallet.matrixNotification',
   );
 
   await Dartez().init();
