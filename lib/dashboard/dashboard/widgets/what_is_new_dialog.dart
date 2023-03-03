@@ -82,6 +82,23 @@ class WhatIsNewDialog extends StatelessWidget {
                       ),
                       const SizedBox(height: Sizes.spaceXSmall),
                       const NewFeature(
+                        'End to end encryption of decentralized chat in Altme',
+                      ),
+                      const NewFeature(
+                        'Specific design for EBSI diploma card', // ignore: lines_longer_than_80_chars
+                      ),
+                      Text(
+                        '1.9.9',
+                        style: Theme.of(context)
+                            .textTheme
+                            .defaultDialogSubtitle
+                            .copyWith(
+                              color: Colors.white,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: Sizes.spaceXSmall),
+                      const NewFeature(
                         'Integration of Matrix.org to give users access to a decentralized chat in Altme', // ignore: lines_longer_than_80_chars
                       ),
                       const NewFeature(
