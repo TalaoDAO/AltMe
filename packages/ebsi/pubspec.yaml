@@ -18,7 +18,7 @@ dependencies:
   fast_base58: ^0.2.1
   flutter:
     sdk: flutter
-  hex: ^0.2.0  
+  hex: ^0.2.0
   http_mock_adapter: ^0.3.3
   jose: ^0.3.3
   json_path: ^0.4.2
@@ -28,6 +28,7 @@ dependencies:
     git:
       url: https://github.com/autonomy-system/tezart.git
       ref: bd4b8db6e3a352590a6e556d31df8aef60db3465
+  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:

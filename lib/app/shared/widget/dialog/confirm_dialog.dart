@@ -28,7 +28,7 @@ class ConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
-    final background = bgColor ?? Theme.of(context).colorScheme.onBackground;
+    final background = bgColor ?? Theme.of(context).colorScheme.popupBackground;
     final text = textColor ?? Theme.of(context).colorScheme.dialogText;
 
     final l10n = context.l10n;

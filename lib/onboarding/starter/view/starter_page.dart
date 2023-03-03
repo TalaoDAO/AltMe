@@ -49,35 +49,32 @@ class StarterPage extends StatelessWidget {
                   const Spacer(flex: 3),
                   const SplashImage(),
                   const Spacer(flex: 2),
-                  if (Parameters.hasCryptoCallToAction)
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).push<void>(
-                          EnterNewPinCodePage.route(
-                            isFromOnboarding: true,
-                            isValidCallback: () {
-                              Navigator.of(context).pushReplacement<void, void>(
-                                ActiviateBiometricsPage.route(
-                                  routeType: WalletRouteType.recover,
-                                ),
-                              );
-                            },
-                            restrictToBack: false,
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(Sizes.spaceLarge),
-                        child: GradientButtonText(
-                          text: l10n.import_wallet,
-                          onPressed: () {},
-                          fontSize: 18,
-                          upperCase: true,
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).push<void>(
+                        EnterNewPinCodePage.route(
+                          isFromOnboarding: true,
+                          isValidCallback: () {
+                            Navigator.of(context).pushReplacement<void, void>(
+                              ActiviateBiometricsPage.route(
+                                routeType: WalletRouteType.recover,
+                              ),
+                            );
+                          },
+                          restrictToBack: false,
                         ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(Sizes.spaceLarge),
+                      child: GradientButtonText(
+                        text: l10n.import_wallet,
+                        onPressed: () {},
+                        fontSize: 18,
+                        upperCase: true,
                       ),
-                    )
-                  else
-                    const SizedBox.shrink(),
+                    ),
+                  ),
                   MyGradientButton(
                     text: l10n.create_wallet,
                     onPressed: () {
@@ -97,9 +94,6 @@ class StarterPage extends StatelessWidget {
                     },
                   ),
                   const Spacer(),
-                  const SizedBox(
-                    height: Sizes.spaceSmall,
-                  ),
                 ],
               ),
             ),

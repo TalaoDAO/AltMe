@@ -109,6 +109,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     final params = <String, dynamic>{
       'anyof.from.to': walletAddress,
       'token.contract.eq': state.selectedToken.contractAddress,
+      'limit': 1000,
     };
     final result = await client.get(
       '$baseUrl/v1/tokens/transfers',
@@ -141,11 +142,13 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
       params = <String, dynamic>{
         'anyof.sender.target': walletAddress,
         'amount.gt': 0,
+        'limit': 1000
       };
     } else {
       params = <String, dynamic>{
         'anyof.sender.target': contractAddress,
         'entrypoint': 'transfer',
+        'limit': 1000,
         'parameter.in': jsonEncode([
           {'to': walletAddress},
           {'from': walletAddress}

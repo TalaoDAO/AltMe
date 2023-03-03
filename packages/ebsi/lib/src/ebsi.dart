@@ -14,6 +14,7 @@ import 'package:hex/hex.dart';
 import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:secp256k1/secp256k1.dart';
+import 'package:uuid/uuid.dart';
 
 /// {@template ebsi}
 /// EBSI wallet compliance
@@ -542,6 +543,9 @@ class Ebsi {
   Future<String> getIdToken(
     VerifierTokenParameters tokenParameters,
   ) async {
+    final uuid1 = const Uuid().v4();
+    final uuid2 = const Uuid().v4();
+
     /// build id token
     final payload = {
       'iat': DateTime.now().microsecondsSinceEpoch,
@@ -552,11 +556,11 @@ class Ebsi {
       'nonce': tokenParameters.nonce,
       '_vp_token': {
         'presentation_submission': {
-          'definition_id': 'conformance_mock_vp_request',
-          'id': 'VA presentation Talao',
+          'definition_id': 'Altme defintion for EBSI project',
+          'id': uuid1,
           'descriptor_map': [
             {
-              'id': 'conformance_mock_vp',
+              'id': uuid2,
               'format': 'jwt_vp',
               'path': r'$',
             }

@@ -247,6 +247,10 @@ class HomeCredential extends Equatable {
         break;
 
       case CredentialSubjectType.bloometaPass:
+        image = ImageStrings.bloometaDummy;
+        link = Urls.bloometaCardUrl;
+        break;
+
       case CredentialSubjectType.voucher:
       case CredentialSubjectType.selfIssued:
       case CredentialSubjectType.defaultCredential:

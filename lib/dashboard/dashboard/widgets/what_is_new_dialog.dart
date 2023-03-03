@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -28,377 +30,197 @@ class WhatIsNewDialog extends StatelessWidget {
 
     return SafeArea(
       child: AlertDialog(
-        backgroundColor: Theme.of(context).colorScheme.whatsNewPopupBackground,
+        backgroundColor: Theme.of(context).colorScheme.popupBackground,
         contentPadding: const EdgeInsets.all(Sizes.spaceXSmall),
         insetPadding: const EdgeInsets.symmetric(
           horizontal: Sizes.spaceSmall,
-          vertical: Sizes.spaceNormal,
+          vertical: Sizes.spaceSmall,
         ),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(Sizes.normalRadius),
           ),
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            const Align(
-              alignment: Alignment.topRight,
-              child: WhiteCloseButton(),
-            ),
-            const SizedBox(height: Sizes.spaceSmall),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: Sizes.spaceSmall,
+        content: SizedBox(
+          width: double.maxFinite,
+          child: Stack(
+            children: [
+              const Align(
+                alignment: Alignment.topRight,
+                child: WhiteCloseButton(),
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: Sizes.spaceSmall),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: Sizes.spaceNormal,
+                          right: Sizes.spaceXLarge,
+                        ),
+                        child: Column(
+                          //mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const AltMeLogo(
+                              color: Colors.white,
+                              size: Sizes.logoLarge * 1.05,
+                            ),
+                            Text(
+                              l10n.whatsNew,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .defaultDialogTitle
+                                  .copyWith(
+                                    color: Colors.white,
+                                  ),
+                              textAlign: TextAlign.center,
+                            ),
+                            NewContent(
+                              version: versionNumber,
+                              features: const [
+                                'End to end encryption of decentralized chat in Altme',
+                                'Specific design for EBSI diploma card',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.9.9',
+                              features: [
+                                'Integration of Matrix.org to give users access to a decentralized chat in Altme',
+                                'Compliance with EBSI and support of new official ID documents (diplomas...)',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.8.13',
+                              features: [
+                                'Integration of an on-ramp solution to buy crypto',
+                                'New features : Help center',
+                                'New wallet certificate credential',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.7.6',
+                              features: [
+                                'Bug correction',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.7.5',
+                              features: [
+                                'New Chainborn gaming membership card',
+                                'Credential manifest input descriptors update',
+                                'Beacon pairing improvement',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.7.1',
+                              features: [
+                                'Improve compatibility with more wallets',
+                                'Update Altme’s privacy, terms and conditions',
+                                'Update NFT detail screen information',
+                                'New category for Professional credentials',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.6.5',
+                              features: [
+                                'Bug correction',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.6.3',
+                              features: [
+                                'Support SBT (Soulbound Tokens)',
+                                'New Drawer',
+                                'New Device Info credential',
+                                'Bug fix',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.5.7',
+                              features: ['Upgrade Beacon behavior'],
+                            ),
+                            const NewContent(
+                              version: '1.5.6',
+                              features: [
+                                'Age range with Al as 551 issuer',
+                                'Al issuer optimization'
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.5.1',
+                              features: [
+                                'Al verification to get Over13 and Over18 pass',
+                                'Ethereum support',
+                                'Privacy and terms update',
+                                'Enforced security',
+                                'User experience improvements'
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.4.8',
+                              features: [
+                                'Add Tezotopia membership card in Discover',
+                                'Update design of credentials'
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.4.4',
+                              features: [
+                                'Add the possibility to SEND an NFT to tezos blockchain address',
+                                'Improvements of user experience',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.4.1',
+                              features: ['New feature : NFT display in wallet'],
+                            ),
+                            const NewContent(
+                              version: '1.3.7',
+                              features: [
+                                'FA1.2 and FA2 token support',
+                                'Beacon integration to connect to Tezos dApps',
+                                'Get multiple identity credentials after identity verification (OpenID for VC Issuance)',
+                                'Choose card categories to display',
+                                'New cards design',
+                                'Nationality card',
+                                'Age range card',
+                                'Liveness test',
+                                'Display card and token history',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.1.0',
+                              features: [
+                                'USD value of tokens',
+                                'Multiple credentials presentation',
+                                'Wording',
+                                'Bug correction',
+                              ],
+                            ),
+                            const SizedBox(height: Sizes.spaceSmall),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const AltMeLogo(
-                        color: Colors.white,
-                      ),
-                      Text(
-                        l10n.whatsNew,
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogTitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceNormal),
-                      Text(
-                        versionNumber,
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'End to end encryption of decentralized chat in Altme',
-                      ),
-                      const NewFeature(
-                        'Specific design for EBSI diploma card', // ignore: lines_longer_than_80_chars
-                      ),
-                      Text(
-                        '1.9.9',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'Integration of Matrix.org to give users access to a decentralized chat in Altme', // ignore: lines_longer_than_80_chars
-                      ),
-                      const NewFeature(
-                        'Compliance with EBSI and support of new official ID documents (diplomas...)', // ignore: lines_longer_than_80_chars
-                      ),
-                      Text(
-                        '1.8.13',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'Integration of an on-ramp solution to buy crypto',
-                      ),
-                      const NewFeature(
-                        'New features : Help center',
-                      ),
-                      const NewFeature(
-                        'New wallet certificate credential',
-                      ),
-                      Text(
-                        '1.7.6',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'Bug correction',
-                      ),
-                      Text(
-                        '1.7.5',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'New Chainborn gaming membership card',
-                      ),
-                      const NewFeature(
-                        'Credential manifest input descriptors update',
-                      ),
-                      const NewFeature(
-                        'Beacon pairing improvement',
-                      ),
-                      Text(
-                        '1.7.1',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'Improve compatibility with more wallets',
-                      ),
-                      const NewFeature(
-                        'Update Altme’s privacy, terms and conditions',
-                      ),
-                      const NewFeature(
-                        'Update NFT detail screen information',
-                      ),
-                      const NewFeature(
-                        'New category for Professional credentials',
-                      ),
-                      Text(
-                        '1.6.5',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'Bug correction',
-                      ),
-                      Text(
-                        '1.6.3',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'Support SBT (Soulbound Tokens)',
-                      ),
-                      const NewFeature(
-                        'New Drawer',
-                      ),
-                      const NewFeature(
-                        'New Device Info credential',
-                      ),
-                      const NewFeature(
-                        'Bug fix',
-                      ),
-                      Text(
-                        '1.5.7',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'Upgrade Beacon behavior',
-                      ),
-                      Text(
-                        '1.5.6',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'Age range with Al as 551 issuer',
-                      ),
-                      const NewFeature('Al issuer optimization'),
-                      Text(
-                        '1.5.1',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'Al verification to get Over13 and Over18 pass',
-                      ),
-                      const NewFeature(
-                        'Ethereum support',
-                      ),
-                      const NewFeature(
-                        'Privacy and terms update',
-                      ),
-                      const NewFeature(
-                        'Enforced security',
-                      ),
-                      const NewFeature('User experience improvements'),
-                      Text(
-                        '1.4.8',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'Add Tezotopia membership card in Discover',
-                      ),
-                      const NewFeature('Update design of credentials'),
-                      Text(
-                        '1.4.4',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'Add the possibility to SEND an NFT to tezos blockchain address',
-                      ),
-                      const NewFeature(
-                        'Improvements of user experience',
-                      ),
-                      Text(
-                        '1.4.1',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature('New feature : NFT display in wallet'),
-                      Text(
-                        '1.3.7',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'FA1.2 and FA2 token support',
-                      ),
-                      const NewFeature(
-                        'Beacon integration to connect to Tezos dApps',
-                      ),
-                      const NewFeature(
-                        'Get multiple identity credentials after identity verification (OpenID for VC Issuance)', // ignore: lines_longer_than_80_chars
-                      ),
-                      const NewFeature(
-                        'Choose card categories to display',
-                      ),
-                      const NewFeature(
-                        'New cards design',
-                      ),
-                      const NewFeature(
-                        'Nationality card',
-                      ),
-                      const NewFeature(
-                        'Age range card',
-                      ),
-                      const NewFeature(
-                        'Liveness test',
-                      ),
-                      const NewFeature(
-                        'Display card and token history',
-                      ),
-                      Text(
-                        '1.1.0',
-                        style: Theme.of(context)
-                            .textTheme
-                            .defaultDialogSubtitle
-                            .copyWith(
-                              color: Colors.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: Sizes.spaceXSmall),
-                      const NewFeature(
-                        'USD value of tokens',
-                      ),
-                      const NewFeature(
-                        'Multiple credentials presentation',
-                      ),
-                      const NewFeature(
-                        'Wording',
-                      ),
-                      const NewFeature(
-                        'Bug correction',
-                      ),
-                      const SizedBox(height: Sizes.spaceSmall),
-                    ],
-                  ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(Sizes.spaceNormal),
+                    child: MyGradientButton(
+                      text: l10n.okGotIt,
+                      verticalSpacing: 16,
+                      fontSize: 18,
+                      borderRadius: Sizes.normalRadius,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  )
+                ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Sizes.spaceLarge,
-                vertical: Sizes.spaceXSmall,
-              ),
-              child: MyElevatedButton(
-                text: l10n.okGotIt,
-                verticalSpacing: 12,
-                fontSize: 18,
-                borderRadius: 20,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );

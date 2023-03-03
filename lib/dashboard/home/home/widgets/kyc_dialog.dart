@@ -15,7 +15,7 @@ class KycDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.onBackground,
+      backgroundColor: Theme.of(context).colorScheme.popupBackground,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -99,16 +99,18 @@ class KycDialog extends StatelessWidget {
             ),
             Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.asset(
                   IconStrings.lockCircle,
                   width: Sizes.icon,
                 ),
-                Text(
-                  l10n.kycDialogFooter,
-                  style: Theme.of(context).textTheme.kycDialogFooter,
-                  textAlign: TextAlign.center,
+                Expanded(
+                  child: Text(
+                    l10n.kycDialogFooter,
+                    style: Theme.of(context).textTheme.kycDialogFooter,
+                  ),
                 ),
               ],
             ),

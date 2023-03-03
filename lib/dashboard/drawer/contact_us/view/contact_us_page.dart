@@ -51,31 +51,6 @@ class _ContactUsViewState extends State<ContactUsView> {
             const SizedBox(
               height: Sizes.spaceXSmall,
             ),
-            TextFormField(
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.emailAddress,
-              style: Theme.of(context).textTheme.titleSmall,
-              onSaved: (value) {
-                subject = value ?? '';
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return l10n.fillingThisFieldIsMandatory;
-                } else {
-                  return null;
-                }
-              },
-              decoration: InputDecoration(
-                hintText: '${l10n.subject} :',
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(
-                      Sizes.smallRadius,
-                    ),
-                  ),
-                ),
-              ),
-            ),
             const SizedBox(
               height: Sizes.spaceLarge,
             ),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
@@ -19,6 +20,32 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   final SecureStorageProvider secureStorageProvider;
+
+  Timer? _timer;
+
+  int loginAttemptCount = 0;
+
+  void passcodeEntered() {
+    loginAttemptCount++;
+    if (loginAttemptCount > 3) return;
+
+    if (loginAttemptCount == 3) {
+      setActionAllowValue(value: false);
+      _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+        resetloginAttemptCount();
+        _timer?.cancel();
+      });
+    }
+  }
+
+  void resetloginAttemptCount() {
+    loginAttemptCount = 0;
+    setActionAllowValue(value: true);
+  }
+
+  void setActionAllowValue({required bool value}) {
+    emit(state.copyWith(status: AppStatus.idle, allowLogin: value));
+  }
 
   Future<void> load() async {
     emit(state.loading());
@@ -72,7 +99,12 @@ class ProfileCubit extends Cubit<ProfileState> {
         isEnterprise: isEnterprise,
       );
 
-      emit(state.success(model: profileModel));
+      emit(
+        state.copyWith(
+          model: profileModel,
+          status: AppStatus.success,
+        ),
+      );
     } catch (e) {
       log.e('something went wrong', e);
       emit(
@@ -99,7 +131,12 @@ class ProfileCubit extends Cubit<ProfileState> {
         .delete(SecureStorageKeys.issuerVerificationUrlKey);
     await secureStorageProvider.delete(SecureStorageKeys.blockchainNetworkKey);
     await secureStorageProvider.delete(SecureStorageKeys.isEnterpriseUser);
-    emit(state.success(model: ProfileModel.empty()));
+    emit(
+      state.copyWith(
+        model: ProfileModel.empty(),
+        status: AppStatus.success,
+      ),
+    );
   }
 
   Future<void> update(ProfileModel profileModel) async {
@@ -149,7 +186,12 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.isEnterprise.toString(),
       );
 
-      emit(state.success(model: profileModel));
+      emit(
+        state.copyWith(
+          model: profileModel,
+          status: AppStatus.success,
+        ),
+      );
     } catch (e) {
       log.e('something went wrong', e);
 
@@ -184,5 +226,11 @@ class ProfileCubit extends Cubit<ProfileState> {
     final newModel =
         state.model.copyWith(issuerVerificationUrl: issuerVerificationUrl);
     await update(newModel);
+  }
+
+  @override
+  Future<void> close() async {
+    _timer?.cancel();
+    return super.close();
   }
 }

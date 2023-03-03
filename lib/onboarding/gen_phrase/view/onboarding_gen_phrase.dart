@@ -1,16 +1,11 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:key_generator/key_generator.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingGenPhrasePage extends StatelessWidget {
   const OnBoardingGenPhrasePage({super.key});
@@ -23,14 +18,7 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OnBoardingGenPhraseCubit(
-        secureStorageProvider: getSecureStorage,
-        didCubit: context.read<DIDCubit>(),
-        didKitProvider: DIDKitProvider(),
-        keyGenerator: KeyGenerator(),
-        homeCubit: context.read<HomeCubit>(),
-        walletCubit: context.read<WalletCubit>(),
-      ),
+      create: (context) => OnBoardingGenPhraseCubit(),
       child: const OnBoardingGenPhraseView(),
     );
   }
@@ -73,6 +61,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
             stateMessage: state.message!,
           );
         }
+
         if (state.status == AppStatus.success) {
           context.read<LiveChatCubit>().init();
           Navigator.pushAndRemoveUntil<void>(
@@ -100,7 +89,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                     children: [
                       const MStepper(
                         step: 3,
-                        totalStep: 3,
+                        totalStep: 4,
                       ),
                       const SizedBox(
                         height: Sizes.spaceNormal,
@@ -202,11 +191,13 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
               child: MyGradientButton(
                 text: l10n.onBoardingGenPhraseButton,
                 verticalSpacing: 18,
-                onPressed: state.isTicked || mnemonic != null
-                    ? () async {
-                        await context
-                            .read<OnBoardingGenPhraseCubit>()
-                            .generateSSIAndCryptoAccount(mnemonic!);
+                onPressed: state.isTicked
+                    ? () {
+                        Navigator.of(context).push(
+                          OnBoardingVerifyPhrasePage.route(
+                            mnemonic: mnemonic!,
+                          ),
+                        );
                       }
                     : null,
               ),

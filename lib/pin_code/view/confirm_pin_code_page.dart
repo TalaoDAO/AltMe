@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
@@ -38,7 +39,8 @@ class ConfirmPinCodePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PinCodeViewCubit(),
+      create: (context) =>
+          PinCodeViewCubit(profileCubit: context.read<ProfileCubit>()),
       child: ConfirmPinCodeView(
         storedPassword: storedPassword,
         isValidCallback: isValidCallback,
@@ -68,6 +70,8 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
   final StreamController<bool> _verificationNotifier =
       StreamController<bool>.broadcast();
 
+  bool get byPassScreen => !Parameters.hasCryptoCallToAction;
+
   @override
   void initState() {
     super.initState();
@@ -91,9 +95,9 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
         title: l10n.confirmYourPinCode,
         passwordEnteredCallback: _onPasscodeEntered,
         header: widget.isFromOnboarding
-            ? const MStepper(
+            ? MStepper(
                 step: 1,
-                totalStep: 3,
+                totalStep: byPassScreen ? 2 : 4,
               )
             : null,
         deleteButton: Text(
