@@ -379,6 +379,7 @@
   "selectAccount": "Select account",
   "onbordingSeedPhrase": "Seed Phrase",
   "onboardingPleaseStoreMessage": "Please, write down your Recovery Phrase",
+  "onboardingVerifyPhraseMessage": "Please, verify your Recovery Phrase",
   "onboardingAltmeMessage": "Altme is non-custodial. Your Recovery Phrase is the only way to recover your account.",
   "onboardingWroteDownMessage": "I wrote down my Recovery Phrase",
   "copyToClipboard": "Copy to clipboard",

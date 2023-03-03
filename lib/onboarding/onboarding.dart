@@ -5,5 +5,6 @@ export 'starter/starter.dart';
 export 'submit_enterprise_user/submit_enterprise_user.dart';
 export 'third/onboarding_third.dart';
 export 'tos/onboarding_terms.dart';
+export 'verify_phrase/onboarding_verify_phrase.dart';
 export 'wallet_ready/wallet_ready.dart';
 export 'widgets/widgets.dart';

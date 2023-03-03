@@ -26,10 +26,15 @@ class PhraseWord extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(128),
         ),
-        child: MyText(
-          '$order. $word',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.passPhraseText,
+        child: SizedBox(
+          height: 25,
+          child: Center(
+            child: MyText(
+              '$order. $word',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.passPhraseText,
+            ),
+          ),
         ),
       );
 }

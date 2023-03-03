@@ -97,7 +97,7 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
         header: widget.isFromOnboarding
             ? MStepper(
                 step: 1,
-                totalStep: byPassScreen ? 2 : 3,
+                totalStep: byPassScreen ? 2 : 4,
               )
             : null,
         deleteButton: Text(

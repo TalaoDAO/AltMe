@@ -329,6 +329,7 @@
     "selectAccount",
     "onbordingSeedPhrase",
     "onboardingPleaseStoreMessage",
+    "onboardingVerifyPhraseMessage",
     "onboardingAltmeMessage",
     "onboardingWroteDownMessage",
     "copyToClipboard",
@@ -1073,6 +1074,7 @@
     "selectAccount",
     "onbordingSeedPhrase",
     "onboardingPleaseStoreMessage",
+    "onboardingVerifyPhraseMessage",
     "onboardingAltmeMessage",
     "onboardingWroteDownMessage",
     "copyToClipboard",
@@ -1489,6 +1491,7 @@
 
   "fr": [
     "educationCredentials",
+    "onboardingVerifyPhraseMessage",
     "importWalletTextRecoveryPhraseOnly",
     "importWalletHintTextRecoveryPhraseOnly",
     "educationCredentialHomeSubtitle",
@@ -1844,6 +1847,7 @@
     "selectAccount",
     "onbordingSeedPhrase",
     "onboardingPleaseStoreMessage",
+    "onboardingVerifyPhraseMessage",
     "onboardingAltmeMessage",
     "onboardingWroteDownMessage",
     "copyToClipboard",

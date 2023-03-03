@@ -83,7 +83,7 @@ class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
         header: widget.isFromOnboarding
             ? MStepper(
                 step: 1,
-                totalStep: byPassScreen ? 2 : 3,
+                totalStep: byPassScreen ? 2 : 4,
               )
             : null,
         deleteButton: Text(
