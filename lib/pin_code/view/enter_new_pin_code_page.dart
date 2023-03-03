@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
@@ -31,7 +32,8 @@ class EnterNewPinCodePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PinCodeViewCubit(),
+      create: (context) =>
+          PinCodeViewCubit(profileCubit: context.read<ProfileCubit>()),
       child: EnterNewPinCodeView(
         isValidCallback: isValidCallback,
         isFromOnboarding: isFromOnboarding,
@@ -55,6 +57,8 @@ class EnterNewPinCodeView extends StatefulWidget {
 }
 
 class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
+  bool get byPassScreen => !Parameters.hasCryptoCallToAction;
+
   @override
   void initState() {
     super.initState();
@@ -77,9 +81,9 @@ class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
         title: l10n.enterNewPinCode,
         passwordEnteredCallback: _onPasscodeEntered,
         header: widget.isFromOnboarding
-            ? const MStepper(
+            ? MStepper(
                 step: 1,
-                totalStep: 3,
+                totalStep: byPassScreen ? 2 : 4,
               )
             : null,
         deleteButton: Text(

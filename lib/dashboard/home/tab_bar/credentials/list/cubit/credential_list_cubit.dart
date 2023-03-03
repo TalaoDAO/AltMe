@@ -49,6 +49,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.tezVoucher:
         case CredentialSubjectType.diplomaCard:
         case CredentialSubjectType.tezotopiaMembership:
+        case CredentialSubjectType.bloometaPass:
         case CredentialSubjectType.chainbornMembership:
           gamingCategories.remove(credentialSubjectType);
           break;
@@ -85,7 +86,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.ecole42LearningAchievement:
         case CredentialSubjectType.emailPass:
         case CredentialSubjectType.walletCredential:
-        case CredentialSubjectType.bloometaPass:
         case CredentialSubjectType.dogamiPass:
         case CredentialSubjectType.bunnyPass:
         case CredentialSubjectType.troopezPass:
@@ -241,6 +241,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
         switch (credentialSubjectType) {
           case CredentialSubjectType.tezotopiaMembership:
+          case CredentialSubjectType.bloometaPass:
           case CredentialSubjectType.chainbornMembership:
           case CredentialSubjectType.voucher:
           case CredentialSubjectType.tezVoucher:
@@ -276,7 +277,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.ecole42LearningAchievement:
           case CredentialSubjectType.emailPass:
           case CredentialSubjectType.diplomaCard:
-          case CredentialSubjectType.bloometaPass:
           case CredentialSubjectType.walletCredential:
           case CredentialSubjectType.learningAchievement:
           case CredentialSubjectType.loyaltyCard:
@@ -554,7 +554,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         if (credentialSubjectType ==
                 CredentialSubjectType.tezotopiaMembership ||
             credentialSubjectType ==
-                CredentialSubjectType.chainbornMembership) {
+                CredentialSubjectType.chainbornMembership ||
+            credentialSubjectType == CredentialSubjectType.bloometaPass) {
           gamingCategories.add(credentialSubjectType);
         }
 

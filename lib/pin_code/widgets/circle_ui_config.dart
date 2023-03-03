@@ -24,11 +24,13 @@ class Circle extends StatelessWidget {
     this.filled = false,
     required this.circleUIConfig,
     this.extraSize = 0,
+    required this.allowAction,
   });
 
   final bool filled;
   final CircleUIConfig circleUIConfig;
   final double extraSize;
+  final bool allowAction;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,13 @@ class Circle extends StatelessWidget {
         color: filled ? circleUIConfig.fillColor : null,
         shape: BoxShape.circle,
         border: Border.all(
-          color: filled ? circleUIConfig.fillColor : circleUIConfig.borderColor,
+          color: filled
+              ? allowAction
+                  ? circleUIConfig.fillColor
+                  : circleUIConfig.fillColor.withOpacity(0.1)
+              : allowAction
+                  ? circleUIConfig.borderColor
+                  : circleUIConfig.borderColor.withOpacity(0.1),
           width: circleUIConfig.borderWidth,
         ),
       ),

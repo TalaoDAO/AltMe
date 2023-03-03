@@ -49,7 +49,6 @@ class MyGradientButton extends StatelessWidget {
             Theme.of(context).colorScheme.startButtonColorA,
             Theme.of(context).colorScheme.startButtonColorB,
           ],
-          stops: const [0.0, 0.4],
         );
     return SizedBox(
       width: MediaQuery.of(context).size.width,

@@ -164,9 +164,18 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
       if (state.uri != null) {
         final profileCubit = context.read<ProfileCubit>();
         var approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
-        final isIssuerVerificationSettingTrue =
+
+        late bool isIssuerVerificationSettingTrue;
+
+        isIssuerVerificationSettingTrue =
             profileCubit.state.model.issuerVerificationUrl != '';
+
+        if (state.uri!.toString().startsWith('openid://initiate_issuance?')) {
+          isIssuerVerificationSettingTrue = true;
+        }
+
         log.i('checking issuer - $isIssuerVerificationSettingTrue');
+
         if (isIssuerVerificationSettingTrue) {
           try {
             approvedIssuer = await CheckIssuer(
@@ -175,6 +184,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               state.uri!,
             ).isIssuerInApprovedList();
           } catch (e) {
+            log.e(e);
             if (e is MessageHandler) {
               await context.read<QRCodeScanCubit>().emitError(e);
             } else {
@@ -191,16 +201,21 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
         var acceptHost = true;
 
-        if (approvedIssuer.did.isEmpty &&
-            profileCubit.state.model.issuerVerificationUrl.isNotEmpty) {
+        if (approvedIssuer.did.isEmpty && isIssuerVerificationSettingTrue) {
+          String subtitle = (approvedIssuer.did.isEmpty)
+              ? state.uri!.host
+              : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
+
+          if (state.uri!.toString().startsWith('openid://initiate_issuance?')) {
+            subtitle = state.uri!.queryParameters['issuer'].toString();
+          }
+
           acceptHost = await showDialog<bool>(
                 context: context,
                 builder: (BuildContext context) {
                   return ConfirmDialog(
                     title: l10n.scanPromptHost,
-                    subtitle: (approvedIssuer.did.isEmpty)
-                        ? state.uri!.host
-                        : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''',
+                    subtitle: subtitle,
                     yes: l10n.communicationHostAllow,
                     no: l10n.communicationHostDeny,
                     //lock: state.uri!.scheme == 'http',

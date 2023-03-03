@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
+import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
@@ -22,6 +23,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
     required this.homeCubit,
     required this.didCubit,
     required this.walletCubit,
+    required this.splashCubit,
   }) : super(const ImportWalletState());
 
   final DIDKitProvider didKitProvider;
@@ -30,6 +32,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
   final HomeCubit homeCubit;
   final DIDCubit didCubit;
   final WalletCubit walletCubit;
+  final SplashCubit splashCubit;
 
   void isMnemonicsOrKeyValid(String value) {
     //different type of tezos private keys start with 'edsk' ,
@@ -66,6 +69,12 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
             mnemonicOrKey.startsWith('0x');
 
         if (isSecretKey) {
+          if (!Parameters.hasCryptoCallToAction) {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
           mnemonic = bip39.generateMnemonic();
         } else {
           mnemonic = mnemonicOrKey;
@@ -93,6 +102,9 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
           verificationMethod: verificationMethod,
         );
       }
+
+      /// what's new popup disabled
+      splashCubit.disableWhatsNewPopUp();
 
       /// crypto wallet with unknown blockchain type
       await walletCubit.createCryptoWallet(

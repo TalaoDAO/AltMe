@@ -196,6 +196,7 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                   child: LayoutBuilder(
                     builder: (_, constraint) {
                       return NumericKeyboard(
+                        allowAction: true,
                         keyboardUIConfig: KeyboardUIConfig(
                           digitShape: BoxShape.rectangle,
                           spacing: 40,
@@ -213,6 +214,7 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                           label: '.',
                           semanticsLabel: '.',
                           onTap: _insertKey,
+                          allowAction: true,
                         ),
                         trailingButton: KeyboardButton(
                           digitShape: BoxShape.rectangle,
@@ -223,6 +225,7 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                             width: Sizes.icon2x,
                             color: Colors.white,
                           ),
+                          allowAction: true,
                           onLongPress: (_) {
                             context
                                 .read<TokenAmountCalculatorCubit>()

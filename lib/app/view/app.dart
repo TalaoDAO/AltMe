@@ -171,7 +171,7 @@ class App extends StatelessWidget {
             manageNetworkCubit: context.read<ManageNetworkCubit>(),
           ),
         ),
-        BlocProvider(
+        BlocProvider<LiveChatCubit>(
           lazy: false,
           create: (context) => LiveChatCubit(
             dioClient: DioClient('', Dio()),

@@ -81,16 +81,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         await walletConnectCubit.connect(scannedResponse);
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-      } else if (scannedResponse.startsWith('openid://initiate_issuance?')) {
-        // convert String from QR code into Uri
-        await initiateEbsiCredentialIssuance(
-          scannedResponse,
-          client,
-          walletCubit,
-          getSecureStorage,
-        );
-
-        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else {
         await host(url: scannedResponse);
       }
@@ -337,6 +327,18 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     late final dynamic data;
 
     try {
+      if (state.uri.toString().startsWith('openid://initiate_issuance?')) {
+        await initiateEbsiCredentialIssuance(
+          state.uri.toString(),
+          client,
+          walletCubit,
+          getSecureStorage,
+        );
+
+        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+        return;
+      }
+
       final dynamic response = await client.get(uri.toString());
       data = response is String ? jsonDecode(response) : response;
 

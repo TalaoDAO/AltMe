@@ -19,7 +19,7 @@ class DefaultDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.onBackground,
+        backgroundColor: Theme.of(context).colorScheme.popupBackground,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: Sizes.spaceNormal,
         vertical: Sizes.spaceSmall,

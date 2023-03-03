@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -31,13 +32,13 @@ class CustomListTileCard extends StatelessWidget {
       tileColor: Theme.of(context).colorScheme.surface,
       title: Row(
         children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.customListTileTitleStyle,
+          Expanded(
+            child: MyText(
+              title,
+              style: Theme.of(context).textTheme.customListTileTitleStyle,
+            ),
           ),
-          const SizedBox(
-            width: 10,
-          ),
+          const SizedBox(width: 10),
           if (recommended)
             const Icon(
               Icons.thumb_up,
