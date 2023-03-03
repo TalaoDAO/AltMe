@@ -7,13 +7,23 @@ class PhraseWord extends StatelessWidget {
     super.key,
     required this.order,
     required this.word,
+    this.color,
+    this.showOrder = true,
+    this.onTap,
   });
 
   final int order;
   final String word;
+  final Color? color;
+  final bool showOrder;
+  final void Function()? onTap;
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) {
+    final color = this.color ?? Theme.of(context).colorScheme.primary;
+    return TransparentInkWell(
+      onTap: onTap,
+      child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: Sizes.spaceSmall,
           vertical: Sizes.spaceSmall,
@@ -22,7 +32,7 @@ class PhraseWord extends StatelessWidget {
           color: Theme.of(context).colorScheme.transparent,
           border: Border.all(
             width: 1.5,
-            color: Theme.of(context).colorScheme.primary,
+            color: color,
           ),
           borderRadius: BorderRadius.circular(128),
         ),
@@ -30,11 +40,13 @@ class PhraseWord extends StatelessWidget {
           height: 25,
           child: Center(
             child: MyText(
-              '$order. $word',
+              showOrder ? '$order. $word' : word,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.passPhraseText,
             ),
           ),
         ),
-      );
+      ),
+    );
+  }
 }

@@ -25,7 +25,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     required this.homeCubit,
     required this.walletCubit,
     required this.splashCubit,
-  }) : super(const OnBoardingVerifyPhraseState());
+  }) : super(OnBoardingVerifyPhraseState());
 
   final SecureStorageProvider secureStorageProvider;
   final KeyGenerator keyGenerator;
@@ -37,17 +37,65 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
 
   final log = getLogger('OnBoardingVerifyPhraseCubit');
 
+  void orderMnemonics() {
+    emit(state.loading());
+    //create list
+    final oldState = List<MnemonicState>.from(state.mnemonicStates);
+    for (var i = 1; i <= 12; i++) {
+      oldState.add(MnemonicState(order: i));
+    }
+    oldState.shuffle();
+    emit(state.copyWith(mnemonicStates: oldState, status: AppStatus.idle));
+  }
+
+  List<String> tempMnemonics = [];
+
   Future<void> verify({
     required List<String> mnemonic,
-    required List<String> lastFourMnemonics,
+    required int index,
   }) async {
-    if (mnemonic[8] == lastFourMnemonics[0] &&
-        mnemonic[9] == lastFourMnemonics[1] &&
-        mnemonic[10] == lastFourMnemonics[2] &&
-        mnemonic[11] == lastFourMnemonics[3]) {
-      emit(state.copyWith(isVerified: true));
+    final mnemonicState = state.mnemonicStates[index];
+    final int clickCount = tempMnemonics.length;
+
+    if (mnemonicState.order <= clickCount) return;
+
+    if (mnemonicState.mnemonicStatus != MnemonicStatus.wrongSelection) {
+      for (final mnemonicState in state.mnemonicStates) {
+        if (mnemonicState.mnemonicStatus == MnemonicStatus.wrongSelection) {
+          return;
+        }
+      }
+    }
+
+    final updatedList = List<MnemonicState>.from(state.mnemonicStates);
+    if (mnemonicState.order == clickCount + 1) {
+      tempMnemonics.add(mnemonic[mnemonicState.order - 1]);
+      updatedList[index] =
+          mnemonicState.copyWith(mnemonicStatus: MnemonicStatus.selected);
     } else {
-      emit(state.copyWith(isVerified: false));
+      if (mnemonicState.mnemonicStatus == MnemonicStatus.unselected) {
+        updatedList[index] = mnemonicState.copyWith(
+          mnemonicStatus: MnemonicStatus.wrongSelection,
+        );
+      } else {
+        updatedList[index] =
+            mnemonicState.copyWith(mnemonicStatus: MnemonicStatus.unselected);
+      }
+    }
+
+    emit(state.copyWith(status: AppStatus.idle, mnemonicStates: updatedList));
+
+    if (tempMnemonics.length >= 6) {
+      if (mnemonic[0] == tempMnemonics[0] &&
+          mnemonic[1] == tempMnemonics[1] &&
+          mnemonic[2] == tempMnemonics[2] &&
+          mnemonic[3] == tempMnemonics[3] &&
+          mnemonic[4] == tempMnemonics[4] &&
+          mnemonic[5] == tempMnemonics[5]) {
+        emit(state.copyWith(isVerified: true, status: AppStatus.idle));
+      } else {
+        emit(state.copyWith(isVerified: false, status: AppStatus.idle));
+      }
     }
   }
 
