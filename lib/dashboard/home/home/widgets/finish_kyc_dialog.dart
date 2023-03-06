@@ -27,18 +27,18 @@ class FinishKycDialog extends StatelessWidget {
             Icon(
               Icons.access_time_filled_rounded,
               size: Sizes.icon4x,
-              color: Theme.of(context).colorScheme.surface,
+              color: Theme.of(context).iconTheme.color,
             ),
             const SizedBox(height: Sizes.spaceSmall),
             Text(
               l10n.finishedVerificationTitle,
-              style: Theme.of(context).textTheme.finishVerificationDialogTitle,
+              style: Theme.of(context).textTheme.defaultDialogTitle,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceSmall),
             Text(
               l10n.finishedVerificationDescription,
-              style: Theme.of(context).textTheme.finishVerificationDialogBody,
+              style: Theme.of(context).textTheme.defaultDialogBody,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceSmall),

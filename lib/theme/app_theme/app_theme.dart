@@ -674,18 +674,6 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff180B2B),
       );
 
-  TextStyle get finishVerificationDialogTitle => GoogleFonts.nunito(
-        fontSize: 25,
-        fontWeight: FontWeight.bold,
-        color: const Color(0xff180B2B),
-      );
-
-  TextStyle get finishVerificationDialogBody => GoogleFonts.nunito(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: const Color(0xFF5F556F),
-      );
-
   TextStyle get defaultDialogTitle => GoogleFonts.nunito(
         fontSize: 25,
         fontWeight: FontWeight.bold,
