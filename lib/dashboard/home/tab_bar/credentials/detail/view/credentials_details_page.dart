@@ -256,7 +256,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               : SafeArea(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
+                      horizontal: 12,
                       vertical: 5,
                     ),
                     child: Column(
