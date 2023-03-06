@@ -6,21 +6,21 @@ import 'package:flutter/material.dart';
 class FantomAssociatedAddressWidget extends StatelessWidget {
   const FantomAssociatedAddressWidget({
     super.key,
-    required this.credentialModel,
+    this.credentialModel,
   });
 
-  final CredentialModel credentialModel;
+  final CredentialModel? credentialModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final associatedAddress = credentialModel.credentialPreview
-        .credentialSubjectModel as FantomAssociatedAddressModel;
+    final associatedAddress = credentialModel?.credentialPreview
+        .credentialSubjectModel as FantomAssociatedAddressModel?;
 
     return MyBlockchainAccountBaseWidget(
       image: IconStrings.fantom,
       name: l10n.fantomNetwork,
-      walletAddress: associatedAddress.associatedAddress ?? '',
+      walletAddress: associatedAddress?.associatedAddress ?? '',
     );
   }
 }

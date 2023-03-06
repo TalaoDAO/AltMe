@@ -95,45 +95,49 @@ class MissingCredentialsView extends StatelessWidget {
                   shrinkWrap: true,
                   itemBuilder: (context, i) {
                     final homeCredential = state.dummyCredentials[i];
+                    final credentialType = homeCredential.credentialSubjectType;
                     return Container(
                       margin: const EdgeInsets.only(
                         bottom: 15,
                         right: 10,
                         left: 10,
                       ),
-                      child: AspectRatio(
-                        aspectRatio: Sizes.credentialAspectRatio,
-                        child: CredentialImage(
-                          image: homeCredential.image!,
-                          child: homeCredential.dummyDescription == null
-                              ? null
-                              : CustomMultiChildLayout(
-                                  delegate: DummyCredentialItemDelegate(
-                                    position: Offset.zero,
-                                  ),
-                                  children: [
-                                    LayoutId(
-                                      id: 'dummyDesc',
-                                      child: FractionallySizedBox(
-                                        widthFactor: 0.85,
-                                        heightFactor: 0.36,
-                                        child: MyText(
-                                          homeCredential.dummyDescription!
-                                              .getMessage(
-                                            context,
-                                            homeCredential.dummyDescription!,
-                                          ),
-                                          maxLines: 3,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
+                      child: credentialType.isBlockchainAccount
+                          ? credentialType.blockchainWidget
+                          : AspectRatio(
+                              aspectRatio: Sizes.credentialAspectRatio,
+                              child: CredentialImage(
+                                image: homeCredential.image!,
+                                child: homeCredential.dummyDescription == null
+                                    ? null
+                                    : CustomMultiChildLayout(
+                                        delegate: DummyCredentialItemDelegate(
+                                          position: Offset.zero,
                                         ),
+                                        children: [
+                                          LayoutId(
+                                            id: 'dummyDesc',
+                                            child: FractionallySizedBox(
+                                              widthFactor: 0.85,
+                                              heightFactor: 0.36,
+                                              child: MyText(
+                                                homeCredential.dummyDescription!
+                                                    .getMessage(
+                                                  context,
+                                                  homeCredential
+                                                      .dummyDescription!,
+                                                ),
+                                                maxLines: 3,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                        ),
-                      ),
+                              ),
+                            ),
                     );
                   },
                 ),
@@ -142,20 +146,25 @@ class MissingCredentialsView extends StatelessWidget {
               MyGradientButton(
                 onPressed: () async {
                   for (final credentials in state.dummyCredentials) {
-                    await Navigator.push<void>(
-                      context,
-                      DiscoverDetailsPage.route(
-                        homeCredential: credentials,
-                        buttonText: l10n.getThisCard,
-                        onCallBack: () async {
-                          await discoverCredential(
-                            homeCredential: credentials,
-                            context: context,
-                          );
-                          Navigator.pop(context);
-                        },
-                      ),
-                    );
+                    if (credentials.credentialSubjectType.isBlockchainAccount) {
+                      await Navigator.of(context)
+                          .push<void>(ChooseAddAccountMethodPage.route());
+                    } else {
+                      await Navigator.push<void>(
+                        context,
+                        DiscoverDetailsPage.route(
+                          homeCredential: credentials,
+                          buttonText: l10n.getThisCard,
+                          onCallBack: () async {
+                            await discoverCredential(
+                              homeCredential: credentials,
+                              context: context,
+                            );
+                            Navigator.pop(context);
+                          },
+                        ),
+                      );
+                    }
                   }
                   Navigator.pop(context);
                 },

@@ -408,4 +408,32 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
     return false;
   }
+
+  bool get isBlockchainAccount {
+    if (this == CredentialSubjectType.tezosAssociatedWallet ||
+        this == CredentialSubjectType.ethereumAssociatedWallet ||
+        this == CredentialSubjectType.binanceAssociatedWallet ||
+        this == CredentialSubjectType.fantomAssociatedWallet ||
+        this == CredentialSubjectType.polygonAssociatedWallet) {
+      return true;
+    }
+    return false;
+  }
+
+  Widget? get blockchainWidget {
+    if (this == CredentialSubjectType.tezosAssociatedWallet) {
+      return const TezosAssociatedAddressWidget();
+    } else if (this == CredentialSubjectType.ethereumAssociatedWallet) {
+      return const EthereumAssociatedAddressWidget();
+    } else if (this == CredentialSubjectType.polygonAssociatedWallet) {
+      return const PolygonAssociatedAddressWidget();
+    } else if (this == CredentialSubjectType.binanceAssociatedWallet) {
+      return const BinanceAssociatedAddressWidget();
+    } else if (this == CredentialSubjectType.tezosAssociatedWallet) {
+      return const TezosAssociatedAddressWidget();
+    } else if (this == CredentialSubjectType.fantomAssociatedWallet) {
+      return const FantomAssociatedAddressWidget();
+    }
+    return null;
+  }
 }

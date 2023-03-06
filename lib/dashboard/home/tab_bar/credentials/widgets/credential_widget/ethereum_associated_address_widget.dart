@@ -6,21 +6,21 @@ import 'package:flutter/material.dart';
 class EthereumAssociatedAddressWidget extends StatelessWidget {
   const EthereumAssociatedAddressWidget({
     super.key,
-    required this.credentialModel,
+    this.credentialModel,
   });
 
-  final CredentialModel credentialModel;
+  final CredentialModel? credentialModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final associatedAddress = credentialModel.credentialPreview
-        .credentialSubjectModel as EthereumAssociatedAddressModel;
+    final associatedAddress = credentialModel?.credentialPreview
+        .credentialSubjectModel as EthereumAssociatedAddressModel?;
 
     return MyBlockchainAccountBaseWidget(
       image: IconStrings.ethereum,
       name: l10n.ethereumNetwork,
-      walletAddress: associatedAddress.associatedAddress ?? '',
+      walletAddress: associatedAddress?.associatedAddress ?? '',
     );
   }
 }
