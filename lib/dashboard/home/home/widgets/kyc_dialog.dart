@@ -49,6 +49,7 @@ class KycDialog extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
@@ -66,6 +67,7 @@ class KycDialog extends StatelessWidget {
                 ),
                 const SizedBox(width: Sizes.spaceNormal),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
                       IconStrings.checkCircleBlue,
@@ -100,11 +102,12 @@ class KycDialog extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
                   IconStrings.lockCircle,
                   width: Sizes.icon,
+                  color: Theme.of(context).colorScheme.kycKeyIconColor,
                 ),
                 Expanded(
                   child: Text(
