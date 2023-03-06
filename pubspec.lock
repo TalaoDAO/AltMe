@@ -864,14 +864,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  flutter_openssl_crypto:
-    dependency: "direct main"
-    description:
-      name: flutter_openssl_crypto
-      sha256: b64a0825d79f10b6d5f5951f7ce2d5ddc12ed532129fc5a7e0ce472f5b97d78e
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
   flutter_parsed_text:
     dependency: transitive
     description:
