@@ -29,6 +29,7 @@ class InfoDialog extends StatelessWidget {
     final text = textColor ?? Theme.of(context).colorScheme.dialogText;
     return AlertDialog(
       backgroundColor: background,
+      surfaceTintColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),

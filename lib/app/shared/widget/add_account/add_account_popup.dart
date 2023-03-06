@@ -29,6 +29,7 @@ class _AddAccountPopUpState extends State<AddAccountPopUp> {
 
     return AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.popupBackground,
+        surfaceTintColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       shape: RoundedRectangleBorder(
         side: BorderSide(
