@@ -77,6 +77,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.tezosPooAddress:
       case CredentialSubjectType.pcdsAgentCertificate:
       case CredentialSubjectType.euDiplomaCard:
+      case CredentialSubjectType.euVerifiableId:
         return Colors.white;
     }
   }
@@ -145,6 +146,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.tezosPooAddress:
       case CredentialSubjectType.pcdsAgentCertificate:
       case CredentialSubjectType.euDiplomaCard:
+      case CredentialSubjectType.euVerifiableId:
         return Icons.perm_identity;
     }
   }
@@ -266,6 +268,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'PCDSAgentCertificate';
       case CredentialSubjectType.euDiplomaCard:
         return 'https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd';
+      case CredentialSubjectType.euVerifiableId:
+        return 'https://api-conformance.ebsi.eu/trusted-schemas-registry/v2/schemas/z22ZAMdQtNLwi51T2vdZXGGZaYyjrsuP1yzWyXZirCAHv';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -379,6 +383,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return TezosPooAddressModel.fromJson(json);
       case CredentialSubjectType.euDiplomaCard:
         return EUDiplomaCardModel.fromJson(json);
+      case CredentialSubjectType.euVerifiableId:
+        return EUVerifiableIdModel.fromJson(json);
     }
   }
 
@@ -404,6 +410,14 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.gender ||
         this == CredentialSubjectType.passportFootprint ||
         this == CredentialSubjectType.linkedInCard) {
+      return true;
+    }
+    return false;
+  }
+
+  bool get isEbsiCard {
+    if (this == CredentialSubjectType.euDiplomaCard ||
+        this == CredentialSubjectType.euVerifiableId) {
       return true;
     }
     return false;

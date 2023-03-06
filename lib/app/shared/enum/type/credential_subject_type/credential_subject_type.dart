@@ -57,4 +57,5 @@ enum CredentialSubjectType {
   pcdsAgentCertificate,
   twitterCard,
   euDiplomaCard,
+  euVerifiableId,
 }
