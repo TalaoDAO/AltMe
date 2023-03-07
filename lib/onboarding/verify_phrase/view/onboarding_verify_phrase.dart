@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
+import 'package:altme/flavor/flavor.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
@@ -34,6 +35,7 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
         homeCubit: context.read<HomeCubit>(),
         walletCubit: context.read<WalletCubit>(),
         splashCubit: context.read<SplashCubit>(),
+        flavorCubit: context.read<FlavorCubit>(),
       ),
       child: OnBoardingVerifyPhraseView(mnemonic: mnemonic),
     );
