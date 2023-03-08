@@ -25,6 +25,7 @@ Future<void> generateAccount({
     mnemonicFormatted,
   );
 
+  /// did
   final ssiKey = await keyGenerator.jwkFromMnemonic(
     mnemonic: mnemonicFormatted,
     accountType: AccountType.ssi,
@@ -43,6 +44,8 @@ Future<void> generateAccount({
     didMethodName: didMethodName,
     verificationMethod: verificationMethod,
   );
+
+  ///polygon
 
   /// what's new popup disabled
   splashCubit.disableWhatsNewPopUp();
