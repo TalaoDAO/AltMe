@@ -9,7 +9,10 @@ class ManageDIDPage extends StatelessWidget {
   const ManageDIDPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(builder: (_) => const ManageDIDPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => const ManageDIDPage(),
+      settings: const RouteSettings(name: '/ManageDIDPage'),
+    );
   }
 
   @override
@@ -35,10 +38,7 @@ class ManageDIDPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
               child: Divider(),
             ),
-            DidPrivateKey(
-              l10n: l10n,
-              route: DIDPrivateKeyPage.route(),
-            ),
+            DidPrivateKey(route: DIDPrivateKeyPage.route()),
           ],
         ),
       ),

@@ -10,7 +10,10 @@ class ManageDidEbsiPage extends StatefulWidget {
   const ManageDidEbsiPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(builder: (_) => const ManageDidEbsiPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => const ManageDidEbsiPage(),
+      settings: const RouteSettings(name: '/ManageDidEbsiPage'),
+    );
   }
 
   @override
@@ -55,10 +58,7 @@ class _ManageDidEbsiPageState extends State<ManageDidEbsiPage> {
               padding: EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
               child: Divider(),
             ),
-            DidPrivateKey(
-              l10n: l10n,
-              route: DidEbsiPrivateKeyPage.route(),
-            ),
+            DidPrivateKey(route: DidEbsiPrivateKeyPage.route()),
           ],
         ),
       ),
