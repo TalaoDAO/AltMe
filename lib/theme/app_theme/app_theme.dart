@@ -126,7 +126,7 @@ abstract class AppTheme {
         iconTheme: const IconThemeData(color: icon),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: snackBarBackground,
-          contentTextStyle: GoogleFonts.roboto(
+          contentTextStyle: GoogleFonts.poppins(
             color: onPrimary,
             fontSize: 12,
             fontWeight: FontWeight.w400,
@@ -284,18 +284,18 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get keyboardDigitTextStyle =>
-      GoogleFonts.roboto(fontSize: 30, color: digitPrimary);
+      GoogleFonts.poppins(fontSize: 30, color: digitPrimary);
 
-  TextStyle get calculatorKeyboardDigitTextStyle => GoogleFonts.roboto(
+  TextStyle get calculatorKeyboardDigitTextStyle => GoogleFonts.poppins(
         fontSize: 30,
         color: digitPrimary,
         fontWeight: FontWeight.bold,
       );
 
   TextStyle get keyboardDeleteButtonTextStyle =>
-      GoogleFonts.roboto(fontSize: 16, color: digitPrimary);
+      GoogleFonts.poppins(fontSize: 16, color: digitPrimary);
 
-  TextStyle get loadingText => GoogleFonts.roboto(
+  TextStyle get loadingText => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w600,
@@ -337,38 +337,38 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get onBoardingTitleStyle => GoogleFonts.roboto(
+  TextStyle get onBoardingTitleStyle => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 22,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get onBoardingSubTitleStyle => GoogleFonts.roboto(
+  TextStyle get onBoardingSubTitleStyle => GoogleFonts.poppins(
         color: onTertiary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get learnMoreTextStyle => GoogleFonts.roboto(
+  TextStyle get learnMoreTextStyle => GoogleFonts.poppins(
         color: onTertiary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
         decoration: TextDecoration.underline,
       );
 
-  TextStyle get infoTitle => GoogleFonts.roboto(
+  TextStyle get infoTitle => GoogleFonts.poppins(
         color: onSurface,
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get infoSubtitle => GoogleFonts.roboto(
+  TextStyle get infoSubtitle => GoogleFonts.poppins(
         color: onTertiary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get normal => GoogleFonts.roboto(
+  TextStyle get normal => GoogleFonts.poppins(
         color: onTertiary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
@@ -380,7 +380,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get bottomBar => GoogleFonts.roboto(
+  TextStyle get bottomBar => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 10,
         fontWeight: FontWeight.w600,
@@ -392,19 +392,19 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get listTitle => GoogleFonts.roboto(
+  TextStyle get listTitle => GoogleFonts.poppins(
         color: onSurface,
         fontSize: 20,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get listSubtitle => GoogleFonts.roboto(
+  TextStyle get listSubtitle => GoogleFonts.poppins(
         color: onSurface,
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get bodySmall2 => GoogleFonts.roboto(
+  TextStyle get bodySmall2 => GoogleFonts.poppins(
         color: const Color(0xFF8682A8),
         fontSize: 12,
         fontWeight: FontWeight.w400,
@@ -416,31 +416,31 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get listTileTitle => GoogleFonts.roboto(
+  TextStyle get listTileTitle => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 14,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get listTileSubtitle => GoogleFonts.roboto(
+  TextStyle get listTileSubtitle => GoogleFonts.poppins(
         color: const Color(0xFF8682A8),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get close => GoogleFonts.roboto(
+  TextStyle get close => GoogleFonts.poppins(
         color: const Color(0xFFD6C3F2),
         fontSize: 13,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get dialogClose => GoogleFonts.roboto(
+  TextStyle get dialogClose => GoogleFonts.poppins(
         color: closeIcon,
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get drawerMenu => GoogleFonts.roboto(
+  TextStyle get drawerMenu => GoogleFonts.poppins(
         color: onTertiary,
         fontSize: 15,
         fontWeight: FontWeight.w400,
@@ -480,7 +480,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get biometricMessage => GoogleFonts.roboto(
+  TextStyle get biometricMessage => GoogleFonts.poppins(
         color: const Color(0xFFB1ADC3),
         fontSize: 12,
         fontWeight: FontWeight.w400,
@@ -498,7 +498,7 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get getCardsButton => GoogleFonts.roboto(
+  TextStyle get getCardsButton => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 12,
         fontWeight: FontWeight.w600,
@@ -510,123 +510,124 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get credentialTitle => GoogleFonts.roboto(
+  TextStyle get credentialTitle => GoogleFonts.poppins(
         color: const Color(0xFF424242),
         fontSize: 15,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get credentialDescription => GoogleFonts.roboto(
+  TextStyle get credentialDescription => GoogleFonts.poppins(
         color: const Color(0xFF757575),
         fontSize: 13,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialFieldTitle => GoogleFonts.roboto(
+  TextStyle get credentialFieldTitle => GoogleFonts.poppins(
         color: const Color(0xff212121),
         fontSize: 14,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get credentialFieldDescription => GoogleFonts.roboto(
+  TextStyle get credentialFieldDescription => GoogleFonts.poppins(
         color: const Color(0xff212121),
         fontSize: 14,
         height: 1.5,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get discoverFieldTitle => GoogleFonts.roboto(
+  TextStyle get discoverFieldTitle => GoogleFonts.poppins(
         color: onTertiary,
         fontSize: 14,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get discoverFieldDescription => GoogleFonts.roboto(
+  TextStyle get discoverFieldDescription => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 14,
         height: 1.5,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get learningAchievementTitle => GoogleFonts.roboto(
+  TextStyle get learningAchievementTitle => GoogleFonts.poppins(
         color: const Color(0xff212121),
         fontSize: 12,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get learningAchievementDescription => GoogleFonts.roboto(
+  TextStyle get learningAchievementDescription => GoogleFonts.poppins(
         color: const Color(0xff212121),
         fontSize: 12,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialIssuer => GoogleFonts.roboto(
+  TextStyle get credentialIssuer => GoogleFonts.poppins(
         color: const Color(0xff212121),
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get imageCard => GoogleFonts.roboto(
+  TextStyle get imageCard => GoogleFonts.poppins(
         color: const Color(0xff212121),
         fontSize: 12,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get loyaltyCard => GoogleFonts.roboto(
+  TextStyle get loyaltyCard => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 13,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get professionalExperienceAssessmentRating => GoogleFonts.roboto(
+  TextStyle get professionalExperienceAssessmentRating => GoogleFonts.poppins(
         color: const Color(0xff212121),
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get voucherOverlay => GoogleFonts.roboto(
+  TextStyle get voucherOverlay => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 13,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get ecole42LearningAchievementStudentIdentity => GoogleFonts.roboto(
+  TextStyle get ecole42LearningAchievementStudentIdentity =>
+      GoogleFonts.poppins(
         color: const Color(0xff212121),
         fontSize: 6,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get ecole42LearningAchievementLevel => GoogleFonts.roboto(
+  TextStyle get ecole42LearningAchievementLevel => GoogleFonts.poppins(
         color: const Color(0xff212121),
         fontSize: 5,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.roboto(
+  TextStyle get certificateOfEmploymentTitleCard => GoogleFonts.poppins(
         color: const Color(0xFF0650C6),
         fontSize: 20,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get certificateOfEmploymentDescription => GoogleFonts.roboto(
+  TextStyle get certificateOfEmploymentDescription => GoogleFonts.poppins(
         color: const Color(0xFF757575),
         fontSize: 13,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get certificateOfEmploymentData => GoogleFonts.roboto(
+  TextStyle get certificateOfEmploymentData => GoogleFonts.poppins(
         color: const Color(0xFF434e62),
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get identityCardData => GoogleFonts.roboto(
+  TextStyle get identityCardData => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get tezosAssociatedAddressData => GoogleFonts.roboto(
+  TextStyle get tezosAssociatedAddressData => GoogleFonts.poppins(
         color: divider,
         fontSize: 17,
         fontWeight: FontWeight.normal,
@@ -638,67 +639,67 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get credentialStudentCardTextCard => GoogleFonts.roboto(
+  TextStyle get credentialStudentCardTextCard => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 14,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get over18 => GoogleFonts.roboto(
+  TextStyle get over18 => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 20,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get studentCardSchool => GoogleFonts.roboto(
+  TextStyle get studentCardSchool => GoogleFonts.poppins(
         color: const Color(0xff9dc5ff),
         fontSize: 15,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get studentCardData => GoogleFonts.roboto(
+  TextStyle get studentCardData => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 12,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get credentialTitleCard => GoogleFonts.roboto(
+  TextStyle get credentialTitleCard => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 20,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get voucherValueCard => GoogleFonts.roboto(
+  TextStyle get voucherValueCard => GoogleFonts.poppins(
         color: const Color(0xFFFEEA00),
         fontSize: 50,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get credentialTextCard => GoogleFonts.roboto(
+  TextStyle get credentialTextCard => GoogleFonts.poppins(
         color: const Color(0xff212121),
         fontSize: 14,
         fontWeight: FontWeight.normal,
       );
 
-  TextStyle get illustrationPageDescription => GoogleFonts.roboto(
+  TextStyle get illustrationPageDescription => GoogleFonts.poppins(
         color: digitPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get dialogTitle => GoogleFonts.roboto(
+  TextStyle get dialogTitle => GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: digitPrimary,
       );
 
-  TextStyle get dialogSubtitle => GoogleFonts.roboto(
+  TextStyle get dialogSubtitle => GoogleFonts.poppins(
         fontSize: 13,
         fontWeight: FontWeight.w400,
         color: digitPrimary.withOpacity(0.67),
       );
 
-  TextStyle get walletAltme => GoogleFonts.roboto(
+  TextStyle get walletAltme => GoogleFonts.poppins(
         fontSize: 25,
         fontWeight: FontWeight.w600,
         color: const Color(0xff180B2B),
@@ -764,43 +765,43 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff86809D),
       );
 
-  TextStyle get walletAltmeMessage => GoogleFonts.roboto(
+  TextStyle get walletAltmeMessage => GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: const Color(0xff9A8BB1),
       );
 
-  TextStyle get credentialCategoryTitle => GoogleFonts.roboto(
+  TextStyle get credentialCategoryTitle => GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: onSurface,
       );
 
-  TextStyle get credentialCategorySubTitle => GoogleFonts.roboto(
+  TextStyle get credentialCategorySubTitle => GoogleFonts.poppins(
         fontSize: 14,
         fontWeight: FontWeight.normal,
         color: onTertiary,
       );
 
-  TextStyle get credentialSurfaceText => GoogleFonts.roboto(
+  TextStyle get credentialSurfaceText => GoogleFonts.poppins(
         fontSize: 10,
         fontWeight: FontWeight.w400,
         color: applied,
       );
 
-  TextStyle get errorMessage => GoogleFonts.roboto(
+  TextStyle get errorMessage => GoogleFonts.poppins(
         fontSize: 15,
         fontWeight: FontWeight.w400,
         color: onPrimary,
       );
 
-  TextStyle get accountsText => GoogleFonts.roboto(
+  TextStyle get accountsText => GoogleFonts.poppins(
         fontSize: 22,
         fontWeight: FontWeight.w600,
         color: onPrimary,
       );
 
-  TextStyle get accountsName => GoogleFonts.roboto(
+  TextStyle get accountsName => GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.w500,
         color: onPrimary,
@@ -812,19 +813,19 @@ extension CustomTextTheme on TextTheme {
         color: onPrimary,
       );
 
-  TextStyle get walletAddress => GoogleFonts.roboto(
+  TextStyle get walletAddress => GoogleFonts.poppins(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         color: const Color(0xFF757575),
       );
 
-  TextStyle get textButton => GoogleFonts.roboto(
+  TextStyle get textButton => GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w700,
         color: primary,
       );
 
-  TextStyle get scrollText => GoogleFonts.roboto(
+  TextStyle get scrollText => GoogleFonts.poppins(
         fontSize: 9,
         fontWeight: FontWeight.w500,
         color: onPrimary,
@@ -860,12 +861,12 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff86809D),
       );
 
-  TextStyle get identitiyBaseLightText => GoogleFonts.roboto(
+  TextStyle get identitiyBaseLightText => GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w300,
         color: onPrimary,
       );
-  TextStyle get identitiyBaseBoldText => GoogleFonts.roboto(
+  TextStyle get identitiyBaseBoldText => GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: onPrimary,
@@ -884,13 +885,13 @@ extension CustomTextTheme on TextTheme {
         color: onPrimary,
       );
 
-  TextStyle get messageTitle => GoogleFonts.roboto(
+  TextStyle get messageTitle => GoogleFonts.poppins(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: onSurface,
       );
 
-  TextStyle get messageSubtitle => GoogleFonts.roboto(
+  TextStyle get messageSubtitle => GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: onSurface,
@@ -908,115 +909,115 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialManifestTitle1 => GoogleFonts.roboto(
+  TextStyle get credentialManifestTitle1 => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get credentialManifestDescription => GoogleFonts.roboto(
+  TextStyle get credentialManifestDescription => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialManifestTitle2 => GoogleFonts.roboto(
+  TextStyle get credentialManifestTitle2 => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get credentialSubtitle => GoogleFonts.roboto(
+  TextStyle get credentialSubtitle => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 14,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get credentialStatus => GoogleFonts.roboto(
+  TextStyle get credentialStatus => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get beaconRequestPermission => GoogleFonts.roboto(
+  TextStyle get beaconRequestPermission => GoogleFonts.poppins(
         color: onTertiary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get beaconSelectAccont => GoogleFonts.roboto(
+  TextStyle get beaconSelectAccont => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get uploadFileTitle => GoogleFonts.roboto(
+  TextStyle get uploadFileTitle => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get beaconPermissionTitle => GoogleFonts.roboto(
+  TextStyle get beaconPermissionTitle => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       );
 
-  TextStyle get beaconPermissions => GoogleFonts.roboto(
+  TextStyle get beaconPermissions => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get beaconPayload => GoogleFonts.roboto(
+  TextStyle get beaconPayload => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get beaconWalletAddress => GoogleFonts.roboto(
+  TextStyle get beaconWalletAddress => GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: onPrimary,
       );
 
-  TextStyle get dappName => GoogleFonts.roboto(
+  TextStyle get dappName => GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: onPrimary,
       );
 
-  TextStyle get cacheErrorMessage => GoogleFonts.roboto(
+  TextStyle get cacheErrorMessage => GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: onPrimary,
       );
 
-  TextStyle get credentialSteps => GoogleFonts.roboto(
+  TextStyle get credentialSteps => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 18,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get discoverOverlayDescription => GoogleFonts.roboto(
+  TextStyle get discoverOverlayDescription => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 11,
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get faqQue => GoogleFonts.roboto(
+  TextStyle get faqQue => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w700,
       );
 
-  TextStyle get faqAns => GoogleFonts.roboto(
+  TextStyle get faqAns => GoogleFonts.poppins(
         color: const Color(0xFF757575),
         fontSize: 14,
         fontWeight: FontWeight.w400,
       );
 
-  TextStyle get proofCardDetail => GoogleFonts.roboto(
+  TextStyle get proofCardDetail => GoogleFonts.poppins(
         fontSize: 12,
         fontWeight: FontWeight.w300,
         color: const Color(0xffFFFFFF),

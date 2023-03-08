@@ -307,7 +307,7 @@ void main() {
       final brand = tester.widget<Text>(find.byKey(const Key('brand')));
       expect(
         brand.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xFFFFFFFF),
           fontSize: 28,
           fontWeight: FontWeight.w400,
@@ -318,7 +318,7 @@ void main() {
           tester.widget<Text>(find.byKey(const Key('credentialTitle')));
       expect(
         credentialTitle.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xFF424242),
           fontSize: 14,
           fontWeight: FontWeight.bold,
@@ -329,7 +329,7 @@ void main() {
           tester.widget<Text>(find.byKey(const Key('credentialDescription')));
       expect(
         credentialDescription.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xFF757575),
           fontSize: 14,
           fontWeight: FontWeight.bold,
@@ -340,7 +340,7 @@ void main() {
           tester.widget<Text>(find.byKey(const Key('credentialFieldTitle')));
       expect(
         credentialFieldTitle.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xff212121),
           fontSize: 12,
           fontWeight: FontWeight.w400,
@@ -351,7 +351,7 @@ void main() {
           .widget<Text>(find.byKey(const Key('credentialFieldDescription')));
       expect(
         credentialFieldDescription.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xff212121),
           fontSize: 13,
           fontWeight: FontWeight.w600,
@@ -362,7 +362,7 @@ void main() {
           .widget<Text>(find.byKey(const Key('learningAchievementTitle')));
       expect(
         learningAchievementTitle.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xff212121),
           fontSize: 12,
           fontWeight: FontWeight.w600,
@@ -374,7 +374,7 @@ void main() {
       );
       expect(
         learningAchievementDescription.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xff212121),
           fontSize: 12,
           fontWeight: FontWeight.w400,
@@ -385,7 +385,7 @@ void main() {
           tester.widget<Text>(find.byKey(const Key('credentialIssuer')));
       expect(
         credentialIssuer.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xff212121),
           fontSize: 13,
           fontWeight: FontWeight.w500,
@@ -395,7 +395,7 @@ void main() {
       final imageCard = tester.widget<Text>(find.byKey(const Key('imageCard')));
       expect(
         imageCard.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xff212121),
           fontSize: 12,
           fontWeight: FontWeight.w500,
@@ -406,7 +406,7 @@ void main() {
           tester.widget<Text>(find.byKey(const Key('loyaltyCard')));
       expect(
         loyaltyCard.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xffffffff),
           fontSize: 13,
           fontWeight: FontWeight.w600,
@@ -418,7 +418,7 @@ void main() {
       );
       expect(
         professionalExperienceAssessmentRating.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xff212121),
           fontSize: 13,
           fontWeight: FontWeight.w500,
@@ -429,7 +429,7 @@ void main() {
           tester.widget<Text>(find.byKey(const Key('voucherOverlay')));
       expect(
         voucherOverlay.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xffFFFFFF),
           fontSize: 13,
           fontWeight: FontWeight.w500,
@@ -441,7 +441,7 @@ void main() {
       );
       expect(
         ecole42LearningAchievementStudentIdentity.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xff212121),
           fontSize: 6,
           fontWeight: FontWeight.w700,
@@ -453,7 +453,7 @@ void main() {
       );
       expect(
         ecole42LearningAchievementLevel.style,
-        GoogleFonts.roboto(
+        GoogleFonts.poppins(
           color: const Color(0xff212121),
           fontSize: 5,
           fontWeight: FontWeight.w700,
