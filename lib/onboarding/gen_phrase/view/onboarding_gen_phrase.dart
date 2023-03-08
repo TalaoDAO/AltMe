@@ -1,11 +1,17 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
+import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
+import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:key_generator/key_generator.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingGenPhrasePage extends StatelessWidget {
   const OnBoardingGenPhrasePage({super.key});
@@ -18,7 +24,15 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OnBoardingGenPhraseCubit(),
+      create: (context) => OnBoardingGenPhraseCubit(
+        secureStorageProvider: getSecureStorage,
+        didCubit: context.read<DIDCubit>(),
+        didKitProvider: DIDKitProvider(),
+        keyGenerator: KeyGenerator(),
+        homeCubit: context.read<HomeCubit>(),
+        walletCubit: context.read<WalletCubit>(),
+        splashCubit: context.read<SplashCubit>(),
+      ),
       child: const OnBoardingGenPhraseView(),
     );
   }
@@ -133,53 +147,6 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                   ),
                 ),
               ),
-              //const Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(
-                  Sizes.spaceNormal,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Transform.scale(
-                      scale: 1.5,
-                      child: Checkbox(
-                        value: state.isTicked,
-                        fillColor: MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.primary,
-                        ),
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(6),
-                          ),
-                        ),
-                        onChanged: (newValue) => context
-                            .read<OnBoardingGenPhraseCubit>()
-                            .switchTick(),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: Sizes.spaceXSmall,
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          context.read<OnBoardingGenPhraseCubit>().switchTick();
-                        },
-                        child: MyText(
-                          l10n.onboardingWroteDownMessage,
-                          style: Theme.of(context)
-                              .textTheme
-                              .onBoardingCheckMessage,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
           navigation: SafeArea(
@@ -188,18 +155,31 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                 horizontal: Sizes.spaceSmall,
                 vertical: Sizes.spaceSmall,
               ),
-              child: MyGradientButton(
-                text: l10n.onBoardingGenPhraseButton,
-                verticalSpacing: 18,
-                onPressed: state.isTicked
-                    ? () {
-                        Navigator.of(context).push(
-                          OnBoardingVerifyPhrasePage.route(
-                            mnemonic: mnemonic!,
-                          ),
-                        );
-                      }
-                    : null,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MyGradientButton(
+                    text: l10n.verifyLater,
+                    verticalSpacing: 18,
+                    onPressed: () async {
+                      await context
+                          .read<OnBoardingGenPhraseCubit>()
+                          .generateSSIAndCryptoAccount(mnemonic!);
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  MyGradientButton(
+                    text: l10n.verifyNow,
+                    verticalSpacing: 18,
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        OnBoardingVerifyPhrasePage.route(
+                          mnemonic: mnemonic!,
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ),
