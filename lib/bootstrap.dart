@@ -15,6 +15,7 @@ import 'package:dartez/dartez.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:workmanager/workmanager.dart';
 
@@ -125,6 +126,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   );
 
   await Dartez().init();
+
+  /// PolygonId SDK initialization
+  await PolygonId().init();
 
   await runZonedGuarded(
     () async {

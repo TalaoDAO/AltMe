@@ -7,6 +7,7 @@ import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class DashboardPage extends StatelessWidget {
