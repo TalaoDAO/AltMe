@@ -221,6 +221,24 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         final credentials = List.of(state.gamingCredentials)
           ..insert(0, HomeCredential.isNotDummy(credential));
         emit(state.populate(gamingCredentials: credentials));
+
+        final credentialSubjectType = credential
+            .credentialPreview.credentialSubjectModel.credentialSubjectType;
+
+        if (credentialSubjectType ==
+                CredentialSubjectType.tezotopiaMembership ||
+            credentialSubjectType ==
+                CredentialSubjectType.chainbornMembership ||
+            credentialSubjectType == CredentialSubjectType.bloometaPass ||
+            credentialSubjectType == CredentialSubjectType.tezVoucher ||
+            credentialSubjectType == CredentialSubjectType.voucher) {
+          _removeDummyIfCredentialExist(
+            credentials,
+            gamingCategories,
+            credentialSubjectType,
+          );
+        }
+
         break;
 
       case CredentialCategory.communityCards:
@@ -240,18 +258,6 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         final credentialSubjectType = credential
             .credentialPreview.credentialSubjectModel.credentialSubjectType;
         switch (credentialSubjectType) {
-          case CredentialSubjectType.tezotopiaMembership:
-          case CredentialSubjectType.bloometaPass:
-          case CredentialSubjectType.chainbornMembership:
-          case CredentialSubjectType.voucher:
-          case CredentialSubjectType.tezVoucher:
-            _removeDummyIfCredentialExist(
-              credentials,
-              gamingCategories,
-              credentialSubjectType,
-            );
-            break;
-
           case CredentialSubjectType.ageRange:
           case CredentialSubjectType.nationality:
           case CredentialSubjectType.identityPass:
@@ -269,6 +275,11 @@ class CredentialListCubit extends Cubit<CredentialListState> {
             );
             break;
 
+          case CredentialSubjectType.tezotopiaMembership:
+          case CredentialSubjectType.bloometaPass:
+          case CredentialSubjectType.chainbornMembership:
+          case CredentialSubjectType.voucher:
+          case CredentialSubjectType.tezVoucher:
           case CredentialSubjectType.linkedInCard:
           case CredentialSubjectType.tezosAssociatedWallet:
           case CredentialSubjectType.ethereumAssociatedWallet:

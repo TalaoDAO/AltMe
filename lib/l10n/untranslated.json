@@ -742,7 +742,9 @@
     "contractAddress",
     "lastMetadataSync",
     "e2eEncyptedChat",
-    "pincodeAttemptMessage"
+    "pincodeAttemptMessage",
+    "verifyNow",
+    "verifyLater"
   ],
 
   "es": [
@@ -1488,7 +1490,9 @@
     "contractAddress",
     "lastMetadataSync",
     "e2eEncyptedChat",
-    "pincodeAttemptMessage"
+    "pincodeAttemptMessage",
+    "verifyNow",
+    "verifyLater"
   ],
 
   "fr": [
@@ -1517,7 +1521,9 @@
     "contractAddress",
     "lastMetadataSync",
     "e2eEncyptedChat",
-    "pincodeAttemptMessage"
+    "pincodeAttemptMessage",
+    "verifyNow",
+    "verifyLater"
   ],
 
   "it": [
@@ -2263,6 +2269,8 @@
     "contractAddress",
     "lastMetadataSync",
     "e2eEncyptedChat",
-    "pincodeAttemptMessage"
+    "pincodeAttemptMessage",
+    "verifyNow",
+    "verifyLater"
   ]
 }

@@ -15,6 +15,7 @@ class WalletDialog extends StatelessWidget {
     final l10n = context.l10n;
     return AlertDialog(
       backgroundColor: Theme.of(context).colorScheme.popupBackground,
+      surfaceTintColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),

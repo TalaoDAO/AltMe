@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:altme/app/shared/shared.dart';
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/dashboard/home/tab_bar/tab_bar.dart';
@@ -37,7 +37,7 @@ Future<void> getMutipleCredentials(
     secureStorageProvider,
     preAuthorizedCode,
   );
-// Wait 1 minute to let passbase verification time to happen
+  // Wait 1 minute to let passbase verification time to happen
   await multipleCredentialsTimer(
     preAuthorizedCode,
     client,
@@ -250,10 +250,8 @@ Future<void> registerMultipleCredentialsProcess(
 Future<void> unregisterMultipleCredentialsProcess(
   secure_storage.SecureStorageProvider secureStorageProvider,
 ) async {
-  await secureStorageProvider.set(
-    SecureStorageKeys.passBaseVerificationDate,
-    '',
-  );
+  await secureStorageProvider
+      .delete(SecureStorageKeys.passBaseVerificationDate);
 }
 
 Future<bool> isGettingMultipleCredentialsNeeded(

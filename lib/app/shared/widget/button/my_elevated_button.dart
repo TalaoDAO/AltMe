@@ -10,7 +10,7 @@ class MyElevatedButton extends StatelessWidget {
     this.icon,
     this.backgroundColor,
     this.textColor,
-    this.borderRadius = 20,
+    this.borderRadius = 18,
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,

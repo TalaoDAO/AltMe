@@ -31,6 +31,7 @@ class WhatIsNewDialog extends StatelessWidget {
     return SafeArea(
       child: AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.popupBackground,
+        surfaceTintColor: Colors.transparent,
         contentPadding: const EdgeInsets.all(Sizes.spaceXSmall),
         insetPadding: const EdgeInsets.symmetric(
           horizontal: Sizes.spaceSmall,
@@ -41,7 +42,8 @@ class WhatIsNewDialog extends StatelessWidget {
             Radius.circular(Sizes.normalRadius),
           ),
         ),
-        content: SizedBox(
+        content: Container(
+          //color: Theme.of(context).colorScheme.popupBackground,
           width: double.maxFinite,
           child: Stack(
             children: [

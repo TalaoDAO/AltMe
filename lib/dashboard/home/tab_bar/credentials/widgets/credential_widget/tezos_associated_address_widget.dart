@@ -6,20 +6,20 @@ import 'package:flutter/material.dart';
 class TezosAssociatedAddressWidget extends StatelessWidget {
   const TezosAssociatedAddressWidget({
     super.key,
-    required this.credentialModel,
+    this.credentialModel,
   });
 
-  final CredentialModel credentialModel;
+  final CredentialModel? credentialModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final associatedAddress = credentialModel.credentialPreview
-        .credentialSubjectModel as TezosAssociatedAddressModel;
+    final associatedAddress = credentialModel?.credentialPreview
+        .credentialSubjectModel as TezosAssociatedAddressModel?;
     return MyBlockchainAccountBaseWidget(
       image: IconStrings.tezos,
       name: l10n.tezosNetwork,
-      walletAddress: associatedAddress.associatedAddress ?? '',
+      walletAddress: associatedAddress?.associatedAddress ?? '',
     );
   }
 }

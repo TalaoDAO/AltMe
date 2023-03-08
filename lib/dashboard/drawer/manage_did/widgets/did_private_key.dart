@@ -8,15 +8,14 @@ import 'package:flutter/material.dart';
 class DidPrivateKey extends StatelessWidget {
   const DidPrivateKey({
     super.key,
-    required this.l10n,
     required this.route,
   });
 
-  final AppLocalizations l10n;
   final Route<dynamic> route;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       children: [
         const SizedBox(
@@ -55,10 +54,7 @@ class DidPrivateKey extends StatelessWidget {
                 PinCodePage.route(
                   restrictToBack: false,
                   isValidCallback: () {
-                    Navigator.push<void>(
-                      context,
-                      route,
-                    );
+                    Navigator.push<void>(context, route);
                   },
                 ),
               );

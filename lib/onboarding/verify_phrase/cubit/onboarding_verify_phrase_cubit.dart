@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
+import 'package:altme/flavor/flavor.dart';
 import 'package:altme/onboarding/helper_function/helper_function.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -25,6 +26,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     required this.homeCubit,
     required this.walletCubit,
     required this.splashCubit,
+    required this.flavorCubit,
   }) : super(OnBoardingVerifyPhraseState());
 
   final SecureStorageProvider secureStorageProvider;
@@ -33,6 +35,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
   final DIDCubit didCubit;
   final HomeCubit homeCubit;
   final WalletCubit walletCubit;
+  final FlavorCubit flavorCubit;
   final SplashCubit splashCubit;
 
   final log = getLogger('OnBoardingVerifyPhraseCubit');
@@ -44,7 +47,10 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     for (var i = 1; i <= 12; i++) {
       oldState.add(MnemonicState(order: i));
     }
-    oldState.shuffle();
+    if (flavorCubit.state != FlavorMode.development) {
+      oldState.shuffle();
+    }
+
     emit(state.copyWith(mnemonicStates: oldState, status: AppStatus.idle));
   }
 

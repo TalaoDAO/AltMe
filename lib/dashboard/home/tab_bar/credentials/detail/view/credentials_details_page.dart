@@ -132,9 +132,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                 .credentialSubjectModel.credentialSubjectType ==
             CredentialSubjectType.linkedInCard;
 
-        final bool isEUDiplomaCard = widget.credentialModel.credentialPreview
-                .credentialSubjectModel.credentialSubjectType ==
-            CredentialSubjectType.euDiplomaCard;
+        final bool isEbsiCard = widget.credentialModel.credentialPreview
+            .credentialSubjectModel.credentialSubjectType.isEbsiCard;
 
         final bool disAllowDelete = widget.credentialModel.credentialPreview
                     .credentialSubjectModel.credentialSubjectType ==
@@ -256,7 +255,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               : SafeArea(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
+                      horizontal: 12,
                       vertical: 5,
                     ),
                     child: Column(
@@ -279,7 +278,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                 ),
                               );
                             } else {
-                              if (isEUDiplomaCard) {
+                              if (isEbsiCard) {
                                 /// removing type that was added in add_ebsi_credential.dart // ignore: lines_longer_than_80_chars
                                 widget.credentialModel.data['credentialSubject']
                                     .remove('type');

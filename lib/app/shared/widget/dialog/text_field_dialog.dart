@@ -59,6 +59,7 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
 
     return AlertDialog(
       backgroundColor: background,
+      surfaceTintColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       shape: RoundedRectangleBorder(
         side: BorderSide(

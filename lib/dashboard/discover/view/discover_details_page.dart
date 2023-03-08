@@ -59,6 +59,7 @@ class DiscoverDetailsView extends StatelessWidget {
     return BasePage(
       title: l10n.cardDetails,
       scrollView: false,
+      titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       body: BackgroundCard(
         child: Column(

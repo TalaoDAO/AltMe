@@ -251,6 +251,14 @@ class HomeCredential extends Equatable {
         link = Urls.bloometaCardUrl;
         break;
 
+      case CredentialSubjectType.ethereumAssociatedWallet:
+      case CredentialSubjectType.fantomAssociatedWallet:
+      case CredentialSubjectType.polygonAssociatedWallet:
+      case CredentialSubjectType.binanceAssociatedWallet:
+      case CredentialSubjectType.tezosAssociatedWallet:
+        image = ImageStrings.myAccountCard;
+        break;
+
       case CredentialSubjectType.voucher:
       case CredentialSubjectType.selfIssued:
       case CredentialSubjectType.defaultCredential:
@@ -262,7 +270,6 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.identityPass:
       case CredentialSubjectType.ecole42LearningAchievement:
       case CredentialSubjectType.studentCard:
-      case CredentialSubjectType.tezosAssociatedWallet:
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.diplomaCard:
@@ -271,11 +278,7 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.aragoLearningAchievement:
       case CredentialSubjectType.aragoOver18:
       case CredentialSubjectType.aragoPass:
-      case CredentialSubjectType.ethereumAssociatedWallet:
       case CredentialSubjectType.pcdsAgentCertificate:
-      case CredentialSubjectType.fantomAssociatedWallet:
-      case CredentialSubjectType.polygonAssociatedWallet:
-      case CredentialSubjectType.binanceAssociatedWallet:
       case CredentialSubjectType.tezosPooAddress:
       case CredentialSubjectType.ethereumPooAddress:
       case CredentialSubjectType.fantomPooAddress:

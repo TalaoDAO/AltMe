@@ -10,7 +10,7 @@ class MyOutlinedButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.borderColor,
-    this.borderRadius = 50,
+    this.borderRadius = 18,
     this.verticalSpacing = 15,
     this.elevation = 2,
     this.fontSize = 18,

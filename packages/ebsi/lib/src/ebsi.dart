@@ -64,10 +64,10 @@ class Ebsi {
     final ay = HEX.decode(my);
     final y = base64Url.encode(ay).substring(0, 43);
     // ATTENTION !!!!!
-    /// we are using P-256K for dart library conformance which is
-    /// the same as secp256k1
+    /// we were using P-256K for dart library conformance which is
+    /// the same as secp256k1, but we are using secp256k1 now
     final jwk = {
-      'crv': 'P-256K',
+      'crv': 'secp256k1',
       'd': d,
       'kty': 'EC',
       'x': x,

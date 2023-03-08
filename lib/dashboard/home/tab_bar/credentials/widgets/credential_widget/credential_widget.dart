@@ -21,6 +21,7 @@ export 'email_pass_widget.dart';
 export 'ethereum_associated_address_widget.dart';
 export 'ethereum_poo_address_widget.dart';
 export 'eu_diploma_card_widget.dart';
+export 'eu_verifiable_id_widget.dart';
 export 'fantom_associated_address_widget.dart';
 export 'fantom_poo_address_widget.dart';
 export 'gender_widget.dart';

@@ -6,20 +6,20 @@ import 'package:flutter/material.dart';
 class PolygonAssociatedAddressWidget extends StatelessWidget {
   const PolygonAssociatedAddressWidget({
     super.key,
-    required this.credentialModel,
+    this.credentialModel,
   });
 
-  final CredentialModel credentialModel;
+  final CredentialModel? credentialModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final associatedAddress = credentialModel.credentialPreview
-        .credentialSubjectModel as PolygonAssociatedAddressModel;
+    final associatedAddress = credentialModel?.credentialPreview
+        .credentialSubjectModel as PolygonAssociatedAddressModel?;
     return MyBlockchainAccountBaseWidget(
       image: IconStrings.polygon,
       name: l10n.polygonNetwork,
-      walletAddress: associatedAddress.associatedAddress ?? '',
+      walletAddress: associatedAddress?.associatedAddress ?? '',
     );
   }
 }

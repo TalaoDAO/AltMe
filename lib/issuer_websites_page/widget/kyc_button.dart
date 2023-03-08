@@ -68,6 +68,7 @@ class KYCButton extends StatelessWidget {
                 builder: (context) => AlertDialog(
                   backgroundColor:
                       Theme.of(context).colorScheme.popupBackground,
+                  surfaceTintColor: Colors.transparent,
                   contentPadding: const EdgeInsets.only(
                     top: 24,
                     bottom: 16,

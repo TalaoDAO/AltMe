@@ -144,6 +144,8 @@ extension CustomColorScheme on ColorScheme {
 
   Color get greyText => onTertiary;
 
+  Color get kycKeyIconColor => const Color(0xFF86809D);
+
   Color get popupBackground => const Color(0xff271C38);
 
   Color get cardHighlighted => cardHighlight;
@@ -717,19 +719,19 @@ extension CustomTextTheme on TextTheme {
   TextStyle get defaultDialogTitle => GoogleFonts.poppins(
         fontSize: 25,
         fontWeight: FontWeight.bold,
-        color: const Color(0xff180B2B),
+        color: const Color(0xffF5F5F5),
       );
 
   TextStyle get defaultDialogBody => GoogleFonts.poppins(
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF5F556F),
+        color: const Color(0xFF86809D),
       );
 
   TextStyle get defaultDialogSubtitle => GoogleFonts.poppins(
         fontSize: 20,
         fontWeight: FontWeight.bold,
-        color: const Color(0xff180B2B),
+        color: const Color(0xff86809D),
       );
 
   TextStyle get newVersionTitle => GoogleFonts.nunito(
@@ -741,7 +743,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get kycDialogTitle => GoogleFonts.nunito(
         fontSize: 25,
         fontWeight: FontWeight.bold,
-        color: const Color(0xff180B2B),
+        color: const Color(0xffF5F5F5),
       );
 
   TextStyle get kycDialogBodySmall => GoogleFonts.poppins(
@@ -753,13 +755,13 @@ extension CustomTextTheme on TextTheme {
   TextStyle get kycDialogBody => GoogleFonts.poppins(
         fontSize: 14,
         fontWeight: FontWeight.w700,
-        color: const Color(0xFF180B2B),
+        color: const Color(0xff86809D),
       );
 
   TextStyle get kycDialogFooter => GoogleFonts.poppins(
         fontSize: 10,
         fontWeight: FontWeight.w500,
-        color: const Color(0xFF180B2B),
+        color: const Color(0xff86809D),
       );
 
   TextStyle get walletAltmeMessage => GoogleFonts.roboto(
