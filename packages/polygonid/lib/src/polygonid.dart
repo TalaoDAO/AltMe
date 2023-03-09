@@ -32,6 +32,7 @@ class PolygonId {
   /// security system, you can find the privateKey in the PrivateIdentityEntity
   /// object.
   ///
+
   Future<void> createIdentity() async {
     //we get the sdk instance previously initialized
     final sdk = PolygonIdSdk.I;
@@ -39,10 +40,7 @@ class PolygonId {
       blockchain: 'polygon',
       network: 'main',
     );
-    print(identity.privateKey);
     print(identity.did);
-    print(identity.publicKey);
-    print(identity.profiles);
   }
 
   /// create JWK from mnemonic
