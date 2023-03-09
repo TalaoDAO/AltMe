@@ -256,10 +256,6 @@ $ ./install_altme.sh -android
 $ ./install_altme.sh -ios
 ```
 
-#### Note
-
-Please check the [Setting Up PolygonID Flutter SDK] section for complete setup of polygonid-flutter-sdk.
-
 ## Generate missing .g.dart file
 
 In order to generate all \*.g.dart files, run the following command:
@@ -290,6 +286,10 @@ keys:
 
 6. MORALIS_API_KEY<br />
    You can get this key from [`here`](https://docs.moralis.io/web3-data-api/get-your-api-key).
+
+#### Note
+
+Please check the [Setting Up PolygonID Flutter SDK] section for key-dependencies of polygonid-flutter-sdk.
 
 ## Building Altme
 
