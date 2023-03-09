@@ -11,14 +11,16 @@ class SecureStorageProvider {
 
   final FlutterSecureStorage _storage;
 
-  IOSOptions get _defaultIOSOptions => const IOSOptions(
-        accessibility: IOSAccessibility.unlocked_this_device,
-      );
+  IOSOptions get _defaultIOSOptions =>
+      const IOSOptions(accessibility: KeychainAccessibility.first_unlock);
 
   ///get
   Future<String?> get(String key) async {
     try {
-      return await _storage.read(key: key);
+      return await _storage.read(
+        key: key,
+        iOptions: _defaultIOSOptions,
+      );
     } catch (e) {
       return null;
     }
@@ -29,7 +31,6 @@ class SecureStorageProvider {
     return _storage.write(
       key: key,
       value: val,
-      iOptions: _defaultIOSOptions,
     );
   }
 
@@ -37,7 +38,6 @@ class SecureStorageProvider {
   Future<void> delete(String key) async {
     return _storage.delete(
       key: key,
-      iOptions: _defaultIOSOptions,
     );
   }
 

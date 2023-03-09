@@ -1,56 +1,81 @@
-if [[ "$*" == *-build_runner* ]]; 
-then
-  echo "build runner"
-  fvm flutter clean
+
+function pub {
+  for d in `ls packages`;
+  do
+    (
+      cd "packages/$d"
+      flutter pub get
+    )
+  done 
   fvm flutter pub get
+}
+
+function buildRunner {
+  echo "build_runner"
+  for d in `ls packages`;
+  do
+    (
+      echo "$d"
+      cd "packages/$d"
+      flutter packages pub run build_runner build --delete-conflicting-outputs
+    )
+  done 
   fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+}
+
+function podUpdate {
+  echo "pod install"
+  cd ios
+  pod install
+  pod update
+  cd ..
+
+}
+
+
+if [[ "$*" == *-runDev* ]]; 
+then
+  echo "flutter run development"
+  fvm flutter run --flavor development --target lib/main_development.dart
+
+elif [[ "$*" == *-runstage* ]]; 
+then
+  echo "flutter run staging"
+  fvm flutter run --flavor staging --target lib/main_staging.dart
 
 elif [[ "$*" == *-run* ]]; 
 then
-  echo "flutter run"
+  echo "flutter run production"
   fvm flutter run --flavor production --target lib/main_production.dart
 
-elif [[ "$*" == *-pod$sinstall* ]]; 
+elif [[ "$*" == *-pod* ]]; 
 then 
-  echo "pod install"
-  cd ios
-  pod install
-  cd ..
-
-elif [[ "$*" == *-build$sappbundle* ]]; 
+  podUpdate
+elif [[ "$*" == *-android* ]]; 
 then 
-  echo "app bundle"
+  pub
+  buildRunner
+  echo "deploy android"
+  echo "Make sure you are in right branch"
   fvm flutter build appbundle --flavor "production" --target "lib/main_production.dart"
+  # cd android 
+  # fastlane deploy
+  echo "app bundle deployed on internal testing track"
 
-elif [[ "$*" == *-deploy$sios* ]]; 
+elif [[ "$*" == *-ios* ]]; 
 then 
+  pub
+  buildRunner
+  podUpdate
   echo "deploy ios"
   echo "Make sure you are in right branch"
-  fvm flutter build ios --release 
+  fvm flutter build ios --release --flavor "production" --target "lib/main_production.dart"
   cd ios 
   fastlane beta
-  cd ..
-
-elif [[ "$*" == *-completeIos* ]]; 
-then 
-  echo "build runner"
-  fvm flutter clean
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs
-  echo "pod install"
-  cd ios
-  pod install
-  cd ..
-  echo "deploy ios"
-  echo "Make sure you are in right branch"
-  fvm flutter build ios --release
-  cd ios 
-  fastlane beta
-  cd ..
-
+elif [[ "$*" == *-pub* ]];
+then
+pub
 else
-  echo "build runner"
-  fvm flutter clean
-  fvm flutter pub get
-  fvm flutter packages pub run build_runner build --delete-conflicting-outputs  
+  pub
+  buildRunner
 fi
