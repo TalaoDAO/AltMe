@@ -211,7 +211,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get qrScanOuterShadow => const Color(0xff430F91);
 
-  Color get dialogText => const Color(0xFF180B2B);
+  Color get dialogText => const Color(0xffF5F5F5);
 
   Color get tabBarNotSelected => const Color(0xFF280164);
 
@@ -656,26 +656,8 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w600,
       );
 
-  TextStyle get dialogTitle => GoogleFonts.roboto(
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-        color: Colors.white,
-      );
-
-  TextStyle get dialogSubtitle => GoogleFonts.roboto(
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-        color: Colors.white.withOpacity(0.67),
-      );
-
-  TextStyle get walletAltme => GoogleFonts.roboto(
-        fontSize: 25,
-        fontWeight: FontWeight.w600,
-        color: const Color(0xff180B2B),
-      );
-
   TextStyle get defaultDialogTitle => GoogleFonts.nunito(
-        fontSize: 25,
+        fontSize: 24,
         fontWeight: FontWeight.bold,
         color: const Color(0xffF5F5F5),
       );
@@ -687,7 +669,7 @@ extension CustomTextTheme on TextTheme {
       );
 
   TextStyle get defaultDialogSubtitle => GoogleFonts.nunito(
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: FontWeight.bold,
         color: const Color(0xff86809D),
       );
@@ -720,12 +702,6 @@ extension CustomTextTheme on TextTheme {
         fontSize: 10,
         fontWeight: FontWeight.w500,
         color: const Color(0xff86809D),
-      );
-
-  TextStyle get walletAltmeMessage => GoogleFonts.roboto(
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        color: const Color(0xff9A8BB1),
       );
 
   TextStyle get credentialCategoryTitle => GoogleFonts.roboto(

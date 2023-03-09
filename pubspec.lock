@@ -1725,7 +1725,7 @@ packages:
       path: "../polygonid-flutter-sdk"
       relative: true
     source: path
-    version: "2.0.0"
+    version: "2.1.1"
   pool:
     dependency: transitive
     description:

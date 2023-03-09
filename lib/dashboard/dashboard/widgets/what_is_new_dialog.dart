@@ -43,14 +43,9 @@ class WhatIsNewDialog extends StatelessWidget {
           ),
         ),
         content: SizedBox(
-          //color: Theme.of(context).colorScheme.popupBackground,
           width: double.maxFinite,
           child: Stack(
             children: [
-              const Align(
-                alignment: Alignment.topRight,
-                child: WhiteCloseButton(),
-              ),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -63,7 +58,6 @@ class WhatIsNewDialog extends StatelessWidget {
                           right: Sizes.spaceXLarge,
                         ),
                         child: Column(
-                          //mainAxisSize: MainAxisSize.min,
                           children: [
                             const AltMeLogo(
                               color: Colors.white,
@@ -221,7 +215,10 @@ class WhatIsNewDialog extends StatelessWidget {
                   )
                 ],
               ),
-            ],
+            const Align(
+                alignment: Alignment.topRight,
+                child: WhiteCloseButton(),
+              ),],
           ),
         ),
       ),
