@@ -59,12 +59,12 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
             .replaceAll(',', ''),
       );
 
-      final operationsList = await client.transferOperation(
-        source: sourceKeystore,
-        destination: state.withdrawalAddress,
-        amount: amount,
-        customFee: customFee,
-      );
+      // final operationsList = await client.transferOperation(
+      //   source: sourceKeystore,
+      //   destination: state.withdrawalAddress,
+      //   amount: amount,
+      //   customFee: customFee,
+      // );
       logger.i(
         'before execute: withdrawal from secretKey: ${sourceKeystore.secretKey}'
         ' , publicKey: ${sourceKeystore.publicKey} '
@@ -74,7 +74,7 @@ class ConfirmWithdrawalCubit extends Cubit<ConfirmWithdrawalState> {
         '${state.withdrawalAddress}',
       );
       // ignore: unawaited_futures
-      operationsList.executeAndMonitor();
+      // operationsList.executeAndMonitor();
       logger.i('after withdrawal execute');
       emit(state.success());
     } catch (e, s) {

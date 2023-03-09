@@ -14,7 +14,8 @@ dependencies:
   secp256k1: ^0.3.0
   tezart:
     git:
-     url: https://github.com/TalebRafiepour/tezart.git
+      url: https://github.com/autonomy-system/tezart.git
+      ref: bd4b8db6e3a352590a6e556d31df8aef60db3465
 
 dev_dependencies:
   coverage: ^1.1.0
