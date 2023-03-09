@@ -69,7 +69,7 @@ then
   podUpdate
   echo "deploy ios"
   echo "Make sure you are in right branch"
-  fvm flutter build ios --release --flavor "production" --target "lib/main_production.dart"
+  fvm flutter build ios --release
   cd ios 
   fastlane beta
 elif [[ "$*" == *-pub* ]];
