@@ -79,7 +79,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
       for (final e in queryByExampleCubit.credentialQuery) {
         final _reason = e.reason;
         if (_reason != null) {
-          reasonList += '${GetTranslation.getTranslation(_reason, l10n)}\n';
+          reasonList += _reason;
         }
       }
     }
