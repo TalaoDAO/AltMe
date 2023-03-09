@@ -14,13 +14,24 @@ import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class OnBoardingVerifyPhrasePage extends StatelessWidget {
-  const OnBoardingVerifyPhrasePage({required this.mnemonic, super.key});
+  const OnBoardingVerifyPhrasePage({
+    required this.mnemonic,
+    required this.isFromOnboarding,
+    super.key,
+  });
 
   final List<String> mnemonic;
+  final bool isFromOnboarding;
 
-  static Route<dynamic> route({required List<String> mnemonic}) =>
+  static Route<dynamic> route({
+    required List<String> mnemonic,
+    required bool isFromOnboarding,
+  }) =>
       MaterialPageRoute<void>(
-        builder: (context) => OnBoardingVerifyPhrasePage(mnemonic: mnemonic),
+        builder: (context) => OnBoardingVerifyPhrasePage(
+          mnemonic: mnemonic,
+          isFromOnboarding: isFromOnboarding,
+        ),
         settings: const RouteSettings(name: '/OnBoardingVerifyPhrasePage'),
       );
 
@@ -37,15 +48,23 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
         splashCubit: context.read<SplashCubit>(),
         flavorCubit: context.read<FlavorCubit>(),
       ),
-      child: OnBoardingVerifyPhraseView(mnemonic: mnemonic),
+      child: OnBoardingVerifyPhraseView(
+        mnemonic: mnemonic,
+        isFromOnboarding: isFromOnboarding,
+      ),
     );
   }
 }
 
 class OnBoardingVerifyPhraseView extends StatefulWidget {
-  const OnBoardingVerifyPhraseView({required this.mnemonic, super.key});
+  const OnBoardingVerifyPhraseView({
+    required this.mnemonic,
+    required this.isFromOnboarding,
+    super.key,
+  });
 
   final List<String> mnemonic;
+  final bool isFromOnboarding;
 
   @override
   State<OnBoardingVerifyPhraseView> createState() =>
@@ -83,12 +102,19 @@ class _OnBoardingVerifyPhraseViewState
         }
 
         if (state.status == AppStatus.success) {
-          context.read<LiveChatCubit>().init();
-          Navigator.pushAndRemoveUntil<void>(
-            context,
-            WalletReadyPage.route(),
-            (Route<dynamic> route) => route.isFirst,
-          );
+          if (widget.isFromOnboarding) {
+            context.read<LiveChatCubit>().init();
+            Navigator.pushAndRemoveUntil<void>(
+              context,
+              WalletReadyPage.route(),
+              (Route<dynamic> route) => route.isFirst,
+            );
+          } else {
+            Navigator.pushReplacement<void, void>(
+              context,
+              KeyVerifiedPage.route(),
+            );
+          }
         }
       },
       builder: (context, state) {
@@ -102,11 +128,13 @@ class _OnBoardingVerifyPhraseViewState
               ? Container()
               : Column(
                   children: [
-                    const MStepper(
-                      step: 4,
-                      totalStep: 4,
-                    ),
-                    const SizedBox(height: Sizes.spaceNormal),
+                    if (widget.isFromOnboarding) ...[
+                      const MStepper(
+                        step: 3,
+                        totalStep: 3,
+                      ),
+                      const SizedBox(height: Sizes.spaceNormal),
+                    ],
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: Sizes.spaceNormal,
@@ -215,7 +243,10 @@ class _OnBoardingVerifyPhraseViewState
                     ? () async {
                         await context
                             .read<OnBoardingVerifyPhraseCubit>()
-                            .generateSSIAndCryptoAccount(widget.mnemonic);
+                            .generateSSIAndCryptoAccount(
+                              mnemonic: widget.mnemonic,
+                              isFromOnboarding: widget.isFromOnboarding,
+                            );
                       }
                     : null,
               ),

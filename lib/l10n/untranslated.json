@@ -744,7 +744,9 @@
     "e2eEncyptedChat",
     "pincodeAttemptMessage",
     "verifyNow",
-    "verifyLater"
+    "verifyLater",
+    "welDone",
+    "mnemonicsVerifiedMessage"
   ],
 
   "es": [
@@ -1492,7 +1494,9 @@
     "e2eEncyptedChat",
     "pincodeAttemptMessage",
     "verifyNow",
-    "verifyLater"
+    "verifyLater",
+    "welDone",
+    "mnemonicsVerifiedMessage"
   ],
 
   "fr": [
@@ -1523,7 +1527,9 @@
     "e2eEncyptedChat",
     "pincodeAttemptMessage",
     "verifyNow",
-    "verifyLater"
+    "verifyLater",
+    "welDone",
+    "mnemonicsVerifiedMessage"
   ],
 
   "it": [
@@ -2271,6 +2277,8 @@
     "e2eEncyptedChat",
     "pincodeAttemptMessage",
     "verifyNow",
-    "verifyLater"
+    "verifyLater",
+    "welDone",
+    "mnemonicsVerifiedMessage"
   ]
 }

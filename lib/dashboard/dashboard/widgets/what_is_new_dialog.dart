@@ -42,7 +42,7 @@ class WhatIsNewDialog extends StatelessWidget {
             Radius.circular(Sizes.normalRadius),
           ),
         ),
-        content: Container(
+        content: SizedBox(
           //color: Theme.of(context).colorScheme.popupBackground,
           width: double.maxFinite,
           child: Stack(

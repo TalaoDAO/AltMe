@@ -68,4 +68,6 @@ class SecureStorageKeys {
   static const String recoverCredentialMnemonics = 'recoverCredentialMnemonics';
   static const String version = 'version';
   static const String buildNumber = 'buildNumber';
+
+  static const String hasVerifiedMnemonics = 'hasVerifiedMnemonics';
 }

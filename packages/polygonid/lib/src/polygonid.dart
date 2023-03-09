@@ -40,7 +40,7 @@ class PolygonId {
       blockchain: 'polygon',
       network: 'main',
     );
-    print(identity.did);
+    //print(identity.did);
   }
 
   /// create JWK from mnemonic

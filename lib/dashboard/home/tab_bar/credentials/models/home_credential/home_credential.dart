@@ -285,6 +285,7 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.polygonPooAddress:
       case CredentialSubjectType.binancePooAddress:
       case CredentialSubjectType.euDiplomaCard:
+      case CredentialSubjectType.euVerifiableId:
         break;
     }
 

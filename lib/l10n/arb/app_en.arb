@@ -808,5 +808,8 @@
   "e2eEncyptedChat": "Chat is encrypted from end to end.",
   "pincodeAttemptMessage": "You have entered an incorrect PIN code three times. For security reasons, please wait for one minute before trying again.",
   "verifyNow": "Verify Now",
-  "verifyLater": "Verify Later"
+  "verifyLater": "Verify Later",
+  "welDone": "Well done!",
+  "mnemonicsVerifiedMessage": "Your revovery phrase is saved correctly.",
+  "letsGo": "Let's Go"
 }

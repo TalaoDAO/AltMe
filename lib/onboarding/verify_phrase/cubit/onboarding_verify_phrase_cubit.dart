@@ -105,19 +105,27 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     }
   }
 
-  Future<void> generateSSIAndCryptoAccount(List<String> mnemonic) async {
+  Future<void> generateSSIAndCryptoAccount({
+    required List<String> mnemonic,
+    required bool isFromOnboarding,
+  }) async {
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
-      await generateAccount(
-        mnemonic: mnemonic,
-        secureStorageProvider: secureStorageProvider,
-        keyGenerator: keyGenerator,
-        didKitProvider: didKitProvider,
-        didCubit: didCubit,
-        homeCubit: homeCubit,
-        walletCubit: walletCubit,
-        splashCubit: splashCubit,
+      if (isFromOnboarding) {
+        await generateAccount(
+          mnemonic: mnemonic,
+          secureStorageProvider: secureStorageProvider,
+          keyGenerator: keyGenerator,
+          didKitProvider: didKitProvider,
+          didCubit: didCubit,
+          homeCubit: homeCubit,
+          walletCubit: walletCubit,
+          splashCubit: splashCubit,
+        );
+      }
+      await secureStorageProvider.set(
+        SecureStorageKeys.hasVerifiedMnemonics,
+        'yes',
       );
       emit(state.success());
     } catch (error) {

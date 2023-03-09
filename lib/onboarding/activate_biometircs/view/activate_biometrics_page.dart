@@ -103,7 +103,7 @@ class ActivateBiometricsView extends StatelessWidget {
               children: [
                 MStepper(
                   step: 2,
-                  totalStep: byPassScreen ? 2 : 4,
+                  totalStep: byPassScreen ? 2 : 3,
                 ),
                 const Spacer(),
                 Text(
