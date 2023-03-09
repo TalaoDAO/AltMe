@@ -200,16 +200,20 @@ $ cargo build
 
 #### Required:
 
-**NETWORK_NAME** - Blockchain name. <br />
-**NETWORK_ENV** - Network name. <br />
-**INFURA_URL** - Infura base url. <br />
-**INFURA_RDP_URL** - Infura base rdp url. <br />
-**INFURA_API_KEY** - Infura api key. <br />
-**ID_STATE_CONTRACT_ADDR** - Identity state smart contract address. <br />
+```
+NETWORK_NAME - Blockchain name.
+NETWORK_ENV - Network name.
+INFURA_URL - Infura base url.
+INFURA_RDP_URL - Infura base rdp url.
+INFURA_API_KEY - Infura api key.
+ID_STATE_CONTRACT_ADDR - Identity state smart contract address.
+```
 
 #### Not required:
 
-**PUSH_URL** - Polygon push gateway server base url. <br />
+```
+PUSH_URL - Polygon push gateway server base url.
+```
 
 ### Deploy
 
