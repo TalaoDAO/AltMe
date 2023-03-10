@@ -189,56 +189,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         // Check if we can respond to presentation request:
         // having credentials?
         // having correct crv in ebsi key
-        if (!await isSiopV2RequestValid(uri!)) {
-          emit(
-            state.copyWith(
-              qrScanStatus: QrScanStatus.success,
-              route: IssuerWebsitesPage.route(''),
-            ),
-          );
-        } else {
-          var claims = uri.queryParameters['claims'] ?? '';
-
-          // TODO(hawkbee): change when correction is done on verifier
-          claims = claims.replaceAll("'email': None", "'email': 'None'");
-
-          claims = claims.replaceAll("'", '"');
-          final jsonPath = JsonPath(r'$..input_descriptors');
-          final outputDescriptors =
-              jsonPath.readValues(jsonDecode(claims)).first as List;
-          final inputDescriptorList = outputDescriptors
-              .map((e) => InputDescriptor.fromJson(e as Map<String, dynamic>))
-              .toList();
-
-          final PresentationDefinition presentationDefinition =
-              PresentationDefinition(inputDescriptorList);
-          final CredentialModel credentialPreview = CredentialModel(
-            id: 'id',
-            image: 'image',
-            credentialPreview: Credential.dummy(),
-            shareLink: 'shareLink',
-            display: Display.emptyDisplay(),
-            data: const {},
-            credentialManifest: CredentialManifest(
-              'id',
-              IssuedBy('', ''),
-              null,
-              presentationDefinition,
-            ),
-          );
-          emit(
-            state.copyWith(
-              qrScanStatus: QrScanStatus.success,
-              route: CredentialManifestOfferPickPage.route(
-                uri: uri,
-                credential: credentialPreview,
-                issuer: Issuer.emptyIssuer('domain'),
-                inputDescriptorIndex: 0,
-                credentialsToBePresented: [],
-              ),
-            ),
-          );
-        }
+        await launchSiopV2Flow(uri);
 
         // final openIdCredential = getCredentialName(sIOPV2Param.claims!);
         // final openIdIssuer = getIssuersName(sIOPV2Param.claims!);
@@ -313,6 +264,62 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           ),
         );
       }
+    }
+  }
+
+  Future<void> launchSiopV2Flow(Uri? uri) async {
+    // Check if we can respond to presentation request:
+    // having credentials?
+    // having correct crv in ebsi key
+    if (!await isSiopV2RequestValid(uri!)) {
+      emit(
+        state.copyWith(
+          qrScanStatus: QrScanStatus.success,
+          route: IssuerWebsitesPage.route(''),
+        ),
+      );
+    } else {
+      var claims = uri.queryParameters['claims'] ?? '';
+
+      // TODO(hawkbee): change when correction is done on verifier
+      claims = claims.replaceAll("'email': None", "'email': 'None'");
+
+      claims = claims.replaceAll("'", '"');
+      final jsonPath = JsonPath(r'$..input_descriptors');
+      final outputDescriptors =
+          jsonPath.readValues(jsonDecode(claims)).first as List;
+      final inputDescriptorList = outputDescriptors
+          .map((e) => InputDescriptor.fromJson(e as Map<String, dynamic>))
+          .toList();
+
+      final PresentationDefinition presentationDefinition =
+          PresentationDefinition(inputDescriptorList);
+      final CredentialModel credentialPreview = CredentialModel(
+        id: 'id',
+        image: 'image',
+        credentialPreview: Credential.dummy(),
+        shareLink: 'shareLink',
+        display: Display.emptyDisplay(),
+        data: const {},
+        credentialManifest: CredentialManifest(
+          'id',
+          IssuedBy('', ''),
+          null,
+          presentationDefinition,
+        ),
+      );
+      emit(
+        state.copyWith(
+          qrScanStatus: QrScanStatus.success,
+          route: CredentialManifestOfferPickPage.route(
+            uri: uri,
+            credential: credentialPreview,
+            issuer: Issuer.emptyIssuer('domain'),
+            inputDescriptorIndex: 0,
+            credentialsToBePresented: [],
+          ),
+        ),
+      );
     }
   }
 
