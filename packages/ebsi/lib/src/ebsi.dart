@@ -67,7 +67,7 @@ class Ebsi {
     /// we were using P-256K for dart library conformance which is
     /// the same as secp256k1, but we are using secp256k1 now
     final jwk = {
-      'crv': 'secp256k1',
+      'crv': 'P-256K',
       'd': d,
       'kty': 'EC',
       'x': x,
@@ -517,6 +517,10 @@ class Ebsi {
     final vpVerifierClaims = JsonWebTokenClaims.fromJson(vpTokenPayload);
     // create a builder, decoding the JWT in a JWS, so using a
     // JsonWebSignatureBuilder
+    final privateKey = tokenParameters.privateKey;
+    if (tokenParameters.privateKey['crv'] == 'secp256k1') {
+      privateKey['crv'] = 'P-256K';
+    }
 
     final key = JsonWebKey.fromJson(tokenParameters.privateKey);
 

@@ -71,20 +71,20 @@ class _SplashViewState extends State<SplashView> {
           if (url == Parameters.ebsiUniversalLink) {
             final client = Dio();
             final ebsi = Ebsi(client);
-            // final mnemonic = await secure_storage.getSecureStorage.get(
-            //   SecureStorageKeys.ssiMnemonic,
-            // );
+            final mnemonic =
+                await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+            final privateKey =
+                await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic!);
             var credentialUri = uri;
             if (uri.queryParameters['uri'] != null) {
               final credentialUrl = uri.queryParameters['uri'];
               credentialUri = Uri.parse(credentialUrl!);
             }
-            final String p256PrivateKey =
-                await getRandomP256PrivateKey(getSecureStorage);
+
             final dynamic encodedCredentialFromEbsi = await ebsi.getCredential(
               credentialUri,
               null,
-              p256PrivateKey,
+              privateKey,
             );
             await addEbsiCredential(
               encodedCredentialFromEbsi,
