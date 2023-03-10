@@ -452,30 +452,40 @@ class Ebsi {
     String? mnemonic,
     String? privateKey,
   ) async {
-    final private = await getPrivateKey(mnemonic, privateKey);
+    //TODO(bibash):  if the "request_uri" attribute exists,
+    //wallet must do a GET to endpoint to get the request value as a
+    //json. The wallet receives a JWT which must be verified wit the public key
+    // of the verifier. It means that wallety must call the API to get teh DID
+    //document from EBSI and extract the correct public key with teh kid.
 
-    final tokenParameters = VerifierTokenParameters(
-      private,
-      uri,
-      credentialsToBePresented,
-    );
-
-    // structures
-    final verifierIdToken = await getIdToken(tokenParameters);
-
-    /// build vp token
-
-    final vpToken = await getVpToken(tokenParameters);
-
-    final responseHeaders = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
-
-    final responseData = <String, dynamic>{
-      'id_token': verifierIdToken,
-      'vp_token': vpToken
-    };
     try {
+      // final dynamic response =
+      //     await client.get<dynamic>(uri.queryParameters['request_uri']!);
+
+      final private = await getPrivateKey(mnemonic, privateKey);
+
+      final tokenParameters = VerifierTokenParameters(
+        private,
+        uri,
+        credentialsToBePresented,
+      );
+
+      // structures
+      final verifierIdToken = await getIdToken(tokenParameters);
+
+      /// build vp token
+
+      final vpToken = await getVpToken(tokenParameters);
+
+      final responseHeaders = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      };
+
+      final responseData = <String, dynamic>{
+        'id_token': verifierIdToken,
+        'vp_token': vpToken
+      };
+
       await client.post<dynamic>(
         uri.queryParameters['redirect_uri']!,
         options: Options(headers: responseHeaders),

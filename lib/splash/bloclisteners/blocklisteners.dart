@@ -174,6 +174,11 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           isIssuerVerificationSettingTrue = true;
         }
 
+        if (state.uri?.queryParameters['scope'] == 'openid') {
+          isIssuerVerificationSettingTrue =
+              state.uri!.queryParameters['request_uri'] != null;
+        }
+
         log.i('checking issuer - $isIssuerVerificationSettingTrue');
 
         if (isIssuerVerificationSettingTrue) {
@@ -208,6 +213,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
           if (state.uri!.toString().startsWith('openid://initiate_issuance?')) {
             subtitle = state.uri!.queryParameters['issuer'].toString();
+          }
+
+          if (state.uri?.queryParameters['scope'] == 'openid') {
+            subtitle = state.uri!.queryParameters['request_uri'].toString();
           }
 
           acceptHost = await showDialog<bool>(

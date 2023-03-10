@@ -197,47 +197,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             ),
           );
         } else {
-          var claims = uri.queryParameters['claims'] ?? '';
-
-          // TODO(hawkbee): change when correction is done on verifier
-          claims = claims.replaceAll("'email': None", "'email': 'None'");
-
-          claims = claims.replaceAll("'", '"');
-          final jsonPath = JsonPath(r'$..input_descriptors');
-          final outputDescriptors =
-              jsonPath.readValues(jsonDecode(claims)).first as List;
-          final inputDescriptorList = outputDescriptors
-              .map((e) => InputDescriptor.fromJson(e as Map<String, dynamic>))
-              .toList();
-
-          final PresentationDefinition presentationDefinition =
-              PresentationDefinition(inputDescriptorList);
-          final CredentialModel credentialPreview = CredentialModel(
-            id: 'id',
-            image: 'image',
-            credentialPreview: Credential.dummy(),
-            shareLink: 'shareLink',
-            display: Display.emptyDisplay(),
-            data: const {},
-            credentialManifest: CredentialManifest(
-              'id',
-              IssuedBy('', ''),
-              null,
-              presentationDefinition,
-            ),
-          );
-          emit(
-            state.copyWith(
-              qrScanStatus: QrScanStatus.success,
-              route: CredentialManifestOfferPickPage.route(
-                uri: uri,
-                credential: credentialPreview,
-                issuer: Issuer.emptyIssuer('domain'),
-                inputDescriptorIndex: 0,
-                credentialsToBePresented: [],
-              ),
-            ),
-          );
+          emit(state.acceptHost(uri: uri));
         }
 
         // final openIdCredential = getCredentialName(sIOPV2Param.claims!);
@@ -327,6 +287,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     late final dynamic data;
 
     try {
+      /// ebsi credential
+      /// oidc4vci
       if (state.uri.toString().startsWith('openid://initiate_issuance?')) {
         await initiateEbsiCredentialIssuance(
           state.uri.toString(),
@@ -339,6 +301,54 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         return;
       }
 
+      /// ebsi presentation
+      /// siopv2
+      if (state.uri?.queryParameters['scope'] == 'openid') {
+        var claims = uri.queryParameters['claims'] ?? '';
+
+        // TODO(hawkbee): change when correction is done on verifier
+        claims = claims.replaceAll("'email': None", "'email': 'None'");
+
+        claims = claims.replaceAll("'", '"');
+        final jsonPath = JsonPath(r'$..input_descriptors');
+        final outputDescriptors =
+            jsonPath.readValues(jsonDecode(claims)).first as List;
+        final inputDescriptorList = outputDescriptors
+            .map((e) => InputDescriptor.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        final PresentationDefinition presentationDefinition =
+            PresentationDefinition(inputDescriptorList);
+        final CredentialModel credentialPreview = CredentialModel(
+          id: 'id',
+          image: 'image',
+          credentialPreview: Credential.dummy(),
+          shareLink: 'shareLink',
+          display: Display.emptyDisplay(),
+          data: const {},
+          credentialManifest: CredentialManifest(
+            'id',
+            IssuedBy('', ''),
+            null,
+            presentationDefinition,
+          ),
+        );
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.success,
+            route: CredentialManifestOfferPickPage.route(
+              uri: uri,
+              credential: credentialPreview,
+              issuer: Issuer.emptyIssuer('domain'),
+              inputDescriptorIndex: 0,
+              credentialsToBePresented: [],
+            ),
+          ),
+        );
+        return;
+      }
+
+      /// did credential addition and presentation
       final dynamic response = await client.get(uri.toString());
       data = response is String ? jsonDecode(response) : response;
 
