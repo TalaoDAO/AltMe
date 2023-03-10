@@ -296,13 +296,13 @@ class Ebsi {
   }
 
   Map<String, dynamic> readPublicKeyJwk(
-    String issuerDid,
+    String holderKid,
     Response<Map<String, dynamic>> didDocumentResponse,
   ) {
     final jsonPath = JsonPath(r'$..verificationMethod');
     final data = jsonPath.read(didDocumentResponse.data).first.value
       ..where(
-        (dynamic e) => e['controller'].toString() == issuerDid,
+        (dynamic e) => e['id'].toString() == holderKid,
       ).toList();
 
     final value = data.first['publicKeyJwk'];
@@ -337,8 +337,11 @@ class Ebsi {
 
     final issuerDid = readIssuerDid(openidConfigurationResponse);
 
-    final isVerified =
-        await verifyCredential(issuerDid: issuerDid, vcJwt: vcJwt);
+    final isVerified = await verifyCredential(
+      issuerDid: issuerDid,
+      vcJwt: vcJwt,
+      holderKid: issuerTokenParameters.kid,
+    );
 
     if (isVerified == VerificationType.notVerified) {
       throw Exception('VERIFICATION_ISSUE');
@@ -356,12 +359,13 @@ class Ebsi {
 
   Future<VerificationType> verifyCredential({
     required String issuerDid,
+    required String holderKid,
     required String vcJwt,
   }) async {
     try {
       final didDocument = await getDidDocument(issuerDid);
 
-      final publicKeyJwk = readPublicKeyJwk(issuerDid, didDocument);
+      final publicKeyJwk = readPublicKeyJwk(holderKid, didDocument);
 
       // create a JsonWebSignature from the encoded string
       final jws = JsonWebSignature.fromCompactSerialization(vcJwt);
