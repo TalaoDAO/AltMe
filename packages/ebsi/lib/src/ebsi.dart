@@ -585,4 +585,14 @@ class Ebsi {
     final tokenParameters = TokenParameters(private);
     return tokenParameters.didKey;
   }
+
+  Future<String> getKid(
+    String? mnemonic,
+    String? privateKey,
+  ) async {
+    final private = await getPrivateKey(mnemonic, privateKey);
+
+    final tokenParameters = TokenParameters(private);
+    return tokenParameters.kid;
+  }
 }
