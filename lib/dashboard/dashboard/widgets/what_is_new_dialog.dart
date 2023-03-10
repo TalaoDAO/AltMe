@@ -76,6 +76,16 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'Improve onboarding experience',
+                                'Add confirmation of recovery phrase',
+                                'Improve popup design',
+                                'Update SIOPV2 flow',
+                                'Add deeplink for EBSI credentials',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.10.5',
+                              features: [
                                 'End to end encryption of decentralized chat in Altme',
                                 'Specific design for EBSI diploma card',
                               ],
@@ -215,10 +225,11 @@ class WhatIsNewDialog extends StatelessWidget {
                   )
                 ],
               ),
-            const Align(
+              const Align(
                 alignment: Alignment.topRight,
                 child: WhiteCloseButton(),
-              ),],
+              ),
+            ],
           ),
         ),
       ),
