@@ -6,5 +6,6 @@ class AltmeChatSupportCubit extends ChatRoomCubit {
     required super.matrixChat,
     required super.invites,
     required super.storageKey,
+    required super.roomNamePrefix,
   });
 }

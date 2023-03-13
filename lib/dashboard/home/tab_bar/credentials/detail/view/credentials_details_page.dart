@@ -148,11 +148,20 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
           titleAlignment: Alignment.topCenter,
           titleLeading: const BackLeadingButton(),
+
+          /// TODO(Taleb): check if json contains the ChatSupport then enable chat button
           titleTrailing: IconButton(
             onPressed: () {
               Navigator.push(
                 context,
-                AltmeSupportChatPage.route(appBarTitle: l10n.companySupport),
+                LoyaltyCardSupportChatPage.route(
+                  /// TODO(Taleb): read the ChatSupport property from credential
+                  /// json and replace by this '@bloometa:matrix.talao.co'
+                  companySupportId: '@bloometa:matrix.talao.co',
+                  appBarTitle: l10n.companySupport,
+                  loyaltyCardType: widget.credentialModel.credentialPreview
+                      .credentialSubjectModel.credentialSubjectType.name,
+                ),
               );
             },
             icon: Icon(

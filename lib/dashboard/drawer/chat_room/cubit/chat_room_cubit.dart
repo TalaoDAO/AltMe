@@ -22,6 +22,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
     required this.matrixChat,
     required this.invites,
     required this.storageKey,
+    required this.roomNamePrefix,
   }) : super(
           const ChatRoomState(),
         ) {
@@ -35,6 +36,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   StreamController<int>? _notificationStreamController;
   final List<String>? invites;
   final String storageKey;
+  final String roomNamePrefix;
 
   //
   final MatrixChatImpl matrixChat;
@@ -256,7 +258,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
       final did = await secureStorageProvider.get(SecureStorageKeys.did) ?? '';
       final username = did.replaceAll(':', '-');
       _roomId = await matrixChat.createRoomAndInviteSupport(
-        username,
+        '$roomNamePrefix-$username',
         invites,
       );
       await matrixChat.setRoomIdInStorage(

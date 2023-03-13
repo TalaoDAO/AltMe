@@ -178,6 +178,7 @@ class App extends StatelessWidget {
             matrixChat: MatrixChatImpl(),
             invites: [AltMeStrings.matrixSupportId],
             storageKey: SecureStorageKeys.supportRoomId,
+            roomNamePrefix: 'Altme',
           ),
         ),
       ],
