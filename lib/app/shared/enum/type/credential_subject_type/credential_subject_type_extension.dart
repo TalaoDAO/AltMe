@@ -399,7 +399,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   bool get byPassDeepLink {
     if (this == CredentialSubjectType.tezotopiaMembership ||
-        this == CredentialSubjectType.bloometaPass ||
         this == CredentialSubjectType.chainbornMembership ||
         this == CredentialSubjectType.twitterCard ||
         this == CredentialSubjectType.over13 ||
