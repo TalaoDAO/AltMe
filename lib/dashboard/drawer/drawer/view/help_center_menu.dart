@@ -86,7 +86,11 @@ class HelpCenterView extends StatelessWidget {
                 DrawerItem(
                   title: l10n.altmeSupport,
                   onTap: () {
-                    Navigator.of(context).push<void>(LiveChatPage.route());
+                    Navigator.of(context).push<void>(
+                      AltmeSupportChatPage.route(
+                        appBarTitle: l10n.altmeSupport,
+                      ),
+                    );
                   },
                 ),
               ],

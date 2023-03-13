@@ -2,9 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/live_chat/matrix_chat/matrix_chat_impl.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
-import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:http/http.dart' as http;
@@ -14,25 +13,28 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-part 'live_chat_cubit.g.dart';
-part 'live_chat_state.dart';
+part 'chat_room_cubit.g.dart';
+part 'chat_room_state.dart';
 
-class LiveChatCubit extends Cubit<LiveChatState> {
-  LiveChatCubit({
+abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
+  ChatRoomCubit({
     required this.secureStorageProvider,
     required this.matrixChat,
+    required this.invites,
+    required this.storageKey,
   }) : super(
-          const LiveChatState(),
+          const ChatRoomState(),
         ) {
     init();
   }
 
   final SecureStorageProvider secureStorageProvider;
-  final logger = getLogger('LiveChatCubit');
+  final logger = getLogger('ChatRoomCubit');
   String? _roomId;
   StreamSubscription<Event>? _onEventSubscription;
   StreamController<int>? _notificationStreamController;
-  final String supportId = '@support:matrix.talao.co';
+  final List<String>? invites;
+  final String storageKey;
 
   //
   final MatrixChatImpl matrixChat;
@@ -139,8 +141,7 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       _notificationStreamController ??= StreamController<int>.broadcast();
 
       List<Message> retrivedMessageFromDB = [];
-      final savedRoomId = await matrixChat
-          .getRoomIdFromStorage(SecureStorageKeys.supportRoomId);
+      final savedRoomId = await matrixChat.getRoomIdFromStorage(storageKey);
       if (savedRoomId != null) {
         _roomId = savedRoomId;
         await matrixChat.enableRoomEncyption(savedRoomId);
@@ -256,10 +257,10 @@ class LiveChatCubit extends Cubit<LiveChatState> {
       final username = did.replaceAll(':', '-');
       _roomId = await matrixChat.createRoomAndInviteSupport(
         username,
-        supportId,
+        invites,
       );
       await matrixChat.setRoomIdInStorage(
-        SecureStorageKeys.supportRoomId,
+        storageKey,
         _roomId!,
       );
       _getUnreadMessageCount();

@@ -8,7 +8,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/drawer/live_chat/matrix_chat/matrix_chat_impl.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
@@ -172,11 +171,13 @@ class App extends StatelessWidget {
             manageNetworkCubit: context.read<ManageNetworkCubit>(),
           ),
         ),
-        BlocProvider<LiveChatCubit>(
+        BlocProvider<AltmeChatSupportCubit>(
           lazy: false,
-          create: (context) => LiveChatCubit(
+          create: (context) => AltmeChatSupportCubit(
             secureStorageProvider: getSecureStorage,
             matrixChat: MatrixChatImpl(),
+            invites: [AltMeStrings.matrixSupportId],
+            storageKey: SecureStorageKeys.supportRoomId,
           ),
         ),
       ],

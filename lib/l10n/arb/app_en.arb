@@ -811,5 +811,6 @@
   "verifyLater": "Verify Later",
   "welDone": "Well done!",
   "mnemonicsVerifiedMessage": "Your revovery phrase is saved correctly.",
-  "letsGo": "Let's Go"
+  "letsGo": "Let's Go",
+  "companySupport": "Company support"
 }

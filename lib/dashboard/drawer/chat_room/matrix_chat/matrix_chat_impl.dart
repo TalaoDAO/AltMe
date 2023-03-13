@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/live_chat/matrix_chat/matrix_chat_interface.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:crypto/crypto.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
@@ -360,13 +360,13 @@ class MatrixChatImpl extends MatrixChatInterface {
   @override
   Future<String> createRoomAndInviteSupport(
     String roomName,
-    String supportId,
+    List<String>? invites,
   ) async {
     try {
       final roomId = await client!.createRoom(
         isDirect: true,
         name: roomName,
-        invite: [supportId],
+        invite: invites,
         roomAliasName: roomName,
         initialState: [
           StateEvent(
@@ -387,7 +387,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         final millisecondsSinceEpoch = DateTime.now().millisecondsSinceEpoch;
         return createRoomAndInviteSupport(
           '$roomName-updated-$millisecondsSinceEpoch',
-          supportId,
+          invites,
         );
       } else {
         final roomId = await client!.joinRoom(roomName);

@@ -148,16 +148,18 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
           titleAlignment: Alignment.topCenter,
           titleLeading: const BackLeadingButton(),
-          // titleTrailing: IconButton(
-          //   onPressed: () {
-          //     Navigator.of(context)
-          //         .push<void>(CredentialQrPage.route(widget.credentialModel)); // ignore: lines_longer_than_80_chars
-          //   },
-          //   icon: Icon(
-          //     Icons.qr_code,
-          //     color: Theme.of(context).colorScheme.onBackground,
-          //   ),
-          // ),
+          titleTrailing: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                AltmeSupportChatPage.route(appBarTitle: l10n.companySupport),
+              );
+            },
+            icon: Icon(
+              Icons.support_agent_rounded,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 10),
           scrollView: false,
           body: Column(
@@ -251,7 +253,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               ),
             ],
           ),
-
           navigation: widget.readOnly
               ? null
               : SafeArea(

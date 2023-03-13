@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/live_chat/matrix_chat/matrix_chat_impl.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:logger/logger.dart';
 import 'package:matrix/matrix.dart' hide User;
@@ -14,7 +14,10 @@ abstract class MatrixChatInterface {
     required PartialText partialText,
     required OnMessageCreated onMessageCreated,
   });
-  Future<String> createRoomAndInviteSupport(String roomName, String supportId);
+  Future<String> createRoomAndInviteSupport(
+    String roomName,
+    List<String>? invites,
+  );
   Future<void> enableRoomEncyption(String roomId);
   Future<void> handleImageSelection({
     required OnMessageCreated onMessageCreated,
