@@ -184,7 +184,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }) async {
     emit(state.loading(isScan: isScan));
     try {
-      ///Check if SIOPV2 request
+      /// verifier side (siopv2) without request_uri
       if (uri?.queryParameters['scope'] == 'openid') {
         // Check if we can respond to presentation request:
         // having credentials?
@@ -271,7 +271,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     // Check if we can respond to presentation request:
     // having credentials?
     // having correct crv in ebsi key
-    if (!await isSiopV2RequestValid(uri!)) {
+    if (!await isSiopV2WithRequestURIValid(uri!)) {
       emit(
         state.copyWith(
           qrScanStatus: QrScanStatus.success,
@@ -335,7 +335,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     try {
       /// ebsi credential
-      /// oidc4vci
+      /// issuer side (oidc4VCI)
       if (state.uri.toString().startsWith('openid://initiate_issuance?')) {
         await initiateEbsiCredentialIssuance(
           state.uri.toString(),
@@ -349,7 +349,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
 
       /// ebsi presentation
-      /// siopv2
+      /// verifier side (siopv2) without request_uri
       if (state.uri?.queryParameters['scope'] == 'openid') {
         var claims = uri.queryParameters['claims'] ?? '';
 
@@ -648,7 +648,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return data;
   }
 
-  Future<bool> isSiopV2RequestValid(Uri uri) async {
+  Future<bool> isSiopV2WithRequestURIValid(Uri uri) async {
     bool isValid = true;
 
     ///credential should not be empty since we have to present
