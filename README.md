@@ -4,8 +4,8 @@
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![License: MIT][license_badge]][license_link]
 
-`ALTME` – THE UNIVERSAL WALLET THAT WORKS FOR YOU 
-The Web 3 revolution is all about redistributing the power to the average consumer. 
+`ALTME` – THE UNIVERSAL WALLET THAT WORKS FOR YOU
+The Web 3 revolution is all about redistributing the power to the average consumer.
 This is why we are building Altme, to help you get control over your data back.
 
 ---
@@ -13,6 +13,7 @@ This is why we are building Altme, to help you get control over your data back.
 ## Getting Started 🚀
 
 This project contains 3 flavors:
+
 - development
 - staging
 - production
@@ -43,6 +44,7 @@ the following dependencies:
 - Java 7 or higher
 - Flutter (`dev` channel)
 - [DIDKit](https://github.com/spruceid/didkit)/[SSI](https://github.com/spruceid/ssi)
+- [PolygonID Flutter SDK](https://github.com/iden3/polygonid-flutter-sdk)
 
 ### Rust
 
@@ -88,11 +90,15 @@ $ flutter doctor
 
 This project also depends on two other [`Spruce`](https://github.com/spruceid) projects,
 [`DIDKit`](https://github.com/spruceid/didkit) and
-[`SSI`](https://github.com/spruceid/ssi). 
+[`SSI`](https://github.com/spruceid/ssi).
 
 These projects are all configured to work with relative paths by default,
-so it is recommended to clone them all under the same root directory, for 
+so it is recommended to clone them all under the same root directory, for
 example `$HOME/$FOLDER_NAME/{didkit,ssi,altme}`.
+
+### PolygonID Flutter SDK
+
+This is a flutter Plugin for PolygonID Mobile SDK (https://polygon.technology/polygon-id) This plugin provides a cross-platform tool (iOS, Android) to communicate with the PolygonID platform.
 
 ## Target-Specific Dependencies
 
@@ -105,10 +111,11 @@ Studio](https://developer.android.com/studio/install), which install further
 dependencies upon first being opened after installation. Installing the
 appropriate Android NDK (often not the newest) in Android Studio can be
 accomplished by going to Settings > Appearance & Behavior > System Settings >
-Android SDK and selecting to install the "NDK (Side by Side)". 
+Android SDK and selecting to install the "NDK (Side by Side)".
 
-An alternative method of installing SDK and NDK without Android Studio can be 
+An alternative method of installing SDK and NDK without Android Studio can be
 found in the script below:
+
 ```
 cd $HOME
 wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
@@ -137,18 +144,19 @@ $ export ANDROID_SDK_ROOT=/path/to/Android/Sdk
 
 Note: Some users have experienced difficulties with cross-compilation
 artefacts missing from the newest NDK, which is downloaded by default in the
-installation process.  If you experience errors of this kind, you may have to
+installation process. If you experience errors of this kind, you may have to
 manually downgrade or install multiple NDK versions as [shown
 here])(img/ndk_downgrade.png) in the Android Studio installer (screengrabbed
 from an Ubuntu installation).
 
-If your `build-tools` and/or `NDK`  live in different locations than the default ones inside /SDK/, or if you want to specify a specific NDK or build-tools version, you can manually configure the following two environment variables:
+If your `build-tools` and/or `NDK` live in different locations than the default ones inside /SDK/, or if you want to specify a specific NDK or build-tools version, you can manually configure the following two environment variables:
 
 ```bash
 $ export ANDROID_TOOLS=/path/to/SDK/build-tools/XX.X.X/
 $ export ANDROID_NDK_HOME=/path/to/SDK/ndk/XX.X.XXXXX/
 ```
-::: 
+
+:::
 
 ### iOS Dependencies
 
@@ -173,35 +181,12 @@ $ make -C lib ../target/test/android.stamp
 $ make -C lib ../target/test/flutter.stamp
 $ cargo build
 ```
-*This may take some time as it compiles the entire project for multiple targets*
 
-### Android APK
-```bash
-# Development
-$ flutter build apk --release --split-per-abi --flavor development -t lib/main_development.dart
-
-# Staging
-$ flutter build apk --release --split-per-abi --flavor staging -t lib/main_staging.dart
-
-# Production
-$ flutter build apk --release --split-per-abi --flavor production -t lib/main_production.dart
-```
-
-### Android App Bundle
-```bash
-# Development
-$ flutter build appbundle --flavor "development" --target "lib/main_development.dart"
-
-# Staging
-$ flutter build appbundle --flavor "staging" --target "lib/main_staging.dart"
-
-# Production
-$ flutter build appbundle --flavor "production" --target "lib/main_production.dart"
-```
+_This may take some time as it compiles the entire project for multiple targets_
 
 ### iOS
 
-To build DIDKit for the iOS targets, you will go to the root of `DIDKit` and run: 
+To build DIDKit for the iOS targets, you will go to the root of `DIDKit` and run:
 
 ```bash
 $ make -C lib install-rustup-ios
@@ -209,15 +194,61 @@ $ make -C lib ../target/test/ios.stamp
 $ cargo build
 ```
 
+## Setting Up PolygonID Flutter SDK
+
+### Env variables
+
+#### Required:
+
+```
+NETWORK_NAME - Blockchain name.
+NETWORK_ENV - Network name.
+INFURA_URL - Infura base url.
+INFURA_RDP_URL - Infura base rdp url.
+INFURA_API_KEY - Infura api key.
+ID_STATE_CONTRACT_ADDR - Identity state smart contract address.
+```
+
+#### Not required:
+
+```
+PUSH_URL - Polygon push gateway server base url.
+```
+
+### Deploy
+
+1. Clone this repository.
+2. Generate `.env` and `.env.dev` files in the root folder of the project.
+3. Add required env variables (example):
+   ```bash
+    NETWORK_NAME="polygon"
+    NETWORK_ENV="mumbai"
+    INFURA_URL="https://polygon-mumbai.infura.io/v3/"
+    INFURA_RDP_URL="wss://polygon-mumbai.infura.io/v3/"
+    INFURA_API_KEY="secret"
+    ID_STATE_CONTRACT_ADDR="sc_address"
+    PUSH_URL="push_url"
+   ```
+4. run `build_runner` to generate `.g.dart` files:
+
+```bash
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+#### Note
+
+Using iOS simulator for testing wallet sdk is right now under maintenance and will be available soon.
+
 ## Shortcut setup
-In order to handle installation of didkit, ssi and altme, we can run shortcut script. We can also get the warnings if we have not configured the required things for building Altme.
+
+In order to handle installation of didkit, ssi, polygonid-flutter-sdk and altme, we can run shortcut script. We can also get the warnings if we have not configured the required things for building Altme.
 
 For consistent app builts we can use [`fvm`](https://fvm.app/docs/getting_started/installation).
 
-You have to add the [`install_altme.sh`](https://github.com/TalaoDAO/mobile-install-deploy/blob/main/install_altme.sh) in the directory `$HOME/$FOLDER_NAME/`. Then run the following command to 
+You have to add the [`install_altme.sh`](https://github.com/TalaoDAO/mobile-install-deploy/blob/main/install_altme.sh) in the directory `$HOME/$FOLDER_NAME/`. Then run the following command to
 do the setup:
 
-```bash 
+```bash
 # Android
 $ ./install_altme.sh -android
 
@@ -225,37 +256,40 @@ $ ./install_altme.sh -android
 $ ./install_altme.sh -ios
 ```
 
-
 ## Generate missing .g.dart file
-In order to generate all *.g.dart files, run the following command:
+
+In order to generate all \*.g.dart files, run the following command:
+
 ```bash
 $ flutter packages pub run build_runner build --delete-conflicting-outputs
 ```
 
 ## Key Dependencies
-For smooth running of the functionalities of Altme, you need to add the following 
+
+For smooth running of the functionalities of Altme, you need to add the following
 keys:
 
-
- 
 1. PASSBASE_WEBHOOK_AUTH_TOKEN<br />
-You can get this key from [`here`](https://passbase.com/).
+   You can get this key from [`here`](https://passbase.com/).
 
 2. PASSBASE_CHECK_DID_AUTH_TOKEN<br />
-The key is available [`here`](https://passbase.com/).
+   The key is available [`here`](https://passbase.com/).
 
 3. YOTI_AI_API_KEY<br />
-This key can be obtained from [`here`](https://developers.yoti.com/).
+   This key can be obtained from [`here`](https://developers.yoti.com/).
 
 4. TALAO_ISSUER_API_KEY<br />
-The key is available [`here`](https://talao.io/).
+   The key is available [`here`](https://talao.io/).
 
 5. INFURA_API_KEY<br />
-This key can be obtained from [`here`](https://docs.infura.io/infura/networks/ethereum/how-to/secure-a-project/project-id).
+   This key can be obtained from [`here`](https://docs.infura.io/infura/networks/ethereum/how-to/secure-a-project/project-id).
 
 6. MORALIS_API_KEY<br />
-You can get this key from [`here`](https://docs.moralis.io/web3-data-api/get-your-api-key).
- 
+   You can get this key from [`here`](https://docs.moralis.io/web3-data-api/get-your-api-key).
+
+#### Note
+
+Please check the [Setting Up PolygonID Flutter SDK] section for key-dependencies of polygonid-flutter-sdk.
 
 ## Building Altme
 
@@ -276,7 +310,34 @@ $ flutter run --flavor staging --target lib/main_staging.dart
 $ flutter run --flavor production --target lib/main_production.dart
 ```
 
+### Android APK
+
+```bash
+# Development
+$ flutter build apk --release --split-per-abi --flavor development -t lib/main_development.dart
+
+# Staging
+$ flutter build apk --release --split-per-abi --flavor staging -t lib/main_staging.dart
+
+# Production
+$ flutter build apk --release --split-per-abi --flavor production -t lib/main_production.dart
+```
+
+### Android App Bundle
+
+```bash
+# Development
+$ flutter build appbundle --flavor "development" --target "lib/main_development.dart"
+
+# Staging
+$ flutter build appbundle --flavor "staging" --target "lib/main_staging.dart"
+
+# Production
+$ flutter build appbundle --flavor "production" --target "lib/main_production.dart"
+```
+
 ### iOS .app for Simulator
+
 ```bash
 # Development
 $ flutter build ios --simulator --flavor "development" --target "lib/main_development.dart"
@@ -289,6 +350,7 @@ $ flutter build ios --simulator --flavor "production" --target "lib/main_product
 ```
 
 ### iOS .app for Devices
+
 ```bash
 # Development
 $ flutter build ios --no-codesign --flavor "development" --target "lib/main_development.dart"
@@ -300,7 +362,8 @@ $ flutter build ios --no-codesign --flavor "staging" --target "lib/main_staging.
 $ flutter build ios --no-codesign --flavor "production" --target "lib/main_production.dart"
 ```
 
-### iOS IPA 
+### iOS IPA
+
 ```bash
 # Development
 $ flutter build ipa --flavor "development" --target "lib/main_development.dart"
@@ -313,13 +376,14 @@ $ flutter build ipa --flavor "production" --target "lib/main_production.dart"
 ```
 
 ### iOS Continuous Delivery
+
 If you have setup the [`fastlane`](https://docs.flutter.dev/deployment/cd) for continuous delivery, then you can run the following command to publish:
 
 ```bash
 $ flutter pub get
 $ flutter packages pub run build_runner build --delete-conflicting-outputs
 $ flutter build ios --release --flavor "production" --target "lib/main_production.dart"
-$ $cd ios 
+$ $cd ios
 $ fastlane beta
 ```
 
@@ -333,8 +397,9 @@ For instance, on Flutter, you can delete build files to start over by running:
 ```bash
 $ flutter clean
 ```
+
 Also, reviewing the
-[`install_altme.sh`](https://github.com/TalaoDAO/mobile-install-deploy/blob/main/install_altme.sh) 
+[`install_altme.sh`](https://github.com/TalaoDAO/mobile-install-deploy/blob/main/install_altme.sh)
 script may be helpful.
 
 ## Supported Protocols
@@ -352,7 +417,7 @@ executed.
 
 After receiving a `CredentialOffer` from a trusted host, the app calls the API
 with `subject_id` in the form body, that value is the didKey obtained from the
-private key stored in the `FlutterSecureStorage`, which is backed by KeyStore 
+private key stored in the `FlutterSecureStorage`, which is backed by KeyStore
 on Android and Keychain on iOS.
 
 The flow of events and actions is listed below:
@@ -365,25 +430,25 @@ The flow of events and actions is listed below:
 
 And below is another version of the step-by-step:
 
-| Wallet                   | <sup>1</sup> |       |                      Server |
-| ------------------------ | ------------ | :---: | --------------------------: |
-| Scan QRCode <sup>2</sup> |              |       |
-| Trust Host               | ○ / ×        |       |                             |
-| HTTP GET                 |              |   →   | https://domain.tld/endpoint |
-|                          |              |   ←   |             CredentialOffer |
-| Preview Credential       |              |       |                             |
-| Choose DID               | ○ / ×        |       |                             |
-| HTTP POST <sup>3</sup>   |              |   →   | https://domain.tld/endpoint |
-|                          |              |   ←   |        VerifiableCredential |
-| Verify Credential        |              |       |                             |
-| Store Credential         |              |       |                             |
+| Wallet                   | <sup>1</sup> |     |                      Server |
+| ------------------------ | ------------ | :-: | --------------------------: |
+| Scan QRCode <sup>2</sup> |              |     |
+| Trust Host               | ○ / ×        |     |                             |
+| HTTP GET                 |              |  →  | https://domain.tld/endpoint |
+|                          |              |  ←  |             CredentialOffer |
+| Preview Credential       |              |     |                             |
+| Choose DID               | ○ / ×        |     |                             |
+| HTTP POST <sup>3</sup>   |              |  →  | https://domain.tld/endpoint |
+|                          |              |  ←  |        VerifiableCredential |
+| Verify Credential        |              |     |                             |
+| Store Credential         |              |     |                             |
 
-*<sup>1</sup> Whether this action requires user confirmation, exiting the flow
-early when the user denies.*  
-*<sup>2</sup> The QRCode should contain the HTTP endpoint where the requests
-will be made.*  
-*<sup>3</sup> The body of the request contains a field `subject_id` set to the
-chosen DID.*
+_<sup>1</sup> Whether this action requires user confirmation, exiting the flow
+early when the user denies._  
+_<sup>2</sup> The QRCode should contain the HTTP endpoint where the requests
+will be made._  
+_<sup>3</sup> The body of the request contains a field `subject_id` set to the
+chosen DID._
 
 ### VerifiablePresentationRequest
 
@@ -415,16 +480,16 @@ The flow of events and actions is listed below:
 
 And below is another version of the step-by-step:
 
-| Wallet                       | <sup>1</sup> |       |                        Server |
-| ---------------------------- | ------------ | :---: | ----------------------------: |
-| Scan QRCode <sup>2</sup>     |              |       |
-| Trust Host                   | ○ / ×        |       |                               |
-| HTTP GET                     |              |   →   |   https://domain.tld/endpoint |
-|                              |              |   ←   | VerifiablePresentationRequest |
-| Preview Presentation         |              |       |                               |
-| Choose Verifiable Credential | ○ / ×        |       |                               |
-| HTTP POST <sup>3</sup>       |              |   →   |   https://domain.tld/endpoint |
-|                              |              |   ←   |                        Result |
+| Wallet                       | <sup>1</sup> |     |                        Server |
+| ---------------------------- | ------------ | :-: | ----------------------------: |
+| Scan QRCode <sup>2</sup>     |              |     |
+| Trust Host                   | ○ / ×        |     |                               |
+| HTTP GET                     |              |  →  |   https://domain.tld/endpoint |
+|                              |              |  ←  | VerifiablePresentationRequest |
+| Preview Presentation         |              |     |                               |
+| Choose Verifiable Credential | ○ / ×        |     |                               |
+| HTTP POST <sup>3</sup>       |              |  →  |   https://domain.tld/endpoint |
+|                              |              |  ←  |                        Result |
 
 ## Running Tests 🧪
 
@@ -544,7 +609,9 @@ Update the `CFBundleLocalizations` array in the `Info.plist` at `ios/Runner/Info
     }
 }
 ```
+
 ## Run shortcut scripts
+
 ```bash
 # generate .g.dart files
 $ ./script.sh -build_runner
@@ -568,12 +635,10 @@ $ ./script.sh -build appbundle
 $ ./script.sh -deploy ios
 ```
 
-
 ```bash
 #For permission
 $ sudo chmod 777 script.sh
 ```
-
 
 [coverage_badge]: coverage_badge.svg
 [flutter_localizations_link]: https://api.flutter.dev/flutter/flutter_localizations/flutter_localizations-library.html

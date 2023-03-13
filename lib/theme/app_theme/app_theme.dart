@@ -241,6 +241,8 @@ extension CustomColorScheme on ColorScheme {
 
   Color get qrScanInnerShadow => const Color(0xff0A0215);
 
+  Color get qrScanOuterShadow => const Color(0xff430F91);
+
   Color get dialogText => const Color(0xFF180B2B);
 
   Color get tabBarNotSelected => const Color(0xFF280164);

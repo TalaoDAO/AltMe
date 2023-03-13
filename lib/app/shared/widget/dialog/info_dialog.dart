@@ -45,8 +45,10 @@ class InfoDialog extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             title,
-            style:
-                Theme.of(context).textTheme.dialogTitle.copyWith(color: text),
+            style: Theme.of(context)
+                .textTheme
+                .defaultDialogTitle
+                .copyWith(color: text),
             textAlign: TextAlign.center,
           ),
           if (subtitle != null)
@@ -54,7 +56,7 @@ class InfoDialog extends StatelessWidget {
               subtitle!,
               style: Theme.of(context)
                   .textTheme
-                  .dialogSubtitle
+                  .defaultDialogSubtitle
                   .copyWith(color: text),
               textAlign: TextAlign.center,
             ),

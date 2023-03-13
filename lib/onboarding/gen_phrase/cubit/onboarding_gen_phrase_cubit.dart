@@ -49,6 +49,10 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         walletCubit: walletCubit,
         splashCubit: splashCubit,
       );
+      await secureStorageProvider.set(
+        SecureStorageKeys.hasVerifiedMnemonics,
+        'no',
+      );
       emit(state.success());
     } catch (error) {
       log.e('something went wrong when generating a key', error);

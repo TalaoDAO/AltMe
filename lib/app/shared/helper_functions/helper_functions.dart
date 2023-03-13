@@ -264,8 +264,10 @@ String timeFormatter({required int timeInSecond}) {
   return '$minute : $second';
 }
 
-Future<List<String>> getssiMnemonicsInList() async {
-  final phrase = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+Future<List<String>> getssiMnemonicsInList(
+  SecureStorageProvider secureStorageProvider,
+) async {
+  final phrase = await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
   return phrase!.split(' ');
 }
 

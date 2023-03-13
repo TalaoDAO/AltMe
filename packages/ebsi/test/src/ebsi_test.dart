@@ -81,7 +81,7 @@ void main() {
     ];
 
     const expectedJwk = {
-      'crv': 'P-256K',
+      'crv': 'secp256k1',
       'd': 'ccWWNSjGiv1iWlNh4kfhWvwG3yyQMe8o31Du0uKRzrs',
       'kty': 'EC',
       'x': 'J4vQtLUyrVUiFIXRrtEq4xurmBZp2eq9wJmXkIA_stI',
@@ -100,7 +100,7 @@ void main() {
 
       test('privateKey from mnemonic', () async {
         const key = {
-          'crv': 'P-256K',
+          'crv': 'secp256k1',
           'd': 'ccWWNSjGiv1iWlNh4kfhWvwG3yyQMe8o31Du0uKRzrs',
           'kty': 'EC',
           'x': 'J4vQtLUyrVUiFIXRrtEq4xurmBZp2eq9wJmXkIA_stI',
@@ -404,7 +404,6 @@ void main() {
     test('get publicKey did with didDocumentResponse', () {
       const didDocumentResponse =
           '{"assertionMethod":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"authentication":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"@context":"https://www.w3.org/ns/did/v1","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","verificationMethod":[{"controller":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53","publicKeyJwk":{"alg":"EdDSA","crv":"Ed25519","kid":"3623b877bbb24b08ba390f3585418f53","kty":"OKP","use":"sig","x":"pWgA8M3etXlLaqcRmgjEQkz7waseg3FKzMCzfm9Yeow"},"type":"Ed25519VerificationKey2019"}]}';
-
       const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
 
       const expectedPublicKey =

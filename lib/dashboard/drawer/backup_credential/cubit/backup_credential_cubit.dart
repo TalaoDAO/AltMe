@@ -30,7 +30,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
   String? mnemonics;
 
   Future<List<String>> loadMnemonic() async {
-    final mnemonicList = await getssiMnemonicsInList();
+    final mnemonicList = await getssiMnemonicsInList(secureStorageProvider);
     mnemonics = mnemonicList.join(' ');
     return mnemonicList;
   }

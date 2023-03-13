@@ -103,7 +103,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                     children: [
                       const MStepper(
                         step: 3,
-                        totalStep: 4,
+                        totalStep: 3,
                       ),
                       const SizedBox(
                         height: Sizes.spaceNormal,
@@ -175,6 +175,7 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                       Navigator.of(context).push(
                         OnBoardingVerifyPhrasePage.route(
                           mnemonic: mnemonic!,
+                          isFromOnboarding: true,
                         ),
                       );
                     },

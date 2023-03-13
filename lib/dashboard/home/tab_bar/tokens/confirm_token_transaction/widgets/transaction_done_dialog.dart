@@ -58,6 +58,7 @@ class TransactionDoneDialog extends StatelessWidget {
               IconStrings.bigCheckCircle,
               height: Sizes.icon4x,
               width: Sizes.icon4x,
+              color: Theme.of(context).iconTheme.color,
             ),
             const SizedBox(height: Sizes.spaceNormal),
             Text(

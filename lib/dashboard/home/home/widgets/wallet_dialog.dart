@@ -28,13 +28,13 @@ class WalletDialog extends StatelessWidget {
             const SizedBox(height: 15),
             Text(
               l10n.walletAltme,
-              style: Theme.of(context).textTheme.walletAltme,
+              style: Theme.of(context).textTheme.defaultDialogTitle,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 5),
             Text(
               l10n.createTitle,
-              style: Theme.of(context).textTheme.walletAltmeMessage,
+              style: Theme.of(context).textTheme.defaultDialogSubtitle,
               textAlign: TextAlign.center,
             ),
             Image.asset(
@@ -44,7 +44,7 @@ class WalletDialog extends StatelessWidget {
             ),
             Text(
               l10n.createSubtitle,
-              style: Theme.of(context).textTheme.walletAltmeMessage,
+              style: Theme.of(context).textTheme.defaultDialogSubtitle,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 15),

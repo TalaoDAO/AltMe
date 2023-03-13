@@ -593,7 +593,7 @@
   "linkedinCardHowToGetIt": "You can claim this card by following Talao KYC check. Only information related to your first name, last name, nationality and year of birth will be accessible from your LinkedIn profile.",
   "linkedinCardWhyGetThisCard": "This card is a proof of your identity for your LinkedIn profile. From this card, you can export a QR code and display it in the banner on your LinkedIn account. By scanning the QR code with his Talao wallet, anyone will be able to verify that your identity matches the URL of your LinkedIn profile, and will also be able to access 2 additional information: your nationality and your year of birth.",
   "linkedinCardExpirationDate": "This card will remain active and reusable for 1 YEAR.",
-  "tezotopiaMembershipHowToGetIt": "You need to present a Nationality Proof and an Age Range Proof. Claim them by following Talao KYC check.",
+  "tezotopiaMembershipHowToGetIt": "You need to present a proof that you are over 13 YO and a proof of your email.",
   "over18WhyGetThisCard": "This proof may be required by some Web 3 Apps / Websites to access their service or claim benefits : Membership card, Loyalty card, Rewards, etc.",
   "over18ExpirationDate": "This card will remain active and reusable for 1 YEAR.",
   "over18HowToGetIt": "You can claim this card by following Talao’s KYC check.",
@@ -808,5 +808,8 @@
   "e2eEncyptedChat": "Chat is encrypted from end to end.",
   "pincodeAttemptMessage": "You have entered an incorrect PIN code three times. For security reasons, please wait for one minute before trying again.",
   "verifyNow": "Verify Now",
-  "verifyLater": "Verify Later"
+  "verifyLater": "Verify Later",
+  "welDone": "Well done!",
+  "mnemonicsVerifiedMessage": "Your revovery phrase is saved correctly.",
+  "letsGo": "Let's Go"
 }

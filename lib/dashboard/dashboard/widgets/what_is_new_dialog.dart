@@ -42,15 +42,10 @@ class WhatIsNewDialog extends StatelessWidget {
             Radius.circular(Sizes.normalRadius),
           ),
         ),
-        content: Container(
-          //color: Theme.of(context).colorScheme.popupBackground,
+        content: SizedBox(
           width: double.maxFinite,
           child: Stack(
             children: [
-              const Align(
-                alignment: Alignment.topRight,
-                child: WhiteCloseButton(),
-              ),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -63,7 +58,6 @@ class WhatIsNewDialog extends StatelessWidget {
                           right: Sizes.spaceXLarge,
                         ),
                         child: Column(
-                          //mainAxisSize: MainAxisSize.min,
                           children: [
                             const AltMeLogo(
                               color: Colors.white,
@@ -82,6 +76,16 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'Improve onboarding experience',
+                                'Add confirmation of recovery phrase',
+                                'Improve popup design',
+                                'Update SIOPV2 flow',
+                                'Add deeplink for EBSI credentials',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.10.5',
+                              features: [
                                 'End to end encryption of decentralized chat in Talao',
                                 'Specific design for EBSI diploma card',
                               ],
@@ -198,6 +202,10 @@ class WhatIsNewDialog extends StatelessWidget {
                     ),
                   )
                 ],
+              ),
+              const Align(
+                alignment: Alignment.topRight,
+                child: WhiteCloseButton(),
               ),
             ],
           ),

@@ -1,18 +1,18 @@
 name: altme
 description: AltMe Flutter App 
-version: 1.11.1+149
+version: 1.11.2+150
 publish_to: none
 
 environment:
   sdk: ">=2.19.0 <3.7.0"
 
 dependencies:
-  auto_size_text: ^3.0.0 
+  auto_size_text: ^3.0.0
   badges: ^3.0.2
   beacon_flutter:
     git:
       url: https://github.com/TalaoDAO/beacon.git
-      ref: 5afc170ff4f05c590508fed1c70e7e533021865f  
+      ref: 5afc170ff4f05c590508fed1c70e7e533021865f
   # beacon_flutter:
   #   path: ../beacon
   bip39: ^1.0.6
@@ -29,7 +29,7 @@ dependencies:
   dartez:
     git:
       url: https://github.com/TalebRafiepour/Dartez.git
-      ref: main 
+      ref: main
   device_info_plus: ^8.1.0
   device_preview: ^1.1.0
   devicelocale: ^0.5.5
@@ -81,7 +81,6 @@ dependencies:
   package_info_plus: ^3.0.3
   passbase_flutter: ^2.13.3 # new version available
   path: ^1.8.2 # flutter_test from sdk depends on path 1.8.2
-  path_provider: ^2.0.12
   permission_handler: ^10.2.0
   platform_device_id: ^1.0.1
   pointycastle: ^3.6.2
@@ -98,7 +97,7 @@ dependencies:
     git:
       url: https://github.com/autonomy-system/tezart.git
       ref: bd4b8db6e3a352590a6e556d31df8aef60db3465
-  timezone: ^0.9.1    
+  timezone: ^0.9.1
   uni_links: ^0.5.1
   url_launcher: ^6.1.9
   uuid: ^3.0.7
@@ -108,18 +107,19 @@ dependencies:
     git:
       url: https://github.com/bibash28/wallet-connect-dart.git
       ref: fba9b209ee2b61b62ddd643f07f6a7f64426d7b2
-  web3dart: ^2.6.1
   webview_flutter: ^4.0.2
   webview_flutter_android: ^3.2.4
   webview_flutter_wkwebview: ^3.0.5
   workmanager: ^0.5.1
 
 dependency_overrides:
-# Because flutter_sodium 0.2.0 depends on ffi ^1.0.0 and no versions of flutter_sodium match >0.2.0 <0.3.0, flutter_sodium ^0.2.0 requires ffi ^1.0.0
+  # Because flutter_sodium 0.2.0 depends on ffi ^1.0.0 and no versions of flutter_sodium match >0.2.0 <0.3.0, flutter_sodium ^0.2.0 requires ffi ^1.0.0
   async: ^2.9.0
   ffi: ^2.0.1
   markdown: ^4.0.0
+  path_provider: ^2.0.12
   stream_channel: ^2.1.0
+  web3dart: ^2.6.1
 
 dev_dependencies:
   bloc_test: ^9.1.1
