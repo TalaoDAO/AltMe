@@ -170,12 +170,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         isIssuerVerificationSettingTrue =
             profileCubit.state.model.issuerVerificationUrl != '';
 
-        /// issuer side (oidc4VCI)
         if (state.uri!.toString().startsWith('openid://initiate_issuance?')) {
           isIssuerVerificationSettingTrue = true;
         }
 
-        /// verifier side (siopv2) without request_uri
         if (state.uri?.queryParameters['scope'] == 'openid') {
           isIssuerVerificationSettingTrue =
               state.uri!.queryParameters['request_uri'] != null;
@@ -213,12 +211,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               ? state.uri!.host
               : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
 
-          /// issuer side (oidc4VCI)
           if (state.uri!.toString().startsWith('openid://initiate_issuance?')) {
             subtitle = state.uri!.queryParameters['issuer'].toString();
           }
 
-          /// verifier side (siopv2) without request_uri
           if (state.uri?.queryParameters['scope'] == 'openid') {
             subtitle = state.uri!.queryParameters['request_uri'].toString();
           }
