@@ -41,7 +41,7 @@ class CredentialsDetailsPage extends StatelessWidget {
     return BlocProvider<CredentialDetailsCubit>(
       create: (context) => CredentialDetailsCubit(
         didKitProvider: DIDKitProvider(),
-        secureStorageProvider: context.read<SecureStorageProvider>(),
+        secureStorageProvider: getSecureStorage,
         client: DioClient('', Dio()),
       ),
       child: CredentialsDetailsView(
