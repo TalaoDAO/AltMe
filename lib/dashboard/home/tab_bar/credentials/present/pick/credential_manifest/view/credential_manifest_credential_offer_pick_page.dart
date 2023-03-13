@@ -123,21 +123,14 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                             style: Theme.of(context).textTheme.credentialSteps,
                           ),
                           const SizedBox(height: 10),
-                          if (purpose != null)
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Text(
-                                purpose,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .credentialSubtitle,
-                              ),
-                            )
-                          else
-                            const SizedBox.shrink(),
-                          Text(
-                            l10n.credentialPickSelect,
-                            style: Theme.of(context).textTheme.bodyLarge,
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Text(
+                              purpose ?? l10n.credentialPickSelect,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .credentialSubtitle,
+                            ),
                           ),
                           const SizedBox(height: 12),
                           ...List.generate(
