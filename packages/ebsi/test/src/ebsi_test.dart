@@ -81,7 +81,7 @@ void main() {
     ];
 
     const expectedJwk = {
-      'crv': 'P-256K',
+      'crv': 'secp256k1',
       'd': 'ccWWNSjGiv1iWlNh4kfhWvwG3yyQMe8o31Du0uKRzrs',
       'kty': 'EC',
       'x': 'J4vQtLUyrVUiFIXRrtEq4xurmBZp2eq9wJmXkIA_stI',
@@ -100,7 +100,7 @@ void main() {
 
       test('privateKey from mnemonic', () async {
         const key = {
-          'crv': 'P-256K',
+          'crv': 'secp256k1',
           'd': 'ccWWNSjGiv1iWlNh4kfhWvwG3yyQMe8o31Du0uKRzrs',
           'kty': 'EC',
           'x': 'J4vQtLUyrVUiFIXRrtEq4xurmBZp2eq9wJmXkIA_stI',
