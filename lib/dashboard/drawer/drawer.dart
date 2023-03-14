@@ -1,10 +1,12 @@
 export 'advance_settings/advance_settings.dart';
+export 'altme_support_chat/altme_support_chat.dart';
 export 'backup_credential/backup_credential.dart';
+export 'chat_room/chat_room.dart';
 export 'contact_us/contact_us.dart';
 export 'drawer/drawer.dart';
 export 'faqs/faqs.dart';
 export 'import_talao_community_card/import_talao_community_card.dart';
-export 'live_chat/live_chat.dart';
+export 'loyalty_card_support_chat/loyalty_card_support_chat.dart';
 export 'manage_accounts/manage_accounts.dart';
 export 'manage_did/manage_did.dart';
 export 'manage_issuers_registry/manage_issuers_registry.dart';

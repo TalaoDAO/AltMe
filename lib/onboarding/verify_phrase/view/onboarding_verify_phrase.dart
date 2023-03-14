@@ -103,7 +103,7 @@ class _OnBoardingVerifyPhraseViewState
 
         if (state.status == AppStatus.success) {
           if (widget.isFromOnboarding) {
-            context.read<LiveChatCubit>().init();
+            context.read<AltmeChatSupportCubit>().init();
             Navigator.pushAndRemoveUntil<void>(
               context,
               WalletReadyPage.route(),

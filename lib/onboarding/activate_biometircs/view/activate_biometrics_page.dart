@@ -84,7 +84,7 @@ class ActivateBiometricsView extends StatelessWidget {
           }
 
           if (state.status == AppStatus.success) {
-            context.read<LiveChatCubit>().init();
+            context.read<AltmeChatSupportCubit>().init();
             Navigator.pushAndRemoveUntil<void>(
               context,
               WalletReadyPage.route(),

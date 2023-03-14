@@ -18,4 +18,7 @@ class AltMeStrings {
   static const String uri = 'uri';
   static const String email = 'email';
   static const String time = 'time';
+
+  //Chat
+  static const String matrixSupportId = '@support:matrix.talao.co';
 }

@@ -746,7 +746,8 @@
     "verifyNow",
     "verifyLater",
     "welDone",
-    "mnemonicsVerifiedMessage"
+    "mnemonicsVerifiedMessage",
+    "companySupport"
   ],
 
   "es": [
@@ -1496,7 +1497,8 @@
     "verifyNow",
     "verifyLater",
     "welDone",
-    "mnemonicsVerifiedMessage"
+    "mnemonicsVerifiedMessage",
+    "companySupport"
   ],
 
   "fr": [
@@ -1529,7 +1531,8 @@
     "verifyNow",
     "verifyLater",
     "welDone",
-    "mnemonicsVerifiedMessage"
+    "mnemonicsVerifiedMessage",
+    "companySupport"
   ],
 
   "it": [
@@ -2279,6 +2282,7 @@
     "verifyNow",
     "verifyLater",
     "welDone",
-    "mnemonicsVerifiedMessage"
+    "mnemonicsVerifiedMessage",
+    "companySupport"
   ]
 }

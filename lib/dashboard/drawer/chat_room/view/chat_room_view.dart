@@ -1,57 +1,33 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/app_theme/app_theme.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart' hide FileMessage, Message;
+import 'package:flutter_chat_ui/flutter_chat_ui.dart' hide Message;
 import 'package:visibility_detector/visibility_detector.dart';
 
-class LiveChatPage extends StatelessWidget {
-  const LiveChatPage({
+class ChatRoomView<B extends ChatRoomCubit> extends StatefulWidget {
+  const ChatRoomView({
     super.key,
-    this.hideAppBar = false,
+    this.appBarTitle,
   });
 
-  static Route<void> route() {
-    return MaterialPageRoute<void>(
-      builder: (_) => const LiveChatPage(
-        hideAppBar: false,
-      ),
-      settings: const RouteSettings(name: '/liveChatPage'),
-    );
-  }
-
-  final bool hideAppBar;
+  final String? appBarTitle;
 
   @override
-  Widget build(BuildContext context) {
-    return LiveChatView(
-      hideAppBar: hideAppBar,
-    );
-  }
+  _ChatRoomViewState<B> createState() => _ChatRoomViewState();
 }
 
-class LiveChatView extends StatefulWidget {
-  const LiveChatView({
-    super.key,
-    this.hideAppBar = false,
-  });
-  final bool hideAppBar;
-
-  @override
-  State<LiveChatView> createState() => _ContactUsViewState();
-}
-
-class _ContactUsViewState extends State<LiveChatView> {
-  late final LiveChatCubit liveChatCubit;
+class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
+  late final B liveChatCubit;
 
   bool pageIsVisible = false;
 
   @override
   void initState() {
-    liveChatCubit = context.read<LiveChatCubit>();
+    liveChatCubit = context.read<B>();
     super.initState();
   }
 
@@ -64,13 +40,14 @@ class _ContactUsViewState extends State<LiveChatView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: widget.hideAppBar ? null : l10n.altmeSupport,
+      title: widget.appBarTitle,
       scrollView: false,
-      titleLeading: widget.hideAppBar ? null : const BackLeadingButton(),
+      titleLeading:
+          widget.appBarTitle == null ? null : const BackLeadingButton(),
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.all(Sizes.spaceSmall),
-      body: BlocBuilder<LiveChatCubit, LiveChatState>(
-        builder: (context, state) {
+      body: BlocBuilder<B, ChatRoomState>(
+        builder: (context, ChatRoomState state) {
           if (state.status == AppStatus.loading) {
             return const Center(
               child: CircularProgressIndicator(),
