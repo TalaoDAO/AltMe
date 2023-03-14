@@ -32,7 +32,9 @@ dependencies:
   ed25519_hd_key: ^2.2.0
   equatable: ^2.0.3
   file_picker: ^4.5.1
-  file_saver: ^0.1.1
+  file_saver:
+    git:
+      url: https://github.com/incrediblezayed/file_saver.git
   flutter:
     sdk: flutter
   flutter_barcode_scanner: ^2.0.0
@@ -59,7 +61,7 @@ dependencies:
   # passbase_flutter: ^2.13.3
   path: ^1.8.0
   path_provider: ^2.0.8
-  permission_handler: ^9.2.0
+  permission_handler: ^10.2.0
   pointycastle: ^3.5.2
   qr_flutter: ^4.0.0
   secure_storage:
