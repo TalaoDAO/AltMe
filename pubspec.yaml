@@ -82,6 +82,7 @@ dependencies:
   package_info_plus: ^3.0.3
   passbase_flutter: ^2.13.3 # new version available
   path: ^1.8.2 # flutter_test from sdk depends on path 1.8.2
+  path_provider: ^2.0.13
   permission_handler: ^10.2.0
   platform_device_id: ^1.0.1
   pointycastle: ^3.6.2
@@ -108,6 +109,7 @@ dependencies:
     git:
       url: https://github.com/bibash28/wallet-connect-dart.git
       ref: fba9b209ee2b61b62ddd643f07f6a7f64426d7b2
+  web3dart: ^2.6.1
   webview_flutter: ^4.0.2
   webview_flutter_android: ^3.2.4
   webview_flutter_wkwebview: ^3.0.5

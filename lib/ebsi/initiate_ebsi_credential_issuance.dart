@@ -1,7 +1,6 @@
 import 'package:altme/app/shared/constants/parameters.dart';
 import 'package:altme/app/shared/constants/secure_storage_keys.dart';
 import 'package:altme/app/shared/dio_client/dio_client.dart';
-import 'package:altme/app/shared/helper_functions/helper_functions.dart';
 import 'package:altme/app/shared/launch_url/launch_url.dart';
 import 'package:altme/ebsi/add_ebsi_credential.dart';
 import 'package:altme/wallet/wallet.dart';
