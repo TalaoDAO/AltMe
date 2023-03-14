@@ -133,3 +133,4 @@ app.*.map.json
 
 #private key related
 *.env
+*.env.dev
