@@ -1473,7 +1473,7 @@ packages:
     source: hosted
     version: "1.0.1"
   path_provider:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       name: path_provider
       sha256: dcea5feb97d8abf90cab9e9030b497fb7c3cbf26b7a1fe9e3ef7dcb0a1ddec95
@@ -2311,7 +2311,7 @@ packages:
     source: hosted
     version: "1.0.2"
   web3dart:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       name: web3dart
       sha256: "0b96223a6b284e3146e65dc842ded139eca68a85c4ab79c5ba1a73284927d3cd"
