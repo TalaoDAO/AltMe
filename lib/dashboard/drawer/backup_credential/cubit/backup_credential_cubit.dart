@@ -74,8 +74,12 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       final encrypted =
           await cryptoKeys.encrypt(jsonEncode(message), mnemonicFormatted);
       final fileBytes = Uint8List.fromList(utf8.encode(jsonEncode(encrypted)));
-      final filePath =
-          await fileSaver.saveAs(fileName, fileBytes, 'txt', MimeType.TEXT);
+      final filePath = await fileSaver.saveAs(
+        name: fileName,
+        bytes: fileBytes,
+        ext: 'txt',
+        mimeType: MimeType.text,
+      );
 
       emit(
         state.success(
