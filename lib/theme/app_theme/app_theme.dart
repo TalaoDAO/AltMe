@@ -146,7 +146,7 @@ extension CustomColorScheme on ColorScheme {
 
   Color get kycKeyIconColor => const Color(0xFF86809D);
 
-  Color get popupBackground => const Color(0xff271C38);
+  Color get popupBackground => onPrimary;
 
   Color get cardHighlighted => cardHighlight;
 
@@ -737,13 +737,13 @@ extension CustomTextTheme on TextTheme {
         color: const Color(0xff86809D),
       );
 
-  TextStyle get newVersionTitle => GoogleFonts.nunito(
+  TextStyle get newVersionTitle => GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.w800,
-        color: const Color(0xFFFFFFFF),
+        color: background,
       );
 
-  TextStyle get kycDialogTitle => GoogleFonts.nunito(
+  TextStyle get kycDialogTitle => GoogleFonts.poppins(
         fontSize: 25,
         fontWeight: FontWeight.bold,
         color: const Color(0xffF5F5F5),

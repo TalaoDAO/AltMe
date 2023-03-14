@@ -60,7 +60,7 @@ class WhatIsNewDialog extends StatelessWidget {
                         child: Column(
                           children: [
                             const AltMeLogo(
-                              color: Colors.white,
+                              color: background,
                               size: Sizes.logoLarge * 1.05,
                             ),
                             Text(
@@ -69,7 +69,7 @@ class WhatIsNewDialog extends StatelessWidget {
                                   .textTheme
                                   .defaultDialogTitle
                                   .copyWith(
-                                    color: Colors.white,
+                                    color: background,
                                   ),
                               textAlign: TextAlign.center,
                             ),

@@ -38,7 +38,7 @@ class NewContent extends StatelessWidget {
                     padding: EdgeInsets.only(top: 3),
                     child: Icon(
                       Icons.check_circle,
-                      color: Colors.white,
+                      color: background,
                       size: 18,
                     ),
                   ),
@@ -51,7 +51,7 @@ class NewContent extends StatelessWidget {
                           .textTheme
                           .defaultDialogBody
                           .copyWith(
-                            color: Colors.white,
+                            color: background,
                           ),
                     ),
                   ),
