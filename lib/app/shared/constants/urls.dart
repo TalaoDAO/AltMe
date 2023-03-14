@@ -29,8 +29,7 @@ class Urls {
   static const String tezotopiaMembershipCardUrl =
       'https://issuer.talao.co/tezotopia/membershipcard/';
 
-  static const String bloometaCardUrl =
-      'https://issuer.talao.co/bloometa/membershipcard/';
+  static const String bloometaCardUrl = 'https://issuer.talao.co/bloometa';
 
   static const String chainbornMembershipCardUrl =
       'https://issuer.talao.co/chainborn/membershipcard/';

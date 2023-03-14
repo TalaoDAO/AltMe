@@ -6,7 +6,7 @@ import 'package:fast_base58/fast_base58.dart';
 
 /// Most of the parameters used to get or present EBSI credentials
 /// are computed from private key of the user wallet.
-/// [TokenParameters] regroup those computed parameters
+/// [TokenParameters] regroup those computed parameters`
 class TokenParameters {
   ///
   TokenParameters(this.privateKey);

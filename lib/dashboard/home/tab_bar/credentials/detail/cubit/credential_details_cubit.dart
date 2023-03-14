@@ -8,6 +8,7 @@ import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'credential_details_cubit.g.dart';
 
@@ -16,10 +17,12 @@ part 'credential_details_state.dart';
 class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   CredentialDetailsCubit({
     required this.didKitProvider,
+    required this.secureStorageProvider,
     required this.client,
   }) : super(const CredentialDetailsState());
 
   final DIDKitProvider didKitProvider;
+  final SecureStorageProvider secureStorageProvider;
   final DioClient client;
 
   void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {
@@ -51,6 +54,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       final VerificationType isVerified = await isEbsiCredentialVerified(
         issuerDid,
         client,
+        secureStorageProvider,
         item.jwt!,
       );
 

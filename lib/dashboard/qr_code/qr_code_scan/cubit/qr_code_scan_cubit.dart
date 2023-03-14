@@ -184,7 +184,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }) async {
     emit(state.loading(isScan: isScan));
     try {
-      ///Check if SIOPV2 request
+      /// verifier side (siopv2) without request_uri
       if (uri?.queryParameters['scope'] == 'openid') {
         // Check if we can respond to presentation request:
         // having credentials?
@@ -271,7 +271,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     // Check if we can respond to presentation request:
     // having credentials?
     // having correct crv in ebsi key
-    if (!await isSiopV2RequestValid(uri!)) {
+    if (!await isSiopV2WithRequestURIValid(uri!)) {
       emit(
         state.copyWith(
           qrScanStatus: QrScanStatus.success,
@@ -334,6 +334,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     late final dynamic data;
 
     try {
+      /// ebsi credential
+      /// issuer side (oidc4VCI)
       if (state.uri.toString().startsWith('openid://initiate_issuance?')) {
         await initiateEbsiCredentialIssuance(
           state.uri.toString(),
@@ -346,6 +348,54 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         return;
       }
 
+      /// ebsi presentation
+      /// verifier side (siopv2) without request_uri
+      if (state.uri?.queryParameters['scope'] == 'openid') {
+        var claims = uri.queryParameters['claims'] ?? '';
+
+        // TODO(hawkbee): change when correction is done on verifier
+        claims = claims.replaceAll("'email': None", "'email': 'None'");
+
+        claims = claims.replaceAll("'", '"');
+        final jsonPath = JsonPath(r'$..input_descriptors');
+        final outputDescriptors =
+            jsonPath.readValues(jsonDecode(claims)).first as List;
+        final inputDescriptorList = outputDescriptors
+            .map((e) => InputDescriptor.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        final PresentationDefinition presentationDefinition =
+            PresentationDefinition(inputDescriptorList);
+        final CredentialModel credentialPreview = CredentialModel(
+          id: 'id',
+          image: 'image',
+          credentialPreview: Credential.dummy(),
+          shareLink: 'shareLink',
+          display: Display.emptyDisplay(),
+          data: const {},
+          credentialManifest: CredentialManifest(
+            'id',
+            IssuedBy('', ''),
+            null,
+            presentationDefinition,
+          ),
+        );
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.success,
+            route: CredentialManifestOfferPickPage.route(
+              uri: uri,
+              credential: credentialPreview,
+              issuer: Issuer.emptyIssuer('domain'),
+              inputDescriptorIndex: 0,
+              credentialsToBePresented: [],
+            ),
+          ),
+        );
+        return;
+      }
+
+      /// did credential addition and presentation
       final dynamic response = await client.get(uri.toString());
       data = response is String ? jsonDecode(response) : response;
 
@@ -598,7 +648,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return data;
   }
 
-  Future<bool> isSiopV2RequestValid(Uri uri) async {
+  Future<bool> isSiopV2WithRequestURIValid(Uri uri) async {
     bool isValid = true;
 
     ///credential should not be empty since we have to present

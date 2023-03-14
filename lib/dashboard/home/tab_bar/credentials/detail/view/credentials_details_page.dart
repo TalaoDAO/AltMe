@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:secure_storage/secure_storage.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CredentialsDetailsPage extends StatelessWidget {
@@ -40,6 +41,7 @@ class CredentialsDetailsPage extends StatelessWidget {
     return BlocProvider<CredentialDetailsCubit>(
       create: (context) => CredentialDetailsCubit(
         didKitProvider: DIDKitProvider(),
+        secureStorageProvider: getSecureStorage,
         client: DioClient('', Dio()),
       ),
       child: CredentialsDetailsView(
