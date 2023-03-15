@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/ebsi/verify_ebsi_credential.dart';
+import 'package:altme/ebsi/verify_encoded_data.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
@@ -51,7 +51,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       final issuerDid = item.data['issuer']! as String;
       //const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
 
-      final VerificationType isVerified = await isEbsiCredentialVerified(
+      final VerificationType isVerified = await verifyEncodedData(
         issuerDid,
         client,
         secureStorageProvider,

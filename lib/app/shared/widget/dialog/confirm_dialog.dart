@@ -29,7 +29,8 @@ class ConfirmDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = dialogColor ?? Theme.of(context).colorScheme.primary;
     final background = bgColor ?? Theme.of(context).colorScheme.popupBackground;
-    final text = textColor ?? Theme.of(context).colorScheme.dialogText;
+    final textColor =
+        this.textColor ?? Theme.of(context).colorScheme.dialogText;
 
     final l10n = context.l10n;
     return AlertDialog(
@@ -53,7 +54,7 @@ class ConfirmDialog extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .defaultDialogTitle
-                .copyWith(color: text),
+                .copyWith(color: textColor),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: Sizes.spaceXSmall),
@@ -63,7 +64,7 @@ class ConfirmDialog extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .defaultDialogSubtitle
-                  .copyWith(color: text),
+                  .copyWith(color: textColor),
               textAlign: TextAlign.center,
             ),
           const SizedBox(height: 24),

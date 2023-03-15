@@ -56,18 +56,18 @@ class ScanCubit extends Cubit<ScanState> {
     final log = getLogger('ScanCubit - credentialOffer');
 
     try {
-      if (uri.queryParameters['scope'] == 'openid') {
+      if (uri.queryParameters['scope'] == 'openid' ||
+          uri.toString().startsWith('openid://?client_id')) {
         final ebsi = Ebsi(Dio());
-        final mnemonic =
-            await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-        final privateKey =
-            await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic!);
+
+        final String p256PrivateKey =
+            await getRandomP256PrivateKey(secureStorageProvider);
 
         final credentialList = credentialsToBePresented!
             .map((e) => jsonEncode(e.toJson()))
             .toList();
 
-        await ebsi.sendPresentation(uri, credentialList, null, privateKey);
+        await ebsi.sendPresentation(uri, credentialList, null, p256PrivateKey);
 
         await presentationActivity(
           credentialModels: credentialsToBePresented,

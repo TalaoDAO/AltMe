@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
+import 'package:cryptography/cryptography.dart' as cryptography;
 import 'package:dio/dio.dart';
 import 'package:ebsi/src/issuer_token_parameters.dart';
 import 'package:ebsi/src/token_parameters.dart';
@@ -335,17 +336,17 @@ class Ebsi {
 
     final vcJwt = await getIssuerJwt(issuerTokenParameters, nonce);
 
-    final issuerDid = readIssuerDid(openidConfigurationResponse);
+    //final issuerDid = readIssuerDid(openidConfigurationResponse);
 
-    final isVerified = await verifyCredential(
-      issuerDid: issuerDid,
-      vcJwt: vcJwt,
-      holderKid: issuerTokenParameters.kid,
-    );
+    // final isVerified = await verifyEncodedData(
+    //   issuerDid: issuerDid,
+    //   jwt: vcJwt,
+    //   holderKid: issuerTokenParameters.kid,
+    // );
 
-    if (isVerified == VerificationType.notVerified) {
-      throw Exception('VERIFICATION_ISSUE');
-    }
+    // if (isVerified == VerificationType.notVerified) {
+    //   throw Exception('VERIFICATION_ISSUE');
+    // }
 
     final credentialType =
         credentialRequestUri.queryParameters['credential_type'];
@@ -357,26 +358,43 @@ class Ebsi {
     return credentialData;
   }
 
-  Future<VerificationType> verifyCredential({
+  Future<VerificationType> verifyEncodedData({
     required String issuerDid,
     required String holderKid,
-    required String vcJwt,
+    required String jwt,
   }) async {
     try {
       final didDocument = await getDidDocument(issuerDid);
 
       final publicKeyJwk = readPublicKeyJwk(holderKid, didDocument);
 
-      // create a JsonWebSignature from the encoded string
-      final jws = JsonWebSignature.fromCompactSerialization(vcJwt);
+      final kty = publicKeyJwk['kty'].toString();
 
-      // create a JsonWebKey for verifying the signature
-      final keyStore = JsonWebKeyStore()
-        ..addKey(
-          JsonWebKey.fromJson(publicKeyJwk),
+      late final bool isVerified;
+      if (kty == 'OKP') {
+        var xString = publicKeyJwk['x'].toString();
+        final paddingLength = 4 - (xString.length % 4);
+        xString += '=' * paddingLength;
+
+        final publicKeyBytes = base64Url.decode(xString);
+
+        final publicKey = cryptography.SimplePublicKey(
+          publicKeyBytes,
+          type: cryptography.KeyPairType.ed25519,
         );
 
-      final isVerified = await jws.verify(keyStore);
+        isVerified = await verifyJwt(jwt, publicKey);
+      } else {
+        // create a JsonWebSignature from the encoded string
+        final jws = JsonWebSignature.fromCompactSerialization(jwt);
+
+        // create a JsonWebKey for verifying the signature
+        final keyStore = JsonWebKeyStore()
+          ..addKey(
+            JsonWebKey.fromJson(publicKeyJwk),
+          );
+        isVerified = await jws.verify(keyStore);
+      }
 
       if (isVerified) {
         return VerificationType.verified;
@@ -386,6 +404,33 @@ class Ebsi {
     } catch (e) {
       return VerificationType.unKnown;
     }
+  }
+
+  Future<bool> verifyJwt(
+    String vcJwt,
+    cryptography.SimplePublicKey publicKey,
+  ) async {
+    final parts = vcJwt.split('.');
+
+    final header = parts[0];
+    final payload = parts[1];
+
+    final message = utf8.encode('$header.$payload');
+
+    // Get the signature
+    var signatureString = parts[2];
+    final paddingLength = 4 - (signatureString.length % 4);
+    signatureString += '=' * paddingLength;
+    final signatureBytes = base64Url.decode(signatureString);
+
+    final signature =
+        cryptography.Signature(signatureBytes, publicKey: publicKey);
+
+    //verify signature
+    final result =
+        await cryptography.Ed25519().verify(message, signature: signature);
+
+    return result;
   }
 
   String readCredentialEndpoint(
@@ -519,6 +564,8 @@ class Ebsi {
       'nonce': tokenParameters.nonce
     };
 
+    print(vpTokenPayload);
+
     final verifierVpJwt = generateToken(vpTokenPayload, tokenParameters);
 
     return verifierVpJwt;
@@ -535,6 +582,8 @@ class Ebsi {
     if (tokenParameters.privateKey['crv'] == 'secp256k1') {
       privateKey['crv'] = 'P-256K';
     }
+
+    print(tokenParameters.publicJWK);
 
     final key = JsonWebKey.fromJson(tokenParameters.privateKey);
 

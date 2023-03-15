@@ -3,11 +3,11 @@ import 'package:dio/dio.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-Future<VerificationType> isEbsiCredentialVerified(
+Future<VerificationType> verifyEncodedData(
   String issuerDid,
   DioClient client,
   SecureStorageProvider secureStorageProvider,
-  String vcJwt,
+  String jwt,
 ) async {
   final Ebsi ebsi = Ebsi(Dio());
 
@@ -16,9 +16,9 @@ Future<VerificationType> isEbsiCredentialVerified(
 
   final holderKid = await ebsi.getKid(null, p256PrivateKey);
 
-  final VerificationType verificationType = await ebsi.verifyCredential(
+  final VerificationType verificationType = await ebsi.verifyEncodedData(
     issuerDid: issuerDid,
-    vcJwt: vcJwt,
+    jwt: jwt,
     holderKid: holderKid,
   );
   return verificationType;

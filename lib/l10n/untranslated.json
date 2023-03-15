@@ -748,7 +748,8 @@
     "welDone",
     "mnemonicsVerifiedMessage",
     "companySupport",
-    "sendAnEmail"
+    "sendAnEmail",
+    "service_not_registered_message"
   ],
 
   "es": [
@@ -1500,7 +1501,8 @@
     "welDone",
     "mnemonicsVerifiedMessage",
     "companySupport",
-    "sendAnEmail"
+    "sendAnEmail",
+    "service_not_registered_message"
   ],
 
   "fr": [
@@ -1536,7 +1538,8 @@
     "welDone",
     "mnemonicsVerifiedMessage",
     "companySupport",
-    "sendAnEmail"
+    "sendAnEmail",
+    "service_not_registered_message"
   ],
 
   "it": [
@@ -2288,6 +2291,7 @@
     "welDone",
     "mnemonicsVerifiedMessage",
     "companySupport",
-    "sendAnEmail"
+    "sendAnEmail",
+    "service_not_registered_message"
   ]
 }
