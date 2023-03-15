@@ -772,7 +772,7 @@
   "buy": "Buy",
   "thisFeatureIsNotSupportedYetForFantom": "This feature is not supported yet for Fantom.",
   "thisFeatureIsNotSupportedYetForBinance": "This feature is not supported yet for Binance.",
-  "faqs": "FAQs",
+  "faqs": "Frequently Asked Questions (FAQs)",
   "softwareLicenses": "Software Licenses",
   "notAValidWalletAddress": "Not a valid wallet address!",
   "otherAccount": "Other account",
@@ -789,7 +789,7 @@
   "scanAndDisplay": "Scan and Display",
   "whatsNew": "What's new",
   "okGotIt": "OK, GOT IT!",
-  "altmeSupport": "AltMe support",
+  "altmeSupport": "Chat with Altme’s support",
   "transactionDoneDialogDescription": "It can take a few minutes for the transfer to complete",
   "withdrawalFailedMessage": "The withdrawal from the account was unsuccessful",
   "credentialRequiredMessage": "You need to get those credentials in your wallet to acquire this card:",
@@ -812,5 +812,6 @@
   "welDone": "Well done!",
   "mnemonicsVerifiedMessage": "Your revovery phrase is saved correctly.",
   "letsGo": "Let's Go",
-  "companySupport": "Company support"
+  "companySupport": "Company support",
+  "sendAnEmail": "Send an email"
 }
