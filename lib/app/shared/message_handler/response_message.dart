@@ -10,6 +10,18 @@ class ResponseMessage with MessageHandler {
   String getMessage(BuildContext context, MessageHandler messageHandler) {
     if (messageHandler is ResponseMessage) {
       switch (messageHandler.message) {
+        case ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_bloometaPassExpirationDate:
+          return ResponseString.RESPONSE_STRING_bloometaPassExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt:
+          return ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt
+              .localise(context);
+
         case ResponseString.RESPONSE_STRING_identityProofDummyDescription:
           return ResponseString.RESPONSE_STRING_identityProofDummyDescription
               .localise(context);

@@ -249,6 +249,11 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.bloometaPass:
         image = ImageStrings.bloometaDummy;
         link = Urls.bloometaCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_bloometaPassExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt;
         break;
 
       case CredentialSubjectType.ethereumAssociatedWallet:

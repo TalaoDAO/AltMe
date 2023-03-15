@@ -4,6 +4,16 @@ extension ResponseStringX on ResponseString {
   String localise(BuildContext context) {
     final GlobalMessage globalMessage = GlobalMessage(context.l10n);
     switch (this) {
+      
+      case ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt:
+        return globalMessage.RESPONSE_STRING_bloometaPassHowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_bloometaPassExpirationDate:
+        return globalMessage.RESPONSE_STRING_bloometaPassExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_bloometaPassWhyGetThisCard;
+
       case ResponseString.RESPONSE_STRING_identityProofDummyDescription:
         return globalMessage.RESPONSE_STRING_identityProofDummyDescription;
 

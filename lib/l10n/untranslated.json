@@ -749,7 +749,10 @@
     "mnemonicsVerifiedMessage",
     "companySupport",
     "sendAnEmail",
-    "service_not_registered_message"
+    "service_not_registered_message",
+    "bloometaPassHowToGetIt",
+    "bloometaPassExpirationDate",
+    "bloometaPassWhyGetThisCard"
   ],
 
   "es": [
@@ -1502,7 +1505,10 @@
     "mnemonicsVerifiedMessage",
     "companySupport",
     "sendAnEmail",
-    "service_not_registered_message"
+    "service_not_registered_message",
+    "bloometaPassHowToGetIt",
+    "bloometaPassExpirationDate",
+    "bloometaPassWhyGetThisCard"
   ],
 
   "fr": [
@@ -1539,7 +1545,10 @@
     "mnemonicsVerifiedMessage",
     "companySupport",
     "sendAnEmail",
-    "service_not_registered_message"
+    "service_not_registered_message",
+    "bloometaPassHowToGetIt",
+    "bloometaPassExpirationDate",
+    "bloometaPassWhyGetThisCard"
   ],
 
   "it": [
@@ -2292,6 +2301,9 @@
     "mnemonicsVerifiedMessage",
     "companySupport",
     "sendAnEmail",
-    "service_not_registered_message"
+    "service_not_registered_message",
+    "bloometaPassHowToGetIt",
+    "bloometaPassExpirationDate",
+    "bloometaPassWhyGetThisCard"
   ]
 }

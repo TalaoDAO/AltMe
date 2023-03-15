@@ -8,6 +8,15 @@ class GlobalMessage {
   String get RESPONSE_STRING_identityProofDummyDescription =>
       l10n.identityProofDummyDescription;
 
+  String get RESPONSE_STRING_bloometaPassHowToGetIt =>
+      l10n.bloometaPassHowToGetIt;
+
+  String get RESPONSE_STRING_bloometaPassExpirationDate =>
+      l10n.bloometaPassExpirationDate;
+
+  String get RESPONSE_STRING_bloometaPassWhyGetThisCard =>
+      l10n.bloometaPassWhyGetThisCard;
+
   String get RESPONSE_STRING_over18DummyDescription =>
       l10n.over18ProofDummyDescription;
 
