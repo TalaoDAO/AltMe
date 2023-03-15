@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -158,7 +160,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                   /// TODO(Taleb): read the ChatSupport property from credential
                   /// json and replace by this '@bloometa:matrix.talao.co'
                   companySupportId: '@bloometa:matrix.talao.co',
-                  appBarTitle: l10n.companySupport,
+                  chatWelcomeMessage: l10n.cardChatWelcomeMessage,
+                  appBarTitle:
+                      '${l10n.chatWith} ${widget.credentialModel.credentialPreview.credentialSubjectModel.issuedBy?.name}',
                   loyaltyCardType: widget.credentialModel.credentialPreview
                       .credentialSubjectModel.credentialSubjectType.name,
                 ),

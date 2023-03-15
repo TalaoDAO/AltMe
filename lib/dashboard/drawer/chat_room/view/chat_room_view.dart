@@ -12,9 +12,11 @@ class ChatRoomView<B extends ChatRoomCubit> extends StatefulWidget {
   const ChatRoomView({
     super.key,
     this.appBarTitle,
+    this.chatWelcomeMessage,
   });
 
   final String? appBarTitle;
+  final String? chatWelcomeMessage;
 
   @override
   _ChatRoomViewState<B> createState() => _ChatRoomViewState();
@@ -104,7 +106,8 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            l10n.supportChatWelcomeMessage,
+                            widget.chatWelcomeMessage ??
+                                l10n.supportChatWelcomeMessage,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
