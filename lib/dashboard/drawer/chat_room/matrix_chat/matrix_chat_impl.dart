@@ -175,8 +175,8 @@ class MatrixChatImpl extends MatrixChatInterface {
         id: const Uuid().v4(),
         remoteId: event.eventId,
         name: event.body,
-        size: event.content['info']['size'] as num,
-        uri: getUrlFromUri(uri: event.content['url'] as String),
+        size: event.content['info']['size'] as num? ?? 0,
+        uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         author: User(
@@ -188,8 +188,8 @@ class MatrixChatImpl extends MatrixChatInterface {
         id: const Uuid().v4(),
         remoteId: event.eventId,
         name: event.body,
-        size: event.content['info']['size'] as num,
-        uri: getUrlFromUri(uri: event.content['url'] as String),
+        size: event.content['info']['size'] as num? ?? 0,
+        uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         author: User(
@@ -201,11 +201,11 @@ class MatrixChatImpl extends MatrixChatInterface {
         id: const Uuid().v4(),
         remoteId: event.eventId,
         duration: Duration(
-          milliseconds: event.content['info']['duration'] as int,
+          milliseconds: event.content['info']['duration'] as int? ?? 0,
         ),
         name: event.body,
-        size: event.content['info']['size'] as num,
-        uri: getUrlFromUri(uri: event.content['url'] as String),
+        size: event.content['info']['size'] as num? ?? 0,
+        uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         author: User(
@@ -403,6 +403,7 @@ class MatrixChatImpl extends MatrixChatInterface {
     int width = 500,
     int height = 500,
   }) {
+    if (uri.trim().isEmpty) return '';
     return '${Urls.matrixHomeServer}/_matrix/media/v3/thumbnail/${Urls.matrixHomeServer.replaceAll('https://', '')}/${uri.split('/').last}?width=$width&height=$height';
   }
 
