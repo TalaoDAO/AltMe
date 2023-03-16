@@ -62,7 +62,7 @@ dependencies:
   #google_mlkit_face_detection: ^0.5.0
   http: ^0.13.5
   image: ^3.0.2
-  image_picker: ^0.8.6+1
+  image_picker: ^0.8.7
   intl: ^0.17.0 #flutter_localizations from sdk which depends on intl 0.17.0
   jose: ^0.3.3
   json_annotation: ^4.8.0
