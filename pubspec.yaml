@@ -1,6 +1,6 @@
 name: altme
 description: AltMe Flutter App
-version: 1.11.3+161
+version: 1.11.4+163
 publish_to: none
 
 environment:
@@ -75,12 +75,12 @@ dependencies:
   logger: ^1.1.0
   matrix: ^0.15.13 # new version available
   mime: ^1.0.4
-  mobile_scanner: ^3.0.0
+  mobile_scanner: ^2.1.0
   network_image_mock: ^2.1.1
   no_screenshot: ^0.0.1+6
   open_filex: ^4.3.2
   package_info_plus: ^3.0.3
-  passbase_flutter: ^2.13.3 # new version available
+  passbase_flutter: ^2.14.0
   path: ^1.8.2 # flutter_test from sdk depends on path 1.8.2
   permission_handler: ^10.2.0
   platform_device_id: ^1.0.1

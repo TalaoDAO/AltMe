@@ -5,11 +5,11 @@ class DiscoverList {
     CredentialSubjectType.tezotopiaMembership,
     CredentialSubjectType.chainbornMembership,
     // CredentialSubjectType.bloometaPass,
-    CredentialSubjectType.troopezPass,
-    CredentialSubjectType.pigsPass,
-    CredentialSubjectType.matterlightPass,
+    // CredentialSubjectType.troopezPass,
+    // CredentialSubjectType.pigsPass,
+    // CredentialSubjectType.matterlightPass,
     // CredentialSubjectType.dogamiPass,
-    CredentialSubjectType.bunnyPass,
+    // CredentialSubjectType.bunnyPass,
   ];
 
   static final List<CredentialSubjectType> communityCategories = [

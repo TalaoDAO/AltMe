@@ -1316,10 +1316,10 @@ packages:
     dependency: "direct main"
     description:
       name: mobile_scanner
-      sha256: "4045e8441e21f1fb8998a76fbffd054510dd3a3b1dee55c7c9a2083eee687345"
+      sha256: "531725451c7506f4c57b4720da1fe33a1394cdf9d4a5075a3a2dd51e21113928"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "2.1.0"
   mockingjay:
     dependency: "direct dev"
     description:
@@ -1444,10 +1444,10 @@ packages:
     dependency: "direct main"
     description:
       name: passbase_flutter
-      sha256: "200d5ed74aac08ae420f5f4fe962e62c4a508af66d7aceb873fc29d7f08ad73e"
+      sha256: bb8b350718fed101359753bbe254165b40cb51d5802d8bd1f418e1384b695f64
       url: "https://pub.dev"
     source: hosted
-    version: "2.13.7"
+    version: "2.14.0"
   path:
     dependency: "direct main"
     description:
