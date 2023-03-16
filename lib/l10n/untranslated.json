@@ -753,7 +753,8 @@
     "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
-    "bloometaPassWhyGetThisCard"
+    "bloometaPassWhyGetThisCard",
+    "chat"
   ],
 
   "es": [
@@ -1510,7 +1511,8 @@
     "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
-    "bloometaPassWhyGetThisCard"
+    "bloometaPassWhyGetThisCard",
+    "chat"
   ],
 
   "fr": [
@@ -1551,7 +1553,8 @@
     "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
-    "bloometaPassWhyGetThisCard"
+    "bloometaPassWhyGetThisCard",
+    "chat"
   ],
 
   "it": [
@@ -2308,6 +2311,7 @@
     "service_not_registered_message",
     "bloometaPassHowToGetIt",
     "bloometaPassExpirationDate",
-    "bloometaPassWhyGetThisCard"
+    "bloometaPassWhyGetThisCard",
+    "chat"
   ]
 }

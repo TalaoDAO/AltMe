@@ -817,5 +817,6 @@
   "service_not_registered_message": "This is services is not registered.",
   "bloometaPassHowToGetIt": "You need to present an Email proof and an Over 18 proof. If you don’t have those credentials already, claim them directly in Altme “Discover” section.",
   "bloometaPassExpirationDate": "This card will remain active and reusable for 1 YEAR.",
-  "bloometaPassWhyGetThisCard": "Be among the few to get access to limited edition mints, gaming highlights and future airdrops. Claim your card today and enter the Bloometaverse !"
+  "bloometaPassWhyGetThisCard": "Be among the few to get access to limited edition mints, gaming highlights and future airdrops. Claim your card today and enter the Bloometaverse !",
+  "chat": "Chat"
 }
