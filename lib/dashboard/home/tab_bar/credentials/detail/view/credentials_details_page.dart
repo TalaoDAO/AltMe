@@ -198,37 +198,37 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                           ),
                                     ),
                                   ),
-
-                                /// TODO(Taleb): check if json contains the
-                                /// ChatSupport then enable chat button
-                                Expanded(
-                                  child: CredentialDetailTabbar(
-                                    isSelected: false,
-                                    title: l10n.chat,
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        LoyaltyCardSupportChatPage.route(
-                                          /// TODO(Taleb): read the ChatSupport
-                                          /// property from credential
-                                          /// json and replace by this '@bloometa:matrix.talao.co'
-                                          companySupportId:
-                                              '@bloometa:matrix.talao.co',
-                                          chatWelcomeMessage:
-                                              l10n.cardChatWelcomeMessage,
-                                          appBarTitle:
-                                              '${l10n.chatWith} ${widget.credentialModel.credentialPreview.credentialSubjectModel.issuedBy?.name}',
-                                          loyaltyCardType: widget
-                                              .credentialModel
-                                              .credentialPreview
-                                              .credentialSubjectModel
-                                              .credentialSubjectType
-                                              .name,
-                                        ),
-                                      );
-                                    },
+                                if (widget.credentialModel
+                                            .data['credentialSubject']
+                                        ?['chatSupport'] !=
+                                    null)
+                                  Expanded(
+                                    child: CredentialDetailTabbar(
+                                      isSelected: false,
+                                      title: l10n.chat,
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          LoyaltyCardSupportChatPage.route(
+                                            companySupportId: widget
+                                                    .credentialModel
+                                                    .data['credentialSubject']
+                                                ?['chatSupport'] as String,
+                                            chatWelcomeMessage:
+                                                l10n.cardChatWelcomeMessage,
+                                            appBarTitle:
+                                                '${l10n.chatWith} ${widget.credentialModel.credentialPreview.credentialSubjectModel.issuedBy?.name}',
+                                            loyaltyCardType: widget
+                                                .credentialModel
+                                                .credentialPreview
+                                                .credentialSubjectModel
+                                                .credentialSubjectType
+                                                .name,
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
                               ],
                             ),
                             Divider(
