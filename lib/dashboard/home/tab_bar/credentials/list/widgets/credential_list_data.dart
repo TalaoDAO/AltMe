@@ -57,17 +57,6 @@ class CredentialListData extends StatelessWidget {
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
                 ],
-                if (advanceSettingsState.isBlockchainAccountsEnabled &&
-                    state.blockchainAccountsCredentials.isNotEmpty) ...[
-                  /// BlockchainAccounts Credentials
-                  HomeCredentialWidget(
-                    title: l10n.blockchainAccounts,
-                    credentials: state.blockchainAccountsCredentials,
-                    categorySubtitle:
-                        l10n.blockchainAccountsCredentialHomeSubtitle,
-                  ),
-                  const SizedBox(height: Sizes.spaceNormal),
-                ],
                 if (advanceSettingsState.isEducationEnabled &&
                     state.educationCredentials.isNotEmpty) ...[
                   /// Education Credentials
@@ -107,6 +96,17 @@ class CredentialListData extends StatelessWidget {
                     credentials: state.othersCredentials,
                     showAddOption: true,
                     categorySubtitle: l10n.otherCredentialHomeSubtitle,
+                  ),
+                  const SizedBox(height: Sizes.spaceNormal),
+                ],
+                if (advanceSettingsState.isBlockchainAccountsEnabled &&
+                    state.blockchainAccountsCredentials.isNotEmpty) ...[
+                  /// BlockchainAccounts Credentials
+                  HomeCredentialWidget(
+                    title: l10n.blockchainAccounts,
+                    credentials: state.blockchainAccountsCredentials,
+                    categorySubtitle:
+                        l10n.blockchainAccountsCredentialHomeSubtitle,
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
                 ],
