@@ -36,7 +36,11 @@ class MatrixChatImpl extends MatrixChatInterface {
     required this.dioClient,
     required this.secureStorageProvider,
   }) {
-    init();
+    secureStorageProvider.get(SecureStorageKeys.did).then((did) {
+      if (did != null && did.isNotEmpty) {
+        init();
+      }
+    });
   }
 
   static MatrixChatImpl? _instance;

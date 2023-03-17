@@ -26,7 +26,11 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   }) : super(
           const ChatRoomState(),
         ) {
-    init();
+    secureStorageProvider.get(SecureStorageKeys.did).then((did) {
+      if (did != null && did.isNotEmpty) {
+        init();
+      }
+    });
   }
 
   final SecureStorageProvider secureStorageProvider;
