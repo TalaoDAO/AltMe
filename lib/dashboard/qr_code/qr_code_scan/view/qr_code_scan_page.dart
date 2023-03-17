@@ -94,12 +94,8 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
                   child: MobileScanner(
                     key: qrKey,
                     controller: scannerController,
-                    onDetect: (capture) {
-                      final List<Barcode> qrcodes = capture.barcodes;
-                      final Barcode qrcode = qrcodes[0];
-                      for (final barcode in qrcodes) {
-                        debugPrint('Barcode found! ${barcode.rawValue}');
-                      }
+                    allowDuplicates: false,
+                    onDetect: (qrcode, args) {
                       if (qrcode.rawValue == null) {
                         context.read<QRCodeScanCubit>().emitError(
                               ResponseMessage(
