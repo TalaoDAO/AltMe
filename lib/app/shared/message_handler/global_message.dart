@@ -364,4 +364,10 @@ class GlobalMessage {
       l10n.transactionIsLikelyToFail;
   String get RESPONSE_STRING_verifiableIdCardDummyDesc =>
       l10n.verifiableIdCardDummyDesc;
+  String get RESPONSE_STRING_tezotopiaMembershipLongDescription =>
+      l10n.tezotopiaMembershipLongDescription;
+  String get RESPONSE_STRING_chainbornMembershipLongDescription =>
+      l10n.chainbornMembershipLongDescription;
+  String get RESPONSE_STRING_bloometaPassLongDescription =>
+      l10n.bloometaPassLongDescription;
 }

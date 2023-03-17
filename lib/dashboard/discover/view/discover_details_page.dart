@@ -146,12 +146,21 @@ class DetailFields extends StatelessWidget {
       );
     }
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (homeCredential.websiteGameLink != null)
+        if (homeCredential.websiteLink != null)
           DiscoverDynamicDetial(
-            title: l10n.websiteGame,
-            value: homeCredential.websiteGameLink!,
+            title: l10n.website,
+            value: homeCredential.websiteLink!,
             format: AltMeStrings.uri,
+          ),
+        if (homeCredential.longDescription != null)
+          DiscoverDynamicDetial(
+            title: homeCredential.credentialSubjectType.title,
+            value: homeCredential.whyGetThisCard!.getMessage(
+              context,
+              homeCredential.longDescription!,
+            ),
           ),
         if (homeCredential.whyGetThisCard != null)
           DiscoverDynamicDetial(

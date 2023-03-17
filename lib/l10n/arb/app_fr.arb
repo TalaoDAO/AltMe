@@ -569,7 +569,6 @@
   "transactionErrorTxRollupInvalidZeroTransfer": "Le montant d'un virement doit être supérieur à zéro.",
   "transactionErrorTxRollupUnknownAddress": "L'adresse doit exister dans le contexte lors de la signature d'un transfert avec elle.",
   "transactionErrorInactiveChain": "Tentative de validation d'un bloc d'une chaîne inactive.",
-  "websiteGame": "Jeu de site Web",
   "whyGetThisCard": "Pourquoi obtenir cette carte",
   "howToGetIt": "Comment l'obtenir",
   "emailPassWhyGetThisCard": "Ce justificatif peut être exigé par certaines Apps / Sites Web du Web 3 pour accéder à leur service ou réclamer des avantages : Carte de membre, Carte de fidélité, Rewards, etc.",
