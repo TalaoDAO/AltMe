@@ -655,63 +655,11 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future<void> resetWallet() async {
-    /// reward operations id in all accounts
-    for (final cryptoAccountData in state.cryptoAccount.data) {
-      await secureStorageProvider.delete(
-        SecureStorageKeys.lastNotifiedXTZRewardId +
-            cryptoAccountData.walletAddress,
-      );
-      await secureStorageProvider.delete(
-        SecureStorageKeys.lastNotifiedUNORewardId +
-            cryptoAccountData.walletAddress,
-      );
-    }
+    await secureStorageProvider.deleteAll();
 
-    ///Matrix
-    await secureStorageProvider
-        .delete(SecureStorageKeys.isUserRegisteredMatrix);
-    await secureStorageProvider.delete(SecureStorageKeys.supportRoomId);
-
-    /// ssi
-    await secureStorageProvider.delete(SecureStorageKeys.ssiMnemonic);
-    await secureStorageProvider.delete(SecureStorageKeys.ssiKey);
-
-    /// did
-    await secureStorageProvider.delete(SecureStorageKeys.did);
-    await secureStorageProvider.delete(SecureStorageKeys.didMethod);
-    await secureStorageProvider.delete(SecureStorageKeys.didMethodName);
-    await secureStorageProvider.delete(SecureStorageKeys.verificationMethod);
-
-    /// crypto
-    await secureStorageProvider.delete(SecureStorageKeys.cryptoAccount);
-    await secureStorageProvider
-        .delete(SecureStorageKeys.cryptoAccounTrackingIndex);
-    await secureStorageProvider.delete(SecureStorageKeys.tezosDerivePathIndex);
-    await secureStorageProvider
-        .delete(SecureStorageKeys.ethereumDerivePathIndex);
-    await secureStorageProvider.delete(SecureStorageKeys.fantomDerivePathIndex);
-    await secureStorageProvider
-        .delete(SecureStorageKeys.polygonDerivePathIndex);
-    await secureStorageProvider
-        .delete(SecureStorageKeys.binanceDerivePathIndex);
-    await secureStorageProvider.delete(SecureStorageKeys.currentCryptoIndex);
-    await secureStorageProvider.delete(SecureStorageKeys.data);
-
-    /// credentials
-    await credentialsRepository.deleteAll();
-
-    /// passBase
-    await secureStorageProvider.delete(SecureStorageKeys.passBaseStatus);
-    await secureStorageProvider
-        .delete(SecureStorageKeys.passBaseVerificationDate);
-    await secureStorageProvider.delete(SecureStorageKeys.preAuthorizedCode);
-
-    /// user data
-    await profileCubit.resetProfile();
-    await secureStorageProvider.delete(SecureStorageKeys.pinCode);
-
-    //save dapps
-    await connectedDappRepository.deleteAll();
+    // await credentialsRepository.deleteAll();
+    // await profileCubit.resetProfile();
+    // await connectedDappRepository.deleteAll();
 
     /// clear app states
     homeCubit.emitHasNoWallet();
