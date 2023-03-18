@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -10,6 +12,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:secure_storage/secure_storage.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CredentialsDetailsPage extends StatelessWidget {
@@ -40,6 +43,7 @@ class CredentialsDetailsPage extends StatelessWidget {
     return BlocProvider<CredentialDetailsCubit>(
       create: (context) => CredentialDetailsCubit(
         didKitProvider: DIDKitProvider(),
+        secureStorageProvider: getSecureStorage,
         client: DioClient('', Dio()),
       ),
       child: CredentialsDetailsView(
@@ -146,16 +150,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           title: widget.readOnly ? l10n.linkedInProfile : l10n.cardDetails,
           titleAlignment: Alignment.topCenter,
           titleLeading: const BackLeadingButton(),
-          // titleTrailing: IconButton(
-          //   onPressed: () {
-          //     Navigator.of(context)
-          //         .push<void>(CredentialQrPage.route(widget.credentialModel)); // ignore: lines_longer_than_80_chars
-          //   },
-          //   icon: Icon(
-          //     Icons.qr_code,
-          //     color: Theme.of(context).colorScheme.onBackground,
-          //   ),
-          // ),
           padding: const EdgeInsets.symmetric(horizontal: 10),
           scrollView: false,
           body: Column(
@@ -204,6 +198,37 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                           ),
                                     ),
                                   ),
+                                if (widget.credentialModel
+                                            .data['credentialSubject']
+                                        ?['chatSupport'] !=
+                                    null)
+                                  Expanded(
+                                    child: CredentialDetailTabbar(
+                                      isSelected: false,
+                                      title: l10n.chat,
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          LoyaltyCardSupportChatPage.route(
+                                            companySupportId: widget
+                                                    .credentialModel
+                                                    .data['credentialSubject']
+                                                ?['chatSupport'] as String,
+                                            chatWelcomeMessage:
+                                                l10n.cardChatWelcomeMessage,
+                                            appBarTitle:
+                                                '${l10n.chatWith} ${widget.credentialModel.credentialPreview.credentialSubjectModel.issuedBy?.name}',
+                                            loyaltyCardType: widget
+                                                .credentialModel
+                                                .credentialPreview
+                                                .credentialSubjectModel
+                                                .credentialSubjectType
+                                                .name,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
                               ],
                             ),
                             Divider(
@@ -249,7 +274,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
               ),
             ],
           ),
-
           navigation: widget.readOnly
               ? null
               : SafeArea(

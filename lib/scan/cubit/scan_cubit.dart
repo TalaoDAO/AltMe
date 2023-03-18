@@ -56,7 +56,8 @@ class ScanCubit extends Cubit<ScanState> {
     final log = getLogger('ScanCubit - credentialOffer');
 
     try {
-      if (uri.queryParameters['scope'] == 'openid') {
+      if (uri.queryParameters['scope'] == 'openid' ||
+          uri.toString().startsWith('openid://?client_id')) {
         final ebsi = Ebsi(Dio());
         final mnemonic =
             await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);

@@ -135,4 +135,10 @@ enum ResponseString {
   RESPONSE_STRING_transactionIsLikelyToFail,
   RESPONSE_STRING_linkedInBannerSuccessfullyExported,
   RESPONSE_STRING_credentialSuccessfullyExported,
+  RESPONSE_STRING_bloometaPassExpirationDate,
+  RESPONSE_STRING_bloometaPassWhyGetThisCard,
+  RESPONSE_STRING_bloometaPassHowToGetIt,
+  RESPONSE_STRING_tezotopiaMembershipLongDescription,
+  RESPONSE_STRING_chainbornMembershipLongDescription,
+  RESPONSE_STRING_bloometaPassLongDescription,
 }

@@ -129,6 +129,7 @@ class App extends StatelessWidget {
             walletCubit: context.read<WalletCubit>(),
             beacon: Beacon(),
             walletConnectCubit: context.read<WalletConnectCubit>(),
+            secureStorageProvider: secure_storage.getSecureStorage,
           ),
         ),
         BlocProvider(
@@ -171,12 +172,14 @@ class App extends StatelessWidget {
             manageNetworkCubit: context.read<ManageNetworkCubit>(),
           ),
         ),
-        BlocProvider<LiveChatCubit>(
+        BlocProvider<AltmeChatSupportCubit>(
           lazy: false,
-          create: (context) => LiveChatCubit(
-            dioClient: DioClient('', Dio()),
-            didKit: DIDKitProvider(),
+          create: (context) => AltmeChatSupportCubit(
             secureStorageProvider: getSecureStorage,
+            matrixChat: MatrixChatImpl(),
+            invites: [AltMeStrings.matrixSupportId],
+            storageKey: SecureStorageKeys.supportRoomId,
+            roomNamePrefix: 'Altme',
           ),
         ),
       ],

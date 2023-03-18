@@ -5,6 +5,7 @@ import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
+import 'package:altme/ebsi/verify_encoded_data.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
@@ -12,6 +13,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
+import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -34,6 +36,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.jwtDecode,
     required this.beacon,
     required this.walletConnectCubit,
+    required this.secureStorageProvider,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -46,6 +49,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final JWTDecode jwtDecode;
   final Beacon beacon;
   final WalletConnectCubit walletConnectCubit;
+  final SecureStorageProvider secureStorageProvider;
 
   final log = getLogger('QRCodeScanCubit');
 
@@ -82,7 +86,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else {
-        await host(url: scannedResponse);
+        final uri = Uri.parse(scannedResponse);
+        await verify(uri: uri);
       }
     } on FormatException {
       log.i('Format Exception');
@@ -112,55 +117,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> host({required String? url}) async {
-    emit(state.loading(isScan: true));
-    try {
-      final isInternetAvailable = await isConnected();
-      if (!isInternetAvailable) {
-        throw NetworkException(
-          message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
-        );
-      }
-      if (url == null || url.isEmpty) {
-        throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
-        );
-      } else {
-        final uri = Uri.parse(url);
-        await verify(uri: uri, isScan: true);
-      }
-    } on FormatException {
-      emit(
-        state.error(
-          messageHandler: ResponseMessage(
-            ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
-          ),
-        ),
-      );
-    } catch (e) {
-      if (e is MessageHandler) {
-        emit(state.error(messageHandler: e));
-      } else {
-        emit(
-          state.error(
-            messageHandler: ResponseMessage(
-              ResponseString
-                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-            ),
-          ),
-        );
-      }
-    }
-  }
-
   Future<void> deepLink() async {
-    emit(state.loading(isScan: false));
     final deepLinkUrl = deepLinkCubit.state;
+    emit(state.loading(isScan: false));
     if (deepLinkUrl != '') {
       deepLinkCubit.resetDeepLink();
       try {
-        final uri = Uri.parse(deepLinkUrl);
-        await verify(uri: uri, isScan: false);
+        await verify(uri: Uri.parse(deepLinkUrl));
       } on FormatException {
         emit(
           state.error(
@@ -178,18 +141,22 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     emit(state.error(messageHandler: messageHandler));
   }
 
-  Future<void> verify({
-    required Uri? uri,
-    required bool isScan,
-  }) async {
-    emit(state.loading(isScan: isScan));
+  Future<void> verify({required Uri uri, bool? isScan}) async {
+    emit(
+      state.copyWith(
+        uri: uri,
+        qrScanStatus: QrScanStatus.loading,
+        isScan: isScan,
+      ),
+    );
+
     try {
-      ///Check if SIOPV2 request
-      if (uri?.queryParameters['scope'] == 'openid') {
+      /// verifier side (siopv2) without request_uri
+      if (state.uri?.queryParameters['scope'] == 'openid') {
         // Check if we can respond to presentation request:
         // having credentials?
         // having correct crv in ebsi key
-        await launchSiopV2Flow(uri);
+        await launchSiopV2RequestFlow();
 
         // final openIdCredential = getCredentialName(sIOPV2Param.claims!);
         // final openIdIssuer = getIssuersName(sIOPV2Param.claims!);
@@ -247,8 +214,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         //     ),
         //   ),
         // );
+      } else if (state.uri.toString().startsWith('openid://?client_id')) {
+        /// ebsi presentation
+        /// verifier side (siopv2) with request_uri
+        await verifySiopv2Jwt(state.uri);
       } else {
-        emit(state.acceptHost(uri: uri!));
+        emit(state.acceptHost(isRequestVerified: true));
       }
     } catch (e) {
       log.e(e);
@@ -267,11 +238,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> launchSiopV2Flow(Uri? uri) async {
+  Future<void> launchSiopV2RequestFlow() async {
     // Check if we can respond to presentation request:
     // having credentials?
     // having correct crv in ebsi key
-    if (!await isSiopV2RequestValid(uri!)) {
+
+    if (!await isSiopV2WithRequestURIValid(state.uri!)) {
       emit(
         state.copyWith(
           qrScanStatus: QrScanStatus.success,
@@ -279,61 +251,50 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         ),
       );
     } else {
-      var claims = uri.queryParameters['claims'] ?? '';
-
-      // TODO(hawkbee): change when correction is done on verifier
-      claims = claims.replaceAll("'email': None", "'email': 'None'");
-
-      claims = claims.replaceAll("'", '"');
-      final jsonPath = JsonPath(r'$..input_descriptors');
-      final outputDescriptors =
-          jsonPath.readValues(jsonDecode(claims)).first as List;
-      final inputDescriptorList = outputDescriptors
-          .map((e) => InputDescriptor.fromJson(e as Map<String, dynamic>))
-          .toList();
-
-      final PresentationDefinition presentationDefinition =
-          PresentationDefinition(inputDescriptorList);
-      final CredentialModel credentialPreview = CredentialModel(
-        id: 'id',
-        image: 'image',
-        credentialPreview: Credential.dummy(),
-        shareLink: 'shareLink',
-        display: Display.emptyDisplay(),
-        data: const {},
-        credentialManifest: CredentialManifest(
-          'id',
-          IssuedBy('', ''),
-          null,
-          presentationDefinition,
-        ),
-      );
-      emit(
-        state.copyWith(
-          qrScanStatus: QrScanStatus.success,
-          route: CredentialManifestOfferPickPage.route(
-            uri: uri,
-            credential: credentialPreview,
-            issuer: Issuer.emptyIssuer('domain'),
-            inputDescriptorIndex: 0,
-            credentialsToBePresented: [],
-          ),
-        ),
-      );
+      final claims = state.uri?.queryParameters['claims'] ?? '';
+      await completeSiopV2WithClaim(claims: claims);
     }
   }
 
-  Future<void> accept({
-    required Uri uri,
-    required Issuer issuer,
-    required bool isScan,
-  }) async {
-    emit(state.loading(isScan: isScan));
+  late dynamic encodedData;
+
+  Future<void> verifySiopv2Jwt(Uri? uri) async {
+    final requestUri = state.uri!.queryParameters['request_uri'].toString();
+
+    encodedData = await fetchRequestUriPayload(url: requestUri);
+
+    final Map<String, dynamic> response = decoder(token: encodedData as String);
+
+    final String issuerDid = jsonEncode(response['client_id']);
+
+    //check Signature
+    try {
+      final VerificationType isVerified = await verifyEncodedData(
+        issuerDid,
+        client,
+        secureStorageProvider,
+        encodedData.toString(),
+      );
+
+      if (isVerified == VerificationType.verified) {
+        emit(state.acceptHost(isRequestVerified: true));
+      } else {
+        emit(state.acceptHost(isRequestVerified: false));
+      }
+    } catch (e) {
+      emit(state.acceptHost(isRequestVerified: false));
+    }
+  }
+
+  Future<void> accept({required Issuer issuer}) async {
+    emit(state.loading());
     final log = getLogger('QRCodeScanCubit - accept');
 
     late final dynamic data;
 
     try {
+      /// ebsi credential
+      /// issuer side (oidc4VCI)
       if (state.uri.toString().startsWith('openid://initiate_issuance?')) {
         await initiateEbsiCredentialIssuance(
           state.uri.toString(),
@@ -346,7 +307,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         return;
       }
 
-      final dynamic response = await client.get(uri.toString());
+      if (state.uri.toString().startsWith('openid://?client_id')) {
+        /// ebsi presentation
+        /// verifier side (siopv2) with request_uri
+        await launchSiopV2WithRequestUriFlow(state.uri);
+        return;
+      }
+
+      /// did credential addition and presentation
+      final dynamic response = await client.get(state.uri!.toString());
       data = response is String ? jsonDecode(response) : response;
 
       log.i('data - $data');
@@ -397,7 +366,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             state.copyWith(
               qrScanStatus: QrScanStatus.success,
               route: CredentialsReceivePage.route(
-                uri: uri,
+                uri: state.uri!,
                 preview: data as Map<String, dynamic>,
                 issuer: issuer,
               ),
@@ -441,7 +410,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 done: (done) {
                   log.i('done');
                 },
-                uri: uri,
+                uri: state.uri!,
                 challenge: data['challenge'] as String,
                 domain: data['domain'] as String,
               );
@@ -452,7 +421,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 state.copyWith(
                   qrScanStatus: QrScanStatus.success,
                   route: QueryByExamplePresentPage.route(
-                    uri: uri,
+                    uri: state.uri!,
                     preview: data as Map<String, dynamic>,
                     issuer: issuer,
                   ),
@@ -468,7 +437,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               state.copyWith(
                 qrScanStatus: QrScanStatus.success,
                 route: QueryByExamplePresentPage.route(
-                  uri: uri,
+                  uri: state.uri!,
                   preview: data as Map<String, dynamic>,
                   issuer: issuer,
                 ),
@@ -482,7 +451,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             state.copyWith(
               qrScanStatus: QrScanStatus.success,
               route: CredentialsReceivePage.route(
-                uri: uri,
+                uri: state.uri!,
                 preview: data as Map<String, dynamic>,
                 issuer: issuer,
               ),
@@ -512,6 +481,66 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
     }
+  }
+
+  Future<void> launchSiopV2WithRequestUriFlow(Uri? uri) async {
+    final Map<String, dynamic> response = decoder(token: encodedData as String);
+
+    final String claims = jsonEncode(response['claims']);
+
+    //update uri
+
+    final redirectUri = response['redirect_uri'] ?? '';
+    final nonce = response['nonce'] ?? '';
+
+    final updatedUri = Uri.parse(
+      '${state.uri}&redirect_uri=$redirectUri&nonce=$nonce',
+    );
+
+    emit(state.copyWith(uri: updatedUri));
+    await completeSiopV2WithClaim(claims: claims);
+  }
+
+  Future<void> completeSiopV2WithClaim({required String claims}) async {
+    // TODO(hawkbee): change when correction is done on verifier
+    claims = claims.replaceAll("'email': None", "'email': 'None'");
+
+    claims = claims.replaceAll("'", '"');
+    final jsonPath = JsonPath(r'$..input_descriptors');
+    final outputDescriptors =
+        jsonPath.readValues(jsonDecode(claims)).first as List;
+    final inputDescriptorList = outputDescriptors
+        .map((e) => InputDescriptor.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    final PresentationDefinition presentationDefinition =
+        PresentationDefinition(inputDescriptorList);
+    final CredentialModel credentialPreview = CredentialModel(
+      id: 'id',
+      image: 'image',
+      credentialPreview: Credential.dummy(),
+      shareLink: 'shareLink',
+      display: Display.emptyDisplay(),
+      data: const {},
+      credentialManifest: CredentialManifest(
+        'id',
+        IssuedBy('', ''),
+        null,
+        presentationDefinition,
+      ),
+    );
+    emit(
+      state.copyWith(
+        qrScanStatus: QrScanStatus.success,
+        route: CredentialManifestOfferPickPage.route(
+          uri: state.uri!,
+          credential: credentialPreview,
+          issuer: Issuer.emptyIssuer('domain'),
+          inputDescriptorIndex: 0,
+          credentialsToBePresented: [],
+        ),
+      ),
+    );
   }
 
   bool requestAttributeExists(Uri uri) {
@@ -560,7 +589,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final dynamic encodedData =
           await fetchRequestUriPayload(url: request_uri!);
       if (encodedData != null) {
-        requestUriPayload = decoder(token: encodedData as String);
+        requestUriPayload = decoder(token: encodedData as String).toString();
       }
     }
     return SIOPV2Param(
@@ -585,20 +614,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return data;
   }
 
-  String decoder({required String token}) {
+  Map<String, dynamic> decoder({required String token}) {
     final log = getLogger('QRCodeScanCubit - jwtDecode');
-    late final String data;
+    late final Map<String, dynamic> data;
 
     try {
       final payload = jwtDecode.parseJwt(token);
-      data = payload.toString();
+      data = payload;
     } catch (e) {
       log.e('An error occurred while decoding.', e);
     }
     return data;
   }
 
-  Future<bool> isSiopV2RequestValid(Uri uri) async {
+  Future<bool> isSiopV2WithRequestURIValid(Uri uri) async {
     bool isValid = true;
 
     ///credential should not be empty since we have to present

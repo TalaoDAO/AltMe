@@ -14,10 +14,11 @@ class HomeCredential extends Equatable {
     required this.isDummy,
     this.dummyDescription,
     required this.credentialSubjectType,
-    this.websiteGameLink,
+    this.websiteLink,
     this.whyGetThisCard,
     this.expirationDateDetails,
     this.howToGetIt,
+    this.longDescription,
   });
 
   factory HomeCredential.fromJson(Map<String, dynamic> json) =>
@@ -35,11 +36,12 @@ class HomeCredential extends Equatable {
   factory HomeCredential.isDummy(CredentialSubjectType credentialSubjectType) {
     String? image;
     String? link;
-    String? websiteGameLink;
+    String? websiteLink;
     ResponseString? whyGetThisCard;
     ResponseString? expirationDateDetails;
     ResponseString? howToGetIt;
     ResponseString? dummyDesc;
+    ResponseString? longDescription;
 
     switch (credentialSubjectType) {
       case CredentialSubjectType.walletCredential:
@@ -121,7 +123,7 @@ class HomeCredential extends Equatable {
       case CredentialSubjectType.tezVoucher:
         image = ImageStrings.dummyTezotopiaVoucherCard;
         link = Urls.tezotopiaVoucherUrl;
-        websiteGameLink = 'https://tezotopia.com';
+        websiteLink = 'https://tezotopia.com';
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_tezVoucherWhyGetThisCard;
         expirationDateDetails =
@@ -164,17 +166,22 @@ class HomeCredential extends Equatable {
             ResponseString.RESPONSE_STRING_tezotopiaMembershipExpirationDate;
         howToGetIt =
             ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt;
+        longDescription =
+            ResponseString.RESPONSE_STRING_tezotopiaMembershipLongDescription;
         break;
 
       case CredentialSubjectType.chainbornMembership:
         image = ImageStrings.chainbornMemberShipDummy;
         link = Urls.chainbornMembershipCardUrl;
+        websiteLink = 'https://chainborn.xyz/';
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_chainbornMembershipWhyGetThisCard;
         expirationDateDetails =
             ResponseString.RESPONSE_STRING_chainbornMembershipExpirationDate;
         howToGetIt =
             ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt;
+        longDescription =
+            ResponseString.RESPONSE_STRING_chainbornMembershipLongDescription;
         break;
 
       case CredentialSubjectType.twitterCard:
@@ -248,7 +255,15 @@ class HomeCredential extends Equatable {
 
       case CredentialSubjectType.bloometaPass:
         image = ImageStrings.bloometaDummy;
+        websiteLink = 'https://bloometa.com';
         link = Urls.bloometaCardUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_bloometaPassExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt;
+        longDescription =
+            ResponseString.RESPONSE_STRING_bloometaPassLongDescription;
         break;
 
       case CredentialSubjectType.ethereumAssociatedWallet:
@@ -300,8 +315,10 @@ class HomeCredential extends Equatable {
           ? null
           : ResponseMessage(expirationDateDetails),
       howToGetIt: howToGetIt == null ? null : ResponseMessage(howToGetIt),
-      websiteGameLink: websiteGameLink,
+      websiteLink: websiteLink,
       dummyDescription: dummyDesc == null ? null : ResponseMessage(dummyDesc),
+      longDescription:
+          longDescription == null ? null : ResponseMessage(longDescription),
     );
   }
 
@@ -312,13 +329,15 @@ class HomeCredential extends Equatable {
   final String? image;
   final bool isDummy;
   final CredentialSubjectType credentialSubjectType;
-  final String? websiteGameLink;
+  final String? websiteLink;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? whyGetThisCard;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? expirationDateDetails;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? howToGetIt;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final MessageHandler? longDescription;
 
   Map<String, dynamic> toJson() => _$HomeCredentialToJson(this);
 
@@ -329,10 +348,11 @@ class HomeCredential extends Equatable {
         image,
         isDummy,
         credentialSubjectType,
-        websiteGameLink,
+        websiteLink,
         whyGetThisCard,
         expirationDateDetails,
         howToGetIt,
         dummyDescription,
+        longDescription,
       ];
 }

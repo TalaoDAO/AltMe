@@ -116,7 +116,7 @@ class _TabControllerViewState extends State<TabControllerView>
                       },
                     ),
                     MyTab(
-                      text: l10n.tokens,
+                      text: l10n.coins,
                       icon: state == 2
                           ? IconStrings.health
                           : IconStrings.healthBlur,

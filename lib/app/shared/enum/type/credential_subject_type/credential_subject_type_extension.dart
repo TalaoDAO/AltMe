@@ -399,7 +399,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   bool get byPassDeepLink {
     if (this == CredentialSubjectType.tezotopiaMembership ||
-        this == CredentialSubjectType.bloometaPass ||
         this == CredentialSubjectType.chainbornMembership ||
         this == CredentialSubjectType.twitterCard ||
         this == CredentialSubjectType.over13 ||
@@ -449,5 +448,118 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       return const FantomAssociatedAddressWidget();
     }
     return null;
+  }
+
+  String get title {
+    switch (this) {
+      case CredentialSubjectType.bloometaPass:
+        return 'Bloometa';
+      case CredentialSubjectType.troopezPass:
+        return 'Troopez Pass';
+      case CredentialSubjectType.pigsPass:
+        return 'Pigs Pass';
+      case CredentialSubjectType.matterlightPass:
+        return 'Matterlight Pass';
+      case CredentialSubjectType.dogamiPass:
+        return 'Dogami Pass';
+      case CredentialSubjectType.bunnyPass:
+        return 'Bunny Pass';
+      case CredentialSubjectType.tezotopiaMembership:
+        return 'Membership Card';
+      case CredentialSubjectType.chainbornMembership:
+        return 'Chainborn';
+      case CredentialSubjectType.twitterCard:
+        return 'Twitter Account Proof';
+      case CredentialSubjectType.ageRange:
+        return 'Age Range';
+      case CredentialSubjectType.nationality:
+        return 'Nationality';
+      case CredentialSubjectType.gender:
+        return 'Gender';
+      case CredentialSubjectType.walletCredential:
+        return 'Wallet Credential';
+      case CredentialSubjectType.tezosAssociatedWallet:
+        return 'Tezos Associated Address';
+      case CredentialSubjectType.ethereumAssociatedWallet:
+        return 'Ethereum Associated Address';
+      case CredentialSubjectType.fantomAssociatedWallet:
+        return 'Fantom Associated Address';
+      case CredentialSubjectType.polygonAssociatedWallet:
+        return 'Polygon Associated Address';
+      case CredentialSubjectType.binanceAssociatedWallet:
+        return 'Binance Associated Address';
+      case CredentialSubjectType.ethereumPooAddress:
+        return 'Ethereum Poo Address';
+      case CredentialSubjectType.fantomPooAddress:
+        return 'Fantom Poo Address';
+      case CredentialSubjectType.polygonPooAddress:
+        return 'Polygon Poo Address';
+      case CredentialSubjectType.binancePooAddress:
+        return 'Binance Poo Address';
+      case CredentialSubjectType.tezosPooAddress:
+        return 'Tezos Poo Address';
+      case CredentialSubjectType.certificateOfEmployment:
+        return 'Certificate of Employment';
+      case CredentialSubjectType.ecole42LearningAchievement:
+        return 'Ecole42 Learning Achievement';
+      case CredentialSubjectType.emailPass:
+        return 'Email Pass';
+      case CredentialSubjectType.identityPass:
+        return 'Identity Pass';
+      case CredentialSubjectType.verifiableIdCard:
+        return 'VerifiableId';
+      case CredentialSubjectType.linkedInCard:
+        return 'Linkedin Card';
+      case CredentialSubjectType.learningAchievement:
+        return 'Learning Achievement';
+      case CredentialSubjectType.loyaltyCard:
+        return 'Loyalty Card';
+      case CredentialSubjectType.over18:
+        return 'Over18';
+      case CredentialSubjectType.over13:
+        return 'Over13';
+      case CredentialSubjectType.passportFootprint:
+        return 'Passport Number';
+      case CredentialSubjectType.phonePass:
+        return 'Phone Proof';
+      case CredentialSubjectType.professionalExperienceAssessment:
+        return 'Professional Experience Assessment';
+      case CredentialSubjectType.professionalSkillAssessment:
+        return 'Professional Skill Assessment';
+      case CredentialSubjectType.professionalStudentCard:
+        return 'Professional Student Card';
+      case CredentialSubjectType.residentCard:
+        return 'Resident Card';
+      case CredentialSubjectType.selfIssued:
+        return 'Self Issued';
+      case CredentialSubjectType.studentCard:
+        return 'Student Card';
+      case CredentialSubjectType.voucher:
+        return 'Voucher';
+      case CredentialSubjectType.tezVoucher:
+        return 'TezVoucher';
+      case CredentialSubjectType.talaoCommunityCard:
+        return 'Talao Community';
+      case CredentialSubjectType.diplomaCard:
+        return 'Verifiable Diploma';
+      case CredentialSubjectType.aragoPass:
+        return 'Arago Pass';
+      case CredentialSubjectType.aragoEmailPass:
+        return 'Arago Email Pass';
+      case CredentialSubjectType.aragoIdentityCard:
+        return 'Arago Id Card';
+      case CredentialSubjectType.aragoLearningAchievement:
+        return 'Arago Learning Achievement';
+      case CredentialSubjectType.aragoOver18:
+        return 'Arago Over18';
+      case CredentialSubjectType.pcdsAgentCertificate:
+        return 'PCDS Agent Certificate';
+      case CredentialSubjectType.euDiplomaCard:
+        return 'EU Diploma';
+      case CredentialSubjectType.euVerifiableId:
+        return 'EU VerifiableID';
+      case CredentialSubjectType.defaultCredential:
+        return '';
+    }
   }
 }

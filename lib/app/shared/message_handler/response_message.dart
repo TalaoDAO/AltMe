@@ -10,6 +10,18 @@ class ResponseMessage with MessageHandler {
   String getMessage(BuildContext context, MessageHandler messageHandler) {
     if (messageHandler is ResponseMessage) {
       switch (messageHandler.message) {
+        case ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_bloometaPassExpirationDate:
+          return ResponseString.RESPONSE_STRING_bloometaPassExpirationDate
+              .localise(context);
+
+        case ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt:
+          return ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt.localise(
+              context);
+
         case ResponseString.RESPONSE_STRING_identityProofDummyDescription:
           return ResponseString.RESPONSE_STRING_identityProofDummyDescription
               .localise(context);
@@ -593,22 +605,44 @@ class ResponseMessage with MessageHandler {
               .localise(
             context,
           );
+
         case ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_linkedinCardWhyGetThisCard
               .localise(
             context,
           );
+
         case ResponseString.RESPONSE_STRING_linkedinCardExpirationDate:
           return ResponseString.RESPONSE_STRING_linkedinCardExpirationDate
               .localise(
             context,
           );
+
         case ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt:
           return ResponseString.RESPONSE_STRING_linkedinCardHowToGetIt.localise(
             context,
           );
+
         case ResponseString.RESPONSE_STRING_verifiableIdCardDummyDesc:
           return ResponseString.RESPONSE_STRING_verifiableIdCardDummyDesc
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_tezotopiaMembershipLongDescription:
+          return ResponseString
+              .RESPONSE_STRING_tezotopiaMembershipLongDescription.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_chainbornMembershipLongDescription:
+          return ResponseString
+              .RESPONSE_STRING_chainbornMembershipLongDescription.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_bloometaPassLongDescription:
+          return ResponseString.RESPONSE_STRING_bloometaPassLongDescription
               .localise(
             context,
           );

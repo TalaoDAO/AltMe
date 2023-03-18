@@ -8,6 +8,15 @@ class GlobalMessage {
   String get RESPONSE_STRING_identityProofDummyDescription =>
       l10n.identityProofDummyDescription;
 
+  String get RESPONSE_STRING_bloometaPassHowToGetIt =>
+      l10n.bloometaPassHowToGetIt;
+
+  String get RESPONSE_STRING_bloometaPassExpirationDate =>
+      l10n.bloometaPassExpirationDate;
+
+  String get RESPONSE_STRING_bloometaPassWhyGetThisCard =>
+      l10n.bloometaPassWhyGetThisCard;
+
   String get RESPONSE_STRING_over18DummyDescription =>
       l10n.over18ProofDummyDescription;
 
@@ -355,4 +364,10 @@ class GlobalMessage {
       l10n.transactionIsLikelyToFail;
   String get RESPONSE_STRING_verifiableIdCardDummyDesc =>
       l10n.verifiableIdCardDummyDesc;
+  String get RESPONSE_STRING_tezotopiaMembershipLongDescription =>
+      l10n.tezotopiaMembershipLongDescription;
+  String get RESPONSE_STRING_chainbornMembershipLongDescription =>
+      l10n.chainbornMembershipLongDescription;
+  String get RESPONSE_STRING_bloometaPassLongDescription =>
+      l10n.bloometaPassLongDescription;
 }
