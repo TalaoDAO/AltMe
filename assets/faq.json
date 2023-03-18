@@ -9,8 +9,8 @@
       "ans": "Talao is called a 'Universal wallet' because just like a physical wallet in which you can carry your ID cards and funds, you can use the Talao wallet to gather digital credentials (Identity card, Age range proof, diploma, etc.) and digital assets (Cryptos, NFTs, tokens...). The future of digital identity is being build on Self-Sovereign Identity (SSI standard), which is the technology that powers Talao wallet and give its users the ability to manage digital credentials in a privacy-preserving and decentralized manner."
     },
     {
-      "que": "What is Self-Sovereign Identity (SSI) ?",
-      "ans": "Self-Sovereign Identity, or SSI, is a new technology compatible with blockchain that gives users and organizations the ability to control their own digital credentials and identity data, rather than relying on a central authority or central database to manage their personal information. With SSI, users are able to store, manage and share their personal data in a decentralize manner, enabling greater privacy and security. SSI also uses Zero-Knowledge Proof and 'Selective Disclosure' to protect users privacy."
+      "que": "3. What is Self-Sovereign Identity?",
+      "ans": "Self-Sovereign Identity (SSI) is a new technology compatible with blockchain that gives users the ability to control their own identity data, without relying on a central authority or database to manage their personal information."
     },
     {
       "que": "How can I use my Talao SSI wallet to manage and share my verifiable credentials?",
@@ -41,12 +41,12 @@
       "ans": "To backup your Talao wallet, you need to write down your passphrase and download your digital credentials. It's important to store these in a secure location, such as a password-protected file or a physical safe. If you lose access to your Talao wallet, there is nothing we can do to help you. Talao is self-custodial which means only you can control your keys and your credentials."
     },
     {
-      "que": "What are Verifiable Credentials and why is it useful ?",
-      "ans": "Verifiable Credentials (VCs) are an open standard for digital claims. They can represent information such as identity card, an Over 18 Proof or a proof of ownership of a crypto address. They have many advantages, including the fact that they are digitally signed, making them tamper-proof, extremely secure and instantly verifiable by a third-party."
+      "que": "11. How can I deposit or withdraw funds from my Altme wallet?",
+      "ans": "You can purchase native coins directly in Altme and send them to your desired blockchain addresses."
     },
     {
-      "que": "What is 'elective disclosure' ?",
-      "ans": "Selective disclosure is a way for SSI users to reveal certain pieces of information about their identity, without disclosing sensitive information. It helps increase the security of online interactions. For exemple, reveal that you are 'Over 18' without revealing your name or address."
+      "que": "12. Can I trade cryptocurrencies using Altme?",
+      "ans": "While you cannot directly trade cryptocurrencies in Altme, you can easily connect your wallet with decentralized exchanges (DEX) to trade any coins."
     },
     {
       "que": "What should I do if I find a bug?",

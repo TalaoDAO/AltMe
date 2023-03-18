@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,9 @@ class DiscoverDynamicDetial extends StatelessWidget {
           children: <InlineSpan>[
             TextSpan(text: '$title: ', style: titleTheme),
             TextSpan(
-              text: value,
+              text: (format != null && format == AltMeStrings.uri)
+                  ? context.l10n.link
+                  : value,
               style: valueTheme,
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {

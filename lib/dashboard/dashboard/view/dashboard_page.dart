@@ -183,7 +183,7 @@ class _DashboardViewState extends State<DashboardView> {
       child: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
           if (state.selectedIndex == 3) {
-            context.read<LiveChatCubit>().setMessagesAsRead();
+            context.read<AltmeChatSupportCubit>().setMessagesAsRead();
           }
           return WillPopScope(
             onWillPop: () async {
@@ -265,7 +265,7 @@ class _DashboardViewState extends State<DashboardView> {
                                 WertPage()
                               else
                                 SearchPage(),
-                              LiveChatPage(hideAppBar: true),
+                              AltmeSupportChatPage(),
                             ],
                           ),
                         ),
@@ -303,7 +303,7 @@ class _DashboardViewState extends State<DashboardView> {
                               ),
                             StreamBuilder(
                               stream: context
-                                  .read<LiveChatCubit>()
+                                  .read<AltmeChatSupportCubit>()
                                   .unreadMessageCountStream,
                               builder: (_, snapShot) {
                                 return BottomBarItem(

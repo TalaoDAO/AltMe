@@ -1010,7 +1010,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get faqQue => GoogleFonts.poppins(
         color: onPrimary,
         fontSize: 16,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.normal,
       );
 
   TextStyle get faqAns => GoogleFonts.poppins(

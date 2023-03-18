@@ -2,12 +2,13 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/ebsi/verify_ebsi_credential.dart';
+import 'package:altme/ebsi/verify_encoded_data.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 part 'credential_details_cubit.g.dart';
 
@@ -16,10 +17,12 @@ part 'credential_details_state.dart';
 class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   CredentialDetailsCubit({
     required this.didKitProvider,
+    required this.secureStorageProvider,
     required this.client,
   }) : super(const CredentialDetailsState());
 
   final DIDKitProvider didKitProvider;
+  final SecureStorageProvider secureStorageProvider;
   final DioClient client;
 
   void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {
@@ -48,9 +51,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       final issuerDid = item.data['issuer']! as String;
       //const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
 
-      final VerificationType isVerified = await isEbsiCredentialVerified(
+      final VerificationType isVerified = await verifyEncodedData(
         issuerDid,
         client,
+        secureStorageProvider,
         item.jwt!,
       );
 
