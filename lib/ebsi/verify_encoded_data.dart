@@ -10,11 +10,13 @@ Future<VerificationType> verifyEncodedData(
   String jwt,
 ) async {
   final Ebsi ebsi = Ebsi(Dio());
+  final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+  final privateKey = await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic!);
 
-  final String p256PrivateKey =
-      await getRandomP256PrivateKey(secureStorageProvider);
+  // final String p256PrivateKey =
+  //     await getRandomP256PrivateKey(secureStorageProvider);
 
-  final holderKid = await ebsi.getKid(null, p256PrivateKey);
+  final holderKid = await ebsi.getKid(null, privateKey);
 
   final VerificationType verificationType = await ebsi.verifyEncodedData(
     issuerDid: issuerDid,
