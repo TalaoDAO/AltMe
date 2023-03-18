@@ -941,7 +941,7 @@ extension CustomTextTheme on TextTheme {
   TextStyle get faqQue => GoogleFonts.roboto(
         color: const Color(0xffFFFFFF),
         fontSize: 16,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.normal,
       );
 
   TextStyle get faqAns => GoogleFonts.roboto(
