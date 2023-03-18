@@ -583,8 +583,6 @@ class Ebsi {
       privateKey['crv'] = 'P-256K';
     }
 
-    print(tokenParameters.publicJWK);
-
     final key = JsonWebKey.fromJson(tokenParameters.privateKey);
 
     final vpBuilder = JsonWebSignatureBuilder()
