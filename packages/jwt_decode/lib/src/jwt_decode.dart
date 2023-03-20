@@ -20,6 +20,22 @@ class JWTDecode {
     return payloadMap;
   }
 
+  ///parseJwt to get header
+  Map<String, dynamic> parseJwtHeader(String token) {
+    final parts = token.split('.');
+    if (parts.length != 3) {
+      throw Exception('Invalid Token');
+    }
+
+    final header = _decodeBase64(parts[0]);
+
+    final dynamic headerMap = json.decode(header);
+    if (headerMap is! Map<String, dynamic>) {
+      throw Exception('Invalid Payload');
+    }
+    return headerMap;
+  }
+
   String _decodeBase64(String str) {
     var output = str.replaceAll('-', '+').replaceAll('_', '/');
     switch (output.length % 4) {

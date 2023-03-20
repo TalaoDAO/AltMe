@@ -263,16 +263,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
     encodedData = await fetchRequestUriPayload(url: requestUri);
 
-    final Map<String, dynamic> response = decoder(token: encodedData as String);
+    final Map<String, dynamic> payload =
+        decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
 
-    final String issuerDid = jsonEncode(response['client_id']);
+    final Map<String, dynamic> header =
+        decodeHeader(jwtDecode: jwtDecode, token: encodedData as String);
+
+    final String issuerDid = jsonEncode(payload['client_id']);
+    final String issuerKid = jsonEncode(header['kid']);
 
     //check Signature
     try {
       final VerificationType isVerified = await verifyEncodedData(
         issuerDid,
-        client,
-        secureStorageProvider,
+        issuerKid,
         encodedData.toString(),
       );
 
@@ -484,7 +488,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> launchSiopV2WithRequestUriFlow(Uri? uri) async {
-    final Map<String, dynamic> response = decoder(token: encodedData as String);
+    final Map<String, dynamic> response =
+        decodePayload(jwtDecode: jwtDecode, token: encodedData as String);
 
     final String claims = jsonEncode(response['claims']);
 
@@ -589,7 +594,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final dynamic encodedData =
           await fetchRequestUriPayload(url: request_uri!);
       if (encodedData != null) {
-        requestUriPayload = decoder(token: encodedData as String).toString();
+        requestUriPayload =
+            decodePayload(jwtDecode: jwtDecode, token: encodedData as String)
+                .toString();
       }
     }
     return SIOPV2Param(
@@ -610,19 +617,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       data = response.toString();
     } catch (e) {
       log.e('An error occurred while connecting to the server.', e);
-    }
-    return data;
-  }
-
-  Map<String, dynamic> decoder({required String token}) {
-    final log = getLogger('QRCodeScanCubit - jwtDecode');
-    late final Map<String, dynamic> data;
-
-    try {
-      final payload = jwtDecode.parseJwt(token);
-      data = payload;
-    } catch (e) {
-      log.e('An error occurred while decoding.', e);
     }
     return data;
   }

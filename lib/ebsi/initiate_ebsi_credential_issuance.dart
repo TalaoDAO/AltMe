@@ -17,10 +17,6 @@ Future<void> initiateEbsiCredentialIssuance(
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
     final privateKey = await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic!);
 
-    // final mnemonic = await secureStorage.get(
-    //   SecureStorageKeys.ssiMnemonic,
-    // );
-
     final dynamic encodedCredentialFromEbsi = await ebsi.getCredential(
       uriFromScannedResponse,
       null,

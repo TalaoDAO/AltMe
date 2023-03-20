@@ -10,6 +10,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -330,4 +331,36 @@ Future<String> getRandomP256PrivateKey(
 
 bool isVerifiableDiplomaType(CredentialModel credentialModel) {
   return credentialModel.credentialPreview.type.contains('VerifiableDiploma');
+}
+
+Map<String, dynamic> decodePayload({
+  required JWTDecode jwtDecode,
+  required String token,
+}) {
+  final log = getLogger('QRCodeScanCubit - jwtDecode');
+  late final Map<String, dynamic> data;
+
+  try {
+    final payload = jwtDecode.parseJwt(token);
+    data = payload;
+  } catch (e) {
+    log.e('An error occurred while decoding.', e);
+  }
+  return data;
+}
+
+Map<String, dynamic> decodeHeader({
+  required JWTDecode jwtDecode,
+  required String token,
+}) {
+  final log = getLogger('QRCodeScanCubit - jwtDecode');
+  late final Map<String, dynamic> data;
+
+  try {
+    final header = jwtDecode.parseJwtHeader(token);
+    data = header;
+  } catch (e) {
+    log.e('An error occurred while decoding.', e);
+  }
+  return data;
 }

@@ -427,7 +427,7 @@ void main() {
     const issuerDid2 = 'did:ebsi:zhSw5rPXkcHjvquwnVcTzzC';
     const issuerDid3 = 'did:ebsi:zhSw5rPXkcHjvquwnVcTzzC';
 
-    const holderKid =
+    const issuerKid =
         'did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53';
 
     const didDocumentUrl =
@@ -472,7 +472,7 @@ void main() {
       final isVerified = await ebsi.verifyEncodedData(
         issuerDid: issuerDid2,
         jwt: vcJwt,
-        holderKid: holderKid,
+        issuerKid: issuerKid,
       );
 
       expect(isVerified, VerificationType.verified);
@@ -485,7 +485,7 @@ void main() {
       final isVerified = await ebsi.verifyEncodedData(
         issuerDid: issuerDid1,
         jwt: vcJwt,
-        holderKid: holderKid,
+        issuerKid: issuerKid,
       );
 
       expect(isVerified, VerificationType.notVerified);
@@ -498,7 +498,7 @@ void main() {
       final isVerified = await ebsi.verifyEncodedData(
         issuerDid: issuerDid3,
         jwt: vcJwt,
-        holderKid: holderKid,
+        issuerKid: issuerKid,
       );
       expect(isVerified, VerificationType.verified);
     });
@@ -510,7 +510,7 @@ void main() {
       final isVerified = await ebsi.verifyEncodedData(
         issuerDid: issuerDid2,
         jwt: vcJwt,
-        holderKid: holderKid,
+        issuerKid: issuerKid,
       );
       expect(isVerified, VerificationType.unKnown);
     });

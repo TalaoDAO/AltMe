@@ -360,15 +360,18 @@ class Ebsi {
 
   Future<VerificationType> verifyEncodedData({
     required String issuerDid,
-    required String holderKid,
+    required String issuerKid,
     required String jwt,
   }) async {
     try {
       final didDocument = await getDidDocument(issuerDid);
-
-      final publicKeyJwk = readPublicKeyJwk(holderKid, didDocument);
+      final publicKeyJwk = readPublicKeyJwk(issuerKid, didDocument);
 
       final kty = publicKeyJwk['kty'].toString();
+
+      if (publicKeyJwk['crv'] == 'secp256k1') {
+        publicKeyJwk['crv'] = 'P-256K';
+      }
 
       late final bool isVerified;
       if (kty == 'OKP') {
@@ -393,6 +396,7 @@ class Ebsi {
           ..addKey(
             JsonWebKey.fromJson(publicKeyJwk),
           );
+
         isVerified = await jws.verify(keyStore);
       }
 
@@ -402,6 +406,7 @@ class Ebsi {
         return VerificationType.notVerified;
       }
     } catch (e) {
+      print(e);
       return VerificationType.unKnown;
     }
   }
