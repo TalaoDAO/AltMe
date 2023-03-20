@@ -40,6 +40,9 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
   }
 
   Future<bool> _getStoragePermission() async {
+    if (isAndroid()) {
+      return true;
+    }
     if (await Permission.storage.request().isGranted) {
       return true;
     } else if (await Permission.storage.request().isPermanentlyDenied) {
