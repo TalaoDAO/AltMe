@@ -11,6 +11,7 @@ class PolygonPooAddressModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.polygonPooAddress,
           credentialCategory: CredentialCategory.blockchainAccountsCards,

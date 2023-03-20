@@ -11,6 +11,7 @@ class Ecole42LearningAchievementModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
     this.givenName,
     this.signatureLines,
     this.birthDate,

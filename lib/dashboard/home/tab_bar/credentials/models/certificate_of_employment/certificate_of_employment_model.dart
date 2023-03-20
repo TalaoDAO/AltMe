@@ -18,6 +18,7 @@ class CertificateOfEmploymentModel extends CredentialSubjectModel {
     this.jobTitle,
     this.baseSalary,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.certificateOfEmployment,
           credentialCategory: CredentialCategory.identityCards,

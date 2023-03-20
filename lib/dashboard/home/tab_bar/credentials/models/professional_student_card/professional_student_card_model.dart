@@ -13,6 +13,7 @@ class ProfessionalStudentCardModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.professionalStudentCard,
           credentialCategory: CredentialCategory.communityCards,

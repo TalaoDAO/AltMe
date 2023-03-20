@@ -10,6 +10,7 @@ class Over13Model extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.over13,
           credentialCategory: CredentialCategory.identityCards,

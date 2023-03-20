@@ -13,6 +13,7 @@ class PigsPassModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.pigsPass,
           credentialCategory: CredentialCategory.gamingCards,

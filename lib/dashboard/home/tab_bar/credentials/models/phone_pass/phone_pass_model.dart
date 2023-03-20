@@ -12,6 +12,7 @@ class PhonePassModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.phonePass,
           credentialCategory: CredentialCategory.identityCards,

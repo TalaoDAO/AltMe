@@ -16,6 +16,7 @@ class AragoLearningAchievementModel extends CredentialSubjectModel {
     this.birthDate,
     this.hasCredential,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.aragoLearningAchievement,
           credentialCategory: CredentialCategory.passCards,

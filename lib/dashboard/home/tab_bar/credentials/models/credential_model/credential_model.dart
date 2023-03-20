@@ -32,9 +32,11 @@ class CredentialModel extends Equatable {
 
   factory CredentialModel.fromJson(Map<String, dynamic> json) {
     final Map<String, dynamic> newJson = Map<String, dynamic>.from(json);
+
     if (newJson['data'] != null) {
       newJson.putIfAbsent('credentialPreview', () => newJson['data']);
     }
+
     if (newJson['credentialPreview'] != null) {
       newJson.putIfAbsent('data', () => newJson['credentialPreview']);
     }

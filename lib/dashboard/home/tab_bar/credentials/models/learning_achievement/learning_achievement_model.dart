@@ -16,6 +16,7 @@ class LearningAchievementModel extends CredentialSubjectModel {
     this.birthDate,
     this.hasCredential,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.learningAchievement,
           credentialCategory: CredentialCategory.identityCards,

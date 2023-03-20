@@ -217,7 +217,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                             chatWelcomeMessage:
                                                 l10n.cardChatWelcomeMessage,
                                             appBarTitle:
-                                                '${l10n.chatWith} ${widget.credentialModel.credentialPreview.credentialSubjectModel.issuedBy?.name}',
+                                                '${l10n.chatWith} ${widget.credentialModel.credentialPreview.credentialSubjectModel.offeredBy?.name}',
                                             loyaltyCardType: widget
                                                 .credentialModel
                                                 .credentialPreview

@@ -11,6 +11,7 @@ class FantomPooAddressModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.fantomPooAddress,
           credentialCategory: CredentialCategory.blockchainAccountsCards,

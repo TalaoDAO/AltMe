@@ -11,6 +11,7 @@ class EthereumPooAddressModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.ethereumPooAddress,
           credentialCategory: CredentialCategory.blockchainAccountsCards,

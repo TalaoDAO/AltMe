@@ -10,6 +10,7 @@ class AragoOver18Model extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.aragoOver18,
           credentialCategory: CredentialCategory.passCards,

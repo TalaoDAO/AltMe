@@ -13,6 +13,7 @@ class ProfessionalSkillAssessmentModel extends CredentialSubjectModel {
     super.type,
     this.skills,
     super.issuedBy,
+    super.offeredBy,
     this.signatureLines,
     this.familyName,
     this.givenName,

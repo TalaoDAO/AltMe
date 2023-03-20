@@ -13,6 +13,7 @@ class MatterlightPassModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.matterlightPass,
           credentialCategory: CredentialCategory.gamingCards,

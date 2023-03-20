@@ -18,6 +18,7 @@ class ProfessionalExperienceAssessmentModel extends CredentialSubjectModel {
     this.endDate,
     this.startDate,
     super.issuedBy,
+    super.offeredBy,
     this.review,
     this.signatureLines,
     this.familyName,
