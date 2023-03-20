@@ -101,7 +101,7 @@ class _DashboardViewState extends State<DashboardView> {
       case 2:
         return Parameters.hasCryptoCallToAction ? l10n.buy : l10n.search;
       case 3:
-        return l10n.help;
+        return l10n.chat;
       default:
         return '';
     }
@@ -308,7 +308,7 @@ class _DashboardViewState extends State<DashboardView> {
                               builder: (_, snapShot) {
                                 return BottomBarItem(
                                   icon: IconStrings.messaging,
-                                  text: l10n.help,
+                                  text: l10n.chat,
                                   badgeCount: snapShot.data ?? 0,
                                   onTap: () => bottomTapped(3),
                                   isSelected: state.selectedIndex == 3,
