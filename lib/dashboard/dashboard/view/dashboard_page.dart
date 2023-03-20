@@ -198,54 +198,17 @@ class _DashboardViewState extends State<DashboardView> {
                   Column(
                     children: [
                       Expanded(
-                        child: GestureDetector(
-                          onHorizontalDragEnd: (drag) {
-                            if (drag.primaryVelocity! < 0) {
-                              if (context.read<HomeCubit>().state.homeStatus ==
-                                  HomeStatus.hasNoWallet) {
-                                showDialog<void>(
-                                  context: context,
-                                  builder: (_) => const WalletDialog(),
-                                );
-                                return;
-                              }
-                              if (state.selectedIndex != 2) {
-                                pageController.nextPage(
-                                  duration: pageTurnDuration,
-                                  curve: pageTurnCurve,
-                                );
-                              } else {
-                                scaffoldKey.currentState!.openDrawer();
-                              }
-                            } else if (drag.primaryVelocity! > 0) {
-                              if (context.read<HomeCubit>().state.homeStatus ==
-                                  HomeStatus.hasNoWallet) {
-                                showDialog<void>(
-                                  context: context,
-                                  builder: (_) => const WalletDialog(),
-                                );
-                                return;
-                              }
-                              if (state.selectedIndex != 0) {
-                                pageController.previousPage(
-                                  duration: pageTurnDuration,
-                                  curve: pageTurnCurve,
-                                );
-                              }
-                            }
-                          },
-                          child: PageView(
-                            controller: pageController,
-                            onPageChanged:
-                                context.read<DashboardCubit>().onPageChanged,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              const HomePage(),
-                              const DiscoverPage(),
-                              const SearchPage(),
-                              Container(),
-                            ],
-                          ),
+                        child: PageView(
+                          controller: pageController,
+                          onPageChanged:
+                              context.read<DashboardCubit>().onPageChanged,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            const HomePage(),
+                            const DiscoverPage(),
+                            const SearchPage(),
+                            Container(),
+                          ],
                         ),
                       ),
                       BottomBarDecoration(
