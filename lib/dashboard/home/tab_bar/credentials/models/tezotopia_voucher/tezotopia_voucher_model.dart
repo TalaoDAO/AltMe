@@ -11,6 +11,7 @@ class TezotopiaVoucherModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
     this.identifier,
     this.offers,
   }) : super(

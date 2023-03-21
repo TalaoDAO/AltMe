@@ -13,6 +13,7 @@ class VerifiableIdCardModel extends CredentialSubjectModel {
     this.birthDate,
     this.addressCountry,
     super.issuedBy,
+    super.offeredBy,
     super.id,
     super.type,
   }) : super(

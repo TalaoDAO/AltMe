@@ -10,6 +10,7 @@ class PcdsAgentCertificateModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
     this.identifier,
   }) : super(
           credentialSubjectType: CredentialSubjectType.pcdsAgentCertificate,

@@ -8,6 +8,7 @@ import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'credential_details_cubit.g.dart';
@@ -19,11 +20,13 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     required this.didKitProvider,
     required this.secureStorageProvider,
     required this.client,
+    required this.jwtDecode,
   }) : super(const CredentialDetailsState());
 
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
   final DioClient client;
+  final JWTDecode jwtDecode;
 
   void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {
     emit(state.copyWith(credentialDetailTabStatus: credentialDetailTabStatus));
@@ -49,12 +52,17 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
     if (isEbsiIssuer(item)) {
       final issuerDid = item.data['issuer']! as String;
-      //const issuerDid = 'did:ebsi:zeFCExU2XAAshYkPCpjuahA';
+
+      final encodedData = item.jwt!;
+
+      final Map<String, dynamic> header =
+          decodeHeader(jwtDecode: jwtDecode, token: encodedData);
+
+      final String issuerKid = jsonEncode(header['kid']);
 
       final VerificationType isVerified = await verifyEncodedData(
         issuerDid,
-        client,
-        secureStorageProvider,
+        issuerKid,
         item.jwt!,
       );
 

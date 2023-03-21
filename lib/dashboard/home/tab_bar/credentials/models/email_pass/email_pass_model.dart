@@ -12,6 +12,7 @@ class EmailPassModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
     this.passbaseMetadata,
   }) : super(
           credentialSubjectType: CredentialSubjectType.emailPass,

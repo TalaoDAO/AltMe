@@ -12,6 +12,7 @@ class LoyaltyCardModel extends CredentialSubjectModel {
     this.address,
     this.familyName,
     super.issuedBy,
+    super.offeredBy,
     this.birthDate,
     this.givenName,
     this.programName,

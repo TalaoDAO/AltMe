@@ -14,6 +14,7 @@ class WalletCredentialModel extends CredentialSubjectModel {
     super.id,
     super.type,
     required Author super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.walletCredential,
           credentialCategory: CredentialCategory.othersCards,

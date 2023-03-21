@@ -13,6 +13,7 @@ class BunnyPassModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.bunnyPass,
           credentialCategory: CredentialCategory.gamingCards,

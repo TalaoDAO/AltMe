@@ -36,6 +36,7 @@ Future<void> addEbsiCredential(
     issuer,
     credentialSchema,
   );
+
   if (credentialManifest.outputDescriptors!.isNotEmpty) {
     newCredential['credential_manifest'] = CredentialManifest(
       credentialManifest.id,

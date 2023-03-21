@@ -18,6 +18,7 @@ class ResidentCardModel extends CredentialSubjectModel {
     this.familyName,
     this.image,
     super.issuedBy,
+    super.offeredBy,
     this.birthDate,
     this.givenName,
   }) : super(

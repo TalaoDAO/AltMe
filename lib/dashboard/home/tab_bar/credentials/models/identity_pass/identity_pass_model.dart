@@ -11,6 +11,7 @@ class IdentityPassModel extends CredentialSubjectModel {
     this.recipient,
     this.expires,
     super.issuedBy,
+    super.offeredBy,
     super.id,
     super.type,
   }) : super(

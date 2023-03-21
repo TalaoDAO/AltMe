@@ -10,6 +10,7 @@ class CredentialSubjectModel {
     this.id,
     this.type,
     this.issuedBy,
+    this.offeredBy,
     required this.credentialSubjectType,
     required this.credentialCategory,
   });
@@ -27,6 +28,8 @@ class CredentialSubjectModel {
   final String? type;
   @JsonKey(fromJson: fromJsonAuthor)
   final Author? issuedBy;
+  @JsonKey(fromJson: fromJsonAuthor)
+  final Author? offeredBy;
   final CredentialSubjectType credentialSubjectType;
   final CredentialCategory credentialCategory;
 

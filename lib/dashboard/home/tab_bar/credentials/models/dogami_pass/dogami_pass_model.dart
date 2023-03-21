@@ -13,6 +13,7 @@ class DogamiPassModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.dogamiPass,
           credentialCategory: CredentialCategory.gamingCards,

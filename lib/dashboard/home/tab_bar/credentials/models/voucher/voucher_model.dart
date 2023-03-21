@@ -11,6 +11,7 @@ class VoucherModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
     this.identifier,
     this.offer,
   }) : super(

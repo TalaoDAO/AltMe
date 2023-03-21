@@ -76,6 +76,16 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'Resolved Android KYC stability issues.',
+                                'Integrated live chat support for partners with loyalty cards.',
+                                'Expanded "Discover" section with the addition of Bloometa card.',
+                                'Enhanced credential backup reliability on some Android devices.',
+                                'Optimized help center layout and user experience.',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.11.4',
+                              features: [
                                 'Improve onboarding experience',
                                 'Add confirmation of recovery phrase',
                                 'Improve popup design',

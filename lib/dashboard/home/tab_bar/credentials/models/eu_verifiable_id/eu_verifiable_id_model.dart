@@ -19,6 +19,7 @@ class EUVerifiableIdModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.euVerifiableId,
           credentialCategory: CredentialCategory.educationCards,

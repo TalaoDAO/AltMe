@@ -11,6 +11,7 @@ class BinancePooAddressModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.binancePooAddress,
           credentialCategory: CredentialCategory.blockchainAccountsCards,

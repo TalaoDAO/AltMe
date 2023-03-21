@@ -12,6 +12,7 @@ class AragoEmailPassModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
     this.passbaseMetadata,
   }) : super(
           credentialSubjectType: CredentialSubjectType.aragoEmailPass,

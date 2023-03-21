@@ -10,6 +10,7 @@ class PassportFootprintModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.passportFootprint,
           credentialCategory: CredentialCategory.identityCards,

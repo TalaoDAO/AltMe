@@ -12,6 +12,7 @@ class AgeRangeModel extends CredentialSubjectModel {
     super.id,
     super.type,
     super.issuedBy,
+    super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.ageRange,
           credentialCategory: CredentialCategory.identityCards,
