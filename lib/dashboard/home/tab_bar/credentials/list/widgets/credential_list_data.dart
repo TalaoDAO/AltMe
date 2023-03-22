@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/constants/sizes.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -31,7 +32,7 @@ class CredentialListData extends StatelessWidget {
                   HomeCredentialWidget(
                     title: l10n.gamingCards,
                     credentials: state.gamingCredentials,
-                    showAddOption: true,
+                    credentialCategory: CredentialCategory.gamingCards,
                     categorySubtitle: l10n.gamingCredentialHomeSubtitle,
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
@@ -42,7 +43,7 @@ class CredentialListData extends StatelessWidget {
                   HomeCredentialWidget(
                     title: l10n.communityCards,
                     credentials: state.communityCredentials,
-                    showAddOption: true,
+                    credentialCategory: CredentialCategory.communityCards,
                     categorySubtitle: l10n.communityCredentialHomeSubtitle,
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
@@ -52,7 +53,7 @@ class CredentialListData extends StatelessWidget {
                   HomeCredentialWidget(
                     title: l10n.identityCards,
                     credentials: state.identityCredentials,
-                    showAddOption: true,
+                    credentialCategory: CredentialCategory.identityCards,
                     categorySubtitle: l10n.identityCredentialHomeSubtitle,
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
@@ -63,6 +64,7 @@ class CredentialListData extends StatelessWidget {
                   HomeCredentialWidget(
                     title: l10n.educationCredentials,
                     credentials: state.educationCredentials,
+                    credentialCategory: CredentialCategory.educationCards,
                     categorySubtitle: l10n.educationCredentialHomeSubtitle,
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
@@ -74,7 +76,7 @@ class CredentialListData extends StatelessWidget {
                     title: l10n.pass,
                     credentials: state.passCredentials,
                     categorySubtitle: l10n.passCredentialHomeSubtitle,
-                    showAddOption: true,
+                    credentialCategory: CredentialCategory.passCards,
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
                 ],
@@ -83,7 +85,7 @@ class CredentialListData extends StatelessWidget {
                   HomeCredentialWidget(
                     title: l10n.myProfessionalrCards,
                     credentials: state.myProfessionalCredentials,
-                    showAddOption: true,
+                    credentialCategory: CredentialCategory.myProfessionalCards,
                     categorySubtitle: l10n.myProfessionalrCardsSubtitle,
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
@@ -94,7 +96,7 @@ class CredentialListData extends StatelessWidget {
                   HomeCredentialWidget(
                     title: l10n.otherCards,
                     credentials: state.othersCredentials,
-                    showAddOption: true,
+                    credentialCategory: CredentialCategory.othersCards,
                     categorySubtitle: l10n.otherCredentialHomeSubtitle,
                   ),
                   const SizedBox(height: Sizes.spaceNormal),
@@ -105,6 +107,8 @@ class CredentialListData extends StatelessWidget {
                   HomeCredentialWidget(
                     title: l10n.blockchainAccounts,
                     credentials: state.blockchainAccountsCredentials,
+                    credentialCategory:
+                        CredentialCategory.blockchainAccountsCards,
                     categorySubtitle:
                         l10n.blockchainAccountsCredentialHomeSubtitle,
                   ),

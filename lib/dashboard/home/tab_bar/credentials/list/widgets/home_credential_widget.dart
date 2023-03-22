@@ -10,19 +10,26 @@ class HomeCredentialWidget extends StatelessWidget {
     required this.credentials,
     required this.title,
     required this.categorySubtitle,
-    this.showAddOption = false,
+    required this.credentialCategory,
     this.fromDiscover = false,
   });
 
   final List<HomeCredential> credentials;
   final String title;
   final String categorySubtitle;
-  final bool showAddOption;
+  final CredentialCategory credentialCategory;
   final bool fromDiscover;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    var showAddOption = !fromDiscover;
+
+    if (credentialCategory == CredentialCategory.educationCards) {
+      showAddOption = false;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -55,7 +62,9 @@ class HomeCredentialWidget extends StatelessWidget {
           itemCount: credentials.length + (showAddOption ? 1 : 0),
           itemBuilder: (_, index) {
             if (showAddOption && index == credentials.length) {
-              return const AddCredentialButton();
+              return AddCredentialButton(
+                credentialCategory: credentialCategory,
+              );
             } else {
               return HomeCredentialItem(
                 homeCredential: credentials[index],
