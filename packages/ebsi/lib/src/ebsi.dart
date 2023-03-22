@@ -406,7 +406,6 @@ class Ebsi {
         return VerificationType.notVerified;
       }
     } catch (e) {
-      print(e);
       return VerificationType.unKnown;
     }
   }
