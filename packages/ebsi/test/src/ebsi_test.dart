@@ -446,7 +446,7 @@ void main() {
         'https://api-pilot.ebsi.eu/did-registry/v3/identifiers/$issuerDid3';
 
     const didDocumentResponse3 =
-        '{"assertionMethod":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"authentication":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"@context":"https://www.w3.org/ns/did/v1","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","verificationMethod":[{"controller":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53","publicKeyJwk":{"alg":"ES256K-R","crv":"secp256k1","kid":"3623b877bbb24b08ba390f3585418f53","kty":"EC","use":"sig","x":"9GVoP1wJSgenjKaxA16LzkzeAKY8-wZX1ZmDr1Oe0s4"},"type":"Ed25519VerificationKey2019"}]}';
+        '{"assertionMethod":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"authentication":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"@context":"https://www.w3.org/ns/did/v1","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","verificationMethod":[{"controller":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53","publicKeyJwk":{"alg":"EdDSA","crv":"Ed25519","kid":"-1909572257","kty":"OKP","x":"XWxGtApfcqmKI7p0OKnF5JSEWMVoLsytFXLEP7xZ_l8"},"type":"Ed25519VerificationKey2019"}]}';
     dioAdapter
       ..onGet(
         didDocumentUrl,
@@ -491,18 +491,6 @@ void main() {
       expect(isVerified, VerificationType.notVerified);
     });
 
-    test('returns VerificationType.notVerified for OKP', () async {
-      const vcJwt =
-          'eyJhbGciOiJFUzI1NksiLCJraWQiOiJkaWQ6ZWJzaTp6amhvb0thNVk1RDhBVVhzeVZYeUdvayNCdURBSTg1SEVLeEpWY2dDMnVGM2YyRmFjcExNalZHOThjVDZJdERTU1I4IiwidHlwIjoiSldUIn0.eyJjbGFpbXMiOnsiaWRfdG9rZW4iOnsiZW1haWwiOm51bGx9LCJ2cF90b2tlbiI6eyJwcmVzZW50YXRpb25fZGVmaW5pdGlvbiI6eyJmb3JtYXQiOnsiand0X3ZwIjp7ImFsZyI6WyJFUzI1NksiLCJFUzI1NiIsIkVTMzg0IiwiRVM1MTIiLCJSUzI1NiJdfX0sImlkIjoiNDE1MjAyY2YtYzI1ZS0xMWVkLTg3ZDAtMGExNjI4OTU4NTYwIiwiaW5wdXRfZGVzY3JpcHRvcnMiOlt7ImNvbnN0cmFpbnRzIjp7ImZpZWxkcyI6W3siZmlsdGVyIjp7InBhdHRlcm4iOiJodHRwczovL2FwaS5wcmVwcm9kLmVic2kuZXUvdHJ1c3RlZC1zY2hlbWFzLXJlZ2lzdHJ5L3YxL3NjaGVtYXMvMHhiZjc4ZmMwOGE3YTlmMjhmNTQ3OWY1OGRlYTI2OWQzNjU3ZjU0ZjEzY2EzN2QzODBjZDRlOTIyMzdmYjY5MWRkIiwidHlwZSI6InN0cmluZyJ9LCJwYXRoIjpbIiQuY3JlZGVudGlhbFNjaGVtYS5pZCJdfV19LCJpZCI6IjQxNTIwOTk2LWMyNWUtMTFlZC05ZDk5LTBhMTYyODk1ODU2MCIsIm5hbWUiOiJJbnB1dCBkZXNjcmlwdG9yIDEiLCJwdXJwb3NlIjoiICJ9XX19fSwiY2xpZW50X2lkIjoiZGlkOmVic2k6empob29LYTVZNUQ4QVVYc3lWWHlHb2siLCJub25jZSI6IjQxNTIwYWIwLWMyNWUtMTFlZC04ODlhLTBhMTYyODk1ODU2MCIsInJlZGlyZWN0X3VyaSI6Imh0dHBzOi8vdGFsYW8uY28vc2FuZGJveC9lYnNpL2xvZ2luL2VuZHBvaW50LzQxNTFlNTRhLWMyNWUtMTFlZC1hNGMzLTBhMTYyODk1ODU2MCIsInJlc3BvbnNlX3R5cGUiOiJpZF90b2tlbiIsInNjb3BlIjoib3BlbmlkIn0.LbmFZbDyWE1jRufvZFP-oczmQVutUGGtB5VtJ4RuzzUPQ97K9676JvfhYiENDnl5Ej5R7jstXNxqc61Ue671iA'; // ignore: lines_longer_than_80_chars
-
-      final isVerified = await ebsi.verifyEncodedData(
-        issuerDid: issuerDid3,
-        jwt: vcJwt,
-        issuerKid: issuerKid,
-      );
-      expect(isVerified, VerificationType.notVerified);
-    });
-
     test('returns VerificationType.unKnown', () async {
       const vcJwt = 'random';
 
@@ -512,6 +500,19 @@ void main() {
         issuerKid: issuerKid,
       );
       expect(isVerified, VerificationType.unKnown);
+    });
+
+    test('returns VerificationType.notVerified for OKP', () async {
+      const vcJwt = 'eyJraWQiOiItMTkwOTU3MjI1NyIsImFsZyI6IkVkRFNBIn0.'
+          'eyJqdGkiOiIyMjkxNmYzYy05MDkzLTQ4MTMtODM5Ny1mMTBlNmI3MDRiNjgiLCJkZWxlZ2F0aW9uSWQiOiJiNGFlNDdhNy02MjVhLTQ2MzAtOTcyNy00NTc2NGE3MTJjY2UiLCJleHAiOjE2NTUyNzkxMDksIm5iZiI6MTY1NTI3ODgwOSwic2NvcGUiOiJyZWFkIG9wZW5pZCIsImlzcyI6Imh0dHBzOi8vaWRzdnIuZXhhbXBsZS5jb20iLCJzdWIiOiJ1c2VybmFtZSIsImF1ZCI6ImFwaS5leGFtcGxlLmNvbSIsImlhdCI6MTY1NTI3ODgwOSwicHVycG9zZSI6ImFjY2Vzc190b2tlbiJ9.' // ignore: lines_longer_than_80_chars
+          'rjeE8D_e4RYzgvpu-nOwwx7PWMiZyDZwkwO6RiHR5t8g4JqqVokUKQt-oST1s45wubacfeDSFogOrIhe3UHDAg'; // ignore: lines_longer_than_80_chars
+
+      final isVerified = await ebsi.verifyEncodedData(
+        issuerDid: issuerDid3,
+        jwt: vcJwt,
+        issuerKid: issuerKid,
+      );
+      expect(isVerified, VerificationType.verified);
     });
   });
 
