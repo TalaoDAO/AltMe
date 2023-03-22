@@ -73,10 +73,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           credentialStatus = CredentialStatus.active;
           break;
         case VerificationType.notVerified:
-          credentialStatus = CredentialStatus.pending;
-          break;
         case VerificationType.unKnown:
-          credentialStatus = CredentialStatus.unknown;
+          credentialStatus = CredentialStatus.suspended;
           break;
       }
 
