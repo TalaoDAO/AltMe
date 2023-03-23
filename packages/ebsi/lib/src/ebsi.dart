@@ -582,12 +582,12 @@ class Ebsi {
     final vpVerifierClaims = JsonWebTokenClaims.fromJson(vpTokenPayload);
     // create a builder, decoding the JWT in a JWS, so using a
     // JsonWebSignatureBuilder
-    final privateKey = tokenParameters.privateKey;
+    final privateKey = Map<String, dynamic>.from(tokenParameters.privateKey);
     if (tokenParameters.privateKey['crv'] == 'secp256k1') {
       privateKey['crv'] = 'P-256K';
     }
 
-    final key = JsonWebKey.fromJson(tokenParameters.privateKey);
+    final key = JsonWebKey.fromJson(privateKey);
 
     final vpBuilder = JsonWebSignatureBuilder()
       // set the content
