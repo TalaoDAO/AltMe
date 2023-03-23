@@ -28,7 +28,7 @@ class CredentialSubjectModel {
   final String? type;
   @JsonKey(fromJson: fromJsonAuthor)
   final Author? issuedBy;
-  @JsonKey(fromJson: fromJsonAuthor)
+  @JsonKey(fromJson: fromJsonAuthor, includeIfNull: false)
   final Author? offeredBy;
   final CredentialSubjectType credentialSubjectType;
   final CredentialCategory credentialCategory;
