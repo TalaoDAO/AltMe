@@ -582,14 +582,14 @@ void main() {
   group('get did', () {
     final ebsi = Ebsi(client);
 
-    const expectedDid =
+    const expectedDidP256K =
         'did:ebsi:zo9FR1YfAKFP3Q6dvqhxcXxnfeDiJDP97kmnqhyAUSACj';
     test('from mnemonic ', () async {
       final did = await ebsi.getDidFromMnemonic(mnemonic, null);
-      expect(did, expectedDid);
+      expect(did, expectedDidP256K);
     });
 
-    test('from privateKey ', () async {
+    test('from P-256K privateKey ', () async {
       const key = {
         'crv': 'P-256K',
         'd': 'ccWWNSjGiv1iWlNh4kfhWvwG3yyQMe8o31Du0uKRzrs',
@@ -598,7 +598,20 @@ void main() {
         'y': 'EUU6vXoG3BGX2zzwjXrGDcr4EyDD0Vfk3_5fg5kSgKE'
       };
       final did = await ebsi.getDidFromMnemonic(null, jsonEncode(key));
-      expect(did, expectedDid);
+      expect(did, expectedDidP256K);
+    });
+    test('from secp256k1 privateKey ', () async {
+      const expectedDidsecp256k1 =
+          'did:ebsi:zfuA5yVRZVaKna9pRCHv28yyCYWiXWHZXXvtp3AbTdB4p';
+      const key = {
+        'crv': 'secp256k1',
+        'd': 'jMudzhP9YFNywIeIYYJbHtyizeaXOa1PWdX-qBjPTg8',
+        'kty': 'EC',
+        'x': 'yEC4JxUbpYx2-tKExh2NrLpETx-nnudZfcg4AcyL1to',
+        'y': 'HNh3aF4zQsnf_sFXUVaSzrQF85veDoVxhPQ-163wUYM'
+      };
+      final did = await ebsi.getDidFromMnemonic(null, jsonEncode(key));
+      expect(did, expectedDidsecp256k1);
     });
 
     group('send Presentation', () {
