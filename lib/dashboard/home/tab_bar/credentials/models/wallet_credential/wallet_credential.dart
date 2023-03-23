@@ -59,14 +59,6 @@ class WalletCredential {
               '@protected': true,
               'name': 'https://schema.org/name'
             }
-          },
-          'offeredBy': {
-            '@id': 'schema:offeredBy',
-            '@context': {
-              '@version': 1.1,
-              '@protected': true,
-              'name': 'https://schema.org/name'
-            }
           }
         }
       }
