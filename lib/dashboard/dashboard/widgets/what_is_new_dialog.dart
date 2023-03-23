@@ -82,9 +82,9 @@ class WhatIsNewDialog extends StatelessWidget {
                             const NewContent(
                               version: '1.12.1',
                               features: [
-                                'Resolved Android KYC stability issues.',
+                                'Resolved KYC stability issues.',
                                 'Integrated live chat support for partners with loyalty cards.',
-                                'Enhanced credential backup reliability on some Android devices.',
+                                'Enhanced credential backup reliability on some devices.',
                                 'Optimized help center layout and user experience.',
                               ],
                             ),
