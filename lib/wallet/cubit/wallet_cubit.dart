@@ -654,20 +654,10 @@ class WalletCubit extends Cubit<WalletState> {
     }
   }
 
-  Future<void> resetWallet({
-    List<String>? exceptKeys = const [SecureStorageKeys.version],
-  }) async {
-    if (exceptKeys == null || exceptKeys.isEmpty) {
-      await secureStorageProvider.deleteAll();
-    } else {
-      final keyValues = await secureStorageProvider.getAllValues();
-      final keys = keyValues.keys.toList();
-      for (final key in keys) {
-        if (!exceptKeys.contains(key)) {
-          await secureStorageProvider.delete(key);
-        }
-      }
-    }
+  Future<void> resetWallet() async {
+    await secureStorageProvider.deleteAllExceptsSomeKeys(
+      [SecureStorageKeys.version],
+    );
 
     // await credentialsRepository.deleteAll();
     // await profileCubit.resetProfile();

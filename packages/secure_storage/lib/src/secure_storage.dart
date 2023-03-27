@@ -52,4 +52,19 @@ class SecureStorageProvider {
   Future<void> deleteAll() async {
     return _storage.deleteAll();
   }
+
+  ///deleteAllExceptsSomeKeys
+  Future<void> deleteAllExceptsSomeKeys(List<String>? exceptKeys) async {
+    if (exceptKeys == null || exceptKeys.isEmpty) {
+      await deleteAll();
+    } else {
+      final keyValues = await getAllValues();
+      final keys = keyValues.keys.toList();
+      for (final key in keys) {
+        if (!exceptKeys.contains(key)) {
+          await delete(key);
+        }
+      }
+    }
+  }
 }
