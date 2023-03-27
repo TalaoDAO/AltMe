@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:polygonid/polygonid.dart';
 
 class StarterPage extends StatelessWidget {
   const StarterPage({super.key});
