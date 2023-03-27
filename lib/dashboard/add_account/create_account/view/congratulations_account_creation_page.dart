@@ -58,7 +58,6 @@ class _CongratulationsAccountCreationViewState
 
   @override
   void dispose() {
-    confettiController.stop();
     confettiController.dispose();
     super.dispose();
   }
