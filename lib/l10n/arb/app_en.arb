@@ -797,6 +797,7 @@
   "credentialRequiredMessage": "You need to get those credentials in your wallet to acquire this card:",
   "manageKeyDecentralizedId": "Key Decentralized ID",
   "manageEbsiDecentralizedId": "EBSI Decentralized ID",
+  "managePolygonIdDecentralizedId": "Polygon Decentralized ID",
   "requiredCredentialNotFoundTitle": "We are unable to find the credential\nyou need in Altme.",
   "requiredCredentialNotFoundSubTitle": "The required credential is not in your wallet",
   "requiredCredentialNotFoundDescription": "Please ask Tezotopia to reach us on :",
@@ -821,5 +822,6 @@
   "bloometaPassExpirationDate": "This card will remain active and reusable for 1 YEAR.",
   "bloometaPassWhyGetThisCard": "Be among the few to get access to limited edition mints, gaming highlights and future airdrops. Claim your card today and enter the Bloometaverse !",
   "bloometaPassLongDescription": "Bloometa is a user-friendly NFT marketplace that connects in-game assets from different blockchains, making it easy for Metaverse players and GameFi projects to access a curated selection of NFTs. Enjoy multi-chain compatibility and play-to-earn features in a simple, beginner-friendly platform.",
-  "chat": "Chat"
+  "chat": "Chat",
+  "polygonDecentralizedID": "Polygon Decentralized ID"
 }

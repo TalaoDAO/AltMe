@@ -1,34 +1,33 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:dio/dio.dart';
-import 'package:ebsi/ebsi.dart';
+
 import 'package:flutter/material.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class ManageDidEbsiPage extends StatelessWidget {
-  const ManageDidEbsiPage({super.key});
+class ManageDidPolygonIdPage extends StatelessWidget {
+  const ManageDidPolygonIdPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => const ManageDidEbsiPage(),
-      settings: const RouteSettings(name: '/ManageDidEbsiPage'),
+      builder: (_) => const ManageDidPolygonIdPage(),
+      settings: const RouteSettings(name: '/ManageDidPolygonIdPage'),
     );
   }
 
   Future<String> getDid() async {
-    final ebsi = Ebsi(Dio());
+    final PolygonId polygonId = PolygonId();
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-    final privateKey = await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic!);
-    final did = await ebsi.getDidFromMnemonic(null, privateKey);
-    return did;
+    final identity = await polygonId.createIdentity(mnemonic: mnemonic!);
+    return identity.did;
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.manageEbsiDecentralizedId,
+      title: l10n.managePolygonIdDecentralizedId,
       titleAlignment: Alignment.topCenter,
       scrollView: false,
       titleLeading: const BackLeadingButton(),
@@ -51,7 +50,7 @@ class ManageDidEbsiPage extends StatelessWidget {
                   case ConnectionState.waiting:
                   case ConnectionState.none:
                   case ConnectionState.active:
-                    return const SizedBox();
+                    return const CircularProgressIndicator();
                 }
               },
             ),
@@ -59,7 +58,7 @@ class ManageDidEbsiPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
               child: Divider(),
             ),
-            DidPrivateKey(route: DidEbsiPrivateKeyPage.route()),
+            DidPrivateKey(route: DidPolygonIdPrivateKeyPage.route()),
           ],
         ),
       ),

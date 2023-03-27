@@ -16,6 +16,7 @@ Future<void> generateAccount({
   required HomeCubit homeCubit,
   required WalletCubit walletCubit,
   required SplashCubit splashCubit,
+  //required PolygonId polygonId,
 }) async {
   final mnemonicFormatted = mnemonic.join(' ');
 
@@ -44,8 +45,6 @@ Future<void> generateAccount({
     didMethodName: didMethodName,
     verificationMethod: verificationMethod,
   );
-
-  ///polygon
 
   /// what's new popup disabled
   splashCubit.disableWhatsNewPopUp();

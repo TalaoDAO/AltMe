@@ -4,7 +4,10 @@ import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
 import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
-import 'package:polygonid_flutter_sdk/proof/domain/entities/download_info_entity.dart';
+import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
+import 'package:polygonid_flutter_sdk/identity/domain/entities/private_identity_entity.dart';
+import 'package:polygonid_flutter_sdk/identity/domain/exceptions/identity_exceptions.dart';
+import 'package:polygonid_flutter_sdk/identity/libs/bjj/privadoid_wallet.dart';
 import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
 import 'package:secp256k1/secp256k1.dart';
 
@@ -23,47 +26,20 @@ class PolygonId {
     await PolygonIdSdk.init();
   }
 
-  /// streaming loading
-  Future<Stream<DownloadInfo>> fakeLoading() {
-    return PolygonIdSdk.I.proof.initCircuitsDownloadAndGetInfoStream;
-  }
-
-  /// Create Identity
-  ///
-  /// blockchain and network are not optional, they are used to associate the
-  /// identity to a specific blockchain network.
-  ///
-  /// it is recommended to securely save the privateKey generated with
-  /// createIdentity(), this will often be used within the sdk methods as a
-  /// security system, you can find the privateKey in the PrivateIdentityEntity
-  /// object.
-  ///
-  Future<void> createIdentity() async {
-    //we get the sdk instance previously initialized
-    final sdk = PolygonIdSdk.I;
-    final identity = await sdk.identity
-        .createIdentity(blockchain: 'polygon', network: 'mumbai');
-    print(identity.privateKey);
-    print(identity.did);
-    print(identity.publicKey);
-    print(identity.profiles);
+  /// create JWK from mnemonic
+  Future<Uint8List> privateKeyUint8ListFromMnemonic({
+    required String mnemonic,
+  }) async {
+    final seed = bip393.mnemonicToSeed(mnemonic);
+    final rootKey = bip32.BIP32.fromSeed(seed);
+    final child = rootKey.derivePath("m/44'/5467'/0'/2'");
+    return child.privateKey!;
   }
 
   /// create JWK from mnemonic
-  Future<String> privateKeyFromMnemonic({required String mnemonic}) async {
-    final seed = bip393.mnemonicToSeed(mnemonic);
-
-    final rootKey = bip32.BIP32.fromSeed(seed); //Instance of 'BIP32'
-    final child = rootKey.derivePath(
-      "m/44'/5467'/0'/2'",
-    ); //Instance of 'BIP32'
-    final Iterable<int> iterable = child.privateKey!;
-    final seedBytes = Uint8List.fromList(List.from(iterable));
-
-    final key = jwkFromSeed(
-      seedBytes: seedBytes,
-    );
-
+  Future<String> privateKeyJWTFromMnemonic({required String mnemonic}) async {
+    final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
+    final key = jwkFromSeed(seedBytes: seedBytes);
     return jsonEncode(key);
   }
 
@@ -97,5 +73,101 @@ class PolygonId {
       'y': y,
     };
     return jwk;
+  }
+
+  /// Create Identity
+  ///
+  /// blockchain and network are not optional, they are used to associate the
+  /// identity to a specific blockchain network.
+  ///
+  /// it is recommended to securely save the privateKey generated with
+  /// createIdentity(), this will often be used within the sdk methods as a
+  /// security system, you can find the privateKey in the PrivateIdentityEntity
+  /// object.
+  ///
+  Future<PrivateIdentityEntity> createIdentity({
+    required String mnemonic,
+  }) async {
+    final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
+    final secret = String.fromCharCodes(seedBytes);
+    try {
+      final identity = await PolygonIdSdk.I.identity.createIdentity(
+        blockchain: 'polygon',
+        network: 'mumbai',
+        secret: secret,
+      );
+      return identity;
+    } catch (e) {
+      if (e is IdentityAlreadyExistsException) {
+        final privateKey =
+            await keccak256privateKeyFromSecret(private: seedBytes);
+        final identity = getIdentity(privateKey: privateKey);
+        return identity;
+      } else {
+        throw Exception('STH_WENT_WRONG');
+      }
+    }
+  }
+
+  /// get private key from mnemonics
+  Future<String> keccak256privateKeyFromSecret({
+    required Uint8List private,
+  }) async {
+    const accessMessage =
+        r'PrivadoId account access.\n\nSign this message if you are in a trusted application only.';
+    final privadoIdWallet = await PrivadoIdWallet.createPrivadoIdWallet(
+      accessMessage: accessMessage,
+      secret: private,
+    );
+
+    final privateKey = privadoIdWallet.privateKey;
+    final epk = HEX.encode(privateKey);
+    return epk;
+  }
+
+  /// Return The Identity's did identifier with mnemonics
+  Future<String> getDidFromMnemonics({
+    required String mnemonic,
+  }) async {
+    final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
+    final privateKey = await keccak256privateKeyFromSecret(private: seedBytes);
+    final did = await PolygonIdSdk.I.identity.getDidIdentifier(
+      blockchain: 'polygon',
+      network: 'mumbai',
+      privateKey: privateKey,
+    );
+    return did;
+  }
+
+  /// Restores an IdentityEntity from a privateKey and encrypted backup databases
+  /// associated to the identity
+  Future<PrivateIdentityEntity> getIdentity({
+    required String privateKey,
+  }) async {
+    final sdk = PolygonIdSdk.I;
+
+    final identity = await sdk.identity.restoreIdentity(
+      blockchain: 'polygon',
+      network: 'mumbai',
+      privateKey: privateKey,
+    );
+    return identity;
+  }
+
+  /// Remove the previously stored identity associated with the identifier
+  Future<void> removeIdentity({
+    required String genesisDid,
+    required String privateKey,
+  }) {
+    final sdk = PolygonIdSdk.I;
+    return sdk.identity
+        .removeIdentity(genesisDid: genesisDid, privateKey: privateKey);
+  }
+
+  /// Get a list of public info of [IdentityEntity] associated
+  /// to the identities stored in the Polygon ID Sdk.
+  Future<List<IdentityEntity>> getIdentities() {
+    final sdk = PolygonIdSdk.I;
+    return sdk.identity.getIdentities();
   }
 }
