@@ -759,7 +759,8 @@
     "bloometaPassWhyGetThisCard",
     "bloometaPassLongDescription",
     "chat",
-    "polygonDecentralizedID"
+    "polygonDecentralizedID",
+    "needMnemonicVerificatinoDescription"
   ],
 
   "es": [
@@ -1522,7 +1523,8 @@
     "bloometaPassWhyGetThisCard",
     "bloometaPassLongDescription",
     "chat",
-    "polygonDecentralizedID"
+    "polygonDecentralizedID",
+    "needMnemonicVerificatinoDescription"
   ],
 
   "fr": [
@@ -1570,7 +1572,8 @@
     "bloometaPassWhyGetThisCard",
     "bloometaPassLongDescription",
     "chat",
-    "polygonDecentralizedID"
+    "polygonDecentralizedID",
+    "needMnemonicVerificatinoDescription"
   ],
 
   "it": [
@@ -2333,6 +2336,7 @@
     "bloometaPassWhyGetThisCard",
     "bloometaPassLongDescription",
     "chat",
-    "polygonDecentralizedID"
+    "polygonDecentralizedID",
+    "needMnemonicVerificatinoDescription"
   ]
 }

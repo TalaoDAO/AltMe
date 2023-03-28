@@ -112,6 +112,29 @@ class _DashboardViewState extends State<DashboardView> {
     final l10n = context.l10n;
     return MultiBlocListener(
       listeners: [
+        BlocListener<MnemonicNeedVerificationCubit, bool>(
+          listener: (context, needsVerification) {
+            if (needsVerification) {
+              showDialog<void>(
+                context: context,
+                builder: (_) => DefaultDialog(
+                  title: l10n.warningDialogTitle,
+                  description: l10n.needMnemonicVerificatinoDescription,
+                  buttonLabel: l10n.verifyNow,
+                  onButtonClick: () {
+                    Navigator.of(context).push<void>(
+                      PinCodePage.route(
+                        isValidCallback: () => Navigator.of(context)
+                            .push<void>(RecoveryKeyPage.route()),
+                        restrictToBack: false,
+                      ),
+                    );
+                  },
+                ),
+              );
+            }
+          },
+        ),
         BlocListener<HomeCubit, HomeState>(
           listener: (context, homeState) {
             if (homeState.passBaseStatus == PassBaseStatus.declined) {

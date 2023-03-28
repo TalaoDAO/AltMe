@@ -150,10 +150,15 @@ class App extends StatelessWidget {
             ),
           ),
         ),
+        BlocProvider(
+          create: (_) => MnemonicNeedVerificationCubit(),
+        ),
         BlocProvider<TokensCubit>(
           create: (context) => TokensCubit(
             allTokensCubit: context.read<AllTokensCubit>(),
             networkCubit: context.read<ManageNetworkCubit>(),
+            mnemonicNeedVerificationCubit:
+                context.read<MnemonicNeedVerificationCubit>(),
             secureStorageProvider: secure_storage.getSecureStorage,
             client: DioClient(
               context.read<ManageNetworkCubit>().state.network.apiUrl,
