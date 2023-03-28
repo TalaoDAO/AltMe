@@ -255,7 +255,7 @@ keys:
     The push notification URL (eg: https://push.service.io/api/v1)
 
 11. TALAO_MATRIX_API_KEY<br />
-    The key is available [`here`](https://www.famedly.com/).
+    The key is available [`here`](https://matrix.org/).
 
 ## PolygonID Flutter SDK Configuration
 
