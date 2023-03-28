@@ -13,6 +13,7 @@ import 'package:altme/dashboard/home/home/cubit/home_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
 import 'package:polygonid/polygonid.dart';
@@ -128,7 +129,14 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   await Dartez().init();
 
   /// PolygonId SDK initialization
-  await PolygonId().init();
+  await dotenv.load();
+  await PolygonId().init(
+    web3Url: dotenv.get('INFURA_URL'),
+    web3RdpUrl: dotenv.get('INFURA_RDP_URL'),
+    web3ApiKey: dotenv.get('INFURA_API_KEY'),
+    idStateContract: dotenv.get('ID_STATE_CONTRACT_ADDR'),
+    pushUrl: dotenv.get('PUSH_URL'),
+  );
 
   await runZonedGuarded(
     () async {

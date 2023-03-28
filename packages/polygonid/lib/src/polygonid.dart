@@ -4,6 +4,7 @@ import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
 import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
+import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/private_identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/exceptions/identity_exceptions.dart';
@@ -18,12 +19,33 @@ class PolygonId {
   /// {@macro polygonid}
   PolygonId();
 
+  /// blockchain
+  static const blockchain = 'polygon';
+
+  /// network
+  static const network = 'mumbai';
+
   /// PolygonId SDK initialization
   /// Before you can start using the SDK, you need to initialise it, otherwise
   /// a PolygonIsSdkNotInitializedException exception will be thrown.
-
-  Future<void> init() async {
-    await PolygonIdSdk.init();
+  Future<void> init({
+    required String web3Url,
+    required String web3RdpUrl,
+    required String web3ApiKey,
+    required String idStateContract,
+    required String pushUrl,
+  }) async {
+    await PolygonIdSdk.init(
+      env: EnvEntity(
+        blockchain: blockchain,
+        network: network,
+        web3Url: web3Url,
+        web3RdpUrl: web3RdpUrl,
+        web3ApiKey: web3ApiKey,
+        idStateContract: idStateContract,
+        pushUrl: pushUrl,
+      ),
+    );
   }
 
   /// create JWK from mnemonic
@@ -85,17 +107,14 @@ class PolygonId {
   /// security system, you can find the privateKey in the PrivateIdentityEntity
   /// object.
   ///
-  Future<PrivateIdentityEntity> createIdentity({
+  Future<PrivateIdentityEntity> addIdentity({
     required String mnemonic,
   }) async {
     final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
     final secret = String.fromCharCodes(seedBytes);
     try {
-      final identity = await PolygonIdSdk.I.identity.createIdentity(
-        blockchain: 'polygon',
-        network: 'mumbai',
-        secret: secret,
-      );
+      final identity =
+          await PolygonIdSdk.I.identity.addIdentity(secret: secret);
       return identity;
     } catch (e) {
       if (e is IdentityAlreadyExistsException) {
@@ -132,8 +151,8 @@ class PolygonId {
     final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
     final privateKey = await keccak256privateKeyFromSecret(private: seedBytes);
     final did = await PolygonIdSdk.I.identity.getDidIdentifier(
-      blockchain: 'polygon',
-      network: 'mumbai',
+      blockchain: blockchain,
+      network: network,
       privateKey: privateKey,
     );
     return did;
@@ -147,8 +166,6 @@ class PolygonId {
     final sdk = PolygonIdSdk.I;
 
     final identity = await sdk.identity.restoreIdentity(
-      blockchain: 'polygon',
-      network: 'mumbai',
       privateKey: privateKey,
     );
     return identity;
@@ -160,8 +177,7 @@ class PolygonId {
     required String privateKey,
   }) {
     final sdk = PolygonIdSdk.I;
-    return sdk.identity
-        .removeIdentity(genesisDid: genesisDid, privateKey: privateKey);
+    return sdk.identity.removeIdentity(privateKey: privateKey);
   }
 
   /// Get a list of public info of [IdentityEntity] associated
