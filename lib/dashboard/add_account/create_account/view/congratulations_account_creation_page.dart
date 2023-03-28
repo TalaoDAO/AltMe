@@ -89,6 +89,7 @@ class _CongratulationsAccountCreationViewState
 
     return Stack(
       alignment: Alignment.topCenter,
+      fit: StackFit.expand,
       children: [
         BasePage(
           scrollView: false,
@@ -143,12 +144,15 @@ class _CongratulationsAccountCreationViewState
         ),
         ConfettiWidget(
           confettiController: confettiController,
+          canvas: Size.infinite,
           shouldLoop: true,
-          minBlastForce: 2,
-          maxBlastForce: 8,
-          emissionFrequency: 0.02,
+          blastDirection: 0,
+          maxBlastForce: 60,
+          minBlastForce: 5,
+          emissionFrequency: 0.04,
+          numberOfParticles: 13,
+          gravity: 0.25,
           blastDirectionality: BlastDirectionality.explosive,
-          numberOfParticles: 10,
         ),
       ],
     );
