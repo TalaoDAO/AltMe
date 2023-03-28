@@ -83,7 +83,7 @@ dependencies:
   package_info_plus: ^3.0.3
   passbase_flutter: ^2.14.0
   path: ^1.8.2 # flutter_test from sdk depends on path 1.8.2
-  path_provider: ^2.0.11 # From polygon-id: Path provider 2.0.12 is giving problems with iOS, forced to use 2.0.11
+  path_provider: ^2.0.14
   permission_handler: ^10.2.0
   platform_device_id: ^1.0.1
   pointycastle: ^3.6.2
