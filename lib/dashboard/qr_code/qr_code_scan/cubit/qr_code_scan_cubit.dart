@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
@@ -83,6 +84,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith('wc:')) {
         await walletConnectCubit.connect(scannedResponse);
+
+        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+      } else if (scannedResponse.startsWith('{"id":')) {
+        final mnemonic =
+            await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+        await PolygonId()
+            .fetchAndSaveClaims(message: scannedResponse, mnemonic: mnemonic!);
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else {

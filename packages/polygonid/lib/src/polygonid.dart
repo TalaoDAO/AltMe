@@ -5,6 +5,8 @@ import 'package:bip39/bip39.dart' as bip393;
 import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
+import 'package:polygonid_flutter_sdk/credential/domain/entities/claim_entity.dart';
+import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/iden3_message_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/private_identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/exceptions/identity_exceptions.dart';
@@ -113,8 +115,8 @@ class PolygonId {
     final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
     final secret = String.fromCharCodes(seedBytes);
     try {
-      final identity =
-          await PolygonIdSdk.I.identity.addIdentity(secret: secret);
+      final sdk = PolygonIdSdk.I;
+      final identity = await sdk.identity.addIdentity(secret: secret);
       return identity;
     } catch (e) {
       if (e is IdentityAlreadyExistsException) {
@@ -148,9 +150,10 @@ class PolygonId {
   Future<String> getDidFromMnemonics({
     required String mnemonic,
   }) async {
+    final sdk = PolygonIdSdk.I;
     final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
     final privateKey = await keccak256privateKeyFromSecret(private: seedBytes);
-    final did = await PolygonIdSdk.I.identity.getDidIdentifier(
+    final did = await sdk.identity.getDidIdentifier(
       blockchain: blockchain,
       network: network,
       privateKey: privateKey,
@@ -164,7 +167,6 @@ class PolygonId {
     required String privateKey,
   }) async {
     final sdk = PolygonIdSdk.I;
-
     final identity = await sdk.identity.restoreIdentity(
       privateKey: privateKey,
     );
@@ -185,5 +187,55 @@ class PolygonId {
   Future<List<IdentityEntity>> getIdentities() {
     final sdk = PolygonIdSdk.I;
     return sdk.identity.getIdentities();
+  }
+
+  /// Returns a [Iden3MessageEntity] from an iden3comm message string.
+  ///
+  /// The [message] is the iden3comm message in string format
+  ///
+  /// When communicating through iden3comm with an Issuer or Verifier,
+  /// iden3comm message string needs to be parsed to a supported
+  /// [Iden3MessageEntity] by the Polygon Id Sdk using this method.
+  Future<Iden3MessageEntity> getIden3Message({required String message}) {
+    final sdk = PolygonIdSdk.I;
+    return sdk.iden3comm.getIden3Message(message: message);
+  }
+
+  /// Fetch a list of [ClaimEntity] from issuer using iden3comm message
+  /// and stores them in Polygon Id Sdk.
+  ///
+  /// The [message] is the iden3comm message entity
+  ///
+  /// The did is the unique id of the identity
+  ///
+  /// The profileNonce is the nonce of the profile used from identity
+  /// to obtain the did identifier
+  ///
+  /// The privateKe] is the key used to access all the sensitive info from the
+  /// identity and also to realize operations like generating proofs
+  Future<void> fetchAndSaveClaims({
+    required String message,
+    required String mnemonic,
+  }) async {
+    final sdk = PolygonIdSdk.I;
+    final iden3MessageEntity =
+        await sdk.iden3comm.getIden3Message(message: message);
+
+    print(iden3MessageEntity);
+
+    final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
+    final privateKey = await keccak256privateKeyFromSecret(private: seedBytes);
+    final did = await sdk.identity.getDidIdentifier(
+      blockchain: blockchain,
+      network: network,
+      privateKey: privateKey,
+    );
+
+    final claimEntities = await sdk.iden3comm.fetchAndSaveClaims(
+      message: iden3MessageEntity,
+      did: did,
+      privateKey: privateKey,
+    );
+    print(claimEntities);
   }
 }
