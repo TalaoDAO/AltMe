@@ -1,0 +1,24 @@
+name: polygonid
+description: A Very Good Project created by Very Good CLI.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  bip32: ^2.0.0
+  bip39: ^1.0.6
+  flutter:
+    sdk: flutter
+  hex: ^0.2.0
+  polygonid_flutter_sdk:
+    git:
+      url: ssh://git@github.com/iden3/polygonid-flutter-sdk.git
+      ref: 8794950d1ac603e2f0de9db2b7b05189d60bc9a2
+  secp256k1: ^0.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^4.0.0+1

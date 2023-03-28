@@ -386,6 +386,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  country_code:
+    dependency: transitive
+    description:
+      name: country_code
+      sha256: f69ccd5163b1ca43011be9632e33ebe7ffac65e49ce2afcd3e3e5228af5d91fc
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   coverage:
     dependency: transitive
     description:
@@ -638,6 +646,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  encrypt:
+    dependency: transitive
+    description:
+      name: encrypt
+      sha256: "4fd4e4fdc21b9d7d4141823e1e6515cd94e7b8d84749504c232999fba25d9bbb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.1"
   enhanced_enum:
     dependency: transitive
     description:
@@ -678,6 +694,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  ffigen:
+    dependency: transitive
+    description:
+      name: ffigen
+      sha256: "2f2f40265aae76d966164c3d53bfcbbeb73bc97f0ec2966032ac5e971bb3f20a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.2.7"
   file:
     dependency: transitive
     description:
@@ -970,6 +994,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.0"
+  get_it:
+    dependency: transitive
+    description:
+      name: get_it
+      sha256: "290fde3a86072e4b37dbb03c07bec6126f0ecc28dad403c12ffe2e5a2d751ab7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.2.0"
   glob:
     dependency: transitive
     description:
@@ -1106,6 +1138,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.6.2"
+  injectable:
+    dependency: transitive
+    description:
+      name: injectable
+      sha256: f71eb879124ed286cbd2210337b91ff5f345f146187c1f1891c172e0ac06443a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.4"
   intl:
     dependency: "direct main"
     description:
@@ -1664,6 +1704,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.6.2"
+  polygonid:
+    dependency: "direct main"
+    description:
+      path: "packages/polygonid"
+      relative: true
+    source: path
+    version: "1.0.0+1"
+  polygonid_flutter_sdk:
+    dependency: transitive
+    description:
+      path: "."
+      ref: "8794950d1ac603e2f0de9db2b7b05189d60bc9a2"
+      resolved-ref: "8794950d1ac603e2f0de9db2b7b05189d60bc9a2"
+      url: "ssh://git@github.com/iden3/polygonid-flutter-sdk.git"
+    source: git
+    version: "2.1.1"
   pool:
     dependency: transitive
     description:
@@ -1831,6 +1887,14 @@ packages:
       relative: true
     source: path
     version: "1.0.0+1"
+  sembast:
+    dependency: transitive
+    description:
+      name: sembast
+      sha256: "82f89201b98597ed13253a5fa750ac6b6bba3a9d4a91db7f07c9470baac33a4e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.3"
   share_plus:
     dependency: "direct main"
     description:
@@ -2000,18 +2064,18 @@ packages:
     dependency: transitive
     description:
       name: sqflite
-      sha256: "067ab48dbc66bae05e18073a604443baa35957101bd3905b94f65e764c6d0688"
+      sha256: "500d6fec583d2c021f2d25a056d96654f910662c64f836cd2063167b8f1fa758"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.2.6"
   sqflite_common:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: b2ed22d1d62c944ec0dac5cc687ae99cb3331c3ebe146d726ed24704634b5ccd
+      sha256: "963dad8c4aa2f814ce7d2d5b1da2f36f31bd1a439d8f27e3dc189bb9d26bc684"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.1"
+    version: "2.4.3"
   stack_trace:
     dependency: transitive
     description:
@@ -2422,6 +2486,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  yaml_edit:
+    dependency: transitive
+    description:
+      name: yaml_edit
+      sha256: "0b968021754d8fbd3e9c83563b538ee417d88b2cc587606da5615546b7ee033b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
 sdks:
-  dart: ">=2.19.0 <3.7.0"
+  dart: ">=2.19.0 <3.0.0"
   flutter: ">=3.7.0-0"

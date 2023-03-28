@@ -733,6 +733,7 @@
     "credentialRequiredMessage",
     "manageKeyDecentralizedId",
     "manageEbsiDecentralizedId",
+    "managePolygonIdDecentralizedId",
     "requiredCredentialNotFoundTitle",
     "requiredCredentialNotFoundSubTitle",
     "requiredCredentialNotFoundDescription",
@@ -757,7 +758,8 @@
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
     "bloometaPassLongDescription",
-    "chat"
+    "chat",
+    "polygonDecentralizedID"
   ],
 
   "es": [
@@ -1494,6 +1496,7 @@
     "credentialRequiredMessage",
     "manageKeyDecentralizedId",
     "manageEbsiDecentralizedId",
+    "managePolygonIdDecentralizedId",
     "requiredCredentialNotFoundTitle",
     "requiredCredentialNotFoundSubTitle",
     "requiredCredentialNotFoundDescription",
@@ -1518,7 +1521,8 @@
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
     "bloometaPassLongDescription",
-    "chat"
+    "chat",
+    "polygonDecentralizedID"
   ],
 
   "fr": [
@@ -1540,6 +1544,7 @@
     "altmeSupport",
     "manageKeyDecentralizedId",
     "manageEbsiDecentralizedId",
+    "managePolygonIdDecentralizedId",
     "requiredCredentialNotFoundTitle",
     "requiredCredentialNotFoundSubTitle",
     "requiredCredentialNotFoundDescription",
@@ -1564,7 +1569,8 @@
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
     "bloometaPassLongDescription",
-    "chat"
+    "chat",
+    "polygonDecentralizedID"
   ],
 
   "it": [
@@ -2301,6 +2307,7 @@
     "credentialRequiredMessage",
     "manageKeyDecentralizedId",
     "manageEbsiDecentralizedId",
+    "managePolygonIdDecentralizedId",
     "requiredCredentialNotFoundTitle",
     "requiredCredentialNotFoundSubTitle",
     "requiredCredentialNotFoundDescription",
@@ -2325,6 +2332,7 @@
     "bloometaPassExpirationDate",
     "bloometaPassWhyGetThisCard",
     "bloometaPassLongDescription",
-    "chat"
+    "chat",
+    "polygonDecentralizedID"
   ]
 }

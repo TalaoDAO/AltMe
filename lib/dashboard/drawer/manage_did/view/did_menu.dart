@@ -57,6 +57,13 @@ class DidView extends StatelessWidget {
                     Navigator.of(context).push<void>(ManageDidEbsiPage.route());
                   },
                 ),
+                DrawerItem(
+                  title: l10n.polygonDecentralizedID,
+                  onTap: () {
+                    Navigator.of(context)
+                        .push<void>(ManageDidPolygonIdPage.route());
+                  },
+                ),
               ],
             ),
           ),
