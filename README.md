@@ -194,51 +194,6 @@ $ make -C lib ../target/test/ios.stamp
 $ cargo build
 ```
 
-## Setting Up PolygonID Flutter SDK
-
-### Env variables
-
-#### Required:
-
-```
-NETWORK_NAME - Blockchain name.
-NETWORK_ENV - Network name.
-INFURA_URL - Infura base url.
-INFURA_RDP_URL - Infura base rdp url.
-INFURA_API_KEY - Infura api key.
-ID_STATE_CONTRACT_ADDR - Identity state smart contract address.
-```
-
-#### Not required:
-
-```
-PUSH_URL - Polygon push gateway server base url.
-```
-
-### Deploy
-
-1. Clone this repository.
-2. Generate `.env` and `.env.dev` files in the root folder of the project.
-3. Add required env variables (example):
-   ```bash
-    NETWORK_NAME="polygon"
-    NETWORK_ENV="mumbai"
-    INFURA_URL="https://polygon-mumbai.infura.io/v3/"
-    INFURA_RDP_URL="wss://polygon-mumbai.infura.io/v3/"
-    INFURA_API_KEY="secret"
-    ID_STATE_CONTRACT_ADDR="sc_address"
-    PUSH_URL="push_url"
-   ```
-4. run `build_runner` to generate `.g.dart` files:
-
-```bash
-flutter pub run build_runner build --delete-conflicting-outputs
-```
-
-#### Note
-
-Using iOS simulator for testing wallet sdk is right now under maintenance and will be available soon.
-
 ## Shortcut setup
 
 In order to handle installation of didkit, ssi, polygonid-flutter-sdk and altme, we can run shortcut script. We can also get the warnings if we have not configured the required things for building Altme.
@@ -287,9 +242,51 @@ keys:
 6. MORALIS_API_KEY<br />
    You can get this key from [`here`](https://docs.moralis.io/web3-data-api/get-your-api-key).
 
+7. INFURA_URL<br />
+   URL of the blockchain (eg: https://polygon-mumbai.infura.io/v3/)
+
+8. INFURA_RDP_URL<br />  
+   RDP URL (eg: wss://polygon-mumbai.infura.io/v3/)
+
+9. ID_STATE_CONTRACT_ADDR<br />  
+   The ID state contract (eg: 0x453A1BC32122E39A8398ec6288783389730807a5)
+
+10. PUSH_URL<br />  
+    The push notification URL (eg: https://push.service.io/api/v1)
+
+11. TALAO_MATRIX_API_KEY<br />
+    The key is available [`here`](https://www.famedly.com/).
+
+## PolygonID Flutter SDK Configuration
+
+For iOS only:
+
+1. Add to your app's Podfile the following post_install code:
+
+```
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    ...
+    end
+    # polygon-setup
+    if target.name == "Pods-Runner"
+      puts "Updating #{target.name} OTHER_LDFLAGS"
+      target.build_configurations.each do |config|
+                      xcconfig_path = config.base_configuration_reference.real_path
+                      xcconfig = File.read(xcconfig_path)
+                      new_xcconfig = xcconfig.sub('OTHER_LDFLAGS = $(inherited)', 'OTHER_LDFLAGS = $(inherited) -force_load "${PODS_ROOT}/../.symlinks/plugins/polygonid_flutter_sdk/ios/librapidsnark.a" -force_load "${PODS_ROOT}/../.symlinks/plugins/polygonid_flutter_sdk/ios/libwitnesscalc_authV2.a" -force_load "${PODS_ROOT}/../.symlinks/plugins/polygonid_flutter_sdk/ios/libwitnesscalc_credentialAtomicQueryMTPV2.a" -force_load "${PODS_ROOT}/../.symlinks/plugins/polygonid_flutter_sdk/ios/libwitnesscalc_credentialAtomicQuerySigV2.a" -force_load "${PODS_ROOT}/../.symlinks/plugins/polygonid_flutter_sdk/ios/libgmp.a" -force_load "${PODS_ROOT}/../.symlinks/plugins/polygonid_flutter_sdk/ios/libpolygonid.a"')
+                      File.open(xcconfig_path, "w") { |file| file << new_xcconfig }
+         end
+     end
+  end
+end
+```
+
 #### Note
 
-Please check the [Setting Up PolygonID Flutter SDK] section for key-dependencies of polygonid-flutter-sdk.
+Please check [`PolygonID Flutter SDK`](https://github.com/iden3/polygonid-flutter-sdk) for smooth running of polygonid-flutter-sdk.
+
+P.S. Using iOS simulator for testing wallet sdk is right now under maintenance and will be available soon.
 
 ## Building Altme
 
