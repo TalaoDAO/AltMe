@@ -1,69 +1,60 @@
 {
   "faq": [
     {
-      "que": "What can I do with Talao ?",
-      "ans": "Talao give users the ability to take back control of their personal information and share these with Web 3 applications when its required. For example, with Talao users can present digital credentials (Over 18 proof, KYC...) in order to access certain services or take advantage of certain offers (membership card, loyalty card, Exclusive pass...)."
+      "que": "1. What is Talao?",
+      "ans": "Talao is a digital wallet that fully supports the new self-sovereign digital identity standard, enabling users to securely and privately store personal information (ID card, proof of age…) in the form of Verifiable Credentials."
     },
     {
-      "que": "Why is Talao called a Universal wallet and why is it different from other digital wallets ?",
-      "ans": "Talao is called a 'Universal wallet' because just like a physical wallet in which you can carry your ID cards and funds, you can use the Talao wallet to gather digital credentials (Identity card, Age range proof, diploma, etc.) and digital assets (Cryptos, NFTs, tokens...). The future of digital identity is being build on Self-Sovereign Identity (SSI standard), which is the technology that powers Talao wallet and give its users the ability to manage digital credentials in a privacy-preserving and decentralized manner."
+      "que": "2. How is Talao different from other wallets?",
+      "ans": "Talao wallet is built on Self-Sovereign Identity (SSI), a new digital identity standard that enables the management of digital credentials in a decentralized and privacy-preserving manner."
     },
     {
-      "que": "What is Self-Sovereign Identity (SSI) ?",
-      "ans": "Self-Sovereign Identity, or SSI, is a new technology compatible with blockchain that gives users and organizations the ability to control their own digital credentials and identity data, rather than relying on a central authority or central database to manage their personal information. With SSI, users are able to store, manage and share their personal data in a decentralize manner, enabling greater privacy and security. SSI also uses Zero-Knowledge Proof and 'Selective Disclosure' to protect users privacy."
+      "que": "3. What is Self-Sovereign Identity?",
+      "ans": "Self-Sovereign Identity (SSI) is a new technology compatible with blockchain that gives users the ability to control their own identity data, without relying on a central authority or database to manage their personal information."
     },
     {
-      "que": "How can I use my Talao SSI wallet to manage and share my verifiable credentials?",
-      "ans": "When you receive a verifiable credential in the Talao wallet, it is added to your digital identity. You can then use this credential to prove your identity or access certain services. For example, you might use a membership credential to access a members-only area of a website, or an 'Over 18' proof to access a DeFi application. You can use the “scan” button in Talao to share credentials when it is requested. It’s super easy. Just scan the QR code, and accept the request to share your digital credentials."
+      "que": "4. What are Verifiable Credentials?",
+      "ans": "Verifiable Credentials (VCs) are tamper-proof and extremely secure digital documents (Proof of Age, diploma, ID Card, membership card…) that can be instantly shared and verified by a third-party."
     },
     {
-      "que": "What is the level of security of Talao wallet ?",
-      "ans": "Talao wallet is self-custodial and protected by military grade encryption and biometrics authentication. Your data are encrypted and stored on your device, enabling better privacy and security."
+      "que": "5. How can I use/share my Verifiable Credentials?",
+      "ans": "When you obtain a verifiable credential in Talao, you can use it to prove things about yourself by scanning a simple QR code. For example, you can use your 'Over 18' proof to prove that you are over 18 years old to certain Web 3 applications."
     },
     {
-      "que": "What does it mean that Talao is “self-custodial” ?",
-      "ans": "A self-custodial wallet (= non-custodial) means that your data are encrypted and stored on your device. Only you can access your keys, data and assets. Not us. Not anyone else."
+      "que": "6. What is the level of security of Talao wallet?",
+      "ans": "Talao wallet is self-custodial and protected by military-grade encryption and biometric authentication. Your data is encrypted and stored on your device, enabling unbeatable privacy and security."
     },
     {
-      "que": "Are there any risks related to verifying my address to get a 'proof the ownership' in Talao ?",
-      "ans": "No there is zero risk.&nbsp;You don’t need to share or disclose any passphrase or private keys to get a proof of ownership. All you have to do is scan a QR code with your favorite crypto wallet (address) in order to get the credential that proves you hold the private key of this address. Talao wallet is never connected your crypto wallet."
+      "que": "7. What does it mean that Talao is “self-custodial”?",
+      "ans": "A self-custodial (= non custodial) wallet means that your digital data are encrypted and stored on your device. Only you can access your keys, data, and assets. Not us. Not anyone else."
     },
     {
-      "que": "How does Talao wallet protect my personal information?",
-      "ans": "Talao is built on Self-Sovereign Identity (SSI) technology which is a new digital identity standard that enables the storage and management of personal information in a decentralized, secure and private way. All your personal information are encrypted and stored in your phone. Only you have the power to share credentials information that are encrypted in your wallet."
+      "que": "8. Where are my personal data stored?",
+      "ans": "Your identity and personal data are encrypted and stored off-chain, on your phone."
     },
     {
-      "que": "Where are my digital credentials stored in Talao ?",
-      "ans": "Your digital credentials are encrypted and stored on your phone. There is no central database or cloud that stores your data. This is why it is called “self-sovereign identity” (SSI). Only you should own and access your data."
+      "que": "9. How do I backup my keys and verifiable credentials?",
+      "ans": "To backup your Talao wallet, write down your passphrase (12 words) and download your digital credential files, then store them in a secure location."
     },
     {
-      "que": "How do I backup my keys and credentials in Talao ?",
-      "ans": "To backup your Talao wallet, you need to write down your passphrase and download your digital credentials. It's important to store these in a secure location, such as a password-protected file or a physical safe. If you lose access to your Talao wallet, there is nothing we can do to help you. Talao is self-custodial which means only you can control your keys and your credentials."
+      "que": "10. How can I restore my wallet?",
+      "ans": "You can backup your Talao wallet by using your recovery phrase. Find your recovery phrase by going to “Parameters”, then “Wallet Security”, and finally “Show Wallet Recovery Phrase”."
     },
     {
-      "que": "What are Verifiable Credentials and why is it useful ?",
-      "ans": "Verifiable Credentials (VCs) are an open standard for digital claims. They can represent information such as identity card, an Over 18 Proof or a proof of ownership of a crypto address. They have many advantages, including the fact that they are digitally signed, making them tamper-proof, extremely secure and instantly verifiable by a third-party."
+      "que": "11. What if I lose my recovery phrase?",
+      "ans": "If you lose your recovery phrase, it is not possible for us to help you retrieve it. It is crucial to keep it in a safe and secure location."
     },
     {
-      "que": "What is 'elective disclosure' ?",
-      "ans": "Selective disclosure is a way for SSI users to reveal certain pieces of information about their identity, without disclosing sensitive information. It helps increase the security of online interactions. For exemple, reveal that you are 'Over 18' without revealing your name or address."
+      "que": "12. How can I contact Talao if I need support?",
+      "ans": "If you find a bug, please contact our support team using the in-app chat or email support@Talao.io"
     },
     {
-      "que": "What should I do if I find a bug?",
-      "ans": "You can contact us at our support email : support@Talao.io"
+      "que": "13. Is Talao available in languages other than English?",
+      "ans": "At this time, Talao is only available in English."
     },
     {
-      "que": "How can I contact Talao if I need supports ?",
-      "ans": "You can contact us by using our support email :  support@Talao.io. Currently, the Talao SSI wallet is only available in English. However, we are working on expanding the availability of the wallet to other languages in the future."
-    },
-    {
-      "que": "Why my redirect does not go on the App? IOS/ANDROID",
-      "ans": "If the redirection is not done automatically you must go to your phone's settings > Settings > Apps > Altme/Talao > Set as default > Supported web addresses > app.altme.io  -> On"
-    },
-    {
-      "que": "What are Talao's Terms of Service?",
-      "ans": "Redirect to CGU.",
-      "href": "https://talao.io/"
+      "que": "14. What are Talao's Terms of Service?",
+      "ans": "You can find Talao's Terms of Service by visiting https://Talao.io/cgu."
     }
   ]
 }
