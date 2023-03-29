@@ -9,6 +9,7 @@ import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
@@ -356,6 +357,12 @@ class MatrixChatImpl extends MatrixChatInterface {
       }
     } catch (e, s) {
       logger.e('e: $e, s: $s');
+      if (e is PlatformException && e.code == 'invalid_image') {
+        logger.i(
+          'If you are trying to send image from simulator or emulator'
+          ' then you should use real device!',
+        );
+      }
     }
   }
 
