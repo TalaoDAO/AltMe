@@ -39,7 +39,7 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   void initState() {
-    Future<void>.delayed(const Duration(milliseconds: 5 * 1000), () async {
+    Future<void>.delayed(const Duration(milliseconds: 500), () async {
       await context.read<SplashCubit>().initialiseApp();
     });
     super.initState();
@@ -63,7 +63,7 @@ class _SplashViewState extends State<SplashView> {
         (Uri? uri) async {
           if (!mounted) return;
           log.i('got uri: $uri');
-          final url = '${uri!.scheme}://${uri.authority}${uri.path}';
+          //final url = '${uri!.scheme}://${uri.authority}${uri.path}';
           // if (url == Parameters.ebsiUniversalLink) {
           //   final client = Dio();
           //   final ebsi = Ebsi(client);
@@ -93,7 +93,7 @@ class _SplashViewState extends State<SplashView> {
           // } else {
           String beaconData = '';
           bool isBeaconRequest = false;
-          uri.queryParameters.forEach((key, value) async {
+          uri!.queryParameters.forEach((key, value) async {
             if (key == 'uri') {
               final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
               context.read<DeepLinkCubit>().addDeepLink(url);
@@ -219,18 +219,22 @@ class _SplashViewState extends State<SplashView> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                children: const [
-                  Spacer(flex: 3),
-                  TitleText(),
-                  Spacer(flex: 1),
-                  SubTitle(),
-                  Spacer(flex: 2),
-                  SplashImage(),
-                  Spacer(flex: 3),
-                  LoadingText(),
-                  SizedBox(height: 10),
-                  LoadingProgress(),
-                  Spacer(flex: 2),
+                children: [
+                  const Spacer(flex: 3),
+                  const TitleText(),
+                  const Spacer(flex: 1),
+                  const SubTitle(),
+                  const Spacer(flex: 2),
+                  const SplashImage(),
+                  const Spacer(flex: 3),
+                  const LoadingText(),
+                  const SizedBox(height: 10),
+                  BlocBuilder<SplashCubit, SplashState>(
+                    builder: (context, state) {
+                      return LoadingProgress(value: state.loadedValue);
+                    },
+                  ),
+                  const Spacer(flex: 2),
                 ],
               ),
             ),

@@ -34,6 +34,8 @@ class SplashCubit extends Cubit<SplashState> {
   final DioClient client;
   final PolygonId polygonId;
 
+  StreamSubscription<DownloadInfo>? _subscription;
+
   Future<void> initialiseApp() async {
     final bool hasWallet = await isWalletCreated(
       secureStorageProvider: secureStorageProvider,
@@ -44,7 +46,7 @@ class SplashCubit extends Cubit<SplashState> {
 
     if (hasWallet) {
       await homeCubit.emitHasWallet();
-      emit(state.copyWith(status: SplashStatus.routeToPassCode));
+      //emit(state.copyWith(status: SplashStatus.routeToPassCode));
       if (await isGettingMultipleCredentialsNeeded(secureStorageProvider)) {
         final String? preAuthorizedCode = await secureStorageProvider.get(
           SecureStorageKeys.preAuthorizedCode,
@@ -65,8 +67,42 @@ class SplashCubit extends Cubit<SplashState> {
       );
     } else {
       homeCubit.emitHasNoWallet();
-      emit(state.copyWith(status: SplashStatus.routeToOnboarding));
+      //emit(state.copyWith(status: SplashStatus.routeToOnboarding));
     }
+
+    final Stream<DownloadInfo> stream =
+        await polygonId.initCircuitsDownloadAndGetInfoStream;
+    _subscription = stream.listen((DownloadInfo downloadInfo) {
+      if (downloadInfo.completed) {
+        if (downloadInfo.downloaded == 0 && downloadInfo.contentLength == 0) {
+          double counter = 0;
+          Timer.periodic(const Duration(milliseconds: 5), (timer) async {
+            counter = counter + 0.001;
+            emit(state.copyWith(loadedValue: counter));
+            if (counter >= 1) {
+              timer.cancel();
+              unawaited(_subscription?.cancel());
+              if (hasWallet) {
+                emit(state.copyWith(status: SplashStatus.routeToPassCode));
+              } else {
+                emit(state.copyWith(status: SplashStatus.routeToOnboarding));
+              }
+            }
+          });
+        } else {
+          _subscription?.cancel();
+          if (hasWallet) {
+            emit(state.copyWith(status: SplashStatus.routeToPassCode));
+          } else {
+            emit(state.copyWith(status: SplashStatus.routeToOnboarding));
+          }
+        }
+      } else {
+        final double loadedValue =
+            downloadInfo.downloaded / downloadInfo.contentLength;
+        emit(state.copyWith(loadedValue: loadedValue));
+      }
+    });
   }
 
   Future<void> _getAppVersion() async {

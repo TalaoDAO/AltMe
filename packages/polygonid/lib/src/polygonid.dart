@@ -11,6 +11,7 @@ import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.d
 import 'package:polygonid_flutter_sdk/identity/domain/entities/private_identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/exceptions/identity_exceptions.dart';
 import 'package:polygonid_flutter_sdk/identity/libs/bjj/privadoid_wallet.dart';
+import 'package:polygonid_flutter_sdk/proof/domain/entities/download_info_entity.dart';
 import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
 import 'package:secp256k1/secp256k1.dart';
 
@@ -48,6 +49,11 @@ class PolygonId {
         pushUrl: pushUrl,
       ),
     );
+  }
+
+  /// init Circuits Download And Get Info Stream
+  Future<Stream<DownloadInfo>> get initCircuitsDownloadAndGetInfoStream {
+    return PolygonIdSdk.I.proof.initCircuitsDownloadAndGetInfoStream;
   }
 
   /// create JWK from mnemonic
@@ -232,6 +238,7 @@ class PolygonId {
       network: network,
       privateKey: privateKey,
     );
+    print('start');
 
     /// Authenticate response from iden3Message sharing the needed
     /// (if any) proofs requested by it
@@ -240,14 +247,15 @@ class PolygonId {
       did: did,
       privateKey: privateKey,
     );
+    print('authentizted');
 
-    final claimEntities = await sdk.iden3comm.getClaims(
+    final claimEntities = await sdk.iden3comm.fetchAndSaveClaims(
       message: iden3MessageEntity,
       did: did,
       privateKey: privateKey,
     );
 
-    //https://github.com/iden3/polygonid-flutter-sdk/issues
+    //hhttps://github.com/iden3/polygonid-flutter-sdk/issues/243
     //print(claimEntities);
   }
 }
