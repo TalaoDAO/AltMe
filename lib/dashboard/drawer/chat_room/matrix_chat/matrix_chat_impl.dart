@@ -168,7 +168,7 @@ class MatrixChatImpl extends MatrixChatInterface {
       message = TextMessage(
         id: event.unsigned?['transaction_id'] as String? ?? const Uuid().v4(),
         remoteId: event.eventId,
-        text: event.text,
+        text: event.plaintextBody,
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         status: mapEventStatusToMessageStatus(event.status),
         author: User(
@@ -179,7 +179,7 @@ class MatrixChatImpl extends MatrixChatInterface {
       message = ImageMessage(
         id: const Uuid().v4(),
         remoteId: event.eventId,
-        name: event.body,
+        name: event.plaintextBody,
         size: event.content['info']['size'] as num? ?? 0,
         uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
@@ -192,7 +192,7 @@ class MatrixChatImpl extends MatrixChatInterface {
       message = FileMessage(
         id: const Uuid().v4(),
         remoteId: event.eventId,
-        name: event.body,
+        name: event.plaintextBody,
         size: event.content['info']['size'] as num? ?? 0,
         uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
@@ -208,7 +208,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         duration: Duration(
           milliseconds: event.content['info']['duration'] as int? ?? 0,
         ),
-        name: event.body,
+        name: event.plaintextBody,
         size: event.content['info']['size'] as num? ?? 0,
         uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
@@ -221,7 +221,7 @@ class MatrixChatImpl extends MatrixChatInterface {
       message = TextMessage(
         id: const Uuid().v4(),
         remoteId: event.eventId,
-        text: event.text,
+        text: event.plaintextBody,
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         status: mapEventStatusToMessageStatus(event.status),
         author: User(
