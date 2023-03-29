@@ -246,6 +246,8 @@ class PolygonId {
       did: did,
       privateKey: privateKey,
     );
+
+    //https://github.com/iden3/polygonid-flutter-sdk/issues
     //print(claimEntities);
   }
 }
