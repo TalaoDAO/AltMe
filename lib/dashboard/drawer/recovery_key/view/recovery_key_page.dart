@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -20,6 +21,7 @@ class RecoveryKeyPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => RecoveryKeyCubit(
         secureStorageProvider: getSecureStorage,
+        walletCubit: context.read<WalletCubit>(),
       ),
       child: const RecoveryKeyView(),
     );

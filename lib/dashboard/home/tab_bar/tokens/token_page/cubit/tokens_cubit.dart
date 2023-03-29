@@ -35,8 +35,10 @@ class TokensCubit extends Cubit<TokensState> {
   Future<void> checkIfItNeedsToVerifyMnemonic({
     required double totalBalanceInUSD,
   }) async {
-    final hasVerifiedMnemonics =
-        await secureStorageProvider.get(SecureStorageKeys.hasVerifiedMnemonics);
+    final hasVerifiedMnemonics = await secureStorageProvider.get(
+      SecureStorageKeys.hasVerifiedMnemonics +
+          (walletCubit.state.currentAccount?.walletAddress ?? ''),
+    );
     if (hasVerifiedMnemonics == 'yes') {
       mnemonicNeedVerificationCubit.needToVerifyMnemonic(needToVerify: false);
     } else {

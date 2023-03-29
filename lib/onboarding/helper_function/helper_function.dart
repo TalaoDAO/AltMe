@@ -7,7 +7,7 @@ import 'package:did_kit/did_kit.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-Future<void> generateAccount({
+Future<String> generateAccount({
   required List<String> mnemonic,
   required SecureStorageProvider secureStorageProvider,
   required KeyGenerator keyGenerator,
@@ -50,11 +50,12 @@ Future<void> generateAccount({
   splashCubit.disableWhatsNewPopUp();
 
   /// crypto wallet
-  await walletCubit.createCryptoWallet(
+  final walletAddress = await walletCubit.createCryptoWallet(
     mnemonicOrKey: mnemonicFormatted,
     isImported: false,
     isFromOnboarding: true,
   );
 
   await homeCubit.emitHasWallet();
+  return walletAddress;
 }

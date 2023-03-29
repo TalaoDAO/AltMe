@@ -107,7 +107,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
       splashCubit.disableWhatsNewPopUp();
 
       /// crypto wallet with unknown blockchain type
-      await walletCubit.createCryptoWallet(
+      final walletAddress = await walletCubit.createCryptoWallet(
         accountName: accountName,
         mnemonicOrKey: mnemonicOrKey,
         isImported: !isFromOnboarding,
@@ -125,6 +125,11 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
             ),
           );
         },
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.hasVerifiedMnemonics + walletAddress,
+        'yes',
       );
 
       await homeCubit.emitHasWallet();
