@@ -82,6 +82,7 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                   liveChatCubit.setMessagesAsRead();
                   pageIsVisible = true;
                 } else {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   pageIsVisible = false;
                 }
               },
@@ -91,7 +92,10 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                   Chat(
                     theme: const DarkChatTheme(),
                     messages: state.messages,
-                    onSendPressed: liveChatCubit.onSendPressed,
+                    onSendPressed: (partialText) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      liveChatCubit.onSendPressed(partialText);
+                    },
                     onAttachmentPressed: _handleAttachmentPressed,
                     onMessageTap: _handleMessageTap,
                     onPreviewDataFetched:
