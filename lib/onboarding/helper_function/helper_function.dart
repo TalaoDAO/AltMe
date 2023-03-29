@@ -5,6 +5,7 @@ import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 Future<void> generateAccount({
@@ -16,7 +17,7 @@ Future<void> generateAccount({
   required HomeCubit homeCubit,
   required WalletCubit walletCubit,
   required SplashCubit splashCubit,
-  //required PolygonId polygonId,
+  required PolygonId polygonId,
 }) async {
   final mnemonicFormatted = mnemonic.join(' ');
 
@@ -45,6 +46,9 @@ Future<void> generateAccount({
     didMethodName: didMethodName,
     verificationMethod: verificationMethod,
   );
+
+  /// polygon-id setup
+  await polygonId.addIdentity(mnemonic: mnemonicFormatted);
 
   /// what's new popup disabled
   splashCubit.disableWhatsNewPopUp();

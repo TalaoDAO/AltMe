@@ -7,6 +7,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class MockSecureStorage extends Mock implements SecureStorageProvider {}
@@ -22,12 +23,14 @@ void main() {
   late DIDCubit didCubit;
   late HomeCubit homeCubit;
   late WalletCubit walletCubit;
+  late PolygonId polygonId;
 
   setUp(() {
     mockSecureStorage = MockSecureStorage();
     didCubit = MockDidCubit();
     homeCubit = MockHomeCubit();
     walletCubit = MockWalletCubit();
+    polygonId = PolygonId();
   });
 
   group('Splash Cubit', () {
@@ -39,6 +42,7 @@ void main() {
           homeCubit: homeCubit,
           walletCubit: walletCubit,
           client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
+          polygonId: polygonId,
         ).state,
         SplashStatus.init,
       );
@@ -57,6 +61,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            polygonId: polygonId,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
@@ -75,6 +80,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            polygonId: polygonId,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
@@ -100,6 +106,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            polygonId: polygonId,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
@@ -118,6 +125,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            polygonId: polygonId,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
@@ -145,6 +153,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            polygonId: polygonId,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
@@ -163,6 +172,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            polygonId: polygonId,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
@@ -192,6 +202,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            polygonId: polygonId,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
@@ -210,6 +221,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            polygonId: polygonId,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
@@ -241,6 +253,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            polygonId: polygonId,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
@@ -259,6 +272,7 @@ void main() {
             didCubit: didCubit,
             homeCubit: homeCubit,
             walletCubit: walletCubit,
+            polygonId: polygonId,
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           );
           await splashCubit.initialiseApp();
@@ -284,6 +298,7 @@ void main() {
               didCubit: didCubit,
               homeCubit: homeCubit,
               walletCubit: walletCubit,
+              polygonId: polygonId,
               client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             );
             await splashCubit.initialiseApp();
@@ -302,6 +317,7 @@ void main() {
               didCubit: didCubit,
               homeCubit: homeCubit,
               walletCubit: walletCubit,
+              polygonId: polygonId,
               client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             );
             await splashCubit.initialiseApp();
@@ -320,6 +336,7 @@ void main() {
               didCubit: didCubit,
               homeCubit: homeCubit,
               walletCubit: walletCubit,
+              polygonId: polygonId,
               client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
             );
             await splashCubit.initialiseApp();

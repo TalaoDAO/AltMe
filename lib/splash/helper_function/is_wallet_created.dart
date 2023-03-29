@@ -5,12 +5,14 @@ import 'package:altme/app/shared/constants/constants.dart';
 import 'package:altme/app/shared/enum/enum.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 Future<bool> isWalletCreated({
   required SecureStorageProvider secureStorageProvider,
   required DIDCubit didCubit,
   required WalletCubit walletCubit,
+  required PolygonId polygonId,
 }) async {
   final log = getLogger('IsWalletCreated');
 
@@ -63,6 +65,9 @@ Future<bool> isWalletCreated({
       }
     }
   }
+
+  //polygon-id
+  await polygonId.addIdentity(mnemonic: ssiMnemonic);
 
   await didCubit.load(
     did: did,

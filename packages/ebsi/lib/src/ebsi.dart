@@ -568,8 +568,6 @@ class Ebsi {
       'nonce': tokenParameters.nonce
     };
 
-    print(vpTokenPayload);
-
     final verifierVpJwt = generateToken(vpTokenPayload, tokenParameters);
 
     return verifierVpJwt;

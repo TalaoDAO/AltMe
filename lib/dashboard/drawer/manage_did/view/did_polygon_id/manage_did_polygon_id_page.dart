@@ -19,8 +19,8 @@ class ManageDidPolygonIdPage extends StatelessWidget {
   Future<String> getDid() async {
     final PolygonId polygonId = PolygonId();
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-    final identity = await polygonId.addIdentity(mnemonic: mnemonic!);
-    return identity.did;
+    final did = await polygonId.getDidFromMnemonics(mnemonic: mnemonic!);
+    return did;
   }
 
   @override

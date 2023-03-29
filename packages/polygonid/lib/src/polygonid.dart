@@ -213,15 +213,17 @@ class PolygonId {
   ///
   /// The privateKe] is the key used to access all the sensitive info from the
   /// identity and also to realize operations like generating proofs
-  Future<void> fetchAndSaveClaims({
+  Future<void> getClaims({
     required String message,
     required String mnemonic,
   }) async {
     final sdk = PolygonIdSdk.I;
+
+    /// When communicating through iden3comm with an Issuer or Verifier,
+    /// iden3comm message string needs to be parsed to a supported
+    /// [Iden3MessageEntity] by the Polygon Id Sdk using this method.
     final iden3MessageEntity =
         await sdk.iden3comm.getIden3Message(message: message);
-
-    print(iden3MessageEntity);
 
     final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
     final privateKey = await keccak256privateKeyFromSecret(private: seedBytes);
@@ -231,11 +233,19 @@ class PolygonId {
       privateKey: privateKey,
     );
 
-    final claimEntities = await sdk.iden3comm.fetchAndSaveClaims(
+    /// Authenticate response from iden3Message sharing the needed
+    /// (if any) proofs requested by it
+    await sdk.iden3comm.authenticate(
       message: iden3MessageEntity,
       did: did,
       privateKey: privateKey,
     );
-    print(claimEntities);
+
+    final claimEntities = await sdk.iden3comm.getClaims(
+      message: iden3MessageEntity,
+      did: did,
+      privateKey: privateKey,
+    );
+    //print(claimEntities);
   }
 }

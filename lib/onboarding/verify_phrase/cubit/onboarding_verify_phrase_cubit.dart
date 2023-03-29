@@ -10,6 +10,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:polygonid/polygonid.dart';
 
 import 'package:secure_storage/secure_storage.dart';
 
@@ -27,6 +28,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
     required this.walletCubit,
     required this.splashCubit,
     required this.flavorCubit,
+    required this.polygonId,
   }) : super(OnBoardingVerifyPhraseState());
 
   final SecureStorageProvider secureStorageProvider;
@@ -37,6 +39,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
   final WalletCubit walletCubit;
   final FlavorCubit flavorCubit;
   final SplashCubit splashCubit;
+  final PolygonId polygonId;
 
   final log = getLogger('OnBoardingVerifyPhraseCubit');
 
@@ -121,6 +124,7 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
           homeCubit: homeCubit,
           walletCubit: walletCubit,
           splashCubit: splashCubit,
+          polygonId: polygonId,
         );
       }
       await secureStorageProvider.set(

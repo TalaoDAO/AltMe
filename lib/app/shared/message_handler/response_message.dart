@@ -20,7 +20,8 @@ class ResponseMessage with MessageHandler {
 
         case ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt:
           return ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt.localise(
-              context);
+            context,
+          );
 
         case ResponseString.RESPONSE_STRING_identityProofDummyDescription:
           return ResponseString.RESPONSE_STRING_identityProofDummyDescription

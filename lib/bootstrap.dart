@@ -130,6 +130,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   /// PolygonId SDK initialization
   await dotenv.load();
+
   await PolygonId().init(
     web3Url: dotenv.get('INFURA_URL'),
     web3RdpUrl: dotenv.get('INFURA_RDP_URL'),

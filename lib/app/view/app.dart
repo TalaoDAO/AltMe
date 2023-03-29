@@ -29,6 +29,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:secure_storage/secure_storage.dart';
 
@@ -139,6 +140,7 @@ class App extends StatelessWidget {
             homeCubit: context.read<HomeCubit>(),
             walletCubit: context.read<WalletCubit>(),
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
+            polygonId: PolygonId(),
           ),
         ),
         BlocProvider(
