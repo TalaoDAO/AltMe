@@ -124,7 +124,8 @@ class OnBoardingVerifyPhraseCubit extends Cubit<OnBoardingVerifyPhraseState> {
         );
       }
       await secureStorageProvider.set(
-        SecureStorageKeys.hasVerifiedMnemonics,
+        SecureStorageKeys.hasVerifiedMnemonics +
+            (walletCubit.state.currentAccount?.walletAddress ?? ''),
         'yes',
       );
       emit(state.success());
