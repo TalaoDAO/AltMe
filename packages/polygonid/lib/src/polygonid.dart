@@ -56,13 +56,13 @@ class PolygonId {
     return PolygonIdSdk.I.proof.initCircuitsDownloadAndGetInfoStream;
   }
 
-  /// create JWK from mnemonic
+  /// create Uint8List from mnemonic
   Future<Uint8List> privateKeyUint8ListFromMnemonic({
     required String mnemonic,
   }) async {
     final seed = bip393.mnemonicToSeed(mnemonic);
     final rootKey = bip32.BIP32.fromSeed(seed);
-    final child = rootKey.derivePath("m/44'/5467'/0'/2'");
+    final child = rootKey.derivePath("m/44'/60'/0'/0/0");
     return child.privateKey!;
   }
 
@@ -155,15 +155,16 @@ class PolygonId {
   /// Return The Identity's did identifier with mnemonics
   Future<String> getDidFromMnemonics({
     required String mnemonic,
+    int? profileNonce,
   }) async {
     final sdk = PolygonIdSdk.I;
     final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
     final privateKey = await keccak256privateKeyFromSecret(private: seedBytes);
     final did = await sdk.identity.getDidIdentifier(
-      blockchain: blockchain,
-      network: network,
-      privateKey: privateKey,
-    );
+        blockchain: blockchain,
+        network: network,
+        privateKey: privateKey,
+        profileNonce: profileNonce);
     return did;
   }
 
