@@ -374,6 +374,9 @@ class MatrixChatImpl extends MatrixChatInterface {
     List<String>? invites,
   ) async {
     try {
+      if (client == null) {
+        await _initClient();
+      }
       final roomId = await client!.createRoom(
         isDirect: true,
         name: roomName,
