@@ -134,7 +134,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   await PolygonId().init(
     web3Url: dotenv.get('INFURA_URL'),
     web3RdpUrl: dotenv.get('INFURA_RDP_URL'),
-    web3ApiKey: dotenv.get('INFURA_API_KEY'),
+    web3ApiKey: dotenv.get('INFURA_MUMBAI_API_KEY'),
     idStateContract: dotenv.get('ID_STATE_CONTRACT_ADDR'),
     pushUrl: dotenv.get('PUSH_URL'),
   );

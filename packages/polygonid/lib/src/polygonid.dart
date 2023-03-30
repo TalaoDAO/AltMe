@@ -238,7 +238,6 @@ class PolygonId {
       network: network,
       privateKey: privateKey,
     );
-    print('start');
 
     /// Authenticate response from iden3Message sharing the needed
     /// (if any) proofs requested by it
@@ -247,7 +246,6 @@ class PolygonId {
       did: did,
       privateKey: privateKey,
     );
-    print('authentizted');
 
     final claimEntities = await sdk.iden3comm.fetchAndSaveClaims(
       message: iden3MessageEntity,
