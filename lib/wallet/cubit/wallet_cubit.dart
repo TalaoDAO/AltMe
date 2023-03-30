@@ -209,14 +209,24 @@ class WalletCubit extends Cubit<WalletState> {
           );
         }
       } else {
-        /// only creating tezos at start
+        /// polygon at start
+        await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.polygon,
+          totalAccountsYet: accountsCount,
+        );
+
+        /// tezos at start
         updatedCryptoAccount = await createBlockchainAccount(
           accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.tezos,
-          totalAccountsYet: accountsCount,
+          totalAccountsYet: accountsCount + 1,
         );
       }
     }
