@@ -110,7 +110,9 @@ bool isValidPrivateKey(String value) {
   try {
     EthPrivateKey.fromHex(value);
     isEthereumPrivateKey = true;
-  } catch (_) {}
+  } catch (_) {
+    isEthereumPrivateKey = false;
+  }
 
   return value.startsWith('edsk') ||
       value.startsWith('spsk') ||

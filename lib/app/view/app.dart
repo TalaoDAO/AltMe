@@ -187,6 +187,10 @@ class App extends StatelessWidget {
             roomNamePrefix: 'Altme',
           ),
         ),
+        BlocProvider(
+          create: (_) =>
+              DIDPrivateKeyCubit(secureStorageProvider: getSecureStorage),
+        ),
       ],
       child: const MaterialAppDefinition(),
     );

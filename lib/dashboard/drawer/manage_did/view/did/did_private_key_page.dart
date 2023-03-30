@@ -5,27 +5,34 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
-class DIDPrivateKeyPage extends StatefulWidget {
+class DIDPrivateKeyPage extends StatelessWidget {
   const DIDPrivateKeyPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      builder: (_) => BlocProvider<DIDPrivateKeyCubit>(
-        create: (_) =>
-            DIDPrivateKeyCubit(secureStorageProvider: getSecureStorage),
-        child: const DIDPrivateKeyPage(),
-      ),
+      builder: (_) => const DIDPrivateKeyPage(),
       settings: const RouteSettings(name: '/DIDPrivateKeyPage'),
     );
   }
 
   @override
-  State<DIDPrivateKeyPage> createState() => _DIDPrivateKeyPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider<DIDPrivateKeyCubit>.value(
+      value: context.read<DIDPrivateKeyCubit>(),
+      child: const DIDPrivateKeyView(),
+    );
+  }
 }
 
-class _DIDPrivateKeyPageState extends State<DIDPrivateKeyPage>
+class DIDPrivateKeyView extends StatefulWidget {
+  const DIDPrivateKeyView({super.key});
+
+  @override
+  State<DIDPrivateKeyView> createState() => _DIDPrivateKeyViewState();
+}
+
+class _DIDPrivateKeyViewState extends State<DIDPrivateKeyView>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
