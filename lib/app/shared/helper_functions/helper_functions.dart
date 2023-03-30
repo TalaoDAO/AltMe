@@ -107,11 +107,8 @@ bool isEbsiIssuer(CredentialModel credentialModel) {
 
 bool isValidPrivateKey(String value) {
   bool isEthereumPrivateKey = false;
-  try {
-    EthPrivateKey.fromHex(value);
+  if (RegExp(r'^(0x)?[0-9a-f]{64}$', caseSensitive: false).hasMatch(value)) {
     isEthereumPrivateKey = true;
-  } catch (_) {
-    isEthereumPrivateKey = false;
   }
 
   return value.startsWith('edsk') ||

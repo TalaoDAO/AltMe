@@ -519,8 +519,14 @@ class MatrixChatImpl extends MatrixChatInterface {
   @override
   Future<void> dispose() async {
     try {
-      await client?.logout().catchError((_) => null);
-      await client?.dispose().catchError((_) => null);
+      if (client?.isLogged() ?? false) {
+        await client?.logout().catchError(
+              (_) => logger.e('logout failed!'),
+            );
+      }
+      await client?.dispose().catchError(
+            (dynamic e) => logger.e('dispose failed with $e'),
+          );
       user = null;
       client = null;
     } catch (e, s) {
