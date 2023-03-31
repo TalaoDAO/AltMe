@@ -167,6 +167,8 @@ extension CustomColorScheme on ColorScheme {
 
   Color get borderColor => const Color(0xFFDDCEF4);
 
+  Color get defualtDialogCancelButtonBorderColor => const Color(0xFF424052);
+
   Color get markDownH1 => const Color(0xFFFFFFFF);
 
   Color get markDownH2 => const Color(0xFFFFFFFF);
@@ -670,7 +672,6 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get defaultDialogSubtitle => GoogleFonts.nunito(
         fontSize: 18,
-        fontWeight: FontWeight.bold,
         color: const Color(0xff86809D),
       );
 
