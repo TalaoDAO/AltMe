@@ -10,12 +10,14 @@ class CredentialBackground extends StatelessWidget {
     required this.credentialModel,
     required this.child,
     this.backgroundColor,
+    this.padding = const EdgeInsets.all(8),
   });
 
   final bool showBgDecoration;
   final CredentialModel credentialModel;
   final Widget child;
   final Color? backgroundColor;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class CredentialBackground extends StatelessWidget {
           borderRadius: BorderRadius.circular(Sizes.credentialBorderRadius),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: padding,
           child: child,
         ),
       ),

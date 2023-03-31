@@ -109,8 +109,8 @@ class PolygonId {
     return did;
   }
 
-  /// Restores an IdentityEntity from a privateKey and encrypted backup databases
-  /// associated to the identity
+  /// Restores an IdentityEntity from a privateKey and encrypted backup
+  /// databases associated to the identity
   Future<PrivateIdentityEntity> getIdentity({
     required String privateKey,
   }) async {
@@ -159,8 +159,8 @@ class PolygonId {
   /// The profileNonce is the nonce of the profile used from identity
   /// to obtain the did identifier
   ///
-  /// The privateKey is the key used to access all the sensitive info from the identity
-  /// and also to realize operations like generating proofs
+  /// The privateKey is the key used to access all the sensitive info from the
+  /// identity and also to realize operations like generating proofs
   Future<bool> authenticate({
     required Iden3MessageEntity iden3MessageEntity,
     required String mnemonic,

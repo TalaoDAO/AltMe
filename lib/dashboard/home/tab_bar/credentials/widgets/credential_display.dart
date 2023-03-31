@@ -303,6 +303,12 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.binancePooAddress:
         return BinancePooAddressWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.kycAgeCredential:
+        return KYCAgeCredentialWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.kycCountryOfResidence:
+        return KYCCountryOfResidenceWidget(credentialModel: credentialModel);
     }
   }
 }

@@ -831,5 +831,7 @@
   "polygonDecentralizedID": "Polygon Decentralized ID",
   "needMnemonicVerificatinoDescription": "You need to verify your wallet seed phrases to protect your assets!",
   "succesfullyAuthenticated": "Successfully Authenticated.",
-  "authenticationFailed": "Authentication Failed."
+  "authenticationFailed": "Authentication Failed.",
+  "documentType": "Document Type",
+  "countryCode": "Country Code"
 }

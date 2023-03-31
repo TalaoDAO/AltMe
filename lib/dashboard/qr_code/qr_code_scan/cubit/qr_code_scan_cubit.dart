@@ -207,6 +207,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
     // insert the credential in the wallet
     await walletCubit.insertCredential(credential: credentialModel);
+
+    emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
   }
 
   Future<void> emitError(MessageHandler messageHandler) async {

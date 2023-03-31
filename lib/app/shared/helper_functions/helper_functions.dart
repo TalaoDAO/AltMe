@@ -8,13 +8,13 @@ import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 import 'package:jose/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:web3dart/web3dart.dart';
 
 Future<void> openBlockchainExplorer(
   BlockchainNetwork network,
@@ -362,4 +362,19 @@ Map<String, dynamic> decodeHeader({
     log.e('An error occurred while decoding.', e);
   }
   return data;
+}
+
+String birthDateFormater(int birthData) {
+  final String birthdate = birthData.toString();
+
+  // Parse the input string
+  final DateTime parsedBirthdate = DateTime.parse(
+    '${birthdate.substring(0, 4)}-${birthdate.substring(4, 6)}-${birthdate.substring(6, 8)}', // ignore: lines_longer_than_80_chars
+  );
+
+  // Format the parsed date
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
+  final String formattedBirthdate = formatter.format(parsedBirthdate);
+
+  return formattedBirthdate;
 }

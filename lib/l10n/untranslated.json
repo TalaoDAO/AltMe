@@ -767,7 +767,9 @@
     "polygonDecentralizedID",
     "needMnemonicVerificatinoDescription",
     "succesfullyAuthenticated",
-    "authenticationFailed"
+    "authenticationFailed",
+    "documentType",
+    "countryCode"
   ],
 
   "es": [
@@ -1538,7 +1540,9 @@
     "polygonDecentralizedID",
     "needMnemonicVerificatinoDescription",
     "succesfullyAuthenticated",
-    "authenticationFailed"
+    "authenticationFailed",
+    "documentType",
+    "countryCode"
   ],
 
   "fr": [
@@ -1594,7 +1598,9 @@
     "polygonDecentralizedID",
     "needMnemonicVerificatinoDescription",
     "succesfullyAuthenticated",
-    "authenticationFailed"
+    "authenticationFailed",
+    "documentType",
+    "countryCode"
   ],
 
   "it": [
@@ -2365,6 +2371,8 @@
     "polygonDecentralizedID",
     "needMnemonicVerificatinoDescription",
     "succesfullyAuthenticated",
-    "authenticationFailed"
+    "authenticationFailed",
+    "documentType",
+    "countryCode"
   ]
 }
