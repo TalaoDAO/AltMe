@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -58,6 +60,7 @@ class _CongratulationsAccountCreationViewState
 
   @override
   void dispose() {
+    confettiController.stop();
     confettiController.dispose();
     super.dispose();
   }
@@ -146,12 +149,6 @@ class _CongratulationsAccountCreationViewState
           confettiController: confettiController,
           canvas: Size.infinite,
           shouldLoop: true,
-          blastDirection: 0,
-          maxBlastForce: 60,
-          minBlastForce: 5,
-          emissionFrequency: 0.04,
-          numberOfParticles: 13,
-          gravity: 0.25,
           blastDirectionality: BlastDirectionality.explosive,
         ),
       ],

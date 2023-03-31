@@ -46,6 +46,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
 
   @override
   void dispose() {
+    confettiController.stop();
     confettiController.dispose();
     super.dispose();
   }
@@ -205,12 +206,6 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                 confettiController: confettiController,
                 canvas: Size.infinite,
                 shouldLoop: true,
-                blastDirection: 0,
-                maxBlastForce: 60,
-                minBlastForce: 5,
-                emissionFrequency: 0.04,
-                numberOfParticles: 13,
-                gravity: 0.25,
                 blastDirectionality: BlastDirectionality.explosive,
               ),
             ],
