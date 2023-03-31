@@ -829,5 +829,7 @@
   "bloometaPassLongDescription": "Bloometa is a user-friendly NFT marketplace that connects in-game assets from different blockchains, making it easy for Metaverse players and GameFi projects to access a curated selection of NFTs. Enjoy multi-chain compatibility and play-to-earn features in a simple, beginner-friendly platform.",
   "chat": "Chat",
   "polygonDecentralizedID": "Polygon Decentralized ID",
-  "needMnemonicVerificatinoDescription": "You need to verify your wallet seed phrases to protect your assets!"
+  "needMnemonicVerificatinoDescription": "You need to verify your wallet seed phrases to protect your assets!",
+  "succesfullyAuthenticated": "Successfully Authenticated.",
+  "authenticationFailed": "Authentication Failed."
 }

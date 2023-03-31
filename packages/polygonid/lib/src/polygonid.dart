@@ -208,6 +208,48 @@ class PolygonId {
     return sdk.iden3comm.getIden3Message(message: message);
   }
 
+  /// Authenticate response from iden3Message sharing the needed
+  /// (if any) proofs requested by it
+  ///
+  /// The message is the iden3comm message entity
+  ///
+  /// The did is the unique id of the identity
+  ///
+  /// The profileNonce is the nonce of the profile used from identity
+  /// to obtain the did identifier
+  ///
+  /// The privateKey is the key used to access all the sensitive info from the identity
+  /// and also to realize operations like generating proofs
+  Future<bool> authenticate({
+    required Iden3MessageEntity iden3MessageEntity,
+    required String mnemonic,
+  }) async {
+    try {
+      final sdk = PolygonIdSdk.I;
+
+      final seedBytes =
+          await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
+      final privateKey =
+          await keccak256privateKeyFromSecret(private: seedBytes);
+      final did = await sdk.identity.getDidIdentifier(
+        blockchain: blockchain,
+        network: network,
+        privateKey: privateKey,
+      );
+
+      /// Authenticate response from iden3Message sharing the needed
+      /// (if any) proofs requested by it
+      await sdk.iden3comm.authenticate(
+        message: iden3MessageEntity,
+        did: did,
+        privateKey: privateKey,
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   /// Fetch a list of [ClaimEntity] from issuer using iden3comm message
   /// and stores them in Polygon Id Sdk.
   ///
@@ -221,16 +263,10 @@ class PolygonId {
   /// The privateKe] is the key used to access all the sensitive info from the
   /// identity and also to realize operations like generating proofs
   Future<void> getClaims({
-    required String message,
+    required Iden3MessageEntity iden3MessageEntity,
     required String mnemonic,
   }) async {
     final sdk = PolygonIdSdk.I;
-
-    /// When communicating through iden3comm with an Issuer or Verifier,
-    /// iden3comm message string needs to be parsed to a supported
-    /// [Iden3MessageEntity] by the Polygon Id Sdk using this method.
-    final iden3MessageEntity =
-        await sdk.iden3comm.getIden3Message(message: message);
 
     final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
     final privateKey = await keccak256privateKeyFromSecret(private: seedBytes);
@@ -240,21 +276,12 @@ class PolygonId {
       privateKey: privateKey,
     );
 
-    /// Authenticate response from iden3Message sharing the needed
-    /// (if any) proofs requested by it
-    await sdk.iden3comm.authenticate(
-      message: iden3MessageEntity,
-      did: did,
-      privateKey: privateKey,
-    );
-
     final claimEntities = await sdk.iden3comm.fetchAndSaveClaims(
       message: iden3MessageEntity,
       did: did,
       privateKey: privateKey,
     );
 
-    //hhttps://github.com/iden3/polygonid-flutter-sdk/issues/243
-    //print(claimEntities);
+    print(claimEntities);
   }
 }

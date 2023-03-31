@@ -667,6 +667,17 @@ class ResponseMessage with MessageHandler {
               .localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_succesfullyAuthenticated:
+          return ResponseString.RESPONSE_STRING_succesfullyAuthenticated
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_authenticationFailed:
+          return ResponseString.RESPONSE_STRING_authenticationFailed.localise(
+            context,
+          );
       }
     }
     return '';

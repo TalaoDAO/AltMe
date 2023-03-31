@@ -145,4 +145,6 @@ enum ResponseString {
   RESPONSE_STRING_tezotopiaMembershipLongDescription,
   RESPONSE_STRING_chainbornMembershipLongDescription,
   RESPONSE_STRING_bloometaPassLongDescription,
+  RESPONSE_STRING_succesfullyAuthenticated,
+  RESPONSE_STRING_authenticationFailed,
 }

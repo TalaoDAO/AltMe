@@ -38,6 +38,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.beacon,
     required this.walletConnectCubit,
     required this.secureStorageProvider,
+    required this.polygonId,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -51,6 +52,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final Beacon beacon;
   final WalletConnectCubit walletConnectCubit;
   final SecureStorageProvider secureStorageProvider;
+  final PolygonId polygonId;
 
   final log = getLogger('QRCodeScanCubit');
 
@@ -87,12 +89,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith('{"id":')) {
-        final mnemonic =
-            await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
-        await PolygonId()
-            .getClaims(message: scannedResponse, mnemonic: mnemonic!);
-
-        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+        await handlePolygonId(scannedResponse);
       } else {
         final uri = Uri.parse(scannedResponse);
         await verify(uri: uri);
@@ -142,6 +139,51 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           ),
         );
       }
+    }
+  }
+
+  Future<void> handlePolygonId(String scannedResponse) async {
+    final Iden3MessageEntity iden3MessageEntity =
+        await polygonId.getIden3Message(message: scannedResponse);
+
+    final mnemonic =
+        await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+
+    if (iden3MessageEntity.type ==
+        'https://iden3-communication.io/authorization/1.0/request') {
+      log.i('polygonId authentication');
+      final isAuthenticated = await polygonId.authenticate(
+        iden3MessageEntity: iden3MessageEntity,
+        mnemonic: mnemonic!,
+      );
+
+      if (isAuthenticated) {
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.goBack,
+            message: StateMessage.success(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_succesfullyAuthenticated,
+              ),
+            ),
+          ),
+        );
+      } else {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_authenticationFailed,
+        );
+      }
+    } else if (iden3MessageEntity.type ==
+        'https://iden3-communication.io/credentials/1.0/offer') {
+      log.i('getClaims');
+      await polygonId.getClaims(
+        iden3MessageEntity: iden3MessageEntity,
+        mnemonic: mnemonic!,
+      );
+    } else {
+      throw ResponseMessage(
+        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+      );
     }
   }
 

@@ -765,7 +765,9 @@
     "bloometaPassLongDescription",
     "chat",
     "polygonDecentralizedID",
-    "needMnemonicVerificatinoDescription"
+    "needMnemonicVerificatinoDescription",
+    "succesfullyAuthenticated",
+    "authenticationFailed"
   ],
 
   "es": [
@@ -1534,7 +1536,9 @@
     "bloometaPassLongDescription",
     "chat",
     "polygonDecentralizedID",
-    "needMnemonicVerificatinoDescription"
+    "needMnemonicVerificatinoDescription",
+    "succesfullyAuthenticated",
+    "authenticationFailed"
   ],
 
   "fr": [
@@ -1588,7 +1592,9 @@
     "bloometaPassLongDescription",
     "chat",
     "polygonDecentralizedID",
-    "needMnemonicVerificatinoDescription"
+    "needMnemonicVerificatinoDescription",
+    "succesfullyAuthenticated",
+    "authenticationFailed"
   ],
 
   "it": [
@@ -2357,6 +2363,8 @@
     "bloometaPassLongDescription",
     "chat",
     "polygonDecentralizedID",
-    "needMnemonicVerificatinoDescription"
+    "needMnemonicVerificatinoDescription",
+    "succesfullyAuthenticated",
+    "authenticationFailed"
   ]
 }

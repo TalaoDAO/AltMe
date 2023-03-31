@@ -131,6 +131,7 @@ class App extends StatelessWidget {
             beacon: Beacon(),
             walletConnectCubit: context.read<WalletConnectCubit>(),
             secureStorageProvider: secure_storage.getSecureStorage,
+            polygonId: PolygonId(),
           ),
         ),
         BlocProvider(
