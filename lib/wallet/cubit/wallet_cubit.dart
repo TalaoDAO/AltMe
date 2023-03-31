@@ -111,7 +111,7 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future<String> createCryptoWallet({
+  Future<void> createCryptoWallet({
     String? accountName,
     required String mnemonicOrKey,
     required bool isImported,
@@ -227,7 +227,6 @@ class WalletCubit extends Cubit<WalletState> {
         ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
       ),
     );
-    return updatedCryptoAccount.data.last.walletAddress;
   }
 
   Future<CryptoAccount> createBlockchainAccount({

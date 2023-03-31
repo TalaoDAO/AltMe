@@ -24,8 +24,7 @@ class RecoveryKeyCubit extends Cubit<RecoveryKeyState> {
     bool isMnemonicsVerified = false;
 
     final hasVerifiedMnemonics = await secureStorageProvider.get(
-      SecureStorageKeys.hasVerifiedMnemonics +
-          (walletCubit.state.currentAccount?.walletAddress ?? ''),
+      SecureStorageKeys.hasVerifiedMnemonics,
     );
 
     if (hasVerifiedMnemonics != null && hasVerifiedMnemonics == 'yes') {
