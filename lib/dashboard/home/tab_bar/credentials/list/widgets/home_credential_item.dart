@@ -53,39 +53,33 @@ class RealCredentialItem extends StatelessWidget {
         child: StreamBuilder(
           stream: loyaltyCardSupportChatCubit.unreadMessageCountStream,
           builder: (_, snapShot) {
-            return BackgroundCard(
-              padding: const EdgeInsets.all(4),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push<void>(
-                    CredentialsDetailsPage.route(
-                      credentialModel: credentialModel,
-                    ),
-                  );
-                },
-                child: CredentialsListPageItem(
-                  credentialModel: credentialModel,
-                  badgeCount: snapShot.data ?? 0,
-                ),
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).push<void>(
+                  CredentialsDetailsPage.route(
+                    credentialModel: credentialModel,
+                  ),
+                );
+              },
+              child: CredentialsListPageItem(
+                credentialModel: credentialModel,
+                badgeCount: snapShot.data ?? 0,
               ),
             );
           },
         ),
       );
     } else {
-      return BackgroundCard(
-        padding: const EdgeInsets.all(4),
-        child: GestureDetector(
-          onTap: () {
-            Navigator.of(context).push<void>(
-              CredentialsDetailsPage.route(
-                credentialModel: credentialModel,
-              ),
-            );
-          },
-          child: CredentialsListPageItem(
-            credentialModel: credentialModel,
-          ),
+      return GestureDetector(
+        onTap: () {
+          Navigator.of(context).push<void>(
+            CredentialsDetailsPage.route(
+              credentialModel: credentialModel,
+            ),
+          );
+        },
+        child: CredentialsListPageItem(
+          credentialModel: credentialModel,
         ),
       );
     }
@@ -106,63 +100,59 @@ class DummyCredentialItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BackgroundCard(
-      color: Theme.of(context).colorScheme.credentialBackground,
-      padding: const EdgeInsets.all(4),
-      child: InkWell(
-        onTap: () async {
-          if (context.read<HomeCubit>().state.homeStatus ==
-              HomeStatus.hasNoWallet) {
-            await showDialog<void>(
-              context: context,
-              builder: (_) => const WalletDialog(),
-            );
-            return;
-          }
-
-          await Navigator.push<void>(
-            context,
-            DiscoverDetailsPage.route(
-              homeCredential: homeCredential,
-              buttonText: l10n.getThisCard,
-              onCallBack: () async {
-                await discoverCredential(
-                  homeCredential: homeCredential,
-                  context: context,
-                );
-                Navigator.pop(context);
-              },
-            ),
+    return InkWell(
+      onTap: () async {
+        if (context.read<HomeCubit>().state.homeStatus ==
+            HomeStatus.hasNoWallet) {
+          await showDialog<void>(
+            context: context,
+            builder: (_) => const WalletDialog(),
           );
-        },
-        child: CredentialImage(
-          image: homeCredential.image!,
-          child: homeCredential.dummyDescription == null
-              ? null
-              : CustomMultiChildLayout(
-                  delegate: DummyCredentialItemDelegate(
-                    position: Offset.zero,
-                  ),
-                  children: [
-                    LayoutId(
-                      id: 'dummyDesc',
-                      child: FractionallySizedBox(
-                        widthFactor: 0.85,
-                        heightFactor: 0.42,
-                        child: Text(
-                          homeCredential.dummyDescription!.getMessage(
-                            context,
-                            homeCredential.dummyDescription!,
-                          ),
-                          style: Theme.of(context)
-                              .textTheme
-                              .discoverOverlayDescription,
+          return;
+        }
+
+        await Navigator.push<void>(
+          context,
+          DiscoverDetailsPage.route(
+            homeCredential: homeCredential,
+            buttonText: l10n.getThisCard,
+            onCallBack: () async {
+              await discoverCredential(
+                homeCredential: homeCredential,
+                context: context,
+              );
+              Navigator.pop(context);
+            },
+          ),
+        );
+      },
+      child: CredentialImage(
+        image: homeCredential.image!,
+        child: homeCredential.dummyDescription == null
+            ? null
+            : CustomMultiChildLayout(
+                delegate: DummyCredentialItemDelegate(
+                  position: Offset.zero,
+                ),
+                children: [
+                  LayoutId(
+                    id: 'dummyDesc',
+                    child: FractionallySizedBox(
+                      widthFactor: 0.85,
+                      heightFactor: 0.42,
+                      child: Text(
+                        homeCredential.dummyDescription!.getMessage(
+                          context,
+                          homeCredential.dummyDescription!,
                         ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .discoverOverlayDescription,
                       ),
                     ),
-                  ],
-                ),
-        ),
+                  ),
+                ],
+              ),
       ),
     );
   }
