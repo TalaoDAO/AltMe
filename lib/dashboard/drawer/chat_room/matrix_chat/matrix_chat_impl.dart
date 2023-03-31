@@ -91,6 +91,9 @@ class MatrixChatImpl extends MatrixChatInterface {
 
   Future<void> _initClient() async {
     try {
+      if (client != null) {
+        await dispose();
+      }
       client = Client(
         'AltMeUser',
         databaseBuilder: (_) async {
@@ -512,7 +515,8 @@ class MatrixChatImpl extends MatrixChatInterface {
       return loginResonse.userId!;
     } catch (e, s) {
       logger.i('e: $e, s: $s');
-      return '@$username:${Urls.matrixHomeServer.replaceAll('https://', '')}';
+      return '@$username:${Urls.matrixHomeServer.replaceAll('https://', '')}'
+          .toLowerCase();
     }
   }
 
