@@ -4,6 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class HomeCredentialItem extends StatelessWidget {
   const HomeCredentialItem({
@@ -33,17 +34,61 @@ class RealCredentialItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundCard(
-      padding: const EdgeInsets.all(4),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).push<void>(
-            CredentialsDetailsPage.route(credentialModel: credentialModel),
-          );
-        },
-        child: CredentialsListPageItem(credentialModel: credentialModel),
-      ),
-    );
+    if (credentialModel.data['credentialSubject']?['chatSupport'] != null) {
+      final loyltyCardType = credentialModel
+          .credentialPreview.credentialSubjectModel.credentialSubjectType.name;
+      final loyaltyCardSupportChatCubit = LoyaltyCardSupportChatCubit(
+        secureStorageProvider: getSecureStorage,
+        matrixChat: MatrixChatImpl(),
+        invites: [
+          credentialModel.data['credentialSubject']?['chatSupport'] as String
+        ],
+        storageKey:
+            '$loyltyCardType-${SecureStorageKeys.loyaltyCardsupportRoomId}',
+        roomNamePrefix: loyltyCardType,
+      );
+
+      return BlocProvider(
+        create: (_) => loyaltyCardSupportChatCubit,
+        child: StreamBuilder(
+          stream: loyaltyCardSupportChatCubit.unreadMessageCountStream,
+          builder: (_, snapShot) {
+            return BackgroundCard(
+              padding: const EdgeInsets.all(4),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push<void>(
+                    CredentialsDetailsPage.route(
+                      credentialModel: credentialModel,
+                    ),
+                  );
+                },
+                child: CredentialsListPageItem(
+                  credentialModel: credentialModel,
+                  badgeCount: snapShot.data ?? 0,
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      return BackgroundCard(
+        padding: const EdgeInsets.all(4),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push<void>(
+              CredentialsDetailsPage.route(
+                credentialModel: credentialModel,
+              ),
+            );
+          },
+          child: CredentialsListPageItem(
+            credentialModel: credentialModel,
+          ),
+        ),
+      );
+    }
   }
 }
 
