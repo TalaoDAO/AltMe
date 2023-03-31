@@ -152,7 +152,7 @@ class PolygonId {
   /// Authenticate response from iden3Message sharing the needed
   /// (if any) proofs requested by it
   ///
-  /// The message is the iden3comm message entity
+  /// The iden3MessageEntity is the iden3comm message entity
   ///
   /// The did is the unique id of the identity
   ///
@@ -192,7 +192,7 @@ class PolygonId {
   /// Fetch a list of [ClaimEntity] from issuer using iden3comm message
   /// and stores them in Polygon Id Sdk.
   ///
-  /// The [message] is the iden3comm message entity
+  /// The iden3MessageEntity is the iden3comm message entity
   ///
   /// The did is the unique id of the identity
   ///
@@ -201,25 +201,30 @@ class PolygonId {
   ///
   /// The privateKe] is the key used to access all the sensitive info from the
   /// identity and also to realize operations like generating proofs
-  Future<void> getClaims({
+  Future<List<ClaimEntity>> getClaims({
     required Iden3MessageEntity iden3MessageEntity,
     required String mnemonic,
   }) async {
-    final sdk = PolygonIdSdk.I;
+    try {
+      final sdk = PolygonIdSdk.I;
 
-    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
-    final did = await sdk.identity.getDidIdentifier(
-      blockchain: blockchain,
-      network: network,
-      privateKey: privateKey,
-    );
+      final privateKey =
+          await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+      final did = await sdk.identity.getDidIdentifier(
+        blockchain: blockchain,
+        network: network,
+        privateKey: privateKey,
+      );
 
-    final claimEntities = await sdk.iden3comm.fetchAndSaveClaims(
-      message: iden3MessageEntity,
-      did: did,
-      privateKey: privateKey,
-    );
+      final claimEntities = await sdk.iden3comm.fetchAndSaveClaims(
+        message: iden3MessageEntity,
+        did: did,
+        privateKey: privateKey,
+      );
 
-    print(claimEntities);
+      return claimEntities;
+    } catch (e) {
+      throw Exception();
+    }
   }
 }

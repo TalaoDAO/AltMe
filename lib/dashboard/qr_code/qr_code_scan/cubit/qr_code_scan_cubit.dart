@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
 import 'package:altme/ebsi/verify_encoded_data.dart';
@@ -176,15 +177,36 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     } else if (iden3MessageEntity.type ==
         'https://iden3-communication.io/credentials/1.0/offer') {
       log.i('getClaims');
-      await polygonId.getClaims(
+      final List<ClaimEntity> claims = await polygonId.getClaims(
         iden3MessageEntity: iden3MessageEntity,
         mnemonic: mnemonic!,
       );
+      for (final claim in claims) {
+        await addPolygonCredential(claim);
+      }
     } else {
       throw ResponseMessage(
         ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
       );
     }
+  }
+
+  Future<void> addPolygonCredential(ClaimEntity claimEntity) async {
+    final jsonCredential = claimEntity.info;
+    final credentialPreview = Credential.fromJson(jsonCredential);
+
+    final credentialModel = CredentialModel(
+      id: claimEntity.id,
+      image: 'image',
+      data: jsonCredential,
+      display: Display.emptyDisplay()..toJson(),
+      shareLink: '',
+      credentialPreview: credentialPreview,
+      expirationDate: claimEntity.expiration,
+      activities: [Activity(acquisitionAt: DateTime.now())],
+    );
+    // insert the credential in the wallet
+    await walletCubit.insertCredential(credential: credentialModel);
   }
 
   Future<void> emitError(MessageHandler messageHandler) async {
