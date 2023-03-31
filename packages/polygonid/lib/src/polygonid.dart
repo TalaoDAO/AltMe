@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip393;
 import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
@@ -13,7 +10,6 @@ import 'package:polygonid_flutter_sdk/identity/domain/exceptions/identity_except
 import 'package:polygonid_flutter_sdk/identity/libs/bjj/privadoid_wallet.dart';
 import 'package:polygonid_flutter_sdk/proof/domain/entities/download_info_entity.dart';
 import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
-import 'package:secp256k1/secp256k1.dart';
 
 /// {@template polygonid}
 /// A Very Good Project created by Very Good CLI.
@@ -56,55 +52,6 @@ class PolygonId {
     return PolygonIdSdk.I.proof.initCircuitsDownloadAndGetInfoStream;
   }
 
-  /// create Uint8List from mnemonic
-  Future<Uint8List> privateKeyUint8ListFromMnemonic({
-    required String mnemonic,
-  }) async {
-    final seed = bip393.mnemonicToSeed(mnemonic);
-    final rootKey = bip32.BIP32.fromSeed(seed);
-    final child = rootKey.derivePath("m/44'/60'/0'/0/0");
-    return child.privateKey!;
-  }
-
-  /// create JWK from mnemonic
-  Future<String> privateKeyJWTFromMnemonic({required String mnemonic}) async {
-    final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
-    final key = jwkFromSeed(seedBytes: seedBytes);
-    return jsonEncode(key);
-  }
-
-  /// create JWK from seed
-  Map<String, String> jwkFromSeed({required Uint8List seedBytes}) {
-    // generate JWK for secp256k from bip39 mnemonic
-    // see https://iancoleman.io/bip39/
-    final epk = HEX.encode(seedBytes);
-    final pk = PrivateKey.fromHex(epk); //Instance of 'PrivateKey'
-    final pub = pk.publicKey.toHex().substring(2);
-    final ad = HEX.decode(epk);
-    final d = base64Url.encode(ad).substring(0, 43);
-    // remove "=" padding 43/44
-    final mx = pub.substring(0, 64);
-    // first 32 bytes
-    final ax = HEX.decode(mx);
-    final x = base64Url.encode(ax).substring(0, 43);
-    // remove "=" padding 43/44
-    final my = pub.substring(64);
-    // last 32 bytes
-    final ay = HEX.decode(my);
-    final y = base64Url.encode(ay).substring(0, 43);
-    // ATTENTION !!!!!
-    /// we were using P-256K for dart library conformance which is
-    /// the same as secp256k1, but we are using secp256k1 now
-    final jwk = {
-      'crv': 'secp256k1',
-      'd': d,
-      'kty': 'EC',
-      'x': x,
-      'y': y,
-    };
-    return jwk;
-  }
-
   /// Create Identity
   ///
   /// blockchain and network are not optional, they are used to associate the
@@ -115,19 +62,16 @@ class PolygonId {
   /// security system, you can find the privateKey in the PrivateIdentityEntity
   /// object.
   ///
-  Future<PrivateIdentityEntity> addIdentity({
-    required String mnemonic,
-  }) async {
-    final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
-    final secret = String.fromCharCodes(seedBytes);
+  Future<PrivateIdentityEntity> addIdentity({required String mnemonic}) async {
     try {
       final sdk = PolygonIdSdk.I;
+      final secret = bip393.mnemonicToEntropy(mnemonic);
       final identity = await sdk.identity.addIdentity(secret: secret);
       return identity;
     } catch (e) {
       if (e is IdentityAlreadyExistsException) {
         final privateKey =
-            await keccak256privateKeyFromSecret(private: seedBytes);
+            await keccak256privateKeyFromSecret(mnemonic: mnemonic);
         final identity = getIdentity(privateKey: privateKey);
         return identity;
       } else {
@@ -138,13 +82,14 @@ class PolygonId {
 
   /// get private key from mnemonics
   Future<String> keccak256privateKeyFromSecret({
-    required Uint8List private,
+    required String mnemonic,
   }) async {
+    final secret = bip393.mnemonicToEntropy(mnemonic);
     const accessMessage =
         r'PrivadoId account access.\n\nSign this message if you are in a trusted application only.';
     final privadoIdWallet = await PrivadoIdWallet.createPrivadoIdWallet(
       accessMessage: accessMessage,
-      secret: private,
+      secret: Uint8List.fromList(secret.codeUnits),
     );
 
     final privateKey = privadoIdWallet.privateKey;
@@ -153,18 +98,14 @@ class PolygonId {
   }
 
   /// Return The Identity's did identifier with mnemonics
-  Future<String> getDidFromMnemonics({
-    required String mnemonic,
-    int? profileNonce,
-  }) async {
+  Future<String> getDidFromMnemonics({required String mnemonic}) async {
     final sdk = PolygonIdSdk.I;
-    final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
-    final privateKey = await keccak256privateKeyFromSecret(private: seedBytes);
+    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
     final did = await sdk.identity.getDidIdentifier(
-        blockchain: blockchain,
-        network: network,
-        privateKey: privateKey,
-        profileNonce: profileNonce);
+      blockchain: blockchain,
+      network: network,
+      privateKey: privateKey,
+    );
     return did;
   }
 
@@ -227,10 +168,8 @@ class PolygonId {
     try {
       final sdk = PolygonIdSdk.I;
 
-      final seedBytes =
-          await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
       final privateKey =
-          await keccak256privateKeyFromSecret(private: seedBytes);
+          await keccak256privateKeyFromSecret(mnemonic: mnemonic);
       final did = await sdk.identity.getDidIdentifier(
         blockchain: blockchain,
         network: network,
@@ -268,8 +207,7 @@ class PolygonId {
   }) async {
     final sdk = PolygonIdSdk.I;
 
-    final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
-    final privateKey = await keccak256privateKeyFromSecret(private: seedBytes);
+    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
     final did = await sdk.identity.getDidIdentifier(
       blockchain: blockchain,
       network: network,
