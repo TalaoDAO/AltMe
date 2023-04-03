@@ -47,6 +47,13 @@ class PolygonId {
     );
   }
 
+  /// check if curcuit is already downloaded
+  Future<bool> isCircuitsDownloaded() async {
+    final isDownloaded =
+        await PolygonIdSdk.I.proof.isAlreadyDownloadedCircuitsFromServer();
+    return isDownloaded;
+  }
+
   /// init Circuits Download And Get Info Stream
   Future<Stream<DownloadInfo>> get initCircuitsDownloadAndGetInfoStream {
     return PolygonIdSdk.I.proof.initCircuitsDownloadAndGetInfoStream;

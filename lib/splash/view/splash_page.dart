@@ -231,7 +231,13 @@ class _SplashViewState extends State<SplashView> {
                   const SizedBox(height: 10),
                   BlocBuilder<SplashCubit, SplashState>(
                     builder: (context, state) {
-                      return LoadingProgress(value: state.loadedValue);
+                      return TweenAnimationBuilder(
+                        tween: Tween<double>(begin: 0, end: state.loadedValue),
+                        duration: const Duration(milliseconds: 500),
+                        builder: (context, value, child) {
+                          return LoadingProgress(value: value);
+                        },
+                      );
                     },
                   ),
                   const Spacer(flex: 2),
