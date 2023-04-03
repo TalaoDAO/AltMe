@@ -22,6 +22,7 @@ class DiscoverList {
     CredentialSubjectType.ageRange,
     CredentialSubjectType.nationality,
     CredentialSubjectType.over18,
+    CredentialSubjectType.over15,
     CredentialSubjectType.over13,
     CredentialSubjectType.passportFootprint,
     CredentialSubjectType.verifiableIdCard,

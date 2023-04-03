@@ -41,6 +41,7 @@ export 'loyalty_card/loyalty_card_model.dart';
 export 'matterlight_pass/matterlight_pass_model.dart';
 export 'nationality/nationality_model.dart';
 export 'over13/over13_model.dart';
+export 'over15/over15_model.dart';
 export 'over18/over18_model.dart';
 export 'passport_footprint/passport_footprint_model.dart';
 export 'pcds_agent_certificate/pcds_agent_certificate_model.dart';

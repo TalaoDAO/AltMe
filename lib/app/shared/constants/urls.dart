@@ -18,6 +18,8 @@ class Urls {
       'https://issuer.talao.co/passbase/endpoint/over18/';
   static const String over13Url =
       'https://issuer.talao.co/passbase/endpoint/over13/';
+  static const String over15Url =
+      'https://issuer.talao.co/passbase/endpoint/over15/';
   static const String passportFootprintUrl =
       'https://issuer.talao.co/passbase/endpoint/passportnumber/';
 
@@ -77,6 +79,7 @@ class Urls {
 
   //
   static const over13AIValidationUrl = 'https://issuer.talao.co/ai/over13';
+  static const over15AIValidationUrl = 'https://issuer.talao.co/ai/over15';
   static const over18AIValidationUrl = 'https://issuer.talao.co/ai/over18';
   static const ageRangeAIValidationUrl = 'https://issuer.talao.co/ai/agerange';
 

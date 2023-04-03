@@ -42,7 +42,7 @@ class HomeCubit extends Cubit<HomeState> {
     required WalletCubit walletCubit,
     required CameraCubit cameraCubit,
   }) async {
-    // launch url to get Over18,Over13,AgeRange Credentials
+    // launch url to get Over18, Over15, Over13,AgeRange Credentials
     emit(state.loading());
     final verificationMethod =
         await secureStorageProvider.get(SecureStorageKeys.verificationMethod);
@@ -84,6 +84,15 @@ class HomeCubit extends Cubit<HomeState> {
         apiKey: YOTI_AI_API_KEY,
         data: data,
         credentialType: 'Over13',
+        walletCubit: walletCubit,
+        cameraCubit: cameraCubit,
+      );
+
+      await _getCredentialByAI(
+        url: Urls.over15AIValidationUrl,
+        apiKey: YOTI_AI_API_KEY,
+        data: data,
+        credentialType: 'Over15',
         walletCubit: walletCubit,
         cameraCubit: cameraCubit,
       );
@@ -139,6 +148,9 @@ class HomeCubit extends Cubit<HomeState> {
     }
     if (credentialType == 'Over13') {
       credentialTypeEnum = CredentialSubjectType.over13;
+    }
+    if (credentialType == 'Over15') {
+      credentialTypeEnum = CredentialSubjectType.over15;
     }
     if (credentialType == 'Over18') {
       credentialTypeEnum = CredentialSubjectType.over18;

@@ -36,6 +36,11 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
+        case ResponseString.RESPONSE_STRING_over15DummyDescription:
+          return ResponseString.RESPONSE_STRING_over15DummyDescription.localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_passportFootprintDummyDescription:
           return ResponseString
               .RESPONSE_STRING_passportFootprintDummyDescription.localise(
@@ -479,6 +484,21 @@ class ResponseMessage with MessageHandler {
 
         case ResponseString.RESPONSE_STRING_over13HowToGetIt:
           return ResponseString.RESPONSE_STRING_over13HowToGetIt.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_over15WhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_over15WhyGetThisCard.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_over15ExpirationDate:
+          return ResponseString.RESPONSE_STRING_over15ExpirationDate.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_over15HowToGetIt:
+          return ResponseString.RESPONSE_STRING_over15HowToGetIt.localise(
             context,
           );
 

@@ -22,6 +22,9 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_over13DummyDescription:
         return globalMessage.RESPONSE_STRING_over13DummyDescription;
 
+      case ResponseString.RESPONSE_STRING_over15DummyDescription:
+        return globalMessage.RESPONSE_STRING_over15DummyDescription;
+
       case ResponseString.RESPONSE_STRING_passportFootprintDummyDescription:
         return globalMessage.RESPONSE_STRING_passportFootprintDummyDescription;
 
@@ -343,6 +346,15 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_over13HowToGetIt:
         return globalMessage.RESPONSE_STRING_over13HowToGetIt;
+
+      case ResponseString.RESPONSE_STRING_over15WhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_over15WhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_over15ExpirationDate:
+        return globalMessage.RESPONSE_STRING_over15ExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_over15HowToGetIt:
+        return globalMessage.RESPONSE_STRING_over15HowToGetIt;
 
       case ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard:
         return globalMessage.RESPONSE_STRING_passportFootprintWhyGetThisCard;
