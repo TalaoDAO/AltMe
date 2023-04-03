@@ -227,4 +227,28 @@ class PolygonId {
       throw Exception();
     }
   }
+
+  /// Gets a list of [ClaimEntity] filtered by ids associated to the identity
+  /// previously stored in the the Polygon ID Sdk
+  ///
+  /// The [claimId] is a claim ids to filter by
+  Future<List<ClaimEntity>> getClaimById({
+    required String claimId,
+    required String mnemonic,
+  }) async {
+    final sdk = PolygonIdSdk.I;
+
+    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+    final did = await sdk.identity.getDidIdentifier(
+      blockchain: blockchain,
+      network: network,
+      privateKey: privateKey,
+    );
+
+    return sdk.credential.getClaimsByIds(
+      claimIds: [claimId],
+      did: did,
+      privateKey: privateKey,
+    );
+  }
 }

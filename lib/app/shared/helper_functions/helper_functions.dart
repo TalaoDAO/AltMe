@@ -105,6 +105,11 @@ bool isEbsiIssuer(CredentialModel credentialModel) {
   return credentialModel.issuer.startsWith('did:ebsi');
 }
 
+bool isPolygonssuer(CredentialModel credentialModel) {
+  return credentialModel.id.startsWith(
+      'https://self-hosted-platform.polygonid.me/v1/did:polygonid:polygon:');
+}
+
 bool isValidPrivateKey(String value) {
   bool isEthereumPrivateKey = false;
   if (RegExp(r'^(0x)?[0-9a-f]{64}$', caseSensitive: false).hasMatch(value)) {
