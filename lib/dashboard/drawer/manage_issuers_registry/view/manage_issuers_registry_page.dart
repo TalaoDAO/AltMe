@@ -33,24 +33,6 @@ class ManageIssuersRegistryPage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          var groupValue = IssuerVerificationRegistry.PolygonMainnet;
-          switch (state.model.issuerVerificationUrl) {
-            case '':
-              groupValue = IssuerVerificationRegistry.PolygonMainnet;
-              break;
-            case Urls.checkIssuerEbsiUrl:
-              groupValue = IssuerVerificationRegistry.EBSI;
-              break;
-            case Urls.checkIssuerPolygonTestnetUrl:
-              groupValue = IssuerVerificationRegistry.PolygonTestnet;
-              break;
-            case Urls.checkIssuerPolygonUrl:
-              groupValue = IssuerVerificationRegistry.PolygonMainnet;
-              break;
-            default:
-              groupValue = IssuerVerificationRegistry.PolygonMainnet;
-              break;
-          }
           //const fakeGroupValue = 'titi';
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,8 +57,8 @@ class ManageIssuersRegistryPage extends StatelessWidget {
                   IssuerVerificationRegistrySelector(
                     issuerVerificationRegistry:
                         IssuerVerificationRegistry.PolygonMainnet,
-                    isChecked:
-                        groupValue == IssuerVerificationRegistry.PolygonMainnet,
+                    isChecked: state.model.issuerVerificationUrls
+                        .contains(Urls.checkIssuerPolygonUrl),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -89,8 +71,8 @@ class ManageIssuersRegistryPage extends StatelessWidget {
                   IssuerVerificationRegistrySelector(
                     issuerVerificationRegistry:
                         IssuerVerificationRegistry.PolygonTestnet,
-                    isChecked:
-                        groupValue == IssuerVerificationRegistry.PolygonTestnet,
+                    isChecked: state.model.issuerVerificationUrls
+                        .contains(Urls.checkIssuerPolygonTestnetUrl),
                   ),
                 ],
               ),
@@ -105,7 +87,8 @@ class ManageIssuersRegistryPage extends StatelessWidget {
                 children: [
                   IssuerVerificationRegistrySelector(
                     issuerVerificationRegistry: IssuerVerificationRegistry.EBSI,
-                    isChecked: groupValue == IssuerVerificationRegistry.EBSI,
+                    isChecked: state.model.issuerVerificationUrls
+                        .contains(Urls.checkIssuerEbsiUrl),
                   ),
                 ],
               ),

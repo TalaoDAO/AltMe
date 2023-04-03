@@ -71,9 +71,9 @@ class ProfileCubit extends Cubit<ProfileState> {
           await secureStorageProvider.get(SecureStorageKeys.jobTitle) ?? '';
 
       // by default none is chosen (empty url means none)
-      final issuerVerificationUrl = await secureStorageProvider
+      final issuerVerificationUrls = await secureStorageProvider
               .get(SecureStorageKeys.issuerVerificationUrlKey) ??
-          '';
+          'PolygonMainnet,EBSI';
       final tezosNetworkJson = await secureStorageProvider
           .get(SecureStorageKeys.blockchainNetworkKey);
       final tezosNetwork = tezosNetworkJson != null
@@ -91,7 +91,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         phone: phone,
         location: location,
         email: email,
-        issuerVerificationUrl: issuerVerificationUrl,
+        issuerVerificationUrls: issuerVerificationUrls.split(',').toSet(),
         tezosNetwork: tezosNetwork,
         companyName: companyName,
         companyWebsite: companyWebsite,
@@ -178,7 +178,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
       await secureStorageProvider.set(
         SecureStorageKeys.issuerVerificationUrlKey,
-        profileModel.issuerVerificationUrl,
+        profileModel.issuerVerificationUrls.join(','),
       );
 
       await secureStorageProvider.set(
@@ -208,20 +208,22 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateIssuerVerificationUrl(
     IssuerVerificationRegistry registry,
   ) async {
-    var issuerVerificationUrl = Urls.checkIssuerPolygonUrl;
+    final selectedIssuerUrls = state.model.issuerVerificationUrls;
     switch (registry) {
       case IssuerVerificationRegistry.PolygonMainnet:
-        issuerVerificationUrl = Urls.checkIssuerPolygonUrl;
+        selectedIssuerUrls.remove(Urls.checkIssuerPolygonTestnetUrl);
+        selectedIssuerUrls.add(Urls.checkIssuerPolygonUrl);
         break;
       case IssuerVerificationRegistry.EBSI:
-        issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
+        selectedIssuerUrls.add(Urls.checkIssuerEbsiUrl);
         break;
       case IssuerVerificationRegistry.PolygonTestnet:
-        issuerVerificationUrl = Urls.checkIssuerPolygonTestnetUrl;
+        selectedIssuerUrls.remove(Urls.checkIssuerPolygonUrl);
+        selectedIssuerUrls.add(Urls.checkIssuerPolygonTestnetUrl);
         break;
     }
     final newModel =
-        state.model.copyWith(issuerVerificationUrl: issuerVerificationUrl);
+        state.model.copyWith(issuerVerificationUrls: selectedIssuerUrls);
     await update(newModel);
   }
 

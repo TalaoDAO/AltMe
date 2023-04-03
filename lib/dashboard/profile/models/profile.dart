@@ -12,7 +12,7 @@ class ProfileModel extends Equatable {
     required this.phone,
     required this.location,
     required this.email,
-    required this.issuerVerificationUrl,
+    required this.issuerVerificationUrls,
     required this.tezosNetwork,
     required this.isEnterprise,
     this.companyName = '',
@@ -32,7 +32,7 @@ class ProfileModel extends Equatable {
         companyName: '',
         companyWebsite: '',
         jobTitle: '',
-        issuerVerificationUrl: '',
+        issuerVerificationUrls: const {},
         isEnterprise: false,
         tezosNetwork: TezosNetwork.mainNet(),
       );
@@ -45,7 +45,7 @@ class ProfileModel extends Equatable {
   final String companyName;
   final String companyWebsite;
   final String jobTitle;
-  final String issuerVerificationUrl;
+  final Set<String> issuerVerificationUrls;
   final TezosNetwork tezosNetwork;
   final bool isEnterprise;
 
@@ -56,7 +56,7 @@ class ProfileModel extends Equatable {
         phone,
         location,
         email,
-        issuerVerificationUrl,
+        issuerVerificationUrls,
         tezosNetwork,
         companyName,
         companyWebsite,
@@ -75,7 +75,7 @@ class ProfileModel extends Equatable {
     String? companyName,
     String? companyWebsite,
     String? jobTitle,
-    String? issuerVerificationUrl,
+    Set<String>? issuerVerificationUrls,
     TezosNetwork? tezosNetwork,
     bool? isEnterprise,
   }) {
@@ -88,8 +88,8 @@ class ProfileModel extends Equatable {
       companyName: companyName ?? this.companyName,
       companyWebsite: companyWebsite ?? this.companyWebsite,
       jobTitle: jobTitle ?? this.jobTitle,
-      issuerVerificationUrl:
-          issuerVerificationUrl ?? this.issuerVerificationUrl,
+      issuerVerificationUrls:
+          issuerVerificationUrls ?? this.issuerVerificationUrls,
       tezosNetwork: tezosNetwork ?? this.tezosNetwork,
       isEnterprise: isEnterprise ?? this.isEnterprise,
     );

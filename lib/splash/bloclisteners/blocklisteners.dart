@@ -168,7 +168,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         late bool isIssuerVerificationSettingTrue;
 
         isIssuerVerificationSettingTrue =
-            profileCubit.state.model.issuerVerificationUrl != '';
+            profileCubit.state.model.issuerVerificationUrls != '';
 
         /// issuer side (oidc4VCI)
         if (state.uri!.toString().startsWith('openid://initiate_issuance?')) {
@@ -193,7 +193,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           try {
             approvedIssuer = await CheckIssuer(
               DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-              profileCubit.state.model.issuerVerificationUrl,
+              profileCubit.state.model.issuerVerificationUrls.first,
               state.uri!,
             ).isIssuerInApprovedList();
           } catch (e) {
