@@ -92,7 +92,6 @@ class SplashCubit extends Cubit<SplashState> {
           final double loadedValue =
               downloadInfo.downloaded / downloadInfo.contentLength;
           final roundedValue = double.parse(loadedValue.toStringAsFixed(1));
-          print(roundedValue);
           emit(state.copyWith(loadedValue: roundedValue));
         }
       });
