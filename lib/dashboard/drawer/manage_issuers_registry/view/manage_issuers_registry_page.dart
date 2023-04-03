@@ -33,16 +33,22 @@ class ManageIssuersRegistryPage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          var groupValue = IssuerVerificationRegistry.None;
+          var groupValue = IssuerVerificationRegistry.PolygonMainnet;
           switch (state.model.issuerVerificationUrl) {
             case '':
-              groupValue = IssuerVerificationRegistry.None;
+              groupValue = IssuerVerificationRegistry.PolygonMainnet;
               break;
             case Urls.checkIssuerEbsiUrl:
               groupValue = IssuerVerificationRegistry.EBSI;
               break;
-            case Urls.checkIssuerTalaoUrl:
-              groupValue = IssuerVerificationRegistry.Talao;
+            case Urls.checkIssuerPolygonTestnetUrl:
+              groupValue = IssuerVerificationRegistry.PolygonTestnet;
+              break;
+            case Urls.checkIssuerPolygonUrl:
+              groupValue = IssuerVerificationRegistry.PolygonMainnet;
+              break;
+            default:
+              groupValue = IssuerVerificationRegistry.PolygonMainnet;
               break;
           }
           //const fakeGroupValue = 'titi';
@@ -57,24 +63,20 @@ class ManageIssuersRegistryPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-              Column(
+              Padding(
+                padding: const EdgeInsets.only(left: Sizes.spaceSmall),
+                child: Text(
+                  l10n.polygon,
+                  style: Theme.of(context).textTheme.subtitle3,
+                ),
+              ),
+              GroupedSection(
                 children: [
                   IssuerVerificationRegistrySelector(
                     issuerVerificationRegistry:
-                        IssuerVerificationRegistry.Talao,
-                    groupValue: groupValue,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.spaceSmall,
-                    ),
-                    child: Divider(
-                      color: Theme.of(context).colorScheme.borderColor,
-                    ),
-                  ),
-                  IssuerVerificationRegistrySelector(
-                    issuerVerificationRegistry: IssuerVerificationRegistry.EBSI,
-                    groupValue: groupValue,
+                        IssuerVerificationRegistry.PolygonMainnet,
+                    isChecked:
+                        groupValue == IssuerVerificationRegistry.PolygonMainnet,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -86,29 +88,24 @@ class ManageIssuersRegistryPage extends StatelessWidget {
                   ),
                   IssuerVerificationRegistrySelector(
                     issuerVerificationRegistry:
-                        IssuerVerificationRegistry.Compellio,
-                    isEnable: false,
-                    groupValue: groupValue,
+                        IssuerVerificationRegistry.PolygonTestnet,
+                    isChecked:
+                        groupValue == IssuerVerificationRegistry.PolygonTestnet,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.spaceSmall,
-                    ),
-                    child: Divider(
-                      color: Theme.of(context).colorScheme.borderColor,
-                    ),
-                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: Sizes.spaceSmall),
+                child: Text(
+                  l10n.ebsi,
+                  style: Theme.of(context).textTheme.subtitle3,
+                ),
+              ),
+              GroupedSection(
+                children: [
                   IssuerVerificationRegistrySelector(
-                    issuerVerificationRegistry: IssuerVerificationRegistry.None,
-                    groupValue: groupValue,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.spaceSmall,
-                    ),
-                    child: Divider(
-                      color: Theme.of(context).colorScheme.borderColor,
-                    ),
+                    issuerVerificationRegistry: IssuerVerificationRegistry.EBSI,
+                    isChecked: groupValue == IssuerVerificationRegistry.EBSI,
                   ),
                 ],
               ),

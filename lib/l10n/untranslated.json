@@ -769,7 +769,9 @@
     "succesfullyAuthenticated",
     "authenticationFailed",
     "documentType",
-    "countryCode"
+    "countryCode",
+    "polygon",
+    "ebsi"
   ],
 
   "es": [
@@ -1542,7 +1544,9 @@
     "succesfullyAuthenticated",
     "authenticationFailed",
     "documentType",
-    "countryCode"
+    "countryCode",
+    "polygon",
+    "ebsi"
   ],
 
   "fr": [
@@ -1600,7 +1604,9 @@
     "succesfullyAuthenticated",
     "authenticationFailed",
     "documentType",
-    "countryCode"
+    "countryCode",
+    "polygon",
+    "ebsi"
   ],
 
   "it": [
@@ -2373,6 +2379,8 @@
     "succesfullyAuthenticated",
     "authenticationFailed",
     "documentType",
-    "countryCode"
+    "countryCode",
+    "polygon",
+    "ebsi"
   ]
 }

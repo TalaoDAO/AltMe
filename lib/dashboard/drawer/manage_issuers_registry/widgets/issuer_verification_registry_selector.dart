@@ -8,12 +8,12 @@ class IssuerVerificationRegistrySelector extends StatelessWidget {
   const IssuerVerificationRegistrySelector({
     super.key,
     required this.issuerVerificationRegistry,
-    required this.groupValue,
+    required this.isChecked,
     this.isEnable = true,
   });
 
   final IssuerVerificationRegistry issuerVerificationRegistry;
-  final IssuerVerificationRegistry groupValue;
+  final bool isChecked;
   final bool isEnable;
   @override
   Widget build(BuildContext context) {
@@ -36,17 +36,11 @@ class IssuerVerificationRegistrySelector extends StatelessWidget {
               issuerVerificationRegistry.name,
               style: Theme.of(context).textTheme.radioOption,
             ),
-            trailing: issuerVerificationRegistry == groupValue
-                ? Icon(
-                    Icons.check_circle,
-                    size: Sizes.icon2x,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  )
-                : Icon(
-                    Icons.circle_outlined,
-                    size: Sizes.icon2x,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+            trailing: Icon(
+              isChecked ? Icons.check_circle : Icons.circle_outlined,
+              size: Sizes.icon2x,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
         );
       },

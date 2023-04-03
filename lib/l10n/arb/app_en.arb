@@ -341,7 +341,7 @@
   "networkAndRegistries": "Network & Registries",
   "chooseNetwork": "Choose Network",
   "chooseRegistry": "Choose Registry",
-  "chooseIssuersRegistry": "Choose issuers registry",
+  "chooseIssuersRegistry": "Verifialble Data Registry",
   "network": "Network",
   "issuerRegistry": "Issuer Registry",
   "about": "About",
@@ -833,5 +833,7 @@
   "succesfullyAuthenticated": "Successfully Authenticated.",
   "authenticationFailed": "Authentication Failed.",
   "documentType": "Document Type",
-  "countryCode": "Country Code"
+  "countryCode": "Country Code",
+  "polygon": "Polygon",
+  "ebsi": "EBSI"
 }

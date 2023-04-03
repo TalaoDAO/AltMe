@@ -208,19 +208,16 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateIssuerVerificationUrl(
     IssuerVerificationRegistry registry,
   ) async {
-    var issuerVerificationUrl = Urls.checkIssuerTalaoUrl;
+    var issuerVerificationUrl = Urls.checkIssuerPolygonUrl;
     switch (registry) {
-      case IssuerVerificationRegistry.Compellio:
-        issuerVerificationUrl = '';
+      case IssuerVerificationRegistry.PolygonMainnet:
+        issuerVerificationUrl = Urls.checkIssuerPolygonUrl;
         break;
       case IssuerVerificationRegistry.EBSI:
         issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
         break;
-      case IssuerVerificationRegistry.None:
-        issuerVerificationUrl = '';
-        break;
-      case IssuerVerificationRegistry.Talao:
-        issuerVerificationUrl = Urls.checkIssuerTalaoUrl;
+      case IssuerVerificationRegistry.PolygonTestnet:
+        issuerVerificationUrl = Urls.checkIssuerPolygonTestnetUrl;
         break;
     }
     final newModel =
