@@ -1730,9 +1730,11 @@ packages:
   polygonid_flutter_sdk:
     dependency: transitive
     description:
-      path: "../polygonid-flutter-sdk"
-      relative: true
-    source: path
+      path: "."
+      ref: "71e3e17eedb8a209f791ec6b8e81acafa39a3135"
+      resolved-ref: "71e3e17eedb8a209f791ec6b8e81acafa39a3135"
+      url: "ssh://git@github.com/iden3/polygonid-flutter-sdk.git"
+    source: git
     version: "2.1.1"
   pool:
     dependency: transitive
