@@ -171,6 +171,7 @@ class _DiscoverPageViewState extends State<DiscoverPageView>
                             othersCredentials: [],
                           ),
                         ),
+                        //MWebViewPage(url: 'https://google.com'),
                         Center(
                           child: Text(l10n.thisFeatureIsNotSupportedMessage),
                         ),
