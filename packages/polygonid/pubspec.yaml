@@ -12,7 +12,9 @@ dependencies:
     sdk: flutter
   hex: ^0.2.0
   polygonid_flutter_sdk:
-    path: ../../../polygonid-flutter-sdk
+    git:
+      url: ssh://git@github.com/iden3/polygonid-flutter-sdk.git
+      ref: 71e3e17eedb8a209f791ec6b8e81acafa39a3135
 
 dev_dependencies:
   flutter_test:
