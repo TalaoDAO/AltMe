@@ -7,7 +7,7 @@ import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/iden3_message_en
 import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/private_identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/exceptions/identity_exceptions.dart';
-import 'package:polygonid_flutter_sdk/identity/libs/bjj/privadoid_wallet.dart';
+import 'package:polygonid_flutter_sdk/identity/libs/bjj/bjj_wallet.dart';
 import 'package:polygonid_flutter_sdk/proof/domain/entities/download_info_entity.dart';
 import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
 
@@ -92,10 +92,8 @@ class PolygonId {
     required String mnemonic,
   }) async {
     final secret = bip393.mnemonicToEntropy(mnemonic);
-    const accessMessage =
-        r'PrivadoId account access.\n\nSign this message if you are in a trusted application only.';
-    final privadoIdWallet = await PrivadoIdWallet.createPrivadoIdWallet(
-      accessMessage: accessMessage,
+
+    final privadoIdWallet = await BjjWallet.createBjjWallet(
       secret: Uint8List.fromList(secret.codeUnits),
     );
 
@@ -132,9 +130,18 @@ class PolygonId {
   Future<void> removeIdentity({
     required String genesisDid,
     required String privateKey,
-  }) {
+  }) async {
     final sdk = PolygonIdSdk.I;
-    return sdk.identity.removeIdentity(privateKey: privateKey);
+    final genesisDid = await sdk.identity.getDidIdentifier(
+      blockchain: blockchain,
+      network: network,
+      privateKey: privateKey,
+      profileNonce: 0,
+    );
+    return sdk.identity.removeIdentity(
+      privateKey: privateKey,
+      genesisDid: genesisDid,
+    );
   }
 
   /// Get a list of public info of [IdentityEntity] associated
