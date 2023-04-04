@@ -596,59 +596,29 @@ class WalletCubit extends Cubit<WalletState> {
       }
     }
 
-    ///remove old card added by YOTI
-    if (credentialSubjectModel.credentialSubjectType ==
-        CredentialSubjectType.over13) {
-      final List<CredentialModel> allCredentials =
-          await credentialsRepository.findAll();
-      for (final storedCredential in allCredentials) {
-        final credentialSubjectModel =
-            storedCredential.credentialPreview.credentialSubjectModel;
-        if (credentialSubjectModel.credentialSubjectType ==
-            CredentialSubjectType.over13) {
-          await deleteById(
-            credential: storedCredential,
-            showMessage: false,
-          );
-          break;
-        }
-      }
-    }
+    final cardsToCheck = [
+      CredentialSubjectType.over13,
+      CredentialSubjectType.over15,
+      CredentialSubjectType.over18,
+      CredentialSubjectType.ageRange
+    ];
 
     ///remove old card added by YOTI
-    if (credentialSubjectModel.credentialSubjectType ==
-        CredentialSubjectType.over18) {
-      final List<CredentialModel> allCredentials =
-          await credentialsRepository.findAll();
-      for (final storedCredential in allCredentials) {
-        final credentialSubjectModel =
-            storedCredential.credentialPreview.credentialSubjectModel;
-        if (credentialSubjectModel.credentialSubjectType ==
-            CredentialSubjectType.over18) {
-          await deleteById(
-            credential: storedCredential,
-            showMessage: false,
-          );
-          break;
-        }
-      }
-    }
 
-    ///remove old card added by YOTI
-    if (credentialSubjectModel.credentialSubjectType ==
-        CredentialSubjectType.ageRange) {
-      final List<CredentialModel> allCredentials =
-          await credentialsRepository.findAll();
-      for (final storedCredential in allCredentials) {
-        final credentialSubjectModel =
-            storedCredential.credentialPreview.credentialSubjectModel;
-        if (credentialSubjectModel.credentialSubjectType ==
-            CredentialSubjectType.ageRange) {
-          await deleteById(
-            credential: storedCredential,
-            showMessage: false,
-          );
-          break;
+    for (final card in cardsToCheck) {
+      if (credentialSubjectModel.credentialSubjectType == card) {
+        final List<CredentialModel> allCredentials =
+            await credentialsRepository.findAll();
+        for (final storedCredential in allCredentials) {
+          final credentialSubjectModel =
+              storedCredential.credentialPreview.credentialSubjectModel;
+          if (credentialSubjectModel.credentialSubjectType == card) {
+            await deleteById(
+              credential: storedCredential,
+              showMessage: false,
+            );
+            break;
+          }
         }
       }
     }

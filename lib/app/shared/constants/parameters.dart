@@ -6,6 +6,7 @@ class Parameters {
 
   static List<CredentialSubjectType> passbaseCredentialTypeList = [
     CredentialSubjectType.over13,
+    CredentialSubjectType.over15,
     CredentialSubjectType.over18,
     CredentialSubjectType.ageRange,
     CredentialSubjectType.verifiableIdCard,

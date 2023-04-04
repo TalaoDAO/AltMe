@@ -23,6 +23,9 @@ class GlobalMessage {
   String get RESPONSE_STRING_over13DummyDescription =>
       l10n.over13ProofDummyDescription;
 
+  String get RESPONSE_STRING_over15DummyDescription =>
+      l10n.over15ProofDummyDescription;
+
   String get RESPONSE_STRING_passportFootprintDummyDescription =>
       l10n.passportFootprintDummyDescription;
 
@@ -312,6 +315,9 @@ class GlobalMessage {
   String get RESPONSE_STRING_over13WhyGetThisCard => l10n.over13WhyGetThisCard;
   String get RESPONSE_STRING_over13ExpirationDate => l10n.over13ExpirationDate;
   String get RESPONSE_STRING_over13HowToGetIt => l10n.over13HowToGetIt;
+  String get RESPONSE_STRING_over15WhyGetThisCard => l10n.over15WhyGetThisCard;
+  String get RESPONSE_STRING_over15ExpirationDate => l10n.over15ExpirationDate;
+  String get RESPONSE_STRING_over15HowToGetIt => l10n.over15HowToGetIt;
   String get RESPONSE_STRING_passportFootprintWhyGetThisCard =>
       l10n.passportFootprintWhyGetThisCard;
   String get RESPONSE_STRING_passportFootprintExpirationDate =>

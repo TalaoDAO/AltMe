@@ -50,6 +50,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.over18:
       case CredentialSubjectType.over13:
+      case CredentialSubjectType.over15:
       case CredentialSubjectType.passportFootprint:
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.emailPass:
@@ -119,6 +120,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.linkedInCard:
       case CredentialSubjectType.over18:
       case CredentialSubjectType.over13:
+      case CredentialSubjectType.over15:
       case CredentialSubjectType.passportFootprint:
       case CredentialSubjectType.certificateOfEmployment:
       case CredentialSubjectType.emailPass:
@@ -230,6 +232,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Over18';
       case CredentialSubjectType.over13:
         return 'Over13';
+      case CredentialSubjectType.over15:
+        return 'Over15';
       case CredentialSubjectType.passportFootprint:
         return 'PassportNumber';
       case CredentialSubjectType.phonePass:
@@ -333,6 +337,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return Over18Model.fromJson(json);
       case CredentialSubjectType.over13:
         return Over13Model.fromJson(json);
+      case CredentialSubjectType.over15:
+        return Over15Model.fromJson(json);
       case CredentialSubjectType.passportFootprint:
         return PassportFootprintModel.fromJson(json);
       case CredentialSubjectType.phonePass:
@@ -391,6 +397,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
   bool get checkForAIKYC {
     if (this == CredentialSubjectType.over18 ||
         this == CredentialSubjectType.over13 ||
+        this == CredentialSubjectType.over15 ||
         this == CredentialSubjectType.ageRange) {
       return true;
     }
@@ -402,6 +409,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         this == CredentialSubjectType.chainbornMembership ||
         this == CredentialSubjectType.twitterCard ||
         this == CredentialSubjectType.over13 ||
+        this == CredentialSubjectType.over15 ||
         this == CredentialSubjectType.over18 ||
         this == CredentialSubjectType.verifiableIdCard ||
         this == CredentialSubjectType.ageRange ||
@@ -518,6 +526,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Over18';
       case CredentialSubjectType.over13:
         return 'Over13';
+      case CredentialSubjectType.over15:
+        return 'Over15';
       case CredentialSubjectType.passportFootprint:
         return 'Passport Number';
       case CredentialSubjectType.phonePass:

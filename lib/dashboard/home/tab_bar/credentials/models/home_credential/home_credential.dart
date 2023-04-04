@@ -108,6 +108,16 @@ class HomeCredential extends Equatable {
         dummyDesc = ResponseString.RESPONSE_STRING_over13DummyDescription;
         break;
 
+      case CredentialSubjectType.over15:
+        image = ImageStrings.dummyOver15Card;
+        link = Urls.over15Url;
+        whyGetThisCard = ResponseString.RESPONSE_STRING_over15WhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_over15ExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_over15HowToGetIt;
+        dummyDesc = ResponseString.RESPONSE_STRING_over15DummyDescription;
+        break;
+
       case CredentialSubjectType.passportFootprint:
         image = ImageStrings.dummyPassportFootprintCard;
         link = Urls.passportFootprintUrl;
