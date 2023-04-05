@@ -90,12 +90,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith('{"id":')) {
-        final mnemonic =
-            await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
-        await PolygonId()
-            .getClaims(message: scannedResponse, mnemonic: mnemonic!);
-
-        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+        await handlePolygonId(scannedResponse);
       } else {
         final uri = Uri.parse(scannedResponse);
         await verify(uri: uri);
