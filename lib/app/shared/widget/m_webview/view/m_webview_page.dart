@@ -48,7 +48,8 @@ class MWebView extends StatefulWidget {
   _MWebViewState createState() => _MWebViewState();
 }
 
-class _MWebViewState extends State<MWebView> {
+class _MWebViewState extends State<MWebView>
+    with AutomaticKeepAliveClientMixin<MWebView> {
   final log = getLogger('MWebView');
   late final WebViewController _webViewController;
   late final MWebViewCubit mWebViewCubit;
@@ -134,6 +135,7 @@ class _MWebViewState extends State<MWebView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocBuilder<MWebViewCubit, bool>(
       builder: (context, isLoading) {
         return IndexedStack(
@@ -149,4 +151,7 @@ class _MWebViewState extends State<MWebView> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

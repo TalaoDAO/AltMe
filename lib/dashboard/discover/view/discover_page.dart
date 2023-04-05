@@ -27,7 +27,8 @@ class DiscoverPageView extends StatefulWidget {
 }
 
 class _DiscoverPageViewState extends State<DiscoverPageView>
-    with SingleTickerProviderStateMixin {
+    with
+        SingleTickerProviderStateMixin {
   late final _tabController = TabController(vsync: this, length: 3);
 
   Future<void> onRefresh() async {}
@@ -171,13 +172,12 @@ class _DiscoverPageViewState extends State<DiscoverPageView>
                             othersCredentials: [],
                           ),
                         ),
-                        //MWebViewPage(url: 'https://google.com'),
-                        Center(
-                          child: Text(l10n.thisFeatureIsNotSupportedMessage),
+                        const MWebViewPage(
+                          url: 'https://nft-token-discover.webflow.io/',
                         ),
-                        Center(
-                          child: Text(l10n.thisFeatureIsNotSupportedMessage),
-                        )
+                        const MWebViewPage(
+                          url: 'https://test-coins.webflow.io/',
+                        ),
                       ],
                     ),
                   ),
