@@ -12,7 +12,6 @@ import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ActiviateBiometricsPage extends StatelessWidget {
@@ -42,7 +41,6 @@ class ActiviateBiometricsPage extends StatelessWidget {
         homeCubit: context.read<HomeCubit>(),
         walletCubit: context.read<WalletCubit>(),
         splashCubit: context.read<SplashCubit>(),
-        polygonId: PolygonId(),
       ),
       child: ActivateBiometricsView(
         localAuthApi: LocalAuthApi(),

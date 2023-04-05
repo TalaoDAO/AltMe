@@ -769,7 +769,8 @@
     "succesfullyAuthenticated",
     "authenticationFailed",
     "documentType",
-    "countryCode"
+    "countryCode",
+    "deviceIncompatibilityMessage"
   ],
 
   "es": [
@@ -1542,7 +1543,8 @@
     "succesfullyAuthenticated",
     "authenticationFailed",
     "documentType",
-    "countryCode"
+    "countryCode",
+    "deviceIncompatibilityMessage"
   ],
 
   "fr": [
@@ -1600,7 +1602,8 @@
     "succesfullyAuthenticated",
     "authenticationFailed",
     "documentType",
-    "countryCode"
+    "countryCode",
+    "deviceIncompatibilityMessage"
   ],
 
   "it": [
@@ -2373,6 +2376,7 @@
     "succesfullyAuthenticated",
     "authenticationFailed",
     "documentType",
-    "countryCode"
+    "countryCode",
+    "deviceIncompatibilityMessage"
   ]
 }

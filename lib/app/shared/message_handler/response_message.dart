@@ -678,6 +678,12 @@ class ResponseMessage with MessageHandler {
           return ResponseString.RESPONSE_STRING_authenticationFailed.localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage:
+          return ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage
+              .localise(
+            context,
+          );
       }
     }
     return '';

@@ -22,7 +22,6 @@ class SplashCubit extends Cubit<SplashState> {
     required this.homeCubit,
     required this.walletCubit,
     required this.client,
-    required this.polygonId,
   }) : super(const SplashState()) {
     _getAppVersion();
   }
@@ -32,83 +31,43 @@ class SplashCubit extends Cubit<SplashState> {
   final HomeCubit homeCubit;
   final WalletCubit walletCubit;
   final DioClient client;
-  final PolygonId polygonId;
-
-  StreamSubscription<DownloadInfo>? _subscription;
 
   Future<void> initialiseApp() async {
-    final bool hasWallet = await isWalletCreated(
-      secureStorageProvider: secureStorageProvider,
-      didCubit: didCubit,
-      walletCubit: walletCubit,
-      polygonId: polygonId,
-    );
-
-    if (hasWallet) {
-      await homeCubit.emitHasWallet();
-      //emit(state.copyWith(status: SplashStatus.routeToPassCode));
-      if (await isGettingMultipleCredentialsNeeded(secureStorageProvider)) {
-        final String? preAuthorizedCode = await secureStorageProvider.get(
-          SecureStorageKeys.preAuthorizedCode,
-        );
-        if (preAuthorizedCode != null) {
-          unawaited(
-            multipleCredentialsTimer(
-              preAuthorizedCode,
-              client,
-              secureStorageProvider,
-              walletCubit,
-            ),
-          );
-        }
-      }
-      unawaited(
-        homeCubit.periodicCheckRewardOnTezosBlockchain(),
-      );
-    } else {
-      homeCubit.emitHasNoWallet();
-      //emit(state.copyWith(status: SplashStatus.routeToOnboarding));
-    }
-
-    final isCircuitAlreadyDownloaded = await polygonId.isCircuitsDownloaded();
-    if (isCircuitAlreadyDownloaded) {
-      fakeLoading(hasWallet: hasWallet);
-    } else {
-      final Stream<DownloadInfo> stream =
-          await polygonId.initCircuitsDownloadAndGetInfoStream;
-      _subscription = stream.listen((DownloadInfo downloadInfo) {
-        if (downloadInfo.completed) {
-          if (downloadInfo.downloaded == 0 && downloadInfo.contentLength == 0) {
-            fakeLoading(hasWallet: hasWallet);
-          } else {
-            _subscription?.cancel();
-            if (hasWallet) {
-              emit(state.copyWith(status: SplashStatus.routeToPassCode));
-            } else {
-              emit(state.copyWith(status: SplashStatus.routeToOnboarding));
-            }
-          }
-        } else {
-          final double loadedValue =
-              downloadInfo.downloaded / downloadInfo.contentLength;
-          final roundedValue = double.parse(loadedValue.toStringAsFixed(1));
-          emit(state.copyWith(loadedValue: roundedValue));
-        }
-      });
-    }
-  }
-
-  void fakeLoading({required bool hasWallet}) {
     double counter = 0;
     Timer.periodic(const Duration(milliseconds: 500), (timer) async {
       counter = counter + 0.5;
       emit(state.copyWith(loadedValue: counter / 5));
       if (counter > 5) {
         timer.cancel();
-        unawaited(_subscription?.cancel());
+        final bool hasWallet = await isWalletCreated(
+          secureStorageProvider: secureStorageProvider,
+          didCubit: didCubit,
+          walletCubit: walletCubit,
+        );
+
         if (hasWallet) {
+          await homeCubit.emitHasWallet();
           emit(state.copyWith(status: SplashStatus.routeToPassCode));
+          if (await isGettingMultipleCredentialsNeeded(secureStorageProvider)) {
+            final String? preAuthorizedCode = await secureStorageProvider.get(
+              SecureStorageKeys.preAuthorizedCode,
+            );
+            if (preAuthorizedCode != null) {
+              unawaited(
+                multipleCredentialsTimer(
+                  preAuthorizedCode,
+                  client,
+                  secureStorageProvider,
+                  walletCubit,
+                ),
+              );
+            }
+          }
+          unawaited(
+            homeCubit.periodicCheckRewardOnTezosBlockchain(),
+          );
         } else {
+          homeCubit.emitHasNoWallet();
           emit(state.copyWith(status: SplashStatus.routeToOnboarding));
         }
       }

@@ -833,5 +833,6 @@
   "succesfullyAuthenticated": "Successfully Authenticated.",
   "authenticationFailed": "Authentication Failed.",
   "documentType": "Document Type",
-  "countryCode": "Country Code"
+  "countryCode": "Country Code",
+  "deviceIncompatibilityMessage": "Sorry, your device is not compatible for this feature."
 }

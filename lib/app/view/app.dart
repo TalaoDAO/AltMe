@@ -13,6 +13,7 @@ import 'package:altme/did/did.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
+import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
@@ -48,6 +49,12 @@ class App extends StatelessWidget {
         BlocProvider<RouteCubit>(create: (context) => RouteCubit()),
         BlocProvider<BeaconCubit>(
           create: (context) => BeaconCubit(beacon: Beacon()),
+        ),
+        BlocProvider<PolygonIdCubit>(
+          create: (context) => PolygonIdCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            polygonId: PolygonId(),
+          ),
         ),
         BlocProvider<WalletConnectCubit>(
           create: (context) => WalletConnectCubit(
@@ -132,6 +139,7 @@ class App extends StatelessWidget {
             walletConnectCubit: context.read<WalletConnectCubit>(),
             secureStorageProvider: secure_storage.getSecureStorage,
             polygonId: PolygonId(),
+            polygonIdCubit: context.read<PolygonIdCubit>(),
           ),
         ),
         BlocProvider(
@@ -141,7 +149,6 @@ class App extends StatelessWidget {
             homeCubit: context.read<HomeCubit>(),
             walletCubit: context.read<WalletCubit>(),
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            polygonId: PolygonId(),
           ),
         ),
         BlocProvider(

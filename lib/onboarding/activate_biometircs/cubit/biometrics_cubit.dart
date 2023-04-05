@@ -10,7 +10,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'biometrics_cubit.g.dart';
@@ -25,7 +24,6 @@ class BiometricsCubit extends Cubit<BiometricsState> {
     required this.homeCubit,
     required this.walletCubit,
     required this.splashCubit,
-    required this.polygonId,
   }) : super(const BiometricsState()) {
     init();
   }
@@ -37,7 +35,6 @@ class BiometricsCubit extends Cubit<BiometricsState> {
   final HomeCubit homeCubit;
   final WalletCubit walletCubit;
   final SplashCubit splashCubit;
-  final PolygonId polygonId;
 
   Future<void> init() async {
     final fingerprintEnabled =
@@ -63,7 +60,6 @@ class BiometricsCubit extends Cubit<BiometricsState> {
         homeCubit: homeCubit,
         walletCubit: walletCubit,
         splashCubit: splashCubit,
-        polygonId: polygonId,
       );
       emit(state.success());
     } catch (error) {

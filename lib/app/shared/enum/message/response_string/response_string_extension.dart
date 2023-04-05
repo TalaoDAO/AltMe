@@ -457,6 +457,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_authenticationFailed:
         return globalMessage.RESPONSE_STRING_authenticationFailed;
+
+      case ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage:
+        return globalMessage.RESPONSE_STRING_deviceIncompatibilityMessage;
     }
   }
 }
