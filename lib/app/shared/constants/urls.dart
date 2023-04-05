@@ -9,6 +9,11 @@ class Urls {
   static const String checkIssuerPolygonUrl = 'checkIssuerPolygonUrl';
   static const String checkIssuerEbsiUrl =
       'https://api.conformance.intebsi.xyz/trusted-issuers-registry/v2/issuers';
+  static const Set<String> issuerUrls = {
+    checkIssuerPolygonTestnetUrl,
+    checkIssuerPolygonUrl,
+    checkIssuerEbsiUrl,
+  };
 
   static const String issuerBaseUrl = 'https://issuer.talao.co';
   static const String phonePassUrl = 'https://issuer.talao.co/phonepass';

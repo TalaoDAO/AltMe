@@ -71,9 +71,19 @@ class ProfileCubit extends Cubit<ProfileState> {
           await secureStorageProvider.get(SecureStorageKeys.jobTitle) ?? '';
 
       // by default none is chosen (empty url means none)
-      final issuerVerificationUrls = await secureStorageProvider
-              .get(SecureStorageKeys.issuerVerificationUrlKey) ??
-          'PolygonMainnet,EBSI';
+      final issuerVerificationUrls = (await secureStorageProvider
+                  .get(SecureStorageKeys.issuerVerificationUrlKey) ??
+              '${Urls.checkIssuerPolygonTestnetUrl},${Urls.checkIssuerEbsiUrl}')
+          .split(',')
+          .toSet();
+      // check if at least two issuer is selected from our issuer urls
+      if (issuerVerificationUrls.length < 2 ||
+          !Urls.issuerUrls.containsAll(issuerVerificationUrls)) {
+        issuerVerificationUrls.clear();
+        issuerVerificationUrls.addAll(
+          [Urls.checkIssuerPolygonTestnetUrl, Urls.checkIssuerEbsiUrl],
+        );
+      }
       final tezosNetworkJson = await secureStorageProvider
           .get(SecureStorageKeys.blockchainNetworkKey);
       final tezosNetwork = tezosNetworkJson != null
@@ -91,7 +101,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         phone: phone,
         location: location,
         email: email,
-        issuerVerificationUrls: issuerVerificationUrls.split(',').toSet(),
+        issuerVerificationUrls: issuerVerificationUrls,
         tezosNetwork: tezosNetwork,
         companyName: companyName,
         companyWebsite: companyWebsite,
