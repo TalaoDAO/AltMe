@@ -215,39 +215,54 @@ class PolygonId {
   ///
   /// The privateKe] is the key used to access all the sensitive info from the
   /// identity and also to realize operations like generating proofs
-  Future<void> getClaims({
-    required String message,
+  Future<List<ClaimEntity>> getClaims({
+    required Iden3MessageEntity iden3MessageEntity,
+    required String mnemonic,
+  }) async {
+    try {
+      final sdk = PolygonIdSdk.I;
+
+      final privateKey =
+          await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+      final did = await sdk.identity.getDidIdentifier(
+        blockchain: blockchain,
+        network: network,
+        privateKey: privateKey,
+      );
+
+      final claimEntities = await sdk.iden3comm.fetchAndSaveClaims(
+        message: iden3MessageEntity,
+        did: did,
+        privateKey: privateKey,
+      );
+
+      return claimEntities;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  /// Gets a list of [ClaimEntity] filtered by ids associated to the identity
+  /// previously stored in the the Polygon ID Sdk
+  ///
+  /// The [claimId] is a claim ids to filter by
+  Future<List<ClaimEntity>> getClaimById({
+    required String claimId,
     required String mnemonic,
   }) async {
     final sdk = PolygonIdSdk.I;
 
-    /// When communicating through iden3comm with an Issuer or Verifier,
-    /// iden3comm message string needs to be parsed to a supported
-    /// [Iden3MessageEntity] by the Polygon Id Sdk using this method.
-    final iden3MessageEntity =
-        await sdk.iden3comm.getIden3Message(message: message);
-
-    final seedBytes = await privateKeyUint8ListFromMnemonic(mnemonic: mnemonic);
-    final privateKey = await keccak256privateKeyFromSecret(private: seedBytes);
+    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
     final did = await sdk.identity.getDidIdentifier(
       blockchain: blockchain,
       network: network,
       privateKey: privateKey,
     );
 
-    /// Authenticate response from iden3Message sharing the needed
-    /// (if any) proofs requested by it
-    await sdk.iden3comm.authenticate(
-      message: iden3MessageEntity,
+    return sdk.credential.getClaimsByIds(
+      claimIds: [claimId],
       did: did,
       privateKey: privateKey,
     );
-
-    final claimEntities = await sdk.iden3comm.getClaims(
-      message: iden3MessageEntity,
-      did: did,
-      privateKey: privateKey,
-    );
-    //print(claimEntities);
   }
 }
