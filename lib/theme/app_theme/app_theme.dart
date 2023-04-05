@@ -494,6 +494,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
+  TextStyle get polygonCardDetail => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get credentialFieldTitle => GoogleFonts.roboto(
         color: const Color(0xff212121),
         fontSize: 14,

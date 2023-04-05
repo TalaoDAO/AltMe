@@ -16,7 +16,6 @@ Future<void> generateAccount({
   required HomeCubit homeCubit,
   required WalletCubit walletCubit,
   required SplashCubit splashCubit,
-  //required PolygonId polygonId,
 }) async {
   final mnemonicFormatted = mnemonic.join(' ');
 

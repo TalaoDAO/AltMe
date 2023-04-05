@@ -765,7 +765,12 @@
     "bloometaPassLongDescription",
     "chat",
     "polygonDecentralizedID",
-    "needMnemonicVerificatinoDescription"
+    "needMnemonicVerificatinoDescription",
+    "succesfullyAuthenticated",
+    "authenticationFailed",
+    "documentType",
+    "countryCode",
+    "deviceIncompatibilityMessage"
   ],
 
   "es": [
@@ -1534,7 +1539,12 @@
     "bloometaPassLongDescription",
     "chat",
     "polygonDecentralizedID",
-    "needMnemonicVerificatinoDescription"
+    "needMnemonicVerificatinoDescription",
+    "succesfullyAuthenticated",
+    "authenticationFailed",
+    "documentType",
+    "countryCode",
+    "deviceIncompatibilityMessage"
   ],
 
   "fr": [
@@ -1588,7 +1598,12 @@
     "bloometaPassLongDescription",
     "chat",
     "polygonDecentralizedID",
-    "needMnemonicVerificatinoDescription"
+    "needMnemonicVerificatinoDescription",
+    "succesfullyAuthenticated",
+    "authenticationFailed",
+    "documentType",
+    "countryCode",
+    "deviceIncompatibilityMessage"
   ],
 
   "it": [
@@ -2357,6 +2372,11 @@
     "bloometaPassLongDescription",
     "chat",
     "polygonDecentralizedID",
-    "needMnemonicVerificatinoDescription"
+    "needMnemonicVerificatinoDescription",
+    "succesfullyAuthenticated",
+    "authenticationFailed",
+    "documentType",
+    "countryCode",
+    "deviceIncompatibilityMessage"
   ]
 }

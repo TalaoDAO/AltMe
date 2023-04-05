@@ -1,12 +1,15 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
 import 'package:altme/ebsi/verify_encoded_data.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
+import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -16,9 +19,11 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
@@ -37,6 +42,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.beacon,
     required this.walletConnectCubit,
     required this.secureStorageProvider,
+    required this.polygonId,
+    required this.polygonIdCubit,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -50,8 +57,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final Beacon beacon;
   final WalletConnectCubit walletConnectCubit;
   final SecureStorageProvider secureStorageProvider;
+  final PolygonId polygonId;
+  final PolygonIdCubit polygonIdCubit;
 
   final log = getLogger('QRCodeScanCubit');
+
+  StreamSubscription<DownloadInfo>? _subscription;
 
   @override
   Future<void> close() async {
@@ -85,6 +96,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         await walletConnectCubit.connect(scannedResponse);
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
+      } else if (scannedResponse.startsWith('{"id":')) {
+        await handlePolygonId(scannedResponse);
       } else {
         final uri = Uri.parse(scannedResponse);
         await verify(uri: uri);
@@ -108,6 +121,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         if (e.toString() == 'Exception: VERIFICATION_ISSUE') {
           message = ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL;
+        }
+
+        if (e.toString() == 'Exception: INIT_ISSUE') {
+          message = ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage;
         }
 
         emit(
@@ -135,6 +152,122 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       }
     }
+  }
+
+  bool isPolygonIdInitialised = false;
+
+  Future<void> handlePolygonId(String scannedResponse) async {
+    if (!isPolygonIdInitialised) {
+      log.i('polygon initialization');
+      await polygonIdCubit.initialise();
+
+      /// PolygonId SDK initialization
+      await dotenv.load();
+
+      await PolygonId().init(
+        web3Url: dotenv.get('INFURA_URL'),
+        web3RdpUrl: dotenv.get('INFURA_RDP_URL'),
+        web3ApiKey: dotenv.get('INFURA_MUMBAI_API_KEY'),
+        idStateContract: dotenv.get('ID_STATE_CONTRACT_ADDR'),
+        pushUrl: dotenv.get('PUSH_URL'),
+      );
+
+      isPolygonIdInitialised = true;
+    } else {
+      log.i('polygonid already initialized');
+    }
+
+    log.i('download circuit');
+    //download circuit
+    final isCircuitAlreadyDownloaded = await polygonId.isCircuitsDownloaded();
+    if (isCircuitAlreadyDownloaded) {
+      log.i('circuit already downloaded');
+      await polygonActions(scannedResponse);
+    } else {
+      final Stream<DownloadInfo> stream =
+          await polygonId.initCircuitsDownloadAndGetInfoStream;
+      _subscription = stream.listen((DownloadInfo downloadInfo) {
+        if (downloadInfo.completed) {
+          _subscription?.cancel();
+          log.i('download circuit complete');
+          polygonActions(scannedResponse);
+        } else {
+          // loading value update
+          final double loadedValue =
+              downloadInfo.downloaded / downloadInfo.contentLength;
+          final roundedValue = double.parse(loadedValue.toStringAsFixed(1));
+          log.i(roundedValue);
+        }
+      });
+    }
+  }
+
+  Future<void> polygonActions(String scannedResponse) async {
+    final Iden3MessageEntity iden3MessageEntity =
+        await polygonId.getIden3Message(message: scannedResponse);
+
+    final mnemonic =
+        await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+
+    if (iden3MessageEntity.type ==
+        'https://iden3-communication.io/authorization/1.0/request') {
+      log.i('polygonId authentication');
+      final isAuthenticated = await polygonId.authenticate(
+        iden3MessageEntity: iden3MessageEntity,
+        mnemonic: mnemonic!,
+      );
+
+      if (isAuthenticated) {
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.goBack,
+            message: StateMessage.success(
+              messageHandler: ResponseMessage(
+                ResponseString.RESPONSE_STRING_succesfullyAuthenticated,
+              ),
+            ),
+          ),
+        );
+      } else {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_authenticationFailed,
+        );
+      }
+    } else if (iden3MessageEntity.type ==
+        'https://iden3-communication.io/credentials/1.0/offer') {
+      log.i('polygonid getClaims');
+      final List<ClaimEntity> claims = await polygonId.getClaims(
+        iden3MessageEntity: iden3MessageEntity,
+        mnemonic: mnemonic!,
+      );
+      for (final claim in claims) {
+        await addPolygonCredential(claim);
+      }
+    } else {
+      throw ResponseMessage(
+        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+      );
+    }
+  }
+
+  Future<void> addPolygonCredential(ClaimEntity claimEntity) async {
+    final jsonCredential = claimEntity.info;
+    final credentialPreview = Credential.fromJson(jsonCredential);
+
+    final credentialModel = CredentialModel(
+      id: claimEntity.id,
+      image: 'image',
+      data: jsonCredential,
+      display: Display.emptyDisplay()..toJson(),
+      shareLink: '',
+      credentialPreview: credentialPreview,
+      expirationDate: claimEntity.expiration,
+      activities: [Activity(acquisitionAt: DateTime.now())],
+    );
+    // insert the credential in the wallet
+    await walletCubit.insertCredential(credential: credentialModel);
+
+    emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
   }
 
   Future<void> emitError(MessageHandler messageHandler) async {

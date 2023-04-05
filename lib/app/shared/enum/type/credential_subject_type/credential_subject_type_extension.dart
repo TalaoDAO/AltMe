@@ -33,6 +33,10 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.professionalStudentCard:
         return const Color(0xffCAFFBF);
+      case CredentialSubjectType.kycAgeCredential:
+        return const Color(0xff8247E5);
+      case CredentialSubjectType.kycCountryOfResidence:
+        return const Color(0xff8247E5);
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.bloometaPass:
       case CredentialSubjectType.nationality:
@@ -149,6 +153,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.pcdsAgentCertificate:
       case CredentialSubjectType.euDiplomaCard:
       case CredentialSubjectType.euVerifiableId:
+      case CredentialSubjectType.kycAgeCredential:
+      case CredentialSubjectType.kycCountryOfResidence:
         return Icons.perm_identity;
     }
   }
@@ -274,6 +280,10 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'https://api.preprod.ebsi.eu/trusted-schemas-registry/v1/schemas/0xbf78fc08a7a9f28f5479f58dea269d3657f54f13ca37d380cd4e92237fb691dd';
       case CredentialSubjectType.euVerifiableId:
         return 'https://api-conformance.ebsi.eu/trusted-schemas-registry/v2/schemas/z22ZAMdQtNLwi51T2vdZXGGZaYyjrsuP1yzWyXZirCAHv';
+      case CredentialSubjectType.kycAgeCredential:
+        return 'KYCAgeCredential';
+      case CredentialSubjectType.kycCountryOfResidence:
+        return 'KYCCountryOfResidenceCredential';
       case CredentialSubjectType.defaultCredential:
         return '';
     }
@@ -391,6 +401,10 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return EUDiplomaCardModel.fromJson(json);
       case CredentialSubjectType.euVerifiableId:
         return EUVerifiableIdModel.fromJson(json);
+      case CredentialSubjectType.kycAgeCredential:
+        return KYCAgeCredentialModel.fromJson(json);
+      case CredentialSubjectType.kycCountryOfResidence:
+        return KYCCountryOfResidenceModel.fromJson(json);
     }
   }
 
@@ -568,6 +582,10 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'EU Diploma';
       case CredentialSubjectType.euVerifiableId:
         return 'EU VerifiableID';
+      case CredentialSubjectType.kycAgeCredential:
+        return 'KYC Age Credential';
+      case CredentialSubjectType.kycCountryOfResidence:
+        return 'KYC Country of Residence';
       case CredentialSubjectType.defaultCredential:
         return '';
     }

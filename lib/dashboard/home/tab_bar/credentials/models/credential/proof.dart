@@ -25,8 +25,8 @@ class Proof {
   final String type;
   final String? proofPurpose;
   final String? verificationMethod;
-  final String created;
-  final String jws;
+  final String? created;
+  final String? jws;
 
   Map<String, dynamic> toJson() => _$ProofToJson(this);
 }

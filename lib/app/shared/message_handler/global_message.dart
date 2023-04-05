@@ -376,4 +376,9 @@ class GlobalMessage {
       l10n.chainbornMembershipLongDescription;
   String get RESPONSE_STRING_bloometaPassLongDescription =>
       l10n.bloometaPassLongDescription;
+  String get RESPONSE_STRING_succesfullyAuthenticated =>
+      l10n.succesfullyAuthenticated;
+  String get RESPONSE_STRING_authenticationFailed => l10n.authenticationFailed;
+  String get RESPONSE_STRING_deviceIncompatibilityMessage =>
+      l10n.deviceIncompatibilityMessage;
 }

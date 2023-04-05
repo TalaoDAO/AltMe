@@ -26,6 +26,8 @@ export 'fantom_associated_address_widget.dart';
 export 'fantom_poo_address_widget.dart';
 export 'gender_widget.dart';
 export 'identity_pass_widget.dart';
+export 'kyc_age_credential_widget.dart';
+export 'kyc_country_of_residence_widget.dart';
 export 'learning_achievement_widget.dart';
 export 'linkedin_card_widget.dart';
 export 'loyalty_card_widget.dart';

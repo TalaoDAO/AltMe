@@ -20,7 +20,8 @@ class ResponseMessage with MessageHandler {
 
         case ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt:
           return ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt.localise(
-              context);
+            context,
+          );
 
         case ResponseString.RESPONSE_STRING_identityProofDummyDescription:
           return ResponseString.RESPONSE_STRING_identityProofDummyDescription
@@ -663,6 +664,23 @@ class ResponseMessage with MessageHandler {
 
         case ResponseString.RESPONSE_STRING_bloometaPassLongDescription:
           return ResponseString.RESPONSE_STRING_bloometaPassLongDescription
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_succesfullyAuthenticated:
+          return ResponseString.RESPONSE_STRING_succesfullyAuthenticated
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_authenticationFailed:
+          return ResponseString.RESPONSE_STRING_authenticationFailed.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage:
+          return ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage
               .localise(
             context,
           );

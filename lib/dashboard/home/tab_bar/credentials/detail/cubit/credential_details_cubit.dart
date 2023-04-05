@@ -9,6 +9,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'credential_details_cubit.g.dart';
@@ -21,12 +22,14 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     required this.secureStorageProvider,
     required this.client,
     required this.jwtDecode,
+    required this.polygonId,
   }) : super(const CredentialDetailsState());
 
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
   final DioClient client;
   final JWTDecode jwtDecode;
+  final PolygonId polygonId;
 
   void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {
     emit(state.copyWith(credentialDetailTabStatus: credentialDetailTabStatus));
@@ -76,6 +79,41 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         case VerificationType.unKnown:
           credentialStatus = CredentialStatus.suspended;
           break;
+      }
+
+      emit(
+        state.copyWith(
+          credentialStatus: credentialStatus,
+          status: AppStatus.idle,
+        ),
+      );
+    } else if (isPolygonssuer(item)) {
+      final mnemonic =
+          await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+      final List<ClaimEntity> claim = await polygonId.getClaimById(
+        claimId: item.id,
+        mnemonic: mnemonic!,
+      );
+
+      late CredentialStatus credentialStatus;
+
+      if (claim.isEmpty) {
+        credentialStatus = CredentialStatus.suspended;
+      } else {
+        switch (claim[0].state) {
+          case ClaimState.active:
+            credentialStatus = CredentialStatus.active;
+            break;
+          case ClaimState.expired:
+            credentialStatus = CredentialStatus.suspended;
+            break;
+          case ClaimState.pending:
+            credentialStatus = CredentialStatus.pending;
+            break;
+          case ClaimState.revoked:
+            credentialStatus = CredentialStatus.suspended;
+            break;
+        }
       }
 
       emit(
