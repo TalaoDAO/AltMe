@@ -154,25 +154,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  bool isPolygonIdInitialised = false;
-
   Future<void> handlePolygonId(String scannedResponse) async {
-    if (!isPolygonIdInitialised) {
+    if (!polygonIdCubit.state) {
       log.i('polygon initialization');
       await polygonIdCubit.initialise();
-
-      /// PolygonId SDK initialization
-      await dotenv.load();
-
-      await PolygonId().init(
-        web3Url: dotenv.get('INFURA_URL'),
-        web3RdpUrl: dotenv.get('INFURA_RDP_URL'),
-        web3ApiKey: dotenv.get('INFURA_MUMBAI_API_KEY'),
-        idStateContract: dotenv.get('ID_STATE_CONTRACT_ADDR'),
-        pushUrl: dotenv.get('PUSH_URL'),
-      );
-
-      isPolygonIdInitialised = true;
     } else {
       log.i('polygonid already initialized');
     }
