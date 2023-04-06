@@ -7,4 +7,6 @@ enum IssuerVerificationRegistry {
   PolygonTestnet,
   @JsonValue('ebsi')
   EBSI,
+  @JsonValue('compellio')
+  Compellio,
 }

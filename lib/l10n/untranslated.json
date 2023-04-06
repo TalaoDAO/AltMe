@@ -157,7 +157,11 @@
     "backupCredentialPhrase",
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
+<<<<<<< HEAD
     "backupPolygonIdCredentialEmptyError",
+=======
+    "backupCredentialEmptyError",
+>>>>>>> 93037891 (code update)
     "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
@@ -291,7 +295,11 @@
     "networkAndRegistries",
     "chooseNetwork",
     "chooseRegistry",
+<<<<<<< HEAD
     "verifiableDataRegistry",
+=======
+    "chooseIssuersRegistry",
+>>>>>>> 93037891 (code update)
     "network",
     "issuerRegistry",
     "about",
@@ -682,7 +690,10 @@
     "accountImportCongratulations",
     "saveBackupCredentialTitle",
     "saveBackupCredentialSubtitle",
+<<<<<<< HEAD
     "saveBackupPolygonCredentialSubtitle",
+=======
+>>>>>>> 93037891 (code update)
     "restoreCredentialStep1Title",
     "restorePhraseTextFieldHint",
     "restoreCredentialStep2Title",
@@ -769,12 +780,16 @@
     "yearsOld",
     "youAreOver13",
     "youAreOver15",
+<<<<<<< HEAD
     "youAreOver18",
     "polygon",
     "ebsi",
     "backupPolygonIdCredentials",
     "restorePolygonIdCredentials",
     "comingSoon"
+=======
+    "youAreOver18"
+>>>>>>> 93037891 (code update)
   ],
 
   "es": [
@@ -935,7 +950,11 @@
     "backupCredentialPhrase",
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
+<<<<<<< HEAD
     "backupPolygonIdCredentialEmptyError",
+=======
+    "backupCredentialEmptyError",
+>>>>>>> 93037891 (code update)
     "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
@@ -1069,7 +1088,11 @@
     "networkAndRegistries",
     "chooseNetwork",
     "chooseRegistry",
+<<<<<<< HEAD
     "verifiableDataRegistry",
+=======
+    "chooseIssuersRegistry",
+>>>>>>> 93037891 (code update)
     "network",
     "issuerRegistry",
     "about",
@@ -1460,7 +1483,10 @@
     "accountImportCongratulations",
     "saveBackupCredentialTitle",
     "saveBackupCredentialSubtitle",
+<<<<<<< HEAD
     "saveBackupPolygonCredentialSubtitle",
+=======
+>>>>>>> 93037891 (code update)
     "restoreCredentialStep1Title",
     "restorePhraseTextFieldHint",
     "restoreCredentialStep2Title",
@@ -1547,6 +1573,7 @@
     "yearsOld",
     "youAreOver13",
     "youAreOver15",
+<<<<<<< HEAD
     "youAreOver18",
     "polygon",
     "ebsi",
@@ -1560,6 +1587,14 @@
     "coins",
     "educationCredentials",
     "verifiableDataRegistry",
+=======
+    "youAreOver18"
+  ],
+
+  "fr": [
+    "coins",
+    "educationCredentials",
+>>>>>>> 93037891 (code update)
     "onboardingVerifyPhraseMessage",
     "onboardingVerifyPhraseMessageDetails",
     "importWalletTextRecoveryPhraseOnly",
@@ -1577,7 +1612,10 @@
     "kycSubtitle",
     "passbaseTitle",
     "passbaseSubtitle",
+<<<<<<< HEAD
     "saveBackupPolygonCredentialSubtitle",
+=======
+>>>>>>> 93037891 (code update)
     "altmeSupport",
     "manageKeyDecentralizedId",
     "manageEbsiDecentralizedId",
@@ -1622,12 +1660,16 @@
     "yearsOld",
     "youAreOver13",
     "youAreOver15",
+<<<<<<< HEAD
     "youAreOver18",
     "polygon",
     "ebsi",
     "backupPolygonIdCredentials",
     "restorePolygonIdCredentials",
     "comingSoon"
+=======
+    "youAreOver18"
+>>>>>>> 93037891 (code update)
   ],
 
   "it": [
@@ -1788,7 +1830,11 @@
     "backupCredentialPhrase",
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
+<<<<<<< HEAD
     "backupPolygonIdCredentialEmptyError",
+=======
+    "backupCredentialEmptyError",
+>>>>>>> 93037891 (code update)
     "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
@@ -1922,7 +1968,11 @@
     "networkAndRegistries",
     "chooseNetwork",
     "chooseRegistry",
+<<<<<<< HEAD
     "verifiableDataRegistry",
+=======
+    "chooseIssuersRegistry",
+>>>>>>> 93037891 (code update)
     "network",
     "issuerRegistry",
     "about",
@@ -2313,7 +2363,10 @@
     "accountImportCongratulations",
     "saveBackupCredentialTitle",
     "saveBackupCredentialSubtitle",
+<<<<<<< HEAD
     "saveBackupPolygonCredentialSubtitle",
+=======
+>>>>>>> 93037891 (code update)
     "restoreCredentialStep1Title",
     "restorePhraseTextFieldHint",
     "restoreCredentialStep2Title",
@@ -2400,11 +2453,15 @@
     "yearsOld",
     "youAreOver13",
     "youAreOver15",
+<<<<<<< HEAD
     "youAreOver18",
     "polygon",
     "ebsi",
     "backupPolygonIdCredentials",
     "restorePolygonIdCredentials",
     "comingSoon"
+=======
+    "youAreOver18"
+>>>>>>> 93037891 (code update)
   ]
 }
