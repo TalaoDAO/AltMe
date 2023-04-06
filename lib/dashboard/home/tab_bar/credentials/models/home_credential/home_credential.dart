@@ -261,11 +261,19 @@ class HomeCredential extends Equatable {
         break;
 
       case CredentialSubjectType.ethereumAssociatedWallet:
+        image = ImageStrings.ethereumOwnershipCard;
+        break;
       case CredentialSubjectType.fantomAssociatedWallet:
+        image = ImageStrings.fantomOwnershipCard;
+        break;
       case CredentialSubjectType.polygonAssociatedWallet:
+        image = ImageStrings.polygonOwnershipCard;
+        break;
       case CredentialSubjectType.binanceAssociatedWallet:
+        image = ImageStrings.binanceOwnershipCard;
+        break;
       case CredentialSubjectType.tezosAssociatedWallet:
-        image = ImageStrings.myAccountCard;
+        image = ImageStrings.tezosOwnershipCard;
         break;
 
       case CredentialSubjectType.voucher:

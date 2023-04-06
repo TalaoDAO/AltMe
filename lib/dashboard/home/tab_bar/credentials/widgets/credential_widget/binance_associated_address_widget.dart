@@ -18,8 +18,8 @@ class BinanceAssociatedAddressWidget extends StatelessWidget {
         .credentialSubjectModel as BinanceAssociatedAddressModel?;
 
     return MyBlockchainAccountBaseWidget(
-      image: IconStrings.binance,
-      name: l10n.binanceNetwork,
+      background: ImageStrings.binanceOwnershipCard,
+      proofMessage: l10n.binanceProofMessage,
       walletAddress: associatedAddress?.associatedAddress ?? '',
     );
   }

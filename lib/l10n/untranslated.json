@@ -759,7 +759,12 @@
     "authenticationFailed",
     "documentType",
     "countryCode",
-    "deviceIncompatibilityMessage"
+    "deviceIncompatibilityMessage",
+    "tezosProofMessage",
+    "ethereumProofMessage",
+    "fantomProofMessage",
+    "polygonProofMessage",
+    "binanceProofMessage"
   ],
 
   "es": [
@@ -1522,7 +1527,12 @@
     "authenticationFailed",
     "documentType",
     "countryCode",
-    "deviceIncompatibilityMessage"
+    "deviceIncompatibilityMessage",
+    "tezosProofMessage",
+    "ethereumProofMessage",
+    "fantomProofMessage",
+    "polygonProofMessage",
+    "binanceProofMessage"
   ],
 
   "fr": [
@@ -1580,7 +1590,12 @@
     "authenticationFailed",
     "documentType",
     "countryCode",
-    "deviceIncompatibilityMessage"
+    "deviceIncompatibilityMessage",
+    "tezosProofMessage",
+    "ethereumProofMessage",
+    "fantomProofMessage",
+    "polygonProofMessage",
+    "binanceProofMessage"
   ],
 
   "it": [
@@ -2343,6 +2358,11 @@
     "authenticationFailed",
     "documentType",
     "countryCode",
-    "deviceIncompatibilityMessage"
+    "deviceIncompatibilityMessage",
+    "tezosProofMessage",
+    "ethereumProofMessage",
+    "fantomProofMessage",
+    "polygonProofMessage",
+    "binanceProofMessage"
   ]
 }

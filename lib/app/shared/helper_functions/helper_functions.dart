@@ -107,7 +107,8 @@ bool isEbsiIssuer(CredentialModel credentialModel) {
 
 bool isPolygonssuer(CredentialModel credentialModel) {
   return credentialModel.id.startsWith(
-      'https://self-hosted-platform.polygonid.me/v1/did:polygonid:polygon:');
+    'https://self-hosted-platform.polygonid.me/v1/did:polygonid:polygon:',
+  );
 }
 
 bool isValidPrivateKey(String value) {
