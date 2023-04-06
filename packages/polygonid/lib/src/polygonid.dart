@@ -16,7 +16,15 @@ import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
 /// {@endtemplate}
 class PolygonId {
   /// {@macro polygonid}
-  PolygonId();
+  factory PolygonId() {
+    return _instance ??= PolygonId._();
+  }
+
+  /// private contructor
+  PolygonId._();
+
+  /// _instance
+  static PolygonId? _instance;
 
   /// blockchain
   static const blockchain = 'polygon';
