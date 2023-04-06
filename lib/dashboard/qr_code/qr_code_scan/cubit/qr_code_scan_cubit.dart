@@ -111,8 +111,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           ),
         ),
       );
-    } catch (e) {
-      log.e('Error -$e');
+    } catch (e,s) {
+      log.e('Error -$e, stack: $s');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
@@ -155,12 +155,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   Future<void> handlePolygonId(String scannedResponse) async {
-    if (!polygonIdCubit.state) {
-      log.i('polygon initialization');
-      await polygonIdCubit.initialise();
-    } else {
-      log.i('polygonid already initialized');
-    }
+    await polygonIdCubit.initialise();
 
     log.i('download circuit');
     //download circuit

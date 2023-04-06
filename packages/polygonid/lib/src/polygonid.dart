@@ -24,6 +24,9 @@ class PolygonId {
   /// network
   static const network = 'mumbai';
 
+  /// isInitialized
+  bool isInitialized = false;
+
   /// PolygonId SDK initialization
   /// Before you can start using the SDK, you need to initialise it, otherwise
   /// a PolygonIsSdkNotInitializedException exception will be thrown.
@@ -34,6 +37,7 @@ class PolygonId {
     required String idStateContract,
     required String pushUrl,
   }) async {
+    if (isInitialized) return;
     await PolygonIdSdk.init(
       env: EnvEntity(
         blockchain: blockchain,
@@ -45,6 +49,7 @@ class PolygonId {
         pushUrl: pushUrl,
       ),
     );
+    isInitialized = true;
   }
 
   /// check if curcuit is already downloaded
