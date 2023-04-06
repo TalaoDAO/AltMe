@@ -641,9 +641,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> completeSiopV2WithClaim({required String claims}) async {
     // TODO(hawkbee): change when correction is done on verifier
-    claims = claims.replaceAll("'email': None", "'email': 'None'");
+    claims = claims
+        .replaceAll("'email': None", "'email': 'None'")
+        .replaceAll("'", '"');
 
-    claims = claims.replaceAll("'", '"');
     final jsonPath = JsonPath(r'$..input_descriptors');
     final outputDescriptors =
         jsonPath.readValues(jsonDecode(claims)).first as List;
