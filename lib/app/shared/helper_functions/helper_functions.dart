@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi' as ffi;
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
@@ -15,6 +16,19 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
+
+bool checkIfDeviceArchSupportedInPlygonId() {
+  final logger = getLogger('checkIfDeviceArchSupportedInPlygonId');
+  final abi = ffi.Abi.current();
+  logger.i('current abi type: $abi');
+  if (abi == ffi.Abi.androidArm64 ||
+      abi == ffi.Abi.androidX64 ||
+      abi == ffi.Abi.iosArm64) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 Future<void> openBlockchainExplorer(
   BlockchainNetwork network,
