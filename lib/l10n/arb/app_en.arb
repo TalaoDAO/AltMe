@@ -828,5 +828,9 @@
   "ethereumProofMessage": "Proof of your tezos address ownership",
   "fantomProofMessage": "Proof of your fantom address ownership",
   "polygonProofMessage": "Proof of your polygon address ownership",
-  "binanceProofMessage": "Proof of your binance address ownership"
+  "binanceProofMessage": "Proof of your binance address ownership",
+  "yearsOld": "years old",
+  "youAreOver13": "You are over 13 years old",
+  "youAreOver15": "You are over 15 years old",
+  "youAreOver18": "You are over 18 years old"
 }

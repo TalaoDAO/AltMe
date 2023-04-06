@@ -764,7 +764,11 @@
     "ethereumProofMessage",
     "fantomProofMessage",
     "polygonProofMessage",
-    "binanceProofMessage"
+    "binanceProofMessage",
+    "yearsOld",
+    "youAreOver13",
+    "youAreOver15",
+    "youAreOver18"
   ],
 
   "es": [
@@ -1532,7 +1536,11 @@
     "ethereumProofMessage",
     "fantomProofMessage",
     "polygonProofMessage",
-    "binanceProofMessage"
+    "binanceProofMessage",
+    "yearsOld",
+    "youAreOver13",
+    "youAreOver15",
+    "youAreOver18"
   ],
 
   "fr": [
@@ -1595,7 +1603,11 @@
     "ethereumProofMessage",
     "fantomProofMessage",
     "polygonProofMessage",
-    "binanceProofMessage"
+    "binanceProofMessage",
+    "yearsOld",
+    "youAreOver13",
+    "youAreOver15",
+    "youAreOver18"
   ],
 
   "it": [
@@ -2363,6 +2375,10 @@
     "ethereumProofMessage",
     "fantomProofMessage",
     "polygonProofMessage",
-    "binanceProofMessage"
+    "binanceProofMessage",
+    "yearsOld",
+    "youAreOver13",
+    "youAreOver15",
+    "youAreOver18"
   ]
 }

@@ -12,14 +12,15 @@ class VerifiableIdCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final verifiableIdCardModel = credentialModel
-    //     .credentialPreview.credentialSubjectModel as VerifiableIdCardModel;
+    final verifiableIdCardModel = credentialModel
+        .credentialPreview.credentialSubjectModel as VerifiableIdCardModel;
 
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.verifiableIdCard,
       issuerName: credentialModel
           .credentialPreview.credentialSubjectModel.issuedBy?.name,
-      value: '',
+      value: '${verifiableIdCardModel.familyName} '
+          '${verifiableIdCardModel.givenName}',
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
