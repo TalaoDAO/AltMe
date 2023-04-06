@@ -23,51 +23,6 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
-        case ResponseString.RESPONSE_STRING_identityProofDummyDescription:
-          return ResponseString.RESPONSE_STRING_identityProofDummyDescription
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_over18DummyDescription:
-          return ResponseString.RESPONSE_STRING_over18DummyDescription.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_over13DummyDescription:
-          return ResponseString.RESPONSE_STRING_over13DummyDescription.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_over15DummyDescription:
-          return ResponseString.RESPONSE_STRING_over15DummyDescription.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_passportFootprintDummyDescription:
-          return ResponseString
-              .RESPONSE_STRING_passportFootprintDummyDescription.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_emailProofDummyDescription:
-          return ResponseString.RESPONSE_STRING_emailProofDummyDescription
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_genderProofDummyDescription:
-          return ResponseString.RESPONSE_STRING_genderProofDummyDescription
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_nationalityProofDummyDescription:
-          return ResponseString.RESPONSE_STRING_nationalityProofDummyDescription
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_ageRangeProofDummyDescription:
-          return ResponseString.RESPONSE_STRING_ageRangeProofDummyDescription
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_phoneProofDummyDescription:
-          return ResponseString.RESPONSE_STRING_phoneProofDummyDescription
-              .localise(context);
-
         case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
           return ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW
               .localise(context);

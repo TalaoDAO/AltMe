@@ -18,8 +18,8 @@ class FantomAssociatedAddressWidget extends StatelessWidget {
         .credentialSubjectModel as FantomAssociatedAddressModel?;
 
     return MyBlockchainAccountBaseWidget(
-      image: IconStrings.fantom,
-      name: l10n.fantomNetwork,
+      background: ImageStrings.fantomOwnershipCard,
+      proofMessage: l10n.fantomProofMessage,
       walletAddress: associatedAddress?.associatedAddress ?? '',
     );
   }

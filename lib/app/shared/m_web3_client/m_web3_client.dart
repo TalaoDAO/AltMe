@@ -62,7 +62,7 @@ class MWeb3Client {
       // it's deployed (contractAddr)
 
       late DeployedContract contract;
-      late ContractEvent transferEvent;
+      //late ContractEvent transferEvent;
       late ContractFunction balanceFunction;
       late ContractFunction sendFunction;
       late List<dynamic> balanceFunctionParams;
@@ -78,7 +78,7 @@ class MWeb3Client {
         );
 
         // extracting some functions and events that we'll need later
-        transferEvent = contract.event('Transfer');
+        //transferEvent = contract.event('Transfer');
         balanceFunction = contract.function('balanceOf');
         sendFunction = contract.function('transfer');
 
@@ -97,7 +97,7 @@ class MWeb3Client {
         );
 
         // extracting some functions and events that we'll need later
-        transferEvent = contract.event('Transfer');
+        //transferEvent = contract.event('Transfer');
         balanceFunction = contract.function('balanceOf');
         sendFunction = contract.function('safeTransferFrom');
 
@@ -121,7 +121,7 @@ class MWeb3Client {
         );
 
         // extracting some functions and events that we'll need later
-        transferEvent = contract.event('TransferSingle');
+        //transferEvent = contract.event('TransferSingle');
         balanceFunction = contract.function('balanceOf');
         sendFunction = contract.function('safeTransferFrom');
         balanceFunctionParams = <dynamic>[

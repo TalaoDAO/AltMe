@@ -38,9 +38,22 @@ class CredentialBaseWidget extends StatelessWidget {
                 child: FractionallySizedBox(
                   widthFactor: 0.75,
                   heightFactor: 0.11,
-                  child: MyText(
-                    '${l10n.providedBy} $issuerName',
-                    style: Theme.of(context).textTheme.identitiyBaseLightText,
+                  child: MyRichText(
+                    text: TextSpan(
+                      children: <InlineSpan>[
+                        TextSpan(
+                          text: '${l10n.providedBy} ',
+                          style: Theme.of(context)
+                              .textTheme
+                              .identitiyBaseLightText,
+                        ),
+                        TextSpan(
+                          text: issuerName,
+                          style:
+                              Theme.of(context).textTheme.identitiyBaseBoldText,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -49,10 +62,13 @@ class CredentialBaseWidget extends StatelessWidget {
                 id: 'value',
                 child: FractionallySizedBox(
                   widthFactor: 0.8,
-                  heightFactor: 0.2,
-                  child: MyText(
-                    value!,
-                    style: Theme.of(context).textTheme.identitiyBaseBoldText,
+                  heightFactor: 0.15,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: MyText(
+                      value!,
+                      style: Theme.of(context).textTheme.identitiyBaseBoldText,
+                    ),
                   ),
                 ),
               ),
@@ -64,7 +80,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.issuedOn,
-                    style: Theme.of(context).textTheme.identitiyBaseLightText,
+                    style: Theme.of(context).textTheme.identitiyBaseBoldText,
                   ),
                 ),
               ),
@@ -76,7 +92,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     issuanceDate!,
-                    style: Theme.of(context).textTheme.identitiyBaseBoldText,
+                    style: Theme.of(context).textTheme.identitiyBaseLightText,
                   ),
                 ),
               ),
@@ -88,7 +104,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.expirationDate,
-                    style: Theme.of(context).textTheme.identitiyBaseLightText,
+                    style: Theme.of(context).textTheme.identitiyBaseBoldText,
                   ),
                 ),
               ),
@@ -100,7 +116,7 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     expirationDate!,
-                    style: Theme.of(context).textTheme.identitiyBaseBoldText,
+                    style: Theme.of(context).textTheme.identitiyBaseLightText,
                   ),
                 ),
               ),
@@ -130,7 +146,7 @@ class CredentialBaseWidgetDelegate extends MultiChildLayoutDelegate {
       layoutChild('value', BoxConstraints.loose(size));
       positionChild(
         'value',
-        Offset(size.width * 0.06, size.height * 0.50),
+        Offset(size.width * 0.06, size.height * 0.48),
       );
     }
 
@@ -138,7 +154,7 @@ class CredentialBaseWidgetDelegate extends MultiChildLayoutDelegate {
       layoutChild('issued-on', BoxConstraints.loose(size));
       positionChild(
         'issued-on',
-        Offset(size.width * 0.06, size.height * 0.70),
+        Offset(size.width * 0.06, size.height * 0.73),
       );
     }
     if (hasChild('issued-on-value')) {
@@ -152,7 +168,7 @@ class CredentialBaseWidgetDelegate extends MultiChildLayoutDelegate {
       layoutChild('expiration-date', BoxConstraints.loose(size));
       positionChild(
         'expiration-date',
-        Offset(size.width * 0.5, size.height * 0.70),
+        Offset(size.width * 0.5, size.height * 0.73),
       );
     }
     if (hasChild('expiration-date-value')) {

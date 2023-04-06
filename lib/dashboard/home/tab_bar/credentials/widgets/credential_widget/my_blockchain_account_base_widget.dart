@@ -6,19 +6,19 @@ import 'package:flutter/material.dart';
 class MyBlockchainAccountBaseWidget extends StatelessWidget {
   const MyBlockchainAccountBaseWidget({
     super.key,
-    required this.name,
+    required this.proofMessage,
     required this.walletAddress,
-    required this.image,
+    required this.background,
   });
 
-  final String name;
+  final String proofMessage;
   final String walletAddress;
-  final String image;
+  final String background;
 
   @override
   Widget build(BuildContext context) {
     return CredentialImage(
-      image: ImageStrings.myAccountCard,
+      image: background,
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
@@ -26,35 +26,17 @@ class MyBlockchainAccountBaseWidget extends StatelessWidget {
               MyBlockchainAccountBaseWidgetDelegate(position: Offset.zero),
           children: [
             LayoutId(
-              id: 'name',
+              id: 'proofMessage',
               child: FractionallySizedBox(
                 widthFactor: 0.8,
                 heightFactor: 0.14,
                 child: MyText(
-                  name,
+                  proofMessage,
                   style: Theme.of(context).textTheme.subMessage.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.w600,
                       ),
                 ),
-              ),
-            ),
-            // LayoutId(
-            //   id: 'accountName',
-            //   child: FractionallySizedBox(
-            //     widthFactor: 0.8,
-            //     heightFactor: 0.16,
-            //     child: MyText(
-            //       accountName,
-            //       style: Theme.of(context).textTheme.title,
-            //     ),
-            //   ),
-            // ),
-            LayoutId(
-              id: 'image',
-              child: FractionallySizedBox(
-                widthFactor: 0.2,
-                heightFactor: 0.2,
-                child: Image.asset(image),
               ),
             ),
             LayoutId(
@@ -89,11 +71,11 @@ class MyBlockchainAccountBaseWidgetDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    if (hasChild('name')) {
-      layoutChild('name', BoxConstraints.loose(size));
+    if (hasChild('proofMessage')) {
+      layoutChild('proofMessage', BoxConstraints.loose(size));
       positionChild(
-        'name',
-        Offset(size.width * 0.06, size.height * 0.27),
+        'proofMessage',
+        Offset(size.width * 0.06, size.height * 0.5),
       );
     }
 
@@ -104,14 +86,6 @@ class MyBlockchainAccountBaseWidgetDelegate extends MultiChildLayoutDelegate {
         Offset(size.width * 0.8, size.height * 0.05),
       );
     }
-
-    // if (hasChild('accountName')) {
-    //   layoutChild('accountName', BoxConstraints.loose(size));
-    //   positionChild(
-    //     'accountName',
-    //     Offset(size.width * 0.06, size.height * 0.5),
-    //   );
-    // }
 
     if (hasChild('walletAddress')) {
       layoutChild('walletAddress', BoxConstraints.loose(size));

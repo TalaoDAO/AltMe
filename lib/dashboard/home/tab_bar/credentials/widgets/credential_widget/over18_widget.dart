@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class Over18Widget extends StatelessWidget {
@@ -15,6 +16,7 @@ class Over18Widget extends StatelessWidget {
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
+      value: context.l10n.youAreOver18,
       expirationDate: credentialModel.expirationDate == null
           ? '--'
           : UiDate.formatDateForCredentialCard(

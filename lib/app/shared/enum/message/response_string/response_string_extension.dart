@@ -13,36 +13,6 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_bloometaPassWhyGetThisCard:
         return globalMessage.RESPONSE_STRING_bloometaPassWhyGetThisCard;
 
-      case ResponseString.RESPONSE_STRING_identityProofDummyDescription:
-        return globalMessage.RESPONSE_STRING_identityProofDummyDescription;
-
-      case ResponseString.RESPONSE_STRING_over18DummyDescription:
-        return globalMessage.RESPONSE_STRING_over18DummyDescription;
-
-      case ResponseString.RESPONSE_STRING_over13DummyDescription:
-        return globalMessage.RESPONSE_STRING_over13DummyDescription;
-
-      case ResponseString.RESPONSE_STRING_over15DummyDescription:
-        return globalMessage.RESPONSE_STRING_over15DummyDescription;
-
-      case ResponseString.RESPONSE_STRING_passportFootprintDummyDescription:
-        return globalMessage.RESPONSE_STRING_passportFootprintDummyDescription;
-
-      case ResponseString.RESPONSE_STRING_emailProofDummyDescription:
-        return globalMessage.RESPONSE_STRING_emailProofDummyDescription;
-
-      case ResponseString.RESPONSE_STRING_genderProofDummyDescription:
-        return globalMessage.RESPONSE_STRING_genderProofDummyDescription;
-
-      case ResponseString.RESPONSE_STRING_nationalityProofDummyDescription:
-        return globalMessage.RESPONSE_STRING_nationalityProofDummyDescription;
-
-      case ResponseString.RESPONSE_STRING_ageRangeProofDummyDescription:
-        return globalMessage.RESPONSE_STRING_ageRangeProofDummyDescription;
-
-      case ResponseString.RESPONSE_STRING_phoneProofDummyDescription:
-        return globalMessage.RESPONSE_STRING_phoneProofDummyDescription;
-
       case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
         return globalMessage.RESPONSE_STRING_BALANCE_TOO_LOW;
 
