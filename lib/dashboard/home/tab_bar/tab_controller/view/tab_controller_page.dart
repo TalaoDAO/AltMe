@@ -11,7 +11,7 @@ class TabControllerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TabControllerCubit(),
+      create: (context) => HomeTabbarCubit(),
       child: const TabControllerView(),
     );
   }
@@ -36,7 +36,7 @@ class _TabControllerViewState extends State<TabControllerView>
   }
 
   void _onTabChanged() {
-    context.read<TabControllerCubit>().setIndex(_tabController.index);
+    context.read<HomeTabbarCubit>().setIndex(_tabController.index);
   }
 
   @override
@@ -48,7 +48,7 @@ class _TabControllerViewState extends State<TabControllerView>
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocBuilder<TabControllerCubit, int>(
+    return BlocBuilder<HomeTabbarCubit, int>(
       builder: (context, state) {
         return Column(
           mainAxisSize: MainAxisSize.max,
@@ -93,7 +93,7 @@ class _TabControllerViewState extends State<TabControllerView>
                           return;
                         }
                         _tabController.animateTo(0);
-                        context.read<TabControllerCubit>().setIndex(0);
+                        context.read<HomeTabbarCubit>().setIndex(0);
                       },
                     ),
                     MyTab(
@@ -112,7 +112,7 @@ class _TabControllerViewState extends State<TabControllerView>
                           return;
                         }
                         _tabController.animateTo(1);
-                        context.read<TabControllerCubit>().setIndex(1);
+                        context.read<HomeTabbarCubit>().setIndex(1);
                       },
                     ),
                     MyTab(
@@ -131,7 +131,7 @@ class _TabControllerViewState extends State<TabControllerView>
                           return;
                         }
                         _tabController.animateTo(2);
-                        context.read<TabControllerCubit>().setIndex(2);
+                        context.read<HomeTabbarCubit>().setIndex(2);
                       },
                     ),
                   ],
