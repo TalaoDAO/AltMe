@@ -8,6 +8,9 @@ part 'home_credential.g.dart';
 @JsonSerializable(explicitToJson: true)
 class HomeCredential extends Equatable {
   const HomeCredential({
+    this.credentialModel,
+    required this.isDummy,
+    required this.credentialSubjectType,
     this.link,
     this.image,
     this.websiteLink,

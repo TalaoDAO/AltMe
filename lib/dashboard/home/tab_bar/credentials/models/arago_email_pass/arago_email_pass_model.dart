@@ -28,7 +28,6 @@ class AragoEmailPassModel extends CredentialSubjectModel {
   final String? email;
   @JsonKey(defaultValue: '')
   final String? passbaseMetadata;
-  final HomeCredential? homeCredential;
 
   @override
   Map<String, dynamic> toJson() => _$AragoEmailPassModelToJson(this);
