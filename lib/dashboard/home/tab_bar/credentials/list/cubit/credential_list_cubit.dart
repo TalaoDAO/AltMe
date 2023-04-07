@@ -166,17 +166,17 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           break;
       }
     }
-/* Disable display of dummies when displaying credentials.
-    /// Note: Uncomment if we need to display dummies again. 
-    /// adding dummy gaming credentials
-    gamingCredentials.addAll(dummyListFromCategory(gamingCategories));
+    /* Disable display of dummies when displaying credentials.
+              /// Note: Uncomment if we need to display dummies again. 
+              /// adding dummy gaming credentials
+              gamingCredentials.addAll(dummyListFromCategory(gamingCategories));
 
-    /// adding dummy community credentials
-    communityCredentials.addAll(dummyListFromCategory(communityCategories));
+              /// adding dummy community credentials
+              communityCredentials.addAll(dummyListFromCategory(communityCategories));
 
-    /// adding dummy identity credentials
-    identityCredentials.addAll(dummyListFromCategory(identityCategories));
-*/
+              /// adding dummy identity credentials
+              identityCredentials.addAll(dummyListFromCategory(identityCategories));
+          */
     emit(
       state.populate(
         gamingCredentials: gamingCredentials,

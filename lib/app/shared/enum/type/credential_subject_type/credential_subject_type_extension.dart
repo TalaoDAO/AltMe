@@ -1,6 +1,15 @@
 part of 'credential_subject_type.dart';
 
 extension CredentialSubjectTypeExtension on CredentialSubjectType {
+/*
+
+//GetItCredential? dummyCredenital
+bool single
+//category (enum)
+//int order
+
+*/
+
   Color backgroundColor(CredentialModel credentialModel) {
     final Color backgroundColor;
     if (credentialModel.display.backgroundColor != '') {
@@ -590,4 +599,182 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return '';
     }
   }
+
+  //handle category
+  CredentialCategory get category {
+    switch (this) {
+      case CredentialSubjectType.bloometaPass:
+      case CredentialSubjectType.troopezPass:
+        return CredentialCategory.passCards;
+
+      case CredentialSubjectType.pigsPass:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.matterlightPass:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.dogamiPass:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.bunnyPass:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.tezotopiaMembership:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.chainbornMembership:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.ageRange:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.nationality:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.gender:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.walletCredential:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.tezosAssociatedWallet:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.ethereumAssociatedWallet:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.fantomAssociatedWallet:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.polygonAssociatedWallet:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.binanceAssociatedWallet:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.tezosPooAddress:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.ethereumPooAddress:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.fantomPooAddress:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.polygonPooAddress:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.binancePooAddress:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.certificateOfEmployment:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.defaultCredential:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.ecole42LearningAchievement:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.emailPass:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.identityPass:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.verifiableIdCard:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.linkedInCard:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.learningAchievement:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.loyaltyCard:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.over18:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.over13:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.over15:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.passportFootprint:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.phonePass:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.professionalExperienceAssessment:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.professionalSkillAssessment:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.professionalStudentCard:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.residentCard:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.selfIssued:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.studentCard:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.voucher:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.tezVoucher:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.talaoCommunityCard:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.diplomaCard:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.aragoPass:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.aragoEmailPass:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.aragoIdentityCard:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.aragoLearningAchievement:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.aragoOver18:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.pcdsAgentCertificate:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.twitterCard:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.euDiplomaCard:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.euVerifiableId:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.kycAgeCredential:
+        // TODO: Handle this case.
+        break;
+      case CredentialSubjectType.kycCountryOfResidence:
+        // TODO: Handle this case.
+        break;
+      //
+    }
+  }
+
+  //handle single or multiple with enum
 }
