@@ -341,7 +341,7 @@
   "networkAndRegistries": "Network & Registries",
   "chooseNetwork": "Choose Network",
   "chooseRegistry": "Choose Registry",
-  "chooseIssuersRegistry": "Choose issuers registry",
+  "chooseIssuersRegistry": "Verifialble Data Registry",
   "network": "Network",
   "issuerRegistry": "Issuer Registry",
   "about": "About",
@@ -832,5 +832,7 @@
   "yearsOld": "years old",
   "youAreOver13": "You are over 13 years old",
   "youAreOver15": "You are over 15 years old",
-  "youAreOver18": "You are over 18 years old"
+  "youAreOver18": "You are over 18 years old",
+  "polygon": "Polygon",
+  "ebsi": "EBSI"
 }

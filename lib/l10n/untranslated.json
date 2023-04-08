@@ -768,7 +768,9 @@
     "yearsOld",
     "youAreOver13",
     "youAreOver15",
-    "youAreOver18"
+    "youAreOver18",
+    "polygon",
+    "ebsi"
   ],
 
   "es": [
@@ -1540,7 +1542,9 @@
     "yearsOld",
     "youAreOver13",
     "youAreOver15",
-    "youAreOver18"
+    "youAreOver18",
+    "polygon",
+    "ebsi"
   ],
 
   "fr": [
@@ -1607,7 +1611,9 @@
     "yearsOld",
     "youAreOver13",
     "youAreOver15",
-    "youAreOver18"
+    "youAreOver18",
+    "polygon",
+    "ebsi"
   ],
 
   "it": [
@@ -2379,6 +2385,8 @@
     "yearsOld",
     "youAreOver13",
     "youAreOver15",
-    "youAreOver18"
+    "youAreOver18",
+    "polygon",
+    "ebsi"
   ]
 }
