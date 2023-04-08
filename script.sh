@@ -26,6 +26,7 @@ function buildRunner {
 function podUpdate {
   echo "pod install"
   cd ios
+  rm Podfile.lock
   pod install
   pod update
   cd ..
