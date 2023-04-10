@@ -1,3 +1,4 @@
+export 'chat_support/chat_support.dart';
 export 'credential_qr/credential_qr.dart';
 export 'detail/credentials_detail.dart';
 export 'helper_functions/helper_functions.dart';
