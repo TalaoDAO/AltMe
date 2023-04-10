@@ -1,43 +1,53 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/drawer/recovery_credential/recovery_credential.dart';
+import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class RecoveryCredentialPage extends StatelessWidget {
-  const RecoveryCredentialPage({super.key});
+class RestoreCredentialMnemonicPage extends StatelessWidget {
+  const RestoreCredentialMnemonicPage({
+    super.key,
+    required this.isValidCallback,
+  });
 
-  static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (context) => const RecoveryCredentialPage(),
-        settings: const RouteSettings(name: '/recoveryCredentialPage'),
+  final VoidCallback isValidCallback;
+
+  static Route<dynamic> route({
+    required VoidCallback isValidCallback,
+  }) =>
+      MaterialPageRoute<void>(
+        builder: (context) =>
+            RestoreCredentialMnemonicPage(isValidCallback: isValidCallback),
+        settings: const RouteSettings(name: '/RestoreCredentialMnemonicPage'),
       );
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RecoveryCredentialCubit(
-        walletCubit: context.read<WalletCubit>(),
-        cryptoKeys: const CryptocurrencyKeys(),
-        secureStorageProvider: getSecureStorage,
-      ),
-      child: const RecoveryCredentialView(),
+      create: (context) => RestoreCredentialMnemonicCubit(),
+      child: RestoreCredentialMnemonicView(isValidCallback: isValidCallback),
     );
   }
 }
 
-class RecoveryCredentialView extends StatefulWidget {
-  const RecoveryCredentialView({super.key});
+class RestoreCredentialMnemonicView extends StatefulWidget {
+  const RestoreCredentialMnemonicView({
+    super.key,
+    required this.isValidCallback,
+  });
+
+  final VoidCallback isValidCallback;
 
   @override
-  _RecoveryCredentialViewState createState() => _RecoveryCredentialViewState();
+  _RestoreCredentialMnemonicViewState createState() =>
+      _RestoreCredentialMnemonicViewState();
 }
 
-class _RecoveryCredentialViewState extends State<RecoveryCredentialView> {
+class _RestoreCredentialMnemonicViewState
+    extends State<RestoreCredentialMnemonicView> {
   late TextEditingController mnemonicController;
 
   @override
@@ -46,7 +56,7 @@ class _RecoveryCredentialViewState extends State<RecoveryCredentialView> {
     mnemonicController = TextEditingController();
     mnemonicController.addListener(() {
       context
-          .read<RecoveryCredentialCubit>()
+          .read<RestoreCredentialMnemonicCubit>()
           .isMnemonicsValid(mnemonicController.text);
     });
   }
@@ -64,7 +74,8 @@ class _RecoveryCredentialViewState extends State<RecoveryCredentialView> {
         right: Sizes.spaceSmall,
         bottom: Sizes.spaceSmall,
       ),
-      body: BlocConsumer<RecoveryCredentialCubit, RecoveryCredentialState>(
+      body: BlocConsumer<RestoreCredentialMnemonicCubit,
+          RestoreCredentialMnemonicState>(
         listener: (context, state) {
           if (state.status == AppStatus.loading) {
             LoadingView().show(context: context);
@@ -115,7 +126,8 @@ class _RecoveryCredentialViewState extends State<RecoveryCredentialView> {
       ),
       navigation: Padding(
         padding: const EdgeInsets.all(Sizes.spaceSmall),
-        child: BlocBuilder<RecoveryCredentialCubit, RecoveryCredentialState>(
+        child: BlocBuilder<RestoreCredentialMnemonicCubit,
+            RestoreCredentialMnemonicState>(
           builder: (context, state) {
             return MyGradientButton(
               onPressed: !state.isMnemonicValid
@@ -130,12 +142,7 @@ class _RecoveryCredentialViewState extends State<RecoveryCredentialView> {
                         mnemonicController.text,
                       );
                       LoadingView().hide();
-                      await Navigator.of(context).push<void>(
-                        UploadRecoveryCredentialPage.route(
-                          recoveryCredentialCubit:
-                              context.read<RecoveryCredentialCubit>(),
-                        ),
-                      );
+                      widget.isValidCallback();
                     },
               text: l10n.next,
             );

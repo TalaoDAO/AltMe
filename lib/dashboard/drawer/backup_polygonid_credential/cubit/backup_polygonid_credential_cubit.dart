@@ -50,11 +50,13 @@ class BackupPolygonIdCredentialCubit
 
       //filter polygon id
 
-      final polygonCredential = List.of(walletCubit.state.credentials).where(
-        (CredentialModel element) => element.id.startsWith(
-          'https://self-hosted-platform.polygonid.me/v1/did:polygonid:polygon:',
-        ),
-      );
+      final polygonCredential = List.of(walletCubit.state.credentials)
+          .where(
+            (CredentialModel element) => element.id.startsWith(
+              'https://self-hosted-platform.polygonid.me/v1/did:polygonid:polygon:',
+            ),
+          )
+          .toList();
 
       if (polygonCredential.isEmpty) {
         throw ResponseMessage(
@@ -65,7 +67,7 @@ class BackupPolygonIdCredentialCubit
       final date = UiDate.formatDate(DateTime.now());
       final message = {
         'date': date,
-        'credentials': walletCubit.state.credentials,
+        'credentials': polygonCredential,
       };
 
       final encrypted =

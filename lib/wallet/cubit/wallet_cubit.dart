@@ -657,12 +657,26 @@ class WalletCubit extends Cubit<WalletState> {
     emit(state.copyWith(status: WalletStatus.init));
   }
 
-  Future<void> recoverWallet(List<CredentialModel> credentials) async {
-    await credentialsRepository.deleteAll();
+  Future<void> recoverWallet({
+    required bool isPolygonIdCredentials,
+    required List<CredentialModel> credentials,
+  }) async {
+    if (!isPolygonIdCredentials) {
+      await credentialsRepository.deleteAll();
+    }
     for (final credential in credentials) {
       await credentialsRepository.insert(credential);
     }
-    emit(state.copyWith(status: WalletStatus.init, credentials: credentials));
+
+    final updatedCredentials =
+        await credentialsRepository.findAll(/* filters */);
+
+    emit(
+      state.copyWith(
+        status: WalletStatus.init,
+        credentials: updatedCredentials,
+      ),
+    );
   }
 
   Future<List<CredentialModel>> credentialListFromCredentialSubjectType(
