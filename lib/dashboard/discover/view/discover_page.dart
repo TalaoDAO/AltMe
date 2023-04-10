@@ -2,9 +2,9 @@ import 'package:altme/app/shared/alert_message/alert_message.dart';
 import 'package:altme/app/shared/enum/status/app_status.dart';
 import 'package:altme/app/shared/loading/loading_view.dart';
 import 'package:altme/app/shared/widget/widget.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/home/tab_bar/tab_bar.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,7 +20,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
   @override
   void initState() {
-    context.read<CredentialListCubit>().initialise(context.read<WalletCubit>());
+    context
+        .read<CredentialListCubit>()
+        .initialise(context.read<CredentialsCubit>());
     super.initState();
   }
 
@@ -58,7 +60,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
             onRefresh: () async {
               await context
                   .read<CredentialListCubit>()
-                  .initialise(context.read<WalletCubit>());
+                  .initialise(context.read<CredentialsCubit>());
             },
             state: state.populate(
               gamingCredentials: credentialListCubit.dummyListFromCategory(

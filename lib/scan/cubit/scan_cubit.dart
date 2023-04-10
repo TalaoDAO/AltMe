@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 
-import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
@@ -32,14 +32,14 @@ part 'scan_state.dart';
 class ScanCubit extends Cubit<ScanState> {
   ScanCubit({
     required this.client,
-    required this.walletCubit,
+    required this.credentialsCubit,
     required this.didKitProvider,
     required this.secureStorageProvider,
     required this.ebsi,
   }) : super(const ScanState());
 
   final DioClient client;
-  final WalletCubit walletCubit;
+  final CredentialsCubit credentialsCubit;
   final DIDKitProvider didKitProvider;
   final SecureStorageProvider secureStorageProvider;
   final Ebsi ebsi;
@@ -215,7 +215,7 @@ class ScanCubit extends Cubit<ScanState> {
             List<Activity>.of(credentialModel.activities)
               ..add(Activity(acquisitionAt: DateTime.now()));
 
-        await walletCubit.insertCredential(
+        await credentialsCubit.insertCredential(
           credential: CredentialModel.copyWithData(
             oldCredentialModel: credentialModel,
             newData: jsonCredential as Map<String, dynamic>,
@@ -604,7 +604,7 @@ class ScanCubit extends Cubit<ScanState> {
       credentialModel.activities.add(activity);
 
       log.i('presentation activity added to the credential');
-      await walletCubit.updateCredential(
+      await credentialsCubit.updateCredential(
         credential: credentialModel,
         showMessage: false,
       );

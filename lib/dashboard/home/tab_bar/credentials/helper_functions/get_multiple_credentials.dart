@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/dashboard/home/tab_bar/tab_bar.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -23,7 +23,7 @@ import 'package:secure_storage/secure_storage.dart' as secure_storage;
 Future<void> getMutipleCredentials(
   String preAuthorizedCode,
   DioClient client,
-  WalletCubit walletCubit,
+  CredentialsCubit credentialsCubit,
   secure_storage.SecureStorageProvider secureStorageProvider,
 ) async {
 // TODO(all): getCredentialManifest()
@@ -42,7 +42,7 @@ Future<void> getMutipleCredentials(
     preAuthorizedCode,
     client,
     secureStorageProvider,
-    walletCubit,
+    credentialsCubit,
   );
 }
 
@@ -50,7 +50,7 @@ Future<void> multipleCredentialsTimer(
   String preAuthorizedCode,
   DioClient client,
   secure_storage.SecureStorageProvider secureStorageProvider,
-  WalletCubit walletCubit,
+  CredentialsCubit credentialsCubit,
 ) async {
   Timer.periodic(
       const Duration(
@@ -61,7 +61,7 @@ Future<void> multipleCredentialsTimer(
       client,
       Parameters.passbaseCredentialTypeList,
       secureStorageProvider,
-      walletCubit,
+      credentialsCubit,
     );
     if (result) {
       timer.cancel();
@@ -87,7 +87,7 @@ Future<bool> getCredentialsFromIssuer(
   DioClient client,
   List<CredentialSubjectType> credentialTypeList,
   secure_storage.SecureStorageProvider secureStorageProvider,
-  WalletCubit walletCubit,
+  CredentialsCubit credentialsCubit,
 ) async {
   const String tokenEndPoint = 'https://issuer.talao.co/token';
   const String credentialEndPoint = 'https://issuer.talao.co/credential';
@@ -137,7 +137,7 @@ Future<bool> getCredentialsFromIssuer(
           activities: [Activity(acquisitionAt: DateTime.now())],
         );
         // insert the credential in the wallet
-        await walletCubit.insertCredential(credential: credentialModel);
+        await credentialsCubit.insertCredential(credential: credentialModel);
       }
     }
     unawaited(unregisterMultipleCredentialsProcess(secureStorageProvider));

@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
@@ -15,18 +16,23 @@ class MockDidCubit extends MockCubit<DIDState> implements DIDCubit {}
 
 class MockHomeCubit extends MockCubit<HomeState> implements HomeCubit {}
 
+class MockCredentialsCubit extends MockCubit<CredentialsState>
+    implements CredentialsCubit {}
+
 class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {}
 
 void main() {
   late SecureStorageProvider mockSecureStorage;
   late DIDCubit didCubit;
   late HomeCubit homeCubit;
+  late CredentialsCubit credentialsCubit;
   late WalletCubit walletCubit;
 
   setUp(() {
     mockSecureStorage = MockSecureStorage();
     didCubit = MockDidCubit();
     homeCubit = MockHomeCubit();
+    credentialsCubit = MockCredentialsCubit();
     walletCubit = MockWalletCubit();
   });
 
@@ -34,6 +40,7 @@ void main() {
     test('initial state is correct', () {
       expect(
         SplashCubit(
+          credentialsCubit: credentialsCubit,
           secureStorageProvider: mockSecureStorage,
           didCubit: didCubit,
           homeCubit: homeCubit,
@@ -53,6 +60,7 @@ void main() {
               .thenAnswer((_) => Future.value(null));
 
           final SplashCubit splashCubit = SplashCubit(
+            credentialsCubit: credentialsCubit,
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
             homeCubit: homeCubit,
@@ -71,6 +79,7 @@ void main() {
               .thenAnswer((_) => Future.value(''));
 
           final SplashCubit splashCubit = SplashCubit(
+            credentialsCubit: credentialsCubit,
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
             homeCubit: homeCubit,
@@ -96,6 +105,7 @@ void main() {
               .thenAnswer((_) => Future.value(null));
 
           final SplashCubit splashCubit = SplashCubit(
+            credentialsCubit: credentialsCubit,
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
             homeCubit: homeCubit,
@@ -114,6 +124,7 @@ void main() {
               .thenAnswer((_) => Future.value(''));
 
           final SplashCubit splashCubit = SplashCubit(
+            credentialsCubit: credentialsCubit,
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
             homeCubit: homeCubit,
@@ -141,6 +152,7 @@ void main() {
               .thenAnswer((_) => Future.value(null));
 
           final SplashCubit splashCubit = SplashCubit(
+            credentialsCubit: credentialsCubit,
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
             homeCubit: homeCubit,
@@ -159,6 +171,7 @@ void main() {
               .thenAnswer((_) => Future.value(''));
 
           final SplashCubit splashCubit = SplashCubit(
+            credentialsCubit: credentialsCubit,
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
             homeCubit: homeCubit,
@@ -188,6 +201,7 @@ void main() {
               .thenAnswer((_) => Future.value(null));
 
           final SplashCubit splashCubit = SplashCubit(
+            credentialsCubit: credentialsCubit,
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
             homeCubit: homeCubit,
@@ -206,6 +220,7 @@ void main() {
               .thenAnswer((_) => Future.value(''));
 
           final SplashCubit splashCubit = SplashCubit(
+            credentialsCubit: credentialsCubit,
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
             homeCubit: homeCubit,
@@ -237,6 +252,7 @@ void main() {
               .thenAnswer((_) => Future.value(null));
 
           final SplashCubit splashCubit = SplashCubit(
+            credentialsCubit: credentialsCubit,
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
             homeCubit: homeCubit,
@@ -255,6 +271,7 @@ void main() {
               .thenAnswer((_) => Future.value(''));
 
           final SplashCubit splashCubit = SplashCubit(
+            credentialsCubit: credentialsCubit,
             secureStorageProvider: mockSecureStorage,
             didCubit: didCubit,
             homeCubit: homeCubit,
@@ -280,6 +297,7 @@ void main() {
                 .thenAnswer((_) => Future.value(null));
 
             final SplashCubit splashCubit = SplashCubit(
+              credentialsCubit: credentialsCubit,
               secureStorageProvider: mockSecureStorage,
               didCubit: didCubit,
               homeCubit: homeCubit,
@@ -298,6 +316,7 @@ void main() {
                 .thenAnswer((_) => Future.value(''));
 
             final SplashCubit splashCubit = SplashCubit(
+              credentialsCubit: credentialsCubit,
               secureStorageProvider: mockSecureStorage,
               didCubit: didCubit,
               homeCubit: homeCubit,
@@ -316,6 +335,7 @@ void main() {
                 .thenAnswer((_) => Future.value('{"key" : "value"}'));
 
             final SplashCubit splashCubit = SplashCubit(
+              credentialsCubit: credentialsCubit,
               secureStorageProvider: mockSecureStorage,
               didCubit: didCubit,
               homeCubit: homeCubit,

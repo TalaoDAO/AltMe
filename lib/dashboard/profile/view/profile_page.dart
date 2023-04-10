@@ -1,9 +1,9 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +19,7 @@ class ProfilePage extends StatelessWidget {
         BlocProvider(create: (_) => ProfileCheckboxCubit()),
         BlocProvider(
           create: (_) => SelfIssuedCredentialCubit(
-            walletCubit: context.read<WalletCubit>(),
+            credentialsCubit: context.read<CredentialsCubit>(),
             secureStorageProvider: getSecureStorage,
             didKitProvider: DIDKitProvider(),
             didCubit: context.read<DIDCubit>(),

@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -11,7 +11,7 @@ part 'credential_list_state.dart';
 class CredentialListCubit extends Cubit<CredentialListState> {
   CredentialListCubit() : super(CredentialListState());
 
-  Future<void> initialise(WalletCubit walletCubit) async {
+  Future<void> initialise(CredentialsCubit credentialsCubit) async {
     emit(state.fetching());
 
     await Future<void>.delayed(const Duration(milliseconds: 500));
@@ -34,7 +34,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
       //gamingCategories.remove(CredentialSubjectType.tezotopiaMembership);
     }
 
-    for (final credential in walletCubit.state.credentials) {
+    for (final credential in credentialsCubit.state.credentials) {
       final CredentialSubjectModel credentialSubject =
           credential.credentialPreview.credentialSubjectModel;
 
