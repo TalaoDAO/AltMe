@@ -8,7 +8,7 @@ import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:polygonid/polygonid.dart';
+
 import 'package:secure_storage/secure_storage.dart';
 
 class BackupPolygonIdCredentialPage extends StatelessWidget {
@@ -26,12 +26,11 @@ class BackupPolygonIdCredentialPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BackupPolygonIdCredentialCubit(
+      create: (context) => BackupCredentialCubit(
         secureStorageProvider: getSecureStorage,
         cryptoKeys: const CryptocurrencyKeys(),
         walletCubit: context.read<WalletCubit>(),
         fileSaver: FileSaver.instance,
-        polygonId: PolygonId(),
       ),
       child: const BackupPolygonIdCredentialView(),
     );
@@ -56,14 +55,13 @@ class BackupPolygonIdCredentialView extends StatelessWidget {
       ),
       titleLeading: BackLeadingButton(
         onPressed: () {
-          if (context.read<BackupPolygonIdCredentialCubit>().state.status !=
+          if (context.read<BackupCredentialCubit>().state.status !=
               AppStatus.loading) {
             Navigator.of(context).pop();
           }
         },
       ),
-      body: BlocConsumer<BackupPolygonIdCredentialCubit,
-          BackupPolygonIdCredentialState>(
+      body: BlocConsumer<BackupCredentialCubit, BackupCredentialState>(
         listener: (context, state) async {
           if (state.status == AppStatus.loading) {
             LoadingView().show(context: context);
@@ -119,9 +117,9 @@ class BackupPolygonIdCredentialView extends StatelessWidget {
         padding: const EdgeInsets.all(Sizes.spaceSmall),
         child: MyGradientButton(
           onPressed: () async {
-            await context
-                .read<BackupPolygonIdCredentialCubit>()
-                .downloaEncryptedFile();
+            await context.read<BackupCredentialCubit>().encryptAndDownloadFile(
+                  isPolygonIdCredentials: true,
+                );
           },
           text: l10n.backupCredentialButtonTitle,
         ),

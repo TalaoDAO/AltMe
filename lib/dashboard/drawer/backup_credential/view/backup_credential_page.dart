@@ -116,9 +116,9 @@ class BackupCredentialView extends StatelessWidget {
         padding: const EdgeInsets.all(Sizes.spaceSmall),
         child: MyGradientButton(
           onPressed: () async {
-            await context
-                .read<BackupCredentialCubit>()
-                .encryptAndDownloadFile();
+            await context.read<BackupCredentialCubit>().encryptAndDownloadFile(
+                  isPolygonIdCredentials: false,
+                );
           },
           text: l10n.backupCredentialButtonTitle,
         ),
