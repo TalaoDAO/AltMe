@@ -1,6 +1,8 @@
 export 'advance_settings/advance_settings.dart';
 export 'altme_support_chat/altme_support_chat.dart';
 export 'backup_credential/backup_credential.dart';
+export 'backup_mnemonic/backup_mnemonic.dart';
+export 'backup_polygonid_credential/backup_polygonid_credential.dart';
 export 'chat_room/chat_room.dart';
 export 'contact_us/contact_us.dart';
 export 'drawer/drawer.dart';

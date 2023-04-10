@@ -19,7 +19,6 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -111,7 +110,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           ),
         ),
       );
-    } catch (e,s) {
+    } catch (e, s) {
       log.e('Error -$e, stack: $s');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));

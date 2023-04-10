@@ -60,8 +60,14 @@ class SSIView extends StatelessWidget {
                       PinCodePage.route(
                         restrictToBack: false,
                         isValidCallback: () {
-                          Navigator.of(context)
-                              .push<void>(BackupCredentialPage.route());
+                          Navigator.of(context).push<void>(
+                            BackupMnemonicPage.route(
+                              isValidCallback: () {
+                                Navigator.of(context)
+                                    .push<void>(BackupCredentialPage.route());
+                              },
+                            ),
+                          );
                         },
                       ),
                     );
@@ -93,6 +99,27 @@ class SSIView extends StatelessWidget {
                         ),
                       );
                     }
+                  },
+                ),
+                DrawerItem(
+                  title: l10n.backupPolygonIdCredentials,
+                  onTap: () async {
+                    await Navigator.of(context).push<void>(
+                      PinCodePage.route(
+                        restrictToBack: false,
+                        isValidCallback: () {
+                          Navigator.of(context).push<void>(
+                            BackupMnemonicPage.route(
+                              isValidCallback: () {
+                                Navigator.of(context).push<void>(
+                                  BackupPolygonIdCredentialPage.route(),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    );
                   },
                 ),
                 DrawerItem(

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
@@ -9,25 +10,29 @@ import 'package:equatable/equatable.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-part 'backup_credential_cubit.g.dart';
-part 'backup_credential_state.dart';
+part 'backup_polygonid_credential_cubit.g.dart';
+part 'backup_polygonid_credential_state.dart';
 
-class BackupCredentialCubit extends Cubit<BackupCredentialState> {
-  BackupCredentialCubit({
+class BackupPolygonIdCredentialCubit
+    extends Cubit<BackupPolygonIdCredentialState> {
+  BackupPolygonIdCredentialCubit({
     required this.secureStorageProvider,
     required this.cryptoKeys,
     required this.walletCubit,
     required this.fileSaver,
-  }) : super(const BackupCredentialState());
+    required this.polygonId,
+  }) : super(const BackupPolygonIdCredentialState());
 
   final SecureStorageProvider secureStorageProvider;
   final CryptocurrencyKeys cryptoKeys;
   final WalletCubit walletCubit;
   final FileSaver fileSaver;
+  final PolygonId polygonId;
 
-  Future<void> encryptAndDownloadFile() async {
+  Future<void> downloaEncryptedFile() async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     final mnemonicList = await getssiMnemonicsInList(secureStorageProvider);
@@ -41,7 +46,21 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       }
 
       final dateTime = getDateTimeWithoutSpace();
-      final fileName = 'altme-credential-$dateTime';
+      final fileName = 'altme-polygonid-credential-$dateTime';
+
+      //filter polygon id
+
+      final polygonCredential = List.of(walletCubit.state.credentials).where(
+        (CredentialModel element) => element.id.startsWith(
+          'https://self-hosted-platform.polygonid.me/v1/did:polygonid:polygon:',
+        ),
+      );
+
+      if (polygonCredential.isEmpty) {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_backupPolygonIdCredentialEmptyError,
+        );
+      }
 
       final date = UiDate.formatDate(DateTime.now());
       final message = {
