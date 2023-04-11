@@ -27,16 +27,19 @@ class DiscoverPageView extends StatefulWidget {
 }
 
 class _DiscoverPageViewState extends State<DiscoverPageView>
-    with
-        SingleTickerProviderStateMixin {
-  late final _tabController = TabController(vsync: this, length: 3);
-
-  Future<void> onRefresh() async {}
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
 
   @override
   void initState() {
+    _tabController = TabController(vsync: this, length: 3);
+    _tabController.addListener(_onTabChanged);
     context.read<CredentialListCubit>().initialise(context.read<WalletCubit>());
     super.initState();
+  }
+
+  void _onTabChanged() {
+    context.read<DiscoverTabbarCubit>().setIndex(_tabController.index);
   }
 
   @override
