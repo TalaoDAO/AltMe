@@ -23,23 +23,23 @@ class CredentialsDetailsPage extends StatelessWidget {
     super.key,
     required this.credentialModel,
     required this.readOnly,
-    required this.loyaltyCardSupportChatCubit,
+    required this.cardChatSupportCubit,
   });
 
   final CredentialModel credentialModel;
   final bool readOnly;
-  final LoyaltyCardSupportChatCubit? loyaltyCardSupportChatCubit;
+  final CardChatSupportCubit? cardChatSupportCubit;
 
   static Route<dynamic> route({
     required CredentialModel credentialModel,
-    LoyaltyCardSupportChatCubit? loyaltyCardSupportChatCubit,
+    CardChatSupportCubit? cardChatSupportCubit,
     bool readOnly = false,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => CredentialsDetailsPage(
         credentialModel: credentialModel,
         readOnly: readOnly,
-        loyaltyCardSupportChatCubit: loyaltyCardSupportChatCubit,
+        cardChatSupportCubit: cardChatSupportCubit,
       ),
       settings: const RouteSettings(name: '/credentialsDetailsPages'),
     );
@@ -59,15 +59,15 @@ class CredentialsDetailsPage extends StatelessWidget {
             polygonIdCubit: context.read<PolygonIdCubit>(),
           ),
         ),
-        if (loyaltyCardSupportChatCubit != null)
-          BlocProvider<LoyaltyCardSupportChatCubit>.value(
-            value: loyaltyCardSupportChatCubit!,
+        if (cardChatSupportCubit != null)
+          BlocProvider<CardChatSupportCubit>.value(
+            value: cardChatSupportCubit!,
           ),
       ],
       child: CredentialsDetailsView(
         credentialModel: credentialModel,
         readOnly: readOnly,
-        loyaltyCardSupportChatCubit: loyaltyCardSupportChatCubit,
+        cardChatSupportCubit: cardChatSupportCubit,
       ),
     );
   }
@@ -78,12 +78,12 @@ class CredentialsDetailsView extends StatefulWidget {
     super.key,
     required this.credentialModel,
     required this.readOnly,
-    required this.loyaltyCardSupportChatCubit,
+    required this.cardChatSupportCubit,
   });
 
   final CredentialModel credentialModel;
   final bool readOnly;
-  final LoyaltyCardSupportChatCubit? loyaltyCardSupportChatCubit;
+  final CardChatSupportCubit? cardChatSupportCubit;
 
   @override
   _CredentialsDetailsViewState createState() => _CredentialsDetailsViewState();
@@ -219,11 +219,11 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                           ),
                                     ),
                                   ),
-                                if (widget.loyaltyCardSupportChatCubit != null)
+                                if (widget.cardChatSupportCubit != null)
                                   Expanded(
                                     child: StreamBuilder(
                                       stream: context
-                                          .read<LoyaltyCardSupportChatCubit>()
+                                          .read<CardChatSupportCubit>()
                                           .unreadMessageCountStream,
                                       builder: (context, snapShot) {
                                         return CredentialDetailTabbar(
@@ -238,8 +238,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                                     l10n.cardChatWelcomeMessage,
                                                 appBarTitle:
                                                     '${l10n.chatWith} ${widget.credentialModel.credentialPreview.credentialSubjectModel.offeredBy?.name}',
-                                                loyaltyCardSupportChatCubit: widget
-                                                    .loyaltyCardSupportChatCubit!,
+                                                cardChatSupportCubit: widget
+                                                    .cardChatSupportCubit!,
                                               ),
                                             );
                                           },

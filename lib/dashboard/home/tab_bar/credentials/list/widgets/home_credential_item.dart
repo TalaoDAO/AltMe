@@ -38,20 +38,20 @@ class RealCredentialItem extends StatelessWidget {
       final cardName = credentialModel
           .credentialPreview.credentialSubjectModel.credentialSubjectType.name;
 
-      final loyaltyCardSupportChatCubit = LoyaltyCardSupportChatCubit(
+      final cardChatSupportCubit = CardChatSupportCubit(
         secureStorageProvider: getSecureStorage,
         matrixChat: MatrixChatImpl(),
         invites: [
           credentialModel.data['credentialSubject']?['chatSupport'] as String
         ],
-        storageKey: '$cardName-${SecureStorageKeys.loyaltyCardsupportRoomId}',
+        storageKey: '$cardName-${SecureStorageKeys.cardChatSupportRoomId}',
         roomNamePrefix: cardName,
       );
 
       return BlocProvider(
-        create: (_) => loyaltyCardSupportChatCubit,
+        create: (_) => cardChatSupportCubit,
         child: StreamBuilder(
-          stream: loyaltyCardSupportChatCubit.unreadMessageCountStream,
+          stream: cardChatSupportCubit.unreadMessageCountStream,
           builder: (_, snapShot) {
             return CredentialsListPageItem(
                 credentialModel: credentialModel,
@@ -60,7 +60,7 @@ class RealCredentialItem extends StatelessWidget {
                   Navigator.of(context).push<void>(
                     CredentialsDetailsPage.route(
                       credentialModel: credentialModel,
-                      loyaltyCardSupportChatCubit: loyaltyCardSupportChatCubit,
+                      cardChatSupportCubit: cardChatSupportCubit,
                     ),
                   );
                 });

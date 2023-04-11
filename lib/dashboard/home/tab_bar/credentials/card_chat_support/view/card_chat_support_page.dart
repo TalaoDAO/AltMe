@@ -8,23 +8,23 @@ class LoyaltyCardSupportChatPage extends StatelessWidget {
     super.key,
     this.appBarTitle,
     this.chatWelcomeMessage,
-    required this.loyaltyCardSupportChatCubit,
+    required this.cardChatSupportCubit,
   });
 
   final String? appBarTitle;
   final String? chatWelcomeMessage;
-  final LoyaltyCardSupportChatCubit loyaltyCardSupportChatCubit;
+  final CardChatSupportCubit cardChatSupportCubit;
 
   static Route<void> route({
     String? appBarTitle,
     String? chatWelcomeMessage,
-    required LoyaltyCardSupportChatCubit loyaltyCardSupportChatCubit,
+    required CardChatSupportCubit cardChatSupportCubit,
   }) {
     return MaterialPageRoute<void>(
       builder: (_) => LoyaltyCardSupportChatPage(
         appBarTitle: appBarTitle,
         chatWelcomeMessage: chatWelcomeMessage,
-        loyaltyCardSupportChatCubit: loyaltyCardSupportChatCubit,
+        cardChatSupportCubit: cardChatSupportCubit,
       ),
       settings: const RouteSettings(name: '/loyaltyCardSupportChatPage'),
     );
@@ -33,8 +33,8 @@ class LoyaltyCardSupportChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: loyaltyCardSupportChatCubit,
-      child: ChatRoomView<LoyaltyCardSupportChatCubit>(
+      value: cardChatSupportCubit,
+      child: ChatRoomView<CardChatSupportCubit>(
         appBarTitle: appBarTitle,
         chatWelcomeMessage: chatWelcomeMessage,
       ),
