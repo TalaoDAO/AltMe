@@ -150,7 +150,7 @@ class _TabControllerViewState extends State<TabControllerView>
                           controller: _tabController,
                           physics: const NeverScrollableScrollPhysics(),
                           children: const [
-                            CredentialsListPage(),
+                            HomeCredentialsListPage(),
                             NftPage(),
                             TokensPage(),
                           ],

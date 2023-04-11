@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
@@ -16,7 +15,6 @@ class TokensCubit extends Cubit<TokensState> {
   TokensCubit({
     required this.client,
     required this.walletCubit,
-    required this.credentialsCubit,
     required this.networkCubit,
     required this.allTokensCubit,
     required this.mnemonicNeedVerificationCubit,
@@ -26,7 +24,6 @@ class TokensCubit extends Cubit<TokensState> {
   final SecureStorageProvider secureStorageProvider;
   final DioClient client;
   final WalletCubit walletCubit;
-  final CredentialsCubit credentialsCubit;
   final ManageNetworkCubit networkCubit;
   final AllTokensCubit allTokensCubit;
   final MnemonicNeedVerificationCubit mnemonicNeedVerificationCubit;
@@ -72,9 +69,6 @@ class TokensCubit extends Cubit<TokensState> {
     if (data.length < state.offset) return;
     try {
       if (walletCubit.state.currentAccount == null) {
-        final String? ssiKey =
-            await secureStorageProvider.get(SecureStorageKeys.ssiKey);
-        await credentialsCubit.initialize(ssiKey: ssiKey ?? '');
         if (walletCubit.state.cryptoAccount.data.isEmpty) {
           emit(state.populate(data: {}));
           return;

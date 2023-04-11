@@ -74,7 +74,7 @@ Future<bool> isWalletCreated({
   );
 
   log.i('wallet initialisation');
-  await credentialsCubit.initialize(ssiKey: ssiKey);
+  await credentialsCubit.loadAllCredentials();
 
   log.i('blockchain initialisation');
   await blockchainInitialize(

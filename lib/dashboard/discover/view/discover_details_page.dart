@@ -6,23 +6,23 @@ import 'package:flutter/material.dart';
 class DiscoverDetailsPage extends StatelessWidget {
   const DiscoverDetailsPage({
     super.key,
-    required this.homeCredential,
+    required this.dummyCredential,
     required this.onCallBack,
     required this.buttonText,
   });
 
-  final HomeCredential homeCredential;
+  final DiscoverDummyCredential dummyCredential;
   final VoidCallback onCallBack;
   final String buttonText;
 
   static Route<dynamic> route({
-    required HomeCredential homeCredential,
+    required DiscoverDummyCredential dummyCredential,
     required VoidCallback onCallBack,
     required String buttonText,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => DiscoverDetailsPage(
-        homeCredential: homeCredential,
+        dummyCredential: dummyCredential,
         onCallBack: onCallBack,
         buttonText: buttonText,
       ),
@@ -33,7 +33,7 @@ class DiscoverDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DiscoverDetailsView(
-      homeCredential: homeCredential,
+      dummyCredential: dummyCredential,
       onCallBack: onCallBack,
       buttonText: buttonText,
     );
@@ -43,12 +43,12 @@ class DiscoverDetailsPage extends StatelessWidget {
 class DiscoverDetailsView extends StatelessWidget {
   const DiscoverDetailsView({
     super.key,
-    required this.homeCredential,
+    required this.dummyCredential,
     required this.onCallBack,
     required this.buttonText,
   });
 
-  final HomeCredential homeCredential;
+  final DiscoverDummyCredential dummyCredential;
   final VoidCallback onCallBack;
   final String buttonText;
 
@@ -73,10 +73,10 @@ class DiscoverDetailsView extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       child: AspectRatio(
                         aspectRatio: Sizes.credentialAspectRatio,
-                        child: CredentialImage(image: homeCredential.image!),
+                        child: CredentialImage(image: dummyCredential.image!),
                       ),
                     ),
-                    DetailFields(homeCredential: homeCredential),
+                    DetailFields(dummyCredential: dummyCredential),
                   ],
                 ),
               ),
@@ -89,7 +89,7 @@ class DiscoverDetailsView extends StatelessWidget {
           Sizes.spaceSmall,
         ),
         child: MyGradientButton(
-          onPressed: homeCredential.credentialSubjectType.isDisabled
+          onPressed: dummyCredential.credentialSubjectType.isDisabled
               ? null
               : onCallBack,
           text: buttonText,
@@ -102,15 +102,15 @@ class DiscoverDetailsView extends StatelessWidget {
 class DetailFields extends StatelessWidget {
   const DetailFields({
     super.key,
-    required this.homeCredential,
+    required this.dummyCredential,
   });
 
-  final HomeCredential homeCredential;
+  final DiscoverDummyCredential dummyCredential;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    if (homeCredential.credentialSubjectType.isDisabled) {
+    if (dummyCredential.credentialSubjectType.isDisabled) {
       return DiscoverDynamicDetial(
         title: l10n.credentialManifestDescription,
         value: l10n.soonCardDescription,
@@ -119,42 +119,42 @@ class DetailFields extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (homeCredential.websiteLink != null)
+        if (dummyCredential.websiteLink != null)
           DiscoverDynamicDetial(
             title: l10n.website,
-            value: homeCredential.websiteLink!,
+            value: dummyCredential.websiteLink!,
             format: AltMeStrings.uri,
           ),
-        if (homeCredential.longDescription != null)
+        if (dummyCredential.longDescription != null)
           DiscoverDynamicDetial(
-            title: homeCredential.credentialSubjectType.title,
-            value: homeCredential.whyGetThisCard!.getMessage(
+            title: dummyCredential.credentialSubjectType.title,
+            value: dummyCredential.whyGetThisCard!.getMessage(
               context,
-              homeCredential.longDescription!,
+              dummyCredential.longDescription!,
             ),
           ),
-        if (homeCredential.whyGetThisCard != null)
+        if (dummyCredential.whyGetThisCard != null)
           DiscoverDynamicDetial(
             title: l10n.whyGetThisCard,
-            value: homeCredential.whyGetThisCard!.getMessage(
+            value: dummyCredential.whyGetThisCard!.getMessage(
               context,
-              homeCredential.whyGetThisCard!,
+              dummyCredential.whyGetThisCard!,
             ),
           ),
-        if (homeCredential.expirationDateDetails != null)
+        if (dummyCredential.expirationDateDetails != null)
           DiscoverDynamicDetial(
             title: l10n.expirationDate,
-            value: homeCredential.expirationDateDetails!.getMessage(
+            value: dummyCredential.expirationDateDetails!.getMessage(
               context,
-              homeCredential.expirationDateDetails!,
+              dummyCredential.expirationDateDetails!,
             ),
           ),
-        if (homeCredential.howToGetIt != null)
+        if (dummyCredential.howToGetIt != null)
           DiscoverDynamicDetial(
             title: l10n.howToGetIt,
-            value: homeCredential.howToGetIt!.getMessage(
+            value: dummyCredential.howToGetIt!.getMessage(
               context,
-              homeCredential.howToGetIt!,
+              dummyCredential.howToGetIt!,
             ),
           ),
       ],

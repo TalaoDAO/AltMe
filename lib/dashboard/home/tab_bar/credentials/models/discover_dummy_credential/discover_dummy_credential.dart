@@ -1,15 +1,12 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'home_credential.g.dart';
+part 'discover_dummy_credential.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class HomeCredential extends Equatable {
-  const HomeCredential({
-    this.credentialModel,
-    required this.isDummy,
+class DiscoverDummyCredential extends Equatable {
+  const DiscoverDummyCredential({
     required this.credentialSubjectType,
     this.link,
     this.image,
@@ -20,19 +17,12 @@ class HomeCredential extends Equatable {
     this.longDescription,
   });
 
-  factory HomeCredential.fromJson(Map<String, dynamic> json) =>
-      _$HomeCredentialFromJson(json);
+  factory DiscoverDummyCredential.fromJson(Map<String, dynamic> json) =>
+      _$DiscoverDummyCredentialFromJson(json);
 
-  factory HomeCredential.isNotDummy(CredentialModel credentialModel) {
-    return HomeCredential(
-      credentialModel: credentialModel,
-      isDummy: false,
-      credentialSubjectType: credentialModel
-          .credentialPreview.credentialSubjectModel.credentialSubjectType,
-    );
-  }
-
-  factory HomeCredential.isDummy(CredentialSubjectType credentialSubjectType) {
+  factory DiscoverDummyCredential.dummy(
+    CredentialSubjectType credentialSubjectType,
+  ) {
     String? image;
     String? link;
     String? websiteLink;
@@ -308,8 +298,7 @@ class HomeCredential extends Equatable {
         break;
     }
 
-    return HomeCredential(
-      isDummy: true,
+    return DiscoverDummyCredential(
       image: image,
       link: link,
       credentialSubjectType: credentialSubjectType,
@@ -325,10 +314,8 @@ class HomeCredential extends Equatable {
     );
   }
 
-  final CredentialModel? credentialModel;
   final String? link;
   final String? image;
-  final bool isDummy;
   final CredentialSubjectType credentialSubjectType;
   final String? websiteLink;
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -340,14 +327,12 @@ class HomeCredential extends Equatable {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageHandler? longDescription;
 
-  Map<String, dynamic> toJson() => _$HomeCredentialToJson(this);
+  Map<String, dynamic> toJson() => _$DiscoverDummyCredentialToJson(this);
 
   @override
   List<Object?> get props => [
-        credentialModel,
         link,
         image,
-        isDummy,
         credentialSubjectType,
         websiteLink,
         whyGetThisCard,

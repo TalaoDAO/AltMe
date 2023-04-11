@@ -1,37 +1,33 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/list/widgets/credential_list_data.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CredentialsListPage extends StatefulWidget {
-  const CredentialsListPage({
+class HomeCredentialsListPage extends StatefulWidget {
+  const HomeCredentialsListPage({
     super.key,
   });
 
   @override
-  State<CredentialsListPage> createState() => _CredentialsListPageState();
+  State<HomeCredentialsListPage> createState() =>
+      _HomeCredentialsListPageState();
 }
 
-class _CredentialsListPageState extends State<CredentialsListPage>
-    with AutomaticKeepAliveClientMixin<CredentialsListPage> {
+class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
+    with AutomaticKeepAliveClientMixin<HomeCredentialsListPage> {
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
-    context.read<CredentialListCubit>().initialise(
-          context.read<CredentialsCubit>(),
-        );
+    context.read<CredentialsCubit>().loadAllCredentials();
     super.initState();
   }
 
   Future<void> onRefresh() async {
-    await context.read<CredentialListCubit>().initialise(
-          context.read<CredentialsCubit>(),
-        );
+    await context.read<CredentialsCubit>().loadAllCredentials();
   }
 
   @override
@@ -41,23 +37,23 @@ class _CredentialsListPageState extends State<CredentialsListPage>
       scrollView: false,
       padding: EdgeInsets.zero,
       backgroundColor: Theme.of(context).colorScheme.transparent,
-      body: BlocConsumer<CredentialListCubit, CredentialListState>(
+      body: BlocConsumer<CredentialsCubit, CredentialsState>(
         listener: (context, state) {
-          if (state.status == AppStatus.loading) {
+          if (state.status == CredentialsStatus.loading) {
             LoadingView().show(context: context);
           } else {
             LoadingView().hide();
           }
 
           if (state.message != null &&
-              state.status != AppStatus.errorWhileFetching) {
+              state.status != CredentialsStatus.error) {
             AlertMessage.showStateMessage(
               context: context,
               stateMessage: state.message!,
             );
           }
 
-          if (state.status == AppStatus.success) {
+          if (state.status == CredentialsStatus.populate) {
             //some action
           }
         },
@@ -72,7 +68,11 @@ class _CredentialsListPageState extends State<CredentialsListPage>
           if (state.status == AppStatus.fetching) {
             return const CredentialListShimmer();
           } else if (state.status == AppStatus.populate) {
-            return CredentialListData(state: state, onRefresh: onRefresh);
+            //return CredentialListData(state: state, onRefresh: onRefresh);
+            return HomeCredentialCategoryList(
+              credentials: state.credentials,
+              onRefresh: onRefresh,
+            );
           } else if (state.status == AppStatus.errorWhileFetching) {
             return ErrorView(message: message, onTap: onRefresh);
           } else {

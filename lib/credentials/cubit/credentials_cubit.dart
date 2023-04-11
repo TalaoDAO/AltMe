@@ -46,14 +46,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   final log = getLogger('CredentialsCubit');
 
-  Future<void> initialize({required String ssiKey}) async {
-    if (ssiKey.isNotEmpty) {
-      return loadAllCredentials(ssiKey: ssiKey);
-    }
-  }
-
-  Future<void> loadAllCredentials({required String ssiKey}) async {
+  Future<void> loadAllCredentials() async {
     final log = getLogger('loadAllCredentials');
+    final String? ssiKey =
+        await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+    if (ssiKey == null || ssiKey.isEmpty) {
+      log.i('can not load all credentials beacuse there is no ssi key');
+      return;
+    }
+    emit(state.copyWith(status: CredentialsStatus.loading));
     final savedCredentials = await credentialsRepository.findAll(/* filters */);
     emit(
       state.copyWith(
