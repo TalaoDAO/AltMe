@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class _BaseItem extends StatefulWidget {
   const _BaseItem({
     required this.child,
-    this.onTap,
+    required this.onTap,
     this.enabled = true,
   });
 
@@ -34,13 +34,13 @@ class CredentialsListPageItem extends StatelessWidget {
   const CredentialsListPageItem({
     super.key,
     required this.credentialModel,
-    this.onTap,
+    required this.onTap,
     this.selected,
     this.badgeCount = 0,
   });
 
   final CredentialModel credentialModel;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
   final bool? selected;
   final int badgeCount;
 
@@ -56,12 +56,7 @@ class CredentialsListPageItem extends StatelessWidget {
       position: badges.BadgePosition.topEnd(end: 10, top: 30),
       child: _BaseItem(
         enabled: true,
-        onTap: onTap ??
-            () {
-              Navigator.of(context).push<void>(
-                CredentialsDetailsPage.route(credentialModel: credentialModel),
-              );
-            },
+        onTap: onTap,
         child: selected == null
             ? CredentialDisplay(
                 credentialModel: credentialModel,

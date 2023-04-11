@@ -35,17 +35,17 @@ class RealCredentialItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (credentialModel.data['credentialSubject']?['chatSupport'] != null) {
-      final loyltyCardType = credentialModel
+      final cardName = credentialModel
           .credentialPreview.credentialSubjectModel.credentialSubjectType.name;
+
       final loyaltyCardSupportChatCubit = LoyaltyCardSupportChatCubit(
         secureStorageProvider: getSecureStorage,
         matrixChat: MatrixChatImpl(),
         invites: [
           credentialModel.data['credentialSubject']?['chatSupport'] as String
         ],
-        storageKey:
-            '$loyltyCardType-${SecureStorageKeys.loyaltyCardsupportRoomId}',
-        roomNamePrefix: loyltyCardType,
+        storageKey: '$cardName-${SecureStorageKeys.loyaltyCardsupportRoomId}',
+        roomNamePrefix: cardName,
       );
 
       return BlocProvider(
@@ -53,34 +53,28 @@ class RealCredentialItem extends StatelessWidget {
         child: StreamBuilder(
           stream: loyaltyCardSupportChatCubit.unreadMessageCountStream,
           builder: (_, snapShot) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(context).push<void>(
-                  CredentialsDetailsPage.route(
-                    credentialModel: credentialModel,
-                  ),
-                );
-              },
-              child: CredentialsListPageItem(
+            return CredentialsListPageItem(
                 credentialModel: credentialModel,
                 badgeCount: snapShot.data ?? 0,
-              ),
-            );
+                onTap: () {
+                  Navigator.of(context).push<void>(
+                    CredentialsDetailsPage.route(
+                      credentialModel: credentialModel,
+                      loyaltyCardSupportChatCubit: loyaltyCardSupportChatCubit,
+                    ),
+                  );
+                });
           },
         ),
       );
     } else {
-      return GestureDetector(
+      return CredentialsListPageItem(
+        credentialModel: credentialModel,
         onTap: () {
           Navigator.of(context).push<void>(
-            CredentialsDetailsPage.route(
-              credentialModel: credentialModel,
-            ),
+            CredentialsDetailsPage.route(credentialModel: credentialModel),
           );
         },
-        child: CredentialsListPageItem(
-          credentialModel: credentialModel,
-        ),
       );
     }
   }

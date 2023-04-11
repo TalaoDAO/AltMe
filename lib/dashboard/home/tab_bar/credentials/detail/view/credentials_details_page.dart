@@ -23,19 +23,23 @@ class CredentialsDetailsPage extends StatelessWidget {
     super.key,
     required this.credentialModel,
     required this.readOnly,
+    required this.loyaltyCardSupportChatCubit,
   });
 
   final CredentialModel credentialModel;
   final bool readOnly;
+  final LoyaltyCardSupportChatCubit? loyaltyCardSupportChatCubit;
 
   static Route<dynamic> route({
     required CredentialModel credentialModel,
+    LoyaltyCardSupportChatCubit? loyaltyCardSupportChatCubit,
     bool readOnly = false,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => CredentialsDetailsPage(
         credentialModel: credentialModel,
         readOnly: readOnly,
+        loyaltyCardSupportChatCubit: loyaltyCardSupportChatCubit,
       ),
       settings: const RouteSettings(name: '/credentialsDetailsPages'),
     );
@@ -43,18 +47,27 @@ class CredentialsDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CredentialDetailsCubit>(
-      create: (context) => CredentialDetailsCubit(
-        didKitProvider: DIDKitProvider(),
-        secureStorageProvider: getSecureStorage,
-        client: DioClient('', Dio()),
-        jwtDecode: JWTDecode(),
-        polygonId: PolygonId(),
-        polygonIdCubit: context.read<PolygonIdCubit>(),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CredentialDetailsCubit>(
+          create: (context) => CredentialDetailsCubit(
+            didKitProvider: DIDKitProvider(),
+            secureStorageProvider: getSecureStorage,
+            client: DioClient('', Dio()),
+            jwtDecode: JWTDecode(),
+            polygonId: PolygonId(),
+            polygonIdCubit: context.read<PolygonIdCubit>(),
+          ),
+        ),
+        if (loyaltyCardSupportChatCubit != null)
+          BlocProvider<LoyaltyCardSupportChatCubit>.value(
+            value: loyaltyCardSupportChatCubit!,
+          ),
+      ],
       child: CredentialsDetailsView(
         credentialModel: credentialModel,
         readOnly: readOnly,
+        loyaltyCardSupportChatCubit: loyaltyCardSupportChatCubit,
       ),
     );
   }
@@ -65,10 +78,12 @@ class CredentialsDetailsView extends StatefulWidget {
     super.key,
     required this.credentialModel,
     required this.readOnly,
+    required this.loyaltyCardSupportChatCubit,
   });
 
   final CredentialModel credentialModel;
   final bool readOnly;
+  final LoyaltyCardSupportChatCubit? loyaltyCardSupportChatCubit;
 
   @override
   _CredentialsDetailsViewState createState() => _CredentialsDetailsViewState();
@@ -204,41 +219,32 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                           ),
                                     ),
                                   ),
-                                if (widget.credentialModel
-                                            .data['credentialSubject']
-                                        ?['chatSupport'] !=
-                                    null)
+                                if (widget.loyaltyCardSupportChatCubit != null)
                                   Expanded(
-                                    child: BlocProvider.value(
-                                      value: context
-                                          .read<LoyaltyCardSupportChatCubit>(),
-                                      child: StreamBuilder(
-                                        stream: context
-                                            .read<LoyaltyCardSupportChatCubit>()
-                                            .unreadMessageCountStream,
-                                        builder: (_, snapShot) {
-                                          return CredentialDetailTabbar(
-                                            isSelected: false,
-                                            badgeCount: snapShot.data ?? 0,
-                                            title: l10n.chat,
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                LoyaltyCardSupportChatPage
-                                                    .route(
-                                                  loyaltyCardSupportChatCubit:
-                                                      context.read<
-                                                          LoyaltyCardSupportChatCubit>(),
-                                                  chatWelcomeMessage: l10n
-                                                      .cardChatWelcomeMessage,
-                                                  appBarTitle:
-                                                      '${l10n.chatWith} ${widget.credentialModel.credentialPreview.credentialSubjectModel.offeredBy?.name}',
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
+                                    child: StreamBuilder(
+                                      stream: context
+                                          .read<LoyaltyCardSupportChatCubit>()
+                                          .unreadMessageCountStream,
+                                      builder: (context, snapShot) {
+                                        return CredentialDetailTabbar(
+                                          isSelected: false,
+                                          badgeCount: snapShot.data ?? 0,
+                                          title: l10n.chat,
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              LoyaltyCardSupportChatPage.route(
+                                                chatWelcomeMessage:
+                                                    l10n.cardChatWelcomeMessage,
+                                                appBarTitle:
+                                                    '${l10n.chatWith} ${widget.credentialModel.credentialPreview.credentialSubjectModel.offeredBy?.name}',
+                                                loyaltyCardSupportChatCubit: widget
+                                                    .loyaltyCardSupportChatCubit!,
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
                                     ),
                                   ),
                               ],
