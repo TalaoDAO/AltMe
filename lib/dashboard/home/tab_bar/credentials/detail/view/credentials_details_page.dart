@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -47,6 +48,7 @@ class CredentialsDetailsPage extends StatelessWidget {
         secureStorageProvider: getSecureStorage,
         client: DioClient('', Dio()),
         jwtDecode: JWTDecode(),
+        polygonId: PolygonId(),
       ),
       child: CredentialsDetailsView(
         credentialModel: credentialModel,
@@ -205,30 +207,36 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                         ?['chatSupport'] !=
                                     null)
                                   Expanded(
-                                    child: CredentialDetailTabbar(
-                                      isSelected: false,
-                                      title: l10n.chat,
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          LoyaltyCardSupportChatPage.route(
-                                            companySupportId: widget
-                                                    .credentialModel
-                                                    .data['credentialSubject']
-                                                ?['chatSupport'] as String,
-                                            chatWelcomeMessage:
-                                                l10n.cardChatWelcomeMessage,
-                                            appBarTitle:
-                                                '${l10n.chatWith} ${widget.credentialModel.credentialPreview.credentialSubjectModel.offeredBy?.name}',
-                                            loyaltyCardType: widget
-                                                .credentialModel
-                                                .credentialPreview
-                                                .credentialSubjectModel
-                                                .credentialSubjectType
-                                                .name,
-                                          ),
-                                        );
-                                      },
+                                    child: BlocProvider.value(
+                                      value: context
+                                          .read<LoyaltyCardSupportChatCubit>(),
+                                      child: StreamBuilder(
+                                        stream: context
+                                            .read<LoyaltyCardSupportChatCubit>()
+                                            .unreadMessageCountStream,
+                                        builder: (_, snapShot) {
+                                          return CredentialDetailTabbar(
+                                            isSelected: false,
+                                            badgeCount: snapShot.data ?? 0,
+                                            title: l10n.chat,
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                LoyaltyCardSupportChatPage
+                                                    .route(
+                                                  loyaltyCardSupportChatCubit:
+                                                      context.read<
+                                                          LoyaltyCardSupportChatCubit>(),
+                                                  chatWelcomeMessage: l10n
+                                                      .cardChatWelcomeMessage,
+                                                  appBarTitle:
+                                                      '${l10n.chatWith} ${widget.credentialModel.credentialPreview.credentialSubjectModel.offeredBy?.name}',
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
                               ],

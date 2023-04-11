@@ -8,6 +8,7 @@ export 'drawer/drawer.dart';
 export 'general_information/general_information.dart';
 export 'home/home.dart';
 export 'missing_creentials/missing_credentials.dart';
+export 'mnemonic_verification/mnemonic_verification.dart';
 export 'profile/profile.dart';
 export 'qr_code/qr_code.dart';
 export 'search/search.dart';

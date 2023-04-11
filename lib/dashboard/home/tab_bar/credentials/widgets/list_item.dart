@@ -1,5 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/theme/theme.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 
 class _BaseItem extends StatefulWidget {
@@ -34,28 +36,39 @@ class CredentialsListPageItem extends StatelessWidget {
     required this.credentialModel,
     this.onTap,
     this.selected,
+    this.badgeCount = 0,
   });
 
   final CredentialModel credentialModel;
   final VoidCallback? onTap;
   final bool? selected;
+  final int badgeCount;
 
   @override
   Widget build(BuildContext context) {
-    return _BaseItem(
-      enabled: true,
-      onTap: onTap ??
-          () {
-            Navigator.of(context).push<void>(
-              CredentialsDetailsPage.route(credentialModel: credentialModel),
-            );
-          },
-      child: selected == null
-          ? CredentialDisplay(
-              credentialModel: credentialModel,
-              credDisplayType: CredDisplayType.List,
-            )
-          : displaySelectionElement(context),
+    return badges.Badge(
+      showBadge: badgeCount > 0,
+      badgeContent: Text(
+        badgeCount.toString(),
+        style: Theme.of(context).textTheme.badgeStyle,
+        textAlign: TextAlign.center,
+      ),
+      position: badges.BadgePosition.topEnd(end: 10, top: 30),
+      child: _BaseItem(
+        enabled: true,
+        onTap: onTap ??
+            () {
+              Navigator.of(context).push<void>(
+                CredentialsDetailsPage.route(credentialModel: credentialModel),
+              );
+            },
+        child: selected == null
+            ? CredentialDisplay(
+                credentialModel: credentialModel,
+                credDisplayType: CredDisplayType.List,
+              )
+            : displaySelectionElement(context),
+      ),
     );
   }
 

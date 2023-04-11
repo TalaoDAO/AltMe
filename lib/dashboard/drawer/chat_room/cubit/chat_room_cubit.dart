@@ -276,12 +276,12 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
 
   Future<void> dispose() async {
     try {
-      await matrixChat.dispose();
       await _notificationStreamController?.close().catchError((_) => null);
       _notificationStreamController = null;
       await _onEventSubscription?.cancel().catchError((_) => null);
       _onEventSubscription = null;
       _roomId = null;
+      await matrixChat.dispose();
     } catch (e, s) {
       logger.e('e: $e, s: $s');
     }

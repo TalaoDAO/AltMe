@@ -41,6 +41,7 @@ class HomeState extends Equatable {
     String? link,
     TokenReward? tokenReward,
     dynamic data,
+    bool? needToVerifyMnemonics,
   }) {
     return HomeState(
       status: status,

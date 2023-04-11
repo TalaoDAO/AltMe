@@ -45,8 +45,6 @@ Future<void> generateAccount({
     verificationMethod: verificationMethod,
   );
 
-  ///polygon
-
   /// what's new popup disabled
   splashCubit.disableWhatsNewPopUp();
 

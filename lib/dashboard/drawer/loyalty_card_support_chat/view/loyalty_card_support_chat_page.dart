@@ -1,35 +1,29 @@
-import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class LoyaltyCardSupportChatPage extends StatelessWidget {
   const LoyaltyCardSupportChatPage({
     super.key,
     this.appBarTitle,
     this.chatWelcomeMessage,
-    required this.companySupportId,
-    required this.loyaltyCardType,
+    required this.loyaltyCardSupportChatCubit,
   });
 
   final String? appBarTitle;
   final String? chatWelcomeMessage;
-  final String companySupportId;
-  final String loyaltyCardType;
+  final LoyaltyCardSupportChatCubit loyaltyCardSupportChatCubit;
 
   static Route<void> route({
     String? appBarTitle,
     String? chatWelcomeMessage,
-    required String companySupportId,
-    required String loyaltyCardType,
+    required LoyaltyCardSupportChatCubit loyaltyCardSupportChatCubit,
   }) {
     return MaterialPageRoute<void>(
       builder: (_) => LoyaltyCardSupportChatPage(
         appBarTitle: appBarTitle,
-        companySupportId: companySupportId,
-        loyaltyCardType: loyaltyCardType,
         chatWelcomeMessage: chatWelcomeMessage,
+        loyaltyCardSupportChatCubit: loyaltyCardSupportChatCubit,
       ),
       settings: const RouteSettings(name: '/loyaltyCardSupportChatPage'),
     );
@@ -37,15 +31,8 @@ class LoyaltyCardSupportChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => LoyaltyCardSupportChatCubit(
-        secureStorageProvider: getSecureStorage,
-        matrixChat: MatrixChatImpl(),
-        invites: [companySupportId],
-        storageKey:
-            '$loyaltyCardType-${SecureStorageKeys.loyaltyCardsupportRoomId}',
-        roomNamePrefix: loyaltyCardType,
-      ),
+    return BlocProvider.value(
+      value: loyaltyCardSupportChatCubit,
       child: ChatRoomView<LoyaltyCardSupportChatCubit>(
         appBarTitle: appBarTitle,
         chatWelcomeMessage: chatWelcomeMessage,

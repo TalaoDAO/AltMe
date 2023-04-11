@@ -9,6 +9,7 @@ import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
@@ -52,7 +53,7 @@ class MatrixChatImpl extends MatrixChatInterface {
   @override
   Future<User> init() async {
     logger.i('init()');
-    if (user != null) {
+    if (client != null && user != null) {
       return user!;
     }
     final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
@@ -90,6 +91,9 @@ class MatrixChatImpl extends MatrixChatInterface {
 
   Future<void> _initClient() async {
     try {
+      if (client != null) {
+        await dispose();
+      }
       client = Client(
         'AltMeUser',
         databaseBuilder: (_) async {
@@ -167,7 +171,7 @@ class MatrixChatImpl extends MatrixChatInterface {
       message = TextMessage(
         id: event.unsigned?['transaction_id'] as String? ?? const Uuid().v4(),
         remoteId: event.eventId,
-        text: event.text,
+        text: event.plaintextBody,
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         status: mapEventStatusToMessageStatus(event.status),
         author: User(
@@ -178,7 +182,7 @@ class MatrixChatImpl extends MatrixChatInterface {
       message = ImageMessage(
         id: const Uuid().v4(),
         remoteId: event.eventId,
-        name: event.body,
+        name: event.plaintextBody,
         size: event.content['info']['size'] as num? ?? 0,
         uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
@@ -191,7 +195,7 @@ class MatrixChatImpl extends MatrixChatInterface {
       message = FileMessage(
         id: const Uuid().v4(),
         remoteId: event.eventId,
-        name: event.body,
+        name: event.plaintextBody,
         size: event.content['info']['size'] as num? ?? 0,
         uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
@@ -207,7 +211,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         duration: Duration(
           milliseconds: event.content['info']['duration'] as int? ?? 0,
         ),
-        name: event.body,
+        name: event.plaintextBody,
         size: event.content['info']['size'] as num? ?? 0,
         uri: getUrlFromUri(uri: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
@@ -220,7 +224,7 @@ class MatrixChatImpl extends MatrixChatInterface {
       message = TextMessage(
         id: const Uuid().v4(),
         remoteId: event.eventId,
-        text: event.text,
+        text: event.plaintextBody,
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         status: mapEventStatusToMessageStatus(event.status),
         author: User(
@@ -267,6 +271,7 @@ class MatrixChatImpl extends MatrixChatInterface {
       final room = client!.getRoomById(roomId);
       if (room == null) {
         await client!.joinRoomById(roomId);
+        await enableRoomEncyption(roomId);
       }
       final eventId = await client!.getRoomById(roomId)?.sendTextEvent(
             partialText.text,
@@ -302,6 +307,7 @@ class MatrixChatImpl extends MatrixChatInterface {
       final room = client!.getRoomById(roomId);
       if (room == null) {
         await client!.joinRoomById(roomId);
+        await enableRoomEncyption(roomId);
       }
       await client!.getRoomById(roomId)?.sendFileEvent(
             MatrixFile(
@@ -345,6 +351,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         final room = client!.getRoomById(roomId);
         if (room == null) {
           await client!.joinRoomById(roomId);
+          await enableRoomEncyption(roomId);
         }
         await client!.getRoomById(roomId)?.sendFileEvent(
               MatrixFile(
@@ -356,6 +363,12 @@ class MatrixChatImpl extends MatrixChatInterface {
       }
     } catch (e, s) {
       logger.e('e: $e, s: $s');
+      if (e is PlatformException && e.code == 'invalid_image') {
+        logger.i(
+          'If you are trying to send image from simulator or emulator'
+          ' then you should use real device!',
+        );
+      }
     }
   }
 
@@ -367,6 +380,9 @@ class MatrixChatImpl extends MatrixChatInterface {
     List<String>? invites,
   ) async {
     try {
+      if (client == null) {
+        await _initClient();
+      }
       final roomId = await client!.createRoom(
         isDirect: true,
         name: roomName,
@@ -502,15 +518,22 @@ class MatrixChatImpl extends MatrixChatInterface {
       return loginResonse.userId!;
     } catch (e, s) {
       logger.i('e: $e, s: $s');
-      return '@$username:${Urls.matrixHomeServer.replaceAll('https://', '')}';
+      return '@$username:${Urls.matrixHomeServer.replaceAll('https://', '')}'
+          .toLowerCase();
     }
   }
 
   @override
   Future<void> dispose() async {
     try {
-      await client?.logout().catchError((_) => null);
-      await client?.dispose().catchError((_) => null);
+      if (client?.isLogged() ?? false) {
+        await client?.logout().catchError(
+              (_) => logger.e('logout failed!'),
+            );
+      }
+      await client?.dispose().catchError(
+            (dynamic e) => logger.e('dispose failed with $e'),
+          );
       user = null;
       client = null;
     } catch (e, s) {

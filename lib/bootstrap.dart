@@ -122,9 +122,6 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   await Dartez().init();
 
-  /// PolygonId SDK initialization
-  // await PolygonId().init();
-
   await runZonedGuarded(
     () async {
       Bloc.observer = AppBlocObserver();

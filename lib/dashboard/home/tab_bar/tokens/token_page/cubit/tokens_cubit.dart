@@ -17,6 +17,7 @@ class TokensCubit extends Cubit<TokensState> {
     required this.walletCubit,
     required this.networkCubit,
     required this.allTokensCubit,
+    required this.mnemonicNeedVerificationCubit,
     required this.secureStorageProvider,
   }) : super(const TokensState());
 
@@ -25,10 +26,26 @@ class TokensCubit extends Cubit<TokensState> {
   final WalletCubit walletCubit;
   final ManageNetworkCubit networkCubit;
   final AllTokensCubit allTokensCubit;
+  final MnemonicNeedVerificationCubit mnemonicNeedVerificationCubit;
 
   List<TokenModel> data = [];
   final int _limit = 100;
   int _offsetOfLoadedData = -1;
+
+  Future<void> checkIfItNeedsToVerifyMnemonic({
+    required double totalBalanceInUSD,
+  }) async {
+    final hasVerifiedMnemonics = await secureStorageProvider.get(
+      SecureStorageKeys.hasVerifiedMnemonics,
+    );
+    if (hasVerifiedMnemonics == 'yes') {
+      mnemonicNeedVerificationCubit.needToVerifyMnemonic(needToVerify: false);
+    } else {
+      if (totalBalanceInUSD >= 100) {
+        mnemonicNeedVerificationCubit.needToVerifyMnemonic(needToVerify: true);
+      }
+    }
+  }
 
   void toggleIsSecure() {
     emit(state.copyWith(isSecure: !state.isSecure));
@@ -171,6 +188,9 @@ class TokensCubit extends Cubit<TokensState> {
         data: data.toSet(),
         totalBalanceInUSD: totalBalanceInUSD,
       ),
+    );
+    await checkIfItNeedsToVerifyMnemonic(
+      totalBalanceInUSD: totalBalanceInUSD,
     );
   }
 
@@ -323,6 +343,9 @@ class TokensCubit extends Cubit<TokensState> {
           totalBalanceInUSD: totalBalanceInUSD,
         ),
       );
+      await checkIfItNeedsToVerifyMnemonic(
+        totalBalanceInUSD: totalBalanceInUSD,
+      );
     } else {
       double totalBalanceInUSD = 0;
       for (final tokenElement in data) {
@@ -335,6 +358,9 @@ class TokensCubit extends Cubit<TokensState> {
           data: data.toSet(),
           totalBalanceInUSD: totalBalanceInUSD,
         ),
+      );
+      await checkIfItNeedsToVerifyMnemonic(
+        totalBalanceInUSD: totalBalanceInUSD,
       );
     }
   }

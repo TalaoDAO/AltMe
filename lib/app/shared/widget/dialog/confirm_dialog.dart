@@ -47,7 +47,7 @@ class ConfirmDialog extends StatelessWidget {
             icon,
             width: 50,
             height: 50,
-            color: color,
+            color: textColor,
           ),
           Text(
             title,
@@ -73,11 +73,14 @@ class ConfirmDialog extends StatelessWidget {
               Expanded(
                 child: MyOutlinedButton(
                   text: no ?? l10n.no,
-                  verticalSpacing: 8,
-                  fontSize: 13,
-                  borderColor: color,
+                  verticalSpacing: 14,
+                  fontSize: 15,
+                  borderColor: Theme.of(context)
+                      .colorScheme
+                      .defualtDialogCancelButtonBorderColor,
                   backgroundColor: background,
-                  textColor: color,
+                  textColor: textColor,
+                  borderRadius: Sizes.smallRadius,
                   elevation: 0,
                   onPressed: () {
                     Navigator.of(context).pop(false);
@@ -88,10 +91,10 @@ class ConfirmDialog extends StatelessWidget {
               Expanded(
                 child: MyElevatedButton(
                   text: yes ?? l10n.yes,
-                  verticalSpacing: 8,
+                  verticalSpacing: 14,
                   backgroundColor: color,
-                  textColor: background,
-                  fontSize: 13,
+                  borderRadius: Sizes.smallRadius,
+                  fontSize: 15,
                   elevation: 0,
                   onPressed: () {
                     Navigator.of(context).pop(true);

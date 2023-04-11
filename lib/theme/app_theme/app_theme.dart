@@ -199,6 +199,8 @@ extension CustomColorScheme on ColorScheme {
 
   Color get borderColor => const Color(0xFFDDCEF4);
 
+  Color get defualtDialogCancelButtonBorderColor => primary;
+
   Color get markDownH1 => onPrimary;
 
   Color get markDownH2 => onPrimary;
@@ -524,6 +526,12 @@ extension CustomTextTheme on TextTheme {
         fontWeight: FontWeight.w400,
       );
 
+  TextStyle get polygonCardDetail => GoogleFonts.roboto(
+        color: const Color(0xffFFFFFF),
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+      );
+
   TextStyle get credentialFieldTitle => GoogleFonts.poppins(
         color: const Color(0xff212121),
         fontSize: 14,
@@ -733,7 +741,6 @@ extension CustomTextTheme on TextTheme {
 
   TextStyle get defaultDialogSubtitle => GoogleFonts.poppins(
         fontSize: 20,
-        fontWeight: FontWeight.bold,
         color: const Color(0xff86809D),
       );
 

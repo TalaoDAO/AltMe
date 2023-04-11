@@ -5,15 +5,6 @@ import 'package:flutter/cupertino.dart';
 part 'response_string_extension.dart';
 
 enum ResponseString {
-  RESPONSE_STRING_identityProofDummyDescription,
-  RESPONSE_STRING_over18DummyDescription,
-  RESPONSE_STRING_over13DummyDescription,
-  RESPONSE_STRING_emailProofDummyDescription,
-  RESPONSE_STRING_genderProofDummyDescription,
-  RESPONSE_STRING_nationalityProofDummyDescription,
-  RESPONSE_STRING_ageRangeProofDummyDescription,
-  RESPONSE_STRING_phoneProofDummyDescription,
-  RESPONSE_STRING_passportFootprintDummyDescription,
   RESPONSE_STRING_BALANCE_TOO_LOW,
   RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE,
   RESPONSE_STRING_FEE_TOO_LOW,
@@ -104,6 +95,9 @@ enum ResponseString {
   RESPONSE_STRING_over13WhyGetThisCard,
   RESPONSE_STRING_over13ExpirationDate,
   RESPONSE_STRING_over13HowToGetIt,
+  RESPONSE_STRING_over15WhyGetThisCard,
+  RESPONSE_STRING_over15ExpirationDate,
+  RESPONSE_STRING_over15HowToGetIt,
   RESPONSE_STRING_passportFootprintWhyGetThisCard,
   RESPONSE_STRING_passportFootprintExpirationDate,
   RESPONSE_STRING_passportFootprintHowToGetIt,
@@ -141,4 +135,7 @@ enum ResponseString {
   RESPONSE_STRING_tezotopiaMembershipLongDescription,
   RESPONSE_STRING_chainbornMembershipLongDescription,
   RESPONSE_STRING_bloometaPassLongDescription,
+  RESPONSE_STRING_succesfullyAuthenticated,
+  RESPONSE_STRING_authenticationFailed,
+  RESPONSE_STRING_deviceIncompatibilityMessage,
 }

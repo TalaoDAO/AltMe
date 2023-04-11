@@ -406,7 +406,6 @@ class Ebsi {
         return VerificationType.notVerified;
       }
     } catch (e) {
-      print(e);
       return VerificationType.unKnown;
     }
   }
@@ -502,7 +501,7 @@ class Ebsi {
     String? mnemonic,
     String? privateKey,
   ) async {
-    //TODO(bibash):  if the "request_uri" attribute exists,
+    // TODO(bibash):  if the "request_uri" attribute exists,
     //wallet must do a GET to endpoint to get the request value as a
     //json. The wallet receives a JWT which must be verified wit the public key
     // of the verifier. It means that wallety must call the API to get teh DID
@@ -568,8 +567,6 @@ class Ebsi {
       },
       'nonce': tokenParameters.nonce
     };
-
-    print(vpTokenPayload);
 
     final verifierVpJwt = generateToken(vpTokenPayload, tokenParameters);
 

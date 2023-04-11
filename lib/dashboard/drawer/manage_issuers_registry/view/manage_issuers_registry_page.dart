@@ -33,18 +33,6 @@ class ManageIssuersRegistryPage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          var groupValue = IssuerVerificationRegistry.None;
-          switch (state.model.issuerVerificationUrl) {
-            case '':
-              groupValue = IssuerVerificationRegistry.None;
-              break;
-            case Urls.checkIssuerEbsiUrl:
-              groupValue = IssuerVerificationRegistry.EBSI;
-              break;
-            case Urls.checkIssuerTalaoUrl:
-              groupValue = IssuerVerificationRegistry.Talao;
-              break;
-          }
           //const fakeGroupValue = 'titi';
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,24 +45,20 @@ class ManageIssuersRegistryPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-              Column(
+              Padding(
+                padding: const EdgeInsets.only(left: Sizes.spaceSmall),
+                child: Text(
+                  l10n.polygon,
+                  style: Theme.of(context).textTheme.subtitle3,
+                ),
+              ),
+              GroupedSection(
                 children: [
                   IssuerVerificationRegistrySelector(
                     issuerVerificationRegistry:
-                        IssuerVerificationRegistry.Talao,
-                    groupValue: groupValue,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.spaceSmall,
-                    ),
-                    child: Divider(
-                      color: Theme.of(context).colorScheme.borderColor,
-                    ),
-                  ),
-                  IssuerVerificationRegistrySelector(
-                    issuerVerificationRegistry: IssuerVerificationRegistry.EBSI,
-                    groupValue: groupValue,
+                        IssuerVerificationRegistry.PolygonMainnet,
+                    isChecked: state.model.issuerVerificationUrls
+                        .contains(Urls.checkIssuerPolygonUrl),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -86,29 +70,25 @@ class ManageIssuersRegistryPage extends StatelessWidget {
                   ),
                   IssuerVerificationRegistrySelector(
                     issuerVerificationRegistry:
-                        IssuerVerificationRegistry.Compellio,
-                    isEnable: false,
-                    groupValue: groupValue,
+                        IssuerVerificationRegistry.PolygonTestnet,
+                    isChecked: state.model.issuerVerificationUrls
+                        .contains(Urls.checkIssuerPolygonTestnetUrl),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.spaceSmall,
-                    ),
-                    child: Divider(
-                      color: Theme.of(context).colorScheme.borderColor,
-                    ),
-                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: Sizes.spaceSmall),
+                child: Text(
+                  l10n.ebsi,
+                  style: Theme.of(context).textTheme.subtitle3,
+                ),
+              ),
+              GroupedSection(
+                children: [
                   IssuerVerificationRegistrySelector(
-                    issuerVerificationRegistry: IssuerVerificationRegistry.None,
-                    groupValue: groupValue,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.spaceSmall,
-                    ),
-                    child: Divider(
-                      color: Theme.of(context).colorScheme.borderColor,
-                    ),
+                    issuerVerificationRegistry: IssuerVerificationRegistry.EBSI,
+                    isChecked: state.model.issuerVerificationUrls
+                        .contains(Urls.checkIssuerEbsiUrl),
                   ),
                 ],
               ),

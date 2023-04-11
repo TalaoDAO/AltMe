@@ -37,6 +37,7 @@ enum CredentialSubjectType {
   loyaltyCard,
   over18,
   over13,
+  over15,
   passportFootprint,
   phonePass,
   professionalExperienceAssessment,
@@ -58,4 +59,6 @@ enum CredentialSubjectType {
   twitterCard,
   euDiplomaCard,
   euVerifiableId,
+  kycAgeCredential,
+  kycCountryOfResidence,
 }

@@ -20,47 +20,8 @@ class ResponseMessage with MessageHandler {
 
         case ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt:
           return ResponseString.RESPONSE_STRING_bloometaPassHowToGetIt.localise(
-              context);
-
-        case ResponseString.RESPONSE_STRING_identityProofDummyDescription:
-          return ResponseString.RESPONSE_STRING_identityProofDummyDescription
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_over18DummyDescription:
-          return ResponseString.RESPONSE_STRING_over18DummyDescription.localise(
             context,
           );
-
-        case ResponseString.RESPONSE_STRING_over13DummyDescription:
-          return ResponseString.RESPONSE_STRING_over13DummyDescription.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_passportFootprintDummyDescription:
-          return ResponseString
-              .RESPONSE_STRING_passportFootprintDummyDescription.localise(
-            context,
-          );
-
-        case ResponseString.RESPONSE_STRING_emailProofDummyDescription:
-          return ResponseString.RESPONSE_STRING_emailProofDummyDescription
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_genderProofDummyDescription:
-          return ResponseString.RESPONSE_STRING_genderProofDummyDescription
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_nationalityProofDummyDescription:
-          return ResponseString.RESPONSE_STRING_nationalityProofDummyDescription
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_ageRangeProofDummyDescription:
-          return ResponseString.RESPONSE_STRING_ageRangeProofDummyDescription
-              .localise(context);
-
-        case ResponseString.RESPONSE_STRING_phoneProofDummyDescription:
-          return ResponseString.RESPONSE_STRING_phoneProofDummyDescription
-              .localise(context);
 
         case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
           return ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW
@@ -482,6 +443,21 @@ class ResponseMessage with MessageHandler {
             context,
           );
 
+        case ResponseString.RESPONSE_STRING_over15WhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_over15WhyGetThisCard.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_over15ExpirationDate:
+          return ResponseString.RESPONSE_STRING_over15ExpirationDate.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_over15HowToGetIt:
+          return ResponseString.RESPONSE_STRING_over15HowToGetIt.localise(
+            context,
+          );
+
         case ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard:
           return ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard
               .localise(
@@ -643,6 +619,23 @@ class ResponseMessage with MessageHandler {
 
         case ResponseString.RESPONSE_STRING_bloometaPassLongDescription:
           return ResponseString.RESPONSE_STRING_bloometaPassLongDescription
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_succesfullyAuthenticated:
+          return ResponseString.RESPONSE_STRING_succesfullyAuthenticated
+              .localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_authenticationFailed:
+          return ResponseString.RESPONSE_STRING_authenticationFailed.localise(
+            context,
+          );
+
+        case ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage:
+          return ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage
               .localise(
             context,
           );

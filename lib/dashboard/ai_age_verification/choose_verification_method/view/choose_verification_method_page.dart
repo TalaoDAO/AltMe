@@ -23,7 +23,7 @@ class ChooseVerificationMethodPage extends StatelessWidget {
     required Function onSelectKYC,
   }) {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: '/AiAgeResultPage'),
+      settings: const RouteSettings(name: '/ChooseVerificationMethodPage'),
       builder: (_) => ChooseVerificationMethodPage(
         credentialSubjectType: credentialSubjectType,
         onSelectPassbase: onSelectPassbase,
@@ -40,6 +40,8 @@ class ChooseVerificationMethodPage extends StatelessWidget {
 
     if (credentialSubjectType == CredentialSubjectType.over13) {
       title = l10n.chooseMethodPageOver13Title;
+    } else if (credentialSubjectType == CredentialSubjectType.over15) {
+      title = l10n.chooseMethodPageOver15Title;
     } else if (credentialSubjectType == CredentialSubjectType.over18) {
       title = l10n.chooseMethodPageOver18Title;
     } else {

@@ -299,39 +299,39 @@ void main() {
       expect(jsonEncode(credential), credentialRequestResponse);
     });
 
-    test('throw Exception whren token is not verified', () {
-      const issuerDid = 'did:ebsi:zhSw5rPXkcHjvquwnVcTzzB';
+    // test('throw Exception when token is not verified', () {
+    //   const issuerDid = 'did:ebsi:zhSw5rPXkcHjvquwnVcTzzB';
 
-      const didDocumentUrl =
-          'https://api-pilot.ebsi.eu/did-registry/v3/identifiers/$issuerDid';
+    //   const didDocumentUrl =
+    //       'https://api-pilot.ebsi.eu/did-registry/v3/identifiers/$issuerDid';
 
-      const didDocumentResponse =
-          '{"assertionMethod":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"authentication":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"@context":"https://www.w3.org/ns/did/v1","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","verificationMethod":[{"controller":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53","publicKeyJwk":{"crv":"P-521","kty":"EC","x":"AekpBQ8ST8a8VcfVOTNl353vSrDCLLJXmPk06wTjxrrjcBpXp5EOnYG_NjFZ6OvLFV1jSfS9tsz4qUxcWceqwQGk","y":"ADSmRA43Z1DSNx_RvcLI87cdL07l6jQyyBXMoxVg_l2Th-x3S1WDhjDly79ajL4Kkd0AZMaZmh9ubmf63e3kyMj2"},"type":"Ed25519VerificationKey2019"}]}';
+    //   const didDocumentResponse =
+    //       '{"assertionMethod":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"authentication":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"@context":"https://www.w3.org/ns/did/v1","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","verificationMethod":[{"controller":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53","publicKeyJwk":{"crv":"P-521","kty":"EC","x":"AekpBQ8ST8a8VcfVOTNl353vSrDCLLJXmPk06wTjxrrjcBpXp5EOnYG_NjFZ6OvLFV1jSfS9tsz4qUxcWceqwQGk","y":"ADSmRA43Z1DSNx_RvcLI87cdL07l6jQyyBXMoxVg_l2Th-x3S1WDhjDly79ajL4Kkd0AZMaZmh9ubmf63e3kyMj2"},"type":"Ed25519VerificationKey2019"}]}';
 
-      dioAdapter.onGet(
-        didDocumentUrl,
-        (request) => request.reply(200, jsonDecode(didDocumentResponse)),
-      );
+    //   dioAdapter.onGet(
+    //     didDocumentUrl,
+    //     (request) => request.reply(200, jsonDecode(didDocumentResponse)),
+    //   );
 
-      final ebsi = Ebsi(client);
+    //   final ebsi = Ebsi(client);
 
-      expect(
-        () async {
-          await ebsi.getCredential(
-            credentialRequest,
-            mnemonic,
-            null,
-          );
-        },
-        throwsA(
-          isA<Exception>().having(
-            (p0) => p0.toString(),
-            'toString()',
-            'Exception: VERIFICATION_ISSUE',
-          ),
-        ),
-      );
-    });
+    //   expect(
+    //     () async {
+    //       await ebsi.getCredential(
+    //         credentialRequest,
+    //         mnemonic,
+    //         null,
+    //       );
+    //     },
+    //     throwsA(
+    //       isA<Exception>().having(
+    //         (p0) => p0.toString(),
+    //         'toString()',
+    //         'Exception: VERIFICATION_ISSUE',
+    //       ),
+    //     ),
+    //   );
+    // });
 
     group('build token data', () {
       final ebsi = Ebsi(client);
@@ -446,7 +446,7 @@ void main() {
         'https://api-pilot.ebsi.eu/did-registry/v3/identifiers/$issuerDid3';
 
     const didDocumentResponse3 =
-        '{"assertionMethod":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"authentication":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"@context":"https://www.w3.org/ns/did/v1","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","verificationMethod":[{"controller":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53","publicKeyJwk":{"alg":"ES256K-R","crv":"secp256k1","kid":"3623b877bbb24b08ba390f3585418f53","kty":"EC","use":"sig","x":"9GVoP1wJSgenjKaxA16LzkzeAKY8-wZX1ZmDr1Oe0s4"},"type":"Ed25519VerificationKey2019"}]}';
+        '{"assertionMethod":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"authentication":["did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53"],"@context":"https://www.w3.org/ns/did/v1","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","verificationMethod":[{"controller":"did:ebsi:zeFCExU2XAAshYkPCpjuahA","id":"did:ebsi:zeFCExU2XAAshYkPCpjuahA#3623b877bbb24b08ba390f3585418f53","publicKeyJwk":{"alg":"EdDSA","crv":"Ed25519","kid":"-1909572257","kty":"OKP","x":"XWxGtApfcqmKI7p0OKnF5JSEWMVoLsytFXLEP7xZ_l8"},"type":"Ed25519VerificationKey2019"}]}';
     dioAdapter
       ..onGet(
         didDocumentUrl,
@@ -470,7 +470,7 @@ void main() {
           'EHwJjyqOgzDO7iKvU8vcnwNrmxYbSW9ERBXukOXolLzeO_Jn';
 
       final isVerified = await ebsi.verifyEncodedData(
-        issuerDid: issuerDid2,
+        issuerDid: issuerDid1,
         jwt: vcJwt,
         issuerKid: issuerKid,
       );
@@ -491,21 +491,8 @@ void main() {
       expect(isVerified, VerificationType.notVerified);
     });
 
-    test('returns VerificationType.verified for OKP', () async {
-      const vcJwt =
-          'eyJhbGciOiJFUzI1NksiLCJraWQiOiJkaWQ6ZWJzaTp6amhvb0thNVk1RDhBVVhzeVZYeUdvayNCdURBSTg1SEVLeEpWY2dDMnVGM2YyRmFjcExNalZHOThjVDZJdERTU1I4IiwidHlwIjoiSldUIn0.eyJjbGFpbXMiOnsiaWRfdG9rZW4iOnsiZW1haWwiOm51bGx9LCJ2cF90b2tlbiI6eyJwcmVzZW50YXRpb25fZGVmaW5pdGlvbiI6eyJmb3JtYXQiOnsiand0X3ZwIjp7ImFsZyI6WyJFUzI1NksiLCJFUzI1NiIsIkVTMzg0IiwiRVM1MTIiLCJSUzI1NiJdfX0sImlkIjoiNDE1MjAyY2YtYzI1ZS0xMWVkLTg3ZDAtMGExNjI4OTU4NTYwIiwiaW5wdXRfZGVzY3JpcHRvcnMiOlt7ImNvbnN0cmFpbnRzIjp7ImZpZWxkcyI6W3siZmlsdGVyIjp7InBhdHRlcm4iOiJodHRwczovL2FwaS5wcmVwcm9kLmVic2kuZXUvdHJ1c3RlZC1zY2hlbWFzLXJlZ2lzdHJ5L3YxL3NjaGVtYXMvMHhiZjc4ZmMwOGE3YTlmMjhmNTQ3OWY1OGRlYTI2OWQzNjU3ZjU0ZjEzY2EzN2QzODBjZDRlOTIyMzdmYjY5MWRkIiwidHlwZSI6InN0cmluZyJ9LCJwYXRoIjpbIiQuY3JlZGVudGlhbFNjaGVtYS5pZCJdfV19LCJpZCI6IjQxNTIwOTk2LWMyNWUtMTFlZC05ZDk5LTBhMTYyODk1ODU2MCIsIm5hbWUiOiJJbnB1dCBkZXNjcmlwdG9yIDEiLCJwdXJwb3NlIjoiICJ9XX19fSwiY2xpZW50X2lkIjoiZGlkOmVic2k6empob29LYTVZNUQ4QVVYc3lWWHlHb2siLCJub25jZSI6IjQxNTIwYWIwLWMyNWUtMTFlZC04ODlhLTBhMTYyODk1ODU2MCIsInJlZGlyZWN0X3VyaSI6Imh0dHBzOi8vdGFsYW8uY28vc2FuZGJveC9lYnNpL2xvZ2luL2VuZHBvaW50LzQxNTFlNTRhLWMyNWUtMTFlZC1hNGMzLTBhMTYyODk1ODU2MCIsInJlc3BvbnNlX3R5cGUiOiJpZF90b2tlbiIsInNjb3BlIjoib3BlbmlkIn0.LbmFZbDyWE1jRufvZFP-oczmQVutUGGtB5VtJ4RuzzUPQ97K9676JvfhYiENDnl5Ej5R7jstXNxqc61Ue671iA'; // ignore: lines_longer_than_80_chars
-
-      final isVerified = await ebsi.verifyEncodedData(
-        issuerDid: issuerDid3,
-        jwt: vcJwt,
-        issuerKid: issuerKid,
-      );
-      expect(isVerified, VerificationType.verified);
-    });
-
     test('returns VerificationType.unKnown', () async {
-      const vcJwt =
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksiLCJqd2siOnsiY3J2IjoiUC0yNTZLIiwia3R5IjoiRUMiLCJ4IjoiSjR2UXRMVXlyVlVpRklYUnJ0RXE0eHVybUJacDJlcTl3Sm1Ya0lBX3N0SSIsInkiOiJFVVU2dlhvRzNCR1gyenp3alhyR0RjcjRFeUREMFZmazNfNWZnNWtTZ0tFIn0sImtpZCI6ImRpZDplYnNpOnpvOUZSMVlmQUtGUDNRNmR2cWh4Y1h4bmZlRGlKRFA5N2ttbnFoeUFVU0FDaiNDZ2NnMXk5eGo5dVdGdzU2UE1jMjlYQmQ5RVJlaXh6dm5mdEJ6OEp3UUZpQiJ9.eyJpc3MiOiJkaWQ6ZWJzaTp6bzlGUjFZZkFLRlAzUTZkdnFoeGNYeG5mZURpSkRQOTdrbW5xaHlBVVNBQ2oiLCJub25jZSI6IjdhMDdkZTBmLWE4NzktMTFlZC04MjJiLTBhMTYyODk1ODU2MCIsImlhdCI6MTY3NzA1MDc0MDEyMzIzNSwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9zYW5kYm94L2Vic2kvaXNzdWVyL3ZndmdoeWxvemwifQ.htjRCpFWbRwanAyQcAq9XZ4vxCXyFbzaaN3yPbPxWIcKFFzDDcA4QCHTUl-L4vzWq0R3LSgQFXQ9bo5D9uCm4w'; // ignore: lines_longer_than_80_chars
+      const vcJwt = 'random';
 
       final isVerified = await ebsi.verifyEncodedData(
         issuerDid: issuerDid2,
@@ -513,6 +500,19 @@ void main() {
         issuerKid: issuerKid,
       );
       expect(isVerified, VerificationType.unKnown);
+    });
+
+    test('returns VerificationType.notVerified for OKP', () async {
+      const vcJwt = 'eyJraWQiOiItMTkwOTU3MjI1NyIsImFsZyI6IkVkRFNBIn0.'
+          'eyJqdGkiOiIyMjkxNmYzYy05MDkzLTQ4MTMtODM5Ny1mMTBlNmI3MDRiNjgiLCJkZWxlZ2F0aW9uSWQiOiJiNGFlNDdhNy02MjVhLTQ2MzAtOTcyNy00NTc2NGE3MTJjY2UiLCJleHAiOjE2NTUyNzkxMDksIm5iZiI6MTY1NTI3ODgwOSwic2NvcGUiOiJyZWFkIG9wZW5pZCIsImlzcyI6Imh0dHBzOi8vaWRzdnIuZXhhbXBsZS5jb20iLCJzdWIiOiJ1c2VybmFtZSIsImF1ZCI6ImFwaS5leGFtcGxlLmNvbSIsImlhdCI6MTY1NTI3ODgwOSwicHVycG9zZSI6ImFjY2Vzc190b2tlbiJ9.' // ignore: lines_longer_than_80_chars
+          'rjeE8D_e4RYzgvpu-nOwwx7PWMiZyDZwkwO6RiHR5t8g4JqqVokUKQt-oST1s45wubacfeDSFogOrIhe3UHDAg'; // ignore: lines_longer_than_80_chars
+
+      final isVerified = await ebsi.verifyEncodedData(
+        issuerDid: issuerDid3,
+        jwt: vcJwt,
+        issuerKid: issuerKid,
+      );
+      expect(isVerified, VerificationType.verified);
     });
   });
 

@@ -127,6 +127,13 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         },
       );
 
+      if (isFromOnboarding) {
+        await secureStorageProvider.set(
+          SecureStorageKeys.hasVerifiedMnemonics,
+          'yes',
+        );
+      }
+
       await homeCubit.emitHasWallet();
       emit(state.success());
     } catch (error, stack) {

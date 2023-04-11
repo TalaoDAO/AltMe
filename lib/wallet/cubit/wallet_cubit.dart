@@ -209,14 +209,24 @@ class WalletCubit extends Cubit<WalletState> {
           );
         }
       } else {
-        /// only creating tezos at start
+        /// polygon at start
+        await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.polygon,
+          totalAccountsYet: accountsCount,
+        );
+
+        /// tezos at start
         updatedCryptoAccount = await createBlockchainAccount(
           accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.tezos,
-          totalAccountsYet: accountsCount,
+          totalAccountsYet: accountsCount + 1,
         );
       }
     }
@@ -600,78 +610,38 @@ class WalletCubit extends Cubit<WalletState> {
       }
     }
 
-    ///remove old card added by YOTI
-    if (credentialSubjectModel.credentialSubjectType ==
-        CredentialSubjectType.over13) {
-      final List<CredentialModel> allCredentials =
-          await credentialsRepository.findAll();
-      for (final storedCredential in allCredentials) {
-        final credentialSubjectModel =
-            storedCredential.credentialPreview.credentialSubjectModel;
-        if (credentialSubjectModel.credentialSubjectType ==
-            CredentialSubjectType.over13) {
-          await deleteById(
-            credential: storedCredential,
-            showMessage: false,
-          );
-          break;
-        }
-      }
-    }
+    final cardsToCheck = [
+      CredentialSubjectType.over13,
+      CredentialSubjectType.over15,
+      CredentialSubjectType.over18,
+      CredentialSubjectType.ageRange
+    ];
 
     ///remove old card added by YOTI
-    if (credentialSubjectModel.credentialSubjectType ==
-        CredentialSubjectType.over18) {
-      final List<CredentialModel> allCredentials =
-          await credentialsRepository.findAll();
-      for (final storedCredential in allCredentials) {
-        final credentialSubjectModel =
-            storedCredential.credentialPreview.credentialSubjectModel;
-        if (credentialSubjectModel.credentialSubjectType ==
-            CredentialSubjectType.over18) {
-          await deleteById(
-            credential: storedCredential,
-            showMessage: false,
-          );
-          break;
-        }
-      }
-    }
 
-    ///remove old card added by YOTI
-    if (credentialSubjectModel.credentialSubjectType ==
-        CredentialSubjectType.ageRange) {
-      final List<CredentialModel> allCredentials =
-          await credentialsRepository.findAll();
-      for (final storedCredential in allCredentials) {
-        final credentialSubjectModel =
-            storedCredential.credentialPreview.credentialSubjectModel;
-        if (credentialSubjectModel.credentialSubjectType ==
-            CredentialSubjectType.ageRange) {
-          await deleteById(
-            credential: storedCredential,
-            showMessage: false,
-          );
-          break;
+    for (final card in cardsToCheck) {
+      if (credentialSubjectModel.credentialSubjectType == card) {
+        final List<CredentialModel> allCredentials =
+            await credentialsRepository.findAll();
+        for (final storedCredential in allCredentials) {
+          final credentialSubjectModel =
+              storedCredential.credentialPreview.credentialSubjectModel;
+          if (credentialSubjectModel.credentialSubjectType == card) {
+            await deleteById(
+              credential: storedCredential,
+              showMessage: false,
+            );
+            break;
+          }
         }
       }
     }
   }
 
-  Future<void> resetWallet({
-    List<String>? exceptKeys = const [SecureStorageKeys.version],
-  }) async {
-    if (exceptKeys == null || exceptKeys.isEmpty) {
-      await secureStorageProvider.deleteAll();
-    } else {
-      final keyValues = await secureStorageProvider.getAllValues();
-      final keys = keyValues.keys.toList();
-      for (final key in keys) {
-        if (!exceptKeys.contains(key)) {
-          await secureStorageProvider.delete(key);
-        }
-      }
-    }
+  Future<void> resetWallet() async {
+    await secureStorageProvider.deleteAllExceptsSomeKeys(
+      [SecureStorageKeys.version],
+    );
 
     // await credentialsRepository.deleteAll();
     // await profileCubit.resetProfile();

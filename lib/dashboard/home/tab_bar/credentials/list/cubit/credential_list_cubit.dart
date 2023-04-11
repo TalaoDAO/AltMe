@@ -61,6 +61,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.verifiableIdCard:
         case CredentialSubjectType.over18:
         case CredentialSubjectType.over13:
+        case CredentialSubjectType.over15:
         case CredentialSubjectType.passportFootprint:
         case CredentialSubjectType.residentCard:
         case CredentialSubjectType.twitterCard:
@@ -105,6 +106,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
         case CredentialSubjectType.binancePooAddress:
         case CredentialSubjectType.euDiplomaCard:
         case CredentialSubjectType.euVerifiableId:
+        case CredentialSubjectType.kycAgeCredential:
+        case CredentialSubjectType.kycCountryOfResidence:
           break;
       }
 
@@ -265,6 +268,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.verifiableIdCard:
           case CredentialSubjectType.over18:
           case CredentialSubjectType.over13:
+          case CredentialSubjectType.over15:
           case CredentialSubjectType.passportFootprint:
           case CredentialSubjectType.residentCard:
           case CredentialSubjectType.gender:
@@ -320,6 +324,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.binancePooAddress:
           case CredentialSubjectType.euDiplomaCard:
           case CredentialSubjectType.euVerifiableId:
+          case CredentialSubjectType.kycAgeCredential:
+          case CredentialSubjectType.kycCountryOfResidence:
             break;
         }
 
@@ -635,6 +641,7 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.gender:
           case CredentialSubjectType.over18:
           case CredentialSubjectType.over13:
+          case CredentialSubjectType.over15:
           case CredentialSubjectType.passportFootprint:
           case CredentialSubjectType.twitterCard:
             // // Note: Uncomment if we need to display dummies again.
@@ -687,6 +694,8 @@ class CredentialListCubit extends Cubit<CredentialListState> {
           case CredentialSubjectType.polygonPooAddress:
           case CredentialSubjectType.binancePooAddress:
           case CredentialSubjectType.euVerifiableId:
+          case CredentialSubjectType.kycAgeCredential:
+          case CredentialSubjectType.kycCountryOfResidence:
             break;
         }
 

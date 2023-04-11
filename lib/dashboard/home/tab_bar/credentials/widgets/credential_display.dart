@@ -147,6 +147,9 @@ class CredentialDisplay extends StatelessWidget {
       case CredentialSubjectType.over13:
         return Over13Widget(credentialModel: credentialModel);
 
+      case CredentialSubjectType.over15:
+        return Over15Widget(credentialModel: credentialModel);
+
       case CredentialSubjectType.passportFootprint:
         return PassportFootprintWidget(credentialModel: credentialModel);
 
@@ -300,6 +303,12 @@ class CredentialDisplay extends StatelessWidget {
 
       case CredentialSubjectType.binancePooAddress:
         return BinancePooAddressWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.kycAgeCredential:
+        return KYCAgeCredentialWidget(credentialModel: credentialModel);
+
+      case CredentialSubjectType.kycCountryOfResidence:
+        return KYCCountryOfResidenceWidget(credentialModel: credentialModel);
     }
   }
 }

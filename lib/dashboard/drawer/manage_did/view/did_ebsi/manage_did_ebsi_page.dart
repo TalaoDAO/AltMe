@@ -6,7 +6,7 @@ import 'package:ebsi/ebsi.dart';
 import 'package:flutter/material.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class ManageDidEbsiPage extends StatefulWidget {
+class ManageDidEbsiPage extends StatelessWidget {
   const ManageDidEbsiPage({super.key});
 
   static Route<dynamic> route() {
@@ -16,23 +16,12 @@ class ManageDidEbsiPage extends StatefulWidget {
     );
   }
 
-  @override
-  State<ManageDidEbsiPage> createState() => _ManageDidEbsiPageState();
-}
-
-class _ManageDidEbsiPageState extends State<ManageDidEbsiPage> {
-  String did = '';
-  @override
-  void initState() {
-    Future.delayed(Duration.zero, () async {
-      final ebsi = Ebsi(Dio());
-      final mnemonic =
-          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-      final privateKey = await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic!);
-      did = await ebsi.getDidFromMnemonic(null, privateKey);
-      setState(() {});
-    });
-    super.initState();
+  Future<String> getDid() async {
+    final ebsi = Ebsi(Dio());
+    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+    final privateKey = await ebsi.privateKeyFromMnemonic(mnemonic: mnemonic!);
+    final did = await ebsi.getDidFromMnemonic(null, privateKey);
+    return did;
   }
 
   @override
@@ -52,7 +41,20 @@ class _ManageDidEbsiPageState extends State<ManageDidEbsiPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Did(did: did),
+            FutureBuilder<String>(
+              future: getDid(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.done:
+                    final did = snapshot.data!;
+                    return Did(did: did);
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                  case ConnectionState.active:
+                    return const SizedBox();
+                }
+              },
+            ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
               child: Divider(),

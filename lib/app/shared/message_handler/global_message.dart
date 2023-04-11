@@ -5,9 +5,6 @@ class GlobalMessage {
 
   final AppLocalizations l10n;
 
-  String get RESPONSE_STRING_identityProofDummyDescription =>
-      l10n.identityProofDummyDescription;
-
   String get RESPONSE_STRING_bloometaPassHowToGetIt =>
       l10n.bloometaPassHowToGetIt;
 
@@ -16,30 +13,6 @@ class GlobalMessage {
 
   String get RESPONSE_STRING_bloometaPassWhyGetThisCard =>
       l10n.bloometaPassWhyGetThisCard;
-
-  String get RESPONSE_STRING_over18DummyDescription =>
-      l10n.over18ProofDummyDescription;
-
-  String get RESPONSE_STRING_over13DummyDescription =>
-      l10n.over13ProofDummyDescription;
-
-  String get RESPONSE_STRING_passportFootprintDummyDescription =>
-      l10n.passportFootprintDummyDescription;
-
-  String get RESPONSE_STRING_emailProofDummyDescription =>
-      l10n.emailProofDummyDescription;
-
-  String get RESPONSE_STRING_genderProofDummyDescription =>
-      l10n.genderProofDummyDescription;
-
-  String get RESPONSE_STRING_nationalityProofDummyDescription =>
-      l10n.nationalityProofDummyDescription;
-
-  String get RESPONSE_STRING_ageRangeProofDummyDescription =>
-      l10n.ageRangeProofDummyDescription;
-
-  String get RESPONSE_STRING_phoneProofDummyDescription =>
-      l10n.phoneProofDummyDescription;
 
   String get RESPONSE_STRING_BALANCE_TOO_LOW =>
       l10n.transactionErrorBalanceTooLow;
@@ -312,6 +285,9 @@ class GlobalMessage {
   String get RESPONSE_STRING_over13WhyGetThisCard => l10n.over13WhyGetThisCard;
   String get RESPONSE_STRING_over13ExpirationDate => l10n.over13ExpirationDate;
   String get RESPONSE_STRING_over13HowToGetIt => l10n.over13HowToGetIt;
+  String get RESPONSE_STRING_over15WhyGetThisCard => l10n.over15WhyGetThisCard;
+  String get RESPONSE_STRING_over15ExpirationDate => l10n.over15ExpirationDate;
+  String get RESPONSE_STRING_over15HowToGetIt => l10n.over15HowToGetIt;
   String get RESPONSE_STRING_passportFootprintWhyGetThisCard =>
       l10n.passportFootprintWhyGetThisCard;
   String get RESPONSE_STRING_passportFootprintExpirationDate =>
@@ -370,4 +346,9 @@ class GlobalMessage {
       l10n.chainbornMembershipLongDescription;
   String get RESPONSE_STRING_bloometaPassLongDescription =>
       l10n.bloometaPassLongDescription;
+  String get RESPONSE_STRING_succesfullyAuthenticated =>
+      l10n.succesfullyAuthenticated;
+  String get RESPONSE_STRING_authenticationFailed => l10n.authenticationFailed;
+  String get RESPONSE_STRING_deviceIncompatibilityMessage =>
+      l10n.deviceIncompatibilityMessage;
 }

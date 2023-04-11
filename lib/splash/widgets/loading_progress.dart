@@ -1,32 +1,12 @@
 import 'package:flutter/material.dart';
 
-class LoadingProgress extends StatefulWidget {
-  const LoadingProgress({super.key});
+class LoadingProgress extends StatelessWidget {
+  const LoadingProgress({
+    super.key,
+    required this.value,
+  });
 
-  @override
-  State<LoadingProgress> createState() => _LoadingProgressState();
-}
-
-class _LoadingProgressState extends State<LoadingProgress>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _animationController;
-
-  @override
-  void initState() {
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 4 * 1000),
-    );
-
-    _animationController.forward();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
+  final double value;
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +31,7 @@ class _LoadingProgressState extends State<LoadingProgress>
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(borderRadius),
-          child: AnimatedBuilder(
-            animation: _animationController,
-            builder: (context, child) {
-              return LinearProgressIndicator(value: _animationController.value);
-            },
-          ),
+          child: LinearProgressIndicator(value: value),
         ),
       ),
     );

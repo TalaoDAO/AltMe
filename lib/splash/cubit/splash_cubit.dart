@@ -32,37 +32,45 @@ class SplashCubit extends Cubit<SplashState> {
   final DioClient client;
 
   Future<void> initialiseApp() async {
-    final bool hasWallet = await isWalletCreated(
-      secureStorageProvider: secureStorageProvider,
-      didCubit: didCubit,
-      walletCubit: walletCubit,
-    );
-
-    if (hasWallet) {
-      await homeCubit.emitHasWallet();
-      emit(state.copyWith(status: SplashStatus.routeToPassCode));
-      if (await isGettingMultipleCredentialsNeeded(secureStorageProvider)) {
-        final String? preAuthorizedCode = await secureStorageProvider.get(
-          SecureStorageKeys.preAuthorizedCode,
+    double counter = 0;
+    Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+      counter = counter + 0.5;
+      emit(state.copyWith(loadedValue: counter / 5));
+      if (counter > 5) {
+        timer.cancel();
+        final bool hasWallet = await isWalletCreated(
+          secureStorageProvider: secureStorageProvider,
+          didCubit: didCubit,
+          walletCubit: walletCubit,
         );
-        if (preAuthorizedCode != null) {
+
+        if (hasWallet) {
+          await homeCubit.emitHasWallet();
+          emit(state.copyWith(status: SplashStatus.routeToPassCode));
+          if (await isGettingMultipleCredentialsNeeded(secureStorageProvider)) {
+            final String? preAuthorizedCode = await secureStorageProvider.get(
+              SecureStorageKeys.preAuthorizedCode,
+            );
+            if (preAuthorizedCode != null) {
+              unawaited(
+                multipleCredentialsTimer(
+                  preAuthorizedCode,
+                  client,
+                  secureStorageProvider,
+                  walletCubit,
+                ),
+              );
+            }
+          }
           unawaited(
-            multipleCredentialsTimer(
-              preAuthorizedCode,
-              client,
-              secureStorageProvider,
-              walletCubit,
-            ),
+            homeCubit.periodicCheckRewardOnTezosBlockchain(),
           );
+        } else {
+          homeCubit.emitHasNoWallet();
+          emit(state.copyWith(status: SplashStatus.routeToOnboarding));
         }
       }
-      unawaited(
-        homeCubit.periodicCheckRewardOnTezosBlockchain(),
-      );
-    } else {
-      homeCubit.emitHasNoWallet();
-      emit(state.copyWith(status: SplashStatus.routeToOnboarding));
-    }
+    });
   }
 
   Future<void> _getAppVersion() async {

@@ -6,14 +6,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddCredentialButton extends StatelessWidget {
-  const AddCredentialButton({super.key});
+  const AddCredentialButton({
+    super.key,
+    required this.credentialCategory,
+  });
+
+  final CredentialCategory credentialCategory;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return TransparentInkWell(
       onTap: () {
-        context.read<DashboardCubit>().onPageChanged(1);
+        if (credentialCategory == CredentialCategory.blockchainAccountsCards) {
+          Navigator.of(context).push<void>(ChooseAddAccountMethodPage.route());
+        } else {
+          context.read<DashboardCubit>().onPageChanged(1);
+        }
       },
       child: BackgroundCard(
         padding: const EdgeInsets.all(4),

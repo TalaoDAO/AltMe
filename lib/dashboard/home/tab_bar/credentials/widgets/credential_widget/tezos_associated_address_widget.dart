@@ -17,8 +17,8 @@ class TezosAssociatedAddressWidget extends StatelessWidget {
     final associatedAddress = credentialModel?.credentialPreview
         .credentialSubjectModel as TezosAssociatedAddressModel?;
     return MyBlockchainAccountBaseWidget(
-      image: IconStrings.tezos,
-      name: l10n.tezosNetwork,
+      background: ImageStrings.tezosOwnershipCard,
+      proofMessage: l10n.tezosProofMessage,
       walletAddress: associatedAddress?.associatedAddress ?? '',
     );
   }
