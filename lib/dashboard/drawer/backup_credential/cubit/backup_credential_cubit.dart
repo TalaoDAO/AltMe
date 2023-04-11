@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
@@ -27,17 +28,12 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
   final WalletCubit walletCubit;
   final FileSaver fileSaver;
 
-  String? mnemonics;
-
-  Future<List<String>> loadMnemonic() async {
-    final mnemonicList = await getssiMnemonicsInList(secureStorageProvider);
-    mnemonics = mnemonicList.join(' ');
-    return mnemonicList;
-  }
-
-  Future<void> encryptAndDownloadFile() async {
+  Future<void> encryptAndDownloadFile({
+    required bool isPolygonIdCredentials,
+  }) async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
+    final mnemonicList = await getssiMnemonicsInList(secureStorageProvider);
     final isPermissionStatusGranted = await getStoragePermission();
 
     try {
@@ -48,16 +44,40 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       }
 
       final dateTime = getDateTimeWithoutSpace();
-      final fileName = 'altme-credential-$dateTime';
+      final fileName = isPolygonIdCredentials
+          ? 'altme-polygonid-credential-$dateTime'
+          : 'altme-credential-$dateTime';
+
+      late List<CredentialModel> credentialModels;
+
+      if (isPolygonIdCredentials) {
+        //filter polygon id
+
+        credentialModels = List.of(walletCubit.state.credentials)
+            .where(
+              (CredentialModel element) => element.id.startsWith(
+                'https://self-hosted-platform.polygonid.me/v1/did:polygonid:polygon:',
+              ),
+            )
+            .toList();
+
+        if (credentialModels.isEmpty) {
+          throw ResponseMessage(
+            ResponseString.RESPONSE_STRING_backupPolygonIdCredentialEmptyError,
+          );
+        }
+      } else {
+        credentialModels = walletCubit.state.credentials;
+      }
 
       final date = UiDate.formatDate(DateTime.now());
       final message = {
         'date': date,
-        'credentials': walletCubit.state.credentials,
+        'credentials': credentialModels,
       };
 
       final encrypted =
-          await cryptoKeys.encrypt(jsonEncode(message), mnemonics!);
+          await cryptoKeys.encrypt(jsonEncode(message), mnemonicList.join(' '));
       final fileBytes = Uint8List.fromList(utf8.encode(jsonEncode(encrypted)));
       final filePath =
           await fileSaver.saveAs(fileName, fileBytes, 'txt', MimeType.TEXT);

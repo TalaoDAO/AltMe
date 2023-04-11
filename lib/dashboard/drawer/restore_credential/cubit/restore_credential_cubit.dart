@@ -4,50 +4,46 @@ import 'dart:io';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:bip39/bip39.dart' as bip39;
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-part 'recovery_credential_cubit.g.dart';
-part 'recovery_credential_state.dart';
+part 'restore_credential_cubit.g.dart';
+part 'restore_credential_state.dart';
 
-class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
-  RecoveryCredentialCubit({
+class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
+  RestoreCredentialCubit({
     required this.walletCubit,
+    required this.credentialListCubit,
     required this.cryptoKeys,
     required this.secureStorageProvider,
-  }) : super(const RecoveryCredentialState());
+  }) : super(const RestoreCredentialState());
 
   final WalletCubit walletCubit;
+  final CredentialListCubit credentialListCubit;
   final CryptocurrencyKeys cryptoKeys;
   final SecureStorageProvider secureStorageProvider;
-
-  void isMnemonicsValid(String value) {
-    emit(
-      state.populating(
-        isTextFieldEdited: value.isNotEmpty,
-        isMnemonicValid: bip39.validateMnemonic(value) && value.isNotEmpty,
-      ),
-    );
-  }
 
   void setFilePath({String? filePath}) {
     emit(state.copyWith(backupFilePath: filePath));
   }
 
-  Future<void> recoverWallet() async {
+  Future<void> recoverWallet({required bool isPolygonIdCredentials}) async {
     if (state.backupFilePath == null) return;
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     emit(state.loading());
 
-    final String? mnemonics = await secureStorageProvider
+    final String? recoveryMnemonic = await secureStorageProvider
         .get(SecureStorageKeys.recoverCredentialMnemonics);
 
-    if (mnemonics == null) throw Exception();
+    if (recoveryMnemonic == null) {
+      throw ResponseMessage(
+        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+      );
+    }
 
-    await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
       final file = File(state.backupFilePath!);
       final text = await file.readAsString();
@@ -65,7 +61,8 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
         cipherText: json['cipherText'] as String,
         authenticationTag: json['authenticationTag'] as String,
       );
-      final decryptedText = await cryptoKeys.decrypt(mnemonics, encryption);
+      final decryptedText =
+          await cryptoKeys.decrypt(recoveryMnemonic, encryption);
       final decryptedJson = jsonDecode(decryptedText) as Map<String, dynamic>;
       if (!decryptedJson.containsKey('date') ||
           !decryptedJson.containsKey('credentials') ||
@@ -82,10 +79,12 @@ class RecoveryCredentialCubit extends Cubit<RecoveryCredentialState> {
             CredentialModel.fromJson(credential as Map<String, dynamic>),
       );
 
-      await walletCubit.recoverWallet(credentials.toList());
-      emit(
-        state.success(recoveredCredentialLength: credentials.length),
+      await walletCubit.recoverWallet(
+        credentials: credentials.toList(),
+        isPolygonIdCredentials: isPolygonIdCredentials,
       );
+      await credentialListCubit.initialise(walletCubit);
+      emit(state.success(recoveredCredentialLength: credentials.length));
     } catch (e) {
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));

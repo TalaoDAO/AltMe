@@ -278,4 +278,52 @@ class PolygonId {
       privateKey: privateKey,
     );
   }
+
+  /// Backup a previously stored [IdentityEntity] from a privateKey
+  /// associated to the identity
+  ///
+  /// Identity privateKey is the key used to access all the sensitive info from
+  /// the identity and also to realize operations like generating proofs
+  /// using the claims associated to the identity
+  ///
+  /// Returns a map of profile nonces and
+  /// associated encrypted Identity's Databases.
+  ///
+  /// Throws [IdentityException] if an error occurs.
+  ///
+  /// The identity will be backed up using the current env set with
+  /// [PolygonIdSdk.setEnv]
+  Future<Map<int, String>?> backupIdentity({
+    required String mnemonic,
+  }) async {
+    final sdk = PolygonIdSdk.I;
+    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+    return sdk.identity.backupIdentity(privateKey: privateKey);
+  }
+
+  /// Restores an [IdentityEntity] from a privateKey and encrypted backup
+  /// databases associated to the identity
+  /// Return an identity as a [PrivateIdentityEntity].
+  /// Throws [IdentityException] if an error occurs.
+  ///
+  /// Identity privateKey is the key used to access all the sensitive info from
+  /// the identity and also to realize operations like generating proofs
+  /// using the claims associated to the identity
+  ///
+  ///  The [encryptedIdentityDbs] is a map of profile nonces and
+  ///  associated encrypted Identity's Databases
+  ///
+  /// The identity will be restored using the current env set with
+  /// [PolygonIdSdk.setEnv]
+  Future<void> restoreIdentity({
+    required String mnemonic,
+    required Map<int, String> encryptedIdentityDbs,
+  }) async {
+    final sdk = PolygonIdSdk.I;
+    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+    await sdk.identity.restoreIdentity(
+      privateKey: privateKey,
+      encryptedIdentityDbs: encryptedIdentityDbs,
+    );
+  }
 }

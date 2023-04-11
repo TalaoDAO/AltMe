@@ -60,8 +60,14 @@ class SSIView extends StatelessWidget {
                       PinCodePage.route(
                         restrictToBack: false,
                         isValidCallback: () {
-                          Navigator.of(context)
-                              .push<void>(BackupCredentialPage.route());
+                          Navigator.of(context).push<void>(
+                            BackupMnemonicPage.route(
+                              isValidCallback: () {
+                                Navigator.of(context)
+                                    .push<void>(BackupCredentialPage.route());
+                              },
+                            ),
+                          );
                         },
                       ),
                     );
@@ -87,8 +93,71 @@ class SSIView extends StatelessWidget {
                         PinCodePage.route(
                           restrictToBack: false,
                           isValidCallback: () {
-                            Navigator.of(context)
-                                .push<void>(RecoveryCredentialPage.route());
+                            Navigator.of(context).push<void>(
+                              RestoreCredentialMnemonicPage.route(
+                                isValidCallback: () {
+                                  Navigator.of(context).push<void>(
+                                    RestoreCredentialPage.route(),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  },
+                ),
+                DrawerItem(
+                  title: l10n.backupPolygonIdCredentials,
+                  onTap: () async {
+                    await Navigator.of(context).push<void>(
+                      PinCodePage.route(
+                        restrictToBack: false,
+                        isValidCallback: () {
+                          Navigator.of(context).push<void>(
+                            BackupMnemonicPage.route(
+                              isValidCallback: () {
+                                Navigator.of(context).push<void>(
+                                  BackupPolygonIdCredentialPage.route(),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+                DrawerItem(
+                  title: l10n.restorePolygonIdCredentials,
+                  onTap: () async {
+                    final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => ConfirmDialog(
+                            title: l10n.warningDialogTitle,
+                            subtitle:
+                                l10n.restorationCredentialWarningDialogSubtitle,
+                            yes: l10n.showDialogYes,
+                            no: l10n.showDialogNo,
+                          ),
+                        ) ??
+                        false;
+
+                    if (confirm) {
+                      await Navigator.of(context).push<void>(
+                        PinCodePage.route(
+                          restrictToBack: false,
+                          isValidCallback: () {
+                            Navigator.of(context).push<void>(
+                              RestoreCredentialMnemonicPage.route(
+                                isValidCallback: () {
+                                  Navigator.of(context).push<void>(
+                                    RestorePolygonIdCredentialPage.route(),
+                                  );
+                                },
+                              ),
+                            );
                           },
                         ),
                       );

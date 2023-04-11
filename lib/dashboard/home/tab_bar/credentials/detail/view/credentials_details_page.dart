@@ -5,6 +5,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
@@ -49,6 +50,7 @@ class CredentialsDetailsPage extends StatelessWidget {
         client: DioClient('', Dio()),
         jwtDecode: JWTDecode(),
         polygonId: PolygonId(),
+        polygonIdCubit: context.read<PolygonIdCubit>(),
       ),
       child: CredentialsDetailsView(
         credentialModel: credentialModel,

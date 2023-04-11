@@ -639,6 +639,12 @@ class ResponseMessage with MessageHandler {
               .localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_backupPolygonIdCredentialEmptyError:
+          return ResponseString
+              .RESPONSE_STRING_backupPolygonIdCredentialEmptyError.localise(
+            context,
+          );
       }
     }
     return '';

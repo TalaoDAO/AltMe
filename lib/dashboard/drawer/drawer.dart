@@ -1,6 +1,7 @@
 export 'advance_settings/advance_settings.dart';
 export 'altme_support_chat/altme_support_chat.dart';
 export 'backup_credential/backup_credential.dart';
+export 'backup_mnemonic/backup_mnemonic.dart';
 export 'chat_room/chat_room.dart';
 export 'contact_us/contact_us.dart';
 export 'drawer/drawer.dart';
@@ -11,8 +12,9 @@ export 'manage_accounts/manage_accounts.dart';
 export 'manage_did/manage_did.dart';
 export 'manage_issuers_registry/manage_issuers_registry.dart';
 export 'manage_network/manage_network.dart';
-export 'recovery_credential/recovery_credential.dart';
 export 'recovery_key/recovery_key.dart';
+export 'restore_credential/restore_credential.dart';
+export 'restore_credential_mnemonics/restore_credential_mnemonic.dart';
 export 'secret_key/secret_key.dart';
 export 'sofware_licenses/software_licesnses.dart';
 export 'support/support.dart';

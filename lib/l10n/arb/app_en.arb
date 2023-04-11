@@ -200,7 +200,7 @@
   "backupCredentialPhrase": "Write these words, download the backup file and keep them in a safe place",
   "backupCredentialPhraseExplanation": "To backup your credentials write down your Recovery Phrase and keep it in a safe place.",
   "backupCredentialButtonTitle": "Save The File",
-  "backupCredentialEmptyError": "You do not have any credential in your wallet.",
+  "backupPolygonIdCredentialEmptyError": "You do not have any polygon id credential in your wallet.",
   "needStoragePermission": "Sorry, You need storage permission to download this file.",
   "backupCredentialNotificationTitle": "Success",
   "backupCredentialNotificationMessage": "File has been successfully downloaded. Tap to open the file.",
@@ -745,7 +745,8 @@
   "binanceAccountCreationCongratulations": "Your new Binance account has been successfully created.",
   "accountImportCongratulations": "Your account has been successfully imported.",
   "saveBackupCredentialTitle": "Download the backup file.\nKeep it in a safe place.",
-  "saveBackupCredentialSubtitle": "To recover all your credentials you will need the Recovery Phrase AND this backup file.",
+  "saveBackupCredentialSubtitle": "To recover all your polygon id credentials you will need the Recovery Phrase AND this backup file.",
+  "saveBackupPolygonCredentialSubtitle": "To recover all your credentials you will need the Recovery Phrase AND this backup file.",
   "restoreCredentialStep1Title": "Step 1 : Enter your 12 Recovery Phrase words",
   "restorePhraseTextFieldHint": "Enter your Recovery Phrase (or mnemonic phrase) here...",
   "restoreCredentialStep2Title": "Step 2 : Upload your credentials backup file",
@@ -834,5 +835,7 @@
   "youAreOver15": "You are over 15 years old",
   "youAreOver18": "You are over 18 years old",
   "polygon": "Polygon",
-  "ebsi": "EBSI"
+  "ebsi": "EBSI",
+  "backupPolygonIdCredentials": "Backup PolygonId Credentials",
+  "restorePolygonIdCredentials": "Restore PolygonId Credentials"
 }

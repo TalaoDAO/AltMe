@@ -157,7 +157,7 @@
     "backupCredentialPhrase",
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
-    "backupCredentialEmptyError",
+    "backupPolygonIdCredentialEmptyError",
     "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
@@ -682,6 +682,7 @@
     "accountImportCongratulations",
     "saveBackupCredentialTitle",
     "saveBackupCredentialSubtitle",
+    "saveBackupPolygonCredentialSubtitle",
     "restoreCredentialStep1Title",
     "restorePhraseTextFieldHint",
     "restoreCredentialStep2Title",
@@ -770,7 +771,9 @@
     "youAreOver15",
     "youAreOver18",
     "polygon",
-    "ebsi"
+    "ebsi",
+    "backupPolygonIdCredentials",
+    "restorePolygonIdCredentials"
   ],
 
   "es": [
@@ -931,7 +934,7 @@
     "backupCredentialPhrase",
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
-    "backupCredentialEmptyError",
+    "backupPolygonIdCredentialEmptyError",
     "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
@@ -1456,6 +1459,7 @@
     "accountImportCongratulations",
     "saveBackupCredentialTitle",
     "saveBackupCredentialSubtitle",
+    "saveBackupPolygonCredentialSubtitle",
     "restoreCredentialStep1Title",
     "restorePhraseTextFieldHint",
     "restoreCredentialStep2Title",
@@ -1544,10 +1548,13 @@
     "youAreOver15",
     "youAreOver18",
     "polygon",
-    "ebsi"
+    "ebsi",
+    "backupPolygonIdCredentials",
+    "restorePolygonIdCredentials"
   ],
 
   "fr": [
+    "backupPolygonIdCredentialEmptyError",
     "coins",
     "educationCredentials",
     "onboardingVerifyPhraseMessage",
@@ -1567,6 +1574,7 @@
     "kycSubtitle",
     "passbaseTitle",
     "passbaseSubtitle",
+    "saveBackupPolygonCredentialSubtitle",
     "altmeSupport",
     "manageKeyDecentralizedId",
     "manageEbsiDecentralizedId",
@@ -1613,7 +1621,9 @@
     "youAreOver15",
     "youAreOver18",
     "polygon",
-    "ebsi"
+    "ebsi",
+    "backupPolygonIdCredentials",
+    "restorePolygonIdCredentials"
   ],
 
   "it": [
@@ -1774,7 +1784,7 @@
     "backupCredentialPhrase",
     "backupCredentialPhraseExplanation",
     "backupCredentialButtonTitle",
-    "backupCredentialEmptyError",
+    "backupPolygonIdCredentialEmptyError",
     "needStoragePermission",
     "backupCredentialNotificationTitle",
     "backupCredentialNotificationMessage",
@@ -2299,6 +2309,7 @@
     "accountImportCongratulations",
     "saveBackupCredentialTitle",
     "saveBackupCredentialSubtitle",
+    "saveBackupPolygonCredentialSubtitle",
     "restoreCredentialStep1Title",
     "restorePhraseTextFieldHint",
     "restoreCredentialStep2Title",
@@ -2387,6 +2398,8 @@
     "youAreOver15",
     "youAreOver18",
     "polygon",
-    "ebsi"
+    "ebsi",
+    "backupPolygonIdCredentials",
+    "restorePolygonIdCredentials"
   ]
 }
