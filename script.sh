@@ -1,5 +1,6 @@
 
 function pub {
+  fvm flutter clean
   for d in `ls packages`;
   do
     (
