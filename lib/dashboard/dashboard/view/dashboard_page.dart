@@ -283,7 +283,10 @@ class _DashboardViewState extends State<DashboardView> {
                             physics: const NeverScrollableScrollPhysics(),
                             children: const [
                               HomePage(),
-                              DiscoverPage(),
+                              if (Parameters.hasCryptoCallToAction)
+                                DiscoverTabPage()
+                              else
+                                DiscoverPage(),
                               if (Parameters.hasCryptoCallToAction)
                                 WertPage()
                               else
