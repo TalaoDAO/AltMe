@@ -6,9 +6,11 @@ class DiscoverCredentialCategoryList extends StatelessWidget {
   const DiscoverCredentialCategoryList({
     super.key,
     required this.onRefresh,
+    required this.dummyCredentials,
   });
 
   final RefreshCallback onRefresh;
+  final Map<CredentialCategory, List<DiscoverDummyCredential>> dummyCredentials;
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +18,16 @@ class DiscoverCredentialCategoryList extends StatelessWidget {
       onRefresh: onRefresh,
       child: ListView(
         scrollDirection: Axis.vertical,
-        children: getCredentialsCategories(context: context).map(
+        children: dummyCredentials.keys
+            .where(
+          (category) =>
+              category.showInDiscover &&
+              (dummyCredentials[category]?.isNotEmpty ?? false),
+        )
+            .map(
           (category) {
             return DiscoverCredentialCategoryItem(
-              dummyCredentials: [], //TODO(Taleb): update the list of dummy items
+              dummyCredentials: dummyCredentials[category] ?? [],
               credentialCategory: category,
             );
           },

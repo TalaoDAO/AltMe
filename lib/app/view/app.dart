@@ -85,9 +85,6 @@ class App extends StatelessWidget {
             secureStorageProvider: secure_storage.getSecureStorage,
           ),
         ),
-        BlocProvider<CredentialListCubit>(
-          create: (context) => CredentialListCubit(),
-        ),
         BlocProvider<DIDCubit>(
           create: (context) => DIDCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
@@ -107,7 +104,6 @@ class App extends StatelessWidget {
             credentialsRepository:
                 CredentialsRepository(secure_storage.getSecureStorage),
             secureStorageProvider: secure_storage.getSecureStorage,
-            credentialListCubit: context.read<CredentialListCubit>(),
             keyGenerator: KeyGenerator(),
             didKitProvider: DIDKitProvider(),
             didCubit: context.read<DIDCubit>(),
@@ -119,7 +115,6 @@ class App extends StatelessWidget {
           create: (context) => WalletCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
             homeCubit: context.read<HomeCubit>(),
-            credentialListCubit: context.read<CredentialListCubit>(),
             keyGenerator: KeyGenerator(),
             credentialsCubit: context.read<CredentialsCubit>(),
           ),
@@ -184,7 +179,6 @@ class App extends StatelessWidget {
               Dio(),
             ),
             walletCubit: context.read<WalletCubit>(),
-            credentialsCubit: context.read<CredentialsCubit>(),
           ),
         ),
         BlocProvider<NftCubit>(

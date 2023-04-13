@@ -65,15 +65,15 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
             message = messageHandler.getMessage(context, messageHandler);
           }
 
-          if (state.status == AppStatus.fetching) {
+          if (state.status == CredentialsStatus.loading) {
             return const CredentialListShimmer();
-          } else if (state.status == AppStatus.populate) {
+          } else if (state.status == CredentialsStatus.populate) {
             //return CredentialListData(state: state, onRefresh: onRefresh);
             return HomeCredentialCategoryList(
               credentials: state.credentials,
               onRefresh: onRefresh,
             );
-          } else if (state.status == AppStatus.errorWhileFetching) {
+          } else if (state.status == CredentialsStatus.error) {
             return ErrorView(message: message, onTap: onRefresh);
           } else {
             return Container();

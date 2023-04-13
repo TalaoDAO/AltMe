@@ -8,7 +8,9 @@ class HomeCredentialCategoryItem extends StatelessWidget {
     super.key,
     required this.credentials,
     required this.credentialCategory,
-    this.margin = EdgeInsets.zero,
+    this.margin = const EdgeInsets.only(
+      bottom: Sizes.spaceNormal,
+    ),
   });
 
   final List<CredentialModel> credentials;
@@ -50,9 +52,9 @@ class HomeCredentialCategoryItem extends StatelessWidget {
               childAspectRatio: Sizes.homeCredentialRatio,
             ),
             itemCount: credentials.length +
-                (credentialCategoryConfig.showAddButtonInHome ? 1 : 0),
+                (credentialCategory.showAddButtonInHome ? 1 : 0),
             itemBuilder: (_, index) {
-              if (credentialCategoryConfig.showAddButtonInHome &&
+              if (credentialCategory.showAddButtonInHome &&
                   index == credentials.length) {
                 return AddCredentialButton(
                   credentialCategory: credentialCategory,

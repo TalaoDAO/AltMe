@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -142,8 +143,8 @@ class _TabControllerViewState extends State<TabControllerView>
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(10),
-                child: BlocBuilder<CredentialListCubit, CredentialListState>(
-                  builder: (context, credentialListState) {
+                child: BlocBuilder<CredentialsCubit, CredentialsState>(
+                  builder: (__, _) {
                     return BlocBuilder<WalletCubit, WalletState>(
                       builder: (context, walletState) {
                         return TabBarView(

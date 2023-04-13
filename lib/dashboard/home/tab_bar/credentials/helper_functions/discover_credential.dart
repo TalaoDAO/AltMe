@@ -9,7 +9,7 @@ Future<void> discoverCredential({
   required BuildContext context,
 }) async {
   final List<CredentialSubjectType> credentialSubjectTypeList =
-      List.of(DiscoverList.identityCategories);
+      List.of(CredentialCategory.identityCards.discoverCredentialSubjectTypes);
 
   /// items to remove to bypass KYC
   credentialSubjectTypeList

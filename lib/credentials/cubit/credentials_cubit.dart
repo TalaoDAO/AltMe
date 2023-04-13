@@ -29,7 +29,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   CredentialsCubit({
     required this.credentialsRepository,
     required this.secureStorageProvider,
-    required this.credentialListCubit,
     required this.didCubit,
     required this.didKitProvider,
     required this.advanceSettingsCubit,
@@ -38,7 +37,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   final CredentialsRepository credentialsRepository;
   final SecureStorageProvider secureStorageProvider;
-  final CredentialListCubit credentialListCubit;
   final DIDCubit didCubit;
   final DIDKitProvider didKitProvider;
   final KeyGenerator keyGenerator;
@@ -56,10 +54,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     }
     emit(state.copyWith(status: CredentialsStatus.loading));
     final savedCredentials = await credentialsRepository.findAll(/* filters */);
+    final dummies = _getAvalaibleDummyCredentials(savedCredentials);
     emit(
       state.copyWith(
         status: CredentialsStatus.populate,
         credentials: savedCredentials,
+        dummyCredentials: dummies,
       ),
     );
     log.i('credentials loaded from repository - ${savedCredentials.length}');
@@ -89,6 +89,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     }
   }
 
+  void reset() {
+    emit(
+      state.copyWith(
+        status: CredentialsStatus.reset,
+        credentials: [],
+      ),
+    );
+  }
+
   Future<void> deleteById({
     required CredentialModel credential,
     bool showMessage = true,
@@ -97,7 +106,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     await credentialsRepository.deleteById(credential.id);
     final credentials = List.of(state.credentials)
       ..removeWhere((element) => element.id == credential.id);
-    await credentialListCubit.deleteById(credential);
     emit(
       state.copyWith(
         status: CredentialsStatus.delete,
@@ -123,7 +131,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final credentials = List.of(state.credentials);
     credentials[index] = credential;
 
-    await credentialListCubit.updateCredential(credential);
     emit(
       state.copyWith(
         status: CredentialsStatus.update,
@@ -168,63 +175,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final CredentialCategory credentialCategory =
         credential.credentialPreview.credentialSubjectModel.credentialCategory;
 
-    if (credentialCategory == CredentialCategory.gamingCards &&
-        credentialListCubit.state.gamingCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isGamingEnabled) {
-        advanceSettingsCubit.toggleGamingRadio();
-      }
-    }
+    enableCredentialCategory(category: credentialCategory);
 
-    if (credentialCategory == CredentialCategory.communityCards &&
-        credentialListCubit.state.communityCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isCommunityEnabled) {
-        advanceSettingsCubit.toggleCommunityRadio();
-      }
-    }
-
-    if (credentialCategory == CredentialCategory.identityCards &&
-        credentialListCubit.state.identityCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isIdentityEnabled) {
-        advanceSettingsCubit.toggleIdentityRadio();
-      }
-    }
-
-    if (credentialCategory == CredentialCategory.passCards &&
-        credentialListCubit.state.passCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isPassEnabled) {
-        advanceSettingsCubit.togglePassRadio();
-      }
-    }
-
-    if (credentialCategory == CredentialCategory.blockchainAccountsCards &&
-        credentialListCubit.state.blockchainAccountsCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isBlockchainAccountsEnabled) {
-        advanceSettingsCubit.toggleBlockchainAccountsRadio();
-      }
-    }
-
-    if (credentialCategory == CredentialCategory.educationCards &&
-        credentialListCubit.state.educationCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isEducationEnabled) {
-        advanceSettingsCubit.toggleEducationRadio();
-      }
-    }
-
-    if (credentialCategory == CredentialCategory.othersCards &&
-        credentialListCubit.state.othersCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isOtherEnabled) {
-        advanceSettingsCubit.toggleOtherRadio();
-      }
-    }
-
-    await credentialListCubit.insertCredential(
-      credential: credential,
-    );
+    final dummies = _getAvalaibleDummyCredentials(credentials);
 
     emit(
       state.copyWith(
         status: CredentialsStatus.insert,
         credentials: credentials,
+        dummyCredentials: dummies,
         messageHandler: showMessage
             ? ResponseMessage(
                 ResponseString.RESPONSE_STRING_CREDENTIAL_ADDED_MESSAGE,
@@ -232,6 +191,54 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             : null,
       ),
     );
+  }
+
+  void enableCredentialCategory({required CredentialCategory category}) {
+    switch (category) {
+      case CredentialCategory.gamingCards:
+        if (!advanceSettingsCubit.state.isGamingEnabled) {
+          advanceSettingsCubit.toggleGamingRadio();
+        }
+        break;
+      case CredentialCategory.communityCards:
+        if (!advanceSettingsCubit.state.isCommunityEnabled) {
+          advanceSettingsCubit.toggleCommunityRadio();
+        }
+        break;
+
+      case CredentialCategory.identityCards:
+        if (!advanceSettingsCubit.state.isIdentityEnabled) {
+          advanceSettingsCubit.toggleIdentityRadio();
+        }
+        break;
+
+      case CredentialCategory.passCards:
+        if (!advanceSettingsCubit.state.isPassEnabled) {
+          advanceSettingsCubit.togglePassRadio();
+        }
+        break;
+
+      case CredentialCategory.blockchainAccountsCards:
+        if (!advanceSettingsCubit.state.isBlockchainAccountsEnabled) {
+          advanceSettingsCubit.toggleBlockchainAccountsRadio();
+        }
+        break;
+
+      case CredentialCategory.educationCards:
+        if (!advanceSettingsCubit.state.isEducationEnabled) {
+          advanceSettingsCubit.toggleEducationRadio();
+        }
+        break;
+
+      case CredentialCategory.othersCards:
+        if (!advanceSettingsCubit.state.isOtherEnabled) {
+          advanceSettingsCubit.toggleOtherRadio();
+        }
+        break;
+      case CredentialCategory.myProfessionalCards:
+        // TODO: Handle this case.
+        break;
+    }
   }
 
   Future<void> replaceCredential({
@@ -384,5 +391,40 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       blockchainType: blockchainType,
       keyGenerator: keyGenerator,
     );
+  }
+
+  ///get dummy cards
+  Map<CredentialCategory, List<DiscoverDummyCredential>>
+      _getAvalaibleDummyCredentials(List<CredentialModel> credentials) {
+    final dummies = <CredentialCategory, List<DiscoverDummyCredential>>{};
+    for (final category in getCredentialCategorySorted) {
+      final List<CredentialSubjectType> currentCredentialsSubjectTypeList =
+          credentials
+              .map(
+                (e) => e.credentialPreview.credentialSubjectModel
+                    .credentialSubjectType,
+              )
+              .toList();
+
+      final allSubjectTypeForCategory = category.discoverCredentialSubjectTypes;
+
+      final List<CredentialSubjectType> requiredDummySubjects = [];
+
+      for (final subjectType in allSubjectTypeForCategory) {
+        if (currentCredentialsSubjectTypeList.contains(subjectType)) {
+          if (subjectType.weCanRemoveItIfCredentialExist) {
+            continue;
+          } else {
+            requiredDummySubjects.add(subjectType);
+          }
+        } else {
+          requiredDummySubjects.add(subjectType);
+        }
+      }
+
+      dummies[category] =
+          requiredDummySubjects.map(DiscoverDummyCredential.dummy).toList();
+    }
+    return dummies;
   }
 }

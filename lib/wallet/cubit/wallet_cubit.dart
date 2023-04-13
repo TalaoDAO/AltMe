@@ -20,14 +20,12 @@ class WalletCubit extends Cubit<WalletState> {
   WalletCubit({
     required this.secureStorageProvider,
     required this.homeCubit,
-    required this.credentialListCubit,
     required this.keyGenerator,
     required this.credentialsCubit,
   }) : super(const WalletState());
 
   final SecureStorageProvider secureStorageProvider;
   final HomeCubit homeCubit;
-  final CredentialListCubit credentialListCubit;
   final KeyGenerator keyGenerator;
   final CredentialsCubit credentialsCubit;
 
@@ -334,7 +332,7 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// clear app states
     homeCubit.emitHasNoWallet();
-    await credentialListCubit.clearHomeCredentials();
+    credentialsCubit.reset();
     emit(
       state.copyWith(
         status: WalletStatus.reset,

@@ -1,7 +1,6 @@
 part of 'credential_subject_type.dart';
 
 extension CredentialSubjectTypeExtension on CredentialSubjectType {
-
   Color backgroundColor(CredentialModel credentialModel) {
     final Color backgroundColor;
     if (credentialModel.display.backgroundColor != '') {
@@ -589,6 +588,125 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'KYC Country of Residence';
       case CredentialSubjectType.defaultCredential:
         return '';
+    }
+  }
+
+  bool get weCanRemoveItIfCredentialExist {
+    switch (this) {
+      case CredentialSubjectType.bloometaPass:
+        return true;
+      case CredentialSubjectType.troopezPass:
+        return false;
+      case CredentialSubjectType.pigsPass:
+        return false;
+      case CredentialSubjectType.matterlightPass:
+        return false;
+      case CredentialSubjectType.dogamiPass:
+        return false;
+      case CredentialSubjectType.bunnyPass:
+        return false;
+      case CredentialSubjectType.tezotopiaMembership:
+        return true;
+      case CredentialSubjectType.chainbornMembership:
+        return true;
+      case CredentialSubjectType.ageRange:
+        return true;
+      case CredentialSubjectType.nationality:
+        return true;
+      case CredentialSubjectType.gender:
+        return true;
+      case CredentialSubjectType.walletCredential:
+        return false;
+      case CredentialSubjectType.tezosAssociatedWallet:
+        return false;
+      case CredentialSubjectType.ethereumAssociatedWallet:
+        return false;
+      case CredentialSubjectType.fantomAssociatedWallet:
+        return false;
+      case CredentialSubjectType.polygonAssociatedWallet:
+        return false;
+      case CredentialSubjectType.binanceAssociatedWallet:
+        return false;
+      case CredentialSubjectType.tezosPooAddress:
+        return false;
+      case CredentialSubjectType.ethereumPooAddress:
+        return false;
+      case CredentialSubjectType.fantomPooAddress:
+        return false;
+      case CredentialSubjectType.polygonPooAddress:
+        return false;
+      case CredentialSubjectType.binancePooAddress:
+        return false;
+      case CredentialSubjectType.certificateOfEmployment:
+        return false;
+      case CredentialSubjectType.defaultCredential:
+        return false;
+      case CredentialSubjectType.ecole42LearningAchievement:
+        return false;
+      case CredentialSubjectType.emailPass:
+        return false;
+      case CredentialSubjectType.identityPass:
+        return true;
+      case CredentialSubjectType.verifiableIdCard:
+        return true;
+      case CredentialSubjectType.linkedInCard:
+        return false;
+      case CredentialSubjectType.learningAchievement:
+        return false;
+      case CredentialSubjectType.loyaltyCard:
+        return false;
+      case CredentialSubjectType.over18:
+        return true;
+      case CredentialSubjectType.over13:
+        return true;
+      case CredentialSubjectType.over15:
+        return true;
+      case CredentialSubjectType.passportFootprint:
+        return true;
+      case CredentialSubjectType.phonePass:
+        return false;
+      case CredentialSubjectType.professionalExperienceAssessment:
+        return false;
+      case CredentialSubjectType.professionalSkillAssessment:
+        return false;
+      case CredentialSubjectType.professionalStudentCard:
+        return false;
+      case CredentialSubjectType.residentCard:
+        return true;
+      case CredentialSubjectType.selfIssued:
+        return false;
+      case CredentialSubjectType.studentCard:
+        return false;
+      case CredentialSubjectType.voucher:
+        return true;
+      case CredentialSubjectType.tezVoucher:
+        return true;
+      case CredentialSubjectType.talaoCommunityCard:
+        return false;
+      case CredentialSubjectType.diplomaCard:
+        return true;
+      case CredentialSubjectType.aragoPass:
+        return false;
+      case CredentialSubjectType.aragoEmailPass:
+        return false;
+      case CredentialSubjectType.aragoIdentityCard:
+        return false;
+      case CredentialSubjectType.aragoLearningAchievement:
+        return false;
+      case CredentialSubjectType.aragoOver18:
+        return false;
+      case CredentialSubjectType.pcdsAgentCertificate:
+        return false;
+      case CredentialSubjectType.twitterCard:
+        return true;
+      case CredentialSubjectType.euDiplomaCard:
+        return false;
+      case CredentialSubjectType.euVerifiableId:
+        return false;
+      case CredentialSubjectType.kycAgeCredential:
+        return false;
+      case CredentialSubjectType.kycCountryOfResidence:
+        return false;
     }
   }
 }

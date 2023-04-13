@@ -118,9 +118,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     if (confirm) {
       final credentialsCubit = context.read<CredentialsCubit>();
       await credentialsCubit.deleteById(credential: widget.credentialModel);
-      // TODO(Taleb): update the code and use CredentialsCubit
-      // instead of CredentialListCubit
-      await context.read<CredentialListCubit>().initialise(credentialsCubit);
     }
   }
 

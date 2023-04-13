@@ -1,6 +1,9 @@
 import 'package:altme/app/shared/widget/widget.dart';
+import 'package:altme/credentials/credentials.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({super.key});
@@ -10,7 +13,9 @@ class DiscoverPage extends StatefulWidget {
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
-  Future<void> onRefresh() async {}
+  Future<void> onRefresh() async {
+    await context.read<CredentialsCubit>().loadAllCredentials();
+  }
 
   @override
   void initState() {
@@ -23,7 +28,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
       scrollView: false,
       padding: const EdgeInsets.symmetric(horizontal: 10),
       backgroundColor: Theme.of(context).colorScheme.transparent,
-      body: DiscoverCredentialCategoryList(), //TODO(Taleb): update the inputs
+      body: BlocBuilder<CredentialsCubit, CredentialsState>(
+        builder: (context, state) {
+          return DiscoverCredentialCategoryList(
+            onRefresh: onRefresh,
+            dummyCredentials: state.dummyCredentials,
+          );
+        },
+      ), //TODO(Taleb): update the inputs
       // TODO(Taleb): remove this after migrating code
       // return DiscoverCredentialList(
       //   onRefresh: () async {

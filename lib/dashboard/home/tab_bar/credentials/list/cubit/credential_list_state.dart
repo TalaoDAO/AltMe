@@ -1,3 +1,4 @@
+/*
 part of 'credential_list_cubit.dart';
 
 @JsonSerializable()
@@ -198,3 +199,4 @@ class CredentialListState extends Equatable {
         myProfessionalCategories
       ];
 }
+*/
