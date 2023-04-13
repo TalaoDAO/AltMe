@@ -149,7 +149,6 @@ class PolygonId {
       blockchain: blockchain,
       network: network,
       privateKey: privateKey,
-      profileNonce: 0,
     );
     return sdk.identity.removeIdentity(
       privateKey: privateKey,
@@ -207,7 +206,7 @@ class PolygonId {
       /// (if any) proofs requested by it
       await sdk.iden3comm.authenticate(
         message: iden3MessageEntity,
-        did: did,
+        genesisDid: did,
         privateKey: privateKey,
       );
       return true;
@@ -245,7 +244,7 @@ class PolygonId {
 
       final claimEntities = await sdk.iden3comm.fetchAndSaveClaims(
         message: iden3MessageEntity,
-        did: did,
+        genesisDid: did,
         privateKey: privateKey,
       );
 
@@ -293,7 +292,7 @@ class PolygonId {
   ///
   /// The identity will be backed up using the current env set with
   /// [PolygonIdSdk.setEnv]
-  Future<Map<int, String>?> backupIdentity({
+  Future<String> backupIdentity({
     required String mnemonic,
   }) async {
     final sdk = PolygonIdSdk.I;
@@ -310,20 +309,20 @@ class PolygonId {
   /// the identity and also to realize operations like generating proofs
   /// using the claims associated to the identity
   ///
-  ///  The [encryptedIdentityDbs] is a map of profile nonces and
+  ///  The [encryptedDb] is a map of profile nonces and
   ///  associated encrypted Identity's Databases
   ///
   /// The identity will be restored using the current env set with
   /// [PolygonIdSdk.setEnv]
   Future<void> restoreIdentity({
     required String mnemonic,
-    required Map<int, String> encryptedIdentityDbs,
+    required String encryptedDb,
   }) async {
     final sdk = PolygonIdSdk.I;
     final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
     await sdk.identity.restoreIdentity(
       privateKey: privateKey,
-      encryptedIdentityDbs: encryptedIdentityDbs,
+      encryptedDb: encryptedDb,
     );
   }
 }
