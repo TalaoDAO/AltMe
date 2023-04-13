@@ -20,7 +20,9 @@ Future<void> discoverCredential({
   if (credentialSubjectTypeList
       .contains(homeCredential.credentialSubjectType)) {
     getLogger('discoverCredential').i(homeCredential.credentialSubjectType);
-    //here check for over18, over15, age range and over13 to take photo for AI KYC
+
+    /// here check for over18, over15, age range and over13 to take photo for
+    /// AI KYC
     if (homeCredential.credentialSubjectType.checkForAIKYC) {
       // final passbaseStatus =
       //     await context.read<HomeCubit>().checkPassbaseStatus();

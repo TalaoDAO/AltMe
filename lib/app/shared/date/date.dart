@@ -53,7 +53,7 @@ class UiDate {
 
   static String formatDateForCredentialCard(String date) {
     try {
-      return DateFormat("dd'th' MMM yyyy").format(
+      return DateFormat('dd MMM yyyy').format(
         DateFormat('y-M-dThh:mm:ssZ')
             .parse(
               date,

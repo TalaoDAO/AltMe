@@ -17,8 +17,8 @@ class PolygonAssociatedAddressWidget extends StatelessWidget {
     final associatedAddress = credentialModel?.credentialPreview
         .credentialSubjectModel as PolygonAssociatedAddressModel?;
     return MyBlockchainAccountBaseWidget(
-      image: IconStrings.polygon,
-      name: l10n.polygonNetwork,
+      background: ImageStrings.polygonOwnershipCard,
+      proofMessage: l10n.polygonProofMessage,
       walletAddress: associatedAddress?.associatedAddress ?? '',
     );
   }

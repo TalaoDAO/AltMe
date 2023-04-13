@@ -19,7 +19,6 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -111,8 +110,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           ),
         ),
       );
-    } catch (e) {
-      log.e('Error -$e');
+    } catch (e, s) {
+      log.e('Error -$e, stack: $s');
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else {
@@ -154,28 +153,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  bool isPolygonIdInitialised = false;
-
   Future<void> handlePolygonId(String scannedResponse) async {
-    if (!isPolygonIdInitialised) {
-      log.i('polygon initialization');
-      await polygonIdCubit.initialise();
-
-      /// PolygonId SDK initialization
-      await dotenv.load();
-
-      await PolygonId().init(
-        web3Url: dotenv.get('INFURA_URL'),
-        web3RdpUrl: dotenv.get('INFURA_RDP_URL'),
-        web3ApiKey: dotenv.get('INFURA_MUMBAI_API_KEY'),
-        idStateContract: dotenv.get('ID_STATE_CONTRACT_ADDR'),
-        pushUrl: dotenv.get('PUSH_URL'),
-      );
-
-      isPolygonIdInitialised = true;
-    } else {
-      log.i('polygonid already initialized');
-    }
+    await polygonIdCubit.initialise();
 
     log.i('download circuit');
     //download circuit
@@ -641,9 +620,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> completeSiopV2WithClaim({required String claims}) async {
     // TODO(hawkbee): change when correction is done on verifier
-    claims = claims.replaceAll("'email': None", "'email': 'None'");
+    claims = claims
+        .replaceAll("'email': None", "'email': 'None'")
+        .replaceAll("'", '"');
 
-    claims = claims.replaceAll("'", '"');
     final jsonPath = JsonPath(r'$..input_descriptors');
     final outputDescriptors =
         jsonPath.readValues(jsonDecode(claims)).first as List;

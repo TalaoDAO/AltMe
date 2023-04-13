@@ -18,8 +18,8 @@ class EthereumAssociatedAddressWidget extends StatelessWidget {
         .credentialSubjectModel as EthereumAssociatedAddressModel?;
 
     return MyBlockchainAccountBaseWidget(
-      image: IconStrings.ethereum,
-      name: l10n.ethereumNetwork,
+      background: ImageStrings.ethereumOwnershipCard,
+      proofMessage: l10n.ethereumProofMessage,
       walletAddress: associatedAddress?.associatedAddress ?? '',
     );
   }

@@ -73,6 +73,13 @@ class SearchView extends StatelessWidget {
                           margin: const EdgeInsets.only(bottom: 10),
                           child: CredentialsListPageItem(
                             credentialModel: state.credentials[index],
+                            onTap: () {
+                              Navigator.of(context).push<void>(
+                                CredentialsDetailsPage.route(
+                                  credentialModel: state.credentials[index],
+                                ),
+                              );
+                            },
                           ),
                         );
                       },

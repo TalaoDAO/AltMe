@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/ebsi/verify_encoded_data.dart';
+import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:equatable/equatable.dart';
@@ -23,6 +24,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     required this.client,
     required this.jwtDecode,
     required this.polygonId,
+    required this.polygonIdCubit,
   }) : super(const CredentialDetailsState());
 
   final DIDKitProvider didKitProvider;
@@ -30,6 +32,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   final DioClient client;
   final JWTDecode jwtDecode;
   final PolygonId polygonId;
+  final PolygonIdCubit polygonIdCubit;
 
   void changeTabStatus(CredentialDetailTabStatus credentialDetailTabStatus) {
     emit(state.copyWith(credentialDetailTabStatus: credentialDetailTabStatus));
@@ -90,6 +93,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     } else if (isPolygonssuer(item)) {
       final mnemonic =
           await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+      await polygonIdCubit.initialise();
       final List<ClaimEntity> claim = await polygonId.getClaimById(
         claimId: item.id,
         mnemonic: mnemonic!,

@@ -80,7 +80,7 @@ class _SplashViewState extends State<SplashView> {
           //     }
           //   }
 
-          //   final dynamic encodedCredentialFromEbsi = await ebsi.getCredential(
+          // final dynamic encodedCredentialFromEbsi = await ebsi.getCredential(
           //     credentialUri,
           //     null,
           //     privateKey,

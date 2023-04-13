@@ -73,36 +73,7 @@ class DiscoverDetailsView extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       child: AspectRatio(
                         aspectRatio: Sizes.credentialAspectRatio,
-                        child: CredentialImage(
-                          image: homeCredential.image!,
-                          child: homeCredential.dummyDescription == null
-                              ? null
-                              : CustomMultiChildLayout(
-                                  delegate: DummyCredentialItemDelegate(
-                                    position: Offset.zero,
-                                  ),
-                                  children: [
-                                    LayoutId(
-                                      id: 'dummyDesc',
-                                      child: FractionallySizedBox(
-                                        widthFactor: 0.85,
-                                        heightFactor: 0.36,
-                                        child: MyText(
-                                          homeCredential.dummyDescription!
-                                              .getMessage(
-                                            context,
-                                            homeCredential.dummyDescription!,
-                                          ),
-                                          maxLines: 3,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                        ),
+                        child: CredentialImage(image: homeCredential.image!),
                       ),
                     ),
                     DetailFields(homeCredential: homeCredential),

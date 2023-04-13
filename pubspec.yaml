@@ -1,6 +1,6 @@
 name: altme
 description: AltMe Flutter App
-version: 1.13.4+184
+version: 1.13.9+189
 publish_to: none
 
 environment:
@@ -114,9 +114,9 @@ dependencies:
       url: https://github.com/bibash28/wallet-connect-dart.git
       ref: fba9b209ee2b61b62ddd643f07f6a7f64426d7b2
   web3dart: ^2.6.1
-  webview_flutter: ^4.0.2
-  webview_flutter_android: ^3.2.4
-  webview_flutter_wkwebview: ^3.0.5
+  webview_flutter: ^4.0.7
+  webview_flutter_android: ^3.4.5
+  webview_flutter_wkwebview: ^3.2.4
   workmanager: ^0.5.1
 
 dependency_overrides:

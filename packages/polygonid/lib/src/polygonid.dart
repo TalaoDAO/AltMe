@@ -16,13 +16,24 @@ import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
 /// {@endtemplate}
 class PolygonId {
   /// {@macro polygonid}
-  PolygonId();
+  factory PolygonId() {
+    return _instance ??= PolygonId._();
+  }
+
+  /// private contructor
+  PolygonId._();
+
+  /// _instance
+  static PolygonId? _instance;
 
   /// blockchain
   static const blockchain = 'polygon';
 
   /// network
   static const network = 'mumbai';
+
+  /// isInitialized
+  bool isInitialized = false;
 
   /// PolygonId SDK initialization
   /// Before you can start using the SDK, you need to initialise it, otherwise
@@ -34,6 +45,7 @@ class PolygonId {
     required String idStateContract,
     required String pushUrl,
   }) async {
+    if (isInitialized) return;
     await PolygonIdSdk.init(
       env: EnvEntity(
         blockchain: blockchain,
@@ -45,6 +57,7 @@ class PolygonId {
         pushUrl: pushUrl,
       ),
     );
+    isInitialized = true;
   }
 
   /// check if curcuit is already downloaded
@@ -263,6 +276,54 @@ class PolygonId {
       claimIds: [claimId],
       did: did,
       privateKey: privateKey,
+    );
+  }
+
+  /// Backup a previously stored [IdentityEntity] from a privateKey
+  /// associated to the identity
+  ///
+  /// Identity privateKey is the key used to access all the sensitive info from
+  /// the identity and also to realize operations like generating proofs
+  /// using the claims associated to the identity
+  ///
+  /// Returns a map of profile nonces and
+  /// associated encrypted Identity's Databases.
+  ///
+  /// Throws [IdentityException] if an error occurs.
+  ///
+  /// The identity will be backed up using the current env set with
+  /// [PolygonIdSdk.setEnv]
+  Future<Map<int, String>?> backupIdentity({
+    required String mnemonic,
+  }) async {
+    final sdk = PolygonIdSdk.I;
+    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+    return sdk.identity.backupIdentity(privateKey: privateKey);
+  }
+
+  /// Restores an [IdentityEntity] from a privateKey and encrypted backup
+  /// databases associated to the identity
+  /// Return an identity as a [PrivateIdentityEntity].
+  /// Throws [IdentityException] if an error occurs.
+  ///
+  /// Identity privateKey is the key used to access all the sensitive info from
+  /// the identity and also to realize operations like generating proofs
+  /// using the claims associated to the identity
+  ///
+  ///  The [encryptedIdentityDbs] is a map of profile nonces and
+  ///  associated encrypted Identity's Databases
+  ///
+  /// The identity will be restored using the current env set with
+  /// [PolygonIdSdk.setEnv]
+  Future<void> restoreIdentity({
+    required String mnemonic,
+    required Map<int, String> encryptedIdentityDbs,
+  }) async {
+    final sdk = PolygonIdSdk.I;
+    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+    await sdk.identity.restoreIdentity(
+      privateKey: privateKey,
+      encryptedIdentityDbs: encryptedIdentityDbs,
     );
   }
 }

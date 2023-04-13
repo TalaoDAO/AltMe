@@ -124,7 +124,6 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           );
 
           if (currentAccount == null) {
-            // TODO(bibash): account data not available error message may be
             throw ResponseMessage(
               ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,

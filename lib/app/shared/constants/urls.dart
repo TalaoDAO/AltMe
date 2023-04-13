@@ -2,8 +2,18 @@ class Urls {
   static const String appContactWebsiteUrl = 'https://altme.io';
   static const String checkIssuerTalaoUrl =
       'https://talao.co/trusted-issuers-registry/v1/issuers';
+
+  /// TODO(all): update the issuer url for polygon
+  static const String checkIssuerPolygonTestnetUrl =
+      'checkIssuerPolygonTestnetUrl';
+  static const String checkIssuerPolygonUrl = 'checkIssuerPolygonUrl';
   static const String checkIssuerEbsiUrl =
       'https://api.conformance.intebsi.xyz/trusted-issuers-registry/v2/issuers';
+  static const Set<String> issuerUrls = {
+    checkIssuerPolygonTestnetUrl,
+    checkIssuerPolygonUrl,
+    checkIssuerEbsiUrl,
+  };
 
   static const String issuerBaseUrl = 'https://issuer.talao.co';
   static const String phonePassUrl = 'https://issuer.talao.co/phonepass';

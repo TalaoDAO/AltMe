@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AgeRangeWidget extends StatelessWidget {
@@ -17,7 +18,7 @@ class AgeRangeWidget extends StatelessWidget {
           .credentialPreview.credentialSubjectModel.issuedBy?.name,
       value:
           (ageRangeModel.ageRange != null && ageRangeModel.ageRange!.isNotEmpty)
-              ? '${ageRangeModel.ageRange} YO'
+              ? '${ageRangeModel.ageRange} ${context.l10n.yearsOld}'
               : '--',
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,

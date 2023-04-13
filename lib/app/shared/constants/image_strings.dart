@@ -73,7 +73,17 @@ class ImageStrings {
   static const String euDiplomaCard = '$imagePath/eu_diploma_card.png';
   static const String euVerifiableId = '$imagePath/eu_verifiable_id.png';
 
-  static const String myAccountCard = '$imagePath/my_account_card.png';
+  static const String binanceOwnershipCard =
+      '$imagePath/binance-ownership-card.png';
+  static const String ethereumOwnershipCard =
+      '$imagePath/ethereum-ownership-card.png';
+  static const String fantomOwnershipCard =
+      '$imagePath/fantom-ownership-card.png';
+  static const String polygonOwnershipCard =
+      '$imagePath/polygon-ownership-card.png';
+  static const String tezosOwnershipCard =
+      '$imagePath/tezos-ownership-card.png';
+
   static const String pooAccountCard = '$imagePath/poo_account_card.png';
 
   static const String diplomaCard = '$imagePath/diploma_card.png';

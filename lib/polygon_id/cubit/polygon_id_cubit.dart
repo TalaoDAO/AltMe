@@ -15,11 +15,12 @@ class PolygonIdCubit extends Cubit<bool> {
   final PolygonId polygonId;
 
   Future<void> initialise() async {
-    if (state) {
-      return;
-    }
-
     try {
+      if (PolygonId().isInitialized) {
+        emit(true);
+        return;
+      }
+
       /// PolygonId SDK initialization
       await dotenv.load();
 
@@ -38,6 +39,7 @@ class PolygonIdCubit extends Cubit<bool> {
       await polygonId.addIdentity(mnemonic: mnemonic!);
       emit(true);
     } catch (e) {
+      emit(false);
       throw Exception('INIT_ISSUE');
     }
   }

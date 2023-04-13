@@ -1,5 +1,6 @@
 
 function pub {
+  fvm flutter clean
   for d in `ls packages`;
   do
     (
@@ -26,6 +27,7 @@ function buildRunner {
 function podUpdate {
   echo "pod install"
   cd ios
+  rm Podfile.lock
   pod install
   pod update
   cd ..

@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -35,52 +35,46 @@ class RealCredentialItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (credentialModel.data['credentialSubject']?['chatSupport'] != null) {
-      final loyltyCardType = credentialModel
+      final cardName = credentialModel
           .credentialPreview.credentialSubjectModel.credentialSubjectType.name;
-      final loyaltyCardSupportChatCubit = LoyaltyCardSupportChatCubit(
+
+      final cardChatSupportCubit = CardChatSupportCubit(
         secureStorageProvider: getSecureStorage,
         matrixChat: MatrixChatImpl(),
         invites: [
           credentialModel.data['credentialSubject']?['chatSupport'] as String
         ],
-        storageKey:
-            '$loyltyCardType-${SecureStorageKeys.loyaltyCardsupportRoomId}',
-        roomNamePrefix: loyltyCardType,
+        storageKey: '$cardName-${SecureStorageKeys.cardChatSupportRoomId}',
+        roomNamePrefix: cardName,
       );
 
       return BlocProvider(
-        create: (_) => loyaltyCardSupportChatCubit,
+        create: (_) => cardChatSupportCubit,
         child: StreamBuilder(
-          stream: loyaltyCardSupportChatCubit.unreadMessageCountStream,
+          stream: cardChatSupportCubit.unreadMessageCountStream,
           builder: (_, snapShot) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(context).push<void>(
-                  CredentialsDetailsPage.route(
-                    credentialModel: credentialModel,
-                  ),
-                );
-              },
-              child: CredentialsListPageItem(
+            return CredentialsListPageItem(
                 credentialModel: credentialModel,
                 badgeCount: snapShot.data ?? 0,
-              ),
-            );
+                onTap: () {
+                  Navigator.of(context).push<void>(
+                    CredentialsDetailsPage.route(
+                      credentialModel: credentialModel,
+                      cardChatSupportCubit: cardChatSupportCubit,
+                    ),
+                  );
+                });
           },
         ),
       );
     } else {
-      return GestureDetector(
+      return CredentialsListPageItem(
+        credentialModel: credentialModel,
         onTap: () {
           Navigator.of(context).push<void>(
-            CredentialsDetailsPage.route(
-              credentialModel: credentialModel,
-            ),
+            CredentialsDetailsPage.route(credentialModel: credentialModel),
           );
         },
-        child: CredentialsListPageItem(
-          credentialModel: credentialModel,
-        ),
       );
     }
   }
@@ -126,56 +120,7 @@ class DummyCredentialItem extends StatelessWidget {
           ),
         );
       },
-      child: CredentialImage(
-        image: homeCredential.image!,
-        child: homeCredential.dummyDescription == null
-            ? null
-            : CustomMultiChildLayout(
-                delegate: DummyCredentialItemDelegate(
-                  position: Offset.zero,
-                ),
-                children: [
-                  LayoutId(
-                    id: 'dummyDesc',
-                    child: FractionallySizedBox(
-                      widthFactor: 0.85,
-                      heightFactor: 0.42,
-                      child: Text(
-                        homeCredential.dummyDescription!.getMessage(
-                          context,
-                          homeCredential.dummyDescription!,
-                        ),
-                        style: Theme.of(context)
-                            .textTheme
-                            .discoverOverlayDescription,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-      ),
+      child: CredentialImage(image: homeCredential.image!),
     );
-  }
-}
-
-class DummyCredentialItemDelegate extends MultiChildLayoutDelegate {
-  DummyCredentialItemDelegate({this.position = Offset.zero});
-
-  final Offset position;
-
-  @override
-  void performLayout(Size size) {
-    if (hasChild('dummyDesc')) {
-      layoutChild('dummyDesc', BoxConstraints.loose(size));
-      positionChild(
-        'dummyDesc',
-        Offset(size.width * 0.06, size.height * 0.35),
-      );
-    }
-  }
-
-  @override
-  bool shouldRelayout(DummyCredentialItemDelegate oldDelegate) {
-    return oldDelegate.position != position;
   }
 }
