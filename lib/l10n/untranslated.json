@@ -773,7 +773,8 @@
     "polygon",
     "ebsi",
     "backupPolygonIdCredentials",
-    "restorePolygonIdCredentials"
+    "restorePolygonIdCredentials",
+    "comingSoon"
   ],
 
   "es": [
@@ -1550,7 +1551,8 @@
     "polygon",
     "ebsi",
     "backupPolygonIdCredentials",
-    "restorePolygonIdCredentials"
+    "restorePolygonIdCredentials",
+    "comingSoon"
   ],
 
   "fr": [
@@ -1624,7 +1626,8 @@
     "polygon",
     "ebsi",
     "backupPolygonIdCredentials",
-    "restorePolygonIdCredentials"
+    "restorePolygonIdCredentials",
+    "comingSoon"
   ],
 
   "it": [
@@ -2401,6 +2404,7 @@
     "polygon",
     "ebsi",
     "backupPolygonIdCredentials",
-    "restorePolygonIdCredentials"
+    "restorePolygonIdCredentials",
+    "comingSoon"
   ]
 }

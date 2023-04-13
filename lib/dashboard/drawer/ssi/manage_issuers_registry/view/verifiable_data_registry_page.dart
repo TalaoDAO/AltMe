@@ -54,10 +54,13 @@ class VerifiableDataRegistryPage extends StatelessWidget {
               GroupedSection(
                 children: [
                   IssuerVerificationRegistrySelector(
+                    title: '${IssuerVerificationRegistry.PolygonMainnet.name}'
+                        ' (${l10n.comingSoon})',
                     issuerVerificationRegistry:
                         IssuerVerificationRegistry.PolygonMainnet,
                     isChecked: state.model.issuerVerificationUrls
                         .contains(Urls.checkIssuerPolygonUrl),
+                    isEnable: false,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -68,6 +71,7 @@ class VerifiableDataRegistryPage extends StatelessWidget {
                     ),
                   ),
                   IssuerVerificationRegistrySelector(
+                    title: IssuerVerificationRegistry.PolygonTestnet.name,
                     issuerVerificationRegistry:
                         IssuerVerificationRegistry.PolygonTestnet,
                     isChecked: state.model.issuerVerificationUrls
@@ -85,6 +89,7 @@ class VerifiableDataRegistryPage extends StatelessWidget {
               GroupedSection(
                 children: [
                   IssuerVerificationRegistrySelector(
+                    title: IssuerVerificationRegistry.EBSI.name,
                     issuerVerificationRegistry: IssuerVerificationRegistry.EBSI,
                     isChecked: state.model.issuerVerificationUrls
                         .contains(Urls.checkIssuerEbsiUrl),
