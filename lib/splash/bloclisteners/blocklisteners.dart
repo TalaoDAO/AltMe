@@ -163,98 +163,106 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
       log.i('accept host');
       if (state.uri != null) {
         final profileCubit = context.read<ProfileCubit>();
-        var approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
-
-        late bool isIssuerVerificationSettingTrue;
-
-        isIssuerVerificationSettingTrue =
-            profileCubit.state.model.issuerVerificationUrls.isNotEmpty;
-
-        /// issuer side (oidc4VCI)
-        if (state.uri!.toString().startsWith('openid://initiate_issuance?')) {
-          isIssuerVerificationSettingTrue = true;
-        }
-
-        /// verifier side (siopv2) without request_uri
-        // if (state.uri?.queryParameters['scope'] == 'openid') {
-        //   isIssuerVerificationSettingTrue =
-        //       state.uri!.queryParameters['request_uri'] != null;
-        // }
-
-        /// verifier side (siopv2) with request_uri
-        if (state.uri.toString().startsWith('openid://?client_id')) {
-          isIssuerVerificationSettingTrue =
-              state.uri!.queryParameters['request_uri'] != null;
-        }
-
-        log.i('checking issuer - $isIssuerVerificationSettingTrue');
-
-        if (isIssuerVerificationSettingTrue) {
-          try {
-            // TODO(all): needs update the logic
-            approvedIssuer = await CheckIssuer(
-              DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-              profileCubit.state.model.issuerVerificationUrls.first,
-              state.uri!,
-            ).isIssuerInApprovedList();
-          } catch (e) {
-            log.e(e);
-            if (e is MessageHandler) {
-              await context.read<QRCodeScanCubit>().emitError(e);
-            } else {
-              await context.read<QRCodeScanCubit>().emitError(
-                    ResponseMessage(
-                      ResponseString
-                          .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                    ),
-                  );
-            }
-            return;
-          }
-        }
 
         var acceptHost = true;
+        var approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
 
-        if (approvedIssuer.did.isEmpty && isIssuerVerificationSettingTrue) {
-          String subtitle = (approvedIssuer.did.isEmpty)
-              ? state.uri!.host
-              : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
+        final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
+
+        if (isAlertEnable) {
+          bool isIssuerVerificationSettingTrue =
+              profileCubit.state.model.issuerVerificationUrls.isNotEmpty;
+
+          String issuerVerificationUrl = '';
 
           /// issuer side (oidc4VCI)
           if (state.uri!.toString().startsWith('openid://initiate_issuance?')) {
-            subtitle = state.uri!.queryParameters['issuer'].toString();
+            isIssuerVerificationSettingTrue = true;
+            issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
           }
 
           /// verifier side (siopv2) without request_uri
-          // if (state.uri?.queryParameters['scope'] == 'openid') {
-          //   subtitle = state.uri!.queryParameters['request_uri'].toString();
-          // }
+          if (state.uri?.queryParameters['scope'] == 'openid') {
+            // isIssuerVerificationSettingTrue =
+            //     state.uri!.queryParameters['request_uri'] != null;
+            issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
+          }
 
           /// verifier side (siopv2) with request_uri
           if (state.uri.toString().startsWith('openid://?client_id')) {
-            subtitle = state.uri!.queryParameters['request_uri'].toString();
+            isIssuerVerificationSettingTrue =
+                state.uri!.queryParameters['request_uri'] != null;
+            issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
           }
 
-          String title = l10n.scanPromptHost;
+          log.i('checking issuer - $isIssuerVerificationSettingTrue');
 
-          if (!state.isRequestVerified) {
-            title = '${l10n.service_not_registered_message} '
-                '${l10n.scanPromptHost}';
+          if (isIssuerVerificationSettingTrue) {
+            try {
+              approvedIssuer = await CheckIssuer(
+                DioClient(Urls.checkIssuerTalaoUrl, Dio()),
+                issuerVerificationUrl,
+                state.uri!,
+              ).isIssuerInApprovedList();
+            } catch (e) {
+              log.e(e);
+              if (e is MessageHandler) {
+                await context.read<QRCodeScanCubit>().emitError(e);
+              } else {
+                await context.read<QRCodeScanCubit>().emitError(
+                      ResponseMessage(
+                        ResponseString
+                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                      ),
+                    );
+              }
+              return;
+            }
           }
 
-          acceptHost = await showDialog<bool>(
-                context: context,
-                builder: (BuildContext context) {
-                  return ConfirmDialog(
-                    title: title,
-                    subtitle: subtitle,
-                    yes: l10n.communicationHostAllow,
-                    no: l10n.communicationHostDeny,
-                    //lock: state.uri!.scheme == 'http',
-                  );
-                },
-              ) ??
-              false;
+          if (approvedIssuer.did.isEmpty && isIssuerVerificationSettingTrue) {
+            String subtitle = (approvedIssuer.did.isEmpty)
+                ? state.uri!.host
+                : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
+
+            /// issuer side (oidc4VCI)
+            if (state.uri!
+                .toString()
+                .startsWith('openid://initiate_issuance?')) {
+              subtitle = state.uri!.queryParameters['issuer'].toString();
+            }
+
+            /// verifier side (siopv2) without request_uri
+            // if (state.uri?.queryParameters['scope'] == 'openid') {
+            //   subtitle = state.uri!.queryParameters['request_uri'].toString();
+            // }
+
+            /// verifier side (siopv2) with request_uri
+            if (state.uri.toString().startsWith('openid://?client_id')) {
+              subtitle = state.uri!.queryParameters['request_uri'].toString();
+            }
+
+            String title = l10n.scanPromptHost;
+
+            if (!state.isRequestVerified) {
+              title = '${l10n.service_not_registered_message} '
+                  '${l10n.scanPromptHost}';
+            }
+
+            acceptHost = await showDialog<bool>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ConfirmDialog(
+                      title: title,
+                      subtitle: subtitle,
+                      yes: l10n.communicationHostAllow,
+                      no: l10n.communicationHostDeny,
+                      //lock: state.uri!.scheme == 'http',
+                    );
+                  },
+                ) ??
+                false;
+          }
         }
 
         if (acceptHost) {
