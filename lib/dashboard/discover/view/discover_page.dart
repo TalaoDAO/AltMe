@@ -35,33 +35,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
             dummyCredentials: state.dummyCredentials,
           );
         },
-      ), //TODO(Taleb): update the inputs
-      // TODO(Taleb): remove this after migrating code
-      // return DiscoverCredentialList(
-      //   onRefresh: () async {
-      //     await context
-      //         .read<CredentialListCubit>()
-      //         .initialise(context.read<CredentialsCubit>());
-      //   },
-      //   state: state.populate(
-      //     gamingCredentials: credentialListCubit.dummyListFromCategory(
-      //       state.gamingCategories,
-      //     ),
-      //     communityCredentials: credentialListCubit.dummyListFromCategory(
-      //       state.communityCategories,
-      //     ),
-      //     identityCredentials: credentialListCubit.dummyListFromCategory(
-      //       state.identityCategories,
-      //     ),
-      //     myProfessionalCredentials:
-      //         credentialListCubit.dummyListFromCategory(
-      //       state.myProfessionalCategories,
-      //     ),
-      //     blockchainAccountsCredentials: [],
-      //     educationCredentials: [],
-      //     othersCredentials: [],
-      //   ),
-      // );
+      ),
     );
   }
 }
