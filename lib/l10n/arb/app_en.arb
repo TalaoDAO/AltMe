@@ -838,5 +838,6 @@
   "ebsi": "EBSI",
   "backupPolygonIdCredentials": "Backup PolygonId Credentials",
   "restorePolygonIdCredentials": "Restore PolygonId Credentials",
-  "comingSoon": "Coming Soon"
+  "comingSoon": "Coming Soon",
+  "alert": "Alert"
 }

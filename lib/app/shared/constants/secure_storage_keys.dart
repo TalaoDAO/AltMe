@@ -16,7 +16,9 @@ class SecureStorageKeys {
   static const String isEducationEnabled = 'isEducationEnabled';
   static const String isPassEnabled = 'isPassEnabled';
   static const String isSocialMediaEnabled = 'isSocialMediaEnabled';
-  static const String fingerprintEnabled = 'fingerprintEnabled';
+  static const String isBiometricEnabled = 'fingerprintEnabled';
+  static const String alertEnabled = 'alertEnabled';
+
   static const String pinCode = 'pinCode';
   static const String data = 'data';
   static const String rsaKeyJson = 'RSAKeyJson';

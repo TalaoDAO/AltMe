@@ -774,7 +774,8 @@
     "ebsi",
     "backupPolygonIdCredentials",
     "restorePolygonIdCredentials",
-    "comingSoon"
+    "comingSoon",
+    "alert"
   ],
 
   "es": [
@@ -1552,7 +1553,8 @@
     "ebsi",
     "backupPolygonIdCredentials",
     "restorePolygonIdCredentials",
-    "comingSoon"
+    "comingSoon",
+    "alert"
   ],
 
   "fr": [
@@ -1627,7 +1629,8 @@
     "ebsi",
     "backupPolygonIdCredentials",
     "restorePolygonIdCredentials",
-    "comingSoon"
+    "comingSoon",
+    "alert"
   ],
 
   "it": [
@@ -2405,6 +2408,7 @@
     "ebsi",
     "backupPolygonIdCredentials",
     "restorePolygonIdCredentials",
-    "comingSoon"
+    "comingSoon",
+    "alert"
   ]
 }
