@@ -165,10 +165,10 @@ class SSIView extends StatelessWidget {
                   },
                 ),
                 DrawerItem(
-                  title: l10n.chooseIssuersRegistry,
+                  title: l10n.verifiableDataRegistry,
                   onTap: () async {
                     await Navigator.of(context)
-                        .push<void>(ManageIssuersRegistryPage.route());
+                        .push<void>(VerifiableDataRegistryPage.route());
                   },
                 ),
                 DrawerItem(

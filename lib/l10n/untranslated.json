@@ -291,7 +291,7 @@
     "networkAndRegistries",
     "chooseNetwork",
     "chooseRegistry",
-    "chooseIssuersRegistry",
+    "verifiableDataRegistry",
     "network",
     "issuerRegistry",
     "about",
@@ -773,7 +773,8 @@
     "polygon",
     "ebsi",
     "backupPolygonIdCredentials",
-    "restorePolygonIdCredentials"
+    "restorePolygonIdCredentials",
+    "comingSoon"
   ],
 
   "es": [
@@ -1068,7 +1069,7 @@
     "networkAndRegistries",
     "chooseNetwork",
     "chooseRegistry",
-    "chooseIssuersRegistry",
+    "verifiableDataRegistry",
     "network",
     "issuerRegistry",
     "about",
@@ -1550,13 +1551,15 @@
     "polygon",
     "ebsi",
     "backupPolygonIdCredentials",
-    "restorePolygonIdCredentials"
+    "restorePolygonIdCredentials",
+    "comingSoon"
   ],
 
   "fr": [
     "backupPolygonIdCredentialEmptyError",
     "coins",
     "educationCredentials",
+    "verifiableDataRegistry",
     "onboardingVerifyPhraseMessage",
     "onboardingVerifyPhraseMessageDetails",
     "importWalletTextRecoveryPhraseOnly",
@@ -1623,7 +1626,8 @@
     "polygon",
     "ebsi",
     "backupPolygonIdCredentials",
-    "restorePolygonIdCredentials"
+    "restorePolygonIdCredentials",
+    "comingSoon"
   ],
 
   "it": [
@@ -1918,7 +1922,7 @@
     "networkAndRegistries",
     "chooseNetwork",
     "chooseRegistry",
-    "chooseIssuersRegistry",
+    "verifiableDataRegistry",
     "network",
     "issuerRegistry",
     "about",
@@ -2400,6 +2404,7 @@
     "polygon",
     "ebsi",
     "backupPolygonIdCredentials",
-    "restorePolygonIdCredentials"
+    "restorePolygonIdCredentials",
+    "comingSoon"
   ]
 }

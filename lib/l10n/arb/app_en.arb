@@ -341,7 +341,7 @@
   "networkAndRegistries": "Network & Registries",
   "chooseNetwork": "Choose Network",
   "chooseRegistry": "Choose Registry",
-  "chooseIssuersRegistry": "Verifialble Data Registry",
+  "verifiableDataRegistry": "Verifiable Data Registry",
   "network": "Network",
   "issuerRegistry": "Issuer Registry",
   "about": "About",
@@ -837,5 +837,6 @@
   "polygon": "Polygon",
   "ebsi": "EBSI",
   "backupPolygonIdCredentials": "Backup PolygonId Credentials",
-  "restorePolygonIdCredentials": "Restore PolygonId Credentials"
+  "restorePolygonIdCredentials": "Restore PolygonId Credentials",
+  "comingSoon": "Coming Soon"
 }

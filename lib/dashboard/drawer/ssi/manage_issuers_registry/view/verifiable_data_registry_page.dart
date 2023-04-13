@@ -5,12 +5,12 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ManageIssuersRegistryPage extends StatelessWidget {
-  const ManageIssuersRegistryPage({super.key});
+class VerifiableDataRegistryPage extends StatelessWidget {
+  const VerifiableDataRegistryPage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (_) => const ManageIssuersRegistryPage(),
-        settings: const RouteSettings(name: '/manageIssuersRegistryPage'),
+        builder: (_) => const VerifiableDataRegistryPage(),
+        settings: const RouteSettings(name: '/VerifiableDataRegistryPage'),
       );
 
   @override
@@ -18,7 +18,7 @@ class ManageIssuersRegistryPage extends StatelessWidget {
     final l10n = context.l10n;
 
     return BasePage(
-      title: l10n.chooseIssuersRegistry,
+      title: l10n.verifiableDataRegistry,
       titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       scrollView: true,
@@ -33,7 +33,6 @@ class ManageIssuersRegistryPage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          //const fakeGroupValue = 'titi';
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -55,10 +54,13 @@ class ManageIssuersRegistryPage extends StatelessWidget {
               GroupedSection(
                 children: [
                   IssuerVerificationRegistrySelector(
+                    title: '${IssuerVerificationRegistry.PolygonMainnet.name}'
+                        ' (${l10n.comingSoon})',
                     issuerVerificationRegistry:
                         IssuerVerificationRegistry.PolygonMainnet,
                     isChecked: state.model.issuerVerificationUrls
                         .contains(Urls.checkIssuerPolygonUrl),
+                    isEnable: false,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -69,6 +71,7 @@ class ManageIssuersRegistryPage extends StatelessWidget {
                     ),
                   ),
                   IssuerVerificationRegistrySelector(
+                    title: IssuerVerificationRegistry.PolygonTestnet.name,
                     issuerVerificationRegistry:
                         IssuerVerificationRegistry.PolygonTestnet,
                     isChecked: state.model.issuerVerificationUrls
@@ -86,6 +89,7 @@ class ManageIssuersRegistryPage extends StatelessWidget {
               GroupedSection(
                 children: [
                   IssuerVerificationRegistrySelector(
+                    title: IssuerVerificationRegistry.EBSI.name,
                     issuerVerificationRegistry: IssuerVerificationRegistry.EBSI,
                     isChecked: state.model.issuerVerificationUrls
                         .contains(Urls.checkIssuerEbsiUrl),

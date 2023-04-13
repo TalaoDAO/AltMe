@@ -8,6 +8,7 @@ class IssuerVerificationRegistrySelector extends StatelessWidget {
   const IssuerVerificationRegistrySelector({
     super.key,
     required this.issuerVerificationRegistry,
+    required this.title,
     required this.isChecked,
     this.isEnable = true,
   });
@@ -15,6 +16,8 @@ class IssuerVerificationRegistrySelector extends StatelessWidget {
   final IssuerVerificationRegistry issuerVerificationRegistry;
   final bool isChecked;
   final bool isEnable;
+  final String title;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileCubit, ProfileState>(
@@ -33,7 +36,7 @@ class IssuerVerificationRegistrySelector extends StatelessWidget {
                         );
                   },
             title: Text(
-              issuerVerificationRegistry.name,
+              title,
               style: Theme.of(context).textTheme.radioOption,
             ),
             trailing: Icon(
