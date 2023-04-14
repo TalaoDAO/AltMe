@@ -20,7 +20,7 @@ class DiscoverDummyCredential extends Equatable {
   factory DiscoverDummyCredential.fromJson(Map<String, dynamic> json) =>
       _$DiscoverDummyCredentialFromJson(json);
 
-  factory DiscoverDummyCredential.dummy(
+  factory DiscoverDummyCredential.fromSubjectType(
     CredentialSubjectType credentialSubjectType,
   ) {
     String? image;

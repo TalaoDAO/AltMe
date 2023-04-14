@@ -428,8 +428,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         }
       }
 
-      dummies[category] =
-          requiredDummySubjects.map(DiscoverDummyCredential.dummy).toList();
+      dummies[category] = requiredDummySubjects
+          .map(DiscoverDummyCredential.fromSubjectType)
+          .toList();
     }
     return dummies;
   }

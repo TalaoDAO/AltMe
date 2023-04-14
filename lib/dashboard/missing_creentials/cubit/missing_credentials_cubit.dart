@@ -56,8 +56,8 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
             final credentialSubjectType = getCredTypeFromName(credentialName);
 
             if (credentialSubjectType != null) {
-              dummyCredentials
-                  .add(DiscoverDummyCredential.dummy(credentialSubjectType));
+              dummyCredentials.add(DiscoverDummyCredential.fromSubjectType(
+                  credentialSubjectType));
             }
           }
         }
@@ -79,7 +79,7 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
 
           if (credentialSubjectType != null) {
             dummyCredentials.add(
-              DiscoverDummyCredential.dummy(credentialSubjectType),
+              DiscoverDummyCredential.fromSubjectType(credentialSubjectType),
             );
           }
         }
