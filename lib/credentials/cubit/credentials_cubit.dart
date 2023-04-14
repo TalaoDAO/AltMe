@@ -106,10 +106,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     await credentialsRepository.deleteById(credential.id);
     final credentials = List.of(state.credentials)
       ..removeWhere((element) => element.id == credential.id);
+    final dummies = _getAvalaibleDummyCredentials(credentials);
     emit(
       state.copyWith(
         status: CredentialsStatus.delete,
         credentials: credentials,
+        dummyCredentials: dummies,
         messageHandler: showMessage
             ? ResponseMessage(
                 ResponseString
