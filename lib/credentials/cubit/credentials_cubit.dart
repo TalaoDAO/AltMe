@@ -408,6 +408,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
       final allSubjectTypeForCategory = category.discoverCredentialSubjectTypes;
 
+      /// tezVoucher and tezotopiaMembership is available only on Android platform
+      if (!isAndroid()) {
+        allSubjectTypeForCategory.remove(CredentialSubjectType.tezVoucher);
+        //allSubjectTypeForCategory.remove(CredentialSubjectType.tezotopiaMembership);
+      }
+
       final List<CredentialSubjectType> requiredDummySubjects = [];
 
       for (final subjectType in allSubjectTypeForCategory) {
