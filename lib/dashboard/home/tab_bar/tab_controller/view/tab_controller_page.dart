@@ -148,10 +148,7 @@ class _TabControllerViewState extends State<TabControllerView>
                       builder: (context, walletState) {
                         return TabBarView(
                           controller: _tabController,
-                          physics: context.read<HomeCubit>().state.homeStatus ==
-                                  HomeStatus.hasNoWallet
-                              ? const NeverScrollableScrollPhysics()
-                              : null,
+                          physics: const NeverScrollableScrollPhysics(),
                           children: const [
                             CredentialsListPage(),
                             NftPage(),

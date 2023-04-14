@@ -54,16 +54,17 @@ class RealCredentialItem extends StatelessWidget {
           stream: cardChatSupportCubit.unreadMessageCountStream,
           builder: (_, snapShot) {
             return CredentialsListPageItem(
-                credentialModel: credentialModel,
-                badgeCount: snapShot.data ?? 0,
-                onTap: () {
-                  Navigator.of(context).push<void>(
-                    CredentialsDetailsPage.route(
-                      credentialModel: credentialModel,
-                      cardChatSupportCubit: cardChatSupportCubit,
-                    ),
-                  );
-                });
+              credentialModel: credentialModel,
+              badgeCount: snapShot.data ?? 0,
+              onTap: () {
+                Navigator.of(context).push<void>(
+                  CredentialsDetailsPage.route(
+                    credentialModel: credentialModel,
+                    cardChatSupportCubit: cardChatSupportCubit,
+                  ),
+                );
+              },
+            );
           },
         ),
       );

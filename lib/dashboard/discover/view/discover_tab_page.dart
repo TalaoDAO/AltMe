@@ -121,6 +121,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
+                  physics: const NeverScrollableScrollPhysics(),
                   children: const [
                     DiscoverPage(),
                     MWebViewPage(

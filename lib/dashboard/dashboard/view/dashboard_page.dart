@@ -242,58 +242,23 @@ class _DashboardViewState extends State<DashboardView> {
                   Column(
                     children: [
                       Expanded(
-                        child: GestureDetector(
-                          onHorizontalDragEnd: (drag) {
-                            if (drag.primaryVelocity! < 0) {
-                              if (context.read<HomeCubit>().state.homeStatus ==
-                                  HomeStatus.hasNoWallet) {
-                                showDialog<void>(
-                                  context: context,
-                                  builder: (_) => const WalletDialog(),
-                                );
-                                return;
-                              }
-                              if (state.selectedIndex != 3) {
-                                pageController.nextPage(
-                                  duration: pageTurnDuration,
-                                  curve: pageTurnCurve,
-                                );
-                              }
-                            } else if (drag.primaryVelocity! > 0) {
-                              if (context.read<HomeCubit>().state.homeStatus ==
-                                  HomeStatus.hasNoWallet) {
-                                showDialog<void>(
-                                  context: context,
-                                  builder: (_) => const WalletDialog(),
-                                );
-                                return;
-                              }
-                              if (state.selectedIndex != 0) {
-                                pageController.previousPage(
-                                  duration: pageTurnDuration,
-                                  curve: pageTurnCurve,
-                                );
-                              }
-                            }
-                          },
-                          child: PageView(
-                            controller: pageController,
-                            onPageChanged:
-                                context.read<DashboardCubit>().onPageChanged,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: const [
-                              HomePage(),
-                              if (Parameters.hasCryptoCallToAction)
-                                DiscoverTabPage()
-                              else
-                                DiscoverPage(),
-                              if (Parameters.hasCryptoCallToAction)
-                                WertPage()
-                              else
-                                SearchPage(),
-                              AltmeSupportChatPage(),
-                            ],
-                          ),
+                        child: PageView(
+                          controller: pageController,
+                          onPageChanged:
+                              context.read<DashboardCubit>().onPageChanged,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: const [
+                            HomePage(),
+                            if (Parameters.hasCryptoCallToAction)
+                              DiscoverTabPage()
+                            else
+                              DiscoverPage(),
+                            if (Parameters.hasCryptoCallToAction)
+                              WertPage()
+                            else
+                              SearchPage(),
+                            AltmeSupportChatPage(),
+                          ],
                         ),
                       ),
                       BottomBarDecoration(
