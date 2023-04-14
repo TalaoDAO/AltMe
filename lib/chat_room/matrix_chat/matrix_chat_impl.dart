@@ -15,6 +15,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart' hide User;
 import 'package:mime/mime.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -404,11 +405,24 @@ class MatrixChatImpl extends MatrixChatInterface {
     } catch (e, s) {
       logger.e('e: $e, s: $s');
       if (e is MatrixException && e.errcode == 'M_ROOM_IN_USE') {
-        final millisecondsSinceEpoch = DateTime.now().millisecondsSinceEpoch;
-        return createRoomAndInviteSupport(
-          '$roomName-updated-$millisecondsSinceEpoch',
-          invites,
-        );
+        final clientRooms = List.of(client!.rooms);
+        final result = clientRooms.where((element) => element.name == roomName);
+        if (result.isEmpty) {
+          try {
+            final id = await client!.joinRoom(roomName);
+            return id;
+          } catch (_) {
+            final millisecondsSinceEpoch =
+                DateTime.now().millisecondsSinceEpoch;
+            return createRoomAndInviteSupport(
+              '$roomName-updated-$millisecondsSinceEpoch',
+              invites,
+            );
+          }
+        } else {
+          await client!.joinRoom(result.first.id);
+          return result.first.id;
+        }
       } else {
         final roomId = await client!.joinRoom(roomName);
         await enableRoomEncyption(roomId);
@@ -526,11 +540,9 @@ class MatrixChatImpl extends MatrixChatInterface {
   @override
   Future<void> dispose() async {
     try {
-      if (client?.isLogged() ?? false) {
-        await client?.logout().catchError(
-              (_) => logger.e('logout failed!'),
-            );
-      }
+      await client?.logout().catchError(
+            (_) => logger.e('logout failed!'),
+          );
       await client?.dispose().catchError(
             (dynamic e) => logger.e('dispose failed with $e'),
           );

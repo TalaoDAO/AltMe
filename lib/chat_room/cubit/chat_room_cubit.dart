@@ -245,7 +245,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
       if (unreadMessageCount > 0) {
         final unreadMessageEventIds = state.messages
             .take(unreadMessageCount)
-            .map((e) => e.remoteId!)
+            .map((e) => e.remoteId)
             .toList();
         logger.i(
           'unread message event ids lenght: ${unreadMessageEventIds.length}',
