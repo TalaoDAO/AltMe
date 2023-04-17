@@ -9,21 +9,30 @@ class BackupMnemonicPage extends StatelessWidget {
   const BackupMnemonicPage({
     super.key,
     required this.isValidCallback,
+    required this.title,
   });
 
   final VoidCallback isValidCallback;
+  final String title;
 
   static Route<dynamic> route({
     required VoidCallback isValidCallback,
+    required String title,
   }) =>
       MaterialPageRoute<void>(
-        builder: (_) => BackupMnemonicPage(isValidCallback: isValidCallback),
+        builder: (_) => BackupMnemonicPage(
+          isValidCallback: isValidCallback,
+          title: title,
+        ),
         settings: const RouteSettings(name: '/BackupMnemonicPage'),
       );
 
   @override
   Widget build(BuildContext context) {
-    return BackupMnemonicView(isValidCallback: isValidCallback);
+    return BackupMnemonicView(
+      isValidCallback: isValidCallback,
+      title: title,
+    );
   }
 }
 
@@ -31,16 +40,18 @@ class BackupMnemonicView extends StatelessWidget {
   const BackupMnemonicView({
     super.key,
     required this.isValidCallback,
+    required this.title,
   });
 
   final VoidCallback isValidCallback;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
     return BasePage(
-      title: l10n.backupCredential,
+      title: title,
       titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       padding: const EdgeInsets.only(

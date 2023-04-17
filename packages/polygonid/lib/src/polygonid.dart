@@ -90,9 +90,7 @@ class PolygonId {
       return identity;
     } catch (e) {
       if (e is IdentityAlreadyExistsException) {
-        final privateKey =
-            await keccak256privateKeyFromSecret(mnemonic: mnemonic);
-        final identity = getIdentity(privateKey: privateKey);
+        final identity = getIdentity(mnemonic: mnemonic);
         return identity;
       } else {
         throw Exception('STH_WENT_WRONG');
@@ -130,9 +128,10 @@ class PolygonId {
   /// Restores an IdentityEntity from a privateKey and encrypted backup
   /// databases associated to the identity
   Future<PrivateIdentityEntity> getIdentity({
-    required String privateKey,
+    required String mnemonic,
   }) async {
     final sdk = PolygonIdSdk.I;
+    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
     final identity = await sdk.identity.restoreIdentity(
       privateKey: privateKey,
     );
@@ -273,7 +272,7 @@ class PolygonId {
 
     return sdk.credential.getClaimsByIds(
       claimIds: [claimId],
-      did: did,
+      genesisDid: did,
       privateKey: privateKey,
     );
   }
@@ -292,7 +291,7 @@ class PolygonId {
   ///
   /// The identity will be backed up using the current env set with
   /// [PolygonIdSdk.setEnv]
-  Future<String> backupIdentity({
+  Future<String?> backupIdentity({
     required String mnemonic,
   }) async {
     final sdk = PolygonIdSdk.I;
@@ -314,15 +313,42 @@ class PolygonId {
   ///
   /// The identity will be restored using the current env set with
   /// [PolygonIdSdk.setEnv]
-  Future<void> restoreIdentity({
+  Future<PrivateIdentityEntity> restoreIdentity({
     required String mnemonic,
     required String encryptedDb,
   }) async {
     final sdk = PolygonIdSdk.I;
     final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
-    await sdk.identity.restoreIdentity(
+    final identity = await sdk.identity.restoreIdentity(
       privateKey: privateKey,
       encryptedDb: encryptedDb,
     );
+    return identity;
+  }
+
+  /// Gets a list of [ClaimEntity] associated to the identity previously stored
+  /// in the the Polygon ID Sdk
+  ///
+  /// The list can be filtered by filters
+  ///
+  /// The genesisDid is the unique id of the identity
+  ///
+  /// The privateKey is the key used to access all the sensitive info from the
+  /// identity and also to realize operations like generating proofs
+  Future<List<ClaimEntity>> restoreClaims({
+    required PrivateIdentityEntity privateIdentityEntity,
+  }) async {
+    try {
+      final sdk = PolygonIdSdk.I;
+
+      final claimEntities = await sdk.credential.getClaims(
+        genesisDid: privateIdentityEntity.did,
+        privateKey: privateIdentityEntity.privateKey,
+      );
+
+      return claimEntities;
+    } catch (e) {
+      throw Exception();
+    }
   }
 }

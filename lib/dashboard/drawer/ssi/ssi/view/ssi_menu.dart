@@ -62,6 +62,7 @@ class SSIView extends StatelessWidget {
                         isValidCallback: () {
                           Navigator.of(context).push<void>(
                             BackupMnemonicPage.route(
+                              title: l10n.backupCredential,
                               isValidCallback: () {
                                 Navigator.of(context)
                                     .push<void>(BackupCredentialPage.route());
@@ -95,6 +96,7 @@ class SSIView extends StatelessWidget {
                           isValidCallback: () {
                             Navigator.of(context).push<void>(
                               RestoreCredentialMnemonicPage.route(
+                                title: l10n.restoreCredential,
                                 isValidCallback: () {
                                   Navigator.of(context).push<void>(
                                     RestoreCredentialPage.route(),
@@ -109,7 +111,7 @@ class SSIView extends StatelessWidget {
                   },
                 ),
                 DrawerItem(
-                  title: l10n.backupPolygonIdCredentials,
+                  title: l10n.backupPolygonIdIdentity,
                   onTap: () async {
                     await Navigator.of(context).push<void>(
                       PinCodePage.route(
@@ -117,9 +119,10 @@ class SSIView extends StatelessWidget {
                         isValidCallback: () {
                           Navigator.of(context).push<void>(
                             BackupMnemonicPage.route(
+                              title: l10n.backupPolygonIdIdentity,
                               isValidCallback: () {
                                 Navigator.of(context).push<void>(
-                                  BackupPolygonIdCredentialPage.route(),
+                                  BackupPolygonIdIdentityPage.route(),
                                 );
                               },
                             ),
@@ -131,37 +134,24 @@ class SSIView extends StatelessWidget {
                 ),
                 DrawerItem(
                   title: l10n.restorePolygonIdCredentials,
-                  onTap: () async {
-                    final confirm = await showDialog<bool>(
-                          context: context,
-                          builder: (context) => ConfirmDialog(
-                            title: l10n.warningDialogTitle,
-                            subtitle:
-                                l10n.restorationCredentialWarningDialogSubtitle,
-                            yes: l10n.showDialogYes,
-                            no: l10n.showDialogNo,
-                          ),
-                        ) ??
-                        false;
-
-                    if (confirm) {
-                      await Navigator.of(context).push<void>(
-                        PinCodePage.route(
-                          restrictToBack: false,
-                          isValidCallback: () {
-                            Navigator.of(context).push<void>(
-                              RestoreCredentialMnemonicPage.route(
-                                isValidCallback: () {
-                                  Navigator.of(context).push<void>(
-                                    RestorePolygonIdCredentialPage.route(),
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    }
+                  onTap: () {
+                    Navigator.of(context).push<void>(
+                      PinCodePage.route(
+                        restrictToBack: false,
+                        isValidCallback: () {
+                          Navigator.of(context).push<void>(
+                            RestoreCredentialMnemonicPage.route(
+                              title: l10n.restorePolygonIdCredentials,
+                              isValidCallback: () {
+                                Navigator.of(context).push<void>(
+                                  RestorePolygonIdCredentialPage.route(),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    );
                   },
                 ),
                 DrawerItem(

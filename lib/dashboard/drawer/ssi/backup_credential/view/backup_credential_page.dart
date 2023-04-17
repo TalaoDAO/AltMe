@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
+import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
@@ -30,6 +31,7 @@ class BackupCredentialPage extends StatelessWidget {
         cryptoKeys: const CryptocurrencyKeys(),
         walletCubit: context.read<WalletCubit>(),
         fileSaver: FileSaver.instance,
+        polygonIdCubit: context.read<PolygonIdCubit>(),
       ),
       child: const BackupCredentialView(),
     );
@@ -116,9 +118,9 @@ class BackupCredentialView extends StatelessWidget {
         padding: const EdgeInsets.all(Sizes.spaceSmall),
         child: MyGradientButton(
           onPressed: () async {
-            await context.read<BackupCredentialCubit>().encryptAndDownloadFile(
-                  isPolygonIdCredentials: false,
-                );
+            await context
+                .read<BackupCredentialCubit>()
+                .encryptAndDownloadFile();
           },
           text: l10n.backupCredentialButtonTitle,
         ),

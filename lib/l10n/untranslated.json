@@ -772,7 +772,7 @@
     "youAreOver18",
     "polygon",
     "ebsi",
-    "backupPolygonIdCredentials",
+    "backupPolygonIdIdentity",
     "restorePolygonIdCredentials",
     "comingSoon",
     "alert"
@@ -1551,7 +1551,7 @@
     "youAreOver18",
     "polygon",
     "ebsi",
-    "backupPolygonIdCredentials",
+    "backupPolygonIdIdentity",
     "restorePolygonIdCredentials",
     "comingSoon",
     "alert"
@@ -1627,7 +1627,7 @@
     "youAreOver18",
     "polygon",
     "ebsi",
-    "backupPolygonIdCredentials",
+    "backupPolygonIdIdentity",
     "restorePolygonIdCredentials",
     "comingSoon",
     "alert"
@@ -2406,7 +2406,7 @@
     "youAreOver18",
     "polygon",
     "ebsi",
-    "backupPolygonIdCredentials",
+    "backupPolygonIdIdentity",
     "restorePolygonIdCredentials",
     "comingSoon",
     "alert"
