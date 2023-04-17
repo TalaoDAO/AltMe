@@ -11,16 +11,21 @@ class RestoreCredentialMnemonicPage extends StatelessWidget {
   const RestoreCredentialMnemonicPage({
     super.key,
     required this.isValidCallback,
+    required this.title,
   });
 
   final VoidCallback isValidCallback;
+  final String title;
 
   static Route<dynamic> route({
     required VoidCallback isValidCallback,
+    required String title,
   }) =>
       MaterialPageRoute<void>(
-        builder: (context) =>
-            RestoreCredentialMnemonicPage(isValidCallback: isValidCallback),
+        builder: (context) => RestoreCredentialMnemonicPage(
+          isValidCallback: isValidCallback,
+          title: title,
+        ),
         settings: const RouteSettings(name: '/RestoreCredentialMnemonicPage'),
       );
 
@@ -28,7 +33,10 @@ class RestoreCredentialMnemonicPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => RestoreCredentialMnemonicCubit(),
-      child: RestoreCredentialMnemonicView(isValidCallback: isValidCallback),
+      child: RestoreCredentialMnemonicView(
+        isValidCallback: isValidCallback,
+        title: title,
+      ),
     );
   }
 }
@@ -37,9 +45,11 @@ class RestoreCredentialMnemonicView extends StatefulWidget {
   const RestoreCredentialMnemonicView({
     super.key,
     required this.isValidCallback,
+    required this.title,
   });
 
   final VoidCallback isValidCallback;
+  final String title;
 
   @override
   _RestoreCredentialMnemonicViewState createState() =>
@@ -65,7 +75,7 @@ class _RestoreCredentialMnemonicViewState
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
-      title: l10n.restoreCredential,
+      title: widget.title,
       titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       padding: const EdgeInsets.only(
