@@ -33,6 +33,25 @@ class CredentialSubjectModel {
   final CredentialSubjectType credentialSubjectType;
   final CredentialCategory credentialCategory;
 
+  CredentialSubjectModel copyWith({
+    String? id,
+    String? type,
+    Author? issuedBy,
+    Author? offeredBy,
+    CredentialSubjectType? credentialSubjectType,
+    CredentialCategory? credentialCategory,
+  }) {
+    return CredentialSubjectModel(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      issuedBy: issuedBy ?? this.issuedBy,
+      offeredBy: offeredBy ?? this.offeredBy,
+      credentialSubjectType:
+          credentialSubjectType ?? this.credentialSubjectType,
+      credentialCategory: credentialCategory ?? this.credentialCategory,
+    );
+  }
+
   Map<String, dynamic> toJson() => _$CredentialSubjectModelToJson(this);
 
   static Author fromJsonAuthor(dynamic json) {

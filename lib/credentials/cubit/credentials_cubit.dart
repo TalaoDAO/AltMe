@@ -168,11 +168,25 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required CredentialModel credential,
     bool showMessage = true,
   }) async {
-    await replaceCredential(credential: credential);
+    late final List<CredentialModel> credentials;
 
-    /// if same email credential is present
-    await credentialsRepository.insert(credential);
-    final credentials = List.of(state.credentials)..add(credential);
+    if (isVerifiableDiplomaType(credential)) {
+      final updatedCredential = credential.copyWith(
+        credentialPreview: credential.credentialPreview.copyWith(
+          credentialSubjectModel:
+              credential.credentialPreview.credentialSubjectModel.copyWith(
+            credentialCategory: CredentialCategory.educationCards,
+          ),
+        ),
+      );
+      await replaceCredential(credential: updatedCredential);
+      await credentialsRepository.insert(updatedCredential);
+      credentials = List.of(state.credentials)..add(updatedCredential);
+    } else {
+      await replaceCredential(credential: credential);
+      await credentialsRepository.insert(credential);
+      credentials = List.of(state.credentials)..add(credential);
+    }
 
     final CredentialCategory credentialCategory =
         credential.credentialPreview.credentialSubjectModel.credentialCategory;

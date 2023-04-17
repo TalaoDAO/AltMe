@@ -68,6 +68,32 @@ class Credential {
 
   Map<String, dynamic> toJson() => _$CredentialToJson(this);
 
+  Credential copyWith({
+    String? id,
+    List<String>? type,
+    String? issuer,
+    String? issuanceDate,
+    List<Proof>? proof,
+    CredentialSubjectModel? credentialSubjectModel,
+    List<Translation>? description,
+    List<Translation>? name,
+    CredentialStatusField? credentialStatus,
+    List<Evidence>? evidence,
+  }) {
+    return Credential(
+      id ?? this.id,
+      type ?? this.type,
+      issuer ?? this.issuer,
+      issuanceDate ?? this.issuanceDate,
+      proof ?? this.proof,
+      credentialSubjectModel ?? this.credentialSubjectModel,
+      description ?? this.description,
+      name ?? this.name,
+      credentialStatus ?? this.credentialStatus,
+      evidence ?? this.evidence,
+    );
+  }
+
   static List<Proof> _fromJsonProofs(dynamic json) {
     if (json == null) {
       return [Proof.dummy()];
