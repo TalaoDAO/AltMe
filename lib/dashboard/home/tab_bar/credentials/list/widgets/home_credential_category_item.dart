@@ -19,6 +19,16 @@ class HomeCredentialCategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //sort credentials by order
+    final sortedCredentials = List.of(credentials)
+      ..sort(
+        (a, b) => a.credentialPreview.credentialSubjectModel
+                    .credentialSubjectType.order <
+                b.credentialPreview.credentialSubjectModel.credentialSubjectType
+                    .order
+            ? 1
+            : 0,
+      );
     final credentialCategoryConfig = credentialCategory.config(context);
     return Padding(
       padding: margin,
@@ -51,17 +61,17 @@ class HomeCredentialCategoryItem extends StatelessWidget {
               mainAxisSpacing: 8,
               childAspectRatio: Sizes.homeCredentialRatio,
             ),
-            itemCount: credentials.length +
+            itemCount: sortedCredentials.length +
                 (credentialCategory.showAddButtonInHome ? 1 : 0),
             itemBuilder: (_, index) {
               if (credentialCategory.showAddButtonInHome &&
-                  index == credentials.length) {
+                  index == sortedCredentials.length) {
                 return AddCredentialButton(
                   credentialCategory: credentialCategory,
                 );
               } else {
                 return HomeCredentialItem(
-                  credentialModel: credentials[index],
+                  credentialModel: sortedCredentials[index],
                 );
               }
             },

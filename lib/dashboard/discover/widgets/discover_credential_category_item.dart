@@ -18,6 +18,11 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final credentialCategoryConfig = credentialCategory.config(context);
+    //sort credentials by order
+    dummyCredentials.sort(
+      (a, b) =>
+          a.credentialSubjectType.order < b.credentialSubjectType.order ? 1 : 0,
+    );
     return Padding(
       padding: margin,
       child: Column(
