@@ -33,6 +33,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required this.didCubit,
     required this.didKitProvider,
     required this.advanceSettingsCubit,
+    required this.keyGenerator,
   }) : super(const CredentialsState());
 
   final CredentialsRepository credentialsRepository;
@@ -40,6 +41,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   final CredentialListCubit credentialListCubit;
   final DIDCubit didCubit;
   final DIDKitProvider didKitProvider;
+  final KeyGenerator keyGenerator;
   final AdvanceSettingsCubit advanceSettingsCubit;
 
   final log = getLogger('CredentialsCubit');
@@ -295,13 +297,24 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     }
   }
 
-  Future<void> recoverWallet(List<CredentialModel> credentials) async {
-    await credentialsRepository.deleteAll();
+  Future<void> recoverWallet({
+    required List<CredentialModel> credentials,
+    required bool isPolygonIdCredentials,
+  }) async {
+    if (!isPolygonIdCredentials) {
+      await credentialsRepository.deleteAll();
+    }
     for (final credential in credentials) {
       await credentialsRepository.insert(credential);
     }
-    emit(state.copyWith(
-        status: CredentialsStatus.init, credentials: credentials));
+    final updatedCredentials =
+        await credentialsRepository.findAll(/* filters */);
+    emit(
+      state.copyWith(
+        status: CredentialsStatus.init,
+        credentials: updatedCredentials,
+      ),
+    );
   }
 
   Future<List<CredentialModel>> credentialListFromCredentialSubjectType(
@@ -318,5 +331,57 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       }
     }
     return resultList;
+  }
+
+  Future<void> insertOrUpdateAssociatedWalletCredential({
+    required BlockchainType blockchainType,
+    required CryptoAccountData cryptoAccountData,
+  }) async {
+    /// get id of current AssociatedAddres credential of this account
+    final oldCredentialList = List<CredentialModel>.from(state.credentials);
+
+    // need to update code
+    final filteredCredentialList = getCredentialsFromFilterList(
+      [
+        Field(path: [r'$..type'], filter: blockchainType.filter),
+        Field(
+          path: [r'$..associatedAddress'],
+          filter: Filter('String', cryptoAccountData.walletAddress),
+        ),
+      ],
+      oldCredentialList,
+    );
+
+    /// update or create AssociatedAddres credential with new name
+    if (filteredCredentialList.isNotEmpty) {
+      final credential = await createAssociatedWalletCredential(
+        blockchainType: blockchainType,
+        cryptoAccountData: cryptoAccountData,
+      );
+      if (credential != null) {
+        await updateCredential(credential: credential);
+      }
+    } else {
+      final credential = await createAssociatedWalletCredential(
+        blockchainType: blockchainType,
+        cryptoAccountData: cryptoAccountData,
+      );
+      if (credential != null) {
+        await insertCredential(credential: credential);
+      }
+    }
+  }
+
+  Future<CredentialModel?> createAssociatedWalletCredential({
+    required BlockchainType blockchainType,
+    required CryptoAccountData cryptoAccountData,
+  }) async {
+    return generateAssociatedWalletCredential(
+      cryptoAccountData: cryptoAccountData,
+      didCubit: didCubit,
+      didKitProvider: didKitProvider,
+      blockchainType: blockchainType,
+      keyGenerator: keyGenerator,
+    );
   }
 }
