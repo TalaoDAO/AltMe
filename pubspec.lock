@@ -1731,8 +1731,8 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: e52e9967ae0c41c736a7c74ac37afa33de55f447
-      resolved-ref: e52e9967ae0c41c736a7c74ac37afa33de55f447
+      ref: "29cb3eab7479c52ed31f4a423aa875cbc8d2aa18"
+      resolved-ref: "29cb3eab7479c52ed31f4a423aa875cbc8d2aa18"
       url: "ssh://git@github.com/iden3/polygonid-flutter-sdk.git"
     source: git
     version: "2.1.1"

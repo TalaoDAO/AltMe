@@ -109,20 +109,14 @@ class SSIView extends StatelessWidget {
                   },
                 ),
                 DrawerItem(
-                  title: l10n.backupPolygonIdCredentials,
+                  title: l10n.backupPolygonIdIdentity,
                   onTap: () async {
                     await Navigator.of(context).push<void>(
                       PinCodePage.route(
                         restrictToBack: false,
                         isValidCallback: () {
                           Navigator.of(context).push<void>(
-                            BackupMnemonicPage.route(
-                              isValidCallback: () {
-                                Navigator.of(context).push<void>(
-                                  BackupPolygonIdCredentialPage.route(),
-                                );
-                              },
-                            ),
+                            BackupPolygonIdIdentityPage.route(),
                           );
                         },
                       ),

@@ -12,17 +12,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-part 'backup_credential_cubit.g.dart';
-part 'backup_credential_state.dart';
+part 'backup_polygon_identity_cubit.g.dart';
+part 'backup_polygon_identity_state.dart';
 
-class BackupCredentialCubit extends Cubit<BackupCredentialState> {
-  BackupCredentialCubit({
+class BackupPolygonIdIdentityCubit extends Cubit<BackupPolygonIdIdentityState> {
+  BackupPolygonIdIdentityCubit({
     required this.secureStorageProvider,
     required this.cryptoKeys,
     required this.walletCubit,
     required this.fileSaver,
     required this.polygonIdCubit,
-  }) : super(const BackupCredentialState());
+  }) : super(const BackupPolygonIdIdentityState());
 
   final SecureStorageProvider secureStorageProvider;
   final CryptocurrencyKeys cryptoKeys;
@@ -30,7 +30,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
   final FileSaver fileSaver;
   final PolygonIdCubit polygonIdCubit;
 
-  Future<void> encryptAndDownloadFile() async {
+  Future<void> saveEncryptedFile() async {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     final mnemonic =
@@ -45,18 +45,19 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       }
 
       final dateTime = getDateTimeWithoutSpace();
-      final fileName = 'altme-credential-$dateTime';
+      final fileName = 'altme-polygonid-identity-$dateTime';
 
-      final credentialModels = walletCubit.state.credentials;
+      await polygonIdCubit.initialise();
+      final polygonCredentials =
+          await polygonIdCubit.polygonId.backupIdentity(mnemonic: mnemonic!);
 
-      final date = UiDate.formatDate(DateTime.now());
-      final message = {
-        'date': date,
-        'credentials': credentialModels,
-      };
-      final encrypted =
-          await cryptoKeys.encrypt(jsonEncode(message), mnemonic!);
-      final encryptedString = jsonEncode(encrypted);
+      if (polygonCredentials == null) {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
+
+      final String encryptedString = polygonCredentials;
 
       final fileBytes = Uint8List.fromList(utf8.encode(encryptedString));
       final filePath =

@@ -1,5 +1,6 @@
 export 'backup_credential/backup_credential.dart';
 export 'backup_mnemonic/backup_mnemonic.dart';
+export 'backup_polygon_identity/backup_polygon_identity.dart';
 export 'manage_did/manage_did.dart';
 export 'manage_issuers_registry/verifiable_data_registry.dart';
 export 'restore_credential/restore_credential.dart';

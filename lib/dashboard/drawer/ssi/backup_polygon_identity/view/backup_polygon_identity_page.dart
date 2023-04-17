@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
+import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
@@ -11,41 +12,42 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:secure_storage/secure_storage.dart';
 
-class BackupPolygonIdCredentialPage extends StatelessWidget {
-  const BackupPolygonIdCredentialPage({
+class BackupPolygonIdIdentityPage extends StatelessWidget {
+  const BackupPolygonIdIdentityPage({
     super.key,
   });
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: '/BackupPolygonIdCredentialPage'),
-      builder: (_) => const BackupPolygonIdCredentialPage(),
+      settings: const RouteSettings(name: '/BackupPolygonIdIdentityPage'),
+      builder: (_) => const BackupPolygonIdIdentityPage(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BackupCredentialCubit(
+      create: (context) => BackupPolygonIdIdentityCubit(
         secureStorageProvider: getSecureStorage,
         cryptoKeys: const CryptocurrencyKeys(),
         walletCubit: context.read<WalletCubit>(),
         fileSaver: FileSaver.instance,
+        polygonIdCubit: context.read<PolygonIdCubit>(),
       ),
-      child: const BackupPolygonIdCredentialView(),
+      child: const BackupPolygonIdIdentityView(),
     );
   }
 }
 
-class BackupPolygonIdCredentialView extends StatelessWidget {
-  const BackupPolygonIdCredentialView({super.key});
+class BackupPolygonIdIdentityView extends StatelessWidget {
+  const BackupPolygonIdIdentityView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
     return BasePage(
-      title: l10n.backupPolygonIdCredentials,
+      title: l10n.backupPolygonIdIdentity,
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.only(
         top: 0,
@@ -55,13 +57,14 @@ class BackupPolygonIdCredentialView extends StatelessWidget {
       ),
       titleLeading: BackLeadingButton(
         onPressed: () {
-          if (context.read<BackupCredentialCubit>().state.status !=
+          if (context.read<BackupPolygonIdIdentityCubit>().state.status !=
               AppStatus.loading) {
             Navigator.of(context).pop();
           }
         },
       ),
-      body: BlocConsumer<BackupCredentialCubit, BackupCredentialState>(
+      body: BlocConsumer<BackupPolygonIdIdentityCubit,
+          BackupPolygonIdIdentityState>(
         listener: (context, state) async {
           if (state.status == AppStatus.loading) {
             LoadingView().show(context: context);
@@ -117,9 +120,9 @@ class BackupPolygonIdCredentialView extends StatelessWidget {
         padding: const EdgeInsets.all(Sizes.spaceSmall),
         child: MyGradientButton(
           onPressed: () async {
-            await context.read<BackupCredentialCubit>().encryptAndDownloadFile(
-                  isPolygonIdCredentials: true,
-                );
+            await context
+                .read<BackupPolygonIdIdentityCubit>()
+                .saveEncryptedFile();
           },
           text: l10n.backupCredentialButtonTitle,
         ),
