@@ -29,8 +29,7 @@ class _DidPolygonIdPrivateKeyPageState extends State<DidPolygonIdPrivateKeyPage>
   Future<String> getPrivateKey() async {
     final PolygonId polygonId = PolygonId();
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-    final privateKey =
-        await polygonId.keccak256privateKeyFromSecret(mnemonic: mnemonic!);
+    final privateKey = await polygonId.getPrivateKey(mnemonic: mnemonic!);
     return privateKey;
   }
 
