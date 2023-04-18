@@ -48,21 +48,25 @@ class CredentialsListPageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return badges.Badge(
       showBadge: badgeCount > 0,
+      stackFit: StackFit.expand,
       badgeContent: Text(
         badgeCount.toString(),
         style: Theme.of(context).textTheme.badgeStyle,
         textAlign: TextAlign.center,
       ),
       position: badges.BadgePosition.topEnd(end: 10, top: 30),
-      child: _BaseItem(
-        enabled: true,
-        onTap: onTap,
-        child: selected == null
-            ? CredentialDisplay(
-                credentialModel: credentialModel,
-                credDisplayType: CredDisplayType.List,
-              )
-            : displaySelectionElement(context),
+      child: AspectRatio(
+        aspectRatio: Sizes.credentialAspectRatio,
+        child: _BaseItem(
+          enabled: true,
+          onTap: onTap,
+          child: selected == null
+              ? CredentialDisplay(
+                  credentialModel: credentialModel,
+                  credDisplayType: CredDisplayType.List,
+                )
+              : displaySelectionElement(context),
+        ),
       ),
     );
   }
