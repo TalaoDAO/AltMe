@@ -167,7 +167,8 @@ extension CustomColorScheme on ColorScheme {
 
   Color get borderColor => const Color(0xFFDDCEF4);
 
-  Color get defualtDialogCancelButtonBorderColor => const Color(0xFF424052);
+  Color get defualtDialogCancelButtonBorderColor =>
+      const Color(0xFFFFFFFF).withOpacity(0.2);
 
   Color get markDownH1 => const Color(0xFFFFFFFF);
 
