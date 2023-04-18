@@ -37,26 +37,7 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
       scrollView: false,
       padding: EdgeInsets.zero,
       backgroundColor: Theme.of(context).colorScheme.transparent,
-      body: BlocConsumer<CredentialsCubit, CredentialsState>(
-        listener: (context, state) {
-          if (state.status == CredentialsStatus.loading) {
-            LoadingView().show(context: context);
-          } else {
-            LoadingView().hide();
-          }
-
-          if (state.message != null &&
-              state.status != CredentialsStatus.error) {
-            AlertMessage.showStateMessage(
-              context: context,
-              stateMessage: state.message!,
-            );
-          }
-
-          if (state.status == CredentialsStatus.populate) {
-            //some action
-          }
-        },
+      body: BlocBuilder<CredentialsCubit, CredentialsState>(
         builder: (context, state) {
           String message = '';
           if (state.message != null) {

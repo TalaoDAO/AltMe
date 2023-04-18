@@ -48,7 +48,7 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
         stateMessage: state.message!,
       );
     }
-    
+
     if (state.status == WalletStatus.reset) {
       /// Removes every stack except first route (splashPage)
       await Navigator.pushAndRemoveUntil<void>(
@@ -63,7 +63,17 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
 final credentialsBlocListener =
     BlocListener<CredentialsCubit, CredentialsState>(
   listener: (BuildContext context, CredentialsState state) async {
-    if (state.message != null) {
+    if (state.status == CredentialsStatus.loading) {
+      LoadingView().show(context: context);
+    } else {
+      LoadingView().hide();
+    }
+
+    if (state.message != null &&
+        (state.status == CredentialsStatus.error ||
+            state.status == CredentialsStatus.insert ||
+            state.status == CredentialsStatus.delete ||
+            state.status == CredentialsStatus.update)) {
       AlertMessage.showStateMessage(
         context: context,
         stateMessage: state.message!,
