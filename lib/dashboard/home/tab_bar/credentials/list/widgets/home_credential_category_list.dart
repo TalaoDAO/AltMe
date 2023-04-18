@@ -25,9 +25,8 @@ class HomeCredentialCategoryList extends StatelessWidget {
               scrollDirection: Axis.vertical,
               children: getCredentialCategorySorted.where(
                 (category) {
-                  return category.showInHome &&
-                      (advanceSettingsState.categoryIsEnabledMap[category] ??
-                          true);
+                  return advanceSettingsState.categoryIsEnabledMap[category] ??
+                      true;
                 },
               ).map((category) {
                 final categorizedCredentials = credentials

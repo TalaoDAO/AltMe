@@ -20,9 +20,7 @@ class DiscoverCredentialCategoryList extends StatelessWidget {
         scrollDirection: Axis.vertical,
         children: dummyCredentials.keys
             .where(
-          (category) =>
-              category.showInDiscover &&
-              (dummyCredentials[category]?.isNotEmpty ?? false),
+          (category) => dummyCredentials[category]?.isNotEmpty ?? false,
         )
             .map(
           (category) {

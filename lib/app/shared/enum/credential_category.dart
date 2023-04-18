@@ -90,48 +90,6 @@ extension CredentialCategoryX on CredentialCategory {
     }
   }
 
-  bool get showInHome {
-    switch (this) {
-      case CredentialCategory.gamingCards:
-        return true;
-      case CredentialCategory.identityCards:
-        return true;
-      case CredentialCategory.communityCards:
-        return true;
-      case CredentialCategory.blockchainAccountsCards:
-        return true;
-      case CredentialCategory.educationCards:
-        return true;
-      case CredentialCategory.passCards:
-        return true;
-      case CredentialCategory.othersCards:
-        return true;
-      case CredentialCategory.myProfessionalCards:
-        return true;
-    }
-  }
-
-  bool get showInDiscover {
-    switch (this) {
-      case CredentialCategory.gamingCards:
-        return true;
-      case CredentialCategory.identityCards:
-        return true;
-      case CredentialCategory.communityCards:
-        return true;
-      case CredentialCategory.blockchainAccountsCards:
-        return true;
-      case CredentialCategory.educationCards:
-        return true;
-      case CredentialCategory.passCards:
-        return true;
-      case CredentialCategory.othersCards:
-        return true;
-      case CredentialCategory.myProfessionalCards:
-        return true;
-    }
-  }
-
   bool get showInHomeIfListEmpty {
     switch (this) {
       case CredentialCategory.gamingCards:
@@ -150,27 +108,6 @@ extension CredentialCategoryX on CredentialCategory {
         return false;
       case CredentialCategory.myProfessionalCards:
         return false;
-    }
-  }
-
-  bool get showAddButtonInHome {
-    switch (this) {
-      case CredentialCategory.gamingCards:
-        return true;
-      case CredentialCategory.identityCards:
-        return true;
-      case CredentialCategory.communityCards:
-        return true;
-      case CredentialCategory.blockchainAccountsCards:
-        return true;
-      case CredentialCategory.educationCards:
-        return true;
-      case CredentialCategory.passCards:
-        return true;
-      case CredentialCategory.othersCards:
-        return true;
-      case CredentialCategory.myProfessionalCards:
-        return true;
     }
   }
 

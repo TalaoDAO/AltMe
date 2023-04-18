@@ -61,11 +61,9 @@ class HomeCredentialCategoryItem extends StatelessWidget {
               mainAxisSpacing: 8,
               childAspectRatio: Sizes.homeCredentialRatio,
             ),
-            itemCount: sortedCredentials.length +
-                (credentialCategory.showAddButtonInHome ? 1 : 0),
+            itemCount: sortedCredentials.length + 1,
             itemBuilder: (_, index) {
-              if (credentialCategory.showAddButtonInHome &&
-                  index == sortedCredentials.length) {
+              if (index == sortedCredentials.length) {
                 return AddCredentialButton(
                   credentialCategory: credentialCategory,
                 );
