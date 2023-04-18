@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -93,13 +92,17 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
         return OrientationBuilder(
           builder: (context, orientation) {
             return orientation == Orientation.portrait
-                ? SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                ? Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 if (widget.header != null)
                                   widget.header!
@@ -140,141 +143,135 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                     },
                                   ),
                                 ),
-                                NumKeyboard(
-                                  passwordEnteredCallback:
-                                      widget.passwordEnteredCallback,
-                                  keyboardUIConfig: widget.keyboardUIConfig,
-                                  passwordDigits: widget.passwordDigits,
-                                  cancelCallback: widget.cancelCallback,
-                                  allowAction: widget.allowAction,
-                                ),
-                                widget.bottomWidget ?? Container()
                               ],
                             ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: DeleteButton(
-                                  cancelButton: widget.cancelButton,
-                                  deleteButton: widget.deleteButton,
-                                  cancelCallback: widget.cancelCallback,
-                                  keyboardUIConfig: widget.keyboardUIConfig,
-                                ),
-                              ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: NumKeyboard(
+                              passwordEnteredCallback:
+                                  widget.passwordEnteredCallback,
+                              keyboardUIConfig: widget.keyboardUIConfig,
+                              passwordDigits: widget.passwordDigits,
+                              cancelCallback: widget.cancelCallback,
+                              allowAction: widget.allowAction,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                : Stack(
-                    children: [
-                      Center(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Expanded(
-                              child: Stack(
-                                children: <Widget>[
-                                  Positioned(
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          if (widget.header != null)
-                                            widget.header!
-                                          else
-                                            const AltMeLogo(
-                                              size: Sizes.logoLarge,
-                                            ),
-                                          const SizedBox(
-                                            height: Sizes.spaceNormal,
-                                          ),
-                                          PinCodeTitle(
-                                            title: widget.title,
-                                            subTitle: widget.subTitle,
-                                            allowAction: widget.allowAction,
-                                          ),
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(top: 20),
-                                            height: 40,
-                                            child: AnimatedBuilder(
-                                              animation: animation,
-                                              builder: (_, __) {
-                                                return Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: List.generate(
-                                                    widget.passwordDigits,
-                                                    (index) => Container(
-                                                      margin:
-                                                          const EdgeInsets.all(
-                                                        8,
-                                                      ),
-                                                      child: Circle(
-                                                        allowAction:
-                                                            widget.allowAction,
-                                                        filled: index <
-                                                            enteredPasscode
-                                                                .length,
-                                                        circleUIConfig: widget
-                                                            .circleUIConfig,
-                                                        extraSize:
-                                                            animation.value,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  if (widget.bottomWidget != null)
-                                    Positioned(
-                                      child: Align(
-                                        alignment: Alignment.topCenter,
-                                        child: widget.bottomWidget,
-                                      ),
-                                    )
-                                  else
-                                    Container()
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: NumKeyboard(
-                                passwordEnteredCallback:
-                                    widget.passwordEnteredCallback,
-                                keyboardUIConfig: widget.keyboardUIConfig,
-                                passwordDigits: widget.passwordDigits,
-                                cancelCallback: widget.cancelCallback,
-                                allowAction: widget.allowAction,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                          widget.bottomWidget ?? Container()
+                        ],
                       ),
                       Positioned(
                         bottom: 0,
-                        right: 0,
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: DeleteButton(
-                            cancelButton: widget.cancelButton,
-                            deleteButton: widget.deleteButton,
-                            cancelCallback: widget.cancelCallback,
-                            keyboardUIConfig: widget.keyboardUIConfig,
+                        right: 40,
+                        child: DeleteButton(
+                          cancelButton: widget.cancelButton,
+                          deleteButton: widget.deleteButton,
+                          cancelCallback: widget.cancelCallback,
+                        ),
+                      ),
+                    ],
+                  )
+                : Stack(
+                  fit: StackFit.expand,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: Stack(
+                              children: <Widget>[
+                                Positioned(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        if (widget.header != null)
+                                          widget.header!
+                                        else
+                                          const AltMeLogo(
+                                            size: Sizes.logoLarge,
+                                          ),
+                                        const SizedBox(
+                                          height: Sizes.spaceNormal,
+                                        ),
+                                        PinCodeTitle(
+                                          title: widget.title,
+                                          subTitle: widget.subTitle,
+                                          allowAction: widget.allowAction,
+                                        ),
+                                        Container(
+                                          margin:
+                                              const EdgeInsets.only(top: 20),
+                                          height: 40,
+                                          child: AnimatedBuilder(
+                                            animation: animation,
+                                            builder: (_, __) {
+                                              return Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: List.generate(
+                                                  widget.passwordDigits,
+                                                  (index) => Container(
+                                                    margin:
+                                                        const EdgeInsets.all(
+                                                      8,
+                                                    ),
+                                                    child: Circle(
+                                                      allowAction:
+                                                          widget.allowAction,
+                                                      filled: index <
+                                                          enteredPasscode
+                                                              .length,
+                                                      circleUIConfig:
+                                                          widget.circleUIConfig,
+                                                      extraSize:
+                                                          animation.value,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                if (widget.bottomWidget != null)
+                                  Positioned(
+                                    child: Align(
+                                      alignment: Alignment.topCenter,
+                                      child: widget.bottomWidget,
+                                    ),
+                                  )
+                                else
+                                  Container()
+                              ],
+                            ),
                           ),
+                          Expanded(
+                            child: NumKeyboard(
+                              passwordEnteredCallback:
+                                  widget.passwordEnteredCallback,
+                              keyboardUIConfig: widget.keyboardUIConfig,
+                              passwordDigits: widget.passwordDigits,
+                              cancelCallback: widget.cancelCallback,
+                              allowAction: widget.allowAction,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 40,
+                        child: DeleteButton(
+                          cancelButton: widget.cancelButton,
+                          deleteButton: widget.deleteButton,
+                          cancelCallback: widget.cancelCallback,
                         ),
                       )
                     ],

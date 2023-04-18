@@ -54,43 +54,60 @@ class NumericKeyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> keyboardItems = List.filled(10, '0');
-    keyboardItems = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-    final screenSize = MediaQuery.of(context).size;
-    final keyboardHeight = screenSize.height > screenSize.width
-        ? screenSize.height / 2
-        : screenSize.height - 80;
-    final keyboardWidth = keyboardHeight * 3 / 4;
-    final keyboardSize = keyboardUIConfig.keyboardSize != null
-        ? keyboardUIConfig.keyboardSize!
-        : Size(keyboardWidth, keyboardHeight);
+    keyboardItems = [
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '0',
+    ];
 
-    return Container(
-      width: keyboardSize.width,
-      height: keyboardSize.height,
-      margin: const EdgeInsets.only(top: 16),
-      alignment: Alignment.center,
-      child: RawKeyboardListener(
-        focusNode: _focusNode,
-        autofocus: true,
-        onKey: (event) {
-          if (event is RawKeyUpEvent) {
-            if (keyboardItems.contains(event.data.keyLabel)) {
-              onKeyboardTap(event.logicalKey.keyLabel);
-              return;
-            }
-            if (event.logicalKey.keyLabel == 'Backspace' ||
-                event.logicalKey.keyLabel == 'Delete') {
-              onKeyboardTap(NumericKeyboard.deleteButton);
-              return;
-            }
-          }
-        },
-        child: AlignedGrid(
-          keyboardSize: keyboardSize,
-          spacing: keyboardUIConfig.spacing,
-          children: buildButtons(context, keyboardItems),
-        ),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableSpace = constraints.biggest;
+        final keyboardHeight = availableSpace.height > availableSpace.width
+            ? availableSpace.height
+            : availableSpace.width;
+        final keyboardWidth =
+            keyboardHeight / 1.05; // do not change the 1.05 :)
+        final keyboardSize = keyboardUIConfig.keyboardSize != null
+            ? keyboardUIConfig.keyboardSize!
+            : Size(keyboardWidth, keyboardHeight);
+
+        return Container(
+          width: keyboardWidth,
+          height: keyboardHeight,
+          margin: const EdgeInsets.only(top: 16),
+          alignment: Alignment.center,
+          child: RawKeyboardListener(
+            focusNode: _focusNode,
+            autofocus: true,
+            onKey: (event) {
+              if (event is RawKeyUpEvent) {
+                if (keyboardItems.contains(event.data.keyLabel)) {
+                  onKeyboardTap(event.logicalKey.keyLabel);
+                  return;
+                }
+                if (event.logicalKey.keyLabel == 'Backspace' ||
+                    event.logicalKey.keyLabel == 'Delete') {
+                  onKeyboardTap(NumericKeyboard.deleteButton);
+                  return;
+                }
+              }
+            },
+            child: AlignedGrid(
+              keyboardSize: keyboardSize,
+              spacing: keyboardUIConfig.spacing,
+              children: buildButtons(context, keyboardItems),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -295,7 +312,7 @@ class AlignedGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemWidth =
         (keyboardSize.width - (spacing * (columns - 1))) / columns;
-    final rows = children.length / columns;
+    final rows = (children.length / columns).ceil();
     final itemHeight = (keyboardSize.height - (runSpacing * (rows - 1))) / rows;
     final itemSize = min(itemHeight, itemWidth);
     return Wrap(
