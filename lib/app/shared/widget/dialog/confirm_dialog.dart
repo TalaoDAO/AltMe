@@ -79,9 +79,11 @@ class ConfirmDialog extends StatelessWidget {
                       .colorScheme
                       .defualtDialogCancelButtonBorderColor,
                   backgroundColor: background,
-                  textColor: textColor,
                   borderRadius: Sizes.smallRadius,
                   elevation: 0,
+                  textColor: Theme.of(context)
+                      .colorScheme
+                      .defualtDialogCancelButtonTextColor,
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },

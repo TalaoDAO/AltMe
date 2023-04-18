@@ -120,9 +120,14 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
             verticalSpacing: Sizes.smallRadius,
             fontSize: 12,
             elevation: 0,
-            borderColor: Colors.transparent,
-            backgroundColor: Colors.transparent,
-            textColor: Theme.of(context).colorScheme.label,
+            borderRadius: Sizes.smallRadius,
+            borderColor: Theme.of(context)
+                .colorScheme
+                .defualtDialogCancelButtonBorderColor,
+            backgroundColor: background,
+            textColor: Theme.of(context)
+                .colorScheme
+                .defualtDialogCancelButtonTextColor,
             onPressed: () {
               Navigator.of(context).pop('');
             },

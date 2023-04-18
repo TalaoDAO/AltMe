@@ -201,6 +201,8 @@ extension CustomColorScheme on ColorScheme {
 
   Color get defualtDialogCancelButtonBorderColor => primary;
 
+  Color get defualtDialogCancelButtonTextColor => primary;
+
   Color get markDownH1 => onPrimary;
 
   Color get markDownH2 => onPrimary;
