@@ -14,7 +14,7 @@ dependencies:
   polygonid_flutter_sdk:
     git:
       url: ssh://git@github.com/iden3/polygonid-flutter-sdk.git
-      ref: 29cb3eab7479c52ed31f4a423aa875cbc8d2aa18
+      ref: 719e65fb197f2bf1d209359f994062b38e8eb5ea
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,7 @@
 import 'package:bip39/bip39.dart' as bip393;
 import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
 import 'package:polygonid_flutter_sdk/credential/domain/entities/claim_entity.dart';
 import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/iden3_message_entity.dart';
@@ -99,7 +100,7 @@ class PolygonId {
   }
 
   /// get private key from mnemonics
-  Future<String> keccak256privateKeyFromSecret({
+  Future<String> getPrivateKey({
     required String mnemonic,
   }) async {
     final secret = bip393.mnemonicToEntropy(mnemonic);
@@ -114,15 +115,15 @@ class PolygonId {
   }
 
   /// Return The Identity's did identifier with mnemonics
-  Future<String> getDidFromMnemonics({required String mnemonic}) async {
+  Future<UserIdentity> getUserIdentity({required String mnemonic}) async {
     final sdk = PolygonIdSdk.I;
-    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+    final privateKey = await getPrivateKey(mnemonic: mnemonic);
     final did = await sdk.identity.getDidIdentifier(
       blockchain: blockchain,
       network: network,
       privateKey: privateKey,
     );
-    return did;
+    return UserIdentity(did: did, privateKey: privateKey);
   }
 
   /// Restores an IdentityEntity from a privateKey and encrypted backup
@@ -131,9 +132,10 @@ class PolygonId {
     required String mnemonic,
   }) async {
     final sdk = PolygonIdSdk.I;
-    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+    final userIdentity = await getUserIdentity(mnemonic: mnemonic);
     final identity = await sdk.identity.restoreIdentity(
-      privateKey: privateKey,
+      privateKey: userIdentity.privateKey,
+      genesisDid: userIdentity.did,
     );
     return identity;
   }
@@ -193,8 +195,7 @@ class PolygonId {
     try {
       final sdk = PolygonIdSdk.I;
 
-      final privateKey =
-          await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+      final privateKey = await getPrivateKey(mnemonic: mnemonic);
       final did = await sdk.identity.getDidIdentifier(
         blockchain: blockchain,
         network: network,
@@ -233,8 +234,7 @@ class PolygonId {
     try {
       final sdk = PolygonIdSdk.I;
 
-      final privateKey =
-          await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+      final privateKey = await getPrivateKey(mnemonic: mnemonic);
       final did = await sdk.identity.getDidIdentifier(
         blockchain: blockchain,
         network: network,
@@ -263,7 +263,7 @@ class PolygonId {
   }) async {
     final sdk = PolygonIdSdk.I;
 
-    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+    final privateKey = await getPrivateKey(mnemonic: mnemonic);
     final did = await sdk.identity.getDidIdentifier(
       blockchain: blockchain,
       network: network,
@@ -295,8 +295,11 @@ class PolygonId {
     required String mnemonic,
   }) async {
     final sdk = PolygonIdSdk.I;
-    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
-    return sdk.identity.backupIdentity(privateKey: privateKey);
+    final userIdentity = await getUserIdentity(mnemonic: mnemonic);
+    return sdk.identity.backupIdentity(
+      privateKey: userIdentity.privateKey,
+      genesisDid: userIdentity.did,
+    );
   }
 
   /// Restores an [IdentityEntity] from a privateKey and encrypted backup
@@ -318,9 +321,10 @@ class PolygonId {
     required String encryptedDb,
   }) async {
     final sdk = PolygonIdSdk.I;
-    final privateKey = await keccak256privateKeyFromSecret(mnemonic: mnemonic);
+    final userIdentity = await getUserIdentity(mnemonic: mnemonic);
     final identity = await sdk.identity.restoreIdentity(
-      privateKey: privateKey,
+      privateKey: userIdentity.privateKey,
+      genesisDid: userIdentity.did,
       encryptedDb: encryptedDb,
     );
     return identity;
