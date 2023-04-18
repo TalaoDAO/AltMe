@@ -110,11 +110,12 @@ class WalletSecurityView extends StatelessWidget {
                                     .setFingerprintEnabled(enabled: value);
                                 await showDialog<bool>(
                                   context: context,
-                                  builder: (context) => InfoDialog(
+                                  builder: (context) => ConfirmDialog(
                                     title: value
                                         ? l10n.biometricsEnabledMessage
                                         : l10n.biometricsDisabledMessage,
-                                    button: l10n.ok,
+                                    yes: l10n.ok,
+                                    showNoButton: false,
                                   ),
                                 );
                               }

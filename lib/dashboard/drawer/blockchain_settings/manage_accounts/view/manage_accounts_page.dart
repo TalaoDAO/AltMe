@@ -89,9 +89,10 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
               messageHandler.getMessage(context, messageHandler);
           showDialog<bool>(
             context: context,
-            builder: (context) => InfoDialog(
+            builder: (context) => ConfirmDialog(
               title: message,
-              button: l10n.ok,
+              yes: l10n.ok,
+              showNoButton: false,
             ),
           );
         }

@@ -14,6 +14,7 @@ class ConfirmDialog extends StatelessWidget {
     this.dialogColor,
     this.bgColor,
     this.textColor,
+    this.showNoButton = true,
   });
 
   final String title;
@@ -24,6 +25,7 @@ class ConfirmDialog extends StatelessWidget {
   final Color? bgColor;
   final Color? textColor;
   final String icon;
+  final bool showNoButton;
 
   @override
   Widget build(BuildContext context) {
@@ -69,25 +71,28 @@ class ConfirmDialog extends StatelessWidget {
             ),
           const SizedBox(height: 24),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Expanded(
-                child: MyOutlinedButton(
-                  text: no ?? l10n.no,
-                  verticalSpacing: 14,
-                  fontSize: 15,
-                  borderColor: Theme.of(context)
-                      .colorScheme
-                      .defualtDialogCancelButtonBorderColor,
-                  backgroundColor: background,
-                  textColor: textColor,
-                  borderRadius: Sizes.smallRadius,
-                  elevation: 0,
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
+              if (showNoButton) ...[
+                Expanded(
+                  child: MyOutlinedButton(
+                    text: no ?? l10n.no,
+                    verticalSpacing: 14,
+                    fontSize: 15,
+                    borderColor: Theme.of(context)
+                        .colorScheme
+                        .defualtDialogCancelButtonBorderColor,
+                    backgroundColor: background,
+                    textColor: textColor,
+                    borderRadius: Sizes.smallRadius,
+                    elevation: 0,
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
+                const SizedBox(width: 16),
+              ],
               Expanded(
                 child: MyElevatedButton(
                   text: yes ?? l10n.yes,
