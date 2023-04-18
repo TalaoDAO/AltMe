@@ -211,12 +211,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   void enableCredentialCategory({required CredentialCategory category}) {
     switch (category) {
-      case CredentialCategory.gamingCards:
+      case CredentialCategory.advantagesCards:
         if (!advanceSettingsCubit.state.isGamingEnabled) {
           advanceSettingsCubit.toggleGamingRadio();
         }
         break;
-      case CredentialCategory.communityCards:
+      case CredentialCategory.contactInfoCredentials:
         if (!advanceSettingsCubit.state.isCommunityEnabled) {
           advanceSettingsCubit.toggleCommunityRadio();
         }
@@ -225,12 +225,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       case CredentialCategory.identityCards:
         if (!advanceSettingsCubit.state.isIdentityEnabled) {
           advanceSettingsCubit.toggleIdentityRadio();
-        }
-        break;
-
-      case CredentialCategory.passCards:
-        if (!advanceSettingsCubit.state.isPassEnabled) {
-          advanceSettingsCubit.togglePassRadio();
         }
         break;
 
@@ -250,9 +244,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         if (!advanceSettingsCubit.state.isOtherEnabled) {
           advanceSettingsCubit.toggleOtherRadio();
         }
-        break;
-      case CredentialCategory.myProfessionalCards:
-        // TODO: Handle this case.
         break;
     }
   }

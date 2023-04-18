@@ -13,7 +13,7 @@ class ChainbornMembershipModel extends CredentialSubjectModel {
     super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.chainbornMembership,
-          credentialCategory: CredentialCategory.gamingCards,
+          credentialCategory: CredentialCategory.advantagesCards,
         );
 
   factory ChainbornMembershipModel.fromJson(Map<String, dynamic> json) =>

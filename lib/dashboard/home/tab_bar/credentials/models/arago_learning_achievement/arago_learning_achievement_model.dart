@@ -19,7 +19,7 @@ class AragoLearningAchievementModel extends CredentialSubjectModel {
     super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.aragoLearningAchievement,
-          credentialCategory: CredentialCategory.passCards,
+          credentialCategory: CredentialCategory.educationCards,
         );
 
   factory AragoLearningAchievementModel.fromJson(Map<String, dynamic> json) =>

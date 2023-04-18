@@ -20,7 +20,7 @@ class LoyaltyCardModel extends CredentialSubjectModel {
     this.email,
   }) : super(
           credentialSubjectType: CredentialSubjectType.loyaltyCard,
-          credentialCategory: CredentialCategory.communityCards,
+          credentialCategory: CredentialCategory.contactInfoCredentials,
         );
 
   factory LoyaltyCardModel.fromJson(Map<String, dynamic> json) =>

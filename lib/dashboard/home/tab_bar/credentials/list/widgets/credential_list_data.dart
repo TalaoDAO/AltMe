@@ -31,9 +31,9 @@
 //                 if (advanceSettingsState.isGamingEnabled) ...[
 //                   /// Gaming Credentials
 //                   HomeCredentialWidget(
-//                     title: l10n.gamingCards,
+//                     title: l10n.advantagesCards,
 //                     credentials: state.gamingCredentials,
-//                     credentialCategory: CredentialCategory.gamingCards,
+//                     credentialCategory: CredentialCategory.advantagesCards,
 //                     categorySubtitle: l10n.gamingCredentialHomeSubtitle,
 //                   ),
 //                   const SizedBox(height: Sizes.spaceNormal),
@@ -42,9 +42,9 @@
 //                     state.communityCredentials.isNotEmpty) ...[
 //                   /// Community Credentials
 //                   HomeCredentialWidget(
-//                     title: l10n.communityCards,
+//                     title: l10n.contactInfoCredentials,
 //                     credentials: state.communityCredentials,
-//                     credentialCategory: CredentialCategory.communityCards,
+//                     credentialCategory: CredentialCategory.contactInfoCredentials,
 //                     categorySubtitle: l10n.communityCredentialHomeSubtitle,
 //                   ),
 //                   const SizedBox(height: Sizes.spaceNormal),

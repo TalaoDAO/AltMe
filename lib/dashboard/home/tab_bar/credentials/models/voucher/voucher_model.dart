@@ -16,7 +16,7 @@ class VoucherModel extends CredentialSubjectModel {
     this.offer,
   }) : super(
           credentialSubjectType: CredentialSubjectType.voucher,
-          credentialCategory: CredentialCategory.gamingCards,
+          credentialCategory: CredentialCategory.advantagesCards,
         );
 
   factory VoucherModel.fromJson(Map<String, dynamic> json) =>

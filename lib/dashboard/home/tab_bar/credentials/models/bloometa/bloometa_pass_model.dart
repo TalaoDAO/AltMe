@@ -16,7 +16,7 @@ class BloometaPassModel extends CredentialSubjectModel {
     super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.bloometaPass,
-          credentialCategory: CredentialCategory.gamingCards,
+          credentialCategory: CredentialCategory.advantagesCards,
         );
 
   factory BloometaPassModel.fromJson(Map<String, dynamic> json) =>

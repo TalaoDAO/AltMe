@@ -14,7 +14,7 @@ class PcdsAgentCertificateModel extends CredentialSubjectModel {
     this.identifier,
   }) : super(
           credentialSubjectType: CredentialSubjectType.pcdsAgentCertificate,
-          credentialCategory: CredentialCategory.myProfessionalCards,
+          credentialCategory: CredentialCategory.educationCards,
         );
 
   factory PcdsAgentCertificateModel.fromJson(Map<String, dynamic> json) =>

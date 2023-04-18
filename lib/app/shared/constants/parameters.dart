@@ -27,6 +27,9 @@ class Parameters {
     isCommunityEnabled: true,
     isOtherEnabled: true,
     isPassEnabled: true,
+    isFinanceEnabled: true,
+    isHumanityProofEnabled: true,
+    isWalletIntegrityEnabled: true,
   );
 
   static const ebsiUniversalLink = 'https://app.altme.io/app/download/ebsi';
