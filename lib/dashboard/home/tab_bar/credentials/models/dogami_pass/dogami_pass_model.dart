@@ -16,7 +16,7 @@ class DogamiPassModel extends CredentialSubjectModel {
     super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.dogamiPass,
-          credentialCategory: CredentialCategory.gamingCards,
+          credentialCategory: CredentialCategory.advantagesCards,
         );
 
   factory DogamiPassModel.fromJson(Map<String, dynamic> json) =>

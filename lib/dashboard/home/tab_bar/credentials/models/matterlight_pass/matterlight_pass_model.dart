@@ -16,7 +16,7 @@ class MatterlightPassModel extends CredentialSubjectModel {
     super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.matterlightPass,
-          credentialCategory: CredentialCategory.gamingCards,
+          credentialCategory: CredentialCategory.advantagesCards,
         );
 
   factory MatterlightPassModel.fromJson(Map<String, dynamic> json) =>

@@ -16,7 +16,7 @@ class StudentCardModel extends CredentialSubjectModel {
     super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.studentCard,
-          credentialCategory: CredentialCategory.communityCards,
+          credentialCategory: CredentialCategory.contactInfoCredentials,
         );
 
   factory StudentCardModel.fromJson(Map<String, dynamic> json) =>

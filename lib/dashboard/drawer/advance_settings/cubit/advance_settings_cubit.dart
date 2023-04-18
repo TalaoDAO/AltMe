@@ -50,6 +50,18 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
         (await secureStorageProvider.get(SecureStorageKeys.isPassEnabled) ??
                 'true') ==
             'true';
+    final isFinanceEnabled =
+        (await secureStorageProvider.get(SecureStorageKeys.isFinanceEnabled) ??
+                'true') ==
+            'true';
+    final isHumanityProofEnabled = (await secureStorageProvider
+                .get(SecureStorageKeys.isHumanityProofEnabled) ??
+            'true') ==
+        'true';
+    final isWalletIntegrityEnabled = (await secureStorageProvider
+                .get(SecureStorageKeys.isWalletIntegrityEnabled) ??
+            'true') ==
+        'true';
 
     emit(
       AdvanceSettingsState(
@@ -61,6 +73,9 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
         isCommunityEnabled: isCommunityEnabled,
         isOtherEnabled: isOtherEnabled,
         isPassEnabled: isPassEnabled,
+        isFinanceEnabled: isFinanceEnabled,
+        isHumanityProofEnabled: isHumanityProofEnabled,
+        isWalletIntegrityEnabled: isWalletIntegrityEnabled,
       ),
     );
   }

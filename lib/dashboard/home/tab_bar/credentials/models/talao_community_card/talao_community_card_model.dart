@@ -14,7 +14,7 @@ class TalaoCommunityCardModel extends CredentialSubjectModel {
     this.identifier,
   }) : super(
           credentialSubjectType: CredentialSubjectType.talaoCommunityCard,
-          credentialCategory: CredentialCategory.communityCards,
+          credentialCategory: CredentialCategory.contactInfoCredentials,
         );
 
   factory TalaoCommunityCardModel.fromJson(Map<String, dynamic> json) =>

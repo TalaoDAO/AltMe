@@ -16,7 +16,7 @@ class BunnyPassModel extends CredentialSubjectModel {
     super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.bunnyPass,
-          credentialCategory: CredentialCategory.gamingCards,
+          credentialCategory: CredentialCategory.advantagesCards,
         );
 
   factory BunnyPassModel.fromJson(Map<String, dynamic> json) =>

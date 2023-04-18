@@ -16,7 +16,7 @@ class TroopezPassModel extends CredentialSubjectModel {
     super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.troopezPass,
-          credentialCategory: CredentialCategory.gamingCards,
+          credentialCategory: CredentialCategory.advantagesCards,
         );
 
   factory TroopezPassModel.fromJson(Map<String, dynamic> json) =>
