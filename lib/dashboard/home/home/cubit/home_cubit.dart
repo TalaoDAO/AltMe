@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:altme/wallet/model/crypto_account.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -39,7 +39,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> aiSelfiValidation({
     required CredentialSubjectType credentialType,
     required List<int> imageBytes,
-    required WalletCubit walletCubit,
+    required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
   }) async {
     // launch url to get Over18, Over15, Over13,AgeRange Credentials
@@ -84,7 +84,7 @@ class HomeCubit extends Cubit<HomeState> {
         apiKey: YOTI_AI_API_KEY,
         data: data,
         credentialType: 'Over13',
-        walletCubit: walletCubit,
+        credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
 
@@ -93,7 +93,7 @@ class HomeCubit extends Cubit<HomeState> {
         apiKey: YOTI_AI_API_KEY,
         data: data,
         credentialType: 'Over15',
-        walletCubit: walletCubit,
+        credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
 
@@ -102,7 +102,7 @@ class HomeCubit extends Cubit<HomeState> {
         apiKey: YOTI_AI_API_KEY,
         data: data,
         credentialType: 'Over18',
-        walletCubit: walletCubit,
+        credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
 
@@ -111,7 +111,7 @@ class HomeCubit extends Cubit<HomeState> {
         apiKey: YOTI_AI_API_KEY,
         data: data,
         credentialType: 'AgeRange',
-        walletCubit: walletCubit,
+        credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
 
@@ -120,7 +120,7 @@ class HomeCubit extends Cubit<HomeState> {
         apiKey: YOTI_AI_API_KEY,
         data: data,
         credentialType: 'AgeEstimate',
-        walletCubit: walletCubit,
+        credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
     } catch (e) {
@@ -134,7 +134,7 @@ class HomeCubit extends Cubit<HomeState> {
     required String apiKey,
     required Map<String, dynamic> data,
     required String credentialType,
-    required WalletCubit walletCubit,
+    required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
   }) async {
     final logger = getLogger('HomeCubit - AISelfiValidation');
@@ -156,7 +156,7 @@ class HomeCubit extends Cubit<HomeState> {
       credentialTypeEnum = CredentialSubjectType.over18;
     }
 
-    final List<CredentialModel> credentialList = await walletCubit
+    final List<CredentialModel> credentialList = await credentialsCubit
         .credentialListFromCredentialSubjectType(credentialTypeEnum);
     if (credentialList.isEmpty) {
       dynamic response;
@@ -200,7 +200,7 @@ class HomeCubit extends Cubit<HomeState> {
             activities: [Activity(acquisitionAt: DateTime.now())],
           );
           if (credentialType != 'AgeEstimate') {
-            await walletCubit.insertCredential(
+            await credentialsCubit.insertCredential(
               credential: credentialModel,
               showMessage: true,
             );
@@ -350,7 +350,7 @@ class HomeCubit extends Cubit<HomeState> {
     return passBaseStatus;
   }
 
-  void startPassbaseVerification(WalletCubit walletCubit) {
+  void startPassbaseVerification(CredentialsCubit credentialsCubit) {
     final log = getLogger('HomeCubit - startPassbaseVerification');
     final did = didCubit.state.did!;
     emit(state.loading());
@@ -363,7 +363,7 @@ class HomeCubit extends Cubit<HomeState> {
           getMutipleCredentials(
             identityAccessKey,
             client,
-            walletCubit,
+            credentialsCubit,
             secureStorageProvider,
           ),
         );
@@ -422,9 +422,9 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   /// Give user metadata to KYC. Currently we are just sending user DID.
-  bool setKYCMetadata(WalletCubit walletCubit) {
+  bool setKYCMetadata(CredentialsCubit credentialsCubit) {
     final selectedCredentials = <CredentialModel>[];
-    for (final credentialModel in walletCubit.state.credentials) {
+    for (final credentialModel in credentialsCubit.state.credentials) {
       final credentialTypeList = credentialModel.credentialPreview.type;
 
       ///credential and issuer provided in claims

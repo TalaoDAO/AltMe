@@ -5,11 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
 Future<void> discoverCredential({
-  required HomeCredential homeCredential,
+  required DiscoverDummyCredential dummyCredential,
   required BuildContext context,
 }) async {
   final List<CredentialSubjectType> credentialSubjectTypeList =
-      List.of(DiscoverList.identityCategories);
+      List.of(CredentialCategory.identityCards.discoverCredentialSubjectTypes);
 
   /// items to remove to bypass KYC
   credentialSubjectTypeList
@@ -18,24 +18,24 @@ Future<void> discoverCredential({
     ..remove(CredentialSubjectType.twitterCard);
 
   if (credentialSubjectTypeList
-      .contains(homeCredential.credentialSubjectType)) {
-    getLogger('discoverCredential').i(homeCredential.credentialSubjectType);
+      .contains(dummyCredential.credentialSubjectType)) {
+    getLogger('discoverCredential').i(dummyCredential.credentialSubjectType);
 
     /// here check for over18, over15, age range and over13 to take photo for
     /// AI KYC
-    if (homeCredential.credentialSubjectType.checkForAIKYC) {
+    if (dummyCredential.credentialSubjectType.checkForAIKYC) {
       // final passbaseStatus =
       //     await context.read<HomeCubit>().checkPassbaseStatus();
       await Navigator.push<void>(
         context,
         ChooseVerificationMethodPage.route(
-          credentialSubjectType: homeCredential.credentialSubjectType,
+          credentialSubjectType: dummyCredential.credentialSubjectType,
           onSelectPassbase: () async {
             await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
-                  link: homeCredential.link!,
+                  link: dummyCredential.link!,
                   onPassBaseApproved: () async {
                     await launchUrlAfterDiscovery(
-                      homeCredential: homeCredential,
+                      dummyCredential: dummyCredential,
                       context: context,
                     );
                   },
@@ -47,7 +47,7 @@ Future<void> discoverCredential({
             // start verification by Yoti AI
             await Navigator.of(context).push<void>(
               VerifyAgePage.route(
-                credentialSubjectType: homeCredential.credentialSubjectType,
+                credentialSubjectType: dummyCredential.credentialSubjectType,
               ),
             );
           },
@@ -55,10 +55,10 @@ Future<void> discoverCredential({
       );
     } else {
       await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
-            link: homeCredential.link!,
+            link: dummyCredential.link!,
             onPassBaseApproved: () async {
               await launchUrlAfterDiscovery(
-                homeCredential: homeCredential,
+                dummyCredential: dummyCredential,
                 context: context,
               );
             },
@@ -66,23 +66,23 @@ Future<void> discoverCredential({
     }
   } else {
     await launchUrlAfterDiscovery(
-      homeCredential: homeCredential,
+      dummyCredential: dummyCredential,
       context: context,
     );
   }
 }
 
 Future<void> launchUrlAfterDiscovery({
-  required HomeCredential homeCredential,
+  required DiscoverDummyCredential dummyCredential,
   required BuildContext context,
 }) async {
-  if (homeCredential.credentialSubjectType.byPassDeepLink) {
+  if (dummyCredential.credentialSubjectType.byPassDeepLink) {
     final uuid = const Uuid().v4();
     final uri = Uri.parse(
-      '''${homeCredential.link!}$uuid?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du''',
+      '''${dummyCredential.link!}$uuid?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du''',
     );
     await context.read<QRCodeScanCubit>().verify(uri: uri, isScan: false);
   } else {
-    await LaunchUrl.launch(homeCredential.link!);
+    await LaunchUrl.launch(dummyCredential.link!);
   }
 }

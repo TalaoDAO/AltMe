@@ -27,6 +27,18 @@ class AdvanceSettingsState extends Equatable {
 
   Map<String, dynamic> toJson() => _$AdvanceSettingsStateToJson(this);
 
+  Map<CredentialCategory, bool> get categoryIsEnabledMap {
+    return {
+      CredentialCategory.gamingCards: isGamingEnabled,
+      CredentialCategory.identityCards: isIdentityEnabled,
+      CredentialCategory.blockchainAccountsCards: isBlockchainAccountsEnabled,
+      CredentialCategory.educationCards: isEducationEnabled,
+      CredentialCategory.passCards: isPassEnabled,
+      CredentialCategory.communityCards: isCommunityEnabled,
+      CredentialCategory.othersCards: isOtherEnabled,
+    };
+  }
+
   AdvanceSettingsState copyWith({
     bool? isGamingEnabled,
     bool? isIdentityEnabled,

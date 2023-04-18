@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -47,11 +48,7 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
         stateMessage: state.message!,
       );
     }
-    if (state.status == WalletStatus.delete) {
-      if (state.message != null) {
-        Navigator.of(context).pop();
-      }
-    }
+
     if (state.status == WalletStatus.reset) {
       /// Removes every stack except first route (splashPage)
       await Navigator.pushAndRemoveUntil<void>(
@@ -59,6 +56,33 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
         StarterPage.route(),
         (Route<dynamic> route) => route.isFirst,
       );
+    }
+  },
+);
+
+final credentialsBlocListener =
+    BlocListener<CredentialsCubit, CredentialsState>(
+  listener: (BuildContext context, CredentialsState state) async {
+    if (state.status == CredentialsStatus.loading) {
+      LoadingView().show(context: context);
+    } else {
+      LoadingView().hide();
+    }
+
+    if (state.message != null &&
+        (state.status == CredentialsStatus.error ||
+            state.status == CredentialsStatus.insert ||
+            state.status == CredentialsStatus.delete ||
+            state.status == CredentialsStatus.update)) {
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: state.message!,
+      );
+    }
+    if (state.status == CredentialsStatus.delete) {
+      if (state.message != null) {
+        Navigator.of(context).pop();
+      }
     }
   },
 );

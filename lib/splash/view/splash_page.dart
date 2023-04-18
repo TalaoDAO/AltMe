@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
@@ -115,7 +116,7 @@ class _SplashViewState extends State<SplashView> {
               await initiateEbsiCredentialIssuance(
                 uri.toString(),
                 client,
-                context.read<WalletCubit>(),
+                context.read<CredentialsCubit>(),
                 secure_storage.getSecureStorage,
               );
             }
@@ -195,6 +196,7 @@ class _SplashViewState extends State<SplashView> {
       listeners: [
         splashBlocListener,
         walletBlocListener,
+        credentialsBlocListener,
         walletBlocAccountChangeListener,
         scanBlocListener,
         qrCodeBlocListener,

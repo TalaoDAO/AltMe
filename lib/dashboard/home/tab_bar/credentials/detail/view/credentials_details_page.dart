@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -115,9 +116,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         false;
 
     if (confirm) {
-      final walletCubit = context.read<WalletCubit>();
-      await walletCubit.deleteById(credential: widget.credentialModel);
-      await context.read<CredentialListCubit>().initialise(walletCubit);
+      final credentialsCubit = context.read<CredentialsCubit>();
+      await credentialsCubit.deleteById(credential: widget.credentialModel);
     }
   }
 

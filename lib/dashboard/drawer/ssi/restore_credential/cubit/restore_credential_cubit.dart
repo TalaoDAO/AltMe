@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -18,14 +19,14 @@ part 'restore_credential_state.dart';
 class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
   RestoreCredentialCubit({
     required this.walletCubit,
-    required this.credentialListCubit,
+    required this.credentialsCubit,
     required this.cryptoKeys,
     required this.secureStorageProvider,
     required this.polygonId,
   }) : super(const RestoreCredentialState());
 
   final WalletCubit walletCubit;
-  final CredentialListCubit credentialListCubit;
+  final CredentialsCubit credentialsCubit;
   final CryptocurrencyKeys cryptoKeys;
   final SecureStorageProvider secureStorageProvider;
   final PolygonId polygonId;
@@ -119,11 +120,11 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
         credentialList = credentials.toList();
       }
 
-      await walletCubit.recoverWallet(
+      await credentialsCubit.recoverWallet(
         credentials: credentialList,
         isPolygonIdCredentials: isPolygonIdCredentials,
       );
-      await credentialListCubit.initialise(walletCubit);
+      await credentialsCubit.loadAllCredentials();
       emit(state.success(recoveredCredentialLength: credentialList.length));
     } catch (e) {
       if (e is MessageHandler) {

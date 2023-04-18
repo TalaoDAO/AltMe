@@ -2,7 +2,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,7 +32,6 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
   void initState() {
     _tabController = TabController(vsync: this, length: 3);
     _tabController.addListener(_onTabChanged);
-    context.read<CredentialListCubit>().initialise(context.read<WalletCubit>());
     super.initState();
   }
 

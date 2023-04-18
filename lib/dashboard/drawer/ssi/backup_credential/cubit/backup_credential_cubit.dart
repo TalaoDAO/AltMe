@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
@@ -19,14 +19,14 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
   BackupCredentialCubit({
     required this.secureStorageProvider,
     required this.cryptoKeys,
-    required this.walletCubit,
+    required this.credentialsCubit,
     required this.fileSaver,
     required this.polygonIdCubit,
   }) : super(const BackupCredentialState());
 
   final SecureStorageProvider secureStorageProvider;
   final CryptocurrencyKeys cryptoKeys;
-  final WalletCubit walletCubit;
+  final CredentialsCubit credentialsCubit;
   final FileSaver fileSaver;
   final PolygonIdCubit polygonIdCubit;
 
@@ -47,7 +47,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       final dateTime = getDateTimeWithoutSpace();
       final fileName = 'altme-credential-$dateTime';
 
-      final credentialModels = walletCubit.state.credentials;
+      final credentialModels = credentialsCubit.state.credentials;
 
       final date = UiDate.formatDate(DateTime.now());
       final message = {

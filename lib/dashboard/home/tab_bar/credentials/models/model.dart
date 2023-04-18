@@ -33,7 +33,7 @@ export 'fantom_associated_address/fantom_associated_address_credential.dart';
 export 'fantom_associated_address/fantom_associated_address_model.dart';
 export 'fantom_poo_address/fantom_poo_address_model.dart';
 export 'gender/gender_model.dart';
-export 'home_credential/home_credential.dart';
+export 'discover_dummy_credential/discover_dummy_credential.dart';
 export 'identity_pass/identity_pass_model.dart';
 export 'kyc_age_credential/kyc_age_credential_model.dart';
 export 'kyc_country_of_residence/kyc_country_of_residence_model.dart';

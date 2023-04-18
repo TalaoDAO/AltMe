@@ -1,4 +1,4 @@
-part of 'wallet_cubit.dart';
+part of 'credentials_cubit.dart';
 
 ///helper function to generate Tezos/Ethereum AssociatedAddressCredential
 Future<CredentialModel?> generateAssociatedWalletCredential({
@@ -9,7 +9,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
   required BlockchainType blockchainType,
   required KeyGenerator keyGenerator,
 }) async {
-  final log = getLogger('WalletCubit - generateAssociatedWalletCredential');
+  final log =
+      getLogger('CredentialsCubit - generateAssociatedWalletCredential');
   log.i(blockchainType);
   try {
     late String didMethod;
@@ -210,7 +211,8 @@ Future<CredentialModel?> generateWalletCredential({
   required DIDCubit didCubit,
   String? oldId,
 }) async {
-  final log = getLogger('WalletCubit - generateWalletCredentialCredential');
+  final log =
+      getLogger('CredentialsCubit - generateWalletCredentialCredential');
   try {
     const didMethod = AltMeStrings.defaultDIDMethod;
     final didSsi = didCubit.state.did!;

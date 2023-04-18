@@ -124,11 +124,11 @@ class MissingCredentialsView extends StatelessWidget {
                       await Navigator.push<void>(
                         context,
                         DiscoverDetailsPage.route(
-                          homeCredential: credentials,
+                          dummyCredential: credentials,
                           buttonText: l10n.getThisCard,
                           onCallBack: () async {
                             await discoverCredential(
-                              homeCredential: credentials,
+                              dummyCredential: credentials,
                               context: context,
                             );
                             Navigator.pop(context);

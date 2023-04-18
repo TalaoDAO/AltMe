@@ -69,9 +69,6 @@ class TokensCubit extends Cubit<TokensState> {
     if (data.length < state.offset) return;
     try {
       if (walletCubit.state.currentAccount == null) {
-        final String? ssiKey =
-            await secureStorageProvider.get(SecureStorageKeys.ssiKey);
-        await walletCubit.initialize(ssiKey: ssiKey);
         if (walletCubit.state.cryptoAccount.data.isEmpty) {
           emit(state.populate(data: {}));
           return;

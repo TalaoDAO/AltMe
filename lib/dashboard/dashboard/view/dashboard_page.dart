@@ -1,10 +1,10 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -79,13 +79,13 @@ class _DashboardViewState extends State<DashboardView> {
     if (pinCode?.isEmpty ?? true) {
       context
           .read<HomeCubit>()
-          .startPassbaseVerification(context.read<WalletCubit>());
+          .startPassbaseVerification(context.read<CredentialsCubit>());
     } else {
       await Navigator.of(context).push<void>(
         PinCodePage.route(
           isValidCallback: () => context
               .read<HomeCubit>()
-              .startPassbaseVerification(context.read<WalletCubit>()),
+              .startPassbaseVerification(context.read<CredentialsCubit>()),
           restrictToBack: false,
         ),
       );

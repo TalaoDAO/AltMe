@@ -91,6 +91,38 @@ class CredentialModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
+  CredentialModel copyWith({
+    String? id,
+    String? image,
+    Map<String, dynamic>? data,
+    String? shareLink,
+    Credential? credentialPreview,
+    Display? display,
+    String? expirationDate,
+    CredentialManifest? credentialManifest,
+    String? receivedId,
+    String? challenge,
+    String? domain,
+    List<Activity>? activities,
+    String? jwt,
+  }) {
+    return CredentialModel(
+      id: id ?? this.id,
+      image: image ?? this.image,
+      data: data ?? this.data,
+      shareLink: shareLink ?? this.shareLink,
+      credentialPreview: credentialPreview ?? this.credentialPreview,
+      display: display ?? this.display,
+      expirationDate: expirationDate ?? this.expirationDate,
+      credentialManifest: credentialManifest ?? this.credentialManifest,
+      receivedId: receivedId ?? this.receivedId,
+      challenge: challenge ?? this.challenge,
+      domain: domain ?? this.domain,
+      activities: activities ?? this.activities,
+      jwt: jwt ?? this.jwt,
+    );
+  }
+
   String get issuer => data['issuer'] as String;
 
   static String fromJsonId(dynamic json) {

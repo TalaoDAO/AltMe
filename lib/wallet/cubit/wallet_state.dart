@@ -2,20 +2,17 @@ part of 'wallet_cubit.dart';
 
 @JsonSerializable()
 class WalletState extends Equatable {
-  WalletState({
+  const WalletState({
     this.status = WalletStatus.init,
     this.message,
     this.currentCryptoIndex = 0,
-    CryptoAccount? cryptoAccount,
-    List<CredentialModel>? credentials,
-  })  : credentials = credentials ?? [],
-        cryptoAccount = cryptoAccount ?? CryptoAccount(data: const []);
+    this.cryptoAccount = const CryptoAccount(),
+  });
 
   factory WalletState.fromJson(Map<String, dynamic> json) =>
       _$WalletStateFromJson(json);
 
   final WalletStatus status;
-  final List<CredentialModel> credentials;
   final StateMessage? message;
   final int currentCryptoIndex;
   final CryptoAccount cryptoAccount;
@@ -29,7 +26,6 @@ class WalletState extends Equatable {
   WalletState loading() {
     return WalletState(
       status: WalletStatus.loading,
-      credentials: credentials,
       currentCryptoIndex: currentCryptoIndex,
       cryptoAccount: cryptoAccount,
     );
@@ -39,7 +35,6 @@ class WalletState extends Equatable {
     return WalletState(
       status: WalletStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
-      credentials: credentials,
       currentCryptoIndex: currentCryptoIndex,
       cryptoAccount: cryptoAccount,
     );
@@ -48,7 +43,6 @@ class WalletState extends Equatable {
   WalletState copyWith({
     required WalletStatus status,
     MessageHandler? messageHandler,
-    List<CredentialModel>? credentials,
     CryptoAccount? cryptoAccount,
     int? currentCryptoIndex,
   }) {
@@ -57,7 +51,6 @@ class WalletState extends Equatable {
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
-      credentials: credentials ?? this.credentials,
       currentCryptoIndex: currentCryptoIndex ?? this.currentCryptoIndex,
       cryptoAccount: cryptoAccount ?? this.cryptoAccount,
     );
@@ -69,7 +62,6 @@ class WalletState extends Equatable {
   List<Object?> get props => [
         status,
         message,
-        credentials,
         currentCryptoIndex,
         cryptoAccount,
       ];

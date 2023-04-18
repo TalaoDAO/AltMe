@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
@@ -30,7 +31,7 @@ class RestorePolygonIdCredentialPage extends StatelessWidget {
         secureStorageProvider: getSecureStorage,
         cryptoKeys: const CryptocurrencyKeys(),
         walletCubit: context.read<WalletCubit>(),
-        credentialListCubit: context.read<CredentialListCubit>(),
+        credentialsCubit: context.read<CredentialsCubit>(),
         polygonId: PolygonId(),
       ),
       child: const RestorePolygonIdCredentialView(),

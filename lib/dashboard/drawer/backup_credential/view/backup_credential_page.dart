@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/credentials/cubit/credentials_cubit.dart';
-import 'package:altme/dashboard/drawer/drawer.dart';
+import 'package:altme/credentials/credentials.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
@@ -12,16 +12,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class BackupCredentialPage extends StatelessWidget {
-  const BackupCredentialPage({
-    super.key,
-  });
+  const BackupCredentialPage({super.key});
 
-  static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: '/BackupCredentialPage'),
-      builder: (_) => const BackupCredentialPage(),
-    );
-  }
+  static Route<dynamic> route() => MaterialPageRoute<void>(
+        builder: (_) => const BackupCredentialPage(),
+        settings: const RouteSettings(name: '/backupCredentialPage'),
+      );
 
   @override
   Widget build(BuildContext context) {

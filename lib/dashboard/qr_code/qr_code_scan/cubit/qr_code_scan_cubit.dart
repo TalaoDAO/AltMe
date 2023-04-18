@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/deep_link/deep_link.dart';
@@ -12,7 +13,6 @@ import 'package:altme/issuer_websites_page/issuer_websites.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -34,7 +34,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.requestClient,
     required this.scanCubit,
     required this.profileCubit,
-    required this.walletCubit,
+    required this.credentialsCubit,
     required this.queryByExampleCubit,
     required this.deepLinkCubit,
     required this.jwtDecode,
@@ -49,7 +49,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final DioClient requestClient;
   final ScanCubit scanCubit;
   final ProfileCubit profileCubit;
-  final WalletCubit walletCubit;
+  final CredentialsCubit credentialsCubit;
   final QueryByExampleCubit queryByExampleCubit;
   final DeepLinkCubit deepLinkCubit;
   final JWTDecode jwtDecode;
@@ -244,7 +244,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       activities: [Activity(acquisitionAt: DateTime.now())],
     );
     // insert the credential in the wallet
-    await walletCubit.insertCredential(credential: credentialModel);
+    await credentialsCubit.insertCredential(credential: credentialModel);
 
     emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
   }
@@ -281,7 +281,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         // }
 
         // final selectedCredentials = <CredentialModel>[];
-        // for (final credentialModel in walletCubit.state.credentials) {
+        // for (final credentialModel in credentialsCubit.state.credentials) {
         //   final credentialTypeList = credentialModel.credentialPreview.type;
         //   final issuer = credentialModel.credentialPreview.issuer;
 
@@ -415,7 +415,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         await initiateEbsiCredentialIssuance(
           state.uri.toString(),
           client,
-          walletCubit,
+          credentialsCubit,
           getSecureStorage,
         );
 
@@ -738,7 +738,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     bool isValid = true;
 
     ///credential should not be empty since we have to present
-    if (walletCubit.state.credentials.isEmpty) {
+    if (credentialsCubit.state.credentials.isEmpty) {
       emit(
         state.error(
           messageHandler: ResponseMessage(
