@@ -51,6 +51,32 @@ class _ContactUsViewState extends State<ContactUsView> {
             const SizedBox(
               height: Sizes.spaceXSmall,
             ),
+            TextFormField(
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
+              maxLines: 1,
+              style: Theme.of(context).textTheme.titleSmall,
+              onSaved: (value) {
+                subject = value ?? '';
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.fillingThisFieldIsMandatory;
+                } else {
+                  return null;
+                }
+              },
+              decoration: InputDecoration(
+                hintText: l10n.subject,
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      Sizes.smallRadius,
+                    ),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(
               height: Sizes.spaceLarge,
             ),
@@ -62,7 +88,7 @@ class _ContactUsViewState extends State<ContactUsView> {
               height: Sizes.spaceXSmall,
             ),
             TextFormField(
-              textInputAction: TextInputAction.next,
+              textInputAction: TextInputAction.done,
               keyboardType: TextInputType.text,
               maxLines: 6,
               style: Theme.of(context).textTheme.titleSmall,
@@ -77,7 +103,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                 }
               },
               decoration: InputDecoration(
-                hintText: '${l10n.yourMessage} :',
+                hintText: l10n.yourMessage,
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(
