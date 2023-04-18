@@ -18,15 +18,12 @@ class HomeCredentialItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: homeCredential.isDummy
-          ? DummyCredentialItem(
-              homeCredential: homeCredential,
-              fromDiscover: fromDiscover,
-            )
-          : RealCredentialItem(
-              credentialModel: homeCredential.credentialModel!),
-    );
+    return homeCredential.isDummy
+        ? DummyCredentialItem(
+            homeCredential: homeCredential,
+            fromDiscover: fromDiscover,
+          )
+        : RealCredentialItem(credentialModel: homeCredential.credentialModel!);
   }
 }
 
