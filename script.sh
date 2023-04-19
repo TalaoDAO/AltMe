@@ -5,6 +5,7 @@ function pub {
   do
     (
       cd "packages/$d"
+      flutter clean
       flutter pub get
     )
   done 
