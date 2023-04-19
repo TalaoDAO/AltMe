@@ -245,6 +245,18 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           advanceSettingsCubit.toggleOtherRadio();
         }
         break;
+      case CredentialCategory.financeCards:
+        // TODO: Handle this case.
+        break;
+      case CredentialCategory.humanityProofCards:
+        // TODO: Handle this case.
+        break;
+      case CredentialCategory.socialMediaCards:
+        // TODO: Handle this case.
+        break;
+      case CredentialCategory.walletIntegrity:
+        // TODO: Handle this case.
+        break;
     }
   }
 

@@ -131,24 +131,23 @@ extension CredentialCategoryX on CredentialCategory {
       case CredentialCategory.advantagesCards:
         return CredentialCategoryConfig(
           homeTitle: '${l10n.my} ${l10n.advantagesCards.toLowerCase()}',
-          homeSubTitle: l10n.gamingCredentialHomeSubtitle,
-          discoverTitle: '${l10n.get} ${l10n.advantagesCards.toLowerCase()}',
-          discoverSubTitle: l10n.gamingCredentialDiscoverSubtitle,
+          homeSubTitle: l10n.advantagesCredentialHomeSubtitle,
+          discoverTitle: l10n.advantagesDiscoverCards,
+          discoverSubTitle: l10n.advantagesCredentialDiscoverSubtitle,
         );
       case CredentialCategory.identityCards:
         return CredentialCategoryConfig(
           homeTitle: '${l10n.my} ${l10n.identityCards.toLowerCase()}',
           homeSubTitle: l10n.identityCredentialHomeSubtitle,
-          discoverTitle: '${l10n.get} ${l10n.identityCards.toLowerCase()}',
+          discoverTitle: l10n.identityDiscoverCards,
           discoverSubTitle: l10n.identityCredentialDiscoverSubtitle,
         );
       case CredentialCategory.contactInfoCredentials:
         return CredentialCategoryConfig(
           homeTitle: '${l10n.my} ${l10n.contactInfoCredentials.toLowerCase()}',
-          homeSubTitle: l10n.communityCredentialHomeSubtitle,
-          discoverTitle:
-              '${l10n.get} ${l10n.contactInfoCredentials.toLowerCase()}',
-          discoverSubTitle: l10n.communityCredentialDiscoverSubtitle,
+          homeSubTitle: l10n.contactInfoCredentialHomeSubtitle,
+          discoverTitle: l10n.contactInfoDiscoverCredentials,
+          discoverSubTitle: l10n.contactInfoCredentialDiscoverSubtitle,
         );
       case CredentialCategory.blockchainAccountsCards:
         return CredentialCategoryConfig(
@@ -161,9 +160,8 @@ extension CredentialCategoryX on CredentialCategory {
         return CredentialCategoryConfig(
           homeTitle: '${l10n.my} ${l10n.educationCredentials.toLowerCase()}',
           homeSubTitle: l10n.educationCredentialHomeSubtitle,
-          discoverTitle:
-              '${l10n.get} ${l10n.educationCredentials.toLowerCase()}',
-          discoverSubTitle: '',
+          discoverTitle: l10n.educationDiscoverCredentials,
+          discoverSubTitle: l10n.educationCredentialsDiscoverSubtitle,
         );
       case CredentialCategory.othersCards:
         return CredentialCategoryConfig(
@@ -174,33 +172,31 @@ extension CredentialCategoryX on CredentialCategory {
         );
       case CredentialCategory.financeCards:
         return CredentialCategoryConfig(
-          homeTitle: 'My financial credentials',
-          homeSubTitle:
-              'Share it to access new investment opportunities Social network ownership.',
-          discoverTitle: 'Get verified financial credentials',
-          discoverSubTitle: 'Access new investment opportunities in web3.',
+          homeTitle: l10n.financeCredentialsHomeTitle,
+          homeSubTitle: l10n.financeCredentialsHomeSubtitle,
+          discoverTitle: l10n.financeCredentialsDiscoverTitle,
+          discoverSubTitle: l10n.financeCredentialsDiscoverSubtitle,
         );
       case CredentialCategory.humanityProofCards:
         return CredentialCategoryConfig(
-          homeTitle: 'My proof of humanity',
-          homeSubTitle: 'Easily prove you are a human and not a bot.',
-          discoverTitle: 'Prove you are not a bot or AI',
-          discoverSubTitle: 'Get a reusable proof of humanity to share',
+          homeTitle: l10n.hummanityProofCredentialsHomeTitle,
+          homeSubTitle: l10n.hummanityProofCredentialsHomeSubtitle,
+          discoverTitle: l10n.hummanityProofCredentialsDiscoverTitle,
+          discoverSubTitle: l10n.hummanityProofCredentialsDiscoverSubtitle,
         );
       case CredentialCategory.socialMediaCards:
         return CredentialCategoryConfig(
-          homeTitle: 'My social media accounts',
-          homeSubTitle:
-              'Prove your accounts ownership instantly Proof of humanity',
-          discoverTitle: 'Verify your social media accounts',
-          discoverSubTitle: 'Prove your accounts ownership when required',
+          homeTitle: l10n.socialMediaCredentialsHomeTitle,
+          homeSubTitle: l10n.socialMediaCredentialsHomeSubtitle,
+          discoverTitle: l10n.socialMediaCredentialsDiscoverTitle,
+          discoverSubTitle: l10n.socialMediaCredentialsDiscoverSubtitle,
         );
       case CredentialCategory.walletIntegrity:
         return CredentialCategoryConfig(
-          homeTitle: 'Wallet integrity',
-          homeSubTitle: 'TBD',
-          discoverTitle: 'WAllet integrity',
-          discoverSubTitle: 'TBD',
+          homeTitle: l10n.walletIntegrityCredentialsHomeTitle,
+          homeSubTitle: l10n.walletIntegrityCredentialsHomeSubtitle,
+          discoverTitle: l10n.walletIntegrityCredentialsDiscoverTitle,
+          discoverSubTitle: l10n.walletIntegrityCredentialsDiscoverSubtitle,
         );
     }
   }
