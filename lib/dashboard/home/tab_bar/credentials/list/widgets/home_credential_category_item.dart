@@ -51,15 +51,15 @@ class HomeCredentialCategoryItem extends StatelessWidget {
               style: Theme.of(context).textTheme.credentialCategorySubTitle,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 14),
           GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              childAspectRatio: Sizes.homeCredentialRatio,
+              crossAxisSpacing: 14,
+              mainAxisSpacing: 14,
+              childAspectRatio: Sizes.credentialAspectRatio,
             ),
             itemCount: sortedCredentials.length + 1,
             itemBuilder: (_, index) {

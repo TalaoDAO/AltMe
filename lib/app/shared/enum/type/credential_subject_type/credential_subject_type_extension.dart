@@ -732,7 +732,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.ageRange:
         return 94;
       case CredentialSubjectType.nationality:
-        return 100;
+        return 97.3;
       case CredentialSubjectType.gender:
         return 93;
       case CredentialSubjectType.walletCredential:
@@ -768,7 +768,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.identityPass:
         return 90;
       case CredentialSubjectType.verifiableIdCard:
-        return 0;
+        return 97.5;
       case CredentialSubjectType.linkedInCard:
         return 86;
       case CredentialSubjectType.learningAchievement:

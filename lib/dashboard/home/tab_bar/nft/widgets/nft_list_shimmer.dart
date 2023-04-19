@@ -16,8 +16,8 @@ class NftListShimmer extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
+              crossAxisSpacing: 14,
+              mainAxisSpacing: 14,
               childAspectRatio: Sizes.nftItemRatio,
             ),
             itemBuilder: (_, __) => const NftItemShimmer(),
