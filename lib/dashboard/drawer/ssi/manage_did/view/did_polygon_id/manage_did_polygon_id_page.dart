@@ -24,13 +24,13 @@ class ManageDidPolygonIdPage extends StatelessWidget {
       final userIdentity = await polygonId.getUserIdentity(mnemonic: mnemonic!);
       return userIdentity.did;
     } catch (e) {
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: StateMessage.error(
-          showDialog: true,
-          stringMessage: e.toString(),
-        ),
-      );
+      // AlertMessage.showStateMessage(
+      //   context: context,
+      //   stateMessage: StateMessage.error(
+      //     showDialog: true,
+      //     stringMessage: e.toString(),
+      //   ),
+      // );
       return '';
     }
   }
