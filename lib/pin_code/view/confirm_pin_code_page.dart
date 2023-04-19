@@ -88,6 +88,7 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
     final l10n = context.l10n;
     return BasePage(
       scrollView: false,
+      titleLeading: const BackLeadingButton(),
       padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: PinCodeWidget(

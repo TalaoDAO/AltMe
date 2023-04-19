@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,13 +8,13 @@ class DeleteButton extends StatelessWidget {
     super.key,
     required this.cancelButton,
     required this.deleteButton,
+    KeyboardUIConfig? keyboardUIConfig,
     this.cancelCallback,
-    this.margin = EdgeInsets.zero,
-  });
+  }) : keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
 
   final Widget cancelButton;
   final Widget deleteButton;
-  final EdgeInsets margin;
+  final KeyboardUIConfig keyboardUIConfig;
 
   final CancelCallback? cancelCallback;
 
@@ -26,7 +27,7 @@ class DeleteButton extends StatelessWidget {
           .read<PinCodeViewCubit>()
           .onDeleteCancelButtonPressed(cancelCallback),
       child: Container(
-        margin: margin,
+        margin: keyboardUIConfig.digitInnerMargin,
         child: passCode.isEmpty ? cancelButton : deleteButton,
       ),
     );
