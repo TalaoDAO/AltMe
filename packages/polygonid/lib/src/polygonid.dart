@@ -94,7 +94,7 @@ class PolygonId {
         final identity = getIdentity(mnemonic: mnemonic);
         return identity;
       } else {
-        throw Exception('STH_WENT_WRONG');
+        throw Exception('STH_WENT_WRONG - $e');
       }
     }
   }
