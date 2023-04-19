@@ -40,7 +40,7 @@ class PolygonIdCubit extends Cubit<bool> {
       emit(true);
     } catch (e) {
       emit(false);
-      throw Exception('INIT_ISSUE');
+      throw Exception('INIT_ISSUE - $e');
     }
   }
 }

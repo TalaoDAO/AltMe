@@ -122,7 +122,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           message = ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL;
         }
 
-        if (e.toString() == 'Exception: INIT_ISSUE') {
+        if (e.toString().startsWith('Exception: INIT_ISSUE')) {
           message = ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage;
         }
 

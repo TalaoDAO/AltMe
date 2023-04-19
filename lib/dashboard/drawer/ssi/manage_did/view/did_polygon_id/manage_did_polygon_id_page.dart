@@ -16,11 +16,23 @@ class ManageDidPolygonIdPage extends StatelessWidget {
     );
   }
 
-  Future<String> getDid() async {
-    final PolygonId polygonId = PolygonId();
-    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-    final userIdentity = await polygonId.getUserIdentity(mnemonic: mnemonic!);
-    return userIdentity.did;
+  Future<String> getDid(BuildContext context) async {
+    try {
+      final PolygonId polygonId = PolygonId();
+      final mnemonic =
+          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+      final userIdentity = await polygonId.getUserIdentity(mnemonic: mnemonic!);
+      return userIdentity.did;
+    } catch (e) {
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: StateMessage.error(
+          showDialog: true,
+          stringMessage: e.toString(),
+        ),
+      );
+      return '';
+    }
   }
 
   @override
@@ -41,7 +53,7 @@ class ManageDidPolygonIdPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             FutureBuilder<String>(
-              future: getDid(),
+              future: getDid(context),
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.done:
