@@ -52,12 +52,6 @@ class App extends StatelessWidget {
         BlocProvider<BeaconCubit>(
           create: (context) => BeaconCubit(beacon: Beacon()),
         ),
-        BlocProvider<PolygonIdCubit>(
-          create: (context) => PolygonIdCubit(
-            secureStorageProvider: secure_storage.getSecureStorage,
-            polygonId: PolygonId(),
-          ),
-        ),
         BlocProvider<WalletConnectCubit>(
           create: (context) => WalletConnectCubit(
             connectedDappRepository:
@@ -119,6 +113,13 @@ class App extends StatelessWidget {
             credentialsCubit: context.read<CredentialsCubit>(),
           ),
         ),
+        BlocProvider<PolygonIdCubit>(
+          create: (context) => PolygonIdCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            polygonId: PolygonId(),
+            credentialsCubit: context.read<CredentialsCubit>(),
+          ),
+        ),
         BlocProvider<ScanCubit>(
           create: (context) => ScanCubit(
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
@@ -141,7 +142,6 @@ class App extends StatelessWidget {
             beacon: Beacon(),
             walletConnectCubit: context.read<WalletConnectCubit>(),
             secureStorageProvider: secure_storage.getSecureStorage,
-            polygonId: PolygonId(),
             polygonIdCubit: context.read<PolygonIdCubit>(),
           ),
         ),

@@ -7,6 +7,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
+import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
@@ -456,6 +457,38 @@ final walletConnectBlocListener =
       }
     } catch (e) {
       log.e(e);
+    }
+  },
+);
+final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
+  listener: (BuildContext context, PolygonIdState state) async {
+    if (state.status == AppStatus.loading) {
+      final MessageHandler? messageHandler = state.loadingText?.messageHandler;
+      final String? message =
+          messageHandler?.getMessage(context, messageHandler);
+
+      LoadingView().show(context: context, text: message);
+    } else {
+      LoadingView().hide();
+    }
+
+    if (state.status == AppStatus.success) {
+      if (state.route != null) {
+        await Navigator.of(context).push<void>(state.route!);
+      }
+    }
+
+    if (state.status == AppStatus.goBack) {
+      if (state.route != null) {
+        Navigator.of(context).pop();
+      }
+    }
+
+    if (state.message != null) {
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: state.message!,
+      );
     }
   },
 );
