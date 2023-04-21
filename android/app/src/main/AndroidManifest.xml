@@ -34,6 +34,11 @@
             android:windowSoftInputMode="adjustResize"
             android:showWhenLocked="true"
             android:turnScreenOn="true">
+
+            <meta-data
+                android:name="flutter_deeplinking_enabled"
+                android:value="true"/>
+
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
@@ -50,6 +55,7 @@
                 <data
                     android:scheme="https"
                     android:host="app.altme.io" />
+                <data android:scheme="http"/>
             </intent-filter>
             <intent-filter android:autoVerify="true">
 				<action android:name="android.intent.action.VIEW" />
