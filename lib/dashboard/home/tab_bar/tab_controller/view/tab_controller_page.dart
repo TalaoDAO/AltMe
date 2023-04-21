@@ -11,6 +11,7 @@ class TabControllerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    checkIfDeviceArchSupportedInPlygonId();
     return BlocProvider(
       create: (context) => HomeTabbarCubit(),
       child: const TabControllerView(),

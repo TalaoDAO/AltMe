@@ -8,6 +8,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:convert/convert.dart';
 import 'package:dartez/dartez.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:jose/jose.dart';
@@ -17,15 +18,27 @@ import 'package:key_generator/key_generator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-bool checkIfDeviceArchSupportedInPlygonId() {
+const myChannel = MethodChannel('my_channel');
+
+Future<bool> checkIfDeviceArchSupportedInPlygonId() async {
   final logger = getLogger('checkIfDeviceArchSupportedInPlygonId');
-  final abi = ffi.Abi.current();
-  logger.i('current abi type: $abi');
-  if (abi == ffi.Abi.androidArm64 ||
-      abi == ffi.Abi.androidX64 ||
-      abi == ffi.Abi.iosArm64) {
-    return true;
-  } else {
+  try {
+    final String? arch = await myChannel.invokeMethod('getDeviceArch');
+    logger.i('device arch : $arch');
+    if (arch != null) {
+      if (Platform.isAndroid) {
+        return arch.toLowerCase().contains('arm64') ||
+            arch.toLowerCase().contains('x86');
+      } else if (Platform.isIOS) {
+        return arch.toLowerCase().contains('arm64');
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } on PlatformException catch (e) {
+    logger.e('e: $e');
     return false;
   }
 }
