@@ -67,6 +67,9 @@ class CameraCubit extends Cubit<CameraState> {
         keepExif: false,
         autoCorrectionAngle: true,
         format: CompressFormat.jpeg,
+        // decreasing image quality on android
+        // in order to prevent "payload too large" error from yoti
+        inSampleSize: 2,
       );
       // we flip the image because we sure that the selfi image filping
       final fixedImageBytes =
