@@ -123,10 +123,12 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                   children: const [
                     DiscoverPage(),
                     MWebViewPage(
-                      url: 'https://nft-token-discover.webflow.io/',
+                      url:
+                          'https://discover-coins-part.webflow.io/prod-nota-available/nft-noir',
                     ),
                     MWebViewPage(
-                      url: 'https://test-coins.webflow.io/',
+                      url:
+                          'https://discover-coins-part.webflow.io/prod-nota-available/coins-noir',
                     ),
                   ],
                 ),
