@@ -3,7 +3,7 @@ class Urls {
   static const String checkIssuerTalaoUrl =
       'https://talao.co/trusted-issuers-registry/v1/issuers';
 
-  /// TODO(all): update the issuer url for polygon
+  // TODO(all): update the issuer url for polygon
   static const String checkIssuerPolygonTestnetUrl =
       'checkIssuerPolygonTestnetUrl';
   static const String checkIssuerPolygonUrl = 'checkIssuerPolygonUrl';

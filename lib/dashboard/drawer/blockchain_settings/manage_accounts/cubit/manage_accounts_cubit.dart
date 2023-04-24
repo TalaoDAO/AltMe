@@ -13,7 +13,7 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
   ManageAccountsCubit({
     required this.secureStorageProvider,
     required this.walletCubit,
-  }) : super(ManageAccountsState()) {
+  }) : super(const ManageAccountsState()) {
     initialise();
   }
 

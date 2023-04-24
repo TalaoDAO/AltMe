@@ -8,7 +8,6 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activit
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/theme/theme.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';

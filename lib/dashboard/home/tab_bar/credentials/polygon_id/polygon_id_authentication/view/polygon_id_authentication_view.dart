@@ -1,5 +1,4 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,7 @@ class PolygonIdAuthenticationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
+    // TODO(all): change UI
     return BasePage(
       title: ' Polygon Id Authenticate',
       useSafeArea: true,

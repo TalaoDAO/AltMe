@@ -259,7 +259,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
             /// verifier side (siopv2) without request_uri
             // if (state.uri?.queryParameters['scope'] == 'openid') {
-            //   subtitle = state.uri!.queryParameters['request_uri'].toString();
+            //  subtitle = state.uri!.queryParameters['request_uri'].toString();
             // }
 
             /// verifier side (siopv2) with request_uri

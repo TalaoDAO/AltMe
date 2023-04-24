@@ -2,12 +2,12 @@ part of 'manage_accounts_cubit.dart';
 
 @JsonSerializable()
 class ManageAccountsState extends Equatable {
-  ManageAccountsState({
+  const ManageAccountsState({
     this.status = AppStatus.init,
     this.message,
     this.currentCryptoIndex = 0,
     CryptoAccount? cryptoAccount,
-  }) : cryptoAccount = cryptoAccount ?? CryptoAccount(data: const []);
+  }) : cryptoAccount = cryptoAccount ?? const CryptoAccount(data: []);
 
   factory ManageAccountsState.fromJson(Map<String, dynamic> json) =>
       _$ManageAccountsStateFromJson(json);
@@ -53,7 +53,7 @@ class ManageAccountsState extends Equatable {
 
   @override
   List<Object?> get props => [
-    status,
-    message,
-  ];
+        status,
+        message,
+      ];
 }

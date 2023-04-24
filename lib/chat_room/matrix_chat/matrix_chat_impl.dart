@@ -15,7 +15,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart' hide User;
 import 'package:mime/mime.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:secure_storage/secure_storage.dart';

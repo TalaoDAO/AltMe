@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +26,7 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO(all): update UI
     final l10n = context.l10n;
     return BasePage(
       title: l10n.credentialReceiveTitle,
@@ -36,7 +36,6 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // TODO(all): change UI
             const Text(
               'Would you like to accept a credential from this organisation?',
               textAlign: TextAlign.center,
@@ -70,16 +69,9 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
             MyGradientButton(
               text: 'Accept',
               onPressed: () {
-                Navigator.of(context).push<void>(
-                  PinCodePage.route(
-                    isValidCallback: () {
-                      context.read<PolygonIdCubit>().addPolygonIdCredentials(
-                            claims: claims,
-                          );
-                    },
-                    restrictToBack: false,
-                  ),
-                );
+                context.read<PolygonIdCubit>().addPolygonIdCredentials(
+                      claims: claims,
+                    );
               },
             ),
             const SizedBox(height: 8),

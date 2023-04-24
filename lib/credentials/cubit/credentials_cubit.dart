@@ -246,16 +246,16 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         }
         break;
       case CredentialCategory.financeCards:
-        // TODO: Handle this case.
+        // TODO(all): Handle this case.
         break;
       case CredentialCategory.humanityProofCards:
-        // TODO: Handle this case.
+        // TODO(all): Handle this case.
         break;
       case CredentialCategory.socialMediaCards:
-        // TODO: Handle this case.
+        // TODO(all): Handle this case.
         break;
       case CredentialCategory.walletIntegrity:
-        // TODO: Handle this case.
+        // TODO(all): Handle this case.
         break;
     }
   }
@@ -427,10 +427,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
       final allSubjectTypeForCategory = category.discoverCredentialSubjectTypes;
 
-      /// tezVoucher and tezotopiaMembership is available only on Android platform
+      /// tezVoucher and tezotopiaMembership is available only on Android
+      /// platform
       if (!isAndroid()) {
         allSubjectTypeForCategory.remove(CredentialSubjectType.tezVoucher);
-        //allSubjectTypeForCategory.remove(CredentialSubjectType.tezotopiaMembership);
+        //allSubjectTypeForCategory.remove
+        //(CredentialSubjectType.tezotopiaMembership);
       }
 
       final List<CredentialSubjectType> requiredDummySubjects = [];
