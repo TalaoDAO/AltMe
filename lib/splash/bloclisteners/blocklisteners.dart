@@ -136,8 +136,7 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
       final confirm = await showDialog<bool>(
             context: context,
             builder: (context) => ConfirmDialog(
-              title:
-                  '''${l10n.credentialPresentTitleDIDAuth}\n\n${l10n.confimrDIDAuth}''',
+              title: l10n.confimrDIDAuth,
               yes: l10n.showDialogYes,
               no: l10n.showDialogNo,
             ),
