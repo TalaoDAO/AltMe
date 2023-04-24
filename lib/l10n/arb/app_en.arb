@@ -862,5 +862,7 @@
   "walletIntegrityCredentialsHomeTitle": "Wallet integrity",
   "walletIntegrityCredentialsHomeSubtitle": "TBD",
   "walletIntegrityCredentialsDiscoverTitle": "WAllet integrity",
-  "walletIntegrityCredentialsDiscoverSubtitle": "TBD"
+  "walletIntegrityCredentialsDiscoverSubtitle": "TBD",
+  "restore": "Restore",
+  "backup": "Backup"
 }

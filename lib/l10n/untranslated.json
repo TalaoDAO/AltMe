@@ -798,7 +798,9 @@
     "walletIntegrityCredentialsHomeTitle",
     "walletIntegrityCredentialsHomeSubtitle",
     "walletIntegrityCredentialsDiscoverTitle",
-    "walletIntegrityCredentialsDiscoverSubtitle"
+    "walletIntegrityCredentialsDiscoverSubtitle",
+    "restore",
+    "backup"
   ],
 
   "es": [
@@ -1600,7 +1602,9 @@
     "walletIntegrityCredentialsHomeTitle",
     "walletIntegrityCredentialsHomeSubtitle",
     "walletIntegrityCredentialsDiscoverTitle",
-    "walletIntegrityCredentialsDiscoverSubtitle"
+    "walletIntegrityCredentialsDiscoverSubtitle",
+    "restore",
+    "backup"
   ],
 
   "fr": [
@@ -1703,7 +1707,9 @@
     "walletIntegrityCredentialsHomeTitle",
     "walletIntegrityCredentialsHomeSubtitle",
     "walletIntegrityCredentialsDiscoverTitle",
-    "walletIntegrityCredentialsDiscoverSubtitle"
+    "walletIntegrityCredentialsDiscoverSubtitle",
+    "restore",
+    "backup"
   ],
 
   "it": [
@@ -2505,6 +2511,8 @@
     "walletIntegrityCredentialsHomeTitle",
     "walletIntegrityCredentialsHomeSubtitle",
     "walletIntegrityCredentialsDiscoverTitle",
-    "walletIntegrityCredentialsDiscoverSubtitle"
+    "walletIntegrityCredentialsDiscoverSubtitle",
+    "restore",
+    "backup"
   ]
 }

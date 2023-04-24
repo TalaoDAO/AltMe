@@ -1,29 +1,28 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/drawer/ssi/manage_did/view/did_menu.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class SSIMenu extends StatelessWidget {
-  const SSIMenu({super.key});
+class RestoreMenu extends StatelessWidget {
+  const RestoreMenu({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
-      settings: const RouteSettings(name: '/ssiMenu'),
-      builder: (_) => const SSIMenu(),
+      settings: const RouteSettings(name: '/RestoreMenu'),
+      builder: (_) => const RestoreMenu(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return const SSIView();
+    return const RestoreView();
   }
 }
 
-class SSIView extends StatelessWidget {
-  const SSIView({super.key});
+class RestoreView extends StatelessWidget {
+  const RestoreView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,33 +45,6 @@ class SSIView extends StatelessWidget {
                 ),
                 const SizedBox(
                   height: Sizes.spaceSmall,
-                ),
-                DrawerItem(
-                  title: l10n.manageDecentralizedID,
-                  onTap: () {
-                    Navigator.of(context).push<void>(DidMenu.route());
-                  },
-                ),
-                DrawerItem(
-                  title: l10n.backupCredential,
-                  onTap: () async {
-                    await Navigator.of(context).push<void>(
-                      PinCodePage.route(
-                        restrictToBack: false,
-                        isValidCallback: () {
-                          Navigator.of(context).push<void>(
-                            BackupMnemonicPage.route(
-                              title: l10n.backupCredential,
-                              isValidCallback: () {
-                                Navigator.of(context)
-                                    .push<void>(BackupCredentialPage.route());
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
                 ),
                 DrawerItem(
                   title: l10n.restoreCredential,
@@ -111,28 +83,6 @@ class SSIView extends StatelessWidget {
                   },
                 ),
                 DrawerItem(
-                  title: l10n.backupPolygonIdIdentity,
-                  onTap: () async {
-                    await Navigator.of(context).push<void>(
-                      PinCodePage.route(
-                        restrictToBack: false,
-                        isValidCallback: () {
-                          Navigator.of(context).push<void>(
-                            BackupMnemonicPage.route(
-                              title: l10n.backupPolygonIdIdentity,
-                              isValidCallback: () {
-                                Navigator.of(context).push<void>(
-                                  BackupPolygonIdIdentityPage.route(),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-                DrawerItem(
                   title: l10n.restorePolygonIdCredentials,
                   onTap: () {
                     Navigator.of(context).push<void>(
@@ -152,19 +102,6 @@ class SSIView extends StatelessWidget {
                         },
                       ),
                     );
-                  },
-                ),
-                DrawerItem(
-                  title: l10n.verifiableDataRegistry,
-                  onTap: () async {
-                    await Navigator.of(context)
-                        .push<void>(VerifiableDataRegistryPage.route());
-                  },
-                ),
-                DrawerItem(
-                  title: l10n.searchCredentials,
-                  onTap: () {
-                    Navigator.of(context).push<void>(SearchPage.route());
                   },
                 ),
               ],
