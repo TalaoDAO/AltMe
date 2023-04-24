@@ -74,7 +74,7 @@ class _CreateAccountStep2ViewState extends State<CreateAccountStep2View> {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          LoadingView().hide();
+          LoadingView().hide(context: context);
         }
 
         if (state.status == AppStatus.success) {

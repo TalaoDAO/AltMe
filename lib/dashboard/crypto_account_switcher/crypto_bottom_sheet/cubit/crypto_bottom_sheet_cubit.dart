@@ -21,7 +21,6 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
   final WalletCubit walletCubit;
 
   Future<void> initialise() async {
-    emit(state.loading());
     emit(
       state.success(
         currentCryptoIndex: walletCubit.state.currentCryptoIndex,

@@ -120,8 +120,10 @@ class HomeCubit extends Cubit<HomeState> {
         credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
+      emit(state.copyWith(status: AppStatus.success));
     } catch (e) {
       final logger = getLogger('HomeCubit - AISelfiValidation');
+      emit(state.copyWith(status: AppStatus.error));
       logger.e('error: $e');
 
       logger.e(e);

@@ -66,11 +66,11 @@ class DidView extends StatelessWidget {
                     try {
                       final polygonIdCubit = context.read<PolygonIdCubit>();
                       await polygonIdCubit.initialise();
-                      LoadingView().hide();
+                      LoadingView().hide(context: context);
                       await Navigator.of(context)
                           .push<void>(ManageDidPolygonIdPage.route());
                     } catch (e) {
-                      LoadingView().hide();
+                      LoadingView().hide(context: context);
                       AlertMessage.showStateMessage(
                         context: context,
                         stateMessage: StateMessage.error(

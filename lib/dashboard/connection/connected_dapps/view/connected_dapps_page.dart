@@ -74,7 +74,7 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          LoadingView().hide();
+          LoadingView().hide(context: context);
         }
 
         if (state.message != null) {

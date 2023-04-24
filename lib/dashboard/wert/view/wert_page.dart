@@ -65,7 +65,7 @@ class _WertViewState extends State<WertView> {
           onProgress: (int progress) {
             log.i('WebView is loading (progress : $progress%)');
             if (progress == 100) {
-              LoadingView().hide();
+              LoadingView().hide(context: context);
             }
           },
           onPageStarted: (String url) {
@@ -76,7 +76,7 @@ class _WertViewState extends State<WertView> {
             log.i('Page finished loading: $url');
           },
           onWebResourceError: (WebResourceError error) {
-            LoadingView().hide();
+            LoadingView().hide(context: context);
             log.i('''
                 Page resource error:
                 code: ${error.errorCode}

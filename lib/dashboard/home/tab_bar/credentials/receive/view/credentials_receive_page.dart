@@ -46,7 +46,7 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
         if (state.status == ScanStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          LoadingView().hide();
+          LoadingView().hide(context: context);
         }
       },
       builder: (context, state) {

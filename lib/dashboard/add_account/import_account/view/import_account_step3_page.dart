@@ -176,7 +176,7 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
                         SecureStorageKeys.importAccountStep2Mnemonics,
                         mnemonicController.text,
                       );
-                      LoadingView().hide();
+                      LoadingView().hide(context: context);
                       await Navigator.of(context).push<void>(
                         ImportAccountStep4Page.route(
                           importAccountCubit:

@@ -56,7 +56,7 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
             if (state.status == ScanStatus.loading) {
               LoadingView().show(context: context);
             } else {
-              LoadingView().hide();
+              LoadingView().hide(context: context);
             }
           },
         ),

@@ -90,7 +90,7 @@ class _RestoreCredentialMnemonicViewState
           if (state.status == AppStatus.loading) {
             LoadingView().show(context: context);
           } else {
-            LoadingView().hide();
+            LoadingView().hide(context: context);
           }
 
           if (state.message != null) {
@@ -151,7 +151,7 @@ class _RestoreCredentialMnemonicViewState
                         SecureStorageKeys.recoverCredentialMnemonics,
                         mnemonicController.text,
                       );
-                      LoadingView().hide();
+                      LoadingView().hide(context: context);
                       widget.isValidCallback();
                     },
               text: l10n.next,

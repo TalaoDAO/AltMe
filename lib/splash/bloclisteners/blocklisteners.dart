@@ -72,7 +72,7 @@ final credentialsBlocListener =
       /// during onBoarding
       final onboardingState = context.read<OnboardingCubit>();
       if (onboardingState.state.status != AppStatus.loading) {
-        LoadingView().hide();
+        LoadingView().hide(context: context);
       }
     }
 
@@ -193,7 +193,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
     if (state.status == QrScanStatus.loading) {
       LoadingView().show(context: context);
     } else {
-      LoadingView().hide();
+      LoadingView().hide(context: context);
     }
 
     if (state.status == QrScanStatus.acceptHost) {
@@ -481,7 +481,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
 
       LoadingView().show(context: context, text: message);
     } else {
-      LoadingView().hide();
+      LoadingView().hide(context: context);
     }
 
     if (state.status == AppStatus.goBack) {

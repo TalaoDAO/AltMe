@@ -97,7 +97,7 @@ class _PersonalPageState extends State<ProfileView> {
             if (selfIssuedCredentialState.status == AppStatus.loading) {
               LoadingView().show(context: context);
             } else {
-              LoadingView().hide();
+              LoadingView().hide(context: context);
             }
           },
           child: BlocBuilder<ProfileCheckboxCubit, ProfileCheckboxState>(

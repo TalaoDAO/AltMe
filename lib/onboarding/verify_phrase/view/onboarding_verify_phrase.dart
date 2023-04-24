@@ -92,7 +92,7 @@ class _OnBoardingVerifyPhraseViewState
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          LoadingView().hide();
+          LoadingView().hide(context: context);
         }
 
         if (state.message != null) {

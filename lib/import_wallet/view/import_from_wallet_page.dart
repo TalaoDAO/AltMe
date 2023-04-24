@@ -101,7 +101,7 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          LoadingView().hide();
+          LoadingView().hide(context: context);
         }
 
         if (state.message != null) {

@@ -14,7 +14,13 @@ class LoadingView {
 
   LoadingViewController? controller;
 
+  final logger = getLogger('LoadingView');
+
+  final Set<Type> widgetEnabledLoadingTypes = {};
+
   void show({required BuildContext context, String? text}) {
+    logger.i('show(${context.widget.runtimeType})');
+    widgetEnabledLoadingTypes.add(context.widget.runtimeType);
     final textValue = text ?? context.l10n.loading;
     if (controller?.update(textValue) ?? false) {
       return;
@@ -23,9 +29,17 @@ class LoadingView {
     }
   }
 
-  void hide() {
-    controller?.close();
-    controller = null;
+  void hide({required BuildContext context}) {
+    logger.i(
+      'hide(${context.widget.runtimeType})',
+    );
+    if (widgetEnabledLoadingTypes.contains(context.widget.runtimeType)) {
+      widgetEnabledLoadingTypes.remove(context.widget.runtimeType);
+      if (widgetEnabledLoadingTypes.isEmpty) {
+        controller?.close();
+        controller = null;
+      }
+    }
   }
 
   LoadingViewController showOverlay({

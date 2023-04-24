@@ -95,7 +95,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
               if (sendReceiveHomeState.status == AppStatus.loading) {
                 LoadingView().show(context: context);
               } else {
-                LoadingView().hide();
+                LoadingView().hide(context: context);
                 if (sendReceiveHomeState.status == AppStatus.error) {
                   AlertMessage.showStateMessage(
                     context: context,
