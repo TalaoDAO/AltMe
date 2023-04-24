@@ -134,8 +134,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   Future<void> deepLink() async {
     final deepLinkUrl = deepLinkCubit.state;
-    emit(state.loading(isScan: false));
     if (deepLinkUrl != '') {
+      emit(state.loading(isScan: false));
       deepLinkCubit.resetDeepLink();
       try {
         await verify(uri: Uri.parse(deepLinkUrl));

@@ -87,7 +87,7 @@ class _SelectTokenBottomSheetViewState
                       if (tokensState.status == AppStatus.loading) {
                         LoadingView().show(context: context);
                       } else {
-                        LoadingView().hide();
+                        LoadingView().hide(context: context);
                       }
 
                       if (tokensState.message != null &&

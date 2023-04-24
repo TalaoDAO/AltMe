@@ -21,7 +21,6 @@ class ManageAccountsCubit extends Cubit<ManageAccountsState> {
   final WalletCubit walletCubit;
 
   Future<void> initialise() async {
-    emit(state.loading());
     emit(
       state.success(
         currentCryptoIndex: walletCubit.state.currentCryptoIndex,

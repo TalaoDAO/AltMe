@@ -68,7 +68,7 @@ class SIOPV2CredentialPickView extends StatelessWidget {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          LoadingView().hide();
+          LoadingView().hide(context: context);
         }
       },
       builder: (context, state) {

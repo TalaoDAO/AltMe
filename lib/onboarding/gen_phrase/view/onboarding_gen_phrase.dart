@@ -62,12 +62,12 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BlocConsumer<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
+    return BlocListener<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          LoadingView().hide();
+          LoadingView().hide(context: context);
         }
 
         if (state.message != null) {
@@ -86,107 +86,104 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
           );
         }
       },
-      builder: (context, state) {
-        return BasePage(
-          scrollView: false,
-          useSafeArea: true,
-          padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
-          titleLeading: const BackLeadingButton(),
-          secureScreen: true,
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const MStepper(
-                        step: 3,
-                        totalStep: 3,
+      child: BasePage(
+        scrollView: false,
+        useSafeArea: true,
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
+        titleLeading: const BackLeadingButton(),
+        secureScreen: true,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const MStepper(
+                      step: 3,
+                      totalStep: 3,
+                    ),
+                    const SizedBox(
+                      height: Sizes.spaceNormal,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Sizes.spaceNormal,
                       ),
-                      const SizedBox(
-                        height: Sizes.spaceNormal,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Sizes.spaceNormal,
-                        ),
-                        child: Text(
-                          l10n.onboardingPleaseStoreMessage,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
-                      const SizedBox(height: Sizes.spaceNormal),
-                      if (mnemonic != null)
-                        MnemonicDisplay(mnemonic: mnemonic!),
-                      // const SizedBox(
-                      //   height: Sizes.spaceSmall,
-                      // ),
-                      // TextButton(
-                      //   onPressed: () {
-                      //     Clipboard.setData(
-                      //       ClipboardData(
-                      //         text: state.mnemonic.join(' '),
-                      //       ),
-                      //     );
-                      //   },
-                      //   child: Text(
-                      //     l10n.copyToClipboard,
-                      //     style: Theme.of(context).textTheme.copyToClipBoard,
-                      //   ),
-                      // ),
-                      const SizedBox(height: Sizes.spaceLarge),
-                      Text(
-                        l10n.onboardingAltmeMessage,
+                      child: Text(
+                        l10n.onboardingPleaseStoreMessage,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.genPhraseSubmessage,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: Sizes.spaceNormal),
+                    if (mnemonic != null) MnemonicDisplay(mnemonic: mnemonic!),
+                    // const SizedBox(
+                    //   height: Sizes.spaceSmall,
+                    // ),
+                    // TextButton(
+                    //   onPressed: () {
+                    //     Clipboard.setData(
+                    //       ClipboardData(
+                    //         text: state.mnemonic.join(' '),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: Text(
+                    //     l10n.copyToClipboard,
+                    //     style: Theme.of(context).textTheme.copyToClipBoard,
+                    //   ),
+                    // ),
+                    const SizedBox(height: Sizes.spaceLarge),
+                    Text(
+                      l10n.onboardingAltmeMessage,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.genPhraseSubmessage,
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-          navigation: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Sizes.spaceSmall,
-                vertical: Sizes.spaceSmall,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  MyGradientButton(
-                    text: l10n.verifyLater,
-                    verticalSpacing: 18,
-                    onPressed: () async {
-                      await context
-                          .read<OnBoardingGenPhraseCubit>()
-                          .generateSSIAndCryptoAccount(mnemonic!);
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  MyGradientButton(
-                    text: l10n.verifyNow,
-                    verticalSpacing: 18,
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        OnBoardingVerifyPhrasePage.route(
-                          mnemonic: mnemonic!,
-                          isFromOnboarding: true,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+            ),
+          ],
+        ),
+        navigation: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Sizes.spaceSmall,
+              vertical: Sizes.spaceSmall,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                MyGradientButton(
+                  text: l10n.verifyLater,
+                  verticalSpacing: 18,
+                  onPressed: () {
+                    context
+                        .read<OnBoardingGenPhraseCubit>()
+                        .generateSSIAndCryptoAccount(mnemonic!);
+                  },
+                ),
+                const SizedBox(height: 10),
+                MyGradientButton(
+                  text: l10n.verifyNow,
+                  verticalSpacing: 18,
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      OnBoardingVerifyPhrasePage.route(
+                        mnemonic: mnemonic!,
+                        isFromOnboarding: true,
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

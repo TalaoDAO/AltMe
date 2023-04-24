@@ -40,16 +40,16 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
     await Future<void>.delayed(const Duration(milliseconds: 500));
     emit(state.loading());
 
-    final String? recoveryMnemonic = await secureStorageProvider
-        .get(SecureStorageKeys.recoverCredentialMnemonics);
-
-    if (recoveryMnemonic == null) {
-      throw ResponseMessage(
-        ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-      );
-    }
-
     try {
+      final String? recoveryMnemonic = await secureStorageProvider
+          .get(SecureStorageKeys.recoverCredentialMnemonics);
+
+      if (recoveryMnemonic == null) {
+        throw ResponseMessage(
+          ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+        );
+      }
+
       final file = File(state.backupFilePath!);
       final text = await file.readAsString();
 

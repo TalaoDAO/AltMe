@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
         if (homeState.status == AppStatus.loading) {
           LoadingView().show(context: context);
         } else {
-          LoadingView().hide();
+          LoadingView().hide(context: context);
         }
 
         if (homeState.message != null) {
