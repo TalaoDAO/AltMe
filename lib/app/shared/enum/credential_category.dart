@@ -69,7 +69,7 @@ extension CredentialCategoryX on CredentialCategory {
         return [
           //CredentialSubjectType.gender,
           CredentialSubjectType.ageRange,
-          CredentialSubjectType.nationality,
+          // CredentialSubjectType.nationality,
           CredentialSubjectType.over18,
           CredentialSubjectType.over15,
           CredentialSubjectType.over13,
