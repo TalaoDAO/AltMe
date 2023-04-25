@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/deep_link/cubit/deep_link.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
@@ -156,7 +157,12 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
       }
     }
     if (state.status == ScanStatus.success) {
-      Navigator.of(context).pop();
+      /// should pop until dashboard. Doing such we don't have to consider
+      /// different scanCubit scenarii (DIDAuth, scan or deeplink,
+      /// presentaiton, etc...).
+      Navigator.of(context).popUntil(
+        (route) => route.settings.name == '/dashboardPage',
+      );
     }
     if (state.status == ScanStatus.error) {
       Navigator.of(context).pop();
