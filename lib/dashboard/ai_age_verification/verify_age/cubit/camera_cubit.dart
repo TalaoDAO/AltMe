@@ -3,6 +3,7 @@ import 'package:altme/dashboard/ai_age_verification/verify_age/models/camera_con
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart' as img;
 import 'package:json_annotation/json_annotation.dart';
 
@@ -59,13 +60,24 @@ class CameraCubit extends Cubit<CameraState> {
   Future<void> takePhoto() async {
     try {
       final xFile = await cameraController!.takePicture();
-      final photoCaptured = (await xFile.readAsBytes()).toList();
+      final photoCaptured = await FlutterImageCompress.compressWithList(
+        await xFile.readAsBytes(),
+        rotate: 0,
+        quality: 100,
+        keepExif: false,
+        autoCorrectionAngle: true,
+        format: CompressFormat.jpeg,
+        // decreasing image quality on android
+        // in order to prevent "payload too large" error from yoti
+        inSampleSize: 2,
+      );
+      // we flip the image because we sure that the selfi image filping
       final fixedImageBytes =
           img.encodeJpg(img.flipHorizontal(img.decodeImage(photoCaptured)!));
       emit(
         state.copyWith(
           status: CameraStatus.imageCaptured,
-          data: fixedImageBytes,
+          data: fixedImageBytes.toList(),
         ),
       );
     } catch (e, s) {
