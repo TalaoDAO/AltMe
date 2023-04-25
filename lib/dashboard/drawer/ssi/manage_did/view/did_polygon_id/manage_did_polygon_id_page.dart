@@ -66,11 +66,6 @@ class ManageDidPolygonIdPage extends StatelessWidget {
                 }
               },
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: Sizes.spaceNormal),
-              child: Divider(),
-            ),
-            DidPrivateKey(route: DidPolygonIdPrivateKeyPage.route()),
           ],
         ),
       ),
