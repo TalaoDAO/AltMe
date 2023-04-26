@@ -231,6 +231,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                         onTap: () => context
                             .read<QueryByExampleCredentialPickCubit>()
                             .toggle(index),
+                        showBadge: false,
                       ),
                     ),
                     if (queryState.filteredCredentialList.isEmpty)
