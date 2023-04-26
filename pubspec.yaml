@@ -83,7 +83,6 @@ dependencies:
   no_screenshot: ^0.0.1+6
   open_filex: ^4.3.2
   package_info_plus: ^3.0.3
-  passbase_flutter: ^2.14.0
   path: ^1.8.2 # flutter_test from sdk depends on path 1.8.2
   path_provider: ^2.0.14
   permission_handler: ^10.2.0
@@ -118,7 +117,6 @@ dependencies:
   webview_flutter: ^4.0.7
   webview_flutter_android: ^3.4.5
   webview_flutter_wkwebview: ^3.2.4
-  workmanager: ^0.5.1
 
 dependency_overrides:
   # Because flutter_sodium 0.2.0 depends on ffi ^1.0.0 and no versions of flutter_sodium match >0.2.0 <0.3.0, flutter_sodium ^0.2.0 requires ffi ^1.0.0

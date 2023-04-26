@@ -183,29 +183,34 @@ class FailureWidget extends StatelessWidget {
             );
           },
         ),
-        // const SizedBox(height: Sizes.spaceNormal),
-        // MyElevatedButton(
-        //   text: 'kyc',
-        //   verticalSpacing: 16,
-        //   borderRadius: Sizes.largeRadius,
-        //   onPressed: () async {
-        //     await Navigator.of(context).push<void>(
-        //       PinCodePage.route(
-        //         isValidCallback: () =>
-        //             context.read<HomeCubit>().startPassbaseVerification(
-        //                   context.read<CredentialsCubit>(),
-        //                 ),
-        //         restrictToBack: false,
-        //       ),
-        //     );
-        //     await Navigator.pushAndRemoveUntil<void>(
-        //       context,
-        //       DashboardPage.route(),
-        //       (Route<dynamic> route) => route.isFirst,
-        //     );
-        //   },
-        // ),
-        const SizedBox(height: Sizes.spaceNormal),
+        const SizedBox(
+          height: Sizes.spaceNormal,
+        ),
+        MyElevatedButton(
+          text: 'kyc',
+          verticalSpacing: 16,
+          borderRadius: Sizes.largeRadius,
+          onPressed: () async {
+            // TODO(All): implement the ID360
+            // await Navigator.of(context).push<void>(
+            //   PinCodePage.route(
+            //     isValidCallback: () =>
+            //         context.read<HomeCubit>().startPassbaseVerification(
+            //               context.read<CredentialsCubit>(),
+            //             ),
+            //     restrictToBack: false,
+            //   ),
+            // );
+            // await Navigator.pushAndRemoveUntil<void>(
+            //   context,
+            //   DashboardPage.route(),
+            //   (Route<dynamic> route) => route.isFirst,
+            // );
+          },
+        ),
+        const SizedBox(
+          height: Sizes.spaceNormal,
+        ),
         MyElevatedButton(
           text: l10n.decline,
           verticalSpacing: 16,

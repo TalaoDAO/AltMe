@@ -75,24 +75,6 @@ class _DashboardViewState extends State<DashboardView> {
     pageController.jumpToPage(index);
   }
 
-  Future<void> _onStartPassBaseVerification() async {
-    final pinCode = await getSecureStorage.get(SecureStorageKeys.pinCode);
-    if (pinCode?.isEmpty ?? true) {
-      context
-          .read<HomeCubit>()
-          .startPassbaseVerification(context.read<CredentialsCubit>());
-    } else {
-      await Navigator.of(context).push<void>(
-        PinCodePage.route(
-          isValidCallback: () => context
-              .read<HomeCubit>()
-              .startPassbaseVerification(context.read<CredentialsCubit>()),
-          restrictToBack: false,
-        ),
-      );
-    }
-  }
-
   String _getTitle(int selectedIndex, AppLocalizations l10n) {
     switch (selectedIndex) {
       case 0:
@@ -138,62 +120,7 @@ class _DashboardViewState extends State<DashboardView> {
         ),
         BlocListener<HomeCubit, HomeState>(
           listener: (context, homeState) {
-            if (homeState.passBaseStatus == PassBaseStatus.declined) {
-              showDialog<void>(
-                context: context,
-                builder: (_) => DefaultDialog(
-                  title: l10n.verificationDeclinedTitle,
-                  description: l10n.verificationDeclinedDescription,
-                  buttonLabel: l10n.restartVerification.toUpperCase(),
-                  onButtonClick: _onStartPassBaseVerification,
-                ),
-              );
-            }
-
-            if (homeState.passBaseStatus == PassBaseStatus.pending) {
-              showDialog<void>(
-                context: context,
-                builder: (_) => DefaultDialog(
-                  title: l10n.verificationPendingTitle,
-                  description: l10n.verificationPendingDescription,
-                ),
-              );
-            }
-
-            if (homeState.passBaseStatus == PassBaseStatus.undone) {
-              showDialog<void>(
-                context: context,
-                builder: (_) => KycDialog(
-                  startVerificationPressed: _onStartPassBaseVerification,
-                ),
-              );
-            }
-
-            if (homeState.passBaseStatus == PassBaseStatus.complete) {
-              showDialog<void>(
-                context: context,
-                builder: (_) => const FinishKycDialog(),
-              );
-              context.read<HomeCubit>().getPassBaseStatusBackground();
-            }
-
-            if (homeState.passBaseStatus == PassBaseStatus.verified) {
-              // LocalNotification().showNotification(
-              //   title: l10n.verifiedNotificationTitle,
-              //   message: l10n.verifiedNotificationDescription,
-              //   link: homeState.link,
-              // );
-
-              showDialog<void>(
-                context: context,
-                builder: (_) => DefaultDialog(
-                  title: l10n.verifiedTitle,
-                  description: l10n.verifiedDescription,
-                  buttonLabel: l10n.verfiedButton.toUpperCase(),
-                  onButtonClick: () => context.read<HomeCubit>().launchUrl(),
-                ),
-              );
-            }
+            // TODO(All): check for kyc verifcation status (ID360)
           },
         ),
         BlocListener<DashboardCubit, DashboardState>(

@@ -238,7 +238,7 @@ Future<void> registerMultipleCredentialsProcess(
   String preAuthorizedCode,
 ) async {
   await secureStorageProvider.set(
-    SecureStorageKeys.passBaseVerificationDate,
+    SecureStorageKeys.kycVerificationDate,
     DateTime.now().toString(),
   );
   await secureStorageProvider.set(
@@ -250,15 +250,14 @@ Future<void> registerMultipleCredentialsProcess(
 Future<void> unregisterMultipleCredentialsProcess(
   secure_storage.SecureStorageProvider secureStorageProvider,
 ) async {
-  await secureStorageProvider
-      .delete(SecureStorageKeys.passBaseVerificationDate);
+  await secureStorageProvider.delete(SecureStorageKeys.kycVerificationDate);
 }
 
 Future<bool> isGettingMultipleCredentialsNeeded(
   secure_storage.SecureStorageProvider secureStorageProvider,
 ) async {
   final String? passBaseVerificationDate = await secureStorageProvider.get(
-    SecureStorageKeys.passBaseVerificationDate,
+    SecureStorageKeys.kycVerificationDate,
   );
   if (passBaseVerificationDate != null && passBaseVerificationDate != '') {
     final DateTime date = DateTime.parse(passBaseVerificationDate);

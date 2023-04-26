@@ -11,14 +11,11 @@ import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';
 import 'package:did_kit/did_kit.dart';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:passbase_flutter/passbase_flutter.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:web3dart/crypto.dart';
-import 'package:workmanager/workmanager.dart';
 
 part 'home_cubit.g.dart';
 part 'home_state.dart';
@@ -249,18 +246,6 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> emitHasWallet() async {
-    final String? passbaseStatusFromStorage = await secureStorageProvider.get(
-      SecureStorageKeys.passBaseStatus,
-    );
-    if (passbaseStatusFromStorage != null) {
-      final passBaseStatus = getPassBaseStatusFromString(
-        passbaseStatusFromStorage,
-      );
-      if (passBaseStatus == PassBaseStatus.pending) {
-        getPassBaseStatusBackground();
-      }
-    }
-
     emit(
       state.copyWith(
         status: AppStatus.populate,
@@ -289,192 +274,12 @@ class HomeCubit extends Cubit<HomeState> {
     log.i('Checking PassbaseStatus');
     emit(state.loading());
 
-    final passBaseStatus = await checkPassbaseStatus();
-
-    if (passBaseStatus == PassBaseStatus.approved) {
-      onPassBaseApproved.call();
-    }
-
-    if (passBaseStatus == PassBaseStatus.pending) {
-      getPassBaseStatusBackground();
-    }
-
-    log.i(passBaseStatus);
-
     emit(
       state.copyWith(
         status: AppStatus.populate,
-        passBaseStatus: passBaseStatus,
         link: link,
       ),
     );
-  }
-
-  Future<PassBaseStatus> checkPassbaseStatus() async {
-    emit(state.loading());
-    late PassBaseStatus passBaseStatus;
-
-    /// check if status is already approved in DB
-    final String? passbaseStatusFromStorage = await secureStorageProvider.get(
-      SecureStorageKeys.passBaseStatus,
-    );
-
-    if (passbaseStatusFromStorage != null) {
-      passBaseStatus = getPassBaseStatusFromString(passbaseStatusFromStorage);
-    } else {
-      passBaseStatus = PassBaseStatus.undone;
-    }
-
-    if (passBaseStatus != PassBaseStatus.approved) {
-      final did = didCubit.state.did!;
-      passBaseStatus = await getPassBaseStatusFromAPI(did);
-      await secureStorageProvider.set(
-        SecureStorageKeys.passBaseStatus,
-        passBaseStatus.name,
-      );
-    }
-    emit(state.copyWith(status: AppStatus.populate));
-    return passBaseStatus;
-  }
-
-  void startPassbaseVerification(CredentialsCubit credentialsCubit) {
-    final log = getLogger('HomeCubit - startPassbaseVerification');
-    final did = didCubit.state.did!;
-    emit(state.loading());
-    PassbaseSDK.startVerification(
-      onFinish: (identityAccessKey) async {
-        // IdentityAccessKey to run the process manually:
-        // 22a363e6-2f93-4dd3-9ac8-6cba5a046acd
-
-        unawaited(
-          getMutipleCredentials(
-            identityAccessKey,
-            client,
-            credentialsCubit,
-            secureStorageProvider,
-          ),
-        );
-
-        /// Do not remove: Following POST tell backend the relation between DID
-        /// and passbase token.
-        try {
-          await dotenv.load();
-          final PASSBASE_WEBHOOK_AUTH_TOKEN =
-              dotenv.get('PASSBASE_WEBHOOK_AUTH_TOKEN');
-          final dynamic response = await client.post(
-            '/wallet/webhook',
-            headers: <String, dynamic>{
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer $PASSBASE_WEBHOOK_AUTH_TOKEN',
-            },
-            data: <String, dynamic>{
-              'identityAccessKey': identityAccessKey,
-              'DID': did,
-            },
-          );
-
-          if (response == 'ok') {
-            emit(
-              state.copyWith(
-                status: AppStatus.idle,
-                passBaseStatus: PassBaseStatus.complete,
-              ),
-            );
-          } else {
-            throw Exception();
-          }
-        } catch (e) {
-          emit(
-            state.copyWith(
-              status: AppStatus.populate,
-              passBaseStatus: PassBaseStatus.declined,
-            ),
-          );
-        }
-      },
-      onError: (e) {
-        if (e == 'CANCELLED_BY_USER') {
-          log.e('Cancelled by user');
-        } else {
-          log.e('Unknown error');
-        }
-        emit(
-          state.copyWith(
-            status: AppStatus.idle,
-            passBaseStatus: PassBaseStatus.idle,
-          ),
-        );
-      },
-    );
-  }
-
-  /// Give user metadata to KYC. Currently we are just sending user DID.
-  bool setKYCMetadata(CredentialsCubit credentialsCubit) {
-    final selectedCredentials = <CredentialModel>[];
-    for (final credentialModel in credentialsCubit.state.credentials) {
-      final credentialTypeList = credentialModel.credentialPreview.type;
-
-      ///credential and issuer provided in claims
-      if (credentialTypeList.contains('EmailPass')) {
-        final credentialSubjectModel = credentialModel
-            .credentialPreview.credentialSubjectModel as EmailPassModel;
-        if (credentialSubjectModel.passbaseMetadata != '') {
-          selectedCredentials.add(credentialModel);
-        }
-      }
-    }
-    if (selectedCredentials.isNotEmpty) {
-      final firstEmailPassCredentialSubject =
-          selectedCredentials.first.credentialPreview.credentialSubjectModel;
-      if (firstEmailPassCredentialSubject is EmailPassModel) {
-        /// Give user email from first EmailPass to KYC. When KYC is successful
-        /// this email is used to send the over18 credential link to user.
-
-        PassbaseSDK.prefillUserEmail = firstEmailPassCredentialSubject.email;
-        PassbaseSDK.metaData = firstEmailPassCredentialSubject.passbaseMetadata;
-        return true;
-      }
-    }
-    return false;
-  }
-
-  void getPassBaseStatusBackground() {
-    final did = didCubit.state.did!;
-    Workmanager().registerOneOffTask(
-      'getPassBaseStatusBackground',
-      'getPassBaseStatusBackground',
-      inputData: <String, dynamic>{'did': did},
-    );
-    periodicCheckPassBaseStatus();
-  }
-
-  Future<void> periodicCheckPassBaseStatus() async {
-    // We check passbase status during five minutes
-    var timerCounter = 24;
-    Timer.periodic(const Duration(seconds: 20), (timer) async {
-      final String? passbaseStatusFromStorage = await secureStorageProvider.get(
-        SecureStorageKeys.passBaseStatus,
-      );
-
-      if (passbaseStatusFromStorage != null) {
-        final passBaseStatus = getPassBaseStatusFromString(
-          passbaseStatusFromStorage,
-        );
-        if (passBaseStatus == PassBaseStatus.approved) {
-          emit(
-            state.copyWith(
-              status: AppStatus.populate,
-              passBaseStatus: PassBaseStatus.approved,
-            ),
-          );
-          timer.cancel();
-        }
-      }
-      timerCounter--;
-      if (timerCounter == 0) {
-        timer.cancel();
-      }
-    });
   }
 
   Future<void> periodicCheckRewardOnTezosBlockchain() async {
@@ -630,57 +435,4 @@ class HomeCubit extends Cubit<HomeState> {
       );
     }
   }
-}
-
-Future<PassBaseStatus> getPassBaseStatusFromAPI(String did) async {
-  try {
-    await dotenv.load();
-    final PASSBASE_CHECK_DID_AUTH_TOKEN =
-        dotenv.get('PASSBASE_CHECK_DID_AUTH_TOKEN');
-    final client = DioClient(Urls.issuerBaseUrl, Dio());
-    final dynamic response = await client.get(
-      '/passbase/check/$did',
-      headers: <String, dynamic>{
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $PASSBASE_CHECK_DID_AUTH_TOKEN',
-      },
-    );
-    final PassBaseStatus passBaseStatus = getPassBaseStatusFromString(
-      response as String,
-    );
-    return passBaseStatus;
-  } catch (e) {
-    return PassBaseStatus.undone;
-  }
-}
-
-PassBaseStatus getPassBaseStatusFromString(String? string) {
-  late PassBaseStatus passBaseStatus;
-  switch (string) {
-    case 'approved':
-      passBaseStatus = PassBaseStatus.approved;
-      break;
-    case 'declined':
-      passBaseStatus = PassBaseStatus.declined;
-      break;
-    case 'verified':
-      passBaseStatus = PassBaseStatus.verified;
-      break;
-    case 'pending':
-      passBaseStatus = PassBaseStatus.pending;
-      break;
-    case 'undone':
-      passBaseStatus = PassBaseStatus.undone;
-      break;
-    case 'notdone':
-      passBaseStatus = PassBaseStatus.undone;
-      break;
-    case 'complete':
-      passBaseStatus = PassBaseStatus.complete;
-      break;
-    case 'idle':
-    default:
-      passBaseStatus = PassBaseStatus.idle;
-  }
-  return passBaseStatus;
 }
