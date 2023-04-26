@@ -131,47 +131,7 @@ class _DashboardViewState extends State<DashboardView> {
         ),
         BlocListener<KycVerificationCubit, KycVerificationState>(
           listener: (context, homeState) {
-            if (homeState.status == KycVerificationStatus.rejected) {
-              showDialog<void>(
-                context: context,
-                builder: (_) => DefaultDialog(
-                  title: l10n.verificationDeclinedTitle,
-                  description: l10n.verificationDeclinedDescription,
-                  buttonLabel: l10n.restartVerification.toUpperCase(),
-                  onButtonClick: _startKycVerification,
-                ),
-              );
-            }
-
-            if (homeState.status == KycVerificationStatus.pending) {
-              showDialog<void>(
-                context: context,
-                builder: (_) => DefaultDialog(
-                  title: l10n.verificationPendingTitle,
-                  description: l10n.verificationPendingDescription,
-                ),
-              );
-            }
-
-            if (homeState.status == KycVerificationStatus.unverified) {
-              showDialog<void>(
-                context: context,
-                builder: (_) => KycDialog(
-                  startVerificationPressed: _startKycVerification,
-                ),
-              );
-            }
-
-            if (homeState.status == KycVerificationStatus.approved) {
-              showDialog<void>(
-                context: context,
-                builder: (_) => DefaultDialog(
-                  title: l10n.verifiedTitle,
-                  description: l10n.verifiedDescription,
-                  buttonLabel: l10n.verfiedButton.toUpperCase(),
-                ),
-              );
-            }
+            // TODO(All): check for kyc verifcation status (ID360)
           },
         ),
         BlocListener<DashboardCubit, DashboardState>(
