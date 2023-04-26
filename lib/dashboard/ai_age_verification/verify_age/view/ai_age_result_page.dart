@@ -154,17 +154,15 @@ class FailureWidget extends StatelessWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
-        const SizedBox(
-          height: Sizes.spaceNormal,
-        ),
-        Text(
-          'Would you like to get your credentials through KYC system?',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.normal,
-                color: Theme.of(context).colorScheme.onTertiary,
-              ),
-        ),
+        // const SizedBox(height: Sizes.spaceNormal),
+        // Text(
+        //   'Would you like to get your credentials through KYC system?',
+        //   textAlign: TextAlign.center,
+        //   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+        //         fontWeight: FontWeight.normal,
+        //         color: Theme.of(context).colorScheme.onTertiary,
+        //       ),
+        // ),
         const Spacer(),
         MyElevatedButton(
           text: 'try again',
@@ -186,33 +184,29 @@ class FailureWidget extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(
-          height: Sizes.spaceNormal,
-        ),
-        MyElevatedButton(
-          text: 'kyc',
-          verticalSpacing: 16,
-          borderRadius: Sizes.largeRadius,
-          onPressed: () async {
-            await Navigator.of(context).push<void>(
-              PinCodePage.route(
-                isValidCallback: () =>
-                    context.read<HomeCubit>().startPassbaseVerification(
-                          context.read<CredentialsCubit>(),
-                        ),
-                restrictToBack: false,
-              ),
-            );
-            await Navigator.pushAndRemoveUntil<void>(
-              context,
-              DashboardPage.route(),
-              (Route<dynamic> route) => route.isFirst,
-            );
-          },
-        ),
-        const SizedBox(
-          height: Sizes.spaceNormal,
-        ),
+        // const SizedBox(height: Sizes.spaceNormal),
+        // MyElevatedButton(
+        //   text: 'kyc',
+        //   verticalSpacing: 16,
+        //   borderRadius: Sizes.largeRadius,
+        //   onPressed: () async {
+        //     await Navigator.of(context).push<void>(
+        //       PinCodePage.route(
+        //         isValidCallback: () =>
+        //             context.read<HomeCubit>().startPassbaseVerification(
+        //                   context.read<CredentialsCubit>(),
+        //                 ),
+        //         restrictToBack: false,
+        //       ),
+        //     );
+        //     await Navigator.pushAndRemoveUntil<void>(
+        //       context,
+        //       DashboardPage.route(),
+        //       (Route<dynamic> route) => route.isFirst,
+        //     );
+        //   },
+        // ),
+        const SizedBox(height: Sizes.spaceNormal),
         MyElevatedButton(
           text: l10n.decline,
           verticalSpacing: 16,
