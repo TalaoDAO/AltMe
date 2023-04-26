@@ -1920,10 +1920,18 @@ packages:
     source: hosted
     version: "3.4.3+1"
   sentry:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sentry
       sha256: "9b005f502dfd84ca085dfa660dd4f16f7891c1b4b6300fda7c340330e61525d6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.4.2"
+  sentry_flutter:
+    dependency: "direct main"
+    description:
+      name: sentry_flutter
+      sha256: bb537f6fedbe4c634aaf1a430d5efce8329e355b57dc2e0c224d8a2a3e54c4ac
       url: "https://pub.dev"
     source: hosted
     version: "7.4.2"
