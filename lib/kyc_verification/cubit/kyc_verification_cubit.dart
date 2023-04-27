@@ -14,7 +14,7 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
   final DioClient client;
   final logger = getLogger('KycVerificationCubit');
   final walletId = 111; // TODO(all): change the value
-  final walletApiKey = ''; // TODO(all): change the value
+  final walletApiKey = '123456789'; // TODO(all): change the value
   final walletCallback = ''; // TODO(all): deeplink need to be defined
 
   Future<String?> _getApiCode() async {
