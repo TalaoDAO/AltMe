@@ -13,9 +13,9 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
 
   final DioClient client;
   final logger = getLogger('KycVerificationCubit');
-  final walletId = 111; // TODO(all): change the value
-  final walletApiKey = '123456789'; // TODO(all): change the value
-  final walletCallback = ''; // TODO(all): deeplink need to be defined
+  final walletId = 111;
+  final walletApiKey = '123456789';
+  final walletCallback = 'https://app.altme.io/app/download';
 
   Future<String?> _getApiCode() async {
     try {
@@ -50,5 +50,7 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
         '&client_id=$walletId&callback=$walletCallback',
       ),
     );
+    // TODO(all): don't forget update verfication
+    // status with deeplink callback
   }
 }
