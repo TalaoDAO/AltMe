@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
@@ -131,7 +132,47 @@ class _DashboardViewState extends State<DashboardView> {
         ),
         BlocListener<KycVerificationCubit, KycVerificationState>(
           listener: (context, homeState) {
-            // TODO(All): check for kyc verifcation status (ID360)
+            if (homeState.status == KycVerificationStatus.rejected) {
+              showDialog<void>(
+                context: context,
+                builder: (_) => DefaultDialog(
+                  title: l10n.verificationDeclinedTitle,
+                  description: l10n.verificationDeclinedDescription,
+                  buttonLabel: l10n.restartVerification.toUpperCase(),
+                  onButtonClick: _startKycVerification,
+                ),
+              );
+            }
+
+            if (homeState.status == KycVerificationStatus.pending) {
+              showDialog<void>(
+                context: context,
+                builder: (_) => DefaultDialog(
+                  title: l10n.verificationPendingTitle,
+                  description: l10n.verificationPendingDescription,
+                ),
+              );
+            }
+
+            if (homeState.status == KycVerificationStatus.unverified) {
+              showDialog<void>(
+                context: context,
+                builder: (_) => KycDialog(
+                  startVerificationPressed: _startKycVerification,
+                ),
+              );
+            }
+
+            if (homeState.status == KycVerificationStatus.approved) {
+              showDialog<void>(
+                context: context,
+                builder: (_) => DefaultDialog(
+                  title: l10n.verifiedTitle,
+                  description: l10n.verifiedDescription,
+                  buttonLabel: l10n.verfiedButton.toUpperCase(),
+                ),
+              );
+            }
           },
         ),
         BlocListener<DashboardCubit, DashboardState>(
