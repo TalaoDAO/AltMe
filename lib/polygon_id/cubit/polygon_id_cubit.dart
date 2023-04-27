@@ -151,14 +151,29 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
     if (iden3MessageEntity.messageType == Iden3MessageType.auth) {
-      emit(
-        state.copyWith(
-          status: PolygonIdStatus.success,
-          route: PolygonIdAuthenticationPage.route(
-            iden3MessageEntity: iden3MessageEntity,
+      final body = iden3MessageEntity.body as AuthBodyRequest;
+
+      if (body.scope!.isEmpty) {
+        /// issuer
+        emit(
+          state.copyWith(
+            status: PolygonIdStatus.success,
+            route: PolygonIdAuthenticationPage.route(
+              iden3MessageEntity: iden3MessageEntity,
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        /// verifier
+        emit(
+          state.copyWith(
+            status: PolygonIdStatus.success,
+            route: PolygonIdVerificationPage.route(
+              iden3MessageEntity: iden3MessageEntity,
+            ),
+          ),
+        );
+      }
     } else if (iden3MessageEntity.messageType == Iden3MessageType.offer) {
       log.i('get claims');
       final List<ClaimEntity> claims = await polygonId.getClaims(
