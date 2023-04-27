@@ -143,6 +143,7 @@ class _CameraViewState extends State<CameraView> {
             return MyGradientButton(
               borderRadius: Sizes.smallRadius,
               verticalSpacing: 16,
+              // TODO(all) : localise
               text: 'take a picture',
               onPressed: state.status != CameraStatus.loading
                   ? cameraCubit.takePhoto

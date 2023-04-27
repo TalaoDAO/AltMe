@@ -464,6 +464,7 @@ final walletConnectBlocListener =
     }
   },
 );
+
 final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
   listener: (BuildContext context, PolygonIdState state) async {
     if (state.status == AppStatus.loading) {

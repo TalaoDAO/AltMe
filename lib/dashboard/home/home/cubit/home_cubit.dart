@@ -126,6 +126,52 @@ class HomeCubit extends Cubit<HomeState> {
     } catch (e) {
       final logger = getLogger('HomeCubit - AISelfiValidation');
       logger.e('error: $e');
+
+      logger.e(e);
+      if (e is NetworkException) {
+        String? message;
+        if (e.data != null) {
+          if (e.data['error_description'] is String) {
+            try {
+              final dynamic errorDescriptionJson =
+                  jsonDecode(e.data['error_description'] as String);
+              message = errorDescriptionJson['error_message'] as String;
+            } catch (_, __) {
+              message = e.data['error_description'] as String;
+            }
+          } else if (e.data['error_description'] is Map<String, dynamic>) {
+            message = e.data['error_description']['error_message'] as String;
+          }
+        }
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage(
+              showDialog: true,
+              stringMessage: message,
+              messageHandler: message == null
+                  ? null
+                  : ResponseMessage(
+                      ResponseString
+                          .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
+                    ),
+            ),
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            status: AppStatus.error,
+            message: StateMessage(
+              showDialog: true,
+              messageHandler: ResponseMessage(
+                ResponseString
+                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+              ),
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -137,8 +183,6 @@ class HomeCubit extends Cubit<HomeState> {
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
   }) async {
-    final logger = getLogger('HomeCubit - AISelfiValidation');
-
     /// if credential of this type is already in the wallet do nothing
     /// Ensure credentialType = name of credential type in CredentialModel
     CredentialSubjectType credentialTypeEnum =
@@ -160,101 +204,55 @@ class HomeCubit extends Cubit<HomeState> {
         .credentialListFromCredentialSubjectType(credentialTypeEnum);
     if (credentialList.isEmpty) {
       dynamic response;
-      try {
-        emit(state.copyWith(status: AppStatus.loading));
-        response = await client.post(
-          url,
-          headers: <String, dynamic>{
-            'accept': 'application/json',
-            'Content-Type': 'application/json',
-            'X-API-KEY': apiKey,
-          },
-          data: data,
-        );
 
-        if (response != null) {
-          final credential =
-              jsonDecode(response as String) as Map<String, dynamic>;
+      emit(state.copyWith(status: AppStatus.loading));
+      response = await client.post(
+        url,
+        headers: <String, dynamic>{
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-API-KEY': apiKey,
+        },
+        data: data,
+      );
 
-          final Map<String, dynamic> newCredential =
-              Map<String, dynamic>.from(credential);
-          newCredential['credentialPreview'] = credential;
-          final CredentialManifest credentialManifest =
-              await getCredentialManifestFromAltMe(client);
-          credentialManifest.outputDescriptors
-              ?.removeWhere((element) => element.id != credentialType);
-          if (credentialManifest.outputDescriptors!.isNotEmpty) {
-            newCredential['credential_manifest'] = CredentialManifest(
-              credentialManifest.id,
-              credentialManifest.issuedBy,
-              credentialManifest.outputDescriptors,
-              credentialManifest.presentationDefinition,
-            ).toJson();
-          }
+      if (response != null) {
+        final credential =
+            jsonDecode(response as String) as Map<String, dynamic>;
 
-          final credentialModel = CredentialModel.copyWithData(
-            oldCredentialModel: CredentialModel.fromJson(
-              newCredential,
-            ),
-            newData: credential,
-            activities: [Activity(acquisitionAt: DateTime.now())],
-          );
-          if (credentialType != 'AgeEstimate') {
-            await credentialsCubit.insertCredential(
-              credential: credentialModel,
-              showMessage: true,
-            );
-            await cameraCubit.incrementAcquiredCredentialsQuantity();
-            emit(state.copyWith(status: AppStatus.success));
-          } else {
-            await cameraCubit.updateAgeEstimate(
-              credentialModel.data['credentialSubject']['ageEstimate']
-                  as String,
-            );
-          }
+        final Map<String, dynamic> newCredential =
+            Map<String, dynamic>.from(credential);
+        newCredential['credentialPreview'] = credential;
+        final CredentialManifest credentialManifest =
+            await getCredentialManifestFromAltMe(client);
+        credentialManifest.outputDescriptors
+            ?.removeWhere((element) => element.id != credentialType);
+        if (credentialManifest.outputDescriptors!.isNotEmpty) {
+          newCredential['credential_manifest'] = CredentialManifest(
+            credentialManifest.id,
+            credentialManifest.issuedBy,
+            credentialManifest.outputDescriptors,
+            credentialManifest.presentationDefinition,
+          ).toJson();
         }
-      } catch (e) {
-        logger.e(e);
-        if (e is NetworkException) {
-          String? message;
-          if (e.data != null) {
-            if (e.data['error_description'] is String) {
-              try {
-                final dynamic errorDescriptionJson =
-                    jsonDecode(e.data['error_description'] as String);
-                message = errorDescriptionJson['error_message'] as String;
-              } catch (_, __) {
-                message = e.data['error_description'] as String;
-              }
-            } else if (e.data['error_description'] is Map<String, dynamic>) {
-              message = e.data['error_description']['error_message'] as String;
-            }
-          }
-          emit(
-            state.copyWith(
-              status: AppStatus.error,
-              message: StateMessage(
-                stringMessage: message,
-                messageHandler: message == null
-                    ? null
-                    : ResponseMessage(
-                        ResponseString
-                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-                      ),
-              ),
-            ),
+
+        final credentialModel = CredentialModel.copyWithData(
+          oldCredentialModel: CredentialModel.fromJson(
+            newCredential,
+          ),
+          newData: credential,
+          activities: [Activity(acquisitionAt: DateTime.now())],
+        );
+        if (credentialType != 'AgeEstimate') {
+          await credentialsCubit.insertCredential(
+            credential: credentialModel,
+            showMessage: true,
           );
+          await cameraCubit.incrementAcquiredCredentialsQuantity();
+          emit(state.copyWith(status: AppStatus.success));
         } else {
-          emit(
-            state.copyWith(
-              status: AppStatus.error,
-              message: StateMessage(
-                messageHandler: ResponseMessage(
-                  ResponseString
-                      .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                ),
-              ),
-            ),
+          await cameraCubit.updateAgeEstimate(
+            credentialModel.data['credentialSubject']['ageEstimate'] as String,
           );
         }
       }
