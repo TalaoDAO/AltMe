@@ -238,7 +238,7 @@ Future<CredentialModel?> generateWalletCredential({
     late String systemName;
     late String systemVersion;
 
-    if (isAndroid()) {
+    if (isAndroid) {
       final androidDeviceInfo = await DeviceInfoPlugin().androidInfo;
       deviceName = androidDeviceInfo.model;
       systemName = 'android';

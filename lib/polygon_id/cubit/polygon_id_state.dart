@@ -3,7 +3,7 @@ part of 'polygon_id_cubit.dart';
 @JsonSerializable()
 class PolygonIdState extends Equatable {
   const PolygonIdState({
-    this.status = AppStatus.init,
+    this.status = PolygonIdStatus.init,
     this.isInitialised = false,
     this.message,
     this.loadingText,
@@ -14,7 +14,7 @@ class PolygonIdState extends Equatable {
   factory PolygonIdState.fromJson(Map<String, dynamic> json) =>
       _$PolygonIdStateFromJson(json);
 
-  final AppStatus status;
+  final PolygonIdStatus status;
   final StateMessage? message;
   final StateMessage? loadingText;
   final bool isInitialised;
@@ -24,14 +24,14 @@ class PolygonIdState extends Equatable {
 
   PolygonIdState error({required StateMessage message}) {
     return PolygonIdState(
-      status: AppStatus.error,
+      status: PolygonIdStatus.error,
       message: message,
       scannedResponse: scannedResponse,
     );
   }
 
   PolygonIdState copyWith({
-    AppStatus status = AppStatus.idle,
+    PolygonIdStatus status = PolygonIdStatus.idle,
     bool? isInitialised,
     StateMessage? message,
     StateMessage? loadingText,

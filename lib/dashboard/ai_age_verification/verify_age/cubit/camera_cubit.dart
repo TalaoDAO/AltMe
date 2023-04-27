@@ -60,20 +60,41 @@ class CameraCubit extends Cubit<CameraState> {
   Future<void> takePhoto() async {
     try {
       final xFile = await cameraController!.takePicture();
+      final imageSize = await xFile.length();
+
+      logger
+          .i('Real size: ${(imageSize / (1024 * 1024)).toStringAsFixed(2)} MB');
+
+      /// fileInMB = fileSizeInBytes / (1024 * 1024)
+
+      const int maxSizeInBytes = 1572864; // 1.5MB in bytes
+      const int minSizeInBytes = 51200; // 50KB in bytes
+
       final photoCaptured = await FlutterImageCompress.compressWithList(
         await xFile.readAsBytes(),
-        rotate: 0,
-        quality: 100,
-        keepExif: false,
-        autoCorrectionAngle: true,
-        format: CompressFormat.jpeg,
-        // decreasing image quality on android
-        // in order to prevent "payload too large" error from yoti
-        inSampleSize: 2,
+        quality: isIOS ? 50 : 95,
       );
-      // we flip the image because we sure that the selfi image filping
-      final fixedImageBytes =
-          img.encodeJpg(img.flipHorizontal(img.decodeImage(photoCaptured)!));
+
+      final fileSizeInMB = photoCaptured.length / 1000000;
+      logger.i('Compressed size: ${fileSizeInMB.toStringAsFixed(2)} MB');
+
+      if (photoCaptured.length > maxSizeInBytes) {
+        logger.i('too big size');
+      }
+
+      if (photoCaptured.length < minSizeInBytes) {
+        logger.i('too small size');
+      }
+
+      late List<int> fixedImageBytes;
+      if (isAndroid) {
+        fixedImageBytes = img.encodeJpg(img.decodeImage(photoCaptured)!);
+      } else {
+        // we flip the image because we sure that the selfi image filping
+        fixedImageBytes =
+            img.encodeJpg(img.flipHorizontal(img.decodeImage(photoCaptured)!));
+      }
+
       emit(
         state.copyWith(
           status: CameraStatus.imageCaptured,

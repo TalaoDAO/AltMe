@@ -87,9 +87,9 @@ String generateDefaultAccountName(
   }
 }
 
-bool isAndroid() {
-  return Platform.isAndroid;
-}
+bool get isAndroid => Platform.isAndroid;
+
+bool get isIOS => Platform.isIOS;
 
 String getIssuerDid({required Uri uriToCheck}) {
   String did = '';
@@ -278,7 +278,7 @@ Future<List<String>> getssiMnemonicsInList(
 }
 
 Future<bool> getStoragePermission() async {
-  if (isAndroid()) {
+  if (isAndroid) {
     return true;
   }
   if (await Permission.storage.request().isGranted) {

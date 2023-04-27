@@ -1,10 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/deep_link/cubit/deep_link.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
@@ -18,6 +18,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:polygonid/polygonid.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
@@ -218,11 +219,9 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
           }
 
-          /// verifier side (siopv2) with request_uri
-          if (state.uri.toString().startsWith('openid://?client_id')) {
-            isIssuerVerificationSettingTrue =
-                state.uri!.queryParameters['request_uri'] != null;
-            issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
+          /// polygon id
+          if (state.uri.toString().startsWith('{"id":')) {
+            isIssuerVerificationSettingTrue = false;
           }
 
           log.i('checking issuer - $isIssuerVerificationSettingTrue');
@@ -465,9 +464,10 @@ final walletConnectBlocListener =
     }
   },
 );
+
 final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
   listener: (BuildContext context, PolygonIdState state) async {
-    if (state.status == AppStatus.loading) {
+    if (state.status == PolygonIdStatus.loading) {
       final MessageHandler? messageHandler = state.loadingText?.messageHandler;
       final String? message =
           messageHandler?.getMessage(context, messageHandler);
@@ -477,15 +477,64 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       LoadingView().hide();
     }
 
-    if (state.status == AppStatus.success) {
+    if (state.status == PolygonIdStatus.success) {
       if (state.route != null) {
         await Navigator.of(context).push<void>(state.route!);
       }
     }
 
-    if (state.status == AppStatus.goBack) {
+    if (state.status == PolygonIdStatus.goBack) {
       if (state.route != null) {
         Navigator.of(context).pop();
+      }
+    }
+
+    if (state.status == PolygonIdStatus.alert) {
+      final profileCubit = context.read<ProfileCubit>();
+      final polygonIdCubit = context.read<PolygonIdCubit>();
+
+      final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
+
+      var accept = true;
+
+      final l10n = context.l10n;
+
+      if (isAlertEnable) {
+        /// checking if it is issuer side
+
+        final iden3MessageEntity = await polygonIdCubit.getIden3Message(
+          message: state.scannedResponse!,
+        );
+
+        final body = iden3MessageEntity.body;
+
+        if (body is AuthBodyRequest) {
+          final isIssuer =
+              iden3MessageEntity.messageType == Iden3MessageType.auth &&
+                  body.scope != null &&
+                  body.scope!.isEmpty;
+
+          if (isIssuer) {
+            /// TODO(all): later choose url based on mainnet and testnet
+            accept = await showDialog<bool>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ConfirmDialog(
+                      title: l10n.scanPromptHost,
+                      subtitle: Urls.checkIssuerPolygonTestnetUrl,
+                      no: l10n.communicationHostDeny,
+                    );
+                  },
+                ) ??
+                false;
+          }
+        }
+      }
+
+      if (accept) {
+        await context.read<PolygonIdCubit>().polygonActions();
+      } else {
+        return;
       }
     }
 

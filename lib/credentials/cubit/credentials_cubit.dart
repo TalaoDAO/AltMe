@@ -429,7 +429,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
       /// tezVoucher and tezotopiaMembership is available only on Android
       /// platform
-      if (!isAndroid()) {
+      if (isIOS) {
         allSubjectTypeForCategory.remove(CredentialSubjectType.tezVoucher);
         //allSubjectTypeForCategory.remove
         //(CredentialSubjectType.tezotopiaMembership);
