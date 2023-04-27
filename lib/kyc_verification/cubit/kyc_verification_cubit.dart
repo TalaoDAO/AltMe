@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'kyc_verification_state.dart';
@@ -14,11 +15,12 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
   final DioClient client;
   final logger = getLogger('KycVerificationCubit');
   final walletId = 111;
-  final walletApiKey = '123456789';
   final walletCallback = 'https://app.altme.io/app/download';
 
   Future<String?> _getApiCode() async {
     try {
+      await dotenv.load();
+      final walletApiKey = dotenv.get('WALLET_API_KEY_ID360');
       final response = await client.get(
         Urls.getCodeForId360,
         queryParameters: {
