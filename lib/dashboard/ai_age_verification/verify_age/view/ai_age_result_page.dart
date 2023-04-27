@@ -4,9 +4,9 @@ import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-//import 'package:confetti/confetti.dart';
 
 class AiAgeResultPage extends StatelessWidget {
   const AiAgeResultPage({super.key, required this.blocContext});
@@ -29,8 +29,23 @@ class AiAgeResultPage extends StatelessWidget {
   }
 }
 
-class AiAgeResultView extends StatelessWidget {
+class AiAgeResultView extends StatefulWidget {
   const AiAgeResultView({super.key});
+
+  @override
+  State<AiAgeResultView> createState() => _AiAgeResultViewState();
+}
+
+class _AiAgeResultViewState extends State<AiAgeResultView> {
+  late final ConfettiController confettiController;
+
+  @override
+  void initState() {
+    confettiController = ConfettiController();
+    Future<void>.delayed(Duration.zero)
+        .then((value) => confettiController.play());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,18 +62,15 @@ class AiAgeResultView extends StatelessWidget {
                     : FailureWidget(state),
               ),
             ),
-            // if (state.acquiredCredentialsQuantity > 0)
-            //   ConfettiWidget(
-            //     confettiController: confettiController,
-            //     shouldLoop: true,
-            //     minBlastForce: 2,
-            //     maxBlastForce: 8,
-            //     emissionFrequency: 0.02,
-            //     blastDirectionality: BlastDirectionality.explosive,
-            //     numberOfParticles: 10,
-            //   )
-            // else
-            //   const SizedBox.shrink(),
+            if (state.acquiredCredentialsQuantity > 0)
+              ConfettiWidget(
+                confettiController: confettiController,
+                canvas: Size.infinite,
+                shouldLoop: true,
+                blastDirectionality: BlastDirectionality.explosive,
+              )
+            else
+              const SizedBox.shrink(),
           ],
         );
       },
