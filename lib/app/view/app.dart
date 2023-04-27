@@ -13,6 +13,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
+import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
@@ -61,6 +62,14 @@ class App extends StatelessWidget {
         BlocProvider<DeepLinkCubit>(create: (context) => DeepLinkCubit()),
         BlocProvider<QueryByExampleCubit>(
           create: (context) => QueryByExampleCubit(),
+        ),
+        BlocProvider(
+          create: (_) => KycVerificationCubit(
+            client: DioClient(
+              '',
+              Dio(),
+            ),
+          ),
         ),
         BlocProvider<ProfileCubit>(
           create: (context) => ProfileCubit(

@@ -35,7 +35,9 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
     }
   }
 
-  Future<void> startKycVerifcation() async {
+  Future<void> startKycVerifcation({
+    KycVcType vcType = KycVcType.verifiableId,
+  }) async {
     final code = await _getApiCode();
     if (code == null) {
       emit(state.copyWith(status: KycVerificationStatus.unverified));
@@ -44,7 +46,7 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
     emit(state.copyWith(status: KycVerificationStatus.pending));
     await LaunchUrl.launchUri(
       Uri.parse(
-        '${Urls.authenticateForId360}?code=$code&vc_type=verifiableid'
+        '${Urls.authenticateForId360}?code=$code&vc_type=${vcType.value}'
         '&client_id=$walletId&callback=$walletCallback',
       ),
     );
