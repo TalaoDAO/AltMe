@@ -4,7 +4,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 
-//TODO(Taleb): delete this file after migrating code
+// TODO(Taleb): delete this file after migrating code
 
 // class CredentialListData extends StatelessWidget {
 //   const CredentialListData({
@@ -44,7 +44,7 @@
 //                   HomeCredentialWidget(
 //                     title: l10n.contactInfoCredentials,
 //                     credentials: state.communityCredentials,
-//                     credentialCategory: CredentialCategory.contactInfoCredentials,
+//                credentialCategory: CredentialCategory.contactInfoCredentials,
 //                     categorySubtitle: l10n.communityCredentialHomeSubtitle,
 //                   ),
 //                   const SizedBox(height: Sizes.spaceNormal),
@@ -86,7 +86,7 @@
 //                   HomeCredentialWidget(
 //                     title: l10n.myProfessionalrCards,
 //                     credentials: state.myProfessionalCredentials,
-//                     credentialCategory: CredentialCategory.myProfessionalCards,
+//                   credentialCategory: CredentialCategory.myProfessionalCards,
 //                     categorySubtitle: l10n.myProfessionalrCardsSubtitle,
 //                   ),
 //                   const SizedBox(height: Sizes.spaceNormal),

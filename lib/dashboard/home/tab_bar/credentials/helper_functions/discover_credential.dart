@@ -34,7 +34,7 @@ Future<void> discoverCredential({
       //   ChooseVerificationMethodPage.route(
       //     credentialSubjectType: dummyCredential.credentialSubjectType,
       //     onSelectPassbase: () async {
-      //       await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
+      //    await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
       //             link: dummyCredential.link!,
       //             onPassBaseApproved: () async {
       //               await launchUrlAfterDiscovery(
