@@ -95,7 +95,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         /// polygon id
 
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-        await polygonIdCubit.handlePolygonId(scannedResponse);
+        await polygonIdCubit.downloadCircuits(scannedResponse);
       } else {
         final uri = Uri.parse(scannedResponse);
         await verify(uri: uri);

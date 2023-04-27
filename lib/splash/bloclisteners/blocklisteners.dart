@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -217,11 +218,9 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
           }
 
-          /// verifier side (siopv2) with request_uri
-          if (state.uri.toString().startsWith('openid://?client_id')) {
-            isIssuerVerificationSettingTrue =
-                state.uri!.queryParameters['request_uri'] != null;
-            issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
+          /// polygon id
+          if (state.uri.toString().startsWith('{"id":')) {
+            isIssuerVerificationSettingTrue = false;
           }
 
           log.i('checking issuer - $isIssuerVerificationSettingTrue');
@@ -467,7 +466,7 @@ final walletConnectBlocListener =
 
 final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
   listener: (BuildContext context, PolygonIdState state) async {
-    if (state.status == AppStatus.loading) {
+    if (state.status == PolygonIdStatus.loading) {
       final MessageHandler? messageHandler = state.loadingText?.messageHandler;
       final String? message =
           messageHandler?.getMessage(context, messageHandler);
@@ -477,15 +476,60 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       LoadingView().hide();
     }
 
-    if (state.status == AppStatus.success) {
+    if (state.status == PolygonIdStatus.success) {
       if (state.route != null) {
         await Navigator.of(context).push<void>(state.route!);
       }
     }
 
-    if (state.status == AppStatus.goBack) {
+    if (state.status == PolygonIdStatus.goBack) {
       if (state.route != null) {
         Navigator.of(context).pop();
+      }
+    }
+
+    if (state.status == PolygonIdStatus.alert) {
+      final profileCubit = context.read<ProfileCubit>();
+
+      final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
+
+      var accept = true;
+
+      final l10n = context.l10n;
+
+      if (isAlertEnable) {
+        /// checking if it is issuer side
+
+        final polygonIdResponse = PolygonIdResponse.fromJson(
+          jsonDecode(state.scannedResponse!) as Map<String, dynamic>,
+        );
+
+        final isIssuer = polygonIdResponse.type ==
+                'https://iden3-communication.io/authorization/1.0/request' &&
+            polygonIdResponse.body != null &&
+            polygonIdResponse.body!.scope != null &&
+            polygonIdResponse.body!.scope!.isEmpty;
+
+        if (isIssuer) {
+          /// TODO(all): later choose url based on mainnet and testnet
+          accept = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext context) {
+                  return ConfirmDialog(
+                    title: l10n.scanPromptHost,
+                    subtitle: Urls.checkIssuerPolygonTestnetUrl,
+                    no: l10n.communicationHostDeny,
+                  );
+                },
+              ) ??
+              false;
+        }
+      }
+
+      if (accept) {
+        await context.read<PolygonIdCubit>().polygonActions();
+      } else {
+        return;
       }
     }
 
