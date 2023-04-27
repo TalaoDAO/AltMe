@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
@@ -191,21 +192,19 @@ class FailureWidget extends StatelessWidget {
           verticalSpacing: 16,
           borderRadius: Sizes.largeRadius,
           onPressed: () async {
-            // TODO(All): implement the ID360
-            // await Navigator.of(context).push<void>(
-            //   PinCodePage.route(
-            //     isValidCallback: () =>
-            //         context.read<HomeCubit>().startPassbaseVerification(
-            //               context.read<CredentialsCubit>(),
-            //             ),
-            //     restrictToBack: false,
-            //   ),
-            // );
-            // await Navigator.pushAndRemoveUntil<void>(
-            //   context,
-            //   DashboardPage.route(),
-            //   (Route<dynamic> route) => route.isFirst,
-            // );
+            await Navigator.of(context).push<void>(
+              PinCodePage.route(
+                isValidCallback: () => context
+                    .read<KycVerificationCubit>()
+                    .startKycVerifcation(vcType: KycVcType.verifiableId),
+                restrictToBack: false,
+              ),
+            );
+            await Navigator.pushAndRemoveUntil<void>(
+              context,
+              DashboardPage.route(),
+              (Route<dynamic> route) => route.isFirst,
+            );
           },
         ),
         const SizedBox(
