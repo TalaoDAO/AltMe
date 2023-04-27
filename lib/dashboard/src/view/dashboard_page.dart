@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
