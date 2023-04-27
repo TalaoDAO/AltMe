@@ -506,26 +506,28 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
           message: state.scannedResponse!,
         );
 
-        final body = iden3MessageEntity.body as AuthBodyRequest;
+        final body = iden3MessageEntity.body;
 
-        final isIssuer = iden3MessageEntity.type ==
-                'https://iden3-communication.io/authorization/1.0/request' &&
-            body.scope != null &&
-            body.scope!.isEmpty;
+        if (body is AuthBodyRequest) {
+          final isIssuer =
+              iden3MessageEntity.messageType == Iden3MessageType.auth &&
+                  body.scope != null &&
+                  body.scope!.isEmpty;
 
-        if (isIssuer) {
-          /// TODO(all): later choose url based on mainnet and testnet
-          accept = await showDialog<bool>(
-                context: context,
-                builder: (BuildContext context) {
-                  return ConfirmDialog(
-                    title: l10n.scanPromptHost,
-                    subtitle: Urls.checkIssuerPolygonTestnetUrl,
-                    no: l10n.communicationHostDeny,
-                  );
-                },
-              ) ??
-              false;
+          if (isIssuer) {
+            /// TODO(all): later choose url based on mainnet and testnet
+            accept = await showDialog<bool>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ConfirmDialog(
+                      title: l10n.scanPromptHost,
+                      subtitle: Urls.checkIssuerPolygonTestnetUrl,
+                      no: l10n.communicationHostDeny,
+                    );
+                  },
+                ) ??
+                false;
+          }
         }
       }
 

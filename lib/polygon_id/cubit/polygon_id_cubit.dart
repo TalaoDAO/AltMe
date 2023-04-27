@@ -143,14 +143,14 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   }
 
   Future<void> polygonActions() async {
+    emit(state.copyWith(status: PolygonIdStatus.loading));
     final Iden3MessageEntity iden3MessageEntity =
         await getIden3Message(message: state.scannedResponse!);
 
     final mnemonic =
         await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
-    if (iden3MessageEntity.type ==
-        'https://iden3-communication.io/authorization/1.0/request') {
+    if (iden3MessageEntity.messageType == Iden3MessageType.auth) {
       emit(
         state.copyWith(
           status: PolygonIdStatus.success,
@@ -159,8 +159,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           ),
         ),
       );
-    } else if (iden3MessageEntity.type ==
-        'https://iden3-communication.io/credentials/1.0/offer') {
+    } else if (iden3MessageEntity.messageType == Iden3MessageType.offer) {
       log.i('get claims');
       final List<ClaimEntity> claims = await polygonId.getClaims(
         iden3MessageEntity: iden3MessageEntity,
