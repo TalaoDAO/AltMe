@@ -87,7 +87,7 @@ class CameraCubit extends Cubit<CameraState> {
       }
 
       late List<int> fixedImageBytes;
-      if (isIOS) {
+      if (isAndroid) {
         fixedImageBytes = img.encodeJpg(img.decodeImage(photoCaptured)!);
       } else {
         // we flip the image because we sure that the selfi image filping

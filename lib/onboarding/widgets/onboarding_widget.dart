@@ -65,7 +65,7 @@ class OnBoardingWidget extends StatelessWidget {
           },
         ),
         const SizedBox(height: 20),
-        if (isAndroid())
+        if (isAndroid)
           Column(
             children: [
               GestureDetector(
