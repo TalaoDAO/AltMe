@@ -866,5 +866,21 @@
   "walletIntegrityCredentialsDiscoverSubtitle": "TBD",
   "restore": "Restore",
   "backup": "Backup",
-  "takePicture": "Take a picture"
+  "takePicture": "Take a picture",
+  "kyc": "KYC",
+  "aiSystemWasNotAbleToEstimateYourAge": "AI system was not able to estimate your age",
+  "youGotAgeCredentials": "You got {credentialsCount} credentials",
+  "@youGotAgeCredentials": {
+    "description": "the description for the getting credentials",
+    "placeholders": {
+      "credentialsCount": {}
+    }
+  },
+  "yourAgeEstimationIs": "Your AI age estimation is {ageEstimate} years",
+  "@yourAgeEstimationIs": {
+    "description": "",
+    "placeholders": {
+      "ageEstimate": {}
+    }
+  }
 }

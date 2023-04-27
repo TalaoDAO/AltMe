@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
+import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
@@ -103,7 +103,7 @@ class SuccessWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8),
           child: Text(
-            'Your AI age estimation is ${state.ageEstimate} years',
+            l10n.yourAgeEstimationIs(state.ageEstimate),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
@@ -114,7 +114,7 @@ class SuccessWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8),
           child: Text(
-            'You got ${state.acquiredCredentialsQuantity} credentials',
+            l10n.youGotAgeCredentials(state.acquiredCredentialsQuantity),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.normal,
@@ -162,7 +162,7 @@ class FailureWidget extends StatelessWidget {
           height: Sizes.spaceNormal,
         ),
         Text(
-          'AI system was not able to estimate your age',
+          l10n.aiSystemWasNotAbleToEstimateYourAge,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
@@ -177,7 +177,7 @@ class FailureWidget extends StatelessWidget {
         // ),
         const Spacer(),
         MyElevatedButton(
-          text: 'try again',
+          text: l10n.tryAgain,
           verticalSpacing: 16,
           borderRadius: Sizes.largeRadius,
           onPressed: () async {
@@ -200,7 +200,7 @@ class FailureWidget extends StatelessWidget {
           height: Sizes.spaceNormal,
         ),
         MyElevatedButton(
-          text: 'kyc',
+          text: l10n.kyc,
           verticalSpacing: 16,
           borderRadius: Sizes.largeRadius,
           onPressed: () async {
