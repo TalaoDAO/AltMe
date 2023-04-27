@@ -4,6 +4,7 @@ export 'credential_detail_tab_status.dart';
 export 'credential_status.dart';
 export 'credentials_status.dart';
 export 'home_status.dart';
+export 'kyc_verification_status.dart';
 export 'mnemonic_status.dart';
 export 'polygon_id_status.dart';
 export 'qr_scan_status.dart';
