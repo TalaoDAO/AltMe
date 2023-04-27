@@ -136,9 +136,15 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     }
   }
 
-  Future<void> polygonActions() async {
+  Future<Iden3MessageEntity> getIden3Message({required String message}) async {
     final Iden3MessageEntity iden3MessageEntity =
         await polygonId.getIden3Message(message: state.scannedResponse!);
+    return iden3MessageEntity;
+  }
+
+  Future<void> polygonActions() async {
+    final Iden3MessageEntity iden3MessageEntity =
+        await getIden3Message(message: state.scannedResponse!);
 
     final mnemonic =
         await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);

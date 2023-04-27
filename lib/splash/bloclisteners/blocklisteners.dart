@@ -18,6 +18,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:polygonid/polygonid.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
@@ -490,6 +491,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
 
     if (state.status == PolygonIdStatus.alert) {
       final profileCubit = context.read<ProfileCubit>();
+      final polygonIdCubit = context.read<PolygonIdCubit>();
 
       final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
 
@@ -500,15 +502,16 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       if (isAlertEnable) {
         /// checking if it is issuer side
 
-        final polygonIdResponse = PolygonIdResponse.fromJson(
-          jsonDecode(state.scannedResponse!) as Map<String, dynamic>,
+        final iden3MessageEntity = await polygonIdCubit.getIden3Message(
+          message: state.scannedResponse!,
         );
 
-        final isIssuer = polygonIdResponse.type ==
+        final body = iden3MessageEntity.body as AuthBodyRequest;
+
+        final isIssuer = iden3MessageEntity.type ==
                 'https://iden3-communication.io/authorization/1.0/request' &&
-            polygonIdResponse.body != null &&
-            polygonIdResponse.body!.scope != null &&
-            polygonIdResponse.body!.scope!.isEmpty;
+            body.scope != null &&
+            body.scope!.isEmpty;
 
         if (isIssuer) {
           /// TODO(all): later choose url based on mainnet and testnet
