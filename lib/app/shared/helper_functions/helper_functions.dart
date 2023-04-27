@@ -91,6 +91,8 @@ bool isAndroid() {
   return Platform.isAndroid;
 }
 
+bool get isIOS => Platform.isIOS;
+
 String getIssuerDid({required Uri uriToCheck}) {
   String did = '';
   uriToCheck.queryParameters.forEach((key, value) {
