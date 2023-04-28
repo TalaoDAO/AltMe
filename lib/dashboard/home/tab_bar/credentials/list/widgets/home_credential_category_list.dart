@@ -20,7 +20,7 @@ class HomeCredentialCategoryList extends StatelessWidget {
         return RefreshIndicator(
           onRefresh: onRefresh,
           child: Padding(
-            padding: const EdgeInsets.all(Sizes.space2XSmall),
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
             child: ListView(
               scrollDirection: Axis.vertical,
               children: getCredentialCategorySorted.where(
