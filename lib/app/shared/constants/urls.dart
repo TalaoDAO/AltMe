@@ -97,4 +97,7 @@ class Urls {
   static const matrixHomeServer = 'https://matrix.talao.co';
   static const getNonce = 'https://talao.co/matrix/nonce';
   static const registerToMatrix = 'https://talao.co/matrix/register';
+
+  //deeplink
+  static const appDeepLink = 'https://app.altme.io/app/download';
 }
