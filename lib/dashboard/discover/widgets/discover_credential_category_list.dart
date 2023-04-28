@@ -16,20 +16,23 @@ class DiscoverCredentialCategoryList extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: onRefresh,
-      child: ListView(
-        scrollDirection: Axis.vertical,
-        children: dummyCredentials.keys
-            .where(
-          (category) => dummyCredentials[category]?.isNotEmpty ?? false,
-        )
-            .map(
-          (category) {
-            return DiscoverCredentialCategoryItem(
-              dummyCredentials: dummyCredentials[category] ?? [],
-              credentialCategory: category,
-            );
-          },
-        ).toList(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: dummyCredentials.keys
+              .where(
+            (category) => dummyCredentials[category]?.isNotEmpty ?? false,
+          )
+              .map(
+            (category) {
+              return DiscoverCredentialCategoryItem(
+                dummyCredentials: dummyCredentials[category] ?? [],
+                credentialCategory: category,
+              );
+            },
+          ).toList(),
+        ),
       ),
     );
   }

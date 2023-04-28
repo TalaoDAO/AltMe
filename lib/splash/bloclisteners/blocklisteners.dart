@@ -19,6 +19,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
@@ -467,6 +468,8 @@ final walletConnectBlocListener =
 
 final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
   listener: (BuildContext context, PolygonIdState state) async {
+    final polygonIdCubit = context.read<PolygonIdCubit>();
+
     if (state.status == PolygonIdStatus.loading) {
       final MessageHandler? messageHandler = state.loadingText?.messageHandler;
       final String? message =
@@ -477,21 +480,42 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       LoadingView().hide();
     }
 
-    if (state.status == PolygonIdStatus.success) {
-      if (state.route != null) {
-        await Navigator.of(context).push<void>(state.route!);
-      }
+    final Iden3MessageEntity iden3MessageEntity =
+        await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
+
+    if (state.status == PolygonIdStatus.issuer) {
+      await Navigator.of(context).push<void>(
+        PolygonIdAuthenticationPage.route(
+          iden3MessageEntity: iden3MessageEntity,
+        ),
+      );
+    }
+
+    if (state.status == PolygonIdStatus.offer) {
+      final mnemonic =
+          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+
+      final List<ClaimEntity> claims = await polygonIdCubit.polygonId.getClaims(
+        iden3MessageEntity: iden3MessageEntity,
+        mnemonic: mnemonic!,
+      );
+
+      await Navigator.of(context)
+          .push<void>(PolygonIdCredentialOfferPage.route(claims: claims));
+    }
+
+    if (state.status == PolygonIdStatus.verifier) {
+      await Navigator.of(context).push<void>(
+        PolygonIdVerificationPage.route(iden3MessageEntity: iden3MessageEntity),
+      );
     }
 
     if (state.status == PolygonIdStatus.goBack) {
-      if (state.route != null) {
-        Navigator.of(context).pop();
-      }
+      Navigator.of(context).pop();
     }
 
     if (state.status == PolygonIdStatus.alert) {
       final profileCubit = context.read<ProfileCubit>();
-      final polygonIdCubit = context.read<PolygonIdCubit>();
 
       final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
 

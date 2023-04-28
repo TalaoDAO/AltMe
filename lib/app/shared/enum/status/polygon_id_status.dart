@@ -6,4 +6,7 @@ enum PolygonIdStatus {
   idle,
   goBack,
   alert,
+  issuer,
+  verifier,
+  offer,
 }

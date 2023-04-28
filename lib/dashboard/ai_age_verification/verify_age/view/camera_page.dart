@@ -113,9 +113,12 @@ class _CameraViewState extends State<CameraView> {
                   width: cameraCubit.cameraController!.value.previewSize!.width,
                   height:
                       cameraCubit.cameraController!.value.previewSize!.height,
-                  child: Image.asset(
-                    ImageStrings.cameraFaceDetection,
-                    fit: BoxFit.cover,
+                  child: Transform.scale(
+                    scale: 1.2,
+                    child: Image.asset(
+                      ImageStrings.cameraFaceDetection,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ],

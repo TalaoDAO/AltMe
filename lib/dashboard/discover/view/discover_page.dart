@@ -26,7 +26,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget build(BuildContext context) {
     return BasePage(
       scrollView: false,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.zero,
       backgroundColor: Theme.of(context).colorScheme.transparent,
       body: BlocBuilder<CredentialsCubit, CredentialsState>(
         builder: (context, state) {

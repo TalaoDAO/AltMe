@@ -7,7 +7,6 @@ class PolygonIdState extends Equatable {
     this.isInitialised = false,
     this.message,
     this.loadingText,
-    this.route,
     this.scannedResponse,
   });
 
@@ -18,8 +17,6 @@ class PolygonIdState extends Equatable {
   final StateMessage? message;
   final StateMessage? loadingText;
   final bool isInitialised;
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final Route<dynamic>? route;
   final String? scannedResponse;
 
   PolygonIdState error({required StateMessage message}) {
@@ -43,7 +40,6 @@ class PolygonIdState extends Equatable {
       message: message,
       loadingText: loadingText,
       isInitialised: isInitialised ?? this.isInitialised,
-      route: route ?? this.route,
       scannedResponse: scannedResponse ?? this.scannedResponse,
     );
   }
@@ -56,7 +52,6 @@ class PolygonIdState extends Equatable {
         message,
         isInitialised,
         scannedResponse,
-        route,
         loadingText,
       ];
 }

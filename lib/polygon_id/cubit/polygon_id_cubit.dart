@@ -147,48 +147,19 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     final Iden3MessageEntity iden3MessageEntity =
         await getIden3Message(message: state.scannedResponse!);
 
-    final mnemonic =
-        await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
-
     if (iden3MessageEntity.messageType == Iden3MessageType.auth) {
       final body = iden3MessageEntity.body as AuthBodyRequest;
 
       if (body.scope!.isEmpty) {
-        /// issuer
-        emit(
-          state.copyWith(
-            status: PolygonIdStatus.success,
-            route: PolygonIdAuthenticationPage.route(
-              iden3MessageEntity: iden3MessageEntity,
-            ),
-          ),
-        );
+        log.i('issuer');
+        emit(state.copyWith(status: PolygonIdStatus.issuer));
       } else {
-        /// verifier
-        emit(
-          state.copyWith(
-            status: PolygonIdStatus.success,
-            route: PolygonIdVerificationPage.route(
-              iden3MessageEntity: iden3MessageEntity,
-            ),
-          ),
-        );
+        log.i('verifier');
+        emit(state.copyWith(status: PolygonIdStatus.verifier));
       }
     } else if (iden3MessageEntity.messageType == Iden3MessageType.offer) {
       log.i('get claims');
-      final List<ClaimEntity> claims = await polygonId.getClaims(
-        iden3MessageEntity: iden3MessageEntity,
-        mnemonic: mnemonic!,
-      );
-
-      emit(
-        state.copyWith(
-          status: PolygonIdStatus.success,
-          route: PolygonIdCredentialOfferPage.route(
-            claims: claims,
-          ),
-        ),
-      );
+      emit(state.copyWith(status: PolygonIdStatus.offer));
     } else {
       throw ResponseMessage(
         ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
