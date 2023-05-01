@@ -60,6 +60,7 @@ class CameraCubit extends Cubit<CameraState> {
   Future<void> takePhoto() async {
     try {
       final xFile = await cameraController!.takePicture();
+      await cameraController!.pausePreview();
       final imageSize = await xFile.length();
 
       logger
@@ -102,7 +103,8 @@ class CameraCubit extends Cubit<CameraState> {
         ),
       );
     } catch (e, s) {
-      emit(state.copyWith(status: CameraStatus.error));
+      await cameraController!.resumePreview();
+      emit(state.copyWith(status: CameraStatus.error,data: null));
       logger.e('error : $e, stack: $s');
     }
   }
