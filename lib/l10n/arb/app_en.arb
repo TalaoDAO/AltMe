@@ -864,5 +864,6 @@
   "walletIntegrityCredentialsDiscoverTitle": "WAllet integrity",
   "walletIntegrityCredentialsDiscoverSubtitle": "TBD",
   "restore": "Restore",
-  "backup": "Backup"
+  "backup": "Backup",
+  "takePicture": "Take a picture"
 }

@@ -98,30 +98,14 @@ class _CameraViewState extends State<CameraView> {
               ),
             );
           } else {
-            return Stack(
-              alignment: Alignment.center,
-              children: [
-                if (state.status == CameraStatus.imageCaptured)
-                  Image.memory(
-                    Uint8List.fromList(state.data!),
-                  )
-                else
-                  CameraPreview(
-                    cameraCubit.cameraController!,
-                  ),
-                SizedBox(
-                  width: cameraCubit.cameraController!.value.previewSize!.width,
-                  height:
-                      cameraCubit.cameraController!.value.previewSize!.height,
-                  child: Transform.scale(
-                    scale: 1.2,
-                    child: Image.asset(
-                      ImageStrings.cameraFaceDetection,
-                      fit: BoxFit.cover,
+            return Center(
+              child: state.status == CameraStatus.imageCaptured
+                  ? Image.memory(
+                      Uint8List.fromList(state.data!),
+                    )
+                  : CameraPreview(
+                      cameraCubit.cameraController!,
                     ),
-                  ),
-                ),
-              ],
             );
           }
         },
@@ -146,8 +130,7 @@ class _CameraViewState extends State<CameraView> {
             return MyGradientButton(
               borderRadius: Sizes.smallRadius,
               verticalSpacing: 16,
-              // TODO(all) : localise
-              text: 'take a picture',
+              text: l10n.takePicture,
               onPressed: state.status != CameraStatus.loading
                   ? cameraCubit.takePhoto
                   : null,
