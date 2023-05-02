@@ -217,6 +217,29 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     }
   }
 
+  /// Fetch a list of [ClaimEntity] from issuer using iden3comm message
+  /// and stores them in Polygon Id Sdk.
+  ///
+  /// The iden3MessageEntity is the iden3comm message entity
+  ///
+  /// The did is the unique id of the identity
+  ///
+  /// The profileNonce is the nonce of the profile used from identity
+  /// to obtain the did identifier
+  ///
+  /// The privateKe] is the key used to access all the sensitive info from the
+  /// identity and also to realize operations like generating proofs
+  Future<List<ClaimEntity>> getClaims({
+    required Iden3MessageEntity iden3MessageEntity,
+  }) async {
+    final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+    final List<ClaimEntity> claims = await polygonId.getClaims(
+      iden3MessageEntity: iden3MessageEntity,
+      mnemonic: mnemonic!,
+    );
+    return claims;
+  }
+
   Future<void> addPolygonIdCredentials({
     required List<ClaimEntity> claims,
   }) async {
@@ -224,7 +247,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       log.i('add Claims');
       emit(state.copyWith(status: PolygonIdStatus.loading));
       for (final claim in claims) {
-        await addPolygonCredential(claim);
+        await addToList(claim);
       }
       emit(state.copyWith(status: PolygonIdStatus.goBack));
     } catch (e) {
@@ -246,7 +269,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     }
   }
 
-  Future<void> addPolygonCredential(ClaimEntity claimEntity) async {
+  Future<void> addToList(ClaimEntity claimEntity) async {
     final jsonCredential = claimEntity.info;
     final credentialPreview = Credential.fromJson(jsonCredential);
 

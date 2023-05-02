@@ -491,12 +491,8 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
     }
 
     if (state.status == PolygonIdStatus.offer) {
-      final mnemonic =
-          await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
-
-      final List<ClaimEntity> claims = await polygonIdCubit.polygonId.getClaims(
+      final List<ClaimEntity> claims = await polygonIdCubit.getClaims(
         iden3MessageEntity: iden3MessageEntity,
-        mnemonic: mnemonic!,
       );
 
       await Navigator.of(context)

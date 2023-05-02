@@ -41,58 +41,89 @@ class PolygonIdVerificationPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
-            Text(
-              'Credential Type: ${body.scope![0].query.type}',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Requirements: ${body.scope![0].query.credentialSubject}',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Allowed issuers: ${body.scope![0].query.allowedIssuers}',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Proof type: ${body.scope![0].circuitId}',
-              textAlign: TextAlign.center,
-            ),
+            if (body.scope != null)
+              ListView.builder(
+                physics: const ScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: body.scope!.length,
+                itemBuilder: (context, index) {
+                  final proofScopeRequest = body.scope![index];
+
+                  var proofTypeMsg = '';
+                  if (proofScopeRequest.circuitId ==
+                          'credentialAtomicQuerySigV2' ||
+                      proofScopeRequest.circuitId ==
+                          'credentialAtomicQuerySigV2OnChain') {
+                    proofTypeMsg = ' - BJJ Signature';
+                  } else if (proofScopeRequest.circuitId ==
+                          'credentialAtomicQueryMTPV2' ||
+                      proofScopeRequest.circuitId ==
+                          'credentialAtomicQueryMTPV2OnChain') {
+                    proofTypeMsg = ' - SMT Signature';
+                  }
+                  return Column(
+                    children: [
+                      Text(
+                        'Credential Type: ${proofScopeRequest.query.type}',
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Requirements: ${proofScopeRequest.query.credentialSubject}',
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10),
+
+                      /// About allowed issuers, it will accept a list of dids
+                      /// string of the issuers or an asterisk for any issuer
+                      Text(
+                        'Allowed issuers: ${proofScopeRequest.query.allowedIssuers}',
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Proof type: $proofTypeMsg',
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  );
+                },
+              ),
           ],
         ),
       ),
-      navigation: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            MyGradientButton(
-              text: 'Accept',
-              onPressed: () {
-                Navigator.of(context).push<void>(
-                  PinCodePage.route(
-                    isValidCallback: () {
-                      context
-                          .read<PolygonIdCubit>()
-                          .authenticate(iden3MessageEntity);
+      navigation: body.scope != null
+          ? Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MyGradientButton(
+                    text: 'Accept',
+                    onPressed: () {
+                      Navigator.of(context).push<void>(
+                        PinCodePage.route(
+                          isValidCallback: () {
+                            context
+                                .read<PolygonIdCubit>()
+                                .authenticate(iden3MessageEntity);
+                          },
+                          restrictToBack: false,
+                        ),
+                      );
                     },
-                    restrictToBack: false,
                   ),
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            MyOutlinedButton(
-              verticalSpacing: 20,
-              borderRadius: 20,
-              text: 'Cancel',
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-        ),
-      ),
+                  const SizedBox(height: 8),
+                  MyOutlinedButton(
+                    verticalSpacing: 20,
+                    borderRadius: 20,
+                    text: 'Cancel',
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ),
+            )
+          : null,
     );
   }
 }
