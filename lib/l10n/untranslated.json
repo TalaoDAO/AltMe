@@ -801,7 +801,8 @@
     "walletIntegrityCredentialsDiscoverTitle",
     "walletIntegrityCredentialsDiscoverSubtitle",
     "restore",
-    "backup"
+    "backup",
+    "takePicture"
   ],
 
   "es": [
@@ -1606,7 +1607,8 @@
     "walletIntegrityCredentialsDiscoverTitle",
     "walletIntegrityCredentialsDiscoverSubtitle",
     "restore",
-    "backup"
+    "backup",
+    "takePicture"
   ],
 
   "fr": [
@@ -1712,7 +1714,8 @@
     "walletIntegrityCredentialsDiscoverTitle",
     "walletIntegrityCredentialsDiscoverSubtitle",
     "restore",
-    "backup"
+    "backup",
+    "takePicture"
   ],
 
   "it": [
@@ -2517,6 +2520,7 @@
     "walletIntegrityCredentialsDiscoverTitle",
     "walletIntegrityCredentialsDiscoverSubtitle",
     "restore",
-    "backup"
+    "backup",
+    "takePicture"
   ]
 }

@@ -52,7 +52,7 @@ extension CredentialCategoryX on CredentialCategory {
     }
   }
 
-  List<CredentialSubjectType> get discoverCredentialSubjectTypes {
+  List<CredentialSubjectType> get credSubjectsToShowInDiscover {
     switch (this) {
       case CredentialCategory.advantagesCards:
         return [

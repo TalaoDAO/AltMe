@@ -2,11 +2,8 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
-import 'package:altme/dashboard/ai_age_verification/verify_age/verify_age.dart';
-import 'package:altme/dashboard/home/home/home.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -98,27 +95,12 @@ class _CameraViewState extends State<CameraView> {
               ),
             );
           } else {
-            return Stack(
-              alignment: Alignment.center,
-              children: [
-                if (state.status == CameraStatus.imageCaptured)
-                  Image.memory(
-                    Uint8List.fromList(state.data!),
-                  )
-                else
-                  CameraPreview(
-                    cameraCubit.cameraController!,
-                  ),
-                SizedBox(
-                  width: cameraCubit.cameraController!.value.previewSize!.width,
-                  height:
-                      cameraCubit.cameraController!.value.previewSize!.height,
-                  child: Image.asset(
-                    ImageStrings.cameraFaceDetection,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
+            return Center(
+              child: state.status == CameraStatus.imageCaptured
+                  ? CameraImageBlured(imageBytes: state.data!)
+                  : CameraBlured(
+                      cameraController: cameraCubit.cameraController!,
+                    ),
             );
           }
         },
@@ -132,7 +114,10 @@ class _CameraViewState extends State<CameraView> {
                   cameraCubit: context.read<CameraCubit>(),
                 );
             LoadingView().hide();
-            await Navigator.push<void>(context, AiAgeResultPage.route(context));
+            await Navigator.pushReplacement<void, void>(
+              context,
+              AiAgeResultPage.route(context),
+            );
           }
         },
       ),
@@ -143,8 +128,7 @@ class _CameraViewState extends State<CameraView> {
             return MyGradientButton(
               borderRadius: Sizes.smallRadius,
               verticalSpacing: 16,
-              // TODO(all) : localise
-              text: 'take a picture',
+              text: l10n.takePicture,
               onPressed: state.status != CameraStatus.loading
                   ? cameraCubit.takePhoto
                   : null,

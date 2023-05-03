@@ -425,7 +425,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               )
               .toList();
 
-      final allSubjectTypeForCategory = category.discoverCredentialSubjectTypes;
+      final allSubjectTypeForCategory = category.credSubjectsToShowInDiscover;
 
       /// tezVoucher and tezotopiaMembership is available only on Android
       /// platform

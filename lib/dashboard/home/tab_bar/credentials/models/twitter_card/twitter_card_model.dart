@@ -13,7 +13,7 @@ class TwitterCardModel extends CredentialSubjectModel {
     super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.twitterCard,
-          credentialCategory: CredentialCategory.identityCards,
+          credentialCategory: CredentialCategory.socialMediaCards,
         );
 
   factory TwitterCardModel.fromJson(Map<String, dynamic> json) =>
