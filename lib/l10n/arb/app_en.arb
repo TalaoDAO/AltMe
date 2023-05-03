@@ -679,7 +679,7 @@
   "verifyYourAgeDescription": "By accepting, you agree that we use a picture to estimate your age. The estimation is done by our partner Yoti that uses your picture only for this purpose and immediately deletes it.\n\nFor more info, review our Privacy Policy.",
   "accept": "Accept",
   "decline": "Decline",
-  "placeYourFaceInTheOval": "Place your face in the oval",
+  "placeYourFaceInTheOval": "Place your face in the center",
   "cameraSubtitle": "You have 5 seconds to take your photo.\nMake sure there’s enough light before starting.",
   "todoImportant": "TODO(all): update the text of below keys",
   "soonCardDescription": "This advantage card is not ready yet. This is why there is a \"Soon\" label on it. We are working hard to get it live as soon as possible. Stay tuned !",
