@@ -76,6 +76,16 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'Improved user experience',
+                                'New questions in FAQ',
+                                'New age card Over15',
+                                'End to end encryption of chat',
+                                'Check verifiable data registry for EBSI protocol',
+;                              ],
+                            ),
+                            const NewContent(
+                              version: '1.12.4',
+                              features: [
                                 'Resolved wallet certificate generation issue.',
                               ],
                             ),
@@ -83,10 +93,10 @@ class WhatIsNewDialog extends StatelessWidget {
                               version: '1.12.3',
                               features: [
                                 'Resolved KYC stability issues.',
-                                'Integrated live chat support for partners with loyalty cards.',
-                                'Expanded "Discover" section with the addition of Bloometa card.',
-                                'Enhanced credential backup reliability on some devices.',
-                                'Optimized help center layout and user experience.',
+                                'Integrated live chat support for partners with loyalty cards',
+                                'Expanded "Discover" section with the addition of Bloometa card',
+                                'Enhanced credential backup reliability on some devices',
+                                'Optimized help center layout and user experience',
                               ],
                             ),
                             const NewContent(
