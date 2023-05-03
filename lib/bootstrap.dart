@@ -16,7 +16,6 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:workmanager/workmanager.dart';
 
 void callbackDispatcher() {
@@ -130,17 +129,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   await runZonedGuarded(
     () async {
       Bloc.observer = AppBlocObserver();
-      await SentryFlutter.init(
-        (options) {
-          options.dsn =
-              'https://b1e6ffd0c1224d64bcaaadd46ea4f24e@o586691.ingest.sentry.io/4504605041688576';
-          // Set tracesSampleRate to 1.0 to capture 100% of transactions
-          // for performance monitoring.
-          // We recommend adjusting this value in production.
-          options.tracesSampleRate = 1.0;
-        },
-        appRunner: () async => runApp(await builder()),
-      );
+      runApp(await builder());
     },
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
