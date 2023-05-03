@@ -36,23 +36,25 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                l10n.amount,
+                l10n.amountSent,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               const Spacer(),
               Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '''${isNFT ? amount.toInt() : amount.toStringAsFixed(getDecimalsToShow(amount)).formatNumber()} $symbol''',
+                    '''${isNFT ? grandTotal.toInt() : grandTotal.toStringAsFixed(getDecimalsToShow(grandTotal)).formatNumber()} $symbol''',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   if (tokenUSDRate > 0)
                     Text(
                       r'$' +
-                          (amount * tokenUSDRate)
+                          (grandTotal * tokenUSDRate)
                               .toStringAsFixed(2)
                               .formatNumber(),
                       style: Theme.of(context).textTheme.bodySmall2,
@@ -106,17 +108,16 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
               ),
               const Spacer(),
               Column(
-                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '''${isNFT ? grandTotal.toInt() : grandTotal.toStringAsFixed(getDecimalsToShow(grandTotal)).formatNumber()} $symbol''',
+                    '''${isNFT ? amount.toInt() : amount.toStringAsFixed(getDecimalsToShow(amount)).formatNumber()} $symbol''',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   if (tokenUSDRate > 0)
                     Text(
                       r'$' +
-                          (grandTotal * tokenUSDRate)
+                          (amount * tokenUSDRate)
                               .toStringAsFixed(2)
                               .formatNumber(),
                       style: Theme.of(context).textTheme.bodySmall2,

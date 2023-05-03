@@ -128,50 +128,39 @@ class HomeCubit extends Cubit<HomeState> {
       logger.e('error: $e');
 
       logger.e(e);
+      String? message;
       if (e is NetworkException) {
-        String? message;
         if (e.data != null) {
-          if (e.data['error_description'] is String) {
-            try {
-              final dynamic errorDescriptionJson =
-                  jsonDecode(e.data['error_description'] as String);
-              message = errorDescriptionJson['error_message'] as String;
-            } catch (_, __) {
-              message = e.data['error_description'] as String;
+          if (e.data['error_description'] != null) {
+            if (e.data['error_description'] is String) {
+              try {
+                final dynamic errorDescriptionJson =
+                    jsonDecode(e.data['error_description'] as String);
+                message = errorDescriptionJson['error_message'] as String;
+              } catch (_, __) {
+                message = e.data['error_description'] as String;
+              }
+            } else if (e.data['error_description'] is Map<String, dynamic>) {
+              message = e.data['error_description']['error_message'] as String;
             }
-          } else if (e.data['error_description'] is Map<String, dynamic>) {
-            message = e.data['error_description']['error_message'] as String;
           }
         }
-        emit(
-          state.copyWith(
-            status: AppStatus.error,
-            message: StateMessage(
-              showDialog: true,
-              stringMessage: message,
-              messageHandler: message == null
-                  ? null
-                  : ResponseMessage(
-                      ResponseString
-                          .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-                    ),
-            ),
-          ),
-        );
-      } else {
-        emit(
-          state.copyWith(
-            status: AppStatus.error,
-            message: StateMessage(
-              showDialog: true,
-              messageHandler: ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-              ),
-            ),
-          ),
-        );
       }
+      emit(
+        state.copyWith(
+          status: AppStatus.error,
+          message: StateMessage(
+            showDialog: !(message == null),
+            stringMessage: message,
+            messageHandler: message == null
+                ? ResponseMessage(
+                    ResponseString
+                        .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                  )
+                : null,
+          ),
+        ),
+      );
     }
   }
 

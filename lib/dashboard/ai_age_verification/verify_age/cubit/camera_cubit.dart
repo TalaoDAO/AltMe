@@ -74,6 +74,7 @@ class CameraCubit extends Cubit<CameraState> {
       final photoCaptured = await FlutterImageCompress.compressWithList(
         await xFile.readAsBytes(),
         quality: isIOS ? 50 : 95,
+        inSampleSize: 2,
       );
 
       final fileSizeInMB = photoCaptured.length / 1000000;
