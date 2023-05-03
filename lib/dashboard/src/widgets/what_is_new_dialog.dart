@@ -81,7 +81,7 @@ class WhatIsNewDialog extends StatelessWidget {
                                 'New age card Over15',
                                 'End to end encryption of chat',
                                 'Check verifiable data registry for EBSI protocol',
-;                              ],
+                              ],
                             ),
                             const NewContent(
                               version: '1.12.4',
