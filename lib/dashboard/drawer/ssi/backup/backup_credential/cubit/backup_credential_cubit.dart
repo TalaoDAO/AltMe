@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:equatable/equatable.dart';
@@ -21,14 +20,12 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
     required this.cryptoKeys,
     required this.credentialsCubit,
     required this.fileSaver,
-    required this.polygonIdCubit,
   }) : super(const BackupCredentialState());
 
   final SecureStorageProvider secureStorageProvider;
   final CryptocurrencyKeys cryptoKeys;
   final CredentialsCubit credentialsCubit;
   final FileSaver fileSaver;
-  final PolygonIdCubit polygonIdCubit;
 
   Future<void> encryptAndDownloadFile() async {
     emit(state.loading());

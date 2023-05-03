@@ -67,28 +67,6 @@ class BackupView extends StatelessWidget {
                     );
                   },
                 ),
-                DrawerItem(
-                  title: l10n.backupPolygonIdIdentity,
-                  onTap: () async {
-                    await Navigator.of(context).push<void>(
-                      PinCodePage.route(
-                        restrictToBack: false,
-                        isValidCallback: () {
-                          Navigator.of(context).push<void>(
-                            BackupMnemonicPage.route(
-                              title: l10n.backupPolygonIdIdentity,
-                              isValidCallback: () {
-                                Navigator.of(context).push<void>(
-                                  BackupPolygonIdIdentityPage.route(),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
               ],
             ),
           ),

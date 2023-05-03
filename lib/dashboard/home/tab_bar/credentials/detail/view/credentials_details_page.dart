@@ -6,7 +6,6 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
@@ -14,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -55,8 +53,6 @@ class CredentialsDetailsPage extends StatelessWidget {
             secureStorageProvider: getSecureStorage,
             client: DioClient('', Dio()),
             jwtDecode: JWTDecode(),
-            polygonId: PolygonId(),
-            polygonIdCubit: context.read<PolygonIdCubit>(),
           ),
         ),
         if (cardChatSupportCubit != null)

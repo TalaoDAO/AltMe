@@ -3,7 +3,6 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/drawer/drawer.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:cryptocurrency_keys/cryptocurrency_keys.dart';
 import 'package:file_saver/file_saver.dart';
@@ -31,7 +30,6 @@ class BackupCredentialPage extends StatelessWidget {
         cryptoKeys: const CryptocurrencyKeys(),
         credentialsCubit: context.read<CredentialsCubit>(),
         fileSaver: FileSaver.instance,
-        polygonIdCubit: context.read<PolygonIdCubit>(),
       ),
       child: const BackupCredentialView(),
     );

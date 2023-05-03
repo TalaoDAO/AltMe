@@ -334,10 +334,10 @@ packages:
     dependency: transitive
     description:
       name: cli_util
-      sha256: b8db3080e59b2503ca9e7922c3df2072cf13992354d5e944074ffa836fba43b7
+      sha256: "66f86e916d285c1a93d3b79587d94bd71984a66aac4ff74e524cfa7877f1395c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
+    version: "0.3.5"
   clock:
     dependency: transitive
     description:
@@ -394,14 +394,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
-  country_code:
-    dependency: transitive
-    description:
-      name: country_code
-      sha256: f69ccd5163b1ca43011be9632e33ebe7ffac65e49ce2afcd3e3e5228af5d91fc
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   coverage:
     dependency: transitive
     description:
@@ -654,14 +646,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
-  encrypt:
-    dependency: transitive
-    description:
-      name: encrypt
-      sha256: "4fd4e4fdc21b9d7d4141823e1e6515cd94e7b8d84749504c232999fba25d9bbb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.1"
   enhanced_enum:
     dependency: transitive
     description:
@@ -702,14 +686,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  ffigen:
-    dependency: transitive
-    description:
-      name: ffigen
-      sha256: "94587f4c9699a4d0a25da95dc0b41903ddc69201d9bac3ca128ade8e67d56015"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.2.10"
   file:
     dependency: transitive
     description:
@@ -831,10 +807,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_launcher_icons
-      sha256: "559c600f056e7c704bd843723c21e01b5fba47e8824bd02422165bcc02a5de1d"
+      sha256: ce0e501cfc258907842238e4ca605e74b7fd1cdf04b3b43e86c43f3e40a1592c
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.3"
+    version: "0.11.0"
   flutter_link_previewer:
     dependency: transitive
     description:
@@ -904,14 +880,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  flutter_openssl_crypto:
-    dependency: "direct main"
-    description:
-      name: flutter_openssl_crypto
-      sha256: b64a0825d79f10b6d5f5951f7ce2d5ddc12ed532129fc5a7e0ce472f5b97d78e
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
   flutter_parsed_text:
     dependency: transitive
     description:
@@ -1018,14 +986,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.0"
-  get_it:
-    dependency: transitive
-    description:
-      name: get_it
-      sha256: "290fde3a86072e4b37dbb03c07bec6126f0ecc28dad403c12ffe2e5a2d751ab7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.2.0"
   glob:
     dependency: transitive
     description:
@@ -1162,14 +1122,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.6.3"
-  injectable:
-    dependency: transitive
-    description:
-      name: injectable
-      sha256: f71eb879124ed286cbd2210337b91ff5f345f146187c1f1891c172e0ac06443a
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.4"
   intl:
     dependency: "direct main"
     description:
@@ -1728,22 +1680,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.2"
-  polygonid:
-    dependency: "direct main"
-    description:
-      path: "packages/polygonid"
-      relative: true
-    source: path
-    version: "1.0.0+1"
-  polygonid_flutter_sdk:
-    dependency: transitive
-    description:
-      path: "."
-      ref: e72dda448506c825e95535efe00482a47b27f4d9
-      resolved-ref: e72dda448506c825e95535efe00482a47b27f4d9
-      url: "https://github.com/iden3/polygonid-flutter-sdk.git"
-    source: git
-    version: "2.1.1"
   pool:
     dependency: transitive
     description:
@@ -1911,14 +1847,6 @@ packages:
       relative: true
     source: path
     version: "1.0.0+1"
-  sembast:
-    dependency: transitive
-    description:
-      name: sembast
-      sha256: "24829715d11c2c437e67b413f29ff91b5325daa9632f851d44deeea7a29bde9e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.4.3+1"
   share_plus:
     dependency: "direct main"
     description:
@@ -2510,14 +2438,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
-  yaml_edit:
-    dependency: transitive
-    description:
-      name: yaml_edit
-      sha256: "0b968021754d8fbd3e9c83563b538ee417d88b2cc587606da5615546b7ee033b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
 sdks:
   dart: ">=2.19.0 <3.0.0"
   flutter: ">=3.7.0-0"

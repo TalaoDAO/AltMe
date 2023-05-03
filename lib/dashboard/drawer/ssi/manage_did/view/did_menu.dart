@@ -1,10 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DidMenu extends StatelessWidget {
   const DidMenu({super.key});
@@ -57,32 +55,6 @@ class DidView extends StatelessWidget {
                   title: l10n.manageEbsiDecentralizedId,
                   onTap: () {
                     Navigator.of(context).push<void>(ManageDidEbsiPage.route());
-                  },
-                ),
-                DrawerItem(
-                  title: l10n.polygonDecentralizedID,
-                  onTap: () async {
-                    LoadingView().show(context: context);
-                    try {
-                      final polygonIdCubit = context.read<PolygonIdCubit>();
-                      await polygonIdCubit.initialise();
-                      LoadingView().hide();
-                      await Navigator.of(context)
-                          .push<void>(ManageDidPolygonIdPage.route());
-                    } catch (e) {
-                      LoadingView().hide();
-                      AlertMessage.showStateMessage(
-                        context: context,
-                        stateMessage: StateMessage.error(
-                          showDialog: true,
-                          //stringMessage: e.toString(),
-                          messageHandler: ResponseMessage(
-                            ResponseString
-                                .RESPONSE_STRING_deviceIncompatibilityMessage,
-                          ),
-                        ),
-                      );
-                    }
                   },
                 ),
               ],

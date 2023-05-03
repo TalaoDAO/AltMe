@@ -201,7 +201,6 @@ class _SplashViewState extends State<SplashView> {
         qrCodeBlocListener,
         beaconBlocListener,
         walletConnectBlocListener,
-        polygonIdBlocListener,
       ],
       child: Scaffold(
         body: Container(

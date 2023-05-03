@@ -9,7 +9,6 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
 import 'package:altme/ebsi/verify_encoded_data.dart';
 import 'package:altme/issuer_websites_page/issuer_websites.dart';
-import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
@@ -39,7 +38,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.beacon,
     required this.walletConnectCubit,
     required this.secureStorageProvider,
-    required this.polygonIdCubit,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -53,7 +51,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final Beacon beacon;
   final WalletConnectCubit walletConnectCubit;
   final SecureStorageProvider secureStorageProvider;
-  final PolygonIdCubit polygonIdCubit;
 
   final log = getLogger('QRCodeScanCubit');
 
@@ -91,11 +88,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
         await walletConnectCubit.connect(scannedResponse);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-      } else if (scannedResponse.startsWith('{"id":')) {
-        /// polygon id
-
-        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-        await polygonIdCubit.downloadCircuits(scannedResponse);
       } else if (scannedResponse.startsWith('${Urls.appDeepLink}?uri=')) {
         final url = Uri.decodeFull(
           scannedResponse.substring('${Urls.appDeepLink}?uri='.length),
