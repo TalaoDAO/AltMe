@@ -70,6 +70,10 @@ class ImageStrings {
   static const String verifiableIdCard = '$imagePath/verifiable_id_card.png';
 
   static const String linkedInCard = '$imagePath/linkedin_card.png';
+  static const String kycAgeCredentialCard =
+      '$imagePath/kyc_age_credential_card.png';
+  static const String kycCountryOfResidenceCard =
+      '$imagePath/kyc_country_of_residence_card.png';
   static const String euDiplomaCard = '$imagePath/eu_diploma_card.png';
   static const String euVerifiableId = '$imagePath/eu_verifiable_id.png';
 
