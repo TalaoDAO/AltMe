@@ -19,7 +19,7 @@ class KYCCountryOfResidenceWidget extends StatelessWidget {
         .credentialPreview.credentialSubjectModel as KYCCountryOfResidenceModel;
 
     return CredentialBaseWidget(
-      cardBackgroundImagePath: ImageStrings.kycAgeCredentialCard,
+      cardBackgroundImagePath: ImageStrings.kycCountryOfResidenceCard,
       issuerName: credentialModel
           .credentialPreview.credentialSubjectModel.issuedBy?.name,
       value: '${l10n.countryCode}: ${kycAgeResidenceCardModel.countryCode}',

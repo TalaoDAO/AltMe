@@ -254,11 +254,11 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     try {
       // Try to get Credential manifest for kycAgeCredential
       // and kycCountryOfResidence
-      if (claimEntity.id == CredentialSubjectType.kycAgeCredential.name) {
+      if (claimEntity.type == CredentialSubjectType.kycAgeCredential.name) {
         final response = await client.get(Urls.kycAgeCredentialUrl);
         credentialManifest =
             CredentialManifest.fromJson(response as Map<String, dynamic>);
-      } else if (claimEntity.id ==
+      } else if (claimEntity.type ==
           CredentialSubjectType.kycCountryOfResidence.name) {
         final response = await client.get(Urls.kycCountryOfResidenceUrl);
         credentialManifest =
