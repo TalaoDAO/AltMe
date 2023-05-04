@@ -62,7 +62,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AspectRatio(
-                aspectRatio: 1.2,
+                aspectRatio: 1.1,
                 child: CachedImageFromNetwork(
                   widget.nftModel.displayUrl ??
                       (widget.nftModel.thumbnailUrl ?? ''),
