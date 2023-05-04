@@ -19,8 +19,8 @@ class VerifiableIdCardWidget extends StatelessWidget {
       cardBackgroundImagePath: ImageStrings.verifiableIdCard,
       issuerName: credentialModel
           .credentialPreview.credentialSubjectModel.issuedBy?.name,
-      value: '${verifiableIdCardModel.familyName} '
-          '${verifiableIdCardModel.givenName}',
+      value: '${verifiableIdCardModel.firstName} '
+          '${verifiableIdCardModel.familyName}',
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),

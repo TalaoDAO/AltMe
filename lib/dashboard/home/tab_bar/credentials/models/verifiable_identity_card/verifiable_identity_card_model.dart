@@ -8,7 +8,7 @@ part 'verifiable_identity_card_model.g.dart';
 class VerifiableIdCardModel extends CredentialSubjectModel {
   VerifiableIdCardModel({
     this.familyName,
-    this.givenName,
+    this.firstName,
     this.bithPlace,
     this.birthDate,
     this.addressCountry,
@@ -27,7 +27,7 @@ class VerifiableIdCardModel extends CredentialSubjectModel {
   @JsonKey(defaultValue: '')
   String? familyName;
   @JsonKey(defaultValue: '')
-  String? givenName;
+  String? firstName;
   @JsonKey(defaultValue: '')
   String? birthDate;
   @JsonKey(defaultValue: '')
