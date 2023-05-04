@@ -136,10 +136,6 @@ class ImageStrings {
       '$imagePath/dummy_arago_identity_card.png';
   static const String dummyAragoEmailPassCard =
       '$imagePath/dummy_arago_email_pass_card.png';
-  static const String dummyKycAgeCredentialCard =
-      '$imagePath/dummy_kyc_age_credential_card.png';
-  static const String dummyKycCountryOfResidenceCard =
-      '$imagePath/dummy_country_of_residence_card.png';
 
   static const String onBoardingFirstImage =
       '$imagePath/onBoardingFirstImage.png';

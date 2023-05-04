@@ -294,13 +294,7 @@ class DiscoverDummyCredential extends Equatable {
       case CredentialSubjectType.euDiplomaCard:
       case CredentialSubjectType.euVerifiableId:
       case CredentialSubjectType.kycAgeCredential:
-        image = ImageStrings.dummyKycAgeCredentialCard;
-        link = Urls.kycAgeCredentialUrl;
-        break;
       case CredentialSubjectType.kycCountryOfResidence:
-        image = ImageStrings.dummyKycCountryOfResidenceCard;
-        link = Urls.kycCountryOfResidenceUrl;
-        break;
     }
 
     return DiscoverDummyCredential(

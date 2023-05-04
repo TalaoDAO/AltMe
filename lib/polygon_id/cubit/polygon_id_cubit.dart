@@ -5,6 +5,7 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:bloc/bloc.dart';
+import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -21,11 +22,13 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     required this.polygonId,
     required this.secureStorageProvider,
     required this.credentialsCubit,
+    required this.client,
   }) : super(const PolygonIdState());
 
   final SecureStorageProvider secureStorageProvider;
   final PolygonId polygonId;
   final CredentialsCubit credentialsCubit;
+  final DioClient client;
 
   final log = getLogger('PolygonIdCubit');
 
@@ -247,6 +250,24 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     final jsonCredential = claimEntity.info;
     final credentialPreview = Credential.fromJson(jsonCredential);
 
+    CredentialManifest? credentialManifest;
+    try {
+      // Try to get Credential manifest for kycAgeCredential
+      // and kycCountryOfResidence
+      if (claimEntity.id == CredentialSubjectType.kycAgeCredential.name) {
+        final response = await client.get(Urls.kycAgeCredentialUrl);
+        credentialManifest =
+            CredentialManifest.fromJson(response as Map<String, dynamic>);
+      } else if (claimEntity.id ==
+          CredentialSubjectType.kycCountryOfResidence.name) {
+        final response = await client.get(Urls.kycCountryOfResidenceUrl);
+        credentialManifest =
+            CredentialManifest.fromJson(response as Map<String, dynamic>);
+      }
+    } catch (e) {
+      log.e('can not get the credntials manifest for polygon error: $e');
+    }
+
     final credentialModel = CredentialModel(
       id: claimEntity.id,
       image: 'image',
@@ -254,6 +275,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       display: Display.emptyDisplay()..toJson(),
       shareLink: '',
       credentialPreview: credentialPreview,
+      credentialManifest: credentialManifest,
       expirationDate: claimEntity.expiration,
       activities: [Activity(acquisitionAt: DateTime.now())],
     );

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';

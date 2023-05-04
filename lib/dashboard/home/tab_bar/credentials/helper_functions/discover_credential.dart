@@ -85,11 +85,6 @@ Future<void> launchUrlAfterDiscovery({
       '''${dummyCredential.link!}$uuid?issuer=did:tz:tz1NyjrTUNxDpPaqNZ84ipGELAcTWYg6s5Du''',
     );
     await context.read<QRCodeScanCubit>().verify(uri: uri, isScan: false);
-  } else if (dummyCredential.credentialSubjectType ==
-          CredentialSubjectType.kycAgeCredential ||
-      dummyCredential.credentialSubjectType ==
-          CredentialSubjectType.kycCountryOfResidence) {
-    // TODO(Taleb): hanlde polygonId credentials
   } else {
     await LaunchUrl.launch(dummyCredential.link!);
   }
