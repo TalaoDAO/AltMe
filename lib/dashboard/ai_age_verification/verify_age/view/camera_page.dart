@@ -77,7 +77,7 @@ class _CameraViewState extends State<CameraView> {
     return BasePage(
       scrollView: false,
       titleLeading: const BackLeadingButton(),
-      title: l10n.placeYourFaceInTheOval,
+      title: l10n.yotiCameraAppbarTitle,
       titleAlignment: Alignment.topCenter,
       titleMargin: EdgeInsets.zero,
       padding: EdgeInsets.zero,
