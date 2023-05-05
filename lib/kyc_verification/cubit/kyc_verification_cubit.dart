@@ -59,10 +59,12 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
       return;
     }
     emit(state.copyWith(status: KycVerificationStatus.pending));
+    final url =
+        '${Urls.authenticateForId360}/$code?vc_type=${vcType.value}'
+        '&client_id=$walletId&callback=$walletCallback';
     await LaunchUrl.launchUri(
       Uri.parse(
-        '${Urls.authenticateForId360}?code=$code&vc_type=${vcType.value}'
-        '&client_id=$walletId&callback=$walletCallback',
+        url,
       ),
     );
     // TODO(all): don't forget update verfication
