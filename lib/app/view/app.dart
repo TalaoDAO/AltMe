@@ -115,6 +115,7 @@ class App extends StatelessWidget {
         ),
         BlocProvider<PolygonIdCubit>(
           create: (context) => PolygonIdCubit(
+            client: DioClient('', Dio()),
             secureStorageProvider: secure_storage.getSecureStorage,
             polygonId: PolygonId(),
             credentialsCubit: context.read<CredentialsCubit>(),
