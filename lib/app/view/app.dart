@@ -87,7 +87,7 @@ class App extends StatelessWidget {
           ),
         ),
         BlocProvider(
-          create: (_) => KycVerificationCubit(
+          create: (context) => KycVerificationCubit(
             didCubit: context.read<DIDCubit>(),
             client: DioClient(
               '',
