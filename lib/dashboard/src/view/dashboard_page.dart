@@ -1,13 +1,12 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
-import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -74,24 +73,6 @@ class _DashboardViewState extends State<DashboardView> {
     pageController.jumpToPage(index);
   }
 
-  Future<void> _onStartPassBaseVerification() async {
-    final pinCode = await getSecureStorage.get(SecureStorageKeys.pinCode);
-    if (pinCode?.isEmpty ?? true) {
-      context
-          .read<HomeCubit>()
-          .startPassbaseVerification(context.read<CredentialsCubit>());
-    } else {
-      await Navigator.of(context).push<void>(
-        PinCodePage.route(
-          isValidCallback: () => context
-              .read<HomeCubit>()
-              .startPassbaseVerification(context.read<CredentialsCubit>()),
-          restrictToBack: false,
-        ),
-      );
-    }
-  }
-
   String _getTitle(int selectedIndex, AppLocalizations l10n) {
     switch (selectedIndex) {
       case 0:
@@ -105,6 +86,19 @@ class _DashboardViewState extends State<DashboardView> {
       default:
         return '';
     }
+  }
+
+  void _startKycVerification() {
+    Navigator.of(context).push<void>(
+      PinCodePage.route(
+        isValidCallback: () {
+          context.read<KycVerificationCubit>().startKycVerifcation(
+                vcType: KycVcType.verifiableId,
+              );
+        },
+        restrictToBack: false,
+      ),
+    );
   }
 
   @override
@@ -135,21 +129,21 @@ class _DashboardViewState extends State<DashboardView> {
             }
           },
         ),
-        BlocListener<HomeCubit, HomeState>(
+        BlocListener<KycVerificationCubit, KycVerificationState>(
           listener: (context, homeState) {
-            if (homeState.passBaseStatus == PassBaseStatus.declined) {
+            if (homeState.status == KycVerificationStatus.rejected) {
               showDialog<void>(
                 context: context,
                 builder: (_) => DefaultDialog(
                   title: l10n.verificationDeclinedTitle,
                   description: l10n.verificationDeclinedDescription,
                   buttonLabel: l10n.restartVerification.toUpperCase(),
-                  onButtonClick: _onStartPassBaseVerification,
+                  onButtonClick: _startKycVerification,
                 ),
               );
             }
 
-            if (homeState.passBaseStatus == PassBaseStatus.pending) {
+            if (homeState.status == KycVerificationStatus.pending) {
               showDialog<void>(
                 context: context,
                 builder: (_) => DefaultDialog(
@@ -159,37 +153,22 @@ class _DashboardViewState extends State<DashboardView> {
               );
             }
 
-            if (homeState.passBaseStatus == PassBaseStatus.undone) {
+            if (homeState.status == KycVerificationStatus.unverified) {
               showDialog<void>(
                 context: context,
                 builder: (_) => KycDialog(
-                  startVerificationPressed: _onStartPassBaseVerification,
+                  startVerificationPressed: _startKycVerification,
                 ),
               );
             }
 
-            if (homeState.passBaseStatus == PassBaseStatus.complete) {
-              showDialog<void>(
-                context: context,
-                builder: (_) => const FinishKycDialog(),
-              );
-              context.read<HomeCubit>().getPassBaseStatusBackground();
-            }
-
-            if (homeState.passBaseStatus == PassBaseStatus.verified) {
-              // LocalNotification().showNotification(
-              //   title: l10n.verifiedNotificationTitle,
-              //   message: l10n.verifiedNotificationDescription,
-              //   link: homeState.link,
-              // );
-
+            if (homeState.status == KycVerificationStatus.approved) {
               showDialog<void>(
                 context: context,
                 builder: (_) => DefaultDialog(
                   title: l10n.verifiedTitle,
                   description: l10n.verifiedDescription,
                   buttonLabel: l10n.verfiedButton.toUpperCase(),
-                  onButtonClick: () => context.read<HomeCubit>().launchUrl(),
                 ),
               );
             }

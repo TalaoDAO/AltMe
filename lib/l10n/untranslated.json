@@ -802,7 +802,11 @@
     "walletIntegrityCredentialsDiscoverSubtitle",
     "restore",
     "backup",
-    "takePicture"
+    "takePicture",
+    "kyc",
+    "aiSystemWasNotAbleToEstimateYourAge",
+    "youGotAgeCredentials",
+    "yourAgeEstimationIs"
   ],
 
   "es": [
@@ -1608,7 +1612,11 @@
     "walletIntegrityCredentialsDiscoverSubtitle",
     "restore",
     "backup",
-    "takePicture"
+    "takePicture",
+    "kyc",
+    "aiSystemWasNotAbleToEstimateYourAge",
+    "youGotAgeCredentials",
+    "yourAgeEstimationIs"
   ],
 
   "fr": [
@@ -1716,7 +1724,11 @@
     "walletIntegrityCredentialsDiscoverSubtitle",
     "restore",
     "backup",
-    "takePicture"
+    "takePicture",
+    "kyc",
+    "aiSystemWasNotAbleToEstimateYourAge",
+    "youGotAgeCredentials",
+    "yourAgeEstimationIs"
   ],
 
   "it": [
@@ -2522,6 +2534,10 @@
     "walletIntegrityCredentialsDiscoverSubtitle",
     "restore",
     "backup",
-    "takePicture"
+    "takePicture",
+    "kyc",
+    "aiSystemWasNotAbleToEstimateYourAge",
+    "youGotAgeCredentials",
+    "yourAgeEstimationIs"
   ]
 }

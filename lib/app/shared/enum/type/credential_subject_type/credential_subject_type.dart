@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:flutter/material.dart';
 

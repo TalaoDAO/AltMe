@@ -1,11 +1,12 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-//import 'package:confetti/confetti.dart';
 
 class AiAgeResultPage extends StatelessWidget {
   const AiAgeResultPage({super.key, required this.blocContext});
@@ -28,8 +29,23 @@ class AiAgeResultPage extends StatelessWidget {
   }
 }
 
-class AiAgeResultView extends StatelessWidget {
+class AiAgeResultView extends StatefulWidget {
   const AiAgeResultView({super.key});
+
+  @override
+  State<AiAgeResultView> createState() => _AiAgeResultViewState();
+}
+
+class _AiAgeResultViewState extends State<AiAgeResultView> {
+  late final ConfettiController confettiController;
+
+  @override
+  void initState() {
+    confettiController = ConfettiController();
+    Future<void>.delayed(Duration.zero)
+        .then((value) => confettiController.play());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,18 +62,15 @@ class AiAgeResultView extends StatelessWidget {
                     : FailureWidget(state),
               ),
             ),
-            // if (state.acquiredCredentialsQuantity > 0)
-            //   ConfettiWidget(
-            //     confettiController: confettiController,
-            //     shouldLoop: true,
-            //     minBlastForce: 2,
-            //     maxBlastForce: 8,
-            //     emissionFrequency: 0.02,
-            //     blastDirectionality: BlastDirectionality.explosive,
-            //     numberOfParticles: 10,
-            //   )
-            // else
-            //   const SizedBox.shrink(),
+            if (state.acquiredCredentialsQuantity > 0)
+              ConfettiWidget(
+                confettiController: confettiController,
+                canvas: Size.infinite,
+                shouldLoop: true,
+                blastDirectionality: BlastDirectionality.explosive,
+              )
+            else
+              const SizedBox.shrink(),
           ],
         );
       },
@@ -90,7 +103,7 @@ class SuccessWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8),
           child: Text(
-            'Your AI age estimation is ${state.ageEstimate} years',
+            l10n.yourAgeEstimationIs(state.ageEstimate),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
@@ -101,7 +114,7 @@ class SuccessWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8),
           child: Text(
-            'You got ${state.acquiredCredentialsQuantity} credentials',
+            l10n.youGotAgeCredentials(state.acquiredCredentialsQuantity),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.normal,
@@ -149,7 +162,7 @@ class FailureWidget extends StatelessWidget {
           height: Sizes.spaceNormal,
         ),
         Text(
-          'AI system was not able to estimate your age',
+          l10n.aiSystemWasNotAbleToEstimateYourAge,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
@@ -164,7 +177,7 @@ class FailureWidget extends StatelessWidget {
         // ),
         const Spacer(),
         MyElevatedButton(
-          text: 'try again',
+          text: l10n.tryAgain,
           verticalSpacing: 16,
           borderRadius: Sizes.largeRadius,
           onPressed: () async {
@@ -183,29 +196,32 @@ class FailureWidget extends StatelessWidget {
             );
           },
         ),
-        // const SizedBox(height: Sizes.spaceNormal),
-        // MyElevatedButton(
-        //   text: 'kyc',
-        //   verticalSpacing: 16,
-        //   borderRadius: Sizes.largeRadius,
-        //   onPressed: () async {
-        //     await Navigator.of(context).push<void>(
-        //       PinCodePage.route(
-        //         isValidCallback: () =>
-        //             context.read<HomeCubit>().startPassbaseVerification(
-        //                   context.read<CredentialsCubit>(),
-        //                 ),
-        //         restrictToBack: false,
-        //       ),
-        //     );
-        //     await Navigator.pushAndRemoveUntil<void>(
-        //       context,
-        //       DashboardPage.route(),
-        //       (Route<dynamic> route) => route.isFirst,
-        //     );
-        //   },
-        // ),
-        const SizedBox(height: Sizes.spaceNormal),
+        const SizedBox(
+          height: Sizes.spaceNormal,
+        ),
+        MyElevatedButton(
+          text: l10n.kyc,
+          verticalSpacing: 16,
+          borderRadius: Sizes.largeRadius,
+          onPressed: () async {
+            await Navigator.of(context).push<void>(
+              PinCodePage.route(
+                isValidCallback: () => context
+                    .read<KycVerificationCubit>()
+                    .startKycVerifcation(vcType: KycVcType.verifiableId),
+                restrictToBack: false,
+              ),
+            );
+            await Navigator.pushAndRemoveUntil<void>(
+              context,
+              DashboardPage.route(),
+              (Route<dynamic> route) => route.isFirst,
+            );
+          },
+        ),
+        const SizedBox(
+          height: Sizes.spaceNormal,
+        ),
         MyElevatedButton(
           text: l10n.decline,
           verticalSpacing: 16,

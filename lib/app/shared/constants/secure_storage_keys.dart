@@ -62,8 +62,7 @@ class SecureStorageKeys {
   static const String polygonDerivePathIndex = 'polygonDerivePathIndex';
   static const String binanceDerivePathIndex = 'binanceDerivePathIndex';
 
-  static const String passBaseStatus = 'passBaseStatus';
-  static const String passBaseVerificationDate = 'passBaseVerificationDate';
+  static const String kycVerificationDate = 'kycVerificationDate';
   static const String preAuthorizedCode = 'preAuthorizedCode';
 
   static const String savedDaaps = 'savedDaaps';
