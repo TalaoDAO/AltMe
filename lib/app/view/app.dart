@@ -63,14 +63,6 @@ class App extends StatelessWidget {
         BlocProvider<QueryByExampleCubit>(
           create: (context) => QueryByExampleCubit(),
         ),
-        BlocProvider(
-          create: (_) => KycVerificationCubit(
-            client: DioClient(
-              '',
-              Dio(),
-            ),
-          ),
-        ),
         BlocProvider<ProfileCubit>(
           create: (context) => ProfileCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
