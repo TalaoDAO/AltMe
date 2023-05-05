@@ -48,6 +48,7 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
   }) async {
     logger.i('Checking for KYC verification status (ID360) ');
     // TODO(Taleb): call api to check kyc verification then launch url
+    await startKycVerifcation(vcType: vcType);
   }
 
   Future<void> startKycVerifcation({
@@ -59,8 +60,7 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
       return;
     }
     emit(state.copyWith(status: KycVerificationStatus.pending));
-    final url =
-        '${Urls.authenticateForId360}/$code?vc_type=${vcType.value}'
+    final url = '${Urls.authenticateForId360}/$code?vc_type=${vcType.value}'
         '&client_id=$walletId&callback=$walletCallback';
     await LaunchUrl.launchUri(
       Uri.parse(
