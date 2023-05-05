@@ -41,6 +41,15 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
     }
   }
 
+  Future<void> checkForKycStatusThenLaunchUrl({
+    required KycVcType vcType,
+    required String link,
+    required dynamic Function() onKycApproved,
+  }) async {
+    logger.i('Checking for KYC verification status (ID360) ');
+    // TODO(Taleb): call api to check kyc verification then launch url
+  }
+
   Future<void> startKycVerifcation({
     KycVcType vcType = KycVcType.verifiableId,
   }) async {

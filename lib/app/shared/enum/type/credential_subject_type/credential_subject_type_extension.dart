@@ -418,6 +418,18 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     return false;
   }
 
+  KycVcType get getKycVcType {
+    if (this == CredentialSubjectType.over18) {
+      return KycVcType.over18;
+    } else if (this == CredentialSubjectType.over13) {
+      return KycVcType.over13;
+    } else if (this == CredentialSubjectType.over15) {
+      return KycVcType.over15;
+    } else {
+      return KycVcType.verifiableId;
+    }
+  }
+
   bool get byPassDeepLink {
     if (this == CredentialSubjectType.tezotopiaMembership ||
         this == CredentialSubjectType.chainbornMembership ||

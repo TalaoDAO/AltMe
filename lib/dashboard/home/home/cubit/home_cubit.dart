@@ -267,21 +267,6 @@ class HomeCubit extends Cubit<HomeState> {
     await LaunchUrl.launch(link ?? state.link!);
   }
 
-  Future<void> checkForPassBaseStatusThenLaunchUrl({
-    required String link,
-    required dynamic Function() onPassBaseApproved,
-  }) async {
-    log.i('Checking PassbaseStatus');
-    emit(state.loading());
-
-    emit(
-      state.copyWith(
-        status: AppStatus.populate,
-        link: link,
-      ),
-    );
-  }
-
   Future<void> periodicCheckRewardOnTezosBlockchain() async {
     Timer.periodic(const Duration(minutes: 1), (timer) async {
       List<String> walletAddresses = [];

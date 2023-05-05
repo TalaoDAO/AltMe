@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -24,42 +25,42 @@ Future<void> discoverCredential({
     /// here check for over18, over15, age range and over13 to take photo for
     /// AI KYC
     if (dummyCredential.credentialSubjectType.checkForAIKYC) {
-      await Navigator.of(context).push<void>(
-        VerifyAgePage.route(
+      await Navigator.push<void>(
+        context,
+        ChooseVerificationMethodPage.route(
           credentialSubjectType: dummyCredential.credentialSubjectType,
+          onSelectPassbase: () async {
+            // start verification by KYC (ID360)
+            await context
+                .read<KycVerificationCubit>()
+                .checkForKycStatusThenLaunchUrl(
+                  vcType: dummyCredential.credentialSubjectType.getKycVcType,
+                  link: dummyCredential.link!,
+                  onKycApproved: () async {
+                    await launchUrlAfterDiscovery(
+                      dummyCredential: dummyCredential,
+                      context: context,
+                    );
+                  },
+                );
+
+            Navigator.pop(context);
+          },
+          onSelectKYC: () async {
+            // start verification by Yoti AI
+            await Navigator.of(context).push<void>(
+              VerifyAgePage.route(
+                credentialSubjectType: dummyCredential.credentialSubjectType,
+              ),
+            );
+          },
         ),
       );
-      // await Navigator.push<void>(
-      //   context,
-      //   ChooseVerificationMethodPage.route(
-      //     credentialSubjectType: dummyCredential.credentialSubjectType,
-      //     onSelectPassbase: () async {
-      //    await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
-      //             link: dummyCredential.link!,
-      //             onPassBaseApproved: () async {
-      //               await launchUrlAfterDiscovery(
-      //                 dummyCredential: dummyCredential,
-      //                 context: context,
-      //               );
-      //             },
-      //           );
-
-      //       Navigator.pop(context);
-      //     },
-      //     onSelectKYC: () async {
-      //       // start verification by Yoti AI
-      //       await Navigator.of(context).push<void>(
-      //         VerifyAgePage.route(
-      //           credentialSubjectType: dummyCredential.credentialSubjectType,
-      //         ),
-      //       );
-      //     },
-      //   ),
-      // );
     } else {
-      await context.read<HomeCubit>().checkForPassBaseStatusThenLaunchUrl(
+      await context.read<KycVerificationCubit>().checkForKycStatusThenLaunchUrl(
             link: dummyCredential.link!,
-            onPassBaseApproved: () async {
+            vcType: dummyCredential.credentialSubjectType.getKycVcType,
+            onKycApproved: () async {
               await launchUrlAfterDiscovery(
                 dummyCredential: dummyCredential,
                 context: context,
