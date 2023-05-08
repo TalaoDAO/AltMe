@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
@@ -71,30 +72,23 @@ class PolygonIdVerificationPage extends StatelessWidget {
                         'Credential Type: ${proofScopeRequest.query.type}',
                         textAlign: TextAlign.center,
                       ),
-                      // const SizedBox(height: 10),
-                      // FutureBuilder<List<FilterEntity>>(
-                      //   future: context
-                      //       .read<PolygonIdCubit>()
-                      //       .getFilters(message: iden3MessageEntity),
-                      //   builder: (context, snapshot) {
-                      //     if (snapshot.data != null) {
-                      //       final data = snapshot.data as List<FilterEntity>;
-                      //       return ListView.builder(
-                      //         shrinkWrap: true,
-                      //         physics: const ScrollPhysics(),
-                      //         itemCount: data.length,
-                      //         itemBuilder: (context, i) {
-                      //           return Text(
-                      //             'Filter(${i + 1}): ${data[i].operator} ${data[i].name} ${data[i].value}',
-                      //             textAlign: TextAlign.center,
-                      //           );
-                      //         },
-                      //       );
-                      //     }
+                      const SizedBox(height: 10),
+                      FutureBuilder<List<Map<String, dynamic>>>(
+                        future: context
+                            .read<PolygonIdCubit>()
+                            .getVocabs(message: iden3MessageEntity),
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null) {
+                            final data = snapshot.data;
+                            return Text(
+                              data.toString(),
+                              textAlign: TextAlign.center,
+                            );
+                          }
 
-                      //     return Container();
-                      //   },
-                      // ),
+                          return Container();
+                        },
+                      ),
                       const SizedBox(height: 10),
                       Text(
                         'Requirements: ${proofScopeRequest.query.credentialSubject}',
@@ -129,6 +123,7 @@ class PolygonIdVerificationPage extends StatelessWidget {
                   MyGradientButton(
                     text: 'Accept',
                     onPressed: () async {
+                      LoadingView().show(context: context);
                       final mnemonic = await getSecureStorage
                           .get(SecureStorageKeys.ssiMnemonic);
 
@@ -138,6 +133,8 @@ class PolygonIdVerificationPage extends StatelessWidget {
                             iden3MessageEntity: iden3MessageEntity,
                             mnemonic: mnemonic!,
                           );
+
+                      LoadingView().hide();
 
                       if (filteredClaims.isEmpty) {
                         AlertMessage.showStateMessage(
@@ -150,13 +147,8 @@ class PolygonIdVerificationPage extends StatelessWidget {
                       }
 
                       await Navigator.of(context).push<void>(
-                        PinCodePage.route(
-                          isValidCallback: () {
-                            context
-                                .read<PolygonIdCubit>()
-                                .authenticate(iden3MessageEntity);
-                          },
-                          restrictToBack: false,
+                        PolygonIdProofPage.route(
+                          iden3MessageEntity: iden3MessageEntity,
                         ),
                       );
                     },

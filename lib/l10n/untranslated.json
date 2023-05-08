@@ -807,7 +807,8 @@
     "aiSystemWasNotAbleToEstimateYourAge",
     "youGotAgeCredentials",
     "yourAgeEstimationIs",
-    "claimNotFound"
+    "claimNotFound",
+    "cryptographicProof"
   ],
 
   "es": [
@@ -1618,7 +1619,8 @@
     "aiSystemWasNotAbleToEstimateYourAge",
     "youGotAgeCredentials",
     "yourAgeEstimationIs",
-    "claimNotFound"
+    "claimNotFound",
+    "cryptographicProof"
   ],
 
   "fr": [
@@ -1731,7 +1733,8 @@
     "aiSystemWasNotAbleToEstimateYourAge",
     "youGotAgeCredentials",
     "yourAgeEstimationIs",
-    "claimNotFound"
+    "claimNotFound",
+    "cryptographicProof"
   ],
 
   "it": [
@@ -2542,6 +2545,7 @@
     "aiSystemWasNotAbleToEstimateYourAge",
     "youGotAgeCredentials",
     "yourAgeEstimationIs",
-    "claimNotFound"
+    "claimNotFound",
+    "cryptographicProof"
   ]
 }

@@ -883,5 +883,6 @@
       "ageEstimate": {}
     }
   },
-  "claimNotFound": "Claim Not Found"
+  "claimNotFound": "Claim Not Found",
+  "cryptographicProof": "Cryptographic Proof"
 }
