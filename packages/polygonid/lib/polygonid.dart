@@ -1,6 +1,7 @@
 /// polygon id
 library polygonid;
 
+export 'package:polygonid_flutter_sdk/common/domain/entities/filter_entity.dart';
 export 'package:polygonid_flutter_sdk/credential/domain/entities/claim_entity.dart';
 export 'package:polygonid_flutter_sdk/iden3comm/domain/entities/iden3_message_entity.dart';
 export 'package:polygonid_flutter_sdk/iden3comm/domain/entities/request/auth/auth_body_request.dart';

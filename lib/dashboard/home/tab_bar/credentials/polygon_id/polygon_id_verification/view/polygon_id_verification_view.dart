@@ -1,9 +1,11 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class PolygonIdVerificationPage extends StatelessWidget {
   const PolygonIdVerificationPage({
@@ -25,6 +27,7 @@ class PolygonIdVerificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final body = iden3MessageEntity.body as AuthBodyRequest;
     // TODO(all): change UI
     return BasePage(
@@ -61,12 +64,37 @@ class PolygonIdVerificationPage extends StatelessWidget {
                           'credentialAtomicQueryMTPV2OnChain') {
                     proofTypeMsg = ' - SMT Signature';
                   }
+
                   return Column(
                     children: [
                       Text(
                         'Credential Type: ${proofScopeRequest.query.type}',
                         textAlign: TextAlign.center,
                       ),
+                      // const SizedBox(height: 10),
+                      // FutureBuilder<List<FilterEntity>>(
+                      //   future: context
+                      //       .read<PolygonIdCubit>()
+                      //       .getFilters(message: iden3MessageEntity),
+                      //   builder: (context, snapshot) {
+                      //     if (snapshot.data != null) {
+                      //       final data = snapshot.data as List<FilterEntity>;
+                      //       return ListView.builder(
+                      //         shrinkWrap: true,
+                      //         physics: const ScrollPhysics(),
+                      //         itemCount: data.length,
+                      //         itemBuilder: (context, i) {
+                      //           return Text(
+                      //             'Filter(${i + 1}): ${data[i].operator} ${data[i].name} ${data[i].value}',
+                      //             textAlign: TextAlign.center,
+                      //           );
+                      //         },
+                      //       );
+                      //     }
+
+                      //     return Container();
+                      //   },
+                      // ),
                       const SizedBox(height: 10),
                       Text(
                         'Requirements: ${proofScopeRequest.query.credentialSubject}',
@@ -100,8 +128,28 @@ class PolygonIdVerificationPage extends StatelessWidget {
                 children: [
                   MyGradientButton(
                     text: 'Accept',
-                    onPressed: () {
-                      Navigator.of(context).push<void>(
+                    onPressed: () async {
+                      final mnemonic = await getSecureStorage
+                          .get(SecureStorageKeys.ssiMnemonic);
+
+                      final filteredClaims = await context
+                          .read<PolygonIdCubit>()
+                          .getFilteredClaims(
+                            iden3MessageEntity: iden3MessageEntity,
+                            mnemonic: mnemonic!,
+                          );
+
+                      if (filteredClaims.isEmpty) {
+                        AlertMessage.showStateMessage(
+                          context: context,
+                          stateMessage: StateMessage(
+                            stringMessage: l10n.claimNotFound,
+                          ),
+                        );
+                        return;
+                      }
+
+                      await Navigator.of(context).push<void>(
                         PinCodePage.route(
                           isValidCallback: () {
                             context

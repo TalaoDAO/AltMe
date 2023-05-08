@@ -171,6 +171,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   }
 
   Future<void> authenticate(Iden3MessageEntity iden3MessageEntity) async {
+    // TODO(bibash): find if claim is present or not...
     try {
       emit(state.copyWith(status: PolygonIdStatus.loading));
       final mnemonic =
@@ -304,5 +305,30 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     );
     // insert the credential in the wallet
     await credentialsCubit.insertCredential(credential: credentialModel);
+  }
+
+  /// getVocabs
+  Future<List<Map<String, dynamic>>> getVocabs({
+    required Iden3MessageEntity message,
+  }) async {
+    return polygonId.getVocabs(message: message);
+  }
+
+  /// getSchemas
+  Future<List<Map<String, dynamic>>> getSchemas({
+    required Iden3MessageEntity message,
+  }) async {
+    return polygonId.getSchemas(message: message);
+  }
+
+  /// getFilteredClaims
+  Future<List<ClaimEntity>> getFilteredClaims({
+    required Iden3MessageEntity iden3MessageEntity,
+    required String mnemonic,
+  }) async {
+    return polygonId.getFilteredClaims(
+      iden3MessageEntity: iden3MessageEntity,
+      mnemonic: mnemonic,
+    );
   }
 }

@@ -18,7 +18,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
@@ -479,10 +478,9 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       LoadingView().hide();
     }
 
-    final Iden3MessageEntity iden3MessageEntity =
-        await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
-
     if (state.status == PolygonIdStatus.issuer) {
+      final Iden3MessageEntity iden3MessageEntity =
+          await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
       await Navigator.of(context).push<void>(
         PolygonIdAuthenticationPage.route(
           iden3MessageEntity: iden3MessageEntity,
@@ -491,6 +489,8 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
     }
 
     if (state.status == PolygonIdStatus.offer) {
+      final Iden3MessageEntity iden3MessageEntity =
+          await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
       final List<ClaimEntity> claims = await polygonIdCubit.getClaims(
         iden3MessageEntity: iden3MessageEntity,
       );
@@ -500,6 +500,8 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
     }
 
     if (state.status == PolygonIdStatus.verifier) {
+      final Iden3MessageEntity iden3MessageEntity =
+          await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
       await Navigator.of(context).push<void>(
         PolygonIdVerificationPage.route(iden3MessageEntity: iden3MessageEntity),
       );
@@ -534,7 +536,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
                   body.scope!.isEmpty;
 
           if (isIssuer) {
-            /// TODO(all): later choose url based on mainnet and testnet
+            // TODO(all): later choose url based on mainnet and testnet
             accept = await showDialog<bool>(
                   context: context,
                   builder: (BuildContext context) {
