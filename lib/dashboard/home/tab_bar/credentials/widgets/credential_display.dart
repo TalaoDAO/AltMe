@@ -216,12 +216,7 @@ class CredentialDisplay extends StatelessWidget {
         }
 
       case CredentialSubjectType.studentCard:
-        switch (credDisplayType) {
-          case CredDisplayType.List:
-            return StudentCardRecto(credentialModel: credentialModel);
-          case CredDisplayType.Detail:
-            return StudentCardWidget(credentialModel: credentialModel);
-        }
+        return StudentCardWidget(credentialModel: credentialModel);
 
       case CredentialSubjectType.voucher:
         switch (credDisplayType) {

@@ -42,7 +42,7 @@ class ImageStrings {
       '$imagePath/adecco_student_card_recto.png';
   static const String professionalStudentCardBack =
       '$imagePath/adecco_student_card_verso.png';
-  static const String studentCardFront = '$imagePath/carte-etudiant-recto.png';
+  static const String studentCardFront = '$imagePath/student-card.png';
   static const String studentCardBack = '$imagePath/carte-etudiant-verso.png';
   static const String voucherFront = '$imagePath/carte-coupon-recto.png';
   static const String voucherBack = '$imagePath/carte-coupon-verso.png';
