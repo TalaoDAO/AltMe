@@ -14,6 +14,7 @@ export 'chainborn_membership_widget.dart';
 export 'credential_base_widget.dart';
 export 'default_credential_detail_widget.dart';
 export 'default_credential_list_widget.dart';
+export 'defi_complinace_credential_widget.dart';
 export 'diploma_card_widget.dart';
 export 'dogami_pass_widget.dart';
 export 'ecole_42_learning_achievement_widget.dart';

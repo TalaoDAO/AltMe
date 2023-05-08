@@ -64,6 +64,7 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
       child: BasePage(
         padding: EdgeInsets.zero,
         title: l10n.scanTitle,
+        titleAlignment: Alignment.topCenter,
         scrollView: false,
         extendBelow: true,
         titleLeading: const BackLeadingButton(),

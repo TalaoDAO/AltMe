@@ -15,6 +15,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   Color get defaultBackgroundColor {
     switch (this) {
+      case CredentialSubjectType.defiCompliance:
+        return const Color.fromARGB(255, 62, 15, 163);
       case CredentialSubjectType.identityPass:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.professionalExperienceAssessment:
@@ -89,6 +91,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   IconData get iconData {
     switch (this) {
+      case CredentialSubjectType.defiCompliance:
+        return Icons.account_tree_outlined;
       case CredentialSubjectType.identityPass:
         return Icons.perm_identity;
       case CredentialSubjectType.professionalExperienceAssessment:
@@ -172,6 +176,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   String get name {
     switch (this) {
+      case CredentialSubjectType.defiCompliance:
+        return 'DefiCompliance';
       case CredentialSubjectType.bloometaPass:
         return 'BloometaPass';
       case CredentialSubjectType.troopezPass:
@@ -291,6 +297,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   CredentialSubjectModel modelFromJson(Map<String, dynamic> json) {
     switch (this) {
+      case CredentialSubjectType.defiCompliance:
+        return DefiComplianceModel.fromJson(json);
       case CredentialSubjectType.bloometaPass:
         return BloometaPassModel.fromJson(json);
       case CredentialSubjectType.troopezPass:
@@ -486,6 +494,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   String get title {
     switch (this) {
+      case CredentialSubjectType.defiCompliance:
+        return 'Defi Compliance';
       case CredentialSubjectType.bloometaPass:
         return 'Bloometa';
       case CredentialSubjectType.troopezPass:
@@ -605,6 +615,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
   bool get weCanRemoveItIfCredentialExist {
     switch (this) {
+      case CredentialSubjectType.defiCompliance:
+        return true;
       case CredentialSubjectType.bloometaPass:
         return true;
       case CredentialSubjectType.troopezPass:
@@ -725,6 +737,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
   // Future changes will be made to values where 0 appears
   double get order {
     switch (this) {
+      case CredentialSubjectType.defiCompliance:
+        return 0;
       case CredentialSubjectType.bloometaPass:
         return 76;
       case CredentialSubjectType.troopezPass:

@@ -20,10 +20,10 @@ class StudentCardWidget extends StatelessWidget {
       issuerName: studentCardModel.issuedBy!.name,
       value: '${studentCardModel.recipient!.givenName}'
           ' ${studentCardModel.recipient!.familyName}',
-      expirationDate: UiDate.formatStringDate(
+      expirationDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.expirationDate,
       ),
-      issuanceDate: UiDate.formatStringDate(
+      issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
     );
