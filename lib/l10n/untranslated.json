@@ -806,7 +806,9 @@
     "kyc",
     "aiSystemWasNotAbleToEstimateYourAge",
     "youGotAgeCredentials",
-    "yourAgeEstimationIs"
+    "yourAgeEstimationIs",
+    "claimNotFound",
+    "cryptographicProof"
   ],
 
   "es": [
@@ -1616,7 +1618,9 @@
     "kyc",
     "aiSystemWasNotAbleToEstimateYourAge",
     "youGotAgeCredentials",
-    "yourAgeEstimationIs"
+    "yourAgeEstimationIs",
+    "claimNotFound",
+    "cryptographicProof"
   ],
 
   "fr": [
@@ -1728,7 +1732,9 @@
     "kyc",
     "aiSystemWasNotAbleToEstimateYourAge",
     "youGotAgeCredentials",
-    "yourAgeEstimationIs"
+    "yourAgeEstimationIs",
+    "claimNotFound",
+    "cryptographicProof"
   ],
 
   "it": [
@@ -2538,6 +2544,8 @@
     "kyc",
     "aiSystemWasNotAbleToEstimateYourAge",
     "youGotAgeCredentials",
-    "yourAgeEstimationIs"
+    "yourAgeEstimationIs",
+    "claimNotFound",
+    "cryptographicProof"
   ]
 }

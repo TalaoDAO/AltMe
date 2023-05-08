@@ -882,5 +882,7 @@
     "placeholders": {
       "ageEstimate": {}
     }
-  }
+  },
+  "claimNotFound": "Claim Not Found",
+  "cryptographicProof": "Cryptographic Proof"
 }
