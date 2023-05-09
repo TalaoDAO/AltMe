@@ -31,9 +31,7 @@ Future<void> discoverCredential({
           credentialSubjectType: dummyCredential.credentialSubjectType,
           onSelectPassbase: () async {
             // start verification by KYC (ID360)
-            await context
-                .read<KycVerificationCubit>()
-                .checkForKycStatusThenLaunchUrl(
+            await context.read<KycVerificationCubit>().getVcByKycVerification(
                   vcType: dummyCredential.credentialSubjectType.getKycVcType,
                   link: dummyCredential.link!,
                   onKycApproved: () async {
@@ -57,7 +55,7 @@ Future<void> discoverCredential({
         ),
       );
     } else {
-      await context.read<KycVerificationCubit>().checkForKycStatusThenLaunchUrl(
+      await context.read<KycVerificationCubit>().getVcByKycVerification(
             link: dummyCredential.link!,
             vcType: dummyCredential.credentialSubjectType.getKycVcType,
             onKycApproved: () async {
