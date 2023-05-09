@@ -133,8 +133,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                             'https://discover-coins-part.webflow.io/prod-nota-available/nft-noir',
                       ),
                       MWebViewPage(
-                        url:
-                            'https://discover-coins-part.webflow.io/prod-nota-available/coins-noir',
+                        url: 'https://discover-coins-part.webflow.io/',
                       ),
                     ],
                   ),
