@@ -33,6 +33,7 @@ class HomeCredentialItem extends StatelessWidget {
         create: (_) => cardChatSupportCubit,
         child: StreamBuilder(
           stream: cardChatSupportCubit.unreadMessageCountStream,
+          initialData: cardChatSupportCubit.unreadMessageCount,
           builder: (context, snapShot) {
             return CredentialsListPageItem(
               credentialModel: credentialModel,

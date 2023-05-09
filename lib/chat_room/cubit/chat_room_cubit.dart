@@ -37,7 +37,8 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   final logger = getLogger('ChatRoomCubit');
   String? _roomId;
   StreamSubscription<Event>? _onEventSubscription;
-  StreamController<int>? _notificationStreamController;
+  StreamController<int>? _notificationStreamController =
+      StreamController<int>.broadcast();
   final List<String>? invites;
   final String storageKey;
   final String roomNamePrefix;

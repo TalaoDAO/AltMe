@@ -272,6 +272,9 @@ class _DashboardViewState extends State<DashboardView> {
                                 isSelected: state.selectedIndex == 2,
                               ),
                             StreamBuilder(
+                              initialData: context
+                                  .read<AltmeChatSupportCubit>()
+                                  .unreadMessageCount,
                               stream: context
                                   .read<AltmeChatSupportCubit>()
                                   .unreadMessageCountStream,
