@@ -32,6 +32,7 @@ class DiscoverDummyCredential extends Equatable {
     ResponseString? longDescription;
 
     switch (credentialSubjectType) {
+      case CredentialSubjectType.defiCompliance:
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.ageRange:
         image = ImageStrings.dummyAgeRangeCard;
@@ -273,7 +274,6 @@ class DiscoverDummyCredential extends Equatable {
       case CredentialSubjectType.professionalExperienceAssessment:
       case CredentialSubjectType.professionalSkillAssessment:
       case CredentialSubjectType.professionalStudentCard:
-      case CredentialSubjectType.loyaltyCard:
       case CredentialSubjectType.identityPass:
       case CredentialSubjectType.ecole42LearningAchievement:
       case CredentialSubjectType.studentCard:

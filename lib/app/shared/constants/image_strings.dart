@@ -33,7 +33,6 @@ class ImageStrings {
       '$imagePath/carte-diplome-recto.png';
   static const String learningAchievementBack =
       '$imagePath/carte-diplome-verso.png';
-  static const String loyaltyCard = '$imagePath/tezotopia_loyalty_card.jpeg';
   static const String over18 = '$imagePath/over18.png';
   static const String over15 = '$imagePath/over15.png';
   static const String over13 = '$imagePath/over13.png';
@@ -42,7 +41,7 @@ class ImageStrings {
       '$imagePath/adecco_student_card_recto.png';
   static const String professionalStudentCardBack =
       '$imagePath/adecco_student_card_verso.png';
-  static const String studentCardFront = '$imagePath/carte-etudiant-recto.png';
+  static const String studentCardFront = '$imagePath/student-card.png';
   static const String studentCardBack = '$imagePath/carte-etudiant-verso.png';
   static const String voucherFront = '$imagePath/carte-coupon-recto.png';
   static const String voucherBack = '$imagePath/carte-coupon-verso.png';
@@ -61,10 +60,6 @@ class ImageStrings {
   static const String trooperzPass = '$imagePath/trooperz-pass.png';
   static const String ecole42LearningAchievement =
       '$imagePath/certificate-42.png';
-  static const String associatedWalletFront =
-      '$imagePath/associated_wallet_recto.png';
-  static const String associatedWalletBack =
-      '$imagePath/associated-wallet-verso.png';
   static const String talaoCommunityCard =
       '$imagePath/talao_community_card.png';
   static const String verifiableIdCard = '$imagePath/verifiable_id_card.png';
@@ -75,6 +70,7 @@ class ImageStrings {
   static const String kycCountryOfResidenceCard =
       '$imagePath/kyc_country_of_residence_card.png';
   static const String euDiplomaCard = '$imagePath/eu_diploma_card.png';
+  static const String defiComplianceCard = '$imagePath/defi-compliance-card.png';
   static const String euVerifiableId = '$imagePath/eu_verifiable_id.png';
 
   static const String binanceOwnershipCard =
