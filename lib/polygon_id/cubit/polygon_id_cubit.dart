@@ -170,7 +170,10 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     }
   }
 
-  Future<void> authenticate(Iden3MessageEntity iden3MessageEntity) async {
+  Future<void> authenticate({
+    required Iden3MessageEntity iden3MessageEntity,
+    bool goBack = true,
+  }) async {
     // TODO(bibash): find if claim is present or not...
     try {
       emit(state.copyWith(status: PolygonIdStatus.loading));
@@ -186,7 +189,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       if (isAuthenticated) {
         emit(
           state.copyWith(
-            status: PolygonIdStatus.goBack,
+            status: goBack ? PolygonIdStatus.goBack : PolygonIdStatus.idle,
             message: StateMessage.success(
               messageHandler: ResponseMessage(
                 ResponseString.RESPONSE_STRING_succesfullyAuthenticated,

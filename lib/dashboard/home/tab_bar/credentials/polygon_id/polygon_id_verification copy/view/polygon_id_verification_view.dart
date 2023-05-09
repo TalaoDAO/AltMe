@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -146,8 +146,13 @@ class PolygonIdVerificationPage extends StatelessWidget {
                       }
 
                       await Navigator.of(context).push<void>(
-                        PolygonIdProofPage.route(
-                          iden3MessageEntity: iden3MessageEntity,
+                        PinCodePage.route(
+                          isValidCallback: () {
+                            context.read<PolygonIdCubit>().authenticate(
+                                  iden3MessageEntity: iden3MessageEntity,
+                                );
+                          },
+                          restrictToBack: false,
                         ),
                       );
                     },
