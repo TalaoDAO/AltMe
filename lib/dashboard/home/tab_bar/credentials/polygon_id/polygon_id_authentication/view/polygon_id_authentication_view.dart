@@ -52,9 +52,9 @@ class PolygonIdAuthenticationPage extends StatelessWidget {
                 Navigator.of(context).push<void>(
                   PinCodePage.route(
                     isValidCallback: () {
-                      context
-                          .read<PolygonIdCubit>()
-                          .authenticate(iden3MessageEntity);
+                      context.read<PolygonIdCubit>().authenticate(
+                            iden3MessageEntity: iden3MessageEntity,
+                          );
                     },
                     restrictToBack: false,
                   ),

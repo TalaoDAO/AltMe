@@ -512,11 +512,10 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
     }
 
     if (state.status == PolygonIdStatus.alert) {
+      var accept = true;
       final profileCubit = context.read<ProfileCubit>();
 
       final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
-
-      var accept = true;
 
       final l10n = context.l10n;
 
@@ -548,10 +547,24 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
                   },
                 ) ??
                 false;
+
+            if (accept) {
+              await Navigator.of(context).push<void>(
+                PinCodePage.route(
+                  isValidCallback: () {
+                    context.read<PolygonIdCubit>().authenticate(
+                          iden3MessageEntity: iden3MessageEntity,
+                          goBack: false,
+                        );
+                  },
+                  restrictToBack: false,
+                ),
+              );
+              return;
+            }
           }
         }
       }
-
       if (accept) {
         await context.read<PolygonIdCubit>().polygonActions();
       } else {
