@@ -14,12 +14,16 @@ class SecureStorageProvider {
   IOSOptions get _defaultIOSOptions =>
       const IOSOptions(accessibility: KeychainAccessibility.first_unlock);
 
+  AndroidOptions get _defaultAndroidOptions =>
+      const AndroidOptions(encryptedSharedPreferences: true);
+
   ///get
   Future<String?> get(String key) async {
     try {
       return await _storage.read(
         key: key,
         iOptions: _defaultIOSOptions,
+        aOptions: _defaultAndroidOptions,
       );
     } catch (e) {
       return null;
@@ -32,6 +36,7 @@ class SecureStorageProvider {
       key: key,
       value: val,
       iOptions: _defaultIOSOptions,
+      aOptions: _defaultAndroidOptions,
     );
   }
 
@@ -40,17 +45,24 @@ class SecureStorageProvider {
     return _storage.delete(
       key: key,
       iOptions: _defaultIOSOptions,
+      aOptions: _defaultAndroidOptions,
     );
   }
 
   ///getAllValues
   Future<Map<String, String>> getAllValues() {
-    return _storage.readAll();
+    return _storage.readAll(
+      aOptions: _defaultAndroidOptions,
+      iOptions: _defaultIOSOptions,
+    );
   }
 
   ///deleteAll
   Future<void> deleteAll() async {
-    return _storage.deleteAll();
+    return _storage.deleteAll(
+      aOptions: _defaultAndroidOptions,
+      iOptions: _defaultIOSOptions,
+    );
   }
 
   ///deleteAllExceptsSomeKeys
