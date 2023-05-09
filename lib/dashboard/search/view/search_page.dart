@@ -72,7 +72,6 @@ class SearchView extends StatelessWidget {
                         return Container(
                           margin: const EdgeInsets.only(bottom: 10),
                           child: CredentialsListPageItem(
-                            showBadge: false,
                             credentialModel: state.credentials[index],
                             onTap: () {
                               Navigator.of(context).push<void>(

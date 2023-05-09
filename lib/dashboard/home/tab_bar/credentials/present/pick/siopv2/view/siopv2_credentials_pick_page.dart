@@ -135,7 +135,6 @@ class SIOPV2CredentialPickView extends StatelessWidget {
                 ...List.generate(
                   credentials.length,
                   (index) => CredentialsListPageItem(
-                    showBadge: false,
                     credentialModel: credentials[index],
                     selected: state.index == index,
                     onTap: () =>

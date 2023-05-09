@@ -139,7 +139,6 @@ class CredentialManifestOfferPickView extends StatelessWidget {
                                 .filteredCredentialList.length,
                             (index) {
                               return CredentialsListPageItem(
-                                showBadge: false,
                                 credentialModel: credentialManifestState
                                     .filteredCredentialList[index],
                                 selected: credentialManifestState.selected
