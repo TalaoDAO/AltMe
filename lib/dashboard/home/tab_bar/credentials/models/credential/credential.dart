@@ -18,7 +18,6 @@ class Credential {
     this.issuer,
     this.expirationDate,
     this.issuanceDate,
-    this.expirationDate,
     this.proof,
     this.credentialSubjectModel,
     this.description,
@@ -39,7 +38,6 @@ class Credential {
       'dummy',
       ['dummy'],
       ['dummy'],
-      'dummy',
       'dummy',
       'dummy',
       'dummy',
@@ -67,8 +65,6 @@ class Credential {
   final String expirationDate;
   @JsonKey(defaultValue: '')
   final String issuanceDate;
-  @JsonKey(defaultValue: '')
-  final String expirationDate;
   @JsonKey(fromJson: _fromJsonProofs)
   final List<Proof> proof;
   @JsonKey(name: 'credentialSubject')
@@ -87,7 +83,6 @@ class Credential {
     String? issuer,
     String? expirationDate,
     String? issuanceDate,
-    String? expirationDate,
     List<Proof>? proof,
     CredentialSubjectModel? credentialSubjectModel,
     List<Translation>? description,
@@ -102,7 +97,6 @@ class Credential {
       issuer ?? this.issuer,
       expirationDate ?? this.expirationDate,
       issuanceDate ?? this.issuanceDate,
-      expirationDate ?? this.expirationDate,
       proof ?? this.proof,
       credentialSubjectModel ?? this.credentialSubjectModel,
       description ?? this.description,
