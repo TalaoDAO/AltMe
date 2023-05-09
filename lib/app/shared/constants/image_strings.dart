@@ -33,7 +33,6 @@ class ImageStrings {
       '$imagePath/carte-diplome-recto.png';
   static const String learningAchievementBack =
       '$imagePath/carte-diplome-verso.png';
-  static const String loyaltyCard = '$imagePath/tezotopia_loyalty_card.jpeg';
   static const String over18 = '$imagePath/over18.png';
   static const String over15 = '$imagePath/over15.png';
   static const String over13 = '$imagePath/over13.png';

@@ -31,8 +31,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return Colors.white;
       case CredentialSubjectType.ecole42LearningAchievement:
         return const Color(0xFFffD6A5);
-      case CredentialSubjectType.loyaltyCard:
-        return const Color(0xffCAFFBF);
       case CredentialSubjectType.professionalStudentCard:
         return const Color(0xffCAFFBF);
       case CredentialSubjectType.kycAgeCredential:
@@ -107,8 +105,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return Icons.fact_check_outlined;
       case CredentialSubjectType.ecole42LearningAchievement:
         return Icons.perm_identity;
-      case CredentialSubjectType.loyaltyCard:
-        return Icons.loyalty;
       case CredentialSubjectType.professionalStudentCard:
         return Icons.perm_identity;
       case CredentialSubjectType.walletCredential:
@@ -238,8 +234,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'LinkedinCard';
       case CredentialSubjectType.learningAchievement:
         return 'LearningAchievement';
-      case CredentialSubjectType.loyaltyCard:
-        return 'LoyaltyCard';
       case CredentialSubjectType.over18:
         return 'Over18';
       case CredentialSubjectType.over13:
@@ -349,8 +343,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return VerifiableIdCardModel.fromJson(json);
       case CredentialSubjectType.learningAchievement:
         return LearningAchievementModel.fromJson(json);
-      case CredentialSubjectType.loyaltyCard:
-        return LoyaltyCardModel.fromJson(json);
       case CredentialSubjectType.over18:
         return Over18Model.fromJson(json);
       case CredentialSubjectType.over13:
@@ -556,8 +548,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         return 'Linkedin Card';
       case CredentialSubjectType.learningAchievement:
         return 'Learning Achievement';
-      case CredentialSubjectType.loyaltyCard:
-        return 'Loyalty Card';
       case CredentialSubjectType.over18:
         return 'Over18';
       case CredentialSubjectType.over13:
@@ -676,8 +666,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.linkedInCard:
         return false;
       case CredentialSubjectType.learningAchievement:
-        return false;
-      case CredentialSubjectType.loyaltyCard:
         return false;
       case CredentialSubjectType.over18:
         return true;
@@ -798,8 +786,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.linkedInCard:
         return 86;
       case CredentialSubjectType.learningAchievement:
-        return 0;
-      case CredentialSubjectType.loyaltyCard:
         return 0;
       case CredentialSubjectType.over18:
         return 97;

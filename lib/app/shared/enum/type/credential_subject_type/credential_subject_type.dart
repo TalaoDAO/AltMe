@@ -36,7 +36,6 @@ enum CredentialSubjectType {
   verifiableIdCard,
   linkedInCard,
   learningAchievement,
-  loyaltyCard,
   over18,
   over13,
   over15,

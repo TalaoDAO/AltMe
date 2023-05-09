@@ -274,7 +274,6 @@ class DiscoverDummyCredential extends Equatable {
       case CredentialSubjectType.professionalExperienceAssessment:
       case CredentialSubjectType.professionalSkillAssessment:
       case CredentialSubjectType.professionalStudentCard:
-      case CredentialSubjectType.loyaltyCard:
       case CredentialSubjectType.identityPass:
       case CredentialSubjectType.ecole42LearningAchievement:
       case CredentialSubjectType.studentCard:

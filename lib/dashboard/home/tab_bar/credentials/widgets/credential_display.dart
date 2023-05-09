@@ -133,18 +133,6 @@ class CredentialDisplay extends StatelessWidget {
             );
         }
 
-      case CredentialSubjectType.loyaltyCard:
-        switch (credDisplayType) {
-          case CredDisplayType.List:
-            return DefaultCredentialListWidget(
-              credentialModel: credentialModel,
-            );
-          case CredDisplayType.Detail:
-            return LoyaltyCardDisplayDetail(
-              credentialModel: credentialModel,
-            );
-        }
-
       case CredentialSubjectType.over18:
         return Over18Widget(credentialModel: credentialModel);
 
