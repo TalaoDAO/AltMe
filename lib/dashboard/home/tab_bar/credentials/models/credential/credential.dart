@@ -13,8 +13,10 @@ part 'credential.g.dart';
 class Credential {
   Credential(
     this.id,
+    this.context,
     this.type,
     this.issuer,
+    this.expirationDate,
     this.issuanceDate,
     this.proof,
     this.credentialSubjectModel,
@@ -35,6 +37,8 @@ class Credential {
     return Credential(
       'dummy',
       ['dummy'],
+      ['dummy'],
+      'dummy',
       'dummy',
       'dummy',
       [
@@ -49,12 +53,16 @@ class Credential {
   }
 
   final String id;
+  @JsonKey(name: '@context')
+  final List<dynamic>? context;
   final List<String> type;
   final String issuer;
   @JsonKey(fromJson: _fromJsonTranslations)
   final List<Translation> description;
   @JsonKey(defaultValue: <Translation>[])
   final List<Translation> name;
+  @JsonKey(defaultValue: '')
+  final String expirationDate;
   @JsonKey(defaultValue: '')
   final String issuanceDate;
   @JsonKey(fromJson: _fromJsonProofs)
@@ -70,8 +78,10 @@ class Credential {
 
   Credential copyWith({
     String? id,
+    List<dynamic>? context,
     List<String>? type,
     String? issuer,
+    String? expirationDate,
     String? issuanceDate,
     List<Proof>? proof,
     CredentialSubjectModel? credentialSubjectModel,
@@ -82,8 +92,10 @@ class Credential {
   }) {
     return Credential(
       id ?? this.id,
+      context ?? this.context,
       type ?? this.type,
       issuer ?? this.issuer,
+      expirationDate ?? this.expirationDate,
       issuanceDate ?? this.issuanceDate,
       proof ?? this.proof,
       credentialSubjectModel ?? this.credentialSubjectModel,

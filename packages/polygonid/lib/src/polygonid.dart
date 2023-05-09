@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
+import 'package:polygonid_flutter_sdk/common/domain/entities/filter_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/exceptions/identity_exceptions.dart';
 import 'package:polygonid_flutter_sdk/identity/libs/bjj/bjj_wallet.dart';
@@ -344,6 +345,61 @@ class PolygonId {
       final claimEntities = await sdk.credential.getClaims(
         genesisDid: privateIdentityEntity.did,
         privateKey: privateIdentityEntity.privateKey,
+      );
+
+      return claimEntities;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  /// getVocabs
+  Future<List<Map<String, dynamic>>> getVocabs({
+    required Iden3MessageEntity message,
+  }) async {
+    final sdk = PolygonIdSdk.I;
+    return sdk.iden3comm.getVocabs(message: message);
+  }
+
+  /// getSchemas
+  Future<List<Map<String, dynamic>>> getSchemas({
+    required Iden3MessageEntity message,
+  }) async {
+    final sdk = PolygonIdSdk.I;
+    return sdk.iden3comm.getSchemas(message: message);
+  }
+
+  /// Gets a list of [ClaimEntity] associated to the identity previously stored
+  /// in the the Polygon ID Sdk
+  ///
+  /// The list is be filtered by filters
+  ///
+  /// The genesisDid is the unique id of the identity
+  ///
+  /// The privateKey is the key used to access all the sensitive info from the
+  /// identity and also to realize operations like generating proofs
+  Future<List<ClaimEntity>> getFilteredClaims({
+    required Iden3MessageEntity iden3MessageEntity,
+    required String mnemonic,
+  }) async {
+    try {
+      final sdk = PolygonIdSdk.I;
+
+      final filters =
+          await sdk.iden3comm.getFilters(message: iden3MessageEntity);
+
+      final privateKey = await getPrivateKey(mnemonic: mnemonic);
+
+      final did = await sdk.identity.getDidIdentifier(
+        blockchain: blockchain,
+        network: network,
+        privateKey: privateKey,
+      );
+
+      final claimEntities = await sdk.credential.getClaims(
+        filters: filters,
+        genesisDid: did,
+        privateKey: privateKey,
       );
 
       return claimEntities;
