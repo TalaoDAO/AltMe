@@ -37,20 +37,17 @@ class CredentialsListPageItem extends StatelessWidget {
     required this.onTap,
     this.selected,
     this.badgeCount = 0,
-    this.showBadge = true,
   });
 
   final CredentialModel credentialModel;
   final VoidCallback onTap;
   final bool? selected;
   final int badgeCount;
-  final bool showBadge;
 
   @override
   Widget build(BuildContext context) {
-    return showBadge
+    return badgeCount > 0
         ? badges.Badge(
-            showBadge: badgeCount > 0,
             stackFit: StackFit.expand,
             badgeContent: Text(
               badgeCount.toString(),
