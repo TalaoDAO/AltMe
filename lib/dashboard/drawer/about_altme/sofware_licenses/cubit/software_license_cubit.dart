@@ -13,15 +13,32 @@ class SoftwareLicenseCubit extends Cubit<SoftwareLicenseState> {
 
   Future<void> initialise() async {
     emit(state.loading());
-    final List<LicenseModel> licenses =
-        await LicenseRegistry.licenses.asyncMap<LicenseModel>((license) async {
-      final title = license.packages.join('\n');
-      final description = license.paragraphs
-          .map<String>((paragraph) => paragraph.text)
-          .join('\n\n');
 
-      return LicenseModel(title, description);
-    }).toList();
+    final Map<String, List<String>> groupedLicenses = {};
+
+    await for (final license in LicenseRegistry.licenses) {
+      final titles = license.packages.toList();
+
+      for (final title in titles) {
+        final description = license.paragraphs
+            .map<String>((paragraph) => paragraph.text)
+            .join('\n\n');
+
+        if (groupedLicenses.containsKey(title)) {
+          groupedLicenses[title]!.add(description);
+        } else {
+          groupedLicenses[title] = [description];
+        }
+      }
+    }
+
+    final licenses = groupedLicenses.entries
+        .map((entry) => LicenseModel(entry.key, entry.value))
+        .toList();
+
+    licenses
+        .sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+
     emit(state.copyWith(status: AppStatus.populate, licenses: licenses));
   }
 }

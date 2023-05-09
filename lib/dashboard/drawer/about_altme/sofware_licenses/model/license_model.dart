@@ -11,7 +11,7 @@ class LicenseModel extends Equatable {
       _$LicenseModelFromJson(json);
 
   final String title;
-  final String description;
+  final List<String> description;
 
   Map<String, dynamic> toJson() => _$LicenseModelToJson(this);
 

@@ -42,10 +42,22 @@ class SoftwareLicenseDetailsView extends StatelessWidget {
       body: BackgroundCard(
         height: double.infinity,
         width: double.infinity,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(Sizes.spaceXSmall),
-            child: Text(licenseModel.description),
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const ScrollPhysics(),
+          itemCount: licenseModel.description.length,
+          itemBuilder: (context, index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
+            child: Column(
+              children: [
+                if (index != 0) ...[
+                  const SizedBox(height: Sizes.spaceSmall),
+                  const Divider(),
+                  const SizedBox(height: Sizes.spaceSmall),
+                ],
+                Text(licenseModel.description[index]),
+              ],
+            ),
           ),
         ),
       ),
