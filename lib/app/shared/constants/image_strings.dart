@@ -60,10 +60,6 @@ class ImageStrings {
   static const String trooperzPass = '$imagePath/trooperz-pass.png';
   static const String ecole42LearningAchievement =
       '$imagePath/certificate-42.png';
-  static const String associatedWalletFront =
-      '$imagePath/associated_wallet_recto.png';
-  static const String associatedWalletBack =
-      '$imagePath/associated-wallet-verso.png';
   static const String talaoCommunityCard =
       '$imagePath/talao_community_card.png';
   static const String verifiableIdCard = '$imagePath/verifiable_id_card.png';
