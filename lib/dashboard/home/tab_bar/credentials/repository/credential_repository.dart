@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CredentialsRepository {
   CredentialsRepository(SecureStorageProvider secureStorageProvider)
@@ -13,8 +14,11 @@ class CredentialsRepository {
   Future<List<CredentialModel>> findAll(/* dynamic filters */) async {
     Map<String, String> data;
     try {
+      await Sentry.captureMessage('before getAllValues');
       data = await _secureStorageProvider.getAllValues();
+      await Sentry.captureMessage('after getAllValues');
     } catch (e) {
+      await Sentry.captureMessage(e.toString());
       throw ResponseMessage(
         ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
       );
