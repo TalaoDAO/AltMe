@@ -18,9 +18,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
+    Sentry.captureMessage(
+        'splashBlocListener: ${state.status.toString()} ${DateTime.now()}');
     if (state.status == SplashStatus.routeToPassCode) {
       Navigator.of(context).push<void>(
         PinCodePage.route(
@@ -44,6 +47,8 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
 
 final walletBlocListener = BlocListener<WalletCubit, WalletState>(
   listener: (BuildContext context, WalletState state) async {
+    await Sentry.captureMessage(
+        'walletBlocListener: ${state.status.toString()} ${DateTime.now()}');
     if (state.message != null) {
       AlertMessage.showStateMessage(
         context: context,
@@ -65,6 +70,8 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
 final credentialsBlocListener =
     BlocListener<CredentialsCubit, CredentialsState>(
   listener: (BuildContext context, CredentialsState state) async {
+    await Sentry.captureMessage(
+        'credentialsBlocListener: ${state.status.toString()} ${DateTime.now()}');
     if (state.status == CredentialsStatus.loading) {
       LoadingView().show(context: context);
     } else {
@@ -101,6 +108,9 @@ final walletBlocAccountChangeListener = BlocListener<WalletCubit, WalletState>(
     }
   },
   listener: (context, state) async {
+    await Sentry.captureMessage(
+        'walletBlocAccountChangeListener: ${state.status.toString()} ${DateTime.now()}');
+
     final BlockchainType? blockchainType = state.currentAccount?.blockchainType;
     if (blockchainType == null) return;
     BlockchainNetwork network;
@@ -129,6 +139,8 @@ final walletBlocAccountChangeListener = BlocListener<WalletCubit, WalletState>(
 
 final scanBlocListener = BlocListener<ScanCubit, ScanState>(
   listener: (BuildContext context, ScanState state) async {
+    await Sentry.captureMessage(
+        'scanBlocListener: ${state.status.toString()} ${DateTime.now()}');
     final l10n = context.l10n;
 
     if (state.status == ScanStatus.askPermissionDidAuth) {
@@ -179,6 +191,8 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
 
 final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
   listener: (BuildContext context, QRCodeScanState state) async {
+    await Sentry.captureMessage(
+        'qrCodeBlocListener: ${state.status.toString()} ${DateTime.now()}');
     final log = getLogger('qrCodeBlocListener');
 
     final l10n = context.l10n;
@@ -327,6 +341,8 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
 final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
   listener: (BuildContext context, BeaconState state) {
+    Sentry.captureMessage(
+        'beaconBlocListener: ${state.status.toString()} ${DateTime.now()}');
     final log = getLogger('beaconBlocListener');
     try {
       final BeaconRequest? beaconRequest = state.beaconRequest;
@@ -433,6 +449,8 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
 final walletConnectBlocListener =
     BlocListener<WalletConnectCubit, WalletConnectState>(
   listener: (BuildContext context, WalletConnectState state) {
+    Sentry.captureMessage(
+        'walletConnectBlocListener: ${state.status.toString()} ${DateTime.now()}');
     final log = getLogger('walletConnectStateBlocListener');
     try {
       if (state.status == WalletConnectStatus.permission) {
@@ -466,6 +484,8 @@ final walletConnectBlocListener =
 
 final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
   listener: (BuildContext context, PolygonIdState state) async {
+    await Sentry.captureMessage(
+        'polygonIdBlocListener: ${state.status.toString()} ${DateTime.now()}');
     final polygonIdCubit = context.read<PolygonIdCubit>();
 
     if (state.status == PolygonIdStatus.loading) {

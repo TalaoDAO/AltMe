@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:uni_links/uni_links.dart';
 
 bool _initialUriIsHandled = false;
@@ -40,7 +41,10 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     Future<void>.delayed(const Duration(milliseconds: 500), () async {
+      await Sentry.captureMessage('delayed initState of SplashView');
+
       await context.read<SplashCubit>().initialiseApp();
+      await Sentry.captureMessage('initialiseApp is done');
     });
     super.initState();
   }
