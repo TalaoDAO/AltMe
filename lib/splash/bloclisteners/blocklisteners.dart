@@ -468,7 +468,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
   listener: (BuildContext context, PolygonIdState state) async {
     final polygonIdCubit = context.read<PolygonIdCubit>();
 
-    if (state.status == PolygonIdStatus.loading) {
+    if (state.status == AppStatus.loading) {
       final MessageHandler? messageHandler = state.loadingText?.messageHandler;
       final String? message =
           messageHandler?.getMessage(context, messageHandler);
@@ -478,40 +478,38 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       LoadingView().hide();
     }
 
-    if (state.status == PolygonIdStatus.issuer) {
-      final Iden3MessageEntity iden3MessageEntity =
-          await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
-      await Navigator.of(context).push<void>(
-        PolygonIdAuthenticationPage.route(
-          iden3MessageEntity: iden3MessageEntity,
-        ),
+    if (state.status == AppStatus.goBack) {
+      Navigator.of(context).pop();
+    }
+
+    if (state.message != null) {
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: state.message!,
       );
     }
 
-    if (state.status == PolygonIdStatus.offer) {
+    if (state.polygonAction == PolygonIdAction.offer) {
       final Iden3MessageEntity iden3MessageEntity =
           await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
       final List<ClaimEntity> claims = await polygonIdCubit.getClaims(
         iden3MessageEntity: iden3MessageEntity,
       );
-
+      LoadingView().hide();
       await Navigator.of(context)
           .push<void>(PolygonIdCredentialOfferPage.route(claims: claims));
     }
 
-    if (state.status == PolygonIdStatus.verifier) {
+    if (state.polygonAction == PolygonIdAction.verifier) {
       final Iden3MessageEntity iden3MessageEntity =
           await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
+      LoadingView().hide();
       await Navigator.of(context).push<void>(
         PolygonIdVerificationPage.route(iden3MessageEntity: iden3MessageEntity),
       );
     }
 
-    if (state.status == PolygonIdStatus.goBack) {
-      Navigator.of(context).pop();
-    }
-
-    if (state.status == PolygonIdStatus.alert) {
+    if (state.polygonAction == PolygonIdAction.issuer) {
       var accept = true;
       final profileCubit = context.read<ProfileCubit>();
 
@@ -526,57 +524,51 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
           message: state.scannedResponse!,
         );
 
-        final body = iden3MessageEntity.body;
+        LoadingView().hide();
 
-        if (body is AuthBodyRequest) {
-          final isIssuer =
-              iden3MessageEntity.messageType == Iden3MessageType.auth &&
-                  body.scope != null &&
-                  body.scope!.isEmpty;
+        // TODO(all): later choose url based on mainnet and testnet
+        accept = await showDialog<bool>(
+              context: context,
+              builder: (BuildContext context) {
+                return ConfirmDialog(
+                  title: l10n.scanPromptHost,
+                  subtitle: Urls.checkIssuerPolygonTestnetUrl,
+                  no: l10n.communicationHostDeny,
+                );
+              },
+            ) ??
+            false;
 
-          if (isIssuer) {
-            // TODO(all): later choose url based on mainnet and testnet
-            accept = await showDialog<bool>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return ConfirmDialog(
-                      title: l10n.scanPromptHost,
-                      subtitle: Urls.checkIssuerPolygonTestnetUrl,
-                      no: l10n.communicationHostDeny,
+        if (accept) {
+          /// bypass authentication
+          await Navigator.of(context).push<void>(
+            PinCodePage.route(
+              isValidCallback: () {
+                context.read<PolygonIdCubit>().authenticate(
+                      iden3MessageEntity: iden3MessageEntity,
+                      goBack: false,
                     );
-                  },
-                ) ??
-                false;
-
-            if (accept) {
-              await Navigator.of(context).push<void>(
-                PinCodePage.route(
-                  isValidCallback: () {
-                    context.read<PolygonIdCubit>().authenticate(
-                          iden3MessageEntity: iden3MessageEntity,
-                          goBack: false,
-                        );
-                  },
-                  restrictToBack: false,
-                ),
-              );
-              return;
-            }
-          }
+              },
+              restrictToBack: false,
+            ),
+          );
+          return;
         }
       }
-      if (accept) {
-        await context.read<PolygonIdCubit>().polygonActions();
-      } else {
-        return;
-      }
-    }
 
-    if (state.message != null) {
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: state.message!,
-      );
+      LoadingView().hide();
+
+      if (accept) {
+        /// go to authentication page
+        final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
+            .getIden3Message(message: state.scannedResponse!);
+
+        await Navigator.of(context).push<void>(
+          PolygonIdAuthenticationPage.route(
+            iden3MessageEntity: iden3MessageEntity,
+          ),
+        );
+      }
     }
   },
 );

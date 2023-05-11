@@ -3,7 +3,8 @@ part of 'polygon_id_cubit.dart';
 @JsonSerializable()
 class PolygonIdState extends Equatable {
   const PolygonIdState({
-    this.status = PolygonIdStatus.init,
+    this.status = AppStatus.init,
+    this.polygonAction,
     this.isInitialised = false,
     this.message,
     this.loadingText,
@@ -13,7 +14,8 @@ class PolygonIdState extends Equatable {
   factory PolygonIdState.fromJson(Map<String, dynamic> json) =>
       _$PolygonIdStateFromJson(json);
 
-  final PolygonIdStatus status;
+  final AppStatus status;
+  final PolygonIdAction? polygonAction;
   final StateMessage? message;
   final StateMessage? loadingText;
   final bool isInitialised;
@@ -21,14 +23,15 @@ class PolygonIdState extends Equatable {
 
   PolygonIdState error({required StateMessage message}) {
     return PolygonIdState(
-      status: PolygonIdStatus.error,
+      status: AppStatus.error,
       message: message,
       scannedResponse: scannedResponse,
     );
   }
 
   PolygonIdState copyWith({
-    PolygonIdStatus status = PolygonIdStatus.idle,
+    AppStatus status = AppStatus.idle,
+    PolygonIdAction? polygonAction,
     bool? isInitialised,
     StateMessage? message,
     StateMessage? loadingText,
@@ -37,6 +40,7 @@ class PolygonIdState extends Equatable {
   }) {
     return PolygonIdState(
       status: status,
+      polygonAction: polygonAction,
       message: message,
       loadingText: loadingText,
       isInitialised: isInitialised ?? this.isInitialised,
@@ -49,6 +53,7 @@ class PolygonIdState extends Equatable {
   @override
   List<Object?> get props => [
         status,
+        polygonAction,
         message,
         isInitialised,
         scannedResponse,

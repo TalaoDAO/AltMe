@@ -80,7 +80,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         );
       } else if (scannedResponse.startsWith('tezos://')) {
         /// beacon
-
         final String pairingRequest =
             Uri.parse(scannedResponse).queryParameters['data'].toString();
 
@@ -88,14 +87,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith('wc:')) {
         /// wallet connect
-
         await walletConnectCubit.connect(scannedResponse);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith('{"id":')) {
         /// polygon id
-
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-        await polygonIdCubit.downloadCircuits(scannedResponse);
+        await polygonIdCubit.polygonIdFunction(scannedResponse);
       } else if (scannedResponse.startsWith('${Urls.appDeepLink}?uri=')) {
         final url = Uri.decodeFull(
           scannedResponse.substring('${Urls.appDeepLink}?uri='.length),

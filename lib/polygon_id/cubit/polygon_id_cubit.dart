@@ -45,7 +45,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       if (PolygonId().isInitialized) {
         emit(
           state.copyWith(
-            status: PolygonIdStatus.idle,
+            status: AppStatus.idle,
             isInitialised: true,
           ),
         );
@@ -70,14 +70,14 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       await polygonId.addIdentity(mnemonic: mnemonic!);
       emit(
         state.copyWith(
-          status: PolygonIdStatus.init,
+          status: AppStatus.init,
           isInitialised: true,
         ),
       );
     } catch (e) {
       emit(
         state.copyWith(
-          status: PolygonIdStatus.error,
+          status: AppStatus.error,
           isInitialised: false,
         ),
       );
@@ -85,13 +85,13 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     }
   }
 
-  Future<void> downloadCircuits(String scannedResponse) async {
+  Future<void> polygonIdFunction(String scannedResponse) async {
     try {
       await initialise();
 
       emit(
         state.copyWith(
-          status: PolygonIdStatus.loading,
+          status: AppStatus.loading,
           scannedResponse: scannedResponse,
         ),
       );
@@ -101,7 +101,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       final isCircuitAlreadyDownloaded = await polygonId.isCircuitsDownloaded();
       if (isCircuitAlreadyDownloaded) {
         log.i('circuit already downloaded');
-        emit(state.copyWith(status: PolygonIdStatus.alert));
+        await polygonActions();
       } else {
         // show loading with authentication message
         final Stream<DownloadInfo> stream =
@@ -110,7 +110,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
           if (downloadInfo.completed) {
             unawaited(_subscription?.cancel());
             log.i('download circuit complete');
-            emit(state.copyWith(status: PolygonIdStatus.alert));
+            await polygonActions();
           } else {
             // loading value update
             final double loadedValue =
@@ -146,7 +146,6 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   }
 
   Future<void> polygonActions() async {
-    emit(state.copyWith(status: PolygonIdStatus.loading));
     final Iden3MessageEntity iden3MessageEntity =
         await getIden3Message(message: state.scannedResponse!);
 
@@ -155,14 +154,29 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
 
       if (body.scope!.isEmpty) {
         log.i('issuer');
-        emit(state.copyWith(status: PolygonIdStatus.issuer));
+        emit(
+          state.copyWith(
+            status: AppStatus.loading,
+            polygonAction: PolygonIdAction.issuer,
+          ),
+        );
       } else {
         log.i('verifier');
-        emit(state.copyWith(status: PolygonIdStatus.verifier));
+        emit(
+          state.copyWith(
+            status: AppStatus.loading,
+            polygonAction: PolygonIdAction.verifier,
+          ),
+        );
       }
     } else if (iden3MessageEntity.messageType == Iden3MessageType.offer) {
       log.i('get claims');
-      emit(state.copyWith(status: PolygonIdStatus.offer));
+      emit(
+        state.copyWith(
+          status: AppStatus.loading,
+          polygonAction: PolygonIdAction.offer,
+        ),
+      );
     } else {
       throw ResponseMessage(
         ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
@@ -176,7 +190,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   }) async {
     // TODO(bibash): find if claim is present or not...
     try {
-      emit(state.copyWith(status: PolygonIdStatus.loading));
+      emit(state.copyWith(status: AppStatus.loading));
       final mnemonic =
           await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
@@ -189,7 +203,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       if (isAuthenticated) {
         emit(
           state.copyWith(
-            status: goBack ? PolygonIdStatus.goBack : PolygonIdStatus.idle,
+            status: goBack ? AppStatus.goBack : AppStatus.idle,
             message: StateMessage.success(
               messageHandler: ResponseMessage(
                 ResponseString.RESPONSE_STRING_succesfullyAuthenticated,
@@ -249,11 +263,11 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   }) async {
     try {
       log.i('add Claims');
-      emit(state.copyWith(status: PolygonIdStatus.loading));
+      emit(state.copyWith(status: AppStatus.loading));
       for (final claim in claims) {
         await addToList(claim);
       }
-      emit(state.copyWith(status: PolygonIdStatus.goBack));
+      emit(state.copyWith(status: AppStatus.goBack));
     } catch (e) {
       log.e(e);
       if (e is MessageHandler) {
