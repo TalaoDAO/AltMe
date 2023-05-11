@@ -80,6 +80,9 @@ class LoadingView {
                           }
                         },
                       ),
+                      const SizedBox(height: 10),
+                      const Spinner(),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),

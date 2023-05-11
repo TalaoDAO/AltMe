@@ -17,7 +17,8 @@ class PolygonIdState extends Equatable {
   final AppStatus status;
   final PolygonIdAction? polygonAction;
   final StateMessage? message;
-  final StateMessage? loadingText;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final MessageHandler? loadingText;
   final bool isInitialised;
   final String? scannedResponse;
 
@@ -34,7 +35,7 @@ class PolygonIdState extends Equatable {
     PolygonIdAction? polygonAction,
     bool? isInitialised,
     StateMessage? message,
-    StateMessage? loadingText,
+    MessageHandler? loadingText,
     Route<dynamic>? route,
     String? scannedResponse,
   }) {

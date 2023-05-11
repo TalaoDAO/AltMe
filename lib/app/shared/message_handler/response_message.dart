@@ -645,6 +645,12 @@ class ResponseMessage with MessageHandler {
               .RESPONSE_STRING_backupPolygonIdCredentialEmptyError.localise(
             context,
           );
+
+        case ResponseString.RESPONSE_STRING_downloadingCircuitLoadingMessage:
+          return ResponseString.RESPONSE_STRING_downloadingCircuitLoadingMessage
+              .localise(
+            context,
+          );
       }
     }
     return '';

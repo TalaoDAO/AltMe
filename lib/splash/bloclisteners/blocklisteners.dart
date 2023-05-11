@@ -469,7 +469,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
     final polygonIdCubit = context.read<PolygonIdCubit>();
 
     if (state.status == AppStatus.loading) {
-      final MessageHandler? messageHandler = state.loadingText?.messageHandler;
+      final MessageHandler? messageHandler = state.loadingText;
       final String? message =
           messageHandler?.getMessage(context, messageHandler);
 

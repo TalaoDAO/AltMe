@@ -884,5 +884,6 @@
     }
   },
   "claimNotFound": "Claim Not Found",
-  "cryptographicProof": "Cryptographic Proof"
+  "cryptographicProof": "Cryptographic Proof",
+  "downloadingCircuitLoadingMessage": "Downloading circuits. It may take some time. Please wait."
 }

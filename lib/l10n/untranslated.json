@@ -808,7 +808,8 @@
     "youGotAgeCredentials",
     "yourAgeEstimationIs",
     "claimNotFound",
-    "cryptographicProof"
+    "cryptographicProof",
+    "downloadingCircuitLoadingMessage"
   ],
 
   "es": [
@@ -1620,7 +1621,8 @@
     "youGotAgeCredentials",
     "yourAgeEstimationIs",
     "claimNotFound",
-    "cryptographicProof"
+    "cryptographicProof",
+    "downloadingCircuitLoadingMessage"
   ],
 
   "fr": [
@@ -1734,7 +1736,8 @@
     "youGotAgeCredentials",
     "yourAgeEstimationIs",
     "claimNotFound",
-    "cryptographicProof"
+    "cryptographicProof",
+    "downloadingCircuitLoadingMessage"
   ],
 
   "it": [
@@ -2546,6 +2549,7 @@
     "youGotAgeCredentials",
     "yourAgeEstimationIs",
     "claimNotFound",
-    "cryptographicProof"
+    "cryptographicProof",
+    "downloadingCircuitLoadingMessage"
   ]
 }

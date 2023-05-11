@@ -138,5 +138,6 @@ enum ResponseString {
   RESPONSE_STRING_succesfullyAuthenticated,
   RESPONSE_STRING_authenticationFailed,
   RESPONSE_STRING_deviceIncompatibilityMessage,
-  RESPONSE_STRING_backupPolygonIdCredentialEmptyError
+  RESPONSE_STRING_backupPolygonIdCredentialEmptyError,
+  RESPONSE_STRING_downloadingCircuitLoadingMessage
 }

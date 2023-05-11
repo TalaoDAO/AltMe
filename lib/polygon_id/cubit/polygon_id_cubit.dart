@@ -104,6 +104,16 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         await polygonActions();
       } else {
         // show loading with authentication message
+
+        emit(
+          state.copyWith(
+            status: AppStatus.loading,
+            loadingText: ResponseMessage(
+              ResponseString.RESPONSE_STRING_downloadingCircuitLoadingMessage,
+            ),
+          ),
+        );
+
         final Stream<DownloadInfo> stream =
             await polygonId.initCircuitsDownloadAndGetInfoStream;
         _subscription = stream.listen((DownloadInfo downloadInfo) async {

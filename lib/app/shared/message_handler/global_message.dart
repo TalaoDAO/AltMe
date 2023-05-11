@@ -353,4 +353,6 @@ class GlobalMessage {
       l10n.deviceIncompatibilityMessage;
   String get RESPONSE_STRING_backupPolygonIdCredentialEmptyError =>
       l10n.backupPolygonIdCredentialEmptyError;
+  String get RESPONSE_STRING_downloadingCircuitLoadingMessage =>
+      l10n.downloadingCircuitLoadingMessage;
 }
