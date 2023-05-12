@@ -1,1 +1,1 @@
-enum KycVerificationStatus { unverified, pending, approved, rejected }
+enum KycVerificationStatus { unverified, pending, approved, rejected, unkown }
