@@ -42,6 +42,7 @@ class ProfessionalStudentCardRecipient {
   final String gender;
   @JsonKey(defaultValue: '')
   final String jobTitle;
+  
 
   Map<String, dynamic> toJson() =>
       _$ProfessionalStudentCardRecipientToJson(this);
