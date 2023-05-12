@@ -14,8 +14,10 @@ class SecureStorageProvider {
   IOSOptions get _defaultIOSOptions =>
       const IOSOptions(accessibility: KeychainAccessibility.first_unlock);
 
-  AndroidOptions get _defaultAndroidOptions =>
-      const AndroidOptions(encryptedSharedPreferences: true);
+  AndroidOptions get _defaultAndroidOptions => const AndroidOptions(
+        encryptedSharedPreferences: true,
+        sharedPreferencesName: 'altme',
+      );
 
   ///get
   Future<String?> get(String key) async {
