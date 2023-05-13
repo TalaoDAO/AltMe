@@ -17,7 +17,6 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
   final DioClient client;
   final DIDCubit didCubit;
   final logger = getLogger('KycVerificationCubit');
-  final walletCallback = 'https://app.altme.io/app/download';
 
   Future<String?> _getApiCode() async {
     try {
@@ -62,7 +61,7 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
     await dotenv.load();
     final walletId = dotenv.get('CLIENT_ID_ID360');
     final url = '${Urls.authenticateForId360}/$code?vc_type=${vcType.value}'
-        '&client_id=$walletId&callback=$walletCallback';
+        '&client_id=$walletId&callback=${Urls.appDeepLink}';
     await LaunchUrl.launchUri(
       Uri.parse(
         url,
