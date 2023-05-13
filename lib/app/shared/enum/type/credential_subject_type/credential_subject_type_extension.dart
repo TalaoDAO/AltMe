@@ -425,6 +425,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       return KycVcType.over13;
     } else if (this == CredentialSubjectType.over15) {
       return KycVcType.over15;
+    } else if (this == CredentialSubjectType.ageRange) {
+      return KycVcType.ageRange;
     } else {
       return KycVcType.verifiableId;
     }

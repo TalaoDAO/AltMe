@@ -165,8 +165,10 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
       /// should pop until dashboard. Doing such we don't have to consider
       /// different scanCubit scenarii (DIDAuth, scan or deeplink,
       /// presentaiton, etc...).
-      Navigator.of(context).popUntil(
-        (route) => route.settings.name == '/dashboardPage',
+      await Navigator.pushAndRemoveUntil<void>(
+        context,
+        DashboardPage.route(),
+        (Route<dynamic> route) => route.isFirst,
       );
     }
     if (state.status == ScanStatus.error) {
