@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:altme/theme/theme.dart';
@@ -163,6 +164,9 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                     text: l10n.verifyLater,
                     verticalSpacing: 18,
                     onPressed: () async {
+                      await context
+                          .read<OnboardingCubit>()
+                          .emitOnboardingProcessing();
                       await context
                           .read<OnBoardingGenPhraseCubit>()
                           .generateSSIAndCryptoAccount(mnemonic!);

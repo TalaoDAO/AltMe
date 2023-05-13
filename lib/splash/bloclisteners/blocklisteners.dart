@@ -5,6 +5,7 @@ import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
@@ -68,7 +69,11 @@ final credentialsBlocListener =
     if (state.status == CredentialsStatus.loading) {
       LoadingView().show(context: context);
     } else {
-      LoadingView().hide();
+      /// during onBoarding
+      final onboardingState = context.read<OnboardingCubit>();
+      if (onboardingState.state.status != AppStatus.loading) {
+        LoadingView().hide();
+      }
     }
 
     if (state.message != null &&

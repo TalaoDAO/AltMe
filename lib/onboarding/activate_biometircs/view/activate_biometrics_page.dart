@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/splash/splash.dart';
@@ -171,6 +172,10 @@ class ActivateBiometricsView extends StatelessWidget {
                 onPressed: () async {
                   if (routeType == WalletRouteType.create) {
                     if (byPassScreen) {
+                      await context
+                          .read<OnboardingCubit>()
+                          .emitOnboardingProcessing();
+
                       final mnemonic = bip39.generateMnemonic().split(' ');
                       await context
                           .read<OnBoardingGenPhraseCubit>()

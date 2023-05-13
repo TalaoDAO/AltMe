@@ -16,6 +16,8 @@ import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
+import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
+import 'package:altme/onboarding/gen_phrase/cubit/onboarding_gen_phrase_cubit.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/route/route.dart';
@@ -101,6 +103,9 @@ class App extends StatelessWidget {
             secureStorageProvider: secure_storage.getSecureStorage,
             didCubit: context.read<DIDCubit>(),
           ),
+        ),
+        BlocProvider<OnboardingCubit>(
+          create: (context) => OnboardingCubit(),
         ),
         BlocProvider<CredentialsCubit>(
           lazy: false,
