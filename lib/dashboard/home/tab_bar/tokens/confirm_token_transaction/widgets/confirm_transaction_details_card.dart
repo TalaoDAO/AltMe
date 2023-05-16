@@ -144,6 +144,6 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
   }
 
   int getDecimalsToShow(double amount) {
-    return amount >= 1 ? 2 : 5;
+    return amount >= 1 ? 2 : 6;
   }
 }
