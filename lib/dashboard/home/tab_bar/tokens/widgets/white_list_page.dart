@@ -23,6 +23,7 @@ class WhiteListPage extends StatefulWidget {
 
 class _WhiteListPageState extends State<WhiteListPage> {
   String? selectedWalletAddress;
+  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -55,6 +56,7 @@ class _WhiteListPageState extends State<WhiteListPage> {
                             (walletState.currentAccount != element),
                       )
                       .toList();
+
                   if (accounts.isEmpty) {
                     selectedWalletAddress = null;
                     return Center(
@@ -65,10 +67,13 @@ class _WhiteListPageState extends State<WhiteListPage> {
                     return AccountSelectBoxView(
                       title: l10n.to,
                       accounts: accounts,
-                      selectedAccountIndex: 0,
+                      selectedAccountIndex: selectedIndex,
                       initiallyExpanded: true,
                       onSelectAccount: (accountData, index) {
                         selectedWalletAddress = accountData.walletAddress;
+                        setState(() {
+                          selectedIndex = index;
+                        });
                       },
                     );
                   }
