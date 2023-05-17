@@ -11,10 +11,7 @@ class TabControllerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => HomeTabbarCubit(),
-      child: const TabControllerView(),
-    );
+    return const TabControllerView();
   }
 }
 
@@ -32,12 +29,7 @@ class _TabControllerViewState extends State<TabControllerView>
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 3);
-    _tabController.addListener(_onTabChanged);
     super.initState();
-  }
-
-  void _onTabChanged() {
-    context.read<HomeTabbarCubit>().setIndex(_tabController.index);
   }
 
   @override
@@ -51,6 +43,7 @@ class _TabControllerViewState extends State<TabControllerView>
     final l10n = context.l10n;
     return BlocBuilder<HomeTabbarCubit, int>(
       builder: (context, state) {
+        _tabController.index = state;
         return Column(
           mainAxisSize: MainAxisSize.max,
           children: [

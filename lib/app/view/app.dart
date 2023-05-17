@@ -221,6 +221,9 @@ class App extends StatelessWidget {
           create: (_) =>
               DIDPrivateKeyCubit(secureStorageProvider: getSecureStorage),
         ),
+        BlocProvider(
+          create: (context) => HomeTabbarCubit(),
+        ),
       ],
       child: const MaterialAppDefinition(),
     );

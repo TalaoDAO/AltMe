@@ -11,10 +11,7 @@ class DiscoverTabPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => DiscoverTabbarCubit(),
-      child: const DiscoverTabPageView(),
-    );
+    return const DiscoverTabPageView();
   }
 }
 
@@ -32,12 +29,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 3);
-    _tabController.addListener(_onTabChanged);
     super.initState();
-  }
-
-  void _onTabChanged() {
-    context.read<DiscoverTabbarCubit>().setIndex(_tabController.index);
   }
 
   @override
@@ -53,8 +45,9 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
       scrollView: false,
       padding: EdgeInsets.zero,
       backgroundColor: Theme.of(context).colorScheme.transparent,
-      body: BlocBuilder<DiscoverTabbarCubit, int>(
+      body: BlocBuilder<HomeTabbarCubit, int>(
         builder: (context, tabState) {
+          _tabController.index = tabState;
           return Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -91,7 +84,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                         isSelected: tabState == 0,
                         onPressed: () {
                           _tabController.animateTo(0);
-                          context.read<DiscoverTabbarCubit>().setIndex(0);
+                          context.read<HomeTabbarCubit>().setIndex(0);
                         },
                       ),
                       MyTab(
@@ -102,7 +95,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                         isSelected: tabState == 1,
                         onPressed: () {
                           _tabController.animateTo(1);
-                          context.read<DiscoverTabbarCubit>().setIndex(1);
+                          context.read<HomeTabbarCubit>().setIndex(1);
                         },
                       ),
                       MyTab(
@@ -113,7 +106,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                         isSelected: tabState == 2,
                         onPressed: () {
                           _tabController.animateTo(2);
-                          context.read<DiscoverTabbarCubit>().setIndex(2);
+                          context.read<HomeTabbarCubit>().setIndex(2);
                         },
                       ),
                     ],
