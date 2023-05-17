@@ -109,4 +109,9 @@ class Urls {
   //ID360
   static const getCodeForId360 = 'https://talao.co/id360/get_code';
   static const authenticateForId360 = 'https://talao.co/id360/authenticate';
+
+  //Discover
+  static const discoverCoinsWebView = 'https://discover-coins-part.webflow.io/';
+  static const discoverNftsWebView =
+      'https://discover-coins-part.webflow.io/prod-nota-available/nft-noir';
 }

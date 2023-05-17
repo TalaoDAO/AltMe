@@ -7,17 +7,23 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
+typedef OnNavigationRequest = Future<NavigationDecision> Function(
+  NavigationRequest request,
+);
+
 class MWebViewPage extends StatelessWidget {
   const MWebViewPage({
     super.key,
     required this.url,
     this.headers,
     this.body,
+    this.onNavigationRequest,
   });
 
   final String url;
   final Map<String, String>? headers;
   final Uint8List? body;
+  final OnNavigationRequest? onNavigationRequest;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +33,7 @@ class MWebViewPage extends StatelessWidget {
         url: url,
         headers: headers,
         body: body,
+        onNavigationRequest: onNavigationRequest,
       ),
     );
   }
@@ -38,11 +45,13 @@ class MWebView extends StatefulWidget {
     required this.url,
     this.headers,
     this.body,
+    this.onNavigationRequest,
   });
 
   final String url;
   final Map<String, String>? headers;
   final Uint8List? body;
+  final OnNavigationRequest? onNavigationRequest;
 
   @override
   _MWebViewState createState() => _MWebViewState();
@@ -98,7 +107,11 @@ class _MWebViewState extends State<MWebView>
           },
           onNavigationRequest: (NavigationRequest request) {
             log.i('navigate - ${request.url}');
-            return NavigationDecision.navigate;
+            if (widget.onNavigationRequest != null) {
+              return widget.onNavigationRequest!.call(request);
+            } else {
+              return NavigationDecision.navigate;
+            }
           },
         ),
       )
