@@ -1,5 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'dart:async';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
@@ -62,27 +64,26 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         final client = TezartClient(rpcNodeUrl);
         final keystore = KeyGenerator()
             .getKeystore(secretKey: state.selectedAccountSecretKey);
-        final operationList = OperationsList(
-          source: keystore,
-          publicKey: keystore.publicKey,
-          rpcInterface: client.rpcInterface,
-        );
-        final isReveal = await client.isKeyRevealed(keystore.address);
-        if (!isReveal) {
-          operationList.prependOperation(RevealOperation());
-        }
-        final transactionOperation = TransactionOperation(
-          amount: (state.tokenAmount * 1000000).toInt(),
-          destination: state.withdrawalAddress,
-        );
-        operationList.appendOperation(transactionOperation);
-
-        await operationList.estimate();
-        await operationList.simulate();
-        final feesSum = operationList.operations
+        const minFeesWithStorage = 6526;
+        var transactionAmount =
+            ((state.tokenAmount * 1000000).toInt()) - minFeesWithStorage;
+        // Get fees
+        final OperationsList estimationOperationList =
+            await prepareTezosOperation(keystore, client, transactionAmount);
+        final initialFeesSum = estimationOperationList.operations
+            .fold(0, (sum, element) => sum + element.totalFee);
+        // get final operation
+        // minus 1 to prevent overflow operation :-/
+        // TODO: need to find better solution than (-1)
+        // but it prevent burning gas for nothing.
+        transactionAmount =
+            transactionAmount - initialFeesSum + minFeesWithStorage - 1;
+        final OperationsList finalOperationList =
+            await prepareTezosOperation(keystore, client, transactionAmount);
+        final finalFeesSum = finalOperationList.operations
             .fold(0, (sum, element) => sum + element.totalFee);
         final tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
-          average: feesSum / 1000000,
+          average: finalFeesSum / 1000000,
         );
         final networkFee = tezosNetworkFees[0];
         final XtzUSDPrice = (await getXtzUSDPrice()) ?? 0;
@@ -102,7 +103,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
             totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
                 ? state.tokenAmount - networkFee.fee
                 : state.tokenAmount,
-            operationList: operationList,
+            operationsList: finalOperationList,
           ),
         );
       } else {
@@ -155,6 +156,28 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     }
   }
 
+  Future<OperationsList> prepareTezosOperation(
+      Keystore keystore, TezartClient client, int transactionAmount) async {
+    final operationList = OperationsList(
+      source: keystore,
+      publicKey: keystore.publicKey,
+      rpcInterface: client.rpcInterface,
+    );
+    final isReveal = await client.isKeyRevealed(keystore.address);
+    if (!isReveal) {
+      operationList.prependOperation(RevealOperation());
+    }
+    final transactionOperation = TransactionOperation(
+      amount: transactionAmount,
+      destination: state.withdrawalAddress,
+    );
+    operationList.appendOperation(transactionOperation);
+
+    await operationList.estimate();
+    await operationList.simulate();
+    return operationList;
+  }
+
   void setWithdrawalAddress({required String withdrawalAddress}) {
     emit(state.copyWith(withdrawalAddress: withdrawalAddress));
   }
@@ -178,26 +201,10 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         state.status != AppStatus.loading;
   }
 
-  Future<void> _withdrawTezos({
-    required double tokenAmount,
-    required String selectedAccountSecretKey,
-  }) async {
+  Future<void> _withdrawTezos() async {
     try {
       emit(state.loading());
-      final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
-
-      final amount = int.parse(
-        tokenAmount.toStringAsFixed(6).replaceAll(',', '').replaceAll('.', ''),
-      );
-
-      logger.i(
-        ' , publicKey: ${sourceKeystore.publicKey} '
-        'amount: $amount '
-        'address: ${sourceKeystore.address} =>To address: '
-        '${state.withdrawalAddress}',
-      );
-      // ignore: unawaited_futures
-      state.operationsList!.executeAndMonitor(null);
+      unawaited(state.operationsList!.executeAndMonitor(null));
       logger.i('after withdrawal execute');
       emit(state.success());
     } catch (e, s) {
@@ -333,10 +340,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   }) async {
     try {
       if (token.symbol == 'XTZ') {
-        await _withdrawTezos(
-          tokenAmount: tokenAmount,
-          selectedAccountSecretKey: selectedAccountSecretKey,
-        );
+        await _withdrawTezos();
         return;
       }
       if (token.contractAddress.isEmpty) return;

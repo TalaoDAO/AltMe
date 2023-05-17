@@ -32,7 +32,7 @@ class ConfirmTokenTransactionState extends Equatable {
       status: AppStatus.loading,
       withdrawalAddress: withdrawalAddress,
       networkFee: networkFee,
-      operationList: operationsList,
+      operationsList: operationsList,
     );
   }
 
@@ -44,7 +44,7 @@ class ConfirmTokenTransactionState extends Equatable {
       message: StateMessage.error(messageHandler: messageHandler),
       withdrawalAddress: withdrawalAddress,
       networkFee: networkFee,
-      operationList: operationsList,
+      operationsList: operationsList,
     );
   }
 
@@ -60,7 +60,7 @@ class ConfirmTokenTransactionState extends Equatable {
           : StateMessage.success(messageHandler: messageHandler),
       withdrawalAddress: withdrawalAddress,
       networkFee: networkFee,
-      operationList: operationsList,
+      operationsList: operationsList,
     );
   }
 
@@ -75,7 +75,7 @@ class ConfirmTokenTransactionState extends Equatable {
     double? totalAmount,
     TokenModel? selectedToken,
     String? selectedAccountSecretKey,
-    OperationsList? operationList,
+    OperationsList? operationsList,
   }) {
     return ConfirmTokenTransactionState(
       withdrawalAddress: withdrawalAddress ?? this.withdrawalAddress,
