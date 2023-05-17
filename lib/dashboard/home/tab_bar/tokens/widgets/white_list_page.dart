@@ -24,6 +24,24 @@ class WhiteListPage extends StatefulWidget {
 class _WhiteListPageState extends State<WhiteListPage> {
   String? selectedWalletAddress;
   int selectedIndex = 0;
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      final wallet = context.read<WalletCubit>();
+      final walletAccounts = wallet.state.cryptoAccount.data
+          .where(
+            (element) =>
+                (element.blockchainType ==
+                    wallet.state.currentAccount!.blockchainType) &&
+                (wallet.state.currentAccount != element),
+          )
+          .toList();
+      selectedWalletAddress = walletAccounts.first.walletAddress;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -63,15 +81,14 @@ class _WhiteListPageState extends State<WhiteListPage> {
                       child: Text(l10n.thereIsNoAccountInYourWallet),
                     );
                   } else {
-                    selectedWalletAddress = accounts.first.walletAddress;
                     return AccountSelectBoxView(
                       title: l10n.to,
                       accounts: accounts,
                       selectedAccountIndex: selectedIndex,
                       initiallyExpanded: true,
                       onSelectAccount: (accountData, index) {
-                        selectedWalletAddress = accountData.walletAddress;
                         setState(() {
+                          selectedWalletAddress = accountData.walletAddress;
                           selectedIndex = index;
                         });
                       },

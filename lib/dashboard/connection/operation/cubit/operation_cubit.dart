@@ -590,7 +590,6 @@ class OperationCubit extends Cubit<OperationState> {
       if (!isReveal) {
         operationList.prependOperation(RevealOperation());
       }
-
       log.i(
         'publicKey: ${keystore.publicKey} '
         'amount: ${state.amount} '

@@ -6,6 +6,7 @@ import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:key_generator/key_generator.dart';
 
 class ConfirmTokenTransactionPage extends StatelessWidget {
   const ConfirmTokenTransactionPage({
@@ -44,6 +45,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
       create: (_) => ConfirmTokenTransactionCubit(
         manageNetworkCubit: context.read<ManageNetworkCubit>(),
         client: DioClient('', Dio()),
+        keyGenerator: KeyGenerator(),
         initialState: ConfirmTokenTransactionState(
           withdrawalAddress: withdrawalAddress,
           tokenAmount: amount,

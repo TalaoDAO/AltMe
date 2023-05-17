@@ -6,12 +6,10 @@ import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:key_generator/key_generator.dart';
 import 'package:tezart/tezart.dart';
 import 'package:web3dart/json_rpc.dart';
 import 'package:web3dart/web3dart.dart';
-
-part 'confirm_token_transaction_cubit.g.dart';
 
 part 'confirm_token_transaction_state.dart';
 
@@ -20,10 +18,12 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     required ConfirmTokenTransactionState initialState,
     required this.manageNetworkCubit,
     required this.client,
+    required this.keyGenerator,
   }) : super(initialState);
 
   final ManageNetworkCubit manageNetworkCubit;
   final DioClient client;
+  final KeyGenerator keyGenerator;
 
   final logger = getLogger('ConfirmWithdrawal');
 
@@ -58,8 +58,33 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     emit(state.loading());
     try {
       if (manageNetworkCubit.state.network is TezosNetwork) {
-        final tezosNetworkFees = NetworkFeeModel.tezosNetworkFees();
-        final networkFee = tezosNetworkFees[1];
+        final rpcNodeUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+        final client = TezartClient(rpcNodeUrl);
+        final keystore = KeyGenerator()
+            .getKeystore(secretKey: state.selectedAccountSecretKey);
+        final operationList = OperationsList(
+          source: keystore,
+          publicKey: keystore.publicKey,
+          rpcInterface: client.rpcInterface,
+        );
+        final isReveal = await client.isKeyRevealed(keystore.address);
+        if (!isReveal) {
+          operationList.prependOperation(RevealOperation());
+        }
+        final transactionOperation = TransactionOperation(
+          amount: (state.tokenAmount * 1000000).toInt(),
+          destination: state.withdrawalAddress,
+        );
+        operationList.appendOperation(transactionOperation);
+
+        await operationList.estimate();
+        await operationList.simulate();
+        final feesSum = operationList.operations
+            .fold(0, (sum, element) => sum + element.totalFee);
+        final tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
+          average: feesSum / 1000000,
+        );
+        final networkFee = tezosNetworkFees[0];
         final XtzUSDPrice = (await getXtzUSDPrice()) ?? 0;
         emit(
           state.copyWith(
@@ -77,6 +102,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
             totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
                 ? state.tokenAmount - networkFee.fee
                 : state.tokenAmount,
+            operationList: operationList,
           ),
         );
       } else {
@@ -160,35 +186,18 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       emit(state.loading());
       final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
 
-      final client = TezartClient(manageNetworkCubit.state.network.rpcNodeUrl);
-
       final amount = int.parse(
         tokenAmount.toStringAsFixed(6).replaceAll(',', '').replaceAll('.', ''),
       );
 
-      final customFee = int.parse(
-        state.networkFee!.fee
-            .toStringAsFixed(6)
-            .replaceAll('.', '')
-            .replaceAll(',', ''),
-      );
-
-      final operationsList = await client.transferOperation(
-        source: sourceKeystore,
-        destination: state.withdrawalAddress,
-        amount: amount,
-        customFee: customFee,
-        publicKey: sourceKeystore.publicKey,
-      );
       logger.i(
         ' , publicKey: ${sourceKeystore.publicKey} '
         'amount: $amount '
-        'networkFee: $customFee '
         'address: ${sourceKeystore.address} =>To address: '
         '${state.withdrawalAddress}',
       );
       // ignore: unawaited_futures
-      operationsList.executeAndMonitor(null);
+      state.operationsList!.executeAndMonitor(null);
       logger.i('after withdrawal execute');
       emit(state.success());
     } catch (e, s) {

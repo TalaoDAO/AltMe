@@ -24,11 +24,13 @@ class NetworkFeeModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$NetworkFeeModelToJson(this);
 
-  static List<NetworkFeeModel> tezosNetworkFees() {
-    return const [
-      NetworkFeeModel(fee: 0.002496, networkSpeed: NetworkSpeed.slow),
-      NetworkFeeModel(fee: 0.021900, networkSpeed: NetworkSpeed.average),
-      NetworkFeeModel(fee: 0.050000, networkSpeed: NetworkSpeed.fast),
+  static List<NetworkFeeModel> tezosNetworkFees({
+    double slow = 0.002496,
+    double average = 0.021900,
+    double fast = 0.050000,
+  }) {
+    return [
+      NetworkFeeModel(fee: average, networkSpeed: NetworkSpeed.average),
     ];
   }
 

@@ -1,6 +1,5 @@
 part of 'confirm_token_transaction_cubit.dart';
 
-@JsonSerializable()
 class ConfirmTokenTransactionState extends Equatable {
   const ConfirmTokenTransactionState({
     required this.withdrawalAddress,
@@ -13,10 +12,8 @@ class ConfirmTokenTransactionState extends Equatable {
     this.status = AppStatus.init,
     this.message,
     this.transactionHash,
+    this.operationsList,
   });
-
-  factory ConfirmTokenTransactionState.fromJson(Map<String, dynamic> json) =>
-      _$ConfirmTokenTransactionStateFromJson(json);
 
   final String withdrawalAddress;
   final NetworkFeeModel? networkFee;
@@ -28,12 +25,14 @@ class ConfirmTokenTransactionState extends Equatable {
   final double totalAmount;
   final TokenModel selectedToken;
   final String selectedAccountSecretKey;
+  final OperationsList? operationsList;
 
   ConfirmTokenTransactionState loading() {
     return copyWith(
       status: AppStatus.loading,
       withdrawalAddress: withdrawalAddress,
       networkFee: networkFee,
+      operationList: operationsList,
     );
   }
 
@@ -45,6 +44,7 @@ class ConfirmTokenTransactionState extends Equatable {
       message: StateMessage.error(messageHandler: messageHandler),
       withdrawalAddress: withdrawalAddress,
       networkFee: networkFee,
+      operationList: operationsList,
     );
   }
 
@@ -60,6 +60,7 @@ class ConfirmTokenTransactionState extends Equatable {
           : StateMessage.success(messageHandler: messageHandler),
       withdrawalAddress: withdrawalAddress,
       networkFee: networkFee,
+      operationList: operationsList,
     );
   }
 
@@ -74,6 +75,7 @@ class ConfirmTokenTransactionState extends Equatable {
     double? totalAmount,
     TokenModel? selectedToken,
     String? selectedAccountSecretKey,
+    OperationsList? operationList,
   }) {
     return ConfirmTokenTransactionState(
       withdrawalAddress: withdrawalAddress ?? this.withdrawalAddress,
@@ -87,10 +89,9 @@ class ConfirmTokenTransactionState extends Equatable {
       selectedAccountSecretKey:
           selectedAccountSecretKey ?? this.selectedAccountSecretKey,
       totalAmount: totalAmount ?? this.totalAmount,
+      operationsList: operationsList ?? this.operationsList,
     );
   }
-
-  Map<String, dynamic> toJson() => _$ConfirmTokenTransactionStateToJson(this);
 
   @override
   List<Object?> get props => [
@@ -104,5 +105,6 @@ class ConfirmTokenTransactionState extends Equatable {
         selectedToken,
         transactionHash,
         selectedAccountSecretKey,
+        operationsList,
       ];
 }
