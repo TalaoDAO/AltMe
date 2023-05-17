@@ -51,21 +51,6 @@ class SplashCubit extends Cubit<SplashState> {
         if (hasWallet) {
           await homeCubit.emitHasWallet();
           emit(state.copyWith(status: SplashStatus.routeToPassCode));
-          if (await isGettingMultipleCredentialsNeeded(secureStorageProvider)) {
-            final String? preAuthorizedCode = await secureStorageProvider.get(
-              SecureStorageKeys.preAuthorizedCode,
-            );
-            if (preAuthorizedCode != null) {
-              unawaited(
-                multipleCredentialsTimer(
-                  preAuthorizedCode,
-                  client,
-                  secureStorageProvider,
-                  credentialsCubit,
-                ),
-              );
-            }
-          }
           unawaited(
             homeCubit.periodicCheckRewardOnTezosBlockchain(),
           );

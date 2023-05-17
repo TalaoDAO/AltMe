@@ -88,7 +88,9 @@ extension CredentialCategoryX on CredentialCategory {
       case CredentialCategory.othersCards:
         return [];
       case CredentialCategory.financeCards:
-        return [];
+        return [
+          CredentialSubjectType.defiCompliance,
+        ];
       case CredentialCategory.humanityProofCards:
         return [];
       case CredentialCategory.socialMediaCards:

@@ -651,6 +651,15 @@ class ResponseMessage with MessageHandler {
               .localise(
             context,
           );
+        case ResponseString.RESPONSE_STRING_defiComplianceWhyGetThisCard:
+          return ResponseString.RESPONSE_STRING_defiComplianceWhyGetThisCard
+              .localise(context);
+        case ResponseString.RESPONSE_STRING_defiComplianceExpirationDate:
+          return ResponseString.RESPONSE_STRING_defiComplianceExpirationDate
+              .localise(context);
+        case ResponseString.RESPONSE_STRING_defiComplianceHowToGetIt:
+          return ResponseString.RESPONSE_STRING_defiComplianceHowToGetIt
+              .localise(context);
       }
     }
     return '';

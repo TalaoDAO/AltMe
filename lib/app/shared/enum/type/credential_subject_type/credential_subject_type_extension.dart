@@ -412,7 +412,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     if (this == CredentialSubjectType.over18 ||
         this == CredentialSubjectType.over13 ||
         this == CredentialSubjectType.over15 ||
-        this == CredentialSubjectType.ageRange) {
+        this == CredentialSubjectType.ageRange ||
+        this == CredentialSubjectType.defiCompliance) {
       return true;
     }
     return false;
@@ -427,6 +428,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       return KycVcType.over15;
     } else if (this == CredentialSubjectType.ageRange) {
       return KycVcType.ageRange;
+    } else if (this == CredentialSubjectType.defiCompliance) {
+      return KycVcType.defiCompliance;
     } else {
       return KycVcType.verifiableId;
     }

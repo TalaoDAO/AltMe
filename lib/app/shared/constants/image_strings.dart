@@ -70,7 +70,8 @@ class ImageStrings {
   static const String kycCountryOfResidenceCard =
       '$imagePath/kyc_country_of_residence_card.png';
   static const String euDiplomaCard = '$imagePath/eu_diploma_card.png';
-  static const String defiComplianceCard = '$imagePath/defi-compliance-card.png';
+  static const String defiComplianceCard =
+      '$imagePath/defi-compliance-card.png';
   static const String euVerifiableId = '$imagePath/eu_verifiable_id.png';
 
   static const String binanceOwnershipCard =
@@ -98,6 +99,8 @@ class ImageStrings {
       '$imagePath/pcds_agent_certificate.png';
 
   /// dummy
+  static const String dummyDefiComplianceCard =
+      '$imagePath/dummy_defi-compliance-card.png';
   static const String dummyEmailPassCard =
       '$imagePath/dummy_email_pass_card.png';
   static const String dummyNationalityCard =

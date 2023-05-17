@@ -330,6 +330,13 @@ class GlobalMessage {
   String get RESPONSE_STRING_ageRangeExpirationDate =>
       l10n.ageRangeExpirationDate;
   String get RESPONSE_STRING_ageRangeHowToGetIt => l10n.ageRangeHowToGetIt;
+  String get RESPONSE_STRING_defiComplianceWhyGetThisCard =>
+      l10n.defiComplianceWhyGetThisCard;
+  String get RESPONSE_STRING_defiComplianceExpirationDate =>
+      l10n.defiComplianceExpirationDate;
+  String get RESPONSE_STRING_defiComplianceHowToGetIt =>
+      l10n.defiComplianceHowToGetIt;
+
   String get RESPONSE_STRING_payloadFormatErrorMessage =>
       l10n.payloadFormatErrorMessage;
   String get RESPONSE_STRING_thisFeatureIsNotSupportedMessage =>

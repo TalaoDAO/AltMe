@@ -16,7 +16,10 @@ Future<void> discoverCredential({
   credentialSubjectTypeList
     ..remove(CredentialSubjectType.emailPass)
     ..remove(CredentialSubjectType.phonePass)
-    ..remove(CredentialSubjectType.twitterCard);
+    ..remove(CredentialSubjectType.twitterCard)
+
+    ///items to add because needs KYC
+    ..add(CredentialSubjectType.defiCompliance);
 
   if (credentialSubjectTypeList
       .contains(dummyCredential.credentialSubjectType)) {

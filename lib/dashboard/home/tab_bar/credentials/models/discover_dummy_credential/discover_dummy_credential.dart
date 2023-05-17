@@ -33,6 +33,14 @@ class DiscoverDummyCredential extends Equatable {
 
     switch (credentialSubjectType) {
       case CredentialSubjectType.defiCompliance:
+        image = ImageStrings.dummyDefiComplianceCard;
+        link = Urls.ageRangeUrl;
+        whyGetThisCard =
+            ResponseString.RESPONSE_STRING_defiComplianceWhyGetThisCard;
+        expirationDateDetails =
+            ResponseString.RESPONSE_STRING_defiComplianceExpirationDate;
+        howToGetIt = ResponseString.RESPONSE_STRING_defiComplianceHowToGetIt;
+        break;
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.ageRange:
         image = ImageStrings.dummyAgeRangeCard;

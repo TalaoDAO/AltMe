@@ -398,6 +398,15 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_ageRangeHowToGetIt:
         return globalMessage.RESPONSE_STRING_ageRangeHowToGetIt;
 
+      case ResponseString.RESPONSE_STRING_defiComplianceWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_defiComplianceWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_defiComplianceExpirationDate:
+        return globalMessage.RESPONSE_STRING_defiComplianceExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_defiComplianceHowToGetIt:
+        return globalMessage.RESPONSE_STRING_defiComplianceHowToGetIt;
+
       case ResponseString.RESPONSE_STRING_payloadFormatErrorMessage:
         return globalMessage.RESPONSE_STRING_payloadFormatErrorMessage;
 

@@ -1,4 +1,11 @@
-enum KycVcType { verifiableId, over13, over15, over18, ageRange }
+enum KycVcType {
+  verifiableId,
+  over13,
+  over15,
+  over18,
+  ageRange,
+  defiCompliance,
+}
 
 extension KycVcTypeX on KycVcType {
   String get value {
@@ -13,6 +20,8 @@ extension KycVcTypeX on KycVcType {
         return 'Over18';
       case KycVcType.ageRange:
         return 'AgeRange';
+      case KycVcType.defiCompliance:
+        return 'DefiCompliance';
     }
   }
 }
