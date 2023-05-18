@@ -135,7 +135,16 @@ class _DashboardViewState extends State<DashboardView> {
               pageController.jumpToPage(state.selectedIndex);
             }
           },
-        )
+        ),
+        BlocListener<KycVerificationCubit, KycVerificationState>(
+          listener: (_, state) {
+            if (state.status == KycVerificationStatus.loading) {
+              LoadingView().show(context: context);
+            } else {
+              LoadingView().hide();
+            }
+          },
+        ),
       ],
       child: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {

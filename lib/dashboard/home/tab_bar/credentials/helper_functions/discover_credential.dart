@@ -28,6 +28,17 @@ Future<void> discoverCredential({
     /// here check for over18, over15, age range and over13 to take photo for
     /// AI KYC
     if (dummyCredential.credentialSubjectType.checkForAIKYC) {
+      /// For DefiCompliance, it is not necessary to use Yoti. Instead,
+      /// we can directly proceed with Id360.
+      if (dummyCredential.credentialSubjectType ==
+          CredentialSubjectType.defiCompliance) {
+        await context.read<KycVerificationCubit>().getVcByKycVerification(
+              vcType: dummyCredential.credentialSubjectType.getKycVcType,
+              link: dummyCredential.link!,
+            );
+        return;
+      }
+
       await Navigator.push<void>(
         context,
         ChooseVerificationMethodPage.route(

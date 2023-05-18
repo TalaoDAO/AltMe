@@ -43,7 +43,7 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
   Future<void> getVcByKycVerification({
     required KycVcType vcType,
     required String link,
-    required dynamic Function() onKycApproved,
+    dynamic Function()? onKycApproved,
   }) async {
     await startKycVerifcation(vcType: vcType);
   }
@@ -51,7 +51,7 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
   Future<void> startKycVerifcation({
     KycVcType vcType = KycVcType.verifiableId,
   }) async {
-    emit(state.copyWith(status: KycVerificationStatus.pending));
+    emit(state.copyWith(status: KycVerificationStatus.loading));
     final code = await _getApiCode();
     if (code == null) {
       emit(state.copyWith(status: KycVerificationStatus.unverified));
