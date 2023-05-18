@@ -78,6 +78,32 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// when blockchain type is pre-selected
     if (blockchainType != null) {
+      /// Here, we create temporary accounts and check for their
+      /// existence beforehand.
+      final newAcc = await _generateAccount(
+        mnemonicOrKey: mnemonicOrKey,
+        isImported: isImported,
+        isSecretKey: isSecretKey,
+        blockchainType: blockchainType,
+        totalAccountsYet: int.parse(totalAccountsYet),
+      );
+
+      ///Before creating a duplicate account, please ensure that it
+      ///doesn't already exist.
+      if (state.cryptoAccount.data.any(
+        (acc) =>
+            acc.walletAddress == newAcc.walletAddress &&
+            acc.blockchainType == newAcc.blockchainType,
+      )) {
+        onComplete?.call(
+          cryptoAccount: state.cryptoAccount,
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST,
+          ),
+        );
+        return;
+      }
+
       log.i('creating both $blockchainType accounts');
       updatedCryptoAccount = await createBlockchainAccount(
         accountName: accountName,
@@ -280,6 +306,80 @@ class WalletCubit extends Cubit<WalletState> {
     }
 
     return cryptoAccount;
+  }
+
+  Future<CryptoAccountData> _generateAccount({
+    String? accountName,
+    required String mnemonicOrKey,
+    required bool isImported,
+    required bool isSecretKey,
+    required BlockchainType blockchainType,
+    required int totalAccountsYet,
+  }) async {
+    final AccountType accountType = blockchainType.accountType;
+
+    int derivePathIndex = 0;
+    final bool isCreated = !isImported;
+
+    log.i('isImported - $isImported');
+    if (isCreated) {
+      /// Note: while adding derivePathIndex is always increased
+      final String? savedDerivePathIndex =
+          await secureStorageProvider.get(blockchainType.derivePathIndexKey);
+
+      if (savedDerivePathIndex != null && savedDerivePathIndex.isNotEmpty) {
+        derivePathIndex = int.parse(savedDerivePathIndex) + 1;
+      }
+    }
+
+    log.i('derivePathIndex - $derivePathIndex');
+
+    /// Note: while importing derivePathIndex is always 0
+
+    late String walletAddress;
+    late String secretKey;
+
+    if (isSecretKey) {
+      secretKey = mnemonicOrKey;
+
+      walletAddress = await keyGenerator.walletAddressFromSecretKey(
+        secretKey: secretKey,
+        accountType: accountType,
+      );
+    } else {
+      secretKey = await keyGenerator.secretKeyFromMnemonic(
+        mnemonic: mnemonicOrKey,
+        accountType: accountType,
+        derivePathIndex: derivePathIndex,
+      );
+
+      walletAddress = await keyGenerator.walletAddressFromMnemonic(
+        mnemonic: mnemonicOrKey,
+        accountType: accountType,
+        derivePathIndex: derivePathIndex,
+      );
+    }
+
+    final int newCount = totalAccountsYet + 1;
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.cryptoAccounTrackingIndex,
+      newCount.toString(),
+    );
+
+    String name = 'My Account $newCount';
+
+    if (accountName != null && accountName.isNotEmpty) {
+      name = accountName;
+    }
+
+    return CryptoAccountData(
+      name: name,
+      walletAddress: walletAddress,
+      secretKey: secretKey,
+      isImported: isImported,
+      blockchainType: blockchainType,
+    );
   }
 
   Future<void> editCryptoAccountName({

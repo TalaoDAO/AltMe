@@ -362,4 +362,6 @@ class GlobalMessage {
       l10n.backupPolygonIdCredentialEmptyError;
   String get RESPONSE_STRING_downloadingCircuitLoadingMessage =>
       l10n.downloadingCircuitLoadingMessage;
+  String get RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST =>
+      l10n.cryptoAccountAlreadyExistMessage;
 }

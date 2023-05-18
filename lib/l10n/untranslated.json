@@ -814,7 +814,8 @@
     "yourAgeEstimationIs",
     "claimNotFound",
     "cryptographicProof",
-    "downloadingCircuitLoadingMessage"
+    "downloadingCircuitLoadingMessage",
+    "cryptoAccountAlreadyExistMessage"
   ],
 
   "es": [
@@ -1632,7 +1633,8 @@
     "yourAgeEstimationIs",
     "claimNotFound",
     "cryptographicProof",
-    "downloadingCircuitLoadingMessage"
+    "downloadingCircuitLoadingMessage",
+    "cryptoAccountAlreadyExistMessage"
   ],
 
   "fr": [
@@ -1752,7 +1754,8 @@
     "yourAgeEstimationIs",
     "claimNotFound",
     "cryptographicProof",
-    "downloadingCircuitLoadingMessage"
+    "downloadingCircuitLoadingMessage",
+    "cryptoAccountAlreadyExistMessage"
   ],
 
   "it": [
@@ -2570,6 +2573,7 @@
     "yourAgeEstimationIs",
     "claimNotFound",
     "cryptographicProof",
-    "downloadingCircuitLoadingMessage"
+    "downloadingCircuitLoadingMessage",
+    "cryptoAccountAlreadyExistMessage"
   ]
 }

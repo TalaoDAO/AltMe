@@ -890,5 +890,6 @@
   },
   "claimNotFound": "Claim Not Found",
   "cryptographicProof": "Cryptographic Proof",
-  "downloadingCircuitLoadingMessage": "Downloading circuits. It may take some time. Please wait."
+  "downloadingCircuitLoadingMessage": "Downloading circuits. It may take some time. Please wait.",
+  "cryptoAccountAlreadyExistMessage": "It appears that an account with this crypto information already exists"
 }

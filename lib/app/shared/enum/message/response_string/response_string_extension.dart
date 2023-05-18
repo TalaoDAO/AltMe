@@ -446,6 +446,8 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_downloadingCircuitLoadingMessage:
         return globalMessage.RESPONSE_STRING_downloadingCircuitLoadingMessage;
+      case ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST:
+        return globalMessage.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST;
     }
   }
 }

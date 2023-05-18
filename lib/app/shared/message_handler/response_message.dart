@@ -660,6 +660,9 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_defiComplianceHowToGetIt:
           return ResponseString.RESPONSE_STRING_defiComplianceHowToGetIt
               .localise(context);
+        case ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST:
+          return ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST
+              .localise(context);
       }
     }
     return '';
