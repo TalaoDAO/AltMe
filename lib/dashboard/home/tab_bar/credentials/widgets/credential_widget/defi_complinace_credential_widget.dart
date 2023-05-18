@@ -18,7 +18,7 @@ class DefiComplianceCredentialWidget extends StatelessWidget {
       cardBackgroundImagePath: ImageStrings.defiComplianceCard,
       issuerName: credentialModel
           .credentialPreview.credentialSubjectModel.issuedBy?.name,
-      value: defiComplianceModel.ageCheck ?? '',
+      value: defiComplianceModel.amlComplianceCheck ?? '',
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
