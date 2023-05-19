@@ -5,7 +5,6 @@ import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
-import 'package:secure_storage/secure_storage.dart';
 
 class PolygonIdProofPage extends StatelessWidget {
   const PolygonIdProofPage({
@@ -45,7 +44,7 @@ class PolygonIdProofPage extends StatelessWidget {
             ),
             SizedBox(height: 100),
             Text(
-              'CRYPTOGRPAHIC PROOF',
+              'CRYPTOGRAPHIC PROOF',
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 100),
