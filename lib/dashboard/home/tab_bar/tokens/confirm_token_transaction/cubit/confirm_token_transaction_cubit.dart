@@ -60,100 +60,144 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     emit(state.loading());
     try {
       if (manageNetworkCubit.state.network is TezosNetwork) {
-        final rpcNodeUrl = manageNetworkCubit.state.network.rpcNodeUrl;
-        final client = TezartClient(rpcNodeUrl);
-        final keystore = KeyGenerator()
-            .getKeystore(secretKey: state.selectedAccountSecretKey);
-        const minFeesWithStorage = 6526;
-        var transactionAmount =
-            ((state.tokenAmount * 1000000).toInt()) - minFeesWithStorage;
-        // Get fees
-        final OperationsList estimationOperationList =
-            await prepareTezosOperation(keystore, client, transactionAmount);
-        final initialFeesSum = estimationOperationList.operations
-            .fold(0, (sum, element) => sum + element.totalFee);
-        // get final operation
-        // minus 1 to prevent overflow operation :-/
-        // TODO: need to find better solution than (-1)
-        // but it prevent burning gas for nothing.
-        transactionAmount =
-            transactionAmount - initialFeesSum + minFeesWithStorage - 1;
-        final OperationsList finalOperationList =
-            await prepareTezosOperation(keystore, client, transactionAmount);
-        final finalFeesSum = finalOperationList.operations
-            .fold(0, (sum, element) => sum + element.totalFee);
-        final tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
-          average: finalFeesSum / 1000000,
-        );
-        final networkFee = tezosNetworkFees[0];
-        final XtzUSDPrice = (await getXtzUSDPrice()) ?? 0;
-        emit(
-          state.copyWith(
-            networkFee: networkFee.copyWith(
-              feeInUSD: XtzUSDPrice * networkFee.fee,
-            ),
-            networkFees: tezosNetworkFees
-                .map(
-                  (e) => e.copyWith(
-                    feeInUSD: XtzUSDPrice * e.fee,
-                  ),
-                )
-                .toList(),
-            status: AppStatus.init,
-            totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
-                ? state.tokenAmount - networkFee.fee
-                : state.tokenAmount,
-            operationsList: finalOperationList,
-          ),
-        );
+        await _calculateFeeTezos();
       } else {
-        final web3RpcURL = await web3RpcMainnetInfuraURL();
-
-        final amount = state.tokenAmount
-            .toStringAsFixed(int.parse(state.selectedToken.decimals))
-            .replaceAll(',', '')
-            .replaceAll('.', '');
-
-        final credentials =
-            EthPrivateKey.fromHex(state.selectedAccountSecretKey);
-        final sender = credentials.address;
-        final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
-
-        final maxGas = await MWeb3Client.estimateEthereumFee(
-          web3RpcURL: web3RpcURL,
-          sender: sender,
-          reciever: reciever,
-          amount: EtherAmount.inWei(
-            state.selectedToken.symbol == 'ETH'
-                ? BigInt.from(double.parse(amount))
-                : BigInt.zero,
-          ),
-        );
-
-        final fee = EtherAmount.inWei(maxGas).getValueInUnit(EtherUnit.ether);
-        final etherUSDPrice = (await getEthUSDPrice()) ?? 0;
-        final double feeInUSD = etherUSDPrice * fee;
-        final networkFee = NetworkFeeModel(
-          fee: fee,
-          networkSpeed: NetworkSpeed.average,
-          tokenSymbol: 'ETH',
-          feeInUSD: feeInUSD,
-        );
-
-        emit(
-          state.copyWith(
-            status: AppStatus.init,
-            networkFee: networkFee,
-            totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
-                ? state.tokenAmount - networkFee.fee
-                : state.tokenAmount,
-          ),
-        );
+        await _calculateFeeEthereum();
       }
     } catch (e, s) {
       logger.i('error: $e , stack: $s');
       emit(state.copyWith(status: AppStatus.error));
     }
+  }
+
+  Future<void> _calculateFeeEthereum() async {
+    final web3RpcURL = await web3RpcMainnetInfuraURL();
+
+    final amount = state.tokenAmount
+        .toStringAsFixed(int.parse(state.selectedToken.decimals))
+        .replaceAll(',', '')
+        .replaceAll('.', '');
+
+    final credentials = EthPrivateKey.fromHex(state.selectedAccountSecretKey);
+    final sender = credentials.address;
+    final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
+
+    final maxGas = await MWeb3Client.estimateEthereumFee(
+      web3RpcURL: web3RpcURL,
+      sender: sender,
+      reciever: reciever,
+      amount: EtherAmount.inWei(
+        state.selectedToken.symbol == 'ETH'
+            ? BigInt.from(double.parse(amount))
+            : BigInt.zero,
+      ),
+    );
+
+    final fee = EtherAmount.inWei(maxGas).getValueInUnit(EtherUnit.ether);
+    final etherUSDPrice = (await getEthUSDPrice()) ?? 0;
+    final double feeInUSD = etherUSDPrice * fee;
+    final networkFee = NetworkFeeModel(
+      fee: fee,
+      networkSpeed: NetworkSpeed.average,
+      tokenSymbol: 'ETH',
+      feeInUSD: feeInUSD,
+    );
+
+    emit(
+      state.copyWith(
+        status: AppStatus.init,
+        networkFee: networkFee,
+        totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
+            ? state.tokenAmount - networkFee.fee
+            : state.tokenAmount,
+      ),
+    );
+  }
+
+  Future<void> _calculateFeeTezos() async {
+    final rpcNodeUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+    final client = TezartClient(rpcNodeUrl);
+    final keystore =
+        KeyGenerator().getKeystore(secretKey: state.selectedAccountSecretKey);
+    late OperationsList finalOperationList;
+    if (state.selectedToken.contractAddress.isEmpty) {
+      finalOperationList = await tezosTransfert(keystore, client);
+    } else {
+      finalOperationList = await tezosContract(
+        client,
+        keystore,
+      );
+    }
+    final finalFeesSum = finalOperationList.operations
+        .fold(0, (sum, element) => sum + element.totalFee);
+    final tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
+      average: finalFeesSum / 1000000,
+    );
+    final networkFee = tezosNetworkFees[0];
+    final XtzUSDPrice = (await getXtzUSDPrice()) ?? 0;
+    emit(
+      state.copyWith(
+        networkFee: networkFee.copyWith(
+          feeInUSD: XtzUSDPrice * networkFee.fee,
+        ),
+        networkFees: tezosNetworkFees
+            .map(
+              (e) => e.copyWith(
+                feeInUSD: XtzUSDPrice * e.fee,
+              ),
+            )
+            .toList(),
+        status: AppStatus.init,
+        totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
+            ? state.tokenAmount - networkFee.fee
+            : state.tokenAmount,
+        operationsList: finalOperationList,
+      ),
+    );
+  }
+
+  Future<OperationsList> tezosContract(
+    TezartClient client,
+    Keystore keystore,
+  ) async {
+    final contract = Contract(
+      contractAddress: state.selectedToken.contractAddress,
+      rpcInterface: client.rpcInterface,
+    );
+    final amount = (state.tokenAmount * 1000000).toInt();
+    final parameters = state.selectedToken.isFA1
+        ? '''(Pair "${keystore.publicKey}" (Pair "${state.withdrawalAddress}" $amount))'''
+        : '''{Pair "${keystore.publicKey}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(state.selectedToken.tokenId ?? '0')} $amount)}}''';
+
+    final finalOperationList = await contract.callOperation(
+      amount: amount,
+      params: parameters,
+      source: keystore,
+      publicKey: keystore.publicKey,
+    );
+    return finalOperationList;
+  }
+
+  Future<OperationsList> tezosTransfert(
+    Keystore keystore,
+    TezartClient client,
+  ) async {
+    const minFeesWithStorage = 6526;
+    var transactionAmount =
+        ((state.tokenAmount * 1000000).toInt()) - minFeesWithStorage;
+    // Get fees
+    final OperationsList estimationOperationList =
+        await prepareTezosOperation(keystore, client, transactionAmount);
+    final initialFeesSum = estimationOperationList.operations
+        .fold(0, (sum, element) => sum + element.totalFee);
+    // get final operation
+    // minus 1 to prevent overflow operation :-/
+    // but it prevent burning gas for nothing.
+    transactionAmount =
+        transactionAmount - initialFeesSum + minFeesWithStorage - 1;
+    final finalOperationList =
+        await prepareTezosOperation(keystore, client, transactionAmount);
+    return finalOperationList;
   }
 
   Future<OperationsList> prepareTezosOperation(
