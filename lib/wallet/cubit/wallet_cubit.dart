@@ -169,7 +169,7 @@ class WalletCubit extends Cubit<WalletState> {
           );
         }
       } else {
-        /// polygon at start
+        /// Polygon at start
         await createBlockchainAccount(
           accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
@@ -179,14 +179,24 @@ class WalletCubit extends Cubit<WalletState> {
           totalAccountsYet: accountsCount,
         );
 
-        /// tezos at start
+        /// Binance at start
+        await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.binance,
+          totalAccountsYet: accountsCount + 1,
+        );
+
+        /// Tezos at start
         updatedCryptoAccount = await createBlockchainAccount(
           accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.tezos,
-          totalAccountsYet: accountsCount + 1,
+          totalAccountsYet: accountsCount + 2,
         );
       }
     }
