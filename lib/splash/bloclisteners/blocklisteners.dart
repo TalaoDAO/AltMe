@@ -545,36 +545,26 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
               },
             ) ??
             false;
-
-        if (accept) {
-          /// bypass authentication
-          await Navigator.of(context).push<void>(
-            PinCodePage.route(
-              isValidCallback: () {
-                context.read<PolygonIdCubit>().authenticate(
-                      iden3MessageEntity: iden3MessageEntity,
-                      goBack: false,
-                    );
-              },
-              restrictToBack: false,
-            ),
-          );
-          return;
-        }
       }
 
       LoadingView().hide();
 
       if (accept) {
-        /// go to authentication page
         final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
             .getIden3Message(message: state.scannedResponse!);
 
         await Navigator.of(context).push<void>(
-          PolygonIdAuthenticationPage.route(
-            iden3MessageEntity: iden3MessageEntity,
+          PinCodePage.route(
+            isValidCallback: () {
+              context.read<PolygonIdCubit>().authenticate(
+                    iden3MessageEntity: iden3MessageEntity,
+                    goBack: false,
+                  );
+            },
+            restrictToBack: false,
           ),
         );
+        return;
       }
     }
   },
