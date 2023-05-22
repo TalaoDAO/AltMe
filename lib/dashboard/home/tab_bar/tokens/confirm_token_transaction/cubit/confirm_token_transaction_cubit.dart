@@ -30,9 +30,17 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   final logger = getLogger('ConfirmWithdrawal');
 
   Future<void> getXtzUSDPrice() async {
-    final responseOfXTZUsdPrice = await client
-        .get('${Urls.tezToolBase}/v1/xtz-price') as Map<String, dynamic>;
-    final xtzUSDPrice = responseOfXTZUsdPrice['price'] as double;
+    
+    await dotenv.load();
+    final apiKey = dotenv.get('COIN_GECKO_API_KEY');
+
+    final responseOfXTZUsdPrice = await client.get(
+      '${Urls.coinGeckoBase}/simple/price?ids=tezos&vs_currencies=usd',
+      queryParameters: {
+        'x_cg_pro_api_key': apiKey,
+      },
+    ) as Map<String, dynamic>;
+    final xtzUSDPrice = responseOfXTZUsdPrice['tezos']['usd'] as double;
     emit(
       state.copyWith(
         networkFee: state.networkFee!.copyWith(

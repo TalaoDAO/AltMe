@@ -7,62 +7,34 @@ part 'contract_model.g.dart';
 @JsonSerializable()
 class ContractModel extends Equatable {
   const ContractModel({
+    required this.id,
     required this.symbol,
-    required this.address,
-    required this.thumbnailUri,
-    required this.decimals,
+    required this.image,
     required this.name,
     required this.currentPrice,
-    required this.buyPrice,
-    required this.sellPrice,
-    required this.precision,
-    required this.type,
-    required this.totalSupply,
-    required this.qptTokenSupply,
-    required this.usdValue,
   });
 
   factory ContractModel.fromJson(Map<String, dynamic> json) =>
       _$ContractModelFromJson(json);
 
+  final String id;
   final String symbol;
-  final String address;
-  final String? thumbnailUri;
-  final int decimals;
   final String? name;
-  final double currentPrice;
-  final double buyPrice;
-  final double sellPrice;
-  final int precision;
-  final String type;
-  final double? totalSupply;
-  final double? qptTokenSupply;
-  final double usdValue;
+  final String? image;
+  final double? currentPrice;
 
   Map<String, dynamic> toJson() => _$ContractModelToJson(this);
 
   String? get iconUrl {
-    return thumbnailUri?.replaceFirst('ipfs://', Urls.talaoIpfsGateway);
-  }
-
-  bool isEqualTo({required ContractModel contractModel}) {
-    return address == contractModel.address;
+    return image?.replaceFirst('ipfs://', Urls.talaoIpfsGateway);
   }
 
   @override
   List<Object?> get props => [
+        id,
         symbol,
-        address,
-        thumbnailUri,
-        decimals,
         name,
+        image,
         currentPrice,
-        buyPrice,
-        sellPrice,
-        precision,
-        type,
-        totalSupply,
-        qptTokenSupply,
-        usdValue,
       ];
 }

@@ -63,8 +63,7 @@ class Urls {
   static const mainnetRPC = 'https://rpc.tzstats.com';
   static const ghostnetRPC = 'https://rpc.tzkt.io/ghostnet';
 
-  static const tezToolPrices = 'https://api.teztools.io/v1/prices';
-  static const tezToolBase = 'https://api.teztools.io';
+  static const coinGeckoBase = 'https://pro-api.coingecko.com/api/v3/';
 
   static const xtzPrice = 'https://api.teztools.io/v1/xtz-price';
   static const cryptoCompareBaseUrl = 'https://min-api.cryptocompare.com';
