@@ -249,14 +249,15 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
-        Row(
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Text(
-              '${l10n.createDate} : ',
+              '${l10n.creationDate} : ',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             Text(
-              UiDate.normalFormat(nftModel.date ?? nftModel.firstTime) ?? '?',
+              UiDate.normalFormat(nftModel.firstTime ?? nftModel.date) ?? '?',
               style: Theme.of(context).textTheme.bodySmall3,
             ),
           ],
@@ -330,10 +331,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
-        Row(
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Text(
-              '${l10n.lastMetadataSync} : ',
+              '${l10n.creationDate} : ',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             Text(
