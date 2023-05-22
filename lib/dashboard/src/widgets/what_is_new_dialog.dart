@@ -76,6 +76,18 @@ class WhatIsNewDialog extends StatelessWidget {
                             NewContent(
                               version: versionNumber,
                               features: const [
+                                'New cards designs',
+                                'Robust KYC solution (ID360) by Docaposte',
+                                'PolygonID integration for ZKP credentials',
+                                'New DeFi compliance credential',
+                                'New feature to add an identity layer to any crypto wallet',
+                                'New discover coins section in Altme',
+                                'Bug fixes',
+                              ],
+                            ),
+                            const NewContent(
+                              version: '1.13.24',
+                              features: [
                                 'Improved user experience',
                                 'New questions in FAQ',
                                 'New age card Over15',
