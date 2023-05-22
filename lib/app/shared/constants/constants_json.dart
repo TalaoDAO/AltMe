@@ -280,7 +280,7 @@ abstract class ConstantsJson {
           'title': {
             'path': <dynamic>[],
             'schema': {'type': 'string'},
-            'fallback': 'Binance address'
+            'fallback': 'BNB Chain address'
           },
           'subtitle': {
             'path': <dynamic>[],

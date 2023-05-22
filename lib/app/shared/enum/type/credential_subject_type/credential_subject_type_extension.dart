@@ -528,7 +528,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.polygonAssociatedWallet:
         return 'Polygon Associated Address';
       case CredentialSubjectType.binanceAssociatedWallet:
-        return 'Binance Associated Address';
+        return 'BNB Chain Associated Address';
       case CredentialSubjectType.ethereumPooAddress:
         return 'Ethereum Poo Address';
       case CredentialSubjectType.fantomPooAddress:
@@ -536,7 +536,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.polygonPooAddress:
         return 'Polygon Poo Address';
       case CredentialSubjectType.binancePooAddress:
-        return 'Binance Poo Address';
+        return 'BNB Chain Poo Address';
       case CredentialSubjectType.tezosPooAddress:
         return 'Tezos Poo Address';
       case CredentialSubjectType.certificateOfEmployment:
