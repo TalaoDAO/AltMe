@@ -175,7 +175,7 @@ class App extends StatelessWidget {
           create: (context) => AllTokensCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
             client: DioClient(
-              Urls.tezToolBase,
+              Urls.coinGeckoBase,
               Dio(),
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -26,9 +27,23 @@ class AllTokensCubit extends Cubit<AllTokensState> {
   Future<List<ContractModel>?> getAllContracts() async {
     try {
       emit(state.copyWith(status: AppStatus.loading));
+      await dotenv.load();
+      final apiKey = dotenv.get('COIN_GECKO_API_KEY');
 
-      final dynamic result = await client.get(Urls.tezToolPrices);
-      final contracts = (result['contracts'] as List<dynamic>)
+      final dynamic result = await client.get(
+        '/coins/markets',
+        queryParameters: {
+          'vs_currency': 'usd',
+          'category': 'tezos-ecosystem',
+          'order': 'market_cap_desc',
+          'per_page': 1000,
+          'page': 1,
+          'sparkline': false,
+          'locale': 'en',
+          'x_cg_pro_api_key': apiKey,
+        },
+      );
+      final contracts = (result as List<dynamic>)
           .map(
             (dynamic e) => ContractModel.fromJson(e as Map<String, dynamic>),
           )
@@ -118,124 +133,65 @@ class AllTokensCubit extends Cubit<AllTokensState> {
       );
       selectedContracs.addAll(const [
         ContractModel(
+          id: 'energy',
           symbol: 'ENR',
-          address: 'KT1GxxLmBC7tfx4Enpe5YLaCXppAKKfzNRYF',
-          thumbnailUri: '',
-          decimals: 9,
+          image: '',
           name: 'Energy',
           currentPrice: 0,
-          buyPrice: 0,
-          sellPrice: 0,
-          precision: 0,
-          type: 'fa2',
-          totalSupply: 0,
-          qptTokenSupply: 0,
-          usdValue: 0,
         ),
         ContractModel(
+          id: 'unobtanium-tezos',
           symbol: 'UNO',
-          address: 'KT1Cq3pyv6QEXugsAC2iyXr7ecFqN7fJVTnA',
-          thumbnailUri: '',
-          decimals: 9,
           name: 'Unobtanium',
+          image:
+              'https://assets.coingecko.com/coins/images/19469/large/uno.png?1635255375',
           currentPrice: 0,
-          buyPrice: 0,
-          sellPrice: 0,
-          precision: 0,
-          type: 'fa2',
-          totalSupply: 0,
-          qptTokenSupply: 0,
-          usdValue: 0,
         ),
         ContractModel(
+          id: 'machinery',
           symbol: 'MCH',
-          address: 'KT1JAgJC6FTJ9SzGGits8GVonCr8cfFp5HGV',
-          thumbnailUri: '',
-          decimals: 9,
+          image: '',
           name: 'Machinery',
           currentPrice: 0,
-          buyPrice: 0,
-          sellPrice: 0,
-          precision: 0,
-          type: 'fa2',
-          totalSupply: 0,
-          qptTokenSupply: 0,
-          usdValue: 0,
         ),
         ContractModel(
+          id: 'minerals',
           symbol: 'MIN',
-          address: 'KT1H5YwfF6nmFZavwzftddbcfxAXmbGhyDCY',
-          thumbnailUri: '',
-          decimals: 9,
           name: 'Minerals',
           currentPrice: 0,
-          buyPrice: 0,
-          sellPrice: 0,
-          precision: 0,
-          type: 'fa2',
-          totalSupply: 0,
-          qptTokenSupply: 0,
-          usdValue: 0,
+          image: '',
         ),
         ContractModel(
+          id: 'gif-dao',
           symbol: 'GIF',
-          address: 'KT1LuXT6jZPhUH1qCnSUqAzFedjoBwePLQnF',
-          thumbnailUri: '',
-          decimals: 9,
+          image:
+              'https://assets.coingecko.com/coins/images/19470/large/gif.png?1635255734',
           name: 'GIF DAO',
           currentPrice: 0,
-          buyPrice: 0,
-          sellPrice: 0,
-          precision: 0,
-          type: 'fa2',
-          totalSupply: 0,
-          qptTokenSupply: 0,
-          usdValue: 0,
         ),
         ContractModel(
+          id: 'dogami',
           symbol: 'DOGA',
-          address: 'KT1Ucg1fTZXBD8P426rTRXyu7YQUgYXV7RVu',
-          thumbnailUri: '',
-          decimals: 9,
+          image:
+              'https://assets.coingecko.com/coins/images/24510/large/doga_logo.png?1648541150',
           name: 'DOGAMI',
           currentPrice: 0,
-          buyPrice: 0,
-          sellPrice: 0,
-          precision: 0,
-          type: 'fa2',
-          totalSupply: 0,
-          qptTokenSupply: 0,
-          usdValue: 0,
         ),
         ContractModel(
+          id: 'kolibri-dao',
           symbol: 'kDAO',
-          address: 'KT1NEa7CmaLaWgHNi6LkRi5Z1f4oHfdzRdGA',
-          thumbnailUri: '',
-          decimals: 9,
+          image:
+              'https://assets.coingecko.com/coins/images/22192/large/8BpzM6c.png?1641189068',
           name: 'Kolibri DAO',
           currentPrice: 0,
-          buyPrice: 0,
-          sellPrice: 0,
-          precision: 0,
-          type: 'fa2',
-          totalSupply: 0,
-          qptTokenSupply: 0,
-          usdValue: 0,
         ),
         ContractModel(
+          id: 'wrapped-busd',
           symbol: 'wBUSD',
-          address: 'KT1UMAE2PBskeQayP5f2ZbGiVYF7h8bZ2gyp',
-          thumbnailUri: '',
-          decimals: 9,
+          image:
+              'https://assets.coingecko.com/coins/images/19498/large/wbusd.png?1635305456',
           name: 'Wrapped BUSD',
           currentPrice: 0,
-          buyPrice: 0,
-          sellPrice: 0,
-          precision: 0,
-          type: 'fa2',
-          totalSupply: 0,
-          qptTokenSupply: 0,
-          usdValue: 0,
         ),
       ]);
       await secureStorageProvider.set(
@@ -249,9 +205,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
   }
 
   void addContract({required ContractModel contractModel}) {
-    if (state.selectedContracts
-        .map((e) => e.address)
-        .contains(contractModel.address)) {
+    if (state.selectedContracts.map((e) => e.id).contains(contractModel.id)) {
       return;
     }
     emit(
@@ -266,15 +220,13 @@ class AllTokensCubit extends Cubit<AllTokensState> {
 
   void removeContract({required ContractModel contractModel}) {
     if (state.selectedContracts.isEmpty ||
-        !state.selectedContracts
-            .map((e) => e.address)
-            .contains(contractModel.address)) {
+        !state.selectedContracts.map((e) => e.id).contains(contractModel.id)) {
       return;
     }
     emit(
       state.copyWith(
         selectedContracts: List.from(state.selectedContracts)
-          ..removeWhere((e) => e.address == contractModel.address),
+          ..removeWhere((e) => e.id == contractModel.id),
       ),
     );
   }
