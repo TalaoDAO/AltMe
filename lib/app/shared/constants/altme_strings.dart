@@ -21,4 +21,7 @@ class AltMeStrings {
 
   //Chat
   static const String matrixSupportId = '@support:matrix.talao.co';
+
+  //ID360
+  static const int clientIdForID360=100;
 }
