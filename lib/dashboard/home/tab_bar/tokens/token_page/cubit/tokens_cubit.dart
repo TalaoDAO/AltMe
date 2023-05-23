@@ -452,7 +452,7 @@ class TokensCubit extends Cubit<TokensState> {
     );
 
     try {
-      // get usd balance of xtz from teztools api
+      // get usd balance
       await dotenv.load();
       final apiKey = dotenv.get('COIN_GECKO_API_KEY');
 

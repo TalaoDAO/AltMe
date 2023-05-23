@@ -4,6 +4,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'connected_dapps_cubit.g.dart';
@@ -44,10 +45,7 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
       final formattedBalance = balance / 1e6;
 
       log.i('fetching xtz USD price');
-      final response = await client.get(Urls.xtzPrice) as Map<String, dynamic>;
-      final XtzData xtzData = XtzData.fromJson(response);
-
-      final xtzUSDPrice = xtzData.price!;
+      final xtzUSDPrice = await _getTezosCurrentPriceInUSD() ?? 0;
 
       final token = TokenModel(
         contractAddress: '',
@@ -79,6 +77,23 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
           ),
         );
       }
+    }
+  }
+
+  Future<double?> _getTezosCurrentPriceInUSD() async {
+    try {
+      await dotenv.load();
+      final apiKey = dotenv.get('COIN_GECKO_API_KEY');
+
+      final responseOfXTZUsdPrice = await client.get(
+        '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
+        queryParameters: {
+          'x_cg_pro_api_key': apiKey,
+        },
+      ) as Map<String, dynamic>;
+      return responseOfXTZUsdPrice['tezos']['usd'] as double;
+    } catch (_) {
+      return null;
     }
   }
 

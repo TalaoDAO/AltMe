@@ -8,6 +8,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
 import 'package:tezart/tezart.dart';
@@ -137,11 +138,8 @@ class OperationCubit extends Cubit<OperationState> {
       switch (connectionBridgeType) {
         case ConnectionBridgeType.beacon:
           log.i('fetching xtz USDprice');
-          final response =
-              await dioClient.get(Urls.xtzPrice) as Map<String, dynamic>;
-          final XtzData xtzData = XtzData.fromJson(response);
-          log.i('response - ${xtzData.toJson()}');
-          emit(state.copyWith(usdRate: xtzData.price));
+          final xtzUsdPrice = await _getTezosCurrentPriceInUSD();
+          emit(state.copyWith(usdRate: xtzUsdPrice));
           break;
         case ConnectionBridgeType.walletconnect:
           log.i('fetching evm USDprice');
@@ -178,6 +176,23 @@ class OperationCubit extends Cubit<OperationState> {
           ),
         );
       }
+    }
+  }
+
+  Future<double?> _getTezosCurrentPriceInUSD() async {
+    try {
+      await dotenv.load();
+      final apiKey = dotenv.get('COIN_GECKO_API_KEY');
+
+      final responseOfXTZUsdPrice = await dioClient.get(
+        '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
+        queryParameters: {
+          'x_cg_pro_api_key': apiKey,
+        },
+      ) as Map<String, dynamic>;
+      return responseOfXTZUsdPrice['tezos']['usd'] as double;
+    } catch (_) {
+      return null;
     }
   }
 

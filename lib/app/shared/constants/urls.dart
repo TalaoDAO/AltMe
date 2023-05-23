@@ -65,7 +65,6 @@ class Urls {
 
   static const coinGeckoBase = 'https://pro-api.coingecko.com/api/v3/';
 
-  static const xtzPrice = 'https://api.teztools.io/v1/xtz-price';
   static const cryptoCompareBaseUrl = 'https://min-api.cryptocompare.com';
   static String ethPrice(String symbol) =>
       '$cryptoCompareBaseUrl/data/price?fsym=$symbol&tsyms=USD';
