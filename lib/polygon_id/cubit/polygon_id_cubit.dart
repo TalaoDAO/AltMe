@@ -347,11 +347,11 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   }
 
   /// getFilteredClaims
-  Future<List<ClaimEntity>> getFilteredClaims({
+  Future<List<ClaimEntity?>> getClaimsFromIden3Message({
     required Iden3MessageEntity iden3MessageEntity,
     required String mnemonic,
   }) async {
-    return polygonId.getFilteredClaims(
+    return polygonId.getClaimsFromIden3Message(
       iden3MessageEntity: iden3MessageEntity,
       mnemonic: mnemonic,
     );

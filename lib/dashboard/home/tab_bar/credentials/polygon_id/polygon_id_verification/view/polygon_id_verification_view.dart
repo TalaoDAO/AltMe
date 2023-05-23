@@ -111,7 +111,7 @@ class PolygonIdVerificationPage extends StatelessWidget {
 
                       final filteredClaims = await context
                           .read<PolygonIdCubit>()
-                          .getFilteredClaims(
+                          .getClaimsFromIden3Message(
                             iden3MessageEntity: iden3MessageEntity,
                             mnemonic: mnemonic!,
                           );
