@@ -352,14 +352,6 @@ class PolygonId {
     }
   }
 
-  /// getVocabs
-  Future<List<Map<String, dynamic>>> getVocabs({
-    required Iden3MessageEntity message,
-  }) async {
-    final sdk = PolygonIdSdk.I;
-    return sdk.iden3comm.getVocabs(message: message);
-  }
-
   /// getSchemas
   Future<List<Map<String, dynamic>>> getSchemas({
     required Iden3MessageEntity message,

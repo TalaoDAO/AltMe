@@ -72,23 +72,6 @@ class PolygonIdVerificationPage extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 10),
-                      FutureBuilder<List<Map<String, dynamic>>>(
-                        future: context
-                            .read<PolygonIdCubit>()
-                            .getVocabs(message: iden3MessageEntity),
-                        builder: (context, snapshot) {
-                          if (snapshot.data != null) {
-                            final data = snapshot.data;
-                            return Text(
-                              data.toString(),
-                              textAlign: TextAlign.center,
-                            );
-                          }
-
-                          return Container();
-                        },
-                      ),
-                      const SizedBox(height: 10),
                       Text(
                         'Requirements: ${proofScopeRequest.query.credentialSubject}',
                         textAlign: TextAlign.center,

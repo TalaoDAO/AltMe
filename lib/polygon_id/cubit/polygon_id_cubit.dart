@@ -334,13 +334,6 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     await credentialsCubit.insertCredential(credential: credentialModel);
   }
 
-  /// getVocabs
-  Future<List<Map<String, dynamic>>> getVocabs({
-    required Iden3MessageEntity message,
-  }) async {
-    return polygonId.getVocabs(message: message);
-  }
-
   /// getSchemas
   Future<List<Map<String, dynamic>>> getSchemas({
     required Iden3MessageEntity message,
