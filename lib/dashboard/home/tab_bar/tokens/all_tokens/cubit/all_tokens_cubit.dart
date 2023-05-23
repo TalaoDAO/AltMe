@@ -91,7 +91,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
           await secureStorageProvider.get(SecureStorageKeys.selectedContracts);
       if (result == null) {
         final data = await setDefaultSelectedContractIfFirstTime([]);
-        emit(state.copyWith(selectedContracts: data));
+        emit(state.copyWith(selectedContracts: data,status: AppStatus.init));
         return data;
       } else {
         final json = jsonDecode(result) as List<dynamic>;
@@ -102,7 +102,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
             .toList();
         final data =
             await setDefaultSelectedContractIfFirstTime(selectedContracts);
-        emit(state.copyWith(selectedContracts: data));
+        emit(state.copyWith(selectedContracts: data,status: AppStatus.init));
         getLogger(
           'Tokens cubit',
         ).i(
@@ -132,13 +132,13 @@ class AllTokensCubit extends Cubit<AllTokensState> {
         false.toString(),
       );
       selectedContracs.addAll(const [
-        ContractModel(
-          id: 'energy',
-          symbol: 'ENR',
-          image: '',
-          name: 'Energy',
-          currentPrice: 0,
-        ),
+        // ContractModel(
+        //   id: 'energy',
+        //   symbol: 'ENR',
+        //   image: '',
+        //   name: 'Energy',
+        //   currentPrice: 0,
+        // ),
         ContractModel(
           id: 'unobtanium-tezos',
           symbol: 'UNO',
@@ -147,20 +147,20 @@ class AllTokensCubit extends Cubit<AllTokensState> {
               'https://assets.coingecko.com/coins/images/19469/large/uno.png?1635255375',
           currentPrice: 0,
         ),
-        ContractModel(
-          id: 'machinery',
-          symbol: 'MCH',
-          image: '',
-          name: 'Machinery',
-          currentPrice: 0,
-        ),
-        ContractModel(
-          id: 'minerals',
-          symbol: 'MIN',
-          name: 'Minerals',
-          currentPrice: 0,
-          image: '',
-        ),
+        // ContractModel(
+        //   id: 'machinery',
+        //   symbol: 'MCH',
+        //   image: '',
+        //   name: 'Machinery',
+        //   currentPrice: 0,
+        // ),
+        // ContractModel(
+        //   id: 'minerals',
+        //   symbol: 'MIN',
+        //   name: 'Minerals',
+        //   currentPrice: 0,
+        //   image: '',
+        // ),
         ContractModel(
           id: 'gif-dao',
           symbol: 'GIF',

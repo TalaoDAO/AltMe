@@ -307,6 +307,8 @@ class TokensCubit extends Cubit<TokensState> {
         totalBalanceInUSD += tokenElement.balanceInUSD;
       }
       data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
+    } else {
+      data = _updateToSelectedTezosTokens(data);
     }
     emit(
       state.copyWith(

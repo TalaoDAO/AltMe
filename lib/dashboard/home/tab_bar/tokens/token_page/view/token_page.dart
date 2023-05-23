@@ -125,14 +125,12 @@ class _TokensViewState extends State<TokensView> {
                       AddTokenButton(
                         onTap: () {
                           Navigator.of(context)
-                              .push<bool>(
+                              .push<void>(
                             AllTokensPage.route(),
                           )
                               .then(
-                            (updated) {
-                              if (updated != null && updated == true) {
-                                context.read<TokensCubit>().updateTokenList();
-                              }
+                            (value) {
+                              context.read<TokensCubit>().updateTokenList();
                             },
                           );
                         },

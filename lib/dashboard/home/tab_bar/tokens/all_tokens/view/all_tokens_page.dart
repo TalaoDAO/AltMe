@@ -8,8 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AllTokensPage extends StatelessWidget {
   const AllTokensPage({super.key});
 
-  static Route<bool> route() {
-    return MaterialPageRoute<bool>(
+  static Route<void> route() {
+    return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/addTokensPage'),
       builder: (_) => const AllTokensPage(),
     );
@@ -29,7 +29,6 @@ class _AllTokensView extends StatefulWidget {
 }
 
 class _AllTokensViewState extends State<_AllTokensView> {
-  bool updated = false;
   @override
   void initState() {
     Future<void>.microtask(context.read<AllTokensCubit>().init);
@@ -43,113 +42,101 @@ class _AllTokensViewState extends State<_AllTokensView> {
       builder: (context, state) {
         getLogger('_AllTokensView')
             .i('list of selected contract: ${state.selectedContracts}');
-        return WillPopScope(
-          onWillPop: () async {
-            Navigator.of(context).pop(updated);
-            return false;
-          },
-          child: BasePage(
-            scrollView: false,
-            padding: EdgeInsets.zero,
-            titleLeading: BackLeadingButton(
-              onPressed: () {
-                Navigator.of(context).pop(updated);
-              },
-            ),
-            titleTrailing: const CryptoAccountSwitcherButton(),
-            body: BackgroundCard(
-              width: double.infinity,
-              height: double.infinity,
-              padding: const EdgeInsets.all(Sizes.spaceSmall),
-              margin: const EdgeInsets.all(Sizes.spaceSmall),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        l10n.addTokens,
-                        style: Theme.of(context).textTheme.headlineSmall,
+        return BasePage(
+          scrollView: false,
+          padding: EdgeInsets.zero,
+          titleLeading: const BackLeadingButton(),
+          titleTrailing: const CryptoAccountSwitcherButton(),
+          body: BackgroundCard(
+            width: double.infinity,
+            height: double.infinity,
+            padding: const EdgeInsets.all(Sizes.spaceSmall),
+            margin: const EdgeInsets.all(Sizes.spaceSmall),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      l10n.addTokens,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    TextButton(
+                      onPressed: (state.status == AppStatus.loading ||
+                              state.status == AppStatus.fetching)
+                          ? null
+                          : () async {
+                              await context
+                                  .read<AllTokensCubit>()
+                                  .saveSelectedContracts();
+                              Navigator.of(context).pop();
+                            },
+                      child: Text(
+                        l10n.save,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
-                      TextButton(
-                        onPressed: (state.status == AppStatus.loading ||
-                                state.status == AppStatus.fetching)
-                            ? null
-                            : () async {
-                                await context
-                                    .read<AllTokensCubit>()
-                                    .saveSelectedContracts();
-                                Navigator.of(context).pop(updated);
-                              },
-                        child: Text(
-                          l10n.save,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
+                    ),
+                  ],
+                ),
+                TextField(
+                  textInputAction: TextInputAction.search,
+                  onChanged: (value) {
+                    context.read<AllTokensCubit>().filterTokens(value: value);
+                  },
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Sizes.space2XSmall,
                       ),
-                    ],
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.search,
+                        size: Sizes.icon2x,
+                      ),
+                    ),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(Sizes.smallRadius),
+                      ),
+                    ),
                   ),
-                  TextField(
-                    textInputAction: TextInputAction.search,
-                    onChanged: (value) {
-                      context.read<AllTokensCubit>().filterTokens(value: value);
+                ),
+                Expanded(
+                  child: ListView.separated(
+                    itemBuilder: (_, index) {
+                      final tokenContractModel = state.filteredContracts[index];
+                      return TokenContractItem(
+                        tokenContractModel: tokenContractModel,
+                        isOn: state.containContract(
+                          contractModel: tokenContractModel,
+                        ),
+                        onChange: (isChecked) {
+                          if (isChecked) {
+                            context.read<AllTokensCubit>().addContract(
+                                  contractModel: tokenContractModel,
+                                );
+                          } else {
+                            context.read<AllTokensCubit>().removeContract(
+                                  contractModel: tokenContractModel,
+                                );
+                          }
+                        },
+                      );
                     },
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Sizes.space2XSmall,
-                        ),
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.search,
-                          size: Sizes.icon2x,
-                        ),
-                      ),
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(Sizes.smallRadius),
-                        ),
-                      ),
-                    ),
+                    separatorBuilder: (_, __) {
+                      return Divider(
+                        height: 0.3,
+                        color: Theme.of(context).colorScheme.borderColor,
+                      );
+                    },
+                    itemCount: state.filteredContracts.length,
                   ),
-                  Expanded(
-                    child: ListView.separated(
-                      itemBuilder: (_, index) {
-                        final tokenContractModel =
-                            state.filteredContracts[index];
-                        return TokenContractItem(
-                          tokenContractModel: tokenContractModel,
-                          isOn: state.containContract(
-                            contractModel: tokenContractModel,
-                          ),
-                          onChange: (isChecked) {
-                            updated = true;
-                            if (isChecked) {
-                              context.read<AllTokensCubit>().addContract(
-                                    contractModel: tokenContractModel,
-                                  );
-                            } else {
-                              context.read<AllTokensCubit>().removeContract(
-                                    contractModel: tokenContractModel,
-                                  );
-                            }
-                          },
-                        );
-                      },
-                      separatorBuilder: (_, __) {
-                        return Divider(
-                          height: 0.3,
-                          color: Theme.of(context).colorScheme.borderColor,
-                        );
-                      },
-                      itemCount: state.filteredContracts.length,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );
