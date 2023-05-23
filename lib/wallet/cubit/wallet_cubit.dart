@@ -72,7 +72,7 @@ class WalletCubit extends Cubit<WalletState> {
         '0';
 
     final int accountsCount = int.parse(totalAccountsYet);
-    late CryptoAccount updatedCryptoAccount;
+    final cryptoAccountDataList = List.of(state.cryptoAccount.data);
 
     final isSecretKey = isValidPrivateKey(mnemonicOrKey);
 
@@ -90,13 +90,13 @@ class WalletCubit extends Cubit<WalletState> {
 
       ///Before creating a duplicate account, please ensure that it
       ///doesn't already exist.
-      if (state.cryptoAccount.data.any(
+      if (cryptoAccountDataList.any(
         (acc) =>
             acc.walletAddress == newAcc.walletAddress &&
             acc.blockchainType == newAcc.blockchainType,
       )) {
         onComplete?.call(
-          cryptoAccount: state.cryptoAccount,
+          cryptoAccount: CryptoAccount(data: cryptoAccountDataList),
           messageHandler: ResponseMessage(
             ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST,
           ),
@@ -105,13 +105,15 @@ class WalletCubit extends Cubit<WalletState> {
       }
 
       log.i('creating both $blockchainType accounts');
-      updatedCryptoAccount = await createBlockchainAccount(
-        accountName: accountName,
-        mnemonicOrKey: mnemonicOrKey,
-        isImported: isImported,
-        isSecretKey: isSecretKey,
-        blockchainType: blockchainType,
-        totalAccountsYet: accountsCount,
+      cryptoAccountDataList.add(
+        await _createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: blockchainType,
+          totalAccountsYet: accountsCount,
+        ),
       );
     } else {
       if (isSecretKey) {
@@ -125,82 +127,103 @@ class WalletCubit extends Cubit<WalletState> {
 
         if (isTezosSecretKey) {
           /// creating tezos account
-          updatedCryptoAccount = await createBlockchainAccount(
-            accountName: accountName,
-            mnemonicOrKey: mnemonicOrKey,
-            isImported: isImported,
-            isSecretKey: isSecretKey,
-            blockchainType: BlockchainType.tezos,
-            totalAccountsYet: accountsCount,
+          cryptoAccountDataList.add(
+            await _createBlockchainAccount(
+              accountName: accountName,
+              mnemonicOrKey: mnemonicOrKey,
+              isImported: isImported,
+              isSecretKey: isSecretKey,
+              blockchainType: BlockchainType.tezos,
+              totalAccountsYet: accountsCount,
+            ),
           );
         } else {
           /// creating all ethereum based accounts
-          await createBlockchainAccount(
-            accountName: accountName,
-            mnemonicOrKey: mnemonicOrKey,
-            isImported: isImported,
-            isSecretKey: isSecretKey,
-            blockchainType: BlockchainType.fantom,
-            totalAccountsYet: accountsCount,
+          cryptoAccountDataList.add(
+            await _createBlockchainAccount(
+              accountName: accountName,
+              mnemonicOrKey: mnemonicOrKey,
+              isImported: isImported,
+              isSecretKey: isSecretKey,
+              blockchainType: BlockchainType.fantom,
+              totalAccountsYet: accountsCount,
+            ),
           );
-          await createBlockchainAccount(
+          cryptoAccountDataList.add(
+            await _createBlockchainAccount(
+              accountName: accountName,
+              mnemonicOrKey: mnemonicOrKey,
+              isImported: isImported,
+              isSecretKey: isSecretKey,
+              blockchainType: BlockchainType.polygon,
+              totalAccountsYet: accountsCount + 1,
+            ),
+          );
+          cryptoAccountDataList.add(
+            await _createBlockchainAccount(
+              accountName: accountName,
+              mnemonicOrKey: mnemonicOrKey,
+              isImported: isImported,
+              isSecretKey: isSecretKey,
+              blockchainType: BlockchainType.binance,
+              totalAccountsYet: accountsCount + 2,
+            ),
+          );
+          cryptoAccountDataList.add(
+            await _createBlockchainAccount(
+              accountName: accountName,
+              mnemonicOrKey: mnemonicOrKey,
+              isImported: isImported,
+              isSecretKey: isSecretKey,
+              blockchainType: BlockchainType.ethereum,
+              totalAccountsYet: accountsCount + 3,
+            ),
+          );
+        }
+      } else {
+        /// Polygon at start
+        cryptoAccountDataList.add(
+          await _createBlockchainAccount(
             accountName: accountName,
             mnemonicOrKey: mnemonicOrKey,
             isImported: isImported,
             isSecretKey: isSecretKey,
             blockchainType: BlockchainType.polygon,
-            totalAccountsYet: accountsCount + 1,
-          );
-          await createBlockchainAccount(
+            totalAccountsYet: accountsCount,
+          ),
+        );
+
+        /// Binance at start
+        cryptoAccountDataList.add(
+          await _createBlockchainAccount(
             accountName: accountName,
             mnemonicOrKey: mnemonicOrKey,
             isImported: isImported,
             isSecretKey: isSecretKey,
             blockchainType: BlockchainType.binance,
-            totalAccountsYet: accountsCount + 2,
-          );
-          updatedCryptoAccount = await createBlockchainAccount(
+            totalAccountsYet: accountsCount + 1,
+          ),
+        );
+
+        /// Tezos at start
+        cryptoAccountDataList.add(
+          await _createBlockchainAccount(
             accountName: accountName,
             mnemonicOrKey: mnemonicOrKey,
             isImported: isImported,
             isSecretKey: isSecretKey,
-            blockchainType: BlockchainType.ethereum,
-            totalAccountsYet: accountsCount + 3,
-          );
-        }
-      } else {
-        /// Polygon at start
-        await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.polygon,
-          totalAccountsYet: accountsCount,
-        );
-
-        /// Binance at start
-        await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.binance,
-          totalAccountsYet: accountsCount + 1,
-        );
-
-        /// Tezos at start
-        updatedCryptoAccount = await createBlockchainAccount(
-          accountName: accountName,
-          mnemonicOrKey: mnemonicOrKey,
-          isImported: isImported,
-          isSecretKey: isSecretKey,
-          blockchainType: BlockchainType.tezos,
-          totalAccountsYet: accountsCount + 2,
+            blockchainType: BlockchainType.tezos,
+            totalAccountsYet: accountsCount + 2,
+          ),
         );
       }
     }
+    final updatedCryptoAccount = CryptoAccount(data: cryptoAccountDataList);
+    await _saveCryptoAccountDataInStorage(updatedCryptoAccount);
 
+    /// set new account as current
+    await setCurrentWalletAccount(cryptoAccountDataList.length - 1);
+    emitCryptoAccount(updatedCryptoAccount);
     onComplete?.call(
       cryptoAccount: updatedCryptoAccount,
       messageHandler: ResponseMessage(
@@ -209,7 +232,7 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future<CryptoAccount> createBlockchainAccount({
+  Future<CryptoAccountData> _createBlockchainAccount({
     String? accountName,
     required String mnemonicOrKey,
     required bool isImported,
@@ -286,23 +309,10 @@ class WalletCubit extends Cubit<WalletState> {
       isImported: isImported,
       blockchainType: blockchainType,
     );
-    final cryptoAccounts = List.of(state.cryptoAccount.data)
-      ..add(cryptoAccountData);
 
-    final CryptoAccount cryptoAccount = CryptoAccount(data: cryptoAccounts);
-    final String cryptoAccountString = jsonEncode(cryptoAccount);
-
-    await secureStorageProvider.set(
-      SecureStorageKeys.cryptoAccount,
-      cryptoAccountString,
-    );
-
-    emitCryptoAccount(cryptoAccount);
-
-    /// set new account as current
-    await setCurrentWalletAccount(cryptoAccounts.length - 1);
     log.i('$blockchainType created');
 
+    ///createAssociatedWalletCredential
     final credential = await credentialsCubit.createAssociatedWalletCredential(
       blockchainType: blockchainType,
       cryptoAccountData: cryptoAccountData,
@@ -315,7 +325,19 @@ class WalletCubit extends Cubit<WalletState> {
       );
     }
 
-    return cryptoAccount;
+    return cryptoAccountData;
+  }
+
+  /// Add newly created accounts to the list for safekeeping.
+  Future<void> _saveCryptoAccountDataInStorage(
+    CryptoAccount cryptoAccount,
+  ) async {
+    final String cryptoAccountString = jsonEncode(cryptoAccount);
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.cryptoAccount,
+      cryptoAccountString,
+    );
   }
 
   Future<CryptoAccountData> _generateAccount({
@@ -371,11 +393,6 @@ class WalletCubit extends Cubit<WalletState> {
     }
 
     final int newCount = totalAccountsYet + 1;
-
-    await secureStorageProvider.set(
-      SecureStorageKeys.cryptoAccounTrackingIndex,
-      newCount.toString(),
-    );
 
     String name = 'My Account $newCount';
 

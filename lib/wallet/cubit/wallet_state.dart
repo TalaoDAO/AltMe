@@ -41,13 +41,13 @@ class WalletState extends Equatable {
   }
 
   WalletState copyWith({
-    required WalletStatus status,
+    WalletStatus? status,
     MessageHandler? messageHandler,
     CryptoAccount? cryptoAccount,
     int? currentCryptoIndex,
   }) {
     return WalletState(
-      status: status,
+      status: status ?? this.status,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
