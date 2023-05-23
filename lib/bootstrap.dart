@@ -38,7 +38,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   await LocalNotification().init();
 
   /// Disable Http google font
-  GoogleFonts.config.allowRuntimeFetching = false;
+  // GoogleFonts.config.allowRuntimeFetching = false;
 
   await Dartez().init();
 
