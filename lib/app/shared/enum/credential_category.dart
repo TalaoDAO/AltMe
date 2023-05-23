@@ -56,9 +56,9 @@ extension CredentialCategoryX on CredentialCategory {
     switch (this) {
       case CredentialCategory.advantagesCards:
         return [
-          CredentialSubjectType.tezotopiaMembership,
-          CredentialSubjectType.chainbornMembership,
-          CredentialSubjectType.bloometaPass,
+          // CredentialSubjectType.tezotopiaMembership,
+          // CredentialSubjectType.chainbornMembership,
+          // CredentialSubjectType.bloometaPass,
           // CredentialSubjectType.troopezPass,
           // CredentialSubjectType.pigsPass,
           // CredentialSubjectType.matterlightPass,
