@@ -558,7 +558,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
             isValidCallback: () {
               context.read<PolygonIdCubit>().authenticate(
                     iden3MessageEntity: iden3MessageEntity,
-                    goBack: false,
+                    isGenerateProof: false,
                   );
             },
             restrictToBack: false,
