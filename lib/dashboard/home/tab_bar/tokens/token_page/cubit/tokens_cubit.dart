@@ -267,20 +267,8 @@ class TokensCubit extends Cubit<TokensState> {
       allTokensCubit.init();
     }
 
-    //get usd balance of tokens and update tokens
-    if (allTokensCubit.state.contracts.isNotEmpty) {
-      // Filter just selected tokens to show for user
-      final selectedContracts = allTokensCubit.state.selectedContracts;
-      final loadedTokensSymbols = data.map((e) => e.symbol).toList();
-      final contractsNotInserted = selectedContracts
-          .where(
-            (element) => !loadedTokensSymbols.contains(element.symbol),
-          )
-          .toList();
-
-      final contractsNotInsertedSymbols =
-          contractsNotInserted.map((e) => e.symbol);
-
+    double totalBalanceInUSD = 0;
+    if (data.length > 1) {
       final tokenListSymbols = data.map((e) => e.symbol).toList();
       final coinsList = await _getAllCoinsList();
       final filteredCoinList = coinsList
@@ -313,7 +301,53 @@ class TokensCubit extends Cubit<TokensState> {
         data[indexOfToken] = updatedToken;
       }
 
-      data.addAll(
+      data = _updateToSelectedTezosTokens(data);
+
+      for (final tokenElement in data) {
+        totalBalanceInUSD += tokenElement.balanceInUSD;
+      }
+      data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
+    }
+    emit(
+      state.copyWith(
+        status: AppStatus.success,
+        data: data.toSet(),
+        totalBalanceInUSD: totalBalanceInUSD,
+      ),
+    );
+    await checkIfItNeedsToVerifyMnemonic(
+      totalBalanceInUSD: totalBalanceInUSD,
+    );
+  }
+
+  void updateTokenList() {
+    if (state.blockchainType == BlockchainType.tezos) {
+      data = _updateToSelectedTezosTokens(state.data.toList());
+      emit(
+        state.copyWith(
+          data: data.toSet(),
+        ),
+      );
+    }
+  }
+
+  List<TokenModel> _updateToSelectedTezosTokens(
+    List<TokenModel> tokenList,
+  ) {
+    if (allTokensCubit.state.contracts.isNotEmpty) {
+      // Filter just selected tokens to show for user
+      final selectedContracts = allTokensCubit.state.selectedContracts;
+      final loadedTokensSymbols = tokenList.map((e) => e.symbol).toList();
+      final contractsNotInserted = selectedContracts
+          .where(
+            (element) => !loadedTokensSymbols.contains(element.symbol),
+          )
+          .toList();
+
+      final contractsNotInsertedSymbols =
+          contractsNotInserted.map((e) => e.symbol);
+
+      tokenList.addAll(
         allTokensCubit.state.contracts
             .where(
               (element) => contractsNotInsertedSymbols.contains(element.symbol),
@@ -331,39 +365,8 @@ class TokensCubit extends Cubit<TokensState> {
               ),
             ),
       );
-
-      double totalBalanceInUSD = 0;
-      for (final tokenElement in data) {
-        totalBalanceInUSD += tokenElement.balanceInUSD;
-      }
-      data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
-      emit(
-        state.copyWith(
-          status: AppStatus.success,
-          data: data.toSet(),
-          totalBalanceInUSD: totalBalanceInUSD,
-        ),
-      );
-      await checkIfItNeedsToVerifyMnemonic(
-        totalBalanceInUSD: totalBalanceInUSD,
-      );
-    } else {
-      double totalBalanceInUSD = 0;
-      for (final tokenElement in data) {
-        totalBalanceInUSD += tokenElement.balanceInUSD;
-      }
-      data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
-      emit(
-        state.copyWith(
-          status: AppStatus.success,
-          data: data.toSet(),
-          totalBalanceInUSD: totalBalanceInUSD,
-        ),
-      );
-      await checkIfItNeedsToVerifyMnemonic(
-        totalBalanceInUSD: totalBalanceInUSD,
-      );
     }
+    return tokenList;
   }
 
   Future<List<dynamic>> _getAllCoinsList() async {
