@@ -65,7 +65,7 @@ class PolygonId {
   }
 
   /// init Circuits Download And Get Info Stream
-  Future<Stream<DownloadInfo>> get initCircuitsDownloadAndGetInfoStream {
+  Stream<DownloadInfo> get initCircuitsDownloadAndGetInfoStream {
     return PolygonIdSdk.I.proof.initCircuitsDownloadAndGetInfoStream;
   }
 
