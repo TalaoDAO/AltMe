@@ -324,7 +324,7 @@ class TokensCubit extends Cubit<TokensState> {
 
   void updateTokenList() {
     if (state.blockchainType == BlockchainType.tezos) {
-      data = _updateToSelectedTezosTokens(state.data.toList());
+      data = _updateToSelectedTezosTokens(data);
       emit(
         state.copyWith(
           data: data.toSet(),
@@ -339,15 +339,17 @@ class TokensCubit extends Cubit<TokensState> {
     if (allTokensCubit.state.contracts.isNotEmpty) {
       // Filter just selected tokens to show for user
       final selectedContracts = allTokensCubit.state.selectedContracts;
-      final loadedTokensSymbols = tokenList.map((e) => e.symbol).toList();
+      final loadedTokensSymbols =
+          tokenList.map((e) => e.symbol.toLowerCase()).toList();
       final contractsNotInserted = selectedContracts
           .where(
-            (element) => !loadedTokensSymbols.contains(element.symbol),
+            (element) =>
+                !loadedTokensSymbols.contains(element.symbol.toLowerCase()),
           )
           .toList();
 
       final contractsNotInsertedSymbols =
-          contractsNotInserted.map((e) => e.symbol);
+          contractsNotInserted.map((e) => e.symbol.toLowerCase());
 
       ///first remove old token which added before
       tokenList.removeWhere(
@@ -360,24 +362,25 @@ class TokensCubit extends Cubit<TokensState> {
       );
 
       ///then add new tokens which selected
-      tokenList.addAll(
-        allTokensCubit.state.contracts
-            .where(
-              (element) => contractsNotInsertedSymbols.contains(element.symbol),
-            )
-            .map(
-              (e) => TokenModel(
-                contractAddress: '',
-                name: e.name ?? '',
-                symbol: e.symbol,
-                balance: '0',
-                icon: e.image,
-                decimals: '0',
-                standard: 'fa1.2',
-                decimalsToShow: 2,
-              ),
+      final newTokens = allTokensCubit.state.contracts
+          .where(
+            (element) => contractsNotInsertedSymbols.contains(
+              element.symbol.toLowerCase(),
             ),
-      );
+          )
+          .map(
+            (e) => TokenModel(
+              contractAddress: '',
+              name: e.name ?? '',
+              symbol: e.symbol,
+              balance: '0',
+              icon: e.image,
+              decimals: '0',
+              standard: 'fa1.2',
+              decimalsToShow: 2,
+            ),
+          );
+      tokenList.addAll(newTokens);
     }
     return tokenList;
   }

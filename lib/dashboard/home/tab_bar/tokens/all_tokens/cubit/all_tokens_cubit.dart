@@ -91,7 +91,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
           await secureStorageProvider.get(SecureStorageKeys.selectedContracts);
       if (result == null) {
         final data = await setDefaultSelectedContractIfFirstTime([]);
-        emit(state.copyWith(selectedContracts: data,status: AppStatus.init));
+        emit(state.copyWith(selectedContracts: data));
         return data;
       } else {
         final json = jsonDecode(result) as List<dynamic>;
@@ -102,7 +102,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
             .toList();
         final data =
             await setDefaultSelectedContractIfFirstTime(selectedContracts);
-        emit(state.copyWith(selectedContracts: data,status: AppStatus.init));
+        emit(state.copyWith(selectedContracts: data));
         getLogger(
           'Tokens cubit',
         ).i(
