@@ -349,6 +349,17 @@ class TokensCubit extends Cubit<TokensState> {
       final contractsNotInsertedSymbols =
           contractsNotInserted.map((e) => e.symbol);
 
+      ///first remove old token which added before
+      tokenList.removeWhere(
+        (element) =>
+            element.contractAddress.isEmpty &&
+            element.balance == '0' &&
+            element.decimals == '0' &&
+            element.standard == 'fa1.2' &&
+            element.symbol != 'XTZ',
+      );
+
+      ///then add new tokens which selected
       tokenList.addAll(
         allTokensCubit.state.contracts
             .where(
