@@ -21,9 +21,11 @@ class CheckIssuer {
       log.i('did:ebsi issuer');
       return Issuer.emptyIssuer(uriToCheck.host);
     }
+
     if (checkIssuerServerUrl.isEmpty) {
       return Issuer.emptyIssuer(uriToCheck.host);
     }
+
     try {
       log.i('fetching issuer data');
       final dynamic response =

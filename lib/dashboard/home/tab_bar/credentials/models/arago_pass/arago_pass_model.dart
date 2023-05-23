@@ -14,7 +14,7 @@ class AragoPassModel extends CredentialSubjectModel {
     super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.aragoPass,
-          credentialCategory: CredentialCategory.passCards,
+          credentialCategory: CredentialCategory.othersCards,
         );
 
   factory AragoPassModel.fromJson(Map<String, dynamic> json) =>

@@ -80,9 +80,7 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
         }) async {
           emit(
             state.success(
-              messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
-              ),
+              messageHandler: messageHandler,
             ),
           );
         },

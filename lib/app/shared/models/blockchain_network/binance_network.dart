@@ -29,9 +29,9 @@ class BinanceNetwork extends EthereumNetwork {
         chainId: 56,
         chain: 'bsc',
         rpcNodeUrl: 'https://bsc-dataseed.binance.org/',
-        title: 'Binance Mainnet',
+        title: 'BNB Chain Mainnet',
         subTitle:
-            'This network is the official Binance blockchain running Network.'
+            'This network is the official BNB Chain blockchain running Network.'
             ' You should use this network by default.',
       );
 
@@ -42,7 +42,7 @@ class BinanceNetwork extends EthereumNetwork {
         chainId: 97,
         chain: 'bsc testnet',
         rpcNodeUrl: 'https://bsc-testnet.public.blastapi.io',
-        title: 'Binance Testnet',
+        title: 'BNB Chain Testnet',
         subTitle: 'This network is used to test protocol upgrades'
             ' (do not use it unless you are a developer).',
       );

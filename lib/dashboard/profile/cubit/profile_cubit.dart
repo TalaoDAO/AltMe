@@ -95,6 +95,14 @@ class ProfileCubit extends Cubit<ProfileState> {
               .get(SecureStorageKeys.isEnterpriseUser)) ==
           'true';
 
+      final isBiometricEnabled = (await secureStorageProvider
+              .get(SecureStorageKeys.isBiometricEnabled)) ==
+          'true';
+
+      final isAlertEnabled =
+          (await secureStorageProvider.get(SecureStorageKeys.alertEnabled)) ==
+              'true';
+
       final profileModel = ProfileModel(
         firstName: firstName,
         lastName: lastName,
@@ -107,6 +115,8 @@ class ProfileCubit extends Cubit<ProfileState> {
         companyWebsite: companyWebsite,
         jobTitle: jobTitle,
         isEnterprise: isEnterprise,
+        isBiometricEnabled: isBiometricEnabled,
+        isAlertEnabled: isAlertEnabled,
       );
 
       emit(
@@ -125,28 +135,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         ),
       );
     }
-  }
-
-  Future<void> resetProfile() async {
-    emit(state.loading());
-    await secureStorageProvider.delete(SecureStorageKeys.firstNameKey);
-    await secureStorageProvider.delete(SecureStorageKeys.lastNameKey);
-    await secureStorageProvider.delete(SecureStorageKeys.phoneKey);
-    await secureStorageProvider.delete(SecureStorageKeys.locationKey);
-    await secureStorageProvider.delete(SecureStorageKeys.emailKey);
-    await secureStorageProvider.delete(SecureStorageKeys.jobTitle);
-    await secureStorageProvider.delete(SecureStorageKeys.companyWebsite);
-    await secureStorageProvider.delete(SecureStorageKeys.companyName);
-    await secureStorageProvider
-        .delete(SecureStorageKeys.issuerVerificationUrlKey);
-    await secureStorageProvider.delete(SecureStorageKeys.blockchainNetworkKey);
-    await secureStorageProvider.delete(SecureStorageKeys.isEnterpriseUser);
-    emit(
-      state.copyWith(
-        model: ProfileModel.empty(),
-        status: AppStatus.success,
-      ),
-    );
   }
 
   Future<void> update(ProfileModel profileModel) async {
@@ -196,6 +184,16 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.isEnterprise.toString(),
       );
 
+      await secureStorageProvider.set(
+        SecureStorageKeys.isBiometricEnabled,
+        profileModel.isBiometricEnabled.toString(),
+      );
+
+      await secureStorageProvider.set(
+        SecureStorageKeys.alertEnabled,
+        profileModel.isAlertEnabled.toString(),
+      );
+
       emit(
         state.copyWith(
           model: profileModel,
@@ -215,6 +213,16 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+  Future<void> setFingerprintEnabled({bool enabled = false}) async {
+    final profileModel = state.model.copyWith(isBiometricEnabled: enabled);
+    await update(profileModel);
+  }
+
+  Future<void> setAlertEnabled({bool enabled = false}) async {
+    final profileModel = state.model.copyWith(isAlertEnabled: enabled);
+    await update(profileModel);
+  }
+
   Future<void> updateIssuerVerificationUrl(
     IssuerVerificationRegistry registry,
   ) async {
@@ -232,9 +240,9 @@ class ProfileCubit extends Cubit<ProfileState> {
         selectedIssuerUrls.add(Urls.checkIssuerPolygonTestnetUrl);
         break;
     }
-    final newModel =
+    final profileModel =
         state.model.copyWith(issuerVerificationUrls: selectedIssuerUrls);
-    await update(newModel);
+    await update(profileModel);
   }
 
   @override

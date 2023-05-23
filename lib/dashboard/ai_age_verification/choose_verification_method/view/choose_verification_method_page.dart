@@ -44,6 +44,11 @@ class ChooseVerificationMethodPage extends StatelessWidget {
       title = l10n.chooseMethodPageOver15Title;
     } else if (credentialSubjectType == CredentialSubjectType.over18) {
       title = l10n.chooseMethodPageOver18Title;
+    } else if (credentialSubjectType == CredentialSubjectType.defiCompliance) {
+      title = l10n.chooseMethodPageDefiComplianceTitle;
+    } else if (credentialSubjectType ==
+        CredentialSubjectType.verifiableIdCard) {
+      title = l10n.chooseMethodPageVerifiableIdTitle;
     } else {
       title = l10n.chooseMethodPageAgeRangeTitle;
     }

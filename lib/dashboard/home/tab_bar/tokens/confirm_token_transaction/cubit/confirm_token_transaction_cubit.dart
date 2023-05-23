@@ -1,17 +1,17 @@
 // ignore_for_file: lines_longer_than_80_chars
 
+import 'dart:async';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:key_generator/key_generator.dart';
 import 'package:tezart/tezart.dart';
 import 'package:web3dart/json_rpc.dart';
 import 'package:web3dart/web3dart.dart';
-
-part 'confirm_token_transaction_cubit.g.dart';
 
 part 'confirm_token_transaction_state.dart';
 
@@ -20,22 +20,41 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     required ConfirmTokenTransactionState initialState,
     required this.manageNetworkCubit,
     required this.client,
+    required this.keyGenerator,
   }) : super(initialState);
 
   final ManageNetworkCubit manageNetworkCubit;
   final DioClient client;
+  final KeyGenerator keyGenerator;
 
   final logger = getLogger('ConfirmWithdrawal');
 
-  Future<double?> getXtzUSDPrice() async {
-    try {
-      final responseOfXTZUsdPrice = await client
-          .get('${Urls.tezToolBase}/v1/xtz-price') as Map<String, dynamic>;
-      final xtzUSDPrice = responseOfXTZUsdPrice['price'] as double;
-      return xtzUSDPrice;
-    } catch (_) {
-      return null;
-    }
+  Future<void> getXtzUSDPrice() async {
+    
+    await dotenv.load();
+    final apiKey = dotenv.get('COIN_GECKO_API_KEY');
+
+    final responseOfXTZUsdPrice = await client.get(
+      '${Urls.coinGeckoBase}/simple/price?ids=tezos&vs_currencies=usd',
+      queryParameters: {
+        'x_cg_pro_api_key': apiKey,
+      },
+    ) as Map<String, dynamic>;
+    final xtzUSDPrice = responseOfXTZUsdPrice['tezos']['usd'] as double;
+    emit(
+      state.copyWith(
+        networkFee: state.networkFee!.copyWith(
+          feeInUSD: xtzUSDPrice * state.networkFee!.fee,
+        ),
+        networkFees: state.networkFees!
+            .map(
+              (e) => e.copyWith(
+                feeInUSD: xtzUSDPrice * e.fee,
+              ),
+            )
+            .toList(),
+      ),
+    );
   }
 
   Future<double?> getEthUSDPrice() async {
@@ -58,75 +77,170 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     emit(state.loading());
     try {
       if (manageNetworkCubit.state.network is TezosNetwork) {
-        final tezosNetworkFees = NetworkFeeModel.tezosNetworkFees();
-        final networkFee = tezosNetworkFees[1];
-        final XtzUSDPrice = (await getXtzUSDPrice()) ?? 0;
-        emit(
-          state.copyWith(
-            networkFee: networkFee.copyWith(
-              feeInUSD: XtzUSDPrice * networkFee.fee,
-            ),
-            networkFees: tezosNetworkFees
-                .map(
-                  (e) => e.copyWith(
-                    feeInUSD: XtzUSDPrice * e.fee,
-                  ),
-                )
-                .toList(),
-            status: AppStatus.init,
-            totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
-                ? state.tokenAmount - networkFee.fee
-                : state.tokenAmount,
-          ),
-        );
+        await _calculateFeeTezos();
       } else {
-        final web3RpcURL = await web3RpcMainnetInfuraURL();
-
-        final amount = state.tokenAmount
-            .toStringAsFixed(int.parse(state.selectedToken.decimals))
-            .replaceAll(',', '')
-            .replaceAll('.', '');
-
-        final credentials =
-            EthPrivateKey.fromHex(state.selectedAccountSecretKey);
-        final sender = credentials.address;
-        final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
-
-        final maxGas = await MWeb3Client.estimateEthereumFee(
-          web3RpcURL: web3RpcURL,
-          sender: sender,
-          reciever: reciever,
-          amount: EtherAmount.inWei(
-            state.selectedToken.symbol == 'ETH'
-                ? BigInt.from(double.parse(amount))
-                : BigInt.zero,
-          ),
-        );
-
-        final fee = EtherAmount.inWei(maxGas).getValueInUnit(EtherUnit.ether);
-        final etherUSDPrice = (await getEthUSDPrice()) ?? 0;
-        final double feeInUSD = etherUSDPrice * fee;
-        final networkFee = NetworkFeeModel(
-          fee: fee,
-          networkSpeed: NetworkSpeed.average,
-          tokenSymbol: 'ETH',
-          feeInUSD: feeInUSD,
-        );
-
-        emit(
-          state.copyWith(
-            status: AppStatus.init,
-            networkFee: networkFee,
-            totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
-                ? state.tokenAmount - networkFee.fee
-                : state.tokenAmount,
-          ),
-        );
+        await _calculateFeeEthereum();
       }
     } catch (e, s) {
       logger.i('error: $e , stack: $s');
       emit(state.copyWith(status: AppStatus.error));
     }
+  }
+
+  Future<void> _calculateFeeEthereum() async {
+    final web3RpcURL = await web3RpcMainnetInfuraURL();
+
+    final amount = state.tokenAmount
+        .toStringAsFixed(int.parse(state.selectedToken.decimals))
+        .replaceAll(',', '')
+        .replaceAll('.', '');
+
+    final credentials = EthPrivateKey.fromHex(state.selectedAccountSecretKey);
+    final sender = credentials.address;
+    final reciever = EthereumAddress.fromHex(state.withdrawalAddress);
+
+    final maxGas = await MWeb3Client.estimateEthereumFee(
+      web3RpcURL: web3RpcURL,
+      sender: sender,
+      reciever: reciever,
+      amount: EtherAmount.inWei(
+        state.selectedToken.symbol == 'ETH'
+            ? BigInt.from(double.parse(amount))
+            : BigInt.zero,
+      ),
+    );
+
+    final fee = EtherAmount.inWei(maxGas).getValueInUnit(EtherUnit.ether);
+    final etherUSDPrice = (await getEthUSDPrice()) ?? 0;
+    final double feeInUSD = etherUSDPrice * fee;
+    final networkFee = NetworkFeeModel(
+      fee: fee,
+      networkSpeed: NetworkSpeed.average,
+      tokenSymbol: 'ETH',
+      feeInUSD: feeInUSD,
+    );
+
+    emit(
+      state.copyWith(
+        status: AppStatus.init,
+        networkFee: networkFee,
+        totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
+            ? state.tokenAmount - networkFee.fee
+            : state.tokenAmount,
+      ),
+    );
+  }
+
+  Future<void> _calculateFeeTezos() async {
+    final rpcNodeUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+    final client = TezartClient(rpcNodeUrl);
+    final keystore =
+        KeyGenerator().getKeystore(secretKey: state.selectedAccountSecretKey);
+    late OperationsList? finalOperationList;
+    late List<NetworkFeeModel> tezosNetworkFees;
+    late NetworkFeeModel networkFee;
+    if (state.selectedToken.contractAddress.isEmpty) {
+      finalOperationList = await tezosTransfert(keystore, client);
+      final finalFeesSum = finalOperationList.operations
+          .fold(0, (sum, element) => sum + element.totalFee);
+      tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
+        average: finalFeesSum / 1000000,
+      );
+      networkFee = tezosNetworkFees[0];
+    } else {
+      // Need to convert michelson expression into michelson
+      // finalOperationList = await tezosContract(
+      //   client,
+      //   keystore,
+      // );
+      tezosNetworkFees = NetworkFeeModel.tezosNetworkFees(
+        slow: 0.002496,
+        average: 0.021900,
+        fast: 0.050000,
+      );
+      finalOperationList = null;
+      networkFee = tezosNetworkFees[1];
+    }
+
+    emit(
+      state.copyWith(
+        networkFee: networkFee,
+        networkFees: tezosNetworkFees,
+        status: AppStatus.init,
+        totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
+            ? state.tokenAmount - networkFee.fee
+            : state.tokenAmount,
+        operationsList: finalOperationList,
+      ),
+    );
+    unawaited(getXtzUSDPrice());
+  }
+
+  Future<OperationsList> tezosContract(
+    TezartClient client,
+    Keystore keystore,
+  ) async {
+    final contract = Contract(
+      contractAddress: state.selectedToken.contractAddress,
+      rpcInterface: client.rpcInterface,
+    );
+    final amount = (state.tokenAmount * 1000000).toInt();
+    final parameters = state.selectedToken.isFA1
+        ? '''(Pair "${keystore.publicKey}" (Pair "${state.withdrawalAddress}" $amount))'''
+        : '''{Pair "${keystore.publicKey}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(state.selectedToken.tokenId ?? '0')} $amount)}}''';
+
+    final finalOperationList = await contract.callOperation(
+      entrypoint: 'transfer',
+      amount: amount,
+      params: parameters,
+      source: keystore,
+      publicKey: keystore.publicKey,
+    );
+    return finalOperationList;
+  }
+
+  Future<OperationsList> tezosTransfert(
+    Keystore keystore,
+    TezartClient client,
+  ) async {
+    const minFeesWithStorage = 6526;
+    var transactionAmount =
+        ((state.tokenAmount * 1000000).toInt()) - minFeesWithStorage;
+    // Get fees
+    final OperationsList estimationOperationList =
+        await prepareTezosOperation(keystore, client, transactionAmount);
+    final initialFeesSum = estimationOperationList.operations
+        .fold(0, (sum, element) => sum + element.totalFee);
+    // get final operation
+    // minus 1 to prevent overflow operation :-/
+    // but it prevent burning gas for nothing.
+    transactionAmount =
+        transactionAmount - initialFeesSum + minFeesWithStorage - 1;
+    final finalOperationList =
+        await prepareTezosOperation(keystore, client, transactionAmount);
+    return finalOperationList;
+  }
+
+  Future<OperationsList> prepareTezosOperation(
+      Keystore keystore, TezartClient client, int transactionAmount) async {
+    final operationList = OperationsList(
+      source: keystore,
+      publicKey: keystore.publicKey,
+      rpcInterface: client.rpcInterface,
+    );
+    final isReveal = await client.isKeyRevealed(keystore.address);
+    if (!isReveal) {
+      operationList.prependOperation(RevealOperation());
+    }
+    final transactionOperation = TransactionOperation(
+      amount: transactionAmount,
+      destination: state.withdrawalAddress,
+    );
+    operationList.appendOperation(transactionOperation);
+
+    await operationList.estimate();
+    await operationList.simulate();
+    return operationList;
   }
 
   void setWithdrawalAddress({required String withdrawalAddress}) {
@@ -152,43 +266,10 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         state.status != AppStatus.loading;
   }
 
-  Future<void> _withdrawTezos({
-    required double tokenAmount,
-    required String selectedAccountSecretKey,
-  }) async {
+  Future<void> _withdrawTezos() async {
     try {
       emit(state.loading());
-      final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
-
-      final client = TezartClient(manageNetworkCubit.state.network.rpcNodeUrl);
-
-      final amount = int.parse(
-        tokenAmount.toStringAsFixed(6).replaceAll(',', '').replaceAll('.', ''),
-      );
-
-      final customFee = int.parse(
-        state.networkFee!.fee
-            .toStringAsFixed(6)
-            .replaceAll('.', '')
-            .replaceAll(',', ''),
-      );
-
-      final operationsList = await client.transferOperation(
-        source: sourceKeystore,
-        destination: state.withdrawalAddress,
-        amount: amount,
-        customFee: customFee,
-        publicKey: sourceKeystore.publicKey,
-      );
-      logger.i(
-        ' , publicKey: ${sourceKeystore.publicKey} '
-        'amount: $amount '
-        'networkFee: $customFee '
-        'address: ${sourceKeystore.address} =>To address: '
-        '${state.withdrawalAddress}',
-      );
-      // ignore: unawaited_futures
-      operationsList.executeAndMonitor(null);
+      unawaited(state.operationsList!.executeAndMonitor(null));
       logger.i('after withdrawal execute');
       emit(state.success());
     } catch (e, s) {
@@ -324,10 +405,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   }) async {
     try {
       if (token.symbol == 'XTZ') {
-        await _withdrawTezos(
-          tokenAmount: tokenAmount,
-          selectedAccountSecretKey: selectedAccountSecretKey,
-        );
+        await _withdrawTezos();
         return;
       }
       if (token.contractAddress.isEmpty) return;

@@ -18,7 +18,7 @@ class LinkedinCardModel extends CredentialSubjectModel {
     super.type,
   }) : super(
           credentialSubjectType: CredentialSubjectType.linkedInCard,
-          credentialCategory: CredentialCategory.myProfessionalCards,
+          credentialCategory: CredentialCategory.socialMediaCards,
         );
 
   factory LinkedinCardModel.fromJson(Map<String, dynamic> json) =>

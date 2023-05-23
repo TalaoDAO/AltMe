@@ -92,6 +92,9 @@ class BeCarefulDialog extends StatelessWidget {
                     text: no ?? l10n.no,
                     verticalSpacing: 15,
                     fontSize: 15,
+                    borderColor: Theme.of(context)
+                        .colorScheme
+                        .defualtDialogCancelButtonBorderColor,
                     borderRadius: 12,
                     backgroundColor: Colors.white,
                     textColor: Theme.of(context)

@@ -12,13 +12,13 @@ dependencies:
   beacon_flutter:
     git:
       url: https://github.com/TalaoDAO/beacon.git
-      ref: f7ab2176ed2e56e0843b7de6da863687bef528ea
+      ref: fca8038d3c6378341a2e57d2cb1cceaba9f35561
   # beacon_flutter:
   #   path: ../beacon
   bip39: ^1.0.6
   bloc: ^8.1.0
   cached_network_image: ^3.2.1
-  camera: ^0.10.3
+  camera: ^0.10.4
   confetti: ^0.7.0
   connectivity_plus: ^3.0.3
   convert: ^3.1.1
@@ -51,6 +51,7 @@ dependencies:
   flutter_chat_ui: ^1.6.6
   flutter_dotenv: ^5.0.2
   flutter_html: ^3.0.0-alpha.6
+  flutter_image_compress: ^1.1.3
   flutter_local_notifications: ^13.0.0
   flutter_localizations:
     sdk: flutter
@@ -81,7 +82,6 @@ dependencies:
   no_screenshot: ^0.0.1+6
   open_filex: ^4.3.2
   package_info_plus: ^3.0.3
-  passbase_flutter: ^2.14.0
   path: ^1.8.2 # flutter_test from sdk depends on path 1.8.2
   path_provider: ^2.0.14
   permission_handler: ^10.2.0
@@ -101,7 +101,7 @@ dependencies:
   tezart:
     git:
       url: https://github.com/autonomy-system/tezart.git
-      ref: bd4b8db6e3a352590a6e556d31df8aef60db3465
+      ref: 0cd68a902c8d2554227738594c62046571e57b4c
   timezone: ^0.9.1
   uni_links: ^0.5.1
   url_launcher: ^6.1.9
@@ -113,10 +113,9 @@ dependencies:
       url: https://github.com/bibash28/wallet-connect-dart.git
       ref: fba9b209ee2b61b62ddd643f07f6a7f64426d7b2
   web3dart: ^2.6.1
-  webview_flutter: ^4.0.2
-  webview_flutter_android: ^3.2.4
-  webview_flutter_wkwebview: ^3.0.5
-  workmanager: ^0.5.1
+  webview_flutter: ^4.0.7
+  webview_flutter_android: ^3.4.5
+  webview_flutter_wkwebview: ^3.2.4
 
 dependency_overrides:
   # Because flutter_sodium 0.2.0 depends on ffi ^1.0.0 and no versions of flutter_sodium match >0.2.0 <0.3.0, flutter_sodium ^0.2.0 requires ffi ^1.0.0

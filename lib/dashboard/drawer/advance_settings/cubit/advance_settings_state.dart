@@ -11,6 +11,9 @@ class AdvanceSettingsState extends Equatable {
     required this.isSocialMediaEnabled,
     required this.isCommunityEnabled,
     required this.isOtherEnabled,
+    required this.isFinanceEnabled,
+    required this.isHumanityProofEnabled,
+    required this.isWalletIntegrityEnabled,
   });
 
   factory AdvanceSettingsState.fromJson(Map<String, dynamic> json) =>
@@ -24,8 +27,26 @@ class AdvanceSettingsState extends Equatable {
   final bool isSocialMediaEnabled;
   final bool isCommunityEnabled;
   final bool isOtherEnabled;
+  final bool isFinanceEnabled;
+  final bool isHumanityProofEnabled;
+  final bool isWalletIntegrityEnabled;
 
   Map<String, dynamic> toJson() => _$AdvanceSettingsStateToJson(this);
+
+  Map<CredentialCategory, bool> get categoryIsEnabledMap {
+    return {
+      CredentialCategory.advantagesCards: isGamingEnabled,
+      CredentialCategory.identityCards: isIdentityEnabled,
+      CredentialCategory.blockchainAccountsCards: isBlockchainAccountsEnabled,
+      CredentialCategory.educationCards: isEducationEnabled,
+      CredentialCategory.contactInfoCredentials: isCommunityEnabled,
+      CredentialCategory.othersCards: isOtherEnabled,
+      CredentialCategory.financeCards: isFinanceEnabled,
+      CredentialCategory.humanityProofCards: isHumanityProofEnabled,
+      CredentialCategory.socialMediaCards: isSocialMediaEnabled,
+      CredentialCategory.walletIntegrity: isWalletIntegrityEnabled,
+    };
+  }
 
   AdvanceSettingsState copyWith({
     bool? isGamingEnabled,
@@ -36,6 +57,9 @@ class AdvanceSettingsState extends Equatable {
     bool? isSocialMediaEnabled,
     bool? isCommunityEnabled,
     bool? isOtherEnabled,
+    bool? isFinanceEnabled,
+    bool? isHumanityProofEnabled,
+    bool? isWalletIntegrityEnabled,
   }) {
     return AdvanceSettingsState(
       isGamingEnabled: isGamingEnabled ?? this.isGamingEnabled,
@@ -47,6 +71,11 @@ class AdvanceSettingsState extends Equatable {
       isSocialMediaEnabled: isSocialMediaEnabled ?? this.isSocialMediaEnabled,
       isCommunityEnabled: isCommunityEnabled ?? this.isCommunityEnabled,
       isOtherEnabled: isOtherEnabled ?? this.isOtherEnabled,
+      isFinanceEnabled: isFinanceEnabled ?? this.isFinanceEnabled,
+      isHumanityProofEnabled:
+          isHumanityProofEnabled ?? this.isHumanityProofEnabled,
+      isWalletIntegrityEnabled:
+          isWalletIntegrityEnabled ?? this.isWalletIntegrityEnabled,
     );
   }
 
@@ -60,5 +89,8 @@ class AdvanceSettingsState extends Equatable {
         isSocialMediaEnabled,
         isCommunityEnabled,
         isOtherEnabled,
+        isFinanceEnabled,
+        isHumanityProofEnabled,
+        isWalletIntegrityEnabled,
       ];
 }

@@ -9,82 +9,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/home/home/cubit/home_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:flutter/widgets.dart';
-import 'package:passbase_flutter/passbase_flutter.dart';
-import 'package:secure_storage/secure_storage.dart' as secure_storage;
-import 'package:workmanager/workmanager.dart';
-
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    final log = getLogger('Workmanager');
-    switch (task) {
-      case 'getPassBaseStatusBackground':
-        if (inputData!['did'] != null) {
-          Timer.periodic(const Duration(seconds: 20), (timer) async {
-            final String did = inputData['did'] as String;
-            final secureStorageProvider = secure_storage.getSecureStorage;
-            final String? passbaseStatusFromStorage =
-                await secureStorageProvider.get(
-              SecureStorageKeys.passBaseStatus,
-            );
-            log.i(
-              'isolate passbaseStatusFrom storage: $passbaseStatusFromStorage',
-            );
-
-            final PassBaseStatus oldPassBaseStatus =
-                getPassBaseStatusFromString(
-              passbaseStatusFromStorage,
-            );
-
-            if (oldPassBaseStatus != PassBaseStatus.approved) {
-              try {
-                final PassBaseStatus newPassBaseStatus =
-                    await getPassBaseStatusFromAPI(did);
-                log.i('passbase isolate newPassBaseStatus: $newPassBaseStatus');
-
-                switch (newPassBaseStatus) {
-                  case PassBaseStatus.approved:
-                  case PassBaseStatus.declined:
-                  case PassBaseStatus.verified:
-                    await secureStorageProvider.set(
-                      SecureStorageKeys.passBaseStatus,
-                      newPassBaseStatus.name,
-                    );
-                    timer.cancel();
-                    break;
-                  case PassBaseStatus.pending:
-                    await secureStorageProvider.set(
-                      SecureStorageKeys.passBaseStatus,
-                      newPassBaseStatus.name,
-                    );
-                    break;
-                  case PassBaseStatus.undone:
-                    break;
-                  case PassBaseStatus.complete:
-                    break;
-                  case PassBaseStatus.idle:
-                    break;
-                }
-              } catch (e) {
-                log.e(e.toString());
-                await secureStorageProvider.set(
-                  SecureStorageKeys.passBaseStatus,
-                  PassBaseStatus.idle.name,
-                );
-                timer.cancel();
-              }
-            }
-          });
-        }
-        break;
-    }
-
-    return Future.value(true);
-  });
-}
+import 'package:google_fonts/google_fonts.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
@@ -109,16 +37,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   await LocalNotification().init();
 
-  await PassbaseSDK.initialize(
-    publishableApiKey: AltMeStrings.passBasePublishableApiKey,
-  );
-
-  await Workmanager().initialize(
-    callbackDispatcher, // The top level function, aka callbackDispatcher
-    isInDebugMode:
-        false, // If enabled it will post a notification whenever the task is
-    // running. Handy for debugging tasks
-  );
+  /// Disable Http google font
+  GoogleFonts.config.allowRuntimeFetching = false;
 
   await Dartez().init();
 

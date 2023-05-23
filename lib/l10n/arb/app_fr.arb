@@ -314,9 +314,9 @@
   "credentialSelectionListEmptyError": "Vous n'avez pas les informations d'identification demandées pour poursuivre.",
   "trustedIssuer": "Cet émetteur est approuvé par EBSI.",
   "yourPinCodeChangedSuccessfully": "Votre code PIN a bien été modifié",
-  "gamingCards": "Cartes de jeu",
+  "advantagesCards": "Cartes de jeu",
   "identityCards": "Cartes d'identité",
-  "communityCards": "Cartes communautaires",
+  "contactInfoCredentials": "Cartes communautaires",
   "myProfessionalCards": "Cartes professionnelles",
   "otherCards": "Autres cartes",
   "inMyWallet": "Dans mon portefeuille",
@@ -343,7 +343,7 @@
   "chooseIssuersRegistry": "Choisir le registre des émetteurs",
   "network": "Réseau",
   "issuerRegistry": "Registre des émetteurs",
-  "about":"à propos",
+  "about": "à propos",
   "termsOfUse": "Conditions d'utilisation et confidentialité",
   "scanFingerprintToAuthenticate": "Scanner l'empreinte digitale pour s'authentifier",
   "biometricsNotSupported": "La biométrie n'est pas prise en charge",
@@ -401,9 +401,9 @@
   "@importWalletHintText": {
     "description": "Texte d'astuce lors de l'importation d'un compte supplémentaire",
     "type": "text",
-     "placeholders": {
+    "placeholders": {
       "numberCharacters": {}
-     }
+    }
   },
   "kycDialogTitle": "Pour obtenir cette carte et d'autres cartes d'identité, vous devez vérifier votre identité",
   "idVerificationProcess": "Processus de vérification d'identité",
@@ -481,7 +481,7 @@
   "fast": "rapide",
   "changeFee": "Modifier les frais",
   "sent": "Envoyé",
-  "done" :"fait",
+  "done": "fait",
   "link": "Cliquez pour accéder",
   "myTokens": "Mes jetons",
   "tezosMainNetwork": "Réseau principal Tezos",
@@ -492,9 +492,9 @@
   "@sendOnlyToThisAddressDescription": {
     "description": "Nom du symbole lors de l'affichage de l'adresse dans la page de réception",
     "type": "text",
-     "placeholders": {
-       "symbol": {}
-     }
+    "placeholders": {
+      "symbol": {}
+    }
   },
   "addTokens": "Ajouter des jetons",
   "providedBy": "Fourni par",
@@ -644,7 +644,7 @@
   "ethereumNetwork": "Réseau Ethereum",
   "fantomNetwork": "Réseau fantôme",
   "polygonNetwork": "Réseau de polygones",
-  "binanceNetwork": "Réseau Binance",
+  "binanceNetwork": "Réseau BNB Chain",
   "step": "Etape",
   "activateBiometricsTitle": "Activer la biométrie pour ajouter une couche de sécurité",
   "loginWithBiometricsOnBoarding": "Se connecter avec la biométrie",
@@ -729,7 +729,7 @@
   "fantomAccountDescription": "Créer une nouvelle adresse blockchain Fantom",
   "polygonAccount": "Compte polygone",
   "polygonAccountDescription": "Créer une nouvelle adresse blockchain Polygon",
-  "binanceAccount": "Compte Binance",
+  "binanceAccount": "Compte BNB Chain",
   "binanceAccountDescription": "Créer une nouvelle adresse blockchain Binance",
   "setAccountNameDescription": "Voulez-vous donner un nom à ce nouveau compte ? Utile si vous en avez plusieurs.",
   "letsGo": "Allons-y !",
@@ -764,7 +764,7 @@
   "buy": "acheter",
   "thisFeatureIsNotSupportedYetForFantom": "Cette fonctionnalité n'est pas encore prise en charge pour Fantom.",
   "thisFeatureIsNotSupportedYetForBinance": "Cette fonctionnalité n'est pas encore prise en charge pour Binance.",
-  "faqs":"FAQ",
+  "faqs": "FAQ",
   "softwareLicenses": "Licences logicielles",
   "notAValidWalletAddress": "L'adresse de portefeuille n'est pas valide !",
   "otherAccount": "Autre compte",
@@ -777,8 +777,8 @@
   "credentialSuccessfullyExported": "Votre identifiant a été exporté avec succès.",
   "linkedInBanner": "Bannière Linkedin",
   "linkedInProfile": "Profil Linkedin",
-  "checkLinkedinProfile":"Vérifier un profil Linkedin",
-  "scanAndDisplay":"Numériser et afficher",
+  "checkLinkedinProfile": "Vérifier un profil Linkedin",
+  "scanAndDisplay": "Numériser et afficher",
   "whatsNew": "Quoi de neuf",
   "okGotIt": "OK, COMPRIS !",
   "transactionDoneDialogDescription": "Cela peut prendre quelques minutes pour que le transfert se termine",

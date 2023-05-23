@@ -15,6 +15,8 @@ class ProfileModel extends Equatable {
     required this.issuerVerificationUrls,
     required this.tezosNetwork,
     required this.isEnterprise,
+    required this.isBiometricEnabled,
+    required this.isAlertEnabled,
     this.companyName = '',
     this.companyWebsite = '',
     this.jobTitle = '',
@@ -34,6 +36,8 @@ class ProfileModel extends Equatable {
         jobTitle: '',
         issuerVerificationUrls: const {},
         isEnterprise: false,
+        isBiometricEnabled: false,
+        isAlertEnabled: false,
         tezosNetwork: TezosNetwork.mainNet(),
       );
 
@@ -48,6 +52,8 @@ class ProfileModel extends Equatable {
   final Set<String> issuerVerificationUrls;
   final TezosNetwork tezosNetwork;
   final bool isEnterprise;
+  final bool isBiometricEnabled;
+  final bool isAlertEnabled;
 
   @override
   List<Object> get props => [
@@ -61,7 +67,9 @@ class ProfileModel extends Equatable {
         companyName,
         companyWebsite,
         jobTitle,
-        isEnterprise
+        isEnterprise,
+        isBiometricEnabled,
+        isAlertEnabled
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
@@ -78,6 +86,8 @@ class ProfileModel extends Equatable {
     Set<String>? issuerVerificationUrls,
     TezosNetwork? tezosNetwork,
     bool? isEnterprise,
+    bool? isBiometricEnabled,
+    bool? isAlertEnabled,
   }) {
     return ProfileModel(
       firstName: firstName ?? this.firstName,
@@ -92,6 +102,8 @@ class ProfileModel extends Equatable {
           issuerVerificationUrls ?? this.issuerVerificationUrls,
       tezosNetwork: tezosNetwork ?? this.tezosNetwork,
       isEnterprise: isEnterprise ?? this.isEnterprise,
+      isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
+      isAlertEnabled: isAlertEnabled ?? this.isAlertEnabled,
     );
   }
 }

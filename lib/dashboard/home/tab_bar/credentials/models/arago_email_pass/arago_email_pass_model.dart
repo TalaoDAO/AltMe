@@ -16,7 +16,7 @@ class AragoEmailPassModel extends CredentialSubjectModel {
     this.passbaseMetadata,
   }) : super(
           credentialSubjectType: CredentialSubjectType.aragoEmailPass,
-          credentialCategory: CredentialCategory.passCards,
+          credentialCategory: CredentialCategory.identityCards,
         );
 
   factory AragoEmailPassModel.fromJson(Map<String, dynamic> json) =>

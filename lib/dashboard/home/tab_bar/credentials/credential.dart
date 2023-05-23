@@ -1,9 +1,11 @@
+export 'card_chat_support/card_chat_support.dart';
 export 'credential_qr/credential_qr.dart';
 export 'detail/credentials_detail.dart';
 export 'helper_functions/helper_functions.dart';
 export 'linkedin_credential/linkedin_credential.dart';
 export 'list/credentials_list.dart';
 export 'models/model.dart';
+export 'polygon_id/polygon_id.dart';
 export 'present/credential_present.dart';
 export 'receive/credentials_receive.dart';
 export 'repository/credential_repository.dart';

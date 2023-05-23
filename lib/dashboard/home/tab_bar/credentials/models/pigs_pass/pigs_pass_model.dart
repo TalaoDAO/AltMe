@@ -16,7 +16,7 @@ class PigsPassModel extends CredentialSubjectModel {
     super.offeredBy,
   }) : super(
           credentialSubjectType: CredentialSubjectType.pigsPass,
-          credentialCategory: CredentialCategory.gamingCards,
+          credentialCategory: CredentialCategory.advantagesCards,
         );
 
   factory PigsPassModel.fromJson(Map<String, dynamic> json) =>

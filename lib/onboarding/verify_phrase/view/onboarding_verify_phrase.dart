@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/flavor/flavor.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/theme.dart';
@@ -241,6 +242,9 @@ class _OnBoardingVerifyPhraseViewState
                 verticalSpacing: 18,
                 onPressed: state.isVerified
                     ? () async {
+                        await context
+                            .read<OnboardingCubit>()
+                            .emitOnboardingProcessing();
                         await context
                             .read<OnBoardingVerifyPhraseCubit>()
                             .generateSSIAndCryptoAccount(

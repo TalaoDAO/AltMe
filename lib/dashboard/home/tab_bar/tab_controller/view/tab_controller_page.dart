@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
@@ -10,10 +11,7 @@ class TabControllerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => HomeTabbarCubit(),
-      child: const TabControllerView(),
-    );
+    return const TabControllerView();
   }
 }
 
@@ -31,12 +29,7 @@ class _TabControllerViewState extends State<TabControllerView>
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 3);
-    _tabController.addListener(_onTabChanged);
     super.initState();
-  }
-
-  void _onTabChanged() {
-    context.read<HomeTabbarCubit>().setIndex(_tabController.index);
   }
 
   @override
@@ -50,6 +43,7 @@ class _TabControllerViewState extends State<TabControllerView>
     final l10n = context.l10n;
     return BlocBuilder<HomeTabbarCubit, int>(
       builder: (context, state) {
+        _tabController.index = state;
         return Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -142,18 +136,15 @@ class _TabControllerViewState extends State<TabControllerView>
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(10),
-                child: BlocBuilder<CredentialListCubit, CredentialListState>(
-                  builder: (context, credentialListState) {
+                child: BlocBuilder<CredentialsCubit, CredentialsState>(
+                  builder: (__, _) {
                     return BlocBuilder<WalletCubit, WalletState>(
                       builder: (context, walletState) {
                         return TabBarView(
                           controller: _tabController,
-                          physics: context.read<HomeCubit>().state.homeStatus ==
-                                  HomeStatus.hasNoWallet
-                              ? const NeverScrollableScrollPhysics()
-                              : null,
+                          physics: const NeverScrollableScrollPhysics(),
                           children: const [
-                            CredentialsListPage(),
+                            HomeCredentialsListPage(),
                             NftPage(),
                             TokensPage(),
                           ],

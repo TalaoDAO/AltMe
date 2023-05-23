@@ -31,7 +31,7 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
   Future<void> initialize() async {
     emit(state.loading());
 
-    final List<HomeCredential> homeCredentials = [];
+    final List<DiscoverDummyCredential> dummyCredentials = [];
 
     if (credentialManifest != null) {
       final PresentationDefinition? presentationDefinition =
@@ -56,8 +56,11 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
             final credentialSubjectType = getCredTypeFromName(credentialName);
 
             if (credentialSubjectType != null) {
-              homeCredentials
-                  .add(HomeCredential.isDummy(credentialSubjectType));
+              dummyCredentials.add(
+                DiscoverDummyCredential.fromSubjectType(
+                  credentialSubjectType,
+                ),
+              );
             }
           }
         }
@@ -78,7 +81,9 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
           final credentialSubjectType = getCredTypeFromName(credentialName);
 
           if (credentialSubjectType != null) {
-            homeCredentials.add(HomeCredential.isDummy(credentialSubjectType));
+            dummyCredentials.add(
+              DiscoverDummyCredential.fromSubjectType(credentialSubjectType),
+            );
           }
         }
       }
@@ -87,7 +92,7 @@ class MissingCredentialsCubit extends Cubit<MissingCredentialsState> {
     emit(
       state.copyWith(
         status: AppStatus.idle,
-        dummyCredentials: homeCredentials,
+        dummyCredentials: dummyCredentials,
       ),
     );
   }

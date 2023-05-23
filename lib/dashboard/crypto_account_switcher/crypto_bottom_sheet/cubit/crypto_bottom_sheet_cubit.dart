@@ -13,7 +13,7 @@ class CryptoBottomSheetCubit extends Cubit<CryptoBottomSheetState> {
   CryptoBottomSheetCubit({
     required this.secureStorageProvider,
     required this.walletCubit,
-  }) : super(CryptoBottomSheetState()) {
+  }) : super(const CryptoBottomSheetState()) {
     initialise();
   }
 

@@ -1,6 +1,6 @@
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dio/dio.dart';
 import 'package:jose/jose.dart';
@@ -8,7 +8,7 @@ import 'package:jose/jose.dart';
 Future<void> addEbsiCredential(
   dynamic encodedCredentialFromEbsi,
   Uri uri,
-  WalletCubit walletCubit,
+  CredentialsCubit credentialsCubit,
 ) async {
   final jws = JsonWebSignature.fromCompactSerialization(
     encodedCredentialFromEbsi['credential'] as String,
@@ -54,5 +54,5 @@ Future<void> addEbsiCredential(
     activities: [Activity(acquisitionAt: DateTime.now())],
   );
   // insert the credential in the wallet
-  await walletCubit.insertCredential(credential: credentialModel);
+  await credentialsCubit.insertCredential(credential: credentialModel);
 }

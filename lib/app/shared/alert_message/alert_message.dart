@@ -26,16 +26,17 @@ class AlertMessage {
     if (stateMessage.showDialog) {
       showDialog<bool>(
         context: context,
-        builder: (context) => InfoDialog(
+        builder: (context) => ConfirmDialog(
           title: message,
-          button: context.l10n.ok,
+          yes: context.l10n.ok,
+          showNoButton: false,
           //icon: stateMessage.type.iconPath,
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          duration: const Duration(milliseconds: 800),
+          duration: const Duration(milliseconds: 2 * 800),
           content: SnackBarContent(
             message: message,
             iconPath: stateMessage.type.iconPath,

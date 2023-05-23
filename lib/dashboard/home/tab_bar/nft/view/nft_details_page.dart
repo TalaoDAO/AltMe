@@ -62,7 +62,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AspectRatio(
-                aspectRatio: 1.2,
+                aspectRatio: 1.1,
                 child: CachedImageFromNetwork(
                   widget.nftModel.displayUrl ??
                       (widget.nftModel.thumbnailUrl ?? ''),
@@ -152,17 +152,17 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 ),
               ),
               IconButton(
-            icon: const Icon(
-              Icons.open_in_new,
-              size: Sizes.icon,
-            ),
-            onPressed: () {
-              openAddressBlockchainExplorer(
-                context.read<ManageNetworkCubit>().state.network,
-                nftModel.contractAddress,
-              );
-            },
-          ),
+                icon: const Icon(
+                  Icons.open_in_new,
+                  size: Sizes.icon,
+                ),
+                onPressed: () {
+                  openAddressBlockchainExplorer(
+                    context.read<ManageNetworkCubit>().state.network,
+                    nftModel.contractAddress,
+                  );
+                },
+              ),
             ],
           ),
         ],
@@ -170,6 +170,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
       if (nftModel.identifier != null) ...[
         const SizedBox(height: Sizes.spaceNormal),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               '${l10n.identifier} : ',
@@ -244,18 +245,19 @@ class _NftDetailsViewState extends State<NftDetailsView> {
           ],
         ),
       ],
-      if (nftModel.date != null) ...[
+      if (nftModel.date != null || nftModel.firstTime != null) ...[
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
-        Row(
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Text(
-              '${l10n.createDate} : ',
+              '${l10n.creationDate} : ',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             Text(
-              UiDate.normalFormat(nftModel.date) ?? '?',
+              UiDate.normalFormat(nftModel.firstTime ?? nftModel.date) ?? '?',
               style: Theme.of(context).textTheme.bodySmall3,
             ),
           ],
@@ -329,10 +331,11 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         const SizedBox(
           height: Sizes.spaceXSmall,
         ),
-        Row(
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Text(
-              '${l10n.lastMetadataSync} : ',
+              '${l10n.creationDate} : ',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             Text(

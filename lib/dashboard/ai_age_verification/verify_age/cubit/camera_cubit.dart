@@ -3,6 +3,7 @@ import 'package:altme/dashboard/ai_age_verification/verify_age/models/camera_con
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart' as img;
 import 'package:json_annotation/json_annotation.dart';
 
@@ -59,17 +60,52 @@ class CameraCubit extends Cubit<CameraState> {
   Future<void> takePhoto() async {
     try {
       final xFile = await cameraController!.takePicture();
-      final photoCaptured = (await xFile.readAsBytes()).toList();
-      final fixedImageBytes =
-          img.encodeJpg(img.flipHorizontal(img.decodeImage(photoCaptured)!));
+      await cameraController!.pausePreview();
+      final imageSize = await xFile.length();
+
+      logger
+          .i('Real size: ${(imageSize / (1024 * 1024)).toStringAsFixed(2)} MB');
+
+      /// fileInMB = fileSizeInBytes / (1024 * 1024)
+
+      const int maxSizeInBytes = 1572864; // 1.5MB in bytes
+      const int minSizeInBytes = 51200; // 50KB in bytes
+
+      final photoCaptured = await FlutterImageCompress.compressWithList(
+        await xFile.readAsBytes(),
+        quality: isIOS ? 50 : 95,
+        inSampleSize: 2,
+      );
+
+      final fileSizeInMB = photoCaptured.length / 1000000;
+      logger.i('Compressed size: ${fileSizeInMB.toStringAsFixed(2)} MB');
+
+      if (photoCaptured.length > maxSizeInBytes) {
+        logger.i('too big size');
+      }
+
+      if (photoCaptured.length < minSizeInBytes) {
+        logger.i('too small size');
+      }
+
+      late List<int> fixedImageBytes;
+      if (isAndroid) {
+        fixedImageBytes = img.encodeJpg(img.decodeImage(photoCaptured)!);
+      } else {
+        // we flip the image because we sure that the selfi image filping
+        fixedImageBytes =
+            img.encodeJpg(img.flipHorizontal(img.decodeImage(photoCaptured)!));
+      }
+
       emit(
         state.copyWith(
           status: CameraStatus.imageCaptured,
-          data: fixedImageBytes,
+          data: fixedImageBytes.toList(),
         ),
       );
     } catch (e, s) {
-      emit(state.copyWith(status: CameraStatus.error));
+      await cameraController!.resumePreview();
+      emit(state.copyWith(status: CameraStatus.error,data: null));
       logger.e('error : $e, stack: $s');
     }
   }

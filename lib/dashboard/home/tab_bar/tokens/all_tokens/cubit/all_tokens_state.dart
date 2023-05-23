@@ -34,7 +34,7 @@ class AllTokensState extends Equatable {
 
   bool containContract({required ContractModel contractModel}) {
     return selectedContracts.any(
-      (element) => element.isEqualTo(contractModel: contractModel),
+      (element) => element == contractModel,
     );
   }
 

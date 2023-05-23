@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:confetti/confetti.dart';
 //import 'package:confetti/confetti.dart';
@@ -39,8 +40,11 @@ class _WalletReadyViewState extends State<WalletReadyView> {
   @override
   void initState() {
     confettiController = ConfettiController();
-    Future<void>.delayed(Duration.zero)
-        .then((value) => confettiController.play());
+    Future<void>.delayed(Duration.zero).then((value) {
+      context.read<OnboardingCubit>().emitOnboardingDone();
+
+      confettiController.play();
+    });
     super.initState();
   }
 

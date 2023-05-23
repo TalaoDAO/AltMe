@@ -45,7 +45,7 @@ class FeeDetails extends StatelessWidget {
           Row(
             children: [
               Text(
-                l10n.fee,
+                l10n.networkFee,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               const Spacer(),

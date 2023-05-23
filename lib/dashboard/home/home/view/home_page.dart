@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
       },
       child: Parameters.hasCryptoCallToAction
           ? const TabControllerPage()
-          : const CredentialsListPage(),
+          : const HomeCredentialsListPage(),
     );
   }
 }

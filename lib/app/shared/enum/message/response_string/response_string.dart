@@ -52,6 +52,7 @@ enum ResponseString {
   RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE,
   RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR,
   RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+  RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST,
   RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON,
   RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON,
   RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD,
@@ -70,6 +71,9 @@ enum ResponseString {
   RESPONSE_STRING_chainbornMembershipWhyGetThisCard,
   RESPONSE_STRING_chainbornMembershipExpirationDate,
   RESPONSE_STRING_chainbornMembershipHowToGetIt,
+  RESPONSE_STRING_defiComplianceWhyGetThisCard,
+  RESPONSE_STRING_defiComplianceExpirationDate,
+  RESPONSE_STRING_defiComplianceHowToGetIt,
   RESPONSE_STRING_twitterWhyGetThisCard,
   RESPONSE_STRING_twitterExpirationDate,
   RESPONSE_STRING_twitterHowToGetIt,
@@ -138,4 +142,6 @@ enum ResponseString {
   RESPONSE_STRING_succesfullyAuthenticated,
   RESPONSE_STRING_authenticationFailed,
   RESPONSE_STRING_deviceIncompatibilityMessage,
+  RESPONSE_STRING_backupPolygonIdCredentialEmptyError,
+  RESPONSE_STRING_downloadingCircuitLoadingMessage
 }

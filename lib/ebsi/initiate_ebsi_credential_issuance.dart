@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/ebsi/add_ebsi_credential.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:dio/dio.dart';
 import 'package:ebsi/ebsi.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -8,7 +8,7 @@ import 'package:secure_storage/secure_storage.dart';
 Future<void> initiateEbsiCredentialIssuance(
   String scannedResponse,
   DioClient client,
-  WalletCubit walletCubit,
+  CredentialsCubit credentialsCubit,
   SecureStorageProvider secureStorage,
 ) async {
   final Ebsi ebsi = Ebsi(Dio());
@@ -26,7 +26,7 @@ Future<void> initiateEbsiCredentialIssuance(
     await addEbsiCredential(
       encodedCredentialFromEbsi,
       uriFromScannedResponse,
-      walletCubit,
+      credentialsCubit,
     );
   } else {
     final Uri ebsiAuthenticationUri = await ebsi.getAuthorizationUriForIssuer(

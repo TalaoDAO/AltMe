@@ -6,13 +6,18 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:altme/app/app.dart';
+import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
+import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
+import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
+import 'package:altme/onboarding/gen_phrase/cubit/onboarding_gen_phrase_cubit.dart';
 import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/route/route.dart';
@@ -50,12 +55,6 @@ class App extends StatelessWidget {
         BlocProvider<BeaconCubit>(
           create: (context) => BeaconCubit(beacon: Beacon()),
         ),
-        BlocProvider<PolygonIdCubit>(
-          create: (context) => PolygonIdCubit(
-            secureStorageProvider: secure_storage.getSecureStorage,
-            polygonId: PolygonId(),
-          ),
-        ),
         BlocProvider<WalletConnectCubit>(
           create: (context) => WalletConnectCubit(
             connectedDappRepository:
@@ -83,13 +82,19 @@ class App extends StatelessWidget {
             secureStorageProvider: secure_storage.getSecureStorage,
           ),
         ),
-        BlocProvider<CredentialListCubit>(
-          create: (context) => CredentialListCubit(),
-        ),
         BlocProvider<DIDCubit>(
           create: (context) => DIDCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
             didKitProvider: DIDKitProvider(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => KycVerificationCubit(
+            didCubit: context.read<DIDCubit>(),
+            client: DioClient(
+              '',
+              Dio(),
+            ),
           ),
         ),
         BlocProvider<HomeCubit>(
@@ -99,27 +104,42 @@ class App extends StatelessWidget {
             didCubit: context.read<DIDCubit>(),
           ),
         ),
-        BlocProvider<WalletCubit>(
+        BlocProvider<OnboardingCubit>(
+          create: (context) => OnboardingCubit(),
+        ),
+        BlocProvider<CredentialsCubit>(
           lazy: false,
-          create: (context) => WalletCubit(
+          create: (context) => CredentialsCubit(
             credentialsRepository:
                 CredentialsRepository(secure_storage.getSecureStorage),
-            connectedDappRepository:
-                ConnectedDappRepository(secure_storage.getSecureStorage),
             secureStorageProvider: secure_storage.getSecureStorage,
-            profileCubit: context.read<ProfileCubit>(),
-            homeCubit: context.read<HomeCubit>(),
-            credentialListCubit: context.read<CredentialListCubit>(),
             keyGenerator: KeyGenerator(),
             didKitProvider: DIDKitProvider(),
             didCubit: context.read<DIDCubit>(),
             advanceSettingsCubit: context.read<AdvanceSettingsCubit>(),
           ),
         ),
+        BlocProvider<WalletCubit>(
+          lazy: false,
+          create: (context) => WalletCubit(
+            secureStorageProvider: secure_storage.getSecureStorage,
+            homeCubit: context.read<HomeCubit>(),
+            keyGenerator: KeyGenerator(),
+            credentialsCubit: context.read<CredentialsCubit>(),
+          ),
+        ),
+        BlocProvider<PolygonIdCubit>(
+          create: (context) => PolygonIdCubit(
+            client: DioClient('', Dio()),
+            secureStorageProvider: secure_storage.getSecureStorage,
+            polygonId: PolygonId(),
+            credentialsCubit: context.read<CredentialsCubit>(),
+          ),
+        ),
         BlocProvider<ScanCubit>(
           create: (context) => ScanCubit(
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-            walletCubit: context.read<WalletCubit>(),
+            credentialsCubit: context.read<CredentialsCubit>(),
             didKitProvider: DIDKitProvider(),
             secureStorageProvider: secure_storage.getSecureStorage,
             ebsi: Ebsi(Dio()),
@@ -134,11 +154,10 @@ class App extends StatelessWidget {
             deepLinkCubit: context.read<DeepLinkCubit>(),
             jwtDecode: JWTDecode(),
             profileCubit: context.read<ProfileCubit>(),
-            walletCubit: context.read<WalletCubit>(),
+            credentialsCubit: context.read<CredentialsCubit>(),
             beacon: Beacon(),
             walletConnectCubit: context.read<WalletConnectCubit>(),
             secureStorageProvider: secure_storage.getSecureStorage,
-            polygonId: PolygonId(),
             polygonIdCubit: context.read<PolygonIdCubit>(),
           ),
         ),
@@ -148,6 +167,7 @@ class App extends StatelessWidget {
             didCubit: context.read<DIDCubit>(),
             homeCubit: context.read<HomeCubit>(),
             walletCubit: context.read<WalletCubit>(),
+            credentialsCubit: context.read<CredentialsCubit>(),
             client: DioClient(Urls.checkIssuerTalaoUrl, Dio()),
           ),
         ),
@@ -155,7 +175,7 @@ class App extends StatelessWidget {
           create: (context) => AllTokensCubit(
             secureStorageProvider: secure_storage.getSecureStorage,
             client: DioClient(
-              Urls.tezToolBase,
+              Urls.coinGeckoBase,
               Dio(),
             ),
           ),
@@ -200,6 +220,9 @@ class App extends StatelessWidget {
         BlocProvider(
           create: (_) =>
               DIDPrivateKeyCubit(secureStorageProvider: getSecureStorage),
+        ),
+        BlocProvider(
+          create: (context) => HomeTabbarCubit(),
         ),
       ],
       child: const MaterialAppDefinition(),

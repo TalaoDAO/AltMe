@@ -330,6 +330,13 @@ class GlobalMessage {
   String get RESPONSE_STRING_ageRangeExpirationDate =>
       l10n.ageRangeExpirationDate;
   String get RESPONSE_STRING_ageRangeHowToGetIt => l10n.ageRangeHowToGetIt;
+  String get RESPONSE_STRING_defiComplianceWhyGetThisCard =>
+      l10n.defiComplianceWhyGetThisCard;
+  String get RESPONSE_STRING_defiComplianceExpirationDate =>
+      l10n.defiComplianceExpirationDate;
+  String get RESPONSE_STRING_defiComplianceHowToGetIt =>
+      l10n.defiComplianceHowToGetIt;
+
   String get RESPONSE_STRING_payloadFormatErrorMessage =>
       l10n.payloadFormatErrorMessage;
   String get RESPONSE_STRING_thisFeatureIsNotSupportedMessage =>
@@ -351,4 +358,10 @@ class GlobalMessage {
   String get RESPONSE_STRING_authenticationFailed => l10n.authenticationFailed;
   String get RESPONSE_STRING_deviceIncompatibilityMessage =>
       l10n.deviceIncompatibilityMessage;
+  String get RESPONSE_STRING_backupPolygonIdCredentialEmptyError =>
+      l10n.backupPolygonIdCredentialEmptyError;
+  String get RESPONSE_STRING_downloadingCircuitLoadingMessage =>
+      l10n.downloadingCircuitLoadingMessage;
+  String get RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST =>
+      l10n.cryptoAccountAlreadyExistMessage;
 }

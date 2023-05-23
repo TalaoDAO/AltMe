@@ -2,12 +2,12 @@ part of 'crypto_bottom_sheet_cubit.dart';
 
 @JsonSerializable()
 class CryptoBottomSheetState extends Equatable {
-  CryptoBottomSheetState({
+  const CryptoBottomSheetState({
     this.status = AppStatus.init,
     this.message,
     this.currentCryptoIndex = 0,
     CryptoAccount? cryptoAccount,
-  }) : cryptoAccount = cryptoAccount ?? CryptoAccount(data: const []);
+  }) : cryptoAccount = cryptoAccount ?? const CryptoAccount(data: []);
 
   factory CryptoBottomSheetState.fromJson(Map<String, dynamic> json) =>
       _$CryptoBottomSheetStateFromJson(json);

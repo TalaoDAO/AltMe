@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/pin_code/pin_code.dart';
+import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
@@ -15,6 +18,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:polygonid/polygonid.dart';
 
 final splashBlocListener = BlocListener<SplashCubit, SplashState>(
   listener: (BuildContext context, SplashState state) {
@@ -47,11 +51,7 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
         stateMessage: state.message!,
       );
     }
-    if (state.status == WalletStatus.delete) {
-      if (state.message != null) {
-        Navigator.of(context).pop();
-      }
-    }
+
     if (state.status == WalletStatus.reset) {
       /// Removes every stack except first route (splashPage)
       await Navigator.pushAndRemoveUntil<void>(
@@ -59,6 +59,37 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
         StarterPage.route(),
         (Route<dynamic> route) => route.isFirst,
       );
+    }
+  },
+);
+
+final credentialsBlocListener =
+    BlocListener<CredentialsCubit, CredentialsState>(
+  listener: (BuildContext context, CredentialsState state) async {
+    if (state.status == CredentialsStatus.loading) {
+      LoadingView().show(context: context);
+    } else {
+      /// during onBoarding
+      final onboardingState = context.read<OnboardingCubit>();
+      if (onboardingState.state.status != AppStatus.loading) {
+        LoadingView().hide();
+      }
+    }
+
+    if (state.message != null &&
+        (state.status == CredentialsStatus.error ||
+            state.status == CredentialsStatus.insert ||
+            state.status == CredentialsStatus.delete ||
+            state.status == CredentialsStatus.update)) {
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: state.message!,
+      );
+    }
+    if (state.status == CredentialsStatus.delete) {
+      if (state.message != null) {
+        Navigator.of(context).pop();
+      }
     }
   },
 );
@@ -111,8 +142,7 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
       final confirm = await showDialog<bool>(
             context: context,
             builder: (context) => ConfirmDialog(
-              title:
-                  '''${l10n.credentialPresentTitleDIDAuth}\n\n${l10n.confimrDIDAuth}''',
+              title: l10n.confimrDIDAuth,
               yes: l10n.showDialogYes,
               no: l10n.showDialogNo,
             ),
@@ -132,7 +162,14 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
       }
     }
     if (state.status == ScanStatus.success) {
-      Navigator.of(context).pop();
+      /// should pop until dashboard. Doing such we don't have to consider
+      /// different scanCubit scenarii (DIDAuth, scan or deeplink,
+      /// presentaiton, etc...).
+      await Navigator.pushAndRemoveUntil<void>(
+        context,
+        DashboardPage.route(),
+        (Route<dynamic> route) => route.isFirst,
+      );
     }
     if (state.status == ScanStatus.error) {
       Navigator.of(context).pop();
@@ -163,98 +200,104 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
       log.i('accept host');
       if (state.uri != null) {
         final profileCubit = context.read<ProfileCubit>();
-        var approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
-
-        late bool isIssuerVerificationSettingTrue;
-
-        isIssuerVerificationSettingTrue =
-            profileCubit.state.model.issuerVerificationUrls.isNotEmpty;
-
-        /// issuer side (oidc4VCI)
-        if (state.uri!.toString().startsWith('openid://initiate_issuance?')) {
-          isIssuerVerificationSettingTrue = true;
-        }
-
-        /// verifier side (siopv2) without request_uri
-        // if (state.uri?.queryParameters['scope'] == 'openid') {
-        //   isIssuerVerificationSettingTrue =
-        //       state.uri!.queryParameters['request_uri'] != null;
-        // }
-
-        /// verifier side (siopv2) with request_uri
-        if (state.uri.toString().startsWith('openid://?client_id')) {
-          isIssuerVerificationSettingTrue =
-              state.uri!.queryParameters['request_uri'] != null;
-        }
-
-        log.i('checking issuer - $isIssuerVerificationSettingTrue');
-
-        if (isIssuerVerificationSettingTrue) {
-          try {
-            // TODO(all): needs update the logic
-            approvedIssuer = await CheckIssuer(
-              DioClient(Urls.checkIssuerTalaoUrl, Dio()),
-              profileCubit.state.model.issuerVerificationUrls.first,
-              state.uri!,
-            ).isIssuerInApprovedList();
-          } catch (e) {
-            log.e(e);
-            if (e is MessageHandler) {
-              await context.read<QRCodeScanCubit>().emitError(e);
-            } else {
-              await context.read<QRCodeScanCubit>().emitError(
-                    ResponseMessage(
-                      ResponseString
-                          .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                    ),
-                  );
-            }
-            return;
-          }
-        }
 
         var acceptHost = true;
+        var approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
 
-        if (approvedIssuer.did.isEmpty && isIssuerVerificationSettingTrue) {
-          String subtitle = (approvedIssuer.did.isEmpty)
-              ? state.uri!.host
-              : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
+        final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
+
+        if (isAlertEnable) {
+          bool isIssuerVerificationSettingTrue =
+              profileCubit.state.model.issuerVerificationUrls.isNotEmpty;
+
+          String issuerVerificationUrl = '';
 
           /// issuer side (oidc4VCI)
           if (state.uri!.toString().startsWith('openid://initiate_issuance?')) {
-            subtitle = state.uri!.queryParameters['issuer'].toString();
+            isIssuerVerificationSettingTrue = true;
+            issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
           }
 
           /// verifier side (siopv2) without request_uri
-          // if (state.uri?.queryParameters['scope'] == 'openid') {
-          //   subtitle = state.uri!.queryParameters['request_uri'].toString();
-          // }
-
-          /// verifier side (siopv2) with request_uri
-          if (state.uri.toString().startsWith('openid://?client_id')) {
-            subtitle = state.uri!.queryParameters['request_uri'].toString();
+          if (state.uri?.queryParameters['scope'] == 'openid') {
+            // isIssuerVerificationSettingTrue =
+            //     state.uri!.queryParameters['request_uri'] != null;
+            issuerVerificationUrl = Urls.checkIssuerEbsiUrl;
           }
 
-          String title = l10n.scanPromptHost;
-
-          if (!state.isRequestVerified) {
-            title = '${l10n.service_not_registered_message} '
-                '${l10n.scanPromptHost}';
+          /// polygon id
+          if (state.uri.toString().startsWith('{"id":')) {
+            isIssuerVerificationSettingTrue = false;
           }
 
-          acceptHost = await showDialog<bool>(
-                context: context,
-                builder: (BuildContext context) {
-                  return ConfirmDialog(
-                    title: title,
-                    subtitle: subtitle,
-                    yes: l10n.communicationHostAllow,
-                    no: l10n.communicationHostDeny,
-                    //lock: state.uri!.scheme == 'http',
-                  );
-                },
-              ) ??
-              false;
+          log.i('checking issuer - $isIssuerVerificationSettingTrue');
+
+          if (isIssuerVerificationSettingTrue) {
+            try {
+              approvedIssuer = await CheckIssuer(
+                DioClient(Urls.checkIssuerTalaoUrl, Dio()),
+                issuerVerificationUrl,
+                state.uri!,
+              ).isIssuerInApprovedList();
+            } catch (e) {
+              log.e(e);
+              if (e is MessageHandler) {
+                await context.read<QRCodeScanCubit>().emitError(e);
+              } else {
+                await context.read<QRCodeScanCubit>().emitError(
+                      ResponseMessage(
+                        ResponseString
+                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                      ),
+                    );
+              }
+              return;
+            }
+          }
+
+          if (approvedIssuer.did.isEmpty && isIssuerVerificationSettingTrue) {
+            String subtitle = (approvedIssuer.did.isEmpty)
+                ? state.uri!.host
+                : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
+
+            /// issuer side (oidc4VCI)
+            if (state.uri!
+                .toString()
+                .startsWith('openid://initiate_issuance?')) {
+              subtitle = state.uri!.queryParameters['issuer'].toString();
+            }
+
+            /// verifier side (siopv2) without request_uri
+            // if (state.uri?.queryParameters['scope'] == 'openid') {
+            //  subtitle = state.uri!.queryParameters['request_uri'].toString();
+            // }
+
+            /// verifier side (siopv2) with request_uri
+            if (state.uri.toString().startsWith('openid://?client_id')) {
+              subtitle = state.uri!.queryParameters['request_uri'].toString();
+            }
+
+            String title = l10n.scanPromptHost;
+
+            if (!state.isRequestVerified) {
+              title = '${l10n.service_not_registered_message} '
+                  '${l10n.scanPromptHost}';
+            }
+
+            acceptHost = await showDialog<bool>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ConfirmDialog(
+                      title: title,
+                      subtitle: subtitle,
+                      yes: l10n.communicationHostAllow,
+                      no: l10n.communicationHostDeny,
+                      //lock: state.uri!.scheme == 'http',
+                    );
+                  },
+                ) ??
+                false;
+          }
         }
 
         if (acceptHost) {
@@ -424,6 +467,105 @@ final walletConnectBlocListener =
       }
     } catch (e) {
       log.e(e);
+    }
+  },
+);
+
+final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
+  listener: (BuildContext context, PolygonIdState state) async {
+    final polygonIdCubit = context.read<PolygonIdCubit>();
+
+    if (state.status == AppStatus.loading) {
+      final MessageHandler? messageHandler = state.loadingText;
+      final String? message =
+          messageHandler?.getMessage(context, messageHandler);
+
+      LoadingView().show(context: context, text: message);
+    } else {
+      LoadingView().hide();
+    }
+
+    if (state.status == AppStatus.goBack) {
+      Navigator.of(context).pop();
+    }
+
+    if (state.message != null) {
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: state.message!,
+      );
+    }
+
+    if (state.polygonAction == PolygonIdAction.offer) {
+      final Iden3MessageEntity iden3MessageEntity =
+          await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
+      final List<ClaimEntity> claims = await polygonIdCubit.getClaims(
+        iden3MessageEntity: iden3MessageEntity,
+      );
+      LoadingView().hide();
+      await Navigator.of(context)
+          .push<void>(PolygonIdCredentialOfferPage.route(claims: claims));
+    }
+
+    if (state.polygonAction == PolygonIdAction.verifier) {
+      final Iden3MessageEntity iden3MessageEntity =
+          await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
+      LoadingView().hide();
+      await Navigator.of(context).push<void>(
+        PolygonIdVerificationPage.route(iden3MessageEntity: iden3MessageEntity),
+      );
+    }
+
+    if (state.polygonAction == PolygonIdAction.issuer) {
+      var accept = true;
+      final profileCubit = context.read<ProfileCubit>();
+
+      final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
+
+      final l10n = context.l10n;
+
+      if (isAlertEnable) {
+        /// checking if it is issuer side
+
+        final iden3MessageEntity = await polygonIdCubit.getIden3Message(
+          message: state.scannedResponse!,
+        );
+
+        LoadingView().hide();
+
+        // TODO(all): later choose url based on mainnet and testnet
+        accept = await showDialog<bool>(
+              context: context,
+              builder: (BuildContext context) {
+                return ConfirmDialog(
+                  title: l10n.scanPromptHost,
+                  subtitle: Urls.checkIssuerPolygonTestnetUrl,
+                  no: l10n.communicationHostDeny,
+                );
+              },
+            ) ??
+            false;
+      }
+
+      LoadingView().hide();
+
+      if (accept) {
+        final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
+            .getIden3Message(message: state.scannedResponse!);
+
+        await Navigator.of(context).push<void>(
+          PinCodePage.route(
+            isValidCallback: () {
+              context.read<PolygonIdCubit>().authenticate(
+                    iden3MessageEntity: iden3MessageEntity,
+                    goBack: false,
+                  );
+            },
+            restrictToBack: false,
+          ),
+        );
+        return;
+      }
     }
   },
 );

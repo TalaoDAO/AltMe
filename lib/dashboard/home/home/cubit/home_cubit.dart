@@ -2,23 +2,20 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/did/cubit/did_cubit.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:altme/wallet/model/crypto_account.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';
 import 'package:did_kit/did_kit.dart';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:passbase_flutter/passbase_flutter.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:web3dart/crypto.dart';
-import 'package:workmanager/workmanager.dart';
 
 part 'home_cubit.g.dart';
 part 'home_state.dart';
@@ -39,7 +36,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> aiSelfiValidation({
     required CredentialSubjectType credentialType,
     required List<int> imageBytes,
-    required WalletCubit walletCubit,
+    required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
   }) async {
     // launch url to get Over18, Over15, Over13,AgeRange Credentials
@@ -84,7 +81,7 @@ class HomeCubit extends Cubit<HomeState> {
         apiKey: YOTI_AI_API_KEY,
         data: data,
         credentialType: 'Over13',
-        walletCubit: walletCubit,
+        credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
 
@@ -93,7 +90,7 @@ class HomeCubit extends Cubit<HomeState> {
         apiKey: YOTI_AI_API_KEY,
         data: data,
         credentialType: 'Over15',
-        walletCubit: walletCubit,
+        credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
 
@@ -102,7 +99,7 @@ class HomeCubit extends Cubit<HomeState> {
         apiKey: YOTI_AI_API_KEY,
         data: data,
         credentialType: 'Over18',
-        walletCubit: walletCubit,
+        credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
 
@@ -111,7 +108,7 @@ class HomeCubit extends Cubit<HomeState> {
         apiKey: YOTI_AI_API_KEY,
         data: data,
         credentialType: 'AgeRange',
-        walletCubit: walletCubit,
+        credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
 
@@ -120,12 +117,47 @@ class HomeCubit extends Cubit<HomeState> {
         apiKey: YOTI_AI_API_KEY,
         data: data,
         credentialType: 'AgeEstimate',
-        walletCubit: walletCubit,
+        credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
       );
     } catch (e) {
       final logger = getLogger('HomeCubit - AISelfiValidation');
       logger.e('error: $e');
+
+      logger.e(e);
+      String? message;
+      if (e is NetworkException) {
+        if (e.data != null) {
+          if (e.data['error_description'] != null) {
+            if (e.data['error_description'] is String) {
+              try {
+                final dynamic errorDescriptionJson =
+                    jsonDecode(e.data['error_description'] as String);
+                message = errorDescriptionJson['error_message'] as String;
+              } catch (_, __) {
+                message = e.data['error_description'] as String;
+              }
+            } else if (e.data['error_description'] is Map<String, dynamic>) {
+              message = e.data['error_description']['error_message'] as String;
+            }
+          }
+        }
+      }
+      emit(
+        state.copyWith(
+          status: AppStatus.error,
+          message: StateMessage(
+            showDialog: !(message == null),
+            stringMessage: message,
+            messageHandler: message == null
+                ? ResponseMessage(
+                    ResponseString
+                        .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+                  )
+                : null,
+          ),
+        ),
+      );
     }
   }
 
@@ -134,11 +166,9 @@ class HomeCubit extends Cubit<HomeState> {
     required String apiKey,
     required Map<String, dynamic> data,
     required String credentialType,
-    required WalletCubit walletCubit,
+    required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
   }) async {
-    final logger = getLogger('HomeCubit - AISelfiValidation');
-
     /// if credential of this type is already in the wallet do nothing
     /// Ensure credentialType = name of credential type in CredentialModel
     CredentialSubjectType credentialTypeEnum =
@@ -156,105 +186,59 @@ class HomeCubit extends Cubit<HomeState> {
       credentialTypeEnum = CredentialSubjectType.over18;
     }
 
-    final List<CredentialModel> credentialList = await walletCubit
+    final List<CredentialModel> credentialList = await credentialsCubit
         .credentialListFromCredentialSubjectType(credentialTypeEnum);
     if (credentialList.isEmpty) {
       dynamic response;
-      try {
-        emit(state.copyWith(status: AppStatus.loading));
-        response = await client.post(
-          url,
-          headers: <String, dynamic>{
-            'accept': 'application/json',
-            'Content-Type': 'application/json',
-            'X-API-KEY': apiKey,
-          },
-          data: data,
-        );
 
-        if (response != null) {
-          final credential =
-              jsonDecode(response as String) as Map<String, dynamic>;
+      emit(state.copyWith(status: AppStatus.loading));
+      response = await client.post(
+        url,
+        headers: <String, dynamic>{
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-API-KEY': apiKey,
+        },
+        data: data,
+      );
 
-          final Map<String, dynamic> newCredential =
-              Map<String, dynamic>.from(credential);
-          newCredential['credentialPreview'] = credential;
-          final CredentialManifest credentialManifest =
-              await getCredentialManifestFromAltMe(client);
-          credentialManifest.outputDescriptors
-              ?.removeWhere((element) => element.id != credentialType);
-          if (credentialManifest.outputDescriptors!.isNotEmpty) {
-            newCredential['credential_manifest'] = CredentialManifest(
-              credentialManifest.id,
-              credentialManifest.issuedBy,
-              credentialManifest.outputDescriptors,
-              credentialManifest.presentationDefinition,
-            ).toJson();
-          }
+      if (response != null) {
+        final credential =
+            jsonDecode(response as String) as Map<String, dynamic>;
 
-          final credentialModel = CredentialModel.copyWithData(
-            oldCredentialModel: CredentialModel.fromJson(
-              newCredential,
-            ),
-            newData: credential,
-            activities: [Activity(acquisitionAt: DateTime.now())],
-          );
-          if (credentialType != 'AgeEstimate') {
-            await walletCubit.insertCredential(
-              credential: credentialModel,
-              showMessage: true,
-            );
-            await cameraCubit.incrementAcquiredCredentialsQuantity();
-            emit(state.copyWith(status: AppStatus.success));
-          } else {
-            await cameraCubit.updateAgeEstimate(
-              credentialModel.data['credentialSubject']['ageEstimate']
-                  as String,
-            );
-          }
+        final Map<String, dynamic> newCredential =
+            Map<String, dynamic>.from(credential);
+        newCredential['credentialPreview'] = credential;
+        final CredentialManifest credentialManifest =
+            await getCredentialManifestFromAltMe(client);
+        credentialManifest.outputDescriptors
+            ?.removeWhere((element) => element.id != credentialType);
+        if (credentialManifest.outputDescriptors!.isNotEmpty) {
+          newCredential['credential_manifest'] = CredentialManifest(
+            credentialManifest.id,
+            credentialManifest.issuedBy,
+            credentialManifest.outputDescriptors,
+            credentialManifest.presentationDefinition,
+          ).toJson();
         }
-      } catch (e) {
-        logger.e(e);
-        if (e is NetworkException) {
-          String? message;
-          if (e.data != null) {
-            if (e.data['error_description'] is String) {
-              try {
-                final dynamic errorDescriptionJson =
-                    jsonDecode(e.data['error_description'] as String);
-                message = errorDescriptionJson['error_message'] as String;
-              } catch (_, __) {
-                message = e.data['error_description'] as String;
-              }
-            } else if (e.data['error_description'] is Map<String, dynamic>) {
-              message = e.data['error_description']['error_message'] as String;
-            }
-          }
-          emit(
-            state.copyWith(
-              status: AppStatus.error,
-              message: StateMessage(
-                stringMessage: message,
-                messageHandler: message == null
-                    ? null
-                    : ResponseMessage(
-                        ResponseString
-                            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER, // ignore: lines_longer_than_80_chars
-                      ),
-              ),
-            ),
+
+        final credentialModel = CredentialModel.copyWithData(
+          oldCredentialModel: CredentialModel.fromJson(
+            newCredential,
+          ),
+          newData: credential,
+          activities: [Activity(acquisitionAt: DateTime.now())],
+        );
+        if (credentialType != 'AgeEstimate') {
+          await credentialsCubit.insertCredential(
+            credential: credentialModel,
+            showMessage: true,
           );
+          await cameraCubit.incrementAcquiredCredentialsQuantity();
+          emit(state.copyWith(status: AppStatus.success));
         } else {
-          emit(
-            state.copyWith(
-              status: AppStatus.error,
-              message: StateMessage(
-                messageHandler: ResponseMessage(
-                  ResponseString
-                      .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
-                ),
-              ),
-            ),
+          await cameraCubit.updateAgeEstimate(
+            credentialModel.data['credentialSubject']['ageEstimate'] as String,
           );
         }
       }
@@ -262,18 +246,6 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> emitHasWallet() async {
-    final String? passbaseStatusFromStorage = await secureStorageProvider.get(
-      SecureStorageKeys.passBaseStatus,
-    );
-    if (passbaseStatusFromStorage != null) {
-      final passBaseStatus = getPassBaseStatusFromString(
-        passbaseStatusFromStorage,
-      );
-      if (passBaseStatus == PassBaseStatus.pending) {
-        getPassBaseStatusBackground();
-      }
-    }
-
     emit(
       state.copyWith(
         status: AppStatus.populate,
@@ -293,201 +265,6 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> launchUrl({String? link}) async {
     await LaunchUrl.launch(link ?? state.link!);
-  }
-
-  Future<void> checkForPassBaseStatusThenLaunchUrl({
-    required String link,
-    required dynamic Function() onPassBaseApproved,
-  }) async {
-    log.i('Checking PassbaseStatus');
-    emit(state.loading());
-
-    final passBaseStatus = await checkPassbaseStatus();
-
-    if (passBaseStatus == PassBaseStatus.approved) {
-      onPassBaseApproved.call();
-    }
-
-    if (passBaseStatus == PassBaseStatus.pending) {
-      getPassBaseStatusBackground();
-    }
-
-    log.i(passBaseStatus);
-
-    emit(
-      state.copyWith(
-        status: AppStatus.populate,
-        passBaseStatus: passBaseStatus,
-        link: link,
-      ),
-    );
-  }
-
-  Future<PassBaseStatus> checkPassbaseStatus() async {
-    emit(state.loading());
-    late PassBaseStatus passBaseStatus;
-
-    /// check if status is already approved in DB
-    final String? passbaseStatusFromStorage = await secureStorageProvider.get(
-      SecureStorageKeys.passBaseStatus,
-    );
-
-    if (passbaseStatusFromStorage != null) {
-      passBaseStatus = getPassBaseStatusFromString(passbaseStatusFromStorage);
-    } else {
-      passBaseStatus = PassBaseStatus.undone;
-    }
-
-    if (passBaseStatus != PassBaseStatus.approved) {
-      final did = didCubit.state.did!;
-      passBaseStatus = await getPassBaseStatusFromAPI(did);
-      await secureStorageProvider.set(
-        SecureStorageKeys.passBaseStatus,
-        passBaseStatus.name,
-      );
-    }
-    emit(state.copyWith(status: AppStatus.populate));
-    return passBaseStatus;
-  }
-
-  void startPassbaseVerification(WalletCubit walletCubit) {
-    final log = getLogger('HomeCubit - startPassbaseVerification');
-    final did = didCubit.state.did!;
-    emit(state.loading());
-    PassbaseSDK.startVerification(
-      onFinish: (identityAccessKey) async {
-        // IdentityAccessKey to run the process manually:
-        // 22a363e6-2f93-4dd3-9ac8-6cba5a046acd
-
-        unawaited(
-          getMutipleCredentials(
-            identityAccessKey,
-            client,
-            walletCubit,
-            secureStorageProvider,
-          ),
-        );
-
-        /// Do not remove: Following POST tell backend the relation between DID
-        /// and passbase token.
-        try {
-          await dotenv.load();
-          final PASSBASE_WEBHOOK_AUTH_TOKEN =
-              dotenv.get('PASSBASE_WEBHOOK_AUTH_TOKEN');
-          final dynamic response = await client.post(
-            '/wallet/webhook',
-            headers: <String, dynamic>{
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer $PASSBASE_WEBHOOK_AUTH_TOKEN',
-            },
-            data: <String, dynamic>{
-              'identityAccessKey': identityAccessKey,
-              'DID': did,
-            },
-          );
-
-          if (response == 'ok') {
-            emit(
-              state.copyWith(
-                status: AppStatus.idle,
-                passBaseStatus: PassBaseStatus.complete,
-              ),
-            );
-          } else {
-            throw Exception();
-          }
-        } catch (e) {
-          emit(
-            state.copyWith(
-              status: AppStatus.populate,
-              passBaseStatus: PassBaseStatus.declined,
-            ),
-          );
-        }
-      },
-      onError: (e) {
-        if (e == 'CANCELLED_BY_USER') {
-          log.e('Cancelled by user');
-        } else {
-          log.e('Unknown error');
-        }
-        emit(
-          state.copyWith(
-            status: AppStatus.idle,
-            passBaseStatus: PassBaseStatus.idle,
-          ),
-        );
-      },
-    );
-  }
-
-  /// Give user metadata to KYC. Currently we are just sending user DID.
-  bool setKYCMetadata(WalletCubit walletCubit) {
-    final selectedCredentials = <CredentialModel>[];
-    for (final credentialModel in walletCubit.state.credentials) {
-      final credentialTypeList = credentialModel.credentialPreview.type;
-
-      ///credential and issuer provided in claims
-      if (credentialTypeList.contains('EmailPass')) {
-        final credentialSubjectModel = credentialModel
-            .credentialPreview.credentialSubjectModel as EmailPassModel;
-        if (credentialSubjectModel.passbaseMetadata != '') {
-          selectedCredentials.add(credentialModel);
-        }
-      }
-    }
-    if (selectedCredentials.isNotEmpty) {
-      final firstEmailPassCredentialSubject =
-          selectedCredentials.first.credentialPreview.credentialSubjectModel;
-      if (firstEmailPassCredentialSubject is EmailPassModel) {
-        /// Give user email from first EmailPass to KYC. When KYC is successful
-        /// this email is used to send the over18 credential link to user.
-
-        PassbaseSDK.prefillUserEmail = firstEmailPassCredentialSubject.email;
-        PassbaseSDK.metaData = firstEmailPassCredentialSubject.passbaseMetadata;
-        return true;
-      }
-    }
-    return false;
-  }
-
-  void getPassBaseStatusBackground() {
-    final did = didCubit.state.did!;
-    Workmanager().registerOneOffTask(
-      'getPassBaseStatusBackground',
-      'getPassBaseStatusBackground',
-      inputData: <String, dynamic>{'did': did},
-    );
-    periodicCheckPassBaseStatus();
-  }
-
-  Future<void> periodicCheckPassBaseStatus() async {
-    // We check passbase status during five minutes
-    var timerCounter = 24;
-    Timer.periodic(const Duration(seconds: 20), (timer) async {
-      final String? passbaseStatusFromStorage = await secureStorageProvider.get(
-        SecureStorageKeys.passBaseStatus,
-      );
-
-      if (passbaseStatusFromStorage != null) {
-        final passBaseStatus = getPassBaseStatusFromString(
-          passbaseStatusFromStorage,
-        );
-        if (passBaseStatus == PassBaseStatus.approved) {
-          emit(
-            state.copyWith(
-              status: AppStatus.populate,
-              passBaseStatus: PassBaseStatus.approved,
-            ),
-          );
-          timer.cancel();
-        }
-      }
-      timerCounter--;
-      if (timerCounter == 0) {
-        timer.cancel();
-      }
-    });
   }
 
   Future<void> periodicCheckRewardOnTezosBlockchain() async {
@@ -643,57 +420,4 @@ class HomeCubit extends Cubit<HomeState> {
       );
     }
   }
-}
-
-Future<PassBaseStatus> getPassBaseStatusFromAPI(String did) async {
-  try {
-    await dotenv.load();
-    final PASSBASE_CHECK_DID_AUTH_TOKEN =
-        dotenv.get('PASSBASE_CHECK_DID_AUTH_TOKEN');
-    final client = DioClient(Urls.issuerBaseUrl, Dio());
-    final dynamic response = await client.get(
-      '/passbase/check/$did',
-      headers: <String, dynamic>{
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $PASSBASE_CHECK_DID_AUTH_TOKEN',
-      },
-    );
-    final PassBaseStatus passBaseStatus = getPassBaseStatusFromString(
-      response as String,
-    );
-    return passBaseStatus;
-  } catch (e) {
-    return PassBaseStatus.undone;
-  }
-}
-
-PassBaseStatus getPassBaseStatusFromString(String? string) {
-  late PassBaseStatus passBaseStatus;
-  switch (string) {
-    case 'approved':
-      passBaseStatus = PassBaseStatus.approved;
-      break;
-    case 'declined':
-      passBaseStatus = PassBaseStatus.declined;
-      break;
-    case 'verified':
-      passBaseStatus = PassBaseStatus.verified;
-      break;
-    case 'pending':
-      passBaseStatus = PassBaseStatus.pending;
-      break;
-    case 'undone':
-      passBaseStatus = PassBaseStatus.undone;
-      break;
-    case 'notdone':
-      passBaseStatus = PassBaseStatus.undone;
-      break;
-    case 'complete':
-      passBaseStatus = PassBaseStatus.complete;
-      break;
-    case 'idle':
-    default:
-      passBaseStatus = PassBaseStatus.idle;
-  }
-  return passBaseStatus;
 }

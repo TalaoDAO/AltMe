@@ -3,9 +3,9 @@ class Urls {
   static const String checkIssuerTalaoUrl =
       'https://talao.co/trusted-issuers-registry/v1/issuers';
 
-  /// TODO(all): update the issuer url for polygon
+  // TODO(all): update the issuer url for polygon
   static const String checkIssuerPolygonTestnetUrl =
-      'checkIssuerPolygonTestnetUrl';
+      'https://issuer-demo.polygonid.me/';
   static const String checkIssuerPolygonUrl = 'checkIssuerPolygonUrl';
   static const String checkIssuerEbsiUrl =
       'https://api.conformance.intebsi.xyz/trusted-issuers-registry/v2/issuers';
@@ -43,6 +43,11 @@ class Urls {
 
   static const String bloometaCardUrl = 'https://issuer.talao.co/bloometa';
 
+  static const String kycAgeCredentialUrl =
+      'https://issuer.talao.co/credential-manifest/polygonid/kycagecredential';
+  static const String kycCountryOfResidenceUrl =
+      'https://issuer.talao.co/credential-manifest/polygonid/kyccountryofresidencecredential';
+
   static const String chainbornMembershipCardUrl =
       'https://issuer.talao.co/chainborn/membershipcard/';
 
@@ -58,8 +63,7 @@ class Urls {
   static const mainnetRPC = 'https://rpc.tzstats.com';
   static const ghostnetRPC = 'https://rpc.tzkt.io/ghostnet';
 
-  static const tezToolPrices = 'https://api.teztools.io/v1/prices';
-  static const tezToolBase = 'https://api.teztools.io';
+  static const coinGeckoBase = 'https://pro-api.coingecko.com/api/v3/';
 
   static const xtzPrice = 'https://api.teztools.io/v1/xtz-price';
   static const cryptoCompareBaseUrl = 'https://min-api.cryptocompare.com';
@@ -97,4 +101,16 @@ class Urls {
   static const matrixHomeServer = 'https://matrix.talao.co';
   static const getNonce = 'https://talao.co/matrix/nonce';
   static const registerToMatrix = 'https://talao.co/matrix/register';
+
+  //deeplink
+  static const appDeepLink = 'https://app.altme.io/app/download';
+
+  //ID360
+  static const getCodeForId360 = 'https://talao.co/id360/get_code';
+  static const authenticateForId360 = 'https://talao.co/id360/authenticate';
+
+  //Discover
+  static const discoverCoinsWebView = 'https://discover-coins-part.webflow.io/';
+  static const discoverNftsWebView =
+      'https://discover-coins-part.webflow.io/prod-nota-available/nft-noir';
 }

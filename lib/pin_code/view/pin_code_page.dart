@@ -71,9 +71,9 @@ class _PinCodeViewState extends State<PinCodeView> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final fingerprintEnabled =
-          await getSecureStorage.get(SecureStorageKeys.fingerprintEnabled);
-      if (fingerprintEnabled == true.toString()) {
+      final isBiometricEnabled =
+          await getSecureStorage.get(SecureStorageKeys.isBiometricEnabled);
+      if (isBiometricEnabled == true.toString()) {
         final l10n = context.l10n;
         final authenticated = await widget.localAuthApi
             .authenticate(localizedReason: l10n.scanFingerprintToAuthenticate);

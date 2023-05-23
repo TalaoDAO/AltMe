@@ -398,6 +398,15 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_ageRangeHowToGetIt:
         return globalMessage.RESPONSE_STRING_ageRangeHowToGetIt;
 
+      case ResponseString.RESPONSE_STRING_defiComplianceWhyGetThisCard:
+        return globalMessage.RESPONSE_STRING_defiComplianceWhyGetThisCard;
+
+      case ResponseString.RESPONSE_STRING_defiComplianceExpirationDate:
+        return globalMessage.RESPONSE_STRING_defiComplianceExpirationDate;
+
+      case ResponseString.RESPONSE_STRING_defiComplianceHowToGetIt:
+        return globalMessage.RESPONSE_STRING_defiComplianceHowToGetIt;
+
       case ResponseString.RESPONSE_STRING_payloadFormatErrorMessage:
         return globalMessage.RESPONSE_STRING_payloadFormatErrorMessage;
 
@@ -430,6 +439,15 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage:
         return globalMessage.RESPONSE_STRING_deviceIncompatibilityMessage;
+
+      case ResponseString.RESPONSE_STRING_backupPolygonIdCredentialEmptyError:
+        return globalMessage
+            .RESPONSE_STRING_backupPolygonIdCredentialEmptyError;
+
+      case ResponseString.RESPONSE_STRING_downloadingCircuitLoadingMessage:
+        return globalMessage.RESPONSE_STRING_downloadingCircuitLoadingMessage;
+      case ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST:
+        return globalMessage.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST;
     }
   }
 }

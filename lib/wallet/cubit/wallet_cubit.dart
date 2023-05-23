@@ -2,25 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
-import 'package:altme/did/did.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
-import 'package:credential_manifest/credential_manifest.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:key_generator/key_generator.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:secure_storage/secure_storage.dart';
-import 'package:uuid/uuid.dart';
-
-part 'helper_function.dart';
 
 part 'wallet_cubit.g.dart';
 
@@ -28,74 +18,18 @@ part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<WalletState> {
   WalletCubit({
-    required this.credentialsRepository,
-    required this.connectedDappRepository,
     required this.secureStorageProvider,
-    required this.profileCubit,
     required this.homeCubit,
-    required this.credentialListCubit,
     required this.keyGenerator,
-    required this.didCubit,
-    required this.didKitProvider,
-    required this.advanceSettingsCubit,
-  }) : super(WalletState());
+    required this.credentialsCubit,
+  }) : super(const WalletState());
 
-  final CredentialsRepository credentialsRepository;
-  final ConnectedDappRepository connectedDappRepository;
   final SecureStorageProvider secureStorageProvider;
-  final ProfileCubit profileCubit;
   final HomeCubit homeCubit;
-  final CredentialListCubit credentialListCubit;
   final KeyGenerator keyGenerator;
-  final DIDCubit didCubit;
-  final DIDKitProvider didKitProvider;
-  final AdvanceSettingsCubit advanceSettingsCubit;
+  final CredentialsCubit credentialsCubit;
 
   final log = getLogger('WalletCubit');
-
-  Future<void> initialize({required String? ssiKey}) async {
-    if (ssiKey != null) {
-      if (ssiKey.isNotEmpty) {
-        unawaited(loadAllCredentials(ssiKey: ssiKey));
-      }
-    }
-  }
-
-  Future<void> loadAllCredentials({required String ssiKey}) async {
-    final log = getLogger('loadAllCredentials');
-    final savedCredentials = await credentialsRepository.findAll(/* filters */);
-    emit(
-      state.copyWith(
-        status: WalletStatus.populate,
-        credentials: savedCredentials,
-      ),
-    );
-    log.i('credentials loaded from repository - ${savedCredentials.length}');
-    await addRequiredCredentials(ssiKey: ssiKey);
-  }
-
-  Future<void> addRequiredCredentials({required String ssiKey}) async {
-    final log = getLogger('addRequiredCredentials');
-
-    /// device info card
-    final walletCredentialCards = await credentialListFromCredentialSubjectType(
-      CredentialSubjectType.walletCredential,
-    );
-    if (walletCredentialCards.isEmpty) {
-      final walletCredential = await generateWalletCredential(
-        ssiKey: ssiKey,
-        didKitProvider: didKitProvider,
-        didCubit: didCubit,
-      );
-      if (walletCredential != null) {
-        log.i('CredentialSubjectType.walletCredential added');
-        await insertCredential(
-          credential: walletCredential,
-          showMessage: false,
-        );
-      }
-    }
-  }
 
   Future<void> setCurrentWalletAccount(int index) async {
     emit(state.loading());
@@ -127,7 +61,7 @@ class WalletCubit extends Cubit<WalletState> {
       final String? ssiKey =
           await secureStorageProvider.get(SecureStorageKeys.ssiKey);
       if (ssiKey != null) {
-        await addRequiredCredentials(ssiKey: ssiKey);
+        await credentialsCubit.addRequiredCredentials(ssiKey: ssiKey);
       }
     }
 
@@ -144,6 +78,32 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// when blockchain type is pre-selected
     if (blockchainType != null) {
+      /// Here, we create temporary accounts and check for their
+      /// existence beforehand.
+      final newAcc = await _generateAccount(
+        mnemonicOrKey: mnemonicOrKey,
+        isImported: isImported,
+        isSecretKey: isSecretKey,
+        blockchainType: blockchainType,
+        totalAccountsYet: int.parse(totalAccountsYet),
+      );
+
+      ///Before creating a duplicate account, please ensure that it
+      ///doesn't already exist.
+      if (state.cryptoAccount.data.any(
+        (acc) =>
+            acc.walletAddress == newAcc.walletAddress &&
+            acc.blockchainType == newAcc.blockchainType,
+      )) {
+        onComplete?.call(
+          cryptoAccount: state.cryptoAccount,
+          messageHandler: ResponseMessage(
+            ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST,
+          ),
+        );
+        return;
+      }
+
       log.i('creating both $blockchainType accounts');
       updatedCryptoAccount = await createBlockchainAccount(
         accountName: accountName,
@@ -209,7 +169,7 @@ class WalletCubit extends Cubit<WalletState> {
           );
         }
       } else {
-        /// polygon at start
+        /// Polygon at start
         await createBlockchainAccount(
           accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
@@ -219,14 +179,24 @@ class WalletCubit extends Cubit<WalletState> {
           totalAccountsYet: accountsCount,
         );
 
-        /// tezos at start
+        /// Binance at start
+        await createBlockchainAccount(
+          accountName: accountName,
+          mnemonicOrKey: mnemonicOrKey,
+          isImported: isImported,
+          isSecretKey: isSecretKey,
+          blockchainType: BlockchainType.binance,
+          totalAccountsYet: accountsCount + 1,
+        );
+
+        /// Tezos at start
         updatedCryptoAccount = await createBlockchainAccount(
           accountName: accountName,
           mnemonicOrKey: mnemonicOrKey,
           isImported: isImported,
           isSecretKey: isSecretKey,
           blockchainType: BlockchainType.tezos,
-          totalAccountsYet: accountsCount + 1,
+          totalAccountsYet: accountsCount + 2,
         );
       }
     }
@@ -336,23 +306,94 @@ class WalletCubit extends Cubit<WalletState> {
     /// If we are not using crypto in the wallet we are not generating
     /// AssociatedAddress credentials.
     final credential = Parameters.hasCryptoCallToAction
-        ? await generateAssociatedWalletCredential(
-            cryptoAccountData: cryptoAccountData,
-            didCubit: didCubit,
-            didKitProvider: didKitProvider,
+        ? await await credentialsCubit.createAssociatedWalletCredential(
             blockchainType: blockchainType,
-            keyGenerator: keyGenerator,
+            cryptoAccountData: cryptoAccountData,
           )
         : null;
 
     if (credential != null) {
-      await insertCredential(
+      await credentialsCubit.insertCredential(
         credential: credential,
         showMessage: false,
       );
     }
 
     return cryptoAccount;
+  }
+
+  Future<CryptoAccountData> _generateAccount({
+    String? accountName,
+    required String mnemonicOrKey,
+    required bool isImported,
+    required bool isSecretKey,
+    required BlockchainType blockchainType,
+    required int totalAccountsYet,
+  }) async {
+    final AccountType accountType = blockchainType.accountType;
+
+    int derivePathIndex = 0;
+    final bool isCreated = !isImported;
+
+    log.i('isImported - $isImported');
+    if (isCreated) {
+      /// Note: while adding derivePathIndex is always increased
+      final String? savedDerivePathIndex =
+          await secureStorageProvider.get(blockchainType.derivePathIndexKey);
+
+      if (savedDerivePathIndex != null && savedDerivePathIndex.isNotEmpty) {
+        derivePathIndex = int.parse(savedDerivePathIndex) + 1;
+      }
+    }
+
+    log.i('derivePathIndex - $derivePathIndex');
+
+    /// Note: while importing derivePathIndex is always 0
+
+    late String walletAddress;
+    late String secretKey;
+
+    if (isSecretKey) {
+      secretKey = mnemonicOrKey;
+
+      walletAddress = await keyGenerator.walletAddressFromSecretKey(
+        secretKey: secretKey,
+        accountType: accountType,
+      );
+    } else {
+      secretKey = await keyGenerator.secretKeyFromMnemonic(
+        mnemonic: mnemonicOrKey,
+        accountType: accountType,
+        derivePathIndex: derivePathIndex,
+      );
+
+      walletAddress = await keyGenerator.walletAddressFromMnemonic(
+        mnemonic: mnemonicOrKey,
+        accountType: accountType,
+        derivePathIndex: derivePathIndex,
+      );
+    }
+
+    final int newCount = totalAccountsYet + 1;
+
+    await secureStorageProvider.set(
+      SecureStorageKeys.cryptoAccounTrackingIndex,
+      newCount.toString(),
+    );
+
+    String name = 'My Account $newCount';
+
+    if (accountName != null && accountName.isNotEmpty) {
+      name = accountName;
+    }
+
+    return CryptoAccountData(
+      name: name,
+      walletAddress: walletAddress,
+      secretKey: secretKey,
+      isImported: isImported,
+      blockchainType: blockchainType,
+    );
   }
 
   Future<void> editCryptoAccountName({
@@ -375,45 +416,10 @@ class WalletCubit extends Cubit<WalletState> {
       cryptoAccountString,
     );
 
-    /// get id of current AssociatedAddres credential of this account
-    final oldCredentialList = List<CredentialModel>.from(state.credentials);
-
-    final filteredCredentialList = getCredentialsFromFilterList(
-      [
-        Field(path: [r'$..type'], filter: blockchainType.filter),
-        Field(
-          path: [r'$..associatedAddress'],
-          filter: Filter('String', cryptoAccountData.walletAddress),
-        ),
-      ],
-      oldCredentialList,
+    await credentialsCubit.insertOrUpdateAssociatedWalletCredential(
+      blockchainType: blockchainType,
+      cryptoAccountData: cryptoAccountData,
     );
-
-    /// update or create AssociatedAddres credential with new name
-    if (filteredCredentialList.isNotEmpty) {
-      final credential = await generateAssociatedWalletCredential(
-        cryptoAccountData: cryptoAccountData,
-        oldId: filteredCredentialList.first.id,
-        didCubit: didCubit,
-        didKitProvider: didKitProvider,
-        blockchainType: blockchainType,
-        keyGenerator: keyGenerator,
-      );
-      if (credential != null) {
-        await updateCredential(credential: credential);
-      }
-    } else {
-      final credential = await generateAssociatedWalletCredential(
-        cryptoAccountData: cryptoAccountData,
-        didCubit: didCubit,
-        didKitProvider: didKitProvider,
-        blockchainType: blockchainType,
-        keyGenerator: keyGenerator,
-      );
-      if (credential != null) {
-        await insertCredential(credential: credential);
-      }
-    }
 
     emitCryptoAccount(cryptoAccount);
 
@@ -429,215 +435,6 @@ class WalletCubit extends Cubit<WalletState> {
     );
   }
 
-  Future<void> deleteById({
-    required CredentialModel credential,
-    bool showMessage = true,
-  }) async {
-    emit(state.loading());
-    await credentialsRepository.deleteById(credential.id);
-    final credentials = List.of(state.credentials)
-      ..removeWhere((element) => element.id == credential.id);
-    await credentialListCubit.deleteById(credential);
-    emit(
-      state.copyWith(
-        status: WalletStatus.delete,
-        credentials: credentials,
-        messageHandler: showMessage
-            ? ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE,
-              )
-            : null,
-      ),
-    );
-  }
-
-  Future<void> updateCredential({
-    required CredentialModel credential,
-    bool showMessage = true,
-  }) async {
-    await credentialsRepository.update(credential);
-    final index =
-        state.credentials.indexWhere((element) => element.id == credential.id);
-
-    final credentials = List.of(state.credentials);
-    credentials[index] = credential;
-
-    await credentialListCubit.updateCredential(credential);
-    emit(
-      state.copyWith(
-        status: WalletStatus.update,
-        credentials: credentials,
-        messageHandler: showMessage
-            ? ResponseMessage(
-                ResponseString
-                    .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE,
-              )
-            : null,
-      ),
-    );
-  }
-
-  Future<void> handleUnknownRevocationStatus(CredentialModel credential) async {
-    await credentialsRepository.update(credential);
-    final index =
-        state.credentials.indexWhere((element) => element.id == credential.id);
-    if (index != -1) {
-      final credentials = List.of(state.credentials)
-        ..removeWhere((element) => element.id == credential.id)
-        ..insert(index, credential);
-      emit(
-        state.copyWith(
-          status: WalletStatus.populate,
-          credentials: credentials,
-        ),
-      );
-    }
-  }
-
-  Future<void> insertCredential({
-    required CredentialModel credential,
-    bool showMessage = true,
-  }) async {
-    await replaceCredential(credential: credential);
-
-    /// if same email credential is present
-    await credentialsRepository.insert(credential);
-    final credentials = List.of(state.credentials)..add(credential);
-
-    final CredentialCategory credentialCategory =
-        credential.credentialPreview.credentialSubjectModel.credentialCategory;
-
-    if (credentialCategory == CredentialCategory.gamingCards &&
-        credentialListCubit.state.gamingCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isGamingEnabled) {
-        advanceSettingsCubit.toggleGamingRadio();
-      }
-    }
-
-    if (credentialCategory == CredentialCategory.communityCards &&
-        credentialListCubit.state.communityCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isCommunityEnabled) {
-        advanceSettingsCubit.toggleCommunityRadio();
-      }
-    }
-
-    if (credentialCategory == CredentialCategory.identityCards &&
-        credentialListCubit.state.identityCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isIdentityEnabled) {
-        advanceSettingsCubit.toggleIdentityRadio();
-      }
-    }
-
-    if (credentialCategory == CredentialCategory.passCards &&
-        credentialListCubit.state.passCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isPassEnabled) {
-        advanceSettingsCubit.togglePassRadio();
-      }
-    }
-
-    // if (credentialCategory == CredentialCategory.blockchainAccountsCards &&
-    //     credentialListCubit.state.blockchainAccountsCredentials.isEmpty) {
-    //   if (!advanceSettingsCubit.state.isBlockchainAccountsEnabled) {
-    //     advanceSettingsCubit.toggleBlockchainAccountsRadio();
-    //   }
-    // }
-
-    if (credentialCategory == CredentialCategory.educationCards &&
-        credentialListCubit.state.educationCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isEducationEnabled) {
-        advanceSettingsCubit.toggleEducationRadio();
-      }
-    }
-
-    if (credentialCategory == CredentialCategory.othersCards &&
-        credentialListCubit.state.othersCredentials.isEmpty) {
-      if (!advanceSettingsCubit.state.isOtherEnabled) {
-        advanceSettingsCubit.toggleOtherRadio();
-      }
-    }
-
-    await credentialListCubit.insertCredential(
-      credential: credential,
-    );
-
-    emit(
-      state.copyWith(
-        status: WalletStatus.insert,
-        credentials: credentials,
-        messageHandler: showMessage
-            ? ResponseMessage(
-                ResponseString.RESPONSE_STRING_CREDENTIAL_ADDED_MESSAGE,
-              )
-            : null,
-      ),
-    );
-  }
-
-  Future<void> replaceCredential({
-    required CredentialModel credential,
-    bool showMessage = true,
-  }) async {
-    final credentialSubjectModel =
-        credential.credentialPreview.credentialSubjectModel;
-
-    /// Old EmailPass needs to be removed if currently adding new EmailPass
-    /// with same email address
-    if (credentialSubjectModel.credentialSubjectType ==
-        CredentialSubjectType.emailPass) {
-      final String? email = (credentialSubjectModel as EmailPassModel).email;
-
-      final List<CredentialModel> allCredentials =
-          await credentialsRepository.findAll();
-
-      if (email != null) {
-        for (final storedCredential in allCredentials) {
-          final iteratedCredentialSubjectModel =
-              storedCredential.credentialPreview.credentialSubjectModel;
-
-          if (iteratedCredentialSubjectModel.credentialSubjectType ==
-              CredentialSubjectType.emailPass) {
-            if (email ==
-                (iteratedCredentialSubjectModel as EmailPassModel).email) {
-              await deleteById(
-                credential: storedCredential,
-                showMessage: false,
-              );
-              break;
-            }
-          }
-        }
-      }
-    }
-
-    final cardsToCheck = [
-      CredentialSubjectType.over13,
-      CredentialSubjectType.over15,
-      CredentialSubjectType.over18,
-      CredentialSubjectType.ageRange
-    ];
-
-    ///remove old card added by YOTI
-
-    for (final card in cardsToCheck) {
-      if (credentialSubjectModel.credentialSubjectType == card) {
-        final List<CredentialModel> allCredentials =
-            await credentialsRepository.findAll();
-        for (final storedCredential in allCredentials) {
-          final credentialSubjectModel =
-              storedCredential.credentialPreview.credentialSubjectModel;
-          if (credentialSubjectModel.credentialSubjectType == card) {
-            await deleteById(
-              credential: storedCredential,
-              showMessage: false,
-            );
-            break;
-          }
-        }
-      }
-    }
-  }
-
   Future<void> resetWallet() async {
     await secureStorageProvider.deleteAllExceptsSomeKeys(
       [SecureStorageKeys.version],
@@ -649,39 +446,14 @@ class WalletCubit extends Cubit<WalletState> {
 
     /// clear app states
     homeCubit.emitHasNoWallet();
-    await credentialListCubit.clearHomeCredentials();
+    credentialsCubit.reset();
     emit(
       state.copyWith(
         status: WalletStatus.reset,
-        credentials: [],
-        cryptoAccount: CryptoAccount(data: const []),
+        cryptoAccount: const CryptoAccount(),
         currentCryptoIndex: 0,
       ),
     );
     emit(state.copyWith(status: WalletStatus.init));
-  }
-
-  Future<void> recoverWallet(List<CredentialModel> credentials) async {
-    await credentialsRepository.deleteAll();
-    for (final credential in credentials) {
-      await credentialsRepository.insert(credential);
-    }
-    emit(state.copyWith(status: WalletStatus.init, credentials: credentials));
-  }
-
-  Future<List<CredentialModel>> credentialListFromCredentialSubjectType(
-    CredentialSubjectType credentialSubjectType,
-  ) async {
-    if (state.credentials.isEmpty) return [];
-    final List<CredentialModel> resultList = [];
-    for (final credential in state.credentials) {
-      final credentialSubjectModel =
-          credential.credentialPreview.credentialSubjectModel;
-      if (credentialSubjectModel.credentialSubjectType ==
-          credentialSubjectType) {
-        resultList.add(credential);
-      }
-    }
-    return resultList;
   }
 }

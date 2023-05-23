@@ -5,14 +5,14 @@ class MissingCredentialsState extends Equatable {
   MissingCredentialsState({
     this.status = AppStatus.init,
     this.message,
-    List<HomeCredential>? dummyCredentials,
+    List<DiscoverDummyCredential>? dummyCredentials,
   }) : dummyCredentials = dummyCredentials ?? [];
 
   factory MissingCredentialsState.fromJson(Map<String, dynamic> json) =>
       _$MissingCredentialsStateFromJson(json);
 
   final AppStatus status;
-  final List<HomeCredential> dummyCredentials;
+  final List<DiscoverDummyCredential> dummyCredentials;
   final StateMessage? message;
 
   MissingCredentialsState loading({String? MissingCredentialsText}) {
@@ -33,7 +33,7 @@ class MissingCredentialsState extends Equatable {
   MissingCredentialsState copyWith({
     required AppStatus status,
     StateMessage? message,
-    List<HomeCredential>? dummyCredentials,
+    List<DiscoverDummyCredential>? dummyCredentials,
   }) {
     return MissingCredentialsState(
       status: status,

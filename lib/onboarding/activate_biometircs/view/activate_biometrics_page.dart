@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/did/did.dart';
 import 'package:altme/import_wallet/import_wallet.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/splash/splash.dart';
@@ -33,7 +34,7 @@ class ActiviateBiometricsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => BiometricsCubit(
+      create: (_) => OnBoardingGenPhraseCubit(
         secureStorageProvider: getSecureStorage,
         didCubit: context.read<DIDCubit>(),
         didKitProvider: DIDKitProvider(),
@@ -68,7 +69,7 @@ class ActivateBiometricsView extends StatelessWidget {
       onWillPop: () async {
         return false;
       },
-      child: BlocConsumer<BiometricsCubit, BiometricsState>(
+      child: BlocListener<OnBoardingGenPhraseCubit, OnBoardingGenPhraseState>(
         listener: (context, state) {
           if (state.status == AppStatus.loading) {
             LoadingView().show(context: context);
@@ -92,105 +93,112 @@ class ActivateBiometricsView extends StatelessWidget {
             );
           }
         },
-        builder: (context, state) {
-          return BasePage(
-            scrollView: false,
-            padding: const EdgeInsets.symmetric(
-              horizontal: Sizes.spaceXSmall,
-            ),
-            titleLeading: const BackLeadingButton(),
-            body: Column(
-              children: [
-                MStepper(
-                  step: 2,
-                  totalStep: byPassScreen ? 2 : 3,
-                ),
-                const Spacer(),
-                Text(
-                  l10n.activateBiometricsTitle,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const Spacer(),
-                Image.asset(
-                  ImageStrings.biometrics,
-                  fit: BoxFit.fitHeight,
-                  height: MediaQuery.of(context).size.longestSide * 0.26,
-                ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
-                BiometricsSwitch(
-                  value: state.isBiometricsEnabled,
-                  onChange: (value) async {
-                    final hasBiometrics = await localAuthApi.hasBiometrics();
-                    if (hasBiometrics) {
-                      final result = await localAuthApi.authenticate(
-                        localizedReason: l10n.scanFingerprintToAuthenticate,
-                      );
-                      if (result) {
-                        await getSecureStorage.set(
-                          SecureStorageKeys.fingerprintEnabled,
-                          value.toString(),
+        child: BasePage(
+          scrollView: false,
+          padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.spaceXSmall,
+          ),
+          titleLeading: const BackLeadingButton(),
+          body: Column(
+            children: [
+              MStepper(
+                step: 2,
+                totalStep: byPassScreen ? 2 : 3,
+              ),
+              const Spacer(),
+              Text(
+                l10n.activateBiometricsTitle,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const Spacer(),
+              Image.asset(
+                ImageStrings.biometrics,
+                fit: BoxFit.fitHeight,
+                height: MediaQuery.of(context).size.longestSide * 0.26,
+              ),
+              const SizedBox(
+                height: Sizes.spaceSmall,
+              ),
+              BlocBuilder<ProfileCubit, ProfileState>(
+                builder: (context, state) {
+                  return BiometricsSwitch(
+                    value: state.model.isBiometricEnabled,
+                    onChange: (value) async {
+                      final hasBiometrics = await localAuthApi.hasBiometrics();
+                      if (hasBiometrics) {
+                        final result = await localAuthApi.authenticate(
+                          localizedReason: l10n.scanFingerprintToAuthenticate,
                         );
-                        context
-                            .read<BiometricsCubit>()
-                            .setFingerprintEnabled(enabled: value);
+                        if (result) {
+                          await getSecureStorage.set(
+                            SecureStorageKeys.isBiometricEnabled,
+                            value.toString(),
+                          );
+                          await context
+                              .read<ProfileCubit>()
+                              .setFingerprintEnabled(enabled: value);
+                          await showDialog<bool>(
+                            context: context,
+                            builder: (context) => ConfirmDialog(
+                              title: value
+                                  ? l10n.biometricsEnabledMessage
+                                  : l10n.biometricsDisabledMessage,
+                              yes: l10n.ok,
+                              showNoButton: false,
+                            ),
+                          );
+                        }
+                      } else {
                         await showDialog<bool>(
                           context: context,
-                          builder: (context) => InfoDialog(
-                            title: value
-                                ? l10n.biometricsEnabledMessage
-                                : l10n.biometricsDisabledMessage,
-                            button: l10n.ok,
+                          builder: (context) => ConfirmDialog(
+                            title: l10n.biometricsNotSupported,
+                            subtitle: l10n
+                                .yourDeviceDoseNotSupportBiometricsAuthentication,
+                            yes: l10n.ok,
                           ),
                         );
                       }
+                    },
+                  );
+                },
+              ),
+              const Spacer(
+                flex: 5,
+              ),
+              MyGradientButton(
+                text: l10n.next,
+                onPressed: () async {
+                  if (routeType == WalletRouteType.create) {
+                    if (byPassScreen) {
+                      await context
+                          .read<OnboardingCubit>()
+                          .emitOnboardingProcessing();
+
+                      final mnemonic = bip39.generateMnemonic().split(' ');
+                      await context
+                          .read<OnBoardingGenPhraseCubit>()
+                          .generateSSIAndCryptoAccount(mnemonic);
                     } else {
-                      await showDialog<bool>(
-                        context: context,
-                        builder: (context) => ConfirmDialog(
-                          title: l10n.biometricsNotSupported,
-                          subtitle: l10n
-                              .yourDeviceDoseNotSupportBiometricsAuthentication,
-                          yes: l10n.ok,
-                        ),
-                      );
+                      await Navigator.of(context)
+                          .push<void>(OnBoardingGenPhrasePage.route());
                     }
-                  },
-                ),
-                const Spacer(
-                  flex: 5,
-                ),
-                MyGradientButton(
-                  text: l10n.next,
-                  onPressed: () async {
-                    if (routeType == WalletRouteType.create) {
-                      if (byPassScreen) {
-                        final mnemonic = bip39.generateMnemonic().split(' ');
-                        await context
-                            .read<BiometricsCubit>()
-                            .generateSSIAndCryptoAccount(mnemonic);
-                      } else {
-                        await Navigator.of(context)
-                            .push<void>(OnBoardingGenPhrasePage.route());
-                      }
-                    } else {
-                      await Navigator.of(context).push<void>(
-                        ImportWalletPage.route(
-                          isFromOnboarding: true,
-                        ),
-                      );
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: Sizes.spaceXSmall,
-                )
-              ],
-            ),
-          );
-        },
+                  } else {
+                    await Navigator.of(context).push<void>(
+                      ImportWalletPage.route(
+                        isFromOnboarding: true,
+                      ),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(
+                height: Sizes.spaceXSmall,
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

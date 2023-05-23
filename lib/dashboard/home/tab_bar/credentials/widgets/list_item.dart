@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class _BaseItem extends StatefulWidget {
   const _BaseItem({
     required this.child,
-    this.onTap,
+    required this.onTap,
     this.enabled = true,
   });
 
@@ -34,45 +34,83 @@ class CredentialsListPageItem extends StatelessWidget {
   const CredentialsListPageItem({
     super.key,
     required this.credentialModel,
-    this.onTap,
+    required this.onTap,
     this.selected,
     this.badgeCount = 0,
   });
 
   final CredentialModel credentialModel;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
   final bool? selected;
   final int badgeCount;
 
   @override
   Widget build(BuildContext context) {
-    return badges.Badge(
-      showBadge: badgeCount > 0,
-      badgeContent: Text(
-        badgeCount.toString(),
-        style: Theme.of(context).textTheme.badgeStyle,
-        textAlign: TextAlign.center,
-      ),
-      position: badges.BadgePosition.topEnd(end: 10, top: 30),
-      child: _BaseItem(
-        enabled: true,
-        onTap: onTap ??
-            () {
-              Navigator.of(context).push<void>(
-                CredentialsDetailsPage.route(credentialModel: credentialModel),
-              );
-            },
-        child: selected == null
-            ? CredentialDisplay(
-                credentialModel: credentialModel,
-                credDisplayType: CredDisplayType.List,
-              )
-            : displaySelectionElement(context),
-      ),
+    return badgeCount > 0
+        ? badges.Badge(
+            stackFit: StackFit.expand,
+            badgeContent: Text(
+              badgeCount.toString(),
+              style: Theme.of(context).textTheme.badgeStyle,
+              textAlign: TextAlign.center,
+            ),
+            position: badges.BadgePosition.topEnd(end: 10, top: 30),
+            child: CredentialsDisplayItem(
+              credentialModel: credentialModel,
+              onTap: onTap,
+              selected: selected,
+            ),
+          )
+        : CredentialsDisplayItem(
+            credentialModel: credentialModel,
+            onTap: onTap,
+            selected: selected,
+          );
+  }
+}
+
+class CredentialsDisplayItem extends StatelessWidget {
+  const CredentialsDisplayItem({
+    super.key,
+    required this.credentialModel,
+    required this.onTap,
+    this.selected,
+  });
+
+  final CredentialModel credentialModel;
+  final VoidCallback onTap;
+  final bool? selected;
+
+  @override
+  Widget build(BuildContext context) {
+    return _BaseItem(
+      enabled: true,
+      onTap: onTap,
+      child: selected == null
+          ? CredentialDisplay(
+              credentialModel: credentialModel,
+              credDisplayType: CredDisplayType.List,
+            )
+          : DisplaySelectionElement(
+              credentialModel: credentialModel,
+              selected: selected,
+            ),
     );
   }
+}
 
-  Widget displaySelectionElement(BuildContext context) {
+class DisplaySelectionElement extends StatelessWidget {
+  const DisplaySelectionElement({
+    super.key,
+    required this.credentialModel,
+    this.selected,
+  });
+
+  final CredentialModel credentialModel;
+  final bool? selected;
+
+  @override
+  Widget build(BuildContext context) {
     //final credential = Credential.fromJsonOrDummy(credentialModel.data);
     return CredentialSelectionPadding(
       child: Column(

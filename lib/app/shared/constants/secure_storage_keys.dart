@@ -1,8 +1,7 @@
 class SecureStorageKeys {
   static const String isUserRegisteredMatrix = 'isUserRegisteredMatrix';
   static const String supportRoomId = 'MatrixSupportRoomId';
-  static const String loyaltyCardsupportRoomId =
-      'MatrixLoyaltyCardsupportRoomId';
+  static const String cardChatSupportRoomId = 'MatrixLoyaltyCardsupportRoomId';
   static const String isFirstSelectedTokenContracts =
       'isFirstSelectedTokenContracts';
   static const String selectedContracts = 'selectedContracts';
@@ -17,7 +16,12 @@ class SecureStorageKeys {
   static const String isEducationEnabled = 'isEducationEnabled';
   static const String isPassEnabled = 'isPassEnabled';
   static const String isSocialMediaEnabled = 'isSocialMediaEnabled';
-  static const String fingerprintEnabled = 'fingerprintEnabled';
+  static const String isFinanceEnabled = 'isFinanceEnabled';
+  static const String isHumanityProofEnabled = 'isHumanityProofEnabled';
+  static const String isWalletIntegrityEnabled = 'isWalletIntegrityEnabled';
+  static const String isBiometricEnabled = 'fingerprintEnabled';
+  static const String alertEnabled = 'alertEnabled';
+
   static const String pinCode = 'pinCode';
   static const String data = 'data';
   static const String rsaKeyJson = 'RSAKeyJson';
@@ -58,8 +62,7 @@ class SecureStorageKeys {
   static const String polygonDerivePathIndex = 'polygonDerivePathIndex';
   static const String binanceDerivePathIndex = 'binanceDerivePathIndex';
 
-  static const String passBaseStatus = 'passBaseStatus';
-  static const String passBaseVerificationDate = 'passBaseVerificationDate';
+  static const String kycVerificationDate = 'kycVerificationDate';
   static const String preAuthorizedCode = 'preAuthorizedCode';
 
   static const String savedDaaps = 'savedDaaps';

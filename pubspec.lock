@@ -101,8 +101,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: f7ab2176ed2e56e0843b7de6da863687bef528ea
-      resolved-ref: f7ab2176ed2e56e0843b7de6da863687bef528ea
+      ref: fca8038d3c6378341a2e57d2cb1cceaba9f35561
+      resolved-ref: fca8038d3c6378341a2e57d2cb1cceaba9f35561
       url: "https://github.com/TalaoDAO/beacon.git"
     source: git
     version: "1.0.9"
@@ -262,10 +262,10 @@ packages:
     dependency: "direct main"
     description:
       name: camera
-      sha256: ad1c53c554a2f3e5708f3b01eb738d60b902bb61f7f4ad420c65c715e65a7379
+      sha256: "7afc256902062cab191540c09908b98bc71e93d5e20b6486dbee51aa7731e9b2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.3+2"
+    version: "0.10.4"
   camera_android:
     dependency: transitive
     description:
@@ -803,6 +803,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0-alpha.6"
+  flutter_image_compress:
+    dependency: "direct main"
+    description:
+      name: flutter_image_compress
+      sha256: "37f1b26399098e5f97b74c1483f534855e7dff68ead6ddaccf747029fb03f29f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.3"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -1480,14 +1488,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  passbase_flutter:
-    dependency: "direct main"
-    description:
-      name: passbase_flutter
-      sha256: "589ada226d70d95da506ba3c3945025a47ffc66412e1148eaddfc79b7183eaf5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.15.0"
   path:
     dependency: "direct main"
     description:
@@ -1715,11 +1715,11 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: "86856bd321575e65919ad6396fd871ec4275c323"
-      resolved-ref: "86856bd321575e65919ad6396fd871ec4275c323"
-      url: "ssh://git@github.com/iden3/polygonid-flutter-sdk.git"
+      ref: b53a4ee8d0f335a2fd9b42db68fbe61d2300dccb
+      resolved-ref: b53a4ee8d0f335a2fd9b42db68fbe61d2300dccb
+      url: "https://github.com/iden3/polygonid-flutter-sdk.git"
     source: git
-    version: "2.1.1"
+    version: "2.2.0"
   pool:
     dependency: transitive
     description:
@@ -2160,8 +2160,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: bd4b8db6e3a352590a6e556d31df8aef60db3465
-      resolved-ref: bd4b8db6e3a352590a6e556d31df8aef60db3465
+      ref: "0cd68a902c8d2554227738594c62046571e57b4c"
+      resolved-ref: "0cd68a902c8d2554227738594c62046571e57b4c"
       url: "https://github.com/autonomy-system/tezart.git"
     source: git
     version: "2.0.4"
@@ -2446,14 +2446,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.4"
-  workmanager:
-    dependency: "direct main"
-    description:
-      name: workmanager
-      sha256: e0be7e35d644643f164ee45d2ce14414f0e0fdde19456aa66065f35a0b1d2ea1
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.1"
   x509:
     dependency: transitive
     description:

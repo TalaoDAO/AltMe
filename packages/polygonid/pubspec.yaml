@@ -13,8 +13,8 @@ dependencies:
   hex: ^0.2.0
   polygonid_flutter_sdk:
     git:
-      url: ssh://git@github.com/iden3/polygonid-flutter-sdk.git
-      ref: 86856bd321575e65919ad6396fd871ec4275c323
+      url: https://github.com/iden3/polygonid-flutter-sdk.git
+      ref: b53a4ee8d0f335a2fd9b42db68fbe61d2300dccb
 
 dev_dependencies:
   flutter_test:

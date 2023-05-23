@@ -17,7 +17,7 @@ class DiplomaCardModel extends CredentialSubjectModel {
     this.identifier,
   }) : super(
           credentialSubjectType: CredentialSubjectType.diplomaCard,
-          credentialCategory: CredentialCategory.myProfessionalCards,
+          credentialCategory: CredentialCategory.educationCards,
         );
 
   factory DiplomaCardModel.fromJson(Map<String, dynamic> json) =>

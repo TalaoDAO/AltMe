@@ -19,10 +19,11 @@ class QRIcon extends StatelessWidget {
           if (kIsWeb) {
             showDialog<void>(
               context: context,
-              builder: (BuildContext context) => InfoDialog(
+              builder: (BuildContext context) => ConfirmDialog(
                 title: l10n.unavailable_feature_title,
                 subtitle: l10n.unavailable_feature_message,
-                button: l10n.ok,
+                yes: l10n.ok,
+                showNoButton: false,
               ),
             );
             return;
