@@ -122,7 +122,7 @@ class PolygonIdVerificationPage extends StatelessWidget {
                         AlertMessage.showStateMessage(
                           context: context,
                           stateMessage: StateMessage(
-                            stringMessage: l10n.claimNotFound,
+                            stringMessage: l10n.credentialNotFound,
                           ),
                         );
                         return;

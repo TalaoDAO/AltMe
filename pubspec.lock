@@ -600,7 +600,7 @@ packages:
     source: hosted
     version: "3.0.0"
   dio:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       name: dio
       sha256: "7d328c4d898a61efc3cd93655a0955858e29a0aa647f0f9e02d59b3bb275e2e8"
@@ -1086,10 +1086,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "6aa2946395183537c8b880962d935877325d6a09a2867c3970c05c0fed6ac482"
+      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.5"
+    version: "0.13.6"
   http_mock_adapter:
     dependency: "direct dev"
     description:
@@ -1489,7 +1489,7 @@ packages:
     source: hosted
     version: "2.1.0"
   package_info_plus:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       name: package_info_plus
       sha256: "8df5ab0a481d7dc20c0e63809e90a588e496d276ba53358afc4c4443d0a00697"
@@ -1731,11 +1731,11 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: b53a4ee8d0f335a2fd9b42db68fbe61d2300dccb
-      resolved-ref: b53a4ee8d0f335a2fd9b42db68fbe61d2300dccb
+      ref: "680f05b237f914de7a886bcabf9a2f254832f992"
+      resolved-ref: "680f05b237f914de7a886bcabf9a2f254832f992"
       url: "https://github.com/iden3/polygonid-flutter-sdk.git"
     source: git
-    version: "2.2.0"
+    version: "2.2.2"
   pool:
     dependency: transitive
     description:

@@ -115,18 +115,23 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         );
 
         final Stream<DownloadInfo> stream =
-            await polygonId.initCircuitsDownloadAndGetInfoStream;
+            polygonId.initCircuitsDownloadAndGetInfoStream;
         _subscription = stream.listen((DownloadInfo downloadInfo) async {
-          if (downloadInfo.completed) {
+          if (downloadInfo is DownloadInfoOnDone) {
             unawaited(_subscription?.cancel());
             log.i('download circuit complete');
             await polygonActions();
-          } else {
+          } else if (downloadInfo is DownloadInfoOnProgress) {
             // loading value update
             final double loadedValue =
                 downloadInfo.downloaded / downloadInfo.contentLength;
             final roundedValue = double.parse(loadedValue.toStringAsFixed(1));
             log.i(roundedValue);
+          } else {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
           }
         });
       }
