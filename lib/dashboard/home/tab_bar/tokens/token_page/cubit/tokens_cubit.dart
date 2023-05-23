@@ -31,6 +31,7 @@ class TokensCubit extends Cubit<TokensState> {
   List<TokenModel> data = [];
   final int _limit = 100;
   int _offsetOfLoadedData = -1;
+  List<dynamic>? _coinList;
 
   Future<void> checkIfItNeedsToVerifyMnemonic({
     required double totalBalanceInUSD,
@@ -367,15 +368,16 @@ class TokensCubit extends Cubit<TokensState> {
 
   Future<List<dynamic>> _getAllCoinsList() async {
     try {
+      if (_coinList != null && _coinList!.isNotEmpty) return _coinList!;
       await dotenv.load();
       final apiKey = dotenv.get('COIN_GECKO_API_KEY');
-      final response = await client.get(
+      _coinList = await client.get(
         '${Urls.coinGeckoBase}coins/list',
         queryParameters: {
           'x_cg_pro_api_key': apiKey,
         },
       ) as List<dynamic>;
-      return response;
+      return _coinList!;
     } catch (_) {
       return [];
     }
@@ -453,16 +455,7 @@ class TokensCubit extends Cubit<TokensState> {
 
     try {
       // get usd balance
-      await dotenv.load();
-      final apiKey = dotenv.get('COIN_GECKO_API_KEY');
-
-      final responseOfXTZUsdPrice = await client.get(
-        '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
-        queryParameters: {
-          'x_cg_pro_api_key': apiKey,
-        },
-      ) as Map<String, dynamic>;
-      final xtzUSDPrice = responseOfXTZUsdPrice['tezos']['usd'] as double;
+      final xtzUSDPrice = await _getTezosCurrentPriceInUsd() ?? 0;
 
       return token.copyWith(
         tokenUSDPrice: xtzUSDPrice,
@@ -478,5 +471,22 @@ class TokensCubit extends Cubit<TokensState> {
   @override
   String toString() {
     return 'TokensCubit';
+  }
+
+  Future<double?> _getTezosCurrentPriceInUsd() async {
+    try {
+      await dotenv.load();
+      final apiKey = dotenv.get('COIN_GECKO_API_KEY');
+
+      final responseOfXTZUsdPrice = await client.get(
+        '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
+        queryParameters: {
+          'x_cg_pro_api_key': apiKey,
+        },
+      ) as Map<String, dynamic>;
+      return responseOfXTZUsdPrice['tezos']['usd'] as double;
+    } catch (_) {
+      return null;
+    }
   }
 }
