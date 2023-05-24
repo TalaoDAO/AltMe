@@ -6,10 +6,21 @@ class SplashImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      ImageStrings.splashImage,
-      fit: BoxFit.none,
-      height: MediaQuery.of(context).size.longestSide / 2.2,
+    return Stack(
+      children: [
+        Positioned(
+          child: Transform.scale(
+            scale: 1.1,
+            child: SizedBox(
+              child: Image.asset(
+                ImageStrings.splashImage,
+                fit: BoxFit.fitHeight,
+                height: MediaQuery.of(context).size.longestSide / 2.2,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
