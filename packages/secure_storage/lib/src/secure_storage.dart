@@ -19,7 +19,7 @@ SecureStorageProvider get getSecureStorage {
     } catch (e) {
       const defaultAndroidOptions = AndroidOptions(
         encryptedSharedPreferences: true,
-        sharedPreferencesName: 'altme',
+        sharedPreferencesName: 'talao',
       );
       return const SecureStorageProvider(
         FlutterSecureStorage(
