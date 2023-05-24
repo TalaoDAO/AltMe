@@ -314,11 +314,14 @@ class WalletCubit extends Cubit<WalletState> {
 
     log.i('$blockchainType created');
 
-    ///createAssociatedWalletCredential
-    final credential = await credentialsCubit.createAssociatedWalletCredential(
-      blockchainType: blockchainType,
-      cryptoAccountData: cryptoAccountData,
-    );
+    /// If we are not using crypto in the wallet we are not generating
+    /// AssociatedAddress credentials.
+    final credential = Parameters.walletHandlesCrypto
+        ? await credentialsCubit.createAssociatedWalletCredential(
+            blockchainType: blockchainType,
+            cryptoAccountData: cryptoAccountData,
+          )
+        : null;
 
     if (credential != null) {
       await credentialsCubit.insertCredential(
