@@ -384,3 +384,15 @@ String birthDateFormater(int birthData) {
 
   return formattedBirthdate;
 }
+
+String getSignatureType(String circuitId) {
+  if (circuitId == 'credentialAtomicQuerySigV2' ||
+      circuitId == 'credentialAtomicQuerySigV2OnChain') {
+    return 'BJJ Signature';
+  } else if (circuitId == 'credentialAtomicQueryMTPV2' ||
+      circuitId == 'credentialAtomicQueryMTPV2OnChain') {
+    return 'SMT Signature';
+  }
+
+  return '';
+}

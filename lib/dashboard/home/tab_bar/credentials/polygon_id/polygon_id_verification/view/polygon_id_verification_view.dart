@@ -52,18 +52,8 @@ class PolygonIdVerificationPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final proofScopeRequest = body.scope![index];
 
-                  var proofTypeMsg = '';
-                  if (proofScopeRequest.circuitId ==
-                          'credentialAtomicQuerySigV2' ||
-                      proofScopeRequest.circuitId ==
-                          'credentialAtomicQuerySigV2OnChain') {
-                    proofTypeMsg = ' - BJJ Signature';
-                  } else if (proofScopeRequest.circuitId ==
-                          'credentialAtomicQueryMTPV2' ||
-                      proofScopeRequest.circuitId ==
-                          'credentialAtomicQueryMTPV2OnChain') {
-                    proofTypeMsg = ' - SMT Signature';
-                  }
+                  final proofTypeMsg =
+                      getSignatureType(proofScopeRequest.circuitId);
 
                   return Column(
                     children: [
@@ -86,7 +76,7 @@ class PolygonIdVerificationPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        'Proof type: $proofTypeMsg',
+                        'Proof type: - $proofTypeMsg',
                         textAlign: TextAlign.center,
                       ),
                     ],
