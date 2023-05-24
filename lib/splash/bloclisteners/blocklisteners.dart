@@ -556,7 +556,7 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
         await Navigator.of(context).push<void>(
           PinCodePage.route(
             isValidCallback: () {
-              context.read<PolygonIdCubit>().authenticate(
+              context.read<PolygonIdCubit>().authenticateOrGenerateProof(
                     iden3MessageEntity: iden3MessageEntity,
                     isGenerateProof: false,
                   );

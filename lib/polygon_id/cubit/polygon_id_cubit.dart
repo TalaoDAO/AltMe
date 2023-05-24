@@ -199,11 +199,10 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     }
   }
 
-  Future<void> authenticate({
+  Future<void> authenticateOrGenerateProof({
     required Iden3MessageEntity iden3MessageEntity,
     bool isGenerateProof = true,
   }) async {
-    // TODO(bibash): find if claim is present or not...
     try {
       emit(state.copyWith(status: AppStatus.loading));
       final mnemonic =
