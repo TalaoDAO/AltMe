@@ -3,7 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 class Parameters {
   static const int multipleCredentialsProcessDelay = 1;
 
-  static const bool hasCryptoCallToAction = true;
+  static const bool walletHandlesCrypto = true;
 
   static const AdvanceSettingsState defaultAdvanceSettingsState =
       AdvanceSettingsState(

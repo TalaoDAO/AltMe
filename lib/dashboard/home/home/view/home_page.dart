@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
           );
         }
       },
-      child: Parameters.hasCryptoCallToAction
+      child: Parameters.walletHandlesCrypto
           ? const TabControllerPage()
           : const HomeCredentialsListPage(),
     );

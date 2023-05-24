@@ -48,7 +48,7 @@ class DrawerView extends StatelessWidget {
                         .push<void>(WalletSecurityMenu.route());
                   },
                 ),
-                if (Parameters.hasCryptoCallToAction)
+                if (Parameters.walletHandlesCrypto)
                   Column(
                     children: [
                       const SizedBox(height: Sizes.spaceSmall),

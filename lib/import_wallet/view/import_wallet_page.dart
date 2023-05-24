@@ -152,7 +152,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                     horizontal: Sizes.spaceLarge,
                   ),
                   child: Text(
-                    Parameters.hasCryptoCallToAction
+                    Parameters.walletHandlesCrypto
                         ? l10n.importWalletText
                         : l10n.importWalletTextRecoveryPhraseOnly,
                     textAlign: TextAlign.center,
@@ -171,7 +171,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                         children: [
                           BaseTextField(
                             height: Sizes.recoveryPhraseTextFieldHeight,
-                            hint: Parameters.hasCryptoCallToAction
+                            hint: Parameters.walletHandlesCrypto
                                 ? l10n.importWalletHintText(54)
                                 : l10n.importWalletHintTextRecoveryPhraseOnly,
                             fillColor: Colors.transparent,
@@ -217,7 +217,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                   l10n.importEasilyFrom,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                if (Parameters.hasCryptoCallToAction) ...[
+                if (Parameters.walletHandlesCrypto) ...[
                   const SizedBox(height: Sizes.spaceSmall),
                   WalletTypeList(
                     onItemTap: (wallet) {
@@ -238,7 +238,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                         fontSize: 12,
                       ),
                 ),
-                if (Parameters.hasCryptoCallToAction) ...[
+                if (Parameters.walletHandlesCrypto) ...[
                   const SizedBox(height: Sizes.spaceLarge),
                   Text(
                     l10n.privateKeyDescriptions,

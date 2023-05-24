@@ -80,7 +80,7 @@ class _DashboardViewState extends State<DashboardView> {
       case 1:
         return l10n.discover;
       case 2:
-        return Parameters.hasCryptoCallToAction ? l10n.buy : l10n.search;
+        return Parameters.walletHandlesCrypto ? l10n.buy : l10n.search;
       case 3:
         return l10n.chat;
       default:
@@ -177,7 +177,7 @@ class _DashboardViewState extends State<DashboardView> {
                   scaffoldKey.currentState!.openDrawer();
                 },
               ),
-              titleTrailing: Parameters.hasCryptoCallToAction
+              titleTrailing: Parameters.walletHandlesCrypto
                   ? const CryptoAccountSwitcherButton()
                   : const SizedBox.shrink(),
               body: Stack(
@@ -192,11 +192,11 @@ class _DashboardViewState extends State<DashboardView> {
                           physics: const NeverScrollableScrollPhysics(),
                           children: const [
                             HomePage(),
-                            if (Parameters.hasCryptoCallToAction)
+                            if (Parameters.walletHandlesCrypto)
                               DiscoverTabPage()
                             else
                               DiscoverPage(),
-                            if (Parameters.hasCryptoCallToAction)
+                            if (Parameters.walletHandlesCrypto)
                               WertPage()
                             else
                               SearchPage(),
@@ -221,7 +221,7 @@ class _DashboardViewState extends State<DashboardView> {
                               isSelected: state.selectedIndex == 1,
                             ),
                             const SizedBox(width: 75 * 0.6),
-                            if (Parameters.hasCryptoCallToAction)
+                            if (Parameters.walletHandlesCrypto)
                               BottomBarItem(
                                 icon: IconStrings.cashInHand,
                                 text: l10n.buy,

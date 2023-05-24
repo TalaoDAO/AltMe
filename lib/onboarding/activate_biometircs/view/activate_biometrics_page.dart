@@ -60,7 +60,7 @@ class ActivateBiometricsView extends StatelessWidget {
   final LocalAuthApi localAuthApi;
   final WalletRouteType routeType;
 
-  bool get byPassScreen => !Parameters.hasCryptoCallToAction;
+  bool get byPassScreen => !Parameters.walletHandlesCrypto;
 
   @override
   Widget build(BuildContext context) {
