@@ -128,6 +128,18 @@ class PolygonIdVerificationPage extends StatelessWidget {
                         return;
                       }
 
+                      // TODO(bibash): update based on the response of
+                      // https://github.com/0xPolygonID/polygonid-flutter-sdk/issues/314
+                      if (filteredClaims.contains(null)) {
+                        AlertMessage.showStateMessage(
+                          context: context,
+                          stateMessage: StateMessage(
+                            stringMessage: l10n.credentialNotFound,
+                          ),
+                        );
+                        return;
+                      }
+
                       await Navigator.of(context).pushReplacement<void, void>(
                         PolygonIdProofPage.route(
                           iden3MessageEntity: iden3MessageEntity,
