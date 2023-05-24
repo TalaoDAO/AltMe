@@ -111,7 +111,9 @@ class PolygonIdVerificationPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${proofScopeRequest.query.type}',
+                            separateUppercaseWords(
+                              proofScopeRequest.query.type!,
+                            ),
                             textAlign: TextAlign.start,
                           ),
                           const SizedBox(height: 10),
