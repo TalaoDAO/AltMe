@@ -118,8 +118,6 @@ class PolygonIdVerificationPage extends StatelessWidget {
                         return;
                       }
 
-                      // TODO(bibash): update based on the response of
-                      // https://github.com/0xPolygonID/polygonid-flutter-sdk/issues/314
                       if (filteredClaims.contains(null)) {
                         AlertMessage.showStateMessage(
                           context: context,
