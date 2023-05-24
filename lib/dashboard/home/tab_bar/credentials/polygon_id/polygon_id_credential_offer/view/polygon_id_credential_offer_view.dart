@@ -28,6 +28,7 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
     return BasePage(
       title: l10n.credentialReceiveTitle,
       useSafeArea: true,
@@ -68,7 +69,7 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             MyGradientButton(
-              text: 'Accept',
+              text: l10n.accept,
               onPressed: () {
                 Navigator.of(context).push<void>(
                   PinCodePage.route(
@@ -86,7 +87,7 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
             MyOutlinedButton(
               verticalSpacing: 20,
               borderRadius: 20,
-              text: 'Cancel',
+              text: l10n.cancel,
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
