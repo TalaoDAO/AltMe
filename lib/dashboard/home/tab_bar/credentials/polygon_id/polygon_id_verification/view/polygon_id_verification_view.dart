@@ -55,31 +55,83 @@ class PolygonIdVerificationPage extends StatelessWidget {
                   final proofTypeMsg =
                       getSignatureType(proofScopeRequest.circuitId);
 
-                  return Column(
-                    children: [
-                      Text(
-                        'Credential Type: ${proofScopeRequest.query.type}',
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Requirements: ${proofScopeRequest.query.credentialSubject}',
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
+                  final credentialSubject =
+                      proofScopeRequest.query.credentialSubject;
 
-                      /// About allowed issuers, it will accept a list of dids
-                      /// string of the issuers or an asterisk for any issuer
-                      Text(
-                        'Allowed issuers: ${proofScopeRequest.query.allowedIssuers}',
-                        textAlign: TextAlign.center,
+                  String requirementValue = '';
+
+                  if (credentialSubject != null) {
+                    credentialSubject.forEach((reqKey, reqValue) {
+                      requirementValue = '$requirementValue$reqKey \n';
+
+                      (reqValue as Map<String, dynamic>).forEach(
+                        (conditionKey, conditionValue) {
+                          // handling key
+                          String conditionMsg = '';
+                          if (conditionKey == r'$eq') {
+                            conditionMsg = 'is';
+                          } else if (conditionKey == r'$lt') {
+                            conditionMsg = 'is smaller than';
+                          } else if (conditionKey == r'$gt') {
+                            conditionMsg = 'is bigger than';
+                          } else if (conditionKey == r'$in') {
+                            conditionMsg = 'is one of the following values:';
+                          } else if (conditionKey == r'$nin') {
+                            conditionMsg =
+                                'is not one of the following values:';
+                          } else if (conditionKey == r'$ne') {
+                            conditionMsg = 'is not';
+                          }
+
+                          //handling value
+                          if (conditionValue is List) {
+                            conditionMsg = '$conditionMsg\n';
+                            for (final val in conditionValue) {
+                              conditionMsg = '$conditionMsg - $val';
+                              conditionMsg = '$conditionMsg\n';
+                            }
+                            conditionMsg = conditionMsg.substring(
+                              0,
+                              conditionMsg.length - 1,
+                            );
+                          } else {
+                            conditionMsg = '$conditionMsg $conditionValue';
+                          }
+
+                          requirementValue = requirementValue + conditionMsg;
+                        },
+                      );
+                    });
+                  }
+
+                  return Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${proofScopeRequest.query.type}',
+                            textAlign: TextAlign.start,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            requirementValue,
+                            textAlign: TextAlign.start,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'Allowed issuers: ${proofScopeRequest.query.allowedIssuers}',
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'Proof type: - $proofTypeMsg',
+                            textAlign: TextAlign.start,
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Proof type: - $proofTypeMsg',
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                    ),
                   );
                 },
               ),
