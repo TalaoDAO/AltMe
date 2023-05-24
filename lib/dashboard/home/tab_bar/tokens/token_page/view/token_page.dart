@@ -126,12 +126,13 @@ class _TokensViewState extends State<TokensView> {
                         onTap: () {
                           Navigator.of(context)
                               .push<void>(
-                                AllTokensPage.route(),
-                              )
+                            AllTokensPage.route(),
+                          )
                               .then(
-                                (value) =>
-                                    context.read<TokensCubit>().fetchFromZero(),
-                              );
+                            (value) {
+                              context.read<TokensCubit>().updateTokenList();
+                            },
+                          );
                         },
                       ),
                   ],

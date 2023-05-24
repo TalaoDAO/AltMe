@@ -57,7 +57,7 @@ class EnterNewPinCodeView extends StatefulWidget {
 }
 
 class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
-  bool get byPassScreen => !Parameters.hasCryptoCallToAction;
+  bool get byPassScreen => !Parameters.walletHandlesCrypto;
 
   @override
   void initState() {

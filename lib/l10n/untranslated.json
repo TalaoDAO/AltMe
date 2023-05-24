@@ -812,10 +812,11 @@
     "aiSystemWasNotAbleToEstimateYourAge",
     "youGotAgeCredentials",
     "yourAgeEstimationIs",
-    "claimNotFound",
+    "credentialNotFound",
     "cryptographicProof",
     "downloadingCircuitLoadingMessage",
-    "cryptoAccountAlreadyExistMessage"
+    "cryptoAccountAlreadyExistMessage",
+    "errorGeneratingProof"
   ],
 
   "es": [
@@ -1631,10 +1632,11 @@
     "aiSystemWasNotAbleToEstimateYourAge",
     "youGotAgeCredentials",
     "yourAgeEstimationIs",
-    "claimNotFound",
+    "credentialNotFound",
     "cryptographicProof",
     "downloadingCircuitLoadingMessage",
-    "cryptoAccountAlreadyExistMessage"
+    "cryptoAccountAlreadyExistMessage",
+    "errorGeneratingProof"
   ],
 
   "fr": [
@@ -1753,10 +1755,11 @@
     "aiSystemWasNotAbleToEstimateYourAge",
     "youGotAgeCredentials",
     "yourAgeEstimationIs",
-    "claimNotFound",
+    "credentialNotFound",
     "cryptographicProof",
     "downloadingCircuitLoadingMessage",
-    "cryptoAccountAlreadyExistMessage"
+    "cryptoAccountAlreadyExistMessage",
+    "errorGeneratingProof"
   ],
 
   "it": [
@@ -2572,9 +2575,10 @@
     "aiSystemWasNotAbleToEstimateYourAge",
     "youGotAgeCredentials",
     "yourAgeEstimationIs",
-    "claimNotFound",
+    "credentialNotFound",
     "cryptographicProof",
     "downloadingCircuitLoadingMessage",
-    "cryptoAccountAlreadyExistMessage"
+    "cryptoAccountAlreadyExistMessage",
+    "errorGeneratingProof"
   ]
 }

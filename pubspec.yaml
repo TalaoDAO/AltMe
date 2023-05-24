@@ -36,7 +36,6 @@ dependencies:
   devicelocale: ^0.5.5
   did_kit:
     path: packages/did_kit
-  dio: ^4.0.6
   dotted_border: ^2.0.0+3
   ebsi:
     path: packages/ebsi
@@ -81,7 +80,6 @@ dependencies:
   network_image_mock: ^2.1.1
   no_screenshot: ^0.0.1+6
   open_filex: ^4.3.2
-  package_info_plus: ^3.0.3
   path: ^1.8.2 # flutter_test from sdk depends on path 1.8.2
   path_provider: ^2.0.14
   permission_handler: ^10.2.0
@@ -120,8 +118,10 @@ dependencies:
 dependency_overrides:
   # Because flutter_sodium 0.2.0 depends on ffi ^1.0.0 and no versions of flutter_sodium match >0.2.0 <0.3.0, flutter_sodium ^0.2.0 requires ffi ^1.0.0
   async: ^2.9.0
+  dio: ^4.0.6
   ffi: ^2.0.1
   markdown: ^4.0.0
+  package_info_plus: ^3.0.3
   path_provider: ^2.0.12
   stream_channel: ^2.1.0
   web3dart: ^2.6.1

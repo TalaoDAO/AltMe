@@ -115,18 +115,23 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         );
 
         final Stream<DownloadInfo> stream =
-            await polygonId.initCircuitsDownloadAndGetInfoStream;
+            polygonId.initCircuitsDownloadAndGetInfoStream;
         _subscription = stream.listen((DownloadInfo downloadInfo) async {
-          if (downloadInfo.completed) {
+          if (downloadInfo is DownloadInfoOnDone) {
             unawaited(_subscription?.cancel());
             log.i('download circuit complete');
             await polygonActions();
-          } else {
+          } else if (downloadInfo is DownloadInfoOnProgress) {
             // loading value update
             final double loadedValue =
                 downloadInfo.downloaded / downloadInfo.contentLength;
             final roundedValue = double.parse(loadedValue.toStringAsFixed(1));
             log.i(roundedValue);
+          } else {
+            throw ResponseMessage(
+              ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
           }
         });
       }
@@ -194,11 +199,10 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     }
   }
 
-  Future<void> authenticate({
+  Future<void> authenticateOrGenerateProof({
     required Iden3MessageEntity iden3MessageEntity,
-    bool goBack = true,
+    bool isGenerateProof = true,
   }) async {
-    // TODO(bibash): find if claim is present or not...
     try {
       emit(state.copyWith(status: AppStatus.loading));
       final mnemonic =
@@ -213,7 +217,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       if (isAuthenticated) {
         emit(
           state.copyWith(
-            status: goBack ? AppStatus.goBack : AppStatus.idle,
+            status: isGenerateProof ? AppStatus.goBack : AppStatus.idle,
             message: StateMessage.success(
               messageHandler: ResponseMessage(
                 ResponseString.RESPONSE_STRING_succesfullyAuthenticated,
@@ -223,7 +227,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         );
       } else {
         throw ResponseMessage(
-          ResponseString.RESPONSE_STRING_authenticationFailed,
+          isGenerateProof
+              ? ResponseString.RESPONSE_STRING_errorGeneratingProof
+              : ResponseString.RESPONSE_STRING_authenticationFailed,
         );
       }
     } catch (e) {
@@ -334,13 +340,6 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     await credentialsCubit.insertCredential(credential: credentialModel);
   }
 
-  /// getVocabs
-  Future<List<Map<String, dynamic>>> getVocabs({
-    required Iden3MessageEntity message,
-  }) async {
-    return polygonId.getVocabs(message: message);
-  }
-
   /// getSchemas
   Future<List<Map<String, dynamic>>> getSchemas({
     required Iden3MessageEntity message,
@@ -349,11 +348,11 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   }
 
   /// getFilteredClaims
-  Future<List<ClaimEntity>> getFilteredClaims({
+  Future<List<ClaimEntity?>> getClaimsFromIden3Message({
     required Iden3MessageEntity iden3MessageEntity,
     required String mnemonic,
   }) async {
-    return polygonId.getFilteredClaims(
+    return polygonId.getClaimsFromIden3Message(
       iden3MessageEntity: iden3MessageEntity,
       mnemonic: mnemonic,
     );

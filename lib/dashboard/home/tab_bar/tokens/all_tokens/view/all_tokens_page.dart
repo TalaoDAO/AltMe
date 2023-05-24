@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AllTokensPage extends StatelessWidget {
   const AllTokensPage({super.key});
 
-  static Route<dynamic> route() {
+  static Route<void> route() {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/addTokensPage'),
       builder: (_) => const AllTokensPage(),

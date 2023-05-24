@@ -70,7 +70,7 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
   final StreamController<bool> _verificationNotifier =
       StreamController<bool>.broadcast();
 
-  bool get byPassScreen => !Parameters.hasCryptoCallToAction;
+  bool get byPassScreen => !Parameters.walletHandlesCrypto;
 
   @override
   void initState() {

@@ -65,7 +65,7 @@ class PolygonId {
   }
 
   /// init Circuits Download And Get Info Stream
-  Future<Stream<DownloadInfo>> get initCircuitsDownloadAndGetInfoStream {
+  Stream<DownloadInfo> get initCircuitsDownloadAndGetInfoStream {
     return PolygonIdSdk.I.proof.initCircuitsDownloadAndGetInfoStream;
   }
 
@@ -352,14 +352,6 @@ class PolygonId {
     }
   }
 
-  /// getVocabs
-  Future<List<Map<String, dynamic>>> getVocabs({
-    required Iden3MessageEntity message,
-  }) async {
-    final sdk = PolygonIdSdk.I;
-    return sdk.iden3comm.getVocabs(message: message);
-  }
-
   /// getSchemas
   Future<List<Map<String, dynamic>>> getSchemas({
     required Iden3MessageEntity message,
@@ -368,24 +360,24 @@ class PolygonId {
     return sdk.iden3comm.getSchemas(message: message);
   }
 
-  /// Gets a list of [ClaimEntity] associated to the identity previously stored
-  /// in the the Polygon ID Sdk
+  /// Get a list of [ClaimEntity] from iden3comm message
+  /// stored in Polygon Id Sdk.
   ///
-  /// The list is be filtered by filters
+  /// The message is the iden3comm message entity
   ///
   /// The genesisDid is the unique id of the identity
   ///
+  /// The profileNonce is the nonce of the profile used from identity
+  /// to obtain the did identifier
+  ///
   /// The privateKey is the key used to access all the sensitive info from the
-  /// identity and also to realize operations like generating proofs
-  Future<List<ClaimEntity>> getFilteredClaims({
+  /// identityn and also to realize operations like generating proofs
+  Future<List<ClaimEntity?>> getClaimsFromIden3Message({
     required Iden3MessageEntity iden3MessageEntity,
     required String mnemonic,
   }) async {
     try {
       final sdk = PolygonIdSdk.I;
-
-      final filters =
-          await sdk.iden3comm.getFilters(message: iden3MessageEntity);
 
       final privateKey = await getPrivateKey(mnemonic: mnemonic);
 
@@ -395,8 +387,8 @@ class PolygonId {
         privateKey: privateKey,
       );
 
-      final claimEntities = await sdk.credential.getClaims(
-        filters: filters,
+      final claimEntities = await sdk.iden3comm.getClaimsFromIden3Message(
+        message: iden3MessageEntity,
         genesisDid: did,
         privateKey: privateKey,
       );

@@ -663,6 +663,9 @@ class ResponseMessage with MessageHandler {
         case ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST:
           return ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST
               .localise(context);
+        case ResponseString.RESPONSE_STRING_errorGeneratingProof:
+          return ResponseString.RESPONSE_STRING_errorGeneratingProof.localise(
+              context);
       }
     }
     return '';

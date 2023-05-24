@@ -497,14 +497,25 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
     }
 
     if (state.polygonAction == PolygonIdAction.offer) {
-      final Iden3MessageEntity iden3MessageEntity =
-          await polygonIdCubit.getIden3Message(message: state.scannedResponse!);
-      final List<ClaimEntity> claims = await polygonIdCubit.getClaims(
-        iden3MessageEntity: iden3MessageEntity,
-      );
-      LoadingView().hide();
-      await Navigator.of(context)
-          .push<void>(PolygonIdCredentialOfferPage.route(claims: claims));
+      try {
+        final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
+            .getIden3Message(message: state.scannedResponse!);
+        final List<ClaimEntity> claims = await polygonIdCubit.getClaims(
+          iden3MessageEntity: iden3MessageEntity,
+        );
+        LoadingView().hide();
+        await Navigator.of(context)
+            .push<void>(PolygonIdCredentialOfferPage.route(claims: claims));
+      } catch (e) {
+        final l10n = context.l10n;
+        LoadingView().hide();
+        AlertMessage.showStateMessage(
+          context: context,
+          stateMessage: StateMessage.error(
+            stringMessage: l10n.somethingsWentWrongTryAgainLater,
+          ),
+        );
+      }
     }
 
     if (state.polygonAction == PolygonIdAction.verifier) {
@@ -556,9 +567,9 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
         await Navigator.of(context).push<void>(
           PinCodePage.route(
             isValidCallback: () {
-              context.read<PolygonIdCubit>().authenticate(
+              context.read<PolygonIdCubit>().authenticateOrGenerateProof(
                     iden3MessageEntity: iden3MessageEntity,
-                    goBack: false,
+                    isGenerateProof: false,
                   );
             },
             restrictToBack: false,

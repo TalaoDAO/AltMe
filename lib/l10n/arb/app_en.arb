@@ -888,8 +888,9 @@
       "ageEstimate": {}
     }
   },
-  "claimNotFound": "Claim Not Found",
+  "credentialNotFound": "Credential Not Found",
   "cryptographicProof": "Cryptographic Proof",
   "downloadingCircuitLoadingMessage": "Downloading circuits. It may take some time. Please wait.",
-  "cryptoAccountAlreadyExistMessage": "It appears that an account with this crypto information already exists"
+  "cryptoAccountAlreadyExistMessage": "It appears that an account with this crypto information already exists",
+  "errorGeneratingProof": "Error Generating Proof"
 }

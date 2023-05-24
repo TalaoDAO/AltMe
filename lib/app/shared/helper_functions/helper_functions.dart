@@ -384,3 +384,20 @@ String birthDateFormater(int birthData) {
 
   return formattedBirthdate;
 }
+
+String getSignatureType(String circuitId) {
+  if (circuitId == 'credentialAtomicQuerySigV2' ||
+      circuitId == 'credentialAtomicQuerySigV2OnChain') {
+    return 'BJJ Signature';
+  } else if (circuitId == 'credentialAtomicQueryMTPV2' ||
+      circuitId == 'credentialAtomicQueryMTPV2OnChain') {
+    return 'SMT Signature';
+  }
+
+  return '';
+}
+
+String separateUppercaseWords(String input) {
+  final regex = RegExp('(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])');
+  return input.split(regex).join(' ');
+}

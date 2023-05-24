@@ -22,11 +22,10 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
     try {
       await dotenv.load();
       final walletApiKey = dotenv.get('WALLET_API_KEY_ID360');
-      final walletId = dotenv.get('CLIENT_ID_ID360');
       final response = await client.get(
         Urls.getCodeForId360,
         queryParameters: {
-          'client_id': walletId,
+          'client_id': AltMeStrings.clientIdForID360,
           'did': didCubit.state.did ?? '',
         },
         headers: {
@@ -58,8 +57,7 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
       return;
     }
     //emit(state.copyWith(status: KycVerificationStatus.pending));
-    await dotenv.load();
-    final walletId = dotenv.get('CLIENT_ID_ID360');
+    const walletId = AltMeStrings.clientIdForID360;
     final url = '${Urls.authenticateForId360}/$code?vc_type=${vcType.value}'
         '&client_id=$walletId&callback=${Urls.appDeepLink}';
     await LaunchUrl.launchUri(

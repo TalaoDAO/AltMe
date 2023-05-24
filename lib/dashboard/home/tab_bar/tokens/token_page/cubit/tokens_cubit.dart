@@ -31,6 +31,7 @@ class TokensCubit extends Cubit<TokensState> {
   List<TokenModel> data = [];
   final int _limit = 100;
   int _offsetOfLoadedData = -1;
+  List<dynamic>? _coinList;
 
   Future<void> checkIfItNeedsToVerifyMnemonic({
     required double totalBalanceInUSD,
@@ -266,20 +267,8 @@ class TokensCubit extends Cubit<TokensState> {
       allTokensCubit.init();
     }
 
-    //get usd balance of tokens and update tokens
-    if (allTokensCubit.state.contracts.isNotEmpty) {
-      // Filter just selected tokens to show for user
-      final selectedContracts = allTokensCubit.state.selectedContracts;
-      final loadedTokensSymbols = data.map((e) => e.symbol).toList();
-      final contractsNotInserted = selectedContracts
-          .where(
-            (element) => !loadedTokensSymbols.contains(element.symbol),
-          )
-          .toList();
-
-      final contractsNotInsertedSymbols =
-          contractsNotInserted.map((e) => e.symbol);
-
+    double totalBalanceInUSD = 0;
+    if (data.length > 1) {
       final tokenListSymbols = data.map((e) => e.symbol).toList();
       final coinsList = await _getAllCoinsList();
       final filteredCoinList = coinsList
@@ -312,70 +301,102 @@ class TokensCubit extends Cubit<TokensState> {
         data[indexOfToken] = updatedToken;
       }
 
-      data.addAll(
-        allTokensCubit.state.contracts
-            .where(
-              (element) => contractsNotInsertedSymbols.contains(element.symbol),
-            )
-            .map(
-              (e) => TokenModel(
-                contractAddress: '',
-                name: e.name ?? '',
-                symbol: e.symbol,
-                balance: '0',
-                icon: e.image,
-                decimals: '0',
-                standard: 'fa1.2',
-                decimalsToShow: 2,
-              ),
-            ),
-      );
+      data = _updateToSelectedTezosTokens(data);
 
-      double totalBalanceInUSD = 0;
       for (final tokenElement in data) {
         totalBalanceInUSD += tokenElement.balanceInUSD;
       }
       data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
-      emit(
-        state.copyWith(
-          status: AppStatus.success,
-          data: data.toSet(),
-          totalBalanceInUSD: totalBalanceInUSD,
-        ),
-      );
-      await checkIfItNeedsToVerifyMnemonic(
-        totalBalanceInUSD: totalBalanceInUSD,
-      );
     } else {
-      double totalBalanceInUSD = 0;
-      for (final tokenElement in data) {
-        totalBalanceInUSD += tokenElement.balanceInUSD;
-      }
-      data.sort((a, b) => b.balanceInUSD.compareTo(a.balanceInUSD));
+      data = _updateToSelectedTezosTokens(data);
+    }
+    emit(
+      state.copyWith(
+        status: AppStatus.success,
+        data: data.toSet(),
+        totalBalanceInUSD: totalBalanceInUSD,
+      ),
+    );
+    await checkIfItNeedsToVerifyMnemonic(
+      totalBalanceInUSD: totalBalanceInUSD,
+    );
+  }
+
+  void updateTokenList() {
+    if (state.blockchainType == BlockchainType.tezos) {
+      data = _updateToSelectedTezosTokens(data);
       emit(
         state.copyWith(
-          status: AppStatus.success,
           data: data.toSet(),
-          totalBalanceInUSD: totalBalanceInUSD,
         ),
-      );
-      await checkIfItNeedsToVerifyMnemonic(
-        totalBalanceInUSD: totalBalanceInUSD,
       );
     }
   }
 
+  List<TokenModel> _updateToSelectedTezosTokens(
+    List<TokenModel> tokenList,
+  ) {
+    if (allTokensCubit.state.contracts.isNotEmpty) {
+      // Filter just selected tokens to show for user
+      final selectedContracts = allTokensCubit.state.selectedContracts;
+      final loadedTokensSymbols =
+          tokenList.map((e) => e.symbol.toLowerCase()).toList();
+      final contractsNotInserted = selectedContracts
+          .where(
+            (element) =>
+                !loadedTokensSymbols.contains(element.symbol.toLowerCase()),
+          )
+          .toList();
+
+      final contractsNotInsertedSymbols =
+          contractsNotInserted.map((e) => e.symbol.toLowerCase());
+
+      ///first remove old token which added before
+      tokenList.removeWhere(
+        (element) =>
+            element.contractAddress.isEmpty &&
+            element.balance == '0' &&
+            element.decimals == '0' &&
+            element.standard == 'fa1.2' &&
+            element.symbol != 'XTZ',
+      );
+
+      ///then add new tokens which selected
+      final newTokens = allTokensCubit.state.contracts
+          .where(
+            (element) => contractsNotInsertedSymbols.contains(
+              element.symbol.toLowerCase(),
+            ),
+          )
+          .map(
+            (e) => TokenModel(
+              contractAddress: '',
+              name: e.name ?? '',
+              symbol: e.symbol,
+              balance: '0',
+              icon: e.image,
+              decimals: '0',
+              standard: 'fa1.2',
+              decimalsToShow: 2,
+            ),
+          );
+      tokenList.addAll(newTokens);
+    }
+    return tokenList;
+  }
+
   Future<List<dynamic>> _getAllCoinsList() async {
     try {
+      if (_coinList != null && _coinList!.isNotEmpty) return _coinList!;
       await dotenv.load();
       final apiKey = dotenv.get('COIN_GECKO_API_KEY');
-      final response = await client.get(
+      _coinList = await client.get(
         '${Urls.coinGeckoBase}coins/list',
         queryParameters: {
           'x_cg_pro_api_key': apiKey,
         },
       ) as List<dynamic>;
-      return response;
+      return _coinList!;
     } catch (_) {
       return [];
     }
@@ -452,17 +473,8 @@ class TokensCubit extends Cubit<TokensState> {
     );
 
     try {
-      // get usd balance of xtz from teztools api
-      await dotenv.load();
-      final apiKey = dotenv.get('COIN_GECKO_API_KEY');
-
-      final responseOfXTZUsdPrice = await client.get(
-        '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
-        queryParameters: {
-          'x_cg_pro_api_key': apiKey,
-        },
-      ) as Map<String, dynamic>;
-      final xtzUSDPrice = responseOfXTZUsdPrice['tezos']['usd'] as double;
+      // get usd balance
+      final xtzUSDPrice = await _getTezosCurrentPriceInUsd() ?? 0;
 
       return token.copyWith(
         tokenUSDPrice: xtzUSDPrice,
@@ -478,5 +490,22 @@ class TokensCubit extends Cubit<TokensState> {
   @override
   String toString() {
     return 'TokensCubit';
+  }
+
+  Future<double?> _getTezosCurrentPriceInUsd() async {
+    try {
+      await dotenv.load();
+      final apiKey = dotenv.get('COIN_GECKO_API_KEY');
+
+      final responseOfXTZUsdPrice = await client.get(
+        '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
+        queryParameters: {
+          'x_cg_pro_api_key': apiKey,
+        },
+      ) as Map<String, dynamic>;
+      return responseOfXTZUsdPrice['tezos']['usd'] as double;
+    } catch (_) {
+      return null;
+    }
   }
 }

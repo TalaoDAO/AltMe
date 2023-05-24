@@ -69,7 +69,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
             mnemonicOrKey.startsWith('0x');
 
         if (isSecretKey) {
-          if (!Parameters.hasCryptoCallToAction) {
+          if (!Parameters.walletHandlesCrypto) {
             throw ResponseMessage(
               ResponseString
                   .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,

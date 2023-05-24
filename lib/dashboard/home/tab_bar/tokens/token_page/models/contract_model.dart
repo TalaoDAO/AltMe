@@ -35,6 +35,5 @@ class ContractModel extends Equatable {
         symbol,
         name,
         image,
-        currentPrice,
       ];
 }

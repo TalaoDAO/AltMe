@@ -132,13 +132,13 @@ class AllTokensCubit extends Cubit<AllTokensState> {
         false.toString(),
       );
       selectedContracs.addAll(const [
-        ContractModel(
-          id: 'energy',
-          symbol: 'ENR',
-          image: '',
-          name: 'Energy',
-          currentPrice: 0,
-        ),
+        // ContractModel(
+        //   id: 'energy',
+        //   symbol: 'ENR',
+        //   image: '',
+        //   name: 'Energy',
+        //   currentPrice: 0,
+        // ),
         ContractModel(
           id: 'unobtanium-tezos',
           symbol: 'UNO',
@@ -147,20 +147,20 @@ class AllTokensCubit extends Cubit<AllTokensState> {
               'https://assets.coingecko.com/coins/images/19469/large/uno.png?1635255375',
           currentPrice: 0,
         ),
-        ContractModel(
-          id: 'machinery',
-          symbol: 'MCH',
-          image: '',
-          name: 'Machinery',
-          currentPrice: 0,
-        ),
-        ContractModel(
-          id: 'minerals',
-          symbol: 'MIN',
-          name: 'Minerals',
-          currentPrice: 0,
-          image: '',
-        ),
+        // ContractModel(
+        //   id: 'machinery',
+        //   symbol: 'MCH',
+        //   image: '',
+        //   name: 'Machinery',
+        //   currentPrice: 0,
+        // ),
+        // ContractModel(
+        //   id: 'minerals',
+        //   symbol: 'MIN',
+        //   name: 'Minerals',
+        //   currentPrice: 0,
+        //   image: '',
+        // ),
         ContractModel(
           id: 'gif-dao',
           symbol: 'GIF',
