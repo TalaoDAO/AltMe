@@ -5,6 +5,7 @@ import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:matrix/matrix.dart';
 
 class NftDetailsPage extends StatelessWidget {
   const NftDetailsPage({
@@ -107,14 +108,16 @@ class _NftDetailsViewState extends State<NftDetailsView> {
           ),
         ),
       ),
-      navigation: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(Sizes.spaceSmall),
-          child: MyGradientButton(
-            text: l10n.send,
-            onPressed: widget.nftModel.isTransferable == false
-                ? null
-                : () {
+      navigation: (widget.nftModel.isTransferable == false ||
+              widget.nftModel.contractAddress
+                  .equals(AltMeStrings.minterAddress))
+          ? null
+          : SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(Sizes.spaceSmall),
+                child: MyGradientButton(
+                  text: l10n.send,
+                  onPressed: () {
                     Navigator.of(context).push<void>(
                       ConfirmTokenTransactionPage.route(
                         selectedToken: isTezos
@@ -126,9 +129,9 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                       ),
                     );
                   },
-          ),
-        ),
-      ),
+                ),
+              ),
+            ),
     );
   }
 

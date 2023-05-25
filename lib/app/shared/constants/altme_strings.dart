@@ -23,5 +23,9 @@ class AltMeStrings {
   static const String matrixSupportId = '@support:matrix.talao.co';
 
   //ID360
-  static const int clientIdForID360=100;
+  static const int clientIdForID360 = 100;
+
+  //minter
+  static const String minterAddress =
+      '0x240863E65b2ace78eda93334be396FF220f14354';
 }
