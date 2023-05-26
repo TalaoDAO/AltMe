@@ -365,4 +365,6 @@ class GlobalMessage {
   String get RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST =>
       l10n.cryptoAccountAlreadyExistMessage;
   String get RESPONSE_STRING_errorGeneratingProof => l10n.errorGeneratingProof;
+  String get RESPONSE_STRING_successfullyGeneratingProof =>
+      l10n.successfullyGeneratingProof;
 }

@@ -281,6 +281,7 @@ class _PolygonIdVerificationViewState extends State<PolygonIdVerificationView> {
                                           .authenticateOrGenerateProof(
                                             iden3MessageEntity:
                                                 widget.iden3MessageEntity,
+                                            isGenerateProof: true,
                                           );
                                     },
                                     restrictToBack: false,

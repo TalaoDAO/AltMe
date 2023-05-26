@@ -452,6 +452,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_errorGeneratingProof:
         return globalMessage.RESPONSE_STRING_errorGeneratingProof;
+
+      case ResponseString.RESPONSE_STRING_successfullyGeneratingProof:
+        return globalMessage.RESPONSE_STRING_successfullyGeneratingProof;
     }
   }
 }
