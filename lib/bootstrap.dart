@@ -13,6 +13,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:secure_storage/secure_storage.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
@@ -36,6 +37,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await LocalNotification().init();
+  await initSecureStorage;
 
   /// Disable Http google font
   GoogleFonts.config.allowRuntimeFetching = false;
