@@ -78,6 +78,8 @@ class _SplashViewState extends State<SplashView> {
     }
   }
 
+  bool isPolygonFunctionCalled = false;
+
   Future<void> processIncomingUri(Uri? uri, BuildContext context) async {
     final l10n = context.l10n;
     String beaconData = '';
@@ -107,7 +109,7 @@ class _SplashViewState extends State<SplashView> {
         return;
       }
 
-      //if authentication is already done
+      /// decrypt iden3MessageEntity
       final encryptedIden3MessageEntity =
           uri.toString().split('iden3comm://?i_m=')[1];
 
@@ -115,16 +117,18 @@ class _SplashViewState extends State<SplashView> {
       final iden3MessageEntityJson =
           jwtDecode.parsePolygonIdJwtHeader(encryptedIden3MessageEntity);
 
-      final polygonIdCubit = context.read<PolygonIdCubit>();
+      if (isPolygonFunctionCalled) return;
 
-      /// make sure polygonId is initialised
-      await polygonIdCubit.initialise();
-      final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
-          .getIden3Message(message: jsonEncode(iden3MessageEntityJson));
+      isPolygonFunctionCalled = true;
 
-      await Navigator.of(context).push<void>(
-        PolygonIdVerificationPage.route(iden3MessageEntity: iden3MessageEntity),
-      );
+      await context
+          .read<PolygonIdCubit>()
+          .polygonIdFunction(jsonEncode(iden3MessageEntityJson));
+
+      // Reset the flag variable after 2 seconds
+      Timer(const Duration(seconds: 1), () {
+        isPolygonFunctionCalled = false;
+      });
     }
 
     uri!.queryParameters.forEach((key, value) async {
