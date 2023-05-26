@@ -3,6 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/pin_code/pin_code.dart';
 import 'package:altme/polygon_id/polygon_id.dart';
+import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygonid/polygonid.dart';
@@ -38,9 +39,10 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // TODO(all): change UI
-            const Text(
-              'Would you like to accept a credential from this organisation?',
+            Text(
+              'Would you like to accept this credential(s) from this organisation?',
               textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.credentialSubtitle,
             ),
             const SizedBox(height: 30),
             ListView.builder(
@@ -52,10 +54,40 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                 final jsonCredential = claims[i].info;
                 final credentialPreview = Credential.fromJson(jsonCredential);
 
-                return Center(
-                  child: Text(
-                    credentialPreview
-                        .credentialSubjectModel.credentialSubjectType.name,
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: CredentialContainer(
+                    child: AspectRatio(
+                      aspectRatio: Sizes.credentialAspectRatio,
+                      child: DecoratedBox(
+                        decoration: BaseBoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .credentialBackground,
+                          gradient: const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(0xff0B67C5),
+                              Color(0xff200072),
+                            ],
+                          ),
+                          shapeColor:
+                              Theme.of(context).colorScheme.documentShape,
+                          value: 1,
+                          anchors: const <Alignment>[],
+                        ),
+                        child: Center(
+                          child: MyText(
+                            separateUppercaseWords(
+                              credentialPreview.credentialSubjectModel
+                                  .credentialSubjectType.name,
+                            ),
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },
