@@ -220,7 +220,9 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
             status: isGenerateProof ? AppStatus.goBack : AppStatus.idle,
             message: StateMessage.success(
               messageHandler: ResponseMessage(
-                ResponseString.RESPONSE_STRING_succesfullyAuthenticated,
+                isGenerateProof
+                    ? ResponseString.RESPONSE_STRING_successfullyGeneratingProof
+                    : ResponseString.RESPONSE_STRING_succesfullyAuthenticated,
               ),
             ),
           ),
