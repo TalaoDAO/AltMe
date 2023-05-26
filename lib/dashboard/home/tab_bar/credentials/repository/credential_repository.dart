@@ -14,11 +14,11 @@ class CredentialsRepository {
   Future<List<CredentialModel>> findAll(/* dynamic filters */) async {
     Map<String, String> data;
     try {
-      await Sentry.captureMessage('before getAllValues');
+      print('before getAllValues');
       data = await _secureStorageProvider.getAllValues();
-      await Sentry.captureMessage('after getAllValues');
+      print('after getAllValues');
     } catch (e) {
-      await Sentry.captureMessage(e.toString());
+      print(e.toString());
       throw ResponseMessage(
         ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
       );
@@ -49,7 +49,11 @@ class CredentialsRepository {
   }
 
   Future<int> deleteAll() async {
+    print('before getAllValues 2');
+
     final data = await _secureStorageProvider.getAllValues();
+    print('after getAllValues é');
+
     data.removeWhere(
       (key, value) => !key.startsWith('${SecureStorageKeys.credentialKey}/'),
     );
