@@ -156,7 +156,7 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
 
   Future<Iden3MessageEntity> getIden3Message({required String message}) async {
     final Iden3MessageEntity iden3MessageEntity =
-        await polygonId.getIden3Message(message: state.scannedResponse!);
+        await polygonId.getIden3Message(message: message);
     return iden3MessageEntity;
   }
 

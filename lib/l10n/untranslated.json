@@ -816,7 +816,8 @@
     "cryptographicProof",
     "downloadingCircuitLoadingMessage",
     "cryptoAccountAlreadyExistMessage",
-    "errorGeneratingProof"
+    "errorGeneratingProof",
+    "createWalletMessage"
   ],
 
   "es": [
@@ -1636,7 +1637,8 @@
     "cryptographicProof",
     "downloadingCircuitLoadingMessage",
     "cryptoAccountAlreadyExistMessage",
-    "errorGeneratingProof"
+    "errorGeneratingProof",
+    "createWalletMessage"
   ],
 
   "fr": [
@@ -1759,7 +1761,8 @@
     "cryptographicProof",
     "downloadingCircuitLoadingMessage",
     "cryptoAccountAlreadyExistMessage",
-    "errorGeneratingProof"
+    "errorGeneratingProof",
+    "createWalletMessage"
   ],
 
   "it": [
@@ -2579,6 +2582,7 @@
     "cryptographicProof",
     "downloadingCircuitLoadingMessage",
     "cryptoAccountAlreadyExistMessage",
-    "errorGeneratingProof"
+    "errorGeneratingProof",
+    "createWalletMessage"
   ]
 }
