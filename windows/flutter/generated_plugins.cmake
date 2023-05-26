@@ -10,7 +10,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   permission_handler_windows
   platform_device_id_windows
   secure_application
-  sentry_flutter
   share_plus
   url_launcher_windows
 )
