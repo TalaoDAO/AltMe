@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -6,6 +7,8 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/ebsi/initiate_ebsi_credential_issuance.dart';
+import 'package:altme/l10n/l10n.dart';
+import 'package:altme/polygon_id/polygon_id.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:dio/dio.dart';
@@ -13,6 +16,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:polygonid/polygonid.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 import 'package:uni_links/uni_links.dart';
 
@@ -63,7 +68,7 @@ class _SplashViewState extends State<SplashView> {
         (Uri? uri) async {
           if (!mounted) return;
           log.i('got uri: $uri');
-          processIncomingUri(uri, context);
+          await processIncomingUri(uri, context);
         },
         onError: (Object err) {
           if (!mounted) return;
@@ -73,17 +78,55 @@ class _SplashViewState extends State<SplashView> {
     }
   }
 
-  void processIncomingUri(Uri? uri, BuildContext context) {
+  Future<void> processIncomingUri(Uri? uri, BuildContext context) async {
+    final l10n = context.l10n;
     String beaconData = '';
     bool isBeaconRequest = false;
     if (uri.toString().startsWith('${Urls.appDeepLink}/dashboard')) {
-      Navigator.pushAndRemoveUntil<void>(
+      await Navigator.pushAndRemoveUntil<void>(
         context,
         DashboardPage.route(),
         (Route<dynamic> route) => route.isFirst,
       );
       return;
     }
+
+    if (uri.toString().startsWith('iden3comm://')) {
+      /// if wallet has not been created then alert user
+      final ssiKey =
+          await secure_storage.getSecureStorage.get(SecureStorageKeys.ssiKey);
+      if (ssiKey == null) {
+        await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return ConfirmDialog(
+              title: l10n.createWalletMessage,
+            );
+          },
+        );
+        return;
+      }
+
+      //if authentication is already done
+      final encryptedIden3MessageEntity =
+          uri.toString().split('iden3comm://?i_m=')[1];
+
+      final JWTDecode jwtDecode = JWTDecode();
+      final iden3MessageEntityJson =
+          jwtDecode.parsePolygonIdJwtHeader(encryptedIden3MessageEntity);
+
+      final polygonIdCubit = context.read<PolygonIdCubit>();
+
+      /// make sure polygonId is initialised
+      await polygonIdCubit.initialise();
+      final Iden3MessageEntity iden3MessageEntity = await polygonIdCubit
+          .getIden3Message(message: jsonEncode(iden3MessageEntityJson));
+
+      await Navigator.of(context).push<void>(
+        PolygonIdVerificationPage.route(iden3MessageEntity: iden3MessageEntity),
+      );
+    }
+
     uri!.queryParameters.forEach((key, value) async {
       if (key == 'uri') {
         final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
@@ -141,7 +184,7 @@ class _SplashViewState extends State<SplashView> {
           log.i('got initial uri: $uri');
           if (!mounted) return;
           log.i('got uri: $uri');
-          processIncomingUri(uri, context);
+          await processIncomingUri(uri, context);
         }
       } on services.PlatformException {
         // Platform messages may fail but we ignore the exception

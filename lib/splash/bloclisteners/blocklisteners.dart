@@ -538,10 +538,6 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
       if (isAlertEnable) {
         /// checking if it is issuer side
 
-        final iden3MessageEntity = await polygonIdCubit.getIden3Message(
-          message: state.scannedResponse!,
-        );
-
         LoadingView().hide();
 
         // TODO(all): later choose url based on mainnet and testnet

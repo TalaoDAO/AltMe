@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>getPassBaseStatusBackground</string>
+	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -30,6 +34,19 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>iden3comm</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>iden3comm</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -43,31 +60,29 @@
 	<true/>
 	<key>NSAllowsArbitraryLoads</key>
 	<true/>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Please give us access to your camera, to complete the verification.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Why is my app authenticating using face id?</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Please give us access to your photo library to verify you.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>
-	    <string>fetch</string>
+		<string>fetch</string>
 	</array>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>getPassBaseStatusBackground</string>
-    </array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
-	<key>NSBonjourServices</key>
-	<array>
-		<string>_dartobservatory._tcp</string>
-	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -84,8 +99,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 </dict>
 </plist>
