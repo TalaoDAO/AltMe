@@ -19,11 +19,11 @@ class TermsPage extends StatelessWidget {
       titleLeading: const BackLeadingButton(),
       scrollView: false,
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      body: BackgroundCard(
+      body: const BackgroundCard(
         padding: EdgeInsets.zero,
         child: SingleChildScrollView(
           child: Column(
-            children: const [
+            children: [
               DisplayTermsofUse(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,

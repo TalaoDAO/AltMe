@@ -59,10 +59,15 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       final encryptedString = jsonEncode(encrypted);
 
       final fileBytes = Uint8List.fromList(utf8.encode(encryptedString));
-      final filePath =
-          await fileSaver.saveAs(fileName, fileBytes, 'txt', MimeType.TEXT);
 
-      if (filePath.isEmpty) {
+      final filePath = await fileSaver.saveAs(
+        name: fileName,
+        bytes: fileBytes,
+        ext: 'txt',
+        mimeType: MimeType.text,
+      );
+
+      if (filePath != null && filePath.isEmpty) {
         emit(state.copyWith(status: AppStatus.idle));
       } else {
         emit(

@@ -97,7 +97,7 @@ class _DidEbsiPrivateKeyPageState extends State<DidEbsiPrivateKeyPage>
                         CopyButton(
                           onTap: () async {
                             await Clipboard.setData(
-                              ClipboardData(text: snapshot.data),
+                              ClipboardData(text: snapshot.data!),
                             );
                             AlertMessage.showStateMessage(
                               context: context,

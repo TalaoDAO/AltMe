@@ -126,13 +126,17 @@ class SubmitEnterpriseUserCubit extends Cubit<SubmitEnterpriseUserState> {
       final publicKeyJwks = JsonPath(r'$..publicKeyJwk');
       final publicKeyJwksList = publicKeyJwks
           .read(resolvedDID)
-          .where((element) => element.value['kty'] == 'RSA')
+          .where(
+            (element) =>
+                (element.value as Map<String, dynamic>)['kty'] == 'RSA',
+          )
           .toList();
       final privateRSAKeyAssertionMethod =
           resolvedDID['didDocument']['assertionMethod'] as List<dynamic>?;
       //               as List<dynamic>
       for (var i = 0; i < publicKeyJwksList.length; i++) {
-        final privateRSAKey = publicKeyJwksList[i].value['n'] as String;
+        final privateRSAKey =
+            (publicKeyJwksList[i].value as Map<String, dynamic>)['n'] as String;
         if (privateRSAKey == rsaKey['n'] &&
             (privateRSAKeyAssertionMethod?.contains(rsaKey['kid']) ?? false)) {
           return true;

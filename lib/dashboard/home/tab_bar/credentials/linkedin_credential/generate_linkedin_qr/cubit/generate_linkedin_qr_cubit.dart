@@ -88,10 +88,14 @@ class GenerateLinkedInQrCubit extends Cubit<GenerateLinkedInQrState> {
       final dateTime = getDateTimeWithoutSpace();
       final fileName = 'linkedin-banner-$dateTime';
 
-      final filePath =
-          await fileSaver.saveAs(fileName, capturedImage, 'png', MimeType.PNG);
+      final filePath = await fileSaver.saveAs(
+        name: fileName,
+        bytes: capturedImage,
+        ext: 'png',
+        mimeType: MimeType.png,
+      );
 
-      if (filePath.isEmpty) {
+      if (filePath != null && filePath.isEmpty) {
         emit(state.copyWith(status: AppStatus.idle));
       } else {
         emit(

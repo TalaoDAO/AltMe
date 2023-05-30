@@ -79,7 +79,7 @@ class TransactionDoneDialog extends StatelessWidget {
                 onLongPress: () async {
                   await Clipboard.setData(
                     ClipboardData(
-                      text: transactionHash,
+                      text: transactionHash!,
                     ),
                   );
                   AlertMessage.showStateMessage(

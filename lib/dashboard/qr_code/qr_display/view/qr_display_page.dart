@@ -33,7 +33,7 @@ class QrCodeDisplayPage extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
             Center(
-              child: QrImage(
+              child: QrImageView(
                 data: data,
                 size: 200,
                 foregroundColor: Theme.of(context).colorScheme.onBackground,
