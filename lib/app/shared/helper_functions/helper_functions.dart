@@ -176,30 +176,27 @@ Future<bool> isConnected() async {
 String getCredentialName(String constraints) {
   final dynamic constraintsJson = jsonDecode(constraints);
   final fieldsPath = JsonPath(r'$..fields');
-  final dynamic credentialField = fieldsPath
-      .read(constraintsJson)
-      .first
-      .value
-      .where(
-        (dynamic e) => e['path'].toString() == r'[$.credentialSubject.type]',
-      )
-      .toList()
-      .first;
+  final dynamic credentialField =
+      (fieldsPath.read(constraintsJson).first.value as List)
+          .where(
+            (dynamic e) =>
+                e['path'].toString() == r'[$.credentialSubject.type]',
+          )
+          .toList()
+          .first;
   return credentialField['filter']['pattern'] as String;
 }
 
 String getIssuersName(String constraints) {
   final dynamic constraintsJson = jsonDecode(constraints);
   final fieldsPath = JsonPath(r'$..fields');
-  final dynamic issuerField = fieldsPath
-      .read(constraintsJson)
-      .first
-      .value
-      .where(
-        (dynamic e) => e['path'].toString() == r'[$.issuer]',
-      )
-      .toList()
-      .first;
+  final dynamic issuerField =
+      (fieldsPath.read(constraintsJson).first.value as List)
+          .where(
+            (dynamic e) => e['path'].toString() == r'[$.issuer]',
+          )
+          .toList()
+          .first;
   return issuerField['filter']['pattern'] as String;
 }
 

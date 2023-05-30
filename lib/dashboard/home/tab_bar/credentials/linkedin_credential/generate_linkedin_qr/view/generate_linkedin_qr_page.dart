@@ -111,7 +111,7 @@ class _GenerateLinkedinQrViewState extends State<GenerateLinkedinQrView> {
         },
         builder: (context, state) {
           return Center(
-            child: Screenshot<dynamic>(
+            child: Screenshot(
               controller: screenshotController,
               child: AspectRatio(
                 aspectRatio: Sizes.linkedinBannerAspectRatio,

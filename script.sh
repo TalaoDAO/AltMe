@@ -5,8 +5,8 @@ function pub {
   do
     (
       cd "packages/$d"
-      flutter clean
-      flutter pub get
+      fvm flutter clean
+      fvm flutter pub get
     )
   done 
   fvm flutter pub get
@@ -19,7 +19,7 @@ function buildRunner {
     (
       echo "$d"
       cd "packages/$d"
-      flutter packages pub run build_runner build --delete-conflicting-outputs
+      fvm flutter packages pub run build_runner build --delete-conflicting-outputs
     )
   done 
   fvm flutter packages pub run build_runner build --delete-conflicting-outputs

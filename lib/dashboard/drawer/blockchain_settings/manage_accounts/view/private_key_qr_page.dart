@@ -78,7 +78,7 @@ class _PrivateKeyQrPageState extends State<PrivateKeyQrPage>
           children: [
             const SizedBox(height: 20),
             Center(
-              child: QrImage(
+              child: QrImageView(
                 data: widget.data,
                 size: 200,
                 foregroundColor: Theme.of(context).colorScheme.onBackground,

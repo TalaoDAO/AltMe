@@ -528,7 +528,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         deviceId: deviceId,
         identifier: AuthenticationUserIdentifier(user: username),
       );
-      return loginResonse.userId!;
+      return loginResonse.userId;
     } catch (e, s) {
       logger.i('e: $e, s: $s');
       return '@$username:${Urls.matrixHomeServer.replaceAll('https://', '')}'

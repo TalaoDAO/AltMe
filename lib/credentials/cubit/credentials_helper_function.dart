@@ -245,9 +245,9 @@ Future<CredentialModel?> generateWalletCredential({
       systemVersion = androidDeviceInfo.version.codename;
     } else {
       final iosDeviceInfo = await DeviceInfoPlugin().iosInfo;
-      deviceName = iosDeviceInfo.utsname.machine ?? '';
+      deviceName = iosDeviceInfo.utsname.machine;
       systemName = 'iOS';
-      systemVersion = iosDeviceInfo.systemVersion ?? '';
+      systemVersion = iosDeviceInfo.systemVersion;
     }
 
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();

@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:polygonid/polygonid.dart';
@@ -25,8 +24,6 @@ class PolygonIdProofPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     // TODO(all): change UI
     return BasePage(
       useSafeArea: true,
@@ -100,10 +97,12 @@ class PolygonIdProofPage extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(
-                              width: 1, color: Colors.grey.withOpacity(0.4)),
+                            width: 1,
+                            color: Colors.grey.withOpacity(0.4),
+                          ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -115,7 +114,8 @@ class PolygonIdProofPage extends StatelessWidget {
                               const SizedBox(width: 15),
                               Expanded(
                                 child: Text(
-                                  'No information will be shared from this credential, '
+                                  'No information will be shared from this '
+                                  'credential, '
                                   'only the private proof.',
                                   textAlign: TextAlign.start,
                                   style: Theme.of(context).textTheme.bodySmall,
