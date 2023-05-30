@@ -16,22 +16,13 @@ Future<void> get initSecureStorage async {
       /// required. We don't set it by default because old wallets would loose
       /// their data.
       /// https://github.com/mogol/flutter_secure_storage/issues/354
-      print('first try android');
-      const defaultAndroidOptions = AndroidOptions(
-        encryptedSharedPreferences: true,
-        sharedPreferencesName: 'talao',
-      );
-
-      const storage = FlutterSecureStorage(
-        aOptions: defaultAndroidOptions,
-      );
+      const storage = FlutterSecureStorage();
       await testStorage(storage);
     } catch (e) {
       const defaultAndroidOptions = AndroidOptions(
         encryptedSharedPreferences: true,
-        sharedPreferencesName: 'talao',
+        sharedPreferencesName: 'altme',
       );
-      print('second try android');
 
       const storage = FlutterSecureStorage(
         aOptions: defaultAndroidOptions,
@@ -41,7 +32,6 @@ Future<void> get initSecureStorage async {
   } else {
     const defaultIOSOptions =
         IOSOptions(accessibility: KeychainAccessibility.first_unlock);
-    print('ios!!! ?');
 
     const storage = FlutterSecureStorage(
       iOptions: defaultIOSOptions,
