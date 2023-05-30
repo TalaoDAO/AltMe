@@ -574,5 +574,15 @@ final polygonIdBlocListener = BlocListener<PolygonIdCubit, PolygonIdState>(
         return;
       }
     }
+
+    if (state.polygonAction == PolygonIdAction.contractFunctionCall) {
+      LoadingView().hide();
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: const StateMessage.error(
+          stringMessage: 'This feature is not available yet in our app.',
+        ),
+      );
+    }
   },
 );
