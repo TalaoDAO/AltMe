@@ -46,7 +46,6 @@ Future<void> get initSecureStorage async {
 Future<void> testStorage(FlutterSecureStorage storage) async {
   final secureStorage = SecureStorageProvider(storage: storage);
   final testCompatibility = await secureStorage.getAllValues();
-  print('Call to secure storage worked: ${testCompatibility.length}');
 }
 
 ///SecureStorageProvider
