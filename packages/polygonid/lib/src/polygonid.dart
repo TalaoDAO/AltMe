@@ -3,10 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
 import 'package:polygonid/polygonid.dart';
 import 'package:polygonid_flutter_sdk/common/domain/entities/env_entity.dart';
+import 'package:polygonid_flutter_sdk/common/utils/hex_utils.dart';
+import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/jwz_proof_entity.dart';
+import 'package:polygonid_flutter_sdk/iden3comm/domain/entities/request/onchain/contract_function_call_body_request.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/entities/identity_entity.dart';
 import 'package:polygonid_flutter_sdk/identity/domain/exceptions/identity_exceptions.dart';
 import 'package:polygonid_flutter_sdk/identity/libs/bjj/bjj_wallet.dart';
 import 'package:polygonid_flutter_sdk/sdk/polygon_id_sdk.dart';
+import 'package:web3dart/web3dart.dart';
 
 /// {@template polygonid}
 /// A Very Good Project created by Very Good CLI.
@@ -397,5 +401,71 @@ class PolygonId {
     } catch (e) {
       throw Exception();
     }
+  }
+
+  /// generateProofByContractFunctionCall
+  Future<String> generateProofByContractFunctionCall({
+    required String walletAddress,
+    required Iden3MessageEntity contractIden3messageEntity,
+    required String mnemonic,
+  }) async {
+    final sdk = PolygonIdSdk.I;
+    var challenge = walletAddress;
+
+    if (challenge.toLowerCase().startsWith('0x')) {
+      challenge = challenge.substring(2);
+    }
+
+    final swappedHex =
+        HEX.encode(Uint8List.fromList(HEX.decode(challenge).reversed.toList()));
+    challenge = BigInt.parse(swappedHex, radix: 16).toString();
+
+    final userIdentity = await getUserIdentity(mnemonic: mnemonic);
+
+    final List<JWZProofEntity> response = await sdk.iden3comm.getProofs(
+      message: contractIden3messageEntity,
+      genesisDid: userIdentity.did,
+      privateKey: userIdentity.privateKey,
+      challenge: challenge,
+    );
+
+    final body =
+        contractIden3messageEntity.body as ContractFunctionCallBodyRequest;
+
+    // after the creation of the proof we send the transaction
+    final String to = body.transactionData.contractAddress;
+    final JWZProofEntity proof = response.first;
+
+    const ABI =
+        '[ { "inputs": [ { "internalType": "uint64", "name": "requestId", "type": "uint64" }, { "internalType": "uint256[]", "name": "inputs", "type": "uint256[]" }, { "internalType": "uint256[2]", "name": "a", "type": "uint256[2]" }, { "internalType": "uint256[2][2]", "name": "b", "type": "uint256[2][2]" }, { "internalType": "uint256[2]", "name": "c", "type": "uint256[2]" } ], "name": "submitZKPResponse", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" } ]';
+
+    final ContractAbi cAbi = ContractAbi.fromJson(ABI, to);
+    final DeployedContract dc =
+        DeployedContract(cAbi, EthereumAddress.fromHex(to));
+
+    final zkFun = dc.findFunctionsByName('submitZKPResponse');
+
+    final List<BigInt> pubSig = proof.pubSignals.map(BigInt.parse).toList();
+
+    final funcData = zkFun.first.encodeCall([
+      BigInt.from(proof.id),
+      pubSig,
+      [BigInt.parse(proof.proof.piA[0]), BigInt.parse(proof.proof.piA[1])],
+      [
+        [
+          BigInt.parse(proof.proof.piB[0][1]),
+          BigInt.parse(proof.proof.piB[0][0])
+        ],
+        [
+          BigInt.parse(proof.proof.piB[1][1]),
+          BigInt.parse(proof.proof.piB[1][0])
+        ]
+      ],
+      [BigInt.parse(proof.proof.piC[0]), BigInt.parse(proof.proof.piC[1])]
+    ]);
+
+    final hexData = HexUtils.bytesToHex(funcData.toList());
+
+    return hexData;
   }
 }

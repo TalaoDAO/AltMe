@@ -7,8 +7,10 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activit
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hex/hex.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:polygonid/polygonid.dart';
 
@@ -372,69 +374,6 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
   Future<void> generateProofByContractFunctionCall({
     required String walletAddress,
   }) async {
-    // final Iden3MessageEntity contractIden3messageEntity =
-    //     await getIden3Message(message: state.scannedResponse!);
-
-    // String challenge = walletAddress;
-
-    // if (challenge.toLowerCase().startsWith("0x")) {
-    //   challenge = challenge.substring(2);
-    // }
-
-    // final String swappedHex =
-    //     HEX.encode(Uint8List.fromList(HEX.decode(challenge).reversed.toList()));
-    // challenge = BigInt.parse(swappedHex, radix: 16).toString();
-
-    // //(this _getProofResponsesUseCase usecase use the iden3comm.getProofs method of the sdk)
-    // List<JWZProofEntity> response = await _getProofResponsesUseCase.execute(
-    //   param: GetProofResponsesUseCaseParam(
-    //     contractIden3messageEntity,
-    //     challenge,
-    //   ),
-    // );
-
-    // // after the creation of the proof we send the transaction
-    // String to = contractIden3messageEntity.body.transactionData.contractAddress!;
-    // JWZProofEntity proof = response.first;
-
-    // Future.delayed(Duration.zero, () => connector.openWalletApp());
-
-    // const ABI =
-    //     '[ { "inputs": [ { "internalType": "uint64", "name": "requestId", "type": "uint64" }, { "internalType": "uint256[]", "name": "inputs", "type": "uint256[]" }, { "internalType": "uint256[2]", "name": "a", "type": "uint256[2]" }, { "internalType": "uint256[2][2]", "name": "b", "type": "uint256[2][2]" }, { "internalType": "uint256[2]", "name": "c", "type": "uint256[2]" } ], "name": "submitZKPResponse", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" } ]';
-
-    // ContractAbi cAbi = ContractAbi.fromJson(ABI, to);
-    // DeployedContract dc = DeployedContract(cAbi, EthereumAddress.fromHex(to));
-
-    // var zkFun = dc.findFunctionsByName("submitZKPResponse");
-
-    // List<BigInt> pubSig = proof.pubSignals.map(BigInt.parse).toList();
-
-    // var funcData = zkFun.first.encodeCall([
-    //   BigInt.from(proof.id),
-    //   pubSig,
-    //   [BigInt.parse(proof.proof.piA[0]), BigInt.parse(proof.proof.piA[1])],
-    //   [
-    //     [
-    //       BigInt.parse(proof.proof.piB[0][1]),
-    //       BigInt.parse(proof.proof.piB[0][0])
-    //     ],
-    //     [
-    //       BigInt.parse(proof.proof.piB[1][1]),
-    //       BigInt.parse(proof.proof.piB[1][0])
-    //     ]
-    //   ],
-    //   [BigInt.parse(proof.proof.piC[0]), BigInt.parse(proof.proof.piC[1])]
-    // ]);
-
-    // var hexData = HexUtils.bytesToHex(funcData.toList());
-
-    // final hash = await connector.sendContractTx(to: to, data: hexData);
-
-    // if (hash != null) {
-    //   //SUCCESS
-    // } else {
-    //   //FAILED
-    // }
     return;
   }
 }
