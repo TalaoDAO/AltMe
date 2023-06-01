@@ -94,9 +94,22 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       final mnemonic =
           await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
       await polygonIdCubit.initialise();
+
+      final polygonIdNetwork =
+          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
+
+      String network = Parameters.POLYGON_MAIN_NETWORK;
+
+      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+        network = Parameters.POLYGON_MAIN_NETWORK;
+      } else {
+        network = Parameters.POLYGON_TEST_NETWORK;
+      }
+
       final List<ClaimEntity> claim = await polygonId.getClaimById(
         claimId: item.id,
         mnemonic: mnemonic!,
+        network: network,
       );
 
       late CredentialStatus credentialStatus;

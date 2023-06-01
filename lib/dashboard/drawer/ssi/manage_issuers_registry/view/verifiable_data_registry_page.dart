@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,14 +54,15 @@ class VerifiableDataRegistryPage extends StatelessWidget {
               ),
               GroupedSection(
                 children: [
-                  IssuerVerificationRegistrySelector(
-                    title: '${IssuerVerificationRegistry.PolygonMainnet.name}'
-                        ' (${l10n.comingSoon})',
-                    issuerVerificationRegistry:
-                        IssuerVerificationRegistry.PolygonMainnet,
-                    isChecked: state.model.issuerVerificationUrls
-                        .contains(Urls.checkIssuerPolygonUrl),
-                    isEnable: false,
+                  IssuerVerifierSelector(
+                    title: PolygonIdNetwork.PolygonMainnet.name,
+                    isChecked: state.model.polygonIdNetwork
+                        .contains(PolygonIdNetwork.PolygonMainnet.toString()),
+                    onTap: () =>
+                        context.read<ProfileCubit>().updatePolygonIdNetwork(
+                              polygonIdCubit: context.read<PolygonIdCubit>(),
+                              polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
+                            ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -70,12 +72,15 @@ class VerifiableDataRegistryPage extends StatelessWidget {
                       color: Theme.of(context).colorScheme.borderColor,
                     ),
                   ),
-                  IssuerVerificationRegistrySelector(
-                    title: IssuerVerificationRegistry.PolygonTestnet.name,
-                    issuerVerificationRegistry:
-                        IssuerVerificationRegistry.PolygonTestnet,
-                    isChecked: state.model.issuerVerificationUrls
-                        .contains(Urls.checkIssuerPolygonTestnetUrl),
+                  IssuerVerifierSelector(
+                    title: PolygonIdNetwork.PolygonMumbai.name,
+                    isChecked: state.model.polygonIdNetwork
+                        .contains(PolygonIdNetwork.PolygonMumbai.toString()),
+                    onTap: () =>
+                        context.read<ProfileCubit>().updatePolygonIdNetwork(
+                              polygonIdCubit: context.read<PolygonIdCubit>(),
+                              polygonIdNetwork: PolygonIdNetwork.PolygonMumbai,
+                            ),
                   ),
                 ],
               ),
@@ -86,13 +91,11 @@ class VerifiableDataRegistryPage extends StatelessWidget {
                   style: Theme.of(context).textTheme.subtitle3,
                 ),
               ),
-              GroupedSection(
+              const GroupedSection(
                 children: [
-                  IssuerVerificationRegistrySelector(
-                    title: IssuerVerificationRegistry.EBSI.name,
-                    issuerVerificationRegistry: IssuerVerificationRegistry.EBSI,
-                    isChecked: state.model.issuerVerificationUrls
-                        .contains(Urls.checkIssuerEbsiUrl),
+                  IssuerVerifierSelector(
+                    title: 'EBSI',
+                    isChecked: true,
                   ),
                 ],
               ),

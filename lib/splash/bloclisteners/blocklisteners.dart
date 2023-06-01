@@ -207,8 +207,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         final bool isAlertEnable = profileCubit.state.model.isAlertEnabled;
 
         if (isAlertEnable) {
-          bool isIssuerVerificationSettingTrue =
-              profileCubit.state.model.issuerVerificationUrls.isNotEmpty;
+          bool isIssuerVerificationSettingTrue = true;
 
           String issuerVerificationUrl = '';
 

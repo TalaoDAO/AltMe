@@ -48,8 +48,22 @@ class BackupPolygonIdIdentityCubit extends Cubit<BackupPolygonIdIdentityState> {
       final fileName = 'altme-polygonid-identity-$dateTime';
 
       await polygonIdCubit.initialise();
-      final polygonCredentials =
-          await polygonIdCubit.polygonId.backupIdentity(mnemonic: mnemonic!);
+
+      final polygonIdNetwork =
+          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
+
+      String network = Parameters.POLYGON_MAIN_NETWORK;
+
+      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+        network = Parameters.POLYGON_MAIN_NETWORK;
+      } else {
+        network = Parameters.POLYGON_TEST_NETWORK;
+      }
+
+      final polygonCredentials = await polygonIdCubit.polygonId.backupIdentity(
+        mnemonic: mnemonic!,
+        network: network,
+      );
 
       if (polygonCredentials == null) {
         throw ResponseMessage(

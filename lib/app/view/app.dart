@@ -133,6 +133,7 @@ class App extends StatelessWidget {
             secureStorageProvider: secure_storage.getSecureStorage,
             polygonId: PolygonId(),
             credentialsCubit: context.read<CredentialsCubit>(),
+            profileCubit: context.read<ProfileCubit>(),
           ),
         ),
         BlocProvider<ScanCubit>(

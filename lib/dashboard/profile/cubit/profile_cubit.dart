@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/polygon_id/cubit/polygon_id_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -70,20 +71,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       final jobTitle =
           await secureStorageProvider.get(SecureStorageKeys.jobTitle) ?? '';
 
-      // by default none is chosen (empty url means none)
-      final issuerVerificationUrls = (await secureStorageProvider
-                  .get(SecureStorageKeys.issuerVerificationUrlKey) ??
-              '${Urls.checkIssuerPolygonTestnetUrl},${Urls.checkIssuerEbsiUrl}')
-          .split(',')
-          .toSet();
-      // check if at least two issuer is selected from our issuer urls
-      if (issuerVerificationUrls.length < 2 ||
-          !Urls.issuerUrls.containsAll(issuerVerificationUrls)) {
-        issuerVerificationUrls.clear();
-        issuerVerificationUrls.addAll(
-          [Urls.checkIssuerPolygonTestnetUrl, Urls.checkIssuerEbsiUrl],
-        );
-      }
+      final polygonIdNetwork = (await secureStorageProvider
+              .get(SecureStorageKeys.polygonIdNetwork)) ??
+          PolygonIdNetwork.PolygonMainnet.toString();
+
       final tezosNetworkJson = await secureStorageProvider
           .get(SecureStorageKeys.blockchainNetworkKey);
       final tezosNetwork = tezosNetworkJson != null
@@ -109,7 +100,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         phone: phone,
         location: location,
         email: email,
-        issuerVerificationUrls: issuerVerificationUrls,
+        polygonIdNetwork: polygonIdNetwork,
         tezosNetwork: tezosNetwork,
         companyName: companyName,
         companyWebsite: companyWebsite,
@@ -175,8 +166,8 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.jobTitle,
       );
       await secureStorageProvider.set(
-        SecureStorageKeys.issuerVerificationUrlKey,
-        profileModel.issuerVerificationUrls.join(','),
+        SecureStorageKeys.polygonIdNetwork,
+        profileModel.polygonIdNetwork,
       );
 
       await secureStorageProvider.set(
@@ -223,25 +214,15 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
-  Future<void> updateIssuerVerificationUrl(
-    IssuerVerificationRegistry registry,
-  ) async {
-    final selectedIssuerUrls = state.model.issuerVerificationUrls;
-    switch (registry) {
-      case IssuerVerificationRegistry.PolygonMainnet:
-        selectedIssuerUrls.remove(Urls.checkIssuerPolygonTestnetUrl);
-        selectedIssuerUrls.add(Urls.checkIssuerPolygonUrl);
-        break;
-      case IssuerVerificationRegistry.EBSI:
-        selectedIssuerUrls.add(Urls.checkIssuerEbsiUrl);
-        break;
-      case IssuerVerificationRegistry.PolygonTestnet:
-        selectedIssuerUrls.remove(Urls.checkIssuerPolygonUrl);
-        selectedIssuerUrls.add(Urls.checkIssuerPolygonTestnetUrl);
-        break;
-    }
+  Future<void> updatePolygonIdNetwork({
+    required PolygonIdNetwork polygonIdNetwork,
+    required PolygonIdCubit polygonIdCubit,
+  }) async {
     final profileModel =
-        state.model.copyWith(issuerVerificationUrls: selectedIssuerUrls);
+        state.model.copyWith(polygonIdNetwork: polygonIdNetwork.toString());
+
+    await polygonIdCubit.setEnv(polygonIdNetwork);
+
     await update(profileModel);
   }
 

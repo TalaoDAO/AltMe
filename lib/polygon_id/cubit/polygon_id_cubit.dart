@@ -25,12 +25,14 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     required this.secureStorageProvider,
     required this.credentialsCubit,
     required this.client,
+    required this.profileCubit,
   }) : super(const PolygonIdState());
 
   final SecureStorageProvider secureStorageProvider;
   final PolygonId polygonId;
   final CredentialsCubit credentialsCubit;
   final DioClient client;
+  final ProfileCubit profileCubit;
 
   final log = getLogger('PolygonIdCubit');
 
@@ -57,19 +59,38 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       /// PolygonId SDK initialization
       await dotenv.load();
 
-      await PolygonId().init(
-        web3Url: dotenv.get('INFURA_URL'),
-        web3RdpUrl: dotenv.get('INFURA_RDP_URL'),
-        web3ApiKey: dotenv.get('INFURA_MUMBAI_API_KEY'),
-        idStateContract: dotenv.get('ID_STATE_CONTRACT_ADDR'),
-        pushUrl: dotenv.get('PUSH_URL'),
-      );
+      final polygonIdNetwork =
+          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
+
+      String network = Parameters.POLYGON_MAIN_NETWORK;
+
+      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+        network = Parameters.POLYGON_MAIN_NETWORK;
+        await PolygonId().init(
+          network: network,
+          web3Url: Parameters.INFURA_URL,
+          web3RdpUrl: Parameters.INFURA_RDP_URL,
+          web3ApiKey: dotenv.get('INFURA_API_KEY'),
+          idStateContract: Parameters.ID_STATE_CONTRACT_ADDR,
+          pushUrl: Parameters.PUSH_URL,
+        );
+      } else {
+        network = Parameters.POLYGON_TEST_NETWORK;
+        await PolygonId().init(
+          network: network,
+          web3Url: Parameters.INFURA_MUMBAI_URL,
+          web3RdpUrl: Parameters.INFURA_MUMBAI_RDP_URL,
+          web3ApiKey: dotenv.get('INFURA_MUMBAI_API_KEY'),
+          idStateContract: Parameters.MUMBAI_ID_STATE_CONTRACT_ADDR,
+          pushUrl: Parameters.MUMBAI_PUSH_URL,
+        );
+      }
 
       final mnemonic =
           await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
       //addIdentity
-      await polygonId.addIdentity(mnemonic: mnemonic!);
+      await polygonId.addIdentity(mnemonic: mnemonic!, network: network);
       emit(
         state.copyWith(
           status: AppStatus.init,
@@ -84,6 +105,43 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
         ),
       );
       throw Exception('INIT_ISSUE - $e');
+    }
+  }
+
+  Future<void> setEnv(PolygonIdNetwork polygonIdNetwork) async {
+    try {
+      /// PolygonId SDK update
+      await dotenv.load();
+
+      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet) {
+        await PolygonId().setEnv(
+          network: Parameters.POLYGON_MAIN_NETWORK,
+          web3Url: Parameters.INFURA_URL,
+          web3RdpUrl: Parameters.INFURA_RDP_URL,
+          web3ApiKey: dotenv.get('INFURA_API_KEY'),
+          idStateContract: Parameters.ID_STATE_CONTRACT_ADDR,
+          pushUrl: Parameters.PUSH_URL,
+        );
+      } else {
+        await PolygonId().setEnv(
+          network: Parameters.POLYGON_TEST_NETWORK,
+          web3Url: Parameters.INFURA_MUMBAI_URL,
+          web3RdpUrl: Parameters.INFURA_MUMBAI_RDP_URL,
+          web3ApiKey: dotenv.get('INFURA_MUMBAI_API_KEY'),
+          idStateContract: Parameters.MUMBAI_ID_STATE_CONTRACT_ADDR,
+          pushUrl: Parameters.MUMBAI_PUSH_URL,
+        );
+      }
+      //final data = await PolygonId().getEnv();
+      //print(data.toString());
+      emit(state.copyWith(status: AppStatus.idle));
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: AppStatus.error,
+        ),
+      );
+      throw Exception('UPDATE_ISSUE - $e');
     }
   }
 
@@ -219,10 +277,22 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       final mnemonic =
           await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
 
+      final polygonIdNetwork =
+          await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
+
+      String network = Parameters.POLYGON_MAIN_NETWORK;
+
+      if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+        network = Parameters.POLYGON_MAIN_NETWORK;
+      } else {
+        network = Parameters.POLYGON_TEST_NETWORK;
+      }
+
       log.i('polygonId authentication');
       final isAuthenticated = await polygonId.authenticate(
         iden3MessageEntity: iden3MessageEntity,
         mnemonic: mnemonic!,
+        network: network,
       );
 
       if (isAuthenticated) {
@@ -280,9 +350,22 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     required Iden3MessageEntity iden3MessageEntity,
   }) async {
     final mnemonic = await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+
+    final polygonIdNetwork =
+        await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
+
+    String network = Parameters.POLYGON_MAIN_NETWORK;
+
+    if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+      network = Parameters.POLYGON_MAIN_NETWORK;
+    } else {
+      network = Parameters.POLYGON_TEST_NETWORK;
+    }
+
     final List<ClaimEntity> claims = await polygonId.getClaims(
       iden3MessageEntity: iden3MessageEntity,
       mnemonic: mnemonic!,
+      network: network,
     );
     return claims;
   }
@@ -365,9 +448,20 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
     required Iden3MessageEntity iden3MessageEntity,
     required String mnemonic,
   }) async {
+    final polygonIdNetwork =
+        await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
+
+    String network = Parameters.POLYGON_MAIN_NETWORK;
+
+    if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
+      network = Parameters.POLYGON_MAIN_NETWORK;
+    } else {
+      network = Parameters.POLYGON_TEST_NETWORK;
+    }
     return polygonId.getClaimsFromIden3Message(
       iden3MessageEntity: iden3MessageEntity,
       mnemonic: mnemonic,
+      network: network,
     );
   }
 
