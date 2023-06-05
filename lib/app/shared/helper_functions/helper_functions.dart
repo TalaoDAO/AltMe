@@ -398,3 +398,19 @@ String separateUppercaseWords(String input) {
   final regex = RegExp('(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])');
   return input.split(regex).join(' ');
 }
+
+List<String> generateUriList(String url) {
+  final uri = Uri.parse(url);
+
+  final finalList = <String>[];
+
+  final uriList = uri.queryParametersAll['uri_list'];
+  if (uriList != null) {
+    for (final uriString in uriList) {
+      final Uri uriItem = Uri.parse(Uri.decodeComponent(uriString));
+      finalList.add(uriItem.toString());
+    }
+  }
+
+  return uriList ?? [];
+}
