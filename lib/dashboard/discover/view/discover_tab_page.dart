@@ -4,6 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class DiscoverTabPage extends StatelessWidget {
   const DiscoverTabPage({super.key});
@@ -119,13 +120,25 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                   child: TabBarView(
                     controller: _tabController,
                     physics: const NeverScrollableScrollPhysics(),
-                    children: const [
-                      DiscoverPage(),
-                      MWebViewPage(
+                    children: [
+                      const DiscoverPage(),
+                      const MWebViewPage(
                         url: Urls.discoverNftsWebView,
                       ),
                       MWebViewPage(
                         url: Urls.discoverCoinsWebView,
+                        onNavigationRequest: (request) async {
+                          if (!request.url
+                              .startsWith(Urls.discoverCoinsWebView)) {
+                            /// if a link has a different base URL than the
+                            /// current webpage, it should be opened in an
+                            /// external browser because of dynamic links
+                            await LaunchUrl.launch(request.url);
+                            return NavigationDecision.prevent;
+                          } else {
+                            return NavigationDecision.navigate;
+                          }
+                        },
                       ),
                     ],
                   ),
