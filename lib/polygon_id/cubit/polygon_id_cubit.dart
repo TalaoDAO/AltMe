@@ -57,10 +57,20 @@ class PolygonIdCubit extends Cubit<PolygonIdState> {
       /// PolygonId SDK initialization
       await dotenv.load();
 
-      final polygonIdNetwork =
+      var polygonIdNetwork =
           await secureStorageProvider.get(SecureStorageKeys.polygonIdNetwork);
 
       String network = Parameters.POLYGON_MAIN_NETWORK;
+
+      // set polygon main network a first
+      if (polygonIdNetwork == null) {
+        final network = PolygonIdNetwork.PolygonMainnet.toString();
+        await secureStorageProvider.set(
+          SecureStorageKeys.polygonIdNetwork,
+          network,
+        );
+        polygonIdNetwork = network;
+      }
 
       if (polygonIdNetwork == PolygonIdNetwork.PolygonMainnet.toString()) {
         network = Parameters.POLYGON_MAIN_NETWORK;
