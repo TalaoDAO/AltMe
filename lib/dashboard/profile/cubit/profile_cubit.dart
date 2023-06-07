@@ -218,6 +218,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     required PolygonIdNetwork polygonIdNetwork,
     required PolygonIdCubit polygonIdCubit,
   }) async {
+    emit(state.copyWith(status: AppStatus.loading));
     final profileModel =
         state.model.copyWith(polygonIdNetwork: polygonIdNetwork.toString());
 

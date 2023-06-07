@@ -26,6 +26,12 @@ class VerifiableDataRegistryPage extends StatelessWidget {
       body: BlocConsumer<ProfileCubit, ProfileState>(
         bloc: context.read<ProfileCubit>(),
         listener: (context, state) {
+          if (state.status == AppStatus.loading) {
+            LoadingView().show(context: context);
+          } else {
+            LoadingView().hide();
+          }
+
           if (state.message != null) {
             AlertMessage.showStateMessage(
               context: context,
@@ -58,11 +64,12 @@ class VerifiableDataRegistryPage extends StatelessWidget {
                     title: PolygonIdNetwork.PolygonMainnet.name,
                     isChecked: state.model.polygonIdNetwork
                         .contains(PolygonIdNetwork.PolygonMainnet.toString()),
-                    onTap: () =>
-                        context.read<ProfileCubit>().updatePolygonIdNetwork(
-                              polygonIdCubit: context.read<PolygonIdCubit>(),
-                              polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
-                            ),
+                    onTap: () {
+                      context.read<ProfileCubit>().updatePolygonIdNetwork(
+                            polygonIdCubit: context.read<PolygonIdCubit>(),
+                            polygonIdNetwork: PolygonIdNetwork.PolygonMainnet,
+                          );
+                    },
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -76,11 +83,12 @@ class VerifiableDataRegistryPage extends StatelessWidget {
                     title: PolygonIdNetwork.PolygonMumbai.name,
                     isChecked: state.model.polygonIdNetwork
                         .contains(PolygonIdNetwork.PolygonMumbai.toString()),
-                    onTap: () =>
-                        context.read<ProfileCubit>().updatePolygonIdNetwork(
-                              polygonIdCubit: context.read<PolygonIdCubit>(),
-                              polygonIdNetwork: PolygonIdNetwork.PolygonMumbai,
-                            ),
+                    onTap: () {
+                      context.read<ProfileCubit>().updatePolygonIdNetwork(
+                            polygonIdCubit: context.read<PolygonIdCubit>(),
+                            polygonIdNetwork: PolygonIdNetwork.PolygonMumbai,
+                          );
+                    },
                   ),
                 ],
               ),
