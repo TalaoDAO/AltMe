@@ -42,7 +42,9 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
             Text(
               'Would you like to accept this credential(s) from this organisation?',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.credentialSubtitle,
+              style: Theme.of(context).textTheme.credentialSubtitle.copyWith(
+                    color: const Color(0xFF86809D),
+                  ),
             ),
             const SizedBox(height: 30),
             ListView.builder(
@@ -54,9 +56,28 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                 final jsonCredential = claims[i].info;
                 final credentialPreview = Credential.fromJson(jsonCredential);
 
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: CredentialContainer(
+                Widget widget;
+
+                final credentialSubjectType = credentialPreview
+                    .credentialSubjectModel.credentialSubjectType;
+
+                if (credentialSubjectType ==
+                    CredentialSubjectType.kycAgeCredential) {
+                  widget = const CredentialBaseWidget(
+                    cardBackgroundImagePath: ImageStrings.kycAgeCredentialCard,
+                    issuerName: '',
+                    value: '',
+                  );
+                } else if (credentialSubjectType ==
+                    CredentialSubjectType.kycCountryOfResidence) {
+                  widget = const CredentialBaseWidget(
+                    cardBackgroundImagePath:
+                        ImageStrings.kycCountryOfResidenceCard,
+                    issuerName: '',
+                    value: '',
+                  );
+                } else {
+                  widget = CredentialContainer(
                     child: AspectRatio(
                       aspectRatio: Sizes.credentialAspectRatio,
                       child: DecoratedBox(
@@ -88,7 +109,12 @@ class PolygonIdCredentialOfferPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
+                  );
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: widget,
                 );
               },
             ),
